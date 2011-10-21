@@ -1,0 +1,13 @@
+<CustomerList>
+<Customer>
+<Extn ExtnCustomerName="" ExtnCustomerDivision="" ExtnShipFromBranch="" ExtnCustOrderBranch="" ExtnEnvironmentCode="" ExtnUomType="" ExtnCompanyCode="" ExtnLegacyCustNumber="" 
+ExtnCSREMailID="" ExtnShipToSuffix="" ExtnOrigEnvironmentCode="" ExtnSAPParentAccNo="" ExtnStockCheckOption="" ExtnECsr1EMailID="" ExtnECsr2EMailID="" ExtnBillToSuffix=""/>
+<ParentCustomer/>
+<BuyerOrganization OrganizationName=""/>
+<CustomerAdditionalAddressList>
+<CustomerAdditionalAddress AddressType="ShipTo">
+<PersonInfo/>
+</CustomerAdditionalAddress>
+</CustomerAdditionalAddressList>
+</Customer>
+</CustomerList>

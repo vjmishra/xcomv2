@@ -1,0 +1,19 @@
+<FlatfileDelimitedSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='delimitedreceiver.xsd'>
+   <ParserDefaults DefaultRecordDelimiter="Newline" DefaultFieldDelimiter="," DefaultPadCharacter="#" RecordIdStartPosition="1">
+       </ParserDefaults>
+
+   <Root Name="LegacyUOMs">
+	 <Header Name="LegacyUOM " RecordName="LegacyUOM " MinOccurrence="1" MaxOccurrence="1"/>
+   </Root>
+
+   <RecordDefinitions>
+      <Record RecordId="LegacyUOM " Name="LegacyUOM " XMLName="LegacyUOM ">
+         <Field Name="LegacyUom" FieldPosition="2" XMLName="LegacyUom"/>
+		 <Field Name="CompanyCode" FieldPosition="3" XMLName="CompanyCode"/>
+         <Field Name="EDIUom" FieldPosition="4" XMLName="EDIUom"/>
+         <Field Name="UOMDescription" FieldPosition="5" XMLName="UOMDescription"/> 
+	  </Record>
+     </RecordDefinitions>
+</FlatfileDelimitedSchema>
+
+

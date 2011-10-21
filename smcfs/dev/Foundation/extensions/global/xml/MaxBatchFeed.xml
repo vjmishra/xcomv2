@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<!--
+                     LIMITATION OF LIABILITY
+THIS SOFTWARE SAMPLE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED 
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+IN NO EVENT SHALL STERLING COMMERCE, Inc. BE LIABLE UNDER ANY THEORY OF 
+LIABILITY (INCLUDING, BUT NOT LIMITED TO, BREACH OF CONTRACT, BREACH 
+OF WARRANTY, TORT, NEGLIGENCE, STRICT LIABILITY, OR ANY OTHER THEORY 
+OF LIABILITY) FOR (i) DIRECT DAMAGES OR INDIRECT, SPECIAL, INCIDENTAL, 
+OR CONSEQUENTIAL DAMAGES SUCH AS, BUT NOT LIMITED TO, EXEMPLARY OR 
+PUNITIVE DAMAGES, OR ANY OTHER SIMILAR DAMAGES, WHETHER OR NOT 
+FORESEEABLE AND WHETHER OR NOT STERLING OR ITS REPRESENTATIVES HAVE 
+BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR (ii) ANY OTHER 
+CLAIM, DEMAND OR DAMAGES WHATSOEVER RESULTING FROM OR ARISING OUT OF
+OR IN CONNECTION THE DELIVERY OR USE OF THIS INFORMATION.
+-->
+<FlatfileSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='flatfileschema.xsd'>
+   <ParserDefaults  DefaultEscapeCharacter="~" DefaultPadCharacter=" " RecordIdStartPosition="1" RecordIdEndPosition="2"  >
+   </ParserDefaults>
+   <Root Name="CustomerList">
+        <Header Name="Company" RecordName="N3" MinOccurrence="1" MaxOccurrence="1"/>
+	  </Root>
+	   <RecordDefinitions>
+		  <Record RecordId="N3" Name="N3" XMLName="Customer">
+			<Field Name="EnvironmentId" StartPosition="1" EndPosition="2" XMLName="EnvironmentId"/>
+			<Field Name="Company" StartPosition="3" EndPosition="4" XMLName="CompanyCode"/>
+			<Field Name="CustomerBranch" StartPosition="5" EndPosition="6" XMLName="CustomerBranch"/>
+			<Field Name="LegacyCustomerNumber" StartPosition="7" EndPosition="16" XMLName="LegacyCustomerNumber"/>
+			<Field Name="ShiptoSuffix" StartPosition="17" EndPosition="23" XMLName="ShiptoSuffix"/>
+			<Field Name="BilltoSuffix" StartPosition="24" EndPosition="26" XMLName="BilltoSuffix"/>
+			<Field Name="CustomerOrderBranch" StartPosition="27" EndPosition="28" XMLName="CustomerOrderBranch"/>
+			<Field Name="ShipFromBranch" StartPosition="29" EndPosition="30" XMLName="ShipFromBranch"/>
+			<Field Name="MQRegion" StartPosition="31" EndPosition="38" XMLName="MQRegion"/>
+			<Field Name="NationalAccountNumber" StartPosition="39" EndPosition="48" XMLName="NationalAccountNumber"/>
+			<Field Name="ProcessCode" StartPosition="49" EndPosition="49" XMLName="ProcessCode"/>
+			<Field Name="SuffixType" StartPosition="50" EndPosition="50" XMLName="SuffixType"/>
+			<Field Name="CustomerName" StartPosition="51" EndPosition="80" XMLName="CustomerName"/>
+			<Field Name="AddressLine1" StartPosition="81" EndPosition="110" XMLName="AddressLine1"/>
+			<Field Name="AddressLine2" StartPosition="111" EndPosition="140" XMLName="AddressLine2"/>
+			<Field Name="AddressLine3" StartPosition="141" EndPosition="170" XMLName="AddressLine3"/>
+			<Field Name="City" StartPosition="171" EndPosition="190" XMLName="City"/>
+			<Field Name="State" StartPosition="191" EndPosition="192" XMLName="State"/>
+			<Field Name="ZipCode" StartPosition="193" EndPosition="202" XMLName="ZipCode"/>
+			<Field Name="InvoiceDistributionMethod" StartPosition="203" EndPosition="203" XMLName="InvoiceDistributionMethod"/>
+			<Field Name="TerritoryCode" StartPosition="204" EndPosition="214" XMLName="TerritoryCode"/>
+		</Record>
+	   </RecordDefinitions>
+	</FlatfileSchema>

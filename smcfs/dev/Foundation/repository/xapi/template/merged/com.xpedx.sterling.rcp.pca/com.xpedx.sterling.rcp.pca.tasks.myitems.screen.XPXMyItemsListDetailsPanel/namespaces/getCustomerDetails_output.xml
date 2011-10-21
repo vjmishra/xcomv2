@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customer CustomerID="" CustomerKey="" OrganizationCode="">
+<Extn />
+    <BuyerOrganization OrganizationCode="" OrganizationName=""/>
+    <CustomerContactList>
+        <CustomerContact ApproverProxyUserId="" ApproverUserId="" CustomerContactID="" DateOfBirth="" DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo="" EveningPhone="" FirstName=""
+            JobTitle="" LastName="" MiddleName="" MobilePhone="" SpendingLimit="" SpendingLimitCurrency="" SpouseDateOfBirth="" Status="" Title="" UserID="" WeddingAnniversaryDate="">
+		<Extn/>
+		</CustomerContact>	
+    </CustomerContactList>
+    <CustomerCurrencyList>
+        <CustomerCurrency Curreny="" IsDefaultCurrency=""/>
+    </CustomerCurrencyList>
+</Customer>

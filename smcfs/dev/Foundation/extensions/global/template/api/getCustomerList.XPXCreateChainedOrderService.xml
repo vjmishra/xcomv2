@@ -1,0 +1,15 @@
+<CustomerList>
+<Customer CustomerID="" RootCustomerKey="" ParentCustomerKey="" OrganizationCode="" CustomerKey="">
+<Extn>
+<XPXCustomerRulesProfileList>
+       <XPXCustomerRulesProfile Param1="" Param2="" Param3="" RuleKey="">
+              <XPXRuleDefn B2BFlag="" InteractiveFlag="" RuleID="" RuleKey=""/>
+       </XPXCustomerRulesProfile>
+</XPXCustomerRulesProfileList>
+</Extn>
+<BuyerOrganization OrganizationName=""/>
+<ParentCustomer ParentCustomerKey="" BuyerOrganizationCode="" CustomerID="" OrganizationCode="">
+<Extn ExtnMinOrderAmount="" ExtnMinChargeAmount="" ExtnMaxOrderAmount=""/>
+</ParentCustomer>
+</Customer>
+</CustomerList>

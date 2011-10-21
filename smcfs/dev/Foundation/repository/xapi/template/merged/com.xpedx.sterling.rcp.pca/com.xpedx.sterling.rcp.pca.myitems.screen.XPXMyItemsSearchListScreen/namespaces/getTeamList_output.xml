@@ -1,0 +1,8 @@
+<TeamList>
+<Team TeamId="" TeamKey="" Description="" EnterpriseAccessMode="" DocumentTypeAccessMode=""  OrganizationCode="" ShipNodeAccessMode="" ParentGroupKey="" >
+ 	<TeamNodesList >
+		<TeamNodes TeamNodeKey="" TeamKey="" ShipnodeKey="">
+		</TeamNodes>
+ 	</TeamNodesList>
+</Team>
+</TeamList>

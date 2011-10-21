@@ -1,0 +1,12 @@
+<CustomerList>
+<Customer CustomerID="" OrganizationCode="" BuyerOrganizationCode="" ParentCustomerKey="">
+<Extn/>	
+<CustomerAdditionalAddressList>
+	<CustomerAdditionalAddress>
+		<PersonInfo>
+			<Extn/>
+		</PersonInfo>
+	</CustomerAdditionalAddress>
+</CustomerAdditionalAddressList>
+</Customer>
+</CustomerList>

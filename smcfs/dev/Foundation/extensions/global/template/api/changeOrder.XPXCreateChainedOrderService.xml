@@ -1,0 +1,31 @@
+<Order>
+<Extn/>
+<PriceInfo/>
+<Instructions>
+<Instruction InstructionType="" InstructionText=""/>
+</Instructions>
+<OrderHoldTypes>
+<OrderHoldType/>
+</OrderHoldTypes>
+<OrderLines>
+<OrderLine CarrierServiceCode="" CustomerLinePONo="" CustomerPONo="" IsPriceLocked="" ItemGroupCode="" LineType="" MaxLineStatus="" MaxLineStatusDesc="" 
+MinLineStatus="" MinLineStatusDesc="" OrderHeaderKey="" OrderLineKey="" OrderedQty="" PrimeLineNo="" ReqShipDate="" ReqDeliveryDate="" ShipNode="" ShipToID="" 
+ShippedQuantity="" Status="" ShipToKey="" SubLineNo="">
+<Extn/>
+<Item>
+<Extn/>
+</Item>
+<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+<LinePriceInfo/>
+<Instructions>
+<Instruction InstructionType="" InstructionText=""/>
+</Instructions>
+<LineCharges/>
+<Awards>
+<Award/>
+</Awards>
+</OrderLine>
+</OrderLines>
+<PersonInfoShipTo/>
+<PersonInfoBillTo/>
+</Order>

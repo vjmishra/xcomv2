@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customer CustomerID="" CustomerKey="" OrganizationCode="">
+    <BuyerOrganization OrganizationCode="" OrganizationName=""/>
+    <CustomerContactList>
+        <CustomerContact ApproverProxyUserId="" ApproverUserId="" CustomerContactID="" DateOfBirth="" DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo="" EveningPhone="" FirstName=""
+            JobTitle="" LastName="" MiddleName="" MobilePhone="" SpendingLimit="" SpendingLimitCurrency="" SpouseDateOfBirth="" Status="" Title="" UserID="" WeddingAnniversaryDate="">
+		<Extn/>
+		<User Activateflag="" BillingaddressKey="" BusinessKey="" ChangePassNext="" ContactaddressKey="" CreatorOrganizationKey="" DataSecurityGroupId="" DepartmentCode="" DisplayUserID="" EnterpriseCode="" GeneratePassword="" Imagefile="" IsSupervisor="" Localecode="" Loginid="" Longdesc="" MaxCustomerAssignments="" MenuId="" NoteKey="" OrganizationKey="" ParentUserKey="" Password="" PasswordPolicyId="" PasswordPolicyKey="" PreferenceKey="" Pwdlastchangedon="" SessionTimeout="" SuperUser="" Theme="" UserKey="" Username="" Usertype=""/>
+		</CustomerContact>	
+    </CustomerContactList>
+    <CustomerCurrencyList>
+        <CustomerCurrency Curreny="" IsDefaultCurrency=""/>
+    </CustomerCurrencyList>
+</Customer>

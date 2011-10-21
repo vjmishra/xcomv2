@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_ORG_ENTERPRISEList TableName="YFS_ORG_ENTERPRISE">
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210135837" OrganizationKey="DEFAULT"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136838" OrganizationKey="UPSN"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136839" OrganizationKey="USPS"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136840" OrganizationKey="FEDX"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136841" OrganizationKey="UPSC"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136842" OrganizationKey="UPSA"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136843" OrganizationKey="UPSE"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136844" OrganizationKey="UPSL"/>
+<OrgEnterprise Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    EnterpriseOrganizationKey="DEFAULT" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="SYSTEM" OrgEnterpriseKey="20100420210136845" OrganizationKey="Purolator"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-04-29T21:43:54-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="xpedx" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-04-29T21:43:54-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010042921435414264" OrganizationKey="xpedx"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T21:40:09-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="BulkleyDunton" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T21:40:09-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090121401044305" OrganizationKey="BulkleyDunton"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T22:23:27-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="CentralLewmar" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:23:27-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090122232745390" OrganizationKey="CentralLewmar"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T22:43:57-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="CentralMarquardt" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:43:57-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090122435746513" OrganizationKey="CentralMarquardt"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:08:07-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="Saalfeld" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:08:07-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090123080747798" OrganizationKey="Saalfeld"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:26:18-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="StrategicPaper" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:26:18-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090123261848843" OrganizationKey="StrategicPaper"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:39:14-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="WesternPaper" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:39:14-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090123391549730" OrganizationKey="WesternPaper"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:50:31-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="WhitemanTower" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:50:31-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090123503250614" OrganizationKey="WhitemanTower"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-02T00:01:19-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="Zellerbach" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-02T00:01:19-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="2010090200012052675" OrganizationKey="Zellerbach"/>
+<OrgEnterprise Createprogid=".YCPOrgDetailsAPI"
+    Createts="2011-06-09T14:23:15-04:00" Createuserid="admin"
+    EnterpriseOrganizationKey="xpedxCanada" Lockid="0"
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2011-06-09T14:23:15-04:00" Modifyuserid="admin"
+    OrgEnterpriseKey="20110609142316144529" OrganizationKey="xpedxCanada"/>
+</YFS_ORG_ENTERPRISEList>

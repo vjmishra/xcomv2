@@ -1,0 +1,26 @@
+<FlatfileDelimitedSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='delimitedreceiver.xsd'>
+   <ParserDefaults DefaultRecordDelimiter="Newline" DefaultFieldDelimiter="," DefaultPadCharacter="#" RecordIdStartPosition="1">
+       </ParserDefaults>
+
+   <Root Name="CustomerXRefList">
+	 <Header Name="CustomerXRef" RecordName="XREF" MinOccurrence="1" MaxOccurrence="1"/>
+   </Root>
+
+   <RecordDefinitions>
+      <Record RecordId="XREF" Name="XREF" XMLName="CustomerXRef">
+         <Field Name="Environment" FieldPosition="2" XMLName="EnvironmentId"/>
+         <Field Name="Company" FieldPosition="3" XMLName="CompanyCode"/>
+         <Field Name="ProcessCode" FieldPosition="4" XMLName="ProcessCode"/>
+         <Field Name="CAPSID" FieldPosition="5" XMLName="CapsId"/>
+         <Field Name="CustBR" FieldPosition="6" XMLName="CustomerDivision"/>
+         <Field Name="CustomerNumber" FieldPosition="7" XMLName="LegacyCustomerNumber"/>
+         <Field Name="MPC" FieldPosition="8" XMLName="MasterProductCode"/>
+         <Field Name="LegacyItemNbr" FieldPosition="9" XMLName="LegacyItemNumber"/>
+         <Field Name="CustomerPartNumber" FieldPosition="10" XMLName="CustomerItemNumber"/>
+         <Field Name="CustomerDescription" FieldPosition="11" XMLName="CustomerSpecificDescription"/>
+         <Field Name="LegacyBase" FieldPosition="12" XMLName="LegacyUoM"/>
+         <Field Name="CustomerUnit" FieldPosition="13" XMLName="CustomerUoM"/>
+         <Field Name="ConvFactor" FieldPosition="14" XMLName="CustomerUoMConversionFactor"/>
+      </Record>
+     </RecordDefinitions>
+</FlatfileDelimitedSchema>

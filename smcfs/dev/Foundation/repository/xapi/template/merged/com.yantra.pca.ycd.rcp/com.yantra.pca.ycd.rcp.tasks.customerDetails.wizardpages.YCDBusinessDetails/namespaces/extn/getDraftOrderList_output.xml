@@ -1,0 +1,12 @@
+<OrderList LastRecordSet=" ">
+    <Order AuthorizedClient=""  BillToID=" " BuyerOrganizationCode="" BuyerUserId="" 
+    CustomerContactID="" CustomerEMailID="" CustomerFirstName=" " CustomerLastName=" " CustomerPONo="" 
+    DisplayStatusDescription="" DocumentType="" DraftOrderFlag="" EnterpriseCode="" 
+    MaxOrderStatusDesc="" MultipleStatusesExist="" 
+    OrderDate="" OrderHeaderKey="" OrderName="" OrderNo="" OrderType="" 
+    SupportLevel="" SellerOrganizationCode="" Status="" isHistory="" Modifyts="" Modifyuserid="">
+		<Extn/>
+        <PriceInfo Currency="" TotalAmount=""/>
+        <PersonInfoBillTo AddressLine1=""/>
+    </Order>
+</OrderList>

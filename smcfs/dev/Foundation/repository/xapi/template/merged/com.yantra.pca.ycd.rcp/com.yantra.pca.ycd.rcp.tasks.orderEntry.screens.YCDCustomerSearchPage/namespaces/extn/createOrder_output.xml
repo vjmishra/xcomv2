@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order BillToID="" BuyerOrganizationCode="" BuyerUserId="" CustomerFirstName="" CustomerLastName="" DocumentType="" DraftOrderFlag="" EnterpriseCode="" OrderDate="" OrderHeaderKey="" OrderNo="" SellerOrganizationCode="">
+<Extn/>
+    <PriceInfo Currency="" TotalAmount=""/>
+    <PersonInfoShipTo>
+	<Extn/>
+	</PersonInfoShipTo>
+    <PersonInfoBillTo>
+	<Extn/>
+	</PersonInfoBillTo>
+</Order>

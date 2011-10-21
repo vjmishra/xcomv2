@@ -1,0 +1,188 @@
+	
+package com.xpedx.sterling.rcp.pca.customerDetails.extn;
+
+/**
+ * Created on May 13,2010
+ *
+ */
+ 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
+import com.yantra.yfc.rcp.YRCExtendedTableImageProvider;
+import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCTblClmBindingData;
+import com.yantra.yfc.rcp.YRCWizardExtensionBehavior;
+import com.yantra.yfc.rcp.IYRCComposite;
+import com.yantra.yfc.rcp.YRCValidationResponse;
+import com.yantra.yfc.rcp.YRCExtendedTableBindingData;
+import com.yantra.yfc.rcp.YRCXmlUtils;
+/**
+ * @author vchandra-tw
+ * Copyright © 2005-2010 Sterling Commerce, Inc. All Rights Reserved.
+ */
+ public class CustomerDetailsWizardExtnBehavior extends YRCWizardExtensionBehavior {
+
+	/**
+	 * This method initializes the behavior class.
+	 */
+	public void init() {
+		//TODO: Write behavior init here.
+	}
+ 
+ 	
+    public String getExtnNextPage(String currentPageId) {
+		//TODO
+		return null;
+    }
+    
+    public IYRCComposite createPage(String pageIdToBeShown) {
+		//TODO
+		return null;
+	}
+    
+    public void pageBeingDisposed(String pageToBeDisposed) {
+		//TODO
+    }
+
+    /**
+     * Called when a wizard page is about to be shown for the first time.
+     *
+     */
+    public void initPage(String pageBeingShown) {
+		//TODO
+    }
+ 	
+ 	
+	/**
+	 * Method for validating the text box.
+     */
+    public YRCValidationResponse validateTextField(String fieldName, String fieldValue) {
+    	// TODO Validation required for the following controls.
+		
+		// TODO Create and return a response.
+		return super.validateTextField(fieldName, fieldValue);
+	}
+    
+    /**
+     * Method for validating the combo box entry.
+     */
+    public void validateComboField(String fieldName, String fieldValue) {
+    	// TODO Validation required for the following controls.
+		
+		// TODO Create and return a response.
+		super.validateComboField(fieldName, fieldValue);
+    }
+    
+    /**
+     * Method called when a button is clicked.
+     */
+    public YRCValidationResponse validateButtonClick(String fieldName) {
+    	// TODO Validation required for the following controls.
+		
+		// TODO Create and return a response.
+		return super.validateButtonClick(fieldName);
+    }
+    
+    /**
+     * Method called when a link is clicked.
+     */
+	public YRCValidationResponse validateLinkClick(String fieldName) {
+
+		if ("extn_lnkManageCustomerProfileRule".equals(fieldName)) {
+			YRCPlatformUI.fireAction("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleAction");
+		}		
+		//return new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_OK, "Invalid date provided.");
+		return super.validateLinkClick(fieldName);
+	}
+	
+	/**
+	 * Create and return the binding data for advanced table columns added to the tables.
+	 */
+	 public YRCExtendedTableBindingData getExtendedTableBindingData(String tableName, ArrayList tableColumnNames) {
+	 	// Create and return the binding data definition for the table.
+		 final YRCExtendedTableBindingData tblBindingData = new YRCExtendedTableBindingData(tableName);
+		 if(YRCPlatformUI.equals(tableName,"tblCustomerContact"))
+		 {
+		 HashMap<String, YRCTblClmBindingData> bindingDataMap = new HashMap<String, YRCTblClmBindingData>();
+		 final YRCTblClmBindingData permissionBindingData = new YRCTblClmBindingData();
+		 permissionBindingData.setName("extn_permissionsTblClmn");
+		 permissionBindingData.setAttributeBinding("Permissions");
+		 permissionBindingData.setTooltipBinding("Permissions");
+		 bindingDataMap.put("extn_permissionsTblClmn", permissionBindingData);
+		 tblBindingData.setTableColumnBindingsMap(bindingDataMap);
+
+		 permissionBindingData.setLabelProvider(new IYRCTableColumnTextProvider(){
+
+			public String getColumnText(Element arg0) {
+				// TODO Auto-generated method stub
+				ArrayList<String> roleList = new ArrayList<String>();
+				
+				String permissions = "";
+				Element eleTableItem = (Element)arg0;
+				Element extnElement = YRCXmlUtils.getXPathElement(eleTableItem, "/CustomerContact/Extn");
+				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnStockCheckWS"))){
+					roleList.add("StockCheck");
+				}	
+				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnViewInvoices"))){
+					roleList.add("ViewInvoices");
+				}	
+				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnEstimator"))){
+					roleList.add("Estimator");
+				}
+				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewPricesFlag"))){
+					roleList.add("ViewPrices");
+				}
+				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewReportsFlag"))){
+					roleList.add("ViewReports");
+				}
+				NodeList userList = eleTableItem.getElementsByTagName("UserGroupList");
+				int userLength = userList.getLength();
+				for(int userCount=0;userCount<userLength;userCount++)
+				{
+					Element userElement = (Element)userList.item(userCount);
+					String role = userElement.getAttribute("UsergroupKey");
+					if(role.contains("BUYER-ADMIN"))
+						role = "Admin";
+					if(role.contains("BUYER-APPROVER"))
+						role = "Approver";
+					if(role.contains("BUYER-USER"))
+						role = "Buyer";
+					roleList.add(role);
+				}
+				for(int counter=0;counter<roleList.size();counter++)
+				{
+					if(YRCPlatformUI.equals("", permissions))
+					{
+						permissions = permissions+roleList.get(counter);
+					}
+					else
+					{
+						permissions = permissions+","+roleList.get(counter);
+					}
+				}
+				return permissions;
+			}
+			 
+		 });
+		 
+		 final YRCTblClmBindingData userNameBindingData = new YRCTblClmBindingData();
+		 userNameBindingData.setName("extn_userNameTblClmn");
+		 userNameBindingData.setAttributeBinding("UserName");
+		 userNameBindingData.setTooltipBinding("UserName");
+		 bindingDataMap.put("extn_userNameTblClmn", userNameBindingData);
+		 tblBindingData.setTableColumnBindingsMap(bindingDataMap);
+		 userNameBindingData.setAttributeBinding("@FirstName;@LastName");
+		 userNameBindingData.setKey("customer_contact_key");
+	 
+		 }	
+			//}
+	 	// The defualt super implementation does nothing.
+	 	//return super.getExtendedTableBindingData(tableName, tableColumnNames);
+			return tblBindingData;
+	 }
+}
