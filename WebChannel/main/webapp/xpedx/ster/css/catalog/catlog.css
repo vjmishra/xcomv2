@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+
+.catalog-landing-images{
+	border:solid 1px #e4e4e4;
+	width:100px; 
+	float:left;
+	text-align:center;
+	margin:2px 2px 5px 2px;
+	-moz-border-radius:3px; }
+	
+.catalog-landing-images span{
+	text-align:center;
+	font-size:11px;
+	margin:8px auto;
+	width:100px; 
+	color:#009;
+	padding-bottom:5px;}
+
+.catalog-landing-images img{
+	margin:2px;}
