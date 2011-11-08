@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PriceAndAvailability>
+
+	<TransactionStatus>Success</TransactionStatus>
+
+	<EnvironmentId />
+
+	<Company>Sterling Commerce</Company>
+
+	<CustomerBranch />
+
+	<CustomerNumber></CustomerNumber>
+
+	<ShipToSuffix />
+
+	<OrderBranch />
+
+	<HeaderStatusCode>00</HeaderStatusCode>
+
+	<Items>
+	
+		<Item>
+
+			<LineNumber>123</LineNumber>
+
+			<LegacyProductCode>2092781</LegacyProductCode>
+
+			<RequestedQtyUOM>EACH</RequestedQtyUOM>
+
+			<RequestedQty>35</RequestedQty>
+
+			<PurchaseOrderQty />
+
+			<PricingUOM>CASE</PricingUOM>
+
+			<PriceCurrencyCode />
+
+			<UnitPricePerPricingUOM>100.00</UnitPricePerPricingUOM>
+
+			<UnitPricePerRequestedUOM>75.00</UnitPricePerRequestedUOM>
+
+			<ExtendedPrice>1879.00</ExtendedPrice>
+
+			<ItemCost>29.87</ItemCost>
+
+			<CostCurrencyCode />
+
+			<Brackets>
+
+				<Bracket>
+
+					<BracketQTY>23</BracketQTY>
+
+					<BracketUOM>EA</BracketUOM>
+
+					<BracketPrice>56.78</BracketPrice>
+
+				</Bracket>
+				<Bracket>
+
+					<BracketQTY>87</BracketQTY>
+
+					<BracketUOM>CASE</BracketUOM>
+
+					<BracketPrice>50</BracketPrice>
+
+				</Bracket>
+
+			</Brackets>
+
+			<WarehouseLocationList>
+
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>34</AvailableQty>
+
+					<NumberOfDays>67</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>23</AvailableQty>
+
+					<NumberOfDays>0</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>7</AvailableQty>
+
+					<NumberOfDays>0</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>14</AvailableQty>
+
+					<NumberOfDays>1</NumberOfDays>
+
+				</WarehouseLocation>
+
+			</WarehouseLocationList>
+
+			<LineStatusCode>00</LineStatusCode>
+
+		</Item>
+		<Item>
+
+			<LineNumber>456</LineNumber>
+
+			<LegacyProductCode>2316206</LegacyProductCode>
+
+			<RequestedQtyUOM>CASE</RequestedQtyUOM>
+
+			<RequestedQty>45</RequestedQty>
+
+			<PurchaseOrderQty />
+
+			<PricingUOM />
+
+			<PriceCurrencyCode />
+
+			<UnitPricePerPricingUOM >100</UnitPricePerPricingUOM>
+
+			<UnitPricePerRequestedUOM>553</UnitPricePerRequestedUOM>
+
+			<ExtendedPrice>34345.00</ExtendedPrice>
+
+			<ItemCost>997.09</ItemCost>
+
+			<CostCurrencyCode />
+
+			<Brackets>
+
+				<Bracket>
+
+					<BracketQTY>3</BracketQTY>
+
+					<BracketUOM>CASE</BracketUOM>
+
+					<BracketPrice>67.87</BracketPrice>
+
+				</Bracket>
+				<Bracket>
+
+					<BracketQTY>23</BracketQTY>
+
+					<BracketUOM />
+
+					<BracketPrice />
+
+				</Bracket>
+
+			</Brackets>
+
+			<WarehouseLocationList>
+
+				<WarehouseLocation>
+
+					<Warehouse>Kundapura</Warehouse>
+
+					<AvailableQty>23</AvailableQty>
+
+					<NumberOfDays>32</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Udupi</Warehouse>
+
+					<AvailableQty>23</AvailableQty>
+
+					<NumberOfDays>19</NumberOfDays>
+
+				</WarehouseLocation>
+
+			</WarehouseLocationList>
+
+			<LineStatusCode>00</LineStatusCode>
+
+		</Item>
+		
+		<Item>
+
+			<LineNumber>123</LineNumber>
+
+			<LegacyProductCode>2092781</LegacyProductCode>
+
+			<RequestedQtyUOM>EACH</RequestedQtyUOM>
+
+			<RequestedQty>35</RequestedQty>
+
+			<PurchaseOrderQty />
+
+			<PricingUOM>CASE</PricingUOM>
+
+			<PriceCurrencyCode />
+
+			<UnitPricePerPricingUOM>100.00</UnitPricePerPricingUOM>
+
+			<UnitPricePerRequestedUOM>75.00</UnitPricePerRequestedUOM>
+
+			<ExtendedPrice>1879.00</ExtendedPrice>
+
+			<ItemCost>29.87</ItemCost>
+
+			<CostCurrencyCode />
+
+			<Brackets>
+
+				<Bracket>
+
+					<BracketQTY>23</BracketQTY>
+
+					<BracketUOM>EA</BracketUOM>
+
+					<BracketPrice>56.78</BracketPrice>
+
+				</Bracket>
+				<Bracket>
+
+					<BracketQTY>87</BracketQTY>
+
+					<BracketUOM>CASE</BracketUOM>
+
+					<BracketPrice>50</BracketPrice>
+
+				</Bracket>
+
+			</Brackets>
+
+			<WarehouseLocationList>
+
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>34</AvailableQty>
+
+					<NumberOfDays>67</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>23</AvailableQty>
+
+					<NumberOfDays>0</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>7</AvailableQty>
+
+					<NumberOfDays>0</NumberOfDays>
+
+				</WarehouseLocation>
+				<WarehouseLocation>
+
+					<Warehouse>Gangolli</Warehouse>
+
+					<AvailableQty>14</AvailableQty>
+
+					<NumberOfDays>1</NumberOfDays>
+	
+				</WarehouseLocation>
+
+			</WarehouseLocationList>
+
+			<LineStatusCode>00</LineStatusCode>
+
+		</Item>
+	</Items>
+
+</PriceAndAvailability>
