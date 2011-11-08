@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries Catalog Navigation Bar</comment>
+	<entry key="WCContext.storefrontId">MainCategories:/SearchCatalogIndex/@CallingOrganizationCode</entry>
+	<entry key="#parameters.OrganizationCode">MainCategories:/SearchCatalogIndex/@OrganizationCode</entry>
+	<entry key="#parameters.CategoryDomain">MainCategories:/SearchCatalogIndex/@CategoryDomain</entry>
+	<entry key="#parameters.CategoryDepth">MainCategories:/SearchCatalogIndex/@CategoryDepth</entry>
+	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">MainCategories:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale</entry>
+	<entry key="WCContext.customerId">MainCategories:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="categoryDepth">MainCategories:/SearchCatalogIndex/@CategoryDepth</entry>
+</properties>
