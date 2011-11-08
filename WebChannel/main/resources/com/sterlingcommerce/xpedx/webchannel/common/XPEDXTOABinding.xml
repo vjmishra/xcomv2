@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for UpdateUserTOA</comment>
+	<entry key="customerId">UpdateUserTOA:/Customer/@CustomerID</entry>
+	<entry key="WCContext.storefrontId">UpdateUserTOA:/Customer/@OrganizationCode</entry>
+	<entry key="customerContactId">UpdateUserTOA:/Customer/CustomerContactList/CustomerContact/@CustomerContactID</entry>
+	<entry key="toaChecked">UpdateUserTOA:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnAcceptTAndCFlag</entry>
+	<entry key="toaAcceptedDate">UpdateUserTOA:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnTAndCAcceptedOn</entry>
+</properties>
