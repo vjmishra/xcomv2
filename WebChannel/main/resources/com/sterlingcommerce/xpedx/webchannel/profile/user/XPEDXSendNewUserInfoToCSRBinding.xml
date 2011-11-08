@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="mailHost">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@MailHost</entry>
+	<entry key="mailFromAddress">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@FromAddress</entry>
+	<entry key="appendedCSREmailIDs">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/ToAddresses/ToAddress/@EmailID</entry>
+	<entry key="mailCCAddress">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/CCAddresses/CCAddress/@EmailID</entry>
+	<entry key="mailSubject">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@SubjectText</entry>
+	<entry key="newUserName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Name</entry>
+	<entry key="newUserEmail">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@EmailID</entry>
+	<entry key="newUserPhone">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Phone</entry>
+	<entry key="newUserCompanyName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@CompanyName</entry>
+	<entry key="templatePath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@TemplateFile</entry>
+</properties>

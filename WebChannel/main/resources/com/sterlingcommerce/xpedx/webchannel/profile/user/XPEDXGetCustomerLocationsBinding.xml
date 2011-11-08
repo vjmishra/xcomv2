@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Customer Locations action</comment>
+	<entry key="wcContext.loggedInUserId">xpedx-getCustomerAssignments:/CustomerAssignment/@UserId</entry>
+	<entry key="billToParentCustomerKey">XPEDXBillTOAndShipToHierarchyMashup:/Customer/@CustomerKey</entry>
+</properties>
