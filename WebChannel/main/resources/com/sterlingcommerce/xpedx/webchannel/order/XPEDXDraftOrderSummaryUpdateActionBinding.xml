@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for draft order summary information</comment>
+    
+    <entry key="orderHeaderKey">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@OrderHeaderKey,me_dod_validateItemForOrdering:/Order/@OrderHeaderKey</entry>
+    
+    <entry key="deliveryHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldFlag</entry>
+    <entry key="deliveryHoldDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate</entry>
+    <entry key="#parameters.DeliveryHoldTime">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime</entry>
+    <entry key="draftShipComplete">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipComplete</entry>
+    <entry key="willCallFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWillCall</entry>    
+            
+    <entry key="#parameters.orderReqDeliveryDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ReqDeliveryDate</entry>
+    <entry key="#parameters.RushOrderNoteText">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderComments</entry>
+    <entry key="rushOrdrFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderFlag</entry>
+ 	<entry key="extnWebHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag</entry>
+ 
+ 	<entry key="emailAddresses">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr</entry>
+ 	 <!-- 
+ 	<entry key="#parameters.extnPricingUOM">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnPricingUOM</entry>
+    <entry key="#parameters.pricingUOMUnitPrice">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnUnitPrice</entry>
+   	<entry key="#parameters.unitPrice">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/LinePriceInfo/@UnitPrice</entry> 	
+ 	<entry key="#parameters.itemId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Item/@ItemID</entry> 
+ 	<entry key="#parameters.uom">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Item/@UnitOfMeasure</entry>
+ 	-->
+ 	<entry key="#parameters.transactionalQty">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
+ 	<entry key="#parameters.transactionalUOM">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry> 
+    <!-- Added entry for binding Customer PO Number  -->
+   	<entry key="customerPoNumber">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerPONo</entry>
+    
+    <!-- Save cart summary information (same as draftOrderSummaryUpdate) on orderplace: RUgrani -->
+    <entry key="extnEnvtId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnEnvtId</entry>
+    <entry key="#parameters.ShipToAttn">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAttentionName</entry>    
+	<entry key="extnCompanyId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnCompanyId</entry>
+	<entry key="extnOrderDivision">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnOrderDivision</entry>
+	<entry key="extnShipFromDiv">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ShipNode</entry>
+	<entry key="extnCustomerDivision">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnCustomerDivision</entry>
+	<entry key="extnCustomerNo">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnCustomerNo</entry>
+	<entry key="extnShipToName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipToName</entry>
+	<entry key="extnBillToName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnBillToName</entry>
+	<entry key="extnSourceType">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnSourceType</entry>
+	<entry key="orderLineKeyList">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
+	<entry key="orderLineShipNodeList">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/@ShipNode</entry>
+	<entry key="recordPendingChanges">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/PendingChanges/@RecordPendingChanges</entry>
+	<entry key="skipBOMValidationsValue">me_dod_validateItemForOrdering:/Order/@SkipBOMValidations</entry>
+</properties>

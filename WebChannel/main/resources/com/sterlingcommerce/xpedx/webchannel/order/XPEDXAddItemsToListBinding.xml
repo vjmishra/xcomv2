@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	<entry key="name">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Name</entry>
+	<entry key="desc">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Desc</entry>
+	<entry key="qty">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Qty</entry>
+	<entry key="jobId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@JobId</entry>
+	<entry key="order">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemOrder</entry>
+	<entry key="listKey">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@MyItemsListKey</entry>
+	<entry key="itemId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemId</entry>
+	<entry key="itemType">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemType</entry>
+	<entry key="customerLinePONo">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemPoNumber</entry>
+	<entry key="WCContext.loggedInUserId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createuserid</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createusername</entry>
+</properties>

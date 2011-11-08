@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for changing order header</comment>
+    <entry key="#parameters.OrderHeaderKey">xpedx_me_changeOrderHeader:/Order/@OrderHeaderKey</entry>
+    <entry key="#parameters.cartName">xpedx_me_changeOrderHeader:/Order/@OrderName</entry>
+    <entry key="#parameters.selectedCurrency">xpedx_me_changeOrderHeader:/Order/PriceInfo/@Currency</entry>
+    <entry key="#parameters.cartDesc">xpedx_me_changeOrderHeader:/Order/Extn/@ExtnOrderDesc</entry>
+    <entry key="recordPendingChanges">xpedx_me_changeOrderHeader:/Order/PendingChanges/@RecordPendingChanges</entry>
+</properties>

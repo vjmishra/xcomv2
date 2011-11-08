@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for draft order summary information</comment>
+    
+     <entry key="orderHeaderKey">xpedx_draftOrderSummary:/Order/@OrderHeaderKey,me_dod_validateItemForOrdering:/Order/@OrderHeaderKey</entry>
+     <entry key="WCContext.customerId">xpedx_CheckOrderedItemsEntitlements:/Item/CustomerInformation/@CustomerID</entry>
+     <entry key="WCContext.storefrontId">xpedx_CheckOrderedItemsEntitlements:/Item/@CallingOrganizationCode</entry>
+     <entry key="ItemIDs">xpedx_CheckOrderedItemsEntitlements:/Item/ComplexQuery/Or/Exp[]/@Value</entry>
+    
+</properties>
