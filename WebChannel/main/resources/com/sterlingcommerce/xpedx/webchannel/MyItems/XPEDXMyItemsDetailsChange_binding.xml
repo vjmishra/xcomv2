@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	
+	<entry key="itemId">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemId</entry>
+	<entry key="name">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@Name</entry>
+	<entry key="desc">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@Desc</entry>
+	<entry key="qty">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@Qty</entry>
+	<entry key="jobId">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@JobId</entry>
+	<entry key="order">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemOrder</entry>
+	<entry key="listKey">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@MyItemsListKey</entry>
+	<entry key="key">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@MyItemsKey</entry>
+	<entry key="uom">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@UomId</entry>
+	
+	<entry key="listKey2">XPEDXMyItemsListChange:/XPEDXMyItemsList/@MyItemsListKey</entry>
+	<entry key="listName">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Name</entry>
+	<entry key="listDesc">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Desc</entry>
+	
+	
+	<entry key="customFieldCustomerPONo">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemPoNumber</entry>
+	<entry key="customFieldSeqNo">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemSeqNumber</entry>
+	<entry key="customFieldCustLineField1">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemCustomField1</entry>
+	<entry key="customFieldCustLineField2">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemCustomField2</entry>
+	<entry key="customFieldCustLineField3">XPEDXMyItemsDetailsChange:/XPEDXMyItemsItems/@ItemCustomField3</entry>
+	
+</properties>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	<entry key="listKey">XPEDXMyItemsListChange:/XPEDXMyItemsList/@MyItemsListKey</entry>
+	<entry key="name">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Name</entry>
+	<entry key="desc">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Desc</entry>
+	<entry key="customerId">XPEDXMyItemsListChange:/XPEDXMyItemsList/@CustomerID</entry>
+	<entry key="modifiedDate">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Modifyts</entry>
+</properties>

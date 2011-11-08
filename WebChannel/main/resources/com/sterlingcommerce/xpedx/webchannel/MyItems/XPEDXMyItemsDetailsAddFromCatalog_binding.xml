@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	<entry key="prodId">XPEDXMyItemsDetailsAddFromCatalog:/Item/@ItemID</entry>
+	<entry key="#parameters.sfId">XPEDXMyItemsDetailsAddFromCatalog:/Item/@CallingOrganizationCode</entry>
+	<entry key="WCContext.customerId">XPEDXMyItemsDetailsAddFromCatalog:/Item/CustomerInformation/@CustomerID</entry>
+</properties>

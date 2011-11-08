@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	<entry key="customerId">XPEDXMyItemsDetailsGetShareList:/Customer/@CustomerID</entry>
+	
+	<entry key="customerId">XPEDXMyItemsGetCustomersList:/Customer/@CustomerID</entry>
+	<entry key="sfId">XPEDXMyItemsGetCustomersList:/Customer/@OrganizationCode</entry>
+</properties>

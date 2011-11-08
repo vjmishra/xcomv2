@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Creating My Items List action</comment>
+	<entry key="customerPath">XPEDXMyItemsDetailsChangeShareList:/XPEDXMyItemsListShare/@CustomerPath</entry>
+	<entry key="customerId">XPEDXMyItemsDetailsChangeShareList:/XPEDXMyItemsListShare/@CustomerID</entry>
+	<entry key="customerDiv">XPEDXMyItemsDetailsChangeShareList:/XPEDXMyItemsListShare/@DivisionID</entry>
+	<entry key="listKey">XPEDXMyItemsDetailsChangeShareList:/XPEDXMyItemsListShare/@MyItemsListKey,XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@MyItemsListKey,XPEDXMyItemsListChange:/XPEDXMyItemsList/@MyItemsListKey</entry>
+	
+	<entry key="sharePermissionLevel">XPEDXMyItemsListChange:/XPEDXMyItemsList/@SharePrivate</entry>
+	<entry key="shareAdminOnly">XPEDXMyItemsListChange:/XPEDXMyItemsList/@ShareAdminOnly</entry>
+	
+	<entry key="name">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Name</entry>
+	<entry key="desc">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Desc</entry>
+	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate</entry>
+	<entry key="WCContext.customerId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@CustomerID</entry>
+	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createuserid,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Modifyuserid</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername</entry>
+	
+	<!-- START - Copy list fields -->
+	<entry key="clFromListId">XPEDXMyItemsDetails:/XPEDXMyItemsItems/@MyItemsListKey</entry>
+	
+	<entry key="clName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Name</entry>
+	<entry key="clDesc">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Desc</entry>
+	<entry key="clQty">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Qty</entry>
+	<entry key="clCustField1">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemCustomField1</entry>
+	<entry key="clCustField2">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemCustomField2</entry>
+	<entry key="clCustField3">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemCustomField3</entry>
+	<entry key="clJobId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@JobId</entry>
+	<entry key="clOrder">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemOrder</entry>
+	<entry key="clListKey">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@MyItemsListKey</entry>
+	<entry key="clItemId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemId</entry>
+	<entry key="clItemType">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemType</entry>
+	<entry key="clUomId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@UomId</entry>
+	<entry key="clItemPO">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemPoNumber</entry>
+	
+	<entry key="clUserId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createuserid</entry>
+	<entry key="clUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createusername</entry>
+	<!-- END - Copy list fields -->
+	
+</properties>
