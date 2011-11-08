@@ -1,0 +1,1294 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Title zone</title>
+<style type="text/css">
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/calendar.js"></script>
+<script language="javascript" src="../../../lib/lov.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/multilist.js"></script>
+<script language="javascript" src="../../../lib/prompttree.js"></script>
+<script language="javascript" src="../scripts/filterlov.js"></script>
+<script language="javascript" src="../scripts/promptsUI.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/QueryWom.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript">
+function getSourceWidget(sourceID)
+{
+var source = null;
+var qpFrame = _topfs.getQueryFrame(); 
+source = qpFrame.getCurrentFilterWidget(sourceID); 
+if(source == null)
+{
+var dlgfrm=getFrame("SecondDlgFrame",parent); 
+if(dlgfrm)
+{
+var layer= dlgfrm.getLayer(sourceID)
+source = layer?dlgfrm._widgets[layer._widget]:null;
+}
+}
+return source;
+}
+_topfs=getTopFrameset()
+_skin=_topfs._skin
+_img=_topfs._img
+_lang=_topfs._lang
+_root=_topfs._root
+_appExt=_topfs._appExt
+_urlImg = parent._root + parent._img
+strEntry = _topfs.strEntry
+_iItemValueMaxLength=30
+_dlgWidth=_ie?586:600
+_dlgHeight=_ie?340:350
+_listNbLine=10
+_listWidth=250
+_treeHeight=100
+_btnWidth=60
+_infoHeight=50
+_lovZoneHeight=200
+_iItemValueMaxLength=50
+ID = requestQueryString(window,"ID");
+fltPartIdx = requestQueryString(window,"index");
+_obj=null
+_isForProfileValues= (ID == 'forProfileValues')? true: false;
+initDom(_root + "lib/images/"+_topfs._skinName+"/", _lang,_isForProfileValues?null: _topfs, "filterLOV")
+</script>
+<script language="javascript">styleSheet();</script>
+<script language="javascript"> 
+if (_isForProfileValues) {
+_img=_urlImg 
+alertDlg=null
+function showAlertDialog(msg,title,iPromptType,okCB)
+{
+if (alertDlg==null)
+{
+alertDlg=newAlertDialog("alertDlg","","","OK",_promptDlgInfo)
+targetApp(alertDlg.getHTML());
+alertDlg.init()
+}
+if (iPromptType ==null) iPromptType=0
+if (title==null)
+title= "Web Intelligence"
+alertDlg.setText(msg)
+alertDlg.setTitle(title)
+alertDlg.setPromptType(iPromptType)
+alertDlg.yesCB=(okCB)?okCB:null
+alertDlg.show(true)
+}
+_topfs.showAlertDialog = showAlertDialog
+promptDlg=null
+invalidSessionDlg=null
+function alertSessionInvalid()
+{
+if (invalidSessionDlg==null)
+{
+invalidSessionDlg=newAlertDialog("invalidSessionDlg","Web Intelligence","Invalid session. Please close your browser and log on again. (WIH 00013)","OK",_promptDlgWarning, parent.cancel)
+targetApp(invalidSessionDlg.getHTML());
+invalidSessionDlg.init()
+}
+invalidSessionDlg.show(true)
+}
+_topfs.alertSessionInvalid = alertSessionInvalid
+var url = _topfs._root + "incGetUniverseObject"+_appExt;
+url += "?unvid="+ encodeURIComponent(_topfs._univID);
+url += "&sNewVarIds=" + encodeURIComponent(_topfs._sNewDSID);
+includeScript(url) ;
+}
+</script>
+<script language="javascript"> 
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+if(!isError)
+{
+if (_isForProfileValues) 
+{
+_labFil=new Array;
+_labFil[EQUAL]="Equal to";
+_labFil[NOT_EQUAL]="Not Equal to";
+_labFil[GREATER]="Greater than";
+_labFil[GREATER_OR_EQUAL]="Greater than or Equal to";
+_labFil[LESS]="Less than";
+_labFil[LESS_OR_EQUAL]="Less than or Equal to";
+_labFil[BETWEEN]="Between";
+_labFil[NOT_BETWEEN]="Not Between";
+_labFil[IN_LIST]="In List";
+_labFil[NOT_IN_LIST]="Not In List"
+_labFil[IS_NULL]="Is Null"
+_labFil[NOT_IS_NULL]="Is not Null"
+_labFil[LIKE]="Matches pattern"
+_labFil[NOT_LIKE]="Different from pattern"
+_labFil[BOTH]="Both"
+_labFil[EXCEPT]="Except"
+_labOperand=new Array;
+_labOperand[AND]="And";
+_labOperand[OR]="Or";
+_labOperand[BEGINPROMPT]="prompt(\'";
+_labOperand[ENDPROMPT]="\')";
+_labOperand[OBJECT]="Object";
+_labOperand[BASEON]="Based on";
+_labOperand[FOREACH]="For Each";
+_labOperand[ANY]="Any";
+_labOperand[ALL]="All";
+var curObjHasLOV = _obj.hasLov
+_filterObj = newBOObj(_obj.name, _obj.id, _obj.kind, _obj.dataType,'', curObjHasLOV);
+_filter = newAdvBOFilter(_filterConst, _filterObj);
+_fPart=_filter.getOperandPart(0);
+_fPart2=_filter.getOperandPart(1);
+if (_topfs._webiFormulaInternal && "null" != _topfs._webiFormulaInternal && "" != _topfs._webiFormulaInternal) {
+var arFormula = _topfs._webiFormulaInternal.split("[")
+var operator = arFormula[0]
+var operands = arFormula[1].substring(0, arFormula[1].length -1)
+_filter.operator = operator
+if ((BETWEEN != operator) && (NOT_BETWEEN != operator)) {
+_fPart.operand = operands
+_fPart2.operand = ""
+} else {
+arOp = operands.split(_topfs._listSeparator)
+_fPart.operand = arOp[0]
+_fPart2.operand = (arOp[1]?arOp[1]:"")
+}
+}
+_showRefresh=true
+} else {
+_sourceWidget=getSourceWidget(ID);
+_filter=_sourceWidget.getFilter();
+_filterObj=_filter.obj
+_fPart=_filter.getOperandPart(fltPartIdx);
+_showRefresh=_topfs.isEnableUserRight(_topfs._usrRefreshLOV);
+}
+_opCount=_filter.getOperandCount()
+_isListOp=_filter.isListOperator()
+if(_fPart.type==_filterPrompt && _fPart.selectFromList)
+_showTextField= false
+else
+_showTextField= true
+if(_filterObj.dataType==_date)
+_showDateField= true
+else
+_showDateField= false
+var filterLOVDlg=null;
+var arrLOV = null;
+var arrChunk = null;
+var arrIdxValue = null;
+var bFillNestedPrompts=false;
+var bGroupedPrompts=false;
+var iCurNestedIndex=0;
+var arrPrompts=new Array;
+var iNbPrompts =1;
+var bSubmitAction=false;
+var bCaseSensitive="no";
+var sSearchValue="";
+rootLov=new Object
+rootLov.type=_isListOp?'Multi':'Mono'
+rootLov.opCount=_opCount
+rootLov.dataType=_filterObj.dataType
+if(_isForProfileValues)
+{        
+rootLov.name=_filterObj.name; 
+rootLov.v=_fPart.operand;
+rootLov.v2=_fPart2.operand;
+}
+else
+{
+rootLov.name=_fPart.getLabel(fltPartIdx,_iItemValueMaxLength);
+if(_sourceWidget.isDefaultValues)
+{
+rootLov.v=_fPart.defaultValues;
+}
+else
+{
+rootLov.v=_fPart.operand;
+}
+}
+}
+</script>
+<script language="javascript"> 
+if(!isError)
+{
+var p=arrPrompts[0]=new Array(19);
+p[0]=rootLov.name
+p[1]="PV1"
+p[2]=_topfs._inputFormatDate
+p[3]=_showDateField 
+p[4]=rootLov.type
+p[5]=true    
+p[6]=false    
+p[7]=false
+p[8]="" 
+p[9]=true   
+p[10]= rootLov.name 
+p[11]=""
+p[12]=false        
+p[13]=null
+p[14]=0
+p[15]=true;
+p[16]=false;
+p[17]=false;
+p[18]=false;
+if (_isForProfileValues && !curObjHasLOV) {
+strLovID = _filterObj.id;
+isLovDelegatedSearch=false;
+arrNbBatchLovItems=new Array;
+arrBatchLovTexts=new Array;
+arrBatchLovSelValue=new Array;
+arrLovTitle=new Array();
+iLovSortType=new Array();
+iLovSortedColumnIndex=new Array();
+arrNbLovItems=new Array;
+arrSelectedValues=new Array;
+arrLovTexts=new Array;
+arrLovValues=new Array;
+arrLovIndexes=new Array;
+isLovParialResult=false;
+} else {
+var url = _topfs._root + "incLov"+_appExt;
+if (_isForProfileValues) 
+{
+url +=  "?sEntry=" + strEntry
+url += "&iDPIndex=0"
+} else {
+url += _topfs.urlParams(false,true);
+url += "&iDPIndex="+_topfs.getSelectedDPIndex()
+}
+url += "&sOid=" + _filterObj.id;
+url += "&sLovType=DATA_SOURCE"
+url += "&iChunk=0"
+includeScript(url) ;
+}
+}
+</script>
+<script language="javascript">
+isError= isError || (typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+if(!isError)
+{
+arrPrompts[0][11]=strLovID;
+arrPrompts[0][12]=bFillNestedPrompts  
+arrPrompts[0][13]=bGroupedPrompts  
+arrPrompts[0][17]=(typeof(isLovDelegatedSearch)!="undefined" && isLovDelegatedSearch)?true:false;
+arrPrompts[0][18]=(typeof(isLovParialResult)!="undefined" && isLovParialResult)?true:false;
+prompts=new Array();
+for (var i=0;i<iNbPrompts;i++)
+{
+prompts[i]=newBOPrompt(arrPrompts[i]);
+prompts[i].index=i;
+prompts[i].valuefromlov=arrPrompts[i][8];
+}
+}
+    function loadCB()
+    {
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+_topfs.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+_topfs.showAlertDialog(_displayErrorMessage,"List of Values",2, _isForProfileValues?"parent.cancel()":null);
+return;
+}
+isPageLoaded = true
+initialized = false
+if (!initialized)
+{
+initialized = true     
+filterLOVDlg=newDialogBoxWidget("filterLOVDlg","List of Values",_dlgWidth, _dlgHeight, okCB, cancelCB, true, _isForProfileValues)
+filterLOVNested =newTreePromptWidget("filterLOVNestedTree",_dlgWidth-30,_treeHeight,nestedLOVCB,nestedLOVCB,null,expandTreeNodeCB,collapseTreeNodeCB);
+filterLOVZone=newFrameZoneWidget("filterLOVZone",null,_lovZoneHeight)
+if(_isForProfileValues)
+filterLOVRight = newSelectedValuesWidget("filterLOVRight",_opCount,_isListOp,_listNbLine,_listWidth,getSelectionCB,true,null,null,changeSelectionCB,opChangeCB)
+else
+filterLOVRight = newSelectedLOVWidget("filterLOVRight",_opCount,_isListOp,_listNbLine,_listWidth,getSelectionCB);
+filterLOVLeft   =newLovWidget("filterLOVLeft","",_listWidth,_listNbLine-3,_showTextField,_showRefresh,changeBatchLOVCB,refreshLOVCB,searchValueCB,dblClickLOVCB,_isListOp,enterCB,_showDateField)
+filterLOVLeft.lovList.sortCB=sortColumnValuesCB;
+filterLOVTree=newTreeWidget("filterLOVHierTree",_listWidth,_dlgHeight-170,_urlImg,ftreeLov_clickCB,ftreeLov_dclickCB,null,null,null);
+filterLOVDate=newCalendarTextFieldButton("filterLOVDate",null,null,null,null,submitFreeLovCB,true,null,_listWidth,null,null,_topfs._inputFormatDate);
+filterLOVTxt=newTextFieldWidget("filterLOVTxt",null,null,null,submitFreeLovCB,true,"",_listWidth);
+filterLOVRefresh =  newIconWidget("filterLOVRefresh",_urlImg+'standard.gif',refreshLOVCB,"Refresh Values","Refresh Values",16,16,16*7,0,16*7,16);
+filterLOVRefresh.txtPosition="left";
+filterLOVInfo=newInfoWidget("filterLOVInfo","More Information",null,"Select or enter the the values that you want to show on the selected table or cell.",_infoHeight)
+OKButton=newButtonWidget("filterLOVOK","OK",okCB,_btnWidth)
+CancelButton=newButtonWidget("filterLOVCancel","Cancel",cancelCB,_btnWidth)
+HelpButton=newButtonWidget("filterLOVHelp","Help",null,_btnWidth)
+filterLOVDlg.attachDefaultButton(OKButton);
+filterLOVTree.setMultiSelection(true);
+displayWaitCursor = newBlockWhileWaitWidget();
+}
+if (_curWin.filterLOVDlgInitialized!=true)
+{
+_curWin.filterLOVDlgInitialized=true
+targetApp
+(
+filterLOVDlg.beginHTML() +
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td>'+filterLOVNested.getHTML()+'</td></tr>'+
+'<tr><td>'+
+filterLOVZone.beginHTML()+
+'<table class="dialogzone" cellpadding="0" cellspacing="0" border="0"><tr><td align="right">'+
+filterLOVTxt.getHTML()+
+filterLOVDate.getHTML()+
+'<table  class="dialogzone" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td>'+
+filterLOVRefresh.getHTML()+
+'</td></tr></tbody></table>'+
+filterLOVLeft.getHTML()+
+filterLOVTree.getHTML()+
+'</td>'+
+'<td>'+
+filterLOVRight.getHTML()+
+'</td></tr></table>'+
+filterLOVZone.endHTML()+
+'</td></tr>'+
+'<tr><td>'+
+filterLOVInfo.getHTML()+
+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'<td>'+HelpButton.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+filterLOVDlg.endHTML()
+)
+}
+filterLOVDlg.init()
+filterLOVNested.init();
+filterLOVZone.init()
+filterLOVRight.init();
+filterLOVLeft.init();
+filterLOVTree.init();
+filterLOVDate.init();
+filterLOVTxt.init();
+filterLOVRefresh.init();
+filterLOVInfo.init()
+OKButton.init()
+OKButton.setDisabled(true)
+CancelButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+displayWaitCursor.init()
+initWidget()
+filterLOVDlg.show(true)
+}
+function initWidget()
+{
+arrChunk = arrBatchLovTexts[iCurNestedIndex];
+arrLOV = arrLovTexts[iCurNestedIndex];
+fillIdxValues(arrLovIndexes[iCurNestedIndex],prompts[iCurNestedIndex].isMultiColumn?arrLovValues[iCurNestedIndex]:arrLovTexts[iCurNestedIndex]);
+filterLOVLeft.isLovFilled=false;
+filterLOVLeft.setLovMessage(convStr("Use search criteria to retreive values.\n\nThe search is case sensitive. Here are examples of search criteria:\nSearch = a* -> retrieves all values starting by \"a\".\nSearch = *a -> retrieves all values finishing by \"a\".\nSearch = a*a -> retrieves all values starting and finishing by \"a\".\nSearch = a*a* -> retrieves all values starting by \"a\" and containing one more \"a\".",false,true));
+if (prompts[iCurNestedIndex].isLovDelegatedSearch)
+{
+showDelegatedSearch(true);
+}
+else
+{
+filterLOVLeft.fillLOV( arrLOV,arrIdxValue,arrLovTitle[iCurNestedIndex],iLovSortType[iCurNestedIndex], iLovSortedColumnIndex[iCurNestedIndex]);
+filterLOVLeft.fillChunk( arrChunk );
+filterLOVLeft.isLovFilled=true;
+showDelegatedSearch(false); 
+}
+filterLOVLeft.showPartialResult(prompts[iCurNestedIndex].isLovPartialResult);
+if(_isForProfileValues)
+{
+filterLOVRight.setLabels("","And")
+filterLOVRight.setValues(rootLov.v,rootLov.v2,_filterObj.name, _filterObj.kind, _filter)
+}
+else
+{
+filterLOVRight.setLabels(rootLov.name)
+filterLOVRight.setValues(rootLov.v)
+}
+filterLOVLeft.setDisplay(false);
+filterLOVNested.setDisplay(false);
+filterLOVTree.setDisplay(false);
+filterLOVDate.setDisplay(false);
+filterLOVTxt.setDisplay(false);
+filterLOVRefresh.setDisplay(false);
+filterLOVLeft.change(null,null,null,null,null,null,null,null,null,_isListOp,null,null,!_filterObj.hasLov)
+filterLOVLeft.setFormatDate(_topfs._inputFormatDate)
+bCaseSensitive=filterLOVLeft.isCaseSensitive()?"yes":"no";
+sSearchValue=""
+if(bFillNestedPrompts)
+{
+if(bGroupedPrompts)
+{
+if(_showDateField)
+filterLOVDate.setDisplay(true);
+else
+filterLOVTxt.setDisplay(true);
+filterLOVRefresh.setDisplay(_showRefresh);
+filterLOVTree.setDisplay(true);
+fillNestedLOVHierTree();
+}
+else
+{
+filterLOVLeft.setDisplay(true);
+filterLOVNested.setDisplay(true);
+fillNestedLovList()
+changeSelectionCB()
+filterLOVDlg.resize(_dlgWidth,_dlgHeight+100);
+}
+}
+else
+{
+filterLOVLeft.setDisplay(true);
+filterLOVDlg.resize(_dlgWidth,_dlgHeight);
+}
+}
+function showDelegatedSearch(b)
+{
+filterLOVLeft.showDelegateSearch(b)
+}
+function fillIdxValues(arrIdx,arrValues)
+{
+if(arrIdxValue == null )
+arrIdxValue=new Array();
+else 
+arrIdxValue.length=0;
+if(arrValues == null )return; 
+var len = arrValues.length;
+if(arrIdx == null || arrIdx.length == 0 )
+{
+for(var i=0;i<len;i++)
+arrIdxValue[i]="_"+arrValues[i];
+}
+else
+{
+for(var i=0;i<len;i++)
+arrIdxValue[i]=arrIdx[i]+"_"+arrValues[i];
+}
+}
+function fillNestedLovList()
+{
+filterLOVNested.deleteAll();
+var arrParentNodes = new Array();
+arrParentNodes[0]=filterLOVNested;
+for (var i=0;i<prompts.length;i++)
+{
+var strValue=(prompts[i].value=="")?null:prompts[i].value;
+var strName=prompts[i].name;
+if (strValue!=null)
+{
+}
+arrParentNodes[prompts[i].level+1]=arrParentNodes[prompts[i].level].add(newTreePromptElem(strName,strValue,i,prompts[i].isOptional));
+arrParentNodes[prompts[i].level+1].expanded=true;
+}
+filterLOVNested.rebuildHTML();
+filterLOVNested.selectByData(0);
+updateLovMsg(_sNeedAnswer);
+}
+function okCB()
+{
+if (_isForProfileValues) 
+{
+if(iCurNestedIndex==0)
+{
+rootLov.v = filterLOVRight.getValues(1)
+rootLov.v2 = filterLOVRight.getValues(2)
+}
+var val = getOnlyValues(rootLov.v)
+if (val == null) val = ""
+var val2 = getOnlyValues(rootLov.v2)
+if ((val2 != null) && (val2 != "")) {
+val += _topfs._listSeparator + val2
+}
+val = "[" + val + "]"
+var expression = _filter.operator + val
+var displayExp = _labFil[_filter.operator] + val
+parent.setExpression(expression, displayExp)
+} 
+else 
+{
+if(iCurNestedIndex==0)
+rootLov.v = filterLOVRight.getValues()
+_sourceWidget.setLovSelection(rootLov.v,fltPartIdx)
+}
+filterLOVDlg.show(false)
+}
+function cancelCB()
+{
+if (_isForProfileValues) 
+{
+parent.cancel()
+} 
+else 
+{
+if(_sourceWidget.cancelAction)
+{
+if(_filter.isQuickFilter)
+_sourceWidget.cancelAction("removefilter",fltPartIdx);
+else
+_sourceWidget.cancelAction("resetmenu",fltPartIdx);
+}
+}
+filterLOVDlg.show(false)
+}
+function getSelectionCB()
+{
+    var o=filterLOVRight
+if(bGroupedPrompts)
+{
+    var arr=new Array;
+    var text="";
+    if(_showDateField)
+text = processFreeValues(filterLOVDate.getValue());
+    else
+text = processFreeValues(filterLOVTxt.getValue());
+if(text!="") 
+{
+    if(o.isList)
+        {
+        var arrText=text.split(_topfs._listSeparator), arrlen=arrText.length
+        for(var i=0;i<arrlen;i++)    
+        arr[arr.length]="_"+arrText[i]
+        }
+        else
+        {
+        arr[arr.length]="_"+text
+    }
+}
+var arraySel = filterLOVTree.getSelections(),len = arraySel.length;
+if((len==0) && (text=="")) return; 
+for(var i=0;i<len;i++)
+{
+var sel = arraySel[i];
+if (sel && sel.selectableItem)
+{
+arr[arr.length]=sel.userData[1]+"_"+sel.userData[2];
+}
+}
+return arr;
+}
+else
+{
+return getLovChoices(filterLOVLeft,o.isList,null,true);
+}
+}
+function changeSelectionCB()
+{
+    var bDisableOK=true;
+if(bFillNestedPrompts && !bGroupedPrompts)
+{
+var treeItem = filterLOVNested.getSelectedItem()
+var strValueToDisplay =getOnlyValues(filterLOVRight.getValues(1))
+var iPrompt=iCurNestedIndex
+if(iPrompt == 0 && rootLov.opCount==2)
+{
+var s = getOnlyValues(filterLOVRight.getValues(2))
+if(s!="")
+strValueToDisplay+=' ; '+ s
+}
+if (!prompts[iPrompt].isNestedPrompt() && prompts[iPrompt].isRequired)
+{
+if(strValueToDisplay=="")
+{
+strValueToDisplay=null;
+bDisableOK=true;
+}
+else    
+bDisableOK = false;
+}
+treeItem.change(prompts[iPrompt].name,strValueToDisplay,prompts[iPrompt].isOptional);
+}
+else
+{
+    if(_isForProfileValues)
+{
+    if(_opCount==0)
+        bDisableOK=false;
+    if(_opCount==1 && filterLOVRight.getValues(1)!="")
+        bDisableOK=false;
+    if(_opCount==2 && (filterLOVRight.getValues(1)!="") && (filterLOVRight.getValues(2)!=""))
+    bDisableOK=false;
+}
+else
+{    
+                    bDisableOK=(filterLOVRight.getValues()=="");    
+}
+}
+OKButton.setDisabled(bDisableOK);
+}
+function opChangeCB(isList,nbOperand)
+{
+        _opCount=nbOperand
+        _isListOp=isList
+var label=w=lines=showText=showRefresh=moveCB=refreshCB=searchCB=dblClickCB=multi=enterCB=showDate=showTextOnly=null
+multi=isList
+showTextOnly = !_filterObj.hasLov
+filterLOVLeft.change(label,w,lines,showText,showRefresh,moveCB,refreshCB,searchCB,dblClickCB,multi,enterCB,showDate,showTextOnly)
+var listVals = filterLOVRight.valuesList
+if ((nbOperand == 1) && (listVals.getCount() == 1) && (listVals.getValue(0).value == "")) {
+listVals.del()
+}
+_filter.setOperator(filterLOVRight.operator.getSelection().value);
+changeSelectionCB()
+}
+function dblClickLOVCB()
+{
+var o=filterLOVRight
+var sel = filterLOVLeft.getLOVSelection(),len=sel.length
+if((len == 0) || (len==1 && (sel[0].value == _sNeedAnswer || sel[0].value == _sNoValue)))return;
+var target= o.getTarget();
+var v = sel[0].value, s=getOnlyValues(v);
+if(o.isList)
+{
+if(canAddValue(target,v,true))
+target.add(s,v);
+}
+else
+{
+target.setValue(s);
+}
+o.updateOperands(new Array(v),target);
+changeSelectionCB()
+}
+function enterCB(ev)
+{
+var o=filterLOVRight
+var target= o.getTarget()
+var arr = null;
+if( !isTextInput(ev)) 
+arr = getLovChoices(filterLOVLeft,o.isList,null,true,true)
+else 
+arr = getLovChoices(filterLOVLeft,o.isList,true,true,null) 
+var len=arr.length;
+if(len==0) return;
+if(o.isList)
+{
+var v ="",s="";
+for(var i=0;i<len;i++)
+{
+v = arr[i];
+s =getOnlyValues(v);
+if(canAddValue(target,v,true))
+target.add(s,v)
+}
+}
+else
+{
+target.setValue(getOnlyValues(arr[0]))
+}
+o.updateOperands(arr,target)
+changeSelectionCB()
+}
+function changeBatchLOVCB()
+{
+var strId=""+filterLOVLeft.getChunkSelection().index;
+var pIndex = iCurNestedIndex;
+submitNestedLovAction(prompts[pIndex].paramName,"B",strId);
+}
+function searchValueCB()
+{
+var pIndex = iCurNestedIndex;
+if (prompts[pIndex].isLovDelegatedSearch && this.getSearchValue()=="")
+{
+showDelegatedSearch(true);
+filterLOVLeft.showPartialResult(false);
+filterLOVLeft.chunkCombo.del();
+filterLOVLeft.updateWidget();
+return;
+} 
+submitNestedLovAction(prompts[pIndex].paramName,"S","0");
+}
+function refreshLOVCB()
+{
+var pIndex = iCurNestedIndex;
+if(bFillNestedPrompts && bGroupedPrompts)
+{
+_this=filterLOVTree;
+pIndex = prompts.length -1;
+}
+if (prompts[pIndex].hasNP)
+setNestedLov("R");
+else
+    submitNestedLovAction(prompts[pIndex].paramName,"R","0");
+}
+function sortColumnValuesCB(colIndex)
+{
+var pIndex = iCurNestedIndex;
+this.sortedColumn=colIndex;
+var sortType=this.cols[colIndex].sortIcn;
+sortType++;
+if (sortType>1) sortType=-1;
+this.sortType=sortType;
+submitNestedLovAction(prompts[pIndex].paramName,"SRT",0);
+}
+function expandTreeNodeCB(){}
+function collapseTreeNodeCB(){}
+function nestedLOVCB()
+{
+var pIndex=parseInt(this.getSelectedItem().userData);
+if (iCurNestedIndex!=pIndex)
+{
+saveSelValues();
+iCurNestedIndex=pIndex;
+arrChunk = arrBatchLovTexts[pIndex];
+arrLOV = arrLovTexts[pIndex];
+fillIdxValues(arrLovIndexes[pIndex],prompts[pIndex].isMultiColumn?arrLovValues[pIndex]:arrLovTexts[pIndex]);
+if (prompts[pIndex].isLovDelegatedSearch && !filterLOVLeft.isLovFilled)
+showDelegatedSearch(true);
+else
+{
+filterLOVLeft.fillLOV( arrLOV,arrIdxValue );
+filterLOVLeft.fillChunk( arrChunk );
+filterLOVLeft.setSearchValue("");
+sSearchValue="";
+}
+if (prompts[pIndex].hasNP)
+setNestedLov();
+else if (arrChunk == null && prompts[pIndex].hasLOV)
+submitNestedLovAction(prompts[pIndex].paramName,"F","0");
+updateUI(prompts[pIndex])
+setSelValues()
+bCaseSensitive=filterLOVLeft.isCaseSensitive()?"yes":"no";
+sSearchValue="";
+}
+}
+function saveSelValues()
+{
+var iPrompt=iCurNestedIndex;
+if(iPrompt == 0)
+{
+if(_isForProfileValues)
+{
+rootLov.v=filterLOVRight.getValues(1)
+rootLov.v2=filterLOVRight.getValues(2)
+rootLov.opCount=filterLOVRight.operandCount;
+rootLov.type=filterLOVRight.isList?'Multi':'Mono'
+}
+else
+{
+rootLov.v=filterLOVRight.getValues()
+}
+}
+else
+{
+var idx=_isForProfileValues?1:null;
+var s=getOnlyValues(filterLOVRight.getValues(idx))
+var sIndex=getOnlyIndexes(filterLOVRight.getValues(idx))
+if(s!= prompts[iPrompt].value)
+{
+prompts[iPrompt].value=s
+prompts[iPrompt].valueIndex=sIndex
+prompts[iPrompt].valueChanged=true
+prompts[iPrompt].valuefromlov=filterLOVRight.getValues(idx);
+}
+else
+prompts[iPrompt].valueChanged=false
+}
+}
+function setSelValues()
+{
+var iPrompt=iCurNestedIndex;
+var v="",v2="";
+if(iPrompt == 0)
+{
+v= rootLov.v
+v2=rootLov.v2
+}
+else
+{
+v=prompts[iPrompt].valuefromlov;
+}
+if(_isForProfileValues)
+filterLOVRight.setValues(v,v2,_filterObj.name, _filterObj.kind, _filter);
+else
+filterLOVRight.setValues(v);
+}
+function updateLovMsg(msg)
+{
+if (arrChunk == null) 
+{
+if(msg == null)
+{
+msg=_sNoValue;
+if (prompts[iCurNestedIndex].hasNP)
+{
+var pLovID=prompts[iCurNestedIndex].lovID;
+var pLevel=prompts[iCurNestedIndex].level+1;
+for (var i=iCurNestedIndex+1;i<prompts.length;i++) 
+{
+if (prompts[i].level>0) 
+{
+if (prompts[i].level==pLevel && prompts[i].isNestedPrompt() && prompts[i].parentLovID==pLovID) 
+{
+if(prompts[i].value=="")
+{
+msg=_sNeedAnswer;
+break;
+}
+}
+}
+else
+break;
+}
+}
+}
+filterLOVLeft.fillLOV( new Array(msg),null );
+}
+}
+function updateUI(p)
+{
+var opCount =1
+var isList=(p.type=='Multi')
+var label=p.name
+var showTextOnly=!p.hasLOV 
+var bEditOperator=(iCurNestedIndex == 0);
+if(iCurNestedIndex == 0)
+{
+opCount=rootLov.opCount 
+isList=(rootLov.type=='Multi')
+}
+if(_isForProfileValues)
+filterLOVRight.update(opCount,isList,label,null,bEditOperator);
+else
+filterLOVRight.update(opCount,isList,label);
+var label=w=lines=showText=showRefresh=moveCB=refreshCB=searchCB=dblClickCB=multi=enterCB=showDate=null
+multi=isList
+showText=!p.isContrained
+if(p.isDate) 
+showDate=true
+else
+showDate=false
+filterLOVLeft.change(label,w,lines,showText,showRefresh,moveCB,refreshCB,searchCB,dblClickCB,multi,enterCB,showDate,showTextOnly)
+if(!bSubmitAction)
+updateLovMsg();
+}
+function setNestedLov(strAction)
+{
+strAction=strAction?strAction:"";
+var pIndex = iCurNestedIndex;
+var blnRefresh=(strAction=="R")?true:false;
+var strChildren="";
+var pLovID=prompts[pIndex].lovID;
+var pLevel=prompts[pIndex].level+1;
+for (var i=pIndex+1;i<prompts.length;i++) 
+{
+if (prompts[i].level>0) 
+{
+if (prompts[i].level==pLevel && prompts[i].isNestedPrompt() && prompts[i].parentLovID==pLovID) 
+{
+if (strAction=="" && prompts[i].valueChanged)
+blnRefresh=true;
+strChildren=(strChildren=="")?strChildren+i.toString():strChildren+","+i.toString();
+}
+}
+else
+break;
+}
+if (blnRefresh) 
+{
+var setNP='no'
+if(strChildren!="")
+{
+var arrChildren=strChildren.split(',');
+for (var i=0;i<arrChildren.length;i++)
+{
+var j=parseInt(arrChildren[i]);
+prompts[j].valueChanged=false;
+}
+setNP='yes'
+}
+submitNestedLovAction(prompts[pIndex].paramName,"R","0",setNP);
+}
+}
+function submitNestedLovAction(strPromptName,strAction,iChunk,strSetNP)
+{
+var iPrompt=getPromptIndex(strPromptName);
+if (typeof(strSetNP)=="undefined")
+strSetNP="";
+else
+strSetNP="&setNP="+strSetNP;
+var url = _topfs._root + "processRefreshLOV" + _appExt 
+if (_isForProfileValues) 
+{
+url +=  "?sEntry=" + strEntry
+url +=  "&iViewerID=0"
+} 
+else 
+{
+url +=  _topfs.urlParams(false,true);
+}
+var strQueryParams=url+"&sLovID="+prompts[iPrompt].lovID;
+strQueryParams+="&sAction="+strAction+"&sParamName="+strPromptName+"&gIndex="+iPrompt.toString()+"&iChunk="+iChunk;
+var promptIndex="";
+var strNested="";
+if (prompts[iPrompt].isNestedPrompt())
+{
+strNested=strPromptName.substring("NPV".length);
+var iPos=strNested.lastIndexOf('.');
+if (iPos>=0)
+{
+    promptIndex=strNested.substring(iPos+1);
+    strNested=strNested.substring(0,iPos);
+}
+strQueryParams+="&iPrompt="+promptIndex+"&sNested="+strNested;
+}
+else
+{
+promptIndex=strPromptName.substring("PV".length);
+strQueryParams+="&iPrompt="+promptIndex;
+}
+if(iPrompt == 0)
+strQueryParams+="&sLovType="
+strQueryParams+=strSetNP;
+if (strAction=="S")
+{
+bCaseSensitive=filterLOVLeft.isCaseSensitive()?"yes":"no";
+sSearchValue=filterLOVLeft.getSearchValue();
+}
+strQueryParams+="&sCaseSensitive="+bCaseSensitive;
+strQueryParams+="&sEmptyLab="+convURL(_emptyValueLab);
+if (strAction=="R")
+{
+filterLOVLeft.setSearchValue("");
+sSearchValue="";
+}
+var colIndex=(typeof(filterLOVLeft.lovList.sortedColumn)!="undefined")?filterLOVLeft.lovList.sortedColumn:0;
+var sortType=(typeof(filterLOVLeft.lovList.sortType)!="undefined")?filterLOVLeft.lovList.sortType:(filterLOVLeft.lovList.cols[colIndex]?filterLOVLeft.lovList.cols[colIndex].sortIcn:-1);
+strQueryParams+="&colIndex="+colIndex+"&sortType="+sortType;
+if (_isForProfileValues) 
+{
+strQueryParams+="&iDPIndex=0"
+} 
+else 
+{
+strQueryParams+="&iDPIndex="+_topfs.getSelectedDPIndex()
+}
+generateLOVForm(strAction,strPromptName)
+var nLovForm = document.getElementById("nestedLovForm");
+nLovForm.action=strQueryParams
+nLovForm.submit();
+bSubmitAction= true;
+displayWaitCursor.show(true);
+}
+function generateLOVForm(strAction,strPromptName)
+{
+var pIndex=getPromptIndex(strPromptName);
+var strForm='<form target="lovDlgFrame" style="display:none" id="nestedLovForm" name="nestedLovForm" method="post" action="">'
+if(strAction == 'R')
+{
+var pLovID=prompts[pIndex].lovID;
+var pLevel=prompts[pIndex].level+1;
+for (var i=pIndex+1;i<prompts.length;i++) 
+{
+if (prompts[i].level>0) 
+{
+if (prompts[i].level==pLevel && prompts[i].isNestedPrompt() && prompts[i].parentLovID==pLovID && prompts[i].value!="") 
+{
+strForm +='<input type="hidden" id="'+prompts[i].paramName+'" name="'+prompts[i].paramName+'" value="'+prompts[i].value+'">';
+strForm +='<input type="hidden" id="'+prompts[i].paramIndexName+'" name="'+prompts[i].paramIndexName+'" value="'+prompts[i].valueIndex+'">';
+}
+}
+else
+break;
+}
+}
+var sParam = 'L'+strPromptName+'_searchVal'
+strForm +='<input type="hidden" id="'+sParam+'" name="'+sParam+'" value="'+sSearchValue+'">';
+strForm +='</form>';
+var nLovForm = document.getElementById("nestedLovForm");
+if(nLovForm!=null)
+document.body.removeChild(nLovForm)
+append(document.body,strForm,document)
+}
+function updateQueryFltLOV(iPrompt,s)
+{
+if(bGroupedPrompts)
+{
+updateGroupedBatchAndLov(iPrompt,s);
+}
+else
+{
+prompts[iPrompt].isMultiColumn=s.arrPrompts[0][7];
+prompts[iPrompt].isLovPartialResult=s.arrPrompts[0][18];
+arrLovIndexes[iPrompt]=s.arrLovIndexes[0];
+arrLovValues[iPrompt]=s.arrLovValues[0];
+arrLovTexts[iPrompt]=s.arrLovTexts[0];
+arrBatchLovTexts[iPrompt]=s.arrBatchLovTexts[0];
+if (s.strAction != "B")
+{
+arrChunk = arrBatchLovTexts[iPrompt];
+filterLOVLeft.fillChunk( arrChunk );
+}
+if (prompts[iPrompt].isMultiColumn)
+{
+fillIdxValues(arrLovIndexes[iPrompt],arrLovValues[iPrompt]);
+}
+else
+{
+fillIdxValues(arrLovIndexes[iPrompt],arrLovTexts[iPrompt]);
+}
+arrLOV = arrLovTexts[iPrompt];
+if (prompts[iPrompt].isLovDelegatedSearch)
+filterLOVLeft.showLovMessage(false);
+filterLOVLeft.showPartialResult(prompts[iPrompt].isLovPartialResult);
+filterLOVLeft.fillLOV( arrLOV,arrIdxValue,s.arrLovTitle[0],s.iLovSortType[0], s.iLovSortedColumnIndex[0]);
+filterLOVLeft.isLovFilled=true;
+bSubmitAction=false;
+updateLovMsg(_sNoValue);
+}
+}
+function displayErrorMsg(strMsg)
+{
+_topfs.showAlertDialog(strMsg,"List of Values",2);
+}
+function fillNestedLOVHierTree()
+{
+var i=prompts.length -1;
+var np=prompts[i];
+var selChunk = null;
+var iNbBatchLovItems=arrNbBatchLovItems[i];
+if(iNbBatchLovItems>1)
+{
+for (var j=0;j<iNbBatchLovItems;j++)
+{
+var blnSelected=(j==arrBatchLovSelValue[i]);
+var itemChunk=newTreeWidgetElem(-1,arrBatchLovTexts[i][j],new Array(np.paramName,j),"",null,"",null);
+itemChunk.selectableItem=false;
+if (blnSelected)
+selChunk = filterLOVTree.add(itemChunk);
+else
+{
+var subChunk=filterLOVTree.add(itemChunk);
+subChunk.setIncomplete(ftreeLov_CompleteChunkCB);
+subChunk.expanded=false;
+}
+}
+}
+if(arrNbLovItems[i]>0)
+{
+for (var k=0;k<arrNbLovItems[i];k++)
+{
+var t=arrLovTexts[i][k];
+var userData =null;
+if (np.isMultiColumn)
+{
+userData=new Array(i,arrLovIndexes[i][k],arrLovValues[i][k]);
+t=t.join(" | ");
+}
+else
+userData=new Array(i,arrLovIndexes[i][k],arrLovTexts[i][k]);
+var itemLov=newTreeWidgetElem(-1,t,userData,"",null,"",null);
+itemLov.selectableItem=np.lovSelectableItems;
+var sub = null;
+if(selChunk) 
+{
+sub = selChunk.add(itemLov);
+selChunk.expanded =true;
+}
+else 
+{
+sub=filterLOVTree.add(itemLov);
+}
+sub.expanded=false;
+sub.setIncomplete(ftreeLov_CompleteLOVCB);
+}
+}
+else 
+{
+var itemLov=newTreeWidgetElem(-1,_sNoValue,"","",null,"",null);
+itemLov.selectableItem=false;
+filterLOVTree.add(itemLov);
+}
+filterLOVTree.rebuildHTML();
+}
+function updateGroupedBatchAndLov(iPrompt,s)
+{
+var selChunk =null;
+arrBatchLovSelValue[iPrompt]=s.arrBatchLovSelValue[0];
+arrNbBatchLovItems[iPrompt]=s.arrNbBatchLovItems[0];
+arrNbLovItems[iPrompt]=s.arrNbLovItems[0];
+if(_this.id == filterLOVTree.id) 
+{
+_this.deleteAll();
+}
+if (s.strAction!="B")
+{
+var iNbBatchLovItems=arrNbBatchLovItems[iPrompt];
+if(iNbBatchLovItems>1)
+{
+arrBatchLovTexts[iPrompt]=new Array(iNbBatchLovItems);
+for (var j=0;j<iNbBatchLovItems;j++)
+{
+arrBatchLovTexts[iPrompt][j]=s.arrBatchLovTexts[0][j];
+var blnSelected=(j==arrBatchLovSelValue[iPrompt]);
+var itemChunk=newTreeWidgetElem(-1,arrBatchLovTexts[iPrompt][j],new Array(prompts[iPrompt].paramName,j),"",null,"",null);
+itemChunk.selectableItem=false;
+if (blnSelected)
+selChunk = _this.add(itemChunk);
+else
+{
+var subChunk=_this.add(itemChunk);
+subChunk.setIncomplete(ftreeLov_CompleteChunkCB);
+subChunk.expanded=false;
+}
+}
+}
+}
+if(arrNbLovItems[iPrompt]>0)
+{
+for (var i=0;i<arrNbLovItems[iPrompt];i++)
+{
+var t=s.arrLovTexts[0][i];
+var userData =null;
+if (s.arrPrompts[0][7])
+{
+userData=new Array(iPrompt,s.arrLovIndexes[0][i],s.arrLovValues[0][i]);
+t=t.join(" | ");
+}
+else
+userData=new Array(iPrompt,s.arrLovIndexes[0][i],s.arrLovTexts[0][i]);
+var itemLov=newTreeWidgetElem(-1,t,userData,"",null,"",null);
+itemLov.selectableItem=prompts[iPrompt].lovSelectableItems;
+var sub = null;
+if(selChunk)
+{
+sub = selChunk.add(itemLov);
+selChunk.expanded=true;
+}
+else
+{
+sub = _this.add(itemLov);
+}
+if (prompts[iPrompt].isGrouped)
+{
+}
+else
+{
+sub.setIncomplete(ftreeLov_CompleteLOVCB);
+sub.expanded=false;
+}
+}
+}
+else 
+{
+var itemLov=newTreeWidgetElem(-1,_sNoValue,"","",null,"",null);
+itemLov.selectableItem=false;
+_this.add(itemLov);
+}
+if(_this.id == filterLOVTree.id) 
+{
+_this.rebuildHTML();
+}
+else
+{
+_this.finishComplete();
+_this.expanded=true;
+}
+}
+function ftreeLov_clickCB()
+{
+}
+function ftreeLov_dclickCB()
+{
+var arrUserData=null;
+var arraySel = this.getSelections(), len = arraySel.length;
+if(len == 0) return; 
+for(var i=0;i<len;i++)
+{
+if (arraySel[i].selectableItem)
+{
+arrUserData=arraySel[i].userData;
+break;
+}
+}
+if (arrUserData!=null)
+{
+var o=filterLOVRight;
+var target= o.getTarget();
+var s=arrUserData[2];
+var sIdx_Value=arrUserData[1]+"_"+arrUserData[2];
+if(o.isList)
+{
+if(canAddValue(target,sIdx_Value,true))
+target.add(s,sIdx_Value);
+}
+else
+{
+target.setValue(s);
+}
+o.updateOperands(new Array(sIdx_Value),target);
+changeSelectionCB();
+}
+}
+function ftreeLov_CompleteChunkCB()
+{
+_this=this;
+var strPromptName=this.userData[0];
+var iChunk=this.userData[1];
+submitNestedLovAction(strPromptName,"B",iChunk);
+}
+function ftreeLov_CompleteLOVCB()
+{
+_this=this;
+var iPrompt=_this.userData[0];
+var pt=prompts[iPrompt];
+pt.valueIndex=_this.userData[1];
+pt.value=_this.userData[2];
+if (iPrompt>0)
+{
+iPrompt--;
+submitNestedLovAction(prompts[iPrompt].paramName,"R",0,"yes");
+}
+}
+function submitFreeLovCB()
+{
+var text = processFreeValues(this.getValue());
+if(text!="") 
+{
+var o=filterLOVRight;
+var target= o.getTarget();
+var arrSel= new Array();
+if(o.isList)
+{
+var arr=text.split(_topfs._listSeparator), arrlen=arr.length
+var v="";
+for(var i=0;i<arrlen;i++)
+{
+v="_"+arr[i];
+if(canAddValue(target,v,true))
+{
+arrSel[arrSel.length]=v;
+target.add(arr[i],v);
+}
+}
+}
+else
+{
+arrSel[arrSel.length]="_"+text;
+target.setValue(text);
+}
+o.updateOperands(arrSel,target)
+changeSelectionCB();
+}
+}
+</script>
+</head>
+<body style="overflow:hidden" class="dialogzone" scroll="no" marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" onLoad="setTimeout('loadCB()',1)" onresize="">
+<script language="javascript">
+    document.write('<iframe name="lovDlgFrame" style="position:absolute;left:-100px;top:-100px;width:10px;height:10px;"  src="'+_root+'"html/empty.html"></iframe>');
+    </script>
+</body>
+</html>

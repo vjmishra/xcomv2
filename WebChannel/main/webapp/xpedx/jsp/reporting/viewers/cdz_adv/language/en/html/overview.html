@@ -1,0 +1,360 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#printTb{position:absolute;top:0;left:0px;overflow:hidden;}
+#infoContent{position:absolute;top:28px;left:0px;overflow:auto;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../scripts/alerters.js"></script>
+<script language="javascript">
+p = parent
+initDom("../../../lib/images/" + p._skinName +"/", p._lang)
+p.setKeyCB(this, false)
+</script>
+<script language="javascript">
+styleSheet()
+</script>
+<script language="javascript">
+var url =  p._root + "incOverview" + p._appExt
+url += p.urlParams(false, true) 
+</script>
+<script language="javascript"> includeScript(url)  </script>
+<script language="javascript">
+var url =  p._root + "incAlerters" + p._appExt
+url += p.urlParams(false, true) 
+</script>
+<script language="javascript"> includeScript(url)  </script>
+<script language="javascript">
+_error = (window._isSessionInvalid || !window.incAlertersOK || !window.incOverviewOK) 
+_printDoc = false 
+doc = p.doc 
+titleSummary = "", linesSummary = ""
+titleDocProp = "", linesDocProp = ""
+titlePrompts = "", linesPrompts = ""
+titleAlerters = "",linesAlerters = ""
+docName = ""
+checkedPrintOptionLabels = new Array("General","Document Properties", "Prompts", "Alerters")
+checkedDisplayOptions = new Array()
+checkedPrintOptions = new Array()
+rep = "../../../images/main/"
+_space = "" 
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+} else if (window.incAlertersOK && window.incOverviewOK) { 
+isPageLoaded=false
+mustLoadContent=true
+overviewToolbar = newPaletteWidget("overviewToolbar")
+curIcon="print.gif"
+_img = '../../../images/main/'
+printTb = overviewToolbar.add(newIconWidget("printTb",_img+curIcon,printButtonCB,"Print","",23,18,0,0,0,18))
+infoContent = newWidget("infoContent")
+summaryW = newFolderWidget("summaryW", p._docSummaryBranchExp)
+docPropW = newFolderWidget("docPropW", p._docPropBranchExp)
+promptsW = newFolderWidget("promptsW", p._promptsBranchExp)
+alertersW = newFolderWidget("alertersW", p._alertersBranchExp)
+}
+function updateFromLoadReport() 
+{
+if (_curWin.isPageLoaded)
+{
+_SUMMARY = 0
+_DOC_PROP = 1
+_PROMPTS = 2
+_ALERTERS = 3
+for (var i = 0; i <= _ALERTERS; i++)
+{
+checkedDisplayOptions[i] = true
+checkedPrintOptions[i] = true
+}
+labelProperties = new Array("Last modified by:", "Description:", "Keywords:", "Document locale:", "Creation date:", "Last refresh date:", "Enhanced viewing mode:", "Refresh on open:", "Permanent regional formatting:", "Use query drill:", "Always merge dimensions:", "Track data changes:","Auto-update reference data on refresh:")
+createSummary()
+createDocProp()
+createPrompts()
+createAlerters()
+checkedDisplayOptions[_PROMPTS] = (titlePrompts != "")
+checkedDisplayOptions[_ALERTERS] = (titleAlerters != "")
+infoContent.init() 
+infoContent.setHTML( makeHTML(titleSummary, linesSummary, titleDocProp, linesDocProp, titlePrompts, linesPrompts, titleAlerters, linesAlerters))
+summaryW.init()
+docPropW.init()
+if (promptsW.written) {
+promptsW.init()
+}
+if (alertersW.written) {
+alertersW.init()
+}
+overviewToolbar.init()
+printTb.init()
+} else {
+mustLoadContent=true
+}
+}
+function doPrint() 
+{
+createSummary()
+createDocProp()
+createPrompts()
+createAlerters()
+self.document.submitForm.title.value = docName
+self.document.submitForm.textToPrint.value = makeHTML(titleSummary, linesSummary, titleDocProp, linesDocProp, titlePrompts, linesPrompts, titleAlerters, linesAlerters)
+var url = "printWindow.html"
+url += "?skin=../../../lib/images/" + p._skinName + "/&lang=" + p._lang
+var features = "width=640,height=480,menubar,resizable,scrollbars"
+window.open(url, "printWindow", features)
+}
+function createSummary()
+{
+if ((doc == null) || !checkedPrintOptions[_SUMMARY])
+{
+titleSummary = ""
+linesSummary = ""
+return
+}
+titleSummary = '<b>General</b>'
+var s = new Array, j=0
+var value = (!_printDoc)? p.longText("Document name:",p.strDocName,null,".p") : convStr(p.strDocName)
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + "Document name:"
+s[j++] = '</td>'
+s[j++] = '<td><b>' + value + '</b></td></tr>'
+value = (!_printDoc)? p.longText("Creator:",p.strAuthor,null,".p") : p.strAuthor
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + "Creator:"
+s[j++] = '</td>'
+s[j++] = '<td><b>' + value + '</b></td></tr>'
+for (var i = 0; i < 4; i++)
+{
+var value = (!_printDoc)? p.longText(labelProperties[i], props[i],null,".p") : props[i]
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + labelProperties[i]
+s[j++] = '</td>'
+s[j++] = '<td>' + value + '</td></tr>'
+}
+value = (!_printDoc)? p.longText(labelProperties[4],p.strCreationDate,null,".p") : p.strCreationDate
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + labelProperties[4]
+s[j++] = '</td>'
+s[j++] = '<td>' + value + '</td></tr>'
+value = (!_printDoc)? p.longText(labelProperties[5],p.strLastRefreshDate,null,".p") : p.strLastRefreshDate
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + labelProperties[5]
+s[j++] = '</td>'
+s[j++] = '<td>' + value + '</td></tr>'
+linesSummary = s.join('')
+}
+function createDocProp()
+{
+if ((doc == null) || !checkedPrintOptions[_DOC_PROP])
+{
+titleDocProp = ""
+linesDocProp = ""
+return
+}
+titleDocProp = '<b>Document Properties</b>'
+var s = new Array, j=0
+llen = labelProperties.length
+for (var i = 6; i < llen; i++)
+{
+if (i==8)
+var val = ((bPermanentRegionalFormatting == true)? "On":"Off") 
+else
+var val = ((props[i] == "true")? "On":"Off")
+var value = (!_printDoc)? p.longText(labelProperties[i], val,null,".p") : val
+s[j++] = '<tr valign="top"><td>' + _space + '</td>'
+s[j++] = '<td colspan="3" valign="top">' + labelProperties[i]
+s[j++] = '</td>'
+s[j++] = '<td>' + value + '</td></tr>'
+}
+linesDocProp = s.join('')
+}
+function createPrompts()
+{
+if ((doc == null) || !checkedPrintOptions[_PROMPTS] || (prompts.length == 0))
+{
+titlePrompts = ""
+linesPrompts = ""
+return
+}
+var s = new Array, k = 0
+for (var i = 0; i < prompts.length; i++)
+{
+promptValues = prompts[i]
+promptName = promptValues[0] 
+s[k++] = '<tr>'
+s[k++] = '<td valign="top">' + _space + '</td>'
+s[k++] = '<td valign="top" colspan="3"><table class="panelzone" cellspacing="0" cellpadding="0" border="0"><tbody>'
+s[k++] ='<tr><td valign="top">' + imgOffset(rep + "qualificationIcons.gif",16,16, 0, (5*16) + 2) + '&nbsp;</td>'
+s[k++] = '<td valign="top">' + promptName + '</td></tr></tbody></table></td>' 
+var values = ''
+for (var j = 1; j < promptValues.length; j++)
+{
+values += promptValues[j]
+if ( j < promptValues.length - 1) values += p._listSeparator
+}
+values = _printDoc? (promptName + values) : p.longText(promptName, values,null,".p")
+s[k++] = '<td valign="top"><b>' + values + '</b></td></tr>' 
+}
+titlePrompts = '<b>Prompts</b>'
+linesPrompts = s.join('')
+}
+function createAlerters()
+{
+if ((doc == null) || !checkedPrintOptions[_ALERTERS] || (arrAlerter.length == 0))
+{
+titleAlerters = ""
+linesAlerters = ""
+return
+}
+var s = new Array, k = 0
+for (var i = 0; i < arrAlerter.length; i++)
+{
+alerter = arrAlerter[i]
+s[k++] = '<tr>'
+s[k++] ='<td valign="top">' + _space + '</td>'
+s[k++] ='<td valign="top" colspan="3">' + 'Alerter ' + alerter.id + ':' + '</td>'
+s[k++] = '<td valign="top">' + alerter.name + '</td>'
+s[k++] = '</tr>' 
+}
+titleAlerters = '<b>Alerters</b>'
+linesAlerters = s.join('')
+}
+function resizeCB()
+{
+if (isPageLoaded)
+{
+infoContent.move(0,26)
+infoContent.resize(Math.max(0,winWidth()), Math.max(0,winHeight()-26))
+}
+}
+function loadCB() 
+{
+if (_error)
+{ 
+p.hideBlockWhileWaitWidget();
+return 
+}
+isPageLoaded = true
+if (mustLoadContent) {
+updateFromLoadReport()
+}
+resizeCB()
+p.hideBlockWhileWaitWidget();
+}
+function detachEvents(){}
+function makeHTML(titleSummary, linesSummary, titleDocProp, linesDocProp, titlePrompts, linesPrompts, titleAlerters, linesAlerters) 
+{
+i=0
+var shtml = new Array
+shtml[i++] = '<table cellspacing="2" cellpadding="0" border="0" class="panelzone">'
+if (_printDoc) 
+{
+shtml[i++] = '<tbody><tr><td colspan="3"></td>'
+shtml[i++] ='<td id="resizableTD"></td>'
+shtml[i++] ='<td></td></tr></tbody>'
+}
+else
+{
+shtml[i++] = '<tbody style="height:0px"><tr><td width="13"></td><td colspan="3" width="40%"></td><td width="60%"></td></tr></tbody>'
+}
+shtml[i++] = '<tbody><tr><td>' + summaryW.getCross() + '</td>'
+shtml[i++] = '<td colspan="4">' + titleSummary + '</td></tr></tbody>'
+shtml[i++] = '<tbody id="summaryW" '+ ((_printDoc || summaryW.expanded)?'':' style="display:none"')+'>'
+shtml[i++] =linesSummary
+shtml[i++] = '</tbody>'
+shtml[i++] = '<tr><td colspan="5">&nbsp;</td></tr>'
+shtml[i++] = '<tbody><tr><td>' + docPropW.getCross() + '</td>'
+shtml[i++] = '<td colspan="4">' + titleDocProp + '</td></tr></tbody>'
+shtml[i++] = '<tbody id="docPropW" '+ ((_printDoc || docPropW.expanded)?'':' style="display:none"')+'>'
+shtml[i++] =linesDocProp
+shtml[i++] = '</tbody>'
+shtml[i++] = '<tr><td colspan="5">&nbsp;</td></tr>'
+if (titlePrompts != "") {
+shtml[i++] = '<tbody><tr><td>' + promptsW.getCross() + '</td>'
+shtml[i++] = '<td colspan="4">' + titlePrompts +'</td></tr></tbody>'
+shtml[i++] = '<tbody id="promptsW" '+((_printDoc || promptsW.expanded)?'':' style="display:none"')+'>'
+shtml[i++] =linesPrompts
+shtml[i++] = '</tbody>'
+shtml[i++] = '<tr><td colspan="5">&nbsp;</td></tr>'
+promptsW.written = true
+}
+if (titleAlerters != "") {
+shtml[i++] = '<tbody><tr><td>' + alertersW.getCross() + '</td>'
+shtml[i++] = '<td colspan="4">' + titleAlerters +'</td></tr></tbody>'
+shtml[i++] = '<tbody id="alertersW" '+((_printDoc || alertersW.expanded)?'':' style="display:none"')+'>'
+shtml[i++] =linesAlerters
+shtml[i++] = '</tbody>'
+shtml[i++] = '<tr><td colspan="5">&nbsp;</td></tr>'
+alertersW.written = true
+}
+shtml[i++] = '</table>'
+return shtml.join('')
+}
+function writeMyBody()
+{
+if (_error) return 
+var s = new Array()
+var i=0
+s[i++] = overviewToolbar.getHTML()
+s[i++] = '<div class=treeZone style="height:'+(_ie?1:0)+'px;overflow:hidden;position:absolute;top:25px;left:0px;width:100%;border-top-width:0px;border-left-width:0px;border-right-width:0px;"></div>'
+s[i++] = '<div id="infoContent"> </div>'
+document.write(s.join(""))
+}
+function printButtonCB()
+{
+p.escapeFormatPainter()
+p.wt()
+p.frameNav("DlgFrame","printOptionsDialog.html")
+}
+function clickCrossCB(elem)
+{
+elem.expanded = !elem.expanded
+crossL = getLayer('img'+elem.id)
+changeOffset(crossL,elem.expanded?0:13,_mac?2:3,null,elem.expanded?_expandedLab:_collapsedLab)
+switch(elem.id) {
+case 'summaryW': 
+p._docSummaryBranchExp = elem.expanded
+break
+case 'docPropW': 
+p._docPropBranchExp = elem.expanded
+case 'promptsW': 
+p._promptsBranchExp = elem.expanded
+break
+case 'alertersW': 
+p._alertersBranchExp = elem.expanded
+break
+}
+elem.setDisplay(elem.expanded)
+}
+function lPaneContextMenu()
+{
+return false;
+}
+</script>
+</head>
+<body class="panelzone"  style="overflow:hidden;" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  onLoad="loadCB()" onUnload="detachEvents()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+<script language="javascript">writeMyBody()</script>
+<!-- Hidden form -->
+<form target="printWindow" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="title" id="title" value="">
+<input type="hidden" name="textToPrint" id="textToPrint" value="">
+</form>
+</body>
+</html>

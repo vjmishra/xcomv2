@@ -1,0 +1,247 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+var p=parent
+initDom("../../../lib/images/"+p._skinName+"/",p._lang)
+p.setKeyCB(this, false)
+styleSheet()
+</script>
+<script language="javascript">
+var isPageLoaded=false
+var buttonWidth=60
+var findLabel=NewLabelWidget("findLabel",
+"Find:")
+var textField=newTextFieldWidget("textField",keyUpCB,null,keyUpCB,doFind,
+true,"Find:")
+var framezone=newFrameZoneWidget("tzone")
+var matchWord=newCheckWidget("matchWord",
+"Match whole word")
+var optionLabel=NewLabelWidget("optionLabel",
+"Options")
+var matchCase=newCheckWidget("matchCase",
+"Match case")
+var directionLabel=NewLabelWidget("directionLabel",
+"Direction")
+var upDir=newRadioWidget("upDir","RadioGp","Up")
+var downDir=newRadioWidget("downDir","RadioGp",
+"Down")
+var findButton=newButtonWidget("findButton",
+"Find Next",doFind,buttonWidth)
+function keyUpCB()
+{
+p.escapeFormatPainter()
+if ( textField.getValue() != '' )
+findButton.setDisabled(false)
+else
+findButton.setDisabled(true)
+}
+function advFindCB()
+{
+if (!p._showLeftPane)
+return
+if (!_ie)
+return
+reportFrame = p.getReportFrame()
+bodyRange = reportFrame.document.body.createTextRange()
+curRange = bodyRange.duplicate()
+upRange = bodyRange.duplicate()
+downRange = bodyRange.duplicate()
+}
+var advFindObs=p.newObserverOneEvent(p._EVT_WOM_LOADED,advFindCB)
+function doFind()
+{
+p.escapeFormatPainter()
+findInPage(textField.getValue())
+}
+var reportFrame = p.getReportFrame()
+var bodyRange = null
+var curRange = null 
+var upRange = null
+var downRange = null
+var curPage = p.iPage
+function findInPage(str)
+{
+if (str == "")
+return false
+if (_moz)
+{
+var caseSensitive
+if (matchCase.isChecked())
+caseSensitive = true
+else
+caseSensitive = false
+var backwards
+if (upDir.isChecked())
+backwards = true
+else
+backwards = false
+var wholeWord
+if (matchWord.isChecked())
+wholeWord = true
+else
+wholeWord = false
+reportFrame.focus()
+if ( !reportFrame.find( str, caseSensitive, backwards, true, wholeWord, true, false ) )
+p.showAlertDialog("Not found","Find",p._promptDlgInfo)
+}
+if (_ie) 
+{
+if (curPage !=p.iPage)
+{
+curPage = p.iPage
+bodyRange = reportFrame.document.body.createTextRange()
+curRange = bodyRange.duplicate()
+upRange = bodyRange.duplicate()
+downRange = bodyRange.duplicate()
+}
+var matchOptions = 0
+if ( matchWord.isChecked() )
+matchOptions += 2
+if ( matchCase.isChecked() )
+matchOptions += 4
+var searchScope
+if ( upDir.isChecked() )
+searchScope = -1
+if ( downDir.isChecked() )
+searchScope = +1
+if ( upDir.isChecked() )
+curRange = upRange.duplicate()
+if ( downDir.isChecked() )
+curRange = downRange.duplicate();
+var found = curRange.findText(str, searchScope, matchOptions);
+if (found) 
+{
+curRange.select()
+upRange.setEndPoint("EndToStart", curRange)
+downRange.setEndPoint("StartToEnd", curRange)
+}
+if ( (!found) && (!curRange.isEqual(bodyRange)) )
+{
+curRange = bodyRange.duplicate()
+upRange = bodyRange.duplicate()
+downRange = bodyRange.duplicate()
+findInPage(str)
+}
+if ( (!found) && (curRange.isEqual(bodyRange)) )
+{
+p.showAlertDialog("Not found","Find",p._promptDlgInfo)
+}
+}
+}
+function resizeCB()
+{
+    if (isPageLoaded)
+    {   
+var margin=10
+textField.resize(winWidth()-margin-findButton.getWidth()-20)
+framezone.resize(winWidth()-margin)
+directionZone.width=directionLabel.getWidth()+upDir.getWidth()+downDir.getWidth()
+}
+}
+function loadCB()
+{
+isPageLoaded = true
+findLabel.init()
+textField.init()
+textField.setValue("Type your text here.")
+textField.select()
+findButton.init()
+findButton.setDisabled(true) 
+framezone.init()
+optionLabel.init()
+directionLabel.init()
+matchWord.init()
+matchCase.init()
+upDir.init()
+downDir.init()
+downDir.check(true)
+resizeCB()
+if (_ie && typeof(reportFrame.document)!="unknown")
+{
+bodyRange = reportFrame.document.body.createTextRange()
+curRange = bodyRange.duplicate()
+upRange = bodyRange.duplicate()
+downRange = bodyRange.duplicate()
+}
+}
+function unloadCB()
+{
+p.eventManager.detach(advFindObs)
+advFindObs=null
+}
+function lPaneContextMenu()
+{
+return false;
+}
+</script>        
+</head>
+<body id="findPane" style="overflow:hidden" class="dialogzone" scroll="no" 
+marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" 
+onLoad="loadCB()" onresize="resizeCB()" onunload="unloadCB()" oncontextmenu="return lPaneContextMenu();">
+   <table style="margin-top:10px" cellspacing="0" cellpadding="0" 
+   width="100%" border="0" class="dialogzone"><tbody>
+<tr>
+<td valign="middle"><label for="textField"><script language="javascript">findLabel.write()</script></label></td>
+</tr>
+<tr>
+<td>
+<table cellspacing="0" cellpadding="0" width="100%" border="0" 
+class="dialogzone"><tbody>
+<tr>
+<td><script language="javascript">textField.write()</script></td>
+<td align="right"><script language="javascript">findButton.write()</script></td>
+</tr>
+</tbody></table>
+</td>
+</tr></tbody></table>
+<fieldset style="border:none;padding:0;margin:0;">
+<table>
+<tr>
+<td><script language="javascript">optionLabel.write()</script></td>
+</tr>
+<tr>
+<td>
+<script language="javascript">document.write(framezone.beginHTML())</script>
+<table cellspacing="0" cellpadding="0" width="100%" border="0" 
+class="dialogzone"><tbody>
+<tr>
+<td><script language="javascript">matchWord.write()</script></td>
+</tr>
+<tr>
+<td><script language="javascript">matchCase.write()</script></td>
+</tr>
+<tr>
+<td>
+<fieldset style="border:none;padding:0;margin:0;width:140px;">
+<div id="directionZone" class="dialogzone">
+<script language="javascript">directionLabel.write()</script>
+<script language="javascript">upDir.write()</script>
+<script language="javascript">downDir.write()</script>
+</div>
+</fieldset>
+</td>
+</tr>
+</tbody></table>
+<script language="javascript">document.write(framezone.endHTML())</script>
+</td>
+</tr>
+</tbody></table>
+</body>
+</html>

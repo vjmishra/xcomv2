@@ -1,0 +1,238 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Change source dialog</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../scripts/dataSourceMapping.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"changeSrcDlg");
+</script>
+<script language="javascript">
+var changeSrcDlg=null
+var changeSrcInfo=null
+var changeSrcOkBtn=null
+var changeSrcCancelBtn=null
+var changeSrcHelpBtn=null
+var buttonsWidth= 60
+var dlgWidth= 500
+var dlgHeight= 350
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-125
+var listWidth= frameWidth-20
+var listHeight= frameHeight
+var initialized= false
+_selObj= null
+_rowid= null
+var f=parent.getTopFrameset()
+var queryPropertiesFrame=f.getFrame("DlgFrame")
+_curEntry = queryPropertiesFrame._curEntry
+_sOldDSID = queryPropertiesFrame._sOldDSID
+_sNewDSID = queryPropertiesFrame._sNewDSID
+_newUnv=null 
+</script>
+<script language="javascript">
+var url = p._root + "incChangeSource" + p._appExt
+url += p.urlParams(true,true,_curEntry)
+url += '&sOldDSID='+_sOldDSID
+url += '&sNewDSID='+_sNewDSID
+includeScript(url)
+</script>
+<script language="javascript">
+function updateChangeSourceDialog(sEntry,id,q,s,map)
+{
+    if(sEntry!=null)
+    _curEntry=sEntry
+changeSrcTblList.changeDSMappingRow(id,map,q,s)
+setStateOfChangeSrcRmObjBtn()
+}
+function setStateOfChangeSrcRmObjBtn()
+{
+var ret=changeSrcTblList.getSelection(),dis=true
+if ((ret!=null) && (ret.mapping!=_NOT_FOUND))
+dis=false
+changeSrcRmObjBtn.setDisabled(dis)
+}
+function changeSrcFillWidgets()
+{
+changeSrcRmObjBtn.setDisabled(true)
+if ( typeof(mapArr)== "undefined" )
+{
+changeSrcOkBtn.setDisabled(true)
+return
+}
+changeSrcOkBtn.setDisabled(false)
+changeSrcTblList.deleteAll()
+var elem=null
+for (var i=0; i<mapArr.length; i++)
+{
+changeSrcTblList.addDPNameRow(mapArr[i].name)
+var arr=mapArr[i].arr, e=null
+for (var j=0; j < arr.length; j++)
+{
+e=arr[j]
+changeSrcTblList.addDSMappingRow(e.mapping,e.src.kind,e.src.name,e.trg.kind,e.trg.name,tblListClickCB,editTrgUnvCB,e)
+}
+}
+changeSrcTblList.rebuildHTML()
+}
+function changeSrcRmBtnCB() 
+{
+var ret=changeSrcTblList.getSelection()
+if (ret==null)
+return
+var url=p._root + "processChangeSource" + p._appExt
+url += p.urlParams(true,true,_curEntry)
+url += "&iAction=1"
+url += "&iDPIndex="+ret.usrData.dpIdx
+url += "&iMapIndex="+ret.usrData.mapIdx
+url += "&id="+ret.id
+frameNav("changeSrcFrame",url,true)
+}
+function tblListClickCB(id,e)
+{
+setStateOfChangeSrcRmObjBtn()
+}
+function editTrgUnvCB(id,e)
+{
+setStateOfChangeSrcRmObjBtn()
+_rowid=id
+_selObj=e
+var url=p._root + "language/"+p._lang+"/html/mapObjectDialog.html"
+frameNav("changeSrcFrame",url,true)
+}
+function changeSrcYesCB()
+{
+var url=p._root + "processChangeSource" + p._appExt
+url += p.urlParams(true,true,_curEntry)
+url += "&iAction=0"
+url += "&iDPIndex="+p.getSelectedDPIndex()
+frameNav("changeSrcFrame",url,true)
+}
+function changeSrcNoCB()
+{
+changeSrcDlg.show(false)
+var url=p._root + "processCleanSession" + p._appExt
+url += p.urlParams(true,true,_curEntry)
+frameNav("changeSrcFrame",url);
+}
+function okCB( )
+{
+if(mapArr.length>1)
+p.showPromptDialog("More than one query will be changed to use the new universe, are you sure this is what you want to do?","Change Source",1,changeSrcYesCB,changeSrcNoCB)
+else
+{
+    changeSrcYesCB()
+}
+}
+function cancelCB()
+{
+    changeSrcNoCB()
+}
+function helpCB()
+{
+parent.showAlertDialog("Not implemented yet !","Development version",0);
+changeSrcDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+changeSrcDlg = newDialogBoxWidget("changeSrcDlg","Change Source",dlgWidth,dlgHeight,okCB,cancelCB)
+changeSrcTblList=newDSMappingWidget("changeSrcTblList",listWidth,listHeight)
+changeSrcRmObjBtn=newButtonWidget("changeSrcRmObjBtn","Remove Object",changeSrcRmBtnCB,buttonsWidth)
+changeSrcFramezone = newFrameZoneWidget("changeSrcFramezone",frameWidth,frameHeight)
+changeSrcInfo=newInfoWidget("changeSrcInfo","Description","","Map objects in the new universe to objects in the original universe.")
+changeSrcOkBtn=newButtonWidget("changeSrcOkBtn","OK",okCB,buttonsWidth)
+changeSrcCancelBtn=newButtonWidget("changeSrcCancelBtn","Cancel",cancelCB,buttonsWidth)
+changeSrcHelpBtn=newButtonWidget("changeSrcHelpBtn","Help",helpCB,buttonsWidth)
+changeSrcDlg.attachDefaultButton(changeSrcOkBtn);
+}
+if ( !_curWin.changeSrcDlgInitialized )
+{
+_curWin.changeSrcDlgInitialized=true
+targetApp(
+changeSrcDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+changeSrcFramezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>'+'Map source and target objects:'+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td style="padding-top:5px;">'+changeSrcTblList.getHTML()+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="right" style="padding-top:5px;">'+changeSrcRmObjBtn.getHTML()+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+changeSrcFramezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="center">' +
+   changeSrcInfo.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   changeSrcOkBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   changeSrcCancelBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   changeSrcHelpBtn.getHTML() +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+changeSrcDlg.endHTML()
+);
+}
+changeSrcDlg.init()
+changeSrcTblList.init()
+changeSrcRmObjBtn.init()
+changeSrcInfo.init()
+changeSrcOkBtn.init()
+changeSrcCancelBtn.init()
+changeSrcHelpBtn.init()
+changeSrcFillWidgets()
+changeSrcHelpBtn.setDisplay(false)
+changeSrcDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden frame -->
+<iframe name="changeSrcFrame" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="changeSrcForm" method="post" action="">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

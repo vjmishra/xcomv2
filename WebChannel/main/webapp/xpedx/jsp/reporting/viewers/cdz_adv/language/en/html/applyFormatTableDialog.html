@@ -1,0 +1,1586 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>"Format Table"</title>
+<style type="text/css">
+#ftDlgPreviewBorders{
+border-top:0px solid white;
+border-bottom:0px solid white;
+border-left:0px solid white;
+border-right:0px solid white;
+}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/ReportWom.js"></script>
+<script language="javascript" src="../scripts/appearanceTab.js"></script>
+<script language="javascript" src="../scripts/applyFormat_borderTab.js"></script>
+<script language="javascript">
+p = parent
+p._globalWOMCallback = null;
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "formatTable")
+_iReportIdx = requestQueryString(window,"reportIndex")
+_iReportIdx=(_iReportIdx=="" || _iReportIdx=="undefined" )?null:_iReportIdx
+curEntry=p.strEntry
+_simpleBorder = false;
+if (p._formatTableBid) {
+_bid = p._formatTableBid
+elt = p.findByBID(p.doc,_bid)
+} else {
+elts = p.getSelectedElts()
+var firstCell=null
+var theTable=null
+for (var i in elts)
+{
+if (elts[i] != null)
+{
+var elt=elts[i]
+if (elt.className=="tableCell")
+{
+firstCell=elt
+theTable=firstCell.parent.parent.parent
+break;
+}
+}
+}
+for (var e in elts) 
+{
+if (elts[e].className == "block") {
+theTable=elts[e]
+break
+}
+}
+p.selectSingle(theTable.bid)
+elts = p.getSelectedElts()
+elt = (elts[0].className == "block")? elts[0] : elts[0].parent.parent.parent
+_bid = elt.bid
+}
+var url =  p._root + "incObjects" + p._appExt
+urlParams = p.urlParamsNoBID(curEntry,null,_iReportIdx)
+</script>
+<script language="javascript"> includeScript(url+urlParams) </script>
+<script language="javascript">
+initialized = false
+formatTableDlg = null
+currList = null
+function block(nm, bt, ndd, nmes, dr, snp, roep, apb, u, ph, pv, se)
+{
+var b=new Object
+b.name=nm
+b.blockType=bt
+b.nDimDetails=ndd
+b.nMeasures=nmes
+b.dupRow=dr
+b.startNewPage=snp
+b.repeatOnEveryPage=roep
+b.avoidPageBreak=apb
+b.unitIsInch=u
+b.posH=ph
+b.posV=pv
+b.showWhenEmpty=se
+return b
+}
+function tableForm(u, s, af, fc, bgc, sk, iu, dm, ha, va, embimg)
+{
+var t=new Object
+t.unitIsInch=u
+t.spacing=s
+t.freqVal=af
+t.freqColor=fc
+t.bgColor=bgc
+t.skin=sk
+t.imgURL=iu
+t.dispMode=dm
+t.HAlign=ha
+t.VAlign=va
+t.embimg=embimg
+return t
+}
+function table(dh, df, rh, rf)
+{
+var t=new Object
+t.dispHead=dh
+t.dispFoot=df
+t.repeatHead=rh
+t.repeatFoot=rf
+return t
+}
+function cl(r,g,b)
+{
+var o=new Object
+o.rgb=""+r+","+g+","+b
+return o
+}
+function unloadCB()
+{
+if (elt) {
+elt.table=null 
+elt.block=null
+elt.tableForm=null
+}
+}
+</script>
+<script language="javascript">
+var url =  p._root + "incTableWom" + p._appExt
+urlParams += "&sBid=" + _bid
+includeScript(url+urlParams)
+</script>
+<script language="javascript">
+if (window.bIncTableWomOK) {
+elt.table = varTable
+elt.block = varBlock
+elt.tableForm = varTableForm
+}
+_axisCommands = new Array
+function loadDialog()
+{
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+return
+}
+if (!window.bIncTableWomOK) {
+return
+}
+if (!initialized)
+{
+initialized = true
+formatTableDlg = newDialogBoxWidget("formatTableDlg",'Format Table',null,null, okCB, cancelCB)
+tzone = newTabbedZone("ftDlgTzone",selectZoneCB,600,300)
+tzone.add('General',"gen")
+tzone.add("Border","bdr")
+tzone.add('Appearance',"app")
+tzone.add('Layout',"lay")
+tzone.add('Pivot',"piv")
+nameTxt = newTextFieldWidget( "ftDlgNameTxt", null, 30, null, null, true, 'The name of the table', 240)
+tableHeadersCheck = newCheckWidget("ftDlgTableHeadersCheck",'Table headers')
+xTableLeftHeaderCheck = newCheckWidget("ftDlgXTableLeftHeaderCheck",'Left header', showLeftTopHdrsCheckCB)
+xTableTopHeaderCheck = newCheckWidget("ftDlgXTableTopHeaderCheck",'Top header', showLeftTopHdrsCheckCB)
+xTableObjNamesCheck = newCheckWidget("ftDlgXTableObjNamesCheck",'Show object names', showXtraHdrsCheckCB)
+xTableChecks = newWidget("xTableChecks")
+tableFootersCheck = newCheckWidget("ftDlgTableFootersCheck",'Table footers')
+xTableFootersCheck = newCheckWidget("ftDlgXTableFootersCheck",'Table footers')
+dupRowCheck = newCheckWidget("ftDlgDupRowCheck",'Avoid duplicate row aggregation')
+emptyRowCheck = newCheckWidget("ftDlgEmptyRowCheck",'Show empty rows')
+emptyTableCheck = newCheckWidget("ftDlgEmptyTableCheck",'Show table when empty')
+emptyColumnsCheck = newCheckWidget("ftDlgEmptyColumnsCheck",'Show empty columns')
+emptyFieldsCheck = newCheckWidget("ftDlgEmptyFieldsCheck",'Show empty fields')
+createWidgetsForBorderTab("ft");
+createWidgetsForAppearenceTab("ft")
+backgroundZone = newWidget("ftDlgBackgroundZone")
+HSpacingField = newFloatFieldWidget( "ftDlgHSpacingField", null, null, null, null, true, 'Horizontal spacing', 40)
+HSpacingUnit = newWidget("ftDlgHSpacingUnit")
+frequencyField = newIntFieldWidget( "ftDlgFrequencyField", null, null, null, null, true, 'Frequency', 40)
+frequencyColor = newIconColorMenuWidget("ftDlgFrequencyColor",p._img+"format.gif",changeColorCB,null,'Select a color for alternate columns or rows',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+startNewPageCheck = newCheckWidget("ftDlgStartNewPageCheck",'Start on a new page', null)
+repeatEveryPageCheck = newCheckWidget("ftDlgRepeatEveryPageCheck",'Repeat on every page', null)
+avoidPageBreakCheck = newCheckWidget("ftDlgAvoidPageBreakCheck",'Avoid page breaks in table', null)
+repeatHeaderCheck = newCheckWidget("ftDlgRepeatHeaderCheck",'Repeat header on every page', null)
+repeatFooterCheck = newCheckWidget("ftDlgRepeatFooterCheck",'Repeat footer on every page', null)
+sectionOrBodyTxt = newWidget("ftDlgSectionOrBodyTxt")
+horizontalImg = newWidget("ftDlgHorizontalImg")
+horizontalPosField = newFloatFieldWidget( "ftDlgHorizontalPosField", null, null, null, null, true, 'Horizontal position', 40)
+HPosUnit = newWidget("ftDlgHPosUnit")
+horizontalPosCombo = newComboWidget("ftDlgHorizontalPosCombo", horizontalPosComboCB, true, 160)
+horizontalEltCombo = newComboWidget("ftDlgHorizontalEltCombo", elementComboCB, true, 120)
+verticalImg = newWidget("ftDlgVerticalImg")
+verticalPosField = newFloatFieldWidget( "ftDlgVerticalPosField", null, null, null, null, true, 'Vertical position', 40)
+VPosUnit = newWidget("ftDlgVPosUnit")
+verticalPosCombo = newComboWidget("ftDlgVerticalPosCombo", verticalPosComboCB, true, 160)
+verticalEltCombo = newComboWidget("ftDlgVerticalEltCombo", elementComboCB, true, 120)
+condDisplayCheck = newCheckWidget("ftDlgCondDisplayCheck",'Conditional display if:', condDisplayCheckCB)
+condDisplayTxt = newWidget("ftDlgCondDisplayTxt")
+valButton = newButtonWidget("ftDlgValButton",'Validate',"testBtCB()",60)
+dicTree = newTreeWidget('ftDlgDicTree', 145, 240, p._img + "qualificationIcons.gif", clickCB, dclickCB)
+dicTree.setTooltipOnMouseOver(true);
+dicTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+addObjButton = newButtonWidget('ftDlgAddObjButton',null, addButtonCB,null,null,"Add selected object from available objects",null,null,p._skin+'buttonIcons.gif',16,16,0,0)
+delObjButton = newButtonWidget('ftDlgDelObjButton',null, removeButtonCB,null,null,"Remove selected object",null,null,p._skin+'buttonIcons.gif',16,16,0,16)
+_block = elt
+_blockKind = (elt.block.blockType - 7) 
+_isHor = (_blockKind == 0)
+_isVert = (_blockKind == 1)
+_isMatrix = (_blockKind == 2) 
+_isForm =  (_blockKind == 3) 
+_nbVis=2
+currentObj = null
+validZones = new Array
+_blockCurrent = null
+axisObjects = new Array 
+_axisType = new Array()
+_axisType['cols'] = _isForm ? 1:0
+_axisType['rows'] = 1
+_axisType['body'] = 2
+widgetRows = newWidget("rows")
+widgetCols = newWidget("cols")
+widgetBody = newWidget("body")
+createList('rows', 'Row(s)', _isMatrix?'_horiBOList':'_vertBOList')
+createList('cols', 'Column(s)', _isMatrix?'_vertBOList':'_horiBOList')
+createList('body', 'Body','_horiBOList')
+info = newInfoWidget("ftDlgInfo","More Information","","Modify general table properties here.")
+OKButton = newButtonWidget("ftDlgOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("ftDlgHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("ftDlgCancelButton","Cancel","cancelCB()",60)
+applyButton = newButtonWidget("ftDlgApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+formatTableDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.formatTableInitialized!=true)
+{
+_curWin.formatTableInitialized=true
+var arHTML = new Array()
+var i=0
+arHTML[i++] = formatTableDlg.beginHTML()
+arHTML[i++] = '<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = tzone.beginHTML() 
+arHTML[i++] = tzone.beginTabHTML(0)
+ arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="50">' +'Name:' + '</td>' 
+arHTML[i++] = '<td colspan="2">' + nameTxt.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td colspan="3">' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + 'Display:' + '</td>'
+arHTML[i++] = '<td>' + tableHeadersCheck.getHTML() + xTableLeftHeaderCheck.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + tableFootersCheck.getHTML() + xTableTopHeaderCheck.getHTML()+ '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody>'
+arHTML[i++] = '<tbody id="xTableChecks">'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + xTableObjNamesCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + xTableFootersCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody>'
+arHTML[i++] = '<tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + dupRowCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + emptyTableCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>' 
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td><nobr>' + emptyFieldsCheck.getHTML() + emptyRowCheck.getHTML() + '</nobr></td>'
+arHTML[i++] = '<td>' + emptyColumnsCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// BORDERS
+arHTML[i++] = tzone.beginTabHTML(1)
+arHTML[i++] = getHTMLForBorderTab("ft")
+arHTML[i++] =tzone.endTabHTML() 
+// APPEARANCE
+arHTML[i++] = tzone.beginTabHTML(2)
+ arHTML[i++] = '<table border="0" class="dialogzone" cellpadding="1" cellspacing="0" width=100%">'
+arHTML[i++] = '<tbody id="ftDlgBackgroundZone">'
+arHTML[i++] = '<tr>'
+arHTML[i++] ='<td colspan="4">'
+arHTML[i++] =getHTMLForAppearenceTab()
+arHTML[i++] ='</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody>'
+arHTML[i++] = '<tr><td colspan="4">' + getSep() + '</td></tr>'
+arHTML[i++] = '<tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="4">' 
+ arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' + 'Spacing:' + '</td>'
+arHTML[i++] = '<td>' + HSpacingField.getHTML() +'</td>'
+arHTML[i++] = '<td>' + '<span id="ftDlgHSpacingUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td colspan="4">' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="4">'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' + 'Alternate color' + '</td>'
+arHTML[i++] = '<td>' + 'Frequency:' + '</td>'
+arHTML[i++] = '<td width="80">' + frequencyField.getHTML()  + '</td>'
+arHTML[i++] = '<td>' + 'Color:' + '</td>'
+arHTML[i++] = '<td>' + frequencyColor.getHTML()  + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(3)
+ arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' 
+arHTML[i++] = '<table border="0" class="dialogzone" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' + 'New page:' + '</td>' 
+arHTML[i++] = '<td>' + startNewPageCheck.getHTML() + '</td>'
+arHTML[i++] = '<td width="80">' + 'Page layout:' + '</td>'
+arHTML[i++] = '<td>' + avoidPageBreakCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + repeatEveryPageCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + repeatHeaderCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="3">' + '' + '</td>'
+arHTML[i++] = '<td>' + repeatFooterCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="60">' +'Position:' + '</td>'
+arHTML[i++] = '<td colspan="5">' + 'Within the' + ' <b>' + '<span id="ftDlgSectionOrBodyTxt"></span>' + '</b>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right" rowspan="2">' + '<div id="ftDlgHorizontalImg">'+ horizontalImg.getHTML() + '</td>'
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'The left of this table is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + horizontalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="ftDlgHPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + horizontalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + horizontalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right" rowspan="2">' + '<div id="ftDlgVerticalImg">'+ verticalImg.getHTML() + '</td>'
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'The top of this table is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + verticalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="ftDlgVPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + verticalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + verticalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+//'<tr>'+
+//'<td>' + getSep() + '</td>' +
+//'</tr>'+
+//'<tr>'+
+//'<td>' +
+//'<table border="0" class="dialogzone" width="100%"><tbody>'+
+//'<tr>'+
+//'<td valign="top">' + condDisplayCheck.getHTML() + '</td>' +
+//'<td valign="top">' + 
+//'<textarea id="ftDlgCondDisplayTxt" rows="3" cols="32" ></textarea>' + 
+//'</td>' +
+//'<td valign="top">' + valButton.getHTML() + '</td>' +
+//'</tr>'+
+//'</tbody></table>'+
+//'</td>'+
+//'</tr>'+
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// PIVOT
+arHTML[i++] = tzone.beginTabHTML(4)
+arHTML[i++] = '<table border="0" cellpadding="2" cellspacing="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + "Available Objects" + '</td>'
+arHTML[i++] = '<td></td>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top">'
+arHTML[i++] = dicTree.getHTML() 
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td valign="top" align="center" width="30">' + '<br><br>'
+arHTML[i++] = addObjButton.getHTML()
+arHTML[i++] = '<br>'
+arHTML[i++] = delObjButton.getHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td valign="top">'
+arHTML[i++] = '<table border="0" cellspacing="0" cellpadding="2" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>' 
+arHTML[i++] = '<td></td>'
+arHTML[i++] = '<td id="cols" align="right">' + getBlockZone('cols') + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td id="rows">' + getBlockZone('rows') + '</td>'
+arHTML[i++] = '<td id="body">' + getBlockZone('body') + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.endHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+// BOTTOM DIALOG
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'+info.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right">'
+arHTML[i++] = '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + OKButton.getHTML() + '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+arHTML[i++] = '<td>' + CancelButton.getHTML() + '</td>'
+   arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] = '<td>' + applyButton.getHTML() + '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1) + '</td>'
+arHTML[i++] = '<td>' + HelpButton.getHTML() + '</td>'
+arHTML[i++] = '</tr></tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = formatTableDlg.endHTML()
+targetApp(arHTML.join(''))
+}// end curwin init
+// Init
+formatTableDlg.init()
+tzone.init()
+// Select the tab zone
+tzone.select(p._ftDlgSelectedPane)
+initGeneral= false
+initAppearance= false
+initPageLayout= false
+initPivot= false
+initBorders= false
+nameTxt.init()
+nameTxt.setValue(elt.block.name)
+// the CB call the init function of the zone
+setTimeout("selectZoneCB(p._ftDlgSelectedPane)",1)
+// Bottom Zone
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)//future feature
+//get the current report BID
+reportBID=p.findReportBid(elt)
+// Show the dialog box
+formatTableDlg.show(true)
+}
+//
+// selectZoneCB(index)
+//
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0: // set General
+setGeneral(elt)
+info.setText("Modify general table properties here.")
+break;
+case 1://set border
+{
+var elts=new Array();
+elts[elts.length]=elt;
+setBorders(elts);
+info.setText("Set the borders of the selected cells here.");
+break;
+}
+case 2: // set Appearance
+setAppearance(elt)
+info.setText("Modify table appearance here.")
+break;
+case 3: // set Layout Properties
+setLayout(elt)
+info.setText("Modify table layout here.")
+break;
+case 4: // set Pivot
+setPivot(elt)
+info.setText("Modify data display here.")
+break;
+}
+}
+// CB for BG color combo ////////////////////////////
+function changeColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorDialogCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+p.addLastUsedColor(this.getColor())
+}
+}
+// changeColorCB()
+//
+function changeColorDialogCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+}
+// testBtCB ////////////////////////////
+function testBtCB()
+{
+}
+//
+// horizontalPosComboCB()
+//
+function horizontalPosComboCB()
+{
+var sel=horizontalPosCombo.getSelection().value,imgsrc=''
+horizontalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))// Left
+imgsrc='position_left_edge.gif'
+else// Right
+imgsrc='position_right_edge.gif'
+horizontalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+//
+// verticalPosComboCB()
+//
+function verticalPosComboCB()
+{
+var sel=verticalPosCombo.getSelection().value,imgsrc=''
+verticalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))// Top
+imgsrc='position_top_edge.gif'
+else// Bottom
+imgsrc='position_bottom_edge.gif'
+verticalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+//
+// elementComboCB()
+//
+function elementComboCB()
+{
+}
+// CB for OK button ////////////////////////////
+function okCB(bApplyBtn)
+{
+OKButton.setDisabled(true)
+applyButton.setDisabled(true)
+p._formatTableBid = bApplyBtn?_bid:null
+doFormatTable()
+p._ftDlgSelectedPane = tzone.tabs.selIndex
+// For the dialog box to be re-drawn when the page is reloaded
+p.wt(bApplyBtn)
+if (bApplyBtn) {
+formatTableDlg.unload()
+p._globalWOMCallback = p.formatTable_globalWOMCallback;
+}else {
+formatTableDlg.show(false)
+}
+OKButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+// cancel button ////////////////////////////
+function cancelCB()
+{
+p._formatTableBid = null
+formatTableDlg.show(false)
+}
+////////////////////////////
+// help button ////////////////////////////
+function helpCB()
+{
+}
+//
+// condDisplayCheckCB()
+//
+function condDisplayCheckCB()
+{
+condDisplayTxt.setDisabled(!condDisplayCheck.isChecked())
+}
+// set General
+function setGeneral(elt)
+{
+if (!initGeneral) 
+{
+initGeneral= true
+tableHeadersCheck.init()
+xTableLeftHeaderCheck.init()
+xTableTopHeaderCheck.init()
+xTableObjNamesCheck.init()
+xTableFootersCheck.init()
+tableFootersCheck.init()
+xTableChecks.init()
+dupRowCheck.init()
+emptyRowCheck.init()
+emptyTableCheck.init()
+emptyColumnsCheck.init()
+emptyFieldsCheck.init()
+tableHeadersCheck.setDisplay(false)
+tableFootersCheck.setDisplay(false)
+emptyFieldsCheck.setDisplay(false)
+xTableLeftHeaderCheck.setDisplay(false)
+xTableTopHeaderCheck.setDisplay(false)
+xTableObjNamesCheck.setDisplay(false)
+xTableChecks.setDisplay(false)
+xTableFootersCheck.setDisplay(false)
+emptyRowCheck.show(false)
+emptyColumnsCheck.show(false)
+dupRowCheck.setDisplay(true)
+// read wom
+if (_isForm) {
+emptyFieldsCheck.setDisplay(true)
+emptyFieldsCheck.check(elt.tableForm.showEmptyFields == 1)
+} else if (_isMatrix) {
+emptyRowCheck.show(true)
+emptyColumnsCheck.check(elt.table.showEmptyCols == 1)
+emptyColumnsCheck.show(true)
+dupRowCheck.setDisplay(false)
+xTableLeftHeaderCheck.setDisplay(true)
+xTableTopHeaderCheck.setDisplay(true)
+xTableObjNamesCheck.setDisplay(true)
+xTableChecks.setDisplay(true)
+xTableFootersCheck.setDisplay(true)
+xTableLeftHeaderCheck.check(elt.table.showLeftHeader == 1)
+xTableTopHeaderCheck.check(elt.table.showTopHeader == 1)
+xTableObjNamesCheck.check(elt.table.showObjectNames == 1)
+xTableFootersCheck.check(elt.table.dispFoot == 1)
+} else {
+tableHeadersCheck.setDisplay(true)
+tableFootersCheck.setDisplay(true)
+tableHeadersCheck.check(elt.table.dispHead == 1)
+tableFootersCheck.check(elt.table.dispFoot == 1)
+emptyRowCheck.show(_isVert)
+emptyRowCheck.check(elt.table.showEmptyRows == 1)
+emptyColumnsCheck.check(elt.table.showEmptyCols == 1)
+emptyColumnsCheck.show(_isHor)
+}
+dupRowCheck.check(elt.block.dupRow == 0) // avoid opposite of show
+emptyTableCheck.check(elt.block.showWhenEmpty == 1)
+}
+}
+// set Appearance
+function setAppearance(elt)
+{
+if (initAppearance)
+return
+initAppearance= true
+backgroundZone.init()
+bgColor.init()
+noneRadio.init()
+imageRadio.init()
+skinRadio.init()
+skinsCombo.init()
+urlTxt.init()
+imageFromFileRadio.init()
+addImageButton.init()
+//testButton.init()
+displayCombo.init()
+alignHorizontalCombo.init()
+alignVerticalCombo.init()
+{
+// BG Color
+bgColor.setColor(elt.tableForm.bgColor.rgb)
+// Skin
+skinsAr = p._blockSkins
+skin = elt.tableForm.skin
+imgUrl = elt.tableForm.imgURL
+var hasSkin = (skin != "")
+skinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+{
+skinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+}
+// Embedded image
+var hasEmbImg=elt.tableForm.embimg
+noneRadio.check(true)
+skinRadio.check(hasSkin)
+imageRadio.check(imgUrl != "")
+urlTxt.setValue(imgUrl)
+imageFromFileRadio.check(hasEmbImg)
+// Display
+displayCombo.del()
+dispMode = elt.tableForm.dispMode
+for (var i = 0; i < p._dispImg.length; i++)
+{
+displayCombo.add(p._dispImg[i], p._dispImg[i], (i == dispMode))
+}
+// Alignment
+alignHorizontalCombo.del()
+alignVerticalCombo.del()
+HAlign = elt.tableForm.HAlign
+VAlign = elt.tableForm.VAlign
+for (var j = 0; j < p._posH.length; j++)
+{
+alignHorizontalCombo.add(p._posH[j], p._posH[j], (j == HAlign))
+alignVerticalCombo.add(p._posV[j], p._posV[j], (j == VAlign))
+}
+skinOrImageCB()
+}
+/// -------------------------------------------
+HSpacingField.init()
+HSpacingField.setPrecision(2)
+HSpacingField.setMin(0)
+HSpacingField.setMax(p.toUserUnit(9999.9, false)) // 9999.9 mm = 999.99 cm
+HSpacingUnit.init()
+HSpacingUnit.setHTML(p._unitLabel)
+/// -------------------------------------------
+frequencyField.init()
+frequencyField.setMin(0)
+frequencyField.setMax(999999)
+frequencyColor.init()
+tableUnitIsInch = (elt.tableForm.unitIsInch == 1)
+HSpacingField.setValue( p.toUserUnit(elt.tableForm.spacing, tableUnitIsInch))
+frequencyField.setValue(elt.tableForm.freqVal)
+frequencyColor.setColor(elt.tableForm.freqColor.rgb)
+}
+//
+// getREType()
+//
+function getREType()
+{
+return "table"
+}
+//
+// updateDialog()
+//
+function updateDialog(entry, img)
+{
+curEntry=entry
+addImageButton.setText('Edit')
+//save it in a global array for the same session
+elt.tableForm.embimg=true;
+var elts=new Array
+elts[0]=elt
+setBackgroundImgFile(elts, img);
+}
+//
+// set Page Layout
+//
+function setLayout(elt)
+{
+if (!initPageLayout)
+{
+initPageLayout = true
+startNewPageCheck.init()
+repeatEveryPageCheck.init()
+avoidPageBreakCheck.init()
+repeatHeaderCheck.init()
+repeatFooterCheck.init()
+sectionOrBodyTxt.init()
+horizontalImg.init()
+horizontalPosField.init()
+horizontalPosField.setPrecision(2)
+horizontalPosField.setMin(0)
+horizontalPosField.setMax(p.toUserUnit(9999.9, false)) // 9999.9 mm = 999.99 cm
+HPosUnit.init()
+HPosUnit.setHTML(p._unitLabel)
+horizontalPosCombo.init()
+horizontalPosCombo.del()
+horizontalEltCombo.init()
+verticalImg.init()
+verticalPosField.init()
+verticalPosField.setPrecision(2)
+verticalPosField.setMin(0)
+verticalPosField.setMax(p.toUserUnit(9999.9, false))
+VPosUnit.init()
+VPosUnit.setHTML(p._unitLabel)
+verticalPosCombo.init()
+verticalPosCombo.del()
+verticalEltCombo.init()
+//condDisplayCheck.init()
+//condDisplayTxt.init()
+//valButton.init()
+// read wom
+startNewPageCheck.check(elt.block.startNewPage == 1)
+repeatEveryPageCheck.check(elt.block.repeatOnEveryPage == 1)
+avoidPageBreakCheck.check(elt.block.avoidPageBreak == 1)
+if (_isForm) {
+repeatHeaderCheck.setDisplay(false)
+repeatFooterCheck.setDisplay(false)
+} else {
+repeatHeaderCheck.setDisplay(true)
+repeatFooterCheck.setDisplay(true)
+repeatHeaderCheck.check(elt.table.repeatHead == 1)
+repeatFooterCheck.check(elt.table.repeatFoot == 1)
+}
+// Position
+setPosition(elt)
+}
+}
+// set Position
+function setPosition(elt)
+{
+blockPosUnitIsInch = (elt.block.unitIsInch == 1)
+horizontalPosField.setValue( p.toUserUnit(elt.block.posH, blockPosUnitIsInch))
+verticalPosField.setValue( p.toUserUnit(elt.block.posV, blockPosUnitIsInch))
+var attached = (elt.attach)? true : false
+var inSection = (elt.parent.className == "section")
+sectionOrBodyTxt.setHTML(inSection? "Section":"Report")
+horizontalEltCombo.del()
+verticalEltCombo.del()
+var children = elt.parent.children
+var lenChildren = children.length
+var attachToHEltBid = attached ? elt.attach.toH : 0
+var attachToVEltBid = attached ? elt.attach.toV : 0
+var eltBid = elt.bid
+for (var j = 0; j < lenChildren; j++) // add all the elements from the same container
+{
+var child = children[j]
+var childBid = child.bid
+if ((eltBid != childBid) && (child.className != "section")) //except itself or section
+{
+var name = ""
+if (child.fcell) // cell
+{
+name = child.fcell.formula
+}
+if (child.className == "block") // block
+{
+name = child.block.name
+}
+if (child.className == "reportCell") // reportCell
+{
+name = child.formula
+}
+if (name == "") name = "Empty Cell"
+if (child.attach && (child.attach.toH != eltBid)) {// circular attachment
+if (attachToHEltBid == childBid)
+{
+horizontalEltCombo.add(name,childBid, true) // select
+} else {
+horizontalEltCombo.add(name, childBid)
+}
+}
+if (child.attach && (child.attach.toV != eltBid)) {// circular attachment
+if (attachToVEltBid == childBid)
+{
+verticalEltCombo.add(name, childBid, true)
+} else {
+verticalEltCombo.add(name, childBid)
+}
+}
+}
+}
+horizontalPosCombo.del()
+horizontalPosCombo.add(inSection?"Left edge of section":"Left edge of report",0, true)
+verticalPosCombo.del()
+verticalPosCombo.add(inSection?"Top edge of section":"Top edge of report",0, true)
+if (horizontalEltCombo.getCount() > 0) 
+{
+var res = (attached) ? elt.attach.h : 0
+for (var i=1; i < p._attachH.length; i++)
+{
+horizontalPosCombo.add(p._attachH[i], i, (res == i))
+}
+res = (attached) ? elt.attach.v : 0
+for (var i=1; i < p._attachV.length; i++)
+{
+verticalPosCombo.add(p._attachV[i], i, (res == i))
+}
+}
+horizontalPosComboCB()
+verticalPosComboCB()
+}
+// set setPivot
+function setPivot(elt)
+{
+if (!initPivot) 
+{
+initPivot = true
+dicTree.init()
+buildTree(dicTree, true)
+//dicTree.show(true)
+addObjButton.init()
+delObjButton.init()
+widgetRows.init()
+widgetCols.init()
+widgetBody.init()
+if (_isMatrix) // cross table
+{
+validZones['body']=true
+validZones['cols']=true
+validZones['rows']=true
+axisObjects['body'] = _block.axis[0].vars
+axisObjects['cols'] = _block.axis[1].vars
+axisObjects['rows'] = _block.axis[2].vars
+widgetRows.setDisplay(true)
+widgetCols.setDisplay(true)
+widgetBody.setDisplay(true)
+} else if ((_blockKind==0) || (_isForm)) {// H Table& Form
+validZones['rows']=true
+axisObjects['rows'] = _block.axis[2].vars
+widgetRows.setDisplay(true)
+widgetCols.setDisplay(false)
+widgetBody.setDisplay(false)
+} else if (_blockKind==1) {// V Table
+validZones['cols']=true
+axisObjects['cols'] = _block.axis[1].vars
+widgetRows.setDisplay(false)
+widgetCols.setDisplay(true)
+widgetBody.setDisplay(false)
+}
+objectsByID = new Array
+for (var i in _docObjects)
+{
+objectsByID[_docObjects[i].id] = _docObjects[i]
+}
+for (var i in _variableObjects)
+{
+objectsByID[_variableObjects[i].id] = _variableObjects[i]
+}
+for (var i in _formulaObjects)
+{
+objectsByID[_formulaObjects[i].id] = _formulaObjects[i]
+}
+w = _isMatrix? 170 : 345
+h = _isMatrix? 100 : 218
+for (var i in validZones)
+{
+var zone=i
+window[zone+'Radio'].init()
+window[zone+'LEd'].init()
+window[zone+'LEd'].resize(w,h)
+window[zone+'L'].remove()
+fillList(zone)
+}
+}
+rowsLEd.chgLayout(_isMatrix?_horiBOList:_vertBOList)
+colsLEd.chgLayout((_isMatrix || _isForm)?_vertBOList:_horiBOList)
+if (_isMatrix)
+{
+setTargetCurrent('body')
+} else {
+for (var i in validZones)
+{
+setTargetCurrent(i)
+break
+}
+}
+}
+//
+// doFormatTable()
+// forward to jsp process page
+//
+function doFormatTable()
+{
+// fill form
+var f = self.document.formatTableForm
+f.unitIsInch.value="" + p._unitIsInch
+// General
+f.nameTable.value="" + nameTxt.getValue()
+if (emptyTableCheck.initialized()) {
+if (!_isForm) {
+if (_isMatrix || _isVert) f.showEmptyRows.value="" + emptyRowCheck.isChecked()
+if (_isHor) f.showEmptyRows.value="" + emptyColumnsCheck.isChecked() // !! cause SDK is like this
+if (_isMatrix) {
+f.showEmptyCols.value="" + emptyColumnsCheck.isChecked()
+f.showLeftHeader.value="" + xTableLeftHeaderCheck.isChecked()
+f.showTopHeader.value="" + xTableTopHeaderCheck.isChecked()
+f.showObjectNames.value="" + xTableObjNamesCheck.isChecked()
+f.dispFoot.value="" + xTableFootersCheck.isChecked()
+}
+} else {
+f.showEmptyFields.value="" + emptyFieldsCheck.isChecked()
+}
+if (!_isMatrix) { 
+f.dispFoot.value="" + tableFootersCheck.isChecked()
+f.dispHead.value="" + tableHeadersCheck.isChecked()
+f.dupRow.value="" + !dupRowCheck.isChecked() // avoid opposite of show
+}
+f.showWhenEmpty.value = "" + emptyTableCheck.isChecked()
+}
+//Borders
+doFormatForBorders(f);
+// Appearance
+if (bgColor.initialized())
+{
+if (bgColor.getColor())
+{
+f.bgColor.value="" + bgColor.getColor()
+}
+var isNone = noneRadio.isChecked()
+f.noneBG.value="" + isNone
+if (!isNone)
+{
+var isSkin = (skinsCombo.getSelection()) ? skinRadio.isChecked() : false
+f.isSkin.value="" + isSkin
+f.hasEmbeddedImg.value=""+imageFromFileRadio.isChecked()
+f.dispMode.value="" + displayCombo.getSelection().index
+f.urlImg.value="" + (isSkin ? (skinsCombo.getSelection().value) : urlTxt.getValue())
+f.alignH.value="" + ((alignHorizontalCombo.getSelection().value == "") ? "" : alignHorizontalCombo.getSelection().index)
+f.alignV.value="" + ((alignVerticalCombo.getSelection().value == "") ? "" : alignVerticalCombo.getSelection().index)
+}
+else
+{
+f.urlImg.value=""
+f.isSkin.value="" + false
+}
+f.HSpacing.value="" + HSpacingField.getValue()
+f.freqVal.value="" + frequencyField.getValue()
+if (frequencyColor.getColor())
+f.freqColor.value="" + frequencyColor.getColor()
+}
+// Layout Properties
+if (startNewPageCheck.initialized()) {
+f.startNewPage.value="" + startNewPageCheck.isChecked()
+f.repeatOnEveryPage.value="" + repeatEveryPageCheck.isChecked()
+f.avoidPageBreak.value="" + avoidPageBreakCheck.isChecked()
+if (!_isForm) {
+f.repeatHead.value="" + repeatHeaderCheck.isChecked()
+f.repeatFoot.value="" + repeatFooterCheck.isChecked()
+}
+f.posH.value="" + horizontalPosField.getValue()
+f.posV.value="" + verticalPosField.getValue()
+if (horizontalEltCombo.getSelection()){
+f.attachToH.value="" + horizontalEltCombo.getSelection().value
+}
+f.attachH.value="" + horizontalPosCombo.getSelection().value
+if (verticalEltCombo.getSelection()){
+f.attachToV.value="" + verticalEltCombo.getSelection().value
+}
+f.attachV.value="" + verticalPosCombo.getSelection().value
+//f.condDisplay.value="" + (condDisplayCheck.isIndeterminate()? '' : condDisplayCheck.isChecked())
+//f.condDisplayTxt.value="" + condDisplayTxt.getHTML()
+}
+// Pivot
+if (_axisCommands.length > 0) {
+var sCommands = "" 
+for (var i = 0; i < _axisCommands.length; i++) {
+sCommands += "[" + _axisCommands[i] + "]"
+if (i < _axisCommands.length-1) sCommands += ","
+}
+f.axisCommands.value="[" + sCommands + "]"
+}
+// Build URL
+var url = p._root + "processFormatTable" + p._appExt
+url += p.urlParamsNoBID(curEntry,null,_iReportIdx)
+url += "&sBid="+ _bid
+f.action = url
+setTimeout("document.formatTableForm.submit()",1)
+}
+function createList(coll,title,layout)
+{
+window[coll+"Radio"] = newRadioWidget(coll+"Radio","targetGroup",title,eval('set'+coll+'Target'),false)
+//   newBOListContainerWidget(id,w,h,image,layout,changeCB,dblClickCB,moveCB,deleteCB,noText, focusCB)
+eval('window.'+coll+'LEd = newBOListContainerWidget("'+coll+'LEd",120,60, p._img+"qualificationIcons.gif",'+layout+',changeObjSelCB,null,moveCB,removeButtonCB,true,focusCB)')
+eval('window.'+coll+'L = window.'+coll+'LEd.getList()')
+eval('window.'+coll+'L.setDragDrop(dragCB, acceptDropCB, dropCB)');
+eval('window.'+coll+'L.targetName="'+coll+'"');
+}
+// when click on the BOList zone the radio button is selected
+function focusCB()
+{
+setTargetCurrent(this.targetName)
+}
+function updateButtons()
+{
+}
+// ============
+// Drag & drop 
+// ============
+function dragCB(source) {}
+function acceptDropCB(source,target,ctrl,shift)
+{
+// FR 11550 : we can have dim in the body of a crosstab
+if ((source == null) || (target == null)) return false
+var currentObj = null
+if (source.id == 'ftDlgDicTree') {
+currentObj = source.getSelectedItem().userData
+} else if (source.selection != null) {
+currentObj = source.selection.value
+}
+if ((currentObj != null) && (currentObj.id)) return true
+return false
+}
+function dropCB(source,target,ctrl,shift)
+{
+// ctrl means Drag Drop COPY
+// shift means Drag Drop SWAP
+// no modifiers means Drag Drop MOVE
+// From bolist to tree
+if (target.id=='ftDlgDicTree')
+{
+if (source && (source.id != 'ftDlgDicTree')){
+var sourceItem = source.selection
+var srcIdx = sourceItem.getIndexInParent()
+delCommand(source.targetName,srcIdx)
+sourceItem.remove()
+source.changeCB()
+}
+} else {
+var targetItem = target.dropWidget
+var index      = target.dropIndex
+// From bolist to bolist
+if (source && (source.id != 'ftDlgDicTree'))
+{
+var sourceItem = source.selection
+var srcIdx = sourceItem.getIndexInParent()
+if (shift) // swap
+{
+if (index < 0) return 
+targetItem = targetItem.items[index]
+var targIdx = index
+var n1=source.add(targetItem.text,targetItem.value.kind,targetItem.value,targetItem.text,sourceItem.getIndexInParent())
+var n2=target.add(sourceItem.text,sourceItem.value.kind,sourceItem.value,sourceItem.text,targetItem.getIndexInParent())
+addCommand(target.targetName,targIdx,sourceItem.value.id)
+delCommand(target.targetName,srcIdx)
+delCommand(target.targetName,targIdx)
+addCommand(target.targetName,srcIdx,targetItem.value.id)
+sourceItem.remove()
+targetItem.remove()
+n1.select(true)
+n2.select(true)
+}
+else
+{// copy
+var n = target.add(sourceItem.text,sourceItem.value.kind,sourceItem.value,null,index)
+if (srcIdx < index) {
+addCommand(target.targetName,index,sourceItem.value.id)
+if (!ctrl) {
+sourceItem.remove()
+delCommand(source.targetName,srcIdx)
+}
+} else {
+if (!ctrl) { // move
+sourceItem.remove()
+delCommand(source.targetName,srcIdx)
+}
+addCommand(target.targetName,index,sourceItem.value.id)
+}
+n.select(true)
+}
+//
+target.changeCB()
+}
+// Fom tree to table
+if (source && (source.id == 'ftDlgDicTree'))
+{
+var n = target.add(currentObj.name,currentObj.kind,currentObj,currentObj.name,index)
+addCommand(target.targetName,index,currentObj.id)
+n.select(true)
+target.changeCB()
+}
+}
+}
+function moveCB(elem,node,idx)
+{
+var srcIdx = node.selection.getIndexInParent()
+if (srcIdx < idx) {
+addCommand(node.targetName, idx, elem.value.id)
+delCommand(node.targetName, srcIdx)
+} else {
+addCommand(node.targetName, idx, elem.value.id)
+delCommand(node.targetName, srcIdx+1)
+}
+var n = node.add(elem.text,elem.value.kind,elem.value,elem.text,idx)
+node.selection.remove()
+n.select(true)
+node.changeCB();
+return false
+}
+//// copied from available object left pane
+// function clickCB()
+// callback when click on a tree item
+//  
+        function clickCB(userData)
+        {
+currentObj=userData
+        var items = dicTree.getSelections()
+        _singleSel  = items[0]   
+        setMatchDPName(dicTree.sub[0], "", true, true)
+        if ((_singleSel.par) && (currentObj) && !(currentObj.isFormula) && !(currentObj.isVariable)) {
+           _singleSel.setGrayStyle(!_singleSel.isGrayStyle())
+           switch (currentObj.kind)
+           {       
+           case _dim :
+           case _dtl :
+           var DPName = currentObj.DPName           
+           setMatchDPName(dicTree.sub[0], DPName, false, false)
+           break;
+           case _linkDim : 
+           setMatchDPName(dicTree.sub[0], "", true, false)         
+        for (var k=0; k < currentObj.DPNames.length; k++) {                
+        var DPName = currentObj.DPNames[k]
+           setMatchDPName(dicTree.sub[0], DPName, false, true)                     
+        }
+           break;
+           case _msr :                               
+           case _variable :
+           case _formula :
+           //setMatchDPName(dicTree.sub[0], "", true, false)
+}
+        }
+        }
+// copied from available object left pane
+        function setMatchDPName(subTree, DPName, deselectAll, setOnly) {
+   var subTreeCount = subTree.sub.length
+        for (var j=0; j < subTreeCount; j++)
+        {                  
+        obj = subTree.sub[j]                
+        if (deselectAll) {
+        obj.setGrayStyle(false)
+        }
+        if ((obj.userData != null) && (obj.userData.kind != _msr))  {
+        if (obj.userData.kind == _linkDim) {
+        var matchOneDP = false
+        for (var m=0; m < obj.userData.DPNames.length; m++) {        
+        if (DPName == obj.userData.DPNames[m]) {
+        matchOneDP = true
+        break
+        }                        
+        }
+        if (setOnly) {
+        if (matchOneDP) obj.setGrayStyle(false)
+        } else {
+        obj.setGrayStyle(!matchOneDP)
+        }        
+        } else {
+        if (setOnly) {
+        if (DPName == obj.userData.DPName) obj.setGrayStyle(false)
+        } else {
+        obj.setGrayStyle(DPName != obj.userData.DPName)
+        }
+        }
+        }
+        if (obj.sub.length) setMatchDPName(obj, DPName, deselectAll, setOnly)
+        }
+        }
+function dclickCB(data)
+{
+currentObj=data;
+addButtonCB()
+}
+function addButtonCB()
+{
+if (currentObj==null) return;
+if (this.targetName) {
+currList=eval(this.targetName+'L')
+} else {
+currList=eval(_blockCurrent+'L')
+}
+var idx = currList.items? currList.items.length : 0
+var n = currList.add(currentObj.name,currentObj.kind,currentObj,currentObj.name,idx)
+addCommand(currList.targetName,idx,currentObj.id)
+n.select(true)
+currList.changeCB();
+}
+function removeButtonCB()
+{
+if (this.targetName) {
+currList=eval(this.targetName+'L')
+} else {
+currList=eval(_blockCurrent+'L')
+}
+var sel=currList.getSelection(), idx = sel ? sel.index : null
+if (idx!=null)
+{
+currList.remove(idx)
+var nIdx = Math.min(idx,currList.getLength()-1)
+currList.select(nIdx)
+delCommand(currList.targetName,idx)
+}
+currList.changeCB();
+}
+//update button of the bolist move 
+function changeObjSelCB()
+{
+if (this.targetName) {
+currCont=eval(this.targetName+'LEd')
+} else {
+currCont=eval(_blockCurrent+'LEd')
+}
+var len = this.items.length
+if (len <= 1) {
+currCont.up.setDisabled(true)
+currCont.down.setDisabled(true)
+} else {
+var sel=this.getSelection()
+if (sel)
+{
+if(sel.index == 0)
+currCont.up.setDisabled(true)
+else
+currCont.up.setDisabled(false)
+if (sel.index == len-1)
+currCont.down.setDisabled(true)
+else
+currCont.down.setDisabled(false)
+}
+else
+{
+currCont.up.setDisabled(true)
+currCont.down.setDisabled(true)
+}
+}
+}
+function addCommand(block,idx,id)
+{
+// command to send to SDK : add expr in axis type at index with ID
+_axisCommands[_axisCommands.length] = "a," + _axisType[block] + ","  + idx + "," + id
+}
+function delCommand(block,idx)
+{
+// command to send to SDK : del expr in axis type at index
+_axisCommands[_axisCommands.length] = "d," + _axisType[block] + "," + idx
+}
+function fillList(zone)
+{
+list = eval(zone+'L')
+collection = axisObjects[zone]
+if (collection)
+{
+len=collection.length
+for (var k=0;k<len;k++)
+{
+var obj = objectsByID[collection[k]]
+if (obj) list.add(obj.name,obj.kind,obj,obj.name)
+}
+if (len>0) list.select(0)
+}
+list.changeCB();
+}
+function getBlockZone(kind)
+{
+var s=''
+// Title radio button
+s += '<div align="left">' + window[kind+"Radio"].getHTML() + '</div>'
+// List box
+currList = eval(kind+'L')
+var currListEditable = eval(kind+'LEd')
+s += currListEditable.getHTML()
+return s
+}
+function setTargetCurrent(kind){if (window[kind+'Radio']!=null){ _blockCurrent=kind;window[kind+'Radio'].check(true)}}
+function setrowsTarget() {setTargetCurrent('rows')}
+function setcolsTarget() {setTargetCurrent('cols')}
+function setbodyTarget() {setTargetCurrent('body')}
+function refuseDropCB()
+{
+return false
+}
+function showLeftTopHdrsCheckCB()
+{
+if (!xTableLeftHeaderCheck.isChecked() || !xTableTopHeaderCheck.isChecked()) {
+xTableObjNamesCheck.check(false)
+}
+}
+function showXtraHdrsCheckCB()
+{
+if (xTableObjNamesCheck.isChecked()) {
+xTableLeftHeaderCheck.check(true)
+xTableTopHeaderCheck.check(true)
+}
+}
+// ADAPT00439755
+function buildTree(tree,withFormula)
+{
+tree.deleteAll()
+// objects
+//create a list order different than the one using obj.kind, use listOrder
+setListOrder()
+// sort array
+_docObjects.sort(sortFuncUsingListOrder) 
+// must be called after sort
+renameSameNameDifferentDPObj()
+newTreeElt1 = newTreeWidgetElem(1,"Available Objects", null, null, null, "Available Objects");
+tree.add(newTreeElt1);
+var len = _docObjects.length
+if (len>0)
+{
+// first pass, mark merged objects
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+switch(item.kind) 
+{
+case _linkDim:
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) {
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.isPartOfALinkedDim) continue
+if (el.id == item.linkedIDs[k]) {
+_docObjects[m].isPartOfALinkedDim = true
+}
+}
+}
+break;
+}
+}
+// second pass, add objects non-linked in the tree and linked objects
+// in the correspnoding merged obj subtree
+len = _docObjects.length
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+var sTooltipHdr = "Based On:"
+var sTooltipDesc = "Description:"
+switch(item.kind) 
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+tooltip = sTooltipHdr + " " + item.DPName + tooltipDesc
+newTreeElt1.add(newTreeWidgetElem(item.kind, item.name, item, null,null, shrinkTooltip(tooltip)));
+break;
+case _linkDim:
+mergedTooltip = ""
+mergedTooltipDesc = ""
+nLinkDim = newTreeWidgetElem(_linkDim, item.name, item, null,null, "")
+newTreeElt1.add(nLinkDim);
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) { // iter over linked objects
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.id == item.linkedIDs[k]) {
+tooltipDesc = (el.desc)? ("\n" + sTooltipDesc + " " + el.desc) : ""
+tooltip = sTooltipHdr + " " + el.DPName + tooltipDesc
+nLinkDim.add(newTreeWidgetElem(el.kind, el.name, el, null,null, shrinkTooltip(tooltip)))
+mergedTooltip += el.DPName
+if (k < (l-1)) mergedTooltip += ", "
+}
+}
+}
+mergedTooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+nLinkDim.tooltip = sTooltipHdr + " " + mergedTooltip + mergedTooltipDesc
+break;
+}
+}
+}
+newTreeElt1.expanded = p._resultObjsBranchExp
+// variables
+_variableObjects.sort(BOObj_sortFunc)
+newTreeElt2 = newTreeWidgetElem(1,"Variables", null,null,null, "Variables");
+tree.add(newTreeElt2);
+var len = _variableObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i]
+item.isVariable=true
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.formula)? ("\n" + item.formula) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt2.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+}
+newTreeElt2.expanded = p._varsBranchExp
+// formula
+if (withFormula) 
+{
+_formulaObjects.sort(BOObj_sortFunc)
+var len = _formulaObjects.length
+if (len>0)
+{
+newTreeElt3 = newTreeWidgetElem(1,"Formulas",null, null,null, "Formulas");
+tree.add(newTreeElt3);
+for (var i=0; i < len;i++)
+{
+var item = _formulaObjects[i]
+item.isFormula=true
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.desc)? ("\n" + item.desc) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt3.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+newTreeElt3.expanded = p._formulaeBranchExp
+}
+}
+tree.rebuildHTML()
+}
+/// END PIVOT FUNCTIONS
+function getImgFileFromApplyFormatDlg()
+{
+if (elt.tableForm.embimg)
+{
+var elts=new Array;
+elts[0]=elt
+var img=getBackgroundImgFile(elts);
+return img?img:""
+}
+return null;
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<form target="Report" style="display:none" name="formatTableForm" method="post" action="">
+<input type="hidden" name="unitIsInch" id="unitIsInch" value="">
+<input type="hidden" name="nameTable" id="nameTable" value="">
+<input type="hidden" name="dispHead" id="dispHead" value="">
+<input type="hidden" name="dispFoot" id="dispFoot" value="">
+<input type="hidden" name="showLeftHeader" id="showLeftHeader" value="">
+<input type="hidden" name="showTopHeader" id="showTopHeader" value="">
+<input type="hidden" name="showObjectNames" id="showObjectNames" value="">
+<input type="hidden" name="dupRow" id="dupRow" value="">
+<input type="hidden" name="showWhenEmpty" id="showWhenEmpty" value="">
+<input type="hidden" name="showEmptyRows" id="showEmptyRows" value="">
+<input type="hidden" name="showEmptyCols" id="showEmptyCols" value="">
+<input type="hidden" name="showEmptyFields" id="showEmptyFields" value="">
+<input type="hidden" name="bgColor" id="bgColor" value="">
+<input type="hidden" name="isSkin" id="isSkin" value="">
+<input type="hidden" name="urlImg" id="urlImg" value="">
+<input type="hidden" name="noneBG" id="noneBG" value="">
+<input type="hidden" name="dispMode" id="dispMode" value="">
+<input type="hidden" name="alignH" id="alignH" value="">
+<input type="hidden" name="alignV" id="alignV" value="">
+<input type="hidden" name="hasEmbeddedImg" id="hasEmbeddedImg" value="">
+<input type="hidden" name="HSpacing" id="HSpacing" value="">
+<input type="hidden" name="freqVal" id="freqVal" value="">
+<input type="hidden" name="freqColor" id="freqColor" value="">
+<input type="hidden" name="startNewPage" id="startNewPage" value="">
+<input type="hidden" name="repeatOnEveryPage" id="repeatOnEveryPage" value="">
+<input type="hidden" name="avoidPageBreak" id="avoidPageBreak" value="">
+<input type="hidden" name="repeatHead" id="repeatHead" value="">
+<input type="hidden" name="repeatFoot" id="repeatFoot" value="">
+<input type="hidden" name="posH" id="posH" value="">
+<input type="hidden" name="posV" id="posV" value="">
+<input type="hidden" name="attachToV" id="attachToV" value="">
+<input type="hidden" name="attachToH" id="attachToH" value="">
+<input type="hidden" name="attachH" id="attachH" value="">
+<input type="hidden" name="attachV" id="attachV" value="">
+<input type="hidden" name="condDisplay" id="condDisplay" value="">
+<input type="hidden" name="condDisplayTxt" id="condDisplayTxt" value="">
+<input type="hidden" name="axisCommands" id="axisCommands" value="">
+<input type="hidden" name="borderSize" id="borderSize" value="">
+<input type="hidden" name="borderColor" id="borderColor" value="">
+<input type="hidden" name="topBorderSize" id="topBorderSize" value="">
+<input type="hidden" name="topBorderColor" id="topBorderColor" value="">
+<input type="hidden" name="bottomBorderSize" id="bottomBorderSize" value="">
+<input type="hidden" name="bottomBorderColor" id="bottomBorderColor" value="">
+<input type="hidden" name="leftBorderSize" id="leftBorderSize" value="">
+<input type="hidden" name="leftBorderColor" id="leftBorderColor" value="">
+<input type="hidden" name="rightBorderSize" id="rightBorderSize" value="">
+<input type="hidden" name="rightBorderColor" id="rightBorderColor" value="">
+</form>
+</body>
+</html>
