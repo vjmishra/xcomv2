@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for deleting Customer articles</comment>
+    <entry key="WCContext.storefrontId">xpedxDeleteArticle:/XPXArticle[]/@OrganizationCode</entry>
+    <entry key="articleNames">xpedxDeleteArticle:/XPXArticle[]/@ArticleName</entry>
+    <entry key="divisions">xpedxDeleteArticle:/XPXArticle[]/@XPXDivision</entry>
+    <entry key="customerId">xpedxDeleteArticle:/XPXArticle[]/@CustomerID</entry>
+</properties>

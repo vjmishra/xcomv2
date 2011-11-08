@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries cusotmer logo action</comment>
+	
+	<entry key="#parameters.organizationCode">customer-uploadLogo:/Customer/@OrganizationCode</entry>
+	<entry key="#parameters.customerId">customer-uploadLogo:/Customer/@CustomerID</entry>
+	<entry key="filePath">customer-uploadLogo:/Customer/Extn/@ExtnCustLogo</entry>
+	
+</properties>
+

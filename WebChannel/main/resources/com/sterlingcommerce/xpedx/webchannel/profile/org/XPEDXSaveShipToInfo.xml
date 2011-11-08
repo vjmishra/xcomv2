@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries</comment>
+    
+    <entry key="#parameters.customerId">xpedx-save-shipToInfo:/Customer/@CustomerID</entry>
+    <entry key="#parameters.OrgCode">xpedx-save-shipToInfo:/Customer/@OrganizationCode</entry>
+    <entry key="#parameters.txtCustEmailAddress">xpedx-save-shipToInfo:/Customer/Extn/@ExtnCustEmailAddress</entry>
+    <entry key="#parameters.txtExtnFax1">xpedx-save-shipToInfo:/Customer/Extn/@ExtnFax1</entry>
+    <entry key="#parameters.txtExtnPhone1">xpedx-save-shipToInfo:/Customer/Extn/@ExtnPhone1</entry>
+    <entry key="#parameters.txtExtnFax2">xpedx-save-shipToInfo:/Customer/Extn/@ExtnFax2</entry>
+    <entry key="#parameters.txtExtnPhone2">xpedx-save-shipToInfo:/Customer/Extn/@ExtnPhone2</entry>
+</properties>
