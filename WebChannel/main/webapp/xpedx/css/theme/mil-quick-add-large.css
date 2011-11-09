@@ -1,0 +1,33 @@
+.quick-add-form-top {
+	background: url("../../images/theme/theme-1/quick-add/quickadd-large-bg-PO.png") no-repeat scroll 0 0 #FFFFFF!important;
+	height: 5px;
+	position: absolute;
+	width: 710px!important;
+}
+
+.quick-add-form {
+    background: url("../../images/theme/theme-1/quick-add/quickadd-rpt-bg-PO.png") repeat-y scroll center top transparent!important;
+    margin-bottom: 10px;
+    width: 710px!important;
+}
+.quick-add-form .add-to-cart-btn {
+	float: right;
+	margin: 19px 1px 10px 0;
+}
+.quick-add-form th.type-col {
+	width: 57px;
+}
+.del-quick-add {
+	color:#F00!important;
+	font-weight:bold!important;
+}
+.quick-add-form th.job-col {
+	width: 135px;
+}
+
+.quick-add-form-bot {
+    background: url("../../images/theme/theme-1/quick-add/quick-add-bg-bot-PO.gif") no-repeat scroll 0 0 #FFFFFF!important;
+    height: 37px;
+    position: absolute;
+    width: 710px!important;
+}
