@@ -1,0 +1,60 @@
+BODY.drillbar
+{
+    BORDER-RIGHT: #456e9e 1px solid;
+    BORDER-LEFT: #456e9e 1px solid;
+    BORDER-BOTTOM: #456e9e 1px solid;
+    BACKGROUND-COLOR: white;
+}
+DIV.drillbar_ns
+{
+    BORDER-RIGHT: #456e9e 1px solid;
+    OVERFLOW: auto;
+    BORDER-LEFT: #456e9e 1px solid;
+    BORDER-BOTTOM: #456e9e 1px solid;
+    POSITION: absolute;
+    BACKGROUND-COLOR: white
+}
+TD.Drill_General_Title
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e;
+}
+TD.Drill_Info_Title
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: #456e9e;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #e1e8f0;
+}
+TD.Drill_Info
+{
+    FONT-SIZE: 12px;
+    COLOR: #456e9e;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #e1e8f0;
+}
+TABLE.Drill_Border
+{
+    BACKGROUND-COLOR: #456e9e;
+}
+TABLE.Drill_Background
+{
+    BACKGROUND-COLOR: #e1e8f0;
+}
+INPUT.Drill_Button_Validation
+{
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e;
+}
+HR.Drill_Separator
+{
+    BORDER-TOP: #e1e8f0 1px inset;
+    WIDTH: 94%;
+    BORDER-BOTTOM: white 1px inset;
+}

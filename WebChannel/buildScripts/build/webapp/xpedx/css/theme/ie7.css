@@ -1,0 +1,58 @@
+.prod-config .orange-ui-btn
+{
+top:1px !important;
+}
+
+/* #main-navigation ul li {
+  display: inline;
+} */
+#main-navigation ul li { min-width: auto; }
+#main-nav li a, #main-nav li span { min-width: 99px; }
+#main-navigation ul ul li { width: 140px; }
+#main-navigation ul ul { position: absolute; }
+#welcome-address-popup { zoom:1; width: 280px; }
+#home-image-rotation-nav .img-navi-right { margin-top: -17px; }
+.header-subnav li img { float: none; }
+.searchbox-2 span.float-right { float: none; }
+#cart-management-popup { top: 22px; }
+.narrowbyattributes
+{
+	padding-right: 12px !important;
+}
+#item-box
+{
+	overflow: visible !important;
+}
+.table-header-bar-left, .table-header-bar-right
+{
+	background-color: #003399;
+}
+
+.rebel_btn{
+    bottom: 34px !important;
+    left: 280px !important;
+    position: relative;
+}
+
+.prod-config .orange-ui-btn
+{
+    left: 271px ;
+    position: relative;
+    top: -8px !important;
+}
+
+.prod-detail-img{
+width:150px;
+}
+
+#search_searchTerm
+{
+	padding-top: 3px;
+	margin-top: -1px;
+}
+.xpedx-light-box span#catalog-descr
+{
+position:relative;
+ 	bottom:40px;
+}
+.searchbox-1 .searchButton { top: -5px; }

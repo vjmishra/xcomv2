@@ -1,0 +1,138 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Title zone</title>
+<style type="text/css">
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript"> 
+p=parent
+urlImg = p._root+parent._img
+initDom(p._root + "lib/images/"+p._skinName+"/",p._lang,p,"ambiguousDrill")
+initialized=false
+ambDrillDlg=null
+arrDim=parent._arrAmbiguousDim
+arrRadioBtn=new Array
+drillAction=null
+function loadDialog()
+{
+if (!initialized)
+{
+initialized=true
+urlImg = p._root+p._img
+ambDrillDlg = newDialogBoxWidget("ambDrillDlg","Ambiguous Hierarchy for Drill",410,350,okCB,closeDlg,false)
+ambDrillZone=newFrameZoneWidget("ambDrillZone",null,null,true)
+ambDrillScroll=newScrolledZoneWidget("ambDrillScroll",0,0,400,100,"dialogzone")
+for(var i=0;i<arrDim.length;i++)
+{
+arrRadioBtn[i]=newRadioWidget("ambDim"+i,"grpAmbDrill",makeLabel(arrDim[i]),updateDrillDim,false,urlImg+"dim_o.gif",14,16,false);
+}
+OKButton=newButtonWidget("ambDrillOK","OK","okCB()",60)
+CancelButton=newButtonWidget("ambDrillCancel","Cancel","closeDlg()",60)
+HelpButton=newButtonWidget("ambDrillHelp","Help",null,60)
+ambDrillDlg.attachDefaultButton(OKButton);
+ambDrillInfo= newInfoWidget("ambDrillInfo","More Information","","Select the drill path you want to use for this drill action.")
+}
+var sRadioBtns=''
+for(var i=0;i<arrDim.length;i++)
+{
+sRadioBtns+=arrRadioBtn[i].getHTML()
+}
+if (_curWin.ambDrillInitialized!=true)
+{
+_curWin.ambDrillInitialized=true
+targetApp
+(
+ambDrillDlg.beginHTML()+
+'<table class="dialogzone" width="100%" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td><IMG src="'+urlImg+'../DrillOutsideScopeDialog.gif'+'">You performed a drill action on a dimenson that<br>belongs to multiple hierarchies.<br><br>Select a dimension hierarchy.<br></td></tr>'+
+'<tr width="100%"><td style="padding-top:5px;padding-bottom:5px">'+
+ambDrillZone.beginHTML()+
+ambDrillScroll.beginHTML()+
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td><div id="ambDrillOptions">'+
+sRadioBtns+
+'</div></td></tr>'+
+'</tbody></table>'+
+ambDrillScroll.endHTML()+
+ambDrillZone.endHTML()+
+'</td></tr>'+
+'<tr><td>'+
+ambDrillInfo.getHTML()+
+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'<td>'+HelpButton.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+ambDrillDlg.endHTML()
+)
+}
+else
+{
+var l = getLayer('ambDrillOptions')
+if(l) l.innerHTML=sRadioBtns
+}
+ambDrillDlg.init();
+ambDrillZone.init();
+ambDrillInfo.init();
+OKButton.init();
+CancelButton.init();
+HelpButton.init();
+HelpButton.setDisplay(false)
+for(var i=0;i<arrDim.length;i++)
+{
+arrRadioBtn[i].init()
+if(i==0)
+{
+arrRadioBtn[i].check(true)
+drillAction=arrDim[0]
+}
+}
+ambDrillDlg.show(true)
+}
+function okCB()
+{
+p.wt()
+parent.generateDrill(drillAction[0],drillAction[1],drillAction[3],drillAction[5])
+ambDrillDlg.show(false)
+}
+function closeDlg()
+{
+ambDrillDlg.show(false)
+}
+function makeLabel(arr)
+{
+return ' Hierarchy: <b>'+ convStr(arr[2])+'</b>  -  '+'Dimension: <b>'+convStr(arr[4])+'</b>'
+}
+function updateDrillDim()
+{
+var o=this.id
+var i=parseInt(o.slice(6))
+drillAction=arrDim[i]
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+</body>
+</html>

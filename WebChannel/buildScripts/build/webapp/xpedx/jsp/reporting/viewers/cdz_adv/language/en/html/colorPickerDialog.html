@@ -1,0 +1,299 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "ColorPicker")
+var frameWidth = 330
+var titleFrameHeight = 14
+var parColor=p._currColorCombo.oldColor
+var rgb=parColor?parColor.split(","):null
+var currentColor = rgb?newBOColor(parseInt(rgb[0]),parseInt(rgb[1]),parseInt(rgb[2])):newBOColor(255,255,255)
+if (currentColor.r==-1)
+currentColor.set(255,255,255)
+var newColor = currentColor.getCopy()
+var isPageLoaded = false
+var initialized = false
+var pickerDlg = null
+var rep = "images/main/"
+var line0 = new Array("", "", "", "0.49.99", "49.99.156", "49.99.206", "0.49.156", "0.0.156", "0.0.206", "0.0.99", "", "", "")
+var line1 = new Array("", "", "0.99.99", "0.99.156", "0.156.206", "0.99.206", "0.49.206", "0.0.255", "49.49.255", "49.49.156", "", "", "")
+var line2 = new Array("", "", "0.132.132", "0.156.156", "49.206.206", "0.206.255", "0.156.255", "0.99.255", "49.99.255", "49.49.206", "99.99.156", "", "")
+var line3 = new Array("", "49.156.99", "0.206.156", "0.255.206", "0.255.255", "49.206.255", "49.156.255", "99.156.255", "99.99.255", "99.0.255", "99.0.206", "", "")
+var line4 = new Array("", "49.156.49", "0.206.99", "0.255.156", "99.255.206", "99.255.255", "99.206.255", "156.206.255", "156.156.255", "156.99.255", "156.49.255", "156.0.255", "")
+var line5 = new Array("0.99.0", "0.206.0", "0.255.00", "99.255.156", "156.255.206", "206.255.255", "206.239.255", "206.206.255", "206.156.255", "206.99.255", "206.0.255", "156.0.206", "")
+var line6 = new Array("0.49.0", "0.132.0", "49.206.49", "99.255.99", "156.255.156", "206.255.206", "255.255.255", "255.206.255", "255.156.255", "255.99.255", "255.0.255", "206.0.206", "99.0.9")
+var line7 = new Array("49.99.0", "0.156.0", "99.255.49", "156.255.99", "206.255.156", "255.255.206", "255.206.206", "255.156.206", "255.99.206", "255.49.206", "206.0.156", "132.0.132", "")
+var line8 = new Array("", "49.49.0", "99.156.0", "156.255.49", "206.255.99", "255.255.156", "255.206.156", "255.156.156", "255.99.156", "255.49.156", "206.49.156", "156.0.156", "")
+var line9 = new Array("", "99.99.49", "156.206.0", "206.255.49", "255.255.99", "255.206.99", "255.156.99", "255.123.132", "255.0.99", "214.0.148", "156.49.99", "", "")
+var line10 = new Array("", "", "132.132.0", "206.206.0", "255.255.0", "255.206.0", "255.156.49", "255.99.0", "255.82.82", "206.0.99", "99.0.49", "", "")
+var line11 = new Array("", "", "156.99.49", "206.156.0", "255.156.0", "206.99.0", "255.49.0", "255.0.0", "206.0.0", "156.0.49", "206.0.99", "", "", "")
+var line12 = new Array("", "", "", "99.49.0", "156.99.0", "206.49.0", "156.49.0", "156.0.0", "132.0.0", "165.0.33", "", "", "")
+var losangeColor = new Array( line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, line11, line12)
+line0 = new Array("255.255.255", "222.222.222", "181.181.181", "132.132.132", "90.90.90", "49.49.49", "24.24.24", "8.8.8")
+line1 = new Array("239.239.239", "198.198.198", "148.148.148", "115.115.115", "74.74.74", "41.41.41", "16.16.16", "")
+var linesBW = new Array( line0, line1)
+function helpCB()
+{
+}
+        function loadCB()
+        {
+isPageLoaded = true           
+if (!initialized)
+{
+initialized = true     
+pickerDlg =  newDialogBoxWidget("pickerDlg","Custom Color Picker", null, null, okCB, cancelCB)
+titleColorFrame = newWidget("titleColorFrame")
+colorFrame =  newFrameZoneWidget("colorFrame", frameWidth, 177)
+colorMap = newWidget("colorMap")
+bwMap = newWidget("bwMap")
+redWidget = newIntFieldWidget("redWidget", redCB, 3, redCB, redCB,null,null,30)
+greenWidget = newIntFieldWidget("greenWidget", greenCB, 3, greenCB, greenCB,null,null,30)
+blueWidget = newIntFieldWidget("blueWidget", blueCB, 3, blueCB, blueCB,null,null,30)
+oldColorWidget = newWidget("oldColorWidget")
+newColorWidget = newWidget("newColorWidget")
+info = newInfoWidget("pickerInfo","More Information","","Select a color for the selected text or report area.")
+OKButton= newButtonWidget("pickerOKButton","OK","okCB()",60)
+HelpButton = newButtonWidget("pickerHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("pickerCancelButton","Cancel","cancelCB()",60)
+pickerDlg.attachDefaultButton(OKButton);
+}
+var colorMapSrc = rep + "colorPicker.gif"
+var bwMapSrc = rep + "BWPicker.gif"
+if (_curWin.pickerDlgInitialized!=true)
+{
+_curWin.pickerDlgInitialized=true
+targetApp
+(
+pickerDlg.beginHTML() +
+'<table cellspacing="10" cellpadding="0" border="0" class="dialogzone"><tbody>'+
+'<tr>' +
+'<td align="left" valign="top" colspan="2">' +
+'<div id="titleColorFrame">Click the color you want or select the RGB values:</div>' +
+colorFrame.beginHTML() +
+'<table cellspacing="0" cellpadding="0" border="0" style="margin:3px"><tbody>' +
+'<tr>'+
+'<td align="center" valign="top" rowspan="2">'+
+img(colorMapSrc,183,161,null,' style="cursor:' + _hand + '" id="colorMap" onclick="'+_codeWinName+'.clickCB(event, this.id)" ')+
+'</td>'+
+'<td align="left" valign="top">'+
+img(bwMapSrc,113,29,null,' style="cursor:' + _hand + '" id="bwMap" onclick="'+_codeWinName+'.clickCB(event, this.id)" ')+
+'</td>'+
+'</tr>' +
+'<tr>'+
+'<td align="right" valign="bottom">'+
+'<table cellspacing="0" cellpadding="0" border="0"><tbody>' +
+'<tr>' +
+'<td align="right" class="dialogzone">'+
+'Red:' +
+'</td>'+
+'<td align="left">' +
+redWidget.getHTML() +
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="right" class="dialogzone">'+
+'Green:' +
+'</td>'+
+'<td align="left">' +
+greenWidget.getHTML() +
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="right" class="dialogzone">'+
+'Blue:' +
+'</td>'+
+'<td align="left">' +
+blueWidget.getHTML() +
+'</td>'+
+'</tr>' +
+'</tbody></table>'+ 
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+colorFrame.endHTML() +
+'</td>'+
+'<td align="center" valign="middle" colspan="1">'+
+'<table cellspacing="0" cellpadding="20" border="0"><tbody>' +
+'<tr>' +
+'<td align="center" valign="middle" class="dialogzone">'+
+'<div id="oldColorWidget" style="width:35px;height:20px"></div>' +
+'Current Color' +
+'</td></tr>' + 
+'<tr>' +
+'<td align="center" valign="middle" class="dialogzone">' +
+'<div id="newColorWidget" style="width:35px;height:20px"></div>' +
+'New Color' +
+'</td>'+
+'</tr>' +
+'</tbody></table>'+ 
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="left" colspan="3">'+
+info.getHTML() +
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right" colspan="3">'+
+'<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'+
+'<td>'+
+OKButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+CancelButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+HelpButton.getHTML()+
+'</td>'+
+'</tr></tbody></table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+ 
+pickerDlg.endHTML()
+)
+}
+pickerDlg.init()
+titleColorFrame.init()
+colorFrame.init()
+redWidget.init()
+redWidget.setMin(0)
+redWidget.setMax(255)
+greenWidget.init()
+greenWidget.setMin(0)
+greenWidget.setMax(255)
+blueWidget.init()
+blueWidget.setMin(0)
+blueWidget.setMax(255)
+colorMap.init()
+bwMap.init()
+oldColorWidget.init()
+newColorWidget.init()
+info.init()
+OKButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+CancelButton.init()
+pickerDlg.show(true)
+oldColorWidget.setBgColor(currentColor.getStyleColor())
+updateNewColor(newColor)
+}
+        function clickCB(e, id)
+        {
+var lW = 14
+var lH = 12.75
+var x,y
+y = _ie ? e.offsetY : (e.layerY -55)
+if (id == "colorMap")
+{
+x = _ie ? e.offsetX : (e.layerX -20)
+var hexColor = getColor( x, y, lW, lH, losangeColor)
+if (hexColor != '')
+{
+newColor = hexColor.getCopy()
+updateNewColor(newColor)
+}
+} else if (id == "bwMap"){
+x = _ie ? e.offsetX : (e.layerX -20 -182)
+var hexBW = getColor( x, y, lW, lH, linesBW)
+if (hexBW != '')
+{
+newColor = hexBW.getCopy()
+updateNewColor(newColor)
+}
+}
+        }
+function getColor(x, y, cellW, cellH, matrix)
+{
+var i =  y / cellH
+i = Math.max(0, Math.round(i))
+var lineOffset = 0
+if (i % 2) {
+lineOffset = Math.round(cellW/2)
+}
+var j = (x - lineOffset) / cellW
+if (j<0) return ""; 
+j = Math.max(0, Math.floor(j))
+if ( i >= matrix.length) i = matrix.length - 1;
+if ( j >= matrix[0].length) j = matrix[0].length - 1;
+var color = matrix[i][j]
+if (color == "") return "";
+var colors = color.split('.')
+return newBOColor(colors[0], colors[1], colors[2])
+}
+        function updateNewColor(nColor)
+        {
+    newColorWidget.setBgColor(nColor.getStyleColor())
+    redWidget.setValue(nColor.r)
+greenWidget.setValue(nColor.g)
+blueWidget.setValue(nColor.b)
+OKButton.setDisabled(oldColorWidget.css.backgroundColor == newColorWidget.css.backgroundColor)
+        }
+        function redCB()
+        {
+var red = redWidget.getValue()
+if (red == "") {
+red=0
+redWidget.setValue(0)
+}
+newColor.r = red
+updateNewColor(newColor)
+        }
+        function greenCB()
+        {
+var green = greenWidget.getValue()
+if (green == "") {
+green=0
+greenWidget.setValue(0)
+}
+newColor.g = green
+updateNewColor(newColor)
+        }
+        function blueCB()
+        {
+var blue = blueWidget.getValue()
+if (blue == "") {
+blue=0
+blueWidget.setValue(0)
+}
+newColor.b = blue
+updateNewColor(newColor)
+        }
+function okCB()
+{
+OKButton.setDisabled(true)
+pickerDlg.show(false)
+p._currColorCB(newColor.getStringDef())
+OKButton.setDisabled(false)
+}
+function cancelCB()
+{
+pickerDlg.show(false)
+}
+</script>
+</head>
+<body style="overflow:hidden" class="dialogzone" scroll="no" marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" onLoad="setTimeout('loadCB()',1)" onresize="">
+</body>
+</html>

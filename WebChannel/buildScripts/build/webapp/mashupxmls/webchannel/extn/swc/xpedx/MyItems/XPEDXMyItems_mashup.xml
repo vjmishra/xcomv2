@@ -1,0 +1,613 @@
+<mashups>
+<mashup id ='XPEDXMyItemsList_Hdr' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsList_List_Hdr">
+			<Input>
+				<XPEDXMyItemsList SharePrivate=" ">
+					<XPEDXMyItemsListShareList>
+						<XPEDXMyItemsListShare>
+							<ComplexQuery>
+								<Or>
+									<Exp Name=""  Value="" />
+								</Or>
+							</ComplexQuery>
+						</XPEDXMyItemsListShare>
+					</XPEDXMyItemsListShareList>
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsListList>
+					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+    				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
+    				</XPEDXMyItemsList>
+				</XPEDXMyItemsListList>			
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id ='XPEDXMyItemsList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsList_List">
+			<Input>
+				<XPEDXMyItemsList SharePrivate=" ">
+					<XPEDXMyItemsListShareList>
+						<XPEDXMyItemsListShare>
+							<ComplexQuery>
+								<Or>
+									<Exp Name="" Value="" />
+								</Or>
+							</ComplexQuery>
+						</XPEDXMyItemsListShare>
+					</XPEDXMyItemsListShareList>
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsListList>
+					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+    				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+    				MyItemsListKey=" " Name=" ">
+    					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
+    				</XPEDXMyItemsList>
+				</XPEDXMyItemsListList>			
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsListPrivate' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsList_List_Hdr">
+			<Input>
+				<XPEDXMyItemsList SharePrivate=" ">
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsListList>
+					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+    				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
+    				</XPEDXMyItemsList>
+				</XPEDXMyItemsListList>			
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id ='XPEDXMyItemsDetails' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsItems_List">
+			<Input>
+				<XPEDXMyItemsItems MyItemsListKey=" " IgnoreOrdering="N">
+					<OrderBy>
+							<Attribute Desc="N" Name="ItemOrder" />
+					</OrderBy>
+				</XPEDXMyItemsItems>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsItemsList Createprogid=" " Createuserid=" " Createusername=" " 
+				CustomerID=" " Desc=" " ListOrder=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
+				Modifyuserid=" " MyItemsListKey=" " Name=" " ShareAdminOnly=" " SharePrivate=" ">
+					<XPEDXMyItemsItems TotalNumberOfRecords="" AvailabilityId=" " Createprogid=" " Createuserid=" "
+					    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+					    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" ">
+						
+					</XPEDXMyItemsItems>
+				</XPEDXMyItemsItemsList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsListCreate' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="createXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" " />
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" "/>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsListDelete' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="deleteXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList MyItemsListKey=" ">
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList>
+					<XPEDXMyItemsList result="success"/>
+				</XPEDXMyItemsList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsListChange' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="changeXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" "/>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" "/>
+			</Template>
+		</API>
+	</mashup>
+<!-- START Details -->
+	<mashup id ='XPEDXMyItemsDetailsCreate' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="createXPEDX_MyItemsDetails">
+			<Input>
+				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				    Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="">
+				</XPEDXMyItemsItems>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				    Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" " ItemId=" "  ItemPoNumber="">
+				</XPEDXMyItemsItems>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsDetailsDelete' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="deleteXPEDX_MyItemsDetails">
+			<Input>
+				<XPEDXMyItemsItems MyItemsKey=" ">
+				</XPEDXMyItemsItems>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" ">
+				</XPEDXMyItemsItems>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyItemsDetailsChange' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="changeXPEDX_MyItemsDetails">
+			<Input>
+				<XPEDXMyItemsItems >
+				</XPEDXMyItemsItems>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" ">
+				</XPEDXMyItemsItems>
+			</Template>
+		</API>
+	</mashup>
+
+	<!--
+	<mashup id ='XPEDXMyItemsDetailsAddFromCatalog' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" AlternateUOM="" DisplayLocalizedFieldInLocale="" GlobalItemID=""
+				    InheritAttributesFromClassification="" ItemID="" ItemKey=""
+				    OrganizationCode="" SubCatalogOrganizationCode="" UnitOfMeasure="">
+				    <Extn ExtnMpc = "" />
+				</Item>
+			</Input>			
+			<Template>
+				<ItemList CallingOrganizationCode="" Currency="" DemandType="" ExcludeItemsInPriceList="" ExecuteQueries="" FulfillmentType="" InheritAttributesFromClassification="" LastItemKey="" LastRecordSet="" PriceProgramKey="" PriceProgramName="" PricingDate=""
+				          PurposeForDisplayClassification="" TotalItemList="" TotalNumberOfRecords="">
+					<Item CanUseAsServiceTool="" GlobalItemID="" HasVisibleAssociations="" InheritAttributesFromClassification="" IsItemSuperseded="" ItemGroupCode="" ItemID="" ItemKey="" MaxModifyTS="" OrganizationCode="Required" SubCatalogOrganizationCode=""
+				          UnitOfMeasure="">
+						<PrimaryInformation AllowGiftWrap="" AssumeInfiniteInventory="" BundleFulfillmentMode="" BundlePricingStrategy="PARENT" CapacityPerOrderedQty="" CapacityQuantityStrategy="" ColorCode="" ComputedUnitCost="" ConfigurationKey=""
+				                            ConfigurationModelName="" ConfiguredModelKey="" CostCurrency="" CountryOfOrigin="" CreditWOReceipt="" DefaultProductClass="" Description="" DisplayClassification="" DisplayItemDescription="" EffectiveEndDate=""
+				                            EffectiveStartDate="" ExtendedDescription="" FixedCapacityQtyPerLine="" FixedPricingQtyPerLine="" HasDeliveryServiceAssociated="" HasProvidedServiceAssociated="" ImageID="" ImageLabel="" ImageLocation="" InvoiceBasedOnActuals=""
+				                            InvolvesSegmentChange="" IsAirShippingAllowed="" IsConfigurable="" IsDeliveryAllowed="" IsEligibleForShippingDiscount="" IsForwardingAllowed="" IsFreezerRequired="" IsHazmat="" IsModelItem="" IsParcelShippingAllowed=""
+				                            IsPickupAllowed="" IsPreConfigured="" IsProcurementAllowed="" IsReturnService="" IsReturnable="" IsShippingAllowed="" IsSoldSeparately="" IsStandaloneService="" IsSubOnOrderAllowed="" IsValid="" ItemType="" Keywords=""
+				                            KitCode="" ManufacturerItem="" ManufacturerItemDesc="" ManufacturerName="" MasterCatalogID="" MaxOrderQuantity="" MinOrderQuantity="" MinimumCapacityQuantity="" ModelItemUnitOfMeasure="" NumSecondarySerials=""
+				                            OrderingQuantityStrategy="" PricingQuantityConvFactor="" PricingQuantityStrategy="" PricingUOM="" PricingUOMStrategy="" PrimaryEnterpriseCode="" PrimarySupplier="" ProductLine="" RequiresProdAssociation="" ReturnWindow=""
+				                            RunQuantity="" SerializedFlag="" ServiceTypeID="" ShipmentConsolidationWindow="" ShortDescription="" SizeCode="" Status="" TaxableFlag="" UnitCost="" UnitHeight="" UnitHeightUOM="" UnitLength="" UnitLengthUOM="" UnitVolume=""
+				                            UnitVolumeUOM="" UnitWeight="" UnitWeightUOM="" UnitWidth="" UnitWidthUOM=""/>
+						
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode=""/>
+						</CategoryList>
+					</Item>
+					
+				</ItemList>			
+			</Template>
+		</API>
+	</mashup> 
+	-->
+	
+	<mashup id ='XPEDXMyItemsDetailsAddFromCatalog' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" ItemID="">
+				    <PrimaryInformation ManufacturerItem="" />
+				    <Extn ExtnMpc = "" />
+				    <CustomerInformation CustomerID=""/>
+				</Item>
+			</Input>			
+			<Template>
+				<ItemList CallingOrganizationCode="" TotalItemList="" TotalNumberOfRecords="">
+					<Item ItemID="" UnitOfMeasure="">
+						<PrimaryInformation Description="" DisplayItemDescription=""/>
+					</Item>
+				</ItemList>			
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='XPEDXMyAllItemsDetails' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode=""  ItemID="" >
+				<CustomerInformation CustomerID=""/>
+					<ComplexQuery>
+						<Or>
+							<!--  Exp Name="ItemID" Value="" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>			
+			<Template>
+				<ItemList>
+					<Item  GlobalItemID="" ItemID="" ItemKey="" MaxModifyTS="" OrganizationCode="Required" UnitOfMeasure="">
+						<PrimaryInformation Description="" ShortDescription="" /> 
+					</Item>					
+				</ItemList>			
+			</Template>
+		</API>
+	</mashup>
+	
+    <mashup id='XPEDXMyItemsDetailsAddToCart' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="changeOrder">
+            <Input>
+                <Order OrderHeaderKey="">
+                    <OrderLines>
+                        <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="N">
+                            <Item ItemID="" UnitOfMeasure="" ProductClass=""/>
+                            <OrderLineTranQuantity OrderedQty="" TransactionalUOM="" />
+                        </OrderLine>
+                    </OrderLines>
+                </Order>
+            </Input>
+            <Template>
+                <Order OrderHeaderKey="">
+					<Extn/>
+					<OrderLines>
+						<OrderLine>
+							<Extn />
+						</OrderLine>
+					</OrderLines>
+				</Order>
+                
+            </Template>
+        </API>
+    </mashup>
+    
+     <mashup id='me_draftOrderAddOrderLines_draft' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="changeOrder">
+            <Input>
+                <Order OrderHeaderKey="">
+           			 <OrderLines>
+                		<OrderLine Action="CREATE" OrderedQty=""
+                  			  ReservationMandatory="N" ValidateItem="N">
+                   		 	<Item ItemID="" ProductClass="" UnitOfMeasure=""/>
+               			 </OrderLine>
+            		</OrderLines>
+       			 </Order>
+            </Input>
+            <Template>
+                <Order OrderHeaderKey="">
+					<Extn/>
+					<OrderLines TotalNumberOfRecords="">
+						<OrderLine OrderLineKey="">
+						    <Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
+						    <OrderLineTranQuantity TransactionalUOM=""	OrderedQty="" />
+							<Extn/>
+						</OrderLine>
+					</OrderLines>
+				</Order>
+                
+            </Template>
+        </API>
+    </mashup>
+	<!--
+			Mashup me_draftOrderAddOrderLines is hard coded in out of the box Action calss DraftOrderAddOrderLinesAction
+			so overriding it to add line type
+	 -->
+	  <mashup id='me_draftOrderAddOrderLines' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="changeOrder">
+            <Input>
+                <Order OrderHeaderKey="">
+                    <OrderLines>
+                        <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="N" LineType="">
+                            <Item ItemID="" UnitOfMeasure="" ProductClass=""/>
+                        </OrderLine>
+                    </OrderLines>
+                </Order>
+            </Input>
+            <Template>
+                <Order OrderHeaderKey="">
+					<Extn/>
+					<OrderLines  TotalNumberOfRecords="">
+						<OrderLine OrderLineKey="">
+						 <Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
+						    <OrderLineTranQuantity TransactionalUOM=""	OrderedQty="" />
+							<Extn/>
+						</OrderLine>
+					</OrderLines>
+				</Order>
+            </Template>
+        </API>
+    </mashup>
+	
+    <mashup id='XPEDXMyItemsDetailsGetShareList' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="XPXGetShipToListAPI">
+            <Input>
+				<Customer CustomerID="" OrganizationCode="xpedx"/>
+            </Input>
+            <Template>
+     			<BillTo BillToID="" OrganizationCode="">
+ 					<ShipToList>
+                  		<ShipTo OrganizationCode="" ShipToID="" /> 
+            		</ShipToList>
+      			</BillTo>
+            </Template>
+        </API>
+    </mashup>
+
+    <mashup id='XPEDXMyItemsDetailsChangeShareList' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="createXPEDX_MyItemsDetailsShareList">
+            <Input>
+				<XPEDXMyItemsListShare CustomerPath=" " MyItemsListKey=" " />
+            </Input>
+            
+            <Template>
+				<XPEDXMyItemsListShare 
+				    MyItemsListShareKey=" "
+				    CustomerPath=" " 
+				    MyItemsListKey=" " 
+				/>
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsDetailsGetSavedShareList' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="getXPEDX_MyItemsDetailsShareList">
+            <Input>
+				<XPEDXMyItemsListShare MyItemsListKey=" " >
+				</XPEDXMyItemsListShare>
+            </Input>
+            <Template>
+				<XPEDXMyItemsListShareList>
+					<XPEDXMyItemsListShare 
+					    MyItemsListShareKey=" "
+					    CustomerPath=" " 
+					    CustomerID=" "
+					    MyItemsListKey=" " 
+					/>
+				</XPEDXMyItemsListShareList>
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsDetailsDeleteShareListItems' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="changeXPEDX_MyItemsList">
+            <Input>
+				<XPEDXMyItemsList MyItemsListKey=" ">
+					<XPEDXMyItemsListShareList Reset="true" /> 
+				</XPEDXMyItemsList>
+            </Input>
+            <Template>
+				<XPEDXMyItemsList />
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsGetCustomersList' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="XPXGetImmediateChildCustomerListService">
+            <Input>
+  				<Customer CustomerID=" " OrganizationCode=" "/>
+            </Input>
+            <Template>
+			<CustomerList>
+			    <Customer/>
+			</CustomerList>
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsListGetCustomersPart' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API FlowName="getXPXItemcustXrefList">
+            <Input>
+  				<XPXItemcustXref CustomerItemNumber = "" EnvironmentCode="" CompanyCode="" CustomerNumber="" LegacyItemNumber="" CustomerDivision="" />
+            </Input>
+            <Template>
+			<XPXItemcustXrefList>
+			    <XPXItemcustXref />
+			</XPXItemcustXrefList>
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsPaginatedShipTosCustomerInfo' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getCustomerList">
+            <Input>
+  				<Customer CustomerID="" OrganizationCode="" />
+            </Input>
+            <Template>
+				<CustomerList>
+					<Customer CustomerID="" OrganizationCode="">
+						<Extn />
+					</Customer>
+				</CustomerList>
+            </Template>
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsListGetMPC' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemDetails">
+            <Input>
+  				<Item AlternateUOM = " " >
+  					<Extn ExtnMpc = "" />
+  				</Item>
+            </Input>
+            <Template>
+				<Item />
+			</Template>	
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXMyItemsListValidateItem' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemListForOrdering">
+            <Input>
+  				<Item ItemID="" CallingOrganizationCode="" >
+  				<CustomerInformation CustomerID=""/>
+  				</Item>
+            </Input>
+            <Template>
+				<ItemList>
+					<Item />
+				</ItemList>
+			</Template>	
+        </API>
+    </mashup>
+    
+    <mashup id='XPEDXGetItemSKUs' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemListForOrdering">
+            <Input>
+  				<Item ItemID="" CallingOrganizationCode="" >
+  				<CustomerInformation CustomerID=""/>
+  				</Item>
+            </Input>
+            <Template>
+				<ItemList>
+					<Item ItemID="" >
+						<PrimaryInformation ManufacturerItem="" />
+						<Extn ExtnMpc ="" />
+					</Item>
+				</ItemList>
+			</Template>	
+        </API>
+    </mashup>
+    
+    <mashup id ='XPEDXMyItemsQuickAddMulti' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="changeXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
+					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
+						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+						    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" " ItemOrder=" " ItemId=" " ItemPoNumber="">
+						</XPEDXMyItemsItems>
+					</XPEDXMyItemsItemsList>
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" ">
+					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
+						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
+						    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" " ItemOrder=" " ItemId=" " ItemPoNumber="">
+						</XPEDXMyItemsItems>
+					</XPEDXMyItemsItemsList>
+				</XPEDXMyItemsList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='XPEDXMyItemsList_ListInfo' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsList_List_Hdr">
+			<Input>
+				<XPEDXMyItemsList MyItemsListKey=""/>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsListList>
+					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+    				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
+    				</XPEDXMyItemsList>
+				</XPEDXMyItemsListList>			
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='XPEDXMyItemsList_CreatedInfo' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPEDX_MyItemsList_Header">
+			<Input>
+				<XPEDXMyItemsList MyItemsListKey=""/>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsListList>
+					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+    				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    				</XPEDXMyItemsList>
+				</XPEDXMyItemsListList>			
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedx-getPaginatedAssignedShipTosView-MIL' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		 <API Name="getPage">
+            <Input>
+                <Page PageNumber="" PageSize=""
+                    PaginationStrategy="GENERIC" Refresh="Y">
+                    <PreviousPage PageNumber="" />
+					<API Name="XPXCustomerHierarchyViewService" IsFlow="Y">
+						<Input>
+							<XPXCustHierarchyView ShipToCustomerID="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" >
+								<OrderBy>
+									<Attribute Desc="N" Name="" />
+								</OrderBy>
+							</XPXCustHierarchyView>
+						</Input>
+				        <Template>
+			        		<XPXCustHierarchyViewList TotalNumberOfRecords="" >
+			        			<XPXCustHierarchyView />
+			        		</XPXCustHierarchyViewList>	        				
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+                <Page GeneratedOn="" IsFirstPage="" IsLastPage=""
+                    IsValidPage="" PageNumber="" PageSetToken=""
+                    TotalNumberOfPages="">
+                    <Output />
+                </Page>
+            </Template>
+   		</API>
+	</mashup>  	
+</mashups>

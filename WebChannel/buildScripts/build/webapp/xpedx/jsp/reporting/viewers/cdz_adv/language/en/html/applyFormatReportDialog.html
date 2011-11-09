@@ -1,0 +1,1079 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>"Format Report"</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../scripts/appearanceTab.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "formatReport")
+_iReportIdx = requestQueryString(window,"reportIndex")
+_iReportIdx = (_iReportIdx=="" || _iReportIdx=="undefined" )? null :_iReportIdx
+_iReportIdx = _iReportIdx ? _iReportIdx : p.doc.currentReport
+_APPEAREANCE = 1
+_HEADER = 2
+_FOOTER = 3
+curEntry=p.strEntry
+p._globalWOMCallback = null;
+initialized = false
+formatReportDlg = null
+repImg = "images/"
+sizeLimit = p.toUserUnit(10, false) 
+elt = p.doc.children[_iReportIdx]
+var pageMode = elt.report.pageMode
+_bid = elt.bid
+_pageSize = new Array("A4", "A3", "A2", "A1", "A0", "Letter", "6 3/4 Envelope", "A5", "A6", "B4", "B4 (JIS)", "B5", "B5 (JIS)", "Envelope #9", "Envelope C5", "Envelope C6", "Envelope DL", "Executive", "German legal fanfold", "German STD fanfold", "Japanese Envelope Chou #3", "Japanese Envelope Chou #4", "Ledger/Tabloid", "Legal")
+_pageSizeWHPortraitCM = new Array(wh(20.98,29.673),wh(29.673,41.961),wh(41.961,59.345),wh(59.345,83.923),wh(83.923,118.692),wh(21.57,27.914),wh(9.191,16.485),wh(14.786,20.98),wh(10.49,14.786),wh(24.977,35.268),wh(25.676,36.366),wh(17.584,24.977),wh(18.183,25.676),wh(9.791,22.479),wh(16.185,22.879),wh(11.389,16.185),wh(10.99,21.979),wh(18.398,26.645),wh(21.57,32.989),wh(21.57,30.452),wh(11.989,23.478),wh(8.992,20.481),wh(27.914,43.14),wh(21.57,35.527))
+_pageSizeWHPortraitINCH = new Array(wh(8.26,11.682),wh(11.682,16.52),wh(16.52,23.364),wh(23.364,33.041),wh(33.041,46.729),wh(8.492,10.99),wh(3.619,6.49),wh(5.821,8.26),wh(4.13,5.821),wh(9.834,13.885),wh(10.109,14.318),wh(6.923,9.834),wh(7.159,10.109),wh(3.855,8.85),wh(6.372,9.007),wh(4.484,6.372),wh(4.327,8.653),wh(7.243,10.49),wh(8.492,12.988),wh(8.492,11.989),wh(4.72,9.243),wh(3.54,8.063),wh(10.99,16.984),wh(8.492,13.987))
+_orientation = new Array("Portrait", "Landscape")
+function wh(w, h)
+{
+var o=new Object
+o.w = w
+o.h = h
+return o
+}
+function loadDialog()
+{
+if (!initialized)
+{
+initialized = true
+formatReportDlg = newDialogBoxWidget("formatReportDlg",'Format Report',null,null, okCB, cancelCB)
+tzone = newTabbedZone("frepDlgTzone",selectZoneCB,510,290)
+tzone.add('General',"gen")
+tzone.add('Appearance',"app")
+tzone.add('Header',"head")
+tzone.add('Footer',"foot")
+nameTxt = newTextFieldWidget( "frepDlgNameTxt", null, 50, null, null, true, 'Report name', 240)
+vertRecordsField = newIntFieldWidget( "frepDlgVertRecordField", null, null, null, safeEnterCB, true, 'Number of vertical records per page', 40, null)
+horiRecordsField = newIntFieldWidget( "frepDlgHoriRecordField", null, null, null, safeEnterCB, true, 'Number of horizontal records per page', 40, null)
+pageSizeCombo =  newComboWidget("frepDlgPageSizeCombo", setPageWH, true, 180)
+orientationCombo = newComboWidget("frepDlgOrientationCombo", setPageWH, true, 180)
+marginTopField = newFloatFieldWidget( "frepDlgMarginTopField", null, null, null, safeEnterCB, true, 'Top margin', 40, heightFieldCB)
+marginTopUnit = newWidget("frepDlgMarginTopUnit")
+marginLeftField = newFloatFieldWidget( "frepDlgMarginLeftField", null, null, null, safeEnterCB, true, 'Left margin', 40, widthFieldCB)
+marginLeftUnit = newWidget("frepDlgMarginLeftUnit")
+marginBottomField = newFloatFieldWidget( "frepDlgMarginBottomField", null, null, null, safeEnterCB, true, 'Bottom margin', 40, heightFieldCB)
+marginBottomUnit = newWidget("frepDlgMarginBottomUnit")
+marginRightField = newFloatFieldWidget( "frepDlgMarginRightField", null, null, null, safeEnterCB, true, 'Right margin', 40, widthFieldCB)
+marginRightUnit = newWidget("frepDlgMarginRightUnit")
+hyperLinkVisitedColor = newIconColorMenuWidget("frepDlgHyperLinkVisitedColor",p._img+"format.gif",changeColorCB,null,'Visited hyperlink color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+hyperLinkUnvisitedColor = newIconColorMenuWidget("frepDlgHyperLinkUnvisitedColor",p._img+"format.gif",changeColorCB,null,'Unvisited hyperlink color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+createWidgetsForAppearenceTab("frep")
+showHeaderCheck = newCheckWidget("frepDlgShowHeaderCheck",'Show header', showHeaderCheckCB)
+hdHeightField = newFloatFieldWidget( "frepDlgHeaderHeightField", null, null, null, safeEnterCB, true, 'Header height', 40, heightFieldCB)
+hdHeightUnit = newWidget("frepDlgHeaderHeightUnit")
+hdBgColor = newIconColorMenuWidget("frepDlgheaderBgColor",p._img+"format.gif",changeColorCB,null,'Background color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+hdNoneRadio = newRadioWidget("frepDlgHdNoneRadio","hdimgSkinGrp", 'None', skinOrImageForHeaderOrFooterCB)
+hdImageRadio = newRadioWidget("frepDlgHdImageRadio","hdimgSkinGrp", 'Image from URL', skinOrImageForHeaderOrFooterCB)
+hdSkinRadio = newRadioWidget("frepDlgHdSkinRadio","hdimgSkinGrp", 'Skin:', skinOrImageForHeaderOrFooterCB)
+hdSkinsCombo = newComboWidget("frepDlgHdSkinsCombo", null, true, 120)
+hdUrlField = newTextFieldWidget( "frepDlgHdURLTxt", null, 255, null, null, true, '', 200)
+hdImageFromFileRadio = newRadioWidget("frepDlgHdImageFromFileRadio","hdimgSkinGrp", 'Image from file', skinOrImageForHeaderOrFooterCB)
+hdAddImageButton = newButtonWidget("frepDlgHdAddButton","Add","addImageCB()",60)
+hdDisplayCombo = newComboWidget("frepDlgHdDisplayCombo", displayComboForHeaderOrFooterCB, true, 163)
+hdAlignHACombo = newComboWidget("frepDlgHdAlignHorizontalCombo", null, true, 80)
+hdAlignVACombo = newComboWidget("frepDlgHdAlignVerticalCombo", null, true, 80)
+showFooterCheck = newCheckWidget("frepDlgShowFooterCheck",'Show footer', showFooterCheckCB)
+ftHeightField = newFloatFieldWidget( "frepDlgFooterHeightField", null, null, null, safeEnterCB, true, 'Footer height', 40, heightFieldCB)
+ftHeightUnit = newWidget("frepDlgFooterHeightUnit")
+ftBgColor = newIconColorMenuWidget("frepDlgfooterBgColor",p._img+"format.gif",changeColorCB,null,'Background color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+ftNoneRadio = newRadioWidget("frepDlgFtNoneRadio","ftimgSkinGrp", 'None', skinOrImageForHeaderOrFooterCB)
+ftImageRadio = newRadioWidget("frepDlgFtImageRadio","ftimgSkinGrp", 'Image from URL', skinOrImageForHeaderOrFooterCB)
+ftSkinRadio = newRadioWidget("frepDlgFtSkinRadio","ftimgSkinGrp", 'Skin:', skinOrImageForHeaderOrFooterCB)
+ftSkinsCombo = newComboWidget("frepDlgFtSkinsCombo", null, true, 120)
+ftUrlField = newTextFieldWidget( "frepDlgFtURLTxt", null, 255, null, null, true, '', 200)
+ftImageFromFileRadio = newRadioWidget("frepDlgFtImageFromFileRadio","ftimgSkinGrp", 'Image from file', skinOrImageForHeaderOrFooterCB)
+ftAddImageButton = newButtonWidget("frepDlgFtAddButton","Add","addImageCB()",60)
+ftDisplayCombo = newComboWidget("frepDlgFtDisplayCombo", displayComboForHeaderOrFooterCB, true, 163)
+ftAlignHACombo = newComboWidget("frepDlgFtAlignHorizontalCombo", null, true, 80)
+ftAlignVACombo = newComboWidget("frepDlgFtAlignVerticalCombo", null, true, 80)
+info = newInfoWidget("frepDlgInfo","More Information","","Modify general report format properties here.")
+OKButton = newButtonWidget("frepDlgOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("frepDlgHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("frepDlgCancelButton","Cancel","cancelCB()",60)
+applyButton = newButtonWidget("frepDlgApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+formatReportDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.formatReportInitialized != true)
+{
+_curWin.formatReportInitialized=true
+var arHTML = new Array()
+var i=0
+arHTML[i++] = formatReportDlg.beginHTML()
+arHTML[i++] = '<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = tzone.beginHTML()
+arHTML[i++] = tzone.beginTabHTML(0)
+ arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="120">' + 'Name:' + '</td>'
+arHTML[i++] = '<td>' + nameTxt.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr><td>Page content (Quick Display mode only)</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td style="padding-left:30px;padding-top:5px">' 
+arHTML[i++] = '<table border="0" class="dialogzone""><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="250" style="text-overflow:ellipsis;overflow:hidden;">' + 'Number of vertical records per page' + '</td>'
+arHTML[i++] = '<td>' + vertRecordsField.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="250" style="text-overflow:ellipsis;overflow:hidden;">' + 'Number of horizontal records per page' + '</td>'
+arHTML[i++] = '<td>' + horiRecordsField.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr><td>Page layout</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td style="padding-left:30px;padding-top:5px">' 
+arHTML[i++] = '<table border="0" class="dialogzone" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="120">' + 'Page size:' + '</td>'
+arHTML[i++] = '<td>' + pageSizeCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + 'Orientation:' + '</td>'
+arHTML[i++] = '<td>' + orientationCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' 
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="120">' + 'Margins' + '</td>' 
+arHTML[i++] = '<td>' + 'Top:' + '</td>'
+arHTML[i++] = '<td>' + marginTopField.getHTML() + '</td>'
+arHTML[i++] = '<td width="40">' + '<span id="frepDlgMarginTopUnit"></span>' + '</td>'
+arHTML[i++] = '<td>' + 'Left:' + '</td>'
+arHTML[i++] = '<td>' + marginLeftField.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="frepDlgMarginLeftUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>' 
+arHTML[i++] = '<td>' + 'Bottom:' + '</td>'
+arHTML[i++] = '<td>' + marginBottomField.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="frepDlgMarginBottomUnit"></span>' + '</td>'
+arHTML[i++] = '<td>' + 'Right:' + '</td>'
+arHTML[i++] = '<td>' + marginRightField.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="frepDlgMarginRightUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="160">' + 'Hyperlink color' + '</td>'
+arHTML[i++] = '<td>' + 'Visited:' + '</td>'
+ arHTML[i++] = '<td>' + hyperLinkVisitedColor.getHTML() + '</td>'
+ arHTML[i++] = '<td width="20">' + '' + '</td>'
+arHTML[i++] = '<td>' + 'Unvisited:' + '</td>'
+ arHTML[i++] = '<td>' + hyperLinkUnvisitedColor.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// APPEARANCE
+arHTML[i++] = tzone.beginTabHTML(1)
+arHTML[i++] = getHTMLForAppearenceTab()
+arHTML[i++] = tzone.endTabHTML()
+// HEADER
+arHTML[i++] = tzone.beginTabHTML(2)
+arHTML[i++] = '<table border="0" class="dialogzone" cellpadding="1" cellspacing="0" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="6">'
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="120">' + showHeaderCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + 'Height:' + '</td>'
+arHTML[i++] = '<td>' + hdHeightField.getHTML() + '</td>'
+arHTML[i++] = '<td width="40">' + '<span id="frepDlgHeaderHeightUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="6">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' +'Background' + '</td>'
+arHTML[i++] = '<td width="80">' +'Color:' + '</td>'
+arHTML[i++] = '<td colspan="4">' + hdBgColor.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' + ''  + '</td>'
+arHTML[i++] = '<td width="80">' + 'Pattern:' + '</td>'
+arHTML[i++] = '<td colspan="4">' + hdNoneRadio.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">'
+arHTML[i++] ='<table border="0" class="dialogzone" cellpadding="0" cellspacing="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + hdSkinRadio.getHTML() +  '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1) +  '</td>'
+arHTML[i++] = '<td>' + hdSkinsCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="3">' + hdImageRadio.getHTML() + '</td>'
+arHTML[i++] = '<td>' + hdUrlField.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="3">' + hdImageFromFileRadio.getHTML() + '</td>'
+arHTML[i++] = '<td>' + hdAddImageButton.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="2">' + 'Display:'  + '</td>'
+arHTML[i++] = '<td colspan="2">' + hdDisplayCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="2">' + 'Position:'  + '</td>'
+arHTML[i++] = '<td colspan="2">' + hdAlignHACombo.getHTML() + '&nbsp;'
+arHTML[i++] = hdAlignVACombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(3)
+ arHTML[i++] = '<table border="0" class="dialogzone" border="0" cellspacing="0" cellpadding="1" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="6">' 
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="120">' + showFooterCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + 'Height:' + '</td>'
+arHTML[i++] = '<td>' + ftHeightField.getHTML() + '</td>' 
+arHTML[i++] = '<td width="40">' + '<span id="frepDlgFooterHeightUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="6">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' +'Background' + '</td>'
+arHTML[i++] = '<td width="80">' +'Color:' + '</td>'
+arHTML[i++] = '<td colspan="4">' + ftBgColor.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="80">' + ''  + '</td>'
+arHTML[i++] = '<td width="80">' + 'Pattern:' + '</td>'
+arHTML[i++] = '<td colspan="4">' + ftNoneRadio.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">'
+arHTML[i++] ='<table border="0" class="dialogzone" cellpadding="0" cellspacing="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + ftSkinRadio.getHTML() +  '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1) +  '</td>'
+arHTML[i++] = '<td>' + ftSkinsCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="4">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="3">' + ftImageRadio.getHTML() + '</td>'
+arHTML[i++] = '<td>' + ftUrlField.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="3">' + ftImageFromFileRadio.getHTML() + '</td>'
+arHTML[i++] = '<td>' + ftAddImageButton.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="2">' + 'Display:'  + '</td>'
+arHTML[i++] = '<td colspan="2">' + ftDisplayCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + ''  + '</td>'
+arHTML[i++] = '<td colspan="2">' + 'Position:'  + '</td>'
+arHTML[i++] = '<td colspan="2">' + ftAlignHACombo.getHTML() + '&nbsp;'
+arHTML[i++] = ftAlignVACombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.endHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'+info.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right">'
+arHTML[i++] = '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + OKButton.getHTML() + '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+arHTML[i++] = '<td>' + CancelButton.getHTML() + '</td>'
+   arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] = '<td>' + applyButton.getHTML() + '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1) + '</td>'
+arHTML[i++] = '<td>' + HelpButton.getHTML() + '</td>' 
+arHTML[i++] = '</tr></tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = formatReportDlg.endHTML()
+targetApp(arHTML.join(''))
+}
+formatReportDlg.init()
+tzone.init()
+tzone.select(p._frDlgSelectedPane)
+initGeneral= false
+initAppearance= false
+initPageHeader= false
+initPageFooter= false
+nameTxt.init()
+nameTxt.setValue( elt.report.name)
+vertRecordsField.init()
+vertRecordsField.setMin(100)
+horiRecordsField.init()
+horiRecordsField.setMin(20)
+hdHeightField.init()
+hdHeightField.setPrecision(2)
+hdHeightField.setMin(p.toUserUnit( 0.5, false)) 
+hdHeightField.setMax(p.toUserUnit( 9999.9, false)) 
+ftHeightField.init()
+ftHeightField.setPrecision(2)
+ftHeightField.setMin(p.toUserUnit( 0.5, false)) 
+ftHeightField.setMax(p.toUserUnit( 9999.9, false)) 
+marginTopField.init()
+marginTopField.setPrecision(2)
+marginTopField.setMin(0)
+marginTopField.setMax(p.toUserUnit( 9999.9, false))
+marginBottomField.init()
+marginBottomField.setPrecision(2)
+marginBottomField.setMin(0)
+marginBottomField.setMax(p.toUserUnit( 9999.9, false))
+pageSizeCombo.init()
+pageSizeCombo.del()
+for (var i = 0; i < _pageSize.length; i++)
+{
+pageSizeCombo.add(_pageSize[i])
+}
+pageSizeCombo.select(elt.report.paperSize - 1) 
+orientationCombo.init()
+orientationCombo.del()
+orientationCombo.add(_orientation[0])
+orientationCombo.add(_orientation[1])
+orientationCombo.select(elt.report.paperOrientation)
+setPageWH()
+hdHeightField.setValue( p.toUserUnit(elt.report.headerHeight, (elt.report.headerUnitIsInch == 1)))
+ftHeightField.setValue( p.toUserUnit(elt.report.footerHeight, (elt.report.footerUnitIsInch == 1)))
+marginUnitIsInch = (elt.report.marginUnitIsInch == 1)
+marginTopField.setValue( p.toUserUnit(elt.report.marginTop, marginUnitIsInch))
+marginBottomField.setValue( p.toUserUnit(elt.report.marginBottom, marginUnitIsInch))
+vertRecordsField.setValue(elt.report.vertRecords)
+horiRecordsField.setValue(elt.report.horiRecords)
+selectZoneCB(p._frDlgSelectedPane)
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+reportBID=p.findReportBid(elt)
+formatReportDlg.show(true)
+}
+function safeEnterCB()
+{
+}
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0: 
+setGeneral(elt)
+info.setText("Modify general report format properties here.")
+break;
+case 1: 
+setAppearance(elt)
+info.setText("Modify the report appearance here.")
+break;
+case 2: 
+setHeader(elt)
+info.setText("Modify the report layout here.")
+break;
+case 3: 
+setFooter(elt)
+info.setText("Modify the report layout here.")
+break;
+}
+}
+function changeColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorDialogCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+p.addLastUsedColor(this.getColor())
+}
+}
+function changeColorDialogCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+}
+function testBtCB()
+{
+}
+function okCB(bApplyBtn)
+{
+var newName = nameTxt.getValue()
+if (newName.length==0)
+{
+p.showAlertDialog("The name must contain at least one character.","Web Intelligence",0)
+return
+}
+if ((trim(newName)).length==0)
+{
+p.showAlertDialog("Report names of more than 31 characters or with : \\ / ? * [ ] characters or blanks are invalid in Microsoft Excel. This may cause an error if you save this document as Excel.","Report name",0)
+}
+OKButton.setDisabled(true)
+applyButton.setDisabled(true)
+doFormatReport()
+p._frDlgSelectedPane = tzone.tabs.selIndex
+p.wt(bApplyBtn)
+if (bApplyBtn) {
+formatReportDlg.unload()
+p._globalWOMCallback = p.formatReport_globalWOMCallback;
+} else {
+formatReportDlg.show(false)
+}
+OKButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+function cancelCB()
+{
+formatReportDlg.show(false)
+}
+function helpCB()
+{
+}
+function condDisplayCheckCB()
+{
+condDisplayTxt.setDisabled(!condDisplayCheck.isChecked())
+}
+function setGeneral(elt)
+{
+if (!initGeneral) 
+{
+initGeneral= true
+marginTopUnit.init()
+marginTopUnit.setHTML(p._unitLabel)
+marginLeftField.init()
+marginLeftField.setPrecision(2)
+marginLeftField.setMin(0)
+marginLeftField.setMax(p.toUserUnit( 9999.9, false))
+marginLeftUnit.init()
+marginLeftUnit.setHTML(p._unitLabel)
+marginBottomUnit.init()
+marginBottomUnit.setHTML(p._unitLabel)
+marginRightField.init()
+marginRightField.setPrecision(2)
+marginRightField.setMin(0)
+marginRightField.setMax(p.toUserUnit( 9999.9, false))
+marginRightUnit.init()
+marginRightUnit.setHTML(p._unitLabel)
+marginLeftField.setValue( p.toUserUnit(elt.report.marginLeft, marginUnitIsInch))
+marginRightField.setValue( p.toUserUnit(elt.report.marginRight, marginUnitIsInch))
+hyperLinkVisitedColor.init()
+hyperLinkUnvisitedColor.init()
+hyperLinkVisitedColor.setColor(elt.report.hyperLinkVisitedColor.rgb)
+hyperLinkUnvisitedColor.setColor(elt.report.hyperLinkColor.rgb)
+}
+}
+function setAppearance(elt)
+{
+if (initAppearance) 
+return
+initAppearance= true
+bgColor.init()
+noneRadio.init()
+imageRadio.init()
+skinRadio.init()
+skinsCombo.init()
+urlTxt.init()
+imageFromFileRadio.init()
+addImageButton.init()
+displayCombo.init()
+alignHorizontalCombo.init()
+alignVerticalCombo.init()
+bgColor.setColor(elt.report.bgColor.rgb)
+skinsAr = p._reportSkins
+skin = elt.report.skin
+imgUrl = elt.report.imgURL
+var hasSkin = (skin != "")
+skinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+skinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+var hasEmbImg=elt.report.embimg
+noneRadio.check(true)
+skinRadio.check(hasSkin)
+imageRadio.check(imgUrl != "")
+urlTxt.setValue(imgUrl)
+imageFromFileRadio.check(hasEmbImg)
+addImageButton.setText(hasEmbImg?'Edit':'Add')
+displayCombo.del()
+dispMode = elt.report.dispMode
+for (var i = 0; i < p._dispImg.length; i++)
+displayCombo.add(p._dispImg[i], p._dispImg[i], (i == dispMode))
+alignHorizontalCombo.del()
+alignVerticalCombo.del()
+HAlign = elt.report.HAlign
+VAlign = elt.report.VAlign
+for (var j = 0; j < p._posH.length; j++)
+{
+alignHorizontalCombo.add(p._posH[j], p._posH[j], (j == HAlign))
+alignVerticalCombo.add(p._posV[j], p._posV[j], (j == VAlign))
+}
+skinOrImageCB()
+}
+function setHeader(elt)
+{
+if (initPageHeader)
+return
+initPageHeader = true
+showHeaderCheck.init()
+hdHeightUnit.init()
+hdBgColor.init()
+hdNoneRadio.init()
+hdImageRadio.init()
+hdSkinRadio.init()
+hdSkinsCombo.init()
+hdUrlField.init()
+hdImageFromFileRadio.init()
+hdAddImageButton.init()
+hdDisplayCombo.init()
+hdAlignHACombo.init()
+hdAlignVACombo.init()
+hdHeightUnit.setHTML(p._unitLabel)
+showHeaderCheck.check(elt.report.showHeader == 1)
+showHeaderCheckCB()
+hdBgColor.setColor(elt.report.headerBGColor.rgb)
+var skinsAr = p._reportSkins
+var skin = elt.report.hdskin
+var imgUrl = elt.report.hdimgURL
+var hasSkin = (skin != "")
+hdSkinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+hdSkinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+var hasEmbImg=elt.report.hdembimg
+hdNoneRadio.check(true)
+hdSkinRadio.check(hasSkin)
+hdImageRadio.check(imgUrl != "")
+hdUrlField.setValue(imgUrl)
+hdImageFromFileRadio.check(hasEmbImg)
+hdAddImageButton.setText(hasEmbImg?'Edit':'Add')
+hdDisplayCombo.del()
+var dispMode = elt.report.ftdispMode
+for (var i = 0; i < p._dispImg.length; i++)
+hdDisplayCombo.add(p._dispImg[i], p._dispImg[i], (i == dispMode))
+hdAlignHACombo.del()
+hdAlignVACombo.del()
+HAlign = elt.report.hdHAlign
+VAlign = elt.report.hdVAlign
+for (var j = 0; j < p._posH.length; j++)
+{
+hdAlignHACombo.add(p._posH[j], p._posH[j], (j == HAlign))
+hdAlignVACombo.add(p._posV[j], p._posV[j], (j == VAlign))
+}
+skinOrImageForHeaderOrFooterCB()
+}
+function setFooter(elt)
+{
+if (initPageFooter)
+return
+initPageFooter = true
+showFooterCheck.init()
+ftHeightUnit.init()
+ftBgColor.init()
+ftNoneRadio.init()
+ftImageRadio.init()
+ftSkinRadio.init()
+ftSkinsCombo.init()
+ftUrlField.init()
+ftImageFromFileRadio.init()
+ftAddImageButton.init()
+ftDisplayCombo.init()
+ftAlignHACombo.init()
+ftAlignVACombo.init()
+ftHeightUnit.setHTML(p._unitLabel)
+showFooterCheck.check(elt.report.showFooter == 1)
+showFooterCheckCB()
+ftBgColor.setColor(elt.report.footerBGColor.rgb)
+var skinsAr = p._reportSkins
+var skin = elt.report.ftskin
+var imgUrl = elt.report.ftimgURL
+var hasSkin = (skin != "")
+ftSkinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+ftSkinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+var hasEmbImg=elt.report.ftembimg
+ftNoneRadio.check(true)
+ftSkinRadio.check(hasSkin)
+ftImageRadio.check(imgUrl != "")
+ftUrlField.setValue(imgUrl)
+ftImageFromFileRadio.check(hasEmbImg)
+ftAddImageButton.setText(hasEmbImg?'Edit':'Add')
+ftDisplayCombo.del()
+var dispMode = elt.report.ftdispMode
+for (var i = 0; i < p._dispImg.length; i++)
+ftDisplayCombo.add(p._dispImg[i], p._dispImg[i], (i == dispMode))
+ftAlignHACombo.del()
+ftAlignVACombo.del()
+HAlign = elt.report.ftHAlign
+VAlign = elt.report.ftVAlign
+for (var j = 0; j < p._posH.length; j++)
+{
+ftAlignHACombo.add(p._posH[j], p._posH[j], (j == HAlign))
+ftAlignVACombo.add(p._posV[j], p._posV[j], (j == VAlign))
+}
+skinOrImageForHeaderOrFooterCB()
+}
+function getREType()
+{
+if (tzone.tabs.getSelection().index == _APPEAREANCE )
+return "reportBody"
+if (tzone.tabs.getSelection().index == _HEADER )
+return "reportHeader"
+if (tzone.tabs.getSelection().index == _FOOTER )
+return "reportFooter"
+}
+function updateDialog(entry, img)
+{
+curEntry=entry
+var btn=null, init=false
+var elts=new Array
+if (tzone.tabs.getSelection().index == _APPEAREANCE)
+{
+btn=addImageButton
+init=true
+elts[0]=elt.children[1];
+elt.report.embimg=true;
+}
+if (tzone.tabs.getSelection().index == _HEADER)
+{
+btn=hdAddImageButton
+init=true
+elts[0]=elt.children[0]
+elt.report.hdembimg=true;
+}
+if (tzone.tabs.getSelection().index == _FOOTER)
+{
+btn=ftAddImageButton
+init=true
+elts[0]=elt.children[2]
+elt.report.ftembimg=true;
+}
+if (elts.length==1)
+setBackgroundImgFile(elts, img);
+if (!init)
+return
+btn.setText('Edit')
+}
+function skinOrImageForHeaderOrFooterCB()
+{
+var skRad=null,imRad=null,nnRad=null,ffRad=null,bgCol=null,skCombo=null,urlTxt=null,adImBtn=null,dispCom=null
+if (tzone.tabs.getSelection().index == _HEADER)
+{
+skRad=hdSkinRadio
+imRad=hdImageRadio
+nnRad=hdNoneRadio
+ffRad=hdImageFromFileRadio
+bgCol=hdBgColor
+skCombo=hdSkinsCombo
+urlTxt=hdUrlField
+adImBtn=hdAddImageButton
+dispCom=hdDisplayCombo
+}
+if (tzone.tabs.getSelection().index == _FOOTER)
+{
+skRad=ftSkinRadio
+imRad=ftImageRadio
+nnRad=ftNoneRadio
+ffRad=ftImageFromFileRadio
+bgCol=ftBgColor
+skCombo=ftSkinsCombo
+urlTxt=ftUrlField
+adImBtn=ftAddImageButton
+dispCom=ftDisplayCombo
+}
+var isSkin = skRad.isChecked()
+var isImgUrl = imRad.isChecked()
+var isNone = nnRad.isChecked()
+var isImgFromFile = ffRad.isChecked()
+skCombo.setDisabled(!isSkin)
+urlTxt.setDisabled(!isImgUrl)
+adImBtn.setDisabled(!isImgFromFile)
+dispCom.setDisabled(isNone||isSkin)
+displayComboForHeaderOrFooterCB()
+}
+function displayComboForHeaderOrFooterCB()
+{
+var dispCombo=null,haCombo=null,vaCombo=null,init=false
+if (tzone.tabs.getSelection().index == _HEADER)
+{
+dispCombo=hdDisplayCombo
+haCombo=hdAlignHACombo
+vaCombo=hdAlignVACombo
+init=true
+}
+if (tzone.tabs.getSelection().index == _FOOTER)
+{
+dispCombo=ftDisplayCombo
+haCombo=ftAlignHACombo
+vaCombo=ftAlignVACombo
+init=true
+}
+if (!init)
+return
+var showH = false
+var showV = false
+switch (dispCombo.getSelection().index)
+{
+case p._IMG_NORMAL :
+showH = true
+showV = true
+break;
+case p._IMG_STRETCH :
+showH = false
+showV = false
+break;
+case p._IMG_TILE :
+showH = false
+showV = false
+break;
+case p._IMG_HORIZONTAL_TILE :
+showH = false
+showV = true
+break;
+case p._IMG_VERTICAL_TILE :
+showH = true
+showV = false
+break
+}
+haCombo.setDisabled(!showH)
+vaCombo.setDisabled(!showV)
+}
+function chgBorderColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewBorderCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+}
+}
+function changeBgColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewBgCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+}
+}
+function changeColorPreviewBgCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+}
+function changeColorPreviewBorderCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+}
+function setPageWH()
+{
+paperSize = pageSizeCombo.getSelection().index
+isPortrait = (orientationCombo.getSelection().index == 0)
+sizeWH = p._unitIsInch ? _pageSizeWHPortraitINCH[paperSize]:_pageSizeWHPortraitCM[paperSize]
+currentPageWidth = isPortrait? sizeWH.w:sizeWH.h
+currentPageHeight = isPortrait? sizeWH.h:sizeWH.w
+}
+function showHeaderCheckCB()
+{
+hdHeightField.setDisabled(!showHeaderCheck.isChecked())
+hdBgColor.setDisabled(!showHeaderCheck.isChecked())
+}
+function showFooterCheckCB()
+{
+ftHeightField.setDisabled(!showFooterCheck.isChecked())
+ftBgColor.setDisabled(!showFooterCheck.isChecked())
+}
+function heightFieldCB(n)
+{
+heightSum =  (this.id == marginTopField.id) ? n : parseFloat(marginTopField.getValue())
+heightSum += (this.id == hdHeightField.id) ? n : parseFloat((hdHeightField.getValue() != "")?hdHeightField.getValue():0)
+heightSum += (this.id == ftHeightField.id) ? n : parseFloat((ftHeightField.getValue() != "")?ftHeightField.getValue():0)
+heightSum += (this.id == marginBottomField.id) ? n : parseFloat(marginBottomField.getValue())
+if (currentPageHeight - heightSum < sizeLimit)
+{
+p.showAlertDialog("The value you entered conflicts with the page settings (header and footer height, margins, page size, and orientation) of this report.","Web Intelligence",1)
+return false
+} else {
+return true
+}
+}
+function widthFieldCB(n)
+{
+marginSum = (this.id == marginLeftField.id) ? n : parseFloat(marginLeftField.getValue())
+marginSum += (this.id == marginRightField.id) ? n : parseFloat(marginRightField.getValue())
+if (currentPageWidth - marginSum < sizeLimit)
+{
+p.showAlertDialog("The value you entered conflicts with the page settings (header and footer height, margins, page size, and orientation) of this report.","Web Intelligence",1)
+return false
+} else {
+return true
+}
+}
+function doFormatReport()
+{
+var f = self.document.formatReportForm
+f.unitIsInch.value="" + p._unitIsInch
+f.name.value="" + nameTxt.getValue()
+var index=_iReportIdx?_iReportIdx:p.tabsZone.getSelection().index 
+p.eventManager.notify(p._EVT_REP_RENAMED,index)
+p.arrReports[index].name=nameTxt.getValue()
+p.eventManager.notify(p._EVT_REP_DATAOK)
+f.headerHeight.value="" + hdHeightField.getValue()
+f.footerHeight.value="" + ftHeightField.getValue()
+if (showHeaderCheck.initialized()) 
+{
+f.showHeader.value="" + showHeaderCheck.isChecked()
+if (hdBgColor.getColor())
+f.headerBgColor.value="" + hdBgColor.getColor()
+var isNone = hdNoneRadio.isChecked()
+f.hdnoneBG.value="" + isNone
+if (!isNone) 
+{
+var isSkin = (hdSkinsCombo.getSelection()) ? hdSkinRadio.isChecked() : false
+f.hdisSkin.value="" + isSkin
+f.hdisImgUrl.value=""+hdImageRadio.isChecked()
+f.hdhasEmbeddedImg.value=""+hdImageFromFileRadio.isChecked()
+f.hddispMode.value="" + hdDisplayCombo.getSelection().index
+f.hdurlImg.value="" + (isSkin ? (hdSkinsCombo.getSelection().value) : hdUrlField.getValue())
+f.hdalignH.value="" + ((hdAlignHACombo.getSelection().value == "") ? "" : hdAlignHACombo.getSelection().index)
+f.hdalignV.value="" + ((hdAlignVACombo.getSelection().value == "") ? "" : hdAlignVACombo.getSelection().index)
+} 
+else 
+{
+f.hdurlImg.value=""
+f.hdisSkin.value="" + false
+}
+}
+if (showFooterCheck.initialized()) 
+{
+f.showFooter.value="" + showFooterCheck.isChecked()
+if (ftBgColor.getColor())
+f.footerBgColor.value="" + ftBgColor.getColor()
+var isNone = ftNoneRadio.isChecked()
+f.ftnoneBG.value="" + isNone
+if (!isNone) 
+{
+var isSkin = (ftSkinsCombo.getSelection()) ? ftSkinRadio.isChecked() : false
+f.ftisSkin.value="" + isSkin
+f.ftisImgUrl.value=""+ftImageRadio.isChecked()
+f.fthasEmbeddedImg.value=""+ftImageFromFileRadio.isChecked()
+f.ftdispMode.value="" + ftDisplayCombo.getSelection().index
+f.fturlImg.value="" + (isSkin ? (ftSkinsCombo.getSelection().value) : ftUrlField.getValue())
+f.ftalignH.value="" + ((ftAlignHACombo.getSelection().value == "") ? "" : ftAlignHACombo.getSelection().index)
+f.ftalignV.value="" + ((ftAlignVACombo.getSelection().value == "") ? "" : ftAlignVACombo.getSelection().index)
+} 
+else 
+{
+f.fturlImg.value=""
+f.ftisSkin.value="" + false
+}
+}
+if (hyperLinkVisitedColor.initialized() && hyperLinkVisitedColor.getColor())
+f.hyperLinkVisitedColor.value="" + hyperLinkVisitedColor.getColor()
+if (hyperLinkUnvisitedColor.initialized() && hyperLinkUnvisitedColor.getColor())
+f.hyperLinkUnvisitedColor.value="" + hyperLinkUnvisitedColor.getColor()
+if (bgColor.initialized()) {
+if (bgColor.getColor())
+{
+f.bgColor.value="" + bgColor.getColor()
+}
+var isNone = noneRadio.isChecked()
+f.noneBG.value="" + isNone
+if (!isNone) {
+var isSkin = (skinsCombo.getSelection()) ? skinRadio.isChecked() : false
+f.isSkin.value="" + isSkin
+f.isImgUrl.value=""+imageRadio.isChecked()
+f.hasEmbeddedImg.value=""+imageFromFileRadio.isChecked()
+f.dispMode.value="" + displayCombo.getSelection().index
+f.urlImg.value="" + (isSkin ? (skinsCombo.getSelection().value) : urlTxt.getValue())
+f.alignH.value="" + ((alignHorizontalCombo.getSelection().value == "") ? "" : alignHorizontalCombo.getSelection().index)
+f.alignV.value="" + ((alignVerticalCombo.getSelection().value == "") ? "" : alignVerticalCombo.getSelection().index)
+} else {
+f.urlImg.value=""
+f.isSkin.value="" + false
+}
+}
+if (orientationCombo.initialized()) {
+f.pageSize.value="" + (pageSizeCombo.getSelection().index + 1) 
+f.orientation.value="" + orientationCombo.getSelection().index
+f.marginTop.value="" + marginTopField.getValue()
+f.marginBottom.value="" + marginBottomField.getValue()
+}
+if (marginLeftField.initialized()) {
+f.marginLeft.value="" + marginLeftField.getValue()
+f.marginRight.value="" + marginRightField.getValue()
+}
+f.vertRecords.value="" + vertRecordsField.getValue()
+f.horiRecords.value="" + horiRecordsField.getValue()
+var url = p._root + "processFormatReport" + p._appExt
+url += p.urlParamsNoBID(curEntry,null,_iReportIdx)
+url += "&sBid="+ elt.bid
+document.formatReportForm.action = url
+setTimeout("document.formatReportForm.submit()",1)
+}
+function getImgFileFromApplyFormatDlg()
+{
+var elts=new Array;
+var hasEmbImg=false
+switch (tzone.tabs.getSelection().index)
+{
+case _APPEAREANCE:
+elts[0]=elt.children[1];
+hasEmbImg=elt.report.embimg;
+break;
+case _HEADER:
+elts[0]=elt.children[0];
+hasEmbImg=elt.report.hdembimg;
+break;
+case _FOOTER:
+elts[0]=elt.children[2];
+hasEmbImg=elt.report.ftembimg;
+break;
+}
+if (hasEmbImg)
+{
+var img=getBackgroundImgFile(elts);
+return img?img:"";
+}
+return null;
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<form target="Report" style="display:none" name="formatReportForm" method="post" action="">
+<input type="hidden" name="unitIsInch" id="unitIsInch" value="">
+<input type="hidden" name="name" id="name" value="">
+<input type="hidden" name="showHeader" id="showHeader" value="">
+<input type="hidden" name="headerHeight" id="headerHeight" value="">
+<input type="hidden" name="headerBgColor" id="headerBgColor" value="">
+<input type="hidden" name="showFooter" id="showFooter" value="">
+<input type="hidden" name="footerHeight" id="footerHeight" value="">
+<input type="hidden" name="footerBgColor" id="footerBgColor" value="">
+<input type="hidden" name="bgColor" id="bgColor" value="">
+<input type="hidden" name="isSkin" id="isSkin" value="">
+<input type="hidden" name="noneBG" id="noneBG" value="">
+<input type="hidden" name="urlImg" id="urlImg" value="">
+<input type="hidden" name="dispMode" id="dispMode" value="">
+<input type="hidden" name="alignH" id="alignH" value="">
+<input type="hidden" name="alignV" id="alignV" value="">
+<input type="hidden" name="isImgUrl" id="isImgUrl" value="">
+<input type="hidden" name="hasEmbeddedImg" id="hasEmbeddedImg" value="">
+<input type="hidden" name="hdbgColor" id="hdbgColor" value="">
+<input type="hidden" name="hdisSkin" id="hdisSkin" value="">
+<input type="hidden" name="hdnoneBG" id="hdnoneBG" value="">
+<input type="hidden" name="hdurlImg" id="hdurlImg" value="">
+<input type="hidden" name="hddispMode" id="hddispMode" value="">
+<input type="hidden" name="hdalignH" id="hdalignH" value="">
+<input type="hidden" name="hdalignV" id="hdalignV" value="">
+<input type="hidden" name="hdisImgUrl" id="hdisImgUrl" value="">
+<input type="hidden" name="hdhasEmbeddedImg" id="hdhasEmbeddedImg" value="">
+<input type="hidden" name="ftbgColor" id="ftbgColor" value="">
+<input type="hidden" name="ftisSkin" id="ftisSkin" value="">
+<input type="hidden" name="ftnoneBG" id="ftnoneBG" value="">
+<input type="hidden" name="fturlImg" id="fturlImg" value="">
+<input type="hidden" name="ftdispMode" id="ftdispMode" value="">
+<input type="hidden" name="ftalignH" id="ftalignH" value="">
+<input type="hidden" name="ftalignV" id="ftalignV" value="">
+<input type="hidden" name="ftisImgUrl" id="ftisImgUrl" value="">
+<input type="hidden" name="fthasEmbeddedImg" id="fthasEmbeddedImg" value="">
+<input type="hidden" name="hyperLinkVisitedColor" id="hyperLinkVisitedColor" value="">
+<input type="hidden" name="hyperLinkUnvisitedColor" id="hyperLinkUnvisitedColor" value="">
+<input type="hidden" name="orientation" id="orientation" value="">
+<input type="hidden" name="pageSize" id="pageSize" value="">
+<input type="hidden" name="marginTop" id="marginTop" value="">
+<input type="hidden" name="marginLeft" id="marginLeft" value="">
+<input type="hidden" name="marginBottom" id="marginBottom" value="">
+<input type="hidden" name="marginRight" id="marginRight" value="">
+<input type="hidden" name="vertRecords" id="vertRecords" value="">
+<input type="hidden" name="horiRecords" id="horiRecords" value="">
+</form>
+</body>
+</html>

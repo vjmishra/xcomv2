@@ -1,0 +1,509 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#elemsToolbar{position:absolute;top:0px;left:0px;overflow:hidden;}
+#descTxt{position:absolute;top:25px;left:0px;overflow:hidden;padding:2px;width:100%;}
+#eltsTree{position:absolute;left:0px;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript">
+p = parent
+initDom( "../../../lib/images/"+p._skinName+"/", p._lang)
+initTooltipWin(p)
+p.setKeyCB(this, false)
+</script>     
+<script language="javascript">styleSheet()</script>
+<script language="javascript">
+        isPageLoaded = false        
+var chartTypes = new Array( "Bar Charts", "Line Charts", "Area Charts", "Pie Charts", "Radar Charts");
+var formTextCells= new Array( "Formula and Text Cells", "Blank Cell", "Drill Filters", "Last Refresh Date", "Document Name");
+var pageNbCells= new Array( "Page Number Cells", "Page Number", "Page Number/Total Pages", "Total Number of Pages");
+var maxChartIdx = new Array( 20, 28, 36, 40, 44);
+rep = getBasePath()+'../../../images/main/'
+elemsToolbar = newPaletteWidget("elemsToolbar")
+curIcon="standard.gif"
+_img = '../../../images/main/'
+addTb = addIcn("addTb",null,"Insert","", addOrTurnToCB)
+var descTxt = newWidget("descTxt")
+eltsTree = newTreeWidget('eltsTree', 200, 300, rep + "typeIcons.gif", clickCB, dclickCB, "dialogzone", expCollapseCB,expCollapseCB)
+eltsTree.setDragDrop(startDragCB,acceptDropCB,dropCB,dragEndCB)
+j = maxChartIdx[maxChartIdx.length-1]
+root = newTreeWidgetElem(-1, "Report Elements to Drag and Drop", "", "")
+eltsTree.add(root)
+sub1 = newTreeWidgetElem(-1, "Table Elements", "", "")
+root.add(sub1)
+intTypeToXYType = new Array
+var idx = 7
+var x=0,y=0
+for (idx; idx < 11; idx++)
+{
+intTypeToXYType[idx] = new Array( x, y++ )
+sub1.add(newTreeWidgetElem(idx,  getBlockSubType(idx), "", ""))
+}
+y=0
+sub1.expanded = p._tableElemsBranchExp
+chartsBranch = newTreeWidgetElem(-1, "Chart Elements", "", "")
+root.add(chartsBranch)
+j += 3
+for (var i = 0; i < chartTypes.length; i++)
+{
+eval('subTree' + i + ' = newTreeWidgetElem(' + j++ + ', chartTypes[' + i + '], "", "")')
+eval('chartsBranch.add(subTree' + i + ')')
+x++
+while (idx < maxChartIdx[i])
+{
+intTypeToXYType[idx] = new Array( x, y++ )
+eval('subTree' + i + '.add(newTreeWidgetElem(' + idx + ',  getBlockSubType(' + idx + '), "", ""))')
+idx++
+}
+eval('subTree' + i + '.expanded = p._arrChartElemsBranchExp[' + i + ']')
+y=0
+}
+chartsBranch.expanded= p._chartElemsBranchExp
+freeCellsBranch = newTreeWidgetElem(j, "Cells", "", "")
+root.add(freeCellsBranch)
+var i = 0
+formCellsElem = newTreeWidgetElem(j, formTextCells[i], "", "")
+freeCellsBranch.add(formCellsElem)
+pnCellsElem = newTreeWidgetElem(j, pageNbCells[i], "", "")
+freeCellsBranch.add(pnCellsElem)
+freeCellsBranch.expanded= p._cellsElemBranchExp
+j++
+i = 1
+len = formTextCells.length
+for ( i; i < len; i++)
+{
+formCellsElem.add(newTreeWidgetElem(j, formTextCells[i], i-1, ""))
+}
+formCellsElem.expanded = p._formCellsElemBranchExp
+i = 1
+delta = len-2
+len = pageNbCells.length
+for ( i; i < len; i++)
+{
+pnCellsElem.add(newTreeWidgetElem(j, pageNbCells[i], delta+i, ""))
+}
+pnCellsElem.expanded = p._pnCellsElemBranchExp
+root.expanded = p._elemDDBranchExp
+    function loadCB()
+    {
+        isPageLoaded = true
+updateSelectionObs = p.newObserverOneEvent(p._EVT_ESC_KEY, updateAddBt)
+p.DDInitMethod=DDInitAction
+p.DDActionMethod=DDExecuteAction
+elemsToolbar.init()
+addTb.init()
+addTb.setDisabled(true)
+descTxt.init()
+descTxt.setHTML("<i>" + "These elements are available to drop into your report" + "</i>")
+        eltsTree.init()
+        resizeCB()
+        f = self.document.submitForm    
+    }
+function updateAddBt()
+{
+p._isDDEnabled=false
+addTb.check(false)
+}
+function detachEvents()
+{
+p._isDDEnabled=false
+if (window.updateSelectionObs) p.eventManager.detach(updateSelectionObs);
+}
+    function expCollapseCB()
+    {
+p._elemDDBranchExp = (window.root)? root.expanded : true
+p._tableElemsBranchExp = (window.sub1)? sub1.expanded : true
+p._chartElemsBranchExp = (window.chartsBranch)? chartsBranch.expanded : false
+for (var i = 0; i < chartTypes.length; i++)
+{
+eval('p._arrChartElemsBranchExp[' + i + '] = (window.subTree' + i + ') ? subTree' + i + '.expanded : false')
+}
+p._cellsElemBranchExp = (window.freeCellsBranch)? freeCellsBranch.expanded : true
+p._formCellsElemBranchExp = (window.formCellsElem)? formCellsElem.expanded : false
+p._pnCellsElemBranchExp = (window.pnCellsElem)? pnCellsElem.expanded : false 
+}
+    function startDragCB()
+    {
+setTooltipOffset(p.leftPaneX+1,p.leftPaneY+28)
+p._accepDDfunc=reportAcceptDropCB
+p._dropDDfunc=reportDropCB
+    }
+    function dragEndCB()
+    {
+p._accepDDfunc=null
+p._dropDDfunc=null
+    }
+    function acceptDropCB()
+    {
+return false
+    }
+    function dropCB()
+    {
+    }
+    function reportAcceptDropCB(lyr,cn)
+    {
+var bid=lyr.getAttribute?lyr.getAttribute("bid"):null
+switch (cn)
+{
+case "pageHeader":
+case "pageFooter":
+var accepted=canAdd()
+p.deselectAll(bid)
+p.selectSingle(bid)
+if (accepted&&(selBlockType!=null))
+return false
+return accepted
+case "section":
+case "body":
+p.deselectAll(bid)
+p.selectSingle(bid)
+return canAdd()
+case "cell":
+case "reportCell":
+p.deselectAll()
+return canAdd() 
+case "tableCell":
+p.deselectAll()
+bid=p.findByBID(p.doc,bid).parent.parent.parent.bid
+return canTurnTo(cn,bid)
+case "block":
+p.deselectAll(bid)
+p.selectSingle(bid)
+return canTurnTo(cn,bid)
+default:
+return false
+}
+    }
+    function reportDropCB(lyr,cn)
+{
+var bid=lyr.getAttribute?lyr.getAttribute("bid"):null
+p._curIdRef=lyr.getAttribute?lyr.getAttribute("idref"):null
+p._curIdRefBid=bid
+if (mustShowTurnTo(cn))
+turnToCB(bid,lyr)
+if (mustShowAdd(cn))
+addCB(bid,lyr)
+    }
+currentIconId=0
+    function clickCB()
+    {
+var elt = eltsTree.getSelectedItem()
+if (elt)
+{
+addTb.setDisabled(false)
+currentIconId=eltsTree.getSelectedItem().iconId
+} else {
+addTb.setDisabled(true)
+}
+    }
+    function dclickCB()
+    {
+    }
+    function canTurnTo(cn,bid)
+    {
+if (eltsTree.getSelectedItem() && mustShowTurnTo(cn))
+{
+blockType = adjustBlockType(parseInt(eltsTree.getSelectedItem().iconId, 10))
+p.initCurrentBlockType(intTypeToXYType,bid)
+var ar = new Array
+ar = intTypeToXYType[blockType] 
+if (ar)
+{
+selBlockType = ar[0]
+selBlockSubType = ar[1]
+return p.canApplyTurnTo(selBlockType, selBlockSubType, p.nDimDetails, p.nMeasures)
+}
+} 
+return false
+    }
+     function canAdd()
+     {
+elt = eltsTree.getSelectedItem()
+if (elt)
+{
+selBlockType=null
+selBlockSubType=null
+blockType = adjustBlockType(parseInt(elt.iconId, 10))
+var ar = intTypeToXYType[blockType]
+if (ar)
+{
+selBlockType = "" + ar[0]
+selBlockSubType = "" + ar[1]
+return true
+}
+cellType = ""
+cellType = "" + elt.userData 
+if (cellType != "")
+{
+return true
+}
+}
+return false
+     }
+  function mustShowAdd(cn)
+{
+switch (cn)
+{
+case "section":
+case "pageHeader":
+case "pageFooter":
+case "body":
+case "reportCell":
+case "cell": 
+return true
+default:
+return false
+}
+  }
+  function mustShowTurnTo(cn)
+  {
+switch (cn)
+{
+case "tableCell":
+case "block":
+return true
+default:
+return false
+}
+  }
+     function turnToCB(forcedBID)
+     {
+f.sNewBlockType.value="" + selBlockType 
+f.sNewBlockSubType.value="" + selBlockSubType 
+var url = p._root + "processTurnTo" + p._appExt
+url += forcedBID?(p.urlParamsNoBID()+"&sBid="+escape(forcedBID)):p.urlParams(true)
+f.action = url
+p.wt()
+setTimeout("f.submit()",1)
+     }
+function adjustBlockType(blockType)
+{
+switch(blockType)
+{
+case 47 :
+blockType = 11
+break
+case 48 :
+blockType = 20
+break
+case 49 :
+blockType = 28
+break
+case 50 :
+blockType = 36
+break
+case 51 :
+blockType = 40
+break
+}
+return blockType
+}
+function addOrTurnToCB()
+{
+p.escapeFormatPainter()
+p._DDIconUrl = p._img + "typeIcons.gif"
+p._isDDEnabled=addTb.isChecked()
+}
+function addCB(forcedBID)
+{
+var xybid = p.getClickCoordinates()
+if (selBlockType && selBlockSubType)
+{
+var isTable=(selBlockType=="0")
+p.wt(!isTable)
+var url = p._root+"processAddBlock"+p._appExt
+url += forcedBID?(p.urlParamsNoBID()+"&sBid="+escape(forcedBID)):p.urlParams(true,false)
+url += "&sNewBlockType=" + selBlockType
+url += "&sNewBlockSubType=" + selBlockSubType
+url += "&sUnitIsInch=" + p._unitIsInch
+url += "&sX=" + xybid.x
+url += "&sY=" + xybid.y
+url += "&sPgNb="+ p.pageNumber.getValue()
+url += "&sRow="+ p._row
+p.selectNewBlock()
+setTimeout('p.frameNav("Report","'+ url +'")',1)
+} else if (cellType != "") { 
+f.sNewCellType.value="" + cellType 
+f.sX.value="" + xybid.x
+f.sY.value="" + xybid.y 
+f.sUnitIsInch.value="" + p._unitIsInch
+f.sRow.value="" + p._row
+var url = p._root + "processAddCell" + p._appExt
+url += forcedBID?(p.urlParamsNoBID()+"&sBid="+escape(forcedBID)):p.urlParams(true)
+f.action = url
+p.wt()
+setTimeout("f.submit()",1)
+}
+}
+function getBlockSubType(subType)
+{
+var subTypeString = new Array( "", "", "", "", "", "", "","Horizontal Table", "Vertical Table", "Crosstab", "Form", "Vertical Grouped", "Horizontal Grouped", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Bar", "Vertical \nBar & Line", "Horizontal \nBar & Line", "Vertical Mixed","Horizontal Mixed", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Line Chart", "3D Surface", "Vertical Absolute", "Horizontal Absolute", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Area", "3D Volume", "Pie", "Doughnut", "3D Pie", "3D Doughnut", "Radar Line", "Radar Stacked Area", "Polar", "Scatter");
+return subTypeString[subType];
+}
+function DDInitAction(lyr,cn)
+{
+p._DDTxt="No action is allowed here." + " " + "(Presse Esc  to cancel this action)"
+p._DDIdx= currentIconId
+p._DDAction=null
+var _srcIsTable=false,_srcIsChart=false,_srcIsCell=false, _tgIsCont=false,_tgIsTable=false,_tgIsChart=false,_tgIsCell=false
+if ((currentIconId >= 7) && (currentIconId <= 10)) {
+_srcIsTable=true
+} else if ((currentIconId >= 11) && (currentIconId <= 51)) {
+_srcIsChart=true
+} else if (currentIconId == 53) {
+_srcIsCell=true
+} else {
+return
+}
+var bid=lyr.getAttribute?lyr.getAttribute("bid"):null
+switch (cn)
+{
+case "body":
+case "section":
+case "cell":
+case "reportCell":
+_tgIsCont=true
+break
+case "tableCell":
+_tgIsTable=true
+break
+case "block":
+elt=p.findByBID(p.window.doc,bid)
+if (elt&&(elt.block)&&(elt.block.blockType > 10)) {
+_tgIsChart=true
+} else {
+_tgIsTable=true
+}
+break
+}
+if (_tgIsCont) {
+if (_srcIsChart) {
+if (canAdd()) {
+p._DDTxt="Click to insert the chart here" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionAdd
+}
+} else if (_srcIsTable) {
+if (canAdd()) {
+p._DDTxt="Click to insert the table here" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionAdd
+}
+} else if (_srcIsCell) {
+if (canAdd()) {
+p._DDTxt="Click to insert the cell here" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionAdd
+}
+}
+} else {
+if (_tgIsTable && _srcIsChart) {
+if (canTurnTo(cn,bid)) {
+p._DDTxt="Click to replace the table with the chart" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionTurnTo
+} else {
+p._DDIdx = -1
+}
+} else if (_tgIsChart && _srcIsTable) {
+if (canTurnTo(cn,bid)) {
+p._DDTxt="Click to replace the chart with the table" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionTurnTo
+} else {
+p._DDIdx = -1
+}
+} else if (_tgIsChart && _srcIsChart) {
+if (canTurnTo(cn,bid)) {
+p._DDTxt="Click to change the chart" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionTurnTo
+} else {
+p._DDIdx = -1
+}
+} else if (_tgIsTable && _srcIsTable) {
+if (canTurnTo(cn,bid)) {
+p._DDTxt="Click to change the table" + " " + "(Presse Esc  to cancel this action)"
+p._DDAction=p._DDActionTurnTo
+} else {
+p._DDIdx = -1
+}
+}
+}
+}
+function DDExecuteAction(lyr,cn)
+{
+p._isDDEnabled=false
+addTb.check(false)
+if (lyr)
+{
+var bid=lyr.getAttribute?lyr.getAttribute("bid"):null
+if (p._DDAction==p._DDActionAdd)
+{
+addCB(bid)
+}
+else if (p._DDAction==p._DDActionTurnTo)
+{
+turnToCB(bid)
+}
+}
+}
+    function resizeCB()
+    {
+if (isPageLoaded)
+{
+var w=winWidth(), h=winHeight()
+eltsTree.move( 0, (25 + (_moz?1:0) + descTxt.getHeight()))
+eltsTree.resize( Math.max(0,w+(_moz?4:0)), Math.max(0, h - (25 + (_moz?-4:0) + descTxt.getHeight())))
+}
+    }
+function addIcn(a,b,c,d,e)
+{
+return elemsToolbar.add(newIconCheckWidget(a,(b!=null)?_img+curIcon:null,e,c,d,16,16,b?b*16:0,0,b?b*16:0,16))
+}
+function sp()
+{
+return elemsToolbar.add()
+}    
+    function lPaneContextMenu()
+{
+return false;
+}
+</script>
+</head>
+<body class="dialogzone"  style="overflow:hidden;" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" onLoad="loadCB()" onUnload="detachEvents()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+   <script language="javascript" class="dialogzone">elemsToolbar.write()</script>
+   <script language="javascript" class="dialogzone">
+   var bar = '<div class=treeZone style="height:' + (_ie?1:0) + 'px;overflow:hidden;position:absolute;top:24px;left:0px;width:100%;border-top-width:0px;border-left-width:0px;border-right-width:0px;"></div>'
+   document.write(bar)
+   </script>
+<div id="descTxt" class="dialogzone"></div>
+<!-- Tree view -->
+<script language="javascript">eltsTree.write()</script>
+<!-- Hidden frame -->
+<iframe name="addBlockMngt" style="position:absolute;left:-200px;top:-200px;width:10px;height:10px;" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="sNewBlockType" id="sNewBlockType">
+<input type="hidden" name="sNewBlockSubType" id="sNewBlockSubType">
+<input type="hidden" name="sNewCellType" id="sNewCellType">
+<input type="hidden" name="sX" id="sX">
+<input type="hidden" name="sY" id="sY">
+<input type="hidden" name="sUnitIsInch" id="sUnitIsInch">
+<input type="hidden" name="sRow" id="sRow">
+<input type="hidden" name="sAttachBid" id="sAttachBid">
+</form>
+</body>
+</html>

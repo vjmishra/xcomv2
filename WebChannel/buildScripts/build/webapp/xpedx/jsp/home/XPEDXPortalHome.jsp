@@ -1,0 +1,219 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="swc" uri="swc" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>  
+<!-- styles -->
+
+
+
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx.css" />
+<s:include value="../common/XPEDXStaticInclude.jsp"/>
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc_002.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-mil.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-dan.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-dan.css" />
+
+
+
+<!-- javascript -->
+
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/order/draftOrderList.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+
+<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<!-- STUFF YOU NEED FOR BEAUTYTIPS -->
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
+<script src="/swc/xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
+<!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- /STUFF -->
+<!-- Lightbox/Modal Window -->
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
+
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script>
+
+<script type="text/javascript">
+          $(document).ready(function () {
+           
+              $("#various2").fancybox({
+      			'titleShow'			: false,
+      			'transitionIn'		: 'fade',
+      			'transitionOut'		: 'fade',
+      			'titlePosition' : 'inside',
+      			'transitionIn' : 'none',
+      			'transitionOut' : 'none',
+      			//added for clearing the copycart name and copycartdescription fields
+    			'onClosed'	: function(){$("#copyCartName").val('');$("#copyCartDescription").val('');}
+      								
+      		});
+
+          }); 
+ </script> 
+			<script type="text/javascript">
+			
+			function linkedRowToggle(parentID){
+				var ele = document.getElementById('ChildOf_'+parentID);
+				switch(ele.style.display){
+				case 'none':
+					ele.style.display = 'table-row-group';
+					break;
+				case 'table-row-group':
+					ele.style.display = 'none';
+					break;
+				}									
+			}
+</script>
+<title><s:text name="orders.title" /></title>
+</head>
+<body class="ext-gecko ext-gecko3">
+
+<s:set name='ctxt' value="wCContext" />
+<s:set name='isGuestUser' value="wCContext.guestUser()" />
+<s:set name='approvalWidgetPanel' value='"/swc/order/approvals"'/>
+<s:set name='orderWidgetPanel' value='"/swc/order/authenticatedOrdering"'/>
+
+	<s:url id="approvalListURL" action="approvalList" namespace="/order">
+		<s:param name="pageNumber" value="1"/>
+		<s:param name="searchFieldName" value=""/>
+	    <s:param name="searchFieldValue" value=""/>
+	</s:url>
+	
+	<s:url id="orderlistUrl" action="orderList" namespace="/order">
+ 	</s:url>
+ 	
+ 	<s:url id="orderListWidgetSortURL" action="portalHome" namespace="/home">
+    	<s:param name="orderByAttribute" value="'{0}'"/>
+    	<s:param name="orderDesc" value="'{1}'"/>
+	</s:url>
+	
+<div id="main-container">
+<!-- begin t1-header -->
+	<div id="main">
+
+		<s:action
+			name="xpedxHeader" executeResult="true" namespace="/common" />
+		
+
+<!-- // t1-header end -->
+
+<div class="container">
+
+	<!-- breadcrumb -->
+		<div id="searchBreadcrumb" class="page-title"> <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <span class="breadcrumb-inactive"><s:text name="orders.title" /></span> 
+		<a href="javascript:window.print()"> <span class="print-ico-xpedx"><img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page " />Print page </span></a> </div>
+
+	<div id="mid-col-mil">
+
+		
+		<h2 id="orders">  Recent Approvals<span class="orange-order"> <s:a href="%{approvalListURL}">Show All of My Approvals</s:a></span> </h2>
+		<s:if test='#isGuestUser != true'>
+    		<s:if test="@com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer@getInstance().isAuthorized(#approvalWidgetPanel,#ctxt)">
+    			<s:action name="approvalWidget" executeResult="true" namespace="/order" />
+
+    		</s:if>
+    	</s:if>
+	
+	<div class="mil-bot"></div>
+    <div class="clearall"></div><br />
+    	<h2 id="orders"> Recent Orders <span class="orange-order"> <s:a href="%{orderlistUrl}">Show All of My Recent Orders</s:a></span> </h2>
+    	<s:if test='#isGuestUser != true'>
+    		<s:if test="@com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer@getInstance().isAuthorized(#orderWidgetPanel,#ctxt)">
+    			<s:action name="orderListWIdget" executeResult="true" namespace="/order" >
+					<s:param name="orderByAttribute" value="OrderDate"/>
+					<s:param name="orderDesc" value="Y"/>
+				</s:action>
+			</s:if>
+    	</s:if>
+    <div class="mil-bot"></div>
+	<div class="clearall"></div><br />
+	
+		<h2 id="orders"> Recent Carts <span class="orange-order"> 
+		<a href="<s:url action="draftOrderList" namespace="/order" />">Show All of My Carts</a></span> </h2>
+		<s:if test='#isGuestUser != true'>
+    		<s:if test="@com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer@getInstance().isAuthorized(#approvalWidgetPanel,#ctxt)">
+    			<s:action name="xpedxCartListWidget" executeResult="true" namespace="/order" />
+    		</s:if>
+    	</s:if>
+    <div class="mil-bot"></div>
+	<div class="clearall"></div><br />
+    <!-- // begin t1-main-content -->
+	
+	</div>
+    <!-- // end t1-main-content -->
+
+
+<!-- //t1 container end -->
+	
+
+</div>
+<!-- begin t1-footer -->
+		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />	
+<!-- // t1-footer end -->
+</div>
+</div>
+<swc:dialogPanel title="" isModal="true" id="xpedxDeleteCartDialog">
+	<s:form name="delOrder" id="delOrder" method="post" validate="true">
+		<s:hidden name="OrderHeaderKey" id="OrderHeaderKey" value=""/>
+		<s:hidden name="draft" id="draft" value="Y"/>
+	
+	  	<span class="padding-left4 textAlignLeft">
+	           <s:text name='Cart_Delete_Message'/>
+	  	</span>
+	  	<div class="clearBoth"></div>
+	  	<div id="deleteButtonPanelId" class="padding-all1 textAlignCenter">         	
+	      	<s:submit  type="button" name="yes" id ='Confirm_Yes' key='Confirm_Yes'cssClass="submitBtnBg1" tabindex="3100" onclick="javascript:deleteCart(this.form);DialogPanel.hide('xpedxDeleteCartDialog');return false;"/>
+		<s:submit  type="button" name="no" id='Confirm_No' key='Confirm_No'  cssClass="submitBtnBg1" tabindex="3101" onclick="javascript:DialogPanel.hide('xpedxDeleteCartDialog'); svg_classhandlers_decoratePage(); return false;"/>
+	  	</div>
+	</s:form>
+</swc:dialogPanel>
+
+<a href="#copyCartNameDlg" id="various2" style="display:none"></a> 
+<div style="display: none;">
+	     	<div id='copyCartNameDlg' style="width:500px;height:350px;overflow:auto;">
+	     		 <s:form name="copyOrder" id="copyOrder" method="post" action="draftOrderCopy" namespace="/order" validate="true">
+			       <s:hidden name="OrderHeaderKey" id="OrderHeaderKey" value=""/>
+			       <s:hidden name=''/>
+				
+					<div class="xpedx-light-box" style="width:340px; height:300px;">
+				        <h2>Copy Cart</h2> 
+				        <p class="mil-edit-forms-label">Cart Name:</p>
+				        <input value="" name="copyCartName" id="copyCartName" size="35" class="x-input"/> 
+				        <p class="mil-edit-forms-label">Description:</p>
+				        <textarea name="copyCartDescription" id="copyCartDescription" cols="45" rows="5" class="x-input"></textarea>
+				        <ul id="tool-bar" class="tool-bar-bottom">
+				        	<li style="float: left;"><a class="green-ui-btn" href="javascript:(function(){document.copyOrder.submit();})();"><span>Save</span></a></li>
+				        </ul>
+			    	</div> 
+					
+			    </s:form>
+	     	</div> 
+	     </div>
+<!-- // main end -->
+
+
+</body>
+</html>

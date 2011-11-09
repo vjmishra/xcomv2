@@ -1,0 +1,1834 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Title zone</title>
+  <style type="text/css">
+#fcDlgPreviewBorders{
+border-top:0px solid white;
+border-bottom:0px solid white;
+border-left:0px solid white;
+border-right:0px solid white;
+}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../scripts/appearanceTab.js"></script>
+<script language="javascript" src="../scripts/applyFormat_borderTab.js"></script>
+<script language="javascript">
+p = parent
+initDom( p._root + "lib/images/"+p._skinName+"/", p._lang, p, "formatCell")
+p._globalWOMCallback = null;
+var allTableCells = (requestQueryString(window,"allTableCells") == 'yes')
+curEntry=p.strEntry
+</script>
+<script language="javascript">
+var url =  p._root + "incFormatNumbers" + p._appExt
+url += p.urlParamsNoBID(curEntry)
+includeScript(url)
+</script>
+<script language="javascript">
+styles = new Array("Regular", "Italic", "Bold", "Bold Italic")
+contents = new Array("Hyperlink", "HTML", "Image URL")
+initialized = false
+formatCellDlg = null
+repImg = "images/"
+_simpleBorder = true
+defaultCellW=1.125; 
+defaultCellH=0.25 ; 
+minAutoFit=0.04;
+estimateH=null;
+hasColSpan=false;
+hasRowSpan=false;
+curCellW=null;
+curCellH=null;
+function loadDialog()
+{
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized = true
+formatCellDlg =newDialogBoxWidget("formatCellDlg","Format Cell",null,null, okCB, cancelCB)
+tzone = newTabbedZone("fcDlgTzone",selectZoneCB,580,280)
+tzone.add("General","gen")
+tzone.add("Number","nbr")
+tzone.add("Alignment","align")
+tzone.add("Font","fnt")
+tzone.add("Border","bdr")
+tzone.add('Appearance',"app")
+tzone.add("Layout","lay")
+nameTxt = newTextFieldWidget( "fcDlgNameTxt", null, null, null, null, true, 'Cell name', 240)
+showWhenEmptyCheck = newCheckWidget("fcDlgShowWhenEmpty",'Show when empty')
+showWhenEmptyZone = newWidget("fcDlgShowWhenEmptyZone")
+widthCheck = newCheckWidget("fcDlgWidthCheck",'Autofit width to content' , widthCheckCB)
+widthField = newFloatFieldWidget( "fcDlgWidthField", sizeChangeCB, null, null, null, true, 'Width:', 40)
+widthUnit= newWidget("fcDlgWidthUnit")
+widthLabel= newWidget("fcDlgWidth")
+heightCheck = newCheckWidget("fcDlgHeightCheck",'Autofit height to content' , heightCheckCB)
+heightField = newFloatFieldWidget( "fcDlgHeightField", sizeChangeCB, null, null, null, true, 'Height:', 40)
+heightUnit = newWidget("fcDlgHeightUnit")
+heightLabel = newWidget("fcDlgHeight")
+readContentCheck = newCheckWidget("fcDlgReadContCheck",'Read content as:', readContentCheckCB)
+readContentCombo = newComboWidget("fcDlgReadContCombo", null, true, 120, 'Interpret cell contents as a hyperlink, HTML, or an image URL')
+readContentTxt = newTextFieldWidget( "fcDlgReadContentTxt", null, 30, null, null, true, 'Cell name', 278)
+testButton = newButtonWidget("fcDlgTestButton",'Test',"testBtCB()",60)
+formatNumbersList = newListWidget("fcDlgFormatNumbersList", formatNumbersCB, false, 160, 15)
+icnsImg = repImg + 'main/'
+HLeftAlignIcon = newIconNoTextRadioWidget("fcDlgHLeftAlignIcon","horizGrp", null, icnsImg + 'align_left.gif', 23, 23, "Align Left")
+HCenterAlignIcon = newIconNoTextRadioWidget("fcDlgHCenterAlignIcon","horizGrp", null, icnsImg + 'align_center.gif', 23, 23, "Align Center")
+HRightAlignIcon = newIconNoTextRadioWidget("fcDlgHRightAlignIcon","horizGrp", null, icnsImg + 'align_right.gif', 23, 23, "Align Right")
+VTopAlignIcon = newIconNoTextRadioWidget("fcDlgVTopAlignIcon","vertGrp", null, icnsImg + 'align_top.gif', 23, 23, "Align Top")
+VMiddleAlignIcon = newIconNoTextRadioWidget("fcDlgVMiddleAlignIcon","vertGrp", null,icnsImg + 'align_middle.gif', 23, 23, "Align Middle")
+VBottomAlignIcon = newIconNoTextRadioWidget("fcDlgVBottomAlignIcon","vertGrp", null, icnsImg + 'align_bottom.gif', 23, 23, "Align Bottom")
+wrapCheck = newCheckWidget("fcDlgWrapCheck2",'Wrap text')
+padSep = newWidget("fcDlgPadSep")
+padZone = newWidget("fcDlgPadZone")
+padVField = newFloatFieldWidget( "fcDlgpadVField", null, null, null, null, true, 'Padding vertical field', 40)
+padVUnit = newWidget("fcDlgpadVUnit")
+padHField = newFloatFieldWidget( "fcDlgpadHField", null, null, null, null, true, 'Padding horizontal field', 40)
+padHUnit = newWidget("fcDlgpadHUnit")
+mergeZone = newWidget("mergeZone")
+mergeOrSplitCheck = newCheckWidget("mergeOrSplitCheck",'Merge cells', mergeOrSplitCheckCB)
+var nameW = 110
+var styleW = 70
+var sizeW = 50
+fntName = newTextFieldWidget( "fcDlgFntName", null, null, null, null, true, null, nameW)
+fntNameList = newListWidget( "fcDlgFntNameList", changeFntCB, false, nameW, 12, 'Available fonts')
+fntStyle = newTextFieldWidget( "fcDlgFntStyle", null, null, null, null, true, null, styleW)
+fntStyleList = newListWidget( "fcDlgFntStyleList", changeFntCB, false, styleW, 6, 'Available font styles')
+fntSize = newIntFieldWidget( "fcDlgFntSize", changeFntCB, null, null, null, true, null, sizeW)
+fntSize.setMin (parent._fntSMin) 
+fntSize.setMax (parent._fntSMax) 
+fntSizeList = newListWidget( "fcDlgFntSizeList", changeFntCB, false, sizeW, 6, 'Available font sizes')
+underlineCheck = newCheckWidget( "fcDlgUnderlineCheck",'Underline', changeFntCB)
+strikeCheck = newCheckWidget( "fcDlgStrikeCheck",'Strikethrough', changeFntCB)
+fntFgColor = newIconColorMenuWidget("fcDlgFntFgColor",p._img+"format.gif",changeFntColorCB,null,'Text color',16,16,7*16,0,7*16,16,p._lastUsedColorsAr)
+previewFnt = newWidget("fcDlgPreviewFnt")
+previewFntBG = newWidget("fcDlgPreviewFntBG")
+createWidgetsForBorderTab("fc");
+createWidgetsForAppearenceTab("fc",formatCellDlg,p.formatCell_globalWOMCallback)
+repeatCheck = newCheckWidget("fcDlgRepeatCheck",'Repeat on every page', null)
+avoidPageBreakCheck = newCheckWidget("fcDlgAvoidPageBreakCheck",'Avoid page breaks in free-standing cell', null)
+sectionOrBodyTxt = newWidget("fcDlgSectionOrBodyTxt")
+horizontalImg = newWidget("fcDlgHorizontalImg")
+horizontalPosField = newFloatFieldWidget( "fcDlgHorizontalPosField", null, null, null, null, true, 'Horizontal position', 40)
+HPosUnit = newWidget("fcDlgHPosUnit")
+horizontalPosCombo = newComboWidget("fcDlgHorizontalPosCombo", horizontalPosComboCB, true, 160)
+horizontalEltCombo = newComboWidget("fcDlgHorizontalEltCombo", elementComboCB, true, 120)
+verticalImg = newWidget("fcDlgVerticalImg")
+verticalPosField = newFloatFieldWidget( "fcDlgVerticalPosField", null, null, null, null, true, 'Vertical position', 40)
+VPosUnit = newWidget("fcDlgVPosUnit")
+verticalPosCombo = newComboWidget("fcDlgVerticalPosCombo", verticalPosComboCB, true, 160)
+verticalEltCombo = newComboWidget("fcDlgVerticalEltCombo", elementComboCB, true, 120)
+info = newInfoWidget("fcDlgInfo","More Information","","Choose text and cell format properties for the selected cells here.")
+OKButton = newButtonWidget("fcDlgOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("fcDlgHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("fcDlgCancelButton","Cancel","cancelCB()",60)
+applyButton = newButtonWidget("fcDlgApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+formatCellDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.formatCellInitialized!=true)
+{
+_curWin.formatCellInitialized=true
+var arHTML = new Array()
+var i=0
+arHTML[i++] = formatCellDlg.beginHTML()
+arHTML[i++] = '<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = tzone.beginHTML()
+arHTML[i++] = tzone.beginTabHTML(0)
+ arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="50">' +'Name:' + '</td>' 
+arHTML[i++] = '<td colspan="3">' + nameTxt.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr id="fcDlgShowWhenEmptyZone">'
+arHTML[i++] = '<td>' + '' + '</td>' 
+arHTML[i++] = '<td colspan="3">' + showWhenEmptyCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>' 
+arHTML[i++] = '<tr>'
+/**/
+arHTML[i++] = '<td>' + 'Size:' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td style="padding-left:10px">'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] ='<td colspan="3">' + widthCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td style="padding-left:5px">' + '<span id="fcDlgWidth">Minimum width:</span>' + '</td>'
+arHTML[i++] = '<td width="40" align="right">' + widthField.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="fcDlgWidthUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="3">' + heightCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td style="padding-left:5px">' + '<span id="fcDlgHeight">Minimum height:</span>' + '</td>'
+arHTML[i++] = '<td width="40" align="right">' + heightField.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="fcDlgHeightUnit"></span>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top">' + readContentCheck.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top">' + readContentCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+//'<tr>'+
+//'<td>' + ' ' + '</td>' +
+//'<td valign="top">' + readContentTxt.getHTML() + '</td>' +
+//'<td valign="top">' + testButton.getHTML() + '</td>' +
+//'</tr>'+
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// NUMBER
+arHTML[i++] = tzone.beginTabHTML(1)
+arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right">'
+arHTML[i++] = formatNumbersList.getHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(2)
+arHTML[i++] = '<table border="0" class="dialogzone"  cellspacing="0" cellpadding="0" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' 
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top" width="80">' + 'Alignment' + '</td>' 
+arHTML[i++] = '<td valign="top" width="80">' + 'Horizontal:' + '</td>'
+arHTML[i++] = '<td valign="top" width="30">' + HLeftAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top" width="30">' + HCenterAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top" width="30">' + HRightAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + "" + '</td>' 
+arHTML[i++] = '<td valign="top">' + 'Vertical:' + '</td>'
+arHTML[i++] = '<td valign="top">' + VTopAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top">' + VMiddleAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top">' + VBottomAlignIcon.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='<tr><td id="fcDlgPadSep">' + getSep() + '</td></tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td id="fcDlgPadZone">'
+arHTML[i++] ='<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td valign="top" width="80">' + 'Padding' + '</td>' 
+arHTML[i++] ='<td>' + 'Vertical:' + '</td>'
+arHTML[i++] ='<td>' + padVField.getHTML() + '</td>'
+arHTML[i++] ='<td>' +  '<span id="fcDlgpadVUnit"></span>' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + "" + '</td>'
+arHTML[i++] ='<td>' + 'Horizontal:' + '</td>'
+arHTML[i++] ='<td>' + padHField.getHTML() + '</td>'
+arHTML[i++] ='<td>' + '<span id="fcDlgpadHUnit"></span>' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] = '<td>' + wrapCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td id="mergeZone">' + mergeOrSplitCheck.getHTML()+ '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// FONT
+arHTML[i++] = tzone.beginTabHTML(3)
+arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + 'Font name:' + '</td>'
+arHTML[i++] = '<td>' + 'Font style:' + '</td>'
+arHTML[i++] = '<td>' + 'Font size:' + '</td>'
+arHTML[i++] = '<td>' + 'Color:' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + fntName.getHTML() + '</td>'
+arHTML[i++] = '<td>' + fntStyle.getHTML() + '</td>'
+arHTML[i++] = '<td>' + fntSize.getHTML() + '</td>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" border="0"><tbody><tr>'
+arHTML[i++] = '<td width="40">' + 'Font:' +'</td>'
+arHTML[i++] = '<td>'+  fntFgColor.getHTML() + '</td></tr></tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top" rowspan="6">' + fntNameList.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top" rowspan="4">' + fntStyleList.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top" rowspan="5">' + fntSizeList.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + 'Effects:' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] ='<td>' + "" + '</td>'
+arHTML[i++] = '<td>' + underlineCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] ='<td>' + "" + '</td>'
+arHTML[i++] = '<td>' + strikeCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] ='<td  colspan="2" align="right" valign="middle">' + 'Preview' + '</td>'
+arHTML[i++] = '<td>' 
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody><tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<div style="overflow:hidden;width:250px;height:100px">'
+arHTML[i++] = '<table id="fcDlgPreviewFntBG" cellspacing="0" cellpadding="0" border="0" width="250" height="100"><tbody>'
+arHTML[i++] = '<tr><td valign="bottom" align="left" id="fcDlgPreviewFnt">' + 'AbCd123' + '</td></tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</div>'
+arHTML[i++] = '</td></tr></tbody></table>' 
+arHTML[i++] = '</td>' 
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(4)
+arHTML[i++] = getHTMLForBorderTab("fc")
+arHTML[i++] =tzone.endTabHTML() 
+arHTML[i++] = tzone.beginTabHTML(5)
+ arHTML[i++] = getHTMLForAppearenceTab()
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(6)
+ arHTML[i++] = '<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] ='<table border="0" class="dialogzone" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top">' + repeatCheck.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top">' + avoidPageBreakCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="60">' +'Position:' + '</td>'
+arHTML[i++] = '<td colspan="5">' + 'Within the' + ' <b>' + '<span id="fcDlgSectionOrBodyTxt"></span>' + '</b>' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right" rowspan="2">' + '<div id="fcDlgHorizontalImg">'+ horizontalImg.getHTML() + '</div></td>'
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'Left edge of this cell is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + horizontalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="fcDlgHPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + horizontalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + horizontalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right" rowspan="2">' + '<div id="fcDlgVerticalImg">'+ verticalImg.getHTML() + '</div></td>' 
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'Top edge of this cell is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + verticalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="fcDlgVPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + verticalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + verticalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+//'<tr>'+
+//'<td>' + getSep() + '</td>' +
+//'</tr>'+
+//'<tr>'+
+//'<td>' +
+//'<table border="0" class="dialogzone" width="100%"><tbody>'+
+//'<tr>'+
+//'<td valign="top">' + condDisplayCheck.getHTML() + '</td>' +
+//'<td valign="top">' + 
+//'<textarea id="fcDlgCondDisplayTxt" rows="3" cols="32" ></textarea>' + 
+//'</td>' +
+//'<td valign="top">' + valButton.getHTML() + '</td>' +
+//'</tr>'+
+//'</tbody></table>'+
+//'</td>'+
+//'</tr>'+
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+// END TABS
+arHTML[i++] = tzone.endHTML() 
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+// BOTTOM DIALOG
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'+info.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="right">'
+arHTML[i++] = '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + OKButton.getHTML() + '</td>' 
+arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>' 
+arHTML[i++] = '<td>' + CancelButton.getHTML() + '</td>' 
+   arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>' 
+   arHTML[i++] = '<td>' + applyButton.getHTML() + '</td>'
+arHTML[i++] = '<td>' + getSpace(5,1) + '</td>' 
+arHTML[i++] = '<td>' + HelpButton.getHTML() + '</td>' 
+arHTML[i++] = '</tr></tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = formatCellDlg.endHTML()
+targetApp(arHTML.join(''))
+}// end curwin init
+// Init
+formatCellDlg.init()
+tzone.init()
+if (p.formatCellBids) {
+_bids = p.formatCellBids
+elts = getNonVisibleSelectedElts(_bids.split(','))
+} else {
+elts = p.getSelectedElts()
+// fill elts will all the cells bid of the selected table
+if (allTableCells) {
+// default we select a cell
+var c=elts[0].parent.parent.children
+for (var e in elts) // look for if we have selected the block directly
+{
+if (elts[e].className == "block") {
+c=elts[e].children[0].children
+break
+}
+}
+p.deselectAll()
+for (var i in c)
+{
+var cc=c[i].children
+for (var j in cc)
+p.selectSingle(cc[j].bid)
+}
+elts = p.getSelectedElts()
+}
+_bids = p.getBids()
+}
+isMultiSelect = (elts.length > 1)
+// SET FROM WOM
+res = p.getAttFromElts(".className",elts)
+if (res.defined) 
+{
+isTableCells = (res.ret == "tableCell")
+isReportCells = (res.ret == "reportCell")
+} else {
+isTableCells = false
+isReportCells = false
+}
+isFreeCell = !isMultiSelect && !isTableCells
+isReportCell = !isMultiSelect && isReportCells
+isInHeadrOrBody = false
+if (isFreeCell) {
+var eltParClass = elts[0].parent.className
+isInHeadrOrBody = (eltParClass == "pageHeader") || (eltParClass == "pageFooter")
+}
+// Unit
+res= p.getAttFromElts(".cellsize.unitIsInch",elts)
+if (res.defined) 
+{
+cellUnitIsInch = (res.ret == 1)
+} else {
+cellUnitIsInch = p._unitIsInch
+}
+// show Page Layout tab Zone only for Free Cell
+tzone.showTab(6, isFreeCell)
+if ((p._fcDlgSelectedPane == 6) && !isFreeCell) // if the layout zone of a free cell was selected
+{// and after select a non free ceel
+p._fcDlgSelectedPane = 0
+}
+// show Format Number only for Report Cell with Numbers
+dType = 2// TEXT, default
+if (!isFreeCell || isReportCell) 
+{
+var res= p.getAttFromElts(".dType",elts)
+if ((res.defined) & (res.ret != null))
+{
+dType = res.ret
+} else {
+dType = 2 // TEXT, default
+}
+//window.status = dType
+} 
+// FR 111370
+var showFormatNumber = (dType != 2)
+tzone.showTab(1, showFormatNumber)
+if ((p._fcDlgSelectedPane == 1) && !showFormatNumber) // if the Format Number zone of a report cell was selected
+{// and after select a free ceel
+p._fcDlgSelectedPane = 0
+}
+// Name
+nameTxt.init()
+isFormula = false
+var res= p.getAttFromElts(".formula",elts)
+if (res.defined&&(res.ret!=null)) 
+{
+isFormula= (res.ret.substring(0,1) == "=")
+nameTxt.setDisabled(isFormula)
+nameTxt.setValue(res.ret)
+} else {
+var res= p.getAttFromElts(".fcell.formula",elts)
+if (res.defined&&(res.ret!=null)) 
+{
+isFormula= (res.ret.substring(0,1) == "=")
+nameTxt.setDisabled(isFormula||isMultiSelect)
+nameTxt.setValue(isMultiSelect?'':res.ret)
+} else {
+nameTxt.setValue('')
+nameTxt.setDisabled(true)
+}
+}
+//for autofit 
+for (var i in elts) // look for if we have selected the block directly
+{
+if ((elts[i].colSpan!=null) && (elts[i].colSpan!=1)) 
+hasColSpan = true
+if ((elts[i].rowSpan!=null) && (elts[i].rowSpan!=1)) 
+hasRowSpan = true;
+}
+// Select the zone
+initGeneral= false
+initFormatNumber= false
+initAlign= false
+initFont= false
+initBorders= false
+initAppearance= false
+initPageLayout= false
+initLabelsWidth= false
+tzone.select(p._fcDlgSelectedPane)
+// the CB call the init function of the zone
+selectZoneCB(p._fcDlgSelectedPane)
+// Bottom Zone
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)//future feature
+//get the current report BID
+reportBID=p.findReportBid(elts[0])
+// Show the dialog box
+if(initGeneral)
+{
+//not show directly the dialog because we need to calculate the size of the text 
+//and set the correct size to widthLable and heigthLabel
+formatCellDlg.layer.style.visibility=_hide;
+formatCellDlg.show(true);
+//this action can be done only if initGeneral=true
+setLabelsWidth(); 
+formatCellDlg.center();
+formatCellDlg.layer.style.visibility=_show;
+}
+else
+{
+formatCellDlg.show(true)
+}
+}
+//
+// selectZoneCB(index)
+//
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0: // set General
+setGeneral(elts)
+info.setText("Choose text and cell format properties for the selected cells here.")
+break;
+case 1: // set Format Number
+setFormatNumber(elts, dType)
+info.setText("Set the format of the selected cells here.")
+break;
+case 2: // set Alignment
+setGeneral(elts) // because the wrap text control relies on the width....
+setAlign(elts)
+info.setText("Choose  cell alignment properties for the selected cells here.")
+break;
+case 3: // set Font
+setFont(elts)
+info.setText("Set the font of the selected cells here.")
+break;
+case 4:// set Borders
+setBorders(elts)
+info.setText("Set the borders of the selected cells here.")
+break;
+case 5: //set Appearance
+setAppearance(elts)
+info.setText("Set the appearance of the selected cells here.")
+break;
+case 6: // set Page Layout
+setPageLayout(elts)
+info.setText("Set the layout of the selected cells here.")
+break;
+}
+}
+// setLabelsWidth()
+// retrieve the good size to give to width and heigth labels
+// it can be changed following the localization (it is purely esthetical issue)
+function setLabelsWidth()
+{
+if(formatCellDlg.layer.isShown && initGeneral && !initLabelsWidth )
+{
+widthLabel.setHTML("Minimum width:");
+heightLabel.setHTML("Minimum height:");
+//set max size for widthLabel and heightLabel if possible
+var maxW=(widthLabel.getWidth()>heightLabel.getWidth())? widthLabel.getWidth():heightLabel.getWidth();
+if(maxW > 0 )
+{
+widthLabel.layer.style.width=maxW;
+heightLabel.layer.style.width=maxW;
+initLabelsWidth=true;
+}
+widthLabel.setHTML(widthCheck.isChecked()?"Minimum width:":"Width:")
+heightLabel.setHTML(heightCheck.isChecked()?"Minimum height:":"Height:")
+}
+}
+function sizeChangeCB()
+{
+if(this.id == "fcDlgWidthField" && !widthCheck.isChecked())
+{
+curCellW=widthField.getValue();
+}
+if( this.id == "fcDlgHeightField" && !heightCheck.isChecked())
+{
+curCellH= heightField.getValue();
+}
+}
+//
+// widthCheckCB()
+//
+function widthCheckCB()
+{
+widthLabel.setHTML(widthCheck.isChecked()?"Minimum width:":"Width:")
+if (widthCheck.isChecked()) 
+{
+if(!hasColSpan) //change minimun value if no rowspan
+widthField.setValue( p.toUserUnit(minAutoFit, true))
+//else : keep the current value
+}
+else 
+{
+if(!hasColSpan)
+{
+if(curCellW != null)
+widthField.setValue(curCellW)
+else
+widthField.setValue( p.toUserUnit(defaultCellW, true))
+}
+//else : keep the current value
+}
+}
+//
+// heightCheckCB()
+//
+function heightCheckCB()
+{
+heightLabel.setHTML(heightCheck.isChecked()?"Minimum height:":"Height:")
+if (heightCheck.isChecked())
+{
+if(estimateH)
+heightField.setValue(estimateH)
+//else : keep the current value
+}
+else 
+{
+if(!hasRowSpan)
+{
+if(curCellH != null)
+heightField.setValue(curCellH)
+else
+heightField.setValue( p.toUserUnit(defaultCellH, true))
+}
+}
+}
+//
+// readContentCheckCB()
+//
+function readContentCheckCB()
+{
+readContentCombo.setDisabled(!readContentCheck.isChecked())
+}
+//
+// testBtCB()
+//
+function testBtCB()
+{
+}
+//
+// horizontalPosComboCB()
+//
+function horizontalPosComboCB()
+{
+var sel=horizontalPosCombo.getSelection().value,imgsrc=''
+horizontalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))// Left
+imgsrc='position_left_edge.gif'
+else// Right
+imgsrc='position_right_edge.gif'
+horizontalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+//
+// verticalPosComboCB()
+//
+function verticalPosComboCB()
+{
+var sel=verticalPosCombo.getSelection().value,imgsrc=''
+verticalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))// Top
+imgsrc='position_top_edge.gif'
+else// Bottom
+imgsrc='position_bottom_edge.gif'
+verticalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+//
+// elementComboCB()
+//
+function elementComboCB()
+{
+//var index = this.getSelection().index
+//verticalEltCombo.select(index)
+//horizontalEltCombo.select(index)
+}
+//
+// condDisplayCheckCB()
+//
+function condDisplayCheckCB()
+{
+condDisplayTxt.setDisabled(!condDisplayCheck.isChecked())
+}
+// CB font ////////////////////////////
+function changeFntCB()
+{
+fntPreviewCSS=''
+if (!fntNameList.isUndefined()) {
+fntName.setValue(fntNameList.getSelection().text)
+fntPreviewCSS = fntNameList.getSelection().value
+}
+if (!fntStyleList.isUndefined()) {
+fntStyle.setValue(fntStyleList.getSelection().value)
+}
+if (this != null && this.id == "fcDlgFntSize")
+{
+var ret=fntSizeList.findByText(fntSize.getValue())
+if (ret != null)
+fntSizeList.select (ret.index)
+else 
+fntSizeList.setUndefined(true)
+}
+if (this != null && this.id == "fcDlgFntSizeList")
+{
+if (!fntSizeList.isUndefined()) {
+fntSize.setValue(fntSizeList.getSelection().value)
+}
+}
+updatePreviewFnt()
+}
+//
+// change font color CB
+// 
+function changeFntColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewFntCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+p.addLastUsedColor(this.getColor())
+}
+updatePreviewFnt()
+}
+//
+// changeColorPreviewFntCB()
+//
+function changeColorPreviewFntCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+updatePreviewFnt()
+}
+// CB formatNumbersCB ////////////////////////////
+function formatNumbersCB()
+{
+//
+}
+//
+// mergeOrSplitCheckCB()
+//
+function mergeOrSplitCheckCB ()
+{
+var mergeProcess = mergeOrSplitCheck.isChecked()
+p.processMergeOrSplit (mergeProcess, null, mergeOrSplitCheckCBCancel)
+}
+// ADAPT00884939 - Merge Or Split cancel process
+//-------------------------------------------------------
+function mergeOrSplitCheckCBCancel ()
+{
+mergeOrSplitCheck.check(false)
+}
+// CB for OK button ////////////////////////////
+function okCB(bApplyBtn)
+{
+OKButton.setDisabled(true)
+applyButton.setDisabled(true)
+p.formatCellBids = bApplyBtn?_bids:null
+doFormatCell()
+p._fcDlgSelectedPane = tzone.tabs.selIndex
+// For the dialog box to be re-drawn when the page is reloaded
+p.wt(bApplyBtn)
+if (bApplyBtn)
+{
+formatCellDlg.unload() // 
+p._globalWOMCallback = p.formatCell_globalWOMCallback;
+} else {
+formatCellDlg.show(false)
+}
+OKButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+////////////////////////////
+// cancel button ////////////////////////////
+function cancelCB()
+{
+initGeneral= false
+initPageLayout= false
+initFormatNumber= false
+initAlign= false
+initFont= false
+initBorders= false
+p.formatCellBids = null
+p._fcDlgSelectedPane = tzone.tabs.selIndex
+formatCellDlg.show(false)
+}
+////////////////////////////
+// help button ////////////////////////////
+function helpCB()
+{
+}
+// set General
+function setGeneral(elts)
+{
+if (!initGeneral) 
+{
+initGeneral= true
+showWhenEmptyCheck.init()
+showWhenEmptyZone.init()
+widthCheck.init()
+widthField.init()
+widthField.setPrecision(2)
+widthField.setMin(p.toUserUnit(0.5, false)) // 5 mm = 0.05 cm
+widthField.setMax(p.toUserUnit(9999.9, false)) // 9999.9 mm = 999.99 cm
+widthLabel.init()
+widthUnit.init()
+widthUnit.setHTML(p._unitLabel)
+heightCheck.init()
+heightField.init()
+heightField.setPrecision(2)
+heightField.setMin(p.toUserUnit(0.5, false)) // 5 mm = 0.05 cm
+heightField.setMax(p.toUserUnit(9999.9, false)) // 9999.9 mm = 999.99 cm
+heightLabel.init()
+heightUnit.init()
+heightUnit.setHTML(p._unitLabel)
+readContentCheck.init()
+readContentCombo.init()
+readContentCombo.del()
+var res= p.getAttFromElts(".contType",elts)
+if (res.defined)
+{
+if (res.ret==0) { // text
+readContentCheck.check(false)
+readContentCheck.setIndeterminate(false)
+readContentCombo.setDisabled(true)
+} else {
+readContentCheck.check(true)
+}
+} else {
+readContentCheck.setIndeterminate(true)
+readContentCombo.setDisabled(true)
+}
+for (var i = 0; i < contents.length; i++)
+{
+readContentCombo.add(contents[i],""+contents[i], (res.ret== i+1))
+}
+//readContentTxt.init()
+//testButton.init()
+// Show when empty
+if (isFreeCell && isFormula)
+{
+res= p.getAttFromElts(".showWhenEmpty",elts)
+if (res.defined) 
+{
+showWhenEmptyCheck.check(res.ret == 1)
+} 
+if (isMultiSelect) {
+showWhenEmptyCheck.setDisabled(true)
+}
+}
+showWhenEmptyZone.setDisplay(isFreeCell && isFormula)
+// Size
+res= p.getAttFromElts(".cellsize.width",elts)
+if (res.defined)
+{
+widthField.setValue( p.toUserUnit(res.ret, cellUnitIsInch))
+} else {
+widthField.setValue('')
+}
+res= p.getAttFromElts(".cellsize.specW",elts)
+widthCheck.check(res.ret == 1 || !res.defined)
+curCellW=(res.ret == 1)? null:widthField.getValue()
+widthCheck.setIndeterminate(!res.defined)
+res= p.getAttFromElts(".cellsize.height",elts)
+if (res.defined)
+{
+heightField.setValue( p.toUserUnit(res.ret, cellUnitIsInch))
+} else {
+heightField.setValue('')
+}
+res= p.getAttFromElts(".cellsize.specH",elts)
+heightCheck.check(res.ret == 1 || !res.defined)
+curCellH=(res.ret == 1)? null:heightField.getValue()
+heightCheck.setIndeterminate(!res.defined)
+res= p.getAttFromElts(".cellsize.estimateH",elts)
+if (res.defined)
+estimateH=p.toUserUnit(res.ret,cellUnitIsInch);
+}
+//can be done even after initGeneral=true
+setLabelsWidth()
+}
+//
+// set Page Layout
+//
+function setPageLayout(elts)
+{
+if (!initPageLayout)
+{
+initPageLayout = true
+repeatCheck.init()
+avoidPageBreakCheck.init()
+sectionOrBodyTxt.init()
+horizontalImg.init()
+horizontalPosField.init()
+horizontalPosField.setPrecision(2)
+horizontalPosField.setMin(0)
+horizontalPosField.setMax(p.toUserUnit(9999.9, false)) // 9999.9 mm = 999.99 cm
+HPosUnit.init()
+HPosUnit.setHTML(p._unitLabel)
+horizontalPosCombo.init()
+//horizontalPosCombo.del()
+horizontalEltCombo.init()
+verticalImg.init()
+verticalPosField.init()
+verticalPosField.setPrecision(2)
+verticalPosField.setMin(0)
+verticalPosField.setMax(p.toUserUnit(9999.9, false))
+VPosUnit.init()
+VPosUnit.setHTML(p._unitLabel)
+verticalPosCombo.init()
+//verticalPosCombo.del()
+verticalEltCombo.init()
+//condDisplayCheck.init()
+//condDisplayTxt.init()
+//valButton.init()
+// Avoid Page Break
+var res= p.getAttFromElts(".cell.pageBreak",elts)
+if (res.defined)
+{
+avoidPageBreakCheck.check(res.ret==1)
+avoidPageBreakCheck.setIndeterminate(false)
+} else {
+avoidPageBreakCheck.setIndeterminate(true)
+}
+if (isInHeadrOrBody) {
+avoidPageBreakCheck.check(true)
+avoidPageBreakCheck.setDisabled(true)
+}
+// Repeat on every page
+var res= p.getAttFromElts(".cell.repeat",elts)
+if (res.defined)
+{
+repeatCheck.check(res.ret==1)
+repeatCheck.setIndeterminate(false)
+} else {
+repeatCheck.setIndeterminate(true)
+}
+if (isInHeadrOrBody) {
+repeatCheck.check(true)
+repeatCheck.setDisabled(true)
+}
+// Position
+setPosition(elts[0]) // first and only element
+}
+}
+function setFormatNumber(elts, dType)
+{
+if (!initFormatNumber)
+{
+initFormatNumber = true
+var res= p.getAttFromElts(".formatNb",elts)
+var index = null
+if (res.defined)
+{
+foundFormat = res.ret
+typeToDisplay = p.getAttFromElts(".nbType",elts).ret
+} else {
+foundFormat = null
+}
+// FR 109800
+/*if (foundFormat != null) 
+{
+if (typeToDisplay == _CUSTOM)
+{
+index = new Array(_CURRENCY, _DATE_TIME, _NUMBER, _CUSTOM)
+} else {
+index = new Array(typeToDisplay, _CUSTOM)
+}
+} else {*/
+switch(parseInt(dType))
+{
+case 0 : // Date
+index = new Array(_DATE_TIME, _CUSTOM, _BOOLEAN);
+break;
+case 1 : // Numeric {CURRENCY,NUMBER}
+index = new Array(_CURRENCY, _NUMBER, _CUSTOM, _BOOLEAN);
+break;
+case 2 : // Text
+index = new Array(_CURRENCY, _DATE_TIME, _NUMBER, _CUSTOM, _BOOLEAN);
+break;
+}
+/*}*/
+formatNumbersList.init()
+formatNumbersList.del()
+//window.status = "foundFormat=" + foundFormat + "typeToDisplay == _CUSTOM?" + (typeToDisplay == _CUSTOM) + ", dType=" + dType + ", index.length=" + index.length
+if (index != null) {
+formatNumbersList.add("Default", null, (foundFormat == null))
+for (var j=0; j < index.length; j++)
+{
+var count = _formatNumbers[index[j]].length
+for (var i=0; i < count; i++)
+{
+el = _formatNumbers[index[j]][i]
+formatNumbersList.add(el, el, (foundFormat == el))
+}
+}
+}
+}
+}
+// set Position
+function setPosition(elt)
+{
+// Unit
+positionUnitIsInch = (elt.cell.unitIsInch == 1)
+horizontalPosField.setValue( p.toUserUnit(elt.cell.posH, positionUnitIsInch))
+verticalPosField.setValue( p.toUserUnit(elt.cell.posV, positionUnitIsInch))
+var inSection = (elt.parent.className == "section")
+sectionOrBodyTxt.setHTML(inSection? "Section":"Report")
+var attached = (elt.attach)? true : false
+horizontalEltCombo.del()
+verticalEltCombo.del()
+var children = elt.parent.children
+var lenChildren = children.length
+var attachToHEltBid = attached ? elt.attach.toH : 0
+var attachToVEltBid = attached ? elt.attach.toV : 0
+var eltBid = elt.bid
+for (var j = 0; j < lenChildren; j++) // add all the elements from the same container
+{
+var child = children[j]
+var childBid = child.bid
+if ((eltBid != childBid) && (child.className != "section")) //except itself or section
+{
+var name = ""
+if (child.fcell) // cell
+{
+name = child.fcell.formula
+}
+if (child.className == "block") // block
+{
+name = child.block.name
+}
+if (child.className == "reportCell") // reportCell
+{
+name = child.formula
+}
+if (name == "") name = "Empty Cell"
+if (child.attach && (child.attach.toH != eltBid)) {// circular attachment
+if (attachToHEltBid == childBid)
+{
+horizontalEltCombo.add(name,childBid, true) // select
+} else {
+horizontalEltCombo.add(name, childBid)
+}
+}
+if (child.attach && (child.attach.toV != eltBid)) {// circular attachment
+if (attachToVEltBid == childBid)
+{
+verticalEltCombo.add(name, childBid, true)
+} else {
+verticalEltCombo.add(name, childBid)
+}
+}
+}
+}
+horizontalPosCombo.del()
+horizontalPosCombo.add(inSection?"Left edge of section":"Left edge of report",0, true)
+verticalPosCombo.del()
+verticalPosCombo.add(inSection?"Top edge of section":"Top edge of report",0, true)
+if (horizontalEltCombo.getCount() > 0) 
+{
+var res = (attached) ? elt.attach.h : 0
+for (var i=1; i < p._attachH.length; i++)
+{
+horizontalPosCombo.add(p._attachH[i], i, (res == i))
+}
+res =  (attached) ? elt.attach.v : 0
+for (var i=1; i < p._attachV.length; i++)
+{
+verticalPosCombo.add(p._attachV[i], i, (res == i))
+}
+}
+horizontalPosComboCB()
+verticalPosComboCB()
+}
+//
+// set Alignment
+//
+function setAlign(elts)
+{
+if (!initAlign)
+{
+initAlign = true
+HLeftAlignIcon.init()
+HCenterAlignIcon.init()
+HRightAlignIcon.init()
+VTopAlignIcon.init()
+VMiddleAlignIcon.init()
+VBottomAlignIcon.init()
+var res= p.getAttFromElts(".align.h",elts)
+if (res.defined)
+{
+HLeftAlignIcon.setDisabled(res.ret==null)
+HLeftAlignIcon.check(res.ret==p.AL_LEFT)
+HCenterAlignIcon.setDisabled(res.ret==null)
+HCenterAlignIcon.check(res.ret==p.AL_CENTER)
+HRightAlignIcon.setDisabled(res.ret==null)
+HRightAlignIcon.check(res.ret==p.AL_BOTTOM)
+} else {
+HLeftAlignIcon.setDisabled(false)
+HLeftAlignIcon.check(false)
+HCenterAlignIcon.setDisabled(false)
+HCenterAlignIcon.check(false)
+HRightAlignIcon.setDisabled(false)
+HRightAlignIcon.check(false)
+}
+var res= p.getAttFromElts(".align.v",elts)
+if (res.defined)
+{
+VTopAlignIcon.setDisabled(res.ret==null)
+VTopAlignIcon.check(res.ret==p.AL_TOP)
+VMiddleAlignIcon.setDisabled(res.ret==null)
+VMiddleAlignIcon.check(res.ret==p.AL_CENTER)
+VBottomAlignIcon.setDisabled(res.ret==null)
+VBottomAlignIcon.check(res.ret==p.AL_BOTTOM)
+} else {
+VTopAlignIcon.setDisabled(false)
+VTopAlignIcon.check(false)
+VMiddleAlignIcon.setDisabled(false)
+VMiddleAlignIcon.check(false)
+VBottomAlignIcon.setDisabled(false)
+VBottomAlignIcon.check(false)
+}
+padSep.init()
+padZone.init()
+padVField.init()
+padVField.setPrecision(2)
+padVField.setMin(0)
+padVField.setMax(p.toUserUnit(9999.9, false))
+padVUnit.init()
+padVUnit.setHTML(p._unitLabel)
+padHField.init()
+padHField.setPrecision(2)
+padHField.setMin(0)
+padHField.setMax(p.toUserUnit(9999.9, false))
+padHUnit.init()
+padHUnit.setHTML(p._unitLabel)
+res= p.getAttFromElts(".align.wrap",elts)
+wrapCheck.init()
+wrapCheck.check(res.ret == 1 || !res.defined)
+wrapCheck.setIndeterminate(!res.defined)
+mergeZone.init()
+mergeOrSplitCheck.init()
+var rc=p.setMergeOrSplit(elts)
+mergeOrSplitCheck.check(rc.canSplit)
+mergeOrSplitCheck.setDisabled(!rc.canMergeOrSplit)
+mergeZone.show(isTableCells)
+mergeOrSplitCheck.show(isTableCells)
+if (isTableCells)
+{
+padSep.setDisplay(true)
+padZone.setDisplay(true)
+var res=p.getAttFromElts(".pad.v",elts)
+if (res.defined)
+{
+padVField.setValue( p.toUserUnit(res.ret, cellUnitIsInch))
+} else {
+padVField.setValue('')
+}
+var res=p.getAttFromElts(".pad.h",elts)
+if (res.defined)
+{
+padHField.setValue( p.toUserUnit(res.ret, cellUnitIsInch))
+} else {
+padHField.setValue('')
+}
+} else {
+padSep.setDisplay(false)
+padZone.setDisplay(false)
+}
+}
+}
+// set Font
+function setFont(elts)
+{
+if (!initFont)
+{
+initFont = true
+fntName.init()
+fntName.setDisabled(true)
+fntStyle.init()
+fntStyle.setDisabled(true)
+fntSize.init()
+underlineCheck.init()
+strikeCheck.init()
+fntNameList.init()
+fntStyleList.init()
+fntStyleList.del()
+for (var i=0;i<styles.length;i++)
+{
+fntStyleList.add(styles[i], "" + styles[i])
+}
+fntSizeList.init()
+fntSizeList.del()
+for (var i=0; i < p.sizes.length; i++)
+{
+fntSizeList.add(p.sizes[i], "" + p.sizes[i])
+}
+fntFgColor.init()
+previewFnt.init()
+previewFntBG.init()
+// Font name
+var res=p.getAttFromElts(".font.name",elts)
+var sFntName = ""
+if (res.defined)
+{
+fntNameList.setDisabled(res.ret==null)
+fntNameList.setUndefined(false)
+if (res.ret!=null)
+{
+sFntName = res.ret
+}
+} else {
+fntNameList.setUndefined(true)
+}
+fntNameList.del()
+for (var i=0; i < p.allFonts.length; i++)
+{
+fntNameList.add(p.allFonts[i], p.platformFonts[i], (p.allFonts[i] == sFntName))
+}
+// Font Size
+res=p.getAttFromElts(".font.size",elts)
+if (res.defined)
+{
+fntSizeList.setDisabled(res.ret==null)
+fntSizeList.setUndefined(false)
+fntSizeList.valueSelect(res.ret?(""+res.ret):"")
+fntSize.setValue(res.ret?(""+res.ret):"")
+} else {
+fntSizeList.setUndefined(true)
+}
+var styleIdx = 0
+// Italic
+res=p.getAttFromElts(".font.italic",elts)
+var italicIsDefined=  false
+var isItalic = false
+if (res.defined)
+{ 
+italicIsDefined = true
+isItalic = (res.ret==1)
+styleIdx += isItalic? 1 : 0
+}
+// Bold
+res=p.getAttFromElts(".font.bold",elts)
+var boldIsDefined = false
+var isBold = false
+if (res.defined)
+{ 
+boldIsDefined = true
+isBold = res.ret==1
+styleIdx += (isBold)? 2 : 0
+}
+if (isItalic || isBold)
+{
+fntStyleList.select(styleIdx)
+} else {
+fntStyleList.select(0)
+}
+fntStyleList.setUndefined(!(italicIsDefined && boldIsDefined))
+// Underline
+res=p.getAttFromElts(".font.under",elts)
+if (res.defined)
+{
+underlineCheck.setDisabled(res.ret==null)
+underlineCheck.check(res.ret==1)
+underlineCheck.setIndeterminate(false)
+} else {
+underlineCheck.setIndeterminate(true)
+}
+// StrikeThrough
+res=p.getAttFromElts(".font.strike",elts)
+if (res.defined)
+{
+strikeCheck.setDisabled(res.ret==null)
+strikeCheck.check(res.ret==1)
+strikeCheck.setIndeterminate(false)
+} else {
+strikeCheck.setIndeterminate(true)
+}
+// FG Color
+res=p.getAttFromElts(".fgColor.rgb",elts)
+if (res.defined)
+{
+fntFgColor.setDisabled(res.ret==null)
+fntFgColor.setColor(res.ret)
+} else {
+fntFgColor.setColor(null)
+}
+// BG Color
+/*res=p.getAttFromElts(".bgColor.rgb",elts)
+if (res.defined)
+{
+fntBgColor.setDisabled(res.ret==null)
+fntBgColor.setColor(res.ret)
+} else {
+fntBgColor.setColor(null)
+}*/
+}
+//
+changeFntCB()
+updatePreviewFnt()
+}
+// set Appearance
+function setAppearance(elts)
+{
+if (initAppearance) 
+return
+initAppearance = true
+bgColor.init()
+noneRadio.init()
+imageRadio.init()
+skinRadio.init()
+skinsCombo.init()
+urlTxt.init()
+imageFromFileRadio.init()
+addImageButton.init()
+//testButton.init()
+displayCombo.init()
+alignHorizontalCombo.init()
+alignVerticalCombo.init()
+// BG Color
+var res=p.getAttFromElts(".bgColor.rgb",elts)
+if (res.defined)
+{
+bgColor.setDisabled(res.ret==null)
+bgColor.setColor(res.ret)
+} 
+else 
+{
+bgColor.setColor(null)
+}
+// Skin
+skinsAr = p._blockSkins
+var res1=p.getAttFromElts(".skin",elts)
+if (res1.defined)
+{
+skin=res1.ret?res1.ret:""
+} 
+else 
+{
+skin=""
+}
+// Image From URL
+var res2=p.getAttFromElts(".imgURL",elts)
+if (res2.defined)
+{
+imgUrl=res2.ret?res2.ret:""
+} 
+else 
+{
+imgUrl=""
+}
+var hasSkin = (skin != "")
+skinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+{
+skinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+}
+// Embedded image
+var hasEmbImg=false
+var res3=p.getAttFromElts(".embimg",elts)
+if (res3.defined)
+hasEmbImg=res3.ret?res3.ret:false
+noneRadio.check( (res1.firstVal==null)&&(res2.firstVal==null)&&(res3.firstVal==false) )
+skinRadio.check(hasSkin)
+imageRadio.check(imgUrl != "")
+urlTxt.setValue(imgUrl)
+imageFromFileRadio.check(hasEmbImg)
+addImageButton.setText(hasEmbImg?'Edit':'Add')
+// Display
+displayCombo.del()
+res1=p.getAttFromElts(".dispMode",elts)
+if (res1.defined)
+{
+dispMode=res1.ret
+} 
+else 
+{
+dispMode=-1
+}
+for (var i = 0; i < p._dispImg.length; i++)
+{
+displayCombo.add(p._dispImg[i], p._dispImg[i], (i == (dispMode==-1?0:dispMode)))
+}
+displayCombo.setDisabled(res1.ret==null)
+// Alignment
+res1=p.getAttFromElts(".HAlign",elts)
+if (res1.defined)
+{
+HAlign=res1.ret
+} 
+else 
+{
+HAlign=-1
+}
+var res2=p.getAttFromElts(".VAlign",elts)
+if (res2.defined)
+{
+VAlign=res2.ret
+} 
+else 
+{
+VAlign=-1
+}
+alignHorizontalCombo.del()
+alignVerticalCombo.del()
+for (var j = 0; j < p._posH.length; j++)
+{
+alignHorizontalCombo.add(p._posH[j], p._posH[j], (j == (HAlign==-1?0:HAlign)))
+alignVerticalCombo.add(p._posV[j], p._posV[j], (j == (VAlign==-1?0:VAlign)))
+}
+if (dispMode==-1 || HAlign==-1 || VAlign==-1)
+{
+imageRadio.check(false)
+imageFromFileRadio.check(false)
+}
+skinOrImageCB()
+}
+//
+// getREType()
+//
+function getREType()
+{
+return "cell"
+}
+//
+// updateDialog()
+//
+function setImgFileAttr()
+{
+for (var i in elts)
+{
+if ((elts[i].className=="tableCell")||(elts[i].className=="reportCell")||(elts[i].className=="cell"))
+elts[i].embimg=true;//needed when button is changed to "edit" and click the edit button again.
+}
+}
+function updateDialog(entry, img)
+{
+curEntry=entry
+addImageButton.setText('Edit')
+//save it in a global array for the same session
+setImgFileAttr();
+setBackgroundImgFile(elts, img);
+}
+// CB for BG color combo ////////////////////////////
+function changeColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorDialogCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+p.addLastUsedColor(this.getColor())
+}
+}
+// changeColorCB()
+//
+function changeColorDialogCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+}
+//
+// update Preview Font
+//
+function updatePreviewFnt()
+{
+var css = previewFnt.css
+var cssBG = previewFntBG.css
+css.backgroundColor = "white";
+previewFnt.setHTML('Undefined format')
+// Font
+if (fntPreviewCSS != '') 
+{
+css.fontFamily= fntPreviewCSS  // needs localization
+} else {
+//css.color= cssBG.backgroundColor
+css.color= ""
+css.fontFamily = ""
+css.fontSize = ""
+css.fontWeight = ""
+css.fontStyle = ""
+css.textDecoration = ""
+cssBG.backgroundColor= ""
+return
+}
+value = fntSize.getValue()
+if (value != '') 
+{
+css.fontSize= value +"pt"
+} else {
+//css.color= cssBG.backgroundColor
+css.color= ""
+css.fontFamily = ""
+css.fontSize = ""
+css.fontWeight = ""
+css.fontStyle = ""
+css.textDecoration = ""
+cssBG.backgroundColor= ""
+return
+}
+if (!fntStyleList.isUndefined()) 
+{
+var styleListIdx = fntStyleList.getSelection().index
+css.fontWeight= ((styleListIdx==2)||(styleListIdx==3))? 'bold':'normal'
+css.fontStyle= ((styleListIdx==1)||(styleListIdx==3))? 'italic':'normal'
+var txtDeco = underlineCheck.isChecked()? 'underline ' : ''
+txtDeco += strikeCheck.isChecked()? 'line-through ' : ''
+css.textDecoration = (txtDeco=='')? 'none' : txtDeco
+} else {
+//css.color= cssBG.backgroundColor
+css.color= ""
+css.fontFamily = ""
+css.fontSize = ""
+css.fontWeight = ""
+css.fontStyle = ""
+css.textDecoration = ""
+cssBG.backgroundColor= ""
+return
+}
+// Foreground color
+var s = newBOColor(fntFgColor.getColor()).getStyleColor()
+if (s)
+{
+css.color= s
+} else {
+css.color= "black"
+}
+// Background color
+/*s=  newBOColor(fntBgColor.getColor()).getStyleColor()
+if (s)
+{
+cssBG.backgroundColor= s
+} else {
+cssBG.backgroundColor= "white"
+}*/
+previewFnt.setHTML('AbCd123')
+}
+//
+// doFormatCell()
+// forward to jsp process page
+//
+function doFormatCell()
+{
+// fill form
+var f = self.document.formatCellForm
+f.unitIsInch.value="" + p._unitIsInch
+// General
+f.nameCell.value="" + nameTxt.getValue()
+if (widthField.initialized()) {
+f.showWhenEmpty.value = "" + (showWhenEmptyCheck.isIndeterminate()? true : showWhenEmptyCheck.isChecked())
+f.widthCheck.value="" + (widthCheck.isIndeterminate()? '' : widthCheck.isChecked())
+f.widthField.value="" + widthField.getValue()
+f.heightCheck.value="" + (heightCheck.isIndeterminate()? '' : heightCheck.isChecked())
+f.heightField.value="" + heightField.getValue()
+f.contentAs.value="" + (readContentCheck.isIndeterminate()? 0 : (readContentCheck.isChecked()? (readContentCombo.getSelection().index+1) : 0))
+}
+// Format Number
+if (formatNumbersList.initialized() && (formatNumbersList.getSelection()!= null))
+{
+f.formatNb.value="" + formatNumbersList.getSelection().value
+//window.status= "formatNumbersList.getSelection().value=" + formatNumbersList.getSelection().value
+}
+// Alignment
+if (HLeftAlignIcon.initialized())
+{
+var txtAlignH = HLeftAlignIcon.isChecked() ? p.AL_LEFT : ''
+txtAlignH = HCenterAlignIcon.isChecked() ? p.AL_CENTER : txtAlignH
+txtAlignH = HRightAlignIcon.isChecked() ? p.AL_RIGHT: txtAlignH
+var txtAlignV = VTopAlignIcon.isChecked() ? p.AL_TOP : ''
+txtAlignV = VMiddleAlignIcon.isChecked() ? p.AL_CENTER : txtAlignV
+txtAlignV = VBottomAlignIcon.isChecked() ? p.AL_BOTTOM : txtAlignV
+f.txtAlignH.value="" + txtAlignH
+f.txtAlignV.value="" + txtAlignV
+f.padTop.value="" + padVField.getValue()
+f.padLeft.value="" + padHField.getValue()
+f.wrapText.value="" + (wrapCheck.isIndeterminate()? '' : wrapCheck.isChecked())
+var merge=mergeOrSplitCheck.isDisabled()?'':mergeOrSplitCheck.isChecked()
+f.bMerge.value="" + merge
+}
+// Font
+if (fntNameList.initialized())
+{
+if (!fntNameList.isUndefined())
+{
+f.fntName.value="" + fntNameList.getSelection().text
+}
+if (fntSize.getValue()!='')
+{
+f.fntSize.value="" + fntSize.getValue()
+}
+if (!fntStyleList.isUndefined())
+{
+var styleListIdx = fntStyleList.getSelection().index
+f.bold.value="" + ((styleListIdx==2)||(styleListIdx==3))
+f.italic.value="" + ((styleListIdx==1)||(styleListIdx==3))
+}
+f.underline.value="" + (underlineCheck.isIndeterminate()? '' : underlineCheck.isChecked())
+f.strike.value="" + (strikeCheck.isIndeterminate()? '' : strikeCheck.isChecked())
+if (fntFgColor.getColor())
+{
+f.fgColor.value="" + fntFgColor.getColor()
+}
+/*if (fntBgColor.getColor())
+{
+f.bgColor.value="" + fntBgColor.getColor()
+}*/
+}
+// Borders
+doFormatForBorders(f);
+// Appearance
+if (bgColor.initialized()) 
+{
+var isNothing = ! (noneRadio.isChecked() || imageRadio.isChecked() || skinRadio.isChecked() || imageFromFileRadio.isChecked())
+var isNone = noneRadio.isChecked()
+f.noneBG.value="" + isNone
+if (bgColor.getColor())
+{
+f.bgColor.value="" + bgColor.getColor()
+}
+if (!isNothing)
+{
+if (!isNone) 
+{
+var isSkin = (skinsCombo.getSelection()) ? skinRadio.isChecked() : false
+f.isSkin.value="" + isSkin
+f.hasEmbeddedImg.value=""+imageFromFileRadio.isChecked()
+f.dispMode.value="" + displayCombo.getSelection().index
+f.urlImg.value="" + (isSkin ? (skinsCombo.getSelection().value) : urlTxt.getValue())
+f.alignH.value="" + ((alignHorizontalCombo.getSelection().value == "") ? "" : alignHorizontalCombo.getSelection().index)
+f.alignV.value="" + ((alignVerticalCombo.getSelection().value == "") ? "" : alignVerticalCombo.getSelection().index)
+} 
+else 
+{
+f.urlImg.value=""
+f.isSkin.value="" + false
+}
+}
+}
+// Page Layout
+if (repeatCheck.initialized())
+{
+f.avoidPageBreak.value="" + avoidPageBreakCheck.isChecked()
+f.repeat.value="" + (repeatCheck.isIndeterminate()? '' : repeatCheck.isChecked())
+f.posH.value="" + horizontalPosField.getValue()
+f.posV.value="" + verticalPosField.getValue()
+if (horizontalEltCombo.getSelection()){
+f.attachToH.value="" + horizontalEltCombo.getSelection().value
+}
+f.attachH.value="" + horizontalPosCombo.getSelection().value
+if (verticalEltCombo.getSelection()){
+f.attachToV.value="" + verticalEltCombo.getSelection().value
+}
+f.attachV.value="" + verticalPosCombo.getSelection().value
+//f.condDisplay.value="" + (condDisplayCheck.isIndeterminate()? '' : condDisplayCheck.isChecked())
+//f.condDisplayTxt.value="" + condDisplayTxt.getHTML()
+}
+// Build URL
+var url = p._root + "processFormatCell" + p._appExt
+//url += p.urlParams(false,false) // multi selection
+url += p.urlParamsNoBID(curEntry)
+url += "&bids=" + escape(_bids) // multi selection
+document.formatCellForm.action = url
+setTimeout("document.formatCellForm.submit()",1)
+}
+function getNonVisibleSelectedElts(bids)
+{
+var elts = new Array, len=bids.length
+for (var i=0; i < len; i++)
+{
+var elt=p.findByBID(p.doc, bids[i])
+if (elt) {
+elts[elts.length]=elt
+}
+}
+return elts;
+}
+function getImgFileFromApplyFormatDlg()
+{
+var hasEmbImg=false
+var res1=p.getAttFromElts(".embimg",elts)
+if (res1.defined)
+hasEmbImg=res1.ret?res1.ret:false
+if (hasEmbImg)
+{
+var img=getBackgroundImgFile(elts);
+return img?img:""
+}
+return null;
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<form target="Report" style="display:none" name="formatCellForm" method="post" action="">
+<input type="hidden" name="nameCell" id="nameCell" value="">
+<input type="hidden" name="showWhenEmpty" id="showWhenEmpty" value="">
+<input type="hidden" name="unitIsInch" id="unitIsInch" value="">
+<input type="hidden" name="widthCheck" id="widthCheck" value="">
+<input type="hidden" name="widthField" id="widthField" value="">
+<input type="hidden" name="heightCheck" id="heightCheck" value="">
+<input type="hidden" name="heightField" id="heightField" value="">
+<input type="hidden" name="contentAs" id="contentAs" value="">
+<input type="hidden" name="repeat" id="repeat" value="">
+<input type="hidden" name="avoidPageBreak" id="avoidPageBreak" value="">
+<input type="hidden" name="positionUnitIsInch" id="positionUnitIsInch" value="">
+<input type="hidden" name="posH" id="posH" value="">
+<input type="hidden" name="posV" id="posV" value="">
+<input type="hidden" name="attachToV" id="attachToV" value="">
+<input type="hidden" name="attachToH" id="attachToH" value="">
+<input type="hidden" name="attachH" id="attachH" value="">
+<input type="hidden" name="attachV" id="attachV" value="">
+<input type="hidden" name="condDisplay" id="condDisplay" value="">
+<input type="hidden" name="condDisplayTxt" id="condDisplayTxt" value="">
+<input type="hidden" name="txtAlignH" id="txtAlignH" value="">
+<input type="hidden" name="txtAlignV" id="txtAlignV" value="">
+<input type="hidden" name="bgColor" id="bgColor" value="">
+<input type="hidden" name="isSkin" id="isSkin" value="">
+<input type="hidden" name="hasEmbeddedImg" id="hasEmbeddedImg" value="">
+<input type="hidden" name="urlImg" id="urlImg" value="">
+<input type="hidden" name="noneBG" id="noneBG" value="">
+<input type="hidden" name="dispMode" id="dispMode" value="">
+<input type="hidden" name="alignH" id="alignH" value="">
+<input type="hidden" name="alignV" id="alignV" value="">
+<input type="hidden" name="padTop" id="padTop" value="">
+<input type="hidden" name="padLeft" id="padLeft" value="">
+<input type="hidden" name="wrapText" id="wrapText" value="">
+<input type="hidden" name="bMerge" id="bMerge" value="">
+<input type="hidden" name="fntName" id="fntName" value="">
+<input type="hidden" name="fntSize" id="fntSize" value="">
+<input type="hidden" name="bold" id="bold" value="">
+<input type="hidden" name="italic" id="italic" value="">
+<input type="hidden" name="underline" id="underline" value="">
+<input type="hidden" name="strike" id="strike" value="">
+<input type="hidden" name="fgColor" id="fgColor" value="">
+<input type="hidden" name="formatNb" id="formatNb" value="">
+<input type="hidden" name="borderSize" id="borderSize" value="">
+<input type="hidden" name="borderColor" id="borderColor" value="">
+<input type="hidden" name="topBorderSize" id="topBorderSize" value="">
+<input type="hidden" name="topBorderColor" id="topBorderColor" value="">
+<input type="hidden" name="bottomBorderSize" id="bottomBorderSize" value="">
+<input type="hidden" name="bottomBorderColor" id="bottomBorderColor" value="">
+<input type="hidden" name="leftBorderSize" id="leftBorderSize" value="">
+<input type="hidden" name="leftBorderColor" id="leftBorderColor" value="">
+<input type="hidden" name="rightBorderSize" id="rightBorderSize" value="">
+<input type="hidden" name="rightBorderColor" id="rightBorderColor" value="">
+<input type="file" name="fileImg" id="fileImg" value="" style="display:none">
+</form>
+</body>
+</html>

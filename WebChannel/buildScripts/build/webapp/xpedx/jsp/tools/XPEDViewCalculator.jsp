@@ -1,0 +1,191 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
+<%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
+<%@ taglib prefix="xpedx" uri="/WEB-INF/xpedx.tld"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
+<!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/>
+ 
+
+<!-- javascript -->
+
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
+
+<!-- carousel scripts css  -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
+
+<!-- carousel scripts js   -->
+
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
+
+<!-- STUFF YOU NEED FOR BEAUTYTIPS -->
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
+<script src="/swc/xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
+<!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- /STUFF --><script type="text/javascript" src="/swc/xpedx/js/xpedx-new-ui.js" language="javascript">
+	
+</script>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
+<title><s:property value="wCContext.storefrontId" /> / Imposition Calculator</title>
+<!-- Webtrend tag starts -->
+<meta name="WT.ti" content="xpedx/Imposition Calculater">
+<!-- Webtrend tag stops --> 
+</head>
+<!-- Web trend tag start -->
+<s:include value="../../htmls/webtrends/webtrends.html"/>
+<!-- Web trend tag end -->
+
+<s:set name='_action' value='[0]' />
+<body class="ext-gecko ext-gecko3">
+    <div id="main-container">
+        <div id="main">
+        	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+        
+			<div class="container"> 
+                <!-- breadcrumb -->
+                <div id="searchBreadcrumb">
+                	<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <a href="<s:url action="XPEDXTools" namespace="/xpedx/tools" includeParams='none'/>">Tools</a>  / <span class="breadcrumb-inactive">Imposition Calculater</span> Commented for jira 1538-->
+                </div>                               
+                
+                <div id="mid-col-mil"><div style=" width: 600px;">  
+                 <div class="clearview">&nbsp;</div>
+                 <h2> Imposition Calculator</h2>
+                  To calculate the possible options for cutting a smaller sheet size from a larger sheet size, enter as much information as possible for the most accurate calculations.
+                  
+                  <div id="requestform">
+<div class="clearview">&nbsp;</div> 
+ 
+            
+                      
+              <s:form id="impCalculatorForm" name="impCalculatorForm" namespace="/xpedx/tools"
+              method="post" action="xpedxViewImpCalculation">
+            
+               <table style="width:600px;" class="form">
+                    <tbody>
+                        <tr>
+                          <td>Sheet Size:</td>
+                          <td width="12" valign="middle" class="padding8">W: 
+                            </td>
+                          <td width="80" valign="middle" class="padding8">                                               
+                          	<s:textfield name="sheetSizeW" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeW" onkeyup="calcPhone('Value',impCalculatorForm.sheetSizeW);"/>                          
+                          </td>
+                          <td width="12" class="padding8">X </td>
+                          <td width="12" class="padding8">H:                            </td>
+                          <td width="256" class="padding8">                          
+                          	<s:textfield name="sheetSizeH" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeH" onkeyup="calcPhone('Value',impCalculatorForm.sheetSizeH);"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Trim Size:</td>
+                          <td width="12" valign="middle" class="padding8">W:</td>
+                          <td width="80" valign="middle" class="padding8">							
+							<s:textfield name="trimSizeW" cssStyle="width:70px;" cssClass="x-input" id="trimSizeW" onkeyup="calcPhone('Value',impCalculatorForm.trimSizeW);"/>
+						  </td>
+                          <td width="12" class="padding8">X </td>
+                          <td width="12" class="padding8">H:                            </td>
+                          <td width="256" class="padding8">                          	
+                          	<s:textfield name="trimSizeH" cssStyle="width:70px;" cssClass="x-input" id="trimSizeH" onkeyup="calcPhone('Value',impCalculatorForm.trimSizeH);"/>
+                          </td>
+                        </tr>
+                        <tr>
+                         <td>Gripper Width:</td>
+                         <td colspan="5">                                                     
+                          <s:textfield name="gripperWidth" cssStyle="width:120px;" onkeyup="calcPhone('Value',impCalculatorForm.gripperWidth);" cssClass="x-input" id="gripperWidth" value="0"/>
+                         </td>
+                        </tr>
+                        <tr>
+                         <td>Color Bar Width:</td>
+                         <td colspan="5">
+                          <s:textfield name="colorBarWidth" cssStyle="width:120px;" cssClass="x-input" id="colorBarWidth" onkeyup="calcPhone('Value',impCalculatorForm.colorBarWidth);" value="0"/>
+                         </td>
+                        </tr>
+                        <tr>
+                          <td>Side Guide: </td>
+                          <td colspan="5"><span class="no-border-left">                            
+                          </span>
+                           <s:textfield name="sideGuide" cssStyle="width:120px;" cssClass="x-input" id="sideGuide" onkeyup="calcPhone('Value',impCalculatorForm.sideGuide);" value="0"/>
+                          </td>
+                        </tr>
+                      <tr>
+                          <td>Gutter: </td>
+                          <td colspan="5">                          	
+                          	<s:textfield name="gutter" cssStyle="width:120px;" cssClass="x-input" id="gutter" onkeyup="calcPhone('Value',impCalculatorForm.gutter);" value="0"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td colspan="5"> 
+                            <!-- <ul id="cart-actions"><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="clearValues();"><span>Clear</span></a></li>-->
+                              <!-- Changes done for jira 1538 -->
+                              <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="clearValues();"><span>Clear</span></a></li><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li>  
+                            </ul>
+                         </td>
+                        </tr>                       
+                         
+                    </tbody>
+                </table></s:form>
+             
+            
+    <div class="clearview">&nbsp;</div>
+                        
+                    </div>                                                       
+
+                </div>
+                
+                
+                <div class="bot-margin"></div>
+			</div>
+        </div>
+        
+        </div>
+	</div>
+ 
+	<!-- end main  -->
+    	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+
+
+
+	<!-- end container  -->
+</body>
+</html>

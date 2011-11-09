@@ -1,0 +1,211 @@
+BODY.body
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px;
+    OVERFLOW: auto;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid
+}
+BODY.toolbar
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    BACKGROUND-COLOR: #dce9fb
+}
+TD.title
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: #2d62b0;
+    FONT-FAMILY: Tahoma, Verdana
+}
+A:hover
+{
+    TEXT-DECORATION: underline
+}
+TD.Img_SelTab
+{
+    BACKGROUND-COLOR: #d3e7ff
+}
+TD.SelTab
+{
+    PADDING-RIGHT: 9px;
+    BACKGROUND-COLOR: #dce9fb
+}
+TD.Non_SelTab
+{
+    PADDING-RIGHT: 9px;
+    BACKGROUND-COLOR: transparent
+}
+A.Drill
+{
+    LEFT: 0px;
+    POSITION: relative;
+    TOP: 0px
+}
+A.SnapShot
+{
+    LEFT: 0px;
+    VISIBILITY: hidden;
+    POSITION: relative;
+    TOP: 0px
+}
+A.Txt_SelTab
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma;
+    TEXT-DECORATION: none
+}
+A.Txt_Non_SelTab
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma;
+    TEXT-DECORATION: none
+}
+INPUT.ReportToolBar_PageNum
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    FONT-SIZE: 14px;
+    BORDER-LEFT: #6794d7 1px solid;
+    WIDTH: 35px;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    FONT-FAMILY: Tahoma
+}
+SPAN.ReportToolBar_NbPage
+{
+    FONT-SIZE: 14px;
+    COLOR: black;
+    FONT-FAMILY: 'MS Sans Serif', Tahoma
+}
+BODY.ReportToolbar
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    BACKGROUND-COLOR: #dce9fb
+}
+.Wait_message
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+.Report_Wait_message
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+BODY.ReportTabs
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid
+}
+A.Txt_Non_SelTab_Hover
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma
+}
+TD.Info_Message
+{
+    FONT-SIZE: 14px;
+    COLOR: #000080;
+    FONT-FAMILY: Tahoma
+}
+TD.Warning_Message
+{
+    FONT-SIZE: 14px;
+    COLOR: #ff4500;
+    FONT-FAMILY: Tahoma
+}
+TD.Error_Message
+{
+    FONT-SIZE: 14px;
+    COLOR: red;
+    FONT-FAMILY: Tahoma
+}
+INPUT.Back_Button
+{
+    FONT-SIZE: 14px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #6794d6
+}
+DIV.toolbar_ns
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    BACKGROUND-COLOR: #dce9fb
+}
+DIV.ReportToolbar_ns
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px solid;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    BACKGROUND-COLOR: #dce9fb
+}
+DIV.body_ns
+{
+    BORDER-RIGHT: #6794d7 1px solid;
+    BORDER-TOP: #6794d7 1px;
+    OVERFLOW: auto;
+    BORDER-LEFT: #6794d7 1px solid;
+    BORDER-BOTTOM: #6794d7 1px solid;
+    POSITION: absolute;
+    BACKGROUND-COLOR: transparent
+}
+INPUT.Cancel_Query
+{
+    FONT-SIZE: 11px;
+    COLOR: white;
+    BACKGROUND-COLOR: #6794D6;
+    FONT-FAMILY: Tahoma
+}
+TD.calendar_item
+{
+    FONT-SIZE: 9pt;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+.Filter_List
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+INPUT.Filter_Button
+{
+    FONT-SIZE: 12px;
+    COLOR: white;
+    BACKGROUND-COLOR: #6794D6;
+    FONT-FAMILY: Tahoma
+}
+DIV.Filter_Warning
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: red;
+    FONT-FAMILY: Tahoma
+}
+FONT.Filter_Label
+{
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma
+}

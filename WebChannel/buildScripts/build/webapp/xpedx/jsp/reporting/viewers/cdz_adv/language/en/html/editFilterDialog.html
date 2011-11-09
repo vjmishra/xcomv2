@@ -1,0 +1,419 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Edit Filter</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/multilist.js"></script>
+<script language="javascript" src="../scripts/filterzone.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "editFilterDlg");
+p._globalWOMCallback = null;
+var initialized= false;
+elts = _topfs.getSelectedElts()
+var selElt = ((elts.length > 1 ) && (elts[0].className == "tableCell")) ?  elts[0].parent.parent.parent : elts[0]
+var filterCn = selElt? selElt.className : ''
+var _isFromViewer = (window.location.search.substring(1) == 'viewer')
+if (_isFromViewer)
+{
+var url = p._root + "incFilter" + p._appExt
+url += p.urlParamsNoBID()
+selBid = selElt.bid
+url += "&sBid=" + selBid
+url += "&viewer=true"
+url += "&isBlock=" + ((selElt.className == "block")||(selElt.className == "section"));
+}
+</script>
+<script language="javascript">if (_isFromViewer) includeScript(url)  </script>
+<script language="javascript">
+_currentFilter = null
+if (_isFromViewer)
+{
+_currentFilter = (window.currFil? currFil:null)
+} else {
+pane = p.leftPane.getFrame();
+_currentFilter = pane.getFilter()
+if (_currentFilter != null && _currentFilter.fcn!=null) {
+filterCn = _currentFilter.fcn
+}
+}
+var _dialogTitle = ''
+switch(filterCn) {
+case "tableCell":
+case "block":
+_dialogTitle = 'Block Filter Editor'
+break
+case "section":
+_dialogTitle = 'Section Filter Editor'
+break
+case "report":
+case "body":
+_dialogTitle = 'Report Filter Editor'
+break
+}
+var url =  p._root + "incObjects" + p._appExt
+url += p.urlParamsNoBID() 
+url += "&forFilter=true"
+</script>
+<script language="javascript">includeScript(url)</script>
+<script language="javascript">
+function loadCB()
+{
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized=true;
+buttonsWidth = 60
+editFilterDlg = newDialogBoxWidget("editFilterDlg",_dialogTitle,null,null, OkCB, cancelCB, false);
+treeFrame = newFrameZoneWidget("treeFrame",180,310)
+dicRoot = newTreeWidgetElem(0, _reportName)
+dicTree = newTreeWidget('dicTree', 160, 280, p._img + "qualificationIcons.gif", clickCB, dclickCB)
+dicTree.setTooltipOnMouseOver(true);
+dicTree.setDragDrop(treeDragCB,treeAcceptDropCB,treeDropCB)
+addObjButton = newButtonWidget('addObjButton',null, addButtonCB,null,null,"Add new filter",null,null,p._skin+'buttonIcons.gif',16,16,0,0)
+delObjButton = newButtonWidget('delObjButton',null, removeButtonCB,null,null,"Remove selected filter",null,null,p._skin+'buttonIcons.gif',16,16,0,16)
+editFilter = newFilterZoneWidget('editFilter',"Filters",null,null,false,modifiedFilterCB,null,true)
+filtersList= editFilter.getList()
+filtersList.setDragDrop(treeDragCB,treeAcceptDropCB,treeDropCB)
+info = newInfoWidget("editFilterDlgInfo","More Information","","You can create and edit filters here.")
+OkButton = newButtonWidget("editFilterDlgOkButton", "OK", 
+"OkCB(false)", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("editFilterDlgCancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+helpButton = newButtonWidget("editFilterDlgHelpButton", "Help", 
+"helpCB()", buttonsWidth, "Break properties help.", 
+"Break properties help.", 0, 0);
+applyButton = newButtonWidget("editFilterDlgApplyButton", "Apply", 
+"OkCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+editFilterDlg.attachDefaultButton(OkButton);
+}
+if ( !_curWin.editFilterDlgInitialized )
+{
+_curWin.editFilterDlgInitialized = true;
+targetApp(
+editFilterDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td valign="top">' +
+treeFrame.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="2" border="0"><tbody>' +
+'<tr><td><b>' + "Result Objects" + '</b></td></tr>' +
+'<tr><td>' + dicTree.getHTML() +'</td></tr>' +
+'</tbody></table>'+
+treeFrame.endHTML() +
+   '</td>' +
+'<td valign="top">' +
+' <p><br> <p><br>' +
+addObjButton.getHTML() + '<br>' +
+delObjButton.getHTML() +
+   '</td>' +
+'<td valign="top">' +
+editFilter.getHTML() +
+   '</td>' +      
+'</tr>'+
+'<tr>'+
+'<td colspan="3">'+info.getHTML() + '</td>'+
+'</tr>'+
+   '<tr>' +
+   '<td align="right" colspan="3">' +
+   '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' + OkButton.getHTML() + '</td>' + 
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + cancelButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + applyButton.getHTML() + '</td>' +   
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + helpButton.getHTML() +'</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+editFilterDlg.endHTML()
+);
+}
+editFilterDlg.init()
+editFilterDlg.setTitle(_dialogTitle)
+treeFrame.init()
+dicTree.init()
+buildTree(dicTree, false) 
+addObjButton.init()
+delObjButton.init()
+editFilter.init()
+editFilter.resize(400,310)
+if (_currentFilter == null) 
+{
+_currentFilter = newBOFilterNode(true)
+_currentFilter.filterAnd = true
+}
+editFilter.buildFilters(_currentFilter)
+editFilter.updateBOListIcons()
+backupFilterTree = p.filtersGetCopy(_currentFilter)
+info.init()
+OkButton.init()
+cancelButton.init()
+applyButton.init()
+helpButton.init()
+helpButton.setDisplay(false)
+applyButton.setDisabled(true)
+editFilterDlg.show(true);
+}
+function addButtonCB()
+{
+if (window._currentObj) addCurrentFilter(editFilter,_currentObj)
+}
+function removeButtonCB()
+{
+delCurrentFilter(editFilter)
+}
+function modifiedFilterCB()
+{
+OkButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+function clickCB(data)
+{
+_currentObj=data
+}
+function dclickCB(data)
+{
+currentObj=data;
+addButtonCB()
+}
+function OkCB(bApplyBtn)
+{
+p.editFilterReload = bApplyBtn
+if (!bApplyBtn && applyButton.isDisabled()) 
+{
+editFilterDlg.show(false);
+return;
+}
+doSave()
+p.wt(bApplyBtn&&_isFromViewer)
+if (bApplyBtn) {
+editFilterDlg.show(true);
+p._globalWOMCallback = _isFromViewer ? p.editFilterFromViewer_globalWOMCallback : p.editFilterFromPane_globalWOMCallback
+editFilterDlg.unload();
+} else {
+editFilterDlg.show(false);
+}
+p.eventManager.notify(p._EVT_REINIT_REPORTMAP_NODE)
+}
+function cancelCB()
+{
+if (!_isFromViewer)
+{
+pane._currentFilter = backupFilterTree
+}
+p.editFilterID = null
+p.editFilterReload = false
+p.filtersListSelObjValue = null
+editFilterDlg.show(false);
+}
+function helpCB()
+{
+editFilterDlg.show(false);
+}
+function treeDragCB(source) {}
+function treeAcceptDropCB(source,target,ctrl,shift)
+{
+if ((target.id==filtersList.id)&&(source&&(source.id=='dicTree')))
+return true
+if ((target.id=='dicTree')&&(source&&(source.id==filtersList.id)))
+return true
+if ((target.id==filtersList.id)&&(source&&(source.id==filtersList.id)))
+return true
+return false
+}
+function treeDropCB(source,target,ctrl,shift)
+{
+var sourceItem = source.selection
+var targetItem = target.dropWidget
+var index      = target.dropIndex
+if ((target.id==filtersList.id)&&(source&&(source.id=='dicTree')))
+{
+addCurrentFilter(editFilter,_currentObj,targetItem,index)
+}
+if ((target.id=='dicTree')&&(source&&(source.id==filtersList.id)))
+{
+removeButtonCB()
+}
+if ((target.id==filtersList.id)&&(source&&(source.id==filtersList.id)))
+{
+if(ctrl) 
+{
+editFilter.duplicateFilter(sourceItem,targetItem,index)
+}
+else if (shift) 
+{
+editFilter.switchFilter(sourceItem,targetItem,index)
+}
+else 
+{
+editFilter.moveFilter(sourceItem,targetItem,index)
+}
+}
+}
+function buildTree(tree, withFormula)
+{
+tree.deleteAll()
+setListOrder()
+_docObjects.sort(sortFuncUsingListOrder) 
+renameSameNameDifferentDPObj()
+newTreeElt1 = newTreeWidgetElem(1,"Available Objects", null, null, null, "Available Objects");
+tree.add(newTreeElt1);
+var len = _docObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+switch(item.kind) 
+{
+case _linkDim:
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) {
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.isPartOfALinkedDim) continue
+if (el.id == item.linkedIDs[k]) {
+_docObjects[m].isPartOfALinkedDim = true
+}
+}
+}
+break;
+}
+}
+len = _docObjects.length
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+var sTooltipHdr = "Based On:"
+var sTooltipDesc = "Description:"
+switch(item.kind) 
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+tooltip = sTooltipHdr + " " + item.DPName + tooltipDesc
+newTreeElt1.add(newTreeWidgetElem(item.kind, item.name, item, null,null, shrinkTooltip(tooltip)));
+break;
+case _linkDim:
+mergedTooltip = ""
+mergedTooltipDesc = ""
+nLinkDim = newTreeWidgetElem(_linkDim, item.name, item, null,null, "")
+newTreeElt1.add(nLinkDim);
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) { 
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.id == item.linkedIDs[k]) {
+tooltipDesc = (el.desc)? ("\n" + sTooltipDesc + " " + el.desc) : ""
+tooltip = sTooltipHdr + " " + el.DPName + tooltipDesc
+nLinkDim.add(newTreeWidgetElem(el.kind, el.name, el, null,null, shrinkTooltip(tooltip)))
+mergedTooltip += el.DPName
+if (k < (l-1)) mergedTooltip += ", "
+}
+}
+}
+mergedTooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+nLinkDim.tooltip = sTooltipHdr + " " + mergedTooltip + mergedTooltipDesc
+break;
+}
+}
+}
+var len = _variableObjects.length
+_variableObjects.sort(BOObj_sortFunc)
+if (len>0)
+{
+var newTreeElt=newTreeWidgetElem(1,"Variables",null, null, null, "Variables");
+newTreeElt.expanded = true;
+tree.add(newTreeElt);
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i]
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.formula)? ("\n" + item.formula) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+}
+if (withFormula) 
+{
+var len = _formulaObjects.length
+_formulaObjects.sort(BOObj_sortFunc)
+if (len>0)
+{
+var newTreeElt=newTreeWidgetElem(1,"Formulas",i, null,null, "Formulas");
+newTreeElt.expanded = true;
+tree.add(newTreeElt);
+for (var i=0; i < len;i++)
+{
+var item = _formulaObjects[i]
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.desc)? ("\n" + item.desc) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+}
+}
+tree.rebuildHTML()
+}
+function doSave()
+{
+if (_isFromViewer) 
+{
+doProcess(selBid, editFilter.root)
+} else {
+p.editFilterID = pane._selectedID
+pane.doProcess(pane._del_part_of_filter, pane._bid, editFilter.root)
+}
+}
+function doProcess(bid, filterObj)
+{
+var f = self.document.processForm
+f.command.value = 1 
+f.filter.value = (filterObj)? encodeFilters(filterObj) : ""
+p.updateParentIdRefBidForFilter(bid);
+var url = p._root + "processFilterMap" + p._appExt
+url += p.urlParamsNoBID()
+url += "&sBid=" + bid
+f.action = url
+f.submit()
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<form target="Report" style="display:none" name="processForm" method="post" action="">
+<input type="hidden" name="command" id="command" value="">
+<input type="hidden" name="filter" id="filter" value="">
+</form>
+</body>
+</html>

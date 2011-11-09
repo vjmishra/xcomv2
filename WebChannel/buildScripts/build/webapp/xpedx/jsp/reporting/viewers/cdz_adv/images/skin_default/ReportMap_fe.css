@@ -1,0 +1,28 @@
+<style>
+DIV
+{
+    BACKGROUND-COLOR: transparent
+}
+.Node
+{
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: transparent;
+    TEXT-DECORATION: none
+}
+.SelNode
+{
+    FONT-SIZE: 12px;
+    COLOR: #ffffff;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #00008b;
+    TEXT-DECORATION: none
+}
+.Node_Hover
+{
+    FONT-SIZE: 12px;
+    COLOR: #0069d8;
+    FONT-FAMILY: Tahoma
+}
+</style>

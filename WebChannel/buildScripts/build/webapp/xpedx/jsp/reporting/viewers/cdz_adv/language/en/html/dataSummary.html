@@ -1,0 +1,565 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#printTb{position:absolute;top:0;left:0px;overflow:hidden;}
+#infoContent{position:absolute;top:26px;left:0px;overflow:auto;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript">
+p = parent
+initDom("../../../lib/images/" + p._skinName +"/", p._lang)
+p.setKeyCB(this, false)
+</script>
+<script language="javascript">
+styleSheet()
+</script>
+<script language="javascript">
+var url =  p._root + "incDataSummary" + p._appExt
+url += p.urlParams(false, true) 
+</script>
+<script language="javascript"> includeScript(url)  </script>
+<script language="javascript">
+    _indentVal = 16
+_error=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined" || typeof(errMessage)!="undefined")?true:false;
+_printDoc = false 
+dataSummaryToolbar = newPaletteWidget("dataSummaryToolbar");
+mustLoadContent=window.incDataSummaryOK;
+infoContent = newWidget("infoContent")
+if (window.incDataSummaryOK) { 
+rep = "../../../images/main/"
+isPageLoaded=false
+doc = p.doc 
+titleQuery = ""
+linesQuery = ""
+titleObjects = ""
+linesObjects = ""
+checkedPrintOptionLabels = new Array("Data source", "Objects")
+checkedDisplayOptions = new Array()
+checkedPrintOptions = new Array()
+curIcon="print.gif"
+_img = '../../../images/main/'
+printTb = dataSummaryToolbar.add(newIconWidget("printTb",_img+curIcon,printButtonCB,"Print","",23,18,0,0,0,18))
+queriesNb = dps.length 
+queryW = newFolderWidget("queryW", p._queriesBranch)
+var firstTimePrefInit = (p._arrQueriesBranch.length != queriesNb)
+for (var i = 0; i < queriesNb; i++) {
+if (firstTimePrefInit) {
+p._arrQueriesBranch[i] = (i==0)
+p._arrObjectsBranch[i] = (i==0)
+}
+eval('q' + i + '= newFolderWidget("q' + i + '",' +  p._arrQueriesBranch[i] + ')')
+eval('qi' + i + '= newFolderWidget("qi' + i + '")')
+eval('universeObjectsTitleW' + i + ' = newFolderWidget("universeObjectsTitleW' + i + '",' + p._arrObjectsBranch[i] + ')')
+eval('universeObjectsW' + i + ' = newFolderWidget("universeObjectsW' + i + '")')
+}
+objectsW = newFolderWidget("objectsW", p._objectsBranch)
+varsCount = variableObjects.length 
+if (varsCount > 0) {
+variableObjectsTitleW = newFolderWidget("variableObjectsTitleW", p._varsDocBranchExp) 
+variableObjectsW = newFolderWidget("variableObjectsW", false) 
+}
+formulasCount = formulaObjects.length 
+if (formulasCount > 0) {
+formulaObjectsTitleW = newFolderWidget("formulaObjectsTitleW", p._formulaeDocBranchExp) 
+formulaObjectsW = newFolderWidget("formulaObjectsW", false) 
+}
+}
+function updateFromLoadReport() 
+{
+if (_curWin.isPageLoaded)
+{
+_QUERY = 0
+_OBJECTS = 1
+for (var i = 0; i <= _OBJECTS; i++)
+{
+checkedDisplayOptions[i] = true
+checkedPrintOptions[i] = true
+}
+createQueries()
+createObjects()
+infoContent.init()
+infoContent.setHTML( makeHTML( titleQuery, linesQuery, titleObjects, linesObjects))
+for (var i = 0; i < queriesNb; i++) {
+eval('q' + i + '.init()')
+eval('qi' + i + '.init()')
+eval('universeObjectsTitleW' + i + '.init()')
+eval('universeObjectsW' + i + '.init()')
+}
+if (varsCount > 0) {
+variableObjectsTitleW.init()
+variableObjectsW.init()
+}
+if (formulasCount > 0) {
+formulaObjectsTitleW.init()
+formulaObjectsW.init()
+}
+dataSummaryToolbar.init()
+printTb.init()
+} else {
+mustLoadContent=true
+}
+}
+function doPrint() 
+{
+createQueries()
+createObjects()
+self.document.submitForm.title.value = ""
+self.document.submitForm.textToPrint.value = makeHTML(titleQuery, linesQuery, titleObjects, linesObjects)
+var url = "printWindow.html"
+url += "?skin=../../../lib/images/" + p._skinName + "/&lang=" + p._lang
+var features = "width=640,height=480,menubar,resizable,scrollbars"
+window.open(url, "printWindow", features)
+}
+function getCrossAndText(objName, value, nbIndent)
+{
+    return '<tr valign="top">'+
+               '<td style="padding-left:' + (_indentVal*nbIndent) + '" colspan="2">' +
+                   '<table cellspacing=0 cellpadding=0 border=0>'+
+                       '<tr valign="middle">'+
+                           '<td width=1>'+eval(objName + '.getCross()')+'</td>'+
+                           '<td style="padding-left:3px" class="panelzone">' + value + '</td>'+
+                       '</tr></table>' +
+               '</td>'+
+           '</tr>'
+}
+function getIconAndText(kind, text, value, nbIndent)
+{
+    return '<tr valign="top">' +
+              '<td '+(value ? '' : 'colspan=2')+' style="padding-left:'+(_indentVal*nbIndent)+'">' +
+                   '<table class="panelzone" cellspacing="0" cellpadding="0" border="0">' +
+                   '<tr valign="top">' + 
+                       '<td style="padding-right:2px">' + imgOffset(rep + "qualificationIcons.gif",16,16,0, kind * 16) + '</td>' +
+                       '<td style="padding-right:3px">' + text + '</td>' +                       
+                   '</tr>' +
+               '</table>' +
+           '</td>' +
+           (value ? '<td>' + value + '</td>' : '') +
+       '<tr>'
+            }
+            function getKeyValue(key, value, nbIndent)
+            {
+                return '<tr valign="top">' +
+                          '<td '+(value ? '' : 'colspan=2')+' style="padding-left:'+(_indentVal*nbIndent)+'">' + key + '</td>' +
+          (value ? '<td>' + value + '</td>' : '') +
+       '</tr>'
+            }
+            function getEmptyLine()
+            {
+                return '<tr><td colspan="2">&nbsp;</td></tr>'
+            }
+function createQueries()
+{
+if ((doc == null) || !checkedPrintOptions[_QUERY])
+{
+titleQuery = ""
+linesQuery = ""
+return
+}
+var labelQuery = new Array("Universe:", "Last execution time:", "Nb of rows:", "Keydate used:")
+var restrictionAppliedStr = "<font color=\"red\"> (" + "Restriction applied" + ")</font>"
+k=0
+var s = new Array
+for (var i = 0; i < queriesNb ; i++)
+{
+var dp = dps[i]
+value = '<b>' + dp[0] + '</b>'
+s[k++] = '<tbody id="q' + i + '" ' + ((_printDoc || queryW.expanded)? '':'style="display:none"') + '>'
+s[k++] = getCrossAndText('q'+ i, value, 1)
+s[k++] = '</tbody>'
+s[k++] = '<tbody id="qi' + i + '" ' + ((_printDoc || eval('q'+ i + '.expanded'))? '':'style="display:none"') + '>'
+if (typeof(dp[1])!="undefined")
+{
+value = dp[1]
+if (value != "")
+    s[k++] = getKeyValue(labelQuery[0], value, 2)
+value = dp[2]
+if (value != "") {
+value = (value < 1 )? "< 1" : value
+value += ' s.'
+s[k++] = getKeyValue(labelQuery[1], value, 2)
+}
+value = dp[3] 
+nbRowRetrieved = dp[5]
+restriction = ""
+var strVal = "" + value
+if (strVal != "") {
+restriction = (value != -1) ? ((nbRowRetrieved >= value) ? restrictionAppliedStr:""):""
+}
+value = dp[4] 
+strVal = "" + value
+if ((strVal != "") && (restriction == "")) {
+restriction = (value != -1) ? ((nbRowRetrieved >= value) ? restrictionAppliedStr:""):""
+}
+value = dp[6] 
+if((value == true) && (restriction == "")){
+restriction = restrictionAppliedStr;
+}
+value = nbRowRetrieved + restriction
+if (value != "")
+{
+s[k++] = getKeyValue(labelQuery[2], value, 2)
+}
+value = dp[7];
+if (value != null) {
+if (value == p._keydateLastAvailable) {
+value = "Last available";
+}
+else {
+var dt=new Date();
+dt.setDate(1);
+var arr=value.split('-');
+dt.setYear(arr[2]);
+dt.setMonth(arr[0]-1);
+dt.setDate(arr[1]);
+value = formatDate(dt, p._inputFormatDate);
+}
+s[k++] = getKeyValue(labelQuery[3], value, 2)
+}
+}
+else
+{
+    s[k++] = getKeyValue("Cannot be displayed because there is one or more combined queries.", '', 2)
+}
+if (i < (queriesNb-1))
+    s[k++] = getEmptyLine()
+s[k++] = '</tbody>'
+}
+var queryTitle = (queriesNb < 2) ? "Data source" : "Data sources"
+titleQuery = '<b>' + queryTitle + '</b>'
+linesQuery = s.join('')
+}
+function createObjects()
+{
+if ((doc == null) || !checkedPrintOptions[_OBJECTS])
+{
+titleObjects = ""
+linesObjects = ""
+return
+}
+k = 0
+var s = new Array
+var moreStr = "more..."
+var maxDescLen = (3*60 - (moreStr.length + 3)) 
+for (var j = 0; j < universeObjects.length; j++)
+{
+s[k++] = '<tbody id="universeObjectsTitleW' + j + '"' + ((_printDoc || objectsW.expanded)? '':'style="display:none"') + '>'
+s[k++] = getCrossAndText('universeObjectsTitleW' + j, '<b>' + dps[j][0] + '</b>', 1)
+s[k++] = '</tbody>'
+s[k++] = '<tbody id="universeObjectsW' + j + '"' + ((_printDoc || eval('universeObjectsTitleW' + j + '.expanded'))? '':'style="display:none"') + '>'
+universeObjects[j].sort(BOObj_sortFunc) 
+for (var i = 0; i < universeObjects[j].length; i++)
+{
+var obj = universeObjects[j][i]
+var hasXtraDesc = ((obj.techInfo != "") || (obj.lineage != "") || (obj.mapping != ""))
+var desc = obj.desc
+var myclass = obj.lineage
+var dp = dps[j]
+var univvalue = dp[1]
+if (!_printDoc && (desc.length > maxDescLen)) 
+{
+hasXtraDesc = true
+desc = obj.desc.substring(0, maxDescLen)
+}
+if (hasXtraDesc && !_printDoc && window.BOMM_SERVER==null) 
+{
+desc += ' <a class="panelzone" href=\'javascript:clickXtraDesc(' + i + ',' + j + ')\'>'
+desc += moreStr + '</a>'
+} else if(window.BOMM_SERVER){
+desc += '&nbsp;<a href=\'javascript:lineageWindow("' + escape(univvalue) + '","'+ escape(myclass) + '","' + escape(convStr(obj.name))  + '")\'>Lineage...</a>'
+}
+s[k++] = getIconAndText(obj.kind, convStr(obj.name), desc, 2)
+}
+s[k++] = '</tbody>'
+}
+if (varsCount > 0)
+{
+s[k++] = '<tbody id="variableObjectsTitleW"' + ((_printDoc || objectsW.expanded)? '':'style="display:none"') + '>'
+s[k++] = getCrossAndText('variableObjectsTitleW', '<b>Document Variables</b>', 1)
+s[k++] = '</tbody>'
+s[k++] = '<tbody id="variableObjectsW"' + ((_printDoc || variableObjectsTitleW.expanded)? '':'style="display:none"') + '>'
+for (var i = 0; i < varsCount; i++)
+{
+var obj = variableObjects[i]
+s[k++] = getIconAndText(obj.kind, convStr(obj.name), p.longText(obj.name, obj.desc,null,".p"), 2)
+}
+s[k++] = '</tbody>'
+}
+if (formulasCount > 0)
+{
+s[k++] = '<tbody id="formulaObjectsTitleW"' + ((_printDoc || objectsW.expanded)? '':'style="display:none"') + '>'
+s[k++] = getCrossAndText('formulaObjectsTitleW', '<b>Formulas</b>', 1)
+s[k++] = '</tbody>'
+s[k++] = '<tbody id="formulaObjectsW"' + ((_printDoc || formulaObjectsTitleW.expanded)? '':'style="display:none"') + '>'
+for (var i = 0; i < formulasCount; i++)
+{
+var obj = formulaObjects[i]
+s[k++] = getIconAndText(obj.kind, p.longText(obj.name, obj.name,null,".p"), '', 2) 
+}
+s[k++] = '</tbody>'
+}
+titleObjects = '<b>Objects</b>'
+linesObjects = s.join('')
+}
+function lineageWindow(unvName,unvclassName,unvObjName)
+{
+ hWnd = window.open("","lineageWindow","location=no,toolbar=no,width=700,height=400,menubar,resizable,scrollbars")
+ document.forms.lineageForm.action=window.BOMM_SERVER
+document.forms.lineageForm.user.value = window.BOMM_USER
+document.forms.lineageForm.pwd.value = window.BOMM_PWD
+document.forms.lineageForm.univName.value=unvName
+document.forms.lineageForm.univClassName.value=unvclassName
+document.forms.lineageForm.univObjName.value=unvObjName
+if(window.BOMM_TOKEN != null) {
+  document.forms.lineageForm.token.value = window.BOMM_TOKEN
+}
+document.forms.lineageForm.submit();
+}
+function clickXtraDesc(i,j)
+{
+obj = universeObjects[j][i]
+self.document.submitForm.title.value = "Object Detail"
+self.document.submitForm.textToPrint.value = makeXtraDescHTML(obj.name, obj.desc, obj.techInfo, obj.mapping, obj.lineage)
+var url = "printWindow.html"
+url += "?skin=../../../lib/images/" + p._skinName + "/&lang=" + p._lang
+var features = "width=640,height=480,menubar,resizable,scrollbars"
+window.open(url, "printWindow", features)
+}
+function resizeCB()
+{
+if (isPageLoaded)
+{
+infoContent.move(0,26)
+infoContent.resize(Math.max(0,winWidth()), Math.max(0,winHeight()-26))
+}
+}
+function loadCB() 
+{
+if (_error) 
+{
+if (typeof(_isSessionInvalid)!="undefined")
+{
+p.alertSessionInvalid();
+}
+else 
+if (typeof(_displayErrorMessage)!="undefined" || typeof(errMessage)!="undefined")
+{
+isPageLoaded = true;
+infoContent.init();
+if(typeof(_displayErrorMessage)!="undefined")
+        infoContent.setHTML(_displayErrorMessage);
+else
+infoContent.setHTML(convStr(errMessage));
+resizeCB();
+}
+p.hideBlockWhileWaitWidget();
+return;
+}
+isPageLoaded = true
+if (mustLoadContent) {
+updateFromLoadReport()
+}
+else 
+    infoContent.init();
+resizeCB();
+p.hideBlockWhileWaitWidget();
+}
+function detachEvents(){}
+function makeHTML( titleQuery, linesQuery, titleObjects, linesObjects) 
+{
+i=0
+var shtml = new Array
+shtml[i++] = '<table cellspacing="2" cellpadding="0" border="0" class="panelzone">'
+if (_printDoc) 
+{
+shtml[i++] = '<tbody><tr><td id="resizableTD"></td><td ></td></tr></tbody>'
+}
+shtml[i++] = getCrossAndText("queryW", titleQuery, 0)
+shtml[i++] = linesQuery
+shtml[i++] = getEmptyLine()
+if (titleObjects != "")
+{
+shtml[i++] = getCrossAndText("objectsW", titleObjects, 0)
+shtml[i++] = linesObjects
+shtml[i++] = getEmptyLine()
+}
+if (!_printDoc) 
+{
+    shtml[i++] = '<tbody><tr style="height:0px"><td width="40%"></td><td width="60%"></td></tr></tbody>'
+}
+shtml[i++] = '</table>'
+return shtml.join('')
+}
+function makeXtraDescHTML(name, desc, techInfo, mapping, lineage)
+{
+i=0
+var shtml = new Array
+shtml[i++] = '<table cellspacing="2" cellpadding="0" border="0" class="panelzone">'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td id="resizableTD"></td>'
+shtml[i++] = '<td></td></tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td valign="top"><b>' + "Name:" + '</b></td>'
+shtml[i++] ='<td>' + name + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td valign="top"><b>' + "Description:" + '</b></td>'
+shtml[i++] ='<td>' + desc + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td valign="top"><b>' + "Technical Information:" + '</b></td>'
+shtml[i++] ='<td>' + ((techInfo != "")? techInfo : "&lt;" + "empty" + "&gt;")  + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td valign="top"><b>' + "Mapping:" + '</b></td>'
+shtml[i++] ='<td>' + ((mapping != "")? mapping : "&lt;" + "empty" + "&gt;")  + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '<tbody><tr>'
+shtml[i++] ='<td valign="top"><b>' + "Lineage:" + '</b></td>'
+shtml[i++] ='<td>' + ((lineage != "")? lineage : "&lt;" + "empty" + "&gt;")  + '</td>'
+shtml[i++] = '</tr><tr>'
+shtml[i++] ='<td colspan="2">' + '&nbsp;' + '</td>'
+shtml[i++] = '</tr></tbody>'
+shtml[i++] = '</table>'
+return shtml.join('')
+}
+function printButtonCB()
+{
+p.escapeFormatPainter()
+p.wt()
+p.frameNav("DlgFrame","printOptionsDialog.html?2")
+}
+function clickCrossCB(id)
+{
+id.expanded = !id.expanded
+crossL = getLayer('img'+id.id)
+changeOffset(crossL,id.expanded?0:13,_mac?2:3,null,id.expanded?_expandedLab:_collapsedLab)
+switch(id.id) {
+case "queryW" :
+p._queriesBranch = queryW.expanded
+for (var i = 0; i < queriesNb; i++) {
+crossL = getLayer(eval('qi'+ i + '.id'))
+changeOffset(crossL, eval('q'+ i + '.expanded')?0:13,_mac?2:3,null,eval('q'+ i + '.expanded')?_expandedLab:_collapsedLab)
+eval('q' + i + '.setDisplay(id.expanded)')
+eval('qi' + i + '.setDisplay(id.expanded && ' + eval('q'+ i + '.expanded') + ')')
+}
+break;
+case "objectsW" :
+p._objectsBranch = objectsW.expanded
+for (var i = 0; i < queriesNb; i++) {
+crossL = getLayer(eval('universeObjectsW'+ i + '.id'))
+eval('universeObjectsTitleW' + i + '.setDisplay(id.expanded)')
+changeOffset(crossL, eval('universeObjectsTitleW'+ i + '.expanded')?0:13,_mac?2:3,null, eval('universeObjectsTitleW'+ i + '.expanded')?_expandedLab:_collapsedLab)
+eval('universeObjectsW' + i + '.setDisplay(id.expanded && ' + eval('universeObjectsTitleW'+ i + '.expanded') + ')')
+}
+if (varsCount > 0) {
+crossL = getLayer(variableObjectsW.id)
+changeOffset(crossL, variableObjectsTitleW.expanded?0:13,_mac?2:3,null, variableObjectsTitleW.expanded?_expandedLab:_collapsedLab)
+variableObjectsTitleW.setDisplay(id.expanded)
+variableObjectsW.setDisplay(id.expanded && variableObjectsTitleW.expanded)
+}
+if (formulasCount > 0) {
+crossL = getLayer(formulaObjectsW.id)
+changeOffset(crossL, formulaObjectsTitleW.expanded?0:13,_mac?2:3,null, formulaObjectsTitleW.expanded?_expandedLab:_collapsedLab)
+formulaObjectsTitleW.setDisplay(id.expanded)
+formulaObjectsW.setDisplay(id.expanded && formulaObjectsTitleW.expanded)
+}
+break;
+case "variableObjectsTitleW" :
+p._varsDocBranchExp= id.expanded
+variableObjectsW.setDisplay(id.expanded)
+break;
+case "formulaObjectsTitleW" :
+p._formulaeDocBranchExp = id.expanded
+formulaObjectsW.setDisplay(id.expanded)
+break;
+default :
+var arSplit = id.id.split("q")
+if (arSplit.length > 0) {
+var idx = parseInt(arSplit[1], 10)
+if ((idx >= 0) && (idx < queriesNb)) {
+p._arrQueriesBranch[idx] = id.expanded
+eval('qi' + idx + '.setDisplay(' + eval('q'+ idx + '.expanded')+ ')')
+}
+}
+arSplit = id.id.split("universeObjectsTitleW")
+if (arSplit.length > 0) {
+var idx = parseInt(arSplit[1], 10)
+if ((idx >= 0) && (idx < queriesNb)) {
+p._arrObjectsBranch[idx] = id.expanded
+eval('universeObjectsW' + idx + '.setDisplay(' + eval('universeObjectsTitleW'+ idx + '.expanded')+ ')')
+}
+}
+}
+}
+function writeMyBody()
+{
+var s = new Array()
+var i=0
+s[i++] = dataSummaryToolbar.getHTML()
+if (!_error) 
+{
+s[i++] = '<div class=treeZone style="height:'+(_ie?1:0)+'px;overflow:hidden;position:absolute;top:25px;left:0px;width:100%;border-top-width:0px;border-left-width:0px;border-right-width:0px;"></div>'
+s[i++] = '<div id="infoContent"> </div>'
+}
+else
+{
+s[i++] = '<div id="infoContent" style="padding-left:10px;padding-right:10px"> </div>'
+}
+document.write(s.join(""))
+}
+function lPaneContextMenu()
+{
+return false;
+}
+        </script>
+</head>
+<body class="panelzone"  style="overflow:hidden;" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  onLoad="loadCB()" onUnload="detachEvents()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+<script language="javascript">writeMyBody()</script>
+<!-- Hidden form -->
+<form target="printWindow" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="title" id="title" value="">
+<input type="hidden" name="textToPrint" id="textToPrint" value="">
+</form>
+<!-- Hidden form for lineage-->
+<form target="lineageWindow" style="display:none" name="lineageForm" method="POST" action="">
+ <input type="hidden" name="user" value="">
+ <input type="hidden" name="pwd" value="">
+ <input type="hidden" name="univName" value="">
+ <input type="hidden" name="univClassName" value="">
+ <input type="hidden" name="univObjName" value="">
+ <input type="hidden" name="type" value="Universe_Object">
+ <input type="hidden" name="token" value="">
+</form>
+</body>
+</html>

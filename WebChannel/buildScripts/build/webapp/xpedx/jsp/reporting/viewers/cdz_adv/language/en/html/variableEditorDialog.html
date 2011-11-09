@@ -1,0 +1,1479 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Title zone</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+p = parent
+var url =  p._root + "incObjects" + p._appExt
+url += p.urlParams(false,true)
+includeScript(url) 
+</script>
+<script language="javascript">
+if(p._formulaFcts == null)
+{        
+var url =  p._root + "incFunctions" + p._appExt
+url += p.urlParams(false,true)
+includeScript(url) 
+}
+</script>
+<script language="javascript">
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+_timeInterval=null
+_timeWait=null
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "variableEditorDlg");
+_changeVariableAssociateDim="You can\'t associate a variable or a merged dimension with a variable."
+_fromLPane = (requestQueryString(window,"fromLPane") == 'yes')
+_LPane=_fromLPane?p.leftPane.getFrame():null
+_isFormulaEditor = (requestQueryString(window,"isFormulaEdit") == 'yes')
+_isApplyMode = false;
+_isFromHyperlinkEditor = (requestQueryString(window,"isFromHyperlinkEditor") == 'yes')
+if (_isFromHyperlinkEditor)
+{
+_callBackHyperlinkIn = requestQueryString(window,"callbackin");
+_callBackHyperlinkOut = requestQueryString(window,"callbackout");
+}
+_Qualification = "dimension"
+_associatedDimName = "Select a dimension"
+_associatedDimID = ""
+_baseAssociatedDimID = ""
+_isValidFormula = false
+_isEditing = p.formulaEdition
+_objName=""
+_objFormula=""
+_objDataType=""
+_ddText=""
+_helpText=""
+_varCounts = _variableObjects.length
+_arrLogOp=new Array("=","<","<=","<>",">",">=","+","-","/","*",";","(",")")
+function newIconObj(name,icon,desc)
+{
+var o=new Object()
+o.name=name
+o.icon=icon
+o.desc=desc?desc:""
+return o;
+}
+_shownPopup=false
+_arrSeparators=new Array(" ","=",".",",",";","(",")","[","]","{","}","&","\"","'","|","@","+","-","*","/","<",">","\\","\n","\t")
+_arrMatchTxt=new Array
+_arrObj=new Array
+_arrFctOpe=new Array
+_lastMatchTxt=""
+_currentMatchTxt=""
+_oldFormula=""
+_newFormula=""
+_firstPart=""
+_lastPart=""
+_cursorPos=-1
+_formulaTxtFocus=false;
+initialized=false
+variableEditorDlg=null
+_wDlg=575;
+_hDlgInitial=485;
+_hDlg=_isFormulaEditor?370:_hDlgInitial;
+_wName=235;
+_wType=235;
+_wCombo=235;
+_wLinkedDim=200;
+_nLines=4;
+_nCols=90;
+_wDicTree=180;
+_hDicTree=120;
+_wFctTree=200;
+_hFctTree=120;
+_wOpeTree=155;
+_hOpeTree=77;
+_wFrame=550;
+_hFrame=50;
+_wIcon=21;
+_hIcon=15;
+_wWindow=winWidth();
+_hWindow=winHeight();
+function loadDialog()
+{
+if(isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+p.showAlertDialog(_displayErrorMessage,"Create New Variable",2);
+return;
+}
+if (!initialized)
+{
+initialized=true
+urlImg = p._root + p._img
+variableEditorDlg= newDialogBoxWidget("variableEditorDlg","Create New Variable",_wDlg,_hDlg,okCB,closeDlg,false)
+textName= newTextFieldWidget("variableTextName",null,50,updateButtons,null,true,"Variable name",_wName)
+textTypeZone= newWidget("variableTypeTd");
+qualifList= newComboWidget("variableQualificationList",updateLinkBtn,true,_wCombo,"The object type")
+headerZone= newWidget("variableHeaderZone");
+linkDimZone= newWidget("variableLinkedDimZone");
+linkedDim= newTextFieldWidget("variableLinkedDim",null,null,null,null,true,"Associated dimension",_wLinkedDim)
+linkButton= newButtonWidget("variableLinkButton","...","displayDimList()",15,null,"Display list of dimensions")
+formulaTxt= newTextAreaWidget("variableExprTxt",_nLines,_nCols,null,formulaTxt_change,formulaTxt_validate,formulaTxt_cancel)
+formulaTxt.allowCR= false;
+dicTree= newTreeWidget('variabledicTree', _wDicTree, _hDicTree, urlImg + "qualificationIcons.gif", clickCB, dclickCB)
+dicTree.setTooltipOnMouseOver(true) 
+fctTree= newTreeWidget('variablefctTree', _wFctTree, _hFctTree, urlImg + "qualificationIcons.gif", clickCB, dclickCB)
+opeTree= newIconListWidget("variableopeTree",_wOpeTree,_hOpeTree,urlImg + "qualificationIcons.gif", clickCB, dclickCB,"treeNoBorder");
+opeTree.borderW=0
+helpFctZone= newFrameZoneWidget("variableHelpFctZone",_wFrame,_hFrame,true)
+helpFctScroll= newScrolledZoneWidget("variableHelpFctScroll",0,0,_wFrame,_hFrame,"dialogzone")
+helpFctArea= newWidget("variableHelpFctArea")
+infozone= newInfoWidget("variableInfozone","More Information",null,"Type a name for the variable, then type the formula into the Formula text box and select whether you want Web Intelligence to treat the variable as a dimension, measure, or detail. Validate the formula syntax, then click OK to make the variable available for reports.")
+ValidButton= newButtonWidget("variableValidButton","Validate","validateFormula()",60)
+OKButton= newButtonWidget("variableOKButton","OK","okCB(false)",60)
+CancelButton= newButtonWidget("variableCancelButton","Cancel","closeDlg()",60)
+HelpButton= newButtonWidget("variableHelpButton","Help",null,60)
+ApplyButton= newButtonWidget("variableApplyButton","Apply","okCB(true)",60)
+completionPopup= newIconListPopupWidget("cpopup",150,150,urlImg + "qualificationIcons.gif",completion_click,completion_insert)
+completionList= completionPopup.getList();
+completionList.setMouseOverCB(completion_mouseOver)
+completionPopup.cancelCB = formulaTxt_cancel
+associatedDimDlg= newDialogBoxWidget("associatedDimDlg","Objects and Variables",250,300,associatedDimOK,associatedDimClose,false)
+dimTree= newTreeWidget("associatedDimTree", 240, 220, urlImg + "qualificationIcons.gif",updateDimOKBtn,validateDimCB);
+dimTree.setTooltipOnMouseOver(true) 
+dimOK= newButtonWidget("associatedDimOK","OK","associatedDimOK()",60)
+dimCancel= newButtonWidget("associatedDimCancel","Cancel","associatedDimClose()",60)
+iconLogOp=new Array
+for(var i=0;i<_arrLogOp.length;i++)
+{
+iconLogOp[i]=newIconWidget("iconLogOp"+i,null,clickCB,_arrLogOp[i])
+iconLogOp[i].margin=0
+iconLogOp[i].txtAlign='center'
+iconLogOp[i].border=1
+iconLogOp[i].txtNoPadding=true
+iconLogOp[i].resize(_wIcon,_hIcon)
+}
+validationDlgMsg= "The formula is defined correctly."
+buildFctTree()
+buildOpeTree()
+dicTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+fctTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+opeTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+variableEditorDlg.attachDefaultButton(OKButton);
+associatedDimDlg.attachDefaultButton(dimOK);
+}
+if (_curWin.variableEditorInitialized!=true)
+{
+_curWin.variableEditorInitialized=true
+var iconLogOpHTML='<table class="dialogzone" style="border:1px solid #c6c6c6;border-collapse:collapse" cellpadding="0" cellspacing="0" border="0"><tr>'
+for(var i=0;i<_arrLogOp.length;i++)
+{
+iconLogOpHTML+='<td style="border:1px solid #c6c6c6">'+iconLogOp[i].getHTML()+'</td>'
+if(i==5)iconLogOpHTML+='</tr><tr>'
+}
+iconLogOpHTML+='</tr></table>'
+targetApp
+(
+completionPopup.getHTML()+
+variableEditorDlg.beginHTML()+
+'<table class="dialogzone" cellpadding="0" cellspacing="2" border="0" width="100%">'+
+'<tr><td>'+
+'<div id="variableHeaderZone">'+
+'<table class="dialogzone" cellpadding="2" cellspacing="0" border="0">'+
+'<tr>'+
+'<td>Name: </td>'+
+'<td width="15"></td>'+
+'<td>Type: </td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+textName.getHTML()+'</td>'+
+'<td width="15"></td>'+
+'<td id="variableTypeTd" style="font-style:italic" ></td>'+
+'</tr>'+
+'<tr>'+
+'<td>Qualification: </td>'+
+'<td rowspan="2" width="15"></td>'+
+'<td rowspan="2">'+
+'<table id="variableLinkedDimZone" class="dialogzone" cellpadding="2" cellspacing="0" border="0">'+
+'<tr><td colspan="2">Associated dimension: </td></tr>'+
+'<tr>'+
+'<td>'+linkedDim.getHTML()+'</td>'+
+'<td>'+linkButton.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+qualifList.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</div>'+
+'</td></tr>'+
+'<tr><td>'+
+'<table class="dialogzone" cellpadding="2" cellspacing="0" border="0">'+
+'<tr><td>Formula:</td></tr>'+
+'<tr><td>'+
+'<table class="dialogzone" cellpadding="2" cellspacing="0" border="0">'+
+'<tr>'+
+'<td>'+formulaTxt.getHTML()+'</td>'+
+'<td>'+ValidButton.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</td></tr>'+
+'<tr><td>'+
+'<table class="dialogzone" cellpadding="2" cellspacing="0" border="0">'+
+'<tr>'+
+'<td>Available Objects</td>'+
+'<td>Available Functions</td>'+
+'<td>Available Operators</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+dicTree.getHTML()+'</td>'+
+'<td>'+fctTree.getHTML()+'</td>'+
+'<td>'+
+'<table class="insetBorder" style="padding:0px;background-color:#E4E4EC;" cellpadding="0" cellspacing="0" border="0"><tr><td>'+
+iconLogOpHTML+
+'</td></tr>'+
+'<tr><td>'+opeTree.getHTML()+
+'</td></tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td></tr>'+
+'<tr><td>'+
+helpFctZone.beginHTML()+
+helpFctScroll.beginHTML()+
+'<div id="variableHelpFctArea" width="20"></div>'+
+helpFctScroll.endHTML()+
+helpFctZone.endHTML()+
+'</td></tr>'+
+'</table>'+
+'</td></tr>'+
+'<tr><td>'+infozone.getHTML()+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="5" cellspacing="0" border="0">'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'<td>'+ApplyButton.getHTML()+'</td>'+
+'<td>'+HelpButton.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</td></tr>'+
+'</table>'+
+variableEditorDlg.endHTML()+
+associatedDimDlg.beginHTML()+
+'<table class="dialogzone" cellpadding="0" cellspacing="2" border="0">'+
+'<tr><td>Select dimension to associate to detail</td></tr>'+
+'<tr><td>'+ dimTree.getHTML()+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="5" cellspacing="0" border="0">'+
+'<tr>'+
+'<td>'+dimOK.getHTML()+'</td>'+
+'<td>'+dimCancel.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</td></tr>'+
+'</table>'+
+associatedDimDlg.endHTML()
+)
+}
+variableEditorDlg.init();
+textName.init();
+textTypeZone.init();
+textTypeZone.setTooltip ("The type of data returned by the object");
+qualifList.init();
+headerZone.init();
+linkDimZone.init();
+linkedDim.init();
+linkButton.init();
+linkedDim.setDisabled(true);
+ValidButton.init();
+OKButton.init();
+CancelButton.init();
+ApplyButton.init();
+HelpButton.init();
+HelpButton.setDisplay(false)
+infozone.init();
+formulaTxt.init();
+formulaTxt.layer.ondrop=textDropCB
+formulaTxt.layer.onfocus=formulaTxt_focus
+formulaTxt.layer.onblur=formulaTxt_blur
+formulaTxt.layer.onclick=formulaTxt_storeCaret
+formulaTxt.layer.onselect=formulaTxt_storeCaret
+formulaTxt.layer.onkeyup=formulaTxt_storeCaret
+helpFctZone.init();
+helpFctScroll.init();
+helpFctArea.init();
+dicTree.init()
+buildObjTree(dicTree,true)
+fctTree.init()
+opeTree.init()
+completionList.init()
+for(var i=0;i<_arrLogOp.length;i++)
+{
+iconLogOp[i].init()
+}
+initDialog()
+variableEditorDlg.layer.style.visibility=_hide
+variableEditorDlg.show(true)
+resize()
+variableEditorDlg.center()
+variableEditorDlg.layer.style.visibility=_show
+textName.focus()
+textName.select()
+associatedDimDlg.init();
+dimTree.init();
+buildObjTree(dimTree,false);
+dimOK.init();
+dimOK.setDisabled(true);
+dimCancel.init();
+ _timeInterval=setInterval("updateButtons()",100)
+ _oldFormula= formulaValue();
+_newFormula = formulaValue();
+}
+function initDialog()
+{
+if(_isEditing)
+{
+_objName=getVariableName()
+_objFormula=getVariableDefinition()
+_objDataType=getVariableDataType()
+OKButton.setDisabled(false)
+ApplyButton.setDisabled(false)
+variableEditorDlg.setTitle("Edit Variable")
+}
+else 
+{
+_objName=""
+_objFormula=getFormulaFromFormulaBar()
+OKButton.setDisabled(true)
+ApplyButton.setDisabled(true)
+variableEditorDlg.setTitle("Create New Variable")
+}
+textName.setValue(_objName)
+textTypeValue(_objDataType)
+if (_isFromHyperlinkEditor)
+{
+ApplyButton.setDisabled(true)
+eval('formulaValue('+_callBackHyperlinkIn+'())');
+}
+else
+formulaValue(_objFormula)
+ValidButton.setDisabled(true)
+switch (getVariableQualification())
+{
+case p._msr:
+_Qualification = "measure"
+break;
+case p._dtl:
+_Qualification = "detail"
+fillAssociatedDimInfo();
+break;
+default:
+_Qualification = "dimension"
+break;
+}
+if (qualifList.getCount()==0)
+{
+qualifList.add("Dimension ", "dimension")
+qualifList.add("Measure ", "measure")
+qualifList.add("Detail ", "detail")
+}
+qualifList.valueSelect(_Qualification)
+linkedDim.setValue(_associatedDimName?_associatedDimName:"Select a dimension");
+if(_Qualification=="detail")
+linkDimZone.show(true);
+else
+linkDimZone.show(false);
+headerZone.setDisplay(!_isFormulaEditor);
+infozone.setDisplay(!_isFormulaEditor);
+if(_isFormulaEditor)
+variableEditorDlg.setTitle("Formula Editor")
+}
+function resize()
+{
+if(isSmallScreen()) return; 
+_wZoom=_wWindow/_wDlg;
+_hZoom=_hWindow/_hDlgInitial;
+_Zoom=(_wZoom>_hZoom?_hZoom:_wZoom)*0.8; 
+if(_Zoom<1 || _Zoom<1.1 )  
+_Zoom=1;
+else if(_Zoom>1.5) 
+_Zoom=1.5;
+variableEditorDlg.resize(_wDlg*_Zoom,_hDlg*_Zoom);
+textName.resize(_wName*_Zoom); 
+qualifList.resize(_wCombo*_Zoom);
+linkedDim.resize(_wLinkedDim*_Zoom);
+var marge = 5;
+var hDlgDelta = _hDlg*_Zoom - _hDlg;
+var hTree = _hDicTree+hDlgDelta;
+dicTree.resize(_wDicTree*_Zoom,hTree);
+fctTree.resize(_wFctTree*_Zoom,hTree);
+opeTree.resize(_wOpeTree*_Zoom,hTree-_hIcon*2-marge*2);
+for(var i=0;i<_arrLogOp.length;i++)
+iconLogOp[i].resize(Math.round(_wIcon*_Zoom))
+helpFctZone.resize(_wFrame*_Zoom);
+helpFctScroll.resize(_wFrame*_Zoom);
+formulaTxt.resize(1,1);
+var wDlg=variableEditorDlg.getWidth();
+var hDlg=variableEditorDlg.getHeight();
+variableEditorDlg.resize(wDlg,hDlg); 
+var wValidateBtn=ValidButton.getWidth();
+var cols = Math.round((wDlg-wValidateBtn-marge*4)/5.2);
+formulaTxt.resize(_ie?_nLines:_nLines-1,_ie?cols:cols-5);
+}
+function resizeFormulaArea()
+{
+var marge=5;
+var wValidateBtn=ValidButton.getWidth();
+var cols = Math.round((_wDlg*_Zoom-wValidateBtn-marge*4)/5.2);
+formulaTxt.resize(null,cols);
+}
+function getQualification()
+{
+return qualifList.getSelection().value;
+}
+function getVariableName()
+{
+if(!_fromLPane)
+return p.getVariableName()
+else
+{
+if(_LPane) 
+{
+var items =_LPane.dicTree.getSelections()
+if (items.length > 0) {
+var data=items[0].userData; 
+return data?data.name:"";
+} else {
+return ""
+}
+}
+}
+}
+function getVariableDefinition()
+{
+if(!_fromLPane)
+return p.getVariableDefinition()
+else
+{
+var items =_LPane.dicTree.getSelections()
+var data=items[0].userData; 
+if(_isEditing)
+return data?data.formula:"";
+else
+return ""
+}
+}
+function getVariableDataType()
+{
+if(!_fromLPane)
+return p.getVariableDataType()
+else
+{
+var items =_LPane.dicTree.getSelections()
+var data=items[0].userData; 
+if(_isEditing)
+return data?data.dataType:"";
+else
+return ""
+}
+}
+function getFormulaFromFormulaBar()
+{
+if(!_fromLPane)
+return p.formulaText.getValue()
+else
+{
+return ""
+}
+}
+function getVariableQualification()
+{
+if(!_fromLPane)
+return p.getVariableQualification()
+else
+{
+if(_LPane) 
+{
+var items =_LPane.dicTree.getSelections()
+if (items.length > 0) {
+var data=items[0].userData;
+return data?data.kind:null
+} else {
+return null
+}
+}
+}
+}
+function fillAssociatedDimInfo()
+{
+var linkedID = "";
+if(!_fromLPane)
+linkedID =  p.getAssociatedDim()
+else
+{
+if(_LPane) 
+{
+var items =_LPane.dicTree.getSelections()
+var data=items[0].userData;
+linkedID = data?data.linkedDim:null
+}
+}
+_associatedDimID = linkedID?linkedID:"";
+_associatedDimName =  getDimensionFromID(linkedID);
+_baseAssociatedDimID = _associatedDimID;
+}
+function getDimensionFromID(id)
+{
+if(id == null)
+return "";
+var len = _arrObj.length
+for(var i=0;i<len;i++)
+{
+if(_arrObj[i].id == id)
+return  _arrObj[i].name;
+}
+return "";
+}
+function getURLParams()
+{
+if(!_fromLPane)
+return p.urlParams(false,true)
+else
+return p.urlParamsNoBID()
+}
+function validateStringFormula()
+{
+var f= formulaValue()
+var bAddQuotes=true;
+if(f.substring(0,1)!="" && f.substring(0,1)!= "=")
+{
+if(f.substring(0,1)=='"') bAddQuotes=false;
+//convert to ="f"
+var newf='='+(bAddQuotes?'"'+f.replace(/"/g,"\\\"")+'"':f)
+formulaValue(newf)
+}
+}
+//the syntax is valid or invalid
+//OK button can be disable or not
+function setValidateFormula(b)
+{
+_isValidFormula=b
+}
+//set or get the formulaTxt value
+function formulaValue(s)
+{
+if(s!=null)
+formulaTxt.setValue(s)
+else
+return remSpaceAround(formulaTxt.getValue())
+}
+//set or get the textType value
+function textTypeValue(s)
+{
+if(s!=null)
+{
+if (s=="")
+textTypeZone.setHTML("Undefined")
+else
+textTypeZone.setHTML(p._labDataType[s])
+}
+}
+//disable or enable validate and oK buttons
+function updateButtons()
+{
+//update validate button
+var f=formulaValue();
+if (f!="")
+ValidButton.setDisabled(false)
+else 
+ValidButton.setDisabled(true)
+//update ok button
+var disable = true
+var sName = remSpaceAround(textName.getValue())
+if((sName!="")&& (f!="")) //create variable
+disable=false;
+if(_isFormulaEditor && (f!="")) //formula editor
+disable=false;
+OKButton.setDisabled(disable);
+ApplyButton.setDisabled(((_isFromHyperlinkEditor)?true:disable));
+return disable; 
+}
+//restore the cursor position in the formulaTxt after close the popup
+function delayedRestoreCursor()
+{
+formulaTxt.focus()
+var lyr=formulaTxt.layer
+if (lyr.createTextRange) //ie
+{
+var rng = _curDoc.selection.createRange().duplicate();
+rng.move("character",-(lyr.value.length-_cursorPos))
+rng.select();
+//alert('insert')
+}
+else if(lyr.setSelectionRange )//mozilla
+{
+lyr.setSelectionRange(_cursorPos,_cursorPos);
+}
+}
+//====================================================================
+//CALLBACK FUNCTIONS
+//====================================================================
+function okCB(bApplyBtn)
+{
+_isApplyMode =bApplyBtn!=null?bApplyBtn:false;
+//blindage pour cas special:
+//when we use IE contextmenu to remove text, no key event is send
+//setInterval() is not sufficient to be safe
+var disableOK=updateButtons()
+if(disableOK) return;
+// If nothing has change, we close the windows with the closeDlg function
+if (_Qualification == getQualification() && _objName == textName.getValue() && _objFormula == formulaValue() && _baseAssociatedDimID == _associatedDimID)
+{
+if (!bApplyBtn)
+closeDlg ()
+return;
+}
+// warn that the associated custom sort is destroyed if we change the var qualif or Formula ADAPT00452281
+if (getQualification() != _Qualification || _objFormula != formulaValue()) {
+for (var i=0; i < _varCounts; i++) {
+var obj = _variableObjects[i]
+if (obj && (obj.name == textName.getValue())) {
+if (p.isCustomSort(obj.id)) {
+p.showPromptDialog("Modifying this variable will remove its associated custom sort order. Do you want to continue ?","Warning",p._promptDlgWarning, okCBWork)
+return
+}
+}
+}
+}
+okCBWork()
+}
+function okCBWork()
+{
+_Qualification = getQualification();
+validateStringFormula();
+var nAction = 2 //creation variable
+if(_objName == textName.getValue() &&_isEditing ) nAction=3 //replace variable
+if(_isFormulaEditor)  nAction=1 //replace formula
+if(_isFromHyperlinkEditor) nAction=4 //formula validation
+var params=getURLParams()
+var sName = remSpaceAround(textName.getValue())
+if(params)
+{
+var url = p._root+"processFormulaValidation"+p._appExt+params
+self.document.submitForm.action = url;
+self.document.submitForm.target = "validate"
+self.document.submitForm.sName.value = sName
+self.document.submitForm.sFormula.value = formulaValue()
+self.document.submitForm.sQualif.value = getQualification()
+self.document.submitForm.sAssociatedDim.value =_associatedDimID
+self.document.submitForm.nAction.value = nAction;
+p.wt()
+self.document.submitForm.submit();
+//frameNav("validate",p._root+"processFormulaValidation"+p._appExt+params+"&sFormula="+p.convURL(formulaValue())+"&sName="+p.convURL(sName)+"&sQualif="+p.convURL(_Qualification)+"&action="+nAction)
+}
+}
+//callback of close dialog
+function closeDlg(bApplyBtn)
+{
+if(bApplyBtn)
+{
+_isApplyMode=false;
+_isEditing=true;
+_objFormula=formulaValue();
+_objName=textName.getValue();
+}
+else
+{
+clearInterval(_timeInterval); 
+if(_timeWait!=null) clearTimeout(_timeWait)
+closeCompletionPopup()
+variableEditorDlg.show(false)
+}
+}
+//callback of focus and blur event for formulaTxt
+function formulaTxt_blur(){_formulaTxtFocus = false;}
+function formulaTxt_focus(){_formulaTxtFocus = true;}
+function formulaTxt_storeCaret()
+{
+if (this.createTextRange) 
+this.caretPos = _curDoc.selection.createRange().duplicate(); 
+}
+//escape action: close popup if necessary
+function formulaTxt_cancel(e)
+{
+if(_shownPopup)
+{
+var e=_ie?_curWin.event:e
+eventCancelBubble(e)
+e.returnValue=false
+if(this.id==completionPopup.id)
+setTimeout("delayedRestoreCursor()",1)
+closeCompletionPopup();
+}
+}
+//callabck from keydown event with a delay that why we do not have the event anymore
+function formulaTxt_change(k)
+{
+//var k=eventGetKey(e)
+//window.status='down touche '+k + '('+ (t) +')'; t=t+1;
+//if down arrow key then give focus to popup
+switch(k)
+{
+case 40:
+if(_shownPopup)
+{
+completionList.select(0,true,null,true,true)
+completion_arrowOver()
+return false;
+}
+break;
+}
+//save oldFormula
+_oldFormula = _newFormula;
+_newFormula = formulaValue();
+//window.status=_newFormula;
+//Empty Type
+if (_oldFormula != _newFormula)
+textTypeValue ("");
+//enable OK button if name and formula is not null
+updateButtons()
+if(_oldFormula == _newFormula)//not imprimable caracter
+closeCompletionPopup()
+initTimeWait()
+}
+//enter action: validate formula if necessary
+function formulaTxt_validate(e)
+{
+eventCancelBubble(e)
+var f=formulaValue()
+if(f!="" && _objFormula!=f)
+validateFormula()
+}
+//call from validate button CB
+//validate the sytax of definition
+function validateFormula()
+{
+closeCompletionPopup();
+validateStringFormula()
+var params=getURLParams()
+if(params)
+{
+var url = p._root+"processFormulaValidation"+p._appExt+params
+self.document.submitForm.action = url;
+self.document.submitForm.target = "validate"
+self.document.submitForm.sName.value = ""
+self.document.submitForm.sFormula.value = formulaValue()
+self.document.submitForm.sQualif.value = ""
+self.document.submitForm.sAssociatedDim.value =""
+self.document.submitForm.nAction.value = 0;
+self.document.submitForm.submit();
+p.wt()
+//frameNav("validate",p._root+"processFormulaValidation"+p._appExt+params+"&sFormula="+p.convURL(formulaValue())+"&action=0")
+}
+}
+//called after formula validation
+//when comming back to hyperlink editor
+function setHyperlinkFormula()
+{
+p.hideBlockWhileWaitWidget()
+//p.DlgFrame.setFormulaValue(formulaValue())
+eval(_callBackHyperlinkOut+'(formulaValue())')
+closeDlg()
+}
+//following the qualification choose by user, update the linked dimension zone
+function updateLinkBtn()
+{
+if(getQualification() == "detail")
+{
+linkDimZone.show(true);
+}
+else
+{
+//reset _associatedDimName because it is the only way to disassociated a dim to detail
+_associatedDimName="Select a dimension"
+_associatedDimID = ""
+linkDimZone.show(false);
+}
+linkedDim.setValue(_associatedDimName);
+}
+// show associatedDimDlg to allow user to select dimension to associate to detail
+function displayDimList()
+{
+associatedDimDlg.show(true);
+}
+//enable or disable OK in associatedDimDlg
+//clickCB callback in treeview
+function updateDimOKBtn()
+{
+var sel = dimTree.getSelectedItem();
+if(sel && sel.userData != null)
+dimOK.setDisabled(false);//only if selected a dimension and not a class
+else
+dimOK.setDisabled(true);
+}
+function validateDimCB()//dbclickCB in treeview
+{
+if(!dimOK.isDisabled())
+associatedDimOK();
+}
+//OK action in associatedDimDlg
+function associatedDimOK()
+{
+var sel = dimTree.getSelectedItem();
+associatedDimClose();
+var data = sel?sel.userData:null;
+if(data == null )return; //safe test
+_associatedDimID= data.id;
+_associatedDimName = sel.name;
+linkedDim.setValue(_associatedDimName);
+//ADAPT00492378: give focus to textName (variableEditorDlg) after associatedDimDlg had closed
+textName.focus();
+}
+//close associatedDimDlg 
+function associatedDimClose()
+{
+associatedDimDlg.show(false);
+//ADAPT00492378: give focus to textName (variableEditorDlg) after associatedDimDlg had closed
+textName.focus();
+}
+//=====================================================================
+//tree construction and callback funcions
+//====================================================================
+//deselect other trees selection when selection in a tree
+function unselectOtherTrees(tree)
+{
+if(tree.id !=dicTree.id ) dicTree.unselect()
+if(tree.id !=fctTree.id ) fctTree.unselect()
+if(tree.id !=opeTree.id ) opeTree.unselect()
+}
+//clickCB in treeviews (dicTree,fctTree,opeTree)
+//update help zone
+function clickCB(data)
+{
+var tree = this;
+_ddText=""
+_helpText=""
+unselectOtherTrees(tree);
+if (_ie)
+{
+var sel = _curDoc.selection.createRange().duplicate();
+sel.execCommand("Unselect");
+}
+if(data)
+{
+if(formulaValue()=="")_ddText="="
+        if(tree.id ==dicTree.id )
+        {        
+        //_ddText+="["+data.name+"]"
+        _ddText+=data.snapName
+        _helpText="<b>"+convStr(data.name,true,true)+"</b><br>"+(data.desc?convStr(data.desc,true,true):"")        
+        }
+        else if(tree.id ==fctTree.id)
+        {
+        _ddText+=data.name+"()"
+        _helpText="<b>"+convStr(data.syntax,true,true)+"</b><br>"+convStr(data.hint,true,true)
+        _helpText+=addHelpLink(data.id);
+        }
+        else //opeTree
+        {          
+        _ddText+=data.name 
+        _helpText="<b>"+convStr(data.name,true,true)+"</b>";
+        _helpText+=addHelpLink(data.id);
+        }
+        } 
+        else if((tree.id.substr(0,9))=="iconLogOp")
+        {
+        _ddText=tree.text;
+        dclickCB()
+        }       
+        //update help zone
+        helpFctArea.setHTML(_helpText)                
+}
+//dclickCB in treeviews (dicTree,fctTree,opeTree)
+function dclickCB(data)
+{
+var lyr=formulaTxt.layer
+//if (_ie) 
+if(lyr.createTextRange && lyr.caretPos)
+{
+var sel = lyr.caretPos; 
+sel.text = sel.text.charAt(sel.text.length - 1) == ' ' ? _ddText + ' ' : _ddText; 
+if(data && data.category) //fct
+sel.move('character',-1);
+sel.select();
+}
+else if (lyr.setSelectionRange) 
+{
+lyr.focus()
+var len = lyr.selectionEnd;
+lyr.value = lyr.value.substr( 0, len )
+    + _ddText 
+    + lyr.value.substr( len );
+if(data && data.category) //fct
+lyr.setSelectionRange(len+_ddText.length-1,len+_ddText.length-1);
+else
+lyr.setSelectionRange(len+_ddText.length,len+_ddText.length);
+} 
+else 
+{
+lyr.value += _ddText;
+}
+//save formula
+_oldFormula = _newFormula;
+_newFormula = formulaValue();
+// Empty type
+textTypeValue ("");
+}
+//build ObjTree or dimTree(used in associatedDimDlg)
+function buildObjTree(tree,bSortObj)//dicTree or dimTree
+{
+tree.deleteAll()
+var len = _docObjects.length
+if(bSortObj)//do this action only once !!! /*specific variable Editor*/
+{
+//create a list order different than the one using obj.kind, use listOrder
+setListOrder()
+// sort array
+_docObjects.sort(sortFuncUsingListOrder) 
+// must be called after sort
+renameSameNameDifferentDPObj()
+if (len>0)
+{
+// first pass, mark merged objects
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+switch(item.kind) 
+{
+case _linkDim:
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) {
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.isPartOfALinkedDim) continue
+if (el.id == item.linkedIDs[k]) {
+_docObjects[m].isPartOfALinkedDim = true
+}
+}
+}
+break;
+}
+}
+}
+}
+newTreeElt1 = newTreeWidgetElem(1,"Available Objects", null, null, null, "Available Objects");
+tree.add(newTreeElt1);
+if (len>0)
+{
+// second pass, add objects non-linked in the tree and linked objects
+// in the correspnoding merged obj subtree
+len = _docObjects.length
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+var sTooltipHdr = "Based On:"
+var sTooltipDesc = "Description:"
+//data type
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+//aggregation function for measure object
+if(item.kind == _msr)
+tooltipAggr = "\n" + "Aggregation:"+ " " + p.getAggregationLabel(item.aggregateFct);
+else
+tooltipAggr="";
+switch(item.kind) 
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+tooltip = sTooltipHdr + " " + item.DPName +  "\n" +  tooltipType + tooltipAggr+ tooltipDesc
+addObject(tree,newTreeElt1,item,shrinkTooltip(tooltip));
+break;
+case _linkDim:
+mergedTooltip = ""
+mergedTooltipDesc = ""
+mergedTooltipType = tooltipType
+//nLinkDim = newTreeWidgetElem(_linkDim, item.name, item, null,null, "")
+//newTreeElt1.add(nLinkDim);
+nLinkDim = addObject(tree,newTreeElt1,item,"");
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) { // iter over linked objects
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.id == item.linkedIDs[k]) {
+tooltipType = "Type:" +  " " + p._labDataType[el.dataType];
+tooltipDesc = (el.desc)? ("\n" + sTooltipDesc + " " + el.desc) : ""
+tooltip =  sTooltipHdr + " " + el.DPName + "\n" + tooltipType + tooltipDesc
+//nLinkDim.add(newTreeWidgetElem(el.kind, el.name, el, null,null, tooltip))
+addObject(tree,nLinkDim,el,tooltip);
+mergedTooltip += el.DPName
+if (k < (l-1)) mergedTooltip += ", "
+}
+}
+}
+mergedTooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+nLinkDim.tooltip = shrinkTooltip( sTooltipHdr + " " + mergedTooltip + "\n" + mergedTooltipType +mergedTooltipDesc)
+break;
+}
+}
+}
+newTreeElt1.expanded = p._resultObjsBranchExp
+// variables
+_variableObjects.sort(BOObj_sortFunc)
+newTreeElt2 = newTreeWidgetElem(1,"Variables", null,null,null, "Variables");
+tree.add(newTreeElt2);
+var len = _variableObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i]
+item.snapName="["+item.name+"]"
+item.isVariable=true
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.formula)? ("\n" + item.formula) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+//newTreeElt2.add(newTreeWidgetElem(item.kind, item.name, item));
+addObject(tree,newTreeElt2,item,itemToolTip);
+}
+}
+newTreeElt2.expanded = p._varsBranchExp
+tree.rebuildHTML()
+}
+function addObject(tree, node, item, tooltip)
+{
+var elem=newTreeWidgetElem(item.kind, item.name, item, null,null, shrinkTooltip(tooltip));
+if(dimTree == tree) //build only dimension objects for associatedDimDlg
+{
+if(item.kind==_dim ||  item.kind==_linkDim)
+node.add(elem);
+}
+else //add all objects to tree for variabelEditorDlg
+{
+node.add(elem);
+_arrObj[_arrObj.length]=item;
+}
+return elem;
+}
+/*
+//build ObjTree or dimTree(used in associatedDimDlg)
+function buildObjTree(tree,bSortObj)//dicTree or dimTree
+{
+var showDimOnly = false;
+if(dimTree == tree) //build only dimension objects
+showDimOnly = true;
+tree.deleteAll()
+if(bSortObj)//do this action only once !!!
+{
+//create a list order different than the one using obj.kind, use listOrder
+setListOrder()
+// sort array
+_docObjects.sort(sortFuncUsingListOrder) 
+// must be called after sort
+completeDPObjName()
+renameSameNameDifferentDPObj()
+}
+var newTreeElt;
+var len = _docObjects.length
+if (len>0)
+{
+newTreeElt=newTreeWidgetElem(1,"Available Objects");
+newTreeElt.expanded = true;
+tree.add(newTreeElt);
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+var tooltip = "Based On:" + " "
+switch(item.kind) 
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltip += item.DPName
+break;
+case _linkDim:
+break;
+default:
+tooltip=""
+}
+if(showDimOnly)
+{
+if(item.kind == _dim)
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item, null,null, tooltip));
+}
+else
+{
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item, null,null, tooltip));
+_arrObj[_arrObj.length]=item;
+}
+}
+}
+// variables
+_variableObjects.sort(BOObj_sortFunc)
+var len = _variableObjects.length
+if (len>0)
+{
+newTreeElt=newTreeWidgetElem(1,"Variables");
+tree.add(newTreeElt);
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i]
+item.snapName="["+item.name+"]"
+if(showDimOnly)
+{
+if(item.kind == _dim)
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item));
+}
+else
+{
+newTreeElt.add(newTreeWidgetElem(item.kind, item.name, item));
+_arrObj[_arrObj.length]=item;
+}
+}
+}
+tree.rebuildHTML()
+}
+*/
+//build fctTree
+function buildFctTree()//fctTree
+{
+var arr = p._formulaFcts
+if(arr==null) return;//safe test
+var len = arr.length
+var prevCat="",allCat="", sDesc=""
+var newTreeElt=null;
+if (len>0)
+{
+allCat = arr[0].category
+for (var i=0; i < len; i++)
+{
+var item = arr[i]
+if(prevCat!=item.category)
+{
+prevCat=item.category
+newTreeElt=newTreeWidgetElem(1,prevCat);
+fctTree.add(newTreeElt);
+}
+if(newTreeElt!=null)
+newTreeElt.add(newTreeWidgetElem(-1, item.name, item));
+//newTreeElt.add(newTreeWidgetElem(12, item.name, item));
+//fill _arrFctOpe
+if(allCat == item.category)
+{
+sDesc="<b>"+convStr(item.syntax,true,true)+"</b><br>"+convStr(item.hint,true,true)
+sDesc+=addHelpLink(item.id);
+_arrFctOpe[_arrFctOpe.length]=newIconObj(item.name+"()",12,sDesc)
+}
+}
+}
+}
+//build opeTree
+function buildOpeTree() //opeTree
+{
+var arr = p._formulaOpers
+var sDesc="";
+if(arr == null) return; //safe test
+var len = arr.length
+if (len>0)
+{
+for (var i=13; i < len; i++)
+{
+var item = arr[i]
+opeTree.add(newTreeWidgetElem(-1, item.name, item));
+//fill _arrFctOpe
+sDesc="<b>"+convStr(item.name,true,true)+"</b>"+addHelpLink(item.id);
+_arrFctOpe[_arrFctOpe.length]=newIconObj(item.name,13,sDesc)
+}
+}
+}
+//====================================================================
+//drag and drop
+//====================================================================
+function dragCB(source)
+{
+_curWin.event.dataTransfer.setData("Text", ""+_ddText)
+}
+function acceptDropCB(source,target,ctrl,shift)
+{
+return false
+}
+function dropCB(source,target,ctrl,shift)
+{
+}
+function textDropCB()
+{/*
+if ((typeof(_globalDDD) != "undefined")&&(_globalDDD!=null))
+{
+//_curWin.event.dataTransfer.setData("Text", _globalDDD.getSelectedItem().name)
+_curWin.event.dataTransfer.setData("Text", _ddText)
+}
+return true*/
+if (typeof(_ddText)!="undefined" && _ddText != "")
+{
+_oldFormula = _newFormula;
+_newFormula = _newFormula + _ddText;
+//Empty Type
+if (_oldFormula != _newFormula)
+textTypeValue ("");
+}
+return true
+}
+//====================================================================
+//autocompletion
+//====================================================================
+//wait 1 sec befor launch the completion except if aucompletion has already start
+function initTimeWait()
+{
+if(_timeWait!=null) clearTimeout(_timeWait)
+if(_shownPopup)
+launchAutoCompletion();
+else
+_timeWait=setTimeout("launchAutoCompletion()",1000)
+}
+//launch autocompletion workflow
+function launchAutoCompletion()
+{
+_timeWait=null
+//search text to complete
+lastMatchTxt=_currentMatchTxt
+_currentMatchTxt=getMatchText().toLowerCase()
+if(_currentMatchTxt!="")
+getMatchTextArray()
+else
+closeCompletionPopup()
+}
+//get the current cursor position to determine what is the match text to complete
+//base on _oldFormula and _newFormula difference
+//NOTE: cannot be determined by textarea info :(
+function getCursorPosition()
+{
+if(_oldFormula == _newFormula) return -1;
+var i, len=_oldFormula.length, nlen = _newFormula.length
+for(i=0;i<len;i++)
+{
+if(i>=nlen || _oldFormula.charAt(i)!=_newFormula.charAt(i))
+break;
+}
+if(_newFormula!="" && len<nlen)
+return i+1;
+else
+return i;
+}
+//determine the text to complete (in funciton of separator before and after)
+function getMatchText()
+{
+var cursorPos = _cursorPos= getCursorPosition();
+var startFormula = "" , endFormula = ""
+if(cursorPos == -1 || _newFormula=="")return "";
+//else if(cursorPos == 0) endFormula = _newFormula
+//else if(cursorPos == endFormula.length) endFormula = _newFormula
+else
+{
+startFormula = _newFormula.substring(0,cursorPos)
+endFormula = _newFormula.substring(cursorPos,_newFormula.length)
+}
+if(startFormula=="")
+{ 
+return "";
+}
+//alert(startFormula +"/" +endFormula)
+var lenSep = _arrSeparators.length, sep="",startIdx=0, endIndx=0
+var tmpStart=startFormula,tmpEnd=endFormula
+for(var i=0;i<lenSep;i++)
+{
+var sep = _arrSeparators[i]
+if((startIdx = tmpStart.lastIndexOf(sep))>-1)
+{
+tmpStart=tmpStart.substring(startIdx+1,tmpStart.length)
+}
+if((endIdx=tmpEnd.indexOf(sep))>-1)
+{
+tmpEnd=tmpEnd.substring(0,endIdx)
+}
+}
+if(tmpStart=="")
+{
+return ""
+}
+else
+{
+_firstPart = _lastPart =""
+_firstPart=startFormula.substring(0,startFormula.length-tmpStart.length)
+_lastPart=endFormula.substring(tmpEnd.length,endFormula.length)
+return tmpStart+tmpEnd
+}
+}
+function completeObjects()
+{
+var len = _arrObj.length; obj=null, sDesc=""
+for(var i=0;i<len;i++)
+{
+obj = _arrObj[i].name.toLowerCase()
+if(obj.indexOf(_currentMatchTxt) == 0)
+{
+obj=_arrObj[i];
+sDesc = "<b>"+convStr(obj.name,true,true)+"</b><br>"+(obj.desc?convStr(obj.desc,true,true):"");
+_arrMatchTxt[_arrMatchTxt.length]=newIconObj(obj.snapName,obj.kind,sDesc)
+}
+}
+}
+function getMatchTextArray()
+{
+if(_currentMatchTxt.indexOf(_lastMatchTxt)==0 && _lastMatchTxt!="")
+{
+_arrAllTxt = arrayGetCopy(_arrMatchTxt)
+_arrMatchTxt.length=0;
+for(var i=0;i<_arrAllTxt.length;i++)
+{
+if((_arrAllTxt[i].name.toLowerCase()).indexOf(_currentMatchTxt) == 0)
+_arrMatchTxt[_arrMatchTxt.length]=_arrAllTxt[i]
+}
+completeObjects()
+}
+else 
+{
+_arrAllTxt = arrayGetCopy(_arrFctOpe)
+_arrMatchTxt.length=0;
+for(var i=0;i<_arrAllTxt.length;i++)
+{
+if((_arrAllTxt[i].name.toLowerCase()).indexOf(_currentMatchTxt) == 0)
+_arrMatchTxt[_arrMatchTxt.length]=_arrAllTxt[i]
+}
+completeObjects()
+}
+completionList.deleteAll()
+for(var j=0;j<_arrMatchTxt.length;j++)
+{
+completionList.add(newTreeWidgetElem( _arrMatchTxt[j].icon, _arrMatchTxt[j].name,_arrMatchTxt[j].desc))
+}
+completionList.rebuildHTML()
+if(_arrMatchTxt.length>0 && _formulaTxtFocus)
+{
+var lyr=formulaTxt.layer
+if (lyr.createTextRange)
+{
+var rng = _curDoc.selection.createRange().duplicate();
+completionPopup.show(true,rng.offsetLeft,rng.offsetTop+12)
+_shownPopup=true
+}
+else if(lyr.setSelectionRange )
+{
+var pos = getPos(lyr)
+var height=formulaTxt.getHeight()
+completionPopup.show(true,pos.x,pos.y+height+1)
+_shownPopup=true
+}
+}
+else
+{
+closeCompletionPopup()
+}
+}
+function replaceCompletionText(s,isFct)
+{
+var lyr=formulaTxt.layer
+if (lyr.createTextRange)
+{
+formulaValue(_firstPart+s);
+formulaTxt.focus();
+var rng = _curDoc.selection.createRange().duplicate();
+rng.text=_lastPart;
+if(isFct)
+rng.move("character",-(_lastPart.length+1))
+else
+rng.move("character",-(_lastPart.length))
+rng.select();
+}
+else if(lyr.setSelectionRange )
+{
+var len = _firstPart.length+s.length;
+lyr.value = _firstPart+s+_lastPart;
+if(isFct)
+lyr.setSelectionRange(len-1,len-1);
+else
+lyr.setSelectionRange(len,len);
+}
+}
+function completion_mouseOver(elem)
+{
+elem.select(null,null,true)
+_helpText=elem.userData?elem.userData:"" 
+        helpFctArea.setHTML(_helpText)                         
+}
+function completion_arrowOver()
+{
+var elem=completionList.getSelectedItem()
+_helpText=elem.userData?elem.userData:"" 
+        helpFctArea.setHTML(_helpText)                         
+}
+function completion_click(data,isFromKeyArrow)
+{
+if(isFromKeyArrow) 
+completion_arrowOver()
+else 
+completion_insert()
+}
+function completion_select()
+{
+formulaTxt.focus();
+}
+function completion_insert()
+{
+var s = completionList.getSelectedItem().name;
+var isFct=(completionList.getSelectedItem().iconId==12)
+closeCompletionPopup()
+replaceCompletionText(s,isFct)
+_oldFormula = _newFormula;
+_newFormula = formulaValue();
+setTimeout("formulaTxt.focus()",1)
+}
+function closeCompletionPopup()
+{
+if(_shownPopup)
+{
+_shownPopup=false
+completionPopup.show(false)
+}
+}
+function addHelpLink(id)
+{
+var s="";
+if(id!=null)
+s="<br>"+"<a target='_blank' href='"+helpPath+id+"'>More help</a>";
+return s;
+}
+var helpPath=p._root+"../../help/"+p._lang+"/webintelligence/html_report/html/context.htm?contextid=";
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<iframe name="validate" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="sName" id="sName">
+<input type="hidden" name="sFormula" id="sFormula">
+<input type="hidden" name="sQualif" id="sQualif">
+<input type="hidden" name="sAssociatedDim" id="sAssociatedDim">
+<input type="hidden" name="nAction" id="nAction">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>
