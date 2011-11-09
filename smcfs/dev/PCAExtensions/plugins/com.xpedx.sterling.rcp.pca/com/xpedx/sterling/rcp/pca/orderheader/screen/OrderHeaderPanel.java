@@ -73,7 +73,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
     private Label lblErrAcceptNonStrdShipMethod;
     private Button chkAcceptNonStrdShipMethod;
     private Label lblShipComplete;
-    private Button chkShipComplete;
+//  private Button chkShipComplete;
+    private Combo comboShipComplete;
     private Button chkAcceptShipComplete;
     private Label lblErrShipComplete;
     
@@ -323,7 +324,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			chkAcceptNonStrdShipMethod.setData("YRCButtonBindingDefination", chkBoxBindingData);
 		}
 		
-		if (null != chkShipComplete) {
+		/*if (null != chkShipComplete) {
 			chkBoxBindingData = new YRCButtonBindingData();
 			chkBoxBindingData.setCheckedBinding("C");
 			chkBoxBindingData.setUnCheckedBinding("N");
@@ -336,7 +337,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			chkBoxBindingData.setName("chkShipComplete");
 			chkShipComplete.setData("YRCButtonBindingDefination",
 					chkBoxBindingData);			
-		}
+		}*/
+	
 		
 		if(null != chkAcceptShipComplete){
 			chkBoxBindingData = new YRCButtonBindingData();
@@ -494,7 +496,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
         txtBillToAddress.setData("YRCTextBindingDefination", textBindingData);
         
         textBindingData = new YRCTextBindingData();
-        textBindingData.setSourceBinding("OrderDetails:Order/PersonInfoShipTo/@AddressLine1;OrderDetails:Order/PersonInfoShipTo/@AddressLine2;OrderDetails:Order/PersonInfoShipTo/@AddressLine3;OrderDetails:Order/PersonInfoShipTo/@State;OrderDetails:Order/PersonInfoShipTo/@ZipCode;OrderDetails:Order/PersonInfoShipTo/@City;OrderDetails:Order/PersonInfoShipTo/@Country");
+        textBindingData.setSourceBinding("OrderDetails:Order/PersonInfoShipTo/@AddressLine1;OrderDetails:Order/PersonInfoShipTo/@AddressLine2;OrderDetails:Order/PersonInfoShipTo/@AddressLine3;OrderDetails:Order/PersonInfoShipTo/@City;OrderDetails:Order/PersonInfoShipTo/@State;OrderDetails:Order/PersonInfoShipTo/@ZipCode;OrderDetails:Order/PersonInfoShipTo/@Country");
         textBindingData.setKey("xpedx_ShipTo_address_key");
         textBindingData.setName("txtShipToAddress");
         txtShipToAddress.setData("YRCTextBindingDefination", textBindingData);
@@ -565,6 +567,15 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
         cbd.setTargetBinding("SaveOrder:/Order/@ShipNode");
         cbd.setName("comboShipfrom");
         comboShipFromDiv.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
+        
+        cbd = new YRCComboBindingData();
+        cbd.setCodeBinding("@CodeValue");
+        cbd.setDescriptionBinding("@CodeShortDescription");
+        cbd.setListBinding("ShipComplete:/Code");
+		cbd.setSourceBinding("OrderDetails:/Order/Extn/@ExtnShipComplete");
+		cbd.setTargetBinding("SaveOrder:/Order/Extn/@ExtnShipComplete");
+		cbd.setName("comboShipComplete");
+        comboShipComplete.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
 
         
               
@@ -578,7 +589,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 					txtCustPONo,
 					txtShipDate,
 					btnShipDateLookup,
-					chkShipComplete,
+//					chkShipComplete,
+					comboShipComplete,
 					txtInternalComments,
 					txtHdrComments,
 					txtAttentionName,
@@ -596,11 +608,12 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 					txtCouponCode};
 			setControlsEnabled(controls, false);
 		}
-		if (isDraftOrder()) {
+		if (!isDraftOrder()) {
 			if(XPXUtils.isFullFillmentOrder(orderEle)){
 				String legacyOrderNumber = YRCXmlUtils.getAttributeValue(orderEle, "/Order/Extn/@ExtnLegacyOrderNo");
 					if(!YRCPlatformUI.isVoid(legacyOrderNumber)){
 						comboShipFromDiv.setEnabled(false);
+						comboShipComplete.setEnabled(false);
 					}
 			}
 		}
@@ -1603,12 +1616,15 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
         lblShipComplete.setText("Ship_Complete");
         lblShipComplete.setLayoutData(gridData4);
         lblShipComplete.setData("name", "lblShipComplete");
-		chkShipComplete = new Button(pnlRoot, SWT.CHECK);
+		/*chkShipComplete = new Button(pnlRoot, SWT.CHECK);
 		chkShipComplete.setText("");
 //		chkShipComplete.setVisible(true);
 		chkShipComplete.setData("yrc:customType", "Label");
 		chkShipComplete.setLayoutData(gridData5);
-		chkShipComplete.setData("name", "chkShipComplete");
+		chkShipComplete.setData("name", "chkShipComplete");*/
+        comboShipComplete = new Combo(pnlRoot, 8);
+		comboShipComplete.setLayoutData(gridData5);
+		comboShipComplete.setData("name", "comboShipComplete");
 		
 		lblShippedValue = new Label(pnlRoot, SWT.LEFT);
 		lblShippedValue.setText("Total Shippable Value:");

@@ -1804,7 +1804,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		btnRemoveLine.setToolTipText(YRCPlatformUI.getString("RemoveLine"));
 		btnRemoveLine.setData("name", "btnRemoveLine");
 		
-		if (isDraftOrder()) {
+		if (!isDraftOrder()) {
 			if(XPXUtils.isFullFillmentOrder(orderEle)){
 				String legacyOrderNumber = YRCXmlUtils.getAttributeValue(orderEle, "/Order/Extn/@ExtnLegacyOrderNo");
 					if(!YRCPlatformUI.isVoid(legacyOrderNumber)){
@@ -2852,10 +2852,10 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 	
 	public boolean isDraftOrder() {
 		String sMaxOrderStatus = YRCXmlUtils.getAttributeValue(orderEle,"/Order/@MaxOrderStatus");
-		if(YRCPlatformUI.isVoid(sMaxOrderStatus)){
+		if(YRCPlatformUI.isVoid(sMaxOrderStatus) && !"".equalsIgnoreCase(sMaxOrderStatus)){
 			return true;
 		}
-		if("1100".compareTo(sMaxOrderStatus)>0){
+		if("1100".compareTo(sMaxOrderStatus)>0 && !"".equalsIgnoreCase(sMaxOrderStatus)){
 			return true;
 		}else{
 			return false;

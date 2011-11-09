@@ -533,10 +533,12 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 		// "ShipmentLines"));
 		// eleSplitLine.removeChild(YRCXmlUtils.getChildElement(eleSplitLine,
 		// "OrderStatuses"));
-		eleSplitLine.removeChild(YRCXmlUtils.getChildElement(eleSplitLine,
+		
+		//Commented for JIRA 2541 
+		/*eleSplitLine.removeChild(YRCXmlUtils.getChildElement(eleSplitLine,
 				"OrderHoldTypes"));
 		eleSplitLine.removeChild(YRCXmlUtils.getChildElement(eleSplitLine,
-				"OrderDates"));
+				"OrderDates"));*/
 		// eleSplitLine.removeChild(YRCXmlUtils.getChildElement(eleSplitLine,
 		// "Error"));
 		eleSplitLine.setAttribute("OpenQty", "0");

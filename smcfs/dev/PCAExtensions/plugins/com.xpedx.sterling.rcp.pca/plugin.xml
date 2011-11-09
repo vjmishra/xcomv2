@@ -292,6 +292,7 @@
                     <task id="ReferenceOrderSearch"/>
                     <task id="ArticleMaintenance"/>
                     <task id="MyItemsSearch"/>
+                    <task id="ViewInvoices"/>
                 </tasks>
             </category>
             <category id="XPX_CREATE_USER">
@@ -397,6 +398,15 @@
                     <category id="XPX_GLOBAL"/>
                 </categories>
             </task>
+             <task
+                actionId="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+                filterRequired="false" groupId="Xpedx_Group"
+                id="ViewInvoices" isExtension="false"
+                name="ViewInvoices" permissionId="ycdRCPX006">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
               <task
                 actionId=""
                 filterRequired="false"
@@ -483,7 +493,15 @@
                 label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
                 state="true" style="push"/>
         </actionSet>
-        
+        <actionSet
+		 	id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+			label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction" visible="true">
+			<action
+			class="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+			id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+			label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+			state="true" style="push"/>
+			</actionSet> 
          <actionSet
             id="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
             label="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail" visible="true">

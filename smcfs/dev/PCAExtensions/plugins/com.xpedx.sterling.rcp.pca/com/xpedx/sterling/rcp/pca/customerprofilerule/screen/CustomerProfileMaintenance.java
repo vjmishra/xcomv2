@@ -27,7 +27,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 	private Composite pnlRoot = null;
 	private CustomerProfileRulePanel pnlCustomerProfileRulesObj= null;
 	private CustomerProfileInfoPanel pnlGeneralInfoObj = null;
-	private ArticlesSearchListPanel pnlManageArticles = null;
+	private DivisionEntitlementPanel pnlDivisionEntitlement = null;
 	private CustomerProfileMaintenanceBehavior myBehavior;
 	private YRCWizardBehavior wizBehavior;
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileMaintenance"; // @jve:decl-index=0:
@@ -130,6 +130,10 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 
 			createPnlCustomerProfileRules();
 		}
+		if (this.isShipToCustomer()) {
+
+			createDivisionEntitlement();
+		}
 		if (this.isMasterCustomer() && YRCPlatformUI.hasPermission(XPXConstants.RES_ID_MANAGE_CUSTOMER_OR_USER_INTEG_ATTR)) {
 
 			createPnlCustomerProfileMaintIntegData();
@@ -145,6 +149,18 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		if(eleExtn != null){
 			extSuffixType = YRCXmlUtils.getAttribute(eleExtn , "ExtnSuffixType");
 			if ("MC".equals(extSuffixType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isShipToCustomer() {
+		Element eleExtn = YRCXmlUtils.getXPathElement(myBehavior.getCustomerDetails(),
+		"/CustomerList/Customer/Extn");
+		if(eleExtn != null){
+			extSuffixType = YRCXmlUtils.getAttribute(eleExtn , "ExtnSuffixType");
+			if ("S".equals(extSuffixType)) {
 				return true;
 			}
 		}
@@ -216,18 +232,18 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 	/**
 	 * Adds 'Manage Articles' as Tab Item to the Customer Maintenance TabFolder
 	 */
-/*
-	private void createPnlManageArticles()
+
+	private void createDivisionEntitlement()
     {
 		
-		pnlManageArticles = new ArticlesSearchListPanel(tabFolder, SWT.NONE,this.inputObject, this);
-		pnlManageArticles.setData("name", "pnlManageArticles");
+		pnlDivisionEntitlement = new DivisionEntitlementPanel(tabFolder, SWT.NONE,this.inputObject, this);
+		pnlDivisionEntitlement.setData("name", "pnlDivisionEntitlement");
 
 		TabItem itmPnlArticles = new TabItem(tabFolder, 0);
-		itmPnlArticles.setText(YRCPlatformUI.getString("Tab_Articles"));
-		itmPnlArticles.setControl(pnlManageArticles);
+		itmPnlArticles.setText(YRCPlatformUI.getString("Entitlement"));
+		itmPnlArticles.setControl(pnlDivisionEntitlement);
     }
-*/
+
 	public String getFormId() {
 		return FORM_ID;
 	}

@@ -69,9 +69,11 @@
         <commands>
             <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" OutputTemplateName="" URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" outputNamespace="getCustomerContactList_output" version=""/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getCustomerContactList_output" templateName="getCustomerContactList_output" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileRulePanel">
@@ -125,7 +127,7 @@
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileMaintenance">
         <commands>
             <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerListService" URL="DEFAULT" inputNamespace="XPXGetCustomerListService_input" outputNamespace="XPXGetCustomerListService" version=""/>
-            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version=""/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
             <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" OutputTemplateName="XPXGetParentCustomerListService" URL="DEFAULT"
                 postCommand="" preCommand=""/>
         </commands>

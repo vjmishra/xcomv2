@@ -2,11 +2,14 @@ package com.xpedx.nextgen.customermanagement.api;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -53,7 +56,7 @@ import com.yantra.yfs.japi.YFSException;
  *
  */
 public class XPXCustomerBatchProcess implements YIFCustomApi  {
-	
+
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
 	//private static String strSkip = "FALSE";
@@ -67,7 +70,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	public static final String exceptionType = "BusinessAlert";
 	public static final String referenceType = "Extended Field";
 	private boolean isCustomerActive = false;
-	
+	private ArrayList<String> arrChildCustomerIds = new ArrayList<String>();
+	private String existingMSAPNumber = null;
+
 	static {
 		log = YFCLogCategory.instance(XPXCustomerBatchProcess.class);
 		/*try 
@@ -87,7 +92,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					strSkip = strSkipValue;
 				}*/
 	}
-	
+
 	/**
 	 * This is the method which gets invoked on the hit of the service.
 	 * This forms the complete input xml for manageCustomer api
@@ -104,7 +109,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 			//log.debug("inXML"+SCXmlUtil.getString(inXML));
 			boolean isSapCustomerCreated = false;
-			
+
 			String suffixType = null;
 			String shipToParentCustId = null;
 			String customerDivision = null;
@@ -118,658 +123,714 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			String organizationCode = null;
 			String parentCustomerOrganizationCode = null;
 			String customerPOReqdFlag = null;
-			
+
 			YFCDocument getCustomerListInputDoc = null;
 			Document getCustomerListOutputDoc = null;
-			
+
 			ArrayList networkIdList = new ArrayList();
 			ArrayList customerAssignmentKeys = new ArrayList();
-			
+
 			HashMap salesRepTeam = new HashMap();
-			
+
 			api = YIFClientFactory.getInstance().getApi();
 			//populate the team name array list
 			Document outputCustomerDoc = null;
 			Element customerElement = inXML.getDocumentElement();
 			//get the organis=zation code from the common code list
-			
+
 			//String organizationCode = "xpedx";
 			//Ask question?
 			//get the input document
-			
+
 			NodeList customerList = customerElement.getElementsByTagName(XPXLiterals.E_CUSTOMER);
-			
+
 			if(customerList.getLength()>0)
 			{
-				
+
 				int customerListLength = customerList.getLength();
-			//for each customer
-			for(int customerNo = 0;customerNo<customerListLength;customerNo++)
-			{
-				//form the input xml
-				Element custElement = (Element)customerList.item(customerNo);
-				
-				organizationCode = getOrganizationCode(env,custElement); 
-				log.debug("The organization code returned from the CommonCode list is: "+organizationCode);
-				
-				//log.debug(SCXmlUtil.getString(custElement));
-				String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
-				String shipFrom = custElement.getAttribute(XPXLiterals.A_SHIP_FROM_BRANCH);
-				/************Added as per new logic*****************************************/
-				String masterSapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
-				String sapAccountNumber = custElement.getAttribute(XPXLiterals.A_SAP_NUMBER);
-				String brandCode = custElement.getAttribute(XPXLiterals.A_BRAND_CODE);
-				
-				//sayan added to obtain the MSAP and SAP names START
-				String strSAPName = custElement.getAttribute("SAPName");
-				String strMSAPName = custElement.getAttribute("ParentSAPName");
-				//sayan added to obtain the MSAP and SAP names END
-				
-				//sayan - added to check for SAP and MSAP based on suffix type START
-				suffixType = custElement.getAttribute(XPXLiterals.E_SUFFIX_TYPE);
-				log.debug("The suffix type is: "+suffixType);
-				
-				/******************No customer will be created if sap number is not available and it is a Bill To record***********************/
-				if((sapAccountNumber == null || sapAccountNumber.trim().length() == 0 || masterSapAccountNumber == null ||
-						masterSapAccountNumber.trim().length()==0) && (suffixType != null && XPXLiterals.CHAR_B.equalsIgnoreCase(suffixType.trim())))
-					//sayan - added to check for SAP and MSAP based on suffix type END
+				//for each customer
+				for(int customerNo = 0;customerNo<customerListLength;customerNo++)
 				{
-					YFSException exceptionMessage = new YFSException();
-			    	   exceptionMessage.setErrorDescription("There is no SAP/MSAP name/number, hence no record will be created!!!");
-			    	   
-			    	   prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
-			    	   
-			    	   return outputCustomerDoc;
-				}
-				else
-				{
-					// Creating the msap and sap customer ids
-					
-					masterSapCustomerId  = "CD"+"-"+masterSapAccountNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
-					sapCustomerId = "CD"+"-"+sapAccountNumber+"-"+"S"+"-"+brandCode+"-"+"CC";
-					
-					
-				}
-				/*****************************************************************************/
-				
-				
-				String envtId = custElement.getAttribute(XPXLiterals.A_ENVIRONMENT_ID);
-				log.debug("The envt id from the ip xml is: "+envtId);
-				String companyCode = custElement.getAttribute(XPXLiterals.A_COMPANY_CODE);
-				String pricingWareHouse = custElement.getAttribute(XPXLiterals.A_PRICING_WAREHOUSE);
-				
-						
-				legacyCustomerNumber = custElement.getAttribute(XPXLiterals.A_LEGACY_CUSTOMER_NO);
-				
-				/**************************Added by Prasanth Kumar M. as per new reqmts**************************/
-				
-				
-				customerDivision = custElement.getAttribute(XPXLiterals.E_CUSTOMER_DIVISION);
-				//log.debug("The customer division is: "+customerDivision);
-				
-				legacyCustNo = custElement.getAttribute(XPXLiterals.E_LEGACY_CUSTOMER_NO);
-				//log.debug("The legacy customer no is: "+legacyCustNo);
-				
-				billToSuffix = custElement.getAttribute(XPXLiterals.E_BILL_TO_SUFFIX);
-				//log.debug("The bill to suffix is: "+billToSuffix);
-				
-				shipToSuffix = custElement.getAttribute(XPXLiterals.E_SHIP_TO_SUFFIX);
-				//log.debug("The ship to suffix is: "+shipToSuffix);
-				
-				customerPOReqdFlag = custElement.getAttribute("CustomerPORequiredFlag");
-				log.debug("The customer PO reqd flag is: "+customerPOReqdFlag);
-				
-				/************************************************************************************************/
-				
-				
-						
-			
-				if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
-				{
-				customerID = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
-				}
-				else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
-						{
-					customerID = customerDivision+"-"+legacyCustomerNumber+"-"+shipToSuffix+"-"+envtId+"-"+companyCode+"-S";
-						}
-				
-				/* sayan commented
+					//form the input xml
+					Element custElement = (Element)customerList.item(customerNo);
+
+					organizationCode = getOrganizationCode(env,custElement); 
+					log.debug("The organization code returned from the CommonCode list is: "+organizationCode);
+
+					//log.debug(SCXmlUtil.getString(custElement));
+					String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
+					String shipFrom = custElement.getAttribute(XPXLiterals.A_SHIP_FROM_BRANCH);
+					/************Added as per new logic*****************************************/
+					String masterSapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
+					String sapAccountNumber = custElement.getAttribute(XPXLiterals.A_SAP_NUMBER);
+					String brandCode = custElement.getAttribute(XPXLiterals.A_BRAND_CODE);
+
+					//sayan added to obtain the MSAP and SAP names START
+					String strSAPName = custElement.getAttribute("SAPName");
+					String strMSAPName = custElement.getAttribute("ParentSAPName");
+					//sayan added to obtain the MSAP and SAP names END
+
+					//sayan - added to check for SAP and MSAP based on suffix type START
+					suffixType = custElement.getAttribute(XPXLiterals.E_SUFFIX_TYPE);
+					log.debug("The suffix type is: "+suffixType);
+
+					/******************No customer will be created if sap number is not available and it is a Bill To record***********************/
+					if((sapAccountNumber == null || sapAccountNumber.trim().length() == 0 || masterSapAccountNumber == null ||
+							masterSapAccountNumber.trim().length()==0) && (suffixType != null && XPXLiterals.CHAR_B.equalsIgnoreCase(suffixType.trim())))
+						//sayan - added to check for SAP and MSAP based on suffix type END
+					{
+						YFSException exceptionMessage = new YFSException();
+						exceptionMessage.setErrorDescription("There is no SAP/MSAP name/number, hence no record will be created!!!");
+
+						prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
+
+						return outputCustomerDoc;
+					}
+					else
+					{
+						// Creating the msap and sap customer ids
+
+						masterSapCustomerId  = "CD"+"-"+masterSapAccountNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
+						sapCustomerId = "CD"+"-"+sapAccountNumber+"-"+"S"+"-"+brandCode+"-"+"CC";
+
+
+					}
+					/*****************************************************************************/
+
+
+					String envtId = custElement.getAttribute(XPXLiterals.A_ENVIRONMENT_ID);
+					log.debug("The envt id from the ip xml is: "+envtId);
+					String companyCode = custElement.getAttribute(XPXLiterals.A_COMPANY_CODE);
+					String pricingWareHouse = custElement.getAttribute(XPXLiterals.A_PRICING_WAREHOUSE);
+
+
+					legacyCustomerNumber = custElement.getAttribute(XPXLiterals.A_LEGACY_CUSTOMER_NO);
+
+					/**************************Added by Prasanth Kumar M. as per new reqmts**************************/
+
+
+					customerDivision = custElement.getAttribute(XPXLiterals.E_CUSTOMER_DIVISION);
+					//log.debug("The customer division is: "+customerDivision);
+
+					legacyCustNo = custElement.getAttribute(XPXLiterals.E_LEGACY_CUSTOMER_NO);
+					//log.debug("The legacy customer no is: "+legacyCustNo);
+
+					billToSuffix = custElement.getAttribute(XPXLiterals.E_BILL_TO_SUFFIX);
+					//log.debug("The bill to suffix is: "+billToSuffix);
+
+					shipToSuffix = custElement.getAttribute(XPXLiterals.E_SHIP_TO_SUFFIX);
+					//log.debug("The ship to suffix is: "+shipToSuffix);
+
+					customerPOReqdFlag = custElement.getAttribute("CustomerPORequiredFlag");
+					log.debug("The customer PO reqd flag is: "+customerPOReqdFlag);
+
+					/************************************************************************************************/
+
+
+
+
+					if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
+					{
+						customerID = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-" +companyCode+"-B";
+					}
+					else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
+					{
+						customerID = customerDivision+"-"+legacyCustomerNumber+"-"+shipToSuffix+"-"+envtId+"-"+companyCode+"-S";
+					}
+
+					/* sayan commented
 	            //Temporarily hard coded till Customer batch feed gets fixed to include environment id
 				if(envtId == null || envtId.trim().length() == 0)
 				{
 					envtId = "DEV";
 					log.debug("The environment id is: "+envtId);
 				}
-				*/
-				
-				if(processCode.equalsIgnoreCase("C")){
-					boolean _isExitingCustomer = checkIsCustomerAvailableInSystem(env, customerID, organizationCode);
-					if(_isExitingCustomer && !isCustomerActive()){
-						log.debug("The customer PO reqd flag is: "+customerPOReqdFlag);
-						//activate the customer
-						YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-						manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-						manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-						manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
-						api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
-					}
-				}
-				
-				if(processCode.equalsIgnoreCase("A")||processCode.equalsIgnoreCase("C"))
-				{
-					//Create an input xml
-					YFCDocument inputCustomerDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-					YFCElement inputCustomerElement = formCustomerElement(
-							customerID, inputCustomerDoc, organizationCode,envtId,companyCode,custElement);
-					//create Extn element
-					YFCElement extnElement = formExtnElement(custElement, inputCustomerDoc);
-					inputCustomerElement.appendChild(extnElement);
-					
-					
-					//This method is temporarily used to hardcode the SAP ParentAccount Number until Customer Batch Feed gets fixed
-					if(processCode.equalsIgnoreCase("A"))
-					{
-						if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
-						{	 
-													
-							isSapCustomerCreated = checkIsCustomerAvailableInSystem(env, sapCustomerId, organizationCode);
-							if(isSapCustomerCreated == false)
-							{
-								log.debug("Inside loop to create the sap and master sap customers");
-								//No existing SAP customers created so have to create it
-								
-							    Document manageCustomerOutputDoc = createCustomerWithSAPAccountNumber(env,sapCustomerId,masterSapCustomerId, strSAPName, strMSAPName, organizationCode,custElement);
-							}
-							
-							YFCElement parentCustomerElement = inputCustomerDoc.createElement("ParentCustomer");
-							parentCustomerElement.setAttribute("CustomerID", sapCustomerId);
-							parentCustomerElement.setAttribute("OrganizationCode", organizationCode);
-							inputCustomerElement.appendChild(parentCustomerElement);					
+					 */
+
+					if(processCode.equalsIgnoreCase("C")){
+						boolean _isExitingCustomer = checkIsCustomerAvailableInSystem(env, customerID, organizationCode);
+						if(_isExitingCustomer && !isCustomerActive()){
+							log.debug("The customer PO reqd flag is: "+customerPOReqdFlag);
+							//activate the customer
+							YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
+							api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
 						}
-						else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
+					}
+
+					if(processCode.equalsIgnoreCase("A")||processCode.equalsIgnoreCase("C"))
+					{
+						//Create an input xml
+						YFCDocument inputCustomerDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+						YFCElement inputCustomerElement = formCustomerElement(
+								customerID, inputCustomerDoc, organizationCode,envtId,companyCode,custElement);
+						//create Extn element
+						YFCElement extnElement = formExtnElement(custElement, inputCustomerDoc);
+						inputCustomerElement.appendChild(extnElement);
+
+
+						//This method is temporarily used to hardcode the SAP ParentAccount Number until Customer Batch Feed gets fixed
+						if(processCode.equalsIgnoreCase("A"))
 						{
-							
-						       //Invoking getCustomerList to check if there is a customer with
-						       //CustomerId=<Customer Division>-<Legacy Customer Number>-<Bill To Suffix>-<EnvID>-<CompanyCode> 
-						
-						       shipToParentCustId = customerDivision+"-"+legacyCustNo+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
-						       //log.debug("The shipToParentCustId is: "+shipToParentCustId);
-						
-						      getCustomerListInputDoc = createGetCustomerListInput(env,shipToParentCustId,organizationCode);
-						       
-						      //log.debug("Invoking getCustomerList");
-						       env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
-						       getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
-						       env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
-						       
-						       Element getCustomerListOutputDocRoot = getCustomerListOutputDoc.getDocumentElement();
-						       NodeList customerElementList = getCustomerListOutputDocRoot.getElementsByTagName(XPXLiterals.E_CUSTOMER);
-						       
-						       if(customerElementList.getLength()>0)
-						       {
-						    	   //Parent customer exists
-						    	   
-						    	    YFCElement parentCustomerElelemnt = inputCustomerDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
+							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
+							{	 
+
+								isSapCustomerCreated = checkIsCustomerAvailableInSystem(env, sapCustomerId, organizationCode);
+								if(isSapCustomerCreated == false)
+								{
+									log.debug("Inside loop to create the sap and master sap customers");
+									//No existing SAP customers created so have to create it
+
+									Document manageCustomerOutputDoc = createCustomerWithSAPAccountNumber(env,sapCustomerId,masterSapCustomerId, strSAPName, strMSAPName, organizationCode,custElement);
+								}
+
+								YFCElement parentCustomerElement = inputCustomerDoc.createElement("ParentCustomer");
+								parentCustomerElement.setAttribute("CustomerID", sapCustomerId);
+								parentCustomerElement.setAttribute("OrganizationCode", organizationCode);
+								inputCustomerElement.appendChild(parentCustomerElement);					
+							}
+							else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
+							{
+
+								//Invoking getCustomerList to check if there is a customer with
+								//CustomerId=<Customer Division>-<Legacy Customer Number>-<Bill To Suffix>-<EnvID>-<CompanyCode> 
+
+								shipToParentCustId = customerDivision+"-"+legacyCustNo+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
+								//log.debug("The shipToParentCustId is: "+shipToParentCustId);
+
+								getCustomerListInputDoc = createGetCustomerListInput(env,shipToParentCustId,organizationCode);
+
+								//log.debug("Invoking getCustomerList");
+								env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
+								getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
+								env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+
+								Element getCustomerListOutputDocRoot = getCustomerListOutputDoc.getDocumentElement();
+								NodeList customerElementList = getCustomerListOutputDocRoot.getElementsByTagName(XPXLiterals.E_CUSTOMER);
+
+								if(customerElementList.getLength()>0)
+								{
+									//Parent customer exists
+
+									YFCElement parentCustomerElelemnt = inputCustomerDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
 									//right now customer id is hardcoded
 									parentCustomerElelemnt.setAttribute(XPXLiterals.A_CUSTOMER_ID, shipToParentCustId);
 									parentCustomerElelemnt.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
 									inputCustomerElement.appendChild(parentCustomerElelemnt);
-						       }
-						       else
-						       {
-						    	   //Parent customer does not exist, so create an alert
-						    	   
-						    	   YFSException exceptionMessage = new YFSException();
-						    	   exceptionMessage.setErrorDescription("There is no parent BillTo customer for this ShipTo, hence no record will be created!!!");
-						    	   
-						    	   prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);		
-						    	   
-						    	   return outputCustomerDoc;
-						       }					       
-						}
-					/*Begin - Changes made by Mitesh Parikh for CR 2670*/	
-					} else if(processCode.equalsIgnoreCase("C")){					
-						
-						long startTime = System.currentTimeMillis();
-						boolean isMSAPChanged = checkIsMSAPChanged(env, customerID, organizationCode, masterSapAccountNumber);
-						if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
-						{
-							if(isMSAPChanged)
-							{
-								boolean isAnExistingMSAP=checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
-								if(isAnExistingMSAP){
-									if(!isCustomerActive()){
-										//activate the customer
-										YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-										manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, masterSapCustomerId);
-										manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-										manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
-										api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
-									}
-									updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
-																	
-								} else {
-									createCustomerWithMasterSAPAccountNumber(env, masterSapCustomerId, strMSAPName, organizationCode, custElement);
-									updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
-								
 								}
-								
-								updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName);
-								long endTime = System.currentTimeMillis();
-								System.out.println("Extra Time taken to process new code changes : ["+(endTime-startTime)+"]");
+								else
+								{
+									//Parent customer does not exist, so create an alert
+
+									YFSException exceptionMessage = new YFSException();
+									exceptionMessage.setErrorDescription("There is no parent BillTo customer for this ShipTo, hence no record will be created!!!");
+
+									prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);		
+
+									return outputCustomerDoc;
+								}					       
 							}
-						}						
-					}				
-					/*End - Changes made by Mitesh Parikh for CR 2670*/
-					//create XPEDXSalesRep element
-					/**************************************/
-					HashSet<String> salesRepSet = new HashSet<String>();
-					if(processCode.equalsIgnoreCase("A")|| processCode.equalsIgnoreCase("C"))
-					{
-						YFCElement salesRepListElement = inputCustomerDoc.createElement(XPXLiterals.E_XPEDX_SALES_REP_LIST);
-						
-						//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed START
-						NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
-						
-						if(nlSalesReps.getLength() != 0)
-						{
-							//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed END
-							Element inputXMLSalesRepListElement = (Element)nlSalesReps.item(0);
-							
-							if(inputXMLSalesRepListElement!=null)
+							/*Begin - Changes made by Mitesh Parikh for CR 2670*/	
+						} else if(processCode.equalsIgnoreCase("C")){					
+
+							long startTime = System.currentTimeMillis();
+							boolean isMSAPChanged = checkIsMSAPChanged(env, customerID, organizationCode, masterSapAccountNumber);
+							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
 							{
-								NodeList nlInputXMLSalesRep = inputXMLSalesRepListElement.getElementsByTagName(XPXLiterals.E_SALES_REP);
-							
-							  if(nlInputXMLSalesRep.getLength()!= 0)
-							  {
-								  /*sayan commented
-								  Element eInputXMLSalesRep = (Element)nlInputXMLSalesRep.item(0);
-								  */
-							      for(int i=0; i<nlInputXMLSalesRep.getLength(); i++)
-							      {
-							    	 ArrayList networkIdSalesRepList = new ArrayList();
-									Element inputXMLSalesRepElement = (Element) nlInputXMLSalesRep.item(i);
-									//Element inputXMLEmployeeElement = (Element)inputXMLSalesRepElement.getElementsByTagName(XPXLiterals.E_EMPLOYEE_ID).item(0);
-									String  inputXMLEmployeeId = inputXMLSalesRepElement.getAttribute("EmployeeId");
-									//fix
-									ArrayList<String> userDetails = checkUserExists(env, inputXMLEmployeeId);
-									//boolean userExists = checkUserExists(env, inputXMLEmployeeId);
-									String userExists = userDetails.get(0);
-									
-									/********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
-									//if(userExists.equals("true"))
-									//{
-									if(!salesRepSet.contains(inputXMLEmployeeId))
-									{
-										salesRepSet.add(inputXMLEmployeeId);
-									if(!inputXMLEmployeeId.equals("0000"))
-									{
-									//ArrayList<String> userList = new ArrayList<String>();
-									
-									if(inputXMLEmployeeId == null || "".equals(inputXMLEmployeeId.trim()))
-									{
-										continue;
+								if(isMSAPChanged)
+								{
+									boolean isAnExistingMSAP=checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
+									if(isAnExistingMSAP){
+										if(!isCustomerActive()){
+											//activate the customer
+											YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+											manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, masterSapCustomerId);
+											manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+											manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
+											api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+										}
+										updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
+
+									} else {
+										createCustomerWithMasterSAPAccountNumber(env, masterSapCustomerId, strMSAPName, organizationCode, custElement);
+										updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
+
 									}
-										//replace 
-									//networkIdSalesRepList = invokeGetUserList(env,inputXMLEmployeeId) ;
+
+									arrChildCustomerIds.add(sapCustomerId);
 									
-									//log.debug("The network id retrieved: "+networkId);
-									//Only For testing purposes
-									/*if(i==1)
+									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName);
+									long endTime = System.currentTimeMillis();
+									log.info("Extra Time taken to process new code changes : ["+(endTime-startTime)+"]");
+
+									//getChildCustomerList(env,customerID,organizationCode);
+									
+									String existingMSAPId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
+									Document ccDoc = getCustomerContactList(env, existingMSAPId);
+									Element ccElem = ccDoc.getDocumentElement();
+									NodeList childList = ccElem.getChildNodes();
+									for(int counter = 0; counter < childList.getLength(); counter ++) {
+										Element childElem =(Element)childList.item(counter); 
+										String userId = childElem.getAttribute("UserID");
+										//arrUserList.add(userId);
+										ArrayList<String> arrUserAssgnList = new ArrayList<String>();
+										
+										Document assgnDoc = getCustomerAssignmentList(env, userId);
+										Element custAssgnElem = assgnDoc.getDocumentElement();
+										NodeList assgnNodeList = custAssgnElem.getElementsByTagName("Customer");
+										for(int counter1=0; counter1 < assgnNodeList.getLength(); counter1++) {
+											Element custElem = (Element)assgnNodeList.item(counter1);
+											arrUserAssgnList.add(custElem.getAttribute("CustomerID") );
+										}
+										Collection retainAllCollection = CollectionUtils.retainAll(arrUserAssgnList, arrChildCustomerIds);
+										
+										if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
+												&& retainAllCollection.size() <= arrUserAssgnList.size()) {
+											//Remove the assignments
+											
+											Collection intersection = CollectionUtils.intersection(arrUserAssgnList, arrChildCustomerIds);
+											Iterator iterCustId = intersection.iterator();
+											while(iterCustId.hasNext()){
+												String assgnCustId = (String) iterCustId.next();
+
+												YFCDocument manageCustomerAssgnInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, assgnCustId);
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("IgnoreOrdering","Y");
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("Operation", "Delete");
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingMSAPId);
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", userId);
+												
+												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());
+												
+											}
+											
+										} 
+										
+										if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
+												&& retainAllCollection.size() == arrUserAssgnList.size()) {
+											//Move the login
+											log.info("Following logins have no assignments ---");
+											log.info("Login ID ---" + userId);
+											log.info("Old MSAP hierarchy ---" + existingMSAPId);
+											log.info("New MSAP hierarchy ---" + masterSapCustomerId);
+										}
+									}
+										
+								}
+							}						
+						}				
+						/*End - Changes made by Mitesh Parikh for CR 2670*/
+						//create XPEDXSalesRep element
+						/**************************************/
+						HashSet<String> salesRepSet = new HashSet<String>();
+						if(processCode.equalsIgnoreCase("A")|| processCode.equalsIgnoreCase("C"))
+						{
+							YFCElement salesRepListElement = inputCustomerDoc.createElement(XPXLiterals.E_XPEDX_SALES_REP_LIST);
+
+							//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed START
+							NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
+
+							if(nlSalesReps.getLength() != 0)
+							{
+								//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed END
+								Element inputXMLSalesRepListElement = (Element)nlSalesReps.item(0);
+
+								if(inputXMLSalesRepListElement!=null)
+								{
+									NodeList nlInputXMLSalesRep = inputXMLSalesRepListElement.getElementsByTagName(XPXLiterals.E_SALES_REP);
+
+									if(nlInputXMLSalesRep.getLength()!= 0)
+									{
+										/*sayan commented
+								  Element eInputXMLSalesRep = (Element)nlInputXMLSalesRep.item(0);
+										 */
+										for(int i=0; i<nlInputXMLSalesRep.getLength(); i++)
+										{
+											ArrayList networkIdSalesRepList = new ArrayList();
+											Element inputXMLSalesRepElement = (Element) nlInputXMLSalesRep.item(i);
+											//Element inputXMLEmployeeElement = (Element)inputXMLSalesRepElement.getElementsByTagName(XPXLiterals.E_EMPLOYEE_ID).item(0);
+											String  inputXMLEmployeeId = inputXMLSalesRepElement.getAttribute("EmployeeId");
+											//fix
+											ArrayList<String> userDetails = checkUserExists(env, inputXMLEmployeeId);
+											//boolean userExists = checkUserExists(env, inputXMLEmployeeId);
+											String userExists = userDetails.get(0);
+
+											/********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
+											//if(userExists.equals("true"))
+											//{
+											if(!salesRepSet.contains(inputXMLEmployeeId))
+											{
+												salesRepSet.add(inputXMLEmployeeId);
+												if(!inputXMLEmployeeId.equals("0000"))
+												{
+													//ArrayList<String> userList = new ArrayList<String>();
+
+													if(inputXMLEmployeeId == null || "".equals(inputXMLEmployeeId.trim()))
+													{
+														continue;
+													}
+													//replace 
+													//networkIdSalesRepList = invokeGetUserList(env,inputXMLEmployeeId) ;
+
+													//log.debug("The network id retrieved: "+networkId);
+													//Only For testing purposes
+													/*if(i==1)
 									{
 										networkId = "pnairSecond";
 									}*/
-									
-									
-									        YFCElement salesRepElement = inputCustomerDoc.createElement(XPXLiterals.E_XPEDX_SALES_REP);
-									        salesRepElement.setAttribute(XPXLiterals.A_SALES_REP_ID, inputXMLEmployeeId);
-									        
-									        // Start - changes made on 15/02/2011								        								        
-									        salesRepElement.setAttribute(XPXLiterals.MSAP_CUSTOMER_NAME, strMSAPName);
-									        salesRepElement.setAttribute(XPXLiterals.MSAP_CUSTOMER_NUMBER,masterSapAccountNumber);								        
-									        // End - changes made on 15/02/2011								        								        
-									        
-									       // userList = getNetworkID(env,inputXMLEmployeeId);
-									        //fix
-									        int userLength = userDetails.size();
-									        if(userLength > 1)
-									        {
-									        //replace
-									        //salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, (String)networkIdSalesRepList.get(0));
-									        //salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, "networkID");
-									        salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, userDetails.get(1));
-									        salesRepElement.setAttribute("SalesUserKey", userDetails.get(2));
-									        }
-									        else
-									        {
-									        	//code to be sent to the CENT tool
-									        	//to do
-									        	log.debug("EmployeeID  is not populated");
-									        	
-									        }
-									        salesRepElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-									        
-									        if(i==0)
-									          {
-										         //PrimarySalesRep
-										         salesRepElement.setAttribute(XPXLiterals.A_PRIMARY_SALES_REP_FLAG,XPXLiterals.BOOLEAN_FLAG_Y);
-									           }
-									        salesRepListElement.appendChild(salesRepElement);
-									
-										
-										//replace
-										/*if(networkIdSalesRepList.size()>0)
+
+
+													YFCElement salesRepElement = inputCustomerDoc.createElement(XPXLiterals.E_XPEDX_SALES_REP);
+													salesRepElement.setAttribute(XPXLiterals.A_SALES_REP_ID, inputXMLEmployeeId);
+
+													// Start - changes made on 15/02/2011								        								        
+													salesRepElement.setAttribute(XPXLiterals.MSAP_CUSTOMER_NAME, strMSAPName);
+													salesRepElement.setAttribute(XPXLiterals.MSAP_CUSTOMER_NUMBER,masterSapAccountNumber);								        
+													// End - changes made on 15/02/2011								        								        
+
+													// userList = getNetworkID(env,inputXMLEmployeeId);
+													//fix
+													int userLength = userDetails.size();
+													if(userLength > 1)
+													{
+														//replace
+														//salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, (String)networkIdSalesRepList.get(0));
+														//salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, "networkID");
+														salesRepElement.setAttribute(XPXLiterals.A_NETWORK_ID, userDetails.get(1));
+														salesRepElement.setAttribute("SalesUserKey", userDetails.get(2));
+													}
+													else
+													{
+														//code to be sent to the CENT tool
+														//to do
+														log.debug("EmployeeID  is not populated");
+
+													}
+													salesRepElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+
+													if(i==0)
+													{
+														//PrimarySalesRep
+														salesRepElement.setAttribute(XPXLiterals.A_PRIMARY_SALES_REP_FLAG,XPXLiterals.BOOLEAN_FLAG_Y);
+													}
+													salesRepListElement.appendChild(salesRepElement);
+
+
+													//replace
+													/*if(networkIdSalesRepList.size()>0)
 										{
 										  networkIdList.add((String)networkIdSalesRepList.get(0));	
 										  salesRepTeam.put((String)networkIdSalesRepList.get(0), (String)networkIdSalesRepList.get(1));
 										}*/
-									}       
-									         
-								   }
-									//}
-							      }
-							  }
+												}       
+
+											}
+											//}
+										}
+									}
+								}
 							}
+
+							if(processCode.equalsIgnoreCase("C"))
+							{
+								salesRepListElement.setAttribute(XPXLiterals.A_RESET, XPXLiterals.BOOLEAN_FLAG_Y);
+
+							}
+							extnElement.appendChild(salesRepListElement);
+
+
 						}
-						
-						if(processCode.equalsIgnoreCase("C"))
+
+						/*********Added by Prasanth Kumar M. for CR 968****************************/
+
+						if("Y".equalsIgnoreCase(customerPOReqdFlag) && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
 						{
-							salesRepListElement.setAttribute(XPXLiterals.A_RESET, XPXLiterals.BOOLEAN_FLAG_Y);
-											
+							//If flag is set as Y, add the RequiredCustomerPO rule for the bill to customer(after first checking if its available)
+
+							//Get the rule key from the Rules table
+
+							Document getRuleDefnInputDoc = YFCDocument.createDocument("XPXRuleDefn").getDocument();
+							getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", "RequireCustomerPO");
+							log.debug("The input xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnInputDoc));
+							Document getRuleDefnOutputDoc = api.executeFlow(env, "XPXGetRuleDefnList", getRuleDefnInputDoc);
+							log.debug("The output xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnOutputDoc));
+
+							if(getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").getLength() > 0)
+							{
+								//Rule exists in table
+
+								Element ruleDefnElement = (Element) getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").item(0);	
+								String ruleKey = ruleDefnElement.getAttribute("RuleKey");
+
+								//Check if rule is already applied for customer
+								Document getCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
+								getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
+								getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("RuleKey",ruleKey);
+								log.debug("The input xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleInputDoc));
+								Document getCustomerProfileRuleOutputDoc = api.executeFlow(env, "XPXGetCustomerProfileRuleList", getCustomerProfileRuleInputDoc);
+								log.debug("The output xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleOutputDoc));
+
+								if(getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").getLength()<=0)
+								{
+									//Rule needs to be applied
+									YFCElement customerProfileRuleListElement = inputCustomerDoc.createElement("XPXCustomerRulesProfileList");
+									YFCElement customerProfileRuleElement = inputCustomerDoc.createElement("XPXCustomerRulesProfile");
+									customerProfileRuleElement.setAttribute("CustomerID", customerID);
+									customerProfileRuleElement.setAttribute("RuleKey",ruleKey);
+									customerProfileRuleElement.setAttribute("OrganizationCode",organizationCode);
+									customerProfileRuleListElement.appendChild(customerProfileRuleElement);
+
+									extnElement.appendChild(customerProfileRuleListElement);
+								}
+
+							}
+							else
+							{
+								log.debug("There is no RequiredCustomerPO rule in the system");
+							}
+
+
 						}
-						extnElement.appendChild(salesRepListElement);
-						
-						
-					}
-					
-					/*********Added by Prasanth Kumar M. for CR 968****************************/
-					
-					if("Y".equalsIgnoreCase(customerPOReqdFlag) && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
-					{
-						//If flag is set as Y, add the RequiredCustomerPO rule for the bill to customer(after first checking if its available)
-						
-						//Get the rule key from the Rules table
-						
-						Document getRuleDefnInputDoc = YFCDocument.createDocument("XPXRuleDefn").getDocument();
-						getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", "RequireCustomerPO");
-						log.debug("The input xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnInputDoc));
-						Document getRuleDefnOutputDoc = api.executeFlow(env, "XPXGetRuleDefnList", getRuleDefnInputDoc);
-						log.debug("The output xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnOutputDoc));
-						
-						if(getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").getLength() > 0)
+						else if("N".equalsIgnoreCase(customerPOReqdFlag) && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
 						{
-						   //Rule exists in table
-							
-						   Element ruleDefnElement = (Element) getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").item(0);	
-						   String ruleKey = ruleDefnElement.getAttribute("RuleKey");
-						   
-						   //Check if rule is already applied for customer
-						   Document getCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
-						   getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
-						   getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("RuleKey",ruleKey);
-						   log.debug("The input xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleInputDoc));
-						   Document getCustomerProfileRuleOutputDoc = api.executeFlow(env, "XPXGetCustomerProfileRuleList", getCustomerProfileRuleInputDoc);
-						   log.debug("The output xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleOutputDoc));
-						   
-						   if(getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").getLength()<=0)
-						   {
-							   //Rule needs to be applied
-							   YFCElement customerProfileRuleListElement = inputCustomerDoc.createElement("XPXCustomerRulesProfileList");
-							   YFCElement customerProfileRuleElement = inputCustomerDoc.createElement("XPXCustomerRulesProfile");
-							   customerProfileRuleElement.setAttribute("CustomerID", customerID);
-							   customerProfileRuleElement.setAttribute("RuleKey",ruleKey);
-							   customerProfileRuleElement.setAttribute("OrganizationCode",organizationCode);
-							   customerProfileRuleListElement.appendChild(customerProfileRuleElement);
-							   
-							   extnElement.appendChild(customerProfileRuleListElement);
-						   }
-						   
-						}
-						else
-						{
-							log.debug("There is no RequiredCustomerPO rule in the system");
-						}
-						
-						
-					}
-					else if("N".equalsIgnoreCase(customerPOReqdFlag) && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
-					{
-						//If flag is set as N, delete the RequiredCustomerPO rule for the bill to customer(after first checking if its available)
-						
-	                    //Get the rule key from the Rules table
-						
-						Document getRuleDefnInputDoc = YFCDocument.createDocument("XPXRuleDefn").getDocument();
-						getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", "RequireCustomerPO");
-						log.debug("The input xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnInputDoc));
-						Document getRuleDefnOutputDoc = api.executeFlow(env, "XPXGetRuleDefnList", getRuleDefnInputDoc);
-						log.debug("The output xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnOutputDoc));
-						
-						if(getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").getLength() > 0)
-						{
-							//Rule exists, so retrieve the rule key
-							
-							Element ruleDefnElement = (Element) getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").item(0);	
-							String ruleKey = ruleDefnElement.getAttribute("RuleKey");
-							
-							//Check if rule is already removed for customer
-							
-							Document getCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
-							getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
-							getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("RuleKey",ruleKey);
-							 log.debug("The input xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleInputDoc));
-							Document getCustomerProfileRuleOutputDoc = api.executeFlow(env, "XPXGetCustomerProfileRuleList", getCustomerProfileRuleInputDoc);
-							log.debug("The output xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleOutputDoc));
-							
-							 if(getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").getLength()>0)
-							   {
-								    //Rule exists for customer...so remove the rule
-								   
-								    Element customerProfileRuleElement = (Element) getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").item(0);
-								    String customerProfileRuleKey = customerProfileRuleElement.getAttribute("CustomerRuleProfileKey");
-								    
-								    Document deleteCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
+							//If flag is set as N, delete the RequiredCustomerPO rule for the bill to customer(after first checking if its available)
+
+							//Get the rule key from the Rules table
+
+							Document getRuleDefnInputDoc = YFCDocument.createDocument("XPXRuleDefn").getDocument();
+							getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", "RequireCustomerPO");
+							log.debug("The input xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnInputDoc));
+							Document getRuleDefnOutputDoc = api.executeFlow(env, "XPXGetRuleDefnList", getRuleDefnInputDoc);
+							log.debug("The output xml to XPXGetRuleDefnList is: "+SCXmlUtil.getString(getRuleDefnOutputDoc));
+
+							if(getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").getLength() > 0)
+							{
+								//Rule exists, so retrieve the rule key
+
+								Element ruleDefnElement = (Element) getRuleDefnOutputDoc.getDocumentElement().getElementsByTagName("XPXRuleDefn").item(0);	
+								String ruleKey = ruleDefnElement.getAttribute("RuleKey");
+
+								//Check if rule is already removed for customer
+
+								Document getCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
+								getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
+								getCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("RuleKey",ruleKey);
+								log.debug("The input xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleInputDoc));
+								Document getCustomerProfileRuleOutputDoc = api.executeFlow(env, "XPXGetCustomerProfileRuleList", getCustomerProfileRuleInputDoc);
+								log.debug("The output xml to XPXGetCustomerProfileRuleList is: "+SCXmlUtil.getString(getCustomerProfileRuleOutputDoc));
+
+								if(getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").getLength()>0)
+								{
+									//Rule exists for customer...so remove the rule
+
+									Element customerProfileRuleElement = (Element) getCustomerProfileRuleOutputDoc.getDocumentElement().getElementsByTagName("XPXCustomerRulesProfile").item(0);
+									String customerProfileRuleKey = customerProfileRuleElement.getAttribute("CustomerRuleProfileKey");
+
+									Document deleteCustomerProfileRuleInputDoc = YFCDocument.createDocument("XPXCustomerRulesProfile").getDocument();
 									deleteCustomerProfileRuleInputDoc.getDocumentElement().setAttribute("CustomerRuleProfileKey", customerProfileRuleKey);
 									log.debug("The output xml to XPXDeleteCustomerProfileRule is: "+SCXmlUtil.getString(deleteCustomerProfileRuleInputDoc)); 
 									api.executeFlow(env, "XPXDeleteCustomerProfileRule", deleteCustomerProfileRuleInputDoc);
-																	
-							   }
-							
-						}
-					}
-					
-								
-					
-					YFCElement buyerOrgElement = formBUyerOrgElement(custElement, inputCustomerDoc,
-							inputCustomerElement, sapCustomerId, organizationCode);
-					inputCustomerElement.appendChild(buyerOrgElement);
-					
-					//get the address element
-					NodeList addressList = custElement.getElementsByTagName("AddressList");
-					int addressListLength = addressList.getLength();
-					
-					if(addressListLength>0)
-					{
-						Element addressNodeElement = (Element)addressList.item(0);
-						//log.debug(SCXmlUtil.getString(addressNodeElement));
-						YFCElement billingAddressElement = formBillingPersonInfoElement( addressNodeElement, inputCustomerDoc);
-						YFCElement contactAddressElement = formContactPersonInfoElement( addressNodeElement, inputCustomerDoc);
-						
-						/******************************Fix for Bug#11699 by Prasanth Kumar M.*********************************/
-						
-						YFCElement customerAdditionalAddressElement = formAdditionalAddressElement(addressNodeElement, inputCustomerDoc,suffixType);
-						inputCustomerDoc.getDocumentElement().appendChild(customerAdditionalAddressElement);
-						
-						/****************************************************************************************************/
-						
-						buyerOrgElement.appendChild(billingAddressElement);
-						buyerOrgElement.appendChild(contactAddressElement);
-						
-					}
-					
-					
-					
-					log.debug("the input doc for manageCustomer formed is: "+ SCXmlUtil.getString(inputCustomerDoc.getDocument()));
-					//invoke manageCustomer
-					
-					outputCustomerDoc = api.invoke(env, "manageCustomer", inputCustomerDoc.getDocument());
-					
-					//Added:mnayak
-					//create a user at the MSAP level and assign the user to customer
-					//first time create it second time just assigning
-					//if(processCode.equalsIgnoreCase("A"))
-					//{
-					//createMasterUser(env, customerID, suffixType);
-					//}
-					
-					//new requirement
-					HashSet<String> salesRepSetForUser = new HashSet<String>();
-					if(processCode.equalsIgnoreCase("A"))
-					{
-						NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
-						if(nlSalesReps.getLength() != 0)
-						{
-							//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed END
-							Element inputXMLSalesRepListElement = (Element)nlSalesReps.item(0);
-							
-							if(inputXMLSalesRepListElement!=null)
-							{
-								NodeList nlInputXMLSalesRep = inputXMLSalesRepListElement.getElementsByTagName(XPXLiterals.E_SALES_REP);
-							
-							  if(nlInputXMLSalesRep.getLength()!= 0)
-							  {
-								  /*sayan commented
-								  Element eInputXMLSalesRep = (Element)nlInputXMLSalesRep.item(0);
-								  */
-							      for(int i=0; i<nlInputXMLSalesRep.getLength(); i++)
-							      {
-							    	 ArrayList networkIdSalesRepList = new ArrayList();
-							    	 Element inputXMLSalesRepElement = (Element) nlInputXMLSalesRep.item(i);
-							    	 String salesRep = inputXMLSalesRepElement.getAttribute("EmployeeId");
-							    	 if(!salesRepSetForUser.contains(salesRep))
-							    	 {
-							    		 salesRepSetForUser.add(salesRep);
-							    	
-							    	 //check if the user exists .if user does not exist then create it and asign it to customer
-							    	 if(!salesRep.equals("0000"))
-							    	 {
-							    		 //check if this user exists in User table
-							    		 //boolean userExists = checkUserExists(env,salesRep);
-							    		 ArrayList<String> userDetails = checkUserExists(env,salesRep);
-							    		 String userExists = userDetails.get(0);
-							    		 
-							    		 /********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
-							    		 //if(userExists.equals("true"))
-							    		 //{
-							    			 createMasterUser(env, customerID, suffixType, salesRep);
-							    		 //}
-							    	 }
-							    	 }
-							      }
-							  }
+
+								}
+
 							}
 						}
-					} 
-					
-								
-					/*
-					 * Commenting out temporarily
-					 */
-					//assign an entitlement
-					/*Begin: CR 2277
+
+
+
+						YFCElement buyerOrgElement = formBUyerOrgElement(custElement, inputCustomerDoc,
+								inputCustomerElement, sapCustomerId, organizationCode);
+						inputCustomerElement.appendChild(buyerOrgElement);
+
+						//get the address element
+						NodeList addressList = custElement.getElementsByTagName("AddressList");
+						int addressListLength = addressList.getLength();
+
+						if(addressListLength>0)
+						{
+							Element addressNodeElement = (Element)addressList.item(0);
+							//log.debug(SCXmlUtil.getString(addressNodeElement));
+							YFCElement billingAddressElement = formBillingPersonInfoElement( addressNodeElement, inputCustomerDoc);
+							YFCElement contactAddressElement = formContactPersonInfoElement( addressNodeElement, inputCustomerDoc);
+
+							/******************************Fix for Bug#11699 by Prasanth Kumar M.*********************************/
+
+							YFCElement customerAdditionalAddressElement = formAdditionalAddressElement(addressNodeElement, inputCustomerDoc,suffixType);
+							inputCustomerDoc.getDocumentElement().appendChild(customerAdditionalAddressElement);
+
+							/****************************************************************************************************/
+
+							buyerOrgElement.appendChild(billingAddressElement);
+							buyerOrgElement.appendChild(contactAddressElement);
+
+						}
+
+
+
+						log.debug("the input doc for manageCustomer formed is: "+ SCXmlUtil.getString(inputCustomerDoc.getDocument()));
+						//invoke manageCustomer
+
+						outputCustomerDoc = api.invoke(env, "manageCustomer", inputCustomerDoc.getDocument());
+
+						//Added:mnayak
+						//create a user at the MSAP level and assign the user to customer
+						//first time create it second time just assigning
+						//if(processCode.equalsIgnoreCase("A"))
+						//{
+						//createMasterUser(env, customerID, suffixType);
+						//}
+
+						//new requirement
+						HashSet<String> salesRepSetForUser = new HashSet<String>();
+						if(processCode.equalsIgnoreCase("A"))
+						{
+							NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
+							if(nlSalesReps.getLength() != 0)
+							{
+								//sayan added to handle the requirement that sales rep is not mandatory on customer batch feed END
+								Element inputXMLSalesRepListElement = (Element)nlSalesReps.item(0);
+
+								if(inputXMLSalesRepListElement!=null)
+								{
+									NodeList nlInputXMLSalesRep = inputXMLSalesRepListElement.getElementsByTagName(XPXLiterals.E_SALES_REP);
+
+									if(nlInputXMLSalesRep.getLength()!= 0)
+									{
+										/*sayan commented
+								  Element eInputXMLSalesRep = (Element)nlInputXMLSalesRep.item(0);
+										 */
+										for(int i=0; i<nlInputXMLSalesRep.getLength(); i++)
+										{
+											ArrayList networkIdSalesRepList = new ArrayList();
+											Element inputXMLSalesRepElement = (Element) nlInputXMLSalesRep.item(i);
+											String salesRep = inputXMLSalesRepElement.getAttribute("EmployeeId");
+											if(!salesRepSetForUser.contains(salesRep))
+											{
+												salesRepSetForUser.add(salesRep);
+
+												//check if the user exists .if user does not exist then create it and asign it to customer
+												if(!salesRep.equals("0000"))
+												{
+													//check if this user exists in User table
+													//boolean userExists = checkUserExists(env,salesRep);
+													ArrayList<String> userDetails = checkUserExists(env,salesRep);
+													String userExists = userDetails.get(0);
+
+													/********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
+													//if(userExists.equals("true"))
+													//{
+													createMasterUser(env, customerID, suffixType, salesRep);
+													//}
+												}
+											}
+										}
+									}
+								}
+							}
+						} 
+
+
+						/*
+						 * Commenting out temporarily
+						 */
+						//assign an entitlement
+						/*Begin: CR 2277
 					if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
 					{
 					   //As per business rule, no BillTo customers will have a group entitlement	
 					createEntitlementForCustomer(env, shipFrom, suffixType, envtId, pricingWareHouse,processCode,customerID,organizationCode);
 					}
 					End: CR 2277*/
-					
-					//assign a pricelist
-					createPriceListAssignmentForCustomer(env, shipFrom,envtId,companyCode,pricingWareHouse,customerID,organizationCode);
-					
-					if(processCode.equalsIgnoreCase("C"))
-					{
-						//get the existing assignments
-						ArrayList<String> existingAssignmentKeys = new ArrayList<String>();
-						existingAssignmentKeys = getCustomerAssignments(env,customerID,organizationCode,suffixType);
-						if(existingAssignmentKeys.size() > 0)
+
+						//assign a pricelist
+						createPriceListAssignmentForCustomer(env, shipFrom,envtId,companyCode,pricingWareHouse,customerID,organizationCode);
+
+						if(processCode.equalsIgnoreCase("C"))
 						{
-						   deleteExistingAssignments(env,existingAssignmentKeys);
+							//get the existing assignments
+							ArrayList<String> existingAssignmentKeys = new ArrayList<String>();
+							existingAssignmentKeys = getCustomerAssignments(env,customerID,organizationCode,suffixType);
+							if(existingAssignmentKeys.size() > 0)
+							{
+								deleteExistingAssignments(env,existingAssignmentKeys);
+							}
+							//then assign the customer to the new CSRs
+							manageCustomerAssignmentforA(env,customerID,organizationCode,inXML);
+
 						}
-						//then assign the customer to the new CSRs
-						manageCustomerAssignmentforA(env,customerID,organizationCode,inXML);
-						
+
+						else if (processCode.equalsIgnoreCase("A"))
+						{
+							//added mnayak
+							//create team and assign the customers to the team
+							manageCustomerAssignmentforA(env,customerID,organizationCode,inXML);
+
+						}
+
+
 					}
-					
-					else if (processCode.equalsIgnoreCase("A"))
+					else if(processCode.equalsIgnoreCase("D"))
 					{
-						//added mnayak
-						//create team and assign the customers to the team
-						manageCustomerAssignmentforA(env,customerID,organizationCode,inXML);
-						
+						//Soft Delete the customer i.e make the customer inactive by setting status="30"
+
+						boolean isCustomerAvailableInSystem = false;
+
+						isCustomerAvailableInSystem = checkIsCustomerAvailableInSystem(env,customerID,organizationCode);
+
+						if(isCustomerAvailableInSystem)
+						{
+							YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "30");
+
+							api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+						}
+						else
+						{
+							log.error("The customer: "+customerID+" is not available for soft delete");
+						}
 					}
-						
-				 
-				}
-				else if(processCode.equalsIgnoreCase("D"))
-				{
-					//Soft Delete the customer i.e make the customer inactive by setting status="30"
-					
-					boolean isCustomerAvailableInSystem = false;
-					
-					isCustomerAvailableInSystem = checkIsCustomerAvailableInSystem(env,customerID,organizationCode);
-					
-					if(isCustomerAvailableInSystem)
+
+					else if("E".equalsIgnoreCase(processCode))
 					{
-					YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-					
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "30");
-					
-					api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+						// Hard delete the customer i.e remove the customer details from the system
+
+						boolean isCustomerAvailableInSystem = false;
+
+						isCustomerAvailableInSystem = checkIsCustomerAvailableInSystem(env,customerID,organizationCode);
+
+						if(isCustomerAvailableInSystem)
+						{
+							YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
+
+							manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.DELETE);
+
+							//added:mnayak
+							//get all the assignments
+							ArrayList<String> existingTeamKeys = getAllCustomerAssignments(env, customerID, organizationCode, suffixType);
+							deleteExistingAssignments(env, existingTeamKeys);
+
+							api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+
+
+
+						}
+						else
+						{
+							log.error("The customer: "+customerID+" is not available for hard delete");
+						}
 					}
 					else
 					{
-						log.error("The customer: "+customerID+" is not available for soft delete");
+						log.error("The processCode mentioned: "+processCode+""+" is invalid!!!");
 					}
 				}
-				
-				else if("E".equalsIgnoreCase(processCode))
-				{
-					// Hard delete the customer i.e remove the customer details from the system
-					
-	                 boolean isCustomerAvailableInSystem = false;
-					
-					isCustomerAvailableInSystem = checkIsCustomerAvailableInSystem(env,customerID,organizationCode);
-					
-					if(isCustomerAvailableInSystem)
-					{
-					YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-					
-					manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.DELETE);
-					
-					//added:mnayak
-					//get all the assignments
-					ArrayList<String> existingTeamKeys = getAllCustomerAssignments(env, customerID, organizationCode, suffixType);
-					deleteExistingAssignments(env, existingTeamKeys);
-					
-					api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
-					
-					
-					
-					}
-					else
-					{
-						log.error("The customer: "+customerID+" is not available for hard delete");
-					}
-				}
-				else
-				{
-					log.error("The processCode mentioned: "+processCode+""+" is invalid!!!");
-				}
-			}
 			}
 			return outputCustomerDoc;
 		}catch (NullPointerException ne) {
@@ -786,7 +847,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			throw e;
 		}			
 	}
-	
+
 	/**@author asekhar-tw on 21-Jan-2011
 	 * This method prepares the error object with the exception details which in turn will be used to log into CENT
 	 */
@@ -798,7 +859,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		errorObject.setException(e);
 		ErrorLogger.log(errorObject, env);
 	}
-	
+
 	private ArrayList<String> checkUserExists(YFSEnvironment env, String salesRep) throws YFSException, RemoteException
 	{
 		ArrayList<String> userDetails = new ArrayList<String>();
@@ -830,8 +891,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				//userKey = getUserKey(env,userID);
 				userKey = contactElement.getAttribute("UserKey");
 				userDetails.add(userKey);
-				
-				
+
+
 			}
 		}
 		else
@@ -839,10 +900,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			userExists = "false";
 			userDetails.add(userExists);
 		}
-		
+
 		return userDetails;
 	}
-	
+
 	/*private ArrayList<String> getNetworkID(YFSEnvironment env, String employeeID) throws YFSException, RemoteException
 		{
 		ArrayList<String> ContactList = new ArrayList<String>();
@@ -870,13 +931,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			//userKey = getUserKey(env,userID);
 			userKey = contactElement.getAttribute("UserKey");
 			ContactList.add(userKey);
-			
+
 		}
-		
+
 			return ContactList;
 		}*/
-	
-	
+
+
 	/*private String getUserKey(YFSEnvironment env, String userID) throws YFSException, RemoteException
 	{
 		String userKey = "";
@@ -913,7 +974,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		 *  Master customer user has been formed with master customer id and not with customer name.
 		 * */
 		String masterCustomerUser = salesRepId+"@"+masterCustomerId+".com";
-		
+
 		//check if the mastercustomer user already exists
 		//requirement change
 		boolean masterCustomerexists = false;
@@ -930,10 +991,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			createMasterCustomer(env, masterCustomerUser,rootCustomerKey,customerID);
 			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
 		}
-		
+
 	}
-	
-	
+
+
 	//method to create master customer user
 	private void createMasterCustomer(YFSEnvironment env, String masterCustomerUser, String customerKey, String customerId) throws YFSException, RemoteException
 	{
@@ -973,8 +1034,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		log.debug("inputCustomerDoc"+SCXmlUtil.getString(inputCustomerDoc));
 		api.invoke(env, "manageCustomer", inputCustomerDoc);
 	}
-	
-	
+
+
 	//method to assign master customer user to the customer
 	private void assignMasterCustomerUserToCustomer(YFSEnvironment env, String customerID, String masterCustomerUser, String suffixType,String masterCustomerId) throws YFSException, RemoteException
 	{
@@ -986,23 +1047,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputAssignmentElement.setAttribute("Operation", "Create");
 		if(suffixType.equals("B"))
 		{
-		//inputAssignmentElement.setAttribute("OrganizationCode", customerID);
+			//inputAssignmentElement.setAttribute("OrganizationCode", customerID);
 			inputAssignmentElement.setAttribute("OrganizationCode", masterCustomerId);
-		//}
-		/*sals reps are expected only with billto*/
-		/*else
+			//}
+			/*sals reps are expected only with billto*/
+			/*else
 		if(suffixType.equals("S")){
 			//get the billto customer
 			getBillToForShipTo(env, customerID, inputAssignmentElement);
-			
+
 		}*/
-		log.debug("inputAssignmentDoc"+SCXmlUtil.getString(inputAssignmentDoc));
-		api.invoke(env, "manageCustomerAssignment", inputAssignmentDoc);
+			log.debug("inputAssignmentDoc"+SCXmlUtil.getString(inputAssignmentDoc));
+			api.invoke(env, "manageCustomerAssignment", inputAssignmentDoc);
 		}
-		
+
 	}
 
-	
+
 	//method to get the organization code which manages the customer
 	private void getBillToForShipTo(YFSEnvironment env, String customerID,
 			Element inputAssignmentElement) throws RemoteException {
@@ -1019,8 +1080,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			inputAssignmentElement.setAttribute("OrganizationCode", orgCode);
 		}
 	}
-	
-	
+
+
 	//method to check if the master customer user already exists
 	private boolean checkForMasterCustomer(YFSEnvironment env, String masterCustomerUser) throws YFSException, RemoteException
 	{
@@ -1036,9 +1097,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			customerExists = true;
 		}
 		return customerExists;
-		
+
 	}
-	
+
 	private ArrayList<String> getCustomerNameForMSAP(YFSEnvironment env, String rootCustomerKey) throws YFSException, RemoteException
 	{
 		ArrayList<String> MSAPList = new ArrayList<String>();
@@ -1062,7 +1123,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			customerName = SCXmlUtil.getXpathAttribute(customerElement, "./BuyerOrganization/@OrganizationName");
 			/* End - changes made on 15/02/2011 */
 		}
-		
+
 		MSAPList.add(customerName);
 		MSAPList.add(customerID);
 		return MSAPList;
@@ -1070,7 +1131,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 	//method to get the rootcustomer key
 	private String getRootCustomerKey(YFSEnvironment env, String customerID)
-			throws RemoteException {
+	throws RemoteException {
 		String rootCustomerKey = "";
 		Document inputCustomerDoc = SCXmlUtil.createDocument("Customer");
 		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
@@ -1087,7 +1148,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		}
 		return rootCustomerKey;
 	}
-	
+
 	//method to delete the existing assignments for the customer
 	private void deleteExistingAssignments(YFSEnvironment env,ArrayList<String> existingTeamKeys) throws YFSException, RemoteException
 	{
@@ -1105,9 +1166,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			customerAssignmentElement.setAttribute("CustomerAssignmentKey", existingTeamKeys.get(counter));
 			customerAssignmentElement.setAttribute("Operation", "Delete");
 			inputElement.appendChild(customerAssignmentElement);
-			
+
 		}
-		System.out.println("The input to delete assignments multiApi is: "+SCXmlUtil.getString(multiApiDoc));
+		log.info("The input to delete assignments multiApi is: "+SCXmlUtil.getString(multiApiDoc));
 		api.invoke(env, "multiApi", multiApiDoc);
 	}
 	//this method is to delete all the customer assignments for a customer
@@ -1126,7 +1187,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			if(suffixType.equals("B"))
 			{
 				customerKey = getCustomerKey(env, customerID);
-				
+
 				populateCustomerKeyList(env,customerKey,customerKeyList);
 				customerKeyList.add(customerKey);
 			}
@@ -1138,7 +1199,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			{
 				Document inputCustomerAssignmentDoc = SCXmlUtil.createDocument("CustomerAssignment");
 				Element inputCustomerAssignmentElement = inputCustomerAssignmentDoc.getDocumentElement();
-								
+
 				inputCustomerAssignmentElement.setAttribute("CustomerKey", customerKeyList.get(keyCounter));
 				Document customerAssignmentListDoc = api.invoke(env, "getCustomerAssignmentList", inputCustomerAssignmentDoc);
 				NodeList customerAssignmentNodeList = customerAssignmentListDoc.getElementsByTagName("CustomerAssignment");
@@ -1153,11 +1214,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					}
 				}
 			}
-		
+
 		}
 		return customerAssignmentList;
 	}
-	
+
 	//method to populate customer keys of all shiptos below billto for deleting customer assignments
 	private void populateCustomerKeyList(YFSEnvironment env,String customerKey,ArrayList<String> customerKeyList) throws YFSException, RemoteException
 	{
@@ -1175,13 +1236,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				Element customerElement = (Element)customerNodeList.item(counter);
 				childCustomerKey = customerElement.getAttribute("CustomerKey");
 				customerKeyList.add(childCustomerKey);
-				
+
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	//method to get the customer key
 	private String getCustomerKey(YFSEnvironment env, String customerID) throws YFSException, RemoteException
 	{
@@ -1202,11 +1263,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		{
 			Element customerElement = (Element)customerNodeList.item(0);
 			customerKey = customerElement.getAttribute("CustomerKey");
-			
+
 		}
 		return customerKey;
 	}
-	
+
 	//method to get the existing customer assignments for the customer
 	private ArrayList<String> getCustomerAssignments(YFSEnvironment env, String customerID, String organizationCode,String suffixType) throws YFSException, RemoteException
 	{
@@ -1225,9 +1286,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			{
 				getBillToForShipTo(env, customerID,
 						inputCustomerAssignmentElement);
-				
+
 			}
-		
+
 		//inputCustomerAssignmentElement.setAttribute("UserIdQryType", "ISNULL");
 		Document customerAssignmentListDoc = api.invoke(env, "getCustomerAssignmentList", inputCustomerAssignmentDoc);
 		NodeList customerAssignmentNodeList = customerAssignmentListDoc.getElementsByTagName("CustomerAssignment");
@@ -1243,9 +1304,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		}
 		return customerAssignmentList;
 	}
-	
+
 	//method to create sales rep teams and assign the customer to the team
-	
+
 	private void manageCustomerAssignmentforA(YFSEnvironment env,String customerID, String organizationCode,Document inXML) throws YFSException, RemoteException
 	{
 		HashSet<String> salesRepForTeam = new HashSet<String>();
@@ -1274,57 +1335,57 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					if(!salesRepForTeam.contains(salesRep))
 					{
 						salesRepForTeam.add(salesRep);
-					if(!salesRep.equals("0000")){
-						ArrayList<String> userDetails = checkUserExists(env, salesRep);
-						//boolean userExists = checkUserExists(env, salesRep);
-						String userExists = userDetails.get(0);
-						/* Changes made for issue 633 - Below If condition has been commented as the sales rep data may or
+						if(!salesRep.equals("0000")){
+							ArrayList<String> userDetails = checkUserExists(env, salesRep);
+							//boolean userExists = checkUserExists(env, salesRep);
+							String userExists = userDetails.get(0);
+							/* Changes made for issue 633 - Below If condition has been commented as the sales rep data may or
 						   may not exist in User table. */
-						//if(userExists.equals("true"))
-						//{
-					log.debug("Manage Customer Assignment for the customer = " + counter);
-					teamList = checkForSalesRepTeam(env,salesRep,organizationCode);
-					int teamSize = teamList.size();
-					if(teamSize > 0)
-					{
-						//do the customer assignment to the existing team
-						assignCustomerToTeam(env,customerID,teamList,organizationCode,suffixType);
-						
-						if(userExists.equals("true"))
-						{
-							//Modify the user to assign the team...Added on 14/04/2011
-							Document modifyUserHierarchyInputDoc = YFCDocument.createDocument("User").getDocument();
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("Loginid", userDetails.get(1));
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("UserKey", userDetails.get(2));
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("DataSecurityGroupId", teamList.get(0));
-														
-							api.invoke(env, "modifyUserHierarchy", modifyUserHierarchyInputDoc);
-							
+							//if(userExists.equals("true"))
+							//{
+							log.debug("Manage Customer Assignment for the customer = " + counter);
+							teamList = checkForSalesRepTeam(env,salesRep,organizationCode);
+							int teamSize = teamList.size();
+							if(teamSize > 0)
+							{
+								//do the customer assignment to the existing team
+								assignCustomerToTeam(env,customerID,teamList,organizationCode,suffixType);
+
+								if(userExists.equals("true"))
+								{
+									//Modify the user to assign the team...Added on 14/04/2011
+									Document modifyUserHierarchyInputDoc = YFCDocument.createDocument("User").getDocument();
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("Loginid", userDetails.get(1));
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("UserKey", userDetails.get(2));
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("DataSecurityGroupId", teamList.get(0));
+
+									api.invoke(env, "modifyUserHierarchy", modifyUserHierarchyInputDoc);
+
+								}
+							}
+							else
+							{
+								//create a new team
+								String newteamID = createAndAssignCustomerToTeam(env,customerID,salesRep,organizationCode,suffixType);
+								if(userExists.equals("true"))
+								{
+									//Modify the user to assign the team...Added on 14/04/2011
+									Document modifyUserHierarchyInputDoc = YFCDocument.createDocument("User").getDocument();
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("Loginid", userDetails.get(1));
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("UserKey", userDetails.get(2));
+									modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("DataSecurityGroupId", newteamID);
+
+									api.invoke(env, "modifyUserHierarchy", modifyUserHierarchyInputDoc);
+								}
+							}
+							//}
 						}
-					}
-					else
-					{
-						//create a new team
-						String newteamID = createAndAssignCustomerToTeam(env,customerID,salesRep,organizationCode,suffixType);
-						if(userExists.equals("true"))
-						{
-							//Modify the user to assign the team...Added on 14/04/2011
-                            Document modifyUserHierarchyInputDoc = YFCDocument.createDocument("User").getDocument();
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("Loginid", userDetails.get(1));
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("UserKey", userDetails.get(2));
-							modifyUserHierarchyInputDoc.getDocumentElement().setAttribute("DataSecurityGroupId", newteamID);
-							
-							api.invoke(env, "modifyUserHierarchy", modifyUserHierarchyInputDoc);
-						}
-					}
-					//}
-					}
 					}
 				}
 			}
 		}
 	}
-	
+
 	//method to create a team and assign the customer to the team
 	private String createAndAssignCustomerToTeam(YFSEnvironment env, String customerID, String salesRep,String org, String suffixType) throws YFSException, RemoteException
 	{
@@ -1341,29 +1402,29 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputTeamElement.setAttribute("Operation", "Create");
 		inputTeamElement.setAttribute("OrganizationCode", "xpedx");
 		inputTeamElement.setAttribute("TeamId", teamID);
-		
+
 		//Added by Prasanth Kumar M as a fix for JIRA defect ----> 633
-		
+
 		Element teamEnterpriseListElement = inputTeamDoc.createElement("TeamEnterpriseList");
 		Element teamEnterpriseElement = inputTeamDoc.createElement("TeamEnterprise");
 		teamEnterpriseElement.setAttribute("EnterpriseOrgCode", "xpedx");
 		teamEnterpriseElement.setAttribute("Operation", "Create");
-		
+
 		teamEnterpriseListElement.appendChild(teamEnterpriseElement);
 		inputTeamElement.appendChild(teamEnterpriseListElement);
-		
+
 		Document teamDoc = api.invoke(env, "manageTeam", inputTeamDoc);
-		
+
 		ArrayList<String> teamList = new ArrayList<String>();
 		teamList.add(teamID);
 		teamList.add(teamDoc.getDocumentElement().getAttribute("TeamKey"));
 		teamList.add(salesRep);
-		
+
 		assignCustomerToTeam(env, customerID, teamList, org, suffixType);
-		
+
 		return teamID;
 	}
-	
+
 	//method to retrieve the team key given team id
 	private String getTeamKey(YFSEnvironment env, String teamID) throws YFSException, RemoteException
 	{
@@ -1420,17 +1481,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			{
 				getBillToForShipTo(env, customerID, customerAssignmentElement);
 			}
-		
+
 		customerAssignmentElement.setAttribute("TeamCode", teamList.get(0));
 		//get the team key
 		//String teamKey = getTeamKey(env, teamList.get(0));...Added on 14/04/2011
 		String teamKey = getTeamKey(env, teamList.get(0));
 		//customerAssignmentElement.setAttribute("TeamKey", teamList.get(1));//...Added on 14/04/2011
 		customerAssignmentElement.setAttribute("TeamKey", teamKey);
-		
+
 		api.invoke(env, "manageCustomerAssignment", customerAssignmentDoc);
 	}
-	
+
 	//method to check if the sales rep team already exists or not
 	private ArrayList<String> checkForSalesRepTeam(YFSEnvironment env, String salesRep, String organizationCode) throws YFSException, RemoteException
 	{
@@ -1461,13 +1522,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	/*private Document createGetCustomerListInputForQuery(YFSEnvironment env, String sapCustomerId, String organizationCode)
 	{
          YFCDocument getCustomerListInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);*/
-         /*sayan commented
+	/*sayan commented
          getCustomerListInputDoc.getDocumentElement().setAttribute("CustomerIDQryType", "LIKE");
-         */
-       /*  getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
+	 */
+	/*  getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
          getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-         
-         		
+
+
 		return getCustomerListInputDoc.getDocument();
 	}*/
 
@@ -1480,17 +1541,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		String state = SCXmlUtil.getXpathAttribute(addressNodeElement, "./Address/@State");
 		String country = SCXmlUtil.getXpathAttribute(addressNodeElement, "./Address/@Country");
 		String zipCode = SCXmlUtil.getXpathAttribute(addressNodeElement, "./Address/@ZipCode");
-		
+
 		YFCElement inputCustomerAddnlAddressListElement = inputCustomerDoc.createElement("CustomerAdditionalAddressList");
 		inputCustomerAddnlAddressListElement.setAttribute(XPXLiterals.A_RESET, XPXLiterals.BOOLEAN_FLAG_Y);
-		
+
 		YFCElement inputCustomerAddnlAddressElement = inputCustomerDoc.createElement("CustomerAdditionalAddress");
 		if("S".equalsIgnoreCase(suffixType))
 		{
 			//ShipTo customer
-		inputCustomerAddnlAddressElement.setAttribute("IsDefaultShipTo", "Y");
-		inputCustomerAddnlAddressElement.setAttribute("AddressType", "ShipTo");
-		inputCustomerAddnlAddressElement.setAttribute("IsShipTo", "Y");
+			inputCustomerAddnlAddressElement.setAttribute("IsDefaultShipTo", "Y");
+			inputCustomerAddnlAddressElement.setAttribute("AddressType", "ShipTo");
+			inputCustomerAddnlAddressElement.setAttribute("IsShipTo", "Y");
 		}
 		else
 		{
@@ -1499,8 +1560,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			inputCustomerAddnlAddressElement.setAttribute("AddressType", "BillTo");
 			inputCustomerAddnlAddressElement.setAttribute("IsBillTo", "Y");
 		}
-		
-		
+
+
 		YFCElement inputPersonInfoElement = inputCustomerDoc.createElement("PersonInfo");
 		inputPersonInfoElement.setAttribute("AddressLine1", addressLine1);
 		inputPersonInfoElement.setAttribute("AddressLine2", addressLine2);
@@ -1509,11 +1570,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputPersonInfoElement.setAttribute("State", state);
 		inputPersonInfoElement.setAttribute("Country", country);
 		inputPersonInfoElement.setAttribute("ZipCode", zipCode);   
-		
+
 		inputCustomerAddnlAddressElement.appendChild(inputPersonInfoElement);
 		inputCustomerAddnlAddressListElement.appendChild(inputCustomerAddnlAddressElement);
-		
-		
+
+
 		return inputCustomerAddnlAddressListElement;
 	}
 
@@ -1521,69 +1582,69 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	throws Exception
 	{
 
-            boolean isCustomerAvailableInSytem = false;
-            
-            YFCDocument getCustomerListInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-            getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-            getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-	
-            //log.debug("getCustomerListInputDoc:" + getCustomerListInputDoc);
-            Document templateListDoc = SCXmlUtil.createDocument("CustomerList");
-    		Element templateListElement = templateListDoc.getDocumentElement();
-    		Element templateElement = templateListDoc.createElement("Customer");
-    		templateElement.setAttribute("Status", "");
-    		templateListElement.appendChild(templateElement);
-            env.setApiTemplate( XPXLiterals.GET_CUSTOMER_LIST_API, templateListDoc);
-			Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
-			env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
-			NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER);
-			
-			
-			if(customerList != null && customerList.getLength() >0){
-				isCustomerAvailableInSytem = true;
-				/*check if the customer is active. and set the class variable. This is to avoid double call to the api.
-				 * checkIsCustomerAvailableInSystem() and isCustomerActive() should be used in sequence, and isCustomerActive() cannot be
-				 * used seperately.
-				 */
-				Element _customerElement = SCXmlUtil.getFirstChildElement(getCustomerListOutputDoc.getDocumentElement());
-				if(_customerElement.hasAttribute("Status")){
-					String _customerStatus = SCXmlUtil.getAttribute(_customerElement, "Status");
-					if(null == _customerStatus || _customerStatus.equalsIgnoreCase("10")){
-						setCustomerActive(true);
-					}else{
-						setCustomerActive(false);
-					}
-				}else{
+		boolean isCustomerAvailableInSytem = false;
+
+		YFCDocument getCustomerListInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+
+		//log.debug("getCustomerListInputDoc:" + getCustomerListInputDoc);
+		Document templateListDoc = SCXmlUtil.createDocument("CustomerList");
+		Element templateListElement = templateListDoc.getDocumentElement();
+		Element templateElement = templateListDoc.createElement("Customer");
+		templateElement.setAttribute("Status", "");
+		templateListElement.appendChild(templateElement);
+		env.setApiTemplate( XPXLiterals.GET_CUSTOMER_LIST_API, templateListDoc);
+		Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
+		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+		NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER);
+
+
+		if(customerList != null && customerList.getLength() >0){
+			isCustomerAvailableInSytem = true;
+			/*check if the customer is active. and set the class variable. This is to avoid double call to the api.
+			 * checkIsCustomerAvailableInSystem() and isCustomerActive() should be used in sequence, and isCustomerActive() cannot be
+			 * used seperately.
+			 */
+			Element _customerElement = SCXmlUtil.getFirstChildElement(getCustomerListOutputDoc.getDocumentElement());
+			if(_customerElement.hasAttribute("Status")){
+				String _customerStatus = SCXmlUtil.getAttribute(_customerElement, "Status");
+				if(null == _customerStatus || _customerStatus.equalsIgnoreCase("10")){
 					setCustomerActive(true);
+				}else{
+					setCustomerActive(false);
 				}
+			}else{
+				setCustomerActive(true);
 			}
-		
+		}
+
 		return isCustomerAvailableInSytem;
 	}
 
-/*	private ArrayList retrieveExistingAssignmentKeys(YFSEnvironment env, String teamKey, String customerID, String organizationCode) {
+	/*	private ArrayList retrieveExistingAssignmentKeys(YFSEnvironment env, String teamKey, String customerID, String organizationCode) {
 
         ArrayList <String> existingCustomerAssgnmentKeys = new ArrayList<String>();
-		
+
 		YFCDocument getCustomerAssgmtInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
 		getCustomerAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
 		getCustomerAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
 		//getCustomerAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_TEAM_KEY,teamKey);
-		
+
 		try {
 			Document getCustomerAssgmtOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_ASSIGNMENT_API, getCustomerAssgmtInputDoc.getDocument());
-			
+
 			NodeList getCustomerAssgmtList = getCustomerAssgmtOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
-			
+
 			if(getCustomerAssgmtList.getLength()>0)
 			{
 			    for(int i=0; i<getCustomerAssgmtList.getLength();i++)
 			    {
 				        Element customerAssgmtElement = (Element)getCustomerAssgmtList.item(i);
-				        
+
 				        //sayan added to retrieve only the Sales Rep teams START
 				        String strTeamKey = customerAssgmtElement.getAttribute("TeamKey");
-				        
+
 				        String strTeamID = retrieveTeamID(env, strTeamKey, organizationCode);
 				        if(strTeamID != null && strTeamID.startsWith("SR_"))
 				        {
@@ -1592,7 +1653,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				      //sayan added to retrieve only the Sales Rep teams END
 			     }
 			} 
-			
+
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1600,62 +1661,62 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return existingCustomerAssgnmentKeys;
 	}*/
 
 	/*private void invokeMultiApiForExistingAssgmtDeletion(YFSEnvironment env, ArrayList customerAssignmentKeys, 
 			String customerID, ArrayList networkIdList, String organizationCode, HashMap salesRepTeam) {
-		
+
 		 YFCDocument multiApiInputDoc = YFCDocument.createDocument(XPXLiterals.E_MULTI_API);
-	     
-		    
+
+
 	     for(int i=0; i<customerAssignmentKeys.size(); i++)
 	     {
-	     
-	     
+
+
 	    	 YFCElement apiElement = multiApiInputDoc.createElement(XPXLiterals.E_API);
 		     apiElement.setAttribute(XPXLiterals.A_NAME, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API);
-		     
+
 	         YFCElement inputElement = multiApiInputDoc.createElement(XPXLiterals.E_INPUT);
-	     
+
 	         YFCElement manageCustomerAssgmtElement =  multiApiInputDoc.createElement(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
 	         manageCustomerAssgmtElement.setAttribute(XPXLiterals.A_CUSTOMER_ASSIGNMENT_KEY, (String)customerAssignmentKeys.get(i));
 	         manageCustomerAssgmtElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.DELETE);
 	         manageCustomerAssgmtElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
 	         manageCustomerAssgmtElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-	         
+
 	         inputElement.appendChild(manageCustomerAssgmtElement);
 	         apiElement.appendChild(inputElement);
-	         
+
 	         multiApiInputDoc.getDocumentElement().appendChild(apiElement);
 	     }
-	     
+
 	     if(networkIdList.size() > 0)
 	     {
 	        for(int i=0; i<networkIdList.size(); i++)
 	        {
 	    	 YFCElement apiElement = multiApiInputDoc.createElement(XPXLiterals.E_API);
 		     apiElement.setAttribute(XPXLiterals.A_NAME, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API);
-		     
+
 	         YFCElement inputElement = multiApiInputDoc.createElement(XPXLiterals.E_INPUT);
-	     
+
 	           YFCElement manageCustomerAssignmentElement = multiApiInputDoc.createElement(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_OPERATION, "Create");
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_TEAM_CODE, (String)salesRepTeam.get((String)networkIdList.get(i)));
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_USER_ID, (String)networkIdList.get(i));
-	         
+
 	         inputElement.appendChild(manageCustomerAssignmentElement);
 	         apiElement.appendChild(inputElement);
-	         
+
 	         multiApiInputDoc.getDocumentElement().appendChild(apiElement);
 	        }
 	     }
 	     try {
 	    	 //log.debug("The input to deletion of CustomerAssgmt is: "+SCXmlUtil.getString(multiApiInputDoc.getDocument()));
-	    	 
+
 	    	 if(networkIdList.size() > 0)
 		     { 
 			api.invoke(env, XPXLiterals.MULTI_API, multiApiInputDoc.getDocument());
@@ -1667,26 +1728,26 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}*/
 
-	
+
 	/*private String retrieveTeamID(YFSEnvironment env, String teamKey, String organizationCode) {
-		
+
 		String teamID = null;
-		
+
 		YFCDocument getTeamListInputDoc = YFCDocument.createDocument(XPXLiterals.E_TEAM);
 		getTeamListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_TEAM_KEY, teamKey);
 		getTeamListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		
+
 		try {
 			Document getTeamListOutputDoc = api.invoke(env, XPXLiterals.GET_TEAM_LIST_API, getTeamListInputDoc.getDocument());
-			
+
 			Element teamElement = (Element)getTeamListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_TEAM).item(0);
 			teamID = teamElement.getAttribute(XPXLiterals.A_TEAM_ID);
-			
+
 			log.debug("The team ID value is: "+teamID);
-			
+
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1694,42 +1755,42 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return teamKey;
 	}*/
 
 	/*private void manageCustomerAssignmentToXPXSalesRepTeam(YFSEnvironment env, String customerID, ArrayList networkIdList, HashMap salesRepTeam, String organizationCode)
 	{
 		//Invoke multiApi to manageCustomerAssgmt
-		
+
 		 YFCDocument multiApiInputDoc = YFCDocument.createDocument(XPXLiterals.E_MULTI_API);
-	     
-		    
+
+
 	     for(int i=0; i<networkIdList.size(); i++)
 	     {
 	    	 YFCElement apiElement = multiApiInputDoc.createElement(XPXLiterals.E_API);
 		     apiElement.setAttribute(XPXLiterals.A_NAME, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API);
-		     
+
 	         YFCElement inputElement = multiApiInputDoc.createElement(XPXLiterals.E_INPUT);
-		
+
 		       YFCElement manageCustomerAssignmentElement = multiApiInputDoc.createElement(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_OPERATION, "Create");
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_TEAM_CODE, (String)salesRepTeam.get((String)networkIdList.get(i)));
 		       manageCustomerAssignmentElement.setAttribute(XPXLiterals.A_USER_ID, (String)networkIdList.get(i));
-		
-		
+
+
 		       inputElement.appendChild(manageCustomerAssignmentElement);
 		       apiElement.appendChild(inputElement);
-		         
+
 		       multiApiInputDoc.getDocumentElement().appendChild(apiElement);
-		
-		
+
+
 	     }
 		try {
 			//log.debug("The multiApi input to manageCustomerAssgmt is: "+SCXmlUtil.getString(multiApiInputDoc.getDocument()));
-			
+
 			if(networkIdList.size()>0)
 			{
 			api.invoke(env, XPXLiterals.MULTI_API, multiApiInputDoc.getDocument());
@@ -1741,7 +1802,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	} */
 
 	/*private ArrayList invokeGetUserList(YFSEnvironment env, String inputXMLEmployeeId) {
@@ -1749,9 +1810,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
          String networkId = null;
          String salesRepTeamId = null;
          ArrayList salesRepTeamDetails = new ArrayList();
-         
+
          YFCDocument getUserListInputDoc = YFCDocument.createDocument(XPXLiterals.E_USER); 
-         
+
          //sayan added user organization code, will always be xpedx START
          YFCElement eUser = getUserListInputDoc.getDocumentElement();
          eUser.setAttribute("OrganizationKey", "xpedx");
@@ -1759,22 +1820,22 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
          YFCElement getUserListExtn = getUserListInputDoc.createElement(XPXLiterals.E_EXTN);
          getUserListExtn.setAttribute(XPXLiterals.A_EXTN_EMPLOYEE_ID, inputXMLEmployeeId);
          eUser.appendChild(getUserListExtn);
-         
+
          try {
         	 env.setApiTemplate( XPXLiterals.GET_USER_LIST_API, getUserListTemplate);
 			Document getUserListOutputDoc = api.invoke(env, XPXLiterals.GET_USER_LIST_API, getUserListInputDoc.getDocument());
 			env.clearApiTemplate(XPXLiterals.GET_USER_LIST_API);
 			Element userElement = (Element)getUserListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_USER).item(0);
-			
+
 			if(userElement!=null)
 			{
 				networkId = userElement.getAttribute(XPXLiterals.A_LOGIN_ID);
 				salesRepTeamId = userElement.getAttribute(XPXLiterals.A_DATA_SECURITY_GROUP);
 				salesRepTeamDetails.add(networkId);
 				salesRepTeamDetails.add(salesRepTeamId);
-				
+
 			}
-			
+
 			//networkId="pnair";
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
@@ -1783,62 +1844,62 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-         
+
          //TemporarilyHardCoded
          //networkId = "pnair";
-         
-		
+
+
 		return salesRepTeamDetails;
 	}*/
 
 	//sayan updated signature to include MSAP name START
 	private Document createCustomerWithMasterSAPAccountNumber(YFSEnvironment env, String masterSapCustomerId, String strMSAPName, 
-			String organizationCode, Element custElement) 
+            String organizationCode, Element custElement) 
 	throws Exception
-	{
-		//sayan updated signature to include MSAP name END
-		Document manageCustomerOutputDoc = null;
-		
-	      YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-	      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, masterSapCustomerId);
-	      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
-	      //manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Create");
-	      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Manage");
-	      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-	      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS,"10");
-	      
-	      //add suffix type for MSAP Customer
-	      YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
-	      extnElement.setAttribute("ExtnSuffixType", "MC");
-	      manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
-	      
-	      YFCElement buyerOrgElement = manageCustomerInputDoc.createElement(XPXLiterals.E_BUYER_ORGANIZATION);
-	      buyerOrgElement.setAttribute(XPXLiterals.A_IS_BUYER, XPXLiterals.BOOLEAN_FLAG_Y);
-	      buyerOrgElement.setAttribute(XPXLiterals.A_LOCALE_CODE,"en_US_EST");
-	      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_NAME,strMSAPName);
-	      buyerOrgElement.setAttribute(XPXLiterals.A_PRIMARY_ENTERPRISE_KEY,organizationCode);
-	      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,masterSapCustomerId);
-	      
-	     
-	      
-	      YFCElement customerCurrencyListElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY_LIST);
-	      customerCurrencyListElement.setAttribute(XPXLiterals.A_RESET,XPXLiterals.BOOLEAN_FLAG_Y);
-	      
-	      
-	      YFCElement customerCurrencyElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY);
-	      customerCurrencyElement.setAttribute(XPXLiterals.A_CURRENCY, "USD");
-	      customerCurrencyElement.setAttribute(XPXLiterals.A_IS_DEFAULT_CURRENCY,XPXLiterals.BOOLEAN_FLAG_Y);
-	      
-	      
-	      customerCurrencyListElement.appendChild(customerCurrencyElement);
-	      manageCustomerInputDoc.getDocumentElement().appendChild(buyerOrgElement);
-	      manageCustomerInputDoc.getDocumentElement().appendChild(customerCurrencyListElement);
-	      
-	      //log.debug("manageCustomerInputDoc:" + manageCustomerInputDoc);
-		  manageCustomerOutputDoc = api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  manageCustomerInputDoc.getDocument());		
-		
-		return  manageCustomerOutputDoc;
-	}
+
+{
+      //sayan updated signature to include MSAP name END
+
+      Document manageCustomerOutputDoc = null;
+      YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, masterSapCustomerId);
+      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
+      //manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Create");
+      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Manage");
+      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS,"10");
+      //add suffix type for MSAP Customer
+
+     YFCElement buyerOrgElement = manageCustomerInputDoc.createElement(XPXLiterals.E_BUYER_ORGANIZATION);
+      buyerOrgElement.setAttribute(XPXLiterals.A_IS_BUYER, XPXLiterals.BOOLEAN_FLAG_Y);
+      buyerOrgElement.setAttribute(XPXLiterals.A_LOCALE_CODE,"en_US_EST");
+      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_NAME,strMSAPName);
+      buyerOrgElement.setAttribute(XPXLiterals.A_PRIMARY_ENTERPRISE_KEY,organizationCode);
+      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,masterSapCustomerId);
+
+      YFCElement customerCurrencyListElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY_LIST);
+      customerCurrencyListElement.setAttribute(XPXLiterals.A_RESET,XPXLiterals.BOOLEAN_FLAG_Y);
+
+      YFCElement customerCurrencyElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY);
+      customerCurrencyElement.setAttribute(XPXLiterals.A_CURRENCY, "USD");
+      customerCurrencyElement.setAttribute(XPXLiterals.A_IS_DEFAULT_CURRENCY,XPXLiterals.BOOLEAN_FLAG_Y);
+      customerCurrencyListElement.appendChild(customerCurrencyElement);
+
+      manageCustomerInputDoc.getDocumentElement().appendChild(buyerOrgElement);
+      manageCustomerInputDoc.getDocumentElement().appendChild(customerCurrencyListElement);
+      YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
+      extnElement.setAttribute("ExtnSuffixType", "MC");
+      manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
+
+//    api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+      //log.debug("manageCustomerInputDoc:" + manageCustomerInputDoc);
+//    System.out.println("Doc for creating manageCustomer"+SCXmlUtil.getString( manageCustomerInputDoc.getDocument()));
+
+      manageCustomerOutputDoc = api.invoke(env,XPXLiterals.MANAGE_CUSTOMER_API,manageCustomerInputDoc.getDocument());            
+//    System.out.println("Doc for creating manageCustomer1"+SCXmlUtil.getString(manageCustomerOutputDoc));
+      return  manageCustomerOutputDoc;
+}
+
 
 	//sayan updated signature to include SAP name START
 	private Document createCustomerWithSAPAccountNumber(YFSEnvironment env, String sapCustomerId, String masterSapCustomerId, String strSAPName, 
@@ -1846,78 +1907,78 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	throws Exception
 	{
 		//sayan updated signature to include SAP name END
-		
-		      boolean bMasterCustomerCreated = checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
-		      
-		      if(!bMasterCustomerCreated)
-		      {
-		    	  Document masterManageCustomerOutputDoc = createCustomerWithMasterSAPAccountNumber(env,masterSapCustomerId, strMSAPName, organizationCode,custElement);
-		      }
-		      Document manageCustomerOutputDoc = null;
-		
-		      YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-		      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
-		      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
-		      //manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Create");
-		      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Manage");
-		      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-		      manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS,"10");
-		      //add suffic type for SAP customer
-		      YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
-		      extnElement.setAttribute("ExtnSuffixType", "C");
-		      manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
-		      
-		      YFCElement buyerOrgElement = manageCustomerInputDoc.createElement(XPXLiterals.E_BUYER_ORGANIZATION);
-		      buyerOrgElement.setAttribute(XPXLiterals.A_IS_BUYER, XPXLiterals.BOOLEAN_FLAG_Y);
-		      buyerOrgElement.setAttribute(XPXLiterals.A_LOCALE_CODE,"en_US_EST");
-		      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_NAME,strSAPName);
-		      buyerOrgElement.setAttribute(XPXLiterals.A_PRIMARY_ENTERPRISE_KEY,organizationCode);
-		      buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,sapCustomerId);
-		      
-		      YFCElement parentCustomerElement = manageCustomerInputDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
-		      parentCustomerElement.setAttribute("CustomerID", masterSapCustomerId);//to be reviewed later if this info is correct
-		      parentCustomerElement.setAttribute("OrganizationCode", masterSapCustomerId);
-				
-		      
-		      YFCElement customerCurrencyListElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY_LIST);
-		      customerCurrencyListElement.setAttribute(XPXLiterals.A_RESET,XPXLiterals.BOOLEAN_FLAG_Y);
-		      
-		      
-		      YFCElement customerCurrencyElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY);
-		      customerCurrencyElement.setAttribute(XPXLiterals.A_CURRENCY, "USD");
-		      customerCurrencyElement.setAttribute(XPXLiterals.A_IS_DEFAULT_CURRENCY,XPXLiterals.BOOLEAN_FLAG_Y);
-		      
-		      
-		      customerCurrencyListElement.appendChild(customerCurrencyElement);
-		      manageCustomerInputDoc.getDocumentElement().appendChild(buyerOrgElement);
-		      manageCustomerInputDoc.getDocumentElement().appendChild(customerCurrencyListElement);
-		      manageCustomerInputDoc.getDocumentElement().appendChild(parentCustomerElement);
-		      
-		      //log.debug("manageCustomerInputDoc:" + manageCustomerInputDoc);
-		
-		      try {
-				manageCustomerOutputDoc = api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  manageCustomerInputDoc.getDocument());
-				
-			} catch (YFSException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return  manageCustomerOutputDoc;
+
+		boolean bMasterCustomerCreated = checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
+
+		if(!bMasterCustomerCreated)
+		{
+			Document masterManageCustomerOutputDoc = createCustomerWithMasterSAPAccountNumber(env,masterSapCustomerId, strMSAPName, organizationCode,custElement);
+		}
+		Document manageCustomerOutputDoc = null;
+
+		YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+		manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
+		manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
+		//manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Create");
+		manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Manage");
+		manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+		manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS,"10");
+		//add suffic type for SAP customer
+		YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
+		extnElement.setAttribute("ExtnSuffixType", "C");
+		manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
+
+		YFCElement buyerOrgElement = manageCustomerInputDoc.createElement(XPXLiterals.E_BUYER_ORGANIZATION);
+		buyerOrgElement.setAttribute(XPXLiterals.A_IS_BUYER, XPXLiterals.BOOLEAN_FLAG_Y);
+		buyerOrgElement.setAttribute(XPXLiterals.A_LOCALE_CODE,"en_US_EST");
+		buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_NAME,strSAPName);
+		buyerOrgElement.setAttribute(XPXLiterals.A_PRIMARY_ENTERPRISE_KEY,organizationCode);
+		buyerOrgElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE,sapCustomerId);
+
+		YFCElement parentCustomerElement = manageCustomerInputDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
+		parentCustomerElement.setAttribute("CustomerID", masterSapCustomerId);//to be reviewed later if this info is correct
+		parentCustomerElement.setAttribute("OrganizationCode", masterSapCustomerId);
+
+
+		YFCElement customerCurrencyListElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY_LIST);
+		customerCurrencyListElement.setAttribute(XPXLiterals.A_RESET,XPXLiterals.BOOLEAN_FLAG_Y);
+
+
+		YFCElement customerCurrencyElement = manageCustomerInputDoc.createElement(XPXLiterals.E_CUSTOMER_CURRENCY);
+		customerCurrencyElement.setAttribute(XPXLiterals.A_CURRENCY, "USD");
+		customerCurrencyElement.setAttribute(XPXLiterals.A_IS_DEFAULT_CURRENCY,XPXLiterals.BOOLEAN_FLAG_Y);
+
+
+		customerCurrencyListElement.appendChild(customerCurrencyElement);
+		manageCustomerInputDoc.getDocumentElement().appendChild(buyerOrgElement);
+		manageCustomerInputDoc.getDocumentElement().appendChild(customerCurrencyListElement);
+		manageCustomerInputDoc.getDocumentElement().appendChild(parentCustomerElement);
+
+		//log.debug("manageCustomerInputDoc:" + manageCustomerInputDoc);
+
+		try {
+			manageCustomerOutputDoc = api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  manageCustomerInputDoc.getDocument());
+
+		} catch (YFSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return  manageCustomerOutputDoc;
 	}
 
 	private YFCDocument createGetCustomerListInput(YFSEnvironment env, String shipToParentCustId, String organizationCode) {
 
-         YFCDocument getCustomerListInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-        
-        getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, shipToParentCustId);
-        getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-	
-        return getCustomerListInputDoc;
-		
+		YFCDocument getCustomerListInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+
+		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, shipToParentCustId);
+		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
+
+		return getCustomerListInputDoc;
+
 	}
 
 	/**
@@ -1933,61 +1994,61 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	 * @throws RemoteException
 	 */
 	private void createPriceListAssignmentForCustomer(YFSEnvironment env,String shipFrom, String envtId, String companyCode, String pricingWareHouse, String customerID, String organizationCode)
-			throws RemoteException {
-		
+	throws RemoteException {
+
 		String priceListName = null;
-		
+
 		if(pricingWareHouse == null || pricingWareHouse.trim().length() ==0)
 		{
 			pricingWareHouse = getPricingWareHouse(env,shipFrom);
 		}
-		
+
 		if(pricingWareHouse!=null && pricingWareHouse.trim().length()!= 0)
 		{
-		
-	    priceListName = envtId + "-"+companyCode+"-"+pricingWareHouse;
-	    
-	    Document existingPriceListDoc = getExistingPriceListHeader(env,priceListName,organizationCode) ;
-	    
-	    Element outCustPriceListElement = existingPriceListDoc.getDocumentElement();
-		String customerLength = outCustPriceListElement.getAttribute(XPXLiterals.A_TOT_NO_OF_RECORDS);
-		
-		if(!customerLength.equals("0"))
-		{
-			YFCDocument managePriceListAssgmtInputDoc = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_ASSIGNMENT);
-			managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-			//managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
-			managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
-			managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_SHAREABLE,XPXLiterals.BOOLEAN_FLAG_Y);
-			managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENTERPRISE_CODE,organizationCode);
-			
-			YFCElement priceListHeaderElement = managePriceListAssgmtInputDoc.createElement(XPXLiterals.E_PRICE_LIST_HEADER);
-			priceListHeaderElement.setAttribute(XPXLiterals.A_PRICE_LIST_NAME, priceListName);
-			managePriceListAssgmtInputDoc.getDocumentElement().appendChild(priceListHeaderElement);
-			
-			//log.debug("The input to managePriceListAssgmt is: "+SCXmlUtil.getString(managePriceListAssgmtInputDoc.getDocument()));
-			api.invoke(env, XPXLiterals.MANAGE_PRICE_LIST_ASSIGNMENT_API, managePriceListAssgmtInputDoc.getDocument());
-			
-		}
-		
-		else
-		{
-			YFCDocument alertInputsDoc =  YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-			alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
-			alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_SHIP_FROM_BRANCH, shipFrom);
-			alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_PRICING_WAREHOUSE, pricingWareHouse);
-			alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE,companyCode);
-			api.executeFlow(env, "XPXCreateAlertForCustomerFeedPriceList", alertInputsDoc.getDocument());
-		}
-		
-		/*Document outPLListDocument = getExistingPriceList(env, shipFrom,sapAccountNumber);
-		
+
+			priceListName = envtId + "-"+companyCode+"-"+pricingWareHouse;
+
+			Document existingPriceListDoc = getExistingPriceListHeader(env,priceListName,organizationCode) ;
+
+			Element outCustPriceListElement = existingPriceListDoc.getDocumentElement();
+			String customerLength = outCustPriceListElement.getAttribute(XPXLiterals.A_TOT_NO_OF_RECORDS);
+
+			if(!customerLength.equals("0"))
+			{
+				YFCDocument managePriceListAssgmtInputDoc = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_ASSIGNMENT);
+				managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+				//managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_TYPE,XPXLiterals.CUSTOMER_TYPE_BUSINESS);
+				managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
+				managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_SHAREABLE,XPXLiterals.BOOLEAN_FLAG_Y);
+				managePriceListAssgmtInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENTERPRISE_CODE,organizationCode);
+
+				YFCElement priceListHeaderElement = managePriceListAssgmtInputDoc.createElement(XPXLiterals.E_PRICE_LIST_HEADER);
+				priceListHeaderElement.setAttribute(XPXLiterals.A_PRICE_LIST_NAME, priceListName);
+				managePriceListAssgmtInputDoc.getDocumentElement().appendChild(priceListHeaderElement);
+
+				//log.debug("The input to managePriceListAssgmt is: "+SCXmlUtil.getString(managePriceListAssgmtInputDoc.getDocument()));
+				api.invoke(env, XPXLiterals.MANAGE_PRICE_LIST_ASSIGNMENT_API, managePriceListAssgmtInputDoc.getDocument());
+
+			}
+
+			else
+			{
+				YFCDocument alertInputsDoc =  YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+				alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+				alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_SHIP_FROM_BRANCH, shipFrom);
+				alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_PRICING_WAREHOUSE, pricingWareHouse);
+				alertInputsDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE,companyCode);
+				api.executeFlow(env, "XPXCreateAlertForCustomerFeedPriceList", alertInputsDoc.getDocument());
+			}
+
+			/*Document outPLListDocument = getExistingPriceList(env, shipFrom,sapAccountNumber);
+
 		Element outPLListElement = outPLListDocument.getDocumentElement();
 		String pLength = outPLListElement.getAttribute("TotalNumberOfRecords");
 		if(!pLength.equals("0"))
 		{
 			log.debug(SCXmlUtil.getString(outPLListDocument));
-			
+
 			NodeList plNodeList = outPLListDocument.getElementsByTagName("PricelistHeader");
 			Element plElement = (Element)plNodeList.item(0);
 			String priceListName = plElement.getAttribute("PricelistName");
@@ -2006,7 +2067,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			//invoke  managePricelistAssignment api
 			log.debug(SCXmlUtil.getString(inputPLAssignmentDoc.getDocument()));
 			api.invoke(env, "managePricelistAssignment", inputPLAssignmentDoc.getDocument());
-			
+
 		}*/
 		}
 		else
@@ -2014,21 +2075,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			log.error("No pricelist assigned to customer "+customerID+""+"due to no pricingWarehouse");
 		}
 	}
-	
+
 	private Document getExistingPriceListHeader(YFSEnvironment env, String priceListName, String organizationCode) {
 
 		Document outCustPriceListDoc = null;
-		
+
 		YFCDocument inputPriceListDoc = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_HEADER);
 		YFCElement inputPriceListElement = inputPriceListDoc.getDocumentElement();		
 		inputPriceListElement.setAttribute(XPXLiterals.A_PRICE_LIST_NAME, priceListName);
 		inputPriceListElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		
+
 		YFCDocument priceListHeaderListTemplate = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_HEADER_LIST);
 		priceListHeaderListTemplate.getDocumentElement().setAttribute(XPXLiterals.A_TOT_NO_OF_RECORDS, "");
 		YFCElement priceListHeaderElement = priceListHeaderListTemplate.createElement(XPXLiterals.E_PRICE_LIST_HEADER);
 		priceListHeaderListTemplate.getDocumentElement().appendChild(priceListHeaderElement);
-		
+
 		env.setApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, priceListHeaderListTemplate.getDocument());
 		try {
 			outCustPriceListDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputPriceListDoc.getDocument());
@@ -2040,7 +2101,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			e.printStackTrace();
 		}
 		env.clearApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API);
-		
+
 		return outCustPriceListDoc;
 	}
 
@@ -2048,7 +2109,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		String pricingWarehouse = "";
 		Document outOrgListDocument = null;
-		
+
 		//form the input Document
 		YFCDocument inputOrgDoc = YFCDocument.createDocument(XPXLiterals.E_ORGANIZATION);
 		YFCElement inputOrgElement = inputOrgDoc.getDocumentElement();
@@ -2064,7 +2125,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		extnTemplateElement.setAttribute("ExtnPriceWarehouse", "");
 		orgTemplateElement.appendChild(extnTemplateElement);
 		env.setApiTemplate("getOrganizationList", outputTemplateDoc.getDocument());
-		
+
 		try {
 			outOrgListDocument = api.invoke(env, "getOrganizationList", inputOrgDoc.getDocument());
 			//log.debug("The getOrganizationList output doc is: "+SCXmlUtil.getString(outOrgListDocument));
@@ -2082,12 +2143,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			Element orgElement = (Element)outOrgListElement.getElementsByTagName(XPXLiterals.E_ORGANIZATION).item(0);
 			Element orgExtnElement = (Element)orgElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
 			pricingWarehouse = orgExtnElement.getAttribute("ExtnPriceWarehouse");
-			
+
 			//log.debug("The first pricing warehouse returned is: "+pricingWarehouse);
 		}             
-              
+
 		//log.debug("The pricingWarehouse returned is: "+pricingWarehouse);     
-		
+
 		return pricingWarehouse;
 	}
 
@@ -2101,73 +2162,73 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	 * @throws RemoteException
 	 */
 	private Document getExistingPriceList(YFSEnvironment env, String shipFrom, String sapAccountNumber) throws RemoteException {
-			YFCDocument inputPriceListDoc = YFCDocument.createDocument("PricelistHeader");
-			YFCElement inputPriceListElement = inputPriceListDoc.getDocumentElement();
-			inputPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
+		YFCDocument inputPriceListDoc = YFCDocument.createDocument("PricelistHeader");
+		YFCElement inputPriceListElement = inputPriceListDoc.getDocumentElement();
+		inputPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
+		//its hardcoded here
+		inputPriceListElement.setAttribute("PricelistName", sapAccountNumber);
+		//invoke getPricelistHeaderList api
+
+		YFCDocument priceListHeaderListTemplate = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_HEADER_LIST);
+		priceListHeaderListTemplate.getDocumentElement().setAttribute(XPXLiterals.A_TOT_NO_OF_RECORDS, "");
+		YFCElement priceListHeaderElement = priceListHeaderListTemplate.createElement(XPXLiterals.E_PRICE_LIST_HEADER);
+		priceListHeaderListTemplate.getDocumentElement().appendChild(priceListHeaderElement);
+
+		env.setApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, priceListHeaderListTemplate.getDocument());
+		Document outCustPriceListDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputPriceListDoc.getDocument());
+		env.clearApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API);
+
+		Element outCustPriceListElement = outCustPriceListDoc.getDocumentElement();
+		String customerLength = outCustPriceListElement.getAttribute("TotalNumberOfRecords");
+		if(customerLength.equals("0"))
+		{
+			//form the input document using the shipfrom (division)
+			YFCDocument inputDivPriceListDoc = YFCDocument.createDocument("PricelistHeader");
+			YFCElement inputDivPriceListElement = inputDivPriceListDoc.getDocumentElement();
+			inputDivPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
 			//its hardcoded here
-			inputPriceListElement.setAttribute("PricelistName", sapAccountNumber);
+			inputDivPriceListElement.setAttribute("PricelistName", shipFrom);
 			//invoke getPricelistHeaderList api
-			
-			YFCDocument priceListHeaderListTemplate = YFCDocument.createDocument(XPXLiterals.E_PRICE_LIST_HEADER_LIST);
-			priceListHeaderListTemplate.getDocumentElement().setAttribute(XPXLiterals.A_TOT_NO_OF_RECORDS, "");
-			YFCElement priceListHeaderElement = priceListHeaderListTemplate.createElement(XPXLiterals.E_PRICE_LIST_HEADER);
-			priceListHeaderListTemplate.getDocumentElement().appendChild(priceListHeaderElement);
-			
 			env.setApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, priceListHeaderListTemplate.getDocument());
-			Document outCustPriceListDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputPriceListDoc.getDocument());
+			Document outDivEntRuleDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputDivPriceListDoc.getDocument());
 			env.clearApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API);
-			
-			Element outCustPriceListElement = outCustPriceListDoc.getDocumentElement();
-			String customerLength = outCustPriceListElement.getAttribute("TotalNumberOfRecords");
-			if(customerLength.equals("0"))
+
+			Element outDivEntRuleElement = outDivEntRuleDoc.getDocumentElement();
+			String divLength = outDivEntRuleElement.getAttribute("TotalNumberOfRecords");
+			if(divLength.equals("0"))
 			{
-				//form the input document using the shipfrom (division)
-				YFCDocument inputDivPriceListDoc = YFCDocument.createDocument("PricelistHeader");
-				YFCElement inputDivPriceListElement = inputDivPriceListDoc.getDocumentElement();
-				inputDivPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
+				//form the input document using group
+				//get the group from organization table
+				String group = getGroupFromOrganization(env, shipFrom);
+				YFCDocument inputGroupPriceListDoc = YFCDocument.createDocument("PricelistHeader");
+				YFCElement inputGroupPriceListElement = inputGroupPriceListDoc.getDocumentElement();
+				inputGroupPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
 				//its hardcoded here
-				inputDivPriceListElement.setAttribute("PricelistName", shipFrom);
-				//invoke getPricelistHeaderList api
+				inputGroupPriceListElement.setAttribute("PricelistName", group);
+				//invoke getEntitlementRuleList api
 				env.setApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, priceListHeaderListTemplate.getDocument());
-				Document outDivEntRuleDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputDivPriceListDoc.getDocument());
+				Document outGroupEntRuleDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputGroupPriceListDoc.getDocument());
 				env.clearApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API);
-				
-				Element outDivEntRuleElement = outDivEntRuleDoc.getDocumentElement();
-				String divLength = outDivEntRuleElement.getAttribute("TotalNumberOfRecords");
-				if(divLength.equals("0"))
+
+				Element outGroupEntRuleElement = outGroupEntRuleDoc.getDocumentElement();
+				String groupLength = outGroupEntRuleElement.getAttribute("TotalNumberOfRecords");
+				if(!groupLength.equals("0"))
 				{
-					//form the input document using group
-					//get the group from organization table
-					String group = getGroupFromOrganization(env, shipFrom);
-					YFCDocument inputGroupPriceListDoc = YFCDocument.createDocument("PricelistHeader");
-					YFCElement inputGroupPriceListElement = inputGroupPriceListDoc.getDocumentElement();
-					inputGroupPriceListElement.setAttribute("PricelistNameQryType", "LIKE");
-					//its hardcoded here
-					inputGroupPriceListElement.setAttribute("PricelistName", group);
-					//invoke getEntitlementRuleList api
-					env.setApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, priceListHeaderListTemplate.getDocument());
-					Document outGroupEntRuleDoc = api.invoke(env, XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API, inputGroupPriceListDoc.getDocument());
-					env.clearApiTemplate(XPXLiterals.GET_PRICE_LIST_HEADER_LIST_API);
-					
-					Element outGroupEntRuleElement = outGroupEntRuleDoc.getDocumentElement();
-					String groupLength = outGroupEntRuleElement.getAttribute("TotalNumberOfRecords");
-					if(!groupLength.equals("0"))
-					{
-						return outGroupEntRuleDoc;
-					}
-		
+					return outGroupEntRuleDoc;
 				}
-				else
-				{
-					return outDivEntRuleDoc;
-				}
-	
+
+			}
+			else
+			{
+				return outDivEntRuleDoc;
 			}
 
-			return outCustPriceListDoc;
+		}
+
+		return outCustPriceListDoc;
 
 
-}
+	}
 
 
 	/**
@@ -2186,56 +2247,56 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	/*private void createEntitlementForCustomer(YFSEnvironment env, String shipFrom, String suffixType, String envtId, 
 			String pricingWareHouse, String processCode, String customerID, String organizationCode) throws RemoteException {
 		//create an input doc for getting the entitlement rule
-		
+
 		String entitlementName = null;
 		HashMap existingEntitlementsAttributes = new HashMap();
-		
+
 		if(pricingWareHouse == null || pricingWareHouse.trim().length() ==0)
 		{
 			pricingWareHouse = getPricingWareHouse(env,shipFrom);
 		}
-		
+
 		if(pricingWareHouse!=null && pricingWareHouse.trim().length()!=0)
 		{
 			entitlementName="GROUP"+"_"+envtId+"_"+pricingWareHouse;
-			
+
 			if(processCode.equalsIgnoreCase("C"))
 			{
-				
+
 				existingEntitlementsAttributes = checkExistingEntitlementAssignment(env,customerID,pricingWareHouse,organizationCode);
-				
+
 				if(!existingEntitlementsAttributes.isEmpty())
 				{
-					
+
 					String creationRequired = (String)existingEntitlementsAttributes.get("CreationRequired");
-					
+
 					//log.debug("The creation Required value is: "+creationRequired);
-					
+
 					if(XPXLiterals.BOOLEAN_FLAG_N.equalsIgnoreCase(creationRequired))
 					{
-						
-						
+
+
 						//log.debug("No creation or deletion required as the existing entitlement name has no change");
-						
+
 					}
-					
+
 					else if(XPXLiterals.BOOLEAN_FLAG_Y.equalsIgnoreCase(creationRequired))
 					{
                         //No existing Group entitlement, have to create one
                         //Create input to assign to an existing entitlement
-						
+
 						Document manageEntitlementRuleInputDoc = createInputDocForManageEntitlementRule(env,customerID,entitlementName);
 						log.debug("The input doc for entitlement additon(processCode A) is: "+SCXmlUtil.getString(manageEntitlementRuleInputDoc));
 						api.invoke(env, XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleInputDoc);
-						
+
 						// Commented out as the business rule is that on a change if the customer has no existing group entitlement, 
 						 //  we should not add any
 					}
-					
-					
+
+
 					else
 					{
-						
+
                     //Create input to delete the existing entitlement and create the new one
 					Document manageEntitlementRuleInputDoc = createManageEntitlementRuleInputDoc(env,existingEntitlementsAttributes,
 							XPXLiterals.DELETE,customerID,entitlementName);
@@ -2243,42 +2304,42 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					env.setApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleTemplate);
 					api.invoke(env, XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleInputDoc);
 					env.clearApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API);
-					
+
 					Document manageEntitlementRuleCreationInputDoc = createManageEntitlementRuleInputDoc(env,existingEntitlementsAttributes,
 							XPXLiterals.MANAGE,customerID,entitlementName);
 					//log.debug("The input doc for entitlement additon(processCode C) is: "+SCXmlUtil.getString(manageEntitlementRuleCreationInputDoc));
 					env.setApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleTemplate);
 					api.invoke(env, XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleCreationInputDoc);
 					env.clearApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API);
-					
+
 					}
 				}	
-					
-					
-				
-				
-				
+
+
+
+
+
 			}
 			else if(processCode.equalsIgnoreCase("A"))
 			{
 				// Create input to assign a new entitlement
-						
+
 				Document manageEntitlementRuleInputDoc = createInputDocForManageEntitlementRule(env,customerID,entitlementName,organizationCode);
 				//log.debug("The input doc for entitlement additon(processCode A) is: "+SCXmlUtil.getString(manageEntitlementRuleInputDoc));
 				env.setApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleTemplate);
 				api.invoke(env, XPXLiterals.MANAGE_ENTITLEMENT_RULE_API, manageEntitlementRuleInputDoc);
 				env.clearApiTemplate(XPXLiterals.MANAGE_ENTITLEMENT_RULE_API);
-				
+
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		Document outEntRuleListDoc = getExistingEntitlementRuleList(env, shipFrom, sapAccountNumber);
 		Element outEntRuleListElement = outEntRuleListDoc.getDocumentElement();
 		String ruleLength = outEntRuleListElement.getAttribute("TotalNumberOfRecords");
-		
+
 		if(!ruleLength.equals("0")){
 			NodeList ruleNodeList = outEntRuleListDoc.getElementsByTagName("EntitlementRule");
 			Element ruleElement = (Element)ruleNodeList.item(0);
@@ -2288,7 +2349,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			Document inputAssignmentDoc= YFCDocument.createDocument().getDocument();
 			inputAssignmentDoc.appendChild(inputAssignmentDoc.importNode(ruleNodeList.item(0), true));
 			//create EntitlementRuleAssignmentList element
-						
+
 			Element entRuleAssignmentListElement = inputAssignmentDoc.createElement("EntitlementRuleAssignmentList");
 			entRuleAssignmentListElement.setAttribute("Reset", "");
 			inputAssignmentDoc.getDocumentElement().appendChild(entRuleAssignmentListElement);
@@ -2300,33 +2361,33 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			entRuleAssignmentElement.setAttribute("CustomerType", "01");
 			entRuleAssignmentElement.setAttribute("CustomerLevel", "");
 			entRuleAssignmentListElement.appendChild(entRuleAssignmentElement);
-			
+
 			//invoke manageEntitlementRule api
-			
+
 			log.debug(SCXmlUtil.getString(inputAssignmentDoc));
 			Document outputRuleAssignmentDoc = api.invoke(env, "manageEntitlementRule", inputAssignmentDoc);
-			
+
 		}
 	}*/
 
 	private Document createInputDocForManageEntitlementRule(YFSEnvironment env, String customerID, String entitlementName, String organizationCode) {
 
 		YFCDocument manageEntitlementRuleInputDoc = YFCDocument.createDocument(XPXLiterals.E_ENTITLEMENT_RULE);
-        manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ID, entitlementName);
-        manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
-        		
-        
-        YFCElement entitlementRuleAssignmentList = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT_LIST);
-        
-        
-        YFCElement entitlementRuleAssignment = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT);
-        entitlementRuleAssignment.setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
-        entitlementRuleAssignment.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
-        
-        
-        entitlementRuleAssignmentList.appendChild(entitlementRuleAssignment);
-        manageEntitlementRuleInputDoc.getDocumentElement().appendChild(entitlementRuleAssignmentList);
-		
+		manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ID, entitlementName);
+		manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+
+
+		YFCElement entitlementRuleAssignmentList = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT_LIST);
+
+
+		YFCElement entitlementRuleAssignment = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT);
+		entitlementRuleAssignment.setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
+		entitlementRuleAssignment.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
+
+
+		entitlementRuleAssignmentList.appendChild(entitlementRuleAssignment);
+		manageEntitlementRuleInputDoc.getDocumentElement().appendChild(entitlementRuleAssignmentList);
+
 		return manageEntitlementRuleInputDoc.getDocument();
 	}
 
@@ -2334,7 +2395,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			String customerID, String entitlementName) {
 
         YFCDocument manageEntitlementRuleInputDoc = YFCDocument.createDocument(XPXLiterals.E_ENTITLEMENT_RULE);
-        
+
         if(operation.equalsIgnoreCase(XPXLiterals.DELETE))
         {
         manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ID, 
@@ -2348,13 +2409,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
         }
         manageEntitlementRuleInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,
         		(String)existingEntitlementsAttributes.get(XPXLiterals.A_ORGANIZATION_CODE));
-        
-        
+
+
         YFCElement entitlementRuleAssignmentList = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT_LIST);
-        
-        
+
+
         YFCElement entitlementRuleAssignment = manageEntitlementRuleInputDoc.createElement(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT);
-        
+
         if(operation.equalsIgnoreCase(XPXLiterals.DELETE))
         {
         entitlementRuleAssignment.setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ASSIGNMENT_KEY,
@@ -2365,29 +2426,29 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
         	entitlementRuleAssignment.setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
         	entitlementRuleAssignment.setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_KEY,
         			(String)existingEntitlementsAttributes.get(XPXLiterals.A_ENTITLEMENT_RULE_KEY));
-        	
+
         }
         entitlementRuleAssignment.setAttribute(XPXLiterals.A_OPERATION, operation);
-        
+
         entitlementRuleAssignmentList.appendChild(entitlementRuleAssignment);
         manageEntitlementRuleInputDoc.getDocumentElement().appendChild(entitlementRuleAssignmentList);
-        
-        
+
+
 		return manageEntitlementRuleInputDoc.getDocument();
 	}
-*/
+	 */
 	/*private HashMap checkExistingEntitlementAssignment(YFSEnvironment env, String customerID, String pricingWareHouse, String organizationCode) {
 
            boolean isEntitlementAssigned = false;
            HashMap existingEntitlementsAttributes = new HashMap();
-           		
+
 		   YFCDocument getEnitlementAssignmentInputDoc =  YFCDocument.createDocument(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT);
 		   getEnitlementAssignmentInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 		   getEnitlementAssignmentInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
 		   getEnitlementAssignmentInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_PURPOSE, XPXLiterals.BUYING);
-		   
+
 		   try {
-			   
+
                 // form the template
 				YFCDocument outputTemplateDoc = YFCDocument.createDocument(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT_LIST);
 				YFCElement outputTemplateElement = outputTemplateDoc.getDocumentElement();
@@ -2403,71 +2464,71 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				entitlementRuleTemplateElement.setAttribute(XPXLiterals.A_ENTITLEMENT_RULE_KEY, "");
 				orgTemplateElement.appendChild(entitlementRuleTemplateElement);
 				env.setApiTemplate(XPXLiterals.GET_ENTITLEMENT_ASSIGNMENT_LIST_API, outputTemplateDoc.getDocument());   
-			   
-			   
+
+
 		    //log.debug("The input of getEntitlementAssgmt api is: "+SCXmlUtil.getString(getEnitlementAssignmentInputDoc.getDocument()));   
 			Document getEnitlementAssignmentOutputDoc = api.invoke(env, XPXLiterals.GET_ENTITLEMENT_ASSIGNMENT_LIST_API, 
 					                                            getEnitlementAssignmentInputDoc.getDocument());
 			env.clearApiTemplate(XPXLiterals.GET_ENTITLEMENT_ASSIGNMENT_LIST_API);
-			
+
 			//log.debug("The output of getEntitlementAssgmt api is: "+SCXmlUtil.getString(getEnitlementAssignmentOutputDoc));
 			NodeList entitlementRuleAssgmtElementList = getEnitlementAssignmentOutputDoc.getDocumentElement()
 			                                         .getElementsByTagName(XPXLiterals.E_ENTITLEMENT_RULE_ASSIGNMENT);
-			
+
 			if(entitlementRuleAssgmtElementList.getLength()>0)
 			{
 			       for(int i=0; i<entitlementRuleAssgmtElementList.getLength();i++)
 			       {
 			    	   Element entitlementRuleAssgmtElement = (Element)entitlementRuleAssgmtElementList.item(i);
 			    	   Element entitlementRule = (Element)entitlementRuleAssgmtElement.getElementsByTagName(XPXLiterals.E_ENTITLEMENT_RULE).item(0);
-			    	   
-			    	      
+
+
 			    	     String entitlementRuleId = entitlementRule.getAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ID);
-					     
+
 					     String typeOfEntitlement = entitlementRuleId.substring(0,5);
-					     
+
 					     String existingPricingWarehouse = entitlementRuleId.substring(entitlementRuleId.indexOf("_", 6)).replace("_", "").trim();
-					     
+
 					     if(typeOfEntitlement.equals("GROUP") && !existingPricingWarehouse.equalsIgnoreCase(pricingWareHouse))
 					     {
 					    	 existingEntitlementsAttributes.put(XPXLiterals.A_ENTITLEMENT_RULE_ASSIGNMENT_KEY,
 					    			 entitlementRuleAssgmtElement.getAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ASSIGNMENT_KEY));
 					    	 //log.debug("The entitlement rule assgmt key is: "+entitlementRuleAssgmtElement.getAttribute(XPXLiterals.A_ENTITLEMENT_RULE_ASSIGNMENT_KEY));
-					    	 
+
 					    	 existingEntitlementsAttributes.put(XPXLiterals.A_ENTITLEMENT_RULE_ID, entitlementRuleId);
 					    	 existingEntitlementsAttributes.put(XPXLiterals.A_ENTITLEMENT_RULE_KEY, entitlementRule.getAttribute(XPXLiterals.A_ENTITLEMENT_RULE_KEY));
 					    	 existingEntitlementsAttributes.put(XPXLiterals.A_ORGANIZATION_CODE, entitlementRule.getAttribute(XPXLiterals.A_ORGANIZATION_CODE)); 
 					    	 isEntitlementAssigned = true;
 					    	 break;
 					     }
-					     
+
 					     else if(typeOfEntitlement.equals("GROUP") && existingPricingWarehouse.equalsIgnoreCase(pricingWareHouse))
 					     {
 					    	 String creationRequired = XPXLiterals.BOOLEAN_FLAG_N;
-					    	 
+
 					    	 existingEntitlementsAttributes.put("CreationRequired",creationRequired);
-					    	 
+
 					    	 isEntitlementAssigned = true;
-					    	 
+
 					    	 break;
-					    	 
+
 					     }
-					     
-					   
-			    	   
+
+
+
 			       }
-				
-				
-				
+
+
+
 			}
-			
+
 			if(isEntitlementAssigned==false)
 			{
 				 String creationRequired = XPXLiterals.BOOLEAN_FLAG_Y;
-		    	 
+
 		    	 existingEntitlementsAttributes.put("CreationRequired",creationRequired);
 			} // Commented out as the business rule is that on a change if the customer has no existing group entitlement, we should not add any
-					
+
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2475,8 +2536,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		   
-		   
+
+
 		return existingEntitlementsAttributes;
 	}*/
 
@@ -2533,20 +2594,20 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					return outGroupEntRuleDoc;
 				}
-				
+
 			}
 			else
 			{
 				return outDivEntRuleDoc;
 			}
-			
+
 		}
-		
+
 			return outCustEntRuleDoc;
-		
-		
+
+
 	}*/
-	
+
 	/**
 	 * This method gets the group to which the customer belongs from the organization table.
 	 * @param env
@@ -2579,8 +2640,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			Element orgElement = (Element)orgNodeList.item(0);
 			group = orgElement.getAttribute("ExtnGroup");
 		}
-		
-		
+
+
 		return group;
 	}
 
@@ -2597,7 +2658,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	private YFCElement formCustomerElement(String strCustomerID,
 			YFCDocument inputCustomerDoc, String organizationCode, String envtId, String companyCode,Element custElement) {
 		//sayan changed method signature to accept customer ID END
-		
+
 		YFCElement inputCustomerElement = inputCustomerDoc.getDocumentElement();
 		String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
 		String suffixType = custElement.getAttribute(XPXLiterals.E_SUFFIX_TYPE);
@@ -2611,10 +2672,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		String brandCode = custElement.getAttribute(XPXLiterals.A_BRAND_CODE);
 		log.debug("The suffix type in customer element is: "+suffixType);
 		/****************Added by Prasanth Kumar M. as per the new requirements***************************
-		
+
 		String shipToSuffix = custElement.getAttribute(XPXLiterals.E_SHIP_TO_SUFFIX);
 		String billToSuffix = custElement.getAttribute(XPXLiterals.E_BILL_TO_SUFFIX);
-		
+
 		if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
 		{
 		customerID = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-"+companyCode;
@@ -2624,32 +2685,32 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 			customerID = customerDivision+"-"+legacyCustomerNumber+"-"+shipToSuffix+"-"+envtId+"-"+companyCode;
 				}
-		
+
 		/*************************************************************************************************
-		*/
+		 */
 		//log.debug("The customer id in customer element is: "+strCustomerID);
 		inputCustomerElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, strCustomerID);
 		inputCustomerElement.setAttribute(XPXLiterals.A_CUSTOMER_TYPE, "01");
 		inputCustomerElement.setAttribute(XPXLiterals.A_IGNORE_ORDERING, XPXLiterals.BOOLEAN_FLAG_Y);
 		inputCustomerElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		
-		
-	    inputCustomerElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
-	    
-	    //Begin: CR 2277
-	    inputCustomerElement.setAttribute(XPXLiterals.A_VERTICAL, custElement.getAttribute("BrandCode"));
-	    inputCustomerElement.setAttribute(XPXLiterals.A_RELATIONSHIP_TYPE, custElement.getAttribute("ShipFromBranch"));
-	    if(null!=processCode && processCode.equalsIgnoreCase("A")){
-	    	if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S)){
-	    		inputCustomerElement.setAttribute(XPXLiterals.A_MEMBERSHIP_LEVEL, "Y");
-	    	}
-	    	else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B)){
-	    		inputCustomerElement.setAttribute(XPXLiterals.A_MEMBERSHIP_LEVEL, "I");
-	    	}
-	    }
-	    //End: CR 2277
-		
-		
+
+
+		inputCustomerElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
+
+		//Begin: CR 2277
+		inputCustomerElement.setAttribute(XPXLiterals.A_VERTICAL, custElement.getAttribute("BrandCode"));
+		inputCustomerElement.setAttribute(XPXLiterals.A_RELATIONSHIP_TYPE, custElement.getAttribute("ShipFromBranch"));
+		if(null!=processCode && processCode.equalsIgnoreCase("A")){
+			if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S)){
+				inputCustomerElement.setAttribute(XPXLiterals.A_MEMBERSHIP_LEVEL, "Y");
+			}
+			else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B)){
+				inputCustomerElement.setAttribute(XPXLiterals.A_MEMBERSHIP_LEVEL, "I");
+			}
+		}
+		//End: CR 2277
+
+
 		return inputCustomerElement;
 	}
 
@@ -2667,42 +2728,42 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			YFCDocument inputCustomerDoc, YFCElement inputCustomerElement, String sapAccountId, String strOrganizationCode) {
 		String customerID = null;
 		String parentOrgCode = null;
-	
+
 		YFCElement buyerOrgElement = inputCustomerDoc.createElement("BuyerOrganization");
 		buyerOrgElement.setAttribute("IsBuyer", "Y");
 		buyerOrgElement.setAttribute("LocaleCode", "en_US_EST");
 		buyerOrgElement.setAttribute("OrganizationName", custElement.getAttribute("CustomerName"));
-		
+
 		String envtId = custElement.getAttribute(XPXLiterals.A_ENVIRONMENT_ID);
 		String companyCode = custElement.getAttribute(XPXLiterals.A_COMPANY_CODE);
-		
-        String suffixType = custElement.getAttribute(XPXLiterals.A_SUFFIX_TYPE);
-        String customerDivision = custElement.getAttribute(XPXLiterals.A_CUSTOMER_DIVISION);
+
+		String suffixType = custElement.getAttribute(XPXLiterals.A_SUFFIX_TYPE);
+		String customerDivision = custElement.getAttribute(XPXLiterals.A_CUSTOMER_DIVISION);
 		String legacyCustomerNumber = custElement.getAttribute(XPXLiterals.A_LEGACY_CUSTOMER_NO);
-			
+
 		String shipToSuffix = custElement.getAttribute(XPXLiterals.E_SHIP_TO_SUFFIX);
 		String billToSuffix = custElement.getAttribute(XPXLiterals.E_BILL_TO_SUFFIX);
 		//String sapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
-		
+
 		/*if(sapAccountNumber == null || sapAccountNumber.trim().length() ==0)
 		{
 			sapAccountNumber = sapAccountNumber2;
 		}*/
-		
-		
-		
+
+
+
 		if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
 		{
-		customerID = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
-		parentOrgCode = sapAccountId;
-		//log.debug("The Parent OrganizationCode is: "+parentOrgCode);
+			customerID = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
+			parentOrgCode = sapAccountId;
+			//log.debug("The Parent OrganizationCode is: "+parentOrgCode);
 		}
 		else if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S))
-				{
+		{
 			customerID = customerDivision+"-"+legacyCustomerNumber+"-"+shipToSuffix+"-"+envtId+"-"+companyCode+"-S";
 			parentOrgCode = customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix+"-"+envtId+"-"+companyCode+"-B";
-				}
-		
+		}
+
 		/********8Temporary****************/
 		String strCustomerName = custElement.getAttribute("CustomerName");
 		if(strCustomerName == null || strCustomerName.trim().length() == 0)
@@ -2719,7 +2780,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		buyerOrgElement.setAttribute("PrimaryEnterpriseKey", strOrganizationCode);
 		return buyerOrgElement;
 	}
-	
+
 	/**
 	 * This method used to create a Extn element to the input to manageCustomer api
 	 * @param custElement
@@ -2728,7 +2789,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	 */
 	private YFCElement formExtnElement(Element custElement,
 			YFCDocument inputCustomerDoc) {
-		
+
 		YFCElement extnElement = inputCustomerDoc.createElement(XPXLiterals.E_EXTN);
 		extnElement.setAttribute("ExtnBrandCode", custElement.getAttribute("BrandCode"));
 		extnElement.setAttribute("ExtnCAPSID", custElement.getAttribute("CapsId"));
@@ -2745,18 +2806,18 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		extnElement.setAttribute("ExtnServiceOptCode", strServiceOptCode);
 		/**** Code added for Jira 1419****/
 		extnElement.setAttribute("ExtnAllowDirectOrderFlag",custElement.getAttribute("AllowDirectOrdersFlag"));
-		
-		
+
+
 		//sayan - added START
-			if("K".equalsIgnoreCase(strServiceOptCode)|| "P".equalsIgnoreCase(strServiceOptCode)|| "Q".equalsIgnoreCase(strServiceOptCode))
-			{
-				extnElement.setAttribute("ExtnSampleRequestFlag", "Y");
-			}
-			else
-			{
-				//since default value is ' '
-				extnElement.setAttribute("ExtnSampleRequestFlag", "N");
-			}
+		if("K".equalsIgnoreCase(strServiceOptCode)|| "P".equalsIgnoreCase(strServiceOptCode)|| "Q".equalsIgnoreCase(strServiceOptCode))
+		{
+			extnElement.setAttribute("ExtnSampleRequestFlag", "Y");
+		}
+		else
+		{
+			//since default value is ' '
+			extnElement.setAttribute("ExtnSampleRequestFlag", "N");
+		}
 		//sayan - added END
 		//extnElement.setAttribute("ExtnServiceOptCode", custElement.getAttribute("ServiceOptimizationCode"));
 		extnElement.setAttribute("ExtnShipComplete", custElement.getAttribute("ShipComplete"));
@@ -2780,25 +2841,25 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		extnElement.setAttribute("ExtnPhone1", custElement.getAttribute("CustomerPhone"));
 		extnElement.setAttribute("ExtnAttnName", custElement.getAttribute("CustomerAttentionName"));
 		extnElement.setAttribute("ExtnFax1", custElement.getAttribute("CustomerFax"));
-		
+
 		//Added by Prasanth Kumar M as fix for JIRA defect ---> 630
-		
+
 		extnElement.setAttribute("ExtnBillToDunsNo", custElement.getAttribute("DUNSNumber"));
-		
+
 		//Added for CR 968
-		
+
 		extnElement.setAttribute("ExtnCustomerPORuleFlag", custElement.getAttribute("CustomerPORequiredFlag"));
-		
+
 		//STARTS - Fix for JIRA 1886 : adsouza
-		
+
 		extnElement.setAttribute("ExtnLocationID", custElement.getAttribute("LocationID"));
 
 		//ENDS - Fix for JIRA 1886 : adsouza
-		
-		
+
+
 		return extnElement;
 	}
-	
+
 	/**
 	 * This method is used to form the ContactPersonInfo element to the input to manageCustomer api
 	 * @param custElement
@@ -2824,7 +2885,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputContactPersonInfoElement.setAttribute("ZipCode", zipCode);
 		return inputContactPersonInfoElement;
 	}
-	
+
 	/**
 	 * @param custElement
 	 * @param inputCustomerDoc
@@ -2847,10 +2908,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputBillingPersonInfoElement.setAttribute("State", state);
 		inputBillingPersonInfoElement.setAttribute("Country", country);
 		inputBillingPersonInfoElement.setAttribute("ZipCode", zipCode);
-		
+
 		return inputBillingPersonInfoElement;
 	}
-	
+
 	/**
 	 * @param custElement
 	 * @param inputCustomerDoc
@@ -2860,8 +2921,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	{
 		String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
 		YFCElement salesRepListElement = inputCustomerDoc.createElement("XPEDXSalesRepList");
-		
-		
+
+
 		NodeList salesRepNodeList = custElement.getElementsByTagName("SalesReps");
 		if(salesRepNodeList.getLength()>0)
 		{
@@ -2877,21 +2938,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					for(int salesCounter=0;salesCounter<salesRepCounter;salesCounter++)
 					{
-					Element employeeElement = (Element)salesRepNode.item(salesCounter);
-					//log.debug(SCXmlUtil.getString(employeeElement));
-					employeeID = employeeElement.getAttribute("EmployeeId");
-					YFCElement salesRepElement = inputCustomerDoc.createElement("XPEDXSalesRep");
-					salesRepElement.setAttribute("SalesRepId", employeeID);
-					salesRepElement.setAttribute("Operation", processCode);
-					salesRepListElement.appendChild(salesRepElement);
+						Element employeeElement = (Element)salesRepNode.item(salesCounter);
+						//log.debug(SCXmlUtil.getString(employeeElement));
+						employeeID = employeeElement.getAttribute("EmployeeId");
+						YFCElement salesRepElement = inputCustomerDoc.createElement("XPEDXSalesRep");
+						salesRepElement.setAttribute("SalesRepId", employeeID);
+						salesRepElement.setAttribute("Operation", processCode);
+						salesRepListElement.appendChild(salesRepElement);
 					}
 				}
-				
+
 			}
 		}
 		return salesRepListElement;
 	}
-	
+
 	/**
 	 * @param env
 	 * @param custElement
@@ -2905,10 +2966,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		YFCElement salesRepListElement = inputCustomerDoc.createElement("XPEDXSalesRepList");
 		HashSet<String> existingEmployeeSet = new HashSet<String>();
 		existingEmployeeSet = getExistingCSRList(env);
-		
+
 		HashSet<String> inputEmployeeList = new HashSet<String>();
 		inputEmployeeList = getInputEmployeeList(custElement);
-		
+
 		HashSet<String> finalEmployeeList = new HashSet<String>();
 		HashSet<String> deleteEmployeeList = new HashSet<String>();
 		int flag = 0;
@@ -2923,15 +2984,15 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				//will not modify the already existing CSR
 				//if(existingEmployeeSet.contains(emp))
 				//{
-					//finalEmployeeList.add(emp);
+				//finalEmployeeList.add(emp);
 				//}
 				if(!existingEmployeeSet.contains(emp))
 				{
 					finalEmployeeList.add(emp);
 				}
-				
+
 			}
-			
+
 			Iterator<String> deleteIterator = existingEmployeeSet.iterator();
 			while(deleteIterator.hasNext())
 			{
@@ -2940,10 +3001,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					deleteEmployeeList.add(delEmp);
 				}
-				
+
 			}
 			//form the element
-			
+
 			Iterator<String> salesIterator = finalEmployeeList.iterator();
 			while(salesIterator.hasNext())
 			{
@@ -2961,17 +3022,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				salesRepElement.setAttribute("SalesRepId", delEmpId);
 				salesRepElement.setAttribute("Operation", "Delete");
 				salesRepListElement.appendChild(salesRepElement);
-				
+
 			}
-			
-			
+
+
 		}
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		return salesRepListElement;
 	}
 
@@ -2994,9 +3055,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					flag=1;
 					break;
-					
+
 				}
-								
+
 			}
 		}
 		else
@@ -3027,10 +3088,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					for(int salesCounter=0;salesCounter<salesRepCounter;salesCounter++)
 					{
-					Element employeeElement = (Element)salesRepNode.item(salesCounter);
-					//log.debug(SCXmlUtil.getString(employeeElement));
-					employeeID = employeeElement.getAttribute("EmployeeId");
-					inputEmployeeList.add(employeeID);
+						Element employeeElement = (Element)salesRepNode.item(salesCounter);
+						//log.debug(SCXmlUtil.getString(employeeElement));
+						employeeID = employeeElement.getAttribute("EmployeeId");
+						inputEmployeeList.add(employeeID);
 					}
 				}
 			}
@@ -3045,20 +3106,20 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	 */
 	private HashSet<String> getExistingCSRList(YFSEnvironment env) throws RemoteException {
 		//set template to get the XPEDXSalesRepList
-		
+
 		YFCDocument salesRepTemplateListDoc = YFCDocument.createDocument("XPEDXSalesRepList");
 		YFCElement salesRepTemplateListElement = salesRepTemplateListDoc.getDocumentElement();
 		YFCElement salesRepTemplateElement = salesRepTemplateListDoc.createElement("XPEDXSalesRep");
 		salesRepTemplateElement.setAttribute("SalesRepId", "");
 		salesRepTemplateListElement.appendChild(salesRepTemplateElement);
-		
+
 		//form the input
 		YFCDocument inputCSRDoc = YFCDocument.createDocument("XPEDXSalesRep"); 
 		//get the exisitng list of CSRs
 		env.setApiTemplate("getCSRListService", salesRepTemplateListDoc.getDocument());
 		Document outputCSRListDocument = api.executeFlow(env, "getCSRListService", inputCSRDoc.getDocument());
 		//Document outputCSRListDocument = api.invoke(env, "getCSRListService", inputCSRDoc.getDocument());
-		
+
 		env.clearApiTemplate("getCSRListService");
 		//log.debug(YFCDocument.getDocumentFor(outputCSRListDocument));
 		HashSet<String> existingEmployeeSet = new HashSet<String>();
@@ -3075,7 +3136,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		}
 		return existingEmployeeSet;
 	}
-	
+
 	/**
 	 * @param env
 	 * @param customerElement 
@@ -3102,12 +3163,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			Element listElement = (Element)orgList.item(0);
 			organizationCode = listElement.getAttribute("CodeShortDescription");
 			//log.debug("The organizationCode retruned from method to retrieve the OrgCode is: "+organizationCode);
-			
+
 		}
 		//log.debug("The organizationCode retruned from method to retrieve the OrgCode is: "+organizationCode);
 		return organizationCode;
 	}
-	
+
 	public boolean isCustomerActive() {
 		return isCustomerActive;
 	}
@@ -3115,57 +3176,57 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	public void setCustomerActive(boolean isCustomerActive) {
 		this.isCustomerActive = isCustomerActive;
 	}
-	
+
 	private boolean checkIsMSAPChanged(YFSEnvironment env, String customerID, String organizationCode, String newmSAPAccountNumber) throws RemoteException{
 		YFCDocument getCustomerListInputDoc = createGetCustomerListInput(env, customerID, organizationCode);
 		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		
+
 		Document templateListDoc = SCXmlUtil.createDocument(XPXLiterals.E_CUSTOMER_LIST);
- 		Element templateListElement = templateListDoc.getDocumentElement();
- 		Element templateCustElement = templateListDoc.createElement(XPXLiterals.E_CUSTOMER);
- 		templateCustElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
- 		templateCustElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
- 		Element templateExtnElement = templateListDoc.createElement(XPXLiterals.E_EXTN);
- 		templateExtnElement.setAttribute("ExtnSAPParentAccNo", "");
- 		
- 		templateCustElement.appendChild(templateExtnElement);
- 		templateListElement.appendChild(templateCustElement);
- 		
- 		System.out.println("checkIsMSAPChanged - Extn Template : "+SCXmlUtil.getString(templateListDoc));
- 		
+		Element templateListElement = templateListDoc.getDocumentElement();
+		Element templateCustElement = templateListDoc.createElement(XPXLiterals.E_CUSTOMER);
+		templateCustElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
+		templateCustElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
+		Element templateExtnElement = templateListDoc.createElement(XPXLiterals.E_EXTN);
+		templateExtnElement.setAttribute("ExtnSAPParentAccNo", "");
+
+		templateCustElement.appendChild(templateExtnElement);
+		templateListElement.appendChild(templateCustElement);
+
+		log.info("checkIsMSAPChanged - Extn Template : "+SCXmlUtil.getString(templateListDoc));
+
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, templateListDoc);
-	    Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
-	    env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
-	    
-	    System.out.println("checkIsMSAPChanged - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
-	    
-	    NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_EXTN);
-	    Element custElement = (Element)customerList.item(0);
-	    //Check if  custelement is null or not 
-		String existingMSAPNumber = custElement.getAttribute("ExtnSAPParentAccNo");
+		Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
+		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+
+		log.info("checkIsMSAPChanged - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
+
+		NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_EXTN);
+		Element custElement = (Element)customerList.item(0);
+		//Check if  custelement is null or not 
+		existingMSAPNumber = custElement.getAttribute("ExtnSAPParentAccNo");
 		if(existingMSAPNumber.trim().equals(newmSAPAccountNumber))
 		{
 			return false;
 		}		
-		
+
 		return true;
 	}	
-	
+
 	private void updateCustomerWithMSAPAccountNumber(YFSEnvironment env, String organizationCode, String customerId, String masterSapCustomerId, String newMSAPAccountNumber, String newMSAPName, String suffixType)
 	{
 		YFCDocument updateMSAPCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
 		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerId);
 		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Modify");
 		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);		
-		
+
 		if(suffixType.equals("C"))
 		{
-		    YFCElement parentCustomerElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
-		    parentCustomerElement.setAttribute("CustomerID", masterSapCustomerId);
-		    parentCustomerElement.setAttribute("OrganizationCode", organizationCode);		      
-		    updateMSAPCustomerInputDoc.getDocumentElement().appendChild(parentCustomerElement);
-		
+			YFCElement parentCustomerElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
+			parentCustomerElement.setAttribute("CustomerID", masterSapCustomerId);
+			parentCustomerElement.setAttribute("OrganizationCode", organizationCode);		      
+			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(parentCustomerElement);
+
 		}else {
 			YFCElement extnElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_EXTN);
 			extnElement.setAttribute("ExtnSAPParentAccNo", newMSAPAccountNumber);
@@ -3173,10 +3234,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(extnElement);
 		}		
 
-	    System.out.println("updateSAPCustomerWithMSAPAccountNumber - update xml : "+SCXmlUtil.getString(updateMSAPCustomerInputDoc.getDocument()));
-	    try {
-	    	api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  updateMSAPCustomerInputDoc.getDocument());
-			
+		log.info("updateSAPCustomerWithMSAPAccountNumber - update xml : "+SCXmlUtil.getString(updateMSAPCustomerInputDoc.getDocument()));
+		try {
+			api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  updateMSAPCustomerInputDoc.getDocument());
+
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3184,18 +3245,120 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+
+
+	private Document getChildCustomerList(YFSEnvironment env, String customerId, String organizationCode) throws YFSException, RemoteException{
+
+
+		Document inputCustomerDoc= YFCDocument.createDocument("Customer").getDocument();
+		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
+		inputCustomerElement.setAttribute("CustomerID", customerId);
+		inputCustomerElement.setAttribute("OrganizationCode", organizationCode);
 		
-	}	
-	
+
+		Document childCustomerListDoc = api.executeFlow(env, "XPXGetChildCustomerListService", inputCustomerDoc);
+		return childCustomerListDoc;
+	}
+
+
+
+
+	public Document getCustomerContactList(YFSEnvironment env,String mSapID) throws YFSException, RemoteException{
+
+
+
+		Document inputCustContactDoc =YFCDocument.createDocument("CustomerContact").getDocument();
+
+		Document custContactListDoc;
+
+		Element inputCustContactElement = inputCustContactDoc.getDocumentElement();
+		Element inputCustElement = inputCustContactDoc.createElement("Customer");
+		inputCustElement.setAttribute("BuyerOrganizationCode", mSapID);
+		inputCustContactElement.appendChild(inputCustElement);
+
+
+		YFCDocument outputTemplateDoc = YFCDocument.createDocument("CustomerContactList");
+		YFCElement outputTemplateElement = outputTemplateDoc.getDocumentElement();
+
+		YFCElement orgTemplateElement = outputTemplateDoc.createElement("CustomerContact");
+		orgTemplateElement.setAttribute("UserID","");
+		outputTemplateElement.appendChild(orgTemplateElement);
+		env.setApiTemplate("getCustomerContactList", outputTemplateDoc.getDocument());
+		Document getCustContactListDoc = api.invoke(env, "getCustomerContactList", inputCustContactDoc);
+		env.clearApiTemplate("getCustomerContactList");
+
+		return getCustContactListDoc;
+	}
+
+
+
+
+	public Document getCustomerAssignmentList(YFSEnvironment env,String userId) throws YFSException, RemoteException{
+
+
+		Document inputCustAssignmtDoc =YFCDocument.createDocument("CustomerAssignment").getDocument();
+
+		Element inputCustElement =inputCustAssignmtDoc.getDocumentElement();
+
+		inputCustElement.setAttribute("UserId", userId);
+
+
+
+
+		/*             
+		 * 
+   	   YFCDocument outputTemplateDoc = YFCDocument.createDocument("CustomerContactList");
+   		YFCElement outputTemplateElement = outputTemplateDoc.getDocumentElement();
+
+		YFCElement orgTemplateElement = outputTemplateDoc.createElement("CustomerContact");
+                		orgTemplateElement.setAttribute("UserID","");
+
+		 */               
+
+		YFCDocument outputTemplateDoc = YFCDocument.createDocument("CustomerAssignmentList");
+		YFCElement outputTemplateElement = outputTemplateDoc.getDocumentElement();
+
+		YFCElement assgElement = outputTemplateDoc.createElement("CustomerAssignment");
+		assgElement.setAttribute("UserId","");
+
+
+		YFCElement	custElement=outputTemplateDoc.createElement("Customer");
+		custElement.setAttribute("CustomerID","");
+
+		assgElement.appendChild(custElement);
+
+		YFCElement	extnElement=outputTemplateDoc.createElement("Extn");
+		extnElement.setAttribute("ExtnCustomerName","");
+		extnElement.setAttribute("ExtnSuffixType","");
+
+		custElement.appendChild(extnElement);
+		assgElement.appendChild(custElement);
+		outputTemplateElement.appendChild(assgElement);
+
+
+
+		env.setApiTemplate("getCustomerAssignmentList", outputTemplateDoc.getDocument());
+		Document getCustAssignDoc = api.invoke(env, "getCustomerAssignmentList", inputCustAssignmtDoc);
+		env.clearApiTemplate("getCustomerAssignmentList");
+
+
+		return  getCustAssignDoc;
+
+	}
+
+
 	private void updateAllBillToandShipToWithMasterSAPAccountNumber(YFSEnvironment env, String organizationCode, String sapCustomerId, String newMSAPAccountNumber, String newMSAPName) throws RemoteException
 	{
 		long updateBillShipsStartTime=System.currentTimeMillis();
 		String sapCustomerKey= getCustomerKey(env, sapCustomerId);
 		getBillToList(env, sapCustomerKey, organizationCode, newMSAPAccountNumber, newMSAPName);
 		long updateBillShipsEndTime=System.currentTimeMillis();
-		System.out.println("Extra Time taken to update ALL billTos and shipTos : ["+(updateBillShipsEndTime-updateBillShipsStartTime)+"]");
+		log.info("Extra Time taken to update ALL billTos and shipTos : ["+(updateBillShipsEndTime-updateBillShipsStartTime)+"]");
 	}
-	
+
 	/**
 	 * Method to get all the bill to  from the level customer has logged in.
 	 * @param env
@@ -3234,8 +3397,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		{
 			Element btElement = (Element)btNodeList.item(Counter);
 			String billToCustomerID = btElement.getAttribute("CustomerID");
+			arrChildCustomerIds.add(billToCustomerID);
 			updateCustomerWithMSAPAccountNumber(env, organizationCode, billToCustomerID, "", newMSAPAccountNumber, newMSAPName, "B");
-			
+
 			//get the shipto list
 			Document inputShipToDoc = YFCDocument.createDocument("Customer").getDocument();
 			Element inputShipToElement = inputShipToDoc.getDocumentElement();
@@ -3253,10 +3417,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					Element stElement = (Element)stNodeList.item(sCounter);
 					String shipToCustomerID =  stElement.getAttribute("CustomerID");
+					arrChildCustomerIds.add(shipToCustomerID);
 					updateCustomerWithMSAPAccountNumber(env, organizationCode, shipToCustomerID, "", newMSAPAccountNumber, newMSAPName, "S");					
 				}				
 			}
 		}
 	}
-	
+
 }	

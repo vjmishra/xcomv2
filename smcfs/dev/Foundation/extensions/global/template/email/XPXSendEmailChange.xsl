@@ -13,8 +13,13 @@
 		      <tr>
 		        <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><table width="" border="0" cellpadding="0">
 		          <tr>
-		            <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">This is an automated notification to confirm changes made to your User Profile in <xsl:value-of select="//@BrandName" />.com.  If you did not make any changes, we recommend you contact us at <a href="mailto:distribution.webmaster@ipaper.com" style="color:#000;">distribution.webmaster@ipaper.com</a> or  <strong> 877-269-1784</strong>.</td>
+		            <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com. If you did not change your profile,please contact us at <a href="mailto:distribution.webmaster@ipaper.com" style="color:#000;">distribution.webmaster@ipaper.com</a> or  <strong> 877-269-1784</strong>.</td>
 		          </tr>
+		           <tr>
+		            <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Changes to your profile could be Password, User Name, or Security Question/Answer being changed.
+					</td>
+		          </tr>
+		         
 		          <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><br />
 		              Thank  you for your business!</td>
@@ -28,7 +33,8 @@
 		          <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
 		          </tr>
-		        </table></td>
+		        </table>
+		        </td>
 		      </tr>
 		    </table></td>
 		  </tr>

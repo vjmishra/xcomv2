@@ -543,7 +543,9 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		colBindings1[0].setKey("My_Search_Item_List_Name_Key");
         colBindings1[0].setColumnBinding("List_Nm");
         colBindings1[0].setSortReqd(true);
+        colBindings1[0].setSortBinding("@Name");
 		colBindings1[0].setLinkReqd(true);
+		
        
         
         colBindings1[1] = new YRCTblClmBindingData();
@@ -628,6 +630,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		tblResultsBinding.setCellTypes(editors);
 		tblResultsBinding.setCellModifierRequired(true);
 		tblResultsBinding.setCellModifier(cellModifier);
+		tblResultsBinding.setSortRequired(true);
 		tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
         tblResultsBinding.setTargetBinding("SaveXPEDXMyItemsListList:/XPEDXMyItemsListList");
         tblResultsBinding.setName("tblResultz");

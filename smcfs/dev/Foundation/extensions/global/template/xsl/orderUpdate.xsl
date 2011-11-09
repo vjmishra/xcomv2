@@ -270,9 +270,17 @@
                <xsl:value-of select="normalize-space(//AdjustmentAmount)" />
             </xsl:attribute>
 
-	    <xsl:attribute name ="ExtnOrderLockFlag">
-		<xsl:value-of select="normalize-space(//OrderLockFlag)" />
-	    </xsl:attribute>
+			<xsl:attribute name="ExtnOrderLockFlag">
+				 <xsl:choose>
+						<xsl:when test="( (normalize-space(//OrderLockFlag)='Y') or  (normalize-space(//OrderLockFlag)='y') )">
+						   <xsl:value-of select="'Y'" />
+						</xsl:when>
+
+						<xsl:otherwise>
+						   <xsl:value-of select="'N'" />
+						</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
             
          </xsl:element>
 
@@ -408,6 +416,10 @@
 
                      <xsl:attribute name="ExtnWebLineNumber">
                         <xsl:value-of select="normalize-space(WebLineNumber)" />
+                     </xsl:attribute>
+                     
+                     <xsl:attribute name="ExtnUnitPrice">
+                        <xsl:value-of select="normalize-space(UnitPrice)" />
                      </xsl:attribute>
 
                      <xsl:attribute name="ExtnLegacyLineNumber">

@@ -33,6 +33,12 @@
 				<xsl:value-of select="//@Username" />
 			</xsl:attribute>
 
+
+			<xsl:attribute name="DataSecurityGroupId">
+				<xsl:value-of select="//@DataSecurityGroupId" />
+			</xsl:attribute>
+
+
 			<xsl:if test="(normalize-space(//@Localecode) !='')">
 				<xsl:attribute name="Localecode">
 					<xsl:value-of select="//@Localecode" />

@@ -1582,10 +1582,12 @@ public class CustomerProfileInfoPanel extends Composite implements
 		comboECSR2.setTextLimit(50);
 		comboECSR2.setData("name", "comboECSR2");		
 		addTab(gridData1,"dummyCustomerDivision");
+
 		lblCustomerDivision = new Label(pnlCustomerProfileInfo, SWT.NONE);
-		lblCustomerDivision.setText("Customer_Division");
+		lblCustomerDivision.setText("Company");
 		lblCustomerDivision.setLayoutData(gridData2);
 		lblCustomerDivision.setData("name", "lblCustomerDivision");
+		
 		txtCustomerDivision = new Text(pnlCustomerProfileInfo, 2048);
 		txtCustomerDivision.setText(getDivisionData("txtCustomerDivision"));
 		txtCustomerDivision.setLayoutData(gridData3);

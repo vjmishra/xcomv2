@@ -52,6 +52,10 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	
 	private void setCoustomerContactModel(Element customerContactElement) {
 		this.updateAdditionalAttributes(customerContactElement);
+		String viewInvoices =  YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices");;
+		if("T".equalsIgnoreCase(viewInvoices)){
+			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
+		}
 		setModel("XPXCustomerContactIn", customerContactElement);	
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();

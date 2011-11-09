@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
 
+import com.xpedx.sterling.rcp.pca.util.XPXSortListener;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCCellModifier;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -456,8 +457,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		bindingData.setCellTypes(editors);
 		bindingData.setCellModifierRequired(true);
 		bindingData.setCellModifier(cellModifier);
-        
-        bindingData.setSortRequired(true);
+		bindingData.setSortRequired(true);
         bindingData.setSourceBinding("getXPEDXMyItemsListDetail:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems");
         bindingData.setTargetBinding("SaveXPEDXMyItemsListDetail:/XPEDXMyItemsList/XPEDXMyItemsItemsList");
         bindingData.setName("tblItemsList");
@@ -515,7 +515,8 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		
 		TableColumn clmProductDesc = new TableColumn(tblItemsList, SWT.NONE);
 		clmProductDesc.setText("Product_desc");
-		clmProductDesc.setWidth(150);//
+		clmProductDesc.setWidth(150);
+		
 
 		TableColumn clmProductSKU = new TableColumn(tblItemsList, SWT.NONE);
 		clmProductSKU.setText("SKU");
@@ -529,10 +530,6 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		TableColumn clmUom = new TableColumn(tblItemsList, SWT.NONE);
 		clmUom.setText("UOM");
 		clmUom.setWidth(50);
-		
-		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
-		clmSequence.setText("Sequence");
-		clmSequence.setWidth(50);
 		
 		
 		TableColumn clmCustAccountField = new TableColumn(tblItemsList, SWT.NONE);
@@ -550,6 +547,12 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		TableColumn clmCustField3 = new TableColumn(tblItemsList, SWT.NONE);
 		clmCustField3.setText("Cust.LineField3");
 		clmCustField3.setWidth(50);
+		
+		
+		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
+		clmSequence.setText("Sequence");
+		clmSequence.setWidth(50);
+		
 
 		tblItemsListGD.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		tblItemsListGD.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;

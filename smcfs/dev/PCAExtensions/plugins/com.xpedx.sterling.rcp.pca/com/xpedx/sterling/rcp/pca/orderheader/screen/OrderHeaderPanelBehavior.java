@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
@@ -34,7 +35,11 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	private String invoiceNo;
 	private String shipToId;
 	private String LegacyOrderNumber;
-
+	private static String userKey;
+	private String INTERNAL="INTERNAL";
+//	private static final String COMMAND_GET_USER_LIST = "XPXGetUserList";
+	private Element outXml ;
+	
 	public OrderHeaderPanelBehavior(Composite ownerComposite, String formId, Object inputObject, Element eleOrderDetails) {
         super(ownerComposite, formId, inputObject);
         this.page = (OrderHeaderPanel) ownerComposite;
@@ -43,16 +48,18 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         setModel("ChargesList",page.getOrderLinesPanel().getPageBehavior().getChargesList());
         setModel("TransferCirclesList",page.getOrderLinesPanel().getPageBehavior().getLocalModel("TransferCirclesList"));
         setModel("OrderDetails",eleOrderDetails);
-        customerContactId= eleOrderDetails.getAttribute("CustomerContactID");
+        customerContactId= eleOrderDetails.getAttribute("CustomerContactID");       
         setLegacyOrderNo(eleOrderDetails);
         shipToId = eleOrderDetails.getAttribute("BuyerOrganizationCode");
 		Element eleExtn = YRCXmlUtils.getChildElement((Element)eleOrderDetails, "Extn");
 		invoiceDate = eleExtn.getAttribute("ExtnInvoicedDate");
 		invoiceNo = eleExtn.getAttribute("ExtnInvoiceNo");
-		
-       this.pnaErrorValue= page.getOrderLinesPanel().getPageBehavior().getPnAErrorValue();
-       setFieldValue("lblHeaderErr", pnaErrorValue);
+//		userKey=YRCXmlUtils.getAttributeValue(getModel("UserList"), "/User/Customer/Extn/@userKey");	
+		this.pnaErrorValue= page.getOrderLinesPanel().getPageBehavior().getPnAErrorValue();
+		setFieldValue("lblHeaderErr", pnaErrorValue);
         getCustomerContactDetails();
+        getUserDetails();
+       
         if(eleOrderDetails.getAttribute("EntryType").equals("B2B"))
 		{
 			setControlVisible("btnViewOriginal", true);
@@ -67,6 +74,8 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         }
         //setModel("selectedCustomer",page.getOrderLinesPanel().getPageBehavior().getCustomerDetails());
         setDirty(false);
+        createShipComplete();
+        
     }
 	public Element getInputElement(){
 		return this.inputElement;
@@ -85,6 +94,44 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 				callApi(ctx, page);
 		}
 		
+	}
+	
+	public void createShipComplete(){
+			
+			//Document docCustomer = YRCXmlUtils.createDocument("ShipComplete");
+			Element elemModel = YRCXmlUtils.createDocument("ShipComplete").getDocumentElement();
+			
+			Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "Code");
+			attrElemComplex1.setAttribute("CodeValue", "Y");
+			attrElemComplex1.setAttribute("CodeShortDescription", "Allow Backorder");
+
+			Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Code");;
+
+			attrElemComplex2.setAttribute("CodeValue", "N");
+			attrElemComplex2.setAttribute("CodeShortDescription", "Fill & Kill");
+
+			Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "Code");
+
+			attrElemComplex3.setAttribute("CodeValue", "C");
+			attrElemComplex3.setAttribute("CodeShortDescription", "Ship Complete");
+								
+			setModel("ShipComplete",elemModel);
+			
+	}
+	
+	public void getUserDetails(){
+		String apinames="XPXGetUserList";
+		
+			
+		YRCApiContext ctx = new YRCApiContext();
+		
+		ctx.setFormId("com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel");
+		ctx.setApiName(apinames);
+
+		Document doc = YRCXmlUtils.createFromString(("<User Usertype='" + INTERNAL + "' />"));
+		ctx.setInputXml(doc);
+		if (!page.isDisposed())
+			callApi(ctx, page);
 	}
 	
 	public Element getTargetModelforParent()
@@ -152,27 +199,34 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 
 	@Override
 	public void handleApiCompletion(YRCApiContext ctx) {
+      
 		if(ctx.getInvokeAPIStatus() < 1)
         {
             YRCPlatformUI.trace((new StringBuilder()).append("API exception in ").append(ctx.getFormId()).append(" page, ApiName ").append(ctx.getApiName()).append(",Exception : ").toString(), ctx.getException());
         } else if(page.isDisposed())
             YRCPlatformUI.trace((new StringBuilder()).append(ctx.getFormId()).append(" page is disposed, ApiName ").append(ctx.getApiName()).append(",Exception : ").toString());
-        else {
-//        	if(YRCPlatformUI.equals(ctx.getApiName(), "getXPXReferenceOrderListService"))
-//        	{
-//	        	this.setRefernceList(ctx);
-//	        }
-        	if(YRCPlatformUI.equals(ctx.getApiName(), "getCustomerContactList"))
-        	{
-				Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
-				Element eleCustomerContact = YRCXmlUtils.getXPathElement(eleCustomerContactList, "/CustomerContactList/CustomerContact");
-				setModel("CustomerContactDetails",eleCustomerContact);
-				setOrderedByName(eleCustomerContact);
-				setLegacyOrderNo(eleCustomerContact);
-				
-	        }        	
-       }
-		
+        	else {
+
+        	String[] apinames = ctx.getApiNames();
+			for (int i = 0; i < apinames.length; i++) {
+				String apiname = apinames[i];
+				if ("getCustomerContactList".equals(apiname)) {
+					Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
+					Element eleCustomerContact = YRCXmlUtils.getXPathElement(eleCustomerContactList, "/CustomerContactList/CustomerContact");
+					setModel("CustomerContactDetails",eleCustomerContact);
+					setOrderedByName(eleCustomerContact);
+					setLegacyOrderNo(eleCustomerContact);
+				}						
+				if ("XPXGetUserList".equals(apiname)) {
+					Element eleUserListdetails = ctx.getOutputXml().getDocumentElement();
+					Element eleUserList = YRCXmlUtils.getXPathElement(eleUserListdetails, "/UserList/User");
+					setModel("UserList",eleUserList);
+					userKey=YRCXmlUtils.getAttributeValue(getModel("UserList"), "/User/UserGroupLists/UserGroupList/@UserKey");
+
+				}
+       
+			}
+        }
 	}
 	private void setOrderedByName(Element eleCustomerContact) {
 		Element referenceElement = getModel("OrderDetails");
@@ -260,10 +314,11 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         String URLEncodedInvoiceNo = null;
         String encryptedInvoiceDate = null;
         String URLEncodedInvoiceDate = null;
+        
         try {
             //condition to check URL Attributes 
-            if(customerContactId !=null && customerContactId != "") {                
-                encryptedContactId = tripleDes.encrypt(customerContactId);
+            if(userKey !=null && userKey != "") {                
+                encryptedContactId = tripleDes.encrypt(userKey);
                 URLEncodedContactId = URLEncoder.encode(encryptedContactId);
             }else{
                 YRCPlatformUI.showError("Invoice_user",YRCPlatformUI.getString("Invoice_user"));

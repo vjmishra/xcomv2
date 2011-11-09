@@ -1106,37 +1106,74 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
 		if (rootOrdLinesEle != null) {
 			YFCIterable<YFCElement> yfcItr = rootOrdLinesEle.getChildren("OrderLine");
-			while (yfcItr.hasNext()) {
-				String webLineNo = null;
-				YFCElement rootOrdLineEle = (YFCElement) yfcItr.next();
-				YFCElement rootOrdLineExtnEle = rootOrdLineEle.getChildElement("Extn");
-				if (rootOrdLineExtnEle != null) {
-					if (rootOrdLineExtnEle.hasAttribute("ExtnWebLineNumber")) {
-						webLineNo = rootOrdLineExtnEle.getAttribute("ExtnWebLineNumber");
-					}
+			// If we don't receive order line information from Legacy.
+			if (!yfcItr.hasNext()) {
+				
+				// Appending the order lines from database as there were no order lines sent from legacy.			
+				YFCElement fOrderLinesElem = fOrderEle.getChildElement("OrderLines");
+				if ( fOrderLinesElem == null) {
+					throw new Exception("OrderLines Element Not Available in Incoming Legacy Message or in Next Gen!");
 				}
-
-				System.out.println();
-				System.out.println("ExtnWebLineNumber:" + webLineNo);
-				System.out.println();
-
-				if (!YFCObject.isNull(webLineNo) && !YFCObject.isVoid(webLineNo)) {
-					String fOrdLineKey = this.getOrderLineKeyForWebLineNo(webLineNo, fOrderEle);
-					if (YFCObject.isNull(fOrdLineKey) || YFCObject.isVoid(fOrdLineKey)) {
+				
+				// Add order lines from the database.
+				yfcItr = fOrderLinesElem.getChildren("OrderLine");
+				while (yfcItr.hasNext()) {
+					String fOrderLineKey = null;
+					String webLineNo = null;
+					
+					YFCElement fOrderLineElem = (YFCElement) yfcItr.next();
+					if (fOrderLineElem.hasAttribute("OrderLineKey")) {
+						fOrderLineKey = fOrderLineElem.getAttribute("OrderLineKey");
+					}
+					YFCElement fOrderLineExtnElem = fOrderLineElem.getChildElement("Extn");
+					if (fOrderLineExtnElem != null) {
+						if (fOrderLineExtnElem.hasAttribute("ExtnWebLineNumber")) {
+							webLineNo = fOrderLineExtnElem.getAttribute("ExtnWebLineNumber");
+						}
+					}
+					
+					YFCElement _fOrderLineElem = rootOrdLinesEle.getOwnerDocument().createElement("OrderLine");
+					_fOrderLineElem.setAttribute("OrderLineKey", fOrderLineKey);
+					
+					YFCElement _fOrdLineTranQtyEle = _fOrderLineElem.createChild("OrderLineTranQuantity");
+					if (!isOrdPlace.equalsIgnoreCase("Y")) {		
+						_fOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
+					}
+					
+					YFCElement _fOrdExtnElem = _fOrderLineElem.createChild("Extn");
+					_fOrdExtnElem.setAttribute("ExtnWebLineNumber", webLineNo);
+					rootOrdLinesEle.appendChild(_fOrderLineElem);	
+				}
+			} else {
+							
+				while (yfcItr.hasNext()) {
+					String webLineNo = null;
+					YFCElement rootOrdLineEle = (YFCElement) yfcItr.next();
+					YFCElement rootOrdLineExtnEle = rootOrdLineEle.getChildElement("Extn");
+					if (rootOrdLineExtnEle != null) {
+						if (rootOrdLineExtnEle.hasAttribute("ExtnWebLineNumber")) {
+							webLineNo = rootOrdLineExtnEle.getAttribute("ExtnWebLineNumber");
+						}
+					}
+	
+					System.out.println();
+					System.out.println("ExtnWebLineNumber:" + webLineNo);
+					System.out.println();
+	
+					if (!YFCObject.isNull(webLineNo) && !YFCObject.isVoid(webLineNo)) {
+						String fOrdLineKey = this.getOrderLineKeyForWebLineNo(webLineNo, fOrderEle);
+						if (YFCObject.isNull(fOrdLineKey) || YFCObject.isVoid(fOrdLineKey)) {
+							rootOrdLinesEle.removeChild(rootOrdLineEle);
+						}
+						rootOrdLineEle.setAttribute("OrderLineKey", fOrdLineKey);
+						YFCElement rootOrdLineTranQtyEle = rootOrdLineEle.getChildElement("OrderLineTranQuantity");
+						if (!isOrdPlace.equalsIgnoreCase("Y")) {		
+							rootOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
+						}
+					} else {
 						rootOrdLinesEle.removeChild(rootOrdLineEle);
 					}
-					rootOrdLineEle.setAttribute("OrderLineKey", fOrdLineKey);
-					YFCElement rootOrdLineTranQtyEle = rootOrdLineEle.getChildElement("OrderLineTranQuantity");
-					if (!isOrdPlace.equalsIgnoreCase("Y")) {		
-						rootOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
-					}
-				} else {
-					rootOrdLinesEle.removeChild(rootOrdLineEle);
 				}
-			}
-			yfcItr = rootOrdLinesEle.getChildren("OrderLine");
-			if (!yfcItr.hasNext()) {
-				rootEle.removeAttribute("OrderHeaderKey");
 			}
 		} else {
 			throw new Exception("OrderLines Element Not Available in Incoming Legacy Message!");
@@ -3833,10 +3870,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					// Order.
 					return ordEle;
 				}
-				else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("D")) //Added for Jira 2521
+				else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("D")) 
 				{
 					return ordEle;
-				}
+				}				
 			}
 		}
 
@@ -3945,12 +3982,20 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if (isOrderEdit.equalsIgnoreCase("N")) {
 						if (!this.isCancelledOrder(ordEle) || hpc.equalsIgnoreCase("C")) {
 							return ordEle;
-						} else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("A")) {
+						} 
+						else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("A")) 
+						{
 							// If we receive HeaderProcessCode 'A' for a
 							// Cancelled Order.
 							return ordEle;
 						}
-					} else {
+						else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("D")) 
+						{
+							return ordEle;
+						}					
+					} 
+					else 
+					{
 						return ordEle;
 					}
 				}
