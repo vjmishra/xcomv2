@@ -26,7 +26,7 @@ Class Model for this component:
 --%>
 <%--<swc:sortctl sortField="'sortField'" sortDirection="'sortDirection'"
     down="'sortDown'" up="'sortUp'" urlSpec="sortURL'">--%>
-<table class="<s:property value='cssClass'/>"
+<table class="<s:property value='cssClass'/> standard-table"
        id="<s:property value='id'/>" summary="<s:property value='summary'/>">
 <!--        <tr id="none" class="table-header-bar">-->
 <!-- Arun Changing for carts listing page - have to customize this if there is a conflict with other ones -->
@@ -48,8 +48,11 @@ Class Model for this component:
                 </td>
             </s:iterator>
         </tr>
+                            <%-- bb4 --%>
         <s:iterator value="iterable" id="row" status="rowStatus">
-            <tr <s:if test="#rowStatus.odd">class="odd"</s:if> >
+            <tr class=" <s:if test="#rowStatus.odd">odd </s:if>
+            	<s:if test="#rowStatus.last"> last </s:if>
+           	">
                 <!-- Row number: <s:property value="#rowStatus.count"/> -->
                 <s:iterator value="columnSpecs" id="columnSpec1" status="columnStatus">
                     <s:if test="#row instanceof org.w3c.dom.Element">
@@ -58,7 +61,8 @@ Class Model for this component:
                     <s:else>
                         <s:set name="value" value="#row[#columnSpec1.dataField]"/>
                     </s:else>
-                    <td class="<s:property value="%{#columnSpec1.fieldCssClass}"/>">
+                    <%-- bb5 --%>
+                    <td class="<s:property value="%{#columnSpec1.fieldCssClass}"/> <s:if test="#columnStatus.first">left-cell </s:if><s:if test="#columnStatus.last">right-cell </s:if>" >
                         <s:if test="#columnSpec1.dataCellBuilder!=null">
                             <s:if test="#columnSpec1.dataCellBuilder.endsWith('.jsp')">
                                 <s:set name="nmspace" value="%{#columnSpec1.dataCellBuilderProperties['namespace']}" />
@@ -108,6 +112,12 @@ Class Model for this component:
                 <td colspan="<s:property value='columnCount'/>">
                     <s:text name="NoResults"/>
                 </td>
+            </tr>
+            <tr class="whiteout">
+            	<td> &nbsp; </td>
+            	<td> &nbsp; </td>
+            	<td> &nbsp; </td>
+            	<td> &nbsp; </td>
             </tr>
         </s:if>
 </table>

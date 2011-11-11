@@ -23,6 +23,7 @@ import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
@@ -38,6 +39,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	public String execute() {
 		try {
 			String messageType = getMessageType();
+			setCustomerContactId(getWCContext().getCustomerContactId());
 			if (!YFCCommon.isVoid(messageType)
 					&& "OrderPlace".equalsIgnoreCase(messageType)) {
 				// Fill up all the XPEDX related fields in the Order and Save it
@@ -338,6 +340,8 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					? shipFromBranch /*custExtn.getAttribute("ExtnShipFromBranch")*/+"_"+envCode : 
 						shipToCustomer.getExtnCustOrderBranch()/*custExtn.getAttribute("ExtnCustOrderBranch")*/+"_"+envCode);
 			setExtnCustomerDivision(shipToCustomer.getExtnCustomerDivision()/*custExtn.getAttribute("ExtnCustomerDivision")*/+"_"+envCode);
+			XPEDXCustomerContactInfoBean custContBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+			setOrderedByName(custContBean.getFirstName()+" "+custContBean.getLastName());
 			
 			// OP Task 88
 			if("true".equals(getRushOrdrFlag())){
@@ -711,6 +715,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private String customerPoNumber; // selected customer PO for order
 	private String extnWebHoldFlag;
 	private String rushOrdrFlag="N";
+	private String orderedByName;
 	
 	public ArrayList getOrderLineKeyLists() {
 		return orderLineKeyLists;
@@ -1000,5 +1005,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	 */
 	public void setRushOrdrFlag(String rushOrdrFlag) {
 		this.rushOrdrFlag = rushOrdrFlag;
+	}
+
+	public String getOrderedByName() {
+		return orderedByName;
+	}
+
+	public void setOrderedByName(String orderedByName) {
+		this.orderedByName = orderedByName;
 	}
 }

@@ -43,8 +43,6 @@ function addItemToCart(itemId) {
 				 draftOrder="Y";
 			 }
 			 var url = document.getElementById('addItemToCartURL').value;
-			//JQuery Popup: 3 sec popup dispaly. 
-			 $.jqDialog.notify("Item successfully added to cart", 3);
 				
 			 if(url!=null) {
 				//Ext.Msg.wait("Adding Item "+itemId+"to cart...Please wait!"); 
@@ -71,6 +69,8 @@ function addItemToCart(itemId) {
 						else
 						{
 							refreshMiniCartLink();
+							//JQuery Popup: 3 sec popup dispaly. 
+							$.jqDialog.notify("Item successfully added to cart", 3);
 							Ext.MessageBox.hide(); 
 							//alert("Successfully added item "+itemId+" with quantity "+qty+" and Unit of Measure "+selectedUomText+" to the cart");
 							document.getElementById('Qty_Check_Flag_'+itemId).value = false;

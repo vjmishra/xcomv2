@@ -78,7 +78,14 @@ div.catalog-search-container input#search_searchTerm {
 div#catalog-landing fieldset {
 	padding-top: 0px;
 }
-
+div#home-image-rotation-nav-inner {
+	width: 611px;
+	}
+.userprofile div#searchtable ul {
+	margin-left: 100px;
+	width: 160px;
+	margin-top: -18px;
+}
 /* fieldset.mil-col-mil-div legend {
 	margin-bottom: 10px;
 } */

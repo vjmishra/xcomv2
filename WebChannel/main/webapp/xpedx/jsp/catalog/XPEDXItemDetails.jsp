@@ -110,6 +110,8 @@
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 <script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
 
@@ -129,7 +131,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
 <!-- END head-calls.php -->
-<title><s:property value="wCContext.storefrontId" /> Product Details</title>
+<title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
 
 <s:set name='myParam' value='{"itemID"}' />
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
@@ -155,6 +157,7 @@
 <s:set name='isProcurementInspectMode'
 	value='#util.isProcurementInspectMode(wCContext)' />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
+<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 </head>
 <!-- END swc:head -->
 <script>
@@ -1262,10 +1265,12 @@ function SubmitActionWithValidation()
 				value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
 			<s:set name='imageMainId'
 				value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
+				<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
 			<s:set name='imageMainLabel'
 				value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
+			<!--Removing "/"  from value="#imageMainLocation + "/" + #imageMainId " />-->
 			<s:set name='imageMainURL'
-				value="#imageMainLocation + '/' + #imageMainId " />
+				value="#imageMainLocation + #imageMainId " />
 			<s:if test='%{#imageMainURL=="/"}'>
 				<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
@@ -1355,7 +1360,7 @@ function SubmitActionWithValidation()
 				
 				<br />
 				<s:if test=' (isCustomerLinAcc == "Y") '>
-					<div class="jobNum">
+					<div class="jobNum line-spacing">
 						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
 						<input name="Job" class="input-details x-input"  id="Job" tabindex="12" title="JobNumber" maxlength="25"/>
 					</div>
@@ -1365,7 +1370,7 @@ function SubmitActionWithValidation()
 
 			
 				<s:if test=' (isCustomerPO == "Y") '>
-				<div class="linePO">
+				<div class="linePO line-spacing">
 					<s:property value='customerPOLabel' />:
 					<s:textfield name='customerPONo' theme="simple"
 						cssClass="input-details x-input" id="customerPONo" value="" title="CustomerNumber"
@@ -1396,7 +1401,7 @@ function SubmitActionWithValidation()
 
 				</s:if>
 			</s:if>
-				<div class="orderbtns">
+				<div class="orderbtns line-spacing">
 					<a href="javascript:updatePandA()">My Price & Availability</a>
 					
 				<s:if test='%{#isFlowInContext == true}'>
@@ -1408,10 +1413,18 @@ function SubmitActionWithValidation()
 					</s:a>
 				</s:if>
 				<s:else>
-					<s:a href="javascript:addItemToCart();" theme="simple"
-						cssClass="orange-ui-btn" id="addToCart" tabindex="261">
-						<span><s:text name='Add_to_cart' /></span>
-					</s:a>
+					<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+						<s:a href="javascript:addItemToCart();" theme="simple"
+							cssClass="orange-ui-btn" id="addToCart" tabindex="261">
+							<span><s:text name='Add_to_cart' /></span>
+						</s:a>
+					</s:if>
+					<s:else>
+						<s:a href="javascript:addItemToCart();" theme="simple"
+							cssClass="orange-ui-btn" id="addToCart" tabindex="261">
+							<span><s:text name='Add_to_order' /></span>
+						</s:a>
+					</s:else>
 				</s:else>
 					<br/><br/>
 					<div class="rebel_btn">
@@ -1421,7 +1434,19 @@ function SubmitActionWithValidation()
 					
 				</div>
 				<br/>
-				<div class="error" id="errorMsgForQty" style="display : none">Please enter a quantity greater than 0.<br/></div>
+				<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
+					<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
+					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
+					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
+					<s:hidden name="OrderMultiple" id="OrderMultiple"
+						value="%{#mulVal}" />
+				<s:if test='%{#mulVal >"1" && #mulVal !=null}'>		
+				<div class="temp_UOM" id="test" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/>
+				</s:if>
+				</s:if>	
+				<br/>
+				<!-- <div class="error" id="errorMsgForQty" style="display : none">Please enter a quantity greater than 0.<br/></div> -->
+				<div class="error" id="errorMsgForQty" style="display : none"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' /><br/></div>
 				<br />
 		<script type="text/javascript">
 		
@@ -1735,12 +1760,12 @@ function SubmitActionWithValidation()
 					<li><a href="#tabs-2">Specifications</a></li>
 				</ul>
 				
-				<p class="tablinks">
-			<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
+				<p class="tablinks">&nbsp;
+			<%-- <s:set name="canRequestProductSample" value="#session.showSampleRequest" /> --%>
 		   <%-- <s:if test='#canRequestProductSample=="Y"'> --%>
- 				<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
+ 			<%-- 	<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
 				<s:text
-					name='Request Sample' /> </a>&nbsp;&nbsp;
+					name='Request Sample' /> </a>&nbsp;&nbsp; --%>
 		  <%-- </s:if>  --%>
 			<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
 					<s:set name="link" value="value" />
@@ -1809,7 +1834,9 @@ function SubmitActionWithValidation()
 										value='#xutil.getChildElement(#itemAttribute,"Attribute")' />
 									<s:set name="dataType"
 										value='#xutil.getAttribute(#attribute,"DataType")' /> <s:set
-										name="derivedFrom" value='' /> <s:if
+										name="derivedFrom" value='' /> 
+									
+									<s:if
 										test="%{null != #xutil.getAttribute(#attribute,'AllowMultipleValues')}">
 										<s:set name='allowMultiVals'
 											value='%{#xutil.getAttribute(#attribute,"AllowMultipleValues")}' />
@@ -1824,17 +1851,32 @@ function SubmitActionWithValidation()
 									</s:if> <s:iterator
 										value='#xutil.getChildren(#assignedValueList, "AssignedValue")'
 										id='assignedValue'>
+										<!-- Jira 2634, Adding To Fetch Asset of Attr -->
+										<s:set name="Value" value='#xutil.getAttribute(#assignedValue,"Value")' />
+										<s:hidden name="hdn_Value" value="%{#Value}" />
 										<s:if test='%{"" != #derivedFrom}'>
 											<s:property
 												value='#xutil.getAttribute(#assignedValue,"Value")' />
 											<s:property
 												value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
 										</s:if>
+										<!-- Jira 2634 - Check if Attribute has Asset -->
 										<s:elseif test="%{#dataType=='TEXT'}">
-											<s:property
-												value='#xutil.getAttribute(#assignedValue,"Value")' />
-											<s:property
-												value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+										<s:set name='testContentId' value="#xutil.getAttribute(#itemDataSheets[0], 'ContentID')" />
+										<s:set name='testAssetId' value="#xutil.getAttribute(#itemDataSheets[0], 'AssetID')" />
+											<s:hidden name="hdn_testContentId" value="%{#testContentId}"  />
+											<s:hidden name="hdn_testAssetId" value="%{#testAssetId}"  />
+											<s:set name='testContentLocation' value="#xutil.getAttribute(#itemDataSheets[0], 'ContentLocation')" />
+											<s:hidden name="hdn_testContentLocation" value="%{#testContentLocation}"  />
+											<s:set name='URLForAsset' value="#testContentLocation + #testContentId " />
+											<s:if test='%{#testAssetId == #Value}'>
+												<a href="<s:property value='URLForAsset'/>" target="_blank"><s:property value='#xutil.getAttribute(#assignedValue,"Value")'/></a>
+													<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+											</s:if>
+											<s:else>
+											<s:property value='#xutil.getAttribute(#assignedValue,"Value")'/>
+											<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+											</s:else>
 										</s:elseif>
 										<s:elseif test="%{#dataType=='BOOLEAN'}">
 											<s:property
@@ -1904,9 +1946,10 @@ function SubmitActionWithValidation()
 		</s:form>
 		<div class="prod_detail_bot">&nbsp;</div>
 		 <!-- begin right column -->
-		<s:include value="XPEDXItemPromotions.jsp"></s:include>
+		
 		<!-- end right column -->
-		</div>          
+		</div>     
+		<s:include value="XPEDXItemPromotions.jsp"></s:include>     
         </div>
     </div>
     <!-- // container end -->
@@ -2108,7 +2151,7 @@ o.value=""
             </td>
             <s:hidden id="Itemdescription" name="Itemdescription" value='%{#xutil.getAttribute(#primaryInfoElem,"ShortDescription")}' />
             <td class="padding9 left-border"> <s:property value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></td>				
-            <td class="padding9 left-border right-border"><s:textfield name="Quantity" id="Quantity" cssClass="x-input width55" id="Quantity" maxlength="7" /></td></tr>
+            <td class="padding9 left-border right-border"><s:textfield name="Quantity" id="Quantity" cssClass="x-input width55" id="Quantity" onchange="javascript:this.value=addComma(this.value);" maxlength="7" /></td></tr>
             </tbody>
             </table>         
 <div id="table-bottom-bar" class=" width993 clear-both">

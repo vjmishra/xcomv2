@@ -89,7 +89,7 @@ p{margin-bottom:8px;}
 
 <!-- Facy Box (expand and collpse Modal Window -->
 
-<title><s:property value="wCContext.storefrontId" /> : <s:text name="Resources" /> /  Reporting</title> 
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.REPT.GENERIC.TABTITLE" /> </title> 
 <!-- Webtrends tag starts -->
 <Meta name="WT.ti" Content='xpedx : <s:text name="Resources" /> /  Reporting'>
 <!-- Webtrends tag stops -->
@@ -123,7 +123,7 @@ p{margin-bottom:8px;}
 		
 		
 		<div class="padding-bottom3"> 
-			<strong>Reports </strong>
+			<strong><s:text name="MSG.SWC.MISC.REPT.GENERIC.PGTITLE" /> </strong>
 		</div>
 		
         <div>

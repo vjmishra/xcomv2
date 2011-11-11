@@ -54,7 +54,8 @@
 }
 </style>
 
-<title><s:property value="wCContext.storefrontId" /> /  News Maintenance</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> - News Maintenance</title> --%>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.TABTITLE' /> </title>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -247,7 +248,8 @@ margin-top:2px; }
           				<a class="underlines" href="javascript:history.go(-1)">Back</a>&nbsp;/&nbsp;<strong>News Article</strong> 
  				  </div>  --%>
  				  <div>
- 				 	 <span class="page-title">News Maintenance</span>
+ 				 	 <%-- <span class="page-title">News Maintenance</span> --%>
+ 				 	 <span class="page-title"><s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.PGTITLE' /></span>
  				  </div>
  				  <br/>
 		          <s:form name="newArticleForm" action="xpedxViewArticle" namespace="/profile/user" method="POST">
@@ -255,7 +257,8 @@ margin-top:2px; }
 				    <input type="hidden" name="backActionName" value="XPEDXNewArticle"/>
 				    <input type="hidden" name="articleKey" value=""/>
 				    <input type="hidden" name="currentArtList" id="currentArtList" value='<s:property value="#parameters['artNamesList']"/>'/>
-		            <div class="error" id="errorMsgFor_articleTitle" style="display : none">You can't have two article with same "Article Title". Please give a different name.</div>				    
+		        <!--     <div class="error" id="errorMsgFor_articleTitle" style="display : none">You can't have two article with same "Article Title". Please give a different name.</div> -->				    
+		            <div class="error" id="errorMsgFor_articleTitle" style="display : none"> <s:text name='MSG.SWC.NEWSARTL.CREATE.ERROR.DUPLICATE' /> </div>				    
 		         	
 		         	 <table   width="100%" class="form"  id="order-filter">
 		            <tr>
@@ -273,7 +276,10 @@ margin-top:2px; }
 		            
 		            <tr>
 		              <td  colspan="4"  style="padding-bottom: 0;">
- 				  		<span class="dkcharcole"> Note: It is not possible to attach or paste a local file (like an image) directly to a website. Please ensure files can be accessed from the Internet.</span>
+ 				  		<span class="dkcharcole"> 
+ 				  		<!-- Note: It is not possible to attach or paste a local file (like an image) directly to a website. Please ensure files can be accessed from the Internet. -->
+ 				  		<s:text name='MSG.SWC.NEWSARTL.NEWSMAINTENANCE.INFO.ATTACHEDFILEACESS' /> 
+ 				  		</span>
 		           	</td>
 		           </tr>
 		           

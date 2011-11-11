@@ -27,10 +27,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderDetailsAction;
@@ -45,12 +48,16 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
+import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientCreationException;
+import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfc.dom.YFCElement;
 import java.util.Comparator;
 /**
@@ -79,6 +86,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
 				editedOrderHeaderKey=orderHeaderKey;
+				String newDefaultShipToForEditOrder  = getOrderElementFromOutputDocument().getAttribute("BuyerOrganizationCode");
+				setCurrentCustomerIntoContext(newDefaultShipToForEditOrder);
+				
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
 			{			
@@ -205,7 +215,114 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		}
 		return SUCCESS;
 	}
+	
+	private void changeCurrentCartOwner() {
+		String orderHeaderKey = XPEDXCommerceContextHelper
+				.getCartInContextOrderHeaderKey(getWCContext());
+		if (orderHeaderKey != null) {
+			LOG.debug("Changing the owner of the order");
+			XPEDXWCUtils.changeOrderOwnerToSelectedCustomer(getWCContext(),
+					orderHeaderKey);
+			LOG.debug("Changed the cart owner");
+		}
+	}
 
+public void resetOrganizationValuesForShipToCustomer(){
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		shipToCustomer.setShipToOrgExtnMinOrderAmt(null);
+		shipToCustomer.setShipToOrgExtnSmallOrderFee(null);
+		shipToCustomer.setShipToOrgOrganizationName(null);
+		shipToCustomer.setShipToOrgCorporatePersonInfoState(null);
+		shipToCustomer.setShipToDivDeliveryCutOffTime(null);
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
+}
+
+public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) throws CannotBuildInputException {
+		
+		String selectedCustomerContactId = getWCContext().getSCUIContext().getRequest().getParameter("selectedCustomerContactId");
+		if(SCUtil.isVoid(selectedCustomerContactId))
+			selectedCustomerContactId = wcContext.getCustomerContactId();
+		String  contaxtCustomerContactID = wcContext.getCustomerContactId();
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+		resetOrganizationValuesForShipToCustomer();
+		if(contaxtCustomerContactID.equals(selectedCustomerContactId)){
+			
+			XPEDXWCUtils.setCurrentCustomerIntoContext(
+					ordersBuyerOrganizationCode, getWCContext());
+			
+				getWCContext().getSCUIContext().getSession().removeAttribute(
+						XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN);
+			
+			changeCurrentCartOwner();
+			
+		}
+		
+			try {
+				setSelectedShipToAsDefault(ordersBuyerOrganizationCode);
+			} catch (Exception e) {
+				LOG.error("Cannot set the customer as default. please try again later");
+				e.printStackTrace();
+			}
+		
+			
+	}
+
+public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotBuildInputException,
+	InstantiationException, IllegalAccessException,
+	YIFClientCreationException, YFSException, RemoteException {
+	ISCUITransactionContext scuiTransactionContext = null;
+	YFSEnvironment env = null;
+	SCUIContext wSCUIContext = null;
+	String selectedCustomerContactId = "";
+	try {
+	if (XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext)) {
+		
+		
+		selectedCustomerContactId = wcContext.getSCUIContext().getRequest().getParameter("selectedCustomerContactId");
+		if(!(selectedCustomerContactId != null && selectedCustomerContactId.trim().length()>0)){
+			selectedCustomerContactId = wcContext.getCustomerContactId();
+		}
+			
+		
+		if(SCUtil.isVoid(selectedCustomerID))
+		{
+			selectedCustomerID=wcContext.getCustomerId();
+		}
+		
+		String inputXml = "<Customer CustomerID='"
+				+ XPEDXWCUtils
+						.getLoggedInCustomerFromSession(wcContext)
+				+ "' " + "OrganizationCode='"
+				+ wcContext.getStorefrontId() + "'> "
+				+ "<CustomerContactList>"
+				+ "<CustomerContact CustomerContactID='"
+				+ selectedCustomerContactId + "'> "
+				+ "<Extn ExtnDefaultShipTo='"
+				+ selectedCustomerID + "' /> "
+				+ "</CustomerContact> " + "</CustomerContactList>"
+				+ "</Customer> ";
+		Document document = getXMLUtils().createFromString(inputXml);
+		wSCUIContext = wcContext.getSCUIContext();
+		scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document outputListDocument = api.invoke(env, "manageCustomer",
+				document);
+		LOG.debug(SCXmlUtil.getString(outputListDocument));
+	}
+	}
+	catch(Exception ex){
+		LOG.debug(ex);
+	}
+	finally {
+	SCUITransactionContextHelper.releaseTransactionContext(
+			scuiTransactionContext, wSCUIContext);
+	scuiTransactionContext = null;
+	env = null;
+	}
+	}
 	
 	private void setDivsionAndState(String shipFromBranch, String envCode) {
 		
@@ -367,6 +484,12 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			LOG.info("Calling Change Order");
 			Map<String, String> valueMap1 = new HashMap<String, String>();
 			valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);
+			if("true".equals(isEditOrder)) {
+				valueMap1.put("/Order/PendingChanges/@RecordPendingChanges", "Y");
+			} else {
+				valueMap1.put("/Order/PendingChanges/@RecordPendingChanges", "N");
+			}
+			
 			Element input1;
 			Element orderElem = null;
 			
@@ -1566,23 +1689,29 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		{
 			orderHeaderKey = (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(wcContext);
 		}
-		
-		if(orderHeaderKey!=null && orderHeaderKey.trim().length()>0) {
+		/*Changes done for JIRA 3024 - Start*/
+		if((orderHeaderKey==null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
+			 XPEDXOrderUtils.createNewCartInContext(getWCContext());
+			 //orderHeaderKey =getWCContext().getWCAttribute("CommerceContextObject")
+			 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
+			 //orderHeaderKey=XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
+			 
+		}
+		/*else if((orderHeaderKey!=null && orderHeaderKey.trim().length()>0)  ) {
 			if(!isDraftSet)
 				setDraft("Y");
 			returnVal = execute();
-		}
-		else {
-			if((orderHeaderKey==null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
-				 XPEDXOrderUtils.createNewCartInContext(getWCContext());
-				 //orderHeaderKey =getWCContext().getWCAttribute("CommerceContextObject")
-				 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
-				 //orderHeaderKey=XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
-				 if(!isDraftSet)
-						setDraft("Y");
-			}
+		}*/
+		/*else {
+			
 			returnVal = execute();
-		}
+		}*/
+		
+		/*Changes done for JIRA 3024 - End*/
+		
+		if(!isDraftSet)
+			setDraft("Y");
+		returnVal = execute();
 		return returnVal;
 			
 	}

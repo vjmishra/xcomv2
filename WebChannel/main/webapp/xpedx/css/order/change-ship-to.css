@@ -31,7 +31,7 @@ margin-left:5px;
 {
  padding:0px;
 width: 775px;
-height: 447px;
+height: 454px;
 }
 .black
 {
@@ -79,3 +79,6 @@ height:auto;
 .right { text-align: right; }
 /*.ship-to-top .ship-to-top-left { margin-left:29px; }
 .mill-container-extended-pricing { margin-right:5px; }*/
+li.ship-to-list  {
+  height: 94px;
+}

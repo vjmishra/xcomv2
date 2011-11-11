@@ -108,7 +108,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/css/home/forgotPwd/forgotPassword.css'/>" />
 <script type="text/javascript" src="<s:url value='/swc/js/home/forgotPassword.js'/>"></script>
 
-<title>Forgot Password</title>
+<!-- <title>Forgot Password</title> -->
+<title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/></title>
 
 </head>
 <!-- END swc:head -->
@@ -130,7 +131,8 @@
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
       		<div id="mid-col-mil"> 
 		    <div>
-      		<div class="padding-top3 page-title black"><strong class="black"> Forgot Password</strong></div>
+      		<%-- <div class="padding-top3 page-title black"><strong class="black"> Forgot Password</strong></div> --%>
+      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
 			
@@ -202,7 +204,7 @@
             		
             		
 					<tr>
-              			<td colspan="3" class="grey  no-border-right-user">Questions: Contact the support desk at 877 269-1784</td>
+              			<td colspan="3" class="grey  no-border-right-user"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
             		</tr>
 				</tbody>
 			</table>

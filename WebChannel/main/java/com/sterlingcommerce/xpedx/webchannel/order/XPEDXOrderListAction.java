@@ -166,7 +166,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         	getStatusList();
         	if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
         		if (getSourceTab() != null && getSourceTab().equals("Open")) {
-        			setStatusSearchFieldName("1100.5250");        			
+        			//setStatusSearchFieldName("1100.5250");        			
         		}        		
         	}
         	
@@ -769,11 +769,11 @@ public class XPEDXOrderListAction extends OrderListAction {
         YFCElement apiElement = yorderListInput.getChildElement("API");
         YFCElement inpElement = apiElement.getChildElement("Input");
         YFCElement orderElem = inpElement.getChildElement("Order");
-       
+        YFCElement complexQueryElement =null;
         /* Including only the logged in ship to Id as This is causing the performance Issue -- Jagadeesh
          * Including all the assigned ship to only if assignedShipToSize is less than or equal to 30 -- Discussed with pawan on call  */
         if(assignedShipToSize!=null && assignedShipToSize<=20) {
-        	YFCElement complexQueryElement = orderElem.createChild("ComplexQuery");
+        	complexQueryElement = orderElem.createChild("ComplexQuery");
     		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
     		Iterator<String> itr = shipToList.keySet().iterator();
     		while (itr.hasNext()) {
@@ -791,6 +791,54 @@ public class XPEDXOrderListAction extends OrderListAction {
         {
         	if(SCUtil.isVoid(getShipToSearchFieldName()))//to enable the search functionality removed the buyerorgcode from the input instead passing the shiptoid
             	orderElem.setAttribute("ShipToID", wcContext.getCustomerId());
+        }
+        //Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
+        if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+    		if (getSourceTab() != null && getSourceTab().equals("Open")) {
+    			if(complexQueryElement == null)
+    			{
+    				complexQueryElement = orderElem.createChild("ComplexQuery");
+    			}
+    			YFCElement extnElement = orderElem.getChildElement("Extn");
+    			extnElement.setAttribute("ExtnOrderLockFlag", "N");
+        		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+			    YFCElement expElementCreated = complexQueryOrElement.createChild("Exp");
+			    expElementCreated.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementCreated.setAttribute("Value","1100");
+				complexQueryOrElement.appendChild((YFCNode)expElementCreated);
+				
+			    YFCElement expElementPlaced = complexQueryOrElement.createChild("Exp");
+			    expElementPlaced.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementPlaced.setAttribute("Value","1100.0100");
+				complexQueryOrElement.appendChild((YFCNode)expElementPlaced);
+				
+			    YFCElement expElementPA = complexQueryOrElement.createChild("Exp");
+			    expElementPA.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementPA.setAttribute("Value","1100.5150");
+				complexQueryOrElement.appendChild((YFCNode)expElementPA);
+				
+			    YFCElement expElementLOpen = complexQueryOrElement.createChild("Exp");
+			    expElementLOpen.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementLOpen.setAttribute("Value","1100.5250");
+				complexQueryOrElement.appendChild((YFCNode)expElementLOpen);
+				
+			    YFCElement expElementCHold = complexQueryOrElement.createChild("Exp");
+			    expElementCHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementCHold.setAttribute("Value","1100.5350");
+				complexQueryOrElement.appendChild((YFCNode)expElementCHold);
+				
+			    YFCElement expElementLWHold = complexQueryOrElement.createChild("Exp");
+			    expElementLWHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementLWHold.setAttribute("Value","1100.5450");
+				complexQueryOrElement.appendChild((YFCNode)expElementLWHold);
+				
+			    YFCElement expElementSHold = complexQueryOrElement.createChild("Exp");
+			    expElementSHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementSHold.setAttribute("Value","1100.5400");
+				complexQueryOrElement.appendChild((YFCNode)expElementSHold);
+				
+        		complexQueryElement.setAttribute("Operator", "AND"); 	      			
+    		}   
         }
         if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch) {
         	String holdTypeToSearch = null;

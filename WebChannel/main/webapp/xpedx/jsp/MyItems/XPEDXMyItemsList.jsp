@@ -213,7 +213,8 @@
 			}
 			
 	</script>
-<title><s:text name='myitemslists.title' /></title>
+<%-- <title><s:text name='myitemslists.title' /></title> --%>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE' /></title>
 
 </head>
 <!-- END swc:head -->
@@ -723,7 +724,7 @@
 
 
 <div class="container"><!-- breadcrumb -->
-<div id="breadcumbs-list-name" class="page-title"><s:text name='myitemslists.title' /></div>
+<div id="breadcumbs-list-name" class="page-title"><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></div>
 
 <div id="mid-col-mil">
 <s:form id="filterByForm" action="XPEDXMyItemsList.action" method="post">

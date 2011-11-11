@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -57,8 +58,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String customerNumber = null;
 	private boolean isStockedItem = false;
 	private boolean CategoryC3= false;
-	
-
 	private String priceCurrencyCode;
 	private static final String CUSTOMER_PART_NUMBER_FLAG = "1";
 	private boolean stockedCheckeboxSelected ;
@@ -66,7 +65,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 	ArrayList<String> itemIDList = new ArrayList<String>();
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
+	private Map <String, List<Element>> PLLineMap;
 	
+	public Map<String, List<Element>> getPLLineMap() {
+		return PLLineMap;
+	}
+
+	public void setPLLineMap(Map<String, List<Element>> pLLineMap) {
+		PLLineMap = pLLineMap;
+	}
+
 	public String getCatalogLandingMashupID() {
 		return catalogLandingMashupID;
 	}
@@ -1227,6 +1235,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			e.printStackTrace();
 		}
 
+		Document YPMPricelistLineElement = null;
+		try {
+			YPMPricelistLineElement = getYPMPricelistLineList(itemIds, wcContext);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for (int i = 0; i < itemNodeList.getLength(); i++) {
 			// get the item node
 			Node itemNode = itemNodeList.item(i);
@@ -1340,6 +1356,87 @@ public class XPEDXCatalogAction extends CatalogAction {
 		SCXmlUtil.getString(outputEl);
 		return SCXmlUtil.getAttribute(custXrefEle,"CustomerItemNumber");
 	}
+	
+	public Document getYPMPricelistLineList(ArrayList<String> itemIdList, IWCContext wcContext) throws Exception {
+		Document outputDoc = null;
+		Document outputDocument = null;
+		
+		String organizationCode = wcContext.getStorefrontId();
+		String customerId = wcContext.getCustomerId();
+		
+		Map<String, String> valueMaps = new HashMap<String, String>();
+		valueMaps.put("/PricelistAssignment/@CustomerID", customerId);
+		
+		Element inputElement = WCMashupHelper.getMashupInput("xpedxYpmPricelistAssignmentList", valueMaps,getWCContext().getSCUIContext());
+		Element object = (Element) WCMashupHelper.invokeMashup("xpedxYpmPricelistAssignmentList", inputElement,getWCContext().getSCUIContext());
+		
+		outputDocument = ((Element) object).getOwnerDocument();
+		Element objct		= getXMLUtils().getChildElement(object, "PricelistAssignment");
+		if (objct!=null) {
+			String priceListHeaderKey = objct.getAttribute("PricelistHeaderKey");
+			
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/PricelistLine/Item/@OrganizationCode", organizationCode);
+			valueMap.put("/PricelistLine/PricelistHeader/@PricelistHeaderKey", priceListHeaderKey);
+
+			Element input = WCMashupHelper.getMashupInput("xpedxYpmPricelistLine", valueMap,getWCContext().getSCUIContext());
+			Document inputDoc = input.getOwnerDocument();
+			NodeList inputNodeList = input.getElementsByTagName("Or");
+			Element inputNodeListElemt = (Element) inputNodeList.item(0);
+			for (int i = 0; i < itemIdList.size(); i++) {
+				Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+				Element expElement = expDoc.getDocumentElement();
+				expElement.setAttribute("Name", "ItemID");
+				expElement.setAttribute("Value", itemIdList.get(i));
+				inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
+			}
+			Element obj = (Element)WCMashupHelper.invokeMashup("xpedxYpmPricelistLine", input,getWCContext().getSCUIContext());
+			outputDoc = ((Element) obj).getOwnerDocument();
+			
+			NodeList itemNodeList1 = obj.getElementsByTagName("PricelistLine");
+			Map <String, List<Element>> PricelistLineMap = new HashMap<String, List<Element>>();
+			List<Element> PricelistLineList = null;
+			
+			for (int i = 0; i < itemNodeList1.getLength(); i++) {
+				Node itemNode = itemNodeList1.item(i);
+				Element itemElement = (Element) itemNode;
+				String itemId = itemElement.getAttribute("ItemID");
+				String quantity = itemElement.getAttribute("FromQuantity");
+				if (quantity == "" || quantity == null)
+				{
+					itemElement.setAttribute("FromQuantity", "1");
+				}
+				if(PricelistLineMap.containsKey(itemId)) {
+					PricelistLineList = PricelistLineMap.get(itemId);
+					PricelistLineList.add(itemElement);
+					PricelistLineMap.put(itemId, PricelistLineList);
+				} else {
+					PricelistLineList = new ArrayList<Element>();
+					PricelistLineList.add(itemElement);
+					PricelistLineMap.put(itemId, PricelistLineList);
+				}
+			}
+			setPLLineMap(sortPriceListLine(PricelistLineMap));
+			if (null != outputDoc) {
+				log.debug("Output XML for xpedxYpmPricelistLine: " + SCXmlUtil.getString((Element) obj));
+			}
+		}
+		return outputDoc;
+	}
+	
+	private Map <String, List<Element>> sortPriceListLine(Map <String, List<Element>> PricelistLineMap)
+	{
+		Set<String> itemSet=PricelistLineMap.keySet();
+		Map <String, List<Element>> _pricelistLineMap = new HashMap<String, List<Element>>();
+		for(String itemID:itemSet)
+		{
+			List priceList=PricelistLineMap.get(itemID);
+			Collections.sort(priceList, new XPEDXSortingListPrice());
+			_pricelistLineMap.put(itemID, priceList);
+		}
+		return _pricelistLineMap;
+	}
+	
 	
 	public String setNormallyStockedCheckbox() {
 		getWCContext().setWCAttribute("StockedCheckbox",isStockedCheckeboxSelected(),WCAttributeScope.SESSION);

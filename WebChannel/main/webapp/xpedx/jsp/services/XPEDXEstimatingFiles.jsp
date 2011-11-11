@@ -86,7 +86,8 @@ $("#various4").fancybox();
 
 <!-- Facy Box (expand and collpse Modal Window -->
 
-<title><s:property value="wCContext.storefrontId" /> : <s:text name="Resources" /> /  Estimating Files</title> 
+<%-- <title><s:property value="wCContext.storefrontId" /> : <s:text name="Resources" /> /  Estimating Files</title>  --%>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.ESTFS.GENERIC.TABTITLE" /> </title> 
 <style>
 .ui-datepicker-trigger {
 	margin-left:470px;
@@ -124,7 +125,8 @@ $("#various4").fancybox();
 		<div class="container">
 		<div id="mid-col-mil"><br/>
         <div class="page-title"> 
-			Printable Catalogs & Estimating Files
+			<!-- Printable Catalogs & Estimating Files -->
+			<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" />
 		</div>
     <div class="x-input margin-top2">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -157,7 +159,8 @@ $("#various4").fancybox();
 			   </td>
 			   <td>
 			   		<s:if test="%{CatalogExp.size()} <= 0 ">
-					   	<span>No Printable Catalogs & Estimating Files available </span>
+					   	<%-- <span>No Printable Catalogs & Estimating Files available </span> --%>
+					   	<span> <s:text name="MSG.SWC.MISC.ESTFS.ERROR.NOFILESAVAILABLE" /> </span>
 					 </s:if>
 			   </td>
           </tr>

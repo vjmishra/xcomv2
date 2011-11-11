@@ -55,6 +55,7 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.utilities.CommonCodeUtil;
 import com.sterlingcommerce.webchannel.utilities.UserPreferenceUtil;
+import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
@@ -1021,6 +1022,59 @@ public class XPEDXWCUtils {
 	 * of BillTo Id's(Recursive) and SHIP_TO contains arraylist of all ShipTo
 	 * Id's(Recursive)
 	 */
+	
+	public static Map<String,String> createModifyUserNameMap(List<Element> articleLines)
+	{
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		UtilBean utilBean=new UtilBean();
+		Map<String,String> modifyUserMap=new HashMap<String,String>();
+		try
+		{
+			Element input = WCMashupHelper.getMashupInput("xpedxGetContactUserName", context);
+			input.setAttribute("OrganizationCode", context.getStorefrontId());
+			Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
+			Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
+			for(Element article : articleLines) {
+				Element exp = input.getOwnerDocument().createElement("Exp");
+				exp.setAttribute("Name", "CustomerContactID");
+				exp.setAttribute("Value", article.getAttribute("Modifyuserid"));
+				SCXmlUtil.importElement(OrElem, exp);
+			}
+			Element output =(Element) WCMashupHelper.invokeMashup("xpedxGetContactUserName", input, context.getSCUIContext());
+			
+			
+			List<Element> customerContactList = utilBean.getElements(output, "//CustomerContactList/CustomerContact");
+			for(Element customerContactElem : customerContactList) {
+				String userId = customerContactElem.getAttribute("UserID");
+				String modifyBy = customerContactElem.getAttribute("CustomerContactID");
+				if(!modifyBy.equals(userId))
+					continue;
+				String lastName = customerContactElem.getAttribute("LastName");
+				String firstName = customerContactElem.getAttribute("FirstName");
+				String name="";
+				if (!YFCCommon.isVoid(lastName)){
+					name = lastName;
+				}
+				if (!YFCCommon.isVoid(firstName)){
+					if (!YFCCommon.isVoid(lastName)){
+//						name =  " "+name;
+						name =  name+ ", ";
+					}
+//					name = firstName + name ;
+					name =  name + firstName;
+				}
+				modifyUserMap.put(modifyBy, name);
+			}
+			
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting modify UserName for order!");
+		}
+		return modifyUserMap;
+	}
+
+	
 	public static HashMap<String, ArrayList<String>> getAssignedCustomersMap(
 			String customerID, String userId) throws CannotBuildInputException {
 		HashMap<String, ArrayList<String>> childCustomerMap = new HashMap<String, ArrayList<String>>();
@@ -2666,7 +2720,7 @@ public class XPEDXWCUtils {
 			}
 			else
 			{
-				sb.append(suffix);
+				sb.append(suffix).append(" - ");
 				//shipto add only suffix
 			}
 			return sb.toString();
@@ -2727,7 +2781,8 @@ public class XPEDXWCUtils {
 
 	public static Map<String, String> custFullAddresses(ArrayList<String> CustomerId, String StoreFrontID)
 	{
-		return custFullAddresses(CustomerId,StoreFrontID,true,false);
+		return custFullAddresses(CustomerId,StoreFrontID,false,false);
+
 	}
 	public static Map<String, String> custFullAddresses(ArrayList<String> CustomerId, String StoreFrontID,boolean formatBilltoShipto)
 	{
@@ -2773,7 +2828,7 @@ public class XPEDXWCUtils {
 				.getDocumentFor("<CustomerList>" +
 									"<Customer CustomerID=\"\">" +
 										"<BuyerOrganization OrganizationName=\"\"/>" +
-										"<Extn ExtnSuffixType=\"\"/>" +
+										"<Extn ExtnSuffixType=\"\" ExtnCustomerStoreNumber=\"\" />" +
 										"<CustomerAdditionalAddressList>" +
 											"<CustomerAdditionalAddress CustomerAdditionalAddressKey=\"\">" +
 												"<PersonInfo AddressLine1=\"\" AddressLine2=\"\" AddressLine3=\"\" AddressLine4=\"\" AddressLine5=\"\" AddressLine6=\"\" City=\"\" State=\"\" Country=\"\" ZipCode=\"\"/>" + 
@@ -2860,7 +2915,7 @@ public class XPEDXWCUtils {
 										}
 									}		
 									//added so that the condition occurs only when format billtoship
-									if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && formatBilltoShipto)
+									if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && !formatBilltoShipto)
 									{
 										YFCElement element = custElement.getChildElement("BuyerOrganization");
 										if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
@@ -2870,6 +2925,8 @@ public class XPEDXWCUtils {
 									else{
 										YFCElement buyerOrgElement = custElement.getChildElement("BuyerOrganization");
 										YFCElement addrElement = custElement.getChildElement("CustomerAdditionalAddressList");
+										YFCElement extnElement = custElement.getChildElement("Extn");
+
 										if(addrElement!=null)
 											addrElement = addrElement.getChildElement("CustomerAdditionalAddress");
 										if(addrElement!=null)
@@ -2879,6 +2936,13 @@ public class XPEDXWCUtils {
 										
 										if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
 											custFullAddr += buyerOrgElement.getAttribute("OrganizationName")+" ";
+										/*added for 2769*/
+										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
+											
+											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
+												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";
+										}
+										
 										if(addrElement!=null) {
 											for (int index = 0; index < 6; index++) {
 												if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0) 
@@ -2913,7 +2977,8 @@ public class XPEDXWCUtils {
 	}
 	
 	public static Map<String, String> custFullAddresses(Document CustomerListDoc) {
-		return custFullAddresses(CustomerListDoc,true,false);
+		return custFullAddresses(CustomerListDoc,false,false);
+
 	}
 	
 	public static Map<String, String> custFullAddresses(Document CustomerListDoc,boolean formatBilltoShipto, boolean appendBillToShipTo){
@@ -2996,7 +3061,7 @@ public class XPEDXWCUtils {
 									}
 								}		
 								//added so that the condition occurs only when format billtoship
-								if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && formatBilltoShipto)
+								if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && !formatBilltoShipto)
 								{
 									YFCElement element = custElement.getChildElement("BuyerOrganization");
 									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
@@ -3006,6 +3071,8 @@ public class XPEDXWCUtils {
 								else{
 									YFCElement buyerOrgElement = custElement.getChildElement("BuyerOrganization");
 									YFCElement addrElement = custElement.getChildElement("CustomerAdditionalAddressList");
+									YFCElement extnElement = custElement.getChildElement("Extn");
+									
 									if(addrElement!=null)
 										addrElement = addrElement.getChildElement("CustomerAdditionalAddress");
 									if(addrElement!=null)
@@ -3015,6 +3082,14 @@ public class XPEDXWCUtils {
 									
 									if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
 										custFullAddr += buyerOrgElement.getAttribute("OrganizationName")+" ";
+									
+									/*added for 2769*/
+									if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
+										
+										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
+											custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";
+									}
+									
 									if(addrElement!=null) {
 										for (int index = 0; index < 6; index++) {
 											if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0) 
@@ -4405,7 +4480,7 @@ public class XPEDXWCUtils {
 			}
 		}
 
-		if(viewInvoiceFlag.equals("T"))
+		if(viewInvoiceFlag.equals("Y"))
 		{
 			viewInvoice=true;
 		}
@@ -5020,4 +5095,57 @@ public class XPEDXWCUtils {
 		}
 		return orgDetailsBean;
 	}
+	
+	 public static Element getCustomerListDetalis(List<String> customerIdList ,IWCContext wcContext) throws Exception
+	    {
+	        String wCCustomerId;
+	        String wCOrganizationCode;
+	        Element loggedinCustomer = null;
+	        Element inputCustomer = null;
+	        wCCustomerId = wcContext.getCustomerId();
+	        wCOrganizationCode = wcContext.getStorefrontId();
+	        String logInCustRootCustomerKey;
+	        String inputCustRootCustomerKey;
+	       /* Map valueMapinput = new HashMap();
+	        valueMapinput.put("/Customer/@CustomerID", wCCustomerId);
+	        valueMapinput.put("/Customer/@OrganizationCode", wCOrganizationCode);*/
+	        Element input = WCMashupHelper.getMashupInput("xpedxgetLoggedInCustomer",wcContext);
+			input.setAttribute("OrganizationCode", wCOrganizationCode);
+			Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
+			Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
+			for(int i=0;i <customerIdList.size(); i++) {
+				Element exp = input.getOwnerDocument().createElement("Exp");
+				exp.setAttribute("Name", "CustomerID");
+				exp.setAttribute("Value", customerIdList.get(i));
+				SCXmlUtil.importElement(OrElem, exp);
+			}
+	        
+	        loggedinCustomer = (Element)WCMashupHelper.invokeMashup("xpedxgetLoggedInCustomer", input, wcContext.getSCUIContext());
+	        return loggedinCustomer;
+	        /*valueMapinput = new HashMap();
+	        valueMapinput.put("/Customer/@CustomerID", inputCustomerID);
+	        valueMapinput.put("/Customer/@OrganizationCode", wCOrganizationCode);
+	        input = null;
+	        input = WCMashupHelper.getMashupInput("getLoggedInCustomer", valueMapinput, wcContext);
+	        inputCustomer = (Element)WCMashupHelper.invokeMashup("getLoggedInCustomer", input, wcContext.getSCUIContext());
+	        inputCustRootCustomerKey = SCXmlUtils.getAttribute(inputCustomer, "RootCustomerKey");
+	        if(inputCustRootCustomerKey != null && logInCustRootCustomerKey != null && inputCustRootCustomerKey.equals(logInCustRootCustomerKey))
+	            return true;
+	        break MISSING_BLOCK_LABEL_263;
+	        com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper mashupEx;
+	        mashupEx;
+	        wcContext.getSCUIContext().replaceAttribute("SCUI_EXCEPTION_ATTR", mashupEx);
+	        mashupEx.printStackTrace();
+	        break MISSING_BLOCK_LABEL_263;
+	        mashupEx;
+	        wcContext.getSCUIContext().replaceAttribute("SCUI_EXCEPTION_ATTR", mashupEx);
+	        mashupEx.printStackTrace();
+	        break MISSING_BLOCK_LABEL_263;
+	        mashupEx;
+	        wcContext.getSCUIContext().replaceAttribute("SCUI_EXCEPTION_ATTR", mashupEx);
+	        mashupEx.printStackTrace();
+	        return false;*/
+	    }
+	
+
 }

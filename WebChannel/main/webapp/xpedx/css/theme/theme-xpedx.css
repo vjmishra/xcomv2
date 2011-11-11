@@ -2780,7 +2780,7 @@ a.orange-ui-btn:active span {
 }
 /* Green */
 a.green-ui-btn {
-	background: transparent url('../../images/theme/theme-1/ui-buttons/green-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -2791,7 +2791,7 @@ a.green-ui-btn {
 	text-decoration: none;
 }
 a.green-ui-btn span {
-	background: transparent url('../../images/theme/theme-1/ui-buttons/green-bg-btn-span.png') no-repeat;
+	background: transparent url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;

@@ -15,7 +15,8 @@
 <s:set name='catDoc' value="#_action.getMainCatsDoc()" />
 
 		<div class="anon-hp-prod-cat">
-		    <h2>Browse Our B2B Catalogs</h2>
+		   <!--  <h2>Browse Our B2B Catalogs</h2> -->
+		    <h2><s:text name="MSG.SWC.B2B.COMMERCESITE.GENERIC.PGTITLE"/></h2>
 		    <ul>
 				
 				<s:iterator value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")' id='cat'>

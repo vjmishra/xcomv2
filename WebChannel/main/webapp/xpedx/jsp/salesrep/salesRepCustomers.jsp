@@ -14,7 +14,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sales Representative Search</title>
+<!-- <title>Sales Representative Search</title> -->
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.SEARCH.GENERIC.TABITLE"/></title>
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/style.css'/>" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/SpryTooltip.css'/>" />

@@ -10,10 +10,11 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='util' />
 
 
-           <h2><s:property value="wCContext.storefrontId" /> News</h2>
+          <%--  <h2><s:property value="wCContext.storefrontId" /> - News</h2> --%>
+           <h2><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.NEWS.XPEDX.GENERIC.PGTITLE"/> </h2>
            <s:set name="iter" value="articleLines"/>
            <div class="news-scrollable">
-           <ul>
+           <ul class="news-links">
 	           <s:iterator value='articleLines' id='articleLine' status="articleLineCount">
 					<s:set name="StartDate" value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleLine,"StartDate"),wCContext)}' />
 					<s:set name="EndDate" value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleLine,"EndDate"),wCContext)}' />

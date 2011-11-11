@@ -32,7 +32,7 @@
 					<s:hidden id="siItemId_%{#uId}" name="itemIds" value="%{itemId}"></s:hidden>
 				</td>
 				<td class="col-item" style="width: 39px;">
-					<s:textfield id="siQty_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="qtys" value="%{qty}" onkeyup="javascript:isValidQuantity(this);"></s:textfield>
+					<s:textfield id="siQty_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="qtys" value="%{qty}" onkeyup="javascript:isValidQuantity(this);"  onchange="javascript:this.value=addComma(this.value);"></s:textfield>
 				</td>
 				<td class="col-item" style="width: 99px;">
 					<s:if test='%{isItemValid == true}'>

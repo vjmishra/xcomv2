@@ -31,6 +31,7 @@ import com.sterlingcommerce.webchannel.order.DraftOrderSummaryAction;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.utilities.CreditCardCVVStorageHelper;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
+import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
@@ -47,6 +48,7 @@ import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfc.util.YFCException;
 
 public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
@@ -72,18 +74,12 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isEditOrder;
 	protected String customerFieldsValidated;
 	protected String isCustomerPOMandatory="false";
-	String lastModifiedDateString = "";
 	String lastModifiedUserId = "";
 	XPEDXShipToCustomer shipToCustomer;
+//added for 2769
+	protected YFCDate lastModifiedDate = new YFCDate();
+	protected String lastModifiedDateString = "";
 	
-	public String getLastModifiedDateString() {
-		return lastModifiedDateString;
-	}
-
-	public void setLastModifiedDateString(String lastModifiedDateString) {
-		this.lastModifiedDateString = lastModifiedDateString;
-	}
-
 	public String getLastModifiedUserId() {
 		return lastModifiedUserId;
 	}
@@ -135,6 +131,17 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		}*/
 		try {
 			getCompleteOrderDetailsDoc();
+			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
+			{
+				editedOrderHeaderKey=orderHeaderKey;
+			}
+			if(YFCCommon.isVoid(editedOrderHeaderKey))
+			{			
+				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
+			}
+			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
+				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			
 			// If edit order then sort the order line as per JIRA # 2851
 			if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
@@ -201,8 +208,12 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			}else{
 				setLastModifiedUserId(modifyUserIdStr);
 			}
+			//added for 2769
 			lastModifiedDateStr = getOrderElementFromOutputDocument().getAttribute("Modifyts");
-			setLastModifiedDateString(lastModifiedDateStr);
+			if(lastModifiedDateStr !=null){
+				setLastModifiedDateString(lastModifiedDateStr);
+				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
+			}
 			
 			
 			xPEDXPaymentMethodHelper = new XPEDXPaymentMethodHelper(
@@ -1330,6 +1341,40 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		this.custmerPONumber = custmerPONumber;
 	}
 	
+	public YFCDate getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(YFCDate lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 	
+	public String getLastModifiedDateString() {
+		return lastModifiedDateString;
+	}
+
+	public void setLastModifiedDateString(String lastModifiedDateString) {
+		this.lastModifiedDateString = lastModifiedDateString;
+	}
+	
+	public String getLastModifiedDateToDisplay() {
+		UtilBean utilBean = new UtilBean();
+		String dateToDisplay="";
+		if(lastModifiedDateString != null){
+			dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "MM/dd/yyyy");			
+		}
+		return dateToDisplay;
+	}
+	
+	public String replaceString(String qty,String replaceStr,String withString){
+		String split[]=qty.split("\\.");
+		if(split != null && split.length >1)
+		{
+			int decimalPlace=Integer.parseInt(split[1]);
+			if(decimalPlace==0)
+				return split[0];
+		}
+		return qty;
+	}
 
 }

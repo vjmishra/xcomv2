@@ -129,11 +129,11 @@ function showSharedListForm(){
 }
 </script>
 <s:if test='editMode == true'>
-	<title><s:text name="myitemslists.title" /> / <s:text name="myitemsdetails.editable.title" /></title>
+	<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text name="myitemsdetails.editable.title" /></title>
 	<meta name="DCSext.w_x_list_edit" content="1" />
 </s:if>
 <s:else>
-	<title><s:text name="myitemslists.title" /> / <s:text name="myitemsdetails.noneditable.title" /></title>
+	<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text name="myitemsdetails.noneditable.title" /></title>
 </s:else>
 
 <!-- Web Trends tag start -->
@@ -367,7 +367,6 @@ function showSharedListForm(){
      		clearPreviousDisplayMsg()
      		
      		if(itemId == null || itemId =="") {
-     			/* -LP1-1 validate with previous build */
     			alert("Item ID cannot be null to make a PnA call");
     		}
     		var url = document.getElementById("checkAvailabilityURLHidden");
@@ -426,7 +425,8 @@ function showSharedListForm(){
 			else{
 				
 					
-			   var msgSelectItemFirst = "You have not selected any items to be deleted. Please select an item and try again";
+			  // var msgSelectItemFirst = "You have not selected any items to be deleted. Please select an item and try again";
+			   var msgSelectItemFirst = "<s:text name='MSG.SWC.MIL.NOITEMSELECT.ERROR.SELECTFORDELETE' />";
 				document.getElementById("msgForRemoveFunctionalityTop").innerHTML = msgSelectItemFirst ;
                 document.getElementById("msgForRemoveFunctionalityTop").style.display = "inline";
             
@@ -460,11 +460,13 @@ function showSharedListForm(){
 					}
 				}
 				else{
-					alert("Your list may contain a maximum of 200 items. Please delete some items and try again.");
+					//alert("Your list may contain a maximum of 200 items. Please delete some items and try again.");
+					alert( "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' /> ");
 				}
 			}
 			else{
-				alert("Your list may contain a maximum of 200 items. Please delete some items and try again.");
+				//alert("Your list may contain a maximum of 200 items. Please delete some items and try again.");
+				alert( "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />");
 				return false;
 			}
 			
@@ -485,7 +487,8 @@ function showSharedListForm(){
 			if (document.getElementById("listDesc").value.length > 255){
 				document.getElementById("mandatoryFieldCheckFlag_"+docDivId).value = "true";
 				
-					var jasonErrorMess = "The description can contain a maximum of "+ 255 +" characters, please revise and try again.";
+					//var jasonErrorMess = "The description can contain a maximum of "+ 255 +" characters, please revise and try again.";
+					var jasonErrorMess = "<s:text name='MSG.SWC.MIL.DESC.ERROR.LENGTHGT255' />";
 					document.getElementById("errorMsgForMandatoryFields_"+docDivId).innerHTML = jasonErrorMess;
 					document.getElementById("errorMsgForMandatoryFields_"+docDivId).style.display = "inline";
 					return;
@@ -872,12 +875,14 @@ function showSharedListForm(){
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
-						divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
 					else{
-						divVal.innerHTML='Qty Should be greater than 0';
+						/* divVal.innerHTML='Qty Should be greater than 0'; */
+						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -891,7 +896,8 @@ function showSharedListForm(){
 					var ordMul = totalQty % arrOrdMul[i].value;
 					if(ordMul!= 0)
 					{
-						divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value ;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -1121,7 +1127,8 @@ function showSharedListForm(){
 			}
 
 			if(cnt <=0 ){
-				var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
+				//var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
+				var msgSelectItemFirst = "<s:text name='MSG.SWC.MIL.NOITEMSELECT.ERROR.SELECTFORPNA' />";
 				document.getElementById("msgForPriceAndAvailabilityTop").innerHTML = msgSelectItemFirst ;
                 document.getElementById("msgForPriceAndAvailabilityTop").style.display = "inline";
 
@@ -1217,9 +1224,9 @@ function showSharedListForm(){
 		}
 		
 	</script>
-
+<%-- 
 <script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
-
+ --%>
 </head>
 <!-- Hemantha -->
 <body class="  ext-gecko ext-gecko3">
@@ -1240,7 +1247,7 @@ function showSharedListForm(){
 <s:set name='childCategoryListElem' value="childCategoryListElement" />
 <s:set name='fieldListElem'
 	value="searchableIndexFieldListOutPutElement" />
-
+<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
@@ -1384,7 +1391,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			
                
                
-               	<div id="breadcumbs-list-name" > <span class="page-title"> My Items List:</span> &nbsp; <span><s:property value="listName" /> </span>
+               	<%-- <div id="breadcumbs-list-name" > <span class="page-title"> My Items List:</span> &nbsp; <span><s:property value="listName" /> </span> --%>
+               	<div id="breadcumbs-list-name" > 
+               	<span class="page-title"> <s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:</span> 
+               	&nbsp; <span><s:property value="listName" /> </span>
 				<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="font-weight:normal; font-size:12px;">
 				<img src="/swc/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
 		    
@@ -1545,7 +1555,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                     <!--     <li><a class="modal grey-ui-btn" href="../modals/new-copy-edit-cart-details-redesign.html"><span>New List</span></a></li>-->
                 </ul>
                 <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;">
-                    <li><a class="orange-ui-btn" href="javascript:addToCart();"><span>Add Items with Qty to Cart</span></a></li>
+                    <li><a class="orange-ui-btn" href="javascript:addToCart();">
+                    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+                    <span>Add Items with Qty to Cart</span>
+                    </s:if>
+                    <s:else>
+                     <span>Add Items with Qty to Order</span>
+                    </s:else>
+                    </a></li>
 
                 </ul>
 			</s:if>
@@ -1574,7 +1591,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                     </li>
                                     <li>
                                         <label>Qty</label>
-										<s:textfield maxlength="10" cssStyle="width:63px;" cssClass="qty-field text x-input" name="qty" value="" onkeyup="javascript:isValidQuantity(this);"></s:textfield>
+										<s:textfield maxlength="10" cssStyle="width:63px;" cssClass="qty-field text x-input" name="qty" value="" onkeyup="javascript:isValidQuantity(this);" onchange="javascript:this.value=addComma(this.value);"></s:textfield>
                                     </li>
                                     <s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 	                                    <li>
@@ -1715,9 +1732,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                     <li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
                 </ul>
 
-                <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; margin-right:5px;">
-                    <li><a class="grey-ui-btn" href="javascript:history.back()"><span>Cancel</span></a></li>
-                    <li><a  style="margin-left:5px;" class="green-ui-btn" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
+                <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px;">
+                    <li><a style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
+                    <li><a class="grey-ui-btn float-right-imp" href="javascript:history.back()"><span>Cancel</span></a></li>
                 </ul>
 				
 			</s:else>
@@ -1765,7 +1782,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<div  id="msgForPriceAndAvailabilityTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
 					<s:if test="%{errorMsg == 'ItemsOverLoad'}">
 							<div style="color:red">
-							        Your list may contain a maximum of 200 items. Please delete some items and try again.
+							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
+							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
 							</div>
 						</s:if>
 					<br/>
@@ -1990,7 +2008,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
 													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2004,7 +2022,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											</s:if> <s:else>
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' '/>
@@ -2062,7 +2080,12 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 <li style="float: left; display: block; position: absolute; right: 144px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availablity</span></a></li>
-                                <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> 
+                                <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                <s:if test='%{#mulVal >"1" && #mulVal !=null}'>
+                               <li style="float: left; display: block; position: absolute; right: 65px; margin-right: 8px;"> <div class="temp_UOM" id="test" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property></div>
+                               </s:if>
+                               </li>
+                               <br/> 
 		                     </ul>
                             <div class="clearall"> &nbsp;</div><br></br>
                             <ul>
@@ -2164,7 +2187,12 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 							<!--     <li><a class="modal grey-ui-btn" href="../modals/new-copy-edit-cart-details-redesign.html"><span>New List</span></a></li>-->
 						</ul>
 						<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;">
-							<li><a class="orange-ui-btn" href="javascript:addToCart();"><span>Add Items with Qty to Cart</span></a></li>
+							<li><a class="orange-ui-btn" href="javascript:addToCart();">
+							<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+								<span>Add Items with Qty to Cart</span>
+							</s:if>
+							<s:else><span>Add Items with Qty to Order</span></s:else>
+							</a></li>
 
 						</ul>
 					</s:if>    
@@ -2185,9 +2213,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 								<li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
 							</ul>
 	
-							<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; margin-right:5px;">
-								<li><a class="grey-ui-btn" href="javascript:history.back()"><span>Cancel</span></a></li>
-								<li><a  style="margin-left:5px;" class="green-ui-btn" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
+							<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; ">
+								<li><a  style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
+								<li><a class="grey-ui-btn float-right-imp" href="javascript:history.back()"><span>Cancel</span></a></li>
+								
 							</ul>
 						</s:if>
 
@@ -2205,7 +2234,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						<br />
 					
 						<script type="text/javascript">
-						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
+						//var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
+						var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
 							importItems(milFileImportMsg );
 						</script>
 				</s:if>
@@ -2297,7 +2327,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <div style="display: none;">
 
          <!-- Light Box -->
-         <div style=" height:202px; width:995px; overflow:auto;">
+         <div style=" height:202px; width:600px; overflow:auto;">
          <s:if test='editMode == true'>
 <!-- START of Hidden Layer -PN --> <!-- CODE_START Replacement items - PN -->
 <!-- START: XPEDX Panel for Replacement items --> <s:set name='tabIndex'
@@ -2306,10 +2336,15 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box">
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2>
-	         <!-- Light Box --><div style=" height:202px; width:995px; overflow:auto;">
+         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
 	       
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
-		<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
+		<s:if test="!#iStatus.last" >
+			<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
+		</s:if>
+		<s:else>
+			<div class="mil-wrap-condensed-container last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
+		</s:else>
             <div class="mil-wrap-condensed" style="min-height:200px;">
 		
 				<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
@@ -2360,7 +2395,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 
                 <!-- begin description  -->
                 <div class="mil-desc-wrap">
-                    <div class="mil-wrap-condensed-desc" style="height:auto; max-height:59px;"><s:if test="%{#ritemType != 99}">
+                    <div class="mil-wrap-condensed-desc replacement-items" style="height:auto; max-height:59px;"><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
 								<s:property value="#name" />
 								</a>	

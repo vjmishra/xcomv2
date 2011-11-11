@@ -259,7 +259,7 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 		String modifyUserId = SCXmlUtil.getAttribute(outputDoc.getDocumentElement(), "Modifyuserid");
 		if(modifyTS!=null) {
 			UtilBean utilBean = new UtilBean();
-			modifiedDate = utilBean.formatDate(modifyTS, wcContext, null, "M/d/yyyy");	
+			modifiedDate = utilBean.formatDate(modifyTS, wcContext, null, "MM/dd/yyyy");	
 		}
 		if(modifyUserId!=null) {
 			try {

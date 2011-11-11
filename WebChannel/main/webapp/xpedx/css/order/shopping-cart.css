@@ -720,10 +720,10 @@ span.print-ico-xpedx.item-detail { margin-top: 0px; margin-right: 15px; }
 .add-non-catalog-labels input { text-align:left;}
 .mini-cart-extended-price { padding-left: 3px;}
 .availability-indent { padding-left: 18px; }
-.special-instructions-padding { margin-bottom:-23px; float: left;}
-.special-instructions-div input.special-instructions-input {  width: 255px; font-size: 12px; margin-left:117px;}
+.special-instructions-padding { margin-bottom:-23px; float: left; margin-left: 53px;}
+.special-instructions-div input.special-instructions-input {  width: 255px; font-size: 12px; margin-left:170px;}
 .special-instructions-td { margin-left: 20px; }
-.special-instructions-div { width:700px; margin-left: 15px;}
+.special-instructions-div { width:700px; margin-left: 15px; margin-bottom: 10px;}
 .special-instructions-div#checkout-special-instructions { margin-left: 369px;}
 .cust-defined-fields {    margin-left: 246px; width: 700px; }
 .checkout-body#checkout-container { width:951px; margin: 0 20px 0 20px; padding:0px;}

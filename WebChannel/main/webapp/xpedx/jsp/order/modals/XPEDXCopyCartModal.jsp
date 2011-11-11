@@ -9,8 +9,9 @@
      <s:hidden name="OrderHeaderKey" id="OrderHeaderKey" value=""/>
 
 <div class="xpedx-light-box" id="copy-cart">
-    <h2>Copy Cart</h2> 
-	<div id="cp-cart-err-msg" style="display: none;"><h5 align="left"><b><font color="red">Error: Please enter a Cart Name.</font></b></h5></div>
+<!--     <h2>Copy Cart</h2> --> 
+    <h2><s:text name="MSG.SWC.CART.COPYCART.GENERIC.DLGTITLE" /></h2> 
+	<div id="cp-cart-err-msg" style="display: none;"><h5 align="left"><b><font color="red"> <s:text name='MSG.SWC.CART.VERIFY.ERROR.NONAME' /> </font></b></h5></div>
 	<!-- <div id="cp-cart-err-msg1" style="display: none;"><h5 align="left"><b><font color="red">Error: Please enter a Cart Description.</font></b></h5></div>  for Jira2919  -->
      <p>Name</p>
      <div class="clear"></div>

@@ -9,7 +9,9 @@
     <entry key="deliveryHoldDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate</entry>
     <entry key="#parameters.DeliveryHoldTime">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime</entry>
     <entry key="draftShipComplete">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipComplete</entry>
-    <entry key="willCallFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWillCall</entry>    
+    <entry key="willCallFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWillCall</entry>
+    <entry key="orderedByName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnOrderedByName</entry>
+    <entry key="customerContactId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerContactID</entry>    
             
     <entry key="#parameters.orderReqDeliveryDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ReqDeliveryDate</entry>
     <entry key="#parameters.RushOrderNoteText">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderComments</entry>

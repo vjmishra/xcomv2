@@ -52,7 +52,7 @@ $(document).ready(function() {
 });
 </script>
   
-<title><s:property value="wCContext.storefrontId" /> /  Privacy Policy</title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.PRPY.GENERIC.TABTITLE" /></title>
 
 </head>
     <s:set name='isGuestUser' value="wCContext.guestUser" />
@@ -78,7 +78,7 @@ $(document).ready(function() {
 							</a>
 						</div>
 						<div class="padding-top3 black">
-							<div class="page-title">Privacy Policy</div>
+							<div class="page-title"><s:text name="MSG.SWC.MISC.PRPY.GENERIC.PGTITLE" /></div>
 						</div>
 
 					</div>

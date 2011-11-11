@@ -120,8 +120,8 @@
 			}
 			},
 			'autoDimensions'	: false,
-			'width' 			: 670,
-			'height' 			: 310,
+			'width' 			: 700,
+			'height' 			: 405,
 			//XNGTP - JIRA- 489 
 			'onClosed' : function(){				
 		    	document.getElementById("showLocationsDiv").innerHTML = '';
@@ -428,7 +428,8 @@ ul.checkboxTree li
             </ul>
           </div></div>
            <div class="clearview">&nbsp;</div>
-        <div class="clearview textAlignCenter">Last modified by <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/></div>
+              <div class="clearview textAlignCenter">Last modified by <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/></div>
+        
         <!-- Pricing -->
          
         <div class="clearview">&nbsp;</div>

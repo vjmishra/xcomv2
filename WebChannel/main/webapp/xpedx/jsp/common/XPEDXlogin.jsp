@@ -12,19 +12,19 @@
 			<td class="promo-cell" rowspan="2"  colspan="3">
 				<div id="signon-image-rotation">
 				 					
+				<%-- 
 					<div class="slideshow">
 						<s:action name="xpedxDynamicPromotions" executeResult="true" namespace="/common" >
 							<s:param name="callerPage">signinpage</s:param>
 						</s:action>
 					</div> 
+					--%>
 					
-				<%-- 
 					<div class="slideshow">
 						<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
 							<s:param name="callerPage">SignInPageTop</s:param>
 						</s:action>
 					</div>
-					--%>
 					<div id="home-image-rotation-nav">
 						<div class="img-navi-left"></div>
 

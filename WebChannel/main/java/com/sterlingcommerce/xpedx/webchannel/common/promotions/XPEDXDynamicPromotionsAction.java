@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.common.promotions;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -88,7 +89,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	private String  generatedFileFullPath ;
 	private boolean isDefaultFileUsed =false;
 	//Final Response we set to request and then access by the JSP for rendering 
-	private String ultimateRespPromoHtmlFullFileName = "";
+	//private String ultimateRespPromoHtmlFullFileName = "";
 		
 	private static final long serialVersionUID = 8339664862359079566L;
 	private static final String customerExtnInformation = "xpedx-customer-getCustomExtnFieldsInformation";
@@ -241,18 +242,28 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	}
 
 	/**
-	 * Alwasys return FirstItem in the list
+	 * Always return FirstItem in the list
 	 */
 	public String getFirstItemInCategory() {
+		String firstCat = "";
 		
-		String firstCat = category;
+		//Added extra validation since it is throwing NPE in rare scenarios.
+		if(category != null)
+			firstCat = category;
+		
 		if(category != null && category.length() >  0 ){
 			String cats[] = category.split(",");
+			
 			if(cats.length > 0)
-				firstCat =  cats[0].trim();
+				if(cats[0] != null)
+					firstCat =  cats[0].trim();
+				else
+					firstCat="";
 		}
 		
-			return firstCat;
+			//return firstCat;
+		System.out.println("Seding null FirstItemInCategory .... 1");
+			return null;
 	}
 
 	public String getCategory() {
@@ -283,14 +294,14 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		this.isGuestUser = isGuestUser;
 	}
 	
-	public String getUltimateRespPromoHtmlFullFileName() {
-		return ultimateRespPromoHtmlFullFileName;
-	}
-
-	public void setUltimateRespPromoHtmlFullFileName(
-			String ultimateResponsePromoHtmlFullFileName) {
-		this.ultimateRespPromoHtmlFullFileName = ultimateResponsePromoHtmlFullFileName;
-	}
+//	public String getUltimateRespPromoHtmlFullFileName() {
+//		return ultimateRespPromoHtmlFullFileName;
+//	}
+//
+//	public void setUltimateRespPromoHtmlFullFileName(
+//			String ultimateResponsePromoHtmlFullFileName) {
+//		this.ultimateRespPromoHtmlFullFileName = ultimateResponsePromoHtmlFullFileName;
+//	}
 	
 	public boolean isDefaultFileUsed() {
 		return isDefaultFileUsed;
@@ -329,12 +340,65 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		this.generatedFileFullPath = generatedFileFullPath;
 	}
 	
+	
+	public String execute() {
+		String promoHtml = null;
+		String massagedPromoHtml = null;
+		boolean isFileExists =false ;
+		try {
+			
+			String callerPage = getCallerPage();
+			String newCallerPageTag = "";
+			
+			System.out.println("######################################################################################################### "  );
+			logMessage("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			System.out.println("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			System.out.println("######################################################################################################### "  );
+			
+			//Look for input parameters for this action class.
+			validateDynPromoActionParameter(callerPage);
+		
+
+			// for guest user fetches the default html page.
+			if(wcContext.isGuestUser()){
+				newCallerPageTag = STD_PRE_LOGIN_PREFIX + callerPage;
+				massagedPromoHtml = generatePreLoginPromoFile(newCallerPageTag);
+				System.out.println("EXECUTE METHOD CALLED (Pre Login page) : " + massagedPromoHtml);
+				log.debug("Promotions file Pre-Login : " + newCallerPageTag);
+				setInRequest(massagedPromoHtml);
+				return SUCCESS;
+			}
+		else{
+			String massagedPostLoginPromoHtml = "";
+			
+			 newCallerPageTag = STD_POST_LOGIN_PREFIX + callerPage;
+			boolean doesFileBuilt =  generatePostLoginPromoPageName (newCallerPageTag);	
+		
+			if(doesFileBuilt)			
+				{
+				massagedPostLoginPromoHtml = getGeneratedFileFullPath();
+				System.out.println("EXECUTE METHOD CALLED (Post Login page) : " + massagedPostLoginPromoHtml);
+				setInRequest(  getGeneratedFileFullPath());
+				return SUCCESS;
+				}
+			else
+				return ERROR;
+			
+		}
+			
+		} catch (Exception ex) {
+			log.error(ex.getMessage());			
+			return ERROR;
+		}
+		//return SUCCESS;
+	}
+	
 	/**
 	 * execute method
 	 * Initialized variables
 	 * Then calls either pre=login or post=Login based on user login and page.
 	 */
-	public String execute() {
+	public String execute_Prev() {
 		
 		//String environmentCode = (String) wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
 		//logMessage("Environment : " + environmentCode );
@@ -342,11 +406,12 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		try{
 			
 			String callerPage = getCallerPage();
-			logMessage("######################################################################################################### "  );
+			System.out.println("######################################################################################################### "  );
 			logMessage("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
-			logMessage("######################################################################################################### "  );
+			System.out.println("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			System.out.println("######################################################################################################### "  );
 			
-			//Look for input paramters for this action class.
+			//Look for input parameters for this action class.
 			validateDynPromoActionParameter(callerPage);
 			
 			//initialize parameters to build html promo file name.
@@ -354,13 +419,14 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			
 			//This is generated file name for Pre-login, post-login, default
 			String respHtmlPageNameAndPath = generatePromoFileWithPath ( callerPage.trim() );
-			
 			boolean isFileThere = doesFileExists(" PreLogin-PostLogin-Default Stage " , respHtmlPageNameAndPath );
+			System.out.println(" isFileThere " + isFileThere );
+			
 			//if (isFileThere == true ){
 			
 			if(respHtmlPageNameAndPath != null && respHtmlPageNameAndPath.length() > 0) {
 				LIZ_MESSAGE= "SUCCESS-LIZ" ;
-				setUltimateRespPromoHtmlFullFileName(respHtmlPageNameAndPath);
+				//setUltimateRespPromoHtmlFullFileName(respHtmlPageNameAndPath);
 				setInRequest(respHtmlPageNameAndPath);
 			}
 			else{
@@ -379,12 +445,20 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		return SUCCESS;
 	}
 
+	/**
+	 * 
+	 * @param callerPage
+	 * @throws Exception
+	 */
 	private void validateDynPromoActionParameter(String callerPage) throws Exception {
 		boolean isValidCallerPage = true ;
 		String errorMessage = "";
+		
+		System.out.println("validateDynPromoActionParameter FirstLevel of Validation : " + callerPage);
 		//Validate Action Parameter sent from JSP.
-		if (callerPage == null || "".equalsIgnoreCase(callerPage) )
+		if (callerPage == null || callerPage.trim().length() == 0 )
 		{
+			System.out.println("validateDynPromoActionParameter SecondLevel of Validation : " + callerPage);
 			isValidCallerPage = false ;
 			errorMessage = "CallerPage name sent as parameter, It is either null or empty : "  + callerPage  ;
 		}
@@ -512,9 +586,9 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		boolean goForDefault = false ;
 		String msgFileInfo  ="";
 		
-		logMessage("POST-LOGIN-PROMO - generatePostLoginPromoPageName -- : " + getDivision().length() + " , IL : " + getIndustry().length()  );
 		try {
 			initializeAdditionalPropeties ();
+			logMessage("POST-LOGIN-PROMO - generatePostLoginPromoPageName -- : " + getDivision().length() + " , IL : " + getIndustry().length()  );
 			
 			/**
 			* Home Page
@@ -531,7 +605,11 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					isPostLoginFileBuild = setGeneratedFileName(buildFileNameForPostLoginPage );
 					
 					if(isPostLoginFileBuild == true )
-						isFileExists = doesFileExists( XPEDX_PROMO_RESP_POST_LOGIN_HOME_PAGE , getGeneratedFileFullPath() ) ;
+					{
+						String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + isPostLoginFileBuild;
+						isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
+					
+					}
 					
 					if(isPostLoginFileBuild == false ||  isFileExists == false)
 						goForDefault=true ;
@@ -544,6 +622,9 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					buildFileNameForPostLoginPage = getStoreFrontId() + "_HP_" + STD_PROMO_HTML_SUFFIX ;
 					
 					msgFileInfo  = msgFileInfo + " , " + " Default File Name  : " + buildFileNameForPostLoginPage ;
+					
+					//Just to get copy latest file from external folder to WL path
+					simpleFileCheck(buildFileNameForPostLoginPage);
 					
 					//This sets two variables for one with filename, other with fullpath.
 					isPostLoginFileBuild = setGeneratedFileName(buildFileNameForPostLoginPage );
@@ -563,7 +644,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				buildFileNameForPostLoginPage  = "";
 					msgFileInfo = "Catalog Category " + getCategory() + " , FistItemIn Category : "  + getFirstItemInCategory();
 				
-				if (  getFirstItemInCategory().length() > 0  )
+				if (  getFirstItemInCategory() != null && getFirstItemInCategory().length() > 0  )
 					{
 					buildFileNameForPostLoginPage = getStoreFrontId() + "_CP_"+ getFirstItemInCategory() + "_" + STD_PROMO_HTML_SUFFIX ;
 					}
@@ -571,7 +652,10 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					isPostLoginFileBuild = setGeneratedFileName( buildFileNameForPostLoginPage );
 					
 					if(isPostLoginFileBuild == true )
-						isFileExists = doesFileExists( XPEDX_PROMO_RESP_POST_LOGIN_CATALOG_PAGE , getGeneratedFileFullPath() ) ;
+					{	
+						String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + buildFileNameForPostLoginPage;
+						isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
+					}
 					
 					if(isPostLoginFileBuild == false ||  isFileExists == false)
 						goForDefault=true ;
@@ -584,6 +668,9 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					buildFileNameForPostLoginPage = getStoreFrontId() + "_CP_" + STD_PROMO_HTML_SUFFIX ;
 					
 					msgFileInfo = msgFileInfo + " , " + " Default File Name  : " + buildFileNameForPostLoginPage ;
+					
+					//Just to get copy latest file from external folder to WL path
+					simpleFileCheck(buildFileNameForPostLoginPage);
 					
 					//This sets two variables for one with filename, other with fullpath.
 					isPostLoginFileBuild = setGeneratedFileName( buildFileNameForPostLoginPage );
@@ -665,13 +752,15 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		
 		msgInfo.append( "\n\n #### GENERATED-FILE-NAMES : ");
 		msgInfo.append( "\n Generated File Name : " 	+ getGeneratedFileName() ) ; 
+		
+		msgInfo.append( "\n\n #### Final File Set for JSP : ");
 		msgInfo.append( "\n Generated File FullPath : " + getGeneratedFileFullPath() ) ; 
 		
 		msgInfo.append( "\n\n #### IS-DEFAULT-FILE-USED :");
 		msgInfo.append( "\n isDefaultFileUsed : " 		+ isDefaultFileUsed() ) ; 
 		
-		msgInfo.append( "\n\n #### Final File Set for JSP : ");
-		msgInfo.append( "\n getUltimateRespPromoHtmlFullFileName : " + getUltimateRespPromoHtmlFullFileName() ) ; 
+	//	msgInfo.append( "\n\n #### Final File Set for JSP : ");
+	//	msgInfo.append( "\n getUltimateRespPromoHtmlFullFileName : " + getUltimateRespPromoHtmlFullFileName() ) ; 
 		
 		msgInfo.append("\n----------------------------- ----  --------------------- ------------------- " );
 		
@@ -739,6 +828,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	 * This is to delete unwanted extra chars.
 	 * make sure proper file separator is there, doesn't have semicolons, colons, commas...etc., 
 	 */
+
+	
 	private String massageFileName(String promoFileBeforeProcess ) {
 		
 		String massagedPromoFile = promoFileBeforeProcess;
@@ -766,6 +857,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		return massagedPromoFile ;
 	}
 	
+	
+
 	/**
 	 * Check if file exists on Application server ..
 	 */
@@ -779,9 +872,10 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			return isFileExistOnAppServer;
 		
 		try {
-			
+			System.out.println(" $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ BEGIN $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 			isFileExistOnAppServer =  XPEDXFileManager.checkFile(massagedFileWithPath, this.wcContext, false);
 			System.out.println ( "-DYN-PROMO- FileName (doesFileExists) : " + massagedFileWithPath  + "   - isFileExists : " + isFileExistOnAppServer );
+			System.out.println(" $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ END $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 			} 
 			catch (Exception ex) {
 				message = "FILE-VERIFICATION-FAILED - doesFileExists ( " + source + " ) : \n Promotions file --> " + getGeneratedFileName() + "\n fullFilePath --> " + massagedFileWithPath  ;
@@ -794,7 +888,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			//This is the key, If file found it sets the to ultimateRespPromoHtmlFullFileName variable.
 			if(isFileExistOnAppServer == true)
 			{
-				setUltimateRespPromoHtmlFullFileName( massagedFileWithPath );
+			//	setUltimateRespPromoHtmlFullFileName( massagedFileWithPath );
 				logMessage("FILE-PROMO-SUCCESS (pre) : ( " + source + " ) - Full File path (Dir , FileName) Found on system :  " + massagedFileWithPath );
 			}
 			
@@ -812,8 +906,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		
 		System.out.println("#### " +LIZ_MESSAGE + " ### - FILE-PROMO-SUCCESS - setInRequest + " +
 				"\n PROMO HTML FILE-NAME : "  +getGeneratedFileName() + 
-				"\n FILE-PATH : " + finalNameWithPath + 
-				"\n UltimateRespPromoHtml : " + getUltimateRespPromoHtmlFullFileName() 
+				"\n FILE-PATH : " + finalNameWithPath 
+			//	"\n UltimateRespPromoHtml : " + getUltimateRespPromoHtmlFullFileName() 
 				);
 		
 		//wcContext.setWCAttribute(XPEDXConstants.REQUEST_ATTR_PROMO_PAGE_URL, getUltimateRespPromoHtmlFullFileName(), WCAttributeScope.REQUEST);
@@ -821,8 +915,122 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 
 		logAllVariables("setInRequest");
 		logMessage("##################################### "+ LIZ_MESSAGE + " ########################################################### "  );
-		logMessage ("###### SUCCESS-LIZ ####### FileName : "  + getUltimateRespPromoHtmlFullFileName()  );
+	//	logMessage ("###### SUCCESS-LIZ ####### FileName : "  + getUltimateRespPromoHtmlFullFileName()  );
 	}
+
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	private String generatePreLoginPromoFile(String callerPage) throws IOException {
+		String promoHtml="";
+		boolean isFileExists;
+		promoHtml = constructPreLoginPromoPageName (callerPage );
+
+		//isFileExists = simpleFileCheck(promoHtmlWithMarketingPromoPath);
+		String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + promoHtml;
+		isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
+		System.out.println ( "-DYN-PROMO--  FileName : " + promoHtmlWithMarketingPromoPath + " , isFileExists : " + isFileExists );
+		
+		String massagedPromoHtml = massagedFileName(promoHtmlWithMarketingPromoPath);
+		return massagedPromoHtml;
+	}
+
+	/**
+	 * 
+	 * @param defaultPromoHtml
+	 * @return
+	 */
+	private String massagedFileName(String defaultPromoHtml) {
+		if (defaultPromoHtml.contains(":")){
+			defaultPromoHtml = defaultPromoHtml.substring(defaultPromoHtml.indexOf(SRVR_PATH_SEPARATOR), defaultPromoHtml.length());
+		}		
+		if (!defaultPromoHtml.startsWith(SRVR_PATH_SEPARATOR)){
+			defaultPromoHtml = SRVR_PATH_SEPARATOR + defaultPromoHtml;
+		}
+		defaultPromoHtml = defaultPromoHtml.replace("\\", "/");
+		defaultPromoHtml = defaultPromoHtml.replace("//", "/");
+		return defaultPromoHtml;
+	}
+	
+
+	/**
+	 * 
+	 * @param callerPageTag
+	 * @return
+	 */
+	
+	private String constructPreLoginPromoPageName(String callerPageTag) {
+		
+		initializePropeties();
+		
+		logMessage("PRE-LOGIN-PROMO - generatePreLoginPromoPageName -- " );
+		String buildFileNameForPreLoginPage = "";
+		boolean isFileBuild = false;
+		
+		try {
+			/**
+			 * PreLogin SignIn Page - Top (rotational image)
+			 * 		File name Format: <Storefront>_SPT_Promo.html 
+			 * 		There is no default if file is not found (--NO--).
+			 */
+			if( XPEDX_PROMO_RESP_PRE_LOGIN_SIGNIN_PAGE_TOP.equalsIgnoreCase(callerPageTag ) ) {
+				buildFileNameForPreLoginPage = getStoreFrontId() + "_SPT_" + STD_PROMO_HTML_SUFFIX ;
+				
+			}
+			
+			/**
+			 * SignIn Page - Bottom (non rotational image)
+			 * 		File name Format : <Storefront>_SPB_Promo.html 
+			 * 		There is no default if file is not found (--NO--).
+			 */
+			if( XPEDX_PROMO_RESP_PRE_LOGIN_SIGNIN_PAGE_BOTTOM.equalsIgnoreCase(callerPageTag ) ) {
+				buildFileNameForPreLoginPage = getStoreFrontId() + "_SPB_" + STD_PROMO_HTML_SUFFIX ;
+				
+			}	
+
+			/**
+			 * Catalog Page - guest user
+			 * 		File name: <Storefront>_AP_Promo.html
+			 * 		There is no default if file is not found (--NO--). 
+			 */
+			if( XPEDX_PROMO_RESP_PRE_LOGIN_CATALOG_PAGE.equalsIgnoreCase(callerPageTag ) ) {
+				buildFileNameForPreLoginPage = getStoreFrontId() + "_AP_" + STD_PROMO_HTML_SUFFIX ;
+				
+			 }
+			
+			boolean isPreLoginFileBuild = setGeneratedFileName(buildFileNameForPreLoginPage );
+
+			System.out.println("buildFileNameForPreLoginPage : " + buildFileNameForPreLoginPage + " , for newCallerPageTag :" + callerPageTag);
+			return buildFileNameForPreLoginPage;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @param promoHtml
+	 * @return
+	 */
+	private boolean simpleFileCheck(String promoHtml) {
+		
+		try {
+			String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + promoHtml;
+			return XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void logMessage(String message) {
 		if(DEBUG_TRACE == true )

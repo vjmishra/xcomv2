@@ -53,11 +53,7 @@
 		<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 		<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script>    
 	   
-	    <!-- Lightbox/Modal Window -->
-	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
-	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-	
+	   
 	    <!-- Page Calls -->
 		<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
 		<!-- END head-calls.php -->
@@ -85,7 +81,11 @@
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
-
+ <!-- Lightbox/Modal Window -->
+	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
+	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
+	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
+	    
 	<script type="text/javascript">
 
 	function browserSupport(){
@@ -318,7 +318,7 @@
 					<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>
 					<h2>Quick Links</h2>
 					<div class="news-scrollable">
-						<ul>
+						<ul class = "news-links">
 						   <%-- <s:action name="getCustomerQuickLinks" executeResult="true" namespace="/profile/org" /> --%>
 						    <s:url id='getCustomerQuickLinksURL'  namespace='/profile/org'  action='getCustomerQuickLinks.action' ></s:url>
 						    <div id="getCustomerQuickLinksDiv"></div>

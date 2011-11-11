@@ -61,7 +61,7 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 
 /* Orange */
 a.orange-ui-btn {
-	background: transparent url('../images/buttons/green-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../images/buttons/orange-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -72,7 +72,7 @@ a.orange-ui-btn {
 	text-decoration: none;
 }
 a.orange-ui-btn span {
-	background: transparent url('../images/buttons/green-bg-btn-span.png') no-repeat;
+	background: transparent url('../images/buttons/orange-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;

@@ -78,7 +78,7 @@ DraftOrderModifyLineItemsAction
 		if(zeroOrderLines.equals("true")){
 			mashUpId = "xpedx_me_changeOrderDetails";
 		}
-		else if (!"true".equals(isComingFromCheckout)) {	//Removing changeOrder call for Performance improvement, while checkout
+		else /*if (!"true".equals(isComingFromCheckout)) */{	//Removing changeOrder call for Performance improvement, while checkout
 			mashUpId = CHANGE_ORDER_LINE_DETAILS_MASHUP;
 		}
 		

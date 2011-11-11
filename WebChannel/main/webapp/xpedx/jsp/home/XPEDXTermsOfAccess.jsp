@@ -52,7 +52,8 @@ $(document).ready(function() {
 });
 </script>
   
-<title><s:property value="wCContext.storefrontId" /> /  Terms of Access</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> /  Terms of Access</title> --%>
+<title><s:property value="wCContext.storefrontId" /> /  <s:text name="MSG.SWC.MISC.TERMS.GENERIC.TABTITLE"/> </title>
 	<!--WebTrands Start -->
 	<meta name="WT.ti" content="<s:property value="wCContext.storefrontId" /> / Terms of Access" /> 
 	<!--WebTrands End -->
@@ -80,7 +81,7 @@ $(document).ready(function() {
 							</a>
 						</div>
 						<div class="padding-top3 black">
-							<strong class="black">TERMS OF ACCESS</strong>
+							<strong class="black"><s:text name="MSG.SWC.MISC.TERMS.GENERIC.PGTITLE"/></strong>
 						</div>
 
 					</div>

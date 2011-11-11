@@ -36,7 +36,8 @@ public class XPEDXShowLocations extends WCAction {
 	protected Map<String,ArrayList<String>> billToAndShipToCustomersMap = new HashMap<String, ArrayList<String>>();
 	private final static Logger log = Logger.getLogger(XPEDXShowLocations.class);
 	String shownCustomerSuffixType;
-	
+	protected String mSapName;
+
 	public String execute() {
 		if(!(shownCustomerId!=null && shownCustomerId.trim().length()>0)) { // if the shownCustomerID is not passed taking cusotmerId from the context
 			if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext)) { // checking if a ship to is selected
@@ -54,6 +55,11 @@ public class XPEDXShowLocations extends WCAction {
 			Element custElem = shownCustomerDoc.getDocumentElement();
 			Element ExtnElem = SCXmlUtil.getChildElement(custElem, "Extn");
 			shownCustomerSuffixType = SCXmlUtil.getAttribute(ExtnElem, "ExtnSuffixType");
+			//added for 2769
+			Element parentElem=SCXmlUtil.getChildElement(custElem,"ParentCustomer");
+			Element ExtnElement=SCXmlUtil.getChildElement(parentElem,"Extn");
+			mSapName=SCXmlUtil.getAttribute(ExtnElement,"ExtnSAPParentName");
+
 			
 			if(shownCustomerSuffixType.trim().equalsIgnoreCase(XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE)) {
 				//shown customer is Master customer. This is not a scenario at all, but if in case, the shown customer is MSAP, we will only show him SAP
@@ -350,6 +356,14 @@ public class XPEDXShowLocations extends WCAction {
 	public void setBillToAndShipToCustomersMap(
 			Map<String, ArrayList<String>> billToAndShipToCustomersMap) {
 		this.billToAndShipToCustomersMap = billToAndShipToCustomersMap;
+	}
+	
+	public String getmSapName() {
+		return mSapName;
+	}
+
+	public void setmSapName(String mSapName) {
+		this.mSapName = mSapName;
 	}
 
 }

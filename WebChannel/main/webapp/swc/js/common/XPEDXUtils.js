@@ -121,3 +121,42 @@ function replacementReplaceInList(uId) {
 	
 	Ext.Msg.wait('Saving your selection... Please wait.');
 }
+
+function addComma(strOriginal){	 
+	 
+	 var data = "";	 
+	 var i,j;
+	 j=0;
+	 var len = strOriginal.length;
+
+	 for (i=len; i>=0 ; i-- )
+	 { 
+	   data = data + (strOriginal.charAt(i)) ;
+	   var m = j+1;
+	   var l = m%4;
+	   
+		if( l == 0 && i>0) {					
+			data = data + ',' ;
+			j=j+1;
+		}
+		j=j+1;
+	 } 
+	return reverseString(data);
+	  
+ }
+
+function reverseString(my_str){
+
+	var reverseStr = "";
+
+	var i=my_str.length;
+	i=i-1;
+
+	for (var x = i; x >=0; x--)
+	{
+	reverseStr= reverseStr + my_str.charAt(x);
+
+	}
+	return reverseStr;
+
+ }

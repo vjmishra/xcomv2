@@ -86,7 +86,8 @@ $("#various5").fancybox();
 	
 	
 </script> 
- <title><s:property value="wCContext.storefrontId" /> /  View All Articles</title>
+<%--  <title><s:property value="wCContext.storefrontId" /> /  View All Articles</title> --%>
+ <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.ARTL.GENERIC.VIEWALL" /> </title>
 
 </head>
 <!-- END swc:head -->

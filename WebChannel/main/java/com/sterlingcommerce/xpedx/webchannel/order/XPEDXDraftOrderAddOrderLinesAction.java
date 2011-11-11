@@ -47,6 +47,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		orderedProductUOMs = new ArrayList();
 		orderedProductDefaultUOMs = new ArrayList();
 		orderedProductClasses = new ArrayList();
+		isEditNewline=new ArrayList();
 		changeOrderOutputDoc = null;
 		orderHeaderKey = null;
 		quickAddErrorListSessionKey = null;
@@ -58,9 +59,11 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				currency = getWCContext().getEffectiveCurrency();
 			
 			boolean detailsOfProds = getProductInformationForEnteredProducts();
+			isEditNewline.clear();
 			if (detailsOfProds) {
 				XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 				organizeProductInformationResults();
+				
 				if (orderedProductIDs.size() > 0) {
 					
 					Element changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
@@ -95,7 +98,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			// productsJson = new JSONObject();
 			String items = request.getParameter("itemList");
 			String itemTypes = request.getParameter("itemTypeList");
-			StringTokenizer itemsStringToken = new StringTokenizer(items, "*");
+			//Modified for JIRA 2995
+			StringTokenizer itemsStringToken = new StringTokenizer(items, ",");
 			StringTokenizer itemTypeStringToken = new StringTokenizer(
 					itemTypes, "*");
 			StringBuilder sb = new StringBuilder();
@@ -423,6 +427,14 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					orderedLineTypes.add("P");
 					orderedProductDescs.add("");
 				}
+				if("true".equals(isEditOrder))
+				{
+					isEditNewline.add("Y");
+				}
+				else
+				{
+					isEditNewline.add("N");
+				}
 			}
 		}
 
@@ -724,6 +736,22 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		this.enteredPONos = enteredPONos;
 	}
 
+	public String getIsEditOrder() {
+		return isEditOrder;
+	}
+
+	public void setIsEditOrder(String isEditOrder) {
+		this.isEditOrder = isEditOrder;
+	}
+
+	public ArrayList getIsEditNewline() {
+		return isEditNewline;
+	}
+
+	public void setIsEditNewline(ArrayList isEditNewline) {
+		this.isEditNewline = isEditNewline;
+	}
+
 
 
 	public JSONObject productsJson;
@@ -757,6 +785,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	protected ArrayList enteredUOMs;
 	protected String quickAddErrorListSessionKey;
 	protected ArrayList errorList;
+	protected String isEditOrder="false";
+	protected ArrayList isEditNewline;
 	/**
 	 * @return the errorList
 	 */

@@ -53,7 +53,8 @@ $(document).ready(function() {
 });
 </script>
 
-<title><s:property value="wCContext.storefrontId" /> /  Terms of Access</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> /  Terms of Access</title> --%>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.TERMS.GENERIC.TABTITLE"/> </title>
 	
 </head>
     <s:set name='_action' value='[0]' />
@@ -68,7 +69,7 @@ $(document).ready(function() {
 				<div id="mid-col-mil">
 					<div>
 						<div class="padding-top3 black bold">
-							TERMS OF ACCESS
+							<s:text name="MSG.SWC.MISC.TERMS.GENERIC.PGTITLE"/>
 						</div>
 					</div>
 					<table class="full-widths">
@@ -359,6 +360,10 @@ $(document).ready(function() {
 									<ul class="float-right ">
 										<li class="float-right margin-10"><a href="javascript:toaSubmit('Y')"
 											class="grey-ui-btn"><span>Accept</span>
+										</a>
+										</li>
+										<li class="float-right margin-10 checkaddavail"><a href="javascript:toaSubmit('Y')"
+											class="grey-ui-btn"><span>Cancel</span>
 										</a>
 										</li>
 										<%-- <li class="float-right margin-10"><a href="<s:url action="logout" namespace="/home" includeParams='none'/>"

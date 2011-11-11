@@ -35,8 +35,10 @@ function submitForm(){
 <div style="display: none;">
 <s:div id="delete_my_item_list">
 <div class="xpedx-light-box" style="width:250px; height:150px;">
-	<h2>Delete List</h2>
-	<p>Are you sure you would like to delete this list?</p>
+	<!-- <h2>Delete List</h2> -->
+	<h2> <s:text name="MSG.SWC.MIL.DELMIL.GENERIC.DLGTITLE" /> </h2>
+	<!-- <p>Are you sure you would like to delete this list?</p> -->
+	<p><s:text name="MSG.SWC.MIL.DELMIL.GENERIC.CONFIRM" /></p>
 	<br />
 	<ul id="tool-bar" class="tool-bar-bottom">
 		<li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>No</span></a></li>

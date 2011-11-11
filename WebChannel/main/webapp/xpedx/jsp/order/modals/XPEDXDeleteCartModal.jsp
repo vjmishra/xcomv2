@@ -6,8 +6,10 @@
 <a href="#xpedxDeleteCartDialog" id="xpedxDeleteCartDialog1" style="display:none"></a>
 <div style="display: none;">
 <div class="xpedx-light-box" id="xpedxDeleteCartDialog">
-<h2>Delete Cart</h2>
-<p>Are you sure you would like to delete this cart?</p>
+<!-- <h2>Delete Cart</h2> -->
+<h2> <s:text name="MSG.SWC.CART.DELCART.GENERIC.DLGTITLE" /> </h2>
+<!-- <p>Are you sure you would like to delete this cart?</p> -->
+<s:text name="MSG.SWC.CART.DELCART.GENERIC.CONFIRM" />
 <br />
 
 <s:form name="delOrder" id="delOrder" method="post" validate="true">

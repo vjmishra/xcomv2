@@ -694,7 +694,7 @@ ul.checkboxTree li
 		        
 		        <s:set name="modifiedUser" value="modifiedUser" />
                 <s:if test='#modifiedUser != ""'>
-		       		 <div class="clearview textAlignCenter">Last modified by <s:property value="modifiedUser"/> on <s:property value="modifiedDate"/></div>
+			     	<div class="clearview textAlignCenter">Last modified by <s:property value="modifiedUser"/> on <s:property value="#_action.getModifiedDate()"/></div>
 		        </s:if>
 		        <div class="clearview">&nbsp;</div>
                 <div class="clearview">&nbsp;</div>

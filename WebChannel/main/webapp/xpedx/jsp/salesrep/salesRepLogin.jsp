@@ -9,7 +9,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sales Professional Sign In</title>
+<!-- <title>Sales Professional Sign In</title> -->
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.TABTITLE"/> </title>
 
 <!-- styles 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
@@ -86,7 +87,7 @@ function loadWindow(){
 /* Green */
 a.green-ui-btn {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/green-bg-btn-a.png')
+		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
 		no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
@@ -102,11 +103,11 @@ a.green-ui-btn {
 
 a.green-ui-btn span {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/green-bg-btn-span.png')
+		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
 		no-repeat;
 	display: block;
 	line-height: 12px;
-	padding: 5px 0 4px 18px;
+	padding: 5px 0 5px 18px;
 }
 
 a.green-ui-btn:active {
@@ -117,7 +118,7 @@ a.green-ui-btn:active {
 
 a.green-ui-btn:active span {
 	background-position: bottom left;
-	padding: 6px 0 4px 18px;
+	padding: 5px 0 5px 18px;
 	}
 	
 td p{margin-bottom: 0px; }
@@ -181,7 +182,8 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</s:if>
 
 <div>
-<h1>Sign In</h1>
+<!-- <h1>Sign In</h1> -->
+<h1> <s:text name="MSG.SWC.SREP.LGIN.GENERIC.PGTITLE"/></h1>
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td colspan="2">
@@ -230,7 +232,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	
 	</tr>
 	<tr>
-		<td colspan="2"><span color:#999999;">Questions: Contact the support desk at 877 269-1784</span></td>
+		<td colspan="2"><span color:#999999;"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></span></td>
 		
 	</tr>
 </table>

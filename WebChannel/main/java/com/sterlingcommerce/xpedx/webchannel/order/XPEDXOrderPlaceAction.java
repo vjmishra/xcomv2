@@ -1,6 +1,6 @@
 /*
  *ajindal
- *$Id: XPEDXOrderPlaceAction.java,v 1.25 2011/10/19 07:12:59 amakumar-tw Exp $
+ *$Id: XPEDXOrderPlaceAction.java,v 1.26 2011/10/31 20:44:20 rugrani Exp $
  *
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
@@ -151,6 +151,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					// Flush the cart in context if it is the one we've been working with.
 					CommerceContextHelper.flushCartInContextCache(getWCContext());
 					XPEDXWCUtils.removeObectFromCache("OrderHeaderInContext");
+					XPEDXOrderUtils.refreshMiniCart(getWCContext(),null,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 				}
 			} else {//order update flow
 				

@@ -832,6 +832,7 @@ h6 {
 	*/
 }
 
+
 .shoppingfor {
 	padding: 10px 0 0 10px;
 	float: left;
@@ -926,6 +927,7 @@ h6 {
 .searchbox-1 input {
 	padding-top: 1px;
 	width: 253px;
+	height: 17px;
 }
 
 .searchbox-1 .searchbox-form select {
@@ -2683,7 +2685,6 @@ background-image:url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass
 		url("../../images/theme/theme-1/mil/mil-cart-rpt-bg.gif");
 	background-repeat: repeat-x;
 	height: 206px;
-	padding-left: 18px; /* was 2px; */
 	padding-top: 15px;
 }
 
@@ -3049,7 +3050,7 @@ a.orange-ui-btn:hover,a.green-ui-btn:hover,a.grey-ui-btn:hover {
 /* Green */
 a.green-ui-btn {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/green-bg-btn-a.png')
+		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
 		no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
@@ -3063,7 +3064,7 @@ a.green-ui-btn {
 
 a.green-ui-btn span {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/green-bg-btn-span.png')
+		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
 		no-repeat;
 	display: block;
 	line-height: 12px;
@@ -3138,7 +3139,7 @@ a.blue-ui-btn:active span {
 
 .quick-add h2 {
 	font-size: 12px;
-	color: #003399;
+	color: black;
 	font-weight: normal;
 	margin: 0 0 2px 0;
 	padding: 0 0 0 0;
@@ -3372,6 +3373,9 @@ a.blue-ui-btn:active span {
 	font-size: 12px;
 }
 /* Related Items and Special Offers */
+#cross-sell{
+	padding-left: 5px;
+}
 #cross-sell h2 {
 	margin-left: 26px;
 	margin-bottom: 10px;
@@ -3615,7 +3619,7 @@ a.blue-ui-btn:active span {
 }
 
 .mil-edit {
-	clear: right;
+	clear: none;
 	float: left;
 	padding-left: 10px;
 	padding-top: 15px;
@@ -3772,6 +3776,7 @@ input.xpedx_select_sm,xpedx_select_sm {
 .promotxt {
 	color: #000;
 	font-weight: bold;
+	padding-left: 18px;
 }
 
 .pageresults {
@@ -4454,6 +4459,15 @@ td .inner {
 	padding-right: 5px;
 }
 
+.temp_UOM {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #F9F9E5; 
+    border: 1px solid #828400; 
+    color: #828400; 
+    padding-left: 5px;
+	padding-right: 5px;
+}
 .notice {
 	background-color: #F9F9E5;
 	border: 1px solid #E8E3AA;
@@ -5117,7 +5131,7 @@ tr:hover { /*background-color:#fcffd6;*/
 .mil-edit {
 	padding-left: 0;
 	padding-top: 0;
-	width: 950px;
+	width: auto;
 }
 
 /*
@@ -5465,6 +5479,10 @@ ul#prodlist,ul.prodlist {
 
 .pagination span {
 	color: #333;
+	font-size: 12px;
+}
+span.pageresults a {
+    font-size: 11px;
 }
 
 #catalog-landing {
@@ -5607,7 +5625,8 @@ table.catalog-row-five td img {
 
 #home-image-rotation-nav-inner {
 	display: inline-block;
-	width: 615px;
+	/*width: 615px; */
+	width: 94%;
 	text-align: center;
 }
 
@@ -6100,6 +6119,40 @@ table.catalog-row-five td img {
 	background: url(../images/wait.gif) no-repeat;
 	font-size: 0px;
 }
+#preloader, .preloader {
+	width: 160px;
+	height: 11px;
+	background: url(../../images/xpedx_preloader.gif) no-repeat;
+	font-size: 0px;
+}
+/* begin preloader css */
+.x-window-dlg .preloader.ext-mb-icon {
+	width: 160px;
+	margin-top: 25px;
+	margin-left:-5px;
+}
+.x-progress-inner {
+    background-color: #ffffff;
+}
+	
+.x-progress-wrap {
+    border-color: #e6e6e6;
+}
+body.x-body-masked .x-window-plain .x-window-mc {
+  background-color: #e6e6e6;
+  border: 1px solid #7d7d7d;
+}
+.x-window-mr {
+  padding-right: 0px !important;
+  border: 1px solid #7d7d7d !important;
+}
+.x-progress-bar {
+    background-color: #7d7d7d;
+    border-bottom-color: #7d7d7d;
+    border-right-color: #7d7d7d;
+    border-top-color: #7d7d7d;
+}
+/* end preloader css */
 
 #prodCompare .x-panel-header.x-unselectable {
 	padding: 0;
@@ -6334,7 +6387,7 @@ td.stores-cell img {
 	height: 225px;
 }
 .mil-only .mil-wrap-condensed {
-	border-bottom: 1px solid #cccccc;
+/* 	border-bottom: 1px solid #cccccc; */
 	}
 	
 .mil-only.mil-wrap-condensed-container.last {
@@ -6519,10 +6572,23 @@ div.mini-cart-header tr {
 	border-left: 1px solid white !important;
 }
 
-.standard-table thead tr.table-header-bar {
-	border-left: 0px;
-	border-right: 0px;
+.standard-table thead tr .table-header-bar-left, .standard-table tr .table-header-bar-left {
+	border-left: 0px !important;
+	border-top: 0px !important;
 }
+
+.standard-table thead tr .table-header-bar-right, .standard-table tr .table-header-bar-right {
+	border-right: 0px !important;
+	border-top: 0px !important;
+}
+.standard-table thead tr, .standard-table tr.header {
+	border: 0px !important;
+}
+
+.standard-table thead th {
+	font-color:white;
+	font-size: 11px;
+} 
 
 .standard-table thead td:hover {
 	text-decoration: none;
@@ -6540,6 +6606,17 @@ div.mini-cart-header tr {
 	{
 	text-decoration: none;
 }
+.standard-table tr.last td.left-cell {
+	-moz-border-radius: 5px 0px 0px 0px;
+	-webkit-border-radius: 5px 0px 0px 0px;
+	border-radius: 5px 0px 0px 0px;
+}
+.standard-table tr.last td.right-cell {
+	-moz-border-radius: 0px 0px 5px 0px;
+	-webkit-border-radius: 0px 0px 5px 0px;
+	border-radius: 0px 0px 5px 0px;
+}
+	
 
 .standard-table tbody img {
 	margin-left: 9px;
@@ -6975,5 +7052,10 @@ table#mil-carts-list td {
 
 img#youtube { margin-right: 17px; }
 
-
+#homepage-table ul.news-links { list-style: disc; color: #003399; }
+tr.whiteout, tr.whiteout td {
+	background-color:white; border: 0px solid white;
+}
+input#po_combo_input{ height:12px; }
+span#po_combo_arrow { height: 21px; } 
 /* END bbridge updates */

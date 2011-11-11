@@ -273,6 +273,8 @@ div.demo {
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		 if(actionValue == "Reject")
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";		
+	     //submit it
+		 document.forms["approval"].submit();
 		}
 	// Added for JIRA 2770
 	function showShipTos(){		
@@ -442,7 +444,7 @@ div.demo {
             <swc:sortctl sortField="%{orderByAttribute}"
 		                  sortDirection="%{orderDesc}" down="Y" up="N"
 		                  urlSpec="%{#approvalListSortURL}">			
-	    	<table class="search-table">
+	    	<table class="search-table standard-table">
 	    		<thead>
 	    			<tr id="top-bar">
 	    				<th class="table-header-bar-left " style="min-width: 10em;">
@@ -557,7 +559,13 @@ div.demo {
 								<td><s:property value='#priceWithCurrency' /></td>
 					
 								<td>
-									<s:property value='#parentOrder.getAttribute("Status")' />
+									<s:set name="isPendingApproval" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_LIMIT_APPROVAL')}" />
+									<s:if test='#isPendingApproval'>
+										<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
+									</s:if>
+									<s:else>
+										<s:property value="#parentOrder.getAttribute('Status')" />
+									</s:else>
 									<br/>
 									<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Accept','%{ohk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 <%-- 									<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{ohk}'); " cssClass="grey-ui-btn" tabindex="92" theme="simple"><span>Reject</span></s:a> --%>

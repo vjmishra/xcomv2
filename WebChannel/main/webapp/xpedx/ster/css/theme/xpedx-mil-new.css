@@ -241,8 +241,8 @@ a { outline:0px;}
 
 .user-profile label{ clear:both; float:left; padding-bottom:8px;}
 
-.user-profile .select-arrow {list-style-image: url("../../images/theme/theme-1/ui-buttons/green-bg-btn-span.png") no-repeat scroll 0 0 transparent; padding:6px 6px ; }
-.select-arrow ul li{list-style-image: url("../../images/theme/theme-1/ui-buttons/green-bg-btn-span.png") no-repeat scroll 0 0 transparent; padding:6px 6px ; }
+.user-profile .select-arrow {list-style-image: url("../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png") no-repeat scroll 0 0 transparent; padding:6px 6px ; }
+.select-arrow ul li{list-style-image: url("../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png") no-repeat scroll 0 0 transparent; padding:6px 6px ; }
 
 .tabss {padding:0px; margin:0px;}
 .tabss td table tr{padding:0px; margin:0px;}

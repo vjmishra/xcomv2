@@ -76,7 +76,8 @@
 <!-- Page Calls -->
 <!-- END head-calls -->
 <link media="all" type="text/css" rel="stylesheet" href="../css/order/om2.css" />
-<title>Return Request Confirmation</title>
+<!-- <title>Return Request Confirmation</title> -->
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.RETN.GENERIC.TABTITLE"/> </title>
 
 <script type="text/javascript">
 function reasonChange(me)
@@ -157,7 +158,8 @@ function toggleFields (str, el)
             <div class="container"> 
                <!-- breadcrumb -->
                <div id="breadcumbs-list-name">
-               	<p><span class="page-title"> Return Request </span></p>
+               	<%-- <p><span class="page-title"> Return Request </span></p> --%>
+               	<p><span class="page-title"> <s:text name="MSG.SWC.ORDR.RETN.GENERIC.PGTITLE"/> </span></p>
                </div>
                <!-- end breadcrumb -->
 			<s:form validate="true" id="returnItemForm"
@@ -167,13 +169,13 @@ function toggleFields (str, el)
 				<s:hidden name="orderHeaderKey" value='%{#orderHeaderKeyValue}'></s:hidden>
                 
                <!-- begin top section -->
-               <div class="rounded-border top-section">
+               <div class="rounded-border ">
 			<!-- begin content w/border -->
 				<fieldset class="x-corners mil-col-mil-div">
 				<!-- text on border -->
 			    <legend>Order #: <s:if test='#legacyOrderNumber!=""'><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></s:if></legend>
 				    <!-- begin content-holding table -->
-				    <table border="0px solid red" cellpadding="0" cellspacing="0" class="full-width no-border" id="top-section line-spacing-tr" style="width:100%;">
+				    <table border="0px solid red" cellpadding="0" cellspacing="0" class="full-width no-border line-spacing-tr" id="top-section" style="width:100%;">
 					    <tr>
 							<td style="width: 10em;">Web Confirmation: </td>
 							<td style="width: 335px;"><s:property value='%{webConfirmationNumber}' /></td>
@@ -222,8 +224,12 @@ function toggleFields (str, el)
 				status='orderLineStatIndex'>
 				<s:set name='item'
 					value='#xutil.getChildElement(#orderLine, "Item")' />
+				<s:set name='itemdetails'
+					value='#xutil.getChildElement(#orderLine, "ItemDetails")' />
 				<s:set name='xpedxOrderLineExtn' 
-					value='#xutil.getChildElement(#orderLine,"Extn")'/>
+					value='#xutil.getChildElement(#itemdetails,"Extn")'/>
+				<s:set name='certFlag'
+				value="#xutil.getAttribute(#xpedxOrderLineExtn, 'ExtnCert')" />
 				<s:set name='orderLineKey'
 					value='#xutil.getAttribute(#orderLine,"OrderLineKey")' />
 				<s:set name='itemDetails'
@@ -362,13 +368,26 @@ function toggleFields (str, el)
 		    			<!-- rowspan covers this td -->
 				</tr>
 				<tr>
+   			  			<td><s:property value="wCContext.storefrontId" />  Item #: <s:property value='#item.getAttribute("ItemID")' />
+					<s:if test='%{#certFlag=="Y"}'>
+						<!-- <img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" /> --> 
+						 <img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
+					</s:if>
+					  </td>
+		    			<td> &nbsp; </td>
+		    			<td> &nbsp; </td>
+		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<!-- rowspan covers this td -->
+				</tr>
+				<tr>
+		    			<td> Mfg. Item #: <s:property value='#xutil.getAttribute(#primaryInfo,"ManufacturerItem")' />  </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
-		    			<!-- rowspan covers this td -->
+		    			<td> &nbsp; </td>
+		    			<td> &nbsp; </td>
 				</tr>
 				<tr>
 		    			<td> &nbsp; </td>
@@ -382,18 +401,7 @@ function toggleFields (str, el)
 				</tr>
 				<tr>
 		    			<td> &nbsp; </td>
-		    			<!-- rowspan covers this td -->
 		    			<td> &nbsp; </td>
-		    			<td> &nbsp; </td>
-		    			<td> &nbsp; </td>
-		    			<td> &nbsp; </td>
-		    			<td> &nbsp; </td>
-		    			<td> &nbsp; </td>
-				</tr>
-				<tr>
-		    			<td> &nbsp; </td>
-		    			<td> <s:property value="wCContext.storefrontId" />  Item #: <s:property
-					value='#item.getAttribute("ItemID")' />  </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
@@ -403,8 +411,7 @@ function toggleFields (str, el)
 				</tr>
 				<tr>
 		    			<td> &nbsp; </td>
-		    			<td> Mfg. Item #: <s:property
-					value='#xutil.getAttribute(#primaryInfo,"ManufacturerItem")' />  </td>
+		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>
 		    			<td> &nbsp; </td>

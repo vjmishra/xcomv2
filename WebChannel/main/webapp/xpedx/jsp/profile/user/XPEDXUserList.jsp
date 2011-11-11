@@ -302,7 +302,7 @@
 			    <s:param name="customerID" value="%{#_action.getCustomerID()}"/>
 			    <s:param name="buyerOrgCode" value="%{#buyerOrgCode}"/>
 		    </s:url>
-		    <s:set name='custDoc' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCustomerDetails(#custID,#storeFrontID)"/>
+		    <s:set name='custDoc' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCustomerDetails(#custID,#storeFrontID,'xpedx-customer-Minimum-Info')"/>
 		    <s:set name='userCustElement' value='#custDoc.getDocumentElement()'/>
 		    <s:set name='extnSuffixType' value='%{#SCXmlUtils.getXpathAttribute(#userCustElement, "//Extn/@ExtnSuffixType")}' />
 		    <s:if test='%{#extnSuffixType =="MC"}'>

@@ -87,7 +87,9 @@
 				}									
 			}
 </script>
-<title><s:text name="orders.title" /></title>
+<%-- <title><s:text name="orders.title" /></title> --%>
+<title><s:text name="MSG.SWC.ORDR.ORDR.GENERIC.TABTITLE" /></title> 
+
 </head>
 <body class="ext-gecko ext-gecko3">
 
@@ -123,7 +125,8 @@
 <div class="container">
 
 	<!-- breadcrumb -->
-		<div id="searchBreadcrumb" class="page-title"> <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <span class="breadcrumb-inactive"><s:text name="orders.title" /></span> 
+		<div id="searchBreadcrumb" class="page-title"> <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / 
+		<span class="breadcrumb-inactive"><s:text name="orders.title" /></span> 
 		<a href="javascript:window.print()"> <span class="print-ico-xpedx"><img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page " />Print page </span></a> </div>
 
 	<div id="mid-col-mil">

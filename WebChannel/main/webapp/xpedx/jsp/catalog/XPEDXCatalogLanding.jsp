@@ -92,7 +92,7 @@
 </script>
 
 
-<title><s:text name='catalog.title' /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
 </head>
 <!-- END swc:head -->
 <s:set name='_action' value='[0]'/>

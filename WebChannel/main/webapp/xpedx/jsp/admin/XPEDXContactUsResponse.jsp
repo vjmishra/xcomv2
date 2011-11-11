@@ -36,7 +36,7 @@
     <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
     <link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 	
-	<title><s:property value="wCContext.storefrontId" /> / Contact Us</title>
+	<title><s:property value="wCContext.storefrontId" /> - Contact Us</title>
 </head>
 
 <body class="ext-gecko ext-gecko3">

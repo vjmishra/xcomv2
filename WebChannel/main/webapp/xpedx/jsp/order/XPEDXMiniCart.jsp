@@ -16,7 +16,8 @@
 	
 
 <div class="xpedx-light-box" id="mini-cart">
-<h2>Mini Cart<span style="font-size:10px;font-family:Arial;"> (Last five items)</span></h2>
+<%-- <h2>Mini Cart<span style="font-size:10px;font-family:Arial;"> (Last five items)</span></h2> --%>
+<h2><s:text name='MSG.SWC.CART.MINICART.GENERIC.DLGTITLE' /> <span style="font-size:10px;font-family:Arial;"> <s:text name='MSG.SWC.CART.MINICART.INFO.LAST5ITEMS' /> </span></h2>
 <div class="clearall">&nbsp;</div>
 
 <s:set name='sdoc' value='outputDocument'/>
@@ -150,7 +151,7 @@
 		            <s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		            <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#orderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 		            	<s:if test="%{#theMyPrice=='$0.00'}">
-								<span class="red bold"> Call for Price </span>  
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
                     	 </s:if>
                          <s:else>
 		              	<%-- <s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #orderLineExtn.getAttribute("ExtnLineOrderedTotal"))'/> --%>
@@ -186,14 +187,10 @@
     </s:if>
     <s:else>
     <div class="textAlignCenter">
-    <table width="100%" border="0px solid red">
+    <table width="100%" class="no-border-tbl">
         <tr>
             <td class="textAlignCenter" colspan="4"><s:text name="YourCartIsEmpty"/></td>
         </tr>
-         <tr class="no-border">
-			  	<td class="text-right bold" colspan="4"></td>
-			  	<td class="text-right"></td>
-			  </tr>
      </table>
     </div>
     </s:else>

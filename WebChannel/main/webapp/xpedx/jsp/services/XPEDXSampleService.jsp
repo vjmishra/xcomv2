@@ -52,6 +52,8 @@
 <script type="text/javascript"	src="<s:url value='/swc/js/sbc/picker/itemattrtreeloader.js'/>"></script>
 <script type="text/javascript"	src="<s:url value='/swc/js/sbc/picker/attrtreepanel.js'/>"></script>
 <script type="text/javascript"	src="<s:url value='/swc/js/sbc/picker/attributeutils.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+
 
 <script type="text/javascript">
 
@@ -869,7 +871,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                 <td class="padding8 border-left-gray"> 
                                   <input name="rDescription1" type="text" class="x-input width-300px" id="rDescription1" maxlength="255" />
                                </td>
-                                <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this);"/>
+                                <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" onchange="javascript:this.value=addComma(this.value);"/>
                                </td>
                                 <td width="10%" class="padding8 border-left-gray  border-right-gray"><ul id="cart-actions">
                                   <li><a href="javascript:void(0)" class="grey-ui-btn" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');"><span>Add</span></a></li> 

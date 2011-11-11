@@ -97,7 +97,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/om2.css" />
 
 
-<title>xpedx /  Reporting Error Page</title>
+<!-- <title>xpedx /  Reporting Error Page</title> -->
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.REPTERR.GENERIC.TABTITLE" /> </title>
 
 <script type="text/javascript" src="/swc/swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
@@ -138,7 +139,8 @@
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
                
-					<h5 align="center"><b><font color="red">Unable to communicate to reports server. Please try later.</font></b></h5>	
+					<!-- <h5 align="center"><b><font color="red">Unable to communicate to reports server. Please try later.</font></b></h5> -->	
+					<h5 align="center"><b><font color="red"><s:text name="MSG.SWC.MISC.REPTERR.ERROR.NOREPSRVR" /></font></b></h5>	
 				
             <ul id="cart-actions" class="float-right">
             <li class="float-left"><s:a href="%{homeLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>

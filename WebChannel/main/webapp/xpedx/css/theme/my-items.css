@@ -36,6 +36,15 @@ input label {
 	float:left;
 	height:auto;
 }
+#replacementItemBody .mil-wrap-condensed-container {
+	width:100%;
+	float:left;
+	height:auto;
+	border-bottom:1px solid #ccc;
+}
+#replacementItemBody .mil-wrap-condensed-container.last {
+	border-bottom:0px;
+}
 .mil-wrap-condensed {
 	height:270px;
 	border:solid 1px #ccc;
@@ -43,6 +52,9 @@ input label {
 	border-radius:6px 6px 0px 0px;
 	-moz-border-radius:6px 6px 0px 0px;
 	-webkit-border-radius:6px 6px 0px 0px;
+}
+#replacementItemBody .mil-wrap-condensed {
+	border:solid 0px #ccc;
 }
 .mil-wrap-condensed-bot {
 	height:270px;
@@ -103,6 +115,10 @@ table.mil-my-price-availability td {
 	float:left;
 	height:59px;
 	overflow:hidden;
+}
+
+#replacementItemBody .mil-wrap-condensed-desc {
+	width:200px;
 }
 .mil-desc-attribute-list,
 .mil-desc-attribute-list ul,
@@ -206,11 +222,12 @@ input:focus, textarea:focus {
 }
 .jcarousel-skin-xpedx .jcarousel-item-horizontal {
 	height: 160px;
-	width: 275px !important;
+	padding-left: 20px;
+	width: 255px !important;
 	vertical-align: middle;
 }
 .jcarousel-skin-xpedx .jcarousel-clip-horizontal {
-	height: 107px;
+	height: 152px;
 	margin-top: 10px;
 	padding-left: 27px;
 	width: 841px!important;
@@ -246,6 +263,9 @@ input:focus, textarea:focus {
     /* font-size: 0.9em; */
     height: auto;
     width: 412px;
+}
+#replacementItemBody .mil-desc-wrap {
+    width: 206px;
 }
 .mil-edit-field {
 	float: left;

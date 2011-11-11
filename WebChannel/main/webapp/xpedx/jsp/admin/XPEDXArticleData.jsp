@@ -41,8 +41,9 @@
 	padding:0 3px;
 }
 </style>
-<title>News Article</title>
+
 <%-- <title><s:text name="tools.newsmaintenance.title" /></title> --%>
+<title><s:property value="wCContext.storefrontId" /> -  <s:text name='MSG.SWC.NEWSARTL.LISTALL.GENERIC.TABTITLE' /> </title>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -325,7 +326,8 @@
 				  
 <%-- 			      <div id="breadcumbs-list-name" class="page-title"><s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a> /  <span class="breadcrumb-inactive"><s:text name="tools.newsmaintenance.title" /></span> <a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="/swc/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
 					<div>
-						<span class="page-title">News Articles</span>
+						<%-- <span class="page-title">News Articles</span> --%>
+						<span class="page-title"> <s:text name="MSG.SWC.NEWSARTL.LISTALL.GENERIC.PGTITLE" /> </span>
 					</div>
 			      
 <!-- 			      <ul id="tool-bar" class="tool-bar-top"> -->
@@ -349,7 +351,7 @@
 	                        	<td width="48%" align="left" class="no-border sortable c2 "><span class="white txt-small">Article Title</span></td>
 	        					<td width="20%" align="left" class="table-header-bar-right no-border sortable c2 text-center "><span class="white txt-small">Last Modified By</span></td>
 	         			</tr>
-	                           
+	                    <s:set name="modifiedUserFormattedNames" value='#util.createModifyUserNameMap(articleLines)'/>
 						<s:iterator value='articleLines' id='articleLine' status="articleLineCount">
 							<s:set name="StartDate" value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleLine,"StartDate"),wCContext)}' />
 							<s:set name="EndDate" value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleLine,"EndDate"),wCContext)}' />
@@ -357,10 +359,6 @@
 							<s:set name="Article" value='#xutil.getAttribute(#articleLine,"Article")' />
 							<s:set name="Forced" value='#xutil.getAttribute(#articleLine,"ForcedMessage")' />
 							<s:set name="ModifiedUserId" value='#xutil.getAttribute(#articleLine,"Modifyuserid")' />
-							<s:set name="ModifiedUserList" value='#util.getUserInfo(#ModifiedUserId)' />
-							<s:set name="ModifiedUser" value='#xutil.getChildElement(#ModifiedUserList,"CustomerContact")' />
-							<s:set name="FirstName" value='#xutil.getAttribute(#ModifiedUser,"FirstName")' />
-							<s:set name="LastName" value='#xutil.getAttribute(#ModifiedUser,"LastName")' />
 							<!-- added for 2484 jira -->
 							<s:set name="ArticleCustomerID" value='#xutil.getAttribute(#articleLine,"CustomerID")' />
 							<s:hidden name="articleCustomerId" id="articleCustomerId" value="%{#ArticleCustomerID}" /> 
@@ -381,7 +379,7 @@
 	                              <td class="c4" >
 	                              <a href="<s:url namespace='/profile/user' action='xpedxEditArticle'><s:param name="articleKey" value='#xutil.getAttribute(#articleLine,"ArticleKey")' /></s:url>">
 	                              <s:property value='%{#ArticleName}'/></a></td>
-	                              <td class="c5 text-center" ><s:property value='%{#LastName}'/>, <s:property value='%{#FirstName}'/></td>
+	                              <td class="c5 text-center" ><s:property value='%{#modifiedUserFormattedNames.get(#ModifiedUserId)}'/></td>
 	                        </tr>
 								<s:hidden id="hdn_%{#articleLineCount.count}" value="%{#ArticleName}"/>
 	                              
@@ -422,8 +420,13 @@
 		<!-- added for jira 2484 confirmation box -->  
 		<div style="display: none;">
 	<div id="deleteArticleDiv">
-		<h2>Delete Article</h2><br /><hr /><br></br>
-		<p>Are you sure you would like to delete this article?</p><br></br> <br></br>
+		<!-- <h2>Delete Article</h2> -->
+		<h2> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.PGTITLE' /> </h2>
+		
+		<br /><hr /><br></br>
+		
+		<!-- <p>Are you sure you would like to delete this article?</p><br></br> <br></br> -->
+		<p> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.DELETECONFIRM' /> </p><br></br> <br></br>
 			<ul id="tool-bar" class="tool-bar-bottom">
 			<li>
 				<a class="grey-ui-btn" href="javascript:$.fancybox.close();">

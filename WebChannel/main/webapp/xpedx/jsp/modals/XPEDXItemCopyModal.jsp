@@ -33,7 +33,8 @@ function restrictMaxLength(Object, maxLen){
 
 <div id="dlgShareListHL" class="xpedx-light-box"
 	style="width: 750px !important; height:450px">
-<h2 id="smilTitleHL">Copy My Items List</h2>
+<!-- <h2 id="smilTitleHL">Copy My Items List</h2> -->
+<h2 id="smilTitleHL"><s:text name="MSG.SWC.MIL.COPYMIL.GENERIC.DLGTITLE" /></h2>
 
 <!-- CODE_START MIL - PN --> 
 

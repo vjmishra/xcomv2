@@ -17,6 +17,7 @@
 <s:set name="jsonUOMDesc" value="#uomutil.getUOMDescription(#jsonUOM)" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+<s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
@@ -88,7 +89,7 @@
 										<td class="bold">My Price (USD):</td>
 										<td>
 										 	<s:if test="%{#formattedUnitpriceForUom==#priceWithCurrencyTemp1}">
-														<span class="red bold"> Call for Price </span>  
+														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
 										    </s:if>
 										    <s:else>
 										 				<s:property value='%{#formattedUnitpriceForUom}' /> / <s:property value="#disUOM" />
@@ -120,7 +121,7 @@
 								<td class="bold">Extended Price (USD):</td>
 								<td >
 								<s:if test="%{#formattedExtpriceForUom==#priceWithCurrencyTemp}">
-										<span class="gray"> To be determined </span>  
+										<span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 								</s:if>
 								<s:else>
 									     <s:property value='%{#formattedExtpriceForUom}' />

@@ -136,7 +136,8 @@
 <s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />
 
 
-<title>User Profile</title>
+<!-- <title>User Profile</title> -->
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRF.GENERIC.TABTITLE"/> </title>
 
 </head>
 <!-- END swc:head -->
@@ -149,8 +150,10 @@
 <div class="container"><!-- breadcrumb -->
 
 <div id="searchBreadcrumb" class="page-title"><a
-	href="<s:url action="home" namespace="/home" includeParams='none'/>">Admin</a>
-/ <span class="breadcrumb-inactive">User Profile</span> <a href="javascript:window.print()"><span
+	<%-- href="<s:url action="home" namespace="/home" includeParams='none'/>">Admin</a> --%>
+	href="<s:url action="home" namespace="/home" includeParams='none'/>"> <s:text name="MSG.SWC.ADMN.PRF.GENERIC.PGTITLE"/> </a>
+<%-- - <span class="breadcrumb-inactive">User Profile</span> <a href="javascript:window.print()"><span --%>
+ - <span class="breadcrumb-inactive"> <s:text name="MSG.SWC.ADMN.PRFU.GENERIC.USERPROFILE"/> </span> <a href="javascript:window.print()"><span 
 	class="print-ico-xpedx"><img
 	src="<s:url value='/xpedx/images/common/print-icon.gif'/>" width="16"
 	height="15" alt="Print Page" />Print Page</span></a></div>
@@ -163,10 +166,12 @@
 <table>
 	<tr>
 		<td>
-			<s:a href="%{userProfile}">User Profile</s:a>
+			<%-- <s:a href="%{custProfile}">User Profile</s:a> --%>
+			<s:a href="%{userProfile}"> <s:text name="MSG.SWC.ADMN.PRF.GENERIC.USER.PGTITLE"/> </s:a>
 		</td>
 		<td>
-			<s:a href="%{custProfile}">Customer Profile</s:a>
+			<%-- <s:a href="%{custProfile}">Customer Profile</s:a> --%>
+			<s:a href="%{custProfile}"><s:text name="MSG.SWC.ADMN.PRF.GENERIC.CUST.PGTITLE"/></s:a>
 		</td>
 		<td>
 			<s:a href="%{shipTo}">Ship To</s:a>

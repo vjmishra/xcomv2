@@ -44,7 +44,8 @@
 }
 </style>
 
-<title> News Maintenance</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> -  News Maintenance</title> --%>
+<title><s:property value="wCContext.storefrontId" /> -  <s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.TABTITLE' /> </title>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -202,7 +203,8 @@ margin-top:2px;
 			       <div id="requestform">
 			        <div>
           				<%-- <a class="underlines" href="javascript:history.go(-1)">Back</a>&nbsp;/&nbsp;<strong><s:property value='#xutil.getAttribute(#articleElement,"ArticleName")'/></strong> --%>
-      					<span class="page-title">News Maintenance</span> 
+      					<%-- <span class="page-title">News Maintenance</span> --%> 
+      					<span class="page-title">  <s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.PGTITLE' /> </span> 
  				  </div> 
  				  <br/>
 		          <s:form name="newArticleForm" action="xpedxViewArticle" namespace="/profile/user" method="POST">
@@ -223,7 +225,8 @@ margin-top:2px;
 		            </tr> 
 		            <tr>
 		              <td  colspan="4"  style="padding-bottom: 0;">
- 				  		<span class="dkcharcole"> Note: It is not possible to attach or paste a local file (like an image) directly to a website. Please ensure files can be accessed from the Internet.</span>
+ 				  		<%-- <span class="dkcharcole"> Note: It is not possible to attach or paste a local file (like an image) directly to a website. Please ensure files can be accessed from the Internet.</span> --%>
+ 				  		<span class="dkcharcole"> <s:text name='MSG.SWC.NEWSARTL.NEWSMAINTENANCE.INFO.ATTACHEDFILEACESS' /> </span>
 		           	</td>
 		           </tr>
 		             <tr>

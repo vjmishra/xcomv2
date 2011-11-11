@@ -16,8 +16,10 @@
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="storefrontId" value="wCContext.storefrontId" />
+	
+	<s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/>
 	<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' />
-
+	<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
 	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
@@ -198,7 +200,7 @@
 
 	
 	<!-- end carousel scripts js   -->
-	<title><s:text name='Catalog_Page_Title' /></title>
+	<title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
 
 	
 </head>
@@ -255,7 +257,8 @@
 <s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 <s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 
-<s:set name="itemUomHashMap" value ='%{#_action.getItemUomHashMap()}'/>
+<s:set name="itemUomHashMap" value ='%{#_action.getItemUomHashMap()}'/> 
+<s:set name="plLineMap" value ='%{#_action.getPLLineMap()}'/>
 <s:url id='addToCartURLId' namespace="/xpedx/myItems" action='addMyItemToCart' />
 <s:hidden id='addItemToCartURL' value='%{#addToCartURLId}' />
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
@@ -1076,6 +1079,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 	<s:set name='wcContext' value="#_action.getWCContext()" />
 	<s:set name='currency' value='#itemList.getAttribute("Currency")' />
 	<s:set name='showCurrencySymbol' value='true' />
+	<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
                     // Object include the following fields
                     /*
                     {
@@ -1127,7 +1131,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 							
 							<s:set name='itemBranchBean' value='itemToItemBranchBeanMap.get(#itemID)'/>
 							/*itemBranchBean is of Type com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemBranchInfoBean*/
-							
+							<s:set name='orderMultiple' value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getOrderMultipleForItem(#itemID)'/>
 							<s:set name='b2cItemExtn' value='XMLUtils.getChildElement(#item, "Extn")'/>
 							<s:set name='b2cSize' value='#b2cItemExtn.getAttribute("ExtnSize")'/>
 							<s:set name='b2cColor' value='#b2cItemExtn.getAttribute("ExtnColor")'/>
@@ -1165,16 +1169,22 @@ function createNewFormElement(inputForm, elementName, elementValue){
 							name: "<s:property value='#utilMIL.formatEscapeCharactersHtml(#shortDesc)' escape='false'/>",
 							itemUOMList: "<s:property value='#unitOfMeasure'/>",
 							listprice: ""
-								<s:iterator id='tierPrices'  value='XMLUtils.getElements(#price, "/QuantityRangePriceList/QuantityRangePrice")' status='tierStatus'>
-								<s:set name='tierQty' value='#tierPrices.getAttribute("BreakQtyHigh")'/>
+								<s:iterator id='tierPrices'  value='%{#plLineMap.get(#itemID)}' status='tierStatus'>
+								<s:set name='tierQty' value='#tierPrices.getAttribute("FromQuantity")'/>
+								<s:if test = '#tierQty == null || #tierQty == ""'>
+									<s:set name='tierQty' value='1'/>
+								</s:if>
 								<s:set name='hasTier' value='true'/>
-								<s:set name='tierPrice' value='#tierPrices.getAttribute("UnitPrice")'/>
+								<s:set name='tierPrice' value='#tierPrices.getAttribute("ListPrice")'/>
+								<s:set name='extnTierPrice' value='XMLUtils.getChildElement(#tierPrices, "Extn")'/>
+								<s:set name='tierPriceUOM' value='#extnTierPrice.getAttribute("ExtnTierUom")'/>
+								<s:set name='PriceUOM' value='#extnTierPrice.getAttribute("ExtnPricingUom")'/>
 								<s:set name='formattedTierUnitprice' value='#xpedxutil.formatPriceWithCurrencySymbol(#wcContext,#currency,#tierPrice)'/>
 								<s:if test='#formattedTierUnitprice == ""|| #formattedTierUnitprice == null'>
 								  + "<br/>" 
 								</s:if>
 								<s:else>
-									 + "<s:property value='#tierQty'/>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedUOMCode(#unitOfMeasure)'/>-<s:property value='#formattedTierUnitprice'/>/<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedUOMCode(#unitOfMeasure)'/> <br/> "
+									 + "<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#tierQty)'/>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedUOMCode(#tierPriceUOM)'/>-<s:property value='#formattedTierUnitprice'/>/<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedUOMCode(#PriceUOM)'/> <br/> "
 								</s:else>
 								</s:iterator>
 								<s:if test='#hasTier'>
@@ -1198,8 +1208,14 @@ function createNewFormElement(inputForm, elementName, elementValue){
 		                  tabidx: "<s:property value='#tabidx'/>",
 				            supersedelink: "",
 				            <s:if test='!#guestUser'>
-                           	availablelink:"<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"margin-left:20px; font-weight: normal; \" onclick=\"displayAvailability('<s:property value='#itemID'/>');\">My Price &amp; Availability</a></div>" + "",
+                           	availablelink:"<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability('<s:property value='#itemID'/>');\">My Price &amp; Availability</a></div>" + "",
+                           	uomLink:
+                           		<s:if test='%{#orderMultiple > "1" && #orderMultiple !=null }'>	
+                              // 	"<div class=\"temp_UOM\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\">Must be ordered in units of <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+/*  */
+                               	"<div class=\"temp_UOM\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+
+                               	</s:if>
                            </s:if>
+                           "",
                            action:
                                 "<p class='addtocart'><a href='' onclick=\"javascript:addItemToCart('<s:property value='#itemID'/>'); return false;\">" +
                                     "Add to Cart" +
@@ -1222,7 +1238,8 @@ function createNewFormElement(inputForm, elementName, elementValue){
 				            	<s:if test='!#isReadOnly && !#guestUser'>
 				            "<div class=\"AddToCartAndAvailabililty\"/>"+
 							"<div class=\"qtyAndUom\"><label class=\"input-label\">Qty :</label><input type=\"text\" name='Qty_<s:property value='#itemID'/>' id='Qty_<s:property value='#itemID'/>' size=\"10\" tabindex=\"100\" onclick=\"javascript:setFocus(this);\" onkeyup=\"javascript:isValidQuantity(this);javascript:qtyInputCheck(this, <s:property value='#itemID'/>);\" onmouseover=\"javascript:qtyInputCheck(this, <s:property value='#itemID'/>);\"></input><input type=\"hidden\" id='Qty_Check_Flag_<s:property value='#itemID'/>' name='Qty_Check_Flag_<s:property value='#itemID'/>' value='false'/></div>"+
-							"<div class='error' id='errorMsgForQty_<s:property value='#itemID'/>' style='display : none'/>Qty Should be greater than 0.</div>"+	
+							/* "<div class='error' id='errorMsgForQty_<s:property value='#itemID'/>' style='display : none'/>Qty Should be greater than 01.</div>"+ */	
+							"<div class='error' id='errorMsgForQty_<s:property value='#itemID'/>' style='display : none'/>{qtyGreaterThanZeroMsg}</div>"+	
 				            "<div class=\"uoms\">"+
 				           	<s:if test='#itemUOMList != null'>
 					           	"<select name='itemUomList' id='itemUomList_<s:property value="#itemID"/>'>"+
@@ -1233,7 +1250,12 @@ function createNewFormElement(inputForm, elementName, elementValue){
 					           	</s:iterator>"</select>"+
 					        </s:if>
 				           	"</div>"+
+				           	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		            		"<div class=\"addtocart\"><a tabindex=\"102\" href=\"#\" onclick=\"javascript:addItemToCart('<s:property value='#itemID'/>'); return false;\">Add To Cart</a></div>"+
+		            		</s:if>
+		            		<s:else>
+		            		"<div class=\"addtocart\"><a tabindex=\"102\" href=\"#\" onclick=\"javascript:addItemToCart('<s:property value='#itemID'/>'); return false;\">Add To Order</a></div>"+
+		            		</s:else>
 		            		"<div class=\"availablelink\"><a tabindex=\"103\" href=\"javascript:displayAvailability('<s:property value='#itemID'/>')\">Check Availability</a></div>"+
 		            		"</div>"+
 		            		<s:set name='tabidx' value='%{#tabidx + 1}'/>
@@ -1293,6 +1315,9 @@ function createNewFormElement(inputForm, elementName, elementValue){
 									"<span><img width=\"20\" height=\"20\" src='<s:url value='/xpedx/images/catalog/green-e-logo_small.png'/>'</span>" +
 									 </s:if>
 								"",
+							qtyGreaterThanZeroMsg: ""+
+							"<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />"+
+							"",
 							partno:
 								
 									<s:if test='%{#customerUseSKU == "2"}'>
@@ -1372,11 +1397,24 @@ function createNewFormElement(inputForm, elementName, elementValue){
 															'<td class="item_number">{partno}</td>',
 															'<td class="add_to_cart">',
 																<s:if test='!#guestUser'>
-																'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+																		'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																	</s:if>
+																	<s:else>
+																		'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
+																	</s:else>		
 																'<div class="availablelink">{availablelink}</div>',
 																</s:if>
 															'</td>',
 														'</tr>',
+														'<tr>',
+														'<td colspan="3">',
+														<s:if test='!#guestUser'>
+														'<div class="uomLink">{uomLink}</div>',
+														</s:if>
+														'</td>',
+														'</tr>',
+											
 														//<!-- Only if mill/mfg message to be displayed -->
 														<s:if test='!#guestUser'>
 														'<tr>',
@@ -1386,8 +1424,8 @@ function createNewFormElement(inputForm, elementName, elementValue){
 														//<!-- End mill/mfg -->
 														'<tr class="line_error">',
 															'<td colspan="3">',
-															
-															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 0.</div>',
+															/* '<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 02.</div>', */
+															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 															
 															'</td>',
 														'</tr>',
@@ -1466,7 +1504,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 								'<tpl for=".">',
  										'<dl>',
 										'<tpl for="items">',
-											'<dd id="{itemkey}" class="itemdiv">',
+											'<dd id="{itemkey}" class="itemdiv" style="height:auto;">',
 												'<div class="imgs">',
 												    '<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">',
 													'<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
@@ -1511,14 +1549,29 @@ function createNewFormElement(inputForm, elementName, elementValue){
 															'<td class="mill-mfg">{itemtypedesc}</td>',
 															'<td class="add_to_cart">',
 																<s:if test='!#guestUser'>
-																'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+																		'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																	</s:if>
+																	<s:else>
+																		'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
+																	</s:else>
 																</s:if>
 															'</td>',
 														'</tr>',
 														'<tr>',
-															'<td class="line_error" colspan="2">',
+															'<td colspan="2">',
 															<s:if test='!#guestUser'>
-															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 0.</div>',
+															'<div class="uomLink">{uomLink}</div>',
+															</s:if>
+															'</td>',
+														'</tr>',
+														'<tr>',
+														'<tr>',
+														'</tr>',
+															'<td class="line_error" colspan="2" style="width:50px;">',
+															<s:if test='!#guestUser'>
+															/* '<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 03.</div>', */
+															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/> {qtyGreaterThanZeroMsg} </div>',
 															</s:if>
 															'</td>',
 														'</tr>',
@@ -1566,12 +1619,22 @@ function createNewFormElement(inputForm, elementName, elementValue){
 															'</div>',
 															'<div class="clearall">&nbsp;</div>',
 															<s:if test='!#guestUser'>
-															'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >
+																	'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+																</s:if>
+																<s:else>
+																	'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
+																 </s:else>	
+															</s:if>
+															<s:if test='!#guestUser'>
+															'<div class="uomLink">{uomLink}</div>',
+															'<br/>',
 															</s:if>
 														'</div>',
 														'<div class="line_error" >',
 															<s:if test='!#guestUser'>
-															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 0.</div>',
+															/* '<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>Qty Should be greater than 04.</div>', */
+															'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 															</s:if>
 														'</div>',
 													'</div>',
@@ -1819,6 +1882,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 						//shortenItemDescriptions();
 
 						//var url = '/swc/catalog/setSelectedView.action?sfId=xpedx&amp;scFlag=Y';
+						 initializeView(); updateView(); shortenItemDescriptions(); 
 						 var url = "<s:property value='#selectedViewURL'/>";
 					     url = ReplaceAll(url,"&amp;",'&');
 						Ext.Ajax.request({
@@ -1888,7 +1952,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
                         
                     }
 
-                    Ext.onReady(function () { initializeView(); updateView(); shortenItemDescriptions(); });
+                    Ext.onReady(function () {});
 
                     function shortenItemDescriptions()
                     {
@@ -1989,7 +2053,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
                     function addCompare(itemKey) {
                     		if (compCount == 4)
                     		{
-                    			alert('You may not compare more than four items at a time.');
+                    			alert(' uld');
                     			return false;
                     		}
 
@@ -2608,9 +2672,9 @@ function validationforDragToCompare()
 	<div class="normal-view" id="items">
 	<div id="items-control">
 	<div class="drag-to-compare" id="items-combox">
-	<h4><a href="javascript:validationforDragToCompare();"
-		tabindex="41">Drag Items Here and Click to Compare: <span
-		id="comnum"><s:text name='No_Items' /></span></a></h4>
+	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
+	<s:text name="MSG.SWC.COMP.DRAGTOCOMPARE.GENERIC.PGTITLE" />
+	:<span id="comnum"> <s:text name='No_Items' /></span></a></h4>
 	</div>
 	<div id="items-cb"><img src="../xpedx/images/global/s.gif"
 		class="normal-view" title="Full View"><img
@@ -2642,7 +2706,7 @@ function validationforDragToCompare()
 	<!-- END wctheme.form-close.ftl -->
 	
 	<div class="clearall">&nbsp;</div>
-	<div class="pagination">
+	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
 					<span class="checkboxtxt">Sort By:&nbsp;</span> 
 					<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldLower" name="sortFieldLower"
@@ -2652,8 +2716,8 @@ function validationforDragToCompare()
 							<option selected value="relevancy">Relevancy</option>
 							<option value="Item.ItemID--A">Item # (Low to High)</option>
 							<option value="Item.ItemID--D">Item # (High to Low)</option>
-							<option value="Item.SortableShortDescription--A">Description (Low to High)</option>
-							<option value="Item.SortableShortDescription--D">Description (High to Low)</option>
+							<option value="Item.SortableShortDescription--A">Description (A to Z)</option>
+							<option value="Item.SortableShortDescription--D">Description (Z to A)</option>
 							
 						<%-- </s:if> --%>
 						<%-- <s:else> --%>

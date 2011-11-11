@@ -131,7 +131,7 @@ function setTotalPrice(val){
 		{
 			//setCustomerPONumber();validateForm_OrderSummaryForm;submitOrder();
 			validateFormSubmit();
-			return true;
+			return false; //changed by bb6
 		}
 	}
 	
@@ -167,7 +167,8 @@ function setTotalPrice(val){
     return returnval;
 }
 </script>
-<title><s:text name="draftorder.ordersummary.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRSUMMARY.GENERIC.TABTITLE" /></title>
+
 
 
 <!-- BEGIN head-calls.php -->
@@ -280,6 +281,7 @@ function setTotalPrice(val){
 				paging: { pageSize: 10 }
 });
 $('#po_combo_input').attr("maxlength","22");
+$('#po_combo_input').attr("name","po_combo_input");
 $('#po_combo_input').attr("value","<s:property value='custmerPONumber'/>");
 	});
 	</s:if>
@@ -350,6 +352,8 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber'/>");
 	
 <s:set name='contactId'
 	value='%{#_action.getWCContext().getCustomerContactId()}' />
+	
+<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 <%--
 I don't see UserInfoExtn variable used in this page . So commenting this. If we want to use customer contact extn fields , Please use 
 from session . We have customer Contact Object in session .
@@ -523,7 +527,17 @@ from session . We have customer Contact Object in session .
         			</s:else>
 				</s:if>
 				<s:else>
+					<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 						My Cart: <s:property value='#orderDetails.getAttribute("OrderName")' />
+					</s:if>
+					<s:else>
+						<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
+        					<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#extnElem)'/> </b>
+        				</s:if>
+        				<s:else>
+        					<b>Web Confirmation: <s:property value='#extnElem.getAttribute("ExtnWebConfNum")'/> </b>
+        				</s:else>
+					 </s:else>
 				</s:else>
 			</legend>
 	            <!--[if IE]>
@@ -589,14 +603,25 @@ from session . We have customer Contact Object in session .
 					<s:hidden name='DeliveryHoldTime'
 						value="%{#extnElem.getAttribute('ExtnDeliveryHoldTime')}" />
 				</td></tr>	   
-				<s:if
-					test='%{(#_action.getShipCompleteOption()!= #shipComplY && #_action.getShipCompleteOption()!= #shipComplC && #_action.getShipCompleteOption()!= #shipComplN) || #_action.getShipCompleteOption()=="" || #_action.getShipCompleteOption()==null}'>
+				
+				<s:if test='%{#_action.getShipCompleteOption()== #shipComplY}'>
+					<tr><td><s:checkbox cssClass="checkbox" name='ShipComplete' id="ShipComplete" onclick="javascript:setShipComplete()" 
+								disabled='%{false}' fieldValue="true" value="%{false}" /> 
+								<s:text name="Ship Order Complete (will not ship until all items are available)" />
+								<s:hidden name="draftShipComplete" id="draftShipComplete" value="%{#shipComplY}" />
+							</td></tr>	
+				</s:if>
+				<s:elseif test='%{#_action.getShipCompleteOption()== #shipComplC}'>
 					<tr><td><s:checkbox name='ShipComplete'  id="ShipComplete" cssClass="checkbox"
-							disabled='%{true}' fieldValue="true" value="%{false}" /> <span style="color:#cccccc;"><s:text
-							name="Only available quantity will be shipped" /></span>
-							<s:hidden name="draftShipComplete" id="draftShipComplete" value="%{#shipComplN}" />
-					</td></tr>	
-				</s:if> 
+								disabled='%{true}' fieldValue="true" value="%{true}" /> 
+								<s:text	name="Ship Order Complete (will not ship until all items are available)" />
+								<s:hidden name="draftShipComplete" id="draftShipComplete" value="%{#shipComplC}" />
+							</td></tr>
+				</s:elseif>
+				<s:elseif test='%{#_action.getShipCompleteOption()== #shipComplN}'>
+					<tr><td>
+							</td></tr>
+				</s:elseif>
 				<s:else>
 						<s:if test='%{#_action.getShipComplete()== #shipComplC}'>
 						<tr><td><s:checkbox name='ShipComplete'  id="ShipComplete" cssClass="checkbox"
@@ -612,6 +637,14 @@ from session . We have customer Contact Object in session .
 								<s:hidden name="draftShipComplete" id="draftShipComplete" value="%{#shipComplY}" />
 							</td></tr>
 						</s:elseif>
+						<s:elseif
+							test='%{(#_action.getShipCompleteOption()!= #shipComplY && #_action.getShipCompleteOption()!= #shipComplC && #_action.getShipCompleteOption()!= #shipComplN) || #_action.getShipCompleteOption()=="" || #_action.getShipCompleteOption()==null}'>
+							<tr><td><s:checkbox name='ShipComplete'  id="ShipComplete" cssClass="checkbox"
+									disabled='%{true}' fieldValue="true" value="%{false}" /> <span style="color:#cccccc;"><s:text
+									name="Only available quantity will be shipped" /></span>
+									<s:hidden name="draftShipComplete" id="draftShipComplete" value="%{#shipComplN}" />
+							</td></tr>	
+						</s:elseif> 
 				</s:else>
 				<tr><td><s:checkbox name='rushOrdrFlag' cssClass="checkbox"
 						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
@@ -940,7 +973,7 @@ from session . We have customer Contact Object in session .
 											</td>
 											<td width="157">
 											<s:set name='orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
-											<s:set name='orderdqty' value='%{#strUtil.replace(#orderqty, ".00", "")}' />	
+											<s:set name='orderdqty' value='%{#_action.replaceString(#orderqty, ".00", "")}' />	
 												&nbsp;<s:property value='%{#orderdqty}' />&nbsp;
 												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
 											</td>
@@ -961,7 +994,7 @@ from session . We have customer Contact Object in session .
 													<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 													<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 									 			  		<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
-									 			  			<span class="red bold"> Call for Price</span>  
+									 			  			<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
 												 		</s:if>
 												  		<s:else>
 															<s:property	value='#bracketPriceForUOM' />
@@ -994,7 +1027,7 @@ from session . We have customer Contact Object in session .
 															--%>
 														  <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 											 			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-																<span class="red bold">To be determined </span>
+																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 														  </s:if>
 														  <s:else>
 																<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
@@ -1294,7 +1327,7 @@ from session . We have customer Contact Object in session .
 								<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnOrderSubTotal"))' />
 								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="red bold"> To be determined </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
 											<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnOrderSubTotal"))' />
@@ -1318,7 +1351,7 @@ from session . We have customer Contact Object in session .
 								<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnLegTotOrderAdjustments"))' />
 								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="red bold"> To be determined </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
 												<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnLegTotOrderAdjustments"))' />
@@ -1339,7 +1372,7 @@ from session . We have customer Contact Object in session .
 								<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="red bold"> To be determined </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
 												<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
@@ -1354,14 +1387,14 @@ from session . We have customer Contact Object in session .
 					<tr>
 						<th>Tax:</th>
 						<td class="red bold">
-									To be determined
+									<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
 						</td>
 					</tr>
 					<tr>
 						<th>Shipping &amp; Handling:</th>
 
 						<td class="red bold">
-									To be determined
+									<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
 						</td>
 					</tr>
 					<tr class="order-total">
@@ -1377,7 +1410,7 @@ from session . We have customer Contact Object in session .
 								<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnTotalOrderValue"))' />
 								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="red bold"> To be determined </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
 												<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#extnElem.getAttribute("ExtnTotalOrderValue"))' />
@@ -1396,10 +1429,13 @@ from session . We have customer Contact Object in session .
 		
 		<!--bottom button bar -->
 		<div class="bottom-btn-bar">
+		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 			<a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Cart</span></a>
+		</s:if>
+		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a></s:else>	
 			<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
-				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
-							
+				<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>		
 			</s:if>
 			<s:else>
 <%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
@@ -1418,7 +1454,9 @@ from session . We have customer Contact Object in session .
 <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
 <div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
-    Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> 
+     <!--   Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/>  -->
+    Last modified by <s:property value="#modifiedBy"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/> 
+    
 </div>
 
 </s:form>

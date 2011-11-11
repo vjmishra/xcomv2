@@ -42,7 +42,7 @@ td input.x-input { margin: 0px; }
 .width-60 { width:60%;}
 .auto-width { width:auto; }
 .return-comment-div { margin-top:-44px; width:50%;}
-.return-comment-div div.label { position: relative; right: -58px;}
+.return-comment-div div.label { position: relative; right: 183px; top:21px;}
 .return-comment-div textarea { float:right; height:36px;}
 #breadcumbs-list-name {margin-bottom:15px;}
 .right-section table.full-width input { width: 64px; }

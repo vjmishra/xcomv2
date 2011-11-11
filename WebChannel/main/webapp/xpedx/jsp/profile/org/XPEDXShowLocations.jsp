@@ -11,6 +11,7 @@
 <s:set name="sapAndBillToCustomersMap" value="sapAndBillToCustomersMap"/>
 <s:set name="billToAndShipToCustomersMap" value="billToAndShipToCustomersMap"/>
 <s:set name="shownCustomerId" value="shownCustomerId"/>
+<s:set name="sapParentName" value="%{#_action.getmSapName()}" />
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min.js"></script>
@@ -83,7 +84,7 @@ div#fancybox-content
 			<s:iterator id="sapCustomer" value="#sapCustomers" status="sapCustomerStatus">
 				<s:set name="sapCustomerId" value="#sapCustomer" />
 				<s:set name="sapCustomerDisplay" value="#displayChildCustomersMap.get(#sapCustomer)" />
-				
+				<ul><li><s:property value='#sapParentName'/></li></ul>
 				<ul id="collapseAllButtonsTree">
 					<li>
 					<s:if test="%{#shownCustomerId == #sapCustomerId}">
@@ -93,7 +94,7 @@ div#fancybox-content
 						<input type="radio" id="Tree" name="customerId" value="<s:property value='#sapCustomerId' />" />
 					</s:else>
 					<s:property value="%{#displayChildCustomersMap.get(<s:property value='#sapCustomerId' />)}"/>
-					<s:property value="#sapCustomerDisplay"/>
+					<label>Account: </label><s:property value="#sapCustomerDisplay"/>
 				<s:set name="billToCustomers" value="sapAndBillToCustomersMap.get(#sapCustomerId)" />
 				<s:iterator id="billToCusotmer" value="#billToCustomers">
 					<s:set name="billToCusotmerId" value="#billToCusotmer" />

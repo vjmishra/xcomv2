@@ -238,7 +238,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			welcomeUserLastName = xpedxCustomerContactInfoBean.getLastName();
 			welcomeLocaleId = xpedxCustomerContactInfoBean.getLocalecode();
 			String viewInvoiceFlag = xpedxCustomerContactInfoBean.getExtnViewInvoices();
-			if("T".equalsIgnoreCase(viewInvoiceFlag)) {
+			if("Y".equalsIgnoreCase(viewInvoiceFlag)) {
 				setViewInvoices(true);
 			}
 			if(xpedxCustomerContactInfoBean.isEstimator()) {

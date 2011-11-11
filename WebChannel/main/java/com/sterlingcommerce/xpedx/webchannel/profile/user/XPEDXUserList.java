@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,12 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.profile.ProfileUtility;
 import com.sterlingcommerce.webchannel.profile.user.UserList;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import org.apache.log4j.Logger;
@@ -56,16 +59,74 @@ public class XPEDXUserList extends UserList{
 	        if(YFCCommon.isVoid(inputCustomerID)){
 	            inputCustomerID = wcContext.getCustomerId();
 	        }
-	        if(!(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID, wcContext))){
+	        if(!(isCustInCtxCustHierarchy(inputCustomerID, wcContext))){
 	            return ERROR;
 	        }
-	        setIsChildCustomer(ProfileUtility.setCustomerAccess(getCustomerID(), wcContext));
-	        getBuyerOrgCodeFromCustID();
+	        // I don't see this is getting used in jsp or in this action if any one feels it is required please customize setCustomerAccess method to call only one api
+	       // setIsChildCustomer(ProfileUtility.setCustomerAccess(getCustomerID(), wcContext));
+	        //getBuyerOrgCodeFromCustID();
 	        if(YFCCommon.isVoid(getBuyerOrgCode())){
 	            log.error("No buyer organization information associated with customer : " + getCustomerID());
 	            return ERROR;
 	        }
 	        return searchUser();
+	 }
+	 
+	 
+	 private boolean isCustInCtxCustHierarchy(String inputCustomerID,IWCContext wcContext)
+	 {
+		 boolean retVal=false;
+		 try
+		 {
+			 String wCCustomerId = wcContext.getCustomerId();
+			 if(inputCustomerID.equals(wCCustomerId))
+		            return true;
+			 List<String> customerIdList=new ArrayList<String>();
+			 customerIdList.add(wCCustomerId);
+			 customerIdList.add(inputCustomerID);
+			 Element customerList=XPEDXWCUtils.getCustomerListDetalis(customerIdList ,wcContext);
+			 UtilBean utilBean=new UtilBean();
+			 List<Element> customerContactList =utilBean.getElements(customerList, "//CustomerList/Customer");
+			 if(customerContactList !=null && customerContactList.size() >1)
+			 {
+				 Element loggedinCustomerDetails=customerContactList.get(0);
+				 Element inputCustomerDetails=customerContactList.get(1);
+				 String inputCustRootCustomerKey = inputCustomerDetails.getAttribute("RootCustomerKey");//SCXmlUtils.getAttribute(inputCustomerDetails, "RootCustomerKey");
+				 String inputCustomerId=inputCustomerDetails.getAttribute("CustomerID");//SCXmlUtils.getAttribute(inputCustomerDetails, "CustomerID");
+				 Element buyerOrganizationElem=null;
+				 if(inputCustomerID.equals(inputCustomerId))
+				 {
+					 buyerOrganizationElem=(Element)inputCustomerDetails.getElementsByTagName("BuyerOrganization").item(0);
+					 
+				 }
+				 else
+				 {
+					 buyerOrganizationElem=(Element)loggedinCustomerDetails.getElementsByTagName("BuyerOrganization").item(0);
+				 }
+				 if(buyerOrganizationElem !=null)					 
+				 {
+					 String buyerOrgCode =buyerOrganizationElem.getAttribute("OrganizationCode");
+			           setBuyerOrgCode(buyerOrgCode);
+			           if(!(YFCCommon.isVoid(buyerOrgCode))){
+			               setBuyerOrgName(buyerOrganizationElem.getAttribute("OrganizationName"));
+			           }
+				 }
+				 String logInCustRootCustomerKey = SCXmlUtils.getAttribute(loggedinCustomerDetails, "RootCustomerKey");
+				 if(inputCustRootCustomerKey != null && logInCustRootCustomerKey != null && inputCustRootCustomerKey.equals(logInCustRootCustomerKey))
+					 retVal= true;
+				 else
+					 retVal= false;
+			 }
+			 else
+			 {
+				 retVal= false;
+			 }
+		 }
+		 catch(Exception e)
+		 {
+			 log.info("error while validating user"+e.getMessage());
+		 }
+		 return retVal;
 	 }
 	 
 	 /**

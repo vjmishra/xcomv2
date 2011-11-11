@@ -65,7 +65,11 @@ public class XPEDXGetCustomerAccountsAction extends WCMashupAction {
 							.getOwnerDocument();
 				}
 			}
-			ArrayList<String> childCustomerList = new ArrayList<String>();
+			if(outDoc!=null)
+			{
+				setAccountsMap((HashMap<String, String>) XPEDXWCUtils.custFullAddresses(outDoc));
+			}
+				/*ArrayList<String> childCustomerList = new ArrayList<String>();
 			if(outDoc!=null)
 			{
 				NodeList customerListElem = outDoc.getElementsByTagName("Customer");
@@ -83,7 +87,7 @@ public class XPEDXGetCustomerAccountsAction extends WCMashupAction {
 			if(childCustomerList!=null && childCustomerList.size()>0)
 			{
 				setAccountsMap((HashMap<String, String>) XPEDXWCUtils.custFullAddresses(childCustomerList, wcContext.getStorefrontId()));
-			}
+			}*/
 		} catch (XMLExceptionWrapper e) {
 			e.printStackTrace();
 			return ERROR;

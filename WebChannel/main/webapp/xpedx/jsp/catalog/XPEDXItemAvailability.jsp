@@ -144,7 +144,7 @@
 				<TR>
 					<td class="my-ext-price">Extended Price:</td>
 					<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp}">
-						<td><span class="gray"> To be determined </span></td>
+						<td><span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span></td>
 					</s:if>
 					<s:else>
 						<td class="my-number"><s:property value="#bracketPriceForUOM" /></td>
@@ -161,7 +161,7 @@
 					<td class="my-price"><s:if test="#disUOMStatus.first">My Price:</s:if></td>
 					
 					<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
-						<td><span class="red bold">Call for price</span></td>
+						<td><span class="red bold"><s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span></td>
 					</s:if>
 					<s:else>
 					<td class="my-number"><s:property value="#bracketPriceForUOM" /></td>

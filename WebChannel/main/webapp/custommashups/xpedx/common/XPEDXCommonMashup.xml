@@ -578,6 +578,27 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedx-customer-Minimum-Info' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Organization  mashup">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCustomerDetails">
+             <Input>
+				<Customer CustomerID="" OrganizationCode="" InheritFromParents="Y"/>
+			 </Input>
+			 <Template>
+			    <Customer CallingOrganizationCode="" CustomerKey="" CustomerType="" CustomerID="" ModifyFlag="" 
+		              OrganizationCode="" OwnerOrganizationCode=""  Status="" AggregateStatus="" RelationshipType="" CustomerLevel="" Vertical="">
+  					   <Extn ExtnCustLogo = "" ExtnCustomerClass="" ExtnShipFromBranch="" ExtnIndustry="" ExtnCustLineAccNoFlag="" ExtnCustLinePONoFlag=""
+									ExtnCustLineSeqNoFlag="" ExtnCustLineField1Flag=""
+									ExtnCustLineField2Flag="" ExtnCustLineField3Flag=""
+									ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
+									ExtnCustLineField2Label="" ExtnCustLineField3Label="" ExtnMinOrderAmount="" ExtnMinChargeAmount=""
+									ExtnCurrencyCode="" ExtnUseCustSKU="" ExtnEnvironmentCode="" ExtnCompanyCode="" ExtnLegacyCustNumber="" ExtnCustomerStoreNumber="" ExtnShipComplete="" ExtnOrigEnvironmentCode="" ExtnCustOrderBranch="" ExtnCustomerName=""
+									ExtnCustomerDivision="" >
+					  </Extn>
+				</Customer>
+			 </Template>
+		</API>
+	</mashup>
 	
 </mashups>	
 

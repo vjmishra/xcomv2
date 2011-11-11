@@ -23,8 +23,11 @@ import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDropDownAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.util.YFCDate;
 
 
 public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
@@ -67,6 +70,13 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 		try {
 			outputDoc = (Element) prepareAndInvokeMashup("xpedx_getCustMaintenance");
 		//System.out.println("getCustomerDetails Output" + SCXmlUtils.getString(outputDoc));
+			
+			//added for 2769
+			String lastModifiedDateStr = outputDoc.getAttribute("Modifyts");
+			if(lastModifiedDateStr!=null){
+				setLastModifiedDateString(lastModifiedDateStr);
+				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
+			}
 		} catch (Exception ex) {
 			log.error(ex);
 		}
@@ -90,20 +100,10 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	}
 
 	private void setLastModifiedUser() {
-		UtilBean utilBean = new UtilBean();
-		Document customerdocument = XPEDXWCUtils.getCustomerContactDetails();
-		NodeList customerContact = customerdocument.getElementsByTagName("CustomerContact");
-		for(int i=0; i< customerContact.getLength() ; ){
-			setContactFirstName(SCXmlUtil.getAttribute((Element)customerContact.item(i), "FirstName"));
-			setContactLastName(SCXmlUtil.getAttribute((Element)customerContact.item(i), "LastName"));
-			
-			lastModifiedDate = SCXmlUtil.getAttribute((Element)customerContact.item(i), "Modifyts");
-			setLastModifiedDate(utilBean.formatDate(lastModifiedDate, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
-			
-			userCreatedDate = SCXmlUtil.getAttribute((Element)customerContact.item(i), "Createts");
-			setUserCreatedDate(utilBean.formatDate(userCreatedDate, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
-			
-			break;
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+		if(xpedxCustomerContactInfoBean!=null) {
+			setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
+			setContactLastName(xpedxCustomerContactInfoBean.getLastName());
 		}
 	}
 	
@@ -384,11 +384,13 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	protected boolean CustLineField1Flag;
 	protected boolean CustLineField2Flag;
 	protected boolean CustLineField3Flag;
-	protected String lastModifiedDate = "";
+	//protected String lastModifiedDate = "";
 	protected String userCreatedDate = "";
 	protected String contactFirstName = "";
 	protected String contactLastName = "";
 	
+	protected YFCDate lastModifiedDate = new YFCDate();
+	protected String lastModifiedDateString = "";
 
 	protected String PrimarySalesRepID="";
 	protected String PrimarySalesRep="";
@@ -399,16 +401,6 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public List empNames;
 	
 	protected Map<String, String> countriesMap;
-
-	public String getLastModifiedDate() {
-		return lastModifiedDate;
-	}
-
-
-	public void setLastModifiedDate(String lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
-
 
 	public String getUserCreatedDate() {
 		return userCreatedDate;
@@ -438,6 +430,29 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public void setContactLastName(String contactLastName) {
 		this.contactLastName = contactLastName;
 	}
+//added for 2769 jira for getting the lastmodified date and formatting
+	public YFCDate getLastModifiedDate() {
+		return lastModifiedDate;
+	}
 
+	public void setLastModifiedDate(YFCDate lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+	
+	public String getLastModifiedDateString() {
+		return lastModifiedDateString;
+	}
 
+	public void setLastModifiedDateString(String lastModifiedDateString) {
+		this.lastModifiedDateString = lastModifiedDateString;
+	}
+	
+	public String getLastModifiedDateToDisplay() {
+		UtilBean utilBean = new UtilBean();
+		String dateToDisplay = "";
+		if(lastModifiedDateString != null){
+		 dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "MM/dd/yyyy");		
+		}
+		return dateToDisplay;
+	}
 }

@@ -13,7 +13,7 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><s:property   value="wCContext.storefrontId" /> Catalog - Compare Items </title>
+<title><s:property   value="wCContext.storefrontId" /> - Catalog - Compare Items </title>
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
 
 <swc:breadcrumb rootURL='#myUrl' group='catalog' displayGroup='compare' />
@@ -289,7 +289,7 @@ function addToCart(url, productID, UOM, quantity, headerKey,returnURL,flowID,cur
 }
 var myMask;
 function openAddToCart(val){
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Loading Data..."});
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Processing..."});
 	myMask.show();
 	var url = "<s:property value='#ajaxAvailabilityJsonURL'/>";
     url = ReplaceAll(url,"&amp;",'&');
@@ -806,7 +806,7 @@ var prodData = {
 			<s:set name='isModelItem' value='#xutil.getAttribute(#primeInfo,"IsModelItem")'/>
 			<s:set name='isConfigurable' value='#xutil.getAttribute(#primeInfo,"IsConfigurable")'/>
 			<s:set name='isPreConfigured' value='#xutil.getAttribute(#primeInfo,"IsPreConfigured")'/>
-			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><s:property value="#shortDesc"/><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/></a>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
+			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><s:property value="#shortDesc"/><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/><s:property value="#shortDesc"/></a>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
     <s:if test='!#isReadOnly'>            
 			 
 			<s:if test='{!#guestUser}'>

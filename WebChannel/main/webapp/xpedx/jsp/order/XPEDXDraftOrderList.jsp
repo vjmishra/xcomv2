@@ -268,7 +268,8 @@ span.underlink:hover {
         <s:action name="xpedxHeader" executeResult="true"
 		namespace="/common" />
             <div class="container">
-            	 <div id="breadcumbs-list-name" class="page-title">My Carts </div> 
+            	<!--  <div id="breadcumbs-list-name" class="page-title">My Carts </div> --> 
+            	 <div id="breadcumbs-list-name" class="page-title"> <s:text name='MSG.SWC.CART.CARTLIST.GENERIC.PGTITLE' /> </div> 
                 <div id="mid-col-mil">
                  <div id="tool-bar-bottom" style="margin-top: 10px; padding-bottom: 5px;">
                  <!-- Webtrends Tag starts -->
@@ -278,10 +279,13 @@ span.underlink:hover {
      			</script>
      			
      			     <span class="float-left">
-     			     	<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" src="/swc/xpedx/images/theme/theme-1/20x20_blue_cart_on.png"  > is your active cart. <!-- Click on 
-     			     	<img height="20" width="20" style="display:inline" title="Cart" alt="Cart Icon" src="/swc/xpedx/images/theme/theme-1/20x20_white_cart_off.jpg" > to change your active cart. -->
+     			     	<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
+     			     		src="/swc/xpedx/images/theme/theme-1/20x20_blue_cart_on.png"  > 
+     			     		<!-- is your active cart. --> 
+     			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
      			     </span> 
-                 	<s:a cssClass="orange-ui-btn modal float-right-imp" id="various1"   href="#createNewCartDlg" onclick="javascript: writeMetaTag(tag,content,2);" title="Create New Cart"><span>Create New Cart</span></s:a>
+		          	<s:a cssClass="orange-ui-btn modal float-right-imp" id="various1"   href="#createNewCartDlg" 
+                 	onclick="javascript: writeMetaTag(tag,content,2);" title="Create New Cart"><span>Create New Cart</span></s:a>
                  </div> 
                 <br />
                 <div class="clear">&nbsp;</div>
@@ -295,7 +299,7 @@ span.underlink:hover {
                     <s:action name="xpedxBuildSimpleTable" executeResult="true" namespace="/common" >
                         <s:param name="id" value="'mil-carts-list'"/>
                         <s:param name="summary" value="'Draft Order List Table'"/>
-                        <s:param name="cssClass" value="''" />
+                        <s:param name="cssClass" value="'standard-table'" />
                         <s:param name="iterable" value="#iter"/>
                        
                         <s:param name="columnSpecs[0].label" value="'Name'"/>

@@ -536,7 +536,6 @@ public class XPEDXExtendedOrderDetailAction extends
 	 */
 	public boolean isEditableOrder() {
 		boolean result = true;
-
 		if (xpedxPaymentMethodHelper.isPresentOtherPaymentGroupMethod()) {
 			return false;
 		}
@@ -615,6 +614,88 @@ public class XPEDXExtendedOrderDetailAction extends
 		return result;
 	}
 
+	
+	/**
+	 * This function is to used for check whether logged in user is owner of
+	 * pending order change.
+	 * METHOD ADDED FOR CANCEL BUTTON DISPLAY, JIRA 3042. Specifically for determining display on a customer order.
+	 * @return boolean true if pending user is not logged in user.
+	 */
+	public boolean isEditableCustomerOrder() {
+		boolean result = true;
+		boolean resultForCustomer = false;
+     System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER");
+		if (xpedxPaymentMethodHelper.isPresentOtherPaymentGroupMethod()) {
+			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 1");
+			return false;
+		}
+		if (!isSupportedFunction(false)) {
+			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 2");
+			return false;
+		}
+
+		if (SCXmlUtils.getInstance().getAttribute(elementOrder,
+				"MaxOrderStatus").equals(OrderConstants.ORDER_CANCEL_STATUS)) {
+			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 3");
+			return false;
+		}
+
+		if (isOrderOnDuplicateOrderHold()) {
+			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 4");
+			return false;
+		}
+		//Condition to check if order is locked then user will not be able to see edit order and cancel order button
+		ArrayList<Element> orderExtnNode=SCXmlUtil.getElements(elementOrder,"Extn");//orderElement.getElementsByTagName("Extn").item(0);
+		Element orderExtn=null;
+		if(orderExtnNode != null && orderExtnNode.size()>0)
+		{
+			orderExtn=orderExtnNode.get(0);
+			String extnOrderLockFlag=orderExtn.getAttribute("ExtnOrderLockFlag");
+			String OrderType=elementOrder.getAttribute("OrderType");
+			if("Y".equals(extnOrderLockFlag) && !"Customer".equals(OrderType))
+			{
+				System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 5");
+				return false;
+			}
+		}
+		
+		boolean containPendingChanges = SCXmlUtils.getInstance()
+				.getBooleanAttribute(elementOrder,
+						OrderConstants.CONTAIN_PENDING_CHANGES);
+		if (containPendingChanges) {
+			String otherUserId = SCXmlUtils.getInstance().getAttribute(
+					elementOrder, OrderConstants.PENDING_CHANGES_USERID);
+			if (null != otherUserId
+					&& otherUserId.equals(getWCContext().getLoggedInUserId())) {
+				result = true;
+			} else {
+				result = false;
+			}
+		}
+		//for jira 2248 - for cancel button in system hold status
+		String  maxOrderStatus=SCXmlUtils.getInstance().getAttribute(elementOrder,
+        "MaxOrderStatus");
+		System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, MAX ORDER STATUS IS: " + maxOrderStatus);
+        if (result && (maxOrderStatus.equals("1100.0100"))) // Placed
+        {
+        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, MAX ORDER STATUS IS: " + maxOrderStatus);
+        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING TRUE!");
+        		return true;
+        }
+        else                 
+        {
+        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE!");
+        	return false;
+        }
+        //end of jira 2378
+		
+		//System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING RESULT! " + result);
+		//	 return result;
+	}	
+	
+	
+	
+	
 	public boolean isCancel() {
 		if (!isUserHaveResourceAccessPermission(RESOURCE_ID_FOR_ORDER_CANCEL)) {
 			return false;
@@ -933,6 +1014,4 @@ public class XPEDXExtendedOrderDetailAction extends
 	public void setParentOHK(String parentOHK) {
 		this.parentOHK = parentOHK;
 	}
-
-
 }

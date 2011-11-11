@@ -17,9 +17,9 @@ function viewAccountDetails()
 .margin-10{ margin:0px 10px;}
 </style>
 
-<div style="display: none;">
+<div style="display: none;" >
 	
-	<div id="dlgSelectAccountBox" class="xpedx-light-box" >
+	<div id="dlgSelectAccountBox" class="xpedx-light-box select-account" >
 	<h2 style="margin-bottom:10px; color:#000;"><span>Select Account</span></h2>
 	
 	<div class="form-service-light"> 

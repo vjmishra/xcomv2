@@ -81,7 +81,7 @@
 
 
 
-<title><s:text name="orderlist.title"/></title>
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRLIST.GENERIC.TABTITLE"/></title>
 
 <script type="text/javascript" src="../swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
@@ -214,13 +214,16 @@
 		 searchFieldValueDivId.style.display = "none";
 	 }
 	 
-	function hideSearchField(){
+	function hideSearchField(emptySearchFieldValue){
 	
 		 var searchFieldInitinalValue = "- Select Search Criteria -";
 		 var searchTermFeild = document.getElementById("searchFieldName" ); 
 		 var searchFieldValueDivId = document.getElementById("searchFieldValueDivId" ); 
-		 var searchFieldValueFld = document.getElementById("searchFieldValue" ); 
-		 searchFieldValueFld.value='';
+		 var searchFieldValueFld = document.getElementById("searchFieldValue" );
+		 if(emptySearchFieldValue == null || emptySearchFieldValue == undefined)
+			 emptySearchFieldValue = true
+		 if(emptySearchFieldValue)
+		 	searchFieldValueFld.value='';
 		 
 		 var myindex  = searchTermFeild.selectedIndex
 		 var SelValue = searchTermFeild.options[myindex].value
@@ -417,7 +420,7 @@
 <s:set name="openOrder" value="%{'true'}"/>
 </head>
 
-<body class="ext-gecko ext-gecko3" onLoad="setDateFields();">
+<body class="ext-gecko ext-gecko3" onLoad="setDateFields();hideSearchField(false);">
 <div id="main-container">
 <div id="main">
 
@@ -452,7 +455,8 @@
             <div class="container orders-page" > 
                 <!-- breadcrumb -->
                 <div class="OM-breadcrumb">
-                	<p><span class="page-title"> Order Management</span></p>
+                	<%-- <p><span class="page-title"> Order Management</span></p> --%>
+                	 <p><span class="page-title"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /> </span></p>
                 	<div id="divid" align="center" style="color:red;">&nbsp;</div>  
                 </div>
                 <!-- end breadcrumb -->
@@ -467,11 +471,11 @@
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
 			<s:if test="%{#ViewReportsFlag}">
-			    <legend class="search-legend">Search Orders: Last 6 Months <a href="#" id="" ><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" 
+			    <legend class="search-legend"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.ORDRLAST6MONTHS' /> <a href="#" id="" ><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" 
 			    	 title="View orders which have been placed in the last 6 months. To view older orders, select 'View Order History Reports' below." /></a></legend>
 			 </s:if>
 			 <s:else>
-			    <legend class="search-legend">Search Orders: Last 6 Months <a href="#" id="" ><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" 
+			    <legend class="search-legend"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.ORDRLAST6MONTHS' /> <a href="#" id="" ><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" 
 			    	title="View orders which have been placed in the last 6 months. " /></a></legend>
 			 </s:else>
                         <!-- begin content-holding table -->
@@ -482,7 +486,7 @@
 													
 												 	<div id ="searchFieldValueDivId"  style="display:none;" > 
 														<s:textfield theme="simple" cssStyle="width:209px;" cssClass="search-by-input-field"  name="searchFieldValue" value="%{#parameters.searchFieldValue}"  id="searchFieldValue" />				 
-													 </div>
+													</div>
 													<!-- <input type="text" onclick="javascript:searchTerm_onclick()" class="search-by-input-field x-input" id="searchFieldValue" value="Search Orders " name="searchFieldValue"> -->
 													</td>
 													<td colspan="2"></td>
@@ -554,7 +558,8 @@
 					</s:url>
 					
 					<s:if test="%{#ViewReportsFlag}">
-						<s:a href='%{reportsLink}' cssClass="link"><span class="underlink">View Order History Reports</span>
+						<%-- <s:a href='%{reportsLink}' cssClass="link"><span class="underlink">View Order History Reports</span> --%>
+ 						<s:a href='%{reportsLink}' cssClass="link"><span class="underlink"> <s:text name='MSG.SWC.ORDR.ORDRREPORTS.GENERIC.VIEWORDRHISTREPORTS' /> </span> 
 						<img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" title="List of reports providing order history data for the previous 2 years." /></s:a>
 					</s:if>	
 						
@@ -585,7 +590,7 @@
 						  sortDirection="%{orderDesc}" down="Y" up="N"
 						  urlSpec="%{#orderListSortURL}">
 			
-	    	<table class="search-table">
+	    	<table class="search-table standard-table">
 	    		<thead>
 	    			<tr id="top-bar">
 	    				<th class="table-header-bar-left " style="min-width: 10em;">
@@ -688,10 +693,10 @@
 							<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
 							<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
 								<s:if test='#isPendingApproval'>
-									<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
+									<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 								</s:if>
 								<s:if test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-									<s:property value="#parentOrder.getAttribute('Status')" /> (CSR Reviewing)
+									<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
 							</s:if>
 							<s:else>
@@ -799,7 +804,7 @@
 							
 							<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 							<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-								<span class="gray"> To be determined </span>  
+								<span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                     		</s:if>
                             <s:else>
 								(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
@@ -813,7 +818,7 @@
 								<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
 									<s:if test='#isPendingApproval'>
 										<%-- Fix for JIRA 2238 --%>
-										<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
+										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 										<%-- Fix for JIRA 2243 <s:text name="Pending Approval"></s:text> --%>
 										<br/>
 										<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
@@ -830,7 +835,7 @@
 									<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
 									
 										<%-- Fix for JIRA 2238, Needs Attention changed fix for Jira 2435 --%>
-											<s:property value="#parentOrder.getAttribute('Status')" /> (CSR Reviewing)
+											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 										<%-- Fix for JIRA 2243 <s:text name="Needs Attention"></s:text> --%>
 									</s:elseif>
 								</s:if> 
@@ -931,7 +936,8 @@
 	
 		<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
-			<h2>Approval / Rejection Comments</h2>			
+			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
+			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
 				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">					
 					<s:textarea name="ReasonText" cols="69" rows="5" theme="simple"></s:textarea>
 					<s:hidden name="OrderHeaderKey" value="" />
@@ -954,7 +960,7 @@
 		if(flag == "true")
 		{
 			var divid=document.getElementById(divId);
-			divid.innerHTML="Currently No Open Orders are Available.";
+			divid.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
 		}
 	}
 	setErrorMessage('<s:property value="#openOrder"/>',"divid");

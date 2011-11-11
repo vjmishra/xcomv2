@@ -20,7 +20,8 @@
 
 <div class="xpedx-light-box" id="dlgImportForm">
 	<s:if test='%{XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size<200}'>
-		<h2>Import My Items List</h2>
+		<%-- <h2>Import My Items List</h2> --%>
+		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
 		
 		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
@@ -46,7 +47,8 @@
 			Required Field
 			</div> -->
 						<center><div id="errorMsgForBrowsePath" class="error error-msg-btm" style="display: none;" >
-					Please enter file path
+					<!-- Please enter file path -->
+					<s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.FILEPATH" />
 				</div></center>
 			<p>When the file is imported, it adds the items to the My Items List in the exact order they were entered in the file. When an item is added to an existing My Items List, it simply adds the item to the bottom of the current list. </p>
         	
@@ -83,7 +85,8 @@
 		<h3>Warning</h3>
 		<br>
 		<s:form >
-			Maximum number of element in a list can only be 200.
+			<!-- Maximum number of element in a list can only be 200. -->
+			<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200" />
 			<br>
 			Please try again with removing some items or create a new list.
 			<br>

@@ -3,8 +3,10 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfs.core.YFSSystem;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -59,6 +62,18 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		//END: sort the orderlines based on legacy line number
 		
 		userKey = super.getUserKey();
+		String encUserKey = (String)getWCContext().getSCUIContext().getSession().getAttribute(ENC_USER_KEY);
+		if(encUserKey != null && encUserKey.trim().length() > 0) {
+			userKey = encUserKey;
+		} else {
+			try {
+				userKey = XPEDXWCUtils.encrypt(userKey);
+			} catch (Exception e) {
+				LOG.error("Error in encrypting user key.", e);
+			}
+			userKey = URLEncoder.encode(userKey);
+			getWCContext().getSCUIContext().getSession().setAttribute(ENC_USER_KEY, userKey);
+		}
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
@@ -68,6 +83,9 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		catch (Exception ex) {
 			LOG.debug(ex.getMessage());
 		}
+		
+		invoiceURL = YFSSystem.getProperty("xpedx.invoicing.url"); //to take it from properties files.
+		
 		return returnString;
 	}
 	
@@ -278,6 +296,26 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			// was available(Y), the msg was being displayed on order details page. 
 			if (/*"Y".equals(shipCmpl) || */"C".equals(shipCmpl))
 				shipComplete = true;
+			String extnInvoiceNo = extnElem.getAttribute("ExtnInvoiceNo");
+			if (extnInvoiceNo != null && extnInvoiceNo.trim().length() > 0) {
+				encInvoiceNo = XPEDXWCUtils.encrypt(extnInvoiceNo);
+				encInvoiceNo = URLEncoder.encode(encInvoiceNo);
+			}
+			String extnInvoicedDate = extnElem.getAttribute("ExtnInvoicedDate");
+			if (extnInvoicedDate != null && extnInvoicedDate.trim().length() > 0) {
+				encInvoiceDate = XPEDXWCUtils.encrypt(extnInvoicedDate);
+				encInvoiceDate = URLEncoder.encode(encInvoiceDate);
+			}
+			String shipToId = orderElem.getAttribute("ShipToID");
+			String[] custDetails = shipToId.split("-");
+			if(custDetails!=null && custDetails.length>3)
+			{
+				custSuffix = custDetails[2];
+				if (custSuffix != null && custSuffix.trim().length() > 0) {
+					custSuffix = XPEDXWCUtils.encrypt(custSuffix);
+					custSuffix = URLEncoder.encode(custSuffix);
+				}
+			}
 		} catch (Exception ex) {
 			LOG.error("Expception while getting order element", ex);
 		}
@@ -316,6 +354,41 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				String legacyOrderNumber = orderExtn
 						.getAttribute("ExtnLegacyOrderNo");
 				String status = order.getAttribute("Status");
+				String extnInvoiceNumber = orderExtn.getAttribute("ExtnInvoiceNo");
+				String encInvoiceNumber = "";
+				if(extnInvoiceNumber != null && extnInvoiceNumber.trim().length() > 0) {
+					try {
+						encInvoiceNumber = XPEDXWCUtils.encrypt(extnInvoiceNumber);
+						encInvoiceNumber = URLEncoder.encode(encInvoiceNumber);
+					} catch (Exception e) {
+						LOG.error("Error encrypting invoice no " + e);
+					}
+				}
+				String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");
+				if(extnInvoiceDate != null && extnInvoiceDate.trim().length() > 0) {
+					try {
+						extnInvoiceDate = XPEDXWCUtils.encrypt(extnInvoiceDate);
+						extnInvoiceDate = URLEncoder.encode(extnInvoiceDate);
+					} catch (Exception e) {
+						LOG.error("Error encrypting invoice date " + e);
+					}
+				}
+				String shipToId = order.getAttribute("ShipToID");
+				String[] custDetails = shipToId.split("-");
+				String chainCustSuffix = "";
+				if(custDetails!=null && custDetails.length>3)
+				{
+					chainCustSuffix = custDetails[2];
+					if (chainCustSuffix != null && chainCustSuffix.trim().length() > 0) {
+						try {
+							chainCustSuffix = XPEDXWCUtils.encrypt(chainCustSuffix);
+						} catch (Exception e) {
+							LOG.error("Error encrypting ship to id " + e);
+						}
+						chainCustSuffix = URLEncoder.encode(chainCustSuffix);
+					}
+				}
+				
 				//Added for JIRA 2731
 				String formattedLegacyOrderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
 			
@@ -366,6 +439,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					documentElement.setAttribute("Quantity", quantity);
 					documentElement.setAttribute("Status", status);
 					documentElement.setAttribute("FormattedLegacyOrderNumber", formattedLegacyOrderNumber);
+					documentElement.setAttribute("ExtnInvoiceNo", extnInvoiceNumber);
+					documentElement.setAttribute("EncInvoiceNo", encInvoiceNumber);
+					documentElement.setAttribute("ExtnInvoicedDate", extnInvoiceDate);
+					documentElement.setAttribute("ShipToID", chainCustSuffix);
 
 					if(chainedOrderCountMap.containsKey(chainedFromOrderLineKey))
 					{
@@ -512,13 +589,49 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	private String customerSku;
 	protected HashMap<String, String> customerFieldsMap;
 	protected HashMap<String, ArrayList<String>> chainedOrderMap;
-	protected HashMap<String, List<YFCElement>> chainedOrderCountMap=new HashMap<String, List<YFCElement>>();
+	protected LinkedHashMap<String, List<YFCElement>> chainedOrderCountMap=new LinkedHashMap<String, List<YFCElement>>();
 	protected HashMap<String, String> chainedFOMap=new HashMap<String, String>();
-	
+	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXOrderDetailAction.class);
 	protected ArrayList<String> enteredWebLineNumbers;
+	private String custSuffix = "";
+	private String invoiceURL = "";
+	private String encInvoiceNo = "";
+	private String encInvoiceDate = "";
 	
+	public String getEncInvoiceNo() {
+		return encInvoiceNo;
+	}
+
+	public void setEncInvoiceNo(String encInvoiceNo) {
+		this.encInvoiceNo = encInvoiceNo;
+	}
+
+	public String getEncInvoiceDate() {
+		return encInvoiceDate;
+	}
+
+	public void setEncInvoiceDate(String encInvoiceDate) {
+		this.encInvoiceDate = encInvoiceDate;
+	}
+
+	public String getCustSuffix() {
+		return custSuffix;
+	}
+
+	public void setCustSuffix(String custSuffix) {
+		this.custSuffix = custSuffix;
+	}
+
+	public String getInvoiceURL() {
+		return invoiceURL;
+	}
+
+	public void setInvoiceURL(String invoiceURL) {
+		this.invoiceURL = invoiceURL;
+	}
+
 	/*set the errorMsg coming from either order cancel -> This page will be called from order cancel once the task is complete*/
 	protected String errorMsg;
 	
@@ -568,12 +681,12 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		this.customerSku = customerSku;
 	}
 	
-	public HashMap<String, List<YFCElement>> getChainedOrderCountMap() {
+	public LinkedHashMap<String, List<YFCElement>> getChainedOrderCountMap() {
 		return chainedOrderCountMap;
 	}
 
 	public void setChainedOrderCountMap(
-			HashMap<String, List<YFCElement>> chainedOrderCountMap) {
+			LinkedHashMap<String, List<YFCElement>> chainedOrderCountMap) {
 		this.chainedOrderCountMap = chainedOrderCountMap;
 	}
 
@@ -601,6 +714,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		this.chainedFOMap = chainedFOMap;
 	}
 
+	public String getCalculatedOrderedQuantityWithoutDecimal(Element orderLineElem){
+		String calculatedOrderedQuantity = getCalculatedOrderedQuantity(orderLineElem);
+		return calculatedOrderedQuantity.replace(".0", "");
+	}
 	public String getCalculatedOrderedQuantity(Element orderLineElem){
 		String calculatedOrderedQuantity = "";
 		if(orderLineElem!=null){
@@ -612,7 +729,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				orderLineTranQuantityOrderedQty = Double.parseDouble(orderLineTranQuantityElem.getAttribute("OrderedQty"));
 			else 
 				return "";
-			calculatedOrderedQuantity = ((orderLineOriginalOrderedQty * orderLineTranQuantityOrderedQty)/orderLineOrderedQty) + "";
+			//calculatedOrderedQuantity = ((orderLineOriginalOrderedQty * orderLineTranQuantityOrderedQty)/orderLineOrderedQty) + "";
+			return orderLineTranQuantityOrderedQty + "";
 		}
 		return calculatedOrderedQuantity;
 	}

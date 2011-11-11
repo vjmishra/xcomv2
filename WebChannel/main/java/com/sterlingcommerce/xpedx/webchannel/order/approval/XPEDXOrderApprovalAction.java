@@ -155,6 +155,24 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		log.debug("Assigned shipTos***********=" + shipToList);
 	}
 	
+	public boolean isOrderOnHold(Element OrderElement , String holdTypeToCheck) {
+		boolean isOrderOnHold = false;
+		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
+			Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
+			ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
+			if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
+				for(int i=0; i<orderHoldTypeList.size();i++) {
+					Element orderHoldTypeElem = orderHoldTypeList.get(i);
+					String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
+					String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
+						isOrderOnHold = true;
+				}
+			}
+		}
+		return isOrderOnHold;
+	}
+	
 	protected void getAssignedCustomerListForLoggedInUser(){
 		String loggedInCustomerFromSession = XPEDXWCUtils
 		.getLoggedInCustomerFromSession(wcContext);

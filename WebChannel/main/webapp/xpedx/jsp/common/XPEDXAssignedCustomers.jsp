@@ -50,13 +50,15 @@
 	text-align:right;
 }
 </style>
-<title>Choose a Ship To Address Modal</title>
+<!-- <title>Choose a Ship To Address Modal</title> -->
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.TABTITLE"/> </title>
 
 </head>
 <body>
 <%--	Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments --%>
 <s:if test="%{assignedShipToCount == 0 && comingFromSearch == 'false'}">
-<div align="center">There are no shipTo locations assigned for your profile, Please contact administrator..</div>
+<!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator..</div> -->
+<div align="center"> <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.NOSHIPTO" /> </div> 
 </s:if>
 <s:else>
  <!-- modal window container -->
@@ -300,7 +302,7 @@
 </div>
 
 <div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />Change Preferred Ship-To to Selected
+	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />bb1Change Preferred Ship-To to Selected
 </div>
 
 <div class="float-right" >

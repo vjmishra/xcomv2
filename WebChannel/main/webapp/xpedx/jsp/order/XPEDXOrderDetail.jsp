@@ -48,6 +48,18 @@
 <script type="text/javascript" src="../xpedx/js/swc.js"></script>
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+<link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/order/shipping-option.css" />
+<link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/order/draft-order-list.css" />
+<link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/order/shopping-cart-detail.css" />
+<link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/order/order-adjustment.css" />
+<link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/common/email/email.css" />
+
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
@@ -240,6 +252,7 @@ function showSplitDiv(divId)
 	id='priceUtil' />
 
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='wcUtil' />
 <s:bean name='com.yantra.yfc.util.YFCCommon' id='yfcCommon' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.OrderHelper' id='orderHelper' />
@@ -396,10 +409,12 @@ function showSplitDiv(divId)
                 <div id="breadcumbs-list-name" >
                 	<span class="page-title">
                 	<s:if test='#orderType != "Customer" ' >
-                		Order Detail 
+                		<!-- Order Detail  -->
+                		<s:text name='MSG.SWC.ORDR.ORDRDETAIL.GENERIC.PGTITLE' />
                 	</s:if>
                 	<s:else>
-                		Web Confirmation Detail
+                		<!-- Web Confirmation Detail -->
+                		<s:text name='MSG.SWC.ORDR.WEBCONFIRMATION.GENERIC.PGTITLE' />
                 	</s:else>
                 	</span>
                 	<a href="javascript:window.print()"><span class="print-ico-xpedx orders"><img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
@@ -556,19 +571,21 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> <s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
+                        			<s:if test='%{#status != "Cancelled"}'>
                         				<s:if test='%{#isOrderOnApprovalHold}'>
                         					(Pending Approval)
                         				</s:if>
                         				<s:elseif test="%{#isOrderOnCSRReviewHold}">
                         					(CSR Reviewing)
                         				</s:elseif>
+                        			</s:if>	
 	                        			<s:if test='%{#status == "Invoiced"}'>
 	                        				: Invoice #: 
 	                        				<s:if test='%{#isSalesRep}'>
 	                        				     <s:property value='#extnInvoiceNo'/>
 	                        				</s:if>
 	                        				<s:else>
-	                        				 <a class="underlink" href="https://distributioninvoicing.com/xpx1000_requestinterception.aspx?UserKey=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#extnInvoiceNo'/>&shipTo=<s:property value='#shipToId'/>&InvoiceDate=<s:property value='extnInvoicedDate'/>"><s:property value='#extnInvoiceNo'/></a>
+	                        				 <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
 	                        				</s:else>
 	                        			</s:if>
                         			</td>
@@ -616,7 +633,7 @@ function showSplitDiv(divId)
 	                        </s:if>
                         Order placed<s:if test='#xpedxOrderedByName!=""' > by <s:property value='#xpedxOrderedByName' /></s:if> 
 		                    <s:if test='#xpedxOrderDate!=""' > on  <s:property value='#xpedxOrderDate' /></s:if> 
-		                    <s:if test='#xpedxOrderSource!=""' > via  <s:property value='#xpedxOrderSource' /></s:if>. <s:if test='#xpedxEmail!=""' >Order Confirmation emailed to 
+		                     <s:if test='#xpedxOrderSource=="B2B" || #xpedxOrderSource=="Web" ||#xpedxOrderSource=="Call Center"' > via  <s:property value='#xpedxOrderSource' /></s:if>. <s:if test='#xpedxEmail!=""' >Order Confirmation emailed to 
 		                    <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@replaceSemiWithcomma(#xpedxEmail)' /></s:if> 
 						</div>
 
@@ -771,11 +788,20 @@ function showSplitDiv(divId)
 					    <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' /><!-- added for 2787jira -->
 					    	<table class="full-width"> <!-- my-price-table -->
 					    		<tr>
-					    			<td class="text-right" width="81">Ordered&nbsp;Qty:</td>
-					    			<s:set name='orderqty' value='#_action.getCalculatedOrderedQuantity(#orderLine)' />
-									<s:set name='orderdqty' value='%{#strUtil.replace(#orderqty, ".0", "")}' />
+					    		 
+					    			<td class="text-right" width="81">
+						    			<s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
+						    			  Ordered&nbsp;Qty:
+						    			</s:if>
+					    			</td>
+					    			<s:set name='orderqty' value='#_action.getCalculatedOrderedQuantityWithoutDecimal(#orderLine)' />
+									<%--<s:set name='orderdqty' value='%{#strUtil.replace(#orderqty, ".0", "")}' /> --%> 
 									<s:set name='orderdqty' value="#xpedxUtilBean.formatQuantityForCommas(#orderdqty)"/>
-					    			<td class="text-left"  width="175"><s:property value='%{#orderdqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> </td>
+					    			<td class="text-left"  width="175">	
+						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
+						    			  <s:property value='%{#orderqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			 </s:if>
+					    			</td>
 					    			<td class="text-right" width="95">
 						    			<%--	Using CustomerContactBean object from session
 						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
@@ -783,21 +809,28 @@ function showSplitDiv(divId)
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    				<s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
 						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">
+						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="red bold"> Call for Price </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
+											 </s:if> 
                                             </s:if>
                                             <s:else>
-	                                		    <s:property value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
+                                             <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>   
+	                                		      <s:property value='#theMyPrice'/> <%-- theMyPrice is the Unit Price --%>
+	                                		 </s:if>  
 	                                		</s:else>
 	                                	</s:if>
 									</td>
+							     
 									<td class="text-right" width="127">
 						    			<%--	Using CustomerContactBean object from session
 						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
 						    			--%>
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-						    				<s:if test="#orderType != 'Customer'">						    					
+						    				<s:if test="#orderType != 'Customer'">
+						    				  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>		    					
 						    					<s:property value='#util.formatQuantity(wCContext, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
+						    				  </s:if>
 						    				</s:if>
 						    			</s:if>
 									</td>
@@ -806,24 +839,35 @@ function showSplitDiv(divId)
 						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
 						    			--%>
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-						    			    <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
-						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-						    			        
-											    <span class="red bold"> To be determined </span>  
+						    			    <s:set name="theExtendedPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
+						    			    <s:if test="%{#theExtendedPrice==#priceWithCurrencyTemp}">
+						    			       <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+											   </s:if>
                                             </s:if>
                                             <s:else>
-	                                		    <s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
+                                              <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
+	                                		    <s:property value='#theExtendedPrice'/> <%-- theExtendedPrice is Extended  --%>
+	                                		  </s:if>
 	                                		</s:else>																															  
 										</s:if>
 									</td>
 					    		</tr>
 					    		<tr>
 					    			<s:if test="#orderType != 'Customer'">
-					    				<td class="text-right">Shippable Qty:</td>
+					    				<td class="text-right">
+					    				 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
+					    				  Shippable Qty:
+					    				 </s:if>
+					    				</td>
 					    				<s:set name='shipqty' value='#orderLineExtnElem.getAttribute("ExtnReqShipOrdQty")' />
 										<s:set name='shipqty' value='%{#strUtil.replace(#shipqty, ".00", "")}' />
 										<s:set name='shipqty' value="#xpedxUtilBean.formatQuantityForCommas(#shipqty)"/>
-						    			<td class="text-left"><s:property value='%{#shipqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> </td>
+						    			<td class="text-left">
+						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
+						    			    <s:property value='%{#shipqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			  </s:if>
+						    			</td>
 					    			</s:if>
 					    			<s:else>
 						    			<td class="text-right" width="81">&nbsp;</td>
@@ -834,11 +878,13 @@ function showSplitDiv(divId)
 						    		<s:if test='%{#session.viewPricesFlag == "Y"}'>
 						    		--%>
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-						    			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
+						    			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
                                           </s:if>
                                           <s:else>
+                                              <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 					    						per <s:property value='#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute("ExtnPricingUOM"))'/>
+					    					  </s:if>
 					    				  </s:else>
 					    			</s:if>
 					    			</td>
@@ -846,11 +892,19 @@ function showSplitDiv(divId)
 					    		</tr>
 					    		<tr>
 					    			<s:if test="#orderType != 'Customer'">
-						    			<td class="text-right">Backorder Qty:</td>
+						    			<td class="text-right">
+						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
+						    			    Backorder Qty:
+						    			  </s:if>
+						    			</td>
 						    			<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
 										<s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />
 										<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
-						    			<td class="text-left"><s:property value='%{#backqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> </td>
+						    			<td class="text-left">
+						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
+						    			   <s:property value='%{#backqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			  </s:if>
+						    		    </td>
 					    			</s:if>
 					    			<s:else>
 					    				<td class="text-right" width="81">&nbsp;</td>
@@ -972,9 +1026,18 @@ function showSplitDiv(divId)
 															</s:iterator>				
 														</td>
 														<td valign="top"> 
-															<s:if test='%{#status == "Invoiced"}'>
-															  Invoice #: <a class="underlink" href="https://distributioninvoicing.com/xpx1000_requestinterception.aspx?UserKey=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#extnInvoiceNo'/>&shipTo=<s:property value='#shipToId'/>&InvoiceDate=<s:property value='extnInvoicedDate'/>"><s:property value='#extnInvoiceNo'/></a>
-										        			</s:if>				
+															<s:iterator  value="#splitOrderCount" id='splitOrder' >																
+																<s:if test='%{#splitOrder.getAttribute("Status") == "Invoiced"}'>
+																	<s:set name="extnInvcNo" value='#splitOrder.getAttribute("ExtnInvoiceNo")'/>
+																	<s:set name="encInvcNo" value='#splitOrder.getAttribute("EncInvoiceNo")'/>
+																	<s:set name="extnInvcDt" value='#splitOrder.getAttribute("ExtnInvoicedDate")'/>
+																	<s:set name="splitCustSuff" value='#splitOrder.getAttribute("ShipToID")'/>
+																  Invoice #: <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#encInvcNo'/>&shipTo=<s:property value='#splitCustSuff'/>&InvoiceDate=<s:property value='extnInvcDt'/>"><s:property value='#extnInvcNo'/></a>
+											        			</s:if>
+											        			<s:else>
+											        				<br/>
+											        			</s:else>
+										        			</s:iterator>				
 												        </td>
 													</tr>			
 												</table>
@@ -1067,7 +1130,7 @@ function showSplitDiv(divId)
 					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))'/>
 	    			    
 				    	<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-							<span class="red bold"> To be determined </span>  
+							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                        	</s:if>
                        	<s:else>
                 		   		 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
@@ -1077,16 +1140,16 @@ function showSplitDiv(divId)
 				<tr>
 					<th>Order Total Adjustments:</th>
 					<td><%-- <s:property value='#headerAdjustmentWithoutShipping'/> --%>
-					<s:set name="myPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrderAdjustments"))' />
+					<s:set name="myPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' />
 	    			    	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> To be determined </span>  
+						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                         	</s:if>
                         	<s:else>
                         			<a
 									href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
 									tabindex="<s:property value='%{#tabIndex}'/>"> <span
 									class="nowrap underlink">
-                		   		 	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrderAdjustments"))' /></span></a>
+                		   		 	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span></a>
                 			</s:else>
                 								
 					</td>
@@ -1096,7 +1159,7 @@ function showSplitDiv(divId)
 					<td> <%-- <s:property value='#adjustedSubtotalWithoutTaxes'/> --%>
 					<s:set name="myPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 	    			     	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> To be determined </span>  
+						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                        		</s:if>
                       		<s:else>
                 		    		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
@@ -1113,9 +1176,10 @@ function showSplitDiv(divId)
 				<tr>
 					<th>Tax:</th>
 					<td class="gray"><%-- <s:property value='#grandTax'/> --%>
+					    <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
 						<s:set name='taxValue' value='#OrderExtn.getAttribute("ExtnOrderTax")'/>
-						<s:if test='#taxValue == null || #taxValue=="" || #taxValue=="0.00" || #isMyPriceZero == "true"'><!-- jira 2337 and 2267(if MyPrice is 0)-->
-							<span class="red bold"> To be determined </span>
+						<s:if test='(#taxValue == null || #taxValue=="" || #taxValue=="0.00" || #isMyPriceZero == "true") && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"'><!-- jira 2337 and 2267(if MyPrice is 0)-->
+							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 						</s:if>
 						<s:else>
 							<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
@@ -1127,7 +1191,7 @@ function showSplitDiv(divId)
 					<td class="gray">
 					<s:set name='shipandHndlValue' value='#OrderExtn.getAttribute("ExtnTotalOrderFreight")'/>
 					<s:if test='#shipandHndlValue == null || #shipandHndlValue=="" || #shipandHndlValue=="0.00" || #isMyPriceZero == "true"'><!-- jira 2337 and 2267(if MyPrice is 0)-->
-						<span class="red bold"> To be determined </span>
+						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 					</s:if>
 					<s:else>
 						<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
@@ -1140,7 +1204,7 @@ function showSplitDiv(divId)
 					<td><%-- <s:property value='#grandTotal'/> --%>
 					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
 					 	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> To be determined </span>  
+						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                      	</s:if>
                         <s:else> 
                         	 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
@@ -1162,9 +1226,18 @@ function showSplitDiv(divId)
 			<%-- Commented for bug# 1913
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
 			<s:if test="!#isEstimator"> 
-				<s:if test="#_action.isEditableOrder() && ! #_action.isCustomerOrder(#orderDetail)">
+			   <s:if test="! #_action.isCustomerOrder(#orderDetail)">
+			     <s:if test="#_action.isEditableOrder()">
+			      <a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+			     </s:if>
+			   </s:if>
+			   <s:else>
+				<s:if test="#_action.isCustomerOrder(#orderDetail)">
+				  <s:if test="#_action.isEditableCustomerOrder()">
 					<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+				  </s:if>
 				</s:if>
+			   </s:else>
 			</s:if>
 						
 			<s:if test ="#_action.approvalAllowed()" >

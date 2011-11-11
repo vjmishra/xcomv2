@@ -21,7 +21,8 @@
 
 <div style="display: none;">
  <div id="dlgSelectedList" class="share-modal-forLocations xpedx-light-box" style="width:722px; height:210px;">
-<h2 id="smilTitle_2">Select My Items for Location(s)</h2>
+<!-- <h2 id="smilTitle_2">Select My Items for Location(s)</h2> -->
+<h2 id="smilTitle_2"><s:text name='MSG.SWC.MIL.MILLOC.GENERIC.DLGTITLE' /></h2>
   
 <div class="clear"></div>
 
@@ -104,7 +105,8 @@
 			            	submitNewSelectedlist();
 			            else
 			            {    
-			                var  validationErrorMsg="Please select at least one location.";
+			               // var  validationErrorMsg="Please select at least one location.";
+			                var  validationErrorMsg="<s:text name='MSG.SWC.MIL.MILLOC.ERROR.NOLOCATION' />";
 			                //alert(validationErrorMsg);
 			                document.getElementById("formFieldValidationErrorMsg").innerHTML = validationErrorMsg;
 			                document.getElementById("formFieldValidationErrorMsg").style.display = "inline";

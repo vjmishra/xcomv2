@@ -50,7 +50,8 @@
 	text-align:right;
 }
 </style>
-<title>Choose a Ship To Address Modal</title>
+<!-- <title>Choose a Ship To Address Modal</title> -->
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.TABTITLE"/> </title>
 
 </head>
 <body>
@@ -162,7 +163,7 @@
 </div>
 
 <div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />Change Preferred Ship-To to Selected
+	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />bb2Change Preferred Ship-To to Selected
 </div>
 
 <div class="float-right">

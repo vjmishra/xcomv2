@@ -22,7 +22,12 @@
 		<div class="ship_banner">
 	     <p>
 	       <span class="bold">
-	         Shopping for: 
+	       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	         Shopping for : 
+	       </s:if>
+	       <s:else>
+	         Order's for :
+	       </s:else>	        
 	       </span>
 	       <s:property   value='LoggerInUserCustomerName' />, 
 	       <s:if test="%{#currentShipTo.LocationID!='' && #currentShipTo.LocationID!= null}">

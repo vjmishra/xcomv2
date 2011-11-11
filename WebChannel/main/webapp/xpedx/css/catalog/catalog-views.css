@@ -417,7 +417,7 @@ ul
 {
 	margin: 5px auto 0;
 }
-.normal-view .availablelink { float: left; }
+.normal-view .availablelink { /*float: left; */ }
 .condensed-view .availablelink { float: right; }
 .normal-view .quantity_box .qty, .normal-view .quantity_box .uom-select
 {

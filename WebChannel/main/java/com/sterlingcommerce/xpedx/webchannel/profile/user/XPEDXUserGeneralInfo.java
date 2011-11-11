@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.profile.ProfileUtility;
@@ -163,8 +164,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		if (YFCCommon.isVoid(inputCustomerID)) {
 			inputCustomerID = wcContext.getCustomerId();
 		}
-		if (!(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID,
-				wcContext))) {
+		if (!(isCustInCtxCustHierarchy(inputCustomerID,	wcContext))) {
 			return ERROR;
 		}
 		try {
@@ -201,6 +201,42 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	 *
 	 * @see com.opensymphony.xwork2.ActionSupport#execute()
 	 */
+	
+	 private boolean isCustInCtxCustHierarchy(String inputCustomerID,IWCContext wcContext)
+	 {
+		 boolean retVal=false;
+		 try
+		 {
+			 String wCCustomerId = wcContext.getCustomerId();
+			 if(inputCustomerID.equals(wCCustomerId))
+		            return true;
+			 List<String> customerIdList=new ArrayList<String>();
+			 customerIdList.add(wCCustomerId);
+			 customerIdList.add(inputCustomerID);
+			 Element customerList=XPEDXWCUtils.getCustomerListDetalis(customerIdList ,wcContext);
+			 UtilBean utilBean=new UtilBean();
+			 List<Element> customerContactList =utilBean.getElements(customerList, "//CustomerList/Customer");
+			 if(customerContactList !=null && customerContactList.size() >1){
+				 Element loggedinCustomerDetails=customerContactList.get(0);
+				 Element inputCustomerDetails=customerContactList.get(1);
+				 String inputCustRootCustomerKey = inputCustomerDetails.getAttribute("RootCustomerKey");//SCXmlUtils.getAttribute(inputCustomerDetails, "RootCustomerKey");
+				 String logInCustRootCustomerKey = SCXmlUtil.getAttribute(loggedinCustomerDetails, "RootCustomerKey");
+				 if(inputCustRootCustomerKey != null && logInCustRootCustomerKey != null && inputCustRootCustomerKey.equals(logInCustRootCustomerKey))
+					 retVal= true;
+				 else
+					 retVal= false;
+			 }
+			 else{
+				 retVal= false;
+			 }
+		 }
+		 catch(Exception e)
+		 {
+			 log.info("error while validating user"+e.getMessage());
+		 }
+		 return retVal;
+	 }
+
 	public String execute() {
 		boolean isCustomerIDFromContext = false;
 		if (log.isDebugEnabled()) {

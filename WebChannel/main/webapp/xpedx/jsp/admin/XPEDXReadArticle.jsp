@@ -40,7 +40,8 @@
 	padding:0 3px;
 }
 </style>
-<title>News Article</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> - News Article</title> --%>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.NEWSARTL.READ.GENERIC.TABTITLE' /> </title>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -152,7 +153,8 @@
 					<tr>
 						<td class="no-padding no-border-right-user underlines" width="100%">
 	
-						<span class="page-title">News Article</span>
+						<%-- <span class="page-title">News Article</span> --%>
+						<span class="page-title"> <s:text name='MSG.SWC.NEWSARTL.READ.GENERIC.PGTITLE' /> </span>
 						<br/><br/><span class="bold"><s:property value='#xutil.getAttribute(#articleElement,"ArticleName")' /> </span><br/>
 						<s:property value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleElement,"Createts"),wCContext)}' />
 						</td>

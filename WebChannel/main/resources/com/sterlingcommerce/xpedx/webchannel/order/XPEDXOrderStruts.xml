@@ -530,10 +530,8 @@
 		 	com/sterlingcommerce/xpedx/webchannel/order/XPEDXChecoutDraftOrderModifyLineItemsAction_binding.xml
 		 -->
         <action name="xpedxsaveCartDetails" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
-        <!--    Removing changeOrder call for Performance improvement, while checkout
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
             <param name="mashups">xpedx_me_changeOrderLineDetails</param>
-        -->
             <param name="resourceId">/swc/order/guestShopping</param>
             <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
             <result name="success" type="redirectAction">
@@ -594,10 +592,8 @@
         </action>
         
         <action name="miniCartCheckout" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
-        <!--    Removing changeOrder call for Performance improvement, while checkout
             <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
             <param name="mashups">updateOrderForMiniCart</param>
-        -->          
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success" type="redirectAction">
                 <param name="actionName">LineLevelISPU</param>
@@ -629,6 +625,19 @@
 				<param name="actionName">draftOrderDetails</param>
 				<param name="OrderHeaderKey">${#parameters.orderHeaderKey}</param>
 				<param name="isEditOrder">${#parameters.isEditOrder}</param>				
+				<param name="draft">N</param>
+			</result>
+		</action>
+		
+		<action name="xpedxViewEditOrderChanges"
+			class="com.sterlingcommerce.webchannel.core.WCAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXEditOrderActionBinding.xml</param>
+			<param name="mashups">xpedx_changepricelock</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="isEditOrder">Y</param>				
 				<param name="draft">N</param>
 			</result>
 		</action>

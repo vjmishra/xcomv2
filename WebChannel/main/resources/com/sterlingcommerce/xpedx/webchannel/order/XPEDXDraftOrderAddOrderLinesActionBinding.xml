@@ -17,7 +17,7 @@
     <entry key="orderedProductClasses">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ProductClass</entry>
     <entry key="orderedProductDescs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ItemShortDesc</entry>
     <entry key="orderedJobIDs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnCustLineAccNo</entry>
-    <entry key="#parameters.isEditNewline">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
+    <entry key="isEditNewline">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
     <entry key="orderedLineTypes">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@LineType</entry>
     <entry key="orderedPONos">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@CustomerPONo</entry>
     <entry key="recordPendingChanges">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry>

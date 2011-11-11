@@ -175,10 +175,13 @@ function validateOrderMultiple()
 		{
 			arrOrdMul[i].value=1;
 		}
-		var totalQty = arrUOM[i].value * arrQty[i].value;
+		
+		var totalQty = arrUOM[i].value * arrQty[i].value;		
 		var ordMul = totalQty % arrOrdMul[i].value;
-		
-		
+		if(ordMul=="NaN"|| ordMul==NaN)
+			{
+			    ordMul= 0
+			}		
 		if(ordMul != 0 && zeroError == false)
 		{
 			
@@ -455,10 +458,10 @@ function redrawQuickAddList()
 		        code += '<td class="col-item">';
 		// code += encodeForHTML(QuickAddElems[i].quantity);
 		        if(QuickAddElems[i].itemTypeText == "Special Item"){
-		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onchange="javascript:updateQuickAddElement(\'Qty\','+ i +')" />';
-		        	code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onchange="javascript:updateQuickAddElement(\'Qty\','+ i +')" />';
+		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
+		        	code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
 		        }else{
-		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onchange="javascript:updateQuickAddElement(\'Qty\','+ i +')" />';
+		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
 		        }
 		        code += '<h5 align="center"><br/><br/><b><font color="red"><div id="'+divIdErrorQty+'"></div></font></b></h5>';
 		        code += '</td>';
@@ -550,7 +553,13 @@ function redrawQuickAddList()
 		        
 		        code += '</tr>';
 		       // code += '</div>';
-			
+		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
+		        code += '<tr>';
+		        code += '<td colspan="6">';
+		        code += '<div align="center" class="temp_UOM" id="test12" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+encodeForHTML(QuickAddElems[i].uom)+'</div>';
+		        code += '</td>';
+		        code += '</tr>';
+		        }
 		    	if(QuickAddElems[i].itemTypeText != "Special Item" && QuickAddElems[i].isEntitled == "false")
 		    	{
 		    		var specialId = "div_" + "enteredSpecialItems_" + i;
@@ -655,7 +664,6 @@ function addItemsToQuickAddList()
 			itemQty = itemLine[0];
 			itemSku = itemLine[1];
 		}
-		
 		itemSku = trim(itemSku);
 		itemQty = trim(itemQty);
 		
@@ -669,8 +677,8 @@ function addItemsToQuickAddList()
 		    {
 		            sku: itemSku,
 		            quantity: itemQty,
-		            itemType: "Xpedx #",
-		            itemTypeText: "Xpedx #",
+		            itemType: "1",
+		            itemTypeText: "xpedx Item #",
 		            itemDesc: "",
 		            uom: "",
 		            uomList: uomArray,

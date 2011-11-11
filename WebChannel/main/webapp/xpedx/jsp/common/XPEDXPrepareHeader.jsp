@@ -1564,8 +1564,8 @@ var toaWin = new Ext.Window({
         		getCustomerAccounts();
 			},
 			'autoDimensions'	: false,
-			'width' 			: 300,
-			'height' 			: 425  
+			'width' 			: 450,
+			'height' 			: 350  
 		});
  });
 </script>
@@ -1584,7 +1584,7 @@ function searchShipToAddress(divId,url) {
 */
 		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
 		{
-			alert('Please Enter word or phrase seperated by commas(,) to search');
+			//alert('Please Enter word or phrase seperated by commas(,) to search');
 		}		
 		else
 		{
@@ -2245,7 +2245,7 @@ function callAjaxForSorting(url,divId)
 	<%--Hemantha --%>	
 	
     	
-    	
+ <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">	          	
     <div class="searchbox-2">
     <s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
 <%--          <s:bean name='com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction' id='XPEDXOrderMethod' /> --%>
@@ -2326,6 +2326,11 @@ function callAjaxForSorting(url,divId)
 <%--     		<a href="<s:url action="draftOrderList" namespace="/order" />" tabindex="2003">My Carts</a> --%>
 <!--     	</div> -->
 	</div>
+</s:if>
+
+
+	
+	
 	<div style='display: none;'><s:form name='miniCartForm'
 		id='miniCartForm'>
 		<s:if
@@ -2416,7 +2421,12 @@ function callAjaxForSorting(url,divId)
 					
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
-						Shopping for: 
+						 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	         				Shopping for : 
+	       				</s:if>
+	       				<s:else>
+	         				Order's for :
+	      				 </s:else>	        
 						<a href="#" id="welcome-address-popup-close"><img title="Close" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
 						<s:if test="#isEditOrderHeaderKey == null ">
 							<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
@@ -2665,6 +2675,7 @@ function callAjaxForSorting(url,divId)
 	            	<%--	<s:url id="viewAccountActivity" action="portalHome" namespace="/home" >
 						<s:param name="xpedxSelectedHeaderTab">OrderTab</s:param>
 					</s:url>  Removed link for order landing page --%>
+				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 					<s:if test='#xpedxSelectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
 		            	 <!-- cssClass="active" -->
@@ -2726,7 +2737,8 @@ function callAjaxForSorting(url,divId)
 						</li>
 			        </ul>
 	            </li>
-	            </s:if>  
+	            </s:if> 
+	          </s:if>   
 	            <s:if test="%{!#isProcurementUser}">
 	            
 	                <s:url id='emailSampleLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
@@ -2860,6 +2872,7 @@ function callAjaxForSorting(url,divId)
 			        </ul>
 	            </li>
 	           </s:if>
+	            <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		            <s:url id='homeLink' namespace='/order' action='orderList.action'>
 						<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 						<s:param name='scFlag'>Y</s:param>
@@ -2875,6 +2888,33 @@ function callAjaxForSorting(url,divId)
 	            		<s:a href="%{homeLink}">Add To Existing Order</s:a>
 	            	</s:else>
 	            </li>
+	            </s:if>
+	            <s:else>
+	            	<li class="lighter">
+	            		<s:a href="">Order edit in progress...</s:a>
+	           		 </li>		
+	           		 
+					<s:url id="viewEditOrderChanges" includeParams="none"
+							action='xpedxViewEditOrderChanges' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+							<s:param name="isEditOrder" value='true' />
+							<s:param name="isEditOrder" value='true' />
+					</s:url>
+					<!--<s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
+						<s:param name="isEditOrder" value="%{'true'}" ></s:param>						
+					</s:url> -->
+	            	<li class="lighter">
+	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
+	            	</li>
+	            	<s:url id="cancelEditOrderChanges" includeParams="none"
+							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+					</s:url>
+	            	<li class="lighter">
+	            		<s:a href="%{cancelEditOrderChanges}">Cancel Changes</s:a>
+	            	</li>	
+	            
+	            </s:else>
 	            <%--
 	            Removing as Per JIIRA 2775 . Peding approval count is removing for perofrmance perspective.
 		           <s:if test="%{isApprover()}">
@@ -2938,12 +2978,18 @@ function callAjaxForSorting(url,divId)
 <s:if test="%{getShipToBanner()}">
 	<s:set name='guestUser' value="%{#_action.getWCContext().isGuestUser()}" />
 	<s:set name='defualtShipTAddress'  value="%{#_action.getShipToAddress()}" />
+	<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 	<s:if test='!#guestUser'>
 		<div class="ship-banner-container">
 			<div class="ship_banner">
-		     <p>
+		     <p>		     
 		       <span class="bold">
-		         Shopping for: 
+		         <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	         		Shopping for : 
+	       		</s:if>
+	      		 <s:else>
+	        		 Order's for :
+	       		</s:else>	     
 		       </span>
 		       <s:property   value='LoggerInUserCustomerName' />, 
 		       <s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline'>
@@ -2953,7 +2999,9 @@ function callAjaxForSorting(url,divId)
 		       <s:property value="#defualtShipTAddress.getState()" />
 		       <s:property value="#defualtShipTAddress.getZipCode()" />
 		       <s:property value="#defualtShipTAddress.getCountry()" />
-		       <a href="#ajax-assignedShipToCustomers" id="shipToSelect1">[Change]</a>
+		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect1">[Change]</a>
+		       </s:if>
 		    </p>
 	    	</div>
 	   	</div>

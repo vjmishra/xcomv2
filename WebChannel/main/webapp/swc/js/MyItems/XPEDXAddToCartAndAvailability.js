@@ -82,8 +82,6 @@
 			 draftOrder="N";
 		 }
 		 var url = document.getElementById('updatePandAURL').value;
-			//JQuery Popup: 3 sec popup dispaly. 
-			$.jqDialog.notify("Item successfully added to cart", 3);
 		 if(url!=null) {
 			 
 			//Ext.Msg.wait("Adding Item "+itemId+"to cart...Please wait!"); 
@@ -108,9 +106,11 @@
 					}
 					else
 					{
+						refreshMiniCartLink();
+						//JQuery Popup: 3 sec popup dispaly. 
+						$.jqDialog.notify("Item successfully added to cart", 3);
 						Ext.MessageBox.hide(); 
 						//alert("Successfully added item "+itemId+" with quantity "+qty+" to the cart");
-						refreshMiniCartLink();
 						//-- Web Trends tag start --
 						var tag = "WT.si_n,WT.tx_cartid,WT.si_x,DCSext.w_x_ord_ac";
 						var content = "ShoppingCart," + selCart + ",2,1";
@@ -167,7 +167,7 @@
 			alert("Item ID cannot be null to make a PnA call");
 		}
 		else{
-			Ext.Msg.wait("Getting Avalability for item(s) ...Please wait!"); 
+			Ext.Msg.wait("Processing..."); 
 			Ext.Ajax.request({
 	            url: url,
 	            params: {

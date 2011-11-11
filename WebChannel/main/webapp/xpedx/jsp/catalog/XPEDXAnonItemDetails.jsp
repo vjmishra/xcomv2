@@ -90,6 +90,11 @@
 				<s:if test="%{null != #xutil.getChildElement(#itemListElem, 'Item')}">
 			<s:set name="itemElem"
 				value='#xutil.getChildElement(#itemListElem,"Item")' />
+				<s:set name="itemElemExtn"
+				value='#xutil.getChildElement(#itemElem,"Extn")' />					
+			<s:set name='certFlag'
+				value="#xutil.getAttribute(#itemElemExtn, 'ExtnCert')" />
+				
 			<s:set name='isSuperseded'
 				value='#xutil.getAttribute(#itemElem,"IsItemSuperseded")' />
 			<s:set name="primaryInfoElem"
@@ -378,17 +383,17 @@
 					</ul>
 					<br/>
 					<p><span id="sell-truncated">Loading</span><!--<span id="sell-full" style="display: none;"> commented for jira 2761-->
-					<ul class="bullet_pts" stye="padding-left:0px;">
+					<ul class="bullet_pts" stlye="padding-left:0px;">
 						<s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/>						
 					</ul>
 					<!-- </span>--></p>
 					<br>
 					<div>
 						<s:property value='wCContext.storefrontId' />  Item #: <s:property value='%{#itemID}' />
-								<s:set name="certImage" value="#_action.getCertImagePath()" /> 
-								<s:if test="%{null != #certImage}">
-								<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png">
-							</s:if>
+						<s:set name="certImage" value="#_action.getCertImagePath()" /> 
+								<s:if test='%{#certFlag=="Y"}'>
+									<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" />
+								</s:if>
 					</div>
 		<s:if test='%{#isModelItem != "Y"}'>
 			<s:if test='custSKU!= ""'>
@@ -544,7 +549,7 @@
 					<li><a href="#tabs-2">Specifications</a></li>
 				</ul>
 				
-				<p class="tablinks">
+				<p class="tablinks">&nbsp;
 				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
 					<s:set name="link" value="value" />
 					<s:set name="desc" value="key" />	

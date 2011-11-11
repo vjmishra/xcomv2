@@ -235,6 +235,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private void setMSDSUrls() {
 		if(m_itemListElem!=null) {
 			ArrayList<Element> assetList = new ArrayList<Element>();
+			//Declaring it here.
+			String msdsLink="";
+			String msdsLinkDesc="";
 			ArrayList<Element> MSDSAssetList = SCXmlUtil.getElementsByAttribute(m_itemListElem, "Item/AssetList/Asset", "Type", XPEDXConstants.MSDS_ASSET_TYPE_URL);
 			ArrayList<Element> MSDSAssetListDataSheet = SCXmlUtil.getElementsByAttribute(m_itemListElem, "Item/AssetList/Asset", "Type", XPEDXConstants.MSDS_ASSET_TYPE_DATA_SHEET);
 			if(!SCUtil.isVoid(MSDSAssetList))
@@ -251,15 +254,21 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					String assetType = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Type");
 					String msdsLocation = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentLocation");
 					String msdsContentId = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentID");
-					String msdsLink = msdsLocation+"/"+msdsContentId;
-					String msdsLinkDesc = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Description");
+					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
+					if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
+						 msdsLink = msdsLocation+msdsContentId;
+						 msdsLinkDesc = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Description");
+					}else{
+					msdsLink = msdsLocation+"/"+msdsContentId;
+					msdsLinkDesc = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Description");
+					}
 					if("URL".equalsIgnoreCase(assetType)) {
 						msdsLink = msdsLocation;
 						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
 					}
 					if(msdsLinkMap.isEmpty())
 						msdsLinkMap = new HashMap<String, String>();
-					msdsLinkMap.put(msdsLinkDesc, msdsLink);
+						msdsLinkMap.put(msdsLinkDesc, msdsLink);
 				}
 			}
 		}		
@@ -1617,6 +1626,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	boolean updateAvailability = false;
 	protected String isBracketPricing ;
 	protected Map msdsLinkMap = new HashMap<String, String>();
+	protected Map assetLinkMap = new HashMap<String, String>();
 	protected String isCustomerPO="N";
 	protected String isCustomerLinAcc="N";
 	protected String customerPOLabel="";
@@ -1633,6 +1643,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXItemDetailsAction.class);
 
+	public Map getAssetLinkMap() {
+		return assetLinkMap;
+	}
+
+	public void setAssetLinkMap(Map assetLinkMap) {
+		this.assetLinkMap = assetLinkMap;
+	}
+
+	
 	public Map getMsdsLinkMap() {
 		return msdsLinkMap;
 	}

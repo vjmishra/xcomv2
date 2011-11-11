@@ -79,7 +79,7 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 
-<title><s:property value="wCContext.storefrontId" /> / Contact Us </title> 
+<title><s:property value="wCContext.storefrontId" /> - Contact Us </title> 
 
 <!--Webtrands Start -->
 <s:if test="#isGuestUser == false">    	

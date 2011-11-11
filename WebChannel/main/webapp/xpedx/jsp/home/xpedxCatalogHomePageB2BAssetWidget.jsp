@@ -9,7 +9,8 @@
 	<!-- <s:set name='tourURL' value='%{tourURL}'/> -->
 	
 	<div class="anon-hp-announcements-containers">
-        <h2>Tour Our B2B Site</h2>
+       <!--  <h2>Tour Our B2B Site</h2> -->
+        <h2><s:text name="MSG.SWC.B2B.COMMERCESITE.GENERIC.PGTITLE"/></h2>
 		
 		<!-- 
         <a href="../modals/video-tour.html" id="video-tour"><img class="img-padding-hp" src="<s:property value='assetURL'/>" alt="Video Tour" width="90" height="81" align="left" border="none" /></a>

@@ -338,10 +338,10 @@
                                     <td valign="top" align="left"><p>
                                     		<s:if test="#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold">
 												<s:if test='#isOrderOnApprovalHoldStatus'>
-													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> (Pending Approval)</span>													
+													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/>  <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" /></span>													
 												</s:if>
 												<s:elseif test='#isOrderOnNeedsAttentionHold'>
-													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> (CSR Reviewing)</span>													
+													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" /></span>													
 												</s:elseif>
 											</s:if>
 											<s:else>
@@ -373,17 +373,18 @@
                                     <s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>
 								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-											    <span class="gray"> To be determined </span>  
+											    <span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
-                                    <h1><s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/></h1>Additional charges may apply</p>
+                                    <%-- <h1><s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/></h1>Additional charges may apply</p> --%>
+                                    <h1><s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/></h1> <s:text name='MSG.SWC.ORDR.OM.INFO.ADDITIONALCHARGESTXT' /> </p>
                                     </s:else>
                                     </td>
 
                                 </tr>
                             </tbody>    
                         </table>
-                        <p class="legal-text">This document merely confirms your order; it is not an acceptance of your order. Additional fees may apply to accepted orders.</p>
+                        <p class="legal-text"> <s:text name='MSG.SWC.ORDR.OM.INFO.LEAGALTXT' /></p>
                     </fieldset >
                    <ul class="tool-bar-bottom-right" id="tool-bar">
                         <li><a href="<s:url action="orderList"></s:url>" class="grey-ui-btn"><span>View Orders</span></a></li>

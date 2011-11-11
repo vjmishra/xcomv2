@@ -203,6 +203,7 @@
 				<s:if test="#displayPriceForUoms.size()>0" >
 				<s:div id="myPrice_%{#id}">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<s:set name="break" value="false"></s:set>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					<s:set name="bracketPriceForUOM" value="bracketPrice" />
 					<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -214,7 +215,7 @@
 							<td class="right" width="39%">
 							<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
 								<s:set name="isMyPriceZero" value="%{'true'}" />
-								<span class="gray"> To be determined </span>   
+								<span class="gray"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>   
 							</s:if>
 							<s:else>
 							<s:property value="#bracketPriceForUOM" />
@@ -227,19 +228,23 @@
 						</tr>
 						</s:if>
 						<s:else>
+						<s:if test="%{#break == false}">
 							<tr>
 								<td width="35%"><strong><s:if test="#disUOMStatus.first">My Price:</s:if></strong></td>
 								<td class="right" width="39%">
 								<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
 										<s:set name="isMyPriceZero" value="%{'true'}" />
-										<span class="red bold"> Call for Price </span>
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
+										<s:set name="break" value="true"></s:set>
 							    </s:if>
 							    <s:else>
 										<s:property value="#bracketPriceForUOM" />
 										<td> / <s:property value="#bracketUOMDesc" /></td>
 								</s:else></td>
 							</tr>
-						</s:else>							
+						</s:if>
+						</s:else>
+												
 					</s:iterator>
 					
 				</table>
