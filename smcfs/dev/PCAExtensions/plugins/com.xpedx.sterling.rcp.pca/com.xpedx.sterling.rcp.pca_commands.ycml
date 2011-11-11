@@ -535,4 +535,12 @@
             <namespace name="getOrganizationList_output" templateName="getOrganizationList_output" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementPanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
+        </namespaces>
+    </form>
 </forms>

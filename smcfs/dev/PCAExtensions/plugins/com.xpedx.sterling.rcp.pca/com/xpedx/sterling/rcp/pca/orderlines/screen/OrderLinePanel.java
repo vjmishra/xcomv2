@@ -1837,7 +1837,13 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			}
 		}
 		btnRemoveLine.addSelectionListener(selectionAdapter);
-		
+		if(isDraftOrder()){
+			btnRemoveLine.setEnabled(true);
+			if(isNewLine()){
+				btnRemoveLine.setEnabled(true);
+			}
+			
+		}
 
 	}
 	public void createAvailabilityComposite() {
@@ -2852,6 +2858,10 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 	
 	public boolean isDraftOrder() {
 		String sMaxOrderStatus = YRCXmlUtils.getAttributeValue(orderEle,"/Order/@MaxOrderStatus");
+		String draftOrderFl=YRCXmlUtils.getAttributeValue(this.orderEle,"/Order/@DraftOrderFlag");
+		if ("Y".equalsIgnoreCase(draftOrderFl)){
+			setDeleteButtonEnable();
+		}
 		if(YRCPlatformUI.isVoid(sMaxOrderStatus) && !"".equalsIgnoreCase(sMaxOrderStatus)){
 			return true;
 		}
@@ -2860,6 +2870,14 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		}else{
 			return false;
 		}
+		
+	}
+	
+	public void setDeleteButtonEnable(){
+		btnRemoveLine.setEnabled(true);
+		if(isNewLine()){
+			btnRemoveLine.setEnabled(true);
+		}	
 		
 	}
 	

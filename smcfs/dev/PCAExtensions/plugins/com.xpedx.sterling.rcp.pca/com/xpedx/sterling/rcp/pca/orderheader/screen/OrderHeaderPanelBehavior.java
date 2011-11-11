@@ -303,7 +303,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	
 	public void openUrl()
     {
-        String url = YRCPlatformUI.getYfsSystemProperty("xpedx.invoicing.url");        
+		String url = YRCPlatformUI.getString("xpedx.invoicing.url");       
         TripleDES tripleDes = new TripleDES();
         String encryptedContactId = null;
         String encryptedShipToId = null;

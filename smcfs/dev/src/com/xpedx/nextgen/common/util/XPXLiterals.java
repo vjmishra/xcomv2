@@ -750,7 +750,7 @@ public class XPXLiterals {
 	public static final String A_EXTN_ORDER_SUB_TOTAL= "ExtnOrderSubTotal";
 	public static final String A_EXTN_ORDER_DISCOUNT = "ExtnOrderDiscount";
 	public static final String A_EXTN_ORDER_COUPON_DISCOUNT= "ExtnOrderCouponDiscount";
-	public static final String A_EXTN_TOT_ORDER_ADJUSTMENTS = "ExtnTotOrderAdjustments"; 
+	public static final String A_EXTN_TOT_ORDER_ADJUSTMENTS = "ExtnLegTotOrderAdjustments"; 
 	public static final String A_EXTN_TOT_ORD_VAL_WITHOUT_TAXES= "ExtnTotOrdValWithoutTaxes";
 	
 	

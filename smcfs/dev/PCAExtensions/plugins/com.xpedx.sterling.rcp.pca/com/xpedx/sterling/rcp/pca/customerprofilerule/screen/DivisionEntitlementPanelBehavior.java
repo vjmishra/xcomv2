@@ -56,6 +56,7 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
 		suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(generalInfo, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
 		initPage();
+		
 			
 	}
 	/**
@@ -64,13 +65,13 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 	@Override
 	public void init() {
 //		System.out.println("init().....");
-	}
+		}
 
 	public void initPage() {
 		String brandCode=YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(getModel("XPXCustomerIn"), "/CustomerList/Customer/Extn"), "ExtnBrandCode");
 //TODO : Remove hard code value
 //		brandCode="BDUN";
-		if(!YRCPlatformUI.isVoid(brandCode))
+		/*if(!YRCPlatformUI.isVoid(brandCode))
 		{
 			callApi("XPXGetBrandCodeList", YRCXmlUtils.createFromString("<CommonCode CodeType='"+XPXConstants.COMMON_CODE_XPX_BRAND+"' CodeValue='"+brandCode+"'/>"),null);
 		}
@@ -82,6 +83,15 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		if(!YRCPlatformUI.isVoid(brandCode))
 		{
 			callApi("XPXGetInvoiceDistMethodCodeList", YRCXmlUtils.createFromString("<CommonCode CodeType='XPXInvoiceDM' CodeValue='"+invoiceDistMethodCode+"'/>"),null);
+			
+		}*/
+		//Added By Manas
+		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
+		System.out.println("The customerKey is" + customerKey);
+		if(!YRCPlatformUI.isVoid(customerKey))
+		{
+			callApi("XPXGetCustomerList", YRCXmlUtils.createFromString("<Customer  CustomerKey='" + YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey") + "' />"),null);
+			
 			
 		}
 		
@@ -108,6 +118,8 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 					{
 						parentObj.getBehavior().setCustomerDetails(outXml);
 						parentObj.refreshTabs(true);
+						setDivisionEntitlement(outXml);
+						
 					}
 					
 					//repopulateModel(arg0)
@@ -151,6 +163,19 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 			}
 		
 		super.handleApiCompletion(ctx);
+	}
+	private void setDivisionEntitlement(Element outXml){
+		Element customer = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer");
+		String relationShipType = customer.getAttribute("CustomerType");
+		if(relationShipType != null && relationShipType != ""){
+			setFieldValue("divisionEntitlement", "Y");
+			getControl("divisionEntitlement").setEnabled(false);
+		}
+		else{
+			setFieldValue("divisionEntitlement", "N");
+			getControl("divisionEntitlement").setEnabled(false);
+		}
+		
 	}
 	private void updateModelWithBrandName(Element outXml) {
 		Element generalInfo = getModel("XPXCustomerIn");

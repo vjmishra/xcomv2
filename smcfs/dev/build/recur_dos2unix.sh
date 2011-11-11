@@ -2,6 +2,8 @@
 
 ################################################################
 #Copy this script to your path from where you want to search for all the files and directories in subdirectories recursively.
+# JIRA XNGTP-69 - C.Ctr: Staging, Hyperlinks - Custom Links fail to activate until 2nd click
+# Added .java files to be processed by this script. 
 #################################################################
 
 recur_dos2unix()
@@ -40,6 +42,8 @@ if [ -f "$dirname" ]; then
 		*.ythm ) /usr/bin/dos2unix $curdir/$dirname;;
 		*.properties ) /usr/bin/dos2unix $curdir/$dirname;;
 		*.MF ) /usr/bin/dos2unix $curdir/$dirname;;
+		*.java ) /usr/bin/dos2unix $curdir/$dirname;;
+		*.jsp ) /usr/bin/dos2unix $curdir/$dirname;;
 		* ) ;;
 	esac
 	

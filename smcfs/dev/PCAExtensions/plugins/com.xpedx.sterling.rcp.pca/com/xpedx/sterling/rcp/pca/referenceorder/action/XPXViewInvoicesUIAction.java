@@ -26,7 +26,7 @@ public class XPXViewInvoicesUIAction extends YRCRelatedTaskAction {
 		// TODO Auto-generated method stub
 		    
 			YRCPlatformUI.showInformation("Message", "Click OK to continue");
-			String url = YRCPlatformUI.getYfsSystemProperty("xpedx.invoicing.url");  
+			String url = YRCPlatformUI.getString("xpedx.invoicing.url");
 			Element ele = YRCPlatformUI.getUserElement();
 			String userKey= ele.getAttribute("UserKey");
 			TripleDES tripleDes = new TripleDES();

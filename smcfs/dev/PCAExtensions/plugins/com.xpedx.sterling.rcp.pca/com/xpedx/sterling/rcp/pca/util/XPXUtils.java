@@ -259,14 +259,30 @@ public class XPXUtils {
 				continue;
 			}
 			//addXMLTag(returnDoc,eleItem,"LineNumber",YRCXmlUtils.getAttribute(orderLine, "OrderLineKey"));
+			String itemID = YRCXmlUtils.getAttributeValue(orderLine, "/OrderLine/Item/@ItemID");
+			if(isInteger(itemID)){
 			addXMLTag(returnDoc,eleItem,"LineNumber",YRCXmlUtils.getAttribute(orderLine, "PrimeLineNo"));
 			addXMLTag(returnDoc,eleItem,"LegacyProductCode",YRCXmlUtils.getAttributeValue(orderLine, "/OrderLine/Item/@ItemID"));
 			addXMLTag(returnDoc,eleItem,"RequestedQtyUOM",YRCXmlUtils.getAttributeValue(orderLine, "/OrderLine/OrderLineTranQuantity/@TransactionalUOM"));
-			addXMLTag(returnDoc,eleItem,"RequestedQty",YRCXmlUtils.getAttributeValue(orderLine, "/OrderLine/OrderLineTranQuantity/@OrderedQty"));			
+			addXMLTag(returnDoc,eleItem,"RequestedQty",YRCXmlUtils.getAttributeValue(orderLine, "/OrderLine/OrderLineTranQuantity/@OrderedQty"));
+			}
 		}
 		
 		return returnDoc;
 	}
+	
+	public static boolean isInteger( String input )  
+	{  
+	   try  
+	   {  
+	      Integer.parseInt( input );  
+	      return true;  
+	   }  
+	   catch( Exception e)  
+	   {  
+	      return false;  
+	   }  
+	}  
 	public static void addXMLTag(Document returnDoc, Element element, String tagName, String tagValue){
 		Element textNode = YRCXmlUtils.createChild(element, tagName);
 		Text txt = returnDoc.createTextNode(tagName);

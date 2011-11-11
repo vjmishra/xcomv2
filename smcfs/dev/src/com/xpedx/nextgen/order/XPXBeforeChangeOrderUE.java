@@ -992,7 +992,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 										
 								}
 								reqUnitPrice.put(orderLineKey, orderLineExtnElem.getAttribute("ExtnReqUOMUnitPrice"));
-								if("N".equals(isDraftOrder) && orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag").equalsIgnoreCase("N")) {	
+								if("N".equals(isDraftOrder) && "N".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag"))) {	
 									newLinePriceInfoElem.setAttribute("IsPriceLocked", "N");
 								}
 								/*if(!"true".equals(isPnACall) || ("N".equals(draftOrderFlag) && !"Y".equals(orderLineExtnElem.getAttribute("ExtnEditOrderFlag")) ))
@@ -1033,7 +1033,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 										linePriceInfoElem.setAttribute("IsPriceLocked",  linePriceInfo.getAttribute("IsPriceLocked"));
 									}
 								}
-								if("true".equals(isDraftOrder) && orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag").equalsIgnoreCase("N")) {											
+								if("N".equals(isDraftOrder) && "N".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag"))) {											
 									linePriceInfoElem.setAttribute("IsPriceLocked", "N");
 								}
 								if(!"".equals(linePriceInfo.getAttribute("UnitPrice")))
