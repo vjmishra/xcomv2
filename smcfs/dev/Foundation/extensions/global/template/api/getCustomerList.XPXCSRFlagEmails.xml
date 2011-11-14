@@ -1,6 +1,0 @@
-<CustomerList >
-<Customer CustomerKey='' CustomerID='' OrganizationCode='' ParentCustomerKey='' RootCustomerKey=''>
-<Extn  ExtnECSR1EmailConfirmFlag='' ExtnECsr1EMailID='' ExtnECSR2EmailConfirmFlag='' ExtnECsr2EMailID='' />
-<ParentCustomer/>
-</Customer>
-</CustomerList>
