@@ -1,0 +1,22 @@
+<CustomerList>
+<Customer CustomerID="" OrganizationCode="" BuyerOrganizationCode="">
+<Extn>
+	<XPEDXSalesRepList>
+		<XPEDXSalesRep>
+			<YFSUser/>
+		</XPEDXSalesRep>
+	</XPEDXSalesRepList>
+</Extn>
+<CustomerAdditionalAddressList>
+	<CustomerAdditionalAddress>
+		<PersonInfo>
+			<Extn/>
+		</PersonInfo>
+	</CustomerAdditionalAddress>
+</CustomerAdditionalAddressList>
+<ParentCustomer CustomerID="" OrganizationCode="" BuyerOrganizationCode="">
+<Extn ExtnCustLineField1Flag="" ExtnCustLineField1Label="" ExtnCustLineField2Flag="" ExtnCustLineField2Label="" 
+ ExtnCustLineField3Flag="" ExtnCustLineField3Label="" ExtnCustLinePONoFlag=""/>
+</ParentCustomer>
+</Customer>
+</CustomerList>

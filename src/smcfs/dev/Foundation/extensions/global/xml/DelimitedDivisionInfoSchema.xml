@@ -1,0 +1,37 @@
+<FlatfileDelimitedSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='delimitedreceiver.xsd'>
+   <ParserDefaults DefaultRecordDelimiter="Newline" DefaultFieldDelimiter="|" DefaultPadCharacter="#" RecordIdStartPosition="1">
+       </ParserDefaults>
+
+   <Root Name="Divisions">
+	 <Header Name="Division" RecordName="DIV" MinOccurrence="1" MaxOccurrence="1"/>
+   </Root>
+
+   <RecordDefinitions>
+      <Record RecordId="DIV" Name="DIV" XMLName="Division">
+         <Field Name="Environment" FieldPosition="2" XMLName="EnvironmentId"/>
+         <Field Name="Company" FieldPosition="3" XMLName="CompanyCode"/>
+         <Field Name="ProcessCode" FieldPosition="4" XMLName="ProcessCode"/>
+         <Field Name="AccessBranchNo" FieldPosition="5" XMLName="AccessBranchNo"/>
+         <Field Name="BranchName" FieldPosition="6" XMLName="BranchName"/>
+         <Field Name="AddressLine1" FieldPosition="7" XMLName="AddressLine1"/>
+         <Field Name="AddressLine2" FieldPosition="8" XMLName="AddressLine2"/>
+         <Field Name="City" FieldPosition="9" XMLName="AddressLine3"/>
+         <Field Name="Telephone" FieldPosition="10" XMLName="DivisionPhone"/>
+         <Field Name="Base" FieldPosition="11" XMLName="CountryCode"/>
+         <Field Name="JDE" FieldPosition="12" XMLName="JDECode"/>
+		 <Field Name="PricingWareHouse" FieldPosition="13" XMLName="PricingWareHouse"/>
+         <Field Name="Status" FieldPosition="14" XMLName="Status"/>
+         <Field Name="NationalAccount" FieldPosition="15" XMLName="NationalAccount"/>
+         <Field Name="WareHouseName" FieldPosition="16" XMLName="WareHouseName"/>
+         <Field Name="TransferCircle" FieldPosition="17" XMLName="TransferCircle"/>
+         <Field Name="TransferCircleName" FieldPosition="18" XMLName="TransferCircleName"/>
+	     <Field Name="NoOfDays" FieldPosition="19" XMLName="NoOfDays"/>
+	  </Record>
+     </RecordDefinitions>
+</FlatfileDelimitedSchema>
+
+
+
+
+
+

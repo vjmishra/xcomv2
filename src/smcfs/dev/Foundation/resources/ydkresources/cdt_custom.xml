@@ -1,0 +1,5 @@
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<Group Name="Custom Tables">
+	<Table Name="XPX_RULE_DEFN"/>
+	<Table Name="XPX_ERROR_LOOKUP"/>
+</Group>

@@ -1,0 +1,28 @@
+<CustomerContactList>
+<CustomerContact>
+<Extn>
+</Extn>
+<User>
+<!-- sunith says pick from usergrouplist here master admin -->
+<ContactPersonInfo>
+</ContactPersonInfo>
+</User>
+<Customer>
+<!-- try -->
+<Extn/>
+<CustomerContactList>
+<CustomerContact>
+<User>
+<UserGroupLists>
+<UserGroupList UserGroupListKey="" UsergroupId="" UsergroupKey=""/>
+</UserGroupLists>
+</User>
+<Extn/>
+</CustomerContact>
+
+</CustomerContactList>
+<!-- try -->
+
+</Customer>
+</CustomerContact>
+</CustomerContactList>

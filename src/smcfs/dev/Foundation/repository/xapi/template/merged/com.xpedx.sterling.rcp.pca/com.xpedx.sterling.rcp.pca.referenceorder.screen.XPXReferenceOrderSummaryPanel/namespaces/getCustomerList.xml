@@ -1,0 +1,6 @@
+<CustomerList>
+<Customer CustomerID="" OrganizationCode="" BuyerOrganizationCode="" CustomerKey="">
+<Extn/>	
+<BuyerOrganization OrganizationCode='' OrganizationName=''/>
+</Customer>
+</CustomerList>

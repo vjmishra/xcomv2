@@ -1,0 +1,1 @@
+-CompareOrganizationCode xpedx,DEFAULT,UPSN,USPS,FEDX,UPSC,UPSA,UPSE,UPSL,Purolator,CentralLewmar,CentralMarquardt,Saalfeld,StrategicPaper,WesternPaper,WhitemanTower,Zellerbach,BulkleyDunton,xpedxCanada

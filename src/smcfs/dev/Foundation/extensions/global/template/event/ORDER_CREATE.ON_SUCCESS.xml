@@ -1,0 +1,23 @@
+<Order>
+<Extn/>
+<PriceInfo/>
+<OrderLines>
+<OrderLine>
+<Extn/>
+<Item>
+<Extn/>
+</Item>
+<OrderDates>
+<OrderDate/>
+</OrderDates>
+<LinePriceInfo/>
+<OrderLineTranQuantity/>
+</OrderLine>
+</OrderLines>
+<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" AlternateEmailID="" Beeper="" City="" Company="" Country="" Createprogid="" Createts="" Createuserid="" DayFaxNo="" DayPhone="" Department="" EMailID="" ErrorTxt="" EveningFaxNo="" EveningPhone="" FirstName="" HttpUrl="" JobTitle="" LastName="" Lockid="0" MiddleName="" MobilePhone="" Modifyprogid="" Modifyts="" Modifyuserid="" OtherPhone="" PersonID="" PreferredShipAddress="" State="" Suffix="" Title="" UseCount="0" VerificationStatus="" ZipCode="" isHistory="">
+<Extn/>
+</PersonInfoShipTo>
+<PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6=""         AlternateEmailID="" Beeper="" City="" Company="" Country="" Createprogid="" Createts="" Createuserid="" DayFaxNo="" DayPhone="" Department="" EMailID="" ErrorTxt="" EveningFaxNo="" EveningPhone="" FirstName="" HttpUrl="" JobTitle="" LastName="" Lockid="0" MiddleName="" MobilePhone="" Modifyprogid="" Modifyts="" Modifyuserid="" OtherPhone="" PersonID="" PreferredShipAddress="" State="" Suffix="" Title="" UseCount="0" VerificationStatus="" ZipCode="" isHistory="">
+<Extn/>
+</PersonInfoBillTo>
+</Order>

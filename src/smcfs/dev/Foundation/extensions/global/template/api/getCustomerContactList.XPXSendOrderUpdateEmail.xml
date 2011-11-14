@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomerContactList>
+<CustomerContact ApproverProxyUserId=" " ApproverUserId=" " Company=" "
+    Createprogid=" " Createts=" " Createuserid=" " CustomerContactID=" "
+    CustomerContactKey=" " CustomerKey=" " DateOfBirth=" " DayFaxNo=" "
+    DayPhone=" " Department=" " EmailID=" " EveningFaxNo=" "
+    EveningPhone=" " FirstName=" " JobTitle=" " LastName=" " Lockid=" "
+    MiddleName=" " MobilePhone=" " Modifyprogid=" " Modifyts=" "
+    Modifyuserid=" " SpendingLimit=" " SpendingLimitCurrency=" "
+    SpouseDateOfBirth=" " Status=" " Title=" " UserID=" " WeddingAnniversaryDate=" ">
+    <Extn ExtnAddnlEmailAddrs=" " ExtnB2BCatalogView=" "
+        ExtnDefaultShipTo=" " ExtnEmployeeID=" " ExtnEstimator=" "
+        ExtnMaxOrderAmount=" " ExtnMinChargeAmount=" "
+        ExtnMinOrderAmount=" " ExtnOrderEmailFormat=" " ExtnPOList=" "
+        ExtnPaper101Grade=" " ExtnPrefCatalog=" " ExtnProcessedFlag=" "
+        ExtnPunchOutUser=" " ExtnStockCheckWS=" " ExtnUserNetworkID=" "
+        ExtnUserType=" " ExtnViewInvoices=" " ExtnOrderShipEmailFlag=" " ExtnOrderCancelEmailFlag=" " ExtnBackOrderEmailFlag=" "/>
+	<User>
+		<UserGroupLists>
+			<UserGroupList UserGroupListKey="" UsergroupId="" UsergroupKey="" /> 
+		</UserGroupLists>
+	</User>
+</CustomerContact>
+</CustomerContactList>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YFS_CATEGORY" AuditRequired="N">
+        
+      
+      <Indices>
+            <Index Name="EXTN_CATG_I1" Unique="False">
+            	<Column Name="ORGANIZATION_CODE"/>
+                <Column Name="MODIFYTS"/>
+            </Index>
+            
+            <Index Name="EXTN_CATG_I2" Unique="False">           	
+                <Column Name="CATEGORY_DOMAIN_KEY"/>
+                <Column Name="STATUS"/>
+                <Column Name="ORGANIZATION_CODE"/>        
+            </Index>
+      </Indices>
+      	
+      </Entity>
+      
+      <Entity TableName="YFS_CATEGORY_ITEM" AuditRequired="N">
+        
+      
+      <Indices>
+            <Index Name="EXTN_CATG_ITEM_I1" Unique="False">
+            	<Column Name="CATEGORY_KEY"/>
+            </Index>
+            
+      </Indices>
+      	
+      </Entity>
+</Entities>
+</DBSchema> 

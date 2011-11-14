@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>  
+    <Entity EntityType="VIEW" View="true" TableType="TRANSACTION" TableName="XPEDX_SALES_REP_CUSTOMERS" ApiNeeded="Y" AuditRequired="N" Description="Sales Rep" HasHistory="false" Prefix="XPEDX">
+        <Attributes>
+        
+        <Attribute ColumnName="SALES_RP_CUST_KEY" 
+          DataType="Key"
+          DefaultValue="' '" 
+          Description="Sales Rep Customers Key Primary key of this table" 
+		  Name="SalesRPCustKey"
+          Nullable="false" 
+          XMLName="SalesRPCustKey"
+          />
+        
+		  <Attribute ColumnName="MSAP_NO" 
+          DataType="AccountNo"
+          DefaultValue="' '" 
+          Description="MSAP Number from Customer table"  
+          Nullable="false" 
+          XMLName="ExtnMSAPNo"
+          />	
+		  
+		   <Attribute ColumnName="MSAP_NAME" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="MSAP Name from Customer Table"  
+          Nullable="false" 
+          XMLName="ExtnMSAPName"
+          />
+		  
+		    <Attribute ColumnName="MSAP_ORGANIZATION_NAME" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="MSAP Organization Name"  
+          Nullable="false" 
+          XMLName="ExtnMSAPOrganizationName"
+          />
+		  
+		  <Attribute ColumnName="MSAP_ORGANIZATION_CODE" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="MSAP Organization Code"  
+          Nullable="false" 
+          XMLName="ExtnMSAPOrganizationCode"
+          />
+          
+		  <Attribute ColumnName="CUSTOMER_ID" 
+          DataType="CustomerId"
+          DefaultValue="' '" 
+          Description="Customer to whom the Sales Rep is assigned"  
+          Nullable="false" 
+          XMLName="CustomerID"
+           />  
+		   
+		  <Attribute ColumnName="USER_ID" 
+          DataType="UserId"
+          DefaultValue="' '" 
+          Description="Sales Rep user"  
+          Nullable="false" 
+          XMLName="UserID"
+           />  
+           
+          <Attribute ColumnName="SR_FIRST_NAME" 
+          DataType="varchar2-64"
+          DefaultValue="' '" 
+          Description="Sales Rep First Name"  
+          Nullable="true" 
+          XMLName="FirstName"
+           />   
+           
+           <Attribute ColumnName="SR_LAST_NAME" 
+          DataType="varchar2-64"
+          DefaultValue="' '" 
+          Description="Sales Rep Last Name"  
+          Nullable="true" 
+          XMLName="LastName"
+           />   
+           
+           
+        </Attributes>
+         <PrimaryKey Name="XPEDX_SR_CUST_PK">
+		      <Attribute ColumnName="SALES_RP_CUST_KEY" Name="SalesRPCustKey"/>
+		 </PrimaryKey>
+      </Entity>
+</Entities>
+</DBSchema>

@@ -1,0 +1,19 @@
+<OrderList>
+<Order OrderHeaderKey="" OrderType="">
+<OrderLines>
+<OrderLine OrderLineKey="" LineType="" PrimeLineNo="" SubLineNo="" OrderedQty="">
+<Item ItemID="" UnitOfMeasure="" ProductClass="">
+<Extn/>
+</Item>
+<OrderLineTranQuantity TransactionalUOM=""/>
+<LinePriceInfo/>
+</OrderLine>
+</OrderLines>
+<PersonInfoShipTo>
+<Extn/>
+</PersonInfoShipTo>
+<PersonInfoBillTo>
+<Extn/>
+</PersonInfoBillTo>
+</Order>
+</OrderList>

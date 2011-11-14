@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YPM_PRICELIST_HDR" AuditRequired="N">
+        <Attributes>
+        <Attribute ColumnName="EXTN_ENVT_ID" DataType="Text-20" DefaultValue="' '" Description="Indicates the environment from the Customer Profile" Nullable="true" Size="" XMLName="ExtnEnvtId" XMLGroup="Extn" />
+	    <Attribute ColumnName="EXTN_COMPANY_ID" DataType="Text-20" DefaultValue="' '" Description="Indicated Company Code " Nullable="true" Size="" 
+          XMLName="ExtnCompanyId" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_PRICING_WAREHOUSE" DataType="Text-20" DefaultValue="' '" Description="Indicated Pricing Warehouse " Nullable="true" Size="" XMLName="ExtnPricingWareHouse" XMLGroup="Extn" />
+		
+		<Attribute ColumnName="EXTN_PRICING_UOM" DataType="Text-20" DefaultValue="' '" Description="Indicates the Pricing Uom" Nullable="true" Size="" XMLName="ExtnPricingUom" XMLGroup="Extn" />
+		
+      </Attributes>	
+
+	   <Indices>
+            <Index Name="EXTN_PL_HDR_I1" Unique="False">
+               <Column Name="MODIFYTS"/>
+            </Index>
+      </Indices>
+      </Entity>
+</Entities>
+</DBSchema> 

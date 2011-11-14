@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--getOrderList Output XML-->
+<OrderList TotalOrderList="">
+<Order BuyerOrganizationCode="" EnterpriseCode="" OrderHeaderKey="" MaxOrderStatus="" MinOrderStatus="" >
+<Extn ExtnOrderStatus="" ExtnOrderStatusPrefix="" />
+<OrderLines>
+<OrderLine OrderLineKey="" ChainedFromOrderHeaderKey="" ChainedFromOrderLineKey="">
+<Extn ExtnWebLineNumber="" />
+</OrderLine>
+</OrderLines>
+</Order>
+</OrderList>
