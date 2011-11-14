@@ -829,6 +829,14 @@
 		<antcall target="jar-plugin-clients" />
 		<antcall target="refresh-custom-plugins"/>
 		<antcall target="buildCOMForWindows"/>
+		<!-- 11/11/2011
+		Updated by MLamriben
+		added automatic updates section to :
+		a- Clean the old zip file in the Update Directory
+		b- Unzip the new com.zip file in the Update Directory
+		-->
+		<antcall target="AutomaticUpdates"/>
+		
 	</target>
 	
 	<!-- 09/23/2011
@@ -846,6 +854,23 @@
 		</zip>				
 	</target>
 
+	<target name="AutomaticUpdates">
+		<!-- 11/11/2011
+		Updated by MLamriben
+		added automatic updates section to :
+		a- Clean the old zip file and all files in the Update Directory
+		b- Unzip the new com.zip file in the Update Directory
+		-->
+		 <delete includeemptydirs="true">
+		    <fileset dir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" includes="**/*"/>
+		 </delete>		
+		
+		<copy file="${env.INSTALL_DIR}/rcpdrop/windows/9.0/com.zip" todir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" /> 
+		
+		<unzip src="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86/com.zip" dest="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86"/>
+				
+	</target>
+	
 	<!-- deletes and creates destination rcpdrop folder -->
 	<target name="prepare-rcp-extn-folder">
 		<delete dir="${devhome}/dist/rcpdrop" />

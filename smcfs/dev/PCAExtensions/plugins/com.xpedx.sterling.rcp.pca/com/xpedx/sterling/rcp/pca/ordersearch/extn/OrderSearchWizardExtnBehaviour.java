@@ -453,8 +453,25 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		if(apiContext.getApiName().equals("XPXGetStatusList")){
 			Document docOutput = apiContext.getOutputXml();
 			setExtentionModel("Extn_StatusList", docOutput.getDocumentElement());
-
 			Element eleDocTypes = YRCXmlUtils.createDocument("DocumentTypes").getDocumentElement();
+			Element rootElem = docOutput.getDocumentElement();
+			NodeList commonCodeList=rootElem.getElementsByTagName("CommonCode");
+			for(int i=0;i<commonCodeList.getLength();i++){
+				Element commonCodeElem=(Element) commonCodeList.item(i);
+				String codeValue = commonCodeElem.getAttribute("CodeValue");
+				if (codeValue.equalsIgnoreCase("1100.5150" )){
+					docOutput.getDocumentElement().removeChild(commonCodeElem);
+					}
+				}
+			for(int i=0;i<commonCodeList.getLength();i++){
+				Element commonCodeElem=(Element) commonCodeList.item(i);
+				String codeValue = commonCodeElem.getAttribute("CodeValue");
+				if (codeValue.equalsIgnoreCase("1100.5155" )){
+					docOutput.getDocumentElement().removeChild(commonCodeElem);
+				}
+				
+			}
+			setExtentionModel("Extn_StatusList", docOutput.getDocumentElement());
 			HashMap<String, String> mapDocTypes = new HashMap<String, String>();
 			mapDocTypes.put("0001", "Sales Order");
 			mapDocTypes.put("0001.CUSTOMER_ORDER", "Customer Order");

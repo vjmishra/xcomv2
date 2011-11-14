@@ -15,7 +15,7 @@ public class XPXViewInvoicesUIAction extends YRCRelatedTaskAction {
 
 	private String finalQueryString;
 	String encryptedUserKey = null;
-	String URLEncodedUserKey = null;
+	
 	
 	
 
@@ -38,8 +38,8 @@ public class XPXViewInvoicesUIAction extends YRCRelatedTaskAction {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            URLEncodedUserKey = URLEncoder.encode(encryptedUserKey);
-            finalQueryString = "UserID="+ URLEncodedUserKey;
+           
+            finalQueryString = "UserID="+ encryptedUserKey;
 			XPXUtils.accessURL(url, finalQueryString);
 			return;
 		

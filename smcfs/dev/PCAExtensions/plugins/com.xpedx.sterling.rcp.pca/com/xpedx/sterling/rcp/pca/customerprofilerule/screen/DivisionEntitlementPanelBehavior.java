@@ -5,6 +5,7 @@
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
@@ -12,6 +13,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
@@ -165,15 +167,40 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		super.handleApiCompletion(ctx);
 	}
 	private void setDivisionEntitlement(Element outXml){
+		Element generalInfo = getModel("XPXCustomerIn");
+		Element custEle = YRCXmlUtils.getXPathElement(generalInfo, "/CustomerList/Customer");
 		Element customer = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer");
-		String relationShipType = customer.getAttribute("CustomerType");
-		if(relationShipType != null && relationShipType != ""){
+		String relationShipType = customer.getAttribute("RelationshipType");
+		
+		System.out.println("The relationshiptype is" + relationShipType);
+		Element userElem = YRCPlatformUI.getUserElement();
+		
+		List nodesList=YRCXmlUtils.getChildren(userElem, "UserGroupLists/UserGroupList");
+		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
+		for(int i=0;i<nodList.getLength();i++){
+		Element eleCust=(Element) nodList.item(i);
+		Element groupID = YRCXmlUtils.getXPathElement(eleCust, "/UserGroupList/UserGroup");
+		String groupId = groupID.getAttribute("UsergroupId");
+		if(relationShipType != null && relationShipType != "" ){
 			setFieldValue("divisionEntitlement", "Y");
 			getControl("divisionEntitlement").setEnabled(false);
+			custEle.setAttribute("RelationshipType", "Y");
+			setModel("XPXCustomerIn", generalInfo);
+			if (groupId != null && groupId.equalsIgnoreCase("XPXEBusinessAdmin")){
+				
+				getControl("divisionEntitlement").setEnabled(true);	
+			}
 		}
 		else{
 			setFieldValue("divisionEntitlement", "N");
 			getControl("divisionEntitlement").setEnabled(false);
+			custEle.setAttribute("RelationshipType", "N");
+			setModel("XPXCustomerIn", generalInfo);
+			if (groupId != null && groupId.equalsIgnoreCase("XPXEBusinessAdmin")){
+				
+				getControl("divisionEntitlement").setEnabled(true);	
+			}
+		}
 		}
 		
 	}

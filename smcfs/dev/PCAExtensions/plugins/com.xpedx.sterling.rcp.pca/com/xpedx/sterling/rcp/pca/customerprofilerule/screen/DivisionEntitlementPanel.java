@@ -2414,7 +2414,7 @@ public class DivisionEntitlementPanel extends Composite implements
 				chkCanRequestSample, txtShipComplete, chkOrderUpdateFlag, txtPrimarySalesRep,
 				txtNAICSCode, txtNAICSName, chkShipToOverrideFlag, txtPhone1,
 				txtFax1, txtSalesRep1, txtSalesRep2, txtSalesRep3,
-				txtSalesRep4, txtSAPName, txtMasterSAPName,divisionEntitlement };
+				txtSalesRep4, txtSAPName, txtMasterSAPName};
 	}
 	
 	private Control[] readOnlyforSAPChilds(){
