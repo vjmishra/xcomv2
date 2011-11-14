@@ -71,6 +71,14 @@
     Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
     UsergroupDescription="Integration Administrator"
     UsergroupId="XPXIntegrationAdmin" UsergroupKey="2010113015525881508" UsergroupName="Integration Admin"/>
+<UserGroup Activateflag="" BusinessKey="" Createprogid=".YCPGroupAPI"
+    Createts="2011-11-10T06:52:48-05:00" Createuserid="admin"
+    GroupOwnerId="" GroupType="" Lockid="0" Modifyprogid=".YCPGroupAPI"
+    Modifyts="2011-11-10T06:52:48-05:00" Modifyuserid="admin"
+    OwnerKey="xpedx" OwnerType="" TemplateGroup=""
+    UsergroupDescription="View Invoices Group"
+    UsergroupId="XPXViewInvoicesGroup"
+    UsergroupKey="20111110065248106667" UsergroupName="ViewInvoicesGroup"/>
 <UserGroup Activateflag="" BusinessKey="" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
     GroupOwnerId="" GroupType="EXTERNAL" Lockid="0"
