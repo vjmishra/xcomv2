@@ -1,0 +1,241 @@
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">-->
+<html>
+<head>
+<script language="javascript" src="../deployed/dom.js"></script>
+<script language="javascript" src="../deployed/multilist.js"></script>
+<script language="javascript">
+var skin=parent._skin?parent._skin:"skin_standard";
+var lang=parent._lang?parent._lang:"en";
+initDom("../deployed/images/"+skin+"/",lang)
+styleSheet()
+</script>
+<script language="javascript">
+function changeCB()
+{
+{
+if (this.multi)
+{
+var sel=this.getMultiSelection(),s='Item Count='+this.getCount(),len=Math.min(sel.length,3)
+for (var j=0;j<len;j++)
+{
+s+=' value=' + sel[j].value
+s+=' index=' + sel[j].index
+s+=' text='
+if (this.getColumsCount()>1)
+{
+for (var i in sel[j].text)
+s+=sel[j].text[i]+' '
+}
+else
+s+=sel[j].text
+s+="|"
+}
+status=s
+setTimeout("status=''",3000)
+}
+else
+{
+var sel=this.getSelection(),s='Item Count='+this.getCount()
+if (sel)
+s+=' value=' + sel.value
+s+=' index=' + sel.index
+s+=' text='
+if (this.getColumsCount()>1)
+{
+for (var i in sel.text)
+s+=sel.text[i]+' '
+}
+else
+s+=sel.text
+status=s
+setTimeout("status=''",3000)
+}
+}
+}
+function dblClickCB()
+{
+alert("Double Click")
+}
+function loadCB()
+{
+refillButton.init()
+selectText.init()
+valText.init()
+selectButton.init()
+valSelectButton.init()
+valueButton.init()
+addButton.init()
+delButton.init()
+delAllButton.init()
+moveUpButton.init()
+moveDownButton.init()
+multiList.init()
+simpleList.init()
+timeLayer.init()
+multiList.valueSelect("v5")
+displayTime()
+}
+function sortCB()
+{
+alert("Sort")
+}
+function rebuildCB()
+{
+buildStart=new Date
+if (rebuildMulti)
+writeMulti(multiList,nbIter)
+else
+writeSingle(multiList,nbIter)
+buildEnd=new Date
+writeHTMLStart=new Date
+multiList.rebuildHTML()
+writeHTMLEnd=new Date
+rebuildMulti=!rebuildMulti
+displayTime()
+}
+function selectCB()
+{
+var value=selectText.getValue()
+multiList.select(value?parseInt(value):null)
+}
+function valSelectCB()
+{
+var value=valText.getValue()
+multiList.valueSelect(value)
+}
+function getValueCB()
+{
+var value=selectText.getValue()
+alert("value=" + multiList.getValue(value?parseInt(value):null))
+}
+function writeMulti(list,nbIter)
+{
+list.freeze()
+list.resetColums()
+list.addColumn("Very very very very very very very long title",198,true,0,"tooltip")
+list.addColumn("Resort",198,false,1,"Other tooltip")
+list.addColumn("Revenue",198,true,-1)
+for (var i=0;i<nbIter;i++)
+{
+var j=i*10
+list.addRow("v"+(j++),true,""+i+"France et puis un peu plus long long long etc","French Riviera","200 680 €");
+list.addRow("v"+(j++),false,new Array("ArrFrance","French Riviera","890 600 €"));
+list.addRow("v"+(j++),false,"France","French Riviera","540 780 €");
+list.addRow("v"+(j++),false,"France","French Riviera","200 680 €");
+list.addRow("v"+(j++),false,"France et puis un peu plus long long long etc","French Riviera","200 680 €");
+list.addRow("v"+(j++),false,"France","French Riviera","890 600 €");
+list.addRow("v"+(j++),false,"France","French Riviera","540 780 €");
+list.addRow("v"+(j++),false,"France","French Riviera","200 680 €");
+list.addRow("v"+(j++),false,"France et puis un peu plus long long long etc","French Riviera","200 680 €");
+list.addRow("v"+(j++),false,"France","French Riviera","200 680 €");
+}
+}
+function writeSingle(list,nbIter)
+{
+list.freeze()
+list.resetColums()
+list.addColumn("Liste mono column",198,true,0)
+for (var i=0;i<nbIter;i++)
+{
+var j=i*10
+list.addRow("v"+(j++),false,"Chart Types (Pareto, Radar, etc)");
+list.addRow("v"+(j++),false,"Series Types (Split Column, data-driven color Bubbles, etc)");
+list.addRow("v"+(j++),false,"Annotations (Growth lines, selection, attention, notes)");
+list.addRow("v"+(j++),false,"Skins (complex fills, shapes, data-driven appearance, etc)");
+list.addRow("v"+(j++),false,"Axes (Currency, Duration, etc)");
+list.addRow("v"+(j++),false,"New Customization Points");
+list.addRow("v"+(j++),false,"Custom DataTips");
+list.addRow("v"+(j++),false,"Custom Label Renderers");
+list.addRow("v"+(j++),false,"Dual Axis support");
+list.addRow("v"+(j++),false,"Exploding Pies!");
+}
+}
+function addCB()
+{
+if (multiList.getColumsCount()==1)
+multiList.addRow("added row",false,"New row")
+else
+multiList.addRow("added row",false,"New row","New row","New row")
+multiList.select(-1)
+}
+function delCB()
+{
+var value=selectText.getValue(),index=value?parseInt(value):null
+if (index!=null)
+multiList.del(index)
+}
+function delAllCB()
+{
+multiList.del()
+}
+function displayTime()
+{
+timeLayer.setHTML("<br>Right List: <br><b>Build a list with "+(nbItems)+ " items</b><br><u>Build Time:</u> <b>"+ ((buildEnd.valueOf()-buildStart.valueOf())/1000) +" s</b><br><u>Build HTML Time:</u> <b>"+((writeHTMLEnd.valueOf()-writeHTMLStart.valueOf())/1000)+" s</b>")
+}
+var nbIter=100
+var nbItems=nbIter*10
+var rebuildMulti=false
+refillButton    = newButtonWidget("refillButton","Rebuild",rebuildCB)
+selectButton    = newButtonWidget("select","Select from index (blank=unselect)",selectCB)
+valSelectButton = newButtonWidget("valSelectButton","Select from value",valSelectCB)
+valueButton     = newButtonWidget("value","get value from index",getValueCB)
+addButton       = newButtonWidget("add","add a new row",addCB)
+delButton       = newButtonWidget("delButton","delete from index",delCB)
+delAllButton    = newButtonWidget("delAllButton","delete All",delAllCB)
+moveUpButton    = newButtonWidget("moveUpButton","Move Up","multiList.move(-1)")
+moveDownButton  = newButtonWidget("moveDownButton","Move Down","multiList.move(1)")
+selectText      = newIntFieldWidget("selectText",null,null,null,selectCB,true)
+valText         = newTextFieldWidget("valText",null,null,null,valSelectCB,true)
+timeLayer       = newWidget("timeLayer")
+simpleList      = newMultiColumnList("simpleList",changeCB,false,400,300,dblClickCB,sortCB)
+multiList       = newMultiColumnList("multiList",changeCB,true,400,300,dblClickCB,sortCB)
+multiList.setLines(10)
+writeMulti(multiList, nbIter)
+var buildStart=new Date
+writeSingle(simpleList, nbIter)
+var buildEnd=new Date
+</script>
+</head>
+<body onload="loadCB()">
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<table width="100%"><tr><td align="left" valign="middle">
+<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+<u><b>Multicolum list</b></u><br><br>
+<table border="0">
+<tr valign="top">
+<td class="dialogzone">
+<script language="javascript">simpleList.write()</script>
+</td>
+<td class="dialogzone">
+<script language="javascript">var writeHTMLStart=new Date;multiList.write();var writeHTMLEnd=new Date</script>
+</td>
+<td>
+<script language="javascript">moveUpButton.write();document.write("<br><br>");moveDownButton.write();</script>
+</td>
+</tr>
+</table>
+<table border="0" ID="Table1">
+<tr align="left">
+<td class="dialogzonebold">Right list actions:</td>
+<td colspan="2"><script language="javascript">refillButton.write()</script></td>
+<td colspan="2"><script language="javascript">addButton.write()</script></td>
+</tr>
+<tr align="left">
+<td></td>
+<td><script language="javascript">selectText.write()</script></td>
+<td><script language="javascript">selectButton.write()</script></td>
+<td><script language="javascript">valueButton.write()</script></td>
+<td><script language="javascript">delButton.write()</script></td>
+<td><script language="javascript">delAllButton.write()</script></td>
+</tr>
+<tr align="left">
+<td></td>
+<td><script language="javascript">valText.write()</script></td>
+<td><script language="javascript">valSelectButton.write()</script></td>
+</tr>
+</table>
+<div class="dialogzone" id="timeLayer"></div>
+</div></div>
+</td></tr></table>
+</body>
+</html>

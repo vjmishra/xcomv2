@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries Item Details/Variant action</comment>
+	<!-- 
+	<entry key="WCContext.customerId">XPEDXMyItemsList:/XPEDXMyItemsList/@CustomerID</entry>
+	 -->
+	
+	<entry key="sharePrivate">XPEDXMyItemsListPrivate:/XPEDXMyItemsList/@SharePrivate</entry>
+	
+	<entry key="sharedListOrNames">XPEDXMyItemsList:/XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="sharedListOrValues">XPEDXMyItemsList:/XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/ComplexQuery/Or/Exp[]/@Value</entry>
+	
+</properties>

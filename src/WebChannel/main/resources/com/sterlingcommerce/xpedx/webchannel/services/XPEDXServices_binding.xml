@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for the services/Services action</comment>
+	<entry key="WCContext.storefrontId">xpedxgetCustomerList:/Customer/@OrganizationCode</entry>
+	<entry key="WCContext.customerId">xpedxgetCustomerList:/Customer/@CustomerID</entry>
+</properties>

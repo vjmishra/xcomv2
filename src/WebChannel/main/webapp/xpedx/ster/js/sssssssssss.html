@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body><table style="width:600px;" class="form">
+                    <tbody>
+                      
+                        <tr>
+                          <td>Given Size                                                 (Length):</td>
+                          <td colspan="3"> 
+                          
+                          <input name="hSize" type="text" style="width:80px;" onkeyup="calcPhone('Value',form_Ream.calcwidth);" class="x-input right-align"id="hSize" /></td>
+                        </tr>
+                        <tr>
+                          <td>Given Size                                                 (Width):</td>
+                          <td colspan="3"><input name="wSize" type="text" style="width:80px;" class="x-input right-align"id="wSize" onkeyup="calcPhone('Value',form_Ream.calcheight);"/></td>
+                        </tr>
+                        <tr>
+                          <td>Basis Weight:</td>
+                          <td colspan="3"><span class="no-border-left">
+                            <input type="hidden" id="txtstran" name="txtstran" />
+                          </span>                            <input name="bWeight" type="text" style="width:80px;" class="x-input right-align"id="bWeight" onkeyup="calcPhone('Value',form_Ream.calcpages);"/></td>
+                        </tr>
+                        <tr>
+                          <td>Basic Size                                                 (Length X Width):&nbsp;</td>
+                          <td width="138" class="padding8"><input name="hArea" type="text" style="width:80px;" class="x-input right-align"id="hArea" onkeyup="calcPhone('Value',form_Ream.calcpieces);"/></td>
+                          <td width="17" class="padding8">X </td>
+                          <td width="230" class="padding8"><input name="wArea" type="text" style="width:80px;" class="x-input right-align"id="wArea" onkeyup="calcPhone('Value',form_Ream.calcWaste);"/></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td colspan="3"> 
+                            <ul id="cart-actions"><li><a href="#" onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
+                                
+                            </ul>
+                         </td>
+                        </tr>
+                        <tr >
+                         <td width="195"><strong>Ream Weight:</strong></td>
+                         <td colspan="3"> <strong class="red"> <input style="border:none; color:#F00; font-weight:bold;" class="TextField" size="4" value="*************" name="Answer"></strong>lbs                                              per ream</td>
+                        </tr>
+                         
+                    </tbody>
+                </table>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for the quick link action</comment>
+	<entry key="codeType">xpedxGetCustomCommonCodesForQuickLinks:/CommonCode/@CodeType</entry>
+	<entry key="WCContext.storefrontId">xpedxGetCustomCommonCodesForQuickLinks:/CommonCode/@CallingOrganizationCode</entry>
+</properties>

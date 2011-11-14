@@ -1,0 +1,474 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Grouping dialog window</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/calendar.js"></script>
+<script language="javascript" src="../../../lib/lov.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"groupDlg")
+</script>
+<script language="javascript">
+function GroupElement(name, arrVal)
+{
+var o=this;
+o.name=name;
+o.arrVal=arrVal;
+return o;
+}
+var arrChunk = null
+var arrLov = null
+var arrGroup = null
+var curChunk = 0
+var curLov = 0
+var groupingDlg=null
+var varGpName=null
+var gpLov=null
+var gpAddBtn=null
+var gpRemBtn=null
+var gpTree=null
+var gpNewBtn=null
+var gpRenameBtn=null
+var gpDeleteBtn=null
+var gpMoveUpBtn=null
+var gpMoveDownBtn=null
+var gpInfo=null
+var gpFramezone=null
+var gpOkBtn=null
+var cancelBtn=null
+var helpBtn=null
+var buttonsWidth= 60
+var dlgWidth= 530
+var dlgHeight= 420
+var frmZoneWidth= 0.95*dlgWidth
+var frmZoneHeight= 0.5*dlgHeight
+var initialized= false
+</script>
+<script language="javascript"> 
+var url = p._root + "incLov" + p._appExt
+url += p.urlParams(true,false)
+url += "&sLovType=CUBE"
+url += "&iChunk=" + curChunk
+includeScript(url)
+</script>
+<script language="javascript"> 
+var url = p._root + "incGrouping" + p._appExt
+url += p.urlParams(true,false)
+includeScript(url) 
+</script>
+<script language="javascript"> 
+arrChunk = b
+arrLov = t
+arrGroup = new Array;
+function initGroup()
+{
+arrGroup[0] = new GroupElement("Grouped value  "+1,null);
+}
+function validEditInPlaceCB(text)
+{
+if (text=='')
+{
+p.showAlertDialog("You cannot enter an empty value","Grouping",0)
+return false
+}
+return true
+}
+function fillGroup()
+{
+gpTree.deleteAll();
+for (var i=0;i<arrGroup.length;i++)
+{
+var gp=newTreeWidgetElem(1,arrGroup[i].name,arrGroup[i].name)
+gp.par=gpTree
+gp.setEditable(true,null,validEditInPlaceCB)
+gpTree.add(gp)
+if (arrGroup[i].arrVal == null)
+continue;
+for (var j=0;j<arrGroup[i].arrVal.length;j++)
+{
+var elem=newTreeWidgetElem(null,arrGroup[i].arrVal[j],arrGroup[i].arrVal[j])
+elem.par=gp
+gp.add(elem)
+}
+}
+gpTree.rebuildHTML()
+gpTree.sub[0].select()
+gpTree.sub[0].expanded=true
+}
+function addGroup()
+{
+var idx=gpTree.getCount()+1
+var newgp=newTreeWidgetElem(1,"Grouped value  "+idx)
+newgp.setEditable(true,null,validEditInPlaceCB)
+newgp.par=gpTree
+gpTree.add(newgp)
+newgp.expanded=true
+gpTree.rebuildHTML()
+newgp.select()
+}
+function renameGroup()
+{
+var gp=gpTree.getSelectedItem()
+if (gp!=null)
+gp.showEditInput(true)
+}
+function deleteGroup()
+{
+var gp=gpTree.getSelectedItem()
+if ( (gp==null) || ((gp !=null) && (gp.par!=gpTree)) || (gpTree.getCount()==1) )
+return
+var arr=gpTree.sub
+for (var i=0;i<arr.length;i++)
+{
+if (arr[i].name==gp.name)
+{
+arrayRemove(gpTree,'sub',i)
+break
+}
+}
+gpTree.rebuildHTML()
+gpTree.sub[0].select()
+}
+function moveGroupUp()
+{
+moveGroup(-1)
+}
+function moveGroupDown()
+{
+moveGroup(+1)
+}
+function moveGroup(step)
+{
+var gp=gpTree.getSelectedItem()
+if ( (gp==null) || ((gp !=null) && (gp.par!=gpTree)) || (gpTree.getCount()==1) )
+return
+var arr=gpTree.sub, gpData=gp.userData
+for (var i=0;i<arr.length;i++)
+{
+if (arr[i].name==gp.name)
+{
+arrayMove(gpTree,'sub',i,i+step)
+break
+}
+}
+gpTree.rebuildHTML()
+gp=gpTree.findByData(gpData)
+gp.select()
+}
+function addValues()
+{
+var gp = gpTree.getSelectedItem()
+if (gp==null)
+return
+if (gp.par!=gpTree)
+return
+var gpData=gp.userData
+var arr = gpLov.getLOVSelection()
+for (var i=0;i<arr.length;i++)
+{
+if (gpTree.findByData(arr[i].value)!=null)
+continue
+var elem=newTreeWidgetElem(null,arr[i].value,arr[i].value)
+elem.par=gp
+gp.add( elem )
+}
+gpTree.rebuildHTML()
+gp=gpTree.findByData(gpData)
+gp.select()
+}
+function remValues()
+{
+var val=gpTree.getSelectedItem()
+if ( (val==null) || ((val !=null) && (val.par==gpTree)) )
+return
+var gp=val.par, arr=gp.sub, gpData=gp.userData
+for (var i=0;i<arr.length;i++)
+{
+if (arr[i].name==val.name)
+{
+arrayRemove(gp,'sub',i)
+break
+}
+}
+gpTree.rebuildHTML()
+gp=gpTree.findByData(gpData)
+gp.select()
+}
+function updateLOVList()
+{
+gpLov.fillLOV( arrLov );
+}
+function moveCB()
+{
+var curChunk = gpLov.getChunkSelection().index;
+var url = p._root + "processGrouping" + p._appExt;
+url += p.urlParams(true,false);
+url += "&iAction=0";
+url += "&iChunk=" + curChunk;
+frameNav("groupingMgnt",url,true);
+}
+function searchCB()
+{
+var url = p._root + "processGrouping" + p._appExt;
+url += p.urlParams(true,false);
+url += "&iAction=1";
+url += "&searchVal=" + gpLov.getSearchValue();
+frameNav("groupingMgnt",url,true);
+}
+function dblClickCB()
+{
+addValues()
+}
+function encodeValues(arr)
+{
+var s='[',len=arr.length
+for (var i=0;i<len;i++)
+{
+if (i>0)
+s+=','
+s+=encString(arr[i].name)
+}
+s+=']'
+return s
+}
+function encodeGroup(gp,arr)
+{
+var s='['
+s+=encString(gp)
+s+=','
+s+=encodeValues(arr)
+s+=']'
+return s
+}
+function encodeTree(tree)
+{
+var s='['
+var nbGp=tree.getCount()
+for (var i=0;i<nbGp;i++)
+{
+var gp=tree.sub[i]
+if (gp==null)
+continue
+if (i>0)
+s+=','
+s+=encodeGroup(gp.name,gp.sub)
+}
+s+=']'
+return s
+}
+function okCB( )
+{
+groupingDlg.show(false)
+var s=encodeTree(gpTree)
+self.document.gpForm.sVarName.value=varGpName.getValue()
+self.document.gpForm.sGroups.value=s
+var gpURL=p._root+'processGrouping'+ p._appExt
+gpURL += p.urlParams(true,false)
+document.gpForm.action=gpURL
+setTimeout("document.gpForm.submit()",1)
+}
+function cancelCB( )
+{
+groupingDlg.show(false)
+}
+function helpCB( )
+{
+p.showAlertDialog("Not implemented yet !","Development version",0)
+}
+function loadCB()
+{
+if (window._isSessionInvalid)
+{
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized=true
+groupingDlg=newDialogBoxWidget("groupingDlg","Grouping",
+dlgWidth,dlgHeight,okCB,cancelCB)
+        varGpName = newTextFieldWidget("varGpName",null,50,null,null,null,
+null,250)
+gpLov=newLovWidget("gpLov","Select a chunk:",200,10,true,false,
+moveCB,null,searchCB,dblClickCB,true)
+gpAddBtn=newButtonWidget("gpAddBtn","Add",addValues,
+buttonsWidth,null,null,null,null,_skin+'buttonIcons.gif',16,16,0,0,true)
+gpRemBtn=newButtonWidget("gpRemBtn","Remove",remValues,
+buttonsWidth,null,null,null,null,_skin+'buttonIcons.gif',16,16,0,16)
+icons=p._img+'qualificationIcons.gif'
+gpTree=newTreeWidget("gpTree",150,210,icons)
+gpNewBtn = newButtonWidget("gpNewBtn","New",addGroup,
+buttonsWidth)
+gpRenameBtn = newButtonWidget("gpRenameBtn","Rename",renameGroup,
+buttonsWidth)
+gpDeleteBtn = newButtonWidget("gpDeleteBtn", "Delete",deleteGroup,
+buttonsWidth)
+gpMoveUpBtn = newButtonWidget("gpMoveUpBtn", "Move Up ",moveGroupUp,
+buttonsWidth)
+gpMoveDownBtn = newButtonWidget("gpMoveDownBtn", "Move Down ",moveGroupDown,
+buttonsWidth)
+gpInfo=newInfoWidget("gpInfo","Grouping",null,"Grouping details")
+gpFramezone = newFrameZoneWidget("gpFramezone",frmZoneWidth,frmZoneHeight)
+gpOkBtn = newButtonWidget("gpOkBtn","OK",okCB,buttonsWidth)
+cancelBtn = newButtonWidget("cancelBtn","Cancel",cancelCB,buttonsWidth)
+helpBtn = newButtonWidget("helpBtn","Help",helpCB,buttonsWidth)
+}
+if ( !_curWin.groupingDlgInitialized )
+{
+_curWin.groupingDlgInitialized = true
+targetApp(
+groupingDlg.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+
+gpFramezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>' + 'Variable name for Grouping values:' + '</td>' +
+'<td colspan="4" align="right">' + varGpName.getHTML() + '</td>' +   
+   '</tr>' +
+   '<tr>' +
+   '<td colspan="5">' + getSep() + '</td>' +
+   '</tr>' +
+'<tr>' +
+'<td>' + gpLov.getHTML() + '</td>' +
+'<td>' + '&nbsp;' + '</td>' +
+'<td>' + 
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>' + gpAddBtn.getHTML() + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + '&nbsp;' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpRemBtn.getHTML() + '</td>' +
+'</tr>' +
+'</tbody></table>'+
+'</td>' +
+'<td rowspan="2">' + '&nbsp;' + '</td>' +
+'<td rowspan="4" valign="bottom">' +
+'<table class="dialogzone" cellspacing="2" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td colspan="4">' + 'Grouping values:' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpTree.getHTML() + '</td>' +
+'<td valign="top">' + 
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>' + gpNewBtn.getHTML() + '</td>' + 
+'</tr>' +
+'<tr>' +
+'<td>' + '&nbsp;' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpRenameBtn.getHTML() + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + '&nbsp;' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpDeleteBtn.getHTML() + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + '&nbsp;' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpMoveUpBtn.getHTML() + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + '&nbsp;' + '</td>' +
+'</tr>' +
+'<tr>' +
+'<td>' + gpMoveDownBtn.getHTML() + '</td>' +
+'</tr>' +
+'</tbody></table>' +
+'</td>' +
+'</tr>' +
+'</tbody></table>'+
+'</td>' +
+'</tr>' +
+'</tbody></table>'+
+gpFramezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center">' + gpInfo.getHTML() + '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>'+
+   '<tr>' +
+   '<td>' + gpOkBtn.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + cancelBtn.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' + helpBtn.getHTML() + '</td>' +
+'</tr>'+   
+   '</tbody></table>' +
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+groupingDlg.endHTML()
+);
+}
+groupingDlg.init()
+gpFramezone.init()
+varGpName.init()
+gpLov.init()
+gpAddBtn.init()
+gpRemBtn.init()
+gpTree.init()
+gpNewBtn.init()
+gpRenameBtn.init()
+gpDeleteBtn.init()
+gpMoveUpBtn.init()
+gpMoveDownBtn.init()
+gpInfo.init()
+gpOkBtn.init()
+cancelBtn.init()
+helpBtn.init()
+varGpName.setValue(sDefaultVarName)
+initGroup()
+fillGroup()
+gpLov.setTextValue("Enter a value")
+gpLov.setSearchValue("")
+gpLov.fillChunk(arrChunk)
+gpLov.fillLOV(arrLov)
+gpLov.setTooltips("Enter a value","Previous",
+"Next","Refresh","Search",
+"Chunk","List of Values")
+groupingDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="gpForm" method="post" action="">
+<input type="hidden" name="sVarName" id="sVarName">
+<input type="hidden" name="sGroups" id="sGroups">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

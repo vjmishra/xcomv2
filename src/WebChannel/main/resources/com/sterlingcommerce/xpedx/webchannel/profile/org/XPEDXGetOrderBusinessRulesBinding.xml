@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Get Customer Order Business Rules Data - adsouza</comment>
+    
+    <entry key="#parameters.customerId">xpedx-cust-GetOrderBusinessRules:/Customer/@CustomerID</entry>
+    <entry key="#parameters.organizationCode">xpedx-cust-GetOrderBusinessRules:/Customer/@OrganizationCode</entry>
+    
+</properties>

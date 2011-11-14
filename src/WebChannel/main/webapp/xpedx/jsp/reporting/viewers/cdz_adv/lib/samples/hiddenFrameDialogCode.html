@@ -1,0 +1,67 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2003 Business Objects S.A.
+All rights reserved
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+File: hiddenFrameDialogCode.html
+=============================================================
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../dom.js"></script>
+<script language="javascript" src="../dialog.js"></script>
+<script language="javascript">
+initDom(parent._skin, parent._lang, parent, "MyHiddenFrame")
+styleSheet()
+</script>
+<script language="javascript">
+basicDlg    = null;
+checkButton = null;
+framezone   = null;
+function cancelCB()
+{
+this.show(false)
+}
+function loadDialog()
+{
+basicDlg    = newDialogBoxWidget("basicDlg","Title",500,200, cancelCB,cancelCB,false,false);
+checkButton = newCheckWidget    ("checkButton", "mon ToggleButton")
+framezone   = newFrameZoneWidget("framezone",480,180);
+if (_curWin.myDialogInitialized == null)
+_curWin.myDialogInitialized = false
+if (!_curWin.myDialogInitialized)
+{
+_curWin.myDialogInitialized = true;
+targetApp(
+basicDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+framezone.beginHTML() +
+"Click on the dialog box close button<br><br>"+
+checkButton.getHTML() +
+framezone.endHTML() +
+'</td>' +
+'</tr>' +
+'</table>' +
+basicDlg.endHTML()
+)
+}
+basicDlg.init();
+framezone.init();
+checkButton.init();
+checkButton.check(false);
+basicDlg.show(true);
+}
+</script>
+</head>
+<body onload="setTimeout('loadDialog()',1)">
+</body>
+</html>

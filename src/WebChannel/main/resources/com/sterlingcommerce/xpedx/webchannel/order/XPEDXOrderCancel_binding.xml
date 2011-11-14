@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for adding line items to a draft order (via Quick Add).</comment>
+    
+    <entry key="#parameters.orderHeaderKey">xpedxOrderCancel:/Order/@OrderHeaderKey</entry>
+    
+    <entry key="#parameters.orderHeaderKey">xpedxChangeOrderDetailsOnCancel:/Order/@OrderHeaderKey</entry>
+    <entry key="#parameters.customerPONo">xpedxChangeOrderDetailsOnCancel:/Order/@CustomerPONo</entry>
+    <entry key="#parameters.orderNo">xpedxChangeOrderDetailsOnCancel:/Order/@OrderNo</entry>
+    <entry key="#parameters.orderType">xpedxChangeOrderDetailsOnCancel:/Order/@OrderType</entry>
+    <entry key="#parameters.sellerOrganizationCode">xpedxChangeOrderDetailsOnCancel:/Order/@SellerOrganizationCode</entry>
+    <entry key="#parameters.webConfirmationNumber">xpedxChangeOrderDetailsOnCancel:/Order/Extn/@ExtnWebConfNum</entry>
+    <entry key="#parameters.xpedxLegacyOrderNumber">xpedxChangeOrderDetailsOnCancel:/Order/Extn/@ExtnLegacyOrderNo</entry>
+    
+    <entry key="#parameters.enteredItemIDs">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/Item/@ItemID</entry>
+    <entry key="#parameters.enteredLineTypes">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/@LineType</entry>
+    <entry key="#parameters.enteredPrimeLineNumber">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/@PrimeLineNo</entry>
+    <entry key="#parameters.enteredSubLineNumber">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/@SubLineNo</entry>
+    <entry key="#parameters.enteredOrderLineKeys">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
+    <entry key="#parameters.enteredLegacyLineNumbers">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/Extn/@ExtnLegacyLineNumber</entry>
+    <entry key="#parameters.enteredWebLineNumbers">xpedxChangeOrderDetailsOnCancel:/Order/OrderLines/OrderLine[]/Extn/@ExtnWebLineNumber</entry>
+    
+</properties>

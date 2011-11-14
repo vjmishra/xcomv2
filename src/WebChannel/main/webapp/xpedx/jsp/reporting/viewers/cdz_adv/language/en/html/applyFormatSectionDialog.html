@@ -1,0 +1,696 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Title zone</title>
+  <style type="text/css"></style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../scripts/appearanceTab.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "formatSection")
+_iReportIdx = requestQueryString(window,"reportIndex")
+_iReportIdx=(_iReportIdx=="" || _iReportIdx=="undefined" )?null:_iReportIdx
+p._globalWOMCallback = null;
+initialized = false
+formatSectionDlg = null
+repImg = "images/"
+curEntry=p.strEntry
+function section(nm, u, im, bgc, sk, iu, dm, ha, va, snp, apb, ph, pv, embimg)
+{
+var s=new Object
+s.name=nm
+s.unitIsInch=u
+s.inMap=im
+s.bgColor=bgc
+s.skin=sk
+s.imgURL=iu
+s.dispMode=dm
+s.HAlign=ha
+s.VAlign=va
+s.startNewPage=snp
+s.avoidPageBreak=apb
+s.posH=ph
+s.posV=pv
+s.embimg=embimg
+return s
+}
+function cl(r,g,b)
+{
+var o=new Object
+o.rgb=""+r+","+g+","+b
+return o
+}
+function unloadCB()
+{
+if (elt) elt.section=null 
+}
+</script>
+<script language="javascript">
+if (p.formatSectionBid) {
+_bid = p.formatSectionBid
+elt = p.findByBID(p.doc,_bid)
+} else { 
+elts = p.getSelectedElts()
+elt = parent.searchClassName(elts[0],"section")
+_bid = elt.bid
+}
+var url =  p._root + "incSectionWom" + p._appExt
+url += p.urlParamsNoBID(curEntry,null,_iReportIdx)
+url += "&sBid=" + _bid
+includeScript(url)
+</script>
+<script language="javascript">
+elt.section = varSection
+sectionUnitIsInch = (elt.section.unitIsInch == 1)
+function loadDialog()
+{
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized = true
+formatSectionDlg = newDialogBoxWidget("formatSectionDlg",'Format Section',null,null, okCB, cancelCB)
+tzone = newTabbedZone("fsectDlgTzone",selectZoneCB,510,260)
+tzone.add('General',"gen")
+tzone.add('Appearance',"app")
+tzone.add('Layout',"lay")
+nameTxt = newWidget( "fsectDlgNameTxt", null, 30, null, null, true, 'Cell name', 240)
+showSectionCheck = newCheckWidget("fsectDlgEmptySectionCheck",'Show section when empty', null)
+sectionInMapCheck = newCheckWidget("fsectDlgSectionInMapCheck",'Include section in the Navigation Map', null)
+createWidgetsForAppearenceTab("fsect")
+startNewPageCheck = newCheckWidget("fsectDlgStartNewPageCheck",'Start on a new page', null)
+avoidPageBreakCheck = newCheckWidget("fsectDlgAvoidPageBreakCheck",'Avoid page breaks in section', null)
+sectionOrBodyTxt = newWidget("fsectDlgSectionOrBodyTxt")
+horizontalPosField = newFloatFieldWidget( "fsectDlgHorizontalPosField", null, null, null, null, true, 'Horizontal position', 40)
+HPosUnit = newWidget("fsectDlgHPosUnit")
+horizontalPosCombo = newComboWidget("fsectDlgHorizontalPosCombo", horizontalPosComboCB, true, 160)
+horizontalEltCombo = newComboWidget("fsectDlgHorizontalEltCombo", elementComboCB, true, 120)
+verticalImg = newWidget("fsectDlgVerticalImg")
+verticalPosField = newFloatFieldWidget( "fsectDlgVerticalPosField", null, null, null, null, true, 'Vertical position', 40)
+VPosUnit = newWidget("fsectDlgVPosUnit")
+verticalPosCombo = newComboWidget("fsectDlgVerticalPosCombo", verticalPosComboCB, true, 160)
+verticalEltCombo = newComboWidget("fsectDlgVerticalEltCombo", elementComboCB, true, 120)
+condDisplayCheck = newCheckWidget("fsectDlgCondDisplayCheck",'Conditional display if:', condDisplayCheckCB)
+condDisplayTxt = newWidget("fsectDlgCondDisplayTxt")
+valButton = newButtonWidget("fsectDlgValButton",'Validate',"testBtCB()",60)
+info = newInfoWidget("fsectDlgInfo","More Information","","Modify general section properties here.")
+OKButton = newButtonWidget("fsectDlgOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("fsectDlgHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("fsectDlgCancelButton","Cancel","cancelCB()",60)
+applyButton = newButtonWidget("fsectDlgApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+formatSectionDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.formatSectionInitialized != true)
+{
+_curWin.formatSectionInitialized=true
+var arHTML = new Array()
+var i=0
+arHTML[i++] =formatSectionDlg.beginHTML()
+arHTML[i++] ='<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] =tzone.beginHTML()
+arHTML[i++] =tzone.beginTabHTML(0)
+ arHTML[i++] ='<table class="dialogzone" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] ='<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="100">' + 'Name:' + '</td>'
+arHTML[i++] ='<td>' + 'Section on ' + '<span id="fsectDlgNameTxt"></span>' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] ='<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="100" valign="top">' + 'Display:' + '</td>'
+arHTML[i++] ='<td>' + sectionInMapCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] =tzone.endTabHTML()
+arHTML[i++] =tzone.beginTabHTML(1)
+ arHTML[i++] = getHTMLForAppearenceTab()
+arHTML[i++] =tzone.endTabHTML()
+arHTML[i++] =tzone.beginTabHTML(2)
+ arHTML[i++] ='<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' 
+arHTML[i++] ='<table border="0" class="dialogzone" width="100%"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="80">' + 'New page:' + '</td>'
+arHTML[i++] ='<td>' + startNewPageCheck.getHTML() + '</td>'
+arHTML[i++] ='<td width="80">' + 'Page layout:' + '</td>'
+arHTML[i++] ='<td>' + avoidPageBreakCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] ='<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="60">' +'Position:' + '</td>'
+arHTML[i++] ='<td colspan="5">' + 'Within the' + ' <b>' + '<span id="fsectDlgSectionOrBodyTxt"></span>' + '</b>' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' 
+arHTML[i++] ='<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="right" rowspan="2">' + '<div id="fsectDlgVerticalImg">'+ verticalImg.getHTML() + '</td>'
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'The top of this section is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + verticalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="fsectDlgVPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + verticalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + verticalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+//'<tr>'+
+//'<td>' + getSep() + '</td>' +
+//'</tr>'+
+//'<tr>'+
+//'<td>' +
+//'<table border="0" class="dialogzone" width="100%"><tbody>'+
+//'<tr>'+
+//'<td valign="top">' + condDisplayCheck.getHTML() + '</td>' +
+//'<td valign="top">' + 
+//'<textarea id="fsectDlgCondDisplayTxt" rows="3" cols="32" ></textarea>' + 
+//'</td>' +
+//'<td valign="top">' + valButton.getHTML() + '</td>' +
+//'</tr>'+
+//'</tbody></table>'+
+//'</td>'+
+//'</tr>'+
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] =tzone.endTabHTML()
+arHTML[i++] =tzone.endHTML()
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+// BOTTOM DIALOG
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'+info.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="right">'
+arHTML[i++] ='<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] ='<td>' + OKButton.getHTML() + '</td>'
+arHTML[i++] ='<td>' + getSpace(5,1)+ '</td>'
+arHTML[i++] ='<td>' + CancelButton.getHTML() + '</td>'
+   arHTML[i++] ='<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] ='<td>' + applyButton.getHTML() + '</td>' 
+arHTML[i++] ='<td>' + getSpace(5,1) + '</td>'
+arHTML[i++] ='<td>' + HelpButton.getHTML() + '</td>'
+arHTML[i++] ='</tr></tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = formatSectionDlg.endHTML()
+targetApp(arHTML.join(''))
+}// end curwin init
+// Init
+formatSectionDlg.init()
+tzone.init()
+// Select the tab zone
+tzone.select(p._fsectDlgSelectedPane)
+initGeneral= false
+initAppearance= false
+initPageLayout= false
+// the CB call the init function of the zone
+selectZoneCB(p._fsectDlgSelectedPane)
+// Bottom Zone
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)//future feature
+//get the current report BID
+reportBID=p.findReportBid(elt)
+// Show the dialog box
+formatSectionDlg.show(true)
+}
+//
+// selectZoneCB(index)
+//
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0: // set General
+setGeneral(elt)
+info.setText("Modify general section properties here.")
+break;
+case 1: // set Appearance
+setAppearance(elt)
+info.setText("Modify the section appearance here.")
+break;
+case 2: // set Layout Properties
+setLayout(elt)
+info.setText("Modify the section layout here.")
+break;
+}
+}
+// CB for BG color combo ////////////////////////////
+function changeColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorDialogCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+p.addLastUsedColor(this.getColor())
+}
+}
+// changeColorDialogCB()
+//
+function changeColorDialogCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+}
+// testBtCB ////////////////////////////
+function testBtCB()
+{
+}
+// CB for OK button ////////////////////////////
+function okCB(bApplyBtn)
+{
+OKButton.setDisabled(true)
+applyButton.setDisabled(true)
+p.formatSectionBid = bApplyBtn?_bid:null
+doFormatSection()
+p._fsectDlgSelectedPane = tzone.tabs.selIndex
+// For the dialog box to be re-drawn when the page is reloaded
+p.wt(bApplyBtn)
+if (bApplyBtn) {
+formatSectionDlg.unload()
+p._globalWOMCallback = p.formatSection_globalWOMCallback;
+} else {
+formatSectionDlg.show(false)
+}
+OKButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+////////////////////////////
+// cancel button ////////////////////////////
+function cancelCB()
+{
+p.formatSectionBid = null
+formatSectionDlg.show(false)
+}
+////////////////////////////
+// help button ////////////////////////////
+function helpCB()
+{
+}
+//
+// condDisplayCheckCB()
+//
+function condDisplayCheckCB()
+{
+condDisplayTxt.setDisabled(!condDisplayCheck.isChecked())
+}
+//
+// horizontalPosComboCB()
+//
+function horizontalPosComboCB()
+{
+horizontalEltCombo.show(horizontalPosCombo.getSelection().value != 0)
+}
+//
+// verticalPosComboCB()
+//
+function verticalPosComboCB()
+{
+var sel=verticalPosCombo.getSelection().value,imgsrc=''
+verticalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))// Top
+imgsrc='position_top_edge.gif'
+else// Bottom
+imgsrc='position_bottom_edge.gif'
+verticalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+//
+// elementComboCB()
+//
+function elementComboCB()
+{
+var index = this.getSelection().index
+verticalEltCombo.select(index)
+//horizontalEltCombo.select(index)
+}
+// set General
+function setGeneral(elt)
+{
+if (!initGeneral) 
+{
+initGeneral= true
+nameTxt.init()
+//showSectionCheck.init()
+sectionInMapCheck.init()
+// read wom
+nameTxt.setHTML( elt.section.name)
+sectionInMapCheck.check( elt.section.inMap == 1)
+}
+}
+// set Appearance
+function setAppearance(elt)
+{
+if (initAppearance) 
+return
+initAppearance = true
+bgColor.init()
+noneRadio.init()
+imageRadio.init()
+skinRadio.init()
+skinsCombo.init()
+urlTxt.init()
+imageFromFileRadio.init()
+addImageButton.init()
+//testButton.init()
+displayCombo.init()
+alignHorizontalCombo.init()
+alignVerticalCombo.init()
+// BG Color
+bgColor.setColor(elt.section.bgColor.rgb)
+// Skin
+skinsAr = p._sectionSkins
+skin = elt.section.skin
+imgUrl = elt.section.imgURL
+var hasSkin = (skin != "")
+skinsCombo.del()
+for (var i = 0; i < skinsAr.length; i++)
+{
+skinsCombo.add(skinsAr[i], skinsAr[i], (skinsAr[i] == skin))
+}
+// Embedded image
+var hasEmbImg=elt.section.embimg
+noneRadio.check(true)
+skinRadio.check(hasSkin)
+imageRadio.check(imgUrl != "")
+urlTxt.setValue(imgUrl)
+imageFromFileRadio.check(hasEmbImg)
+// Display
+displayCombo.del()
+dispMode = elt.section.dispMode
+for (var i = 0; i < p._dispImg.length; i++)
+{
+displayCombo.add(p._dispImg[i], p._dispImg[i], (i == dispMode))
+}
+// Alignment
+alignHorizontalCombo.del()
+alignVerticalCombo.del()
+HAlign = elt.section.HAlign
+VAlign = elt.section.VAlign
+for (var j = 0; j < p._posH.length; j++)
+{
+alignHorizontalCombo.add(p._posH[j], p._posH[j], (j == HAlign))
+alignVerticalCombo.add(p._posV[j], p._posV[j], (j == VAlign))
+}
+skinOrImageCB()
+}
+//
+// getREType()
+//
+function getREType()
+{
+return "section"
+}
+//
+// updateDialog()
+//
+function updateDialog(entry, img)
+{
+curEntry=entry
+addImageButton.setText('Edit')
+//save it in a global array for the same session
+elt.section.embimg=true;
+var elts=new Array
+elts[0]=elt
+setBackgroundImgFile(elts, img);
+}
+//
+// set Page Layout
+//
+function setLayout(elt)
+{
+if (!initPageLayout)
+{
+initPageLayout = true
+startNewPageCheck.init()
+avoidPageBreakCheck.init()
+sectionOrBodyTxt.init()
+verticalImg.init()
+verticalPosField.init()
+verticalPosField.setPrecision(2)
+verticalPosField.setMin(0)
+verticalPosField.setMax(p.toUserUnit(9999.9, false))
+VPosUnit.init()
+VPosUnit.setHTML(p._unitLabel)
+verticalPosCombo.init()
+verticalPosCombo.del()
+verticalEltCombo.init()
+//condDisplayCheck.init()
+//condDisplayTxt.init()
+//valButton.init()
+// read wom
+startNewPageCheck.check(elt.section.startNewPage == 1)
+avoidPageBreakCheck.check(elt.section.avoidPageBreak == 1)            
+// Position
+setPosition(elt)
+}
+}
+// set Position
+function setPosition(elt)
+{
+verticalPosField.setValue( p.toUserUnit(elt.section.posV, sectionUnitIsInch))
+var attached = (elt.attach)? true : false
+var inSection = (elt.parent.className == "section")
+sectionOrBodyTxt.setHTML(inSection? "Section":"Report")
+var res = attached? elt.attach.h : 0
+verticalEltCombo.del()
+var children = elt.parent.children
+var lenChildren = children.length
+var attachEltBid = attached? elt.attach.toV : 0
+var eltBid = elt.bid
+for (var j = 0; j < lenChildren; j++)
+{
+var child = children[j]
+var childBid = child.bid
+if ((eltBid != childBid) && (child.className != "section")) //except itself or section
+{
+if (child.attach && (child.attach.toV == eltBid)) {
+continue // circular attachment
+}
+var name = ""
+if (child.fcell)
+{
+name = child.fcell.formula
+}
+if (child.className == "block")
+{
+name = child.block.name
+}
+if (child.className == "reportCell") // reportCell
+{
+name = child.formula
+}
+if (attachEltBid == childBid)
+{
+verticalEltCombo.add(name, childBid, true)
+} else {
+verticalEltCombo.add(name, childBid)
+}
+}
+}
+verticalPosCombo.del()
+verticalPosCombo.add(inSection?"Top edge of section":"Top edge of report",0, true)
+if (verticalEltCombo.getCount() > 0) 
+{
+var res =  (attached) ? elt.attach.v : 0
+for (var i=1; i < p._attachV.length; i++)
+{
+verticalPosCombo.add(p._attachV[i], i, (res == i))
+}
+}
+verticalPosComboCB()
+}
+// CB FUNCTIONS
+//
+// chgBorderColorCB()
+//
+function chgBorderColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewBorderCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+}
+}
+//
+// chgBorderColorCB()
+//
+function changeBgColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewBgCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+}
+}
+//
+// changeColorPreviewBorderCB()
+//
+function changeColorPreviewBgCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+}
+//
+// changeColorPreviewBorderCB()
+//
+function changeColorPreviewBorderCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+}
+//
+// doFormatSection()
+// forward to jsp process page
+//
+function doFormatSection()
+{
+// fill form
+var f = self.document.formatSectionForm
+f.unitIsInch.value="" + p._unitIsInch
+// General
+if (sectionInMapCheck.initialized()) {
+f.inMap.value="" + sectionInMapCheck.isChecked()
+}
+// Appearance
+if (bgColor.initialized()) {
+if (bgColor.getColor())
+{
+f.bgColor.value="" + bgColor.getColor()
+}
+var isNone = noneRadio.isChecked()
+f.noneBG.value="" + isNone
+if (!isNone) {
+var isSkin = (skinsCombo.getSelection()) ? skinRadio.isChecked() : false
+f.isSkin.value="" + isSkin
+f.hasEmbeddedImg.value=""+imageFromFileRadio.isChecked()
+f.dispMode.value="" + displayCombo.getSelection().index
+f.urlImg.value="" + (isSkin ? (skinsCombo.getSelection().value) : urlTxt.getValue())
+f.alignH.value="" + ((alignHorizontalCombo.getSelection().value == "") ? "" : alignHorizontalCombo.getSelection().index)
+f.alignV.value="" + ((alignVerticalCombo.getSelection().value == "") ? "" : alignVerticalCombo.getSelection().index)
+} else {
+f.urlImg.value=""
+f.isSkin.value="" + false
+}
+}
+// Layout Properties
+if (startNewPageCheck.initialized()) {
+f.startNewPage.value="" + startNewPageCheck.isChecked()
+f.avoidPageBreak.value="" + avoidPageBreakCheck.isChecked()
+f.posV.value="" + verticalPosField.getValue()
+if (verticalEltCombo.getSelection()){
+f.attachToV.value="" + verticalEltCombo.getSelection().value
+}
+f.attachV.value="" + verticalPosCombo.getSelection().value
+//f.condDisplay.value="" + (condDisplayCheck.isIndeterminate()? '' : condDisplayCheck.isChecked())
+//f.condDisplayTxt.value="" + condDisplayTxt.getHTML()
+}
+// Build URL
+var url = p._root + "processFormatSection" + p._appExt
+url += p.urlParamsNoBID(curEntry,null,_iReportIdx)
+// Add "Refresh Rep Map node" parameter  to url if the option "Include section in Map" has changed
+var optCkeched = (f.inMap.value=="true")?1:0
+url += (elt.section.inMap!=optCkeched)?"&sRefreshRMNode=yes":""
+    // Add Bid to url
+url += "&sBid="+ _bid
+f.action = url
+setTimeout("document.formatSectionForm.submit()",1)
+}
+function getImgFileFromApplyFormatDlg()
+{
+if (elt.section.embimg)
+{
+var elts=new Array;
+elts[0]=elt
+var img=getBackgroundImgFile(elts);
+return img?img:"";
+}
+return null;
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)" onunload="unloadCB()">
+<form target="Report" style="display:none" name="formatSectionForm" method="post" action="">
+<input type="hidden" name="unitIsInch" id="unitIsInch" value="">
+<input type="hidden" name="inMap" id="inMap" value="">
+<input type="hidden" name="bgColor" id="bgColor" value="">
+<input type="hidden" name="isSkin" id="isSkin" value="">
+<input type="hidden" name="urlImg" id="urlImg" value="">
+<input type="hidden" name="dispMode" id="dispMode" value="">
+<input type="hidden" name="noneBG" id="noneBG" value="">
+<input type="hidden" name="alignH" id="alignH" value="">
+<input type="hidden" name="alignV" id="alignV" value="">
+<input type="hidden" name="hasEmbeddedImg" id="hasEmbeddedImg" value="">
+<input type="hidden" name="startNewPage" id="startNewPage" value="">
+<input type="hidden" name="avoidPageBreak" id="avoidPageBreak" value="">
+<input type="hidden" name="posV" id="posV" value="">
+<input type="hidden" name="attachToV" id="attachToV" value="">
+<input type="hidden" name="attachV" id="attachV" value="">
+<input type="hidden" name="condDisplay" id="condDisplay" value="">
+<input type="hidden" name="condDisplayTxt" id="condDisplayTxt" value="">
+</form>
+</body>
+</html>

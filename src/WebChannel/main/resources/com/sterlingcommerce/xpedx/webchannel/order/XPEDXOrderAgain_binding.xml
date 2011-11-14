@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>XPEDX Binding entries for Order again  action.</comment>
+  <entry key="#parameters.copyFromOrderHeaderKey">xpedxOrderAgain:/Order/@CopyFromOrderHeaderKey</entry>
+  <entry key="formattedOrderName">xpedxOrderAgain:/Order/@OrderName</entry>
+  <entry key="WCContext.customerContactId">xpedxOrderAgain:/Order/@CustomerContactID,xpedxOrderAgain:/Order/@EnteredBy</entry>
+  <entry key="customerId">xpedxOrderAgain:/Order/@BillToID</entry>
+</properties>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for draft order detail information</comment>
+
+	<entry key="organizationCode">draftOrderGetCustomerLineFields:/Customer/@OrganizationCode, dod_getAssociationRelationshipList:/AsscRelationship/@CallingOrganizationCode,
+		draftOrderGetCompleteItemList:/Item/@CallingOrganizationCode, xpedxdraftOrderGetCompleteItemList:/Item/@CallingOrganizationCode</entry>
+
+	<entry key="orderHeaderKey">xpedx_me_draftOrderDetails:/Order/@OrderHeaderKey,me_dod_validateItemForOrdering:/Order/@OrderHeaderKey,
+		me_dod_getPossibleSchedules:/Promise/@OrderHeaderKey</entry>
+
+	<entry key="dynamicAvailabilityExclusionList">me_dod_getPossibleSchedules:/Promise/OmittedLines/OrderLine[]/@OrderLineKey</entry>
+
+	<entry key="itemID">draftOrderGetCompleteItemList:/Item/@ItemID, xpedxdraftOrderGetCompleteItemList:/Item/@ItemID</entry>
+	<entry key="shipFromDivision">xpedxdraftOrderGetCompleteItemList:/Item/Extn/XPXItemExtnList/XPXItemExtn[]/@XPXDivision</entry>
+	<entry key="envCode">xpedxdraftOrderGetCompleteItemList:/Item/Extn/XPXItemExtnList/XPXItemExtn[]/@EnvironmentID</entry>
+	
+	<entry key="unitOfMeasure">draftOrderGetCompleteItemList:/Item/@UnitOfMeasure, xpedxdraftOrderGetCompleteItemList:/Item/@UnitOfMeasure</entry>
+	<entry key="associationTypesOfInterest">draftOrderGetCompleteItemList:/Item/ItemAssociationTypeList/ItemAssociationType[]/@Type, xpedxdraftOrderGetCompleteItemList:/Item/ItemAssociationTypeList/ItemAssociationType[]/@Type</entry>
+
+	<entry key="customerId">draftOrderGetCustomerLineFields:/Customer/@CustomerID, draftOrderGetCompleteItemList:/Item/CustomerInformation/@CustomerID, xpedxdraftOrderGetCompleteItemList:/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="currency">draftOrderGetCompleteItemList:/Item/@Currency, xpedxdraftOrderGetCompleteItemList:/Item/@Currency</entry>
+	<entry key="skipBOMValidationsValue">me_dod_validateItemForOrdering:/Order/@SkipBOMValidations</entry>
+	
+</properties>

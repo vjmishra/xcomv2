@@ -1,0 +1,2654 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+var p=parent;
+initDom(p._root+"lib/images/"+p._skinName+"/",p._lang,p,"hyperlinkDialog");
+</script>
+<script language="javascript" src="../scripts/errorManager.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">
+var url=p._root+"incObjects"+p._appExt;
+url+=p.urlParamsNoBID();
+includeScript(url);
+</script>
+<script language="javascript">
+var labelDlgTitle="Hyperlink";
+var labelCreateNew="Create Hyperlink";
+var labelEditHyperlink="Edit Hyperlink";
+var labelParseMsg="Enter the URL below, then click Parse to extract its parameters.";
+var labelMain="Main:";
+var labelFieldURI="URI";
+var labelActionProperties="Hyperlink properties";
+var labelActionParams="Customize URL parameters:";
+var labelActionAttrib="Customize the look and behavior of the hyperlink:";
+var labelCellCont="Cell content";
+var labelTooltip="Tooltip";
+var labelTargetWin="Target window";
+var labelInfoZone="More Information";
+var infoZoneWebMsg="Type or paste a URL, then extract its parameters. Specify data for the parameters, as well as the hyperlink text and behavior.";
+var infoZoneDocMsg="Select the document (and optional document instance and part) to which you want to link, specify values for the prompts (if they exist) in the target document, then configure the look and behavior of the hyperlink and the target document.";
+var labelItemEditFormula="Build formula";
+var labelItemSelecVar="Select object";
+var labelItemCurWin="Current window";
+var labelItemNewWin="New window";
+var labelOKButton="OK";
+var labelCancelButton="Cancel";
+var labelApplyButton="Apply";
+var labelParseButton="Parse";
+var labelErrorMsgURI="You must enter a valid URI";
+var labelLinkToDocument="Link to document";
+var labelLinkToWeb="Link to web page";
+var labelOpenDocMsg="Click Browse to choose a document";
+var labelReportPartMsg="Click Select then right click the report part";
+var labelReportPartCRMsg="Type the report part here";
+var labelBrowseButton="Browse...";
+var labelNavigateToReport="Target area within the document";
+var labelDocumentName="Name";
+var labelReportName="Report name";
+var labelReportPart="Report part";
+var labelPartContext="Context";
+var labelPartOpenMode="Open mode";
+var labelPartOpenModeFull="Position at report part (full document available)";
+var labelPartOpenModePart="Display report part only";
+var labelSelectButton="Select...";
+var labelOutputFormat="Document format";
+var labelOFDefault="Default";
+var labelOFhtml="HTML";
+var labelOFpdf="PDF";
+var labelOFxls="Excel";
+var labelOFwrd="Word";
+var labelRefreshOnOpen="Refresh on open";
+var labelDocumentPrompts="Document prompts:";
+var labelPromptDefaultValue="Use document default";
+var labelPromptUser="Prompt user at runtime";
+var labelPromptEnterConst="Enter a constant";
+var labelLinkToDocInst="Link to document instance";
+var labelDocInstance="Instance";
+var labelDocInstLast="Most recent";
+var labelDocInstUser="Most recent - current user";
+var labelDocInstParam="Most recent - matching prompt values";
+var labelDocNoInstMsg="This document does not have instances. Do you still want to select this option?";
+var labelErrorMsgDocID="You must enter a valid document ID";
+var labelErrorPopupBlocker="Cannot open a popup window. Check if your popup blocker is activated.";
+var labelToolipValidationMsg="Your tooltip contains one or more of the following invalid characters: \\ \". Use the formula editor to create tooltips containing these characters.";
+var lableAbsoluteURL="Use complete URL path to create hyperlink";
+var labelWarningCheckAdvAbsUrlMsg="If you select complete URL the hyperlink will no longer work if the web server name or port number change. Do you want to continue?";
+function newPromptInfo()
+{
+var o=new Object;
+o.name='';
+o.id='';
+o.type='';
+o.isOptional=false;
+o.isSelected=false;
+}
+function openDocInfo()
+{
+var o=new Object;
+o.ID=null;
+o.CUID=null;
+o.name="";
+o.kind=null;
+o.type=null;
+o.hasInstances=false;
+o.isAgnostic=true;
+o.arrReports=new Array();
+o.arrPrompts=new Array();
+o.refreshOnOpen=false;
+return o;
+}
+var lstOutputFormat=newHashTable();
+lstOutputFormat.put("wid","H,P");
+lstOutputFormat.put("rep","H,P");
+lstOutputFormat.put("rpt","H,P,E,W");
+lstOutputFormat.put("pdf","P");
+lstOutputFormat.put("doc","W");
+lstOutputFormat.put("xls","E");
+var doc=openDocInfo();
+var privateAttrib="nav";
+var navType="doc";
+var bApplied=false;
+var maxChar=1024;
+var elts=p.getSelectedElts();
+var elt=elts[0];
+var isLink=(elt.contType==1)?true:false;
+var isFreeCell=(elt.fcell)?true:false;
+var strCellContent=(isFreeCell)?elt.fcell.formula:elt.formula;
+var strCellName=strCellContent;
+var arrParams=new Array();
+var strLinkQueryString=null;
+var strLinkHref=null;
+var strLinkURI=null;
+var strLinkTitle=null;
+var strLinkTarget=null;
+var isBuiltByHlink=false;
+var isAbsoluteURL=false;
+var iPos=0;
+var iPosA=0;
+if (strCellContent!=null)
+{
+if (strCellContent!='' && strCellContent.charAt(0)=='=')
+strCellContent=prepareFormula(strCellContent);
+var navAttrib=getAttribValue(strCellContent, privateAttrib);
+isBuiltByHlink=(navAttrib!=null && (navAttrib=="doc" || navAttrib=="web"))?true:isBuiltByHlink;
+if (isBuiltByHlink)
+{
+navType=navAttrib;
+var strLinkUrl=getAttribValue(strCellContent, "href")
+if (strLinkUrl!=null)
+{
+iPos=strLinkUrl.indexOf('?');
+strLinkURI=(iPos>-1)?strLinkUrl.substring(0,iPos):strLinkUrl;
+if (iPos>-1)
+{
+var qs=strLinkUrl.substring(iPos+1);
+getParameters(qs);
+}
+}
+strLinkHref=""+strLinkURI;
+for (var i=0;i<arrParams.length;i++)
+{
+if (i==0) strLinkHref+='?';
+else strLinkHref+='&';
+strLinkHref+=arrParams[i][0]+'=';
+if (arrParams[i][1]!=null)
+{
+if (arrParams[i][1].charAt(0)=='=')
+strLinkHref+='('+arrParams[i][1]+')';
+else
+strLinkHref+=arrParams[i][1];
+}
+}
+strLinkTitle=getTooltip(getAttribValue(strCellContent, "title"));
+strLinkTarget=getAttribValue(strCellContent, "target");
+isAbsoluteURL=startsWithIgnoreCase(strLinkURI, "http://");
+isLink=true;
+}
+else
+{
+var src=strCellContent.toLowerCase();
+iPos=src.indexOf('href');
+if (iPos>-1)
+{
+var bWellFormatted=true;
+iPos+=4;
+var level=0;
+var d='';
+for (var i=iPos;i<src.length;i++)
+{
+var c=src.charAt(i);
+if (level==0 && c=='=')
+level++;
+else if (level==1 && c==' ')
+continue;
+else if (level==1 && (c=='\'' || c=='"'))
+{
+d=c;
+iPos=i+1;
+break;
+}
+else if (level==1 && c!=' ')
+{
+bWellFormatted=false;
+break;
+}
+}
+if (bWellFormatted && d!='')
+{
+// Get URL
+strLinkHref=getAttribValue(strCellContent,"href",d);
+if (strLinkHref!=null)
+{
+iPos=strLinkHref.indexOf('?');
+strLinkURI=(iPos>-1)?strLinkHref.substring(0,iPos):strLinkHref;
+if (iPos>-1)
+{
+var qs=strLinkHref.substring(iPos+1);
+getParameters(qs);
+}
+// Check if opendoc link
+iPos=strLinkURI.lastIndexOf('/');
+var targetPage=(iPos>-1)?strLinkURI.substring(iPos+1):strLinkURI;
+navType=(targetPage=="openDocument.jsp")?"doc":"web";
+isLink=true;
+}
+// Get Tooltip
+strLinkTitle=getAttribValue(strCellContent,"title",d);
+// Get Target
+strLinkTarget=getAttribValue(strCellContent,"target",d);
+}
+}
+else
+{
+iPos=src.indexOf('http://');
+if (iPos>-1)
+{
+iPosA=src.indexOf(' ');
+if (iPosA>-1)
+strLinkHref=strCellContent.substring(iPos,iPosA);
+else
+strLinkHref=strCellContent.substring(iPos);
+}
+else if (elt.type==1)
+{
+//Variable
+if (elt.definition)
+{
+src=elt.definition;
+iPos=src.indexOf('http://');
+if (iPos>-1)
+{
+iPosA=src.indexOf('"',iPos);
+if (iPosA>-1)
+strLinkHref=src.substring(iPos,iPosA);
+else
+strLinkHref=src.substring(iPos);
+}
+}
+}
+if (strLinkHref!=null)
+{
+iPos=strLinkHref.indexOf('?');
+strLinkURI=(iPos>-1)?strLinkHref.substring(0,iPos):strLinkHref;
+if (iPos>-1)
+{
+var qs=strLinkHref.substring(iPos+1);
+getParameters(qs);
+}
+iPos=strLinkURI.lastIndexOf('/');
+var targetPage=(iPos>-1)?strLinkURI.substring(iPos+1):strLinkURI;
+navType=(targetPage=="openDocument.jsp")?"doc":"web";
+isLink=true;
+}
+}
+}
+strCellName=getCellNameFromFormula(strCellContent);
+}
+function prepareFormula(cellCont)
+{
+var token='\"+\"';
+var arr=cellCont.split(token);
+if (arr.length>1)
+cellCont=arr.join('');
+return cellCont;
+}
+function getCellNameFromFormula(cellCont)
+{
+var iPos=cellCont.indexOf('>');
+if (iPos>-1)
+{
+iPosA=cellCont.indexOf('<',iPos);
+if (iPosA>-1)
+{
+cellCont=cellCont.substring(iPos+1,iPosA);
+iPos=cellCont.indexOf('+');
+iPosA=cellCont.lastIndexOf('+');
+if (iPos>-1 && iPosA>-1)
+{
+cellCont=cellCont.substring(iPos+1,iPosA);
+cellCont='='+trim(cellCont);
+}
+}
+}
+return cellCont;
+}
+function getAttribValue(cellCont, strAttribName, dl)
+{
+var strRet="";
+var src=cellCont.toLowerCase();
+var strAttrib=" "+strAttribName;
+var iPos=src.indexOf(strAttrib);
+if (iPos>-1)
+{
+var d=(dl && dl!='')?dl:((isFreeCell)?'"':'\\"');
+var level=0;
+iPos+=strAttrib.length;
+for (var i=iPos;i<src.length;i++)
+{
+var c=src.charAt(i);
+if (level==0 && c=='=')
+level++;
+else if (level==1 && c==' ')
+continue;
+else if (level==1 && c==d.charAt(0))
+{
+iPos=src.indexOf(d,i);
+if (iPos>-1)
+{
+iPos+=d.length;
+iPosA=src.indexOf(d,iPos);
+if (iPosA>-1)
+strRet=cellCont.substring(iPos,iPosA);
+}
+break;
+}
+}
+}
+return strRet;
+}
+function getParameters(qs)
+{
+qs+='&';
+var j=0;
+var n=0;
+var level=0;
+for (var i=0;i<qs.length;i++)
+{
+if (qs.charAt(i)=='(')
+level++;
+else if (qs.charAt(i)==')')
+level--;
+else if (level==0 && qs.charAt(i)=='&')
+{
+var v=qs.substring(n,i);
+n=i+1;
+arrParams[j]=new Array(2);
+var iPos=v.indexOf('=');
+if (iPos>-1)
+{
+arrParams[j][0]=v.substring(0,iPos);
+arrParams[j][1]=v.substring(iPos+1);
+}
+else if (v!='')
+arrParams[j][0]=v;
+v=arrParams[j][1];
+if (v!=null)
+{
+if (v.indexOf('(')>-1)
+{
+var iPosL=v.indexOf('(');
+var iPosR=v.lastIndexOf(')');
+if (iPosL>-1 && iPosR>-1)
+{
+v=v.substring(iPosL+1,iPosR);
+iPos=0;
+while(iPos>-1)
+{
+iPos=v.indexOf('""+');
+if (iPos>-1)
+v=v.substring(0,iPos)+v.substring(iPos+3);
+}
+}
+arrParams[j][1]='='+v;
+}
+else
+arrParams[j][1]=decodeURIComponent(v);
+}
+j++;
+}
+}
+}
+function getTooltip(title)
+{
+var isFormula=false;
+var iPos=0;
+if (startsWithIgnoreCase(title, '"+'))
+{
+iPos=title.indexOf('"+');
+title=title.substring(iPos+2);
+isFormula=true;
+}
+if (endsWithIgnoreCase(title, '+"'))
+{
+iPos=title.indexOf('+"');
+title=title.substring(0,iPos);
+isFormula=true;
+}
+iPos=0;
+while (iPos>-1)
+{
+iPos=title.indexOf('&quot;');
+if (iPos>-1)
+{
+if (isFormula)
+title=title.substring(0,iPos)+'\"'+title.substring(iPos+6);
+else
+title=title.substring(0,iPos)+'"'+title.substring(iPos+6);
+}
+}
+if (isFormula)
+{
+if (title.charAt(0)=='(')
+title=title.substring(1);
+var endPos=title.length-1;
+if (title.charAt(endPos)==')')
+title=title.substring(0,endPos);
+title='='+title;
+}
+return title;
+}
+function hasObjVar(v)
+{
+var r=false;
+if (v!=null)
+{
+var l=v.length;
+if (l>1)
+{
+var c1=v.substring(0,1);
+var c2=v.substring(l-1);
+r=(c1=='[' && c2==']')?true:r;
+}
+}
+return r;
+}
+function getQueryParameter(s,bStartWith)
+{
+var o=null;
+if (bStartWith)
+o=new Array();
+var j=0;
+for (var i=0;i<arrParams.length;i++)
+{
+if (bStartWith)
+{
+if (startsWithIgnoreCase(arrParams[i][0],s))
+{
+o[j]=arrParams[i];
+j++;
+}
+}
+else
+{
+if (arrParams[i][0]==s)
+{
+o=arrParams[i];
+break;
+}
+}
+}
+return o;
+}
+</script>
+<script language="javascript">
+if (strCellContent!=null && isLink && navType=="doc")
+{
+var param=getQueryParameter("iDocID");
+if (param!=null)
+{
+var docID='';
+var docType=getQueryParameter("sIDType");
+if (docType!=null)
+docID="cuid="+param[1];
+else
+docID="id="+param[1];
+var url=p._root+"incOpenDocInfos"+p._appExt+"?"+docID+"&sNewDoc=false";
+includeScript(url);
+}
+}
+</script>
+<script language="javascript">
+// Initialize error flag
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+isWarning=(typeof(_displayWarningMessage)!="undefined")?true:false;
+// --------------------------------------------------------
+// Dialog UI
+// --------------------------------------------------------
+var leftMargin=10;
+var topMargin=5;
+var topMarginInZone=2;
+var btnW=60;
+var spaceW=5;
+var firstColW=100;
+var halfFirstColW=Math.floor(firstColW/2);
+var comboW=300;
+var labelW=firstColW-leftMargin;
+var frameZoneW=560;
+var frameZoneH=360;
+var dropdownButtonW=13;
+// Link to a document
+var iLines=3;
+var iCols=(_ie)?93:88;
+var iFirstColumn=firstColW;
+iFirstColumn=(_ie)?iFirstColumn:iFirstColumn-2;
+var iDocOpenWidth=60;
+var iFieldHeight=18;
+iFieldHeight=(_ie)?iFieldHeight:iFieldHeight-2;
+var zoneparamsHmin=21;
+zoneparamsHmin+=topMarginInZone;
+var iStep=20;
+var opendocTxtW=250;
+var opendocTxtCRWidth=160;
+var linkToDocInstLabelW=163;
+var linkToDocInstListW=248;
+var promptsZoneW=firstColW+opendocTxtW+btnW+2*spaceW+20;
+// Link to web page
+var txtAreaURLW=firstColW+comboW-10;
+var selectedWidget=null;
+var initialized=false;
+// Load widgets and write the dialog box html code
+function loadCB()
+{
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+advDisplayViewerErrorMsgDlg(_displayErrorMessage,labelDlgTitle);
+return;
+}
+else if (isWarning)
+{
+p.showPromptDialog(_displayWarningMessage,labelDlgTitle,_promptDlgWarning,loadCB);
+isWarning=null;
+return;
+}
+if (!initialized)
+{
+initialized=true;
+// --------------------------------------------------------
+// Create widgets
+// --------------------------------------------------------
+hyperlinkDlg=newDialogBoxWidget("hlinkDlg",labelDlgTitle,null,null,okCB,cancelCB,false);
+frameZone=newFrameZoneWidget("hlinkFrameZone",frameZoneW,frameZoneH,false);
+infozone=newInfoWidget("hlinkInfozone",labelInfoZone,"","");
+okButton=newButtonWidget("hlinkOKButton",labelOKButton,"okCB(false)",60);
+cancelButton=newButtonWidget("hlinkCancelButton",labelCancelButton,"cancelCB()",60);
+applyButton=newButtonWidget("hlinkApplyButton",labelApplyButton,"okCB(true)",60);
+vertiIcnTbl=newIconTableWidget("hlinkVertiIcnTbl",false,80,340);
+vertiIcnTbl.add("images/main/link_to_doc.gif",onLinkToDocCB,labelLinkToDocument,null,32,32);
+vertiIcnTbl.applyDoc=false;
+vertiIcnTbl.add("images/main/link_to_URL.gif",onLinkToWebCB,labelLinkToWeb,null,32,32);
+vertiIcnTbl.applyWeb=false;
+// Link to a web page widgets
+txtAreaURL=newTextAreaWidget("hlinkTxtArea",iLines,1,null,null,txtAreaEnterCB,null);
+parseURLButton=newButtonWidget("hlinkParseButton",labelParseButton,"parseURLCB()",60);
+txtFieldURI=newTextFieldWidget("hlinkTxtFieldURI",null,maxChar,onKeyUpCB,null,true,"",comboW-14);
+txtFieldURI.updateURL=true;
+cbWebCellContent=newTextComboWidget("hlinkWebCellContent",maxChar,"",comboW,null);
+setChangeEvents(cbWebCellContent);
+cbWebTooltip=newTextComboWidget("hlinkWebTooltip",maxChar,"",comboW,null);
+setChangeEvents(cbWebTooltip);
+cbWebTargetFrame=newTextComboWidget("hlinkWebTargetFrame",null,"",comboW,null);
+setChangeEvents(cbWebTargetFrame);
+cbParamValue=new Array();
+// Link to existing document widgets
+txtFieldDocName=newTextFieldWidget("hlinkTxtFieldDocName",null,null,null,null,true,labelOpenDocMsg,opendocTxtW+halfFirstColW);
+browseButton=newButtonWidget("hlinkBrowseButton",labelBrowseButton,"browseDocCB()",60);
+ckDocRefreshOnOpen=newCheckWidget("hlinkDocRefreshOnOpen",labelRefreshOnOpen,onRefreshOnOpenCB);
+ckLinkToDocInst=newCheckWidget("hlinkToDocInst",labelLinkToDocInst,ckLinkToDocInstCB);
+cbDocInstList=newTextComboWidget("hlinkDocInstList",maxChar,"",linkToDocInstListW,null,null);
+setChangeEvents(cbDocInstList);
+ckNavToReport=newCheckWidget("hlinkNavToReport",labelNavigateToReport,ckNavToReportCB);
+optReportName=newRadioWidget("hlinkOptRepName","hlinkOptGroup",labelReportName,optionChangeCB,false,"",0,0);
+cbRepName=newComboWidget("hlinkListRepName",onRepNamechangeCB,true,opendocTxtW-10);
+optReportPart=newRadioWidget("hlinkOptRepPart","hlinkOptGroup",labelReportPart,optionChangeCB,false,"",0,0);
+txtFieldRepPart=newTextFieldWidget("hlinkTxtFieldRepPart",null,maxChar,onKeyUpCB,null,true,labelReportPartMsg,opendocTxtW-10);
+repPartButton=newButtonWidget("hlinkRepPartButton",labelSelectButton,"selectRepPartCB()",60);
+cbDocOpenMode=newTextComboWidget("hlinkDocOpenMode",null,"",comboW,null,null,beforeShowReportModeCB);
+setChangeEvents(cbDocOpenMode);
+ckAdvAbsUrl=newCheckWidget("hlinkAdvAbsUrl",lableAbsoluteURL, ckAdvAbsUrlCB);
+// For CR document
+txtFieldRepPartCR=newTextFieldWidget("hlinkTxtFieldRepPartCR",null,maxChar,onKeyUpCB,null,true,labelReportPartCRMsg,(comboW-46)/2);
+cbRepContextCR=newTextComboWidget("hlinkDocRepContextCR",maxChar,"",(comboW-56-10)/2,null,null);
+setChangeEvents(cbRepContextCR);
+cbDocCellContent=newTextComboWidget("hlinkDocCellContent",maxChar,"",comboW,null);
+setChangeEvents(cbDocCellContent);
+cbDocTooltip=newTextComboWidget("hlinkDocTooltip",maxChar,"",comboW,null);
+setChangeEvents(cbDocTooltip);
+cbDocTargetFrame=newTextComboWidget("hlinkDocTargetFrame",null,"",comboW,null);
+setChangeEvents(cbDocTargetFrame);
+cbDocOutputFormat=newTextComboWidget("hlinkDocOutputFormat",null,"",comboW,null,null,beforeShowDocOutputFormatCB);
+setChangeEvents(cbDocOutputFormat);
+cbPromptValue=new Array();
+hyperlinkDlg.attachDefaultButton(okButton);
+}
+if (!_curWin.hLinkDlgInitialized)
+{
+_curWin.hLinkDlgInitialized=true;
+// --------------------------------------------------------
+// Write the widgets
+// --------------------------------------------------------
+targetApp
+(
+hyperlinkDlg.beginHTML()+
+'<table border="0" cellspacing="0" cellpadding="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+frameZone.beginHTML()+
+'<table border="0" height="100%" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td valign="top">'+
+vertiIcnTbl.getHTML()+
+'</td>'+
+'<td valign="top">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td id="openDocHlinkID" style="display:none">'+
+getOpenDocLinkHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td id="webHlinkID">'+
+getWebLinkHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+frameZone.endHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getSpace(1,5)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td style="width:'+frameZoneW+'px">'+
+infozone.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+getSpace(1,10)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-bottom:4px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+okButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(10,1)+
+'</td>'+
+'<td>'+
+cancelButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+applyButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+hyperlinkDlg.endHTML()
+);
+}
+// --------------------------------------------------------
+// Init widgets
+// --------------------------------------------------------
+hyperlinkDlg.init();
+hyperlinkDlg.setTitle(((isLink)?labelEditHyperlink:labelCreateNew));
+vertiIcnTbl.init();
+frameZone.init();
+infozone.init();
+okButton.init();
+okButton.setDisabled(true);
+cancelButton.init();
+applyButton.init();
+// Link to a web page init widgets
+txtAreaURL.init();
+parseURLButton.init();
+txtFieldURI.init();
+txtAreaURL.css.width=""+txtAreaURLW+"px";
+// Dynamic Params UI
+var nbRows=_curDoc.getElementById("hlinkTableParamsID").rows.length;
+for (var i=0;i<nbRows;i++)
+{
+cbParamValue[i]=newParamValueWidget(i);
+cbParamValue[i].init();
+cbParamValue[i].addMenuItem("hlinkParamSelVarItem-"+i.toString(),labelItemSelecVar,onSelectVarItemCB);
+cbParamValue[i].addMenuItem("hlinkParamEnterConstItem-"+i.toString(),labelItemEditFormula,editFormulaCB);
+}
+cbWebCellContent.init();
+cbWebCellContent.addMenuItem("hlinkWebCellContSelVarItem",labelItemSelecVar,onSelectVarItemCB);
+cbWebCellContent.addMenuItem("hlinkWebCellContEnterConst",labelItemEditFormula,editFormulaCB);
+cbWebTooltip.init();
+cbWebTooltip.addMenuItem("hlinkWebToolTipSelVarItem",labelItemSelecVar,onSelectVarItemCB);
+cbWebTooltip.addMenuItem("hlinkWebToolTipEnterConst",labelItemEditFormula,editFormulaCB);
+cbWebTargetFrame.init();
+cbWebTargetFrame.addMenuItem("hlinkWebTargetWinItem-0",labelItemCurWin,onTargetWinItemSelCB);
+cbWebTargetFrame.addMenuItem("hlinkWebTargetWinItem-1",labelItemNewWin,onTargetWinItemSelCB);
+// Link to a existing document init widgets
+txtFieldDocName.init();
+browseButton.init();
+ckDocRefreshOnOpen.init();
+ckLinkToDocInst.init();
+cbDocInstList.init();
+cbDocInstList.addMenuItem("hlinkDocInstListItem-Last",labelDocInstLast,onDocInstListItemSelCB);
+cbDocInstList.addMenuItem("hlinkDocInstListItem-User",labelDocInstUser,onDocInstListItemSelCB);
+cbDocInstList.addMenuItem("hlinkDocInstListItem-Param",labelDocInstParam,onDocInstListItemSelCB);
+ckNavToReport.init();
+optReportName.init();
+cbRepName.init();
+optReportPart.init();
+txtFieldRepPart.init();
+repPartButton.init();
+ckAdvAbsUrl.init();
+cbDocOpenMode.init();
+cbDocOpenMode.addMenuItem("hlinkDocOpenModeItem-Part",labelPartOpenModePart,onDocOpenModeItemSelCB);
+cbDocOpenMode.addMenuItem("hlinkDocOpenModeItem-Full",labelPartOpenModeFull,onDocOpenModeItemSelCB);
+txtFieldRepPartCR.init();
+cbRepContextCR.init();
+cbRepContextCR.addMenuItem("hlinkDocRepContextCRSelVarItem",labelItemSelecVar,onSelectVarItemCB);
+cbRepContextCR.addMenuItem("hlinkDocRepContextCREnterConst",labelItemEditFormula,editFormulaCB);
+cbDocCellContent.init();
+cbDocCellContent.addMenuItem("hlinkDocCellContSelVarItem",labelItemSelecVar,onSelectVarItemCB);
+cbDocCellContent.addMenuItem("hlinkDocCellContEnterConst",labelItemEditFormula,editFormulaCB);
+cbDocTooltip.init();
+cbDocTooltip.addMenuItem("hlinkDocToolTipSelVarItem",labelItemSelecVar,onSelectVarItemCB);
+cbDocTooltip.addMenuItem("hlinkDocToolTipEnterConst",labelItemEditFormula,editFormulaCB);
+cbDocTargetFrame.init();
+cbDocTargetFrame.addMenuItem("hlinkDocTargetWinItem-0",labelItemCurWin,onTargetWinItemSelCB);
+cbDocTargetFrame.addMenuItem("hlinkDocTargetWinItem-1",labelItemNewWin,onTargetWinItemSelCB);
+cbDocOutputFormat.init();
+cbDocOutputFormat.addMenuItem("hlinkDocOutputFormatItem-D",labelOFDefault,onOutputFormatItemSelCB);
+cbDocOutputFormat.addMenuItem("hlinkDocOutputFormatItem-H",labelOFhtml,onOutputFormatItemSelCB);
+cbDocOutputFormat.addMenuItem("hlinkDocOutputFormatItem-P",labelOFpdf,onOutputFormatItemSelCB);
+cbDocOutputFormat.addMenuItem("hlinkDocOutputFormatItem-E",labelOFxls,onOutputFormatItemSelCB);
+cbDocOutputFormat.addMenuItem("hlinkDocOutputFormatItem-W",labelOFwrd,onOutputFormatItemSelCB);
+// Dynamic Prompts UI
+var nbRows=_curDoc.getElementById("hlinkTablePromptsID").rows.length;
+for (var i=0;i<nbRows;i++)
+{
+cbPromptValue[i]=newPromptValueWidget(i);
+cbPromptValue[i].init();
+cbPromptValue[i].addMenuItem("hlinkPromptSelVarItem-"+i.toString(),labelItemSelecVar,onSelectVarItemCB);
+cbPromptValue[i].addMenuItem("hlinkPromptEnterFormulaItem-"+i.toString(),labelItemEditFormula,editFormulaCB);
+cbPromptValue[i].addMenuItem("hlinkPromptEnterConstItem-"+i.toString(),labelPromptEnterConst,enterConstantCB);
+cbPromptValue[i].addMenuItem("hlinkPromptUserItem-U-"+i.toString(),labelPromptUser,onPromptUserItemCB);
+cbPromptValue[i].addMenuItem("hlinkPromptDefaultItem-D-"+i.toString(),labelPromptDefaultValue,onPromptDefaultValueItemCB);
+}
+// --------------------------------------------------------
+// Dialog load and initial state
+// --------------------------------------------------------
+// Init open doc Form
+_curDoc.getElementById("zoneDocparamsID").style.display='none';
+txtFieldDocName.setValue('');
+txtFieldDocName.setDisabled(true);
+txtFieldDocName.setHelpTxt(labelOpenDocMsg);
+ckDocRefreshOnOpen.setDisabled(false);
+ckDocRefreshOnOpen.check(false);
+ckLinkToDocInst.setDisabled(false);
+ckLinkToDocInst.check(false);
+_curDoc.getElementById("zoneDocInstID").style.display='none';
+cbDocInstList.setContentEditable(false);
+cbDocInstList.text.setValue(labelDocInstLast);
+_curDoc.getElementById("hlinkDocInstValue").value='Last';
+ckNavToReport.setDisabled(false);
+ckNavToReport.check(false);
+ckNavToReport.setDisabled(true);
+_curDoc.getElementById("zoneDocReportID").style.display='none';
+optReportName.setDisabled(false);
+optReportName.check(false);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='none';
+cbRepName.del();
+optReportPart.setDisabled(false);
+optReportPart.check(false);
+_curDoc.getElementById("zoneDocRepPartID").style.display='none';
+ckAdvAbsUrl.check(false);
+txtFieldRepPart.setValue('');
+//txtFieldRepPart.setDisabled(true);
+txtFieldRepPart.setHelpTxt(labelReportPartMsg);
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='none';
+txtFieldRepPartCR.setValue('');
+txtFieldRepPartCR.setHelpTxt(labelReportPartCRMsg);
+cbRepContextCR.text.setValue('');
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='none';
+cbDocOpenMode.setContentEditable(false);
+cbDocOpenMode.text.setValue(labelPartOpenModePart);
+_curDoc.getElementById("hlinkDocOpenModeValue").value="Part";
+cbDocCellContent.text.setValue((strCellName!=null)?strCellName:'');
+cbDocTooltip.text.setValue('');
+cbDocTargetFrame.text.setValue(labelItemNewWin);
+_curDoc.getElementById("hlinkDocTarget").value="_blank";
+cbDocTargetFrame.setContentEditable(false);
+cbDocOutputFormat.text.setValue(labelOFDefault);
+_curDoc.getElementById("hlinkDocOutputFormatValue").value="D";
+cbDocOutputFormat.setContentEditable(false);
+// Init Link to web Form
+txtAreaURL.setValue('');
+_curDoc.getElementById("zoneWebparamsID").style.display='none';
+txtFieldURI.setValue('');
+cbWebCellContent.text.setValue((strCellName!=null)?strCellName:'');
+cbWebTooltip.text.setValue('');
+cbWebTargetFrame.text.setValue(labelItemNewWin);
+_curDoc.getElementById("hlinkWebTarget").value="_blank";
+cbWebTargetFrame.setContentEditable(false);
+// Update UI
+_curDoc.getElementById("openDocHlinkID").style.display=(navType=="doc")?'':'none';
+_curDoc.getElementById("webHlinkID").style.display=(navType=="web")?'':'none';
+vertiIcnTbl.select(0);
+if (vertiIcnTbl.icnTblLayer) vertiIcnTbl.icnTblLayer.height="100%";
+setDisableApplyButton(true);
+infozone.setText(infoZoneDocMsg);
+if (isLink)
+{
+var loadForm=null;
+if (navType=="doc")
+{
+vertiIcnTbl.select(0);
+infozone.setText(infoZoneDocMsg);
+loadForm=function()
+{
+if (doc.CUID!=null)
+{
+txtFieldDocName.setValue(doc.name);
+var param=getQueryParameter("sInstance");
+if (param!=null)
+{
+ckLinkToDocInst.check(true);
+_curDoc.getElementById("zoneDocInstID").style.display='';
+_curDoc.getElementById("hlinkDocInstValue").value=param[1];
+if (param[1]=="Last")
+cbDocInstList.text.setValue(labelDocInstLast);
+else if (param[1]=="User")
+cbDocInstList.text.setValue(labelDocInstUser);
+else if (param[1]=="Param")
+cbDocInstList.text.setValue(labelDocInstParam);
+}
+cbDocInstList.setItemDisabled(2,doc.isAgnostic);
+ckLinkToDocInst.setDisabled(!doc.isSchedulable);
+ckNavToReport.setDisabled(doc.isAgnostic);
+param=getQueryParameter("sReportName");
+if (param!=null)
+{
+optReportName.check(true);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='';
+for (var i=0;i<doc.arrReports.length;i++)
+{
+cbRepName.add(doc.arrReports[i][0],i,(param[1]==doc.arrReports[i][0]));
+}
+}
+else
+{
+for (var i=0;i<doc.arrReports.length;i++)
+{
+cbRepName.add(doc.arrReports[i][0],i,doc.arrReports[i][1]);
+}
+}
+if (doc.type!="wid" && doc.type!="rep")
+{
+optReportName.setDisabled(true);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='none';
+}
+param=getQueryParameter("sReportPart");
+if (param!=null)
+{
+var rm=null;
+optReportPart.check(true);
+_curDoc.getElementById("zoneDocRepPartID").style.display='';
+if (doc.type=="rpt")
+{
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='';
+txtFieldRepPartCR.setValue(param[1]);
+var rc=getQueryParameter("sPartContext");
+if (rc!=null)
+cbRepContextCR.text.setValue(rc[1]);
+rm=getQueryParameter("sReportMode");
+}
+else
+{
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='';
+txtFieldRepPart.setValue(param[1]);
+rm=getQueryParameter("mode");
+}
+if (rm!=null)
+{
+_curDoc.getElementById("hlinkDocOpenModeValue").value=rm[1];
+if (rm[1]=="Full")
+cbDocOpenMode.text.setValue(labelPartOpenModeFull);
+else if (rm[1]=="Part")
+cbDocOpenMode.text.setValue(labelPartOpenModePart);
+}
+}
+else if (doc.type!="wid" && doc.type!="rpt")
+{
+optReportPart.setDisabled(true);
+_curDoc.getElementById("zoneDocRepPartID").style.display='none';
+}
+if (optReportName.isChecked() || optReportPart.isChecked())
+{
+ckNavToReport.check(true);
+_curDoc.getElementById("zoneDocReportID").style.display='';
+}
+else
+{
+if (doc.type=="wid" || doc.type=="rep")
+{
+optReportName.check(true);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='';
+}
+else if (doc.type=="rpt")
+{
+optReportPart.check(true);
+_curDoc.getElementById("zoneDocRepPartID").style.display='';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='';
+}
+else
+ckNavToReport.setDisabled(true);
+}
+param=getQueryParameter("sOutputFormat");
+if (param!=null)
+{
+_curDoc.getElementById("hlinkDocOutputFormatValue").value=param[1];
+if (param[1]=="D")
+cbDocOutputFormat.text.setValue(labelOFDefault);
+if (param[1]=="H")
+cbDocOutputFormat.text.setValue(labelOFhtml);
+else if (param[1]=="P")
+cbDocOutputFormat.text.setValue(labelOFpdf);
+else if (param[1]=="X")
+cbDocOutputFormat.text.setValue(labelOFxls);
+else if (param[1]=="W")
+cbDocOutputFormat.text.setValue(labelOFwrd);
+// Report navigation should only be allowed for default/HTML output format
+//TODO: this may change when report tabs in PDF mode will be ported in Titan release
+var b=(param[1]=="D" || param[1]=="H")?true:false;
+updateNavToReportZone(b);
+}
+param=getQueryParameter("sRefresh");
+if (param!=null)
+{
+if (param[1]=="Y")
+ckDocRefreshOnOpen.check(true);
+else if (param[1]=="N")
+ckDocRefreshOnOpen.check(false);
+}
+else if (doc.refreshOnOpen)
+{
+ckDocRefreshOnOpen.check(true);
+ckDocRefreshOnOpen.setDisabled(true);
+}
+if (doc.isAgnostic)
+ckDocRefreshOnOpen.setDisabled(true);
+if (strCellName!=null)
+cbDocCellContent.text.setValue(strCellName);
+if (strLinkTitle!=null)
+cbDocTooltip.text.setValue(strLinkTitle);
+param=getQueryParameter("sWindow");
+if (param!=null)
+{
+if (param[1]=="Same")
+{
+cbDocTargetFrame.text.setValue(labelItemCurWin);
+_curDoc.getElementById("hlinkDocTarget").value="_self";
+}
+if (param[1]=="New")
+{
+cbDocTargetFrame.text.setValue(labelItemNewWin);
+_curDoc.getElementById("hlinkDocTarget").value="_blank";
+}
+}
+// Prompts
+var arrTmp=new Array();
+var nbPrompts=doc.arrPrompts.length;
+for (var i=0;i<nbPrompts;i++)
+{
+arrTmp[i]=new Array(2);
+arrTmp[i][0]=doc.arrPrompts[i].name;
+var sQueryParam="ls"+doc.arrPrompts[i].type;
+sQueryParam+=doc.arrPrompts[i].id;
+sQueryParam=encodeURIComponent(sQueryParam);
+param=getQueryParameter(sQueryParam);
+if (param!=null)
+arrTmp[i][1]=param[1];
+else
+arrTmp[i][1]='';
+}
+if (arrTmp.length>0)
+{
+arrParams=new Array();
+for (var i=0;i<arrTmp.length;i++)
+{
+arrParams[i]=new Array(2);
+arrParams[i][0]=arrTmp[i][0];
+arrParams[i][1]=arrTmp[i][1];
+}
+fillActionDocParams();
+for (var i=0;i<arrTmp.length;i++)
+{
+if (arrTmp[i][1]=='')
+{
+_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value='D';
+cbPromptValue[i].text.setValue(labelPromptDefaultValue);
+}
+else if (arrTmp[i][1]=='?')
+{
+_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value='U';
+cbPromptValue[i].text.setValue(labelPromptUser);
+}
+else
+{
+_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value='';
+cbPromptValue[i].text.setValue(arrTmp[i][1]);
+}
+}
+_curDoc.getElementById("zoneDocPromptsID").style.display='';
+updatePromptsDisplay();
+}
+else
+{
+arrParams=new Array();
+fillActionDocParams();
+_curDoc.getElementById("zoneDocPromptsID").style.display='none';
+}
+// Advanced options
+ckAdvAbsUrl.check(isAbsoluteURL);
+// Show attributes
+_curDoc.getElementById("zoneDocparamsID").style.display='';
+updateOkButton();
+}
+}
+}
+else if (navType=="web")
+{
+vertiIcnTbl.select(1);
+infozone.setText(infoZoneWebMsg);
+loadForm=function()
+{
+if (strLinkHref!=null)
+txtAreaURL.setValue(strLinkHref);
+if (strLinkURI!=null)
+txtFieldURI.setValue(strLinkURI);
+// Fill Action parameters
+fillActionWebParams();
+// Fill Action Attributes
+if (strCellName!=null)
+cbWebCellContent.text.setValue(strCellName);
+if (strLinkTitle!=null)
+cbWebTooltip.text.setValue(strLinkTitle);
+if (strLinkTarget=="_self")
+{
+cbWebTargetFrame.text.setValue(labelItemCurWin);
+_curDoc.getElementById("hlinkWebTarget").value="_self";
+}
+else
+{
+cbWebTargetFrame.text.setValue(labelItemNewWin);
+_curDoc.getElementById("hlinkWebTarget").value="_blank";
+}
+// Show attributes
+_curDoc.getElementById("zoneWebparamsID").style.display='';
+updateOkButton();
+}
+}
+if (loadForm!=null)
+loadForm();
+}
+// --------------------------------------------------------
+// Show Dialog
+// --------------------------------------------------------
+hyperlinkDlg.show(true);
+}
+function getOpenDocLinkHTML()
+{
+var strHyperlinkOutput=''+
+'<table class="dialogzone" border="0" style="margin-left:7px" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table class="dialogzone" style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td width="'+halfFirstColW+'">'+
+'<label for="'+txtFieldDocName.id+'">'+labelDocumentName+'</label>'+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+txtFieldDocName.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+browseButton.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td id="zoneDocparamsID" style="display:none">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelActionProperties+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+ckAdvAbsUrl.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+ckDocRefreshOnOpen.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td width="'+linkToDocInstLabelW+'">'+
+ckLinkToDocInst.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td id="zoneDocInstID" style="display:none">'+
+cbDocInstList.getHTML()+
+'<input type="hidden" id="hlinkDocInstValue" value="">'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+ckNavToReport.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td id="zoneDocReportID" style="display:none">'+
+'<table border="0" style="margin-left:'+leftMargin+'px" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td width="'+firstColW+'">'+
+optReportName.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td id="zoneDocRepNameComboID" style="display:none">'+
+cbRepName.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td valign="top" width="'+firstColW+'">'+
+optReportPart.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td id="zoneDocRepPartID" style="display:none">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr id="zoneDocRepPartWebiID" style="display:none">'+
+'<td>'+
+'<table class="dialogzone" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+txtFieldRepPart.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+repPartButton.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr id="zoneDocRepPartCRID" style="display:none">'+
+'<td>'+
+'<table class="dialogzone" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+txtFieldRepPartCR.getHTML()+
+'</td>'+
+'<td align="right" width="51">'+
+'<label for="'+cbRepContextCR.id+'">'+labelPartContext+'</label>'+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbRepContextCR.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td colspan="3" align="left">'+
+cbDocOpenMode.getHTML()+
+'<input type="hidden" id="hlinkDocOpenModeValue" value="">'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td id="zoneDocPromptsID" style="display:none">'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelDocumentPrompts+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<div id="hlinkPromptsContainerID" style="overflow:auto;width:'+promptsZoneW+'px;height:'+zoneparamsHmin+'px">'+
+'<table style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table style="margin-left:'+leftMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tbody id="hlinkTablePromptsID" class="dialogzone">'+
+//parameters will be added dynamically
+'</tbody>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</div>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelActionAttrib+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table class="dialogzone" style="margin-left:'+leftMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td width="'+firstColW+'">'+
+getLabelHTML(labelOutputFormat,cbDocOutputFormat.id,null,firstColW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbDocOutputFormat.getHTML()+
+'<input type="hidden" id="hlinkDocOutputFormatValue" value="">'+
+'</td>'+
+'</tr>'+
+'<tr style="display:none">'+
+'<td>'+
+getLabelHTML(labelCellCont,cbDocCellContent.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbDocCellContent.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getLabelHTML(labelTargetWin,cbDocTargetFrame.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbDocTargetFrame.getHTML()+
+'<input type="hidden" id="hlinkDocTarget" value="">'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getLabelHTML(labelTooltip,cbDocTooltip.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbDocTooltip.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>';
+return strHyperlinkOutput;
+}
+// Web link HTML
+function getWebLinkHTML()
+{
+var strHyperlinkOutput=''+
+'<table class="dialogzone" border="0" style="margin-left:7px" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label for="'+txtAreaURL.id+'">'+labelParseMsg+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+txtAreaURL.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td valign="top">'+
+parseURLButton.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td id="zoneWebparamsID" style="display:none">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelMain+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table class="dialogzone" style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table class="dialogzone" style="margin-left:'+leftMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+getLabelHTML(labelFieldURI,txtFieldURI.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+txtFieldURI.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelActionParams+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<div id="hlinkParamsContainerID" style="overflow:auto;width:'+promptsZoneW+'px;height:'+zoneparamsHmin+'px">'+
+'<table style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table style="margin-left:'+leftMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tbody id="hlinkTableParamsID" class="dialogzone">'+
+//parameters will be added dynamically
+'</tbody>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</div>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<label>'+labelActionAttrib+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:'+topMarginInZone+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+'<table class="dialogzone" style="margin-left:'+leftMargin+'px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr style="display:none">'+
+'<td>'+
+getLabelHTML(labelCellCont,cbWebCellContent.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbWebCellContent.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getLabelHTML(labelTargetWin,cbWebTargetFrame.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbWebTargetFrame.getHTML()+
+'<input type="hidden" id="hlinkWebTarget" value="">'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getLabelHTML(labelTooltip,cbWebTooltip.id,null,labelW)+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+cbWebTooltip.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</table>';
+return strHyperlinkOutput;
+}
+function getLabelHTML(label,forAttrib,idAttrib,w,h)
+{
+return '<div style="overflow:hidden;text-overflow:ellipsis;width:'+((w)?w:iFirstColumn)+'px;height:'+((h)?h:iFieldHeight)+'px"><label '+ ((idAttrib)?'id="'+idAttrib+'" ':'')+'style="white-space:nowrap;" for="'+forAttrib+'" title="'+label+'">'+label+'</label></div>';
+}
+// --------------------------------------------------------
+// Init functions
+// --------------------------------------------------------
+function setChangeEvents(o)
+{
+o.text.changeCB=onChangeCB;
+o.text.keyUpCB=onKeyUpCB;
+}
+function newParamValueWidget(i)
+{
+return newParamWidget("hlinkParamValue-"+i.toString(),true,null);
+}
+function newPromptValueWidget(i)
+{
+return newParamWidget("hlinkPromptValue-"+i.toString(),false,beforeShowPromptMenuCB);
+}
+function newParamWidget(id,bUpdateURL,beforeShowCB)
+{
+var obj=newTextComboWidget(id,maxChar,"",comboW,null,null,beforeShowCB);
+if (bUpdateURL)
+obj.text.updateURL=true;
+setChangeEvents(obj);
+return obj;
+}
+function fillActionWebParams()
+{
+var nbRows=fillActionParams("Param");
+var nbItems=6;
+// Resize param fields container
+var iZoneparamsHeight=zoneparamsHmin;
+if (nbRows>0 && nbRows<=nbItems)
+iZoneparamsHeight+=(nbRows-1)*iStep;
+else if (nbRows>nbItems)
+iZoneparamsHeight+=(nbItems-1)*iStep;
+_curDoc.getElementById("hlinkParamsContainerID").style.height=""+iZoneparamsHeight+"px";
+}
+function fillActionDocParams()
+{
+var nbRows=fillActionParams("Prompt");
+resizePromptsZone();
+}
+function resizePromptsZone()
+{
+var nbItemMax=4;
+if (ckNavToReport.isChecked() && !ckNavToReport.isDisabled())
+{
+nbItemMax--;
+if (optReportPart.isChecked() && !optReportPart.isDisabled())
+nbItemMax--;
+}
+var iZoneparamsHeight=zoneparamsHmin;
+var nbRows=doc.arrPrompts.length;
+if (nbRows>0 && nbRows<=nbItemMax)
+iZoneparamsHeight+=(nbRows-1)*iStep;
+else if (nbRows>nbItemMax)
+iZoneparamsHeight+=(nbItemMax-1)*iStep;
+_curDoc.getElementById("hlinkPromptsContainerID").style.height=""+iZoneparamsHeight+"px";
+}
+function fillActionParams(stype)
+{
+var cb=null;
+if (stype=="Prompt") 
+cb=cbPromptValue;
+else
+cb=cbParamValue;
+// Clean up previous values
+for (var i=0;i<cb.length;i++)
+{
+var strIndex=i.toString();
+_curDoc.getElementById("hlink"+stype+"Name-"+strIndex).innerHTML='&nbsp;';
+_curDoc.getElementById("hlinkRow"+stype+"Index-"+strIndex).value='';
+cb[i].text.setValue('');
+cb[i].setDisabled(true);
+_curDoc.getElementById("hlinkRow"+stype+"ID-"+strIndex).style.display='none';
+}
+var nbRows=0;
+var isPromptType=(stype=="Prompt")?true:false;
+// Fill params rows
+for (var i=0;i<arrParams.length;i++)
+{
+if (arrParams[i]!=null && arrParams[i][0]!=null)
+{
+if (cb[i]!=null)
+{
+var strIndex=i.toString();
+_curDoc.getElementById("hlink"+stype+"Name-"+strIndex).innerHTML=arrParams[i][0];
+    _curDoc.getElementById("hlink"+stype+"Name-"+strIndex).title=arrParams[i][0];
+_curDoc.getElementById("hlinkRow"+stype+"Index-"+strIndex).value='';
+cb[i].text.setValue((arrParams[i][1]!=null)?arrParams[i][1]:'');
+_curDoc.getElementById("hlinkRow"+stype+"ID-"+strIndex).style.display='';
+}
+else
+{
+var strIndex=i.toString();
+var tbody=_curDoc.getElementById("hlinkTable"+stype+"sID");
+var tr=tbody.insertRow(tbody.rows.length);
+tr.id="hlinkRow"+stype+"ID-"+strIndex;
+var strParamName=(arrParams[i][0]!=null)?arrParams[i][0]:"&nbsp;";
+var labelItemWidth=(stype=="Prompt")?firstColW:labelW;
+tr.insertCell(0).innerHTML=getLabelHTML(strParamName,"hlink"+stype+"Value-"+strIndex,"hlink"+stype+"Name-"+strIndex,labelItemWidth);
+tr.insertCell(1).innerHTML='<div style="width:5px"><input type="hidden" id="hlinkRow'+stype+'Index-'+strIndex+'" value=""></div>';
+if (isPromptType)
+cb[i]=newPromptValueWidget(i);
+else
+cb[i]=newParamValueWidget(i);
+tr.insertCell(2).innerHTML=cb[i].getHTML();
+var strParamValue=(arrParams[i][1]!=null)?arrParams[i][1]:'';
+cb[i].init();
+cb[i].addMenuItem("hlink"+stype+"SelVarItem-"+i.toString(),labelItemSelecVar,onSelectVarItemCB);
+cb[i].addMenuItem("hlink"+stype+"EnterFormulaItem-"+i.toString(),labelItemEditFormula,editFormulaCB);
+if (isPromptType)
+{
+cb[i].addMenuItem("hlink"+stype+"EnterConstItem-"+i.toString(),labelPromptEnterConst,enterConstantCB);
+cb[i].addMenuItem("hlink"+stype+"UserItem-U-"+i.toString(),labelPromptUser,onPromptUserItemCB);
+cb[i].addMenuItem("hlink"+stype+"DefaultItem-D-"+i.toString(),labelPromptDefaultValue,onPromptDefaultValueItemCB);
+}
+cb[i].text.setValue(strParamValue);
+}
+cb[i].setDisabled(false);
+cb[i].setContentEditable(!isPromptType);
+nbRows++;
+}
+}
+return nbRows;
+}
+function fillopenDocForm()
+{
+// Reset open doc UI
+ckLinkToDocInst.check(false);
+_curDoc.getElementById("zoneDocInstID").style.display='none';
+ckNavToReport.check(false);
+ckNavToReport.setDisabled(true);
+_curDoc.getElementById("zoneDocReportID").style.display='none';
+// Update open doc form
+// name
+txtFieldDocName.setValue((doc.name!=null)?doc.name:'');
+// Document instance
+cbDocInstList.text.setValue(labelDocInstLast);
+_curDoc.getElementById("hlinkDocInstValue").value='Last';
+cbDocInstList.setItemDisabled(2,doc.isAgnostic);
+ckLinkToDocInst.setDisabled(!doc.isSchedulable);
+if (!doc.isAgnostic)
+{
+// Refreh on open
+ckDocRefreshOnOpen.check(doc.refreshOnOpen);
+ckDocRefreshOnOpen.setDisabled(doc.refreshOnOpen);
+// Report zone
+ckNavToReport.setDisabled(false);
+// Report names
+optReportName.setDisabled(false);
+optReportName.check(false);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='none';
+cbRepName.del();
+for (var i=0;i<doc.arrReports.length;i++)
+{
+cbRepName.add(doc.arrReports[i][0],i,doc.arrReports[i][1]);
+}
+if (doc.type=="wid" || doc.type=="rep")
+{
+optReportName.check(true);
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='';
+}
+else
+optReportName.setDisabled(true);
+// Report part
+optReportPart.setDisabled(false);
+optReportPart.check(false);
+_curDoc.getElementById("zoneDocRepPartID").style.display='none';
+txtFieldRepPart.setValue('');
+txtFieldRepPartCR.setValue('');
+cbRepContextCR.text.setValue('');
+if (doc.type=="wid")
+{
+txtFieldRepPart.setHelpTxt(labelReportPartMsg);
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='none';
+}
+else if (doc.type=="rpt")
+{
+txtFieldRepPartCR.setHelpTxt(labelReportPartCRMsg);
+optReportPart.check(true);
+_curDoc.getElementById("zoneDocRepPartID").style.display='';
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='none';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='';
+}
+else
+{
+optReportPart.setDisabled(true);
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='none';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='none';
+}
+cbDocOpenMode.text.setValue(labelPartOpenModePart);
+_curDoc.getElementById("hlinkDocOpenModeValue").value="Part";
+}
+else
+{
+// Refreh on open
+ckDocRefreshOnOpen.check(false);
+ckDocRefreshOnOpen.setDisabled(true);
+}
+// Output format
+cbDocOutputFormat.text.setValue(labelOFDefault);
+_curDoc.getElementById("hlinkDocOutputFormatValue").value="D";
+// Prompts
+var nbPrompts=doc.arrPrompts.length;
+// display Prompts
+arrParams = new Array();
+for (var i=0;i<nbPrompts;i++)
+{
+arrParams[i]=new Array(2);
+arrParams[i][0]=doc.arrPrompts[i].name;
+arrParams[i][1]='';
+}
+fillActionDocParams();
+// init prompts values
+if (nbPrompts==1)
+{
+_curDoc.getElementById("hlinkRowPromptIndex-0").value='';
+cbPromptValue[0].text.setValue(strCellName);
+cbPromptValue[0].setContentEditable(false);
+}
+else
+{
+for (var i=0;i<nbPrompts;i++)
+{
+_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value='D';
+cbPromptValue[i].text.setValue(labelPromptDefaultValue);
+cbPromptValue[i].setContentEditable(false);
+}
+}
+_curDoc.getElementById("zoneDocPromptsID").style.display=(nbPrompts>0)?'':'none';
+// Show attributes
+_curDoc.getElementById("zoneDocparamsID").style.display='';
+// Advanced options
+ckAdvAbsUrl.check(false);
+setDisableApplyButton(false);
+updateOkButton();
+// Prompts next step
+// We use setTimeout to give again the context to the current page
+if (nbPrompts>1)
+setTimeout('delayedShowPromptsDialog()', 1);
+}
+function delayedShowPromptsDialog()
+{
+p.frameNav("SecondDlgFrame", "selectPromptsDialog.html");
+}
+// Called from Select Prompts dialog box
+function setPromptsCB()
+{
+// init prompts values
+var nbPrompts=doc.arrPrompts.length;
+for (var i=0;i<nbPrompts;i++)
+{
+if (doc.arrPrompts[i].isSelected)
+{
+_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value='';
+cbPromptValue[i].text.setValue(strCellName);
+}
+}
+}
+// --------------------------------------------------------
+// Callback functions
+// --------------------------------------------------------
+function onLinkToDocCB()
+{
+if (navType!="doc")
+{
+navType="doc";
+vertiIcnTbl.applyWeb=(!applyButton.isDisabled());
+setDisableApplyButton(!vertiIcnTbl.applyDoc);
+_curDoc.getElementById("openDocHlinkID").style.display='';
+_curDoc.getElementById("webHlinkID").style.display='none';
+updateOkButton();
+infozone.setText(infoZoneDocMsg);
+}
+}
+function onLinkToWebCB()
+{
+if (navType!="web")
+{
+navType="web";
+vertiIcnTbl.applyDoc=(!applyButton.isDisabled());
+setDisableApplyButton(!vertiIcnTbl.applyWeb);
+_curDoc.getElementById("openDocHlinkID").style.display='none';
+_curDoc.getElementById("webHlinkID").style.display='';
+updateOkButton();
+infozone.setText(infoZoneWebMsg);
+}
+}
+function onOutputFormatItemSelCB()
+{
+var o=this;
+var iPos=o.id.lastIndexOf('-');
+var v=o.id.substring(iPos+1);
+// Check if value changed
+var bChanged=(_curDoc.getElementById("hlinkDocOutputFormatValue").value!=v)?true:false;
+if (bChanged)
+{
+_curDoc.getElementById("hlinkDocOutputFormatValue").value=v;
+var po=o.par.parIcon;
+po.text.setValue(o.text);
+valueChanged(po.text);
+// Report navigation should only be allowed for default/HTML output format
+//TODO: this may change when report tabs in PDF mode will be ported in Titan release
+if (!doc.isAgnostic)
+{
+var b=(v=='D' || v=='H')?true:false;
+updateNavToReportZone(b);
+}
+}
+}
+    function beforeShowDocOutputFormatCB()
+{
+var o=this;
+var arrSof=new Array();
+if (lstOutputFormat.containsKey(doc.type))
+{
+var sof=lstOutputFormat.get(doc.type);
+arrSof=sof.split(',');
+}
+for (var i=0;i<o.items.length;i++)
+{
+var v=o.items[i].id;
+v=v.substring(v.length-1);
+if (v=='D')
+continue;
+    var bFound=false;
+for (var j=0;j<arrSof.length;j++)
+{
+if (arrSof[j]==v)
+{
+bFound=true;
+break;
+}
+}
+o.parIcon.setItemDisabled(i,!bFound);
+}
+}
+function beforeShowReportModeCB()
+{
+var o=this;
+for (var i=0;i<o.items.length;i++)
+{
+var v=o.items[i].id;
+var iPos=v.indexOf('-')
+if (iPos>=0)
+v=v.substring(iPos+1);
+var bDisable=(v=="Full" && doc.type=="wid")?true:false;
+o.parIcon.setItemDisabled(i,bDisable);
+}
+}
+function onRefreshOnOpenCB()
+{
+var o=this;
+valueChanged(o);
+}
+function onPromptUserItemCB()
+{
+setRowIndex(this);
+var o=this.par.parIcon;
+selectedWidget=o.text;
+selectedWidget.setValue(labelPromptUser);
+o.setContentEditable(false);
+}
+function onPromptDefaultValueItemCB()
+{
+setRowIndex(this);
+var o=this.par.parIcon;
+selectedWidget=o.text;
+selectedWidget.setValue(labelPromptDefaultValue);
+o.setContentEditable(false);
+}
+function setRowIndex(o)
+{
+var iPos=o.id.indexOf('-');
+var itemID=o.id.substring(iPos+1);
+iPos=itemID.indexOf('-');
+if (iPos>=0) itemID=itemID.substring(0,iPos);
+var po=o.par.parIcon;
+setRowIndexWithItemValue(po,itemID);
+}
+function setRowIndexWithItemValue(po,sValue)
+{
+var iPos=po.id.lastIndexOf('-');
+var rowIndex=po.id.substring(iPos+1);
+var obj=null;
+if (po.id.indexOf('Prompt')>-1)
+obj=_curDoc.getElementById("hlinkRowPromptIndex-"+rowIndex);
+else if (po.id.indexOf('Param')>-1)
+obj=_curDoc.getElementById("hlinkRowParamIndex-"+rowIndex);
+// Check if value changed
+var bChanged=(obj && obj.value!=sValue)?true:false;
+if (bChanged)
+{
+obj.value=sValue;
+valueChanged(po.text);
+}
+}
+function onSelectVarItemCB()
+{
+selectedWidget=this.par.parIcon;
+p.frameNav("SecondDlgFrame", "selectObjectDialog.html")
+}
+function onVarItemSelectedCB(name)
+{
+if (selectedWidget!=null)
+{
+var po=selectedWidget;
+if (navType=="doc")
+po.setContentEditable(false);
+else
+po.setContentEditable(true);
+var o=po.text;
+var v="=["+name+"]";
+var bChanged=(o.getValue()!=v)?true:false;
+o.setValue(v);
+if (bChanged)
+valueChanged(o);
+setRowIndexWithItemValue(po,'V');
+selectedWidget=null;
+}
+}
+function enterConstantCB()
+{
+var po=this.par.parIcon;
+po.setContentEditable(true);
+var o=po.text;
+var v=o.getValue();
+if (v!='')
+{
+var iPos=po.id.indexOf('-');
+var rowIndex=po.id.substring(iPos+1);
+var obj=_curDoc.getElementById("hlinkRowPromptIndex-"+rowIndex);
+if (!((obj.value=='' || obj.value=='C') && v.charAt(0)!='='))
+{
+o.setValue('');
+valueChanged(o);
+}
+}
+setRowIndexWithItemValue(po,'C');
+o.layer.focus();
+}
+function beforeShowPromptMenuCB()
+{
+if (doc.type=="rpt" || (ckLinkToDocInst.isChecked() && _curDoc.getElementById("hlinkDocInstValue").value=='Param'))
+this.parIcon.setItemDisabled(3,true);
+else
+this.parIcon.setItemDisabled(3,false);
+}
+function onTargetWinItemSelCB()
+{
+var iPos=this.id.indexOf('-');
+var strIndex=this.id.substring(iPos+1);
+var po=this.par.parIcon;
+iPos=po.id.lastIndexOf('Frame');
+var hID=po.id.substring(0,iPos);
+// Check if value changed
+var o=po.text;
+var v=this.text;
+var bChanged=(o.getValue()!=v)?true:false;
+o.setValue(v);
+if (bChanged)
+valueChanged(o);
+_curDoc.getElementById(hID).value=(strIndex=="1")?"_blank":"_self";
+}
+function txtAreaEnterCB()
+{
+var s=this.getValue();
+// Remove CrLf chars
+var src='';
+for (var i=0;i<s.length;i++)
+{
+var c=s.charAt(i);
+if (c!='\n' && c!='\r')
+src+=c;
+}
+this.setValue(src);
+parseURLCB();
+}
+function browseDocCB()
+{
+p.wt();
+var url="saveAsDialog.html?isFromHyperlinkEditor=yes&callback=parent."+self.name+".selectDocFromID";
+p.frameNav("SecondDlgFrame", url);
+}
+function selectDocFromID(id)
+{
+p.wt();
+openDocHyperlink.location.replace(p._root+"incOpenDocInfos"+p._appExt+"?id="+id+"&sNewDoc=true");
+}
+function onDocOpenModeItemSelCB()
+{
+var o=this;
+var iPos=o.id.lastIndexOf('-');
+var v=o.id.substring(iPos+1);
+// Check if value changed
+var bChanged=(_curDoc.getElementById("hlinkDocOpenModeValue").value!=v)?true:false;
+if (bChanged)
+{
+var po=o.par.parIcon;
+_curDoc.getElementById("hlinkDocOpenModeValue").value=v;
+po.text.setValue(o.text);
+valueChanged(po.text);
+}
+}
+function onDocInstListItemSelCB()
+{
+var o=this;
+var iPos=o.id.lastIndexOf('-');
+var v=o.id.substring(iPos+1);
+// Check if value changed
+var bChanged=(_curDoc.getElementById("hlinkDocInstValue").value!=v)?true:false;
+if (bChanged)
+{
+var po=o.par.parIcon;
+_curDoc.getElementById("hlinkDocInstValue").value=v;
+po.text.setValue(o.text);
+valueChanged(po.text);
+}
+updatePromptsDisplay();
+}
+function updatePromptsDisplay()
+{
+var v=_curDoc.getElementById("hlinkDocInstValue").value;
+var b=(ckLinkToDocInst.isChecked() && !ckLinkToDocInst.isDisabled() && (v=="Last" || v=="User"))?true:false;
+setDisablePrompts(b);
+if (!b && doc.arrPrompts.length>0)
+{
+var isParamInstSelected=(ckLinkToDocInst.isChecked() && !ckLinkToDocInst.isDisabled() && v=="Param")?true:false;
+if (isParamInstSelected)
+{
+for (var i=0;i<cbPromptValue.length;i++)
+{
+var rowItem=_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString());
+if (rowItem.value=='U')
+{
+rowItem.value='D';
+cbPromptValue[i].text.setValue(labelPromptDefaultValue);
+}
+}
+}
+}
+}
+function selectRepPartCB()
+{
+var url="../../../viewHyperlinkPartPicker.jsp?id="+doc.ID+"&kind="+doc.kind+"&lang="+p._lang+"&skin="+p._skinName;
+url+="&mode=picker" + "&sReportPart=" + txtFieldRepPart.getValue() + "&iventrystore=" + "DEFAULT_INSTANCE_PICKER";
+openerPicker=document.open(url,"_blank","menubar=no,toolbar=no,location=no,status=yes,resizable=yes",false);
+if (openerPicker==null || typeof(openerPicker)=="undefined")
+{
+p.showAlertDialog(labelErrorPopupBlocker);
+return;
+}
+}
+function setReportPartCB(sRP)
+{
+if (sRP)
+{
+txtFieldRepPart.setValue(sRP);
+valueChanged(txtFieldRepPart);
+}
+setTimeout('openerPicker.close()',100);
+}
+function ckNavToReportCB()
+{
+var o=this;
+enableNavToReportZone(o.isChecked());
+valueChanged(o);
+}
+function enableNavToReportZone(b)
+{
+_curDoc.getElementById("zoneDocReportID").style.display=(b)?'':'none';
+resizePromptsZone();
+}
+function updateNavToReportZone(b)
+{
+ckNavToReport.setDisabled(!b);
+if (ckNavToReport.isChecked())
+enableNavToReportZone(b);
+}
+function ckLinkToDocInstCB()
+{
+if (this.isChecked())
+{
+if (doc.hasInstances)
+checkDocInstCB();
+else
+{
+ckLinkToDocInst.check(false);
+p.showPromptDialog(labelDocNoInstMsg,labelDlgTitle,1,checkDocInstCB,unCheckDocInstCB);
+return;
+}
+}
+else
+unCheckDocInstCB();
+valueChanged(this);
+}
+function checkDocInstCB()
+{
+ckLinkToDocInst.check(true);
+_curDoc.getElementById("zoneDocInstID").style.display='';
+doc.hasInstances=true;
+resizePromptsZone();
+valueChanged(ckLinkToDocInst);
+updatePromptsDisplay();
+}
+function unCheckDocInstCB()
+{
+ckLinkToDocInst.check(false);
+_curDoc.getElementById("zoneDocInstID").style.display='none';
+resizePromptsZone();
+setDisablePrompts(false);
+}
+function setDisablePrompts(b)
+{
+if (doc.arrPrompts.length>0)
+{
+for (var i=0;i<cbPromptValue.length;i++)
+{
+cbPromptValue[i].setDisabled(b);
+}
+}
+}
+function optionChangeCB()
+{
+optRepChanged();
+valueChanged(this);
+}
+function optRepChanged()
+{
+if (optReportName.isChecked())
+{
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='';
+_curDoc.getElementById("zoneDocRepPartID").style.display='none';
+}
+else
+{
+_curDoc.getElementById("zoneDocRepNameComboID").style.display='none';
+_curDoc.getElementById("zoneDocRepPartID").style.display='';
+if (doc.type=="wid")
+{
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='none';
+}
+else if (doc.type=="rpt")
+{
+_curDoc.getElementById("zoneDocRepPartWebiID").style.display='none';
+_curDoc.getElementById("zoneDocRepPartCRID").style.display='';
+}
+}
+resizePromptsZone();
+}
+function onRepNamechangeCB()
+{
+valueChanged(this);
+}
+function isTooltipValueValid()
+{
+var o=null;
+if (navType=="doc")
+o=cbDocTooltip;
+else if (navType=="web")
+o=cbWebTooltip;
+if (o)
+{
+var v=o.text.getValue();
+if (v!='' && v.charAt(0)!='=')
+{
+if (v.indexOf('\\')>-1 || v.indexOf('\"')>-1)
+{
+p.showAlertDialog(labelToolipValidationMsg,labelDlgTitle,p._promptDlgCritical);
+return false;
+}
+}
+}
+return true;
+}
+function ckAdvAbsUrlCB()
+{
+if (this.isChecked())
+p.showPromptDialog(labelWarningCheckAdvAbsUrlMsg,labelDlgTitle,1,null,unCheckAdvAbsUrlCB);
+}
+function unCheckAdvAbsUrlCB()
+{
+ckAdvAbsUrl.check(false);
+}
+// --------------------------------------------------------
+// Edit formula
+// --------------------------------------------------------
+function editFormulaCB()
+{
+var o=this.par.parIcon;
+selectedWidget=o.text;
+goFormulaEditor();
+}
+function goFormulaEditor()
+{
+// Connect to Formula editor
+p.wt();
+var url="variableEditorDialog.html?isFormulaEdit=yes&isFromHyperlinkEditor=yes";
+url+="&callbackin=parent."+self.name+".getFormulaValue&callbackout=parent."+self.name+".setFormulaValue";
+p.frameNav("SecondDlgFrame", url)
+}
+function getFormulaValue()
+{
+var v='';
+if (!selectedWidget.disabled)
+{
+if (selectedWidget.id.indexOf("hlinkPromptValue-")>-1)
+{
+var iPos=selectedWidget.id.lastIndexOf('-');
+var index=(iPos>-1)?selectedWidget.id.substring(iPos+1):selectedWidget.id;
+if (!isNaN(index))
+{
+var s=_curDoc.getElementById("hlinkRowPromptIndex-"+index).value;
+if (s!='U' && s!='D')
+v=selectedWidget.getValue();
+}
+}
+else
+v=selectedWidget.getValue();
+if (v.charAt(0)!='=')
+v=convTxt2Formula(v);
+}
+else
+v='=';
+return v;
+}
+function setFormulaValue(v)
+{
+if (selectedWidget!=null)
+{
+var po=selectedWidget.par;
+if (navType=="doc")
+po.setContentEditable(false);
+else
+po.setContentEditable(true);
+var o=po.text;
+var bChanged=(o.getValue()!=v)?true:false;
+o.setValue(v);
+if (bChanged)
+valueChanged(o);
+setRowIndexWithItemValue(po,'F');
+selectedWidget=null;
+}
+}
+function convTxt2Formula(t)
+{
+var v=t;
+if (v!=null)
+{
+v=v.replace(/"/g,"\\\"");
+var iPosL=0;
+var iPosR=0;
+while (iPosL>-1 && iPosR>-1)
+{
+iPosL=v.indexOf('[',iPosL);
+iPosR=v.indexOf(']',iPosR);
+if (iPosL>-1 && iPosR>-1)
+{
+var l=v.substring(0,iPosL);
+var r=v.substring(iPosR+1);
+if (l!='') l=l+'"+';
+v=l+v.substring(iPosL,iPosR+1);
+iPosL=v.length;
+iPosR=v.length;
+if (r!='') r='+"'+r;
+v=v+r;
+}
+}
+if (v!='')
+{
+if (v.charAt(0)!='[') v='"'+v;
+if (v.charAt(v.length-1)!=']') v=v+'"';
+}
+var iPos=0;
+while (iPos>-1)
+{
+iPos=v.indexOf('""+',iPos);
+if (iPos>-1)
+v=v.substring(0,iPos)+v.substring(iPos+3);
+}
+v='='+v;
+}
+return v;
+}
+function isFormulaString(s)
+{
+var bRet=false;
+if (s != null && s != '')
+{
+bRet = startsWithIgnoreCase(s, '=');
+}
+return bRet;
+}
+function getOpenDocumentURI()
+{
+var baseURL="../../";
+if (ckAdvAbsUrl.isChecked())
+{
+var url=_curDoc.location.href;
+var iPos=url.indexOf("AnalyticalReporting/");
+if (iPos >= 0)
+{
+baseURL=url.substring(0,iPos);
+baseURL+="OpenDocument/";
+}
+}
+var openDocURI=baseURL+"opendoc/openDocument"+p._appExt;
+return openDocURI;
+}
+function parseURLCB()
+{
+var strURL=txtAreaURL.getValue();
+if (strURL!="")
+{
+var url='';
+for (var i=0;i<strURL.length;i++)
+{
+var c=strURL.charAt(i);
+if (c=='\n' || c=='\r') c='';
+url+=c;
+}
+var iPos=url.indexOf('?');
+strLinkURI=(iPos>-1)?url.substring(0,iPos):url;
+arrParams=new Array();
+var qs=(iPos>-1)?url.substring(iPos+1)+'&':"";
+if (qs!='')
+{
+var j=0;
+var n=0;
+var level=0;
+for (var i=0;i<qs.length;i++)
+{
+if (qs.charAt(i)=='(')
+level++;
+else if (qs.charAt(i)==')')
+level--;
+else if (level==0 && qs.charAt(i)=='&')
+{
+var v=qs.substring(n,i);
+n=i+1;
+arrParams[j]=new Array(2);
+iPos=v.indexOf('=');
+if (iPos>-1)
+{
+arrParams[j][0]=v.substring(0,iPos);
+arrParams[j][1]=v.substring(iPos+1);
+}
+else if (v!='')
+arrParams[j][0]=v;
+v=arrParams[j][1];
+if (v!=null && v.charAt(0)=='(' && v.charAt(v.length-1)==')')
+arrParams[j][1]=v.substring(1,v.length-1);
+j++;
+}
+}
+}
+_curDoc.getElementById("zoneWebparamsID").style.display='';
+txtFieldURI.setValue(strLinkURI);
+txtFieldURI.setDisabled(false);
+fillActionWebParams();
+setDisableApplyButton(false);
+updateOkButton();
+}
+}
+function onKeyUpCB()
+{
+valueChanged(this);
+}
+function onChangeCB()
+{
+valueChanged(this);
+}
+function valueChanged(o)
+{
+if (o && o.updateURL)
+rebuildURL();
+setDisableApplyButton(false);
+}
+function updateOkButton()
+{
+if (navType=="doc")
+{
+var d=_curDoc.getElementById("zoneDocparamsID").style.display;
+okButton.setDisabled((d && d=="none")?true:false);
+}
+else if (navType=="web")
+{
+var d=_curDoc.getElementById("zoneWebparamsID").style.display;
+okButton.setDisabled((d && d=="none")?true:false);
+}
+}
+function setDisableApplyButton(b)
+{
+if (applyButton.isDisabled()!=b)
+applyButton.setDisabled(b);
+}
+function rebuildURL()
+{
+var url=trim(txtFieldURI.getValue());
+var qs='';
+for (var i=0;i<cbParamValue.length;i++)
+{
+var strIndex=i.toString();
+var sName=null;
+var paramName=_curDoc.getElementById("hlinkParamName-"+strIndex);
+if (paramName!=null)
+{
+sName=paramName.innerHTML;
+sName=(sName!='' && sName!='&nbsp;')?sName:null;
+}
+if (cbParamValue!=null && sName!=null)
+{
+if (qs!='') qs+='&';
+var v=cbParamValue[i].text.getValue();
+if (v.charAt(0)=='=') v='('+v+')';
+qs+=sName+'='+v;
+}
+}
+url+=(qs!='')?'?'+qs:'';
+txtAreaURL.setValue(url);
+}
+function encodeParameter(s)
+{
+if (s!=null)
+{
+if (s.charAt(0)!='=')
+s=encodeURIComponent(s);
+else
+s='('+s+')';
+}
+return s;
+}
+function cancelCB()
+{
+hyperlinkDlg.show(false);
+}
+function okCB(bApply)
+{
+var bSubmit=(bApply || !(bApplied && applyButton.isDisabled()))?true:false;
+if (bSubmit)
+{
+if (!isTooltipValueValid())
+return;
+if (navType=="web")
+{
+var uri=trim(txtFieldURI.getValue());
+if (uri!='')
+{
+document.frmHyperlink["sURI"].value=uri;
+var qs=document.frmHyperlink["sQueryString"];
+qs.value='';
+for (var i=0;i<cbParamValue.length;i++)
+{
+var strIndex=i.toString();
+var sName=null;
+var paramName=_curDoc.getElementById("hlinkParamName-"+strIndex);
+if (paramName!=null)
+{
+sName=paramName.innerHTML;
+sName=(sName!='' && sName!='&nbsp;')?sName:null;
+}
+if (cbParamValue!=null && sName!=null)
+{
+sName=encodeURIComponent(sName);
+var sValue=cbParamValue[i].text.getValue();
+sValue=encodeParameter(sValue);
+if (qs.value!='') qs.value+='&';
+qs.value+=sName+'='+sValue;
+}
+}
+document.frmHyperlink["sCellContent"].value=cbWebCellContent.text.getValue();
+document.frmHyperlink["sTooltip"].value=cbWebTooltip.text.getValue();
+document.frmHyperlink["sWinTarget"].value=_curDoc.getElementById("hlinkWebTarget").value;
+}
+else
+{
+p.showAlertDialog(labelErrorMsgURI);
+return;
+}
+}
+else if (navType=="doc")
+{
+if (doc.CUID!='')
+{
+document.frmHyperlink["sURI"].value=getOpenDocumentURI();
+var qs=document.frmHyperlink["sQueryString"];
+qs.value="iDocID="+encodeURIComponent(doc.CUID)+"&sIDType=CUID";
+qs.value+="&sType="+doc.type;
+if (ckLinkToDocInst.isChecked() && !ckLinkToDocInst.isDisabled())
+qs.value+="&sInstance="+_curDoc.getElementById("hlinkDocInstValue").value;
+if (ckNavToReport.isChecked() && !ckNavToReport.isDisabled())
+{
+if (optReportName.isChecked())
+{
+var sel=cbRepName.getSelection();
+if (sel!=null)
+qs.value+="&sReportName="+encodeURIComponent(sel.text);
+}
+else if (optReportPart.isChecked() && doc.type=='wid')
+{
+if (txtFieldRepPart.getValue()!='')
+{
+var sWebiRP=txtFieldRepPart.getValue();
+qs.value+="&sReportPart="+(isFormulaString(sWebiRP)?"("+sWebiRP+")":encodeURIComponent(sWebiRP));
+qs.value+="&mode="+_curDoc.getElementById("hlinkDocOpenModeValue").value;
+}
+}
+else if (optReportPart.isChecked() && doc.type=='rpt')
+{
+if (txtFieldRepPartCR.getValue()!='')
+{
+qs.value+="&sReportPart="+encodeURIComponent(txtFieldRepPartCR.getValue());
+qs.value+="&sPartContext="+encodeURIComponent(cbRepContextCR.text.getValue());
+qs.value+="&sReportMode="+_curDoc.getElementById("hlinkDocOpenModeValue").value;
+}
+}
+}
+if (_curDoc.getElementById("hlinkDocOutputFormatValue").value!='D')
+qs.value+="&sOutputFormat="+_curDoc.getElementById("hlinkDocOutputFormatValue").value;
+if (!ckDocRefreshOnOpen.isDisabled())
+qs.value+="&sRefresh="+((ckDocRefreshOnOpen.isChecked())?"Y":"N");
+for (var i=0;i<doc.arrPrompts.length;i++)
+{
+if (!cbPromptValue[i].disabled)
+{
+var t="&ls"+doc.arrPrompts[i].type;
+var v=_curDoc.getElementById("hlinkRowPromptIndex-"+i.toString()).value;
+if (v=='D')
+continue;
+else if (v=='U')
+qs.value+=t+encodeURIComponent(doc.arrPrompts[i].id)+'=?';
+else
+{
+qs.value+=t+encodeURIComponent(doc.arrPrompts[i].id)+'=';
+qs.value+=encodeParameter(cbPromptValue[i].text.getValue());
+}
+}
+}
+if (_curDoc.getElementById("hlinkDocTarget").value=="_self")
+qs.value+="&sWindow=Same";
+else
+qs.value+="&sWindow=New";
+document.frmHyperlink["sCellContent"].value=cbDocCellContent.text.getValue();
+document.frmHyperlink["sTooltip"].value=cbDocTooltip.text.getValue();
+document.frmHyperlink["sWinTarget"].value="_self";
+}
+else
+{
+p.showAlertDialog(labelErrorMsgDocID);
+return;
+}
+}
+document.frmHyperlink["sFreeCell"].value=((isFreeCell)?"true":"false");
+document.frmHyperlink["sPrivateAttrib"].value=privateAttrib;
+document.frmHyperlink["sNavType"].value=navType;
+p.eventManager.notify(p._EVT_VARS_UPDATE);
+var url=p._root+"processHyperlink"+p._appExt;
+url+=p.urlParamsNoBID()+"&sBid="+escape(elt.bid)+"&sAction=U";
+document.frmHyperlink.action=url;
+document.frmHyperlink.target="Report";
+document.frmHyperlink.submit();
+p.wt();
+}
+if (bApply)
+{
+bApplied=true;
+setDisableApplyButton(true);
+}
+else
+hyperlinkDlg.show(false);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<iframe name="openDocHyperlink" style="position:absolute;left:-100px;top:-100px;width:50px;height:50px" src="../../../lib/empty.html"></iframe>
+<form name="frmHyperlink" id="frmHyperlink" method="post" onSubmit="return false;"  style="display:none">
+<input type="hidden" name="sURI" value="">
+<input type="hidden" name="sQueryString" value="">
+<input type="hidden" name="sCellContent" value="">
+<input type="hidden" name="sWinTarget" value="_blank">
+<input type="hidden" name="sTooltip" value="">
+<input type="hidden" name="sFreeCell" value="false">
+<input type="hidden" name="sPrivateAttrib" value="">
+<input type="hidden" name="sNavType" value="">
+</form>
+</body>
+</html>

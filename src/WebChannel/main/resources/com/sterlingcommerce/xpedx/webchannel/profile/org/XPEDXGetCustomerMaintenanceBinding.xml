@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Get Customer Maintenance Data - adsouza</comment>
+    
+    <entry key="#parameters.customerId">xpedx_getCustMaintenance:/Customer/@CustomerID</entry>
+    <entry key="#parameters.organizationCode">xpedx_getCustMaintenance:/Customer/@OrganizationCode</entry>
+    <entry key="empList">xpedx-cust-GetEmployeeNames:/CustomerContact/ComplexQuery/Or/Exp[]/@Value</entry>
+</properties>

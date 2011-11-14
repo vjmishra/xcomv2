@@ -1,0 +1,260 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Map universe objects : define new objects mapping</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../scripts/customTooltip.js"></script>
+<script language="javascript">
+var p=parent.parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"mapObjDlg");
+</script>
+<script language="javascript">
+var mapObjDlg=null
+var mapObjInfo=null
+var mapObjOkBtn=null
+var mapObjCancelBtn=null
+var mapObjHelpBtn=null
+var buttonsWidth= 60
+var dlgWidth= 450
+var dlgHeight= 350
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-125
+var listWidth= frameWidth-20
+var listHeight= frameHeight-50
+var initialized= false
+var expanded= false
+var f=parent.getTopFrameset()
+var changeSourceFrame=f.getFrame("ThirdDlgFrame")
+var curEntry= changeSourceFrame._curEntry
+var selObj= changeSourceFrame._selObj
+var srcQualif= selObj.src.kind
+var srcName= selObj.src.name
+var srcType= selObj.src.dataType
+var iDPIndex= selObj.dpIdx
+var iMapIndex= selObj.mapIdx
+var trgName= selObj.trg.name
+var sNewDSID= changeSourceFrame._sNewDSID
+var rowid= changeSourceFrame._rowid
+if(changeSourceFrame._newUnv)
+{
+    unv = changeSourceFrame._newUnv    
+}
+else
+{
+    var url = p._root + "incMapObject" + p._appExt
+    url += p.urlParams(true,true,curEntry)
+    url += "&sViewerFrameName=p"
+    includeScript(url)
+}
+</script>
+<script language="javascript">
+function updateLoadedUniverseList()
+{
+    if(changeSourceFrame._newUnv ) return
+p._universes[p._universes.length]=unv
+p._universesHrc[p._universesHrc.length]=unvHrc
+changeSourceFrame._newUnv = unv
+}
+function mapObjBuildTree(elt,treeElt,level)
+{
+for (var i in elt.sub)
+{
+var subElt=elt.sub[i]
+var newTreeElt=newTreeWidgetElem(subElt.kind,subElt.name,subElt,subElt.desc,
+subElt.kind==1?9:null,null,p.getIconAlt(p._QUALIF_IMG,subElt.kind),
+(subElt.dataType!=srcType || subElt.kind!=srcQualif)?'treeGray':'treeNormal')
+if (subElt.name==trgName)
+selObj=subElt
+if (!expanded)
+{
+if (level==0) 
+expanded=true
+newTreeElt.expanded=(level<1)
+}
+treeElt.add(newTreeElt)
+if (subElt.sub.length > 0) 
+mapObjBuildTree(subElt,newTreeElt,level+1)
+}
+}
+function mapObjFillWidget()
+{
+mapObjBuildTree(unv.root,unvRootObj,0)
+mapObjTree.rebuildHTML()
+if (selObj)
+mapObjTree.selectByData(selObj,true)
+mapLabel.setHTML('Define new object mapping for:')
+mapSrcName.setHTML(convStr(srcName))
+mapSrcIcon.setHTML(simpleImgOffset(p._img+'qualificationIcons.gif',16,16,0,srcQualif*16))
+}
+function mapObjClickCB()
+{
+var e=mapObjTree.getSelections()
+if (e.length==0)
+return
+mapObjInfo.setText(e[0].userData.desc)
+updateOKButton(); 
+}
+function mapObjdClickCB()
+{
+if(!mapObjOkBtn.isDisabled())
+okCB()
+}
+function okCB( )
+{
+mapObjDlg.show(false)
+var e=mapObjTree.getSelections()
+if (e.length==0)
+return
+var url=p._root + "processMapObject" + p._appExt
+url += p.urlParams(true,true,curEntry)
+url += "&iDPIndex="+iDPIndex
+url += "&iMapIndex="+iMapIndex
+url += "&trgObjID="+e[0].userData.id
+url += "&id="+rowid
+frameNav("mapObjFrame",url,true)
+}
+function cancelCB()
+{
+mapObjDlg.show(false);
+}
+function helpCB()
+{
+parent.showAlertDialog("Not implemented yet !","Development version",0);
+mapObjDlg.show(false);
+}
+function loadCB()
+{
+    if (window._isSessionInvalid ) 
+    {
+p.alertSessionInvalid()
+return
+}
+if( window._displayErrorMessage )
+{
+    p.advDisplayViewerErrorMsgDlg(_displayErrorMessage);
+    return;
+}
+if (!initialized)
+{
+initialized=true;
+mapObjDlg = newDialogBoxWidget("mapObjDlg","Change Source",dlgWidth,dlgHeight,okCB,cancelCB)
+mapObjTree = newTreeWidget('mapObjTree',listWidth,listHeight,p._img+'qualificationIcons.gif',mapObjClickCB,mapObjdClickCB)
+mapObjTree.setTooltipOnMouseOver(true)
+unvRootObj = newTreeWidgetElem(0,unv.name,unv,null,null,null,p.getIconAlt(p._QUALIF_IMG,0),'treeGray') 
+mapObjTree.add(unvRootObj)
+mapObjTooltip=newUnvObjTreeTooltipWidget(300,50)
+mapObjTree.customTooltip=mapObjTooltip
+mapTbl = newWidget('mapTbl')
+mapLabel = newWidget('mapLabel')
+mapSrcName = newWidget('mapSrcName')
+mapSrcIcon = newWidget('mapSrcIcon')
+mapObjFramezone = newFrameZoneWidget("mapObjFramezone",frameWidth,frameHeight)
+mapObjInfo=newInfoWidget("mapObjInfo","Description:","","Info txt....")
+mapObjOkBtn=newButtonWidget("mapObjOkBtn","OK",okCB,buttonsWidth)
+mapObjCancelBtn=newButtonWidget("mapObjCancelBtn","Cancel",cancelCB,buttonsWidth)
+mapObjHelpBtn=newButtonWidget("mapObjHelpBtn","Help",helpCB,buttonsWidth)
+mapObjDlg.attachDefaultButton(mapObjOkBtn);
+}
+if ( !_curWin.mapObjDlgInitialized )
+{
+_curWin.mapObjDlgInitialized=true
+targetApp(
+mapObjDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+mapObjFramezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>'+
+'<table id="mapTbl" cellspacing="0" cellpadding="2" border="0" class="dialogzone"><tbody>'+
+'<tr valign="middle">'+
+'<td><span id="mapLabel" style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"></span></td>'+
+'<td id="mapSrcIcon">'+simpleImgOffset(p._img+'qualificationIcons.gif',16,16,0,srcQualif*16)+'</td>'+
+'<td><b><span id="mapSrcName"></span></b></td>'+
+'</tr></tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="center">'+mapObjTree.getHTML()+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+mapObjFramezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="right">' +
+   mapObjInfo.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   mapObjOkBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   mapObjCancelBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   mapObjHelpBtn.getHTML() +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+mapObjDlg.endHTML()
+);
+}
+mapObjDlg.init()
+mapObjTree.init()
+mapTbl.init()
+mapLabel.init()
+mapSrcName.init()
+mapSrcIcon.init()
+mapObjTooltip.init()
+mapObjInfo.init()
+mapObjOkBtn.init()
+mapObjCancelBtn.init()
+mapObjHelpBtn.init()
+mapObjFillWidget()
+updateLoadedUniverseList()
+updateOKButton()
+mapObjHelpBtn.setDisplay(false)
+mapObjDlg.show(true)
+}
+function updateOKButton()
+{
+var selObj = mapObjTree.getSelectedItem();
+mapObjOkBtn.setDisabled(!selObj || (selObj && selObj.isGrayStyle())  )
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden frame -->
+<iframe name="mapObjFrame" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="mapObjForm" method="post" action="">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

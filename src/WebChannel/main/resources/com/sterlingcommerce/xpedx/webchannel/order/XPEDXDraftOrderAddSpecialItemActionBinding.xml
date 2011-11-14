@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for adding special line item to a draft order</comment>
+    
+    <entry key="#parameters.orderHeaderKey">XPEDXAddSpecialOrderLine:/Order/@OrderHeaderKey,XPEDXUpdateSpecialOrderLine:/Order/@OrderHeaderKey</entry>
+    <!-- entry key="#parameters.specialItemQuantity">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/@OrderedQty</entry-->
+    <!-- entry key="#parameters.specialItemUOM">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/Item/@UnitOfMeasure</entry-->
+    <entry key="#parameters.specialItemProductDesc">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/Item/@ItemShortDesc,XPEDXUpdateSpecialOrderLine:/Order/OrderLines/OrderLine/Item/@ItemShortDesc</entry>
+    <entry key="#parameters.specialItemProductName">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/Item/@ItemID</entry>
+    <entry key="#parameters.specialItemQuantity">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@OrderedQty</entry>
+    <entry key="#parameters.specialItemUOM">XPEDXAddSpecialOrderLine:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@TransactionalUOM</entry>
+    <entry key="recordPendingChanges">XPEDXAddSpecialOrderLine:/Order/PendingChanges/@RecordPendingChanges,XPEDXUpdateSpecialOrderLine:/Order/PendingChanges/@RecordPendingChanges</entry>
+    
+    <entry key="#parameters.updateOrderLineKey">XPEDXUpdateSpecialOrderLine:/Order/OrderLines/OrderLine/@OrderLineKey</entry>
+</properties>

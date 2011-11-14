@@ -1,0 +1,261 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#dicTree{position:absolute;top:25px;left:0px;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript">
+var p=parent;
+initDom(p._root+"lib/images/"+p._skinName+"/",p._lang,p,"selObjectDialog");
+</script>
+<script language="javascript">
+var initialized=false;
+var dirImg = getBasePath()+'../../../images/main/';
+var srcFrame=p.DlgFrame;
+var _docObjects=srcFrame._docObjects;
+var _variableObjects=srcFrame._variableObjects;
+var labelDlgTitle="Select variable";
+var labelInfoZone="More Information";
+var infoZoneMsg="Select an object or a variable";
+var labelOKButton="OK";
+var labelCancelButton="Cancel";
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+selectObjectDlg=newDialogBoxWidget("selObjectDlg",labelDlgTitle,270,280,okCB,cancelCB,false);
+infozone=newInfoWidget("selObjectInfozone",labelInfoZone,"",infoZoneMsg,50);
+okButton=newButtonWidget("selObjectOKButton",labelOKButton,"okCB()",60);
+cancelButton=newButtonWidget("selObjectCancelButton",labelCancelButton,"cancelCB()",60);
+dicTree = newTreeWidget('selObjectDicTree',260,170,dirImg+"qualificationIcons.gif",clickCB,dclickCB, null,expCollapseCB,expCollapseCB);
+dicTree.setTooltipOnMouseOver(true);
+}
+if (!_curWin.selObjectDlgInitialized)
+{
+_curWin.selObjectDlgInitialized=true;
+targetApp
+(
+selectObjectDlg.beginHTML()+
+'<table border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+'<table border="0" cellspacing="0" cellpadding="0" width="100%">'+
+'<tr>'+
+'<td>'+
+dicTree.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getSpace(10,5)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+infozone.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getSpace(1,5)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+okButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(10,1)+
+'</td>'+
+'<td>'+
+cancelButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+selectObjectDlg.endHTML()
+);
+}
+selectObjectDlg.init();
+infozone.init();
+okButton.init();
+okButton.setDisabled(true);
+cancelButton.init();
+dicTree.init();
+buildTree();
+selectObjectDlg.show(true);
+}
+function buildTree()
+{
+dicTree.deleteAll();
+setListOrder();
+_docObjects.sort(sortFuncUsingListOrder);
+renameSameNameDifferentDPObj();
+var newTreeElt1 = newTreeWidgetElem(1,"Available Objects", null,null,null, "Available Objects");
+dicTree.add(newTreeElt1);
+var len = _docObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i];
+if (item.isPartOfALinkedDim) continue
+switch(item.kind)
+{
+case _linkDim:
+var l = item.linkedIDs.length;
+for (var k=0; k < l; k++)
+{
+for (var m=0; m < len ; m++)
+{
+var el = _docObjects[m];
+if (el.isPartOfALinkedDim) continue;
+if (el.id == item.linkedIDs[k])
+{
+_docObjects[m].isPartOfALinkedDim = true;
+}
+}
+}
+break;
+}
+}
+len = _docObjects.length;
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i];
+if (item.isPartOfALinkedDim) continue;
+var sTooltipHdr = "Based On:"
+var sTooltipDesc = "Description:"
+switch(item.kind)
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : "";
+tooltip = sTooltipHdr + " " + item.DPName + tooltipDesc;
+newTreeElt1.add(newTreeWidgetElem(item.kind, item.name, item.name, null,null, shrinkTooltip(tooltip)));
+break;
+case _linkDim:
+mergedTooltip = "";
+mergedTooltipDesc = "";
+nLinkDim = newTreeWidgetElem(_linkDim, item.name, item.name, null,null, "");
+newTreeElt1.add(nLinkDim);
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++)
+{
+for (var m=0; m < len ; m++)
+{
+var el = _docObjects[m];
+if (el.id == item.linkedIDs[k])
+{
+tooltipDesc = (el.desc)? ("\n" + sTooltipDesc + " " + el.desc) : "";
+tooltip = sTooltipHdr + " " + el.DPName + tooltipDesc;
+el.name = el.shortName + "(" + el.DPName + ")";
+nLinkDim.add(newTreeWidgetElem(el.kind, el.name, el.name, null,null, shrinkTooltip(tooltip)));
+mergedTooltip += el.DPName;
+if (k < (l-1)) mergedTooltip += ", ";
+}
+}
+}
+mergedTooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : "";
+nLinkDim.tooltip = shrinkTooltip(sTooltipHdr + " " + mergedTooltip + mergedTooltipDesc);
+break;
+}
+}
+}
+newTreeElt1.expanded = true;
+_variableObjects.sort(BOObj_sortFunc);
+var newTreeElt2 = newTreeWidgetElem(1,"Variables", null, null, null, "Variables");
+dicTree.add(newTreeElt2);
+var len = _variableObjects.length;
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i];
+item.isVariable=true;
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.formula)? ("\n" + item.formula) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt2.add(newTreeWidgetElem(item.kind, item.name, item.name, null, null, itemToolTip));
+}
+}
+newTreeElt2.expanded = true;
+dicTree.rebuildHTML();
+if (srcFrame.selectedWidget!=null)
+{
+var v=srcFrame.selectedWidget.text.getValue();
+var len=v.length;
+v=(len>2)?v.substring(2,len-1):v;
+dicTree.selectByData(v);
+}
+}
+function updateBtns()
+{
+var sel=dicTree.getSelections();
+if (sel.length==0) return;
+var data=sel[0].userData;
+okButton.setDisabled(((data)?false:true));
+}
+function expCollapseCB()
+{
+}
+function clickCB()
+{
+updateBtns();
+}
+function dclickCB()
+{
+updateBtns();
+okCB();
+}
+function cancelCB()
+{
+selectObjectDlg.show(false);
+}
+function okCB()
+{
+var sel=dicTree.getSelections();
+if (sel.length==0) return;
+var data=sel[0].userData;
+if (data)
+{
+srcFrame.onVarItemSelectedCB(data);
+selectObjectDlg.show(false);
+}
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

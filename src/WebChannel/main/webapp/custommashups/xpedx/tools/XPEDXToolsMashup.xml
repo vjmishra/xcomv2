@@ -1,0 +1,16 @@
+<mashups>
+	<mashup id ='xpedxDeleteArticle' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Deleting a Customer Article">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="DeleteXpedxArticle" IgnoreOrdering="N">
+			<Input>
+				<XPXArticle OrganizationCode="" CustomerID="" 
+					XPXDivision="N/A" ArticleName="" >
+				</XPXArticle>
+			</Input>
+			<Template>
+				<XPXArticle />
+			</Template>
+		</API>
+	</mashup>
+</mashups>

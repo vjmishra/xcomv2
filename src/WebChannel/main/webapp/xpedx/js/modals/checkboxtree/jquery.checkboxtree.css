@@ -1,0 +1,48 @@
+ul.checkboxTree {
+    font-family:Arial, Helvetica, sans-serif;
+	padding-left: 20px;
+}
+ul.checkboxTree li {
+	list-style-type: none;
+    position: relative;
+	font-weight:bold;
+	color:#2970A6;
+}
+
+ul.checkboxTree li span {
+    cursor: default;
+    position: absolute;
+    top: 2px;
+    left: -16px;
+}
+
+a.checkboxTree.all {
+background:none repeat scroll 0 0 transparent; 
+padding-right:12px;
+position:relative;
+top:3px;
+color:#003399;
+font-size:11px;
+float:right;
+text-decoration:underline;
+}
+
+a:hover.checkboxTree.all {
+background:none repeat scroll 0 0 transparent; 
+padding-right:12px; 
+top:3px;
+color:#003399;
+font-size:11px;
+float:right;
+text-decoration:none;
+}
+
+.expanded{font-size:12px; color:#FFF; background-image: url(../../../images/icons/12x12_charcoal_collapse.png); background-repeat:no-repeat; background-position:top left; width:12px; height:12px; text-align:right;}
+
+.collapsed{font-size:12px; color:#FFF; background-image: url(../../../images/icons/12x12_charcoal_expand.png); background-repeat:no-repeat; background-position:top left; text-align:right; width:12px; height:12px;}
+
+.share-modal {width:578px; height:auto; border-left:solid 1px #e4e4e4; border-right:solid 1px #e4e4e4;}         
+      
+.indent-tree { margin-left:15px; }       
+
+.indent-tree-act { margin-left:25px; }  

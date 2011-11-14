@@ -1,0 +1,196 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Universe objects : define a filter of type object</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../scripts/customTooltip.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"compareObjDlg");
+</script>
+<script language="javascript">
+var compareObjDlg=null
+var compareObjInfo=null
+var compareObjOkBtn=null
+var compareObjCancelBtn=null
+var compareObjHelpBtn=null
+var buttonsWidth= 60
+var dlgWidth= 450
+var dlgHeight= 400
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-120
+var listWidth= frameWidth-20
+var listHeight= frameHeight-50
+var initialized= false
+var expanded= false
+var topfs=parent.getTopFrameset()
+var qpFrame=topfs.getFrame("querypanel")
+var unv= qpFrame._currentUnv
+var fltID = requestQueryString(window,"ID");
+var pos = requestQueryString(window,"index");
+var advflt= qpFrame.getCurrentFilterWidget(fltID);
+var filter= advflt.getFilter();
+</script>
+<script language="javascript">
+function compareObjBuildTree(elt,treeElt,level)
+{
+for (var i in elt.sub)
+{
+var subElt=elt.sub[i]
+if ( subElt.kind!=_fil ) 
+{
+var newTreeElt=newTreeWidgetElem(subElt.kind,subElt.name,subElt,subElt.desc,
+subElt.kind==1?9:null,null,p.getIconAlt(p._QUALIF_IMG,subElt.kind))
+if (!expanded)
+{
+if (level==0) 
+expanded=true
+newTreeElt.expanded=(level<1)
+}
+treeElt.add(newTreeElt)
+if (subElt.sub.length > 0) 
+compareObjBuildTree(subElt,newTreeElt,level+1)
+}
+}
+}
+function compareObjFillWidget()
+{
+compareObjBuildTree(unv.root,unvRootObj,0)
+compareObjTree.rebuildHTML()
+var s= '<table class="dialogzone" border="0" cellspacing="0" cellpadding="0"><tr><td>Select an object for comparison</td><td>'+imgOffset(topfs._img+"qualificationIcons.gif",16,16,0,16*filter.obj.kind)+'</td><td><b>'+convStr(filter.obj.name)+'</b></td></tr></table>';
+label.setHTML(s);
+}
+function compareObjClickCB()
+{
+var e=compareObjTree.getSelections()
+if (e==null)
+return
+var kind = e[0].userData.kind;
+compareObjOkBtn.setDisabled((kind == topfs._unv)|| (kind== topfs._cls));
+}
+function compareObjdClickCB()
+{
+okCB()
+}
+function okCB( )
+{
+compareObjDlg.show(false)
+var e=compareObjTree.getSelections()
+if (e==null)
+return
+var compareObj = e[0].userData;
+advflt.setCompareObj(compareObj,pos);
+}
+function cancelCB()
+{
+compareObjDlg.show(false);
+advflt.cancelAction("resetmenu",pos)
+}
+function helpCB()
+{
+parent.showAlertDialog("Not implemented yet !","Development version",0);
+compareObjDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+compareObjDlg = newDialogBoxWidget("compareObjDlg","Universe Objects",dlgWidth,dlgHeight,okCB,cancelCB)
+compareObjTree = newTreeWidget('compareObjTree',listWidth,listHeight,p._img+'qualificationIcons.gif',compareObjClickCB,compareObjdClickCB)
+compareObjTree.setTooltipOnMouseOver(true)
+unvRootObj = newTreeWidgetElem(0,unv.name,unv,null,null,null,p.getIconAlt(p._QUALIF_IMG,0))
+compareObjTree.add(unvRootObj)
+compareObjTooltip=newUnvObjTreeTooltipWidget(300,50)
+compareObjTree.customTooltip=compareObjTooltip
+label = newWidget('compareObjLabel')
+compareObjFramezone = newFrameZoneWidget("compareObjFramezone",frameWidth,frameHeight)
+compareObjInfo=newInfoWidget("compareObjInfo","Description:","","Select an object")
+compareObjOkBtn=newButtonWidget("compareObjOkBtn","OK",okCB,buttonsWidth)
+compareObjCancelBtn=newButtonWidget("compareObjCancelBtn","Cancel",cancelCB,buttonsWidth)
+compareObjHelpBtn=newButtonWidget("compareObjHelpBtn","Help",helpCB,buttonsWidth)
+compareObjDlg.attachDefaultButton(compareObjOkBtn);
+}
+if ( !_curWin.compareObjDlgInitialized )
+{
+_curWin.compareObjDlgInitialized=true
+targetApp(
+compareObjDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+compareObjFramezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td id="compareObjLabel" style="padding-bottom:5px;text-overflow:ellipsis;overflow:hidden;">'+
+label.getHTML()+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="center">'+compareObjTree.getHTML()+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+compareObjFramezone.endHTML() +
+'</td>' +
+'</tr>' +  
+'<tr>' +
+   '<td align="center" valign="right">' +
+   compareObjInfo.getHTML() +
+   '</td>' +
+   '</tr>' +    
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   compareObjOkBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   compareObjCancelBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   compareObjHelpBtn.getHTML() +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+compareObjDlg.endHTML()
+);
+}
+compareObjDlg.init()
+compareObjTree.init()
+label.init()
+compareObjTooltip.init()
+compareObjInfo.init();
+compareObjOkBtn.init()
+compareObjOkBtn.setDisabled(true);
+compareObjCancelBtn.init()
+compareObjHelpBtn.init()
+compareObjFillWidget()
+compareObjHelpBtn.setDisplay(false)
+compareObjDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

@@ -1,0 +1,132 @@
+.input-details-cart {
+	float: left;
+	width: 137px;
+}
+input label {
+	float:left;
+	display:inline;
+}
+#mil-inputs input {
+	float:left;
+	display:inline;
+}
+.mil-config td {
+	border:none;
+	padding:3px;
+}
+.jcarousel-skin-xpedx .jcarousel-container-horizontal {
+	float: left;
+	height: 180px;
+	margin-left: 26px;
+	margin-right: 14px;
+	width: 879px;
+}
+.jcarousel-skin-xpedx .jcarousel-clip-horizontal {
+	height: 127px;
+	margin-top: 35px;
+	padding-left: 27px;
+	width: 820px;
+}
+.mil-wrap-condensed-container {
+	width:950px;
+	float:left;
+	font-size:.9em; height:auto;
+}
+.mil-wrap-condensed {
+	min-height:200px; height:auto;
+	border:solid 1px #ccc;
+	-moz-border-radius:6px 6px 0px 0px;
+	-webkit-border-radius:6px 6px 0px 0px;
+	border-radius:6px 6px 0px 0px;
+}
+
+.mil-wrap-condensed-bot {
+	height:205px;
+	border:solid 1px #ccc;
+	/* -moz-border-radius:0px 0px 6px 6px;*/  border-top:0px; 
+}
+
+
+.slidingDiv2 { height:auto;  } 
+
+.mil-wrap-condensed-bot-lg {
+	border:solid 1px #ccc;
+	-moz-border-radius:0px 0px 6px 6px; 
+	border-radius:0px 0px 6px 6px; 
+	-webkit-border-radius:0px 0px 6px 6px; 
+	border-top:0px;
+    height: 285px;
+}
+
+a { outline:none; } 
+
+.mil-desc-txt { height:59px; overflow:hidden; outline:none; } 
+
+
+table.mil-my-price-availability tr {
+  /*  border-top: 1px solid #EBEBEB; padding:0px; */ 
+}
+
+
+table.mil-my-price-availability  {
+	border-left: 1px solid #ccc;
+	padding:0px;
+	border-right: 1px solid #ccc;
+	padding:0px;
+	text-align: left;
+}
+
+
+table.mil-my-price-availability td { padding:1px; } 
+
+.show-hide-wrap { font-size:.9em; } 
+.mil-checkbox-wrap {
+	width:167px;
+	float:left;
+	margin:8px;
+}
+.mil-wrap-condensed-desc {
+	width:400px;
+	margin-top:10px;
+	margin-left:15px;
+	float:left; height:177px;
+}
+.mil-desc-attribute-list {
+    color: #2970A6;
+    height: 73px;
+    list-style-type: disc;
+    overflow: hidden;
+    padding-left: 15px;
+    padding-top: 10px;
+    width: 198px; margin-bottom:10px;
+}
+.mil-action-list-wrap {
+	float:left;
+	width:auto;
+	padding-top:10px;
+	margin-left:15px;
+}
+.mil-replace-condensed a {
+    margin-left: 235px;
+    margin-top: -28px; color:#F00!important; font-weight:bold;
+}
+
+.mil-question-mark {
+	margin:5px;
+}
+.mil-add-to-cart-list {
+	margin-left:30px;
+}
+
+.test8, .test9 span { cursor:pointer; } 
+
+.x-inputError {
+    background: url("../../images/theme/theme-1/input-form-bg-error.gif") repeat-x scroll 0 0 #FFFFFF;
+    border: 1px solid #D65754;
+    color: #D8464A;
+}
+input:focus, textarea:focus {
+    background: url("../../images/theme/theme-1/input-form-bg-focus.gif") repeat-x scroll 0 0 #FFFFFF;
+    border: 1px solid #8CB0E4;
+    color: #3C3C3C;
+}

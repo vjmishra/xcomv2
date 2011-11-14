@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for displaying mini cart</comment>
+    <entry key="orderHeaderKey">XPEDXOrderDetailsForMiniCart:/Order/@OrderHeaderKey</entry>
+    <entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">XPEDXOrderDetailsForMiniCart:/Order/@DisplayLocalizedFieldInLocale</entry>
+</properties>

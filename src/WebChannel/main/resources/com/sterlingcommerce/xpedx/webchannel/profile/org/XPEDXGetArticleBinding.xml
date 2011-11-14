@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries to retrieve Customer articles</comment>
+    <entry key="#parameters.articleKey">XPEDXGetArticle:/XPXArticle/@ArticleKey</entry>
+</properties>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="mailHost">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/@MailHost</entry>
+	<entry key="templatePath">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/@TemplateFile</entry>
+	<entry key="csr1EMailID">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/@FromAddress</entry>
+	<entry key="appendedCSREmailIDs">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/ToAddresses/ToAddress/@EmailID</entry>
+	<entry key="userEmail">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/CCAddresses/CCAddress/@EmailID, XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@EmailID</entry>
+	<entry key="mailSubject">XPEDXSendMailFromContactUs:/SendMail/MessageHeader/@SubjectText, XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@Subject</entry>
+	<entry key="firstName">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@FirstName</entry>
+	<entry key="compName">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@CompName</entry>
+	<entry key="ccity">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@City</entry>
+	<entry key="cstate">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@State</entry>
+	<entry key="czipcode">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@PostalCode</entry>
+	<entry key="comments">XPEDXSendMailFromContactUs:/SendMail/MessageDetail/ContactUs/@Comments</entry>
+</properties>

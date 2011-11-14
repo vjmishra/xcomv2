@@ -1,0 +1,280 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+initDom("../../../lib/images/"+parent.parent._skinName+"/", parent.parent._lang);
+</script>
+<script language="javascript">styleSheet()</script>
+<script language="javascript">
+var urlLabels="../../../language/" + parent.parent._lang + "/" + "scripts/labels.js";
+includeScript(urlLabels);
+</script>
+<script language="javascript">
+var url=parent.parent._root+"viewDrillbar"+parent.parent._appExt+"?sEntry="+parent.strEntry+"&iReport="+parent.iReportID;
+includeScript(url);
+</script>
+<script language="javascript">
+nbFilters=(typeof(nbFilters)!="undefined")?nbFilters:0;
+var isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+if (isError) nbFilters=0;
+var pp=parent.parent;
+var blnLoaded = false;
+var iBlocHeight = null;
+function newBODrill(arrFilters)
+{
+if (arrFilters==null) return null;
+var o=new Object;
+o.index=-1;
+o.name=arrFilters[0];
+o.ID=arrFilters[1];
+o.escapedName=arrFilters[2];
+o.selectedValue=arrFilters[3];
+o.nbValues=0;
+o.arrValues= new Array();
+return o;
+}
+filters=new Array();
+for (var i=0;i<nbFilters;i++)
+{
+filters[i]=newBODrill(arrFilters[i]);
+filters[i].index=i;
+filters[i].nbValues=arrFilterValues[i].length;
+filters[i].arrValues=arrFilterValues[i];
+}
+function doubleQuotes(strValue)
+{
+var res = "";
+if (strValue)
+{
+var length = strValue.length;
+for (var i=0; i<length; i++)
+{
+    var c = strValue.charAt(i);
+    if (c == "\"")
+        res += "\"";
+    res += c;
+}
+}
+return res;
+}
+function AddFilter(strID)
+{
+var blnFound = false;
+for (var i=0; i<nbFilters; i++)
+{
+if (strID==filters[i].ID)
+{
+    blnFound=true;
+    break;
+    }
+}
+if (!blnFound)
+{
+var strAction=pp._root+"processDrillbar"+pp._appExt+pp.urlParamsNoBID()+"&addFilter="+strID;
+self.document.frmDrillbar.target="_parent";
+self.document.frmDrillbar.action=strAction;
+self.document.frmDrillbar.submit();
+}
+}
+document.onmousemove = mouseTracker;
+if (!document.all)
+window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+function mouseTracker(e)
+{
+e = e || window.Event || window.event;
+window.pageX = e.pageX || e.clientX;
+window.pageY = e.pageY || e.clientY;
+}
+function PopupMenu(e)
+{
+if(pp.showDrillFilterMenu)
+pp.showDrillFilterMenu(20,100);
+return true;
+}
+function MoveButtonAddIE()
+{
+dyn_button.style.pixelLeft=document.body.scrollLeft;
+dyn_button.style.pixelTop=document.body.scrollTop+document.body.clientHeight - 20;
+}
+function MoveButtonAddNT()
+{
+document.getElementById("dyn_button").style.left=window.pageXOffset;
+document.getElementById("dyn_button").style.top=window.pageYOffset + window.innerHeight - document.getElementById("imgDyn_button").height - 6;
+document.getElementById("divBody").style.height=window.pageYOffset + window.innerHeight - 2;
+self.document.getElementById("divBody").style.width=(window.pageXOffset + window.innerWidth - 2);
+}
+function drillFilter(strID, objDrillFilter)
+{
+var strAction="";
+var strValue="";
+var iUBound=objDrillFilter.length - 1;
+if (objDrillFilter.selectedIndex > 0)
+strValue=objDrillFilter.value;
+var strQueryString=pp.urlParamsNoBID();
+if (iUBound==objDrillFilter.selectedIndex && strValue=="Remove")
+{
+    for (var i=0; i<nbFilters; i++)
+{
+if (strID==filters[i].ID)
+{
+    if (filters[i].selectedValue!="")
+    {
+strQueryString=removeQueryParameter(strQueryString, "iPage");
+strQueryString+="&sDrillAction=yes";
+}
+    break;
+    }
+}
+    strQueryString+="&sID="+strID+"&removeFilter="+strID;
+    strAction=pp._root+"processDrillbar"+pp._appExt+strQueryString;
+}
+else
+{
+strQueryString=removeQueryParameter(strQueryString, "iPage");
+strQueryString+="&sID="+strID+"&sFilter="+convURL(strValue)+"&sDrillAction=yes";
+strAction=pp._root+"processDrillFilters"+pp._appExt+strQueryString;
+}
+pp.Report.location=strAction;
+}
+function drillIcn()
+{
+var s=imgOffset('../../../'+pp._img+'report.gif',16,16,9*16,0);
+document.write(s);
+}
+fltIcn = newIconWidget('addDrillFilter','../../../'+pp._img+'report.gif',addFilterCB,null,'add drill filter',16,16,16*11,0);
+divBody=newWidget('divBody');
+drillLeftTitle=newWidget('drillLeftTitle')
+function addFilterCB()
+{
+var pos = getPos(pp.reportBorder.layer);
+var posIcn= getPos(fltIcn.layer);
+var icnHeight=fltIcn.getHeight();
+var w = document.body.offsetWidth;
+if (pp.showDrillFilterMenu)
+pp.showDrillFilterMenu(pos.x+w, pos.y+posIcn.y+icnHeight+2);
+}
+function resizeDrillbar()
+{
+var drillbarH=divBody.getHeight();
+var drillbarW=winWidth()
+var maxComboW=Math.max(0,drillbarW-drillLeftTitle.getWidth()-50)
+var combos=document.getElementsByTagName("select")
+if (combos)
+{
+var count = combos.length
+for (var i=0;i<count;i++)
+{
+var combo=combos[i]
+combo.style.width=""
+var w=combo.offsetWidth
+if (w>maxComboW)
+combo.style.width=""+maxComboW+"px"
+}
+}
+setTimeout("parent.resizeCB("+drillbarH+")",100);
+}
+function onInit()
+{
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+pp.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+pp.showAlertDialog(_displayErrorMessage,"Drill Filters",2);
+}
+else
+{
+fltIcn.init();
+divBody.init();
+drillLeftTitle.init();
+resizeDrillbar();
+blnLoaded = true;
+if (pp.filldrillFilterMenu)
+pp.filldrillFilterMenu();
+}
+}
+arrParamName=new Array
+function fctMouseOver(idx)
+{
+window.status=_drillbar_combo_tooltip+" "+arrParamName[idx];
+return true;
+}
+</script>
+</head>
+<body style="overflow:hidden" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" onLoad="onInit()" onResize="resizeDrillbar()" onselectstart="return false" ondragstart="return false" oncontextmenu="return false" >
+<table border="0" cellspacing="0" cellpadding="0" height="100%" width="100%">
+<tr>
+<td style="padding-left:4px;padding-top:4px;" width="20" class="dialogzone" valign='top' >
+<script language="javascript">if (!isError) drillIcn()</script>
+</td>
+<td id="drillLeftTitle" style="padding-left:4px;padding-right:4px;padding-top:6px;" class="dialogzone" valign='top' width="100"  >
+<script language="javascript">if (!isError) document.write("<nobr>Analysis context:</nobr>")</script>
+</td>
+<td class="dialogzone" valign="top" align="left" width="100%">
+<div id="divBody" class="dialogzone">
+<form name="frmDrillbar" method="post" action="viewDrillbar.html" style="padding:0px;margin:0px" onsubmit="return false;">
+    <table border="0" cellspacing="3" cellpadding="0" class="dialogzone">
+<tr>
+    <td>
+<script language="javascript">
+for (var i=0; i<nbFilters; i++)
+{
+var f=filters[i];
+var paramName="FV"+(i+1).toString();
+arrParamName[i]=f.name
+document.write("<select name=\""+paramName+"\" size=\"1\" onChange=\"drillFilter('"+f.ID+"', this)\" onMouseOver=\"javascript:return fctMouseOver("+i+")\" onMouseOut=\"window.status=''\" class=\"listinputs\" title=\""+convStr(_drillbar_combo_tooltip+" "+f.name,true)+"\">");
+if (f.nbValues>0)
+{
+var blnFound=false;
+document.write("<option value=\"All\">"+f.escapedName+"&nbsp;"+"("+_drillbar_allValues+")</option>");
+for (var j=0; j<f.nbValues; j++)
+{
+var v=f.arrValues[j];
+var strSelected = "";
+if (!blnFound)
+{
+if (f.selectedValue==v)
+{
+strSelected=" selected";
+blnFound=true;
+}
+}
+document.write("<option value=\""+doubleQuotes(v)+"\""+strSelected+">"+convStr(v,true)+"</option>");
+}
+document.write("<option value=\"Remove\">("+_drillbar_remove+")</option>");
+}
+else
+document.write("<option value=\"None\">"+f.escapedName+"&nbsp;"+"("+_drillbar_noValue+")</option>");
+document.write("</select>\n");
+}
+</script>
+</td>
+</tr>
+</table>
+</form>
+</div>
+</td>
+<td class="dialogzone" valign='top' align='right' style="padding-top:1px;padding-right:4px" width="20">
+<span><script language="javascript">if (!isError) fltIcn.write();</script></span>
+</td>
+</tr>
+</table>
+</body>
+</html>
