@@ -530,23 +530,21 @@ function showSplitDiv(divId)
 												    <s:param name="orderHeaderKey" value="#chainedFOKey"/>
 												    <s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 												</s:url>
-												<s:if test="#xpedxLegacyOrderNumber != ''">
 													<s:a href="%{orderDetailsURL}">
 												  	<s:property value='#chainedFONo'/>
 													</s:a>		
-												</s:if>
-												<s:else>
-													<s:a href="%{orderDetailsURL}">
-														In Progress
-													</s:a>
-												</s:else>
 											</s:iterator> 
                         				</s:else> 
-                        				<s:else>          		
-							   		<a class="underlink" href="#"> <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></a>
-							      	<s:set name="splitOrderCount" value="chainedOrderCountMap.get(#orderLineKey)"/>
+                        			<s:else>          		
+									   		<a class="underlink" href="#"> <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></a>
+									      	<s:set name="splitOrderCount" value="chainedOrderCountMap.get(#orderLineKey)"/>
 							      	</s:else> 
                                   	</s:if>
+                                  	<s:else>
+                                  		In Progress
+                                  	</s:else> 
+                                  	
+                                  	
 							</td>
 						</s:else>
 						<td><span class="boldText">PO #:</span>
@@ -1238,20 +1236,18 @@ function showSplitDiv(divId)
 			</s:if>
 			<%-- Commented for bug# 1913
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
-			<s:if test="!#isEstimator"> 
-			   <s:if test="! #_action.isCustomerOrder(#orderDetail)">
-			     <s:if test="#_action.isEditableOrder()">
+			<s:if test='#_action.isFOCreated()'>			
+				<s:if test="#_action.isEditableOrder() && ! #_action.isCustomerOrder(#orderDetail)">
 			      <a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
 			     </s:if>
-			   </s:if>
-			   <s:else>
-				<s:if test="#_action.isCustomerOrder(#orderDetail)">
-				  <s:if test="#_action.isEditableCustomerOrder()">
-					<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
-				  </s:if>
-				</s:if>
-			   </s:else>
 			</s:if>
+			<s:else>
+				<s:if test="!#isEstimator">
+					<s:if test="#_action.isEditableOrder()">
+						<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+				  	</s:if>
+				</s:if>
+			</s:else>
 						
 			<s:if test ="#_action.approvalAllowed()" >
 				<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve / Reject Order</span></s:a>

@@ -535,7 +535,7 @@ public class XPEDXExtendedOrderDetailAction extends
 	 * @return boolean true if pending user is not logged in user.
 	 */
 	public boolean isEditableOrder() {
-		boolean result = true;
+		boolean result = false;
 		if (xpedxPaymentMethodHelper.isPresentOtherPaymentGroupMethod()) {
 			return false;
 		}
@@ -551,6 +551,7 @@ public class XPEDXExtendedOrderDetailAction extends
 		if (isOrderOnDuplicateOrderHold()) {
 			return false;
 		}
+		
 		//Condition to check if order is locked then user will not be able to see edit order and cancel order button
 		ArrayList<Element> orderExtnNode=SCXmlUtil.getElements(elementOrder,"Extn");//orderElement.getElementsByTagName("Extn").item(0);
 		Element orderExtn=null;
@@ -563,7 +564,7 @@ public class XPEDXExtendedOrderDetailAction extends
 			{
 				return false;
 			}
-		}
+		} 
 		
 		boolean containPendingChanges = SCXmlUtils.getInstance()
 				.getBooleanAttribute(elementOrder,
@@ -581,13 +582,13 @@ public class XPEDXExtendedOrderDetailAction extends
 		//for jira 2248 - for cancel button in system hold status
 		String  maxOrderStatus=SCXmlUtils.getInstance().getAttribute(elementOrder,
         "MaxOrderStatus");
-        if (result && (maxOrderStatus.equals("1100") || // Created
+        if (/*result && ( */ maxOrderStatus.equals("1100") || // Created
                         maxOrderStatus.equals("1100.0100") || // Placed
                         maxOrderStatus.equals("1100.5150") || // Hold Pending Approval
                         maxOrderStatus.equals("1100.5250") || // Legacy Open
                         maxOrderStatus.equals("1100.5350") || // Customer Hold
                         maxOrderStatus.equals("1100.5450") || // Legacy web hold
-                        maxOrderStatus.equals("1100.5400")) // System hold
+                        maxOrderStatus.equals("1100.5400") /* ) */ // System hold
                         
         )
         {
@@ -595,7 +596,7 @@ public class XPEDXExtendedOrderDetailAction extends
         }
         //end of jira 2248
         //For Jira 2378
-        else if (result && (maxOrderStatus.equals("1100.6000") || // Blanket
+        /*else if (result && (maxOrderStatus.equals("1100.6000") || // Blanket
                 maxOrderStatus.equals("1100.5500") || // Released For Fullfillment
                 maxOrderStatus.equals("1100.5550") || // Shipped JIRA #2607
                 maxOrderStatus.equals("3700.0100") || // Delivered
@@ -606,11 +607,11 @@ public class XPEDXExtendedOrderDetailAction extends
         	)
         {
         	return false;
-        }
+        }*/
         //end of jira 2378
-		if (result) {
+		/*if (!result) {
 			result = enableChangeOrder;
-		}
+		}*/
 		return result;
 	}
 
@@ -621,7 +622,7 @@ public class XPEDXExtendedOrderDetailAction extends
 	 * METHOD ADDED FOR CANCEL BUTTON DISPLAY, JIRA 3042. Specifically for determining display on a customer order.
 	 * @return boolean true if pending user is not logged in user.
 	 */
-	public boolean isEditableCustomerOrder() {
+	/*public boolean isEditableCustomerOrder() {
 		boolean result = true;
 		boolean resultForCustomer = false;
      System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER");
@@ -691,7 +692,7 @@ public class XPEDXExtendedOrderDetailAction extends
 		
 		//System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING RESULT! " + result);
 		//	 return result;
-	}	
+	} */	
 	
 	
 	

@@ -24,8 +24,7 @@ public class XPXViewInvoicesUIAction extends YRCRelatedTaskAction {
 	public void executeTask(IAction arg0, YRCEditorInput arg1,
 			YRCRelatedTask arg2) {
 		// TODO Auto-generated method stub
-		    
-			YRCPlatformUI.showInformation("Message", "Click OK to continue");
+		if(YRCPlatformUI.getConfirmation("CONFIRMATION", "MSG_KEY_Confirm_URL")){
 			String url = YRCPlatformUI.getString("xpedx.invoicing.url");
 			Element ele = YRCPlatformUI.getUserElement();
 			String userKey= ele.getAttribute("UserKey");
@@ -42,6 +41,9 @@ public class XPXViewInvoicesUIAction extends YRCRelatedTaskAction {
             finalQueryString = "UserID="+ encryptedUserKey;
 			XPXUtils.accessURL(url, finalQueryString);
 			return;
+		}else{
+			System.out.println("Test it ");
+		}
 		
 	}
 	@Override

@@ -461,16 +461,13 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				String codeValue = commonCodeElem.getAttribute("CodeValue");
 				if (codeValue.equalsIgnoreCase("1100.5150" )){
 					docOutput.getDocumentElement().removeChild(commonCodeElem);
+					i--;
 					}
-				}
-			for(int i=0;i<commonCodeList.getLength();i++){
-				Element commonCodeElem=(Element) commonCodeList.item(i);
-				String codeValue = commonCodeElem.getAttribute("CodeValue");
 				if (codeValue.equalsIgnoreCase("1100.5155" )){
 					docOutput.getDocumentElement().removeChild(commonCodeElem);
 				}
 				
-			}
+				}
 			setExtentionModel("Extn_StatusList", docOutput.getDocumentElement());
 			HashMap<String, String> mapDocTypes = new HashMap<String, String>();
 			mapDocTypes.put("0001", "Sales Order");
