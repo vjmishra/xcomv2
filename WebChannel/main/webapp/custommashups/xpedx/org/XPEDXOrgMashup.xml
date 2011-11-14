@@ -302,7 +302,7 @@
 					</CustomerAdditionalAddressList>
 					<Extn ExtnSuffixType="" ExtnECSR1Key="" ExtnECSR2Key="" ExtnCurrencyCode="" ExtnAttnName="" ExtnCustEmailAddress=""
 						ExtnCustomerName="" ExtnFax2="" ExtnPhone2="" ExtnPhone1="" ExtnFax1="" ExtnInvoiceEMailID="" ExtnInvoiceDistMethod="" 
-						ExtnShipFromBranch="" ExtnEnvironmentCode="">
+						ExtnShipFromBranch="" ExtnEnvironmentCode=""  ExtnCustomerStoreNumber="">
 						<XPEDXSalesRepList>
 							<XPEDXSalesRep>
 								<YFSUser Username="">
@@ -407,7 +407,7 @@
 					InheritFromParents="Y" />
 			</Input>
 			<Template>
-				<Customer CustomerID="" OrganizationCode="" CustomerKey="">
+				<Customer CustomerID="" OrganizationCode="" CustomerKey="" Modifyts="">
 					<CustomerAdditionalAddressList
 						TotalNumberOfRecords="">
 						<CustomerAdditionalAddress
@@ -984,6 +984,7 @@
 			</Input>
 			<Template>
 				<Customer CustomerID="" OrganizationCode="">
+					<BuyerOrganization OrganizationCode="" OrganizationName="" />
 					<Extn ExtnCustomerName="" ExtnCustomerDivision="" ExtnCustomerStoreNumber=""
 						ExtnShipFromBranch="" ExtnSampleRequestFlag="" ExtnXSLTVer=""
 						ExtnIndustry="" ExtnShipComplete="" ExtnCustomerClass="" ExtnSuffixType="" ExtnAttnName=""/>
@@ -1027,7 +1028,7 @@
 			<Template>
 				<CustomerList>
 					<Customer CustomerID="" OrganizationCode="">
-						<BuyerOrganization OrganizationName="" />
+					<BuyerOrganization OrganizationCode="" OrganizationName="" />
 						<ParentCustomer>
 							<Extn ExtnSAPParentName="" />
 						</ParentCustomer>
@@ -1134,7 +1135,9 @@
 			</Input>
 			<Template>
 				<Customer CustomerID="" CustomerKey="" OrganizationCode="" >
-					<Extn ExtnSuffixType=""/>
+					<BuyerOrganization OrganizationCode=""
+						OrganizationName=""/>
+					<Extn ExtnSuffixType="" />
 					<ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="">
 						<ParentCustomer CustomerID="" CustomerKey="" OrganizationCode=""/>						
 							<Extn ExtnSAPParentName="" />						

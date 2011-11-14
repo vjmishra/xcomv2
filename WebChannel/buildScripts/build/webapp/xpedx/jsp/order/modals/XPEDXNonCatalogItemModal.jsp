@@ -8,7 +8,8 @@
 <div id="divSpecialItemContent_<s:property value="#uId"/>"  class="add-non-catalog-container" style="display: none">
 	
 	<div class="xpedx-light-box" id="inline1" style="height: 305px; width: 550px;">
-	<h2>Add Non-Catalog Item</h2>
+	<!-- <h2>Add Non-Catalog Item</h2> -->
+	 <h2><s:text name="MSG.SWC.CART.NONCAT.GENERIC.DLGTITLE" /></h2> 
 	<br />
 
 	<span class="margin-top-none"><strong>HINT:</strong> Use this

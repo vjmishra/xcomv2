@@ -1028,6 +1028,9 @@
 				<CustomerList>
 					<Customer CustomerID="" OrganizationCode="">
 						<BuyerOrganization OrganizationName="" />
+						<ParentCustomer>
+							<Extn ExtnSAPParentName="" />
+						</ParentCustomer>
 						<Extn ExtnCustomerName="" ExtnCustomerDivision="" ExtnCustomerStoreNumber=""
 							ExtnShipFromBranch="" ExtnSampleRequestFlag="" ExtnXSLTVer=""
 							ExtnIndustry="" ExtnShipComplete="" ExtnCustomerClass="" ExtnSuffixType="" ExtnAttnName=""/>
@@ -1133,7 +1136,8 @@
 				<Customer CustomerID="" CustomerKey="" OrganizationCode="" >
 					<Extn ExtnSuffixType=""/>
 					<ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="">
-						<ParentCustomer CustomerID="" CustomerKey="" OrganizationCode=""/>
+						<ParentCustomer CustomerID="" CustomerKey="" OrganizationCode=""/>						
+							<Extn ExtnSAPParentName="" />						
 					</ParentCustomer>
 				</Customer>
 			</Template>
@@ -1161,7 +1165,15 @@
 			</Input>
 			<Template>
 				<CustomerList>
-					<Customer CustomerID="" />
+					<Customer CustomerID="">
+						<BuyerOrganization OrganizationName=""/>
+						<Extn ExtnSuffixType=""/>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress CustomerAdditionalAddressKey="">
+								<PersonInfo AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State="" Country="" ZipCode=""/>
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+					</Customer>
 				</CustomerList>
 			</Template>
 		</API>

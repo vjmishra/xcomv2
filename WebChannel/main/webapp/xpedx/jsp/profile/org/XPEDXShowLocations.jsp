@@ -12,6 +12,7 @@
 <s:set name="billToAndShipToCustomersMap" value="billToAndShipToCustomersMap"/>
 <s:set name="shownCustomerId" value="shownCustomerId"/>
 <s:set name="sapParentName" value="%{#_action.getmSapName()}" />
+<s:set name="msap" value="%{#_action.getBuyrOrgName()}"/>
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min.js"></script>
@@ -81,10 +82,11 @@ div#fancybox-content
 		<s:iterator id="msapAndSapMap" value="msapAndSapCustomersMap">
 			<s:set name="key" value='key' />
 			<s:set name='sapCustomers' value='value' />
+			<s:property value="%{#_action.getBuyrOrgName()}"/><br />
+			
 			<s:iterator id="sapCustomer" value="#sapCustomers" status="sapCustomerStatus">
 				<s:set name="sapCustomerId" value="#sapCustomer" />
 				<s:set name="sapCustomerDisplay" value="#displayChildCustomersMap.get(#sapCustomer)" />
-				<ul><li><s:property value='#sapParentName'/></li></ul>
 				<ul id="collapseAllButtonsTree">
 					<li>
 					<s:if test="%{#shownCustomerId == #sapCustomerId}">

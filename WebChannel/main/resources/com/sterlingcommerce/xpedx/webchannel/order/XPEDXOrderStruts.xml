@@ -637,7 +637,7 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
 				<param name="OrderHeaderKey">${#parameters.orderHeaderKey}</param>
-				<param name="isEditOrder">Y</param>				
+				<param name="isEditOrder">true</param>				
 				<param name="draft">N</param>
 			</result>
 		</action>

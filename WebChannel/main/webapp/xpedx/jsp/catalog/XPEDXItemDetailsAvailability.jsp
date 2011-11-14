@@ -14,7 +14,7 @@
 <s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" /> 
 <s:set name="jsonAvailability" value="#json.get('Availability')" /> 
 <s:set name="jsonTotalQty" value="#json.get('Total')" />
-<s:set name="jsonUOMDesc" value="#uomutil.getUOMDescription(#jsonUOM)" />
+<s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
@@ -23,8 +23,8 @@
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
 			<tr>
-				<td class="table_center" width="163"><b>Total Available:</b></td>
-				<td class="table_right">
+				<td class="table_center" width="163"><strong>Total Available:</strong></td>
+				<td class="table_right"><strong>
 			<s:if test='%{#jsonTotalQty == null}'>
 				<s:set name="jsonTotalQty" value="%{'0'}"></s:set>
 			</s:if>
@@ -38,8 +38,8 @@
 			</s:if>
 		<!-- Web Trends tag end -->		
 	
-			</td>
-				<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>
+			</strong></td>
+				<td width="114">&nbsp;<strong><s:property value='%{#jsonUOMDesc}' /></strong></td>
 			</tr>
 			<tr>
 				<td class="table_center">Next Day:</td>

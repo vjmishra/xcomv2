@@ -37,7 +37,8 @@ public class XPEDXShowLocations extends WCAction {
 	private final static Logger log = Logger.getLogger(XPEDXShowLocations.class);
 	String shownCustomerSuffixType;
 	protected String mSapName;
-
+	protected String buyrOrgName;
+	
 	public String execute() {
 		if(!(shownCustomerId!=null && shownCustomerId.trim().length()>0)) { // if the shownCustomerID is not passed taking cusotmerId from the context
 			if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext)) { // checking if a ship to is selected
@@ -55,10 +56,11 @@ public class XPEDXShowLocations extends WCAction {
 			Element custElem = shownCustomerDoc.getDocumentElement();
 			Element ExtnElem = SCXmlUtil.getChildElement(custElem, "Extn");
 			shownCustomerSuffixType = SCXmlUtil.getAttribute(ExtnElem, "ExtnSuffixType");
-			//added for 2769
-			Element parentElem=SCXmlUtil.getChildElement(custElem,"ParentCustomer");
-			Element ExtnElement=SCXmlUtil.getChildElement(parentElem,"Extn");
-			mSapName=SCXmlUtil.getAttribute(ExtnElement,"ExtnSAPParentName");
+			
+			//added for jira 2769
+			Element buyrOrgElement = SCXmlUtil.getChildElement(custElem, "BuyerOrganization");
+			buyrOrgName=SCXmlUtil.getAttribute(buyrOrgElement,"OrganizationName");
+
 
 			
 			if(shownCustomerSuffixType.trim().equalsIgnoreCase(XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE)) {
@@ -365,5 +367,14 @@ public class XPEDXShowLocations extends WCAction {
 	public void setmSapName(String mSapName) {
 		this.mSapName = mSapName;
 	}
+	
+	public String getBuyrOrgName() {
+		return buyrOrgName;
+	}
+
+	public void setBuyrOrgName(String buyrOrgName) {
+		this.buyrOrgName = buyrOrgName;
+	}
+
 
 }

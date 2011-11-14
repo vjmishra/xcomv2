@@ -49,7 +49,7 @@
 	text-align:right;
 }
 </style>
-<title>Choose Ship-To</title>
+<title><s:property value="wCContext.storefrontId" /> - Choose Ship-To</title>
 
 </head>
 <body>

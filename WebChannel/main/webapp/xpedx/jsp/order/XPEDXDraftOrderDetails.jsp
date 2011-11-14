@@ -855,6 +855,7 @@ $(document).ready(function(){
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
 		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
+				<s:set name="MultiUom" value='%{#item.getAttribute("UnitOfMeasure")}' /> 
 		<s:hidden name="selectedCustomerContactId" id="selectedCustomerContactId" value="" />
 		
 		<%-- 
@@ -934,7 +935,9 @@ $(document).ready(function(){
 				</s:a>
 				
 				<!-- Disable the fields for line type C -->
-				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" || (!#_action.isDraftOrder() && (!#_action.getIsEditOrder().contains("true") )))'>
+				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
+						<%-- || (!#_action.isDraftOrder() && (!#_action.getIsEditOrder().contains("true") ))--%>
+					)'>
 					<s:set name="disblForLnTypCOrNonDrftOdr" value="%{true}"></s:set>
 				</s:if>
 				<s:else>
@@ -979,12 +982,10 @@ $(document).ready(function(){
 										<s:textfield name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='EACH' disabled="#isUOMAndInstructions"/>
 									</s:if>
 									<s:else>
-									  <s:if test='! #orderLine.getAttribute("LineType") =="M" '>
-										   <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
+										  <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
 											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
-									  </s:if>
 									</s:else>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
@@ -995,7 +996,7 @@ $(document).ready(function(){
 						 		<td>
 						 		<br/>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="temp_UOM" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="temp_UOM" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
 						 		</s:if>
 						 		</td>
 						 	</tr>

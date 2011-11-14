@@ -101,7 +101,7 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
 
 
-<title>xpedx /  Webi Input Prompt</title>
+<title><s:property value="wCContext.storefrontId" /> - Webi Input Prompt</title>
 
 <script type="text/javascript" src="/swc/swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->

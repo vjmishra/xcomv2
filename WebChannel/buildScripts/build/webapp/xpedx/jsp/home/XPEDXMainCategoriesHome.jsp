@@ -56,14 +56,15 @@
 				 	</td>
 		       </s:iterator> --%>
 		       <td class="storefront-td" colspan="4">
-		       <!--  Begin storefront_spb_promo.html content here -->
-		       <!-- 
-		       	<div class="slideshow">
+		       <!--  Begin storefront_spb_promo.html content SignInPageBottom here -->
+		       
+		       	<%-- <div class="slideshow"> --%>
 						<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
 							<s:param name="callerPage">SignInPageBottom</s:param>
-						</s:action>
-				</div>
-				-->
+						 </s:action>
+				<%-- </div> --%>
+		
+
 		       <!-- End storefront_spb_promo.html Content here -->
 		       </td>
 		    </tr>

@@ -38,6 +38,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		 if(!YFCCommon.isVoid(editedOrderHeaderKey))
 		 {
 				orderHeaderKey=editedOrderHeaderKey;
+				isEditNewline="Y";
 		 }
 		 XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 		 try
@@ -241,9 +242,19 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	}
 
 
+	public String getIsEditNewline() {
+		return isEditNewline;
+	}
+
+	public void setIsEditNewline(String isEditNewline) {
+		this.isEditNewline = isEditNewline;
+	}
+
+
 	protected String reqProductUOM;
 	protected String reqJobId;
 	protected String reqCustomer;
 	protected String lineType;
 	protected String customerPONo="";
+	protected String isEditNewline="N";
 }

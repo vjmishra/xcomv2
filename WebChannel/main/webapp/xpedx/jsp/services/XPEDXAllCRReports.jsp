@@ -104,7 +104,7 @@ $("#various4").fancybox();
 <style type="text/css">
 p{margin-bottom:8px;}
  </style>
-<title>Services</title>
+<title><s:property value="wCContext.storefrontId" /> - Reports</title>
 <!--Webtrends tag starts-->
 <meta name="WT.ti" Content='<s:text name="tools.title" />'>
 <!--Webtrends tag stops-->

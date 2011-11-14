@@ -39,7 +39,17 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 	protected Map invoiceEmailIdList = new LinkedHashMap();
 	protected String Phone1FormatChange;
 	protected String Fax1FormatChange;
+	protected String locationId;
 	
+
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
+	}
+
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -104,8 +114,13 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 				Fax1FormatChange = getPhoneAndFaxInMarketingDepartmentstandard(extnElem.getAttribute("ExtnFax1"));
 				Element custAddtnlAddresses = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "CustomerAdditionalAddressList");
 				shipToAddress = SCXmlUtil.getElementByAttribute(custAddtnlAddresses, "CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
+					//added for 2769 to get the store number/localID
+				locationId=extnElem.getAttribute("ExtnCustomerStoreNumber");
 				if(shipToAddress == null)
 					shipToAddress = SCXmlUtil.getFirstChildElement(custAddtnlAddresses);
+// added for 2769 to display shipto address
+				if (shipToAddress != null)
+					shipToAddress = SCXmlUtil.getChildElement(shipToAddress, "PersonInfo");
 				setDisplayCustomerFormat();
 				setLastModifiedFields();
 				return "shipToInfo";
@@ -154,6 +169,9 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 				}
 				Element custAddtnlAddresses = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "CustomerAdditionalAddressList");
 				billToAddress = SCXmlUtil.getElementByAttribute(custAddtnlAddresses, "CustomerAdditionalAddress", "IsDefaultBillTo", "Y");
+	// added for 2769 to display billto address
+				if (billToAddress != null)
+					billToAddress = SCXmlUtil.getChildElement(billToAddress, "PersonInfo");
 				if(billToAddress == null)
 					billToAddress = SCXmlUtil.getFirstChildElement(custAddtnlAddresses);
 				setDisplayCustomerFormat();
@@ -247,13 +265,104 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 	}
 	
 	private void setDisplayCustomerFormat() {
-		String formattedCusotmer = XPEDXWCUtils.formatBillToShipToCustomer(customerId);
-		Element buyerOrgElem = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "BuyerOrganization");
+		
+		// method modified to display billtoshipto address for jira 2769
+		Boolean billto = false;
+		String billtoAddr = "";
+		String shipToAddr = "";
+
+		Element buyerOrgElem = SCXmlUtil.getChildElement(
+				outputDoc.getDocumentElement(), "BuyerOrganization");
 		String orgName = buyerOrgElem.getAttribute("OrganizationName");
-		if(formattedCusotmer!=null && orgName!=null)
-			displayCustomerFormat = formattedCusotmer + " " + orgName;
+
+		if (suffixType != null) {
+			if (suffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)) {
+				billto = true;
+				String formattedCusotmer = XPEDXWCUtils
+						.shareformatBillToShipToCustomer(customerId, true);
+				// if(formattedCusotmer!=null && orgName!=null)
+
+				if (billToAddress != null) {
+					for (int index = 0; index < 6; index++) {
+						if (billToAddress.getAttribute("AddressLine" + index) != null
+								&& billToAddress
+										.getAttribute("AddressLine" + index)
+										.trim().length() > 0)
+							billtoAddr += ", "
+									+ billToAddress.getAttribute("AddressLine"
+											+ index);
+					}
+
+					if (billToAddress.getAttribute("City") != null
+							&& billToAddress.getAttribute("City").trim()
+									.length() > 0)
+						billtoAddr += ", " + billToAddress.getAttribute("City");
+					if (billToAddress.getAttribute("State") != null
+							&& billToAddress.getAttribute("State").trim()
+									.length() > 0)
+						billtoAddr += ", "
+								+ billToAddress.getAttribute("State");
+					if (billToAddress.getAttribute("ZipCode") != null
+							&& billToAddress.getAttribute("ZipCode").trim()
+									.length() > 0)
+						billtoAddr += " "
+								+ billToAddress.getAttribute("ZipCode");
+					if (billToAddress.getAttribute("Country") != null
+							&& billToAddress.getAttribute("Country").trim()
+									.length() > 0)
+						billtoAddr += " "
+								+ billToAddress.getAttribute("Country");
+
+				}
+				if (formattedCusotmer != null && orgName != null)
+					displayCustomerFormat = formattedCusotmer + " " + orgName
+							+ ", " + billtoAddr;
+			}
+
+			else if (suffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE)) {
+				billto = false;
+				String formattedCusotmer = XPEDXWCUtils
+						.shareformatBillToShipToCustomer(customerId, false);
+				
+				String localID=getLocationId();
+				if(localID!=null && locationId!=""){
+					shipToAddr+="Local ID: "+localID+" ";
+				}
+
+				if (shipToAddress != null) {
+					for (int index = 0; index < 6; index++) {
+						if (shipToAddress.getAttribute("AddressLine" + index) != null && shipToAddress.getAttribute("AddressLine" + index).trim().length() > 0)
+							shipToAddr += ", "+ shipToAddress.getAttribute("AddressLine"+ index);
+					}
+					// if(formattedCusotmer!=null && orgName!=null)
+					if (shipToAddress.getAttribute("City") != null
+							&& shipToAddress.getAttribute("City").trim()
+									.length() > 0)
+						shipToAddr += ", " + shipToAddress.getAttribute("City");
+					if (shipToAddress.getAttribute("State") != null
+							&& shipToAddress.getAttribute("State").trim()
+									.length() > 0)
+						shipToAddr += ", "
+								+ shipToAddress.getAttribute("State");
+					if (shipToAddress.getAttribute("ZipCode") != null
+							&& shipToAddress.getAttribute("ZipCode").trim()
+									.length() > 0)
+						shipToAddr += " "
+								+ shipToAddress.getAttribute("ZipCode");
+					if (shipToAddress.getAttribute("Country") != null
+							&& shipToAddress.getAttribute("Country").trim()
+									.length() > 0)
+						shipToAddr += " "
+								+ shipToAddress.getAttribute("Country");
+				}
+				if (formattedCusotmer != null)
+					displayCustomerFormat = formattedCusotmer + " " + orgName
+							+ ", " + shipToAddr;
+
+			}
+		}
 	}
-	
+
 	private void setLastModifiedFields() {
 		String modifyTS = SCXmlUtil.getAttribute(outputDoc.getDocumentElement(), "Modifyts");
 		String modifyUserId = SCXmlUtil.getAttribute(outputDoc.getDocumentElement(), "Modifyuserid");

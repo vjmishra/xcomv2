@@ -282,6 +282,9 @@
                         <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="N">
                             <Item ItemID="" UnitOfMeasure="" ProductClass=""/>
                             <OrderLineTranQuantity OrderedQty="" TransactionalUOM="" />
+                            <Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3=""  ExtnEditOrderFlag=""></Extn>
                         </OrderLine>
                     </OrderLines>
                 </Order>
@@ -309,6 +312,9 @@
                 		<OrderLine Action="CREATE" OrderedQty=""
                   			  ReservationMandatory="N" ValidateItem="N">
                    		 	<Item ItemID="" ProductClass="" UnitOfMeasure=""/>
+                   		 	<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3=""  ExtnEditOrderFlag=""></Extn>
                			 </OrderLine>
             		</OrderLines>
        			 </Order>
@@ -340,6 +346,9 @@
                     <OrderLines>
                         <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="N" LineType="">
                             <Item ItemID="" UnitOfMeasure="" ProductClass=""/>
+                            <Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3=""  ExtnEditOrderFlag=""></Extn>
                         </OrderLine>
                     </OrderLines>
                 </Order>

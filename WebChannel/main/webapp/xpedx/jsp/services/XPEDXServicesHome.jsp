@@ -83,7 +83,7 @@
 	 }
 </script>
 
-<title><s:text name="Resources" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="Resources" /></title>
 <meta name="WT.ti" Content='<s:text name="Resources" />'>
 <style>
 .ui-datepicker-trigger {

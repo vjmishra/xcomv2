@@ -13,7 +13,7 @@
 	text-align:right;
 }
 </style>
-<title>Choose Account</title>
+<title><s:property value="wCContext.storefrontId" /> - Choose Account</title>
 
 </head>
 <body>

@@ -392,7 +392,7 @@ function showSplitDiv(divId)
 <s:set name="orderType" value='%{#xutil.getAttribute(#orderDetail, "OrderType")}' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 
-<title><s:text name="orderdetails.title" /> <s:property value='%{webConfirmationNumber}'/></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="orderdetails.title" /> <s:property value='%{webConfirmationNumber}'/></title>
 <!-- Webtrend tag start -->
 <meta name="WT.ti" content='<s:text name="orderdetails.title" /> <s:property value="%{webConfirmationNumber}"/>' />
 <!-- Webtrend tag end -->
@@ -414,7 +414,7 @@ function showSplitDiv(divId)
                 	</s:if>
                 	<s:else>
                 		<!-- Web Confirmation Detail -->
-                		<s:text name='MSG.SWC.ORDR.WEBCONFIRMATION.GENERIC.PGTITLE' />
+                		<s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' />
                 	</s:else>
                 	</span>
                 	<a href="javascript:window.print()"><span class="print-ico-xpedx orders"><img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
@@ -480,8 +480,14 @@ function showSplitDiv(divId)
                         
                         <s:if test='#orderType != "Customer" ' > 
                         <!-- <div id="OD-on-line" style="width:120px"> -->
-                        	<legend>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></legend>
+                        	<s:if test="#xpedxLegacyOrderNumber != ''">
+                     			<legend>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></legend>
                         	<!-- </div> -->
+                       		</s:if>
+                       		<s:else>
+                       			<legend> In Progress</legend>
+                       		</s:else>
+                       		
                         </s:if>
                         <s:else>
                         <!-- <div id="OD-on-line" style="width:220px"> -->
@@ -524,9 +530,16 @@ function showSplitDiv(divId)
 												    <s:param name="orderHeaderKey" value="#chainedFOKey"/>
 												    <s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 												</s:url>
-												<s:a href="%{orderDetailsURL}">
-												  <s:property value='#chainedFONo'/>
-												</s:a>		
+												<s:if test="#xpedxLegacyOrderNumber != ''">
+													<s:a href="%{orderDetailsURL}">
+												  	<s:property value='#chainedFONo'/>
+													</s:a>		
+												</s:if>
+												<s:else>
+													<s:a href="%{orderDetailsURL}">
+														In Progress
+													</s:a>
+												</s:else>
 											</s:iterator> 
                         				</s:else> 
                         				<s:else>          		

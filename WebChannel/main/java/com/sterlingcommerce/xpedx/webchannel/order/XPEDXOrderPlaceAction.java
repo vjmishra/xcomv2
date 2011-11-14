@@ -1,6 +1,6 @@
 /*
  *ajindal
- *$Id: XPEDXOrderPlaceAction.java,v 1.26 2011/10/31 20:44:20 rugrani Exp $
+ *$Id: XPEDXOrderPlaceAction.java,v 1.27 2011/11/11 05:38:57 rghare Exp $
  *
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
@@ -167,6 +167,9 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				Element input = WCMashupHelper.getMashupInput("XPEDXOrderDetailForOrderUpdate", valueMap, wcContext.getSCUIContext());
 				Object obj;
 				Document orderDetailDocument = null;
+				
+				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
+				wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
 				try {
 					obj = WCMashupHelper.invokeMashup("XPEDXOrderDetailForOrderUpdate", input, wcContext.getSCUIContext());
 					if(!YFCCommon.isVoid(obj)){

@@ -816,4 +816,27 @@
 			</Template>
 		</API>
 	</mashup>
+	
+	<mashup id='xpedxgetLoggedInCustomer' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="To get the cusotmer contact user Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerList">
+			<Input>
+				<Customer OrganizationCode="">
+					<ComplexQuery Operator="AND">
+						<Or/>
+					</ComplexQuery>
+				</Customer>
+			</Input>
+			<Template>
+				<CustomerList>
+					<Customer  CustomerKey="" CustomerID="" OrganizationCode="" RootCustomerKey="" >
+						<BuyerOrganization OrganizationCode="" OrganizationName="" />
+					</Customer>
+				</CustomerList>
+			</Template>
+		</API>
+	</mashup>
+	
 </mashups>

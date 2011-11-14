@@ -695,7 +695,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 	
-<title><s:text name='Services' /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='Services' /></title>
 <link href="/swc/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet"	type="text/css" />
 </head>
 <!-- END swc:head -->

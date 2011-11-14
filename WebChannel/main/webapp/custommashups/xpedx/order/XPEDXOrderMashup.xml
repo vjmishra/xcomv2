@@ -640,7 +640,7 @@
 									Status="" PaymentStatus="" CustomerFirstName=""
 									CustomerLastName="" Modifyuserid="" ShipToID="">
 									<PriceInfo TotalAmount="" Currency="" />
-									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
+									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
 									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
 									<OrderLines>
 										<OrderLine ChainedFromOrderHeaderKey=""/>
@@ -892,6 +892,9 @@
 							<Extn ExtnCustLineAccNo="" ExtnEditOrderFlag=""></Extn>
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
+							<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3=""  ExtnEditOrderFlag=""></Extn>
 						</OrderLine>
 					</OrderLines>
 				</Order>
@@ -922,7 +925,9 @@
 						<OrderLine Action="CREATE" OrderedQty="" LineType=""
 							ReservationMandatory="N" ValidateItem="N" CustomerPONo="">
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
-							<Extn ExtnCustLineAccNo="" ExtnEditOrderFlag=""></Extn>
+							<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3="" ExtnEditOrderFlag=""></Extn>
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
 						</OrderLine>
@@ -1212,7 +1217,9 @@
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" />
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
-							<Extn ExtnCustLineAccNo="" ExtnCustLineField1="" />
+							<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3=""  ExtnEditOrderFlag=""></Extn>
 						</OrderLine>
 					</OrderLines>
 				</Order>
@@ -1451,6 +1458,9 @@
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" />
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
+							<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+								ExtnCustLineField3="" ExtnEditOrderFlag=""></Extn>
 						</OrderLine>
 					</OrderLines>
 				</Order>

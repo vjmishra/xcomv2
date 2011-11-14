@@ -1391,12 +1391,12 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="changeOrder">
 			<Input>				
-				<Order OrderHeaderKey="" CustomerPONo="" ReqDeliveryDate="" Override="Y">
+				<Order OrderHeaderKey="" CustomerPONo="" ReqDeliveryDate="" Override="Y" CustomerContactID="">
 					<Extn ExtnDeliveryHoldFlag="" ExtnRushOrderComments=""
 						ExtnShipComplete="" ExtnWillCall="" ExtnDeliveryHoldDate=""
 						ExtnDeliveryHoldTime="" ExtnAttentionName="" ExtnHeaderComments=""
 						ExtnAddnlEmailAddr="" ExtnTotalOrderValue=""
-						ExtnRushOrderFlag="" ExtnWebHoldFlag=""/>	
+						ExtnRushOrderFlag="" ExtnWebHoldFlag="" ExtnOrderedByName=""/>	
 					<OrderLines>
 						<OrderLine Action="MODIFY" OrderLineKey="">
 							<Extn></Extn>
@@ -2194,7 +2194,9 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="" />
+				<Order OrderHeaderKey="" >
+				<PendingChanges RecordPendingChanges=""/> 
+				</Order>
 			</Input>
 			<Template>
 				<Order OrderHeaderKey="" >

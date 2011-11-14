@@ -81,7 +81,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/css/home/forgotPwd/forgotPassword.css'/>" />
 <script type="text/javascript" src="<s:url value='/swc/js/home/forgotPassword.js'/>"></script>
 
-<title>Forgot Password</title>
+<!-- <title>Forgot Password</title> -->
+<title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/> </title>
 
 </head>
 <!-- END swc:head -->
@@ -96,7 +97,7 @@
       	<!-- breadcrumb -->
       		<div id="mid-col-mil"> 
 		    <div>
-      			<div class="padding-top3  page-title black"><strong class="black"> Forgot Password</strong></div>
+      			<div class="padding-top3  page-title black"><strong class="black"> <title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/> </title></strong></div>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
 			

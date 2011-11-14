@@ -77,6 +77,8 @@
 <script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery.numeric.js"></script>
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
@@ -135,6 +137,7 @@ $(document).ready(function () {
     						
     });
 });
+
 
 //Clicking on Redx ChecksHiddenCheckBox then Delete Function wil be called.
 function checkHiddenCheckboxAndDeleteItem (oImg, sChkId){
@@ -229,7 +232,8 @@ $(document).ready(function(){
 });
 </script>
 
-<title><s:text name="draftorder.details.title" /></title>
+<%-- <title><s:text name="draftorder.details.title" /></title> --%>
+<title><s:text name="MSG.SWC.ORDR.DRAFTORDRDETAIL.GENERIC.TABTITLE" /></title>
 
 				<!-- Web Trends tag start -->
 						<s:if test='%{#session.isUpdateCartMetaTag != null}'>						
@@ -305,6 +309,8 @@ $(document).ready(function(){
 
 <s:set name='appFlowContext' value='#session.FlowContext' />
 <s:set name='isGuest' value='wCContext.isGuestUser()' />
+
+<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
 <s:set name='numberOfInitialComplementaryItemsToDisplay' value='3' />
 <s:set name='canChangeOrderName'
@@ -423,12 +429,12 @@ $(document).ready(function(){
 				<s:hidden name="draft" value="%{#draftOrderFlag}" />
 				<s:hidden name='Currency' value='%{#currencyCode}' />
 				<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
-				<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
+				<%--<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
 					<s:hidden name="isEditNewline" value="%{'Y'}"/>
 				</s:if>
 				<s:else>
 					<s:hidden name="isEditNewline" value="%{'N'}"/>
-				</s:else>		
+				</s:else>	--%>	
 				<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
 				<ul class="hvv">
 					<li>
@@ -446,10 +452,8 @@ $(document).ready(function(){
 						<s:hidden name='localizedMissingProductIDMessage'value='%{#_action.getText("QAMissingProductID")}' />
 					</li>
 					<li>
-						<label>Qty:</label>
-						<s:set name='OrderedQty' value="#xpedxUtilBean.formatQuantityForCommas(#OrderedQty)"/>
-						
-						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this)" />
+						<label>Qty:</label>						
+						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this)"  onchange="javascript:this.value=addComma(this.value);" />
 						<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 					</li>
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
@@ -492,7 +496,14 @@ $(document).ready(function(){
 			<div class="clear">&nbsp;</div>
 			<div id="addProdsToOrder" class="close-btn" style="display: none;">
 				<%-- <a href="#" id="quick-add-close" class="grey-ui-btn"><span>Close</span></a> --%>
-				<a href="#" class="orange-ui-btn" onclick="javascript:addProductsToOrder(); return false;" tabindex="210"  name="addProdsToOrder"><span>Add to Cart</span></a>
+				<a href="#" class="orange-ui-btn" onclick="javascript:addProductsToOrder(); return false;" tabindex="210"  name="addProdsToOrder">
+					<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+						<span>Add to Cart</span>
+					</s:if>
+					<s:else>
+						<span>Add to Order</span>
+					</s:else>
+				</a>
 			</div>
 	</div>
 </div><!-- id="tq-quick-add-overlay" -->
@@ -518,9 +529,10 @@ $(document).ready(function(){
 
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name"><span class="page-title">
-My Cart:&nbsp;</span>
-	<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
-		<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		My Cart:&nbsp;
+		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
+			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
         	Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
         </s:if>
         <s:else>
@@ -529,7 +541,19 @@ My Cart:&nbsp;</span>
 	</s:if>
 	<s:else>
 					<s:property value='#orderDetails.getAttribute("OrderName")' />
+		</s:else>
+	</s:if>
+	<s:else>
+			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
+        		<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/></b>
+        	</s:if>
+        	<s:else>
+        		<b>Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/></b>
+        	</s:else>
 	</s:else>
+	
+	</span>
+	
 
 <br/><br/>
 <a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:url value='/xpedx/images/common/print-icon.gif'/>" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
@@ -652,11 +676,15 @@ My Cart:&nbsp;</span>
 	</s:else>
 	<br />
 	
+	
+	
+<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">	
 	<s:if test="#canChangeOrderName">
 	<%-- <s:textfield id="cartDesc_new" name='cartDesc_new' id="cartDesc_new" size="50"
 			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'220');"
 			value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}'
 			tabindex="3400" /> --%>
+		
 			Description
 			<br/>
 			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
@@ -664,7 +692,8 @@ My Cart:&nbsp;</span>
 			</s:if>
 			<s:else>
 				<textarea  id="cartDesc_new" name="cartDesc_new"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
-			</s:else>						
+			</s:else>
+								
 	</s:if> 
 	<s:else>	
 		<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
@@ -674,12 +703,50 @@ My Cart:&nbsp;</span>
 			<textarea  id="cartDesc_new" name="cartDesc_new"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
 		</s:else>
 	</s:else>
+</s:if>
+<s:else>
+<%-- <span class="red bold">Don’t forget to ‘Checkout’ to apply these changes to your order</span> --%>
+<span class="red bold"> <s:text name='MSG.SWC.ORDR.DRAFTORDRDETAIL.GENERIC.CHKOUTTOAPPLYCHANGES' /> </span>
+	<s:if test="#canChangeOrderName">
+	<%-- <s:textfield id="cartDesc_new" name='cartDesc_new' id="cartDesc_new" size="50"
+			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'220');"
+			value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}'
+			tabindex="3400" /> --%>
+		
+			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
+				<s:hidden  id="cartDesc_new" name="cartDesc_new"></s:hidden>
+			</s:if>
+			<s:else>
+			<s:set name='extOrderDesc' value='#extnOrderDetails.getAttribute("ExtnOrderDesc")' /> 
+				<s:hidden  id="cartDesc_new" name="cartDesc_new" value='<s:property value="%{#extOrderDesc}" />' />
+			</s:else>
+								
+	</s:if> 
+	<s:else>	
+		<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
+			<s:hidden  id="cartDesc_new" name="cartDesc_new"/>
+		</s:if>
+		<s:else>
+			<s:set name='extOrderDesc' value='#extnOrderDetails.getAttribute("ExtnOrderDesc")' />
+			<s:hidden  id="cartDesc_new" name="cartDesc_new" value='<s:property value="%{#extOrderDesc}" />' />
+		</s:else>
+	</s:else>
+
+</s:else>	
+
 	<ul class="float-right tool-bar-bottom sc-btn-list">
 	<li class="float-right"><a id="quick-add-button" class="grey-ui-btn" href="#"><span>Quick Add</span></a></li>
-    <li><a href="#" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
+    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+    	<li><a href="#" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
+    </s:if>	
 <s:if test='majorLineElements.size() > 0'>
-    <li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a></li>
-    </s:if>
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+   	 <li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a></li>
+   	 </s:if>
+   	 <s:else>
+   	 	<li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a></li>
+   	 </s:else>
+ </s:if>
 
 </ul>
 	<br />
@@ -788,6 +855,7 @@ My Cart:&nbsp;</span>
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
 		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
+		<s:hidden name="selectedCustomerContactId" id="selectedCustomerContactId" value="" />
 		
 		<%-- 
 		<s:set name="itemuomMap" value='itemUOMsMap[#itemIDUOM]' /> 
@@ -880,26 +948,30 @@ My Cart:&nbsp;</span>
                 
                 <s:set name='qty' value='#lineTran.getAttribute("OrderedQty")' />
 				<s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
-			    <s:set name='qty' value="#xpedxUtilBean.formatQuantityForCommas(#qty)"/>
 				<div class="cart-availability-section">
 	            	<table width="100%" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config availability-table">
 	                	<tbody>
 	                    	<tr>
 								<td class="text-right" style="padding:0px;">
+								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<label>Qty: </label>
-								
+								</s:if>
 								<s:if test='#isReadOnly'>
+								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
 								</s:if>
 								<s:else>
+								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+								  </s:if>
 								</s:else>
 									<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
@@ -907,16 +979,25 @@ My Cart:&nbsp;</span>
 										<s:textfield name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='EACH' disabled="#isUOMAndInstructions"/>
 									</s:if>
 									<s:else>
-									<s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
-										cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
-										list="#displayUomMap" listKey="key" listValue='value'
-										disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
-									
+									  <s:if test='! #orderLine.getAttribute("LineType") =="M" '>
+										   <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
+											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
+											list="#displayUomMap" listKey="key" listValue='value'
+											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
+									  </s:if>
 									</s:else>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
 									</s:if>
                          		</td>
+						 	</tr>
+						 	<tr>
+						 		<td>
+						 		<br/>
+						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="temp_UOM" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)'></s:property><br/></div>
+						 		</s:if>
+						 		</td>
 						 	</tr>
 					 	</tbody>
 				 	</table>
@@ -1007,7 +1088,7 @@ My Cart:&nbsp;</span>
 									 			  <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 									 			  <s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
 									 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
-														<span class="red bold"> Call for Price</span>  
+														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
 												  </s:if>
 												  <s:else>
 												    <s:property value="#bracketPriceForUOM" /><br/>
@@ -1028,7 +1109,7 @@ My Cart:&nbsp;</span>
 														  <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 											 			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 											 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
-																<span class="red bold">To be determined </span>
+																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 														  </s:if>
 														  <s:else>
 														   		<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
@@ -1202,11 +1283,11 @@ My Cart:&nbsp;</span>
 			    	</div>
 			    	
 			    	<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
-						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#xpedxUtilBean.formatQuantityForCommas(#orderLine.getAttribute('OrderedQty'))"/>");'
+						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Complimentary </a>
 					</s:if>
 					<s:if test='(xpedxItemIDUOMToAlternativeListMap.containsKey(#itemIDUOM))'>
-						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#xpedxUtilBean.formatQuantityForCommas(#orderLine.getAttribute('OrderedQty'))"/>");'
+						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Alternate </a>
 					</s:if>
 					<%-- Commenting the Replacement link as 'This Item has been replaced' is the link to replacement items.
@@ -1275,7 +1356,7 @@ My Cart:&nbsp;</span>
 						</s:if>
 						
 						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#xpedxUtilBean.formatQuantityForCommas(#orderLine.getAttribute('OrderedQty'))"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="/swc/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
+			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="/swc/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
 			    		</s:if>
 			    		
 			    	</div>
@@ -1651,7 +1732,7 @@ var currentAadd2ItemList = new Object();
 						  <s:set name="isMyPriceZero" value="%{'true'}" />
 						   <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-									<span class="red bold"> To be determined </span>  
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 						  		</s:if>
 						  </s:if>
 						  <s:else>
@@ -1675,7 +1756,7 @@ var currentAadd2ItemList = new Object();
 					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' />
 						  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-									<span class="red bold"> To be determined </span>  
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 						  		</s:if>
 						  </s:if>
 						  <s:else>
@@ -1701,7 +1782,7 @@ var currentAadd2ItemList = new Object();
 					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 					<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 			 			  <s:if test="%{#isMyPriceZero=='true'}">
-								<span class="red bold"> To be determined </span>  
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 						  </s:if>
 					</s:if>
 					<s:else>
@@ -1716,13 +1797,13 @@ var currentAadd2ItemList = new Object();
 		<tr>
 			<th>Tax:</th>
 			<td class="red bold">
-					To be determined
+					<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
 			</td>
 		</tr>
 		<tr class="bottom-padding">
 			<th>Shipping &amp; Handling:</th>
 			<td class="red bold">
-					To be determined
+					<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
 			</td>
 		</tr>
 		<%-- <s:set name="subTotAdjusted" value='%{#priceUtil.getLineTotal(#subTotal,"1",#headerAdjustmentWithoutShipping)}' /> --%>
@@ -1737,7 +1818,7 @@ var currentAadd2ItemList = new Object();
 					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 						  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-										<span class="red bold"> To be determined </span>  
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 						  		</s:if>
 						   </s:if>
 						  <s:else>
@@ -1757,7 +1838,18 @@ var currentAadd2ItemList = new Object();
 
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
+<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<a id="otherCartActions"  class="grey-ui-btn pointers" onclick="javascript:actionOnList('Delete');"><span>Delete Cart</span></a>
+</s:if>
+<s:else>
+	<s:url id="cancelEditOrderChanges" includeParams="none"
+							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+	</s:url>
+	<a id="cancel-btn" class="grey-ui-btn" href="<s:property value="#cancelEditOrderChanges"/>"><span>Cancel Changes</span></a>
+	
+	
+</s:else>	
 	<s:set name="ohk" value='%{#orderHeaderKey}' />
 	<s:set name="isEstimator" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<%--	Using CustomerContactBean object from session
@@ -1786,7 +1878,12 @@ var currentAadd2ItemList = new Object();
 		</s:if>
 	</s:else>
 	</s:if>
+<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a>
+</s:if>
+<s:else>
+	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
+</s:else>
 </div>
 <!--bottom button 'bar' -->
 </div>
@@ -1817,31 +1914,38 @@ var currentAadd2ItemList = new Object();
 						<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
-								value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentLocation')" />
 							<s:set name='imageId'
 								value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
 							<s:set name='imageLabel'
 								value="#xutil.getAttribute(#itemAsset, 'Label')" />
-							<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
+							<!--Removed "/" -->
+							<s:set name='imageURL' value="#imageLocation + #imageId " />
 							<s:if test='%{#imageURL=="/"}'>
 											<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
 									</s:if>
-							<li> <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageURL}' includeParams='none' />" width="91" height="94" alt="" /> 
-								<b></b><br /><br /><br />
-								<br />
-								</s:a> </li>
-
-						</s:if> <s:else>								
-									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
-									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
-									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
-							<li> <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+							<!--Jira 2918 - Modified For Image Path -->
+							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
 							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
 								<br />
-								</s:a> </li>
+								</s:a>  </li>
+
+						</s:if> <s:else>								
+									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
+									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
+							<%-- <s:if test='#info.size() > 0 || #shortDesc().size() > 0 '> --%>
+				<%-- 			<li> <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
+								<s:property value="%{#shortDesc}"/>
+								<br />
+								<br />
+								<br />
+								</s:a> </li> --%>
+								<%-- </s:if> --%>
 
 						</s:else>
 					
@@ -1927,7 +2031,11 @@ var currentAadd2ItemList = new Object();
 						</s:url>
                    <input name="relatedItems"
 						onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />
-                    <div class="mil-question-mark"> <img src="<s:url value='%{#pImg}' includeParams='none' />" width="150" height="150" alt="" /></div>
+                    <div class="mil-question-mark"> 
+                               <s:a href="javascript:processDetail('%{#altItem.getAttribute('ItemID')}', '%{#altItem.getAttribute('UnitOfMeasure')}')" >
+                                     <img src="<s:url value='%{#pImg}' includeParams='none' />" width="150" height="150" alt="" />
+                                 </s:a>
+                    </div>
                     <!--  image hardcoded  -->
                 </div>
                 <!-- end image / checkbox   -->

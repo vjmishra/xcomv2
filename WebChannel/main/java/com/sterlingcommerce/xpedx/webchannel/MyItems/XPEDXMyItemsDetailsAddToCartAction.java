@@ -72,6 +72,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	protected ArrayList<String> transactionalUOMs = new ArrayList<String>();
 	protected String addToCartError;
 	protected boolean addingSingleItem = false;
+	protected ArrayList<String> isEditNewline=new ArrayList<String>();
 
 	@Override
 	public String execute() {
@@ -84,6 +85,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			// Process the product list.
 
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			isEditNewline.clear();
 			if(!YFCCommon.isVoid(editedOrderHeaderKey))
 			{
 				orderHeaderKey=editedOrderHeaderKey;
@@ -211,6 +213,15 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			String enteredQtyStr = this.enteredQuantities.get(i);
 			if(enteredQtyStr == null || enteredQtyStr.equalsIgnoreCase("") || enteredQtyStr.equalsIgnoreCase("0")){
 				continue;
+			}
+			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if(!YFCCommon.isVoid(editedOrderHeaderKey))
+			{
+				isEditNewline.add("Y");
+			}
+			else
+			{
+				isEditNewline.add("N");
 			}
 			String enteredUOMStr = (String)this.enteredUOMs.get(i);
 			String itemType=entereditemTypeList.get(i);
@@ -803,6 +814,16 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 
 	public void setTransactionalUOMs(ArrayList<String> transactionalUOMs) {
 		this.transactionalUOMs = transactionalUOMs;
+	}
+
+
+	public ArrayList<String> getIsEditNewline() {
+		return isEditNewline;
+	}
+
+
+	public void setIsEditNewline(ArrayList<String> isEditNewline) {
+		this.isEditNewline = isEditNewline;
 	}
 	
 	

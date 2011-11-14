@@ -91,7 +91,7 @@ $("#various5").fancybox();
 	
 </script> 
 
-<title>News Preview</title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.NEWSARTL.PREVIEW.GENERIC.TABTITLE' /></title>
 
 </head>
 <!-- END swc:head -->
@@ -114,7 +114,7 @@ $("#various5").fancybox();
       
       <div>
       
-       <span class="page-title">News Preview </span> 
+       <span class="page-title"><s:text name='MSG.SWC.NEWSARTL.PREVIEW.GENERIC.PGTITLE' /> </span> 
        
 		<div class="float-right clearview padding-bottom3" ><a href="javascript:window.print()"><span
 			class="print-ico-xpedx underlink"><img
@@ -127,7 +127,8 @@ $("#various5").fancybox();
 		
 
 		 <div>
- 			 <span class="dkcharcole"> Note: News article will not be saved until you click on the Publish button. </span>
+ 			 <%-- <span class="dkcharcole"> Note: News article will not be saved until you click on the Publish button. </span> --%>
+ 			 <span class="dkcharcole"> <s:text name='MSG.SWC.NEWSARTL.PREVIEW.INFO.PREVIEWNOTE' /> </span>
 		 </div>
 		<br/>
 			

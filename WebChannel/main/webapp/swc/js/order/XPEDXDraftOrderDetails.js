@@ -556,7 +556,7 @@ function redrawQuickAddList()
 		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
 		        code += '<tr>';
 		        code += '<td colspan="6">';
-		        code += '<div align="center" class="temp_UOM" id="test12" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+encodeForHTML(QuickAddElems[i].uom)+'</div>';
+		        code += '<div align="center" class="temp_UOM" id="test12" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
 		        code += '</td>';
 		        code += '</tr>';
 		        }

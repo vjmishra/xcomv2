@@ -920,6 +920,7 @@
        				 <Or>
        				 </Or>
 					</ComplexQuery>
+					<PricelistHeader PricelistHeaderKey=""/>
 				</PricelistLine>
 			</Input>
 			<Template>

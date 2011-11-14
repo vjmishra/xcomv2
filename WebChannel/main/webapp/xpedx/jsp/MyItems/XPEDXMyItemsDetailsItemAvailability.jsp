@@ -110,7 +110,7 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
 						</s:else>
 						</strong></td>
-						<td class="left" ><s:property value="#jsonUOMDesc" /></td>
+						<td class="left" ><strong><s:property value="#jsonUOMDesc" /></strong></td>
 					</tr>
 					<tr>
 						<td align="center">Next Day:</td>
