@@ -5,6 +5,7 @@
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
@@ -177,30 +178,36 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		
 		List nodesList=YRCXmlUtils.getChildren(userElem, "UserGroupLists/UserGroupList");
 		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
-		for(int i=0;i<nodList.getLength();i++){
-		Element eleCust=(Element) nodList.item(i);
-		Element groupID = YRCXmlUtils.getXPathElement(eleCust, "/UserGroupList/UserGroup");
-		String groupId = groupID.getAttribute("UsergroupId");
 		if(relationShipType != null && relationShipType != "" ){
 			setFieldValue("divisionEntitlement", "Y");
 			getControl("divisionEntitlement").setEnabled(false);
 			custEle.setAttribute("RelationshipType", "Y");
 			setModel("XPXCustomerIn", generalInfo);
-			if (groupId != null && groupId.equalsIgnoreCase("XPXEBusinessAdmin")){
-				
-				getControl("divisionEntitlement").setEnabled(true);	
-			}
+			
 		}
 		else{
 			setFieldValue("divisionEntitlement", "N");
 			getControl("divisionEntitlement").setEnabled(false);
 			custEle.setAttribute("RelationshipType", "N");
 			setModel("XPXCustomerIn", generalInfo);
-			if (groupId != null && groupId.equalsIgnoreCase("XPXEBusinessAdmin")){
-				
-				getControl("divisionEntitlement").setEnabled(true);	
-			}
+			
 		}
+		ArrayList groupIdList = new ArrayList();
+		for(int i=0;i<nodList.getLength();i++){
+		Element eleCust=(Element) nodList.item(i);
+		Element groupID = YRCXmlUtils.getXPathElement(eleCust, "/UserGroupList/UserGroup");
+		String groupId = groupID.getAttribute("UsergroupId");
+		groupIdList.add(groupId);
+		}
+		System.out.println("The group ID is" + groupIdList);
+		if (groupIdList != null && groupIdList.contains("XPXEBusinessAdmin")){
+			
+			getControl("divisionEntitlement").setEnabled(true);	
+		}
+		
+		else {
+			
+			getControl("divisionEntitlement").setEnabled(false);	
 		}
 		
 	}
