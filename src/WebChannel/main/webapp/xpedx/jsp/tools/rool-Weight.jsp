@@ -65,7 +65,7 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 
-<title><s:text name="tools.rollweight.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.rollweight.title" /></title>
 </head>
 <body class="ext-gecko ext-gecko3">
     <div id="main-container">

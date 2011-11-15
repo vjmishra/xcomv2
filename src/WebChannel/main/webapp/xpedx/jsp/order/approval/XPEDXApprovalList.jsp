@@ -82,7 +82,7 @@
 
 
 
-<title><s:text name="orderlist.title"/></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.APPROVALS.GENERIC.TABTITLE"/></title>
 
 <script type="text/javascript" src="../swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
@@ -334,7 +334,7 @@ div.demo {
 				<img src="/swc/xpedx/images/icons/12x12_charcoal_x.png" id="view-all-invoices-btn-close" width="12" height="12" alt="[Close Window]" />
 			</div>
 			<div> 
-				<p> Search all your invoices; you'll be taken to a new screen. </p>
+				<p> <s:text name='MSG.SWC.ORDR.APPROVALS.INFO.INVSEARCH' /> </p>
 			</div>
 		</div>
 		
@@ -356,7 +356,8 @@ div.demo {
 			
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
-			    <legend class="search-legend">Search Orders: Awaiting Approval</legend>
+			   <!--  <legend class="search-legend">Search Orders: Awaiting Approval</legend> -->
+			    <legend class="search-legend">  <s:text name='MSG.SWC.ORDR.APPROVALS.GENERIC.LEGEND' /> </legend>
                         <!-- begin content-holding table -->
                         <table border="0px solid red " cellpadding="0" cellspacing="0" class="full-width line-spacing-tr" id="top-section">
 								<tr>
@@ -561,7 +562,7 @@ div.demo {
 								<td>
 									<s:set name="isPendingApproval" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_LIMIT_APPROVAL')}" />
 									<s:if test='#isPendingApproval'>
-										<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
+										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 									</s:if>
 									<s:else>
 										<s:property value="#parentOrder.getAttribute('Status')" />
@@ -601,7 +602,8 @@ div.demo {
 		 <swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
-			<h2>Approval / Rejection Comments</h2>				    			
+			<!-- <h2>Approval / Rejection Comments</h2>	 -->			    			
+			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
 					<s:textarea name="ReasonText" cols="69" rows="5" theme="simple"></s:textarea>
 					<s:hidden name="OrderHeaderKey" value="" />

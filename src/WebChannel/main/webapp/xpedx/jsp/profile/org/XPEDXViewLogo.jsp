@@ -14,7 +14,7 @@
     The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
 <s:set name='_action' value='[0]'/>
  <title>
-    <s:text name="CustomerProfile"/>
+    <s:property value="wCContext.storefrontId" /> - <s:text name="CustomerProfile"/>
  </title>
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />

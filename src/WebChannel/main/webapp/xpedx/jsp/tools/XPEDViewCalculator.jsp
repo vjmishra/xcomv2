@@ -67,7 +67,7 @@
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 
-<title><s:property value="wCContext.storefrontId" /> / Imposition Calculator</title>
+<title><s:property value="wCContext.storefrontId" /> - Imposition Calculator</title>
 <!-- Webtrend tag starts -->
 <meta name="WT.ti" content="xpedx/Imposition Calculater">
 <!-- Webtrend tag stops --> 

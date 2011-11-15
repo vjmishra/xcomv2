@@ -706,7 +706,7 @@ $(document).ready(function(){
 </s:if>
 <s:else>
 <%-- <span class="red bold">Don’t forget to ‘Checkout’ to apply these changes to your order</span> --%>
-<span class="red bold"> <s:text name='MSG.SWC.ORDR.DRAFTORDRDETAIL.GENERIC.CHKOUTTOAPPLYCHANGES' /> </span>
+<span class="red bold"> <s:text name='MSG.SWC.ORDR.DRAFTORDRDETAIL.GENERIC.CHKOUTMUST.FORCHANGES' /> </span>
 	<s:if test="#canChangeOrderName">
 	<%-- <s:textfield id="cartDesc_new" name='cartDesc_new' id="cartDesc_new" size="50"
 			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'220');"
@@ -1259,24 +1259,24 @@ $(document).ready(function(){
 				 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 					    	<tbody>
 					    		<tr>
-									<td><p class="bold left" style="width:110px">Total Available: </p></td>
-									<td class="text-right">${jsonFmtTotal} </td>
-									<td class="text-left">&nbsp;${jsonUOMDesc}</td>
+									<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
+									<td class="text-right"><strong>${jsonFmtTotal} </strong></td>
+									<td class="text-left"><strong>&nbsp;${jsonUOMDesc}</strong></td>
 					    		</tr>
 					    		<tr>
 									<td><p class="availability-indent">Next Day: </p></td>
 									<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
-									<td class="text-left">&nbsp;</td>
+									<td class="text-left">&nbsp;${jsonUOMDesc}</td>									
 					    		</tr>
 					    		<tr>
 									<td><p class="availability-indent">2+ Days: </p></td>
 									<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
-									<td class="text-left"> &nbsp;</td>
+									<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 					    		</tr>
 					    		<%-- <s:if test="(#divName != null)"> --%>
 					    		<tr>
 									<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
-									<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} available today at ${DivisionName}</p></td> 
+									<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
 							    </tr>
 							    <%-- </s:if> --%>
 						    </tbody>

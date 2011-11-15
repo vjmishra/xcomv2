@@ -51,14 +51,14 @@
 
 				<TABLE width="100%">
 				<TR>
-					<td class="leftmost my-available">Total Available:</td>
-					<td class="my-number">
+					<td class="leftmost my-available"><strong>Total Available:</strong></td>
+					<td class="my-number"><strong>
 					<s:if test='%{#jsonTotal == null}'>
 						<s:set name="jsonTotal" value="%{'0'}" />
 					</s:if>
-					<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
-					</td>
-					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
+						<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
+					</strong></td>
+					<td class="my-uom"><strong><s:property value="#jsonUOMDesc" /></strong></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-timeframe">Next Day:</td>
@@ -68,7 +68,7 @@
 					</s:if>
 					<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" /> 
 					</td>
-					<td>&nbsp;</td>
+					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-timeframe">2+ Days: </td>
@@ -78,15 +78,15 @@
 					</s:if>
 					<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" /> 
 					</td>
-					<td>&nbsp;</td>
+					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-local-availability" colspan="3">
 					<s:if test='%{#jsonImmediate == null}'>
 						<s:set name="jsonImmediate" value="%{'0'}" /> 
 					</s:if>
-					<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> 
-					available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></td>
+					<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />&nbsp;<s:property value="#jsonUOMDesc" />
+					&nbsp;available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></td>
 					
 				</TR>
 				</TABLE>

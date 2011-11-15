@@ -13,7 +13,7 @@
 <swc:html isXhtml="true">
 <head>
  <title>
-    <s:text name="CustomerProfile"/>
+    <s:property value="wCContext.storefrontId" /> - <s:text name="CustomerProfile"/>
  </title>
 <swc:head/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />

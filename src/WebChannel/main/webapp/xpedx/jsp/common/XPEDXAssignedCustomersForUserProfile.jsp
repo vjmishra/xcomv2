@@ -51,7 +51,7 @@
 }
 </style>
 <!-- <title>Choose a Ship To Address Modal</title> -->
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRFU.GENERIC.TABTITLE"/> </title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRF.GENERIC.USERSHIP-TO.DLGTITLE"/> </title>
 
 </head>
 <body>

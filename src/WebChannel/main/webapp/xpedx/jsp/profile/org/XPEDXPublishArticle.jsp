@@ -12,7 +12,7 @@
 <swc:html isXhtml="true">
 <head>
   <swc:head/>
-  <title><s:text name="my.Account.page"/></title>
+  <title><s:property value="wCContext.storefrontId" /> - <s:text name="my.Account.page"/></title>
   <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
   <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/common/notes-list.css'/>" />
   <script type="text/javascript" src="<s:url value='/swc/js/user/userPreferences.js'/>"></script>

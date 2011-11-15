@@ -68,7 +68,7 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 
-<title><s:text name="tools.basiswtconvchart.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.basiswtconvchart.title" /></title>
 <!-- Web trend tag start -->
 <meta name="DCSext.w_x_tools_ti" content="<s:text name="tools.basiswtconvchart.title" />" />
 <!-- Web trend tag end -->

@@ -123,7 +123,7 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />
 						</s:else>
 						</td>
-						<td>&nbsp;</td>
+						<td class="left" ><s:property value="#jsonUOMDesc" /></td>
 					</tr>
 					<tr>
 						<td align="center">2+ Days: </td>
@@ -136,7 +136,7 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />
 						</s:else>
 						</td>
-						<td>&nbsp;</td>
+						<td class="left" ><s:property value="#jsonUOMDesc" /></td>
 					</tr>
 					<tr>
 						<td colspan="3"><i>
@@ -146,7 +146,8 @@
 						<s:else>
 							<s:set name="jsonImmediate" value="%{'0'}"></s:set>
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />
-						</s:else> available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></td>
+						</s:else><s:property value="#jsonUOMDesc" />&nbsp;
+						 available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></td>
 					</tr>
 					<s:hidden name="price_%{#id}" value="%{#jsonMyPrice}" />
 					<s:hidden name='pricingUom_%{#id}' value="%{#jsonPricingUOM}" />

@@ -60,7 +60,7 @@
 		$(document).pngFix();
 	});
 </script>
-<title><s:text name="tools.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></title>
 <!--Webtrends tag starts-->
 <meta name="WT.ti" Content='<s:text name="tools.title" />'>
 <!--Webtrends tag stops-->
@@ -84,7 +84,7 @@
 				
 				
 				 <div  class="padding-bottom3" >
-                	  <span class="page-title"><s:text name="tools.title" /></span><!--  > Commented for jira 1538-->
+                	  <span class="page-title"><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></span><!--  > Commented for jira 1538-->
                 </div>
 				
                	<div class="underlines x-input"> 

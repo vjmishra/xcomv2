@@ -390,7 +390,13 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				}
 				
 				//Added for JIRA 2731
-				String formattedLegacyOrderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
+				String formattedLegacyOrderNumber="";
+				
+				if(legacyOrderNo != null && !legacyOrderNo.equals("")){
+					formattedLegacyOrderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
+				}else {
+					formattedLegacyOrderNumber="In progress";
+				}
 			
 				if((null != formattedLegacyOrderNumber) && !("".equals(formattedLegacyOrderNumber))){
 					if(!chainedFOMap.containsKey(orderHeaderKey))
@@ -399,16 +405,21 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					}
 				}
 
-				else if((null != legacyOrderNo) && !("".equals(legacyOrderNumber))){
+				/*else if((null != legacyOrderNo) && !("".equals(legacyOrderNumber))){
 					if(!chainedFOMap.containsKey(orderHeaderKey))
 					{
 						chainedFOMap.put(orderHeaderKey, legacyOrderNo);						
 					}
-				}
+				} commented for 2731*/
 				
 				if(!isFOCreated && !legacyOrderNumber.equals("")){
 					isFOCreated = true;
 				}
+				
+				//added for 2731
+				/*if(legacyOrderNumber == null || !legacyOrderNumber.equals("")){
+					legacyOrderNumber="In progress";
+				}*/
 				if(!"Cancelled".equals(orderLine.getAttribute("Status"))){
 					if (null != chainedOrderMap
 							&& chainedOrderMap.containsKey(chainedFromOrderLineKey)) {

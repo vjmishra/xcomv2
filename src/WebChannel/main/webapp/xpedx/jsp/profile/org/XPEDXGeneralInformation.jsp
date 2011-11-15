@@ -14,7 +14,7 @@
     The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
 <s:set name='_action' value='[0]'/>
  <title>
-    <s:text name="CustomerProfile"/>
+    <s:property value="wCContext.storefrontId" /> - <s:text name="CustomerProfile"/>
  </title>
  <script language="javascript" type="text/javascript">
 	var hasAccessTo =  '<s:property value="#_action.getIsChildCustomer()" />';

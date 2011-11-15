@@ -208,7 +208,7 @@ ul.checkboxTree li
 
 <s:url id='adminProfile' namespace='/profile/user' action='XPEDXAdminProfile' />
 
-<title><s:text name="admin.billto.title" /></title> 
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="admin.billto.title" /></title> 
 
 </head>
 <!-- END swc:head -->

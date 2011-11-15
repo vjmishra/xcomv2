@@ -62,7 +62,7 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 
-<title><s:text name="tools.reamweight.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.reamweight.title" /></title>
 
 <!-- Webtrend tag starts -->
 <meta name="WT.ti" content="Ream Weight Calculator">

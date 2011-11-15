@@ -50,7 +50,7 @@
 			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />
 			
 				</td>
-				<td>&nbsp;</td>
+				<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>				
 			</tr>
 			<tr>
 				<td class="table_center">2+ Days:</td>
@@ -60,7 +60,7 @@
 			</s:if>
 			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />
 			</td>
-				<td>&nbsp;</td>
+			<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>				
 			</tr>
 		</table>
 		<br/>
@@ -68,8 +68,9 @@
 			<s:if test='%{#jsonImmediate == null}'>
 				<s:set name="jsonImmediate" value="%{'0'}"></s:set>
 			</s:if>
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />
-		available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
+			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> 
+			&nbsp;<s:property value='%{#jsonUOMDesc}' /> 
+			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
 	</div>
 	<div id="pricesDiv">
 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />

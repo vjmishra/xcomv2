@@ -91,7 +91,7 @@ padding: 0px;
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 
-<title><s:property value="wCContext.storefrontId" /> / Imposition Calculator</title>
+<title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> / Imposition Calculator</title>
 </head>
 
 <s:set name='_action' value='[0]' />

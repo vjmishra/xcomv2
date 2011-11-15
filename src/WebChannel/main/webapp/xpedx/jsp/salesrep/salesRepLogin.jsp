@@ -9,8 +9,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- <title>Sales Professional Sign In</title> -->
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.TABTITLE"/> </title>
+ <title>Sales Professional Sign In</title>
+<%-- <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.TABTITLE"/> </title> --%>
 
 <!-- styles 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
@@ -232,7 +232,8 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	
 	</tr>
 	<tr>
-		<td colspan="2"><span color:#999999;"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></span></td>
+		<td colspan="2"><span color:#999999;">Questions: Contact the support desk at 877 269-1784</span></td>
+		<%-- <td colspan="2"><span color:#999999;"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></span></td> --%>
 		
 	</tr>
 </table>
