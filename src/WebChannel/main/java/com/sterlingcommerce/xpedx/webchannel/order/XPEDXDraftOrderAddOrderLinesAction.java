@@ -99,7 +99,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			String items = request.getParameter("itemList");
 			String itemTypes = request.getParameter("itemTypeList");
 			//Modified for JIRA 2995
-			StringTokenizer itemsStringToken = new StringTokenizer(items, ",");
+			StringTokenizer itemsStringToken = new StringTokenizer(items, "*");
 			StringTokenizer itemTypeStringToken = new StringTokenizer(
 					itemTypes, "*");
 			StringBuilder sb = new StringBuilder();

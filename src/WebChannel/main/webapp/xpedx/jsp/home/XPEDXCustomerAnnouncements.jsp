@@ -10,7 +10,7 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='util' />
 
    <!-- <h2>My Company News</h2> -->
-   <h2>  <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.NEWSARTL.MYCOMPANYNEWS.GENERIC.PGTITLE" /> </h2>
+   <h2> <s:text name="MSG.SWC.NEWSARTL.MYCOMPANYNEWS.GENERIC.PGTITLE" /> </h2>
    <div class="news-scrollable">
 	   <s:set name="iter" value="articleLines"/>
 	   <ul class="news-links">

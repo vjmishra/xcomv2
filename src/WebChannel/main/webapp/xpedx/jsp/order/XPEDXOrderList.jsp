@@ -691,13 +691,21 @@
 							<s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
 							<s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" />
 							<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
-							<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-								<s:if test='#isPendingApproval'>
-									<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+							
+							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
+							
+							<s:if test='%{#status != "Cancelled"}'>
+								<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+									<s:if test='#isPendingApproval'>
+										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+									</s:if>
+									<s:if test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+									</s:if>
 								</s:if>
-								<s:if test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-									<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
-								</s:if>
+								<s:else>
+									<s:property value="#parentOrder.getAttribute('Status')" />
+								</s:else>
 							</s:if>
 							<s:else>
 								<s:property value="#parentOrder.getAttribute('Status')" />
@@ -814,31 +822,26 @@
 								<s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
 								<s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" />
 								<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
-								
-								<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-									<s:if test='#isPendingApproval'>
-										<%-- Fix for JIRA 2238 --%>
-										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
-										<%-- Fix for JIRA 2243 <s:text name="Pending Approval"></s:text> --%>
-										<br/>
-										<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
-									 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
-									 	<%--<s:property value="#resolverId"/> and <s:property value="#loggedInUser"/> --%>
-									 	<%--	Using CustomerContactBean object from session
-									 	<s:if test='%{#session.isApprover == "Y" && #resolverId == #loggedInUser}'>
-									 	--%>
-									 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && #resolverId == #loggedInUser}'>
-											<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
-<%-- 											<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{customerOhk}'); " cssClass="grey-ui-btn" tabindex="92" theme="simple"><span>Reject</span></s:a> --%>
-										</s:if><br/>
-									</s:if>
-									<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-									
-										<%-- Fix for JIRA 2238, Needs Attention changed fix for Jira 2435 --%>
-											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
-										<%-- Fix for JIRA 2243 <s:text name="Needs Attention"></s:text> --%>
-									</s:elseif>
-								</s:if> 
+								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
+								<s:if test='%{#status != "Cancelled"}'>
+									<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+										<s:if test='#isPendingApproval'>
+											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+											<br/>
+											<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
+										 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
+										 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && #resolverId == #loggedInUser}'>
+												<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
+											</s:if><br/>
+										</s:if>
+										<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+												<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+										</s:elseif>
+									</s:if> 
+									<s:else>
+										<s:property value='#chainedOrder.getAttribute("Status")' />
+									</s:else>
+								</s:if>
 			                    <s:else>
 									<s:property value='#chainedOrder.getAttribute("Status")' />
 								</s:else></td>

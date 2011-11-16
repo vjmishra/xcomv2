@@ -151,7 +151,7 @@
 		            <s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		            <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#orderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 		            	<s:if test="%{#theMyPrice=='$0.00'}">
-								<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                     	 </s:if>
                          <s:else>
 		              	<%-- <s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #orderLineExtn.getAttribute("ExtnLineOrderedTotal"))'/> --%>

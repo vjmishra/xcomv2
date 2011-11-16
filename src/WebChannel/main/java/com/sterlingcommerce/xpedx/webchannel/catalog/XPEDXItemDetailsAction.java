@@ -233,6 +233,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	@SuppressWarnings("unchecked")
 	private void setMSDSUrls() {
+		//Creating new Map for Jira 2634
+		assetLinkMap = new HashMap<String, String>();
 		if(m_itemListElem!=null) {
 			ArrayList<Element> assetList = new ArrayList<Element>();
 			//Declaring it here.
@@ -254,6 +256,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					String assetType = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Type");
 					String msdsLocation = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentLocation");
 					String msdsContentId = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentID");
+					String msdsAssetId = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "AssetID");
 					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
 					if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
 						 msdsLink = msdsLocation+msdsContentId;
@@ -268,6 +271,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					}
 					if(msdsLinkMap.isEmpty())
 						msdsLinkMap = new HashMap<String, String>();
+						assetLinkMap.put(msdsAssetId, msdsLink);
 						msdsLinkMap.put(msdsLinkDesc, msdsLink);
 				}
 			}

@@ -1862,21 +1862,23 @@ function SubmitActionWithValidation()
 										</s:if>
 										<!-- Jira 2634 - Check if Attribute has Asset -->
 										<s:elseif test="%{#dataType=='TEXT'}">
-										<s:set name='testContentId' value="#xutil.getAttribute(#itemDataSheets[0], 'ContentID')" />
-										<s:set name='testAssetId' value="#xutil.getAttribute(#itemDataSheets[0], 'AssetID')" />
-											<s:hidden name="hdn_testContentId" value="%{#testContentId}"  />
-											<s:hidden name="hdn_testAssetId" value="%{#testAssetId}"  />
-											<s:set name='testContentLocation' value="#xutil.getAttribute(#itemDataSheets[0], 'ContentLocation')" />
-											<s:hidden name="hdn_testContentLocation" value="%{#testContentLocation}"  />
-											<s:set name='URLForAsset' value="#testContentLocation + #testContentId " />
-											<s:if test='%{#testAssetId == #Value}'>
-												<a href="<s:property value='URLForAsset'/>" target="_blank"><s:property value='#xutil.getAttribute(#assignedValue,"Value")'/></a>
-													<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+										<s:set name="found" value="false" />
+										<!-- Adding Iterator assetLinkMap for Jira 2634 -->
+										<s:iterator value="assetLinkMap" id="assetMap" status="status" >
+											<s:set name="link" value="value" />
+											<s:set name="assetId" value="key" />										
+											<s:hidden name="hdn_test" value="%{#assetId}"  />
+											<s:if test='%{#assetId == #Value}'>
+												<a href="<s:property value='#link'/>" target="_blank"><s:property value='#xutil.getAttribute(#assignedValue,"Value")'/></a>
+												<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+												<s:set name="found" value="true" />
 											</s:if>
-											<s:else>
+										</s:iterator>
+										<s:if test="%{#found == false}"> 
 											<s:property value='#xutil.getAttribute(#assignedValue,"Value")'/>
 											<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
-											</s:else>
+										</s:if>
+											
 										</s:elseif>
 										<s:elseif test="%{#dataType=='BOOLEAN'}">
 											<s:property

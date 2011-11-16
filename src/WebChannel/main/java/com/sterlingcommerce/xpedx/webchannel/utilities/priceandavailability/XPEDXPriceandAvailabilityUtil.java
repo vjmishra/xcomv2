@@ -816,7 +816,9 @@ public class XPEDXPriceandAvailabilityUtil {
 							pricingUOM = pandAItem.getPricingUOM();
 							String pricingUOMUnitPrice = pandAItem
 									.getUnitPricePerPricingUOM();
-							BigDecimal pricingUOMPrice = new BigDecimal(pricingUOMUnitPrice);
+							BigDecimal pricingUOMPrice = new BigDecimal(0);
+							if(pricingUOMUnitPrice != null && !"".equals(pricingUOMUnitPrice))
+								pricingUOMPrice = new BigDecimal(pricingUOMUnitPrice);
 							BigDecimal prodWeight = null;
 							BigDecimal priceForCWTUom = null;
 							BigDecimal priceForTHUom = null;

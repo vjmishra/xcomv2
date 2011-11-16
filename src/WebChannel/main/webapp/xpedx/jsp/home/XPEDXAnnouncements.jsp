@@ -11,7 +11,7 @@
 
 
           <%--  <h2><s:property value="wCContext.storefrontId" /> - News</h2> --%>
-           <h2><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.NEWSARTL.XPEDXNEWS.GENERIC.PGTITLE"/> </h2>
+           <h2> <s:text name="MSG.SWC.NEWSARTL.XPEDXNEWS.GENERIC.PGTITLE"/> </h2>
            <s:set name="iter" value="articleLines"/>
            <div class="news-scrollable">
            <ul class="news-links">

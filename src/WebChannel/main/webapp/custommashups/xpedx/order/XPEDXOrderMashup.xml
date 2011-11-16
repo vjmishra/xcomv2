@@ -889,7 +889,6 @@
 						<OrderLine Action="CREATE" OrderedQty="" LineType=""
 							ReservationMandatory="N" ValidateItem="N" CustomerPONo="">
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
-							<Extn ExtnCustLineAccNo="" ExtnEditOrderFlag=""></Extn>
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
 							<Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""

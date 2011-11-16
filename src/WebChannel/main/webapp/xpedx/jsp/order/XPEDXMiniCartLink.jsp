@@ -88,9 +88,13 @@
 <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#orderTotal1)'/>
 			<s:if test="%{#theMyPrice == '$0.00' && #numbrOfItems1 > 0}">
 					<s:set name="isMyPriceZero" value="%{'true'}" />
-					<span class="gray"> TBD </span>  
+					<span class="gray">&nbsp;&nbsp;&nbsp;TBD </span>  
              </s:if>
              <s:else>
-					<s:property value='#currencyCode'/>  <s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#orderTotal1)'/>
+             	&nbsp;&nbsp;&nbsp;
+             	<s:if test='#currencyCode != null && #currencyCode != ""'>
+             		(<s:property value='#currencyCode'/>)
+             	</s:if>
+					  <s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#orderTotal1)'/>
 			 </s:else>
 </s:if>

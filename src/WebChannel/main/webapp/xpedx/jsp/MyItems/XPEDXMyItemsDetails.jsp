@@ -1734,7 +1734,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 
                 <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px;">
                     <li><a style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-                    <li><a class="grey-ui-btn float-right-imp" href="javascript:history.back()"><span>Cancel</span></a></li>
+                    <li><a class="grey-ui-btn float-right-imp" href="javascript:saveAllItems();"><span>Cancel</span></a></li>
                 </ul>
 				
 			</s:else>
@@ -2215,8 +2215,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	
 							<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; ">
 								<li><a  style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-								<li><a class="grey-ui-btn float-right-imp" href="javascript:history.back()"><span>Cancel</span></a></li>
-								
+								<li><a class="grey-ui-btn float-right-imp" href="javascript:saveAllItems();"><span>Cancel</span></a></li>																
 							</ul>
 						</s:if>
 
