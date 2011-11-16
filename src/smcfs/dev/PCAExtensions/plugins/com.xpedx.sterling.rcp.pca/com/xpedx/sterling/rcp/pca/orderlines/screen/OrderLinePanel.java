@@ -2281,7 +2281,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		}
 		
 		tbd = new YRCTextBindingData();
-		if(!YRCPlatformUI.isVoid(lineType) && lineType.equals("M")){
+		if((!YRCPlatformUI.isVoid(lineType) && lineType.equals("M")) || (!YRCPlatformUI.isVoid(lineType) && lineType.equals("C"))){
 			tbd.setSourceBinding("OrderLineTmp:/OrderLine/Item/@ItemShortDesc");}
 		else{
 			tbd.setSourceBinding("OrderLineTmp:/OrderLine/ItemDetails/PrimaryInformation/@ExtendedDescription");

@@ -538,9 +538,12 @@
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementPanel">
         <commands>
             <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="output"/>
         </namespaces>
     </form>
 </forms>

@@ -36,7 +36,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	private String shipToId;
 	private String LegacyOrderNumber;
 	private static String userKey;
-	private String INTERNAL="INTERNAL";
+//	private String INTERNAL="INTERNAL";
 //	private static final String COMMAND_GET_USER_LIST = "XPXGetUserList";
 	private Element outXml ;
 	
@@ -120,7 +120,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	}
 	
 	public void getUserDetails(){
-		String apinames="XPXGetUserList";
+		/*String apinames="XPXGetUserList";
 		
 			
 		YRCApiContext ctx = new YRCApiContext();
@@ -131,7 +131,9 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 		Document doc = YRCXmlUtils.createFromString(("<User Usertype='" + INTERNAL + "' />"));
 		ctx.setInputXml(doc);
 		if (!page.isDisposed())
-			callApi(ctx, page);
+			callApi(ctx, page);*/
+		Element eleUserKey = YRCPlatformUI.getUserElement();
+		userKey = eleUserKey.getAttribute("UserKey");
 	}
 	
 	public Element getTargetModelforParent()
@@ -217,13 +219,13 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 					setOrderedByName(eleCustomerContact);
 					setLegacyOrderNo(eleCustomerContact);
 				}						
-				if ("XPXGetUserList".equals(apiname)) {
+				/*if ("XPXGetUserList".equals(apiname)) {
 					Element eleUserListdetails = ctx.getOutputXml().getDocumentElement();
 					Element eleUserList = YRCXmlUtils.getXPathElement(eleUserListdetails, "/UserList/User");
 					setModel("UserList",eleUserList);
 					userKey=YRCXmlUtils.getAttributeValue(getModel("UserList"), "/User/UserGroupLists/UserGroupList/@UserKey");
 
-				}
+				}*/
        
 			}
         }
@@ -320,13 +322,18 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
             if(userKey !=null && userKey != "") {                
                 encryptedContactId = tripleDes.encrypt(userKey);
                 URLEncodedContactId = URLEncoder.encode(encryptedContactId);
+               // URLEncodedContactId="ymo1uDIdHoyMyGe0VsbFs8pu7gsd4fFb";
             }else{
                 YRCPlatformUI.showError("Invoice_user",YRCPlatformUI.getString("Invoice_user"));
                 return;
             }
             
             if(shipToId !=null && shipToId != "") {                
-                encryptedShipToId = tripleDes.encrypt(shipToId);
+            	String splitShipToId= shipToId;
+            	String[] temp;
+            	String delimiter = "-";
+            	temp = splitShipToId.split(delimiter); 	
+                encryptedShipToId =tripleDes.encrypt(temp[2]);
                 URLEncodedShipToId = URLEncoder.encode(encryptedShipToId);
             }else{
                 YRCPlatformUI.showError("Invoice_shiptoId",YRCPlatformUI.getString("Invoice_shiptoId"));

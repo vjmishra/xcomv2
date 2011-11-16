@@ -1570,16 +1570,16 @@ public class DivisionEntitlementPanel extends Composite implements
 		btnUpdate.setText("Update_Profile");
 		btnUpdate.setLayoutData(gridData16);
 		btnUpdate.setData("name", "btnUpdate");
-		/*
-		 * btnUpdate .addSelectionListener(new
-		 * org.eclipse.swt.events.SelectionAdapter() { public void
-		 * widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
-		 * YRCPlatformUI
-		 * .fireAction("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction"); }
-		 * });
-		 */
+		
+		btnUpdate.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
+				 myBehavior.updateProfile();
+				 
+			
+		}
+	});
+		
 	}
-
 
 	private void createHeaderPnl(String headerTitle , int align){
 		
@@ -2293,12 +2293,12 @@ public class DivisionEntitlementPanel extends Composite implements
 		tbd.setName("txtNAICSName");
 		txtNAICSName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
-		YRCButtonBindingData bbd = new YRCButtonBindingData();
+		/*YRCButtonBindingData bbd = new YRCButtonBindingData();
 		bbd.setName("btnUpdate");
 		bbd.setActionHandlerEnabled(true);
 		bbd
 				.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
-		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
+		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);*/
 
 	}
 

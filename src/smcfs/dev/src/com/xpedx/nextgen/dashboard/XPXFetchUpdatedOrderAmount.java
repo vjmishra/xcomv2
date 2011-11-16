@@ -126,7 +126,7 @@ public class XPXFetchUpdatedOrderAmount implements YIFCustomApi{
 											 Element itemElem = SCXmlUtil.getChildElement(orderlineElem, "Item");
 											 String itemId = itemElem.getAttribute("ItemID");
 											 String penaltyItemId = YFSSystem.getProperty("ItemID");
-											 if(lineType.equals("M") && ((penaltyItemId!=null && itemId.equals(penaltyItemId)) || itemId.equals("&amp;05")))
+											 if(lineType.equals("M") && ((penaltyItemId!=null && itemId.equals(penaltyItemId)) || itemId.equals("/05")))
 											 {
 												 Element extnElem = SCXmlUtil.getChildElement(orderlineElem, "Extn");
 												 if(extnElem!=null){

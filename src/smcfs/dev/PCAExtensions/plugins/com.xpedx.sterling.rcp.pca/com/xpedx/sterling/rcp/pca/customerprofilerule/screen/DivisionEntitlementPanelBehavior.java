@@ -178,7 +178,7 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		
 		List nodesList=YRCXmlUtils.getChildren(userElem, "UserGroupLists/UserGroupList");
 		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
-		if(relationShipType != null && relationShipType != "" ){
+		if(!"null".equalsIgnoreCase(relationShipType) && !"".equalsIgnoreCase(relationShipType)){
 			setFieldValue("divisionEntitlement", "Y");
 			getControl("divisionEntitlement").setEnabled(false);
 			custEle.setAttribute("RelationshipType", "Y");
@@ -239,28 +239,16 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 	}
 	
 	public void updateProfile() {
-		if(!validateFieldsBeforeUpdate())
-			return;
+		
 		targetRulesModel = this.getTargetModel("XPXCustomerOut");
-		targetRulesModel.setAttribute("CustomerKey", customerKey);
-		targetRulesModel = prepareInputWithCustomerInfo(targetRulesModel);
-		String eCSREmail1="";
-		String eCSREmail2="";
-		String eCSR1LoginId="";
-		String eCSR2LoginId="";
-		if(!page.comboECSR.isDisposed()){
-		 eCSREmail1= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);
 		
-		eCSREmail2= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR2") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);
-		
-		eCSR1LoginId= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/@Loginid",XPathConstants.STRING);
+		if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
+			targetRulesModel.setAttribute("RelationshipType", "null");	
 		}
-		if(!page.comboECSR2.isDisposed())
-		eCSR2LoginId= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR2") +"']/@Loginid",XPathConstants.STRING);
-		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECsr1EMailID",eCSREmail1);
-		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECsr2EMailID",eCSREmail2);
-		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECSR",eCSR1LoginId );
-		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECSR2",eCSR2LoginId);
+		
+		targetRulesModel.setAttribute("CustomerKey", customerKey);
+		
+		
 		callUpdateApi();		
 	}	
 	private Element prepareInputWithCustomerInfo(Element targetRulesModel2) {
@@ -304,6 +292,7 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		// TODO Auto-generated method stub
 		return targetRulesModel2;
 	}
+	
 	public void callUpdateApi() {
 			YRCApiContext ctx = new YRCApiContext();
 			ctx.setApiName("manageCustomer");
@@ -312,8 +301,9 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 			ctx.setShowError(false);
 			ctx.setUserData("isRefreshReqd", String.valueOf(false));
 			callApi(ctx, page);
-			((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+			//((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
 	}
+	
 	public String getSuffixType(){
 		return suffixType;
 	}
