@@ -260,6 +260,7 @@ div.demo {
 	<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/approval.css'/>" />
 	<script type="text/javascript">
 	function openNotePanel(id, actionValue,orderHeaderKey){
+		document.forms["approval"].elements["ReasonText"].value = "";
 		DialogPanel.show(id);
 		svg_classhandlers_decoratePage();
 		/* if(actionValue == "Accept")

@@ -528,7 +528,8 @@ $(document).ready(function(){
 </s:if>
 
 <!-- breadcrumb / 'print page' button -->
-<div class="breadcrumb-title" id="breadcumbs-list-name"><span class="page-title">
+<div class="breadcrumb-title" id="breadcumbs-list-name">
+	<span class="page-title">
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		My Cart:&nbsp;
 		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
@@ -975,6 +976,9 @@ $(document).ready(function(){
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
 								  </s:if>
+								  <s:else>
+								  		<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
+								  </s:else>
 								</s:else>
 									<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
@@ -996,7 +1000,7 @@ $(document).ready(function(){
 						 		<td>
 						 		<br/>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="temp_UOM" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
 						 		</s:if>
 						 		</td>
 						 	</tr>
@@ -1006,7 +1010,12 @@ $(document).ready(function(){
 				 <s:if test='%{#session.viewPricesFlag == "Y"}'>
 				 --%>
 				 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				 	<table class="float-right pricing-table">
+				 	<s:if test="#rowStatus.first == true ">
+				 		<table class="float-right pricing-table" style="margin-top:-60px;">
+				 	</s:if>
+				 	<s:else>
+				 		<table class="float-right pricing-table">
+				 	</s:else>
 				 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				 	
 						<tbody>
@@ -1097,7 +1106,7 @@ $(document).ready(function(){
 												  </s:else>
 												</s:else>
 												</td>
-				                            	<td class="text-right" width="147">
+				                            	<td class="text-right" width="147" valign="top">
 					                            	<span class="mil-action-list-wrap-num-span">
 					                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
 														TBD
@@ -1255,7 +1264,7 @@ $(document).ready(function(){
 					
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 			     	<div class="cart-availability text-left">
-			     	<div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div>
+			     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
 				 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 					    	<tbody>
 					    		<tr>
@@ -1886,6 +1895,8 @@ var currentAadd2ItemList = new Object();
 	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
 </s:else>
 </div>
+
+<div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
 </div>
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
@@ -1904,7 +1915,7 @@ var currentAadd2ItemList = new Object();
 <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 	<div class="mil-cart-bg carousel-div">
 	<div>
-	<span class="promotxt">You might also consider</span>
+	<span class="promotxt">You might also consider...</span>
 		<div id="cross-sell" class="float-left">
 		    <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
 		    

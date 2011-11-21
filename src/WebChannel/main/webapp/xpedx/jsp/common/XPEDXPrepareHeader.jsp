@@ -4,7 +4,7 @@
 <%@ taglib prefix="swc" uri="swc"%>
 
 
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" /> -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" /> 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
  <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
   <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	

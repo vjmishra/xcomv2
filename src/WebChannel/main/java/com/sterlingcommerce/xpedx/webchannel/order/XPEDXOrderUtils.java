@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.xpedx.common.comparator.XpedxSortUOMListByConvFactor;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -756,13 +758,17 @@ public class XPEDXOrderUtils {
 								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
 								NodeList uomListNodeList =	wNode.getChildNodes();
 								Node uomListNode = uomListNodeList.item(0);
+								
+								//2964 Start
 								if (uomListNode != null) {
-									NodeList uomNodes =	uomListNode.getChildNodes();
-									int uomNodesLength = uomNodes.getLength();
-									for (int j = 0; j < uomNodesLength; j++) {
-										Node uomNode = uomNodes.item(j);
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
+									Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
+									
+									for (Element uomNode : listOfUOMElements) {
+									
 										if (uomNode != null) {
 											NamedNodeMap uomAttributes = uomNode.getAttributes();
+											//2964 end
 											if (uomAttributes != null) {
 												Node UnitOfMeasure = uomAttributes
 														.getNamedItem("UnitOfMeasure");
@@ -774,12 +780,14 @@ public class XPEDXOrderUtils {
 														long convFactor = Math.round(Double.parseDouble(conversion));
 															wUOMsAndConFactors.put(UnitOfMeasure
 																.getTextContent(), Long.toString(convFactor));
+															
 													}
 												}
 											}
 										}
 									}
 								}
+							
 								itemUomHashMap.put(itemId.getTextContent(), wUOMsAndConFactors);
 							}
 						}
@@ -1716,63 +1724,67 @@ public class XPEDXOrderUtils {
 	}
 	public static void refreshMiniCartDisplay(IWCContext webContext,Element orderElement,boolean readOrderLinesFromStart,int maxElements)
 	{
-		try{
-			ArrayList<Element> majorLineElements = new ArrayList<Element>();
-            NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
-            int length = orderLines.getLength();
-            boolean hasMore = false;
-            if(readOrderLinesFromStart){
-            	for (int i = 0; i < length; i++) {
-                    Element currNode = (Element) orderLines.item(i);
-                    String lineKey = currNode.getAttribute("OrderLineKey");
-                    log.info("linekey-->"+lineKey);
-                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-                    if ( (bundleParentLines.getLength() == 0) &&
-                         (!OrderHelper.isCancelledLine(currNode)) )
-                    {
-                        log.info(lineKey+ " it's major line");
-                        if(majorLineElements.size() == maxElements)
-                        {
-                            // Already have accumulated the maximum number of line items to display.
-                            // Set the "More..." indicator and break out of the loop.
-                            hasMore = true;
-                            break;
-                        }
-                        else
-                        {
-                            // Haven't hit the max number yet, so go ahead and add it to the list.
-                            majorLineElements.add(currNode);
-                        }
-                    }
-                }
-            }
-            else{
-            	for (int i = length-1; i > -1; i--) {
-                    Element currNode = (Element) orderLines.item(i);
-                    String lineKey = currNode.getAttribute("OrderLineKey");
-                    log.info("linekey-->"+lineKey);
-                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-                    if ( (bundleParentLines.getLength() == 0) &&
-                         (!OrderHelper.isCancelledLine(currNode)) )
-                    {
-                        log.info(lineKey+ " it's major line");
-                        if(majorLineElements.size() == maxElements)
-                        {
-                            // Already have accumulated the maximum number of line items to display.
-                            // Set the "More..." indicator and break out of the loop.
-                            hasMore = true;
-                            break;
-                        }
-                        else
-                        {
-                            // Haven't hit the max number yet, so go ahead and add it to the list.
-                            majorLineElements.add(currNode);
-                        }
-                    }
-                }
-            }
-            XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
-            log.info("getOrderDetails end");
+		try
+		{
+				ArrayList<Element> majorLineElements = new ArrayList<Element>();
+				if(orderElement != null)
+				{
+	            NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
+	            int length = orderLines.getLength();
+	            boolean hasMore = false;
+	            if(readOrderLinesFromStart){
+	            	for (int i = 0; i < length; i++) {
+	                    Element currNode = (Element) orderLines.item(i);
+	                    String lineKey = currNode.getAttribute("OrderLineKey");
+	                    log.info("linekey-->"+lineKey);
+	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+	                    if ( (bundleParentLines.getLength() == 0) &&
+	                         (!OrderHelper.isCancelledLine(currNode)) )
+	                    {
+	                        log.info(lineKey+ " it's major line");
+	                        if(majorLineElements.size() == maxElements)
+	                        {
+	                            // Already have accumulated the maximum number of line items to display.
+	                            // Set the "More..." indicator and break out of the loop.
+	                            hasMore = true;
+	                            break;
+	                        }
+	                        else
+	                        {
+	                            // Haven't hit the max number yet, so go ahead and add it to the list.
+	                            majorLineElements.add(currNode);
+	                        }
+	                    }
+	                }
+	            }
+	            else{
+	            	for (int i = length-1; i > -1; i--) {
+	                    Element currNode = (Element) orderLines.item(i);
+	                    String lineKey = currNode.getAttribute("OrderLineKey");
+	                    log.info("linekey-->"+lineKey);
+	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+	                    if ( (bundleParentLines.getLength() == 0) &&
+	                         (!OrderHelper.isCancelledLine(currNode)) )
+	                    {
+	                        log.info(lineKey+ " it's major line");
+	                        if(majorLineElements.size() == maxElements)
+	                        {
+	                            // Already have accumulated the maximum number of line items to display.
+	                            // Set the "More..." indicator and break out of the loop.
+	                            hasMore = true;
+	                            break;
+	                        }
+	                        else
+	                        {
+	                            // Haven't hit the max number yet, so go ahead and add it to the list.
+	                            majorLineElements.add(currNode);
+	                        }
+	                    }
+	                }
+	            }
+	            XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
+	            log.info("getOrderDetails end");
+			}
         } catch (Exception e) {
             e.printStackTrace();
         }

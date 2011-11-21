@@ -751,7 +751,7 @@ from session . We have customer Contact Object in session .
 						<table>
 							<tr>
 									<td colspan="1">
-										<div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div>
+										<div class="mandatory" id="requiredCustomerPOErrorDiv-old" style="display:none;">PO #: is required field</div>
 									</td>
 								</tr>
 							</table>
@@ -1046,9 +1046,9 @@ from session . We have customer Contact Object in session .
 														<s:set name="inventoryChk" value="value" />
 														<s:set name="itemID1" value="key" />
 													 <s:if test='#itemID1 == #itemID3'>
-															<s:if test='%{#inventoryChk !="Y"}'>
+															<%-- <s:if test='%{#inventoryChk !="Y"}'>
 																<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-															</s:if>
+															</s:if> --%>
 														</s:if>	 
 													</s:iterator>
 												</s:if>
@@ -1056,7 +1056,7 @@ from session . We have customer Contact Object in session .
 			                        	</tr>
 			                        </s:if> 
                         	
-		                        	<s:else>
+		                        	<s:else> <!--  not first item -->
 		                        			
 	                        			<s:if test='#orderLine.getAttribute("LineType") !="C"'>
 	                        			<tr><td colspan=4 class="center">&nbsp;</td></tr>
@@ -1105,6 +1105,23 @@ from session . We have customer Contact Object in session .
 						<s:hidden name="uom" id="uom_%{#orderLineKey}" value="%{#uom}" /> 
 						<s:hidden name="itemId" id="itemId_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
 						<s:hidden name="orderLineKeyLists" id="orderLineKeyLists_%{#orderLineKey}" value="%{#orderLineKey}" /> 
+						
+						<!-- PURMA check if condition... not working? -->
+						<s:if test='%{#inventoryChk !="Y"}'>
+							<tr>
+								<td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td colspan="2" style="text-align:right;"> 
+								
+									<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+								
+								</td>
+							</tr>
+						</s:if>
+						
 						</tbody>
 				 	</table>
 				 	<div class="mill-discount-text">
@@ -1185,7 +1202,7 @@ from session . We have customer Contact Object in session .
 							
 						</s:if>
 			    	</div>
-			    	<div class="special-instructions-div">
+			    	<div class="special-instructions-div" id="checkout-special-instructions">
 			    		<s:if test='#lineNotes.getAttribute("InstructionText") != ""'>
 			    		<p class="special-instructions-padding">Special Instructions:
 			    		<div class="checkout-special-instructions">
@@ -1291,12 +1308,20 @@ from session . We have customer Contact Object in session .
 						value='%{#orderDetails}' /> <s:set name='showAddButton'
 						value='%{true}' /> <s:url id='deleteUrlId' action="deleteCoupon" />
 					<s:url id='addCouponUrlId' action="xpedxaddCoupon" />
-					<b><font color="red"><s:property value="couponOperationError" /></font></b></div>
+					<%-- <b><font color="red"><s:property value="couponOperationError" /></font></b> --%>
+					 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
+			
+					</div>
 				</s:if>
 					<input id='couponID' name='couponID' type="text" /> <a class="grey-ui-btn" style="float: right;" href="javascript:setCustomerPONumber();addCoupon('<s:property value="%{#addCouponUrlId}"/>')"><span>Apply</span></a>
 			
 				</fieldset>
 			</div>
+			<%-- 
+			 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
+			 --%>
+			<%-- <div id="msgForCouponCode" style="display: none;" class="error" > <s:property value="couponOperationError" /> </div> --%>
+			
 			<script type="text/javascript">
 				Ext.onReady(function(){             	          		 
 		         		  new Ext.ToolTip({        
@@ -1446,6 +1471,11 @@ from session . We have customer Contact Object in session .
 		</div>
 		<!-- class="checkout-body" -->
 		</div>
+		
+		<!-- <div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div> -->
+		<div id="requiredCustomerPOErrorDiv" style="display: none;  float: right; margin-right: 28px; margin-top: 5px;" class="error" >PO #: is required field</div>
+
+  
 <!-- class="container" -->
 		
 		

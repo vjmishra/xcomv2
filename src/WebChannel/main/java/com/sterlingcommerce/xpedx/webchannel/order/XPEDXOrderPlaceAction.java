@@ -1,6 +1,6 @@
 /*
  *ajindal
- *$Id: XPEDXOrderPlaceAction.java,v 1.27 2011/11/11 05:38:57 rghare Exp $
+ *$Id: XPEDXOrderPlaceAction.java,v 1.29 2011/11/17 08:23:07 rghare Exp $
  *
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -166,10 +167,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
 				Element input = WCMashupHelper.getMashupInput("XPEDXOrderDetailForOrderUpdate", valueMap, wcContext.getSCUIContext());
 				Object obj;
-				Document orderDetailDocument = null;
+				Document orderDetailDocument = null;				
 				
-				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
-				wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
 				try {
 					obj = WCMashupHelper.invokeMashup("XPEDXOrderDetailForOrderUpdate", input, wcContext.getSCUIContext());
 					if(!YFCCommon.isVoid(obj)){
@@ -229,6 +228,13 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					log.error("Exception posting the order update to Legacy system..\n",e);
 					return FAILURE;
 				}
+				
+				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
+				if(YFCCommon.isVoid(generatedErrorMessage))
+				{
+					wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
+				}
+				
 				//the output required for the confirmation page; do the necessary getCompleteOrderDetails call.
 				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);				
 				ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
@@ -251,6 +257,42 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	{
 		ArrayList<Element> outputOrderLineNodeList=SCXmlUtil.getElements(outputDoc,"OrderLines/OrderLine");
 		Iterator<Element> outputIt=outputOrderLineNodeList.iterator();
+		
+		//Keeping only latest instructions
+		ArrayList<Element> instructionsNodeList=SCXmlUtil.getElements(outputDoc,"Instructions/Instruction");
+		if(!YFCCommon.isVoid(instructionsNodeList))
+		{
+			double maxInstructionDetailsKey=0;
+			Element instructionsElem=(Element)outputDoc.getElementsByTagName("Instructions").item(0);
+			instructionsElem.setAttribute("NumberOfInstructions", "1");
+			for(int i=0;i<instructionsNodeList.size();i++)
+			{
+				Element instuctionElem=instructionsNodeList.get(i);
+				String instructionKey=instuctionElem.getAttribute("InstructionDetailKey");
+				
+				if(!YFCCommon.isVoid(instructionKey))
+				{
+					double _instructionKey=Double.parseDouble(instructionKey);
+					if(_instructionKey < maxInstructionDetailsKey)
+					{
+						instructionsElem.removeChild(instuctionElem);
+					}
+					else
+					{
+						maxInstructionDetailsKey=_instructionKey;
+					}
+					
+				}
+				else if(maxInstructionDetailsKey != 0)
+				{
+					
+					instructionsElem.removeChild(instuctionElem);
+				}
+				
+			}
+		}
+		
+		
 		Element pendingChangeElem=(Element)outputDoc.getElementsByTagName("PendingChanges").item(0);
 		if(YFCCommon.isVoid(pendingChangeElem))
 		{

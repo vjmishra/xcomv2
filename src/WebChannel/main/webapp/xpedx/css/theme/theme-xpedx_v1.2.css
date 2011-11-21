@@ -1889,6 +1889,8 @@ product list page: catalogExt.jsp
 	font-size: 0.9em;
 	font-weight: normal;
 	text-align: left;
+	display: inline-block;
+	width: auto;
 }
 /* This is the style for page level error message displayed at the top of the page */
 .pageErrorMessage {
@@ -2958,6 +2960,14 @@ textarea,input {
 	margin: 20px 0 0 0;
 }
 
+.xpedx-light-box p.less-margin {
+		margin: 10px 0 0 0;
+	}
+.inline-image {
+	display:inline; 
+	margin-bottom: -5px;
+}
+
 #lightbox-table tr {
 	border-top: 1px solid #D7D7D7;
 }
@@ -3770,13 +3780,13 @@ input.xpedx_select_sm,xpedx_select_sm {
 }
 
 .advertisement,#right-col-int a img {
-	margin-left: 25px;
+	/* margin-left: 25px; */
 }
 
 .promotxt {
 	color: #000;
 	font-weight: bold;
-	padding-left: 18px;
+	padding-left: 0px;
 }
 
 .pageresults {
@@ -3894,7 +3904,6 @@ td .inner {
 #right-col-int {
 	width: 185px;
 	margin-left: 5px;
-	margin-top: -40px;
 	float: left;
 }
 
@@ -4419,7 +4428,7 @@ td .inner {
 	-moz-border-radius: 6px 6px 6px 6px;
 	-webkit-border-radius: 6px 6px 6px 6px;
 	border-radius: 6px 6px 6px 6px;
-}
+
 }
 
 .response-msg {
@@ -4453,37 +4462,45 @@ td .inner {
 /* Message Type */
 .error {
 	background-color: #F9E5E6;
-	border: 1px solid #E8AAAD;
+	border: 1px solid #B50007;
 	color: #B50007;
 	padding-left: 5px;
 	padding-right: 5px;
-}
-
-.temp_UOM {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	background-color: #F9F9E5; 
-    border: 1px solid #828400; 
-    color: #828400; 
-    padding-left: 5px;
-	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
 }
 .notice {
 	background-color: #F9F9E5;
-	border: 1px solid #E8E3AA;
+	border: 1px solid #828400;
 	color: #828400;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
 }
 
 .inf {
 	background-color: #E5ECF9;
-	border: 1px solid #AAC6E8;
+	border: 1px solid #0055B5;
 	color: #0055B5;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
 }
 
 .success {
 	background-color: #E9F9E5;
-	border: 1px solid #B4E8AA;
+	border: 1px solid #1C8400;
 	color: #1C8400;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
 }
 /* Message Icons */
 .icon {
@@ -6360,12 +6377,16 @@ div.catalog-search-container input#search_searchTerm {
 	margin-left: -6px;
 }
 
+.promo-txt p.short-description {
+	max-height: auto;
+}
+
 .short-description {
 	color: #003399;
 	font-weight: bold;
 	cursor: pointer;
 	height: auto;
-	max-height: 59px;
+	max-height: 200px;
 }
 
 .eleven {
@@ -6387,7 +6408,7 @@ td.stores-cell img {
 	height: 225px;
 }
 .mil-only .mil-wrap-condensed {
-/* 	border-bottom: 1px solid #cccccc; */
+ 	border-bottom: 1px solid #cccccc; 
 	}
 	
 .mil-only.mil-wrap-condensed-container.last {

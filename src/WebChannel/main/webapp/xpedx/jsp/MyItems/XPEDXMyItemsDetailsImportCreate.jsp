@@ -7,7 +7,7 @@
     <head>
         <swc:head />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title><s:text name='Items' /></title>
+        <title><s:property value="wCContext.storefrontId" /> - <s:text name='Items' /></title>
         <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
         <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/advancedSearch.css"/>
         <script type="text/javascript">

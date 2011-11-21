@@ -74,7 +74,13 @@ function addItemToCart(itemId) {
 							Ext.MessageBox.hide(); 
 							//alert("Successfully added item "+itemId+" with quantity "+qty+" and Unit of Measure "+selectedUomText+" to the cart");
 							document.getElementById('Qty_Check_Flag_'+itemId).value = false;
-							document.getElementById('errorMsgForQty_'+itemId).style.display = "none";
+							//Succesfully Added to Cart Info message
+						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Successfully added to cart" ;
+						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
+					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
+						
+							
 							document.getElementById('Qty_'+itemId).value = "";
 							 //-- Web Trends tag start --
 							 //var selCart = document.getElementById("draftOrders");
@@ -110,7 +116,8 @@ function addItemToCart(itemId) {
 			{
 			var selectedUom = uomList.options[uomList.selectedIndex].value;
 			var url = document.getElementById('checkAvailabilityURLId').value;
-			Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); 
+			/*Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); */
+			Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
 			Ext.Ajax.request({
 	            url: url,
 	            params: {

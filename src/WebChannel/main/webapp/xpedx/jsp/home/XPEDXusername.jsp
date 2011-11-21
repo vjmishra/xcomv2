@@ -91,7 +91,8 @@ function usernameSubmit(){
     if(usernameField.value.trim().length == 0)
     {
        // errorDiv.innerHTML = "Please enter a value for "+ usernameField.title +" field.";
-        errorDiv.innerHTML = "Username is required.";
+       // errorDiv.innerHTML = "Username is required.";
+        errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.FORGOTPASSWORD.ERROR.USERNAMEREQ' />";
         usernameField.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
         return returnval;

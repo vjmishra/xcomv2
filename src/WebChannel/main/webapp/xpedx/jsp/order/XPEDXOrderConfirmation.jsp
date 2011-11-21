@@ -106,7 +106,7 @@
 
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" />
-<title><s:text name="orderlist.title"/></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="orderlist.title"/></title>
 
 <script type="text/javascript" src="../swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->

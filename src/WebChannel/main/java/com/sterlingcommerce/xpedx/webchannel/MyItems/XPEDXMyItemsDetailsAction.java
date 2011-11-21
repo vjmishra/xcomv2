@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -547,35 +548,40 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			/*
 			 * getting all the items UOMs at the same time using a complex query
 			 */
-			itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
-			
-			if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
+			itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(
+					wcContext.getCustomerId(), allItemIds,
+					wcContext.getStorefrontId());
+
+			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemIdsUOMsMap.keySet());
 				Iterator<String> iterator = itemIdsList.iterator();
-				while(iterator.hasNext()) {
+				while (iterator.hasNext()) {
 					String itemIdForUom = iterator.next();
 					Map uommap = itemIdsUOMsMap.get(itemIdForUom);
-					ArrayList<String> uomKeys = new ArrayList<String>();
-					uomKeys.addAll(uommap.keySet());
-					Iterator<String> uomIterator = uomKeys.iterator();
-					Map<String, String> newUomMap = new HashMap<String, String>();
-					while(uomIterator.hasNext()) {
-						String uom = uomIterator.next();
-						String convFactor = (String) uommap.get(uom);
-						long convFac = Math.round(Double.parseDouble(convFactor));
-						if(1 == convFac) {
-							newUomMap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
+					Set<Entry<String, String>> set = uommap.entrySet();
+					for (Entry<String, String> entry : set) {
+						String uom = entry.getKey();
+						String convFactor = (String) uommap.get(entry.getKey());
+						long convFac = Math.round(Double
+								.parseDouble(convFactor));
+
+						if (1 == convFac) {
+							uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
+						} else {
+							// -FXD- adding space between UOM & Conversion
+							// Factor
+							uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)
+									+ " (" + convFac + ")");
 						}
-						else {
-							// -FXD- adding space between UOM & Conversion Factor
-							newUomMap.put(uom, XPEDXWCUtils.getUOMDescription(uom)+" ("+convFac+")" );
-						}
+
 					}
-					
-					itemIdsUOMsDescMap.put(itemIdForUom, newUomMap);
+
+					itemIdsUOMsDescMap.put(itemIdForUom, uommap);
+
 				}
 			}
+
 			/*
 			 * This is set in the method setItemDocAndInventoryMap() and the item extn elements are set in the Map xpedxItemIDToItemExtnMap
 			 * getAlternativeItems();

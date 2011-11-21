@@ -540,7 +540,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	}
 
 	public boolean isViewInvoices(){
-		return (getViewInvoices().equalsIgnoreCase("Y")||getViewInvoices().equalsIgnoreCase("T"))?true:false;
+		return ("Y".equalsIgnoreCase(getViewInvoices()))?true:false;
 	}
 	
 	public Map getUserStatusMap(){
@@ -1859,7 +1859,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	private String estimator = "F";
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
-	private String viewInvoices = "F";
+	private String viewInvoices = "N";
 
 	private Map b2bCatalogViewMap;
 	private String defaultB2bCatalogView;

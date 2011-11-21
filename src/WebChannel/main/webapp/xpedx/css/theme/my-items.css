@@ -204,9 +204,9 @@ input:focus, textarea:focus {
 } */
 .jcarousel-container a
 {
-	color: #333;
+	color: #003399;
 	float: left;
-	font-size: 10px;
+	font-size: 12px;
 	margin-right: 21px;
 	padding-right: 10px;
 	border-right: 1px solid #ccc;

@@ -87,7 +87,7 @@
 							<s:if test='%{#disUOM !=" "}'>
 							<s:if test="#disUOMStatus.first">
 							<tr>
-										<td class="bold">My Price (USD):</td>
+										<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
 										<td>
 										 	<s:if test="%{#formattedUnitpriceForUom==#priceWithCurrencyTemp1}">
 														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
@@ -119,10 +119,10 @@
 							</tr>
 							<s:set name='formattedExtpriceForUom'	value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currency,#unitPriceForUOM,#showCurrencySymbol)' />
 							<tr >
-								<td class="bold">Extended Price (USD):</td>
+								<td class="bold">Extended Price (<s:property value='priceCurrencyCode'/>):</td>
 								<td >
 								<s:if test="%{#formattedExtpriceForUom==#priceWithCurrencyTemp}">
-										<span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 								</s:if>
 								<s:else>
 									     <s:property value='%{#formattedExtpriceForUom}' />
@@ -146,7 +146,7 @@
 					<s:set name='UOMDesc' value='%{#UOM.substring(2,(#UOM.length()))}'/>
 					<s:set name='cost' value='%{getItemCost()}' />
 					<s:set name='formattedCost' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#cost,#showCurrencySymbol)' />
-						<td class="bold">Cost (USD):&nbsp;<a id="show-hide" onclick="return showCost(this);" href="#">[Show]</a></td><td id="cost" style="display:none"> <s:property value='%{#formattedCost}' /> / <s:property value='UOMDesc'/></td>
+						<td class="bold">Cost (<s:property value='priceCurrencyCode'/>):&nbsp;<a id="show-hide" onclick="return showCost(this);" href="#">[Show]</a></td><td id="cost" style="display:none"> <s:property value='%{#formattedCost}' /> / <s:property value='UOMDesc'/></td>
 					</tr>
 				</s:if>
 				<tr>
@@ -157,27 +157,55 @@
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 					<s:if test="isBracketPricing == 'true'">
 						<tr>
-							<td class="table_left bold" colspan="2">My Bracket Pricing (USD):</td>
-						</tr>
-						<s:iterator value='bracketsPricingList' id='bracket' status='bracketStatus'>
-							<s:set name='currency' value='priceCurrencyCode'/>
-							<s:set name="bracketPriceForUOM" value="bracketPrice" />
-							<s:set name='formattedBracketpriceForUom' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#bracketPriceForUOM,#showCurrencySymbol)' />
-							<s:set name="bracketUOMDesc" value="bracketUOM" />
-							<s:set name='formattedbracketUOM'
-									value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
-	
-							<tr id="right-aligned">
-								<td colspan="2">
-									<s:property value="bracketQTY" /> 
-									<s:property value="%{#formattedbracketUOM}" /> 
-									- 
-									<s:property value='%{#formattedBracketpriceForUom}' />
-									/
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
-								</td>
+							<td colspan="1" class="bold" colspan="2">My Bracket Pricing (<s:property value='priceCurrencyCode'/>):</td>
+							<s:set name="isMyPriceZero" value="%{'false'}" />
+						<s:if test="displayPriceForUoms.size()>0" >					
+							<s:iterator value='displayUOMs'	id='disUOM' status='disUOMStatus'>
+								<s:if test="#disUOMStatus.last">
+									<s:set name="unitPriceForUOM" value='%{displayPriceForUoms.get(#disUOMStatus.index)}' />
+									<s:set name='formattedExtpriceForUom'	value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currency,#unitPriceForUOM,#showCurrencySymbol)' />
+									<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
+									<s:if test="%{#formattedExtpriceForUom != #priceWithCurrencyTemp}">
+										<s:iterator value='bracketsPricingList' id='bracket' status='bracketStatus'>
+											<s:set name='currency' value='priceCurrencyCode'/>
+											<s:set name="bracketPriceForUOM" value="bracketPrice" />
+											<s:set name='formattedBracketpriceForUom' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#bracketPriceForUOM,#showCurrencySymbol)' />
+											<s:set name="bracketUOMDesc" value="bracketUOM" />
+											<s:set name='formattedbracketUOM'
+													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+											<s:if test="#bracketStatus.first">
+												<s:set name="isMyPriceZero" value="%{'true'}" />
+												<td>
+														<s:property value="bracketQTY" /> 
+														<s:property value="%{#formattedbracketUOM}" /> 
+														- 
+														<s:property value='%{#formattedBracketpriceForUom}' />
+														/
+														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
+													</td>
+												</tr>											
+											</s:if>
+											<s:else>
+												<tr>
+													<td>&nbsp;</td>						
+													<td>
+														<s:property value="bracketQTY" /> 
+														<s:property value="%{#formattedbracketUOM}" /> 
+														- 
+														<s:property value='%{#formattedBracketpriceForUom}' />
+														/
+														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
+													</td>
+												</tr>
+											</s:else>											
+										</s:iterator>
+									</s:if>	
+								</s:if>
+							</s:iterator>
+						</s:if>
+						<s:if test="%{#isMyPriceZero == 'false'}">
 							</tr>
-						</s:iterator>					
+						</s:if>
 					</s:if>
 				</s:if>
 				</tbody>

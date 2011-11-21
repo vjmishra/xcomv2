@@ -370,7 +370,6 @@
 		<action name="approvalAction" class="com.sterlingcommerce.xpedx.webchannel.order.approval.XPEDXOrderApprovalAction">
 			<param name="mashups">orderApproval</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderApprovalAction_binding.xml</param>
-			<param name="validationClass">com.sterlingcommerce.webchannel.order.approval.OrderApprovalValidation</param>
 			<param name="resourceId">/swc/order/approvals</param>
 			<result name="success" type="redirectAction">
 				<param name="actionName">approvalList</param>

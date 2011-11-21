@@ -172,10 +172,10 @@
             <div id="inline1" class="xpedx-light-box">
            <!-- <div style=" float:right; text-align:right; margin-top:-5px;" >User Search: <input name="textfield" type="text" class="x-input" style="width:120px; margin-bottom:15px;" id="textfield" />  <button type="submit" id="newSearch_0" value="Submit" class="searchButton"></button>     </div>  -->
 <h2><span style="margin:0px;">My Users</span></h2> 
-<p>   **Denotes an Admin User</p>
+<p class="less-margin">  <img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
    <!-- <div class="paginationContainer">-- pagination control -->
-       <span style="float:right; margin-right:3px;"> <span class="bold">Page</span>&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true"/></span>
-   
+       <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page</span>&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true"/></span>
+   </p>
        <!--</div> -->
 
 <div class="clearview">&nbsp;<br /></div>  
@@ -225,13 +225,13 @@
 
 						<tr>
 						<td class="left-cell">
-							<div style="width:175px; word-wrap:break-word;">
+							<div style="width:200px; word-wrap:break-word;">
 								<input type="radio" onchange="javascript:setSelectedUrl('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />');" name="selectRadio" id="selectRadio"/>
-							
-							&nbsp;&nbsp;<s:property value='%{#userList.getAttribute("CustomerContactID")}'/>
-								<s:if test="#_action.isAdminMap.get(#userList.getAttribute('CustomerContactID'))">
-									**
+															<s:if test="#_action.isAdminMap.get(#userList.getAttribute('CustomerContactID'))">
+									<img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" />
 								</s:if>
+							&nbsp;<s:property value='%{#userList.getAttribute("CustomerContactID")}'/>
+
 						  </div> </td>
 							<td ><div>	
 							    <%--Removing test per UI Blitz requirement --%>							
@@ -279,7 +279,6 @@
               </div>  
              
             </div>
-             <br/>
 </div>	
  	<!--
  	<div id="table-bottom-bar">
@@ -287,7 +286,7 @@
     	<div id="table-bottom-bar-R"></div>
     </div>-->
     
-        <div class="paginationContainer" style="margin-right: 13px;"><!-- pagination control -->
+        <div class="paginationContainer " style="margin-right: 13px; margin-bottom: 10px; margin-top: 0px;"><!-- pagination control -->
         <span class="bold">Page</span>&nbsp;
         <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true"  divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true" /> 
     </div><br/>

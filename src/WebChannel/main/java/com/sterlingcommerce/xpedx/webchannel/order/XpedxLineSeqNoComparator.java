@@ -26,8 +26,16 @@ public class XpedxLineSeqNoComparator implements Comparator<Element> {
 		if(YFCCommon.isVoid(elem1ExtnLegacyOrderNo)){
 		return -1;
 		}
-		int op = elemExtnLegacyOrderNo.compareTo(elem1ExtnLegacyOrderNo);
-		return op;
+		int legacyLineNo=Integer.parseInt(elemExtnLegacyOrderNo);
+		int legacyLineNo1=Integer.parseInt(elem1ExtnLegacyOrderNo);
+		if(legacyLineNo > legacyLineNo1)
+			return 1;
+		else if(legacyLineNo < legacyLineNo1)
+			return -1;
+		else
+			return 0;
+		//int op = elemExtnLegacyOrderNo.compareTo(elem1ExtnLegacyOrderNo);
+		//return op;
 	}
 
 	

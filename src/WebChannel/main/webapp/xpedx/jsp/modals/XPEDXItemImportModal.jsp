@@ -50,7 +50,7 @@
 					<!-- Please enter file path -->
 					<s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.FILEPATH" />
 				</div></center>
-			<p>When the file is imported, it adds the items to the My Items List in the exact order they were entered in the file. When an item is added to an existing My Items List, it simply adds the item to the bottom of the current list. </p>
+			<p>Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.</p>
         	
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}"></s:hidden>

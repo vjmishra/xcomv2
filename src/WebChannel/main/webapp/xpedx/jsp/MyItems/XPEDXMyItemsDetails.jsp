@@ -379,7 +379,6 @@ function showSharedListForm(){
 		
 		function importItems(msgImportMyItemsError){
 			
-			//alert("importItems is called ...");
 			
 			//Clears previous messages if any
 			clearPreviousDisplayMsg()
@@ -435,6 +434,28 @@ function showSharedListForm(){
             
 				return;	
 			}
+		}
+		
+		
+		
+		//Resets the Messages and calls the actual javascript function
+		function myUpdateSelectedPAA( ){
+			
+			//Clear previous messages if any
+			clearPreviousDisplayMsg();
+			javascript:updateSelectedPAA( );
+		}
+		
+		
+
+		
+		
+		//Resets the Messages and calls the actual javascript function
+		function myAddItemToCart(itemId, id){
+			
+			//Clear previous messages if any
+			clearPreviousDisplayMsg();
+			javascript:addItemToCart(itemId, id );
 		}
 		
 		function add2List(){
@@ -718,6 +739,8 @@ function showSharedListForm(){
 	
 		function addToCart(){
 
+			clearPreviousDisplayMsg();
+			
 			resetQuantityError();
 			 if(validateOrderMultiple(false,null) == false)
 			 {
@@ -871,6 +894,8 @@ function showSharedListForm(){
 				var divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
 				
+				divVal.setAttribute("class", "error");
+				
 				if((arrQty[i].value == '0' || arrQty[i].value== '' ) && isOnlyOneItem == true)
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
@@ -881,9 +906,12 @@ function showSharedListForm(){
 						errorflag= false;
 					}
 					else{
+						//Display Generic Message at Header level first then Update Line Level message.
+						displayMsgHdrLevelForLineLevelError ();
 						/* divVal.innerHTML='Qty Should be greater than 0'; */
 						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
 						divVal.style.display = 'block';
+						
 						errorflag= false;
 					}
 				}
@@ -1098,6 +1126,18 @@ function showSharedListForm(){
 		
 
 
+		function displayMsgHdrLevelForLineLevelError() {
+			//var msgGenericForLineLevelErrors = "Error occurred in One of the Line, Please Correct";
+			var msgGenericForLineLevelErrors = "<s:text name='MSG.SWC.MIL.GENHDRLEVELMSG.ERROR.LINELEVELERROS' />";
+			document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").innerHTML = msgGenericForLineLevelErrors ;
+            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").style.display = "inline";
+
+			document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").innerHTML = msgGenericForLineLevelErrors ;
+            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").style.display = "inline";
+			
+		}
+		
+		
 		function updateSelectedPAA() {
 			// alert("updateSelectedPAA" );
 
@@ -1210,7 +1250,7 @@ function showSharedListForm(){
 			document.getElementById("msgForPriceAndAvailabilityTop").innerHTML = defaultMsg ;
 			document.getElementById("msgForPriceAndAvailabilityTop").style.display = "none";
 			
-			document.getElementById("msgForPriceAndAvailabilityBottom").innerHTML = defaultMsg ; ;
+			document.getElementById("msgForPriceAndAvailabilityBottom").innerHTML = defaultMsg ; 
             document.getElementById("msgForPriceAndAvailabilityBottom").style.display = "none";
 			
             
@@ -1219,14 +1259,21 @@ function showSharedListForm(){
 			
 			document.getElementById("msgForMILImportBottom").innerHTML = defaultMsg ; ;
             document.getElementById("msgForMILImportBottom").style.display = "none";
-	
+        
+        	document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").innerHTML = defaultMsg ; ;
+            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").style.display = "none";
+        
+         	document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").innerHTML = defaultMsg ; ;
+            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").style.display = "none";
             
 		}
 		
 	</script>
-<%-- 
+ 
+
 <script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
- --%>
+ 
+
 </head>
 <!-- Hemantha -->
 <body class="  ext-gecko ext-gecko3">
@@ -1437,7 +1484,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			</s:if>
 
             <div id="mid-col-mil">
-                                <div class="ad-float">
+           		 	<s:if test='editMode != true'> 
+                        <div class="ad-float">
                         <div class="float-left smallBody">
 						
 						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="/swc/xpedx/images/mil/ad-arrow.gif" width="7" height="4" alt="" />advertisement</div>
@@ -1534,6 +1582,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 			<!-- Ad Juggler Tag Ends -->
 </div>
+</s:if>
 		 	<s:if test='editMode != true'> 
                 <div class="mil-edit">
 
@@ -1544,7 +1593,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                 <fieldset class="mil-non-edit-field">
                     <legend>For Selected Items:</legend>
                     <input class="forselected-input" type="checkbox" id="selAll1"/>
-                    <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
+                   <%--  <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
+                    <a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
                 </fieldset>
 
                 <ul id="tool-bar" class="tool-bar-bottom" style="width:403px; float:left; padding-top:5px; margin-left:9px;">
@@ -1567,7 +1617,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                 </ul>
 			</s:if>
 			<s:else>
-				<div id="mil-edit" class="mil-edit">
+				<div id="mil-edit" class="mil-edit" style="width:100%">
                     <div id="quick-add" class="quick-add float-right">
                         <div class="clear">&nbsp;</div>
 						<s:hidden id="mandatoryFieldCheckFlag_quick-add" name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
@@ -1702,10 +1752,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                         <br />
                           <p >Description</p>
 						<s:if test="%{#disableListNameAndDesc == true}">
-							<textarea class="x-input" id="listDesc" disabled="disabled" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; word-wrap:break-word;"><s:property
+							<textarea class="x-input" id="listDesc" disabled="disabled" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; height: 92px; word-wrap:break-word;"><s:property
 							value="listDesc"   /></textarea>
 						</s:if><s:else>
-							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; word-wrap:break-word; "><s:property
+							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; height: 92px; word-wrap:break-word; "><s:property
 							value="listDesc"  /></textarea>
 						</s:else>
                     </div>
@@ -1774,13 +1824,24 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
          
                  
                <ul style="float:center;text-align: center; background-color:white !important;">
-                 <li>   
+                 <li style="margin-bottom: 5px;">   
                  <div class="clearall"></div>
-                    <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>           
+                <!--    
+                    <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>       
+                    <div  id="msgDisplayGenericAtHeaderLevelForLineLevelErrorTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>    
                     <div  id="msgForMILImportTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
                     <div  id="msgForRemoveFunctionalityTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
 					<div  id="msgForPriceAndAvailabilityTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
-					<s:if test="%{errorMsg == 'ItemsOverLoad'}">
+			 -->		
+			        <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>       
+			        <div class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorTop" style="display:none;" ></div>       
+			        <div class="error" id="msgForMILImportTop" style="display:none;" ></div>       
+			        <div class="error" id="msgForRemoveFunctionalityTop" style="display:none;" ></div>  
+			        <div class="error" id="msgForPriceAndAvailabilityTop" style="display:none;" ></div>  
+			             
+	
+	
+			 <s:if test="%{errorMsg == 'ItemsOverLoad'}">
 							<div style="color:red">
 							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
 							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
@@ -2076,23 +2137,28 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                             <!--  TODO FXD2-11 Display error message  -->
                             <div class="clear"></div>
 							<s:if test='editMode != true'>
-                            <ul style="float: right; width: 181px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
+                            <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 144px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availablity</span></a></li>
-                                <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
-                                <s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-                               <li style="float: left; display: block; position: absolute; right: 65px; margin-right: 8px;"> <div class="temp_UOM" id="test" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property></div>
-                               </s:if>
-                               </li>
-                               <br/> 
-		                     </ul>
-                            <div class="clearall"> &nbsp;</div><br></br>
-                            <ul>
-                            	<li style="float: right; display: block; position: absolute; left: 144px; margin-left: 80px;">
+                                <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
+                                <li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                 <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
+	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
+	                               <div class="notice" id="test" style="display : inline">
+	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; 
+	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property>
+	                               	</div>
+	                               </li>
+                                </s:if>
+                                <li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
 		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
 		                    	</li>
-		                    </ul>
+                               <br/> 
+		
+		                     </ul>
+                            <div class="clearall"> &nbsp;</div><br></br>
+
                             
 							</s:if>
                         </div>
@@ -2167,16 +2233,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			%>
 			
 			<!-- This piece of code should be evaluated  end -->
-			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForMILImportBottom"></div></div>
-			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForRemoveFunctionalityBottom"></div></div>
-			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForPriceAndAvailabilityBottom"></div></div>
 
                     <s:if test='editMode != true'>
 						<div class="clear"></div><br/>
 						<fieldset class="mil-non-edit-field">
 							<legend>For Selected Items:</legend>
 							<input class="forselected-input" type="checkbox" id="selAll2"/>
-							<a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
+							<%-- <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
+							<a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
 						</fieldset>
 
 						<ul id="tool-bar" class="tool-bar-bottom" style="width:403px; float:left; padding-top:5px; margin-left:9px;">
@@ -2222,9 +2286,23 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</s:else>
 			
                 </div>
-                
-            
-            <div class="clear"></div>
+                            <div class="clearall"></div>
+            <ul>
+			<li style="text-align: center;">
+                            
+          <!--   <div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom"></div></div>
+   			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForMILImportBottom"></div></div>
+			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForRemoveFunctionalityBottom"></div></div>
+			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForPriceAndAvailabilityBottom"></div></div> 
+			-->
+ 
+            <div class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom" style="display:none;" ></div>  
+            <div class="error" id="msgForMILImportBottom" style="display:none;" ></div>  
+            <div class="error" id="msgForRemoveFunctionalityBottom" style="display:none;" ></div>  
+            <div class="error" id="msgForPriceAndAvailabilityBottom" style="display:none;" ></div>  
+            </li>
+			</ul>
+            <div class="clearall"></div>
             
                
             <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">

@@ -17,7 +17,7 @@
 <s:if test='%{(row.getAttribute("OrderHeaderKey") != cartInContextOrderHeaderKey)}'>
     <s:set name='makeCartInContextLabel' value='#_action.getText("MakeActiveCart")'/>
     <s:a href="%{draftOrderDetailsMakeCartInContext}" title="%{makeCartInContextLabel}" >  
- 		<img height="20" width="20" align="left" title="Make active cart" alt="Cart Icon" src="/swc/xpedx/images/theme/theme-1/20x20_white_cart_off.jpg" style="margin-right: 4px; margin-top:4px;"> 
+ 		<img height="20" width="20" align="left" title="Make active cart" alt="Cart Icon" src="/swc/xpedx/images/theme/theme-1/20x20_white_cart_off.png" style="margin-right: 4px; margin-top:4px;"> 
 <!--     	&nbsp;&nbsp; -->
     </s:a>
     <s:a href="%{draftOrderDetailsURL}" cssClass="underlink">

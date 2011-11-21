@@ -91,6 +91,7 @@
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <script type="text/javascript">
 	function openNotePanel(id, actionValue,orderHeaderKey){
+		document.forms["approval"].elements["ReasonText"].value = "";
 		DialogPanel.show(id);
 		svg_classhandlers_decoratePage();
 		/* if(actionValue == "Approve")
@@ -104,6 +105,8 @@
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		 if(actionValue == "Reject")
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";		
+		//submit it
+		 document.forms["approval"].submit();	
 		}
 	</script>
 <script type="text/javascript">
@@ -457,7 +460,7 @@
                 <div class="OM-breadcrumb">
                 	<%-- <p><span class="page-title"> Order Management</span></p> --%>
                 	 <p><span class="page-title"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /> </span></p>
-                	<div id="divid" align="center" style="color:red;">&nbsp;</div>  
+                	<!-- <div id="divid" align="center" style="color:red;">&nbsp;</div>  --> 
                 </div>
                 <!-- end breadcrumb -->
                 <!-- begin top section -->
@@ -564,9 +567,9 @@
 					</s:if>	
 						
 					<s:set name="ViewInvoicesFlag" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getInvoiceFlagForLoggedInUser(wCContext)" />
-					<s:if test="%{#ViewInvoicesFlag}">
+					 <s:if test="%{#ViewInvoicesFlag}"> 
 						<a  href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='%{userKey}' />&shipTo=<s:property value='%{custSuffix}' />" target="_blank" id="view-order-history-btn"><span class="underlink">View All Invoices  </span><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" title="Viewing invoices will open a separate pop-up window. Note: If the window does not open, check your pop-up blocker settings" /></a>
-					</s:if>
+					</s:if> 
 						
 				</div>
 
@@ -577,6 +580,7 @@
 	    <!-- Begin mid-section -->
 	    <div class="midsection"> <!-- Begin mid-section container -->
 		
+             <div id="open-orders-Msg-top"  style="display: none; align: center;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">
                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
                  	urlSpec="%{#orderListPaginationURL}"/>
@@ -812,7 +816,7 @@
 							
 							<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 							<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-								<span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                     		</s:if>
                             <s:else>
 								(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
@@ -906,7 +910,15 @@
 				            	
 				            	<td><s:property value='#OrderExtn.getAttribute("ExtnShipToName")'/></td>
 				            	
-				            	<td><s:property value='#priceWithCurrency'/></td>
+				            	<td>
+				            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+										<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
+											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+			                    		</s:if>
+			                            <s:else>
+											(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+										</s:else>
+				            	</td>
 				            	
 				            	<td class="right-cell"><s:property value='#chainedOrder.getAttribute("Status")'/></td>
 				            </tr>
@@ -924,7 +936,9 @@
                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
                  	urlSpec="%{#orderListPaginationURL}"/>
 			</div>
+		 <div id="open-orders-Msg-bottom" style="display: none;" align="center" class="error">&nbsp;</div> 
 
+		 
 	    </div> <!-- end mid-section container -->
 	    <!-- End mid section -->
 
@@ -958,15 +972,39 @@
 		 </swc:dialogPanel> 
     </div><!-- end container  -->
 	<script type="text/javascript">
-	function setErrorMessage(flag,divId)
+	
+	/* 	
+ 	function setErrorMessage(flag,divId)
 	{
 		if(flag == "true")
 		{
 			var divid=document.getElementById(divId);
-			divid.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
+			divid.innerHTML="Currently No Open Orders are Available.";
+			//divid.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
+			
+			open-orders-Mag-bottom
+		}
+	} 
+	setErrorMessage('<s:property value="#openOrder"/>',"divid");
+	*/
+	
+	function setErrorMessage(flag, divIdTop, divIdBottom)
+	{
+		if(flag == "true")
+		{
+		//"Currently No Open Orders are Available.";
+		var dividtop=document.getElementById(divIdTop);
+		dividtop.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
+		dividtop.style.display = "inline"; 
+		
+		var dividbottom=document.getElementById(divIdBottom);
+		dividbottom.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
+		dividbottom.style.display = "inline"; 
+		dividbottom.style.align = "center"; 
 		}
 	}
-	setErrorMessage('<s:property value="#openOrder"/>',"divid");
+	
+	setErrorMessage('<s:property value="#openOrder"/>',"open-orders-Msg-top", "open-orders-Msg-bottom");
 	</script>
 </body>
 </swc:html>

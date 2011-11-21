@@ -17,7 +17,7 @@
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="storefrontId" value="wCContext.storefrontId" />
 	
-	<s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/>
+	<%-- <s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/> --%>
 	<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' />
 	<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
@@ -546,7 +546,8 @@
                      </select> 
                     </s:if>
                  </div>   
-                 <p class="pageresults"><s:property value='#numResult' /> Results<span>&nbsp;&nbsp;|&nbsp;&nbsp;Page</span>&nbsp;&nbsp;
+               
+                 <p class="pageresults"><s:property value='#numResult' /> Results<span>&nbsp;|&nbsp;Page&nbsp</span>
                  <!-- Webtrend Meta Tag start -->
                  <s:if test='searchMetaTag == true'>
 					<META Name="DCSext.w_x_ss" content="1">
@@ -1211,11 +1212,11 @@ function createNewFormElement(inputForm, elementName, elementValue){
                            	availablelink:"<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability('<s:property value='#itemID'/>');\">My Price &amp; Availability</a></div>" + "",
                            	uomLink:
                            		<s:if test='%{#orderMultiple > "1" && #orderMultiple !=null }'>	
-                              // 	"<div class=\"temp_UOM\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\">Must be ordered in units of <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+/*  */
-                               	"<div class=\"temp_UOM\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+
+                               	"<div class=\"notice\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+
                                	</s:if>
+                               	"",
                            </s:if>
-                           "",
+                           
                            action:
                                 "<p class='addtocart'><a href='' onclick=\"javascript:addItemToCart('<s:property value='#itemID'/>'); return false;\">" +
                                     "Add to Cart" +
@@ -2053,7 +2054,8 @@ function createNewFormElement(inputForm, elementName, elementValue){
                     function addCompare(itemKey) {
                     		if (compCount == 4)
                     		{
-                    			alert(' uld');
+                    			//alert(' uld');
+                    			alert ( "<s:text name='MSG.SWC.COMP.DRAGTOCOMPARE.ERROR.MORETHAN4ITEMS' /> " );
                     			return false;
                     		}
 
@@ -2657,9 +2659,12 @@ function processPageSizeLower(){
 function validationforDragToCompare()
 {
 	var c = Ext.get('comnum'); 
+	
+	
     if(c.dom.innerHTML=="0 Items" || c.dom.innerHTML=="1 Item")
     {
-    	alert("Atleast two items required for product comparison");
+    	//alert("Atleast two items required for product comparison");
+    	alert("<s:text name='MSG.SWC.COMP.DRAGTOCOMPARE.ERROR.ATLEAST2ITEMS' />");
     }
     else
     {    	
@@ -2757,7 +2762,8 @@ function validationforDragToCompare()
                     </s:if>                   	 
 	</div>
 	
-	<p class="pageresults"><s:property value='#numResult' /> Results <span>| Page </span>
+	
+	<p class="pageresults"><s:property value='#numResult' /> Results<span>&nbsp;|&nbsp;Page&nbsp</span>
 	<s:url id="goToPageURL" action="goToPage">
 		<s:param name="pageNumber" value="'{0}'" />
 	</s:url> 

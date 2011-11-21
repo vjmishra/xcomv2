@@ -76,7 +76,7 @@ function setTotalPrice(val){
 }
 
 </script>
-<title><s:text name="draftorder.ordersummary.title" /></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="draftorder.ordersummary.title" /></title>
 
 
 <!-- BEGIN head-calls.php -->

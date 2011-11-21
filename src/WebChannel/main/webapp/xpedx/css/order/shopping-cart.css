@@ -627,7 +627,7 @@ padding: 0;
 span.print-ico-xpedx.item-detail { margin-top: 0px; margin-right: 15px; }
 .availability-section { margin-left:375px; } 
 .mil-config.availability-table { width:auto; text-align: left; margin-bottom:10px;}
-.pricing-table { margin-top:-28px; }
+.pricing-table { margin-top:-45px; }
 .cont-shopping-margin#cont-shopping { margin-right: 55px; }
 .replacement-img { display: inline; padding-left:5px; }
 .copy-paste-cancel {margin-right:10px;}
@@ -724,7 +724,8 @@ span.print-ico-xpedx.item-detail { margin-top: 0px; margin-right: 15px; }
 .special-instructions-div input.special-instructions-input {  width: 255px; font-size: 12px; margin-left:170px;}
 .special-instructions-td { margin-left: 20px; }
 .special-instructions-div { width:700px; margin-left: 15px; margin-bottom: 10px;}
-.special-instructions-div#checkout-special-instructions { margin-left: 369px;}
+.special-instructions-div#checkout-special-instructions { margin-left: 310px;}
+.special-instructions-div#checkout-special-instructions .checkout-special-instructions{ margin-left: 116px; width: 196px;}
 .cust-defined-fields {    margin-left: 246px; width: 700px; }
 .checkout-body#checkout-container { width:951px; margin: 0 20px 0 20px; padding:0px;}
 div.mil-wrap-condensed-desc#description-text { width:418px; }

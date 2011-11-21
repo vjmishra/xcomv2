@@ -169,11 +169,11 @@
 								value='U' />
 						</s:param>
 						<!--  WebTrends tag end -- -->
-					</s:url>
+					</s:url><!-- 
 					<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 						<span>View Details</span>
 					</s:a>
-					<!-- 
+					
 					<s:set name='promoItemprice'
 						value='#xutil.getAttribute(#upItemComputedPrice,"UnitPrice")' />
 					<s:set name='showCurrencySymbol' value='true' />
@@ -258,13 +258,13 @@
 								value='A' />
 						</s:param>
 						<!--  WebTrends tag end -- -->
-					</s:url>
+					</s:url><!-- 
 					<s:set name='ipTabIndex' value='%{#ipTabIndex+1}' />
 					<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 						<span>View Details</span>
 					</s:a>
 					
-					<!-- 
+					
 					
 					<tr>
 
@@ -450,13 +450,13 @@
 												<s:property value='Cr' />
 											</s:param>
 											<!--  WebTrends tag end -- -->
-										</s:url>
+										</s:url><!-- 
 										<s:set name='ipTabIndex' value='%{#ipTabIndex+1}' />
 										<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 											<span>View Details</span>
 										</s:a>
 										
-										<!-- 
+										
 								
 										<tr>
 					

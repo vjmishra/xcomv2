@@ -240,8 +240,8 @@ ul.checkboxTree li
         			<s:hidden name="organizationCode" id="organizationCode" value="%{#sdoc.getAttribute('OrganizationCode')}" />
        	 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="form">
         	 		<tr>
-					    <td width="10%" class="no-border-right">Attention:
-							<span class="float-right" style="margin-right:90px"><a href="#">
+					    <td width="13%" class="no-border-right">Attention:
+							<span class="float-right" style="margin-right:45px"><a href="#">
 				   	 			<img src="../../xpedx/images/icons/12x12_grey_help.png"  height="12" width="12" border="0" title=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service. " alt=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service." /></a>
 				   	 		</span>
 						</td>
@@ -361,8 +361,9 @@ ul.checkboxTree li
 		          				<tr class="padding-bottom1">
 						            <td valign="top" class="no-border-right padding0">Sales Professional:</td>
 						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
-						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br />
+						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/>
 					              	<span class="grey-italic">
+					              	<br/>
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
@@ -379,6 +380,7 @@ ul.checkboxTree li
 						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br />
 					              	<span class="grey-italic">
+					              	<br/>
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
@@ -415,11 +417,14 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
+				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/>
 				            	<span class="grey-italic">
+				            		<br/>
 									<s:if test='%{#fmtCsr1Phone != ""}'>
-							          	<s:property value='%{#fmtCsr1Phone}'/><br/>
+							          	<s:property value='%{#fmtCsr1Phone}'/>
+							          	 <br/>
 							        </s:if>
+							       
 									<s:property value="#csr1EMailID"/>
 								</span></td>
 				          	</tr>
@@ -431,9 +436,12 @@ ul.checkboxTree li
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
 				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
 				            	<span class="grey-italic">
+				            		<br/>
 				            	<s:if test='%{#fmtCsr2Phone != ""}'>
 						           	<s:property value='%{#fmtCsr2Phone}'/><br/>
+						           	<br/>
 						        </s:if>
+						     
 				            	<s:property value="#csr1EMailID"/></span></td>
 				          	</tr>
 						</s:else>
@@ -443,10 +451,12 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr2FirstName"/> &nbsp; <s:property value="#csr2LastName"/><br />
+				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
+  					            <br />
 				            	<s:if test="%{#csr2Phone != ''}">
 				            		<s:property value="#csr2Phone"/>,
+				            		<br/>
 				            	</s:if>
 				            	<s:property value="#csr2EMailID"/></span></td>
 				          	</tr>
@@ -455,10 +465,12 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr2FirstName"/> &nbsp; <s:property value="#csr2LastName"/><br />
+				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
+				            	<br />
 				            	<s:if test="%{#csr2Phone != ''}">
 				            		<s:property value="#csr2Phone"/>,
+				            		 <br/>
 				            	</s:if>
 				            	<s:property value="#csr2EMailID"/></span></td>
 				          	</tr>

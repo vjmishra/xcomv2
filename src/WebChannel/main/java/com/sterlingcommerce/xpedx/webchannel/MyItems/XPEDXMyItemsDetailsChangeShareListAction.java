@@ -87,6 +87,14 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			
 			LOG.info("Check 2: Deleting the old data");
 			if (!newList){
+				if(customerIds != null && customerIds.length>0)
+				{
+					setSharePrivate(" ");
+				}
+				else
+				{
+					setSharePrivate(getSharePermissionLevel());
+				}
 				result = prepareAndInvokeMashup(MASHUPID_DELETE_SHARE_LIST_ITEMS);
 				LOG.info("Check 2: Deleting the old data - Done");
 			}

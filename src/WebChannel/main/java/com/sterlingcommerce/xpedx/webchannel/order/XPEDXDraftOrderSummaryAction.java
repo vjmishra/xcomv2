@@ -143,11 +143,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			
-			// If edit order then sort the order line as per JIRA # 2851
-			if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
-				ArrayList<Element> tempMajorLines = getMajorLineElements();
-				Collections.sort(tempMajorLines, new XpedxLineSeqNoComparator());
-			}
+			
 			
 			custmerPONumber = orderOutputDoc.getDocumentElement().getAttribute("CustomerPONo");
 			
@@ -180,6 +176,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			// Get the customer fields
 			getCustomerDisplayFields();
 			processOrderLines();
+			// If edit order then sort the order line as per JIRA # 2851
+			if(!YFCCommon.isVoid(editedOrderHeaderKey)){
+				ArrayList<Element> tempMajorLines1 = getMajorLineElements();
+				Collections.sort(tempMajorLines1, new XpedxLineSeqNoComparator());
+			}
 			//Added for PNA call
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc();
 			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil

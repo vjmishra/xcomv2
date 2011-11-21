@@ -229,6 +229,7 @@ function showSplitDiv(divId)
 </script>
 <script type="text/javascript">
 	function openNotePanel(id, actionValue,orderHeaderKey){
+		document.forms["approval"].elements["ReasonText"].value = "";
 		DialogPanel.show(id);
 		svg_classhandlers_decoratePage();
 		 /*if(actionValue == "Approve")
@@ -241,7 +242,9 @@ function showSplitDiv(divId)
 		 if(actionValue == "Accept")
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		 if(actionValue == "Reject")
-		     document.forms["approval"].elements["ApprovalAction"].value = "1200";		
+		     document.forms["approval"].elements["ApprovalAction"].value = "1200";	
+			//submit it
+		 document.forms["approval"].submit();	
 		}
 	</script>
 <s:set name="isMyPriceZero" value="%{'false'}" />

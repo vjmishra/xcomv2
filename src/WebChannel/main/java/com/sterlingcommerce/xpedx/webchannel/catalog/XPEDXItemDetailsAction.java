@@ -585,8 +585,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			uomListMap.put(baseUOM, "1");
 		}
 		uomListMap.putAll(wUOMsToConversionFactors);
-				
-		displayItemUOMsMap = new HashMap();
+		
+		//2964 start
+		//displayItemUOMsMap = new HashMap();
+		displayItemUOMsMap = uomListMap;
+		//2964 end
 		itemUOMsMap = uomListMap;
 		/*for (Iterator it = itemUOMsMap.keySet().iterator(); it.hasNext();) {
 			String uomDesc = (String) it.next();

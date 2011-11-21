@@ -1338,21 +1338,21 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				ArrayList<String> uomKeys = new ArrayList<String>();
 				uomKeys.addAll(uommap.keySet());
 				Iterator<String> uomIterator = uomKeys.iterator();
-				Map<String, String> newUomMap = new HashMap<String, String>();
+				//Map<String, String> newUomMap = new HashMap<String, String>();
 				while(uomIterator.hasNext()) {
 					String uom = uomIterator.next();
 					String convFactor = (String) uommap.get(uom);
 					long convFac = Math.round(Double.parseDouble(convFactor));
 					if(1 == convFac) {
-						newUomMap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
+						uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
 					}
 					else {
 						//-FXD-1 UOM description & Conversion Factor spacing between them.
-						newUomMap.put(uom, XPEDXWCUtils.getUOMDescription(uom)+" ("+convFac+")" );
+						uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)+" ("+convFac+")" );
 					}
 				}
 				
-				itemIdsUOMsDescMap.put(itemIdForUom, newUomMap);
+				itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 			}
 		}
 		

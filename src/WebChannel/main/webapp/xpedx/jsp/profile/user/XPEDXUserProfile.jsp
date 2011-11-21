@@ -23,27 +23,27 @@
 <!-- styles -->
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/global/global-1.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/swc.min.css" />  commented for jira 1833 -->
+	href="../../xpedx/css/global/global-1.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.min.css" />  commented for jira 1833 -->
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/home/home.css" />
+	href="../../xpedx/css/home/home.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/home/portalhome.css" />
+	href="../../xpedx/css/home/portalhome.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/catalog/narrowBy.css" />
+	href="../../xpedx/css/catalog/narrowBy.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/catalog/catalogExt.css" />
+	href="../../xpedx/css/catalog/catalogExt.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/global/styles.css" />
+	href="../../xpedx/css/global/styles.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/global/ext-all.css" />
+	href="../../xpedx/css/global/ext-all.css" />
 
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/global/swc.css" />
+	href="../../xpedx/css/global/swc.css" />
 <link media="all" type="text/css" rel="stylesheet"
 	href="../../xpedx/css/theme/xpedx-dan.css" />
 <link type="text/css"
-	href="../../xpedx/ster/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css"
+	href="../../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css"
 	rel="stylesheet" />
 	
 <s:include value="../../common/XPEDXStaticInclude.jsp"/>
@@ -51,38 +51,38 @@
 <!-- 	sets up the min-height property in page -->
 	
 <link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/ster/css/theme/prod-details.css" />
-<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil.css" />
+	href="../../xpedx/css/theme/prod-details.css" />
+<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil.css" />
 <link media="all" rel="stylesheet" type="text/css"
-	href="../../xpedx/ster/css/theme/xpedx-mil-new.css" />
+	href="../../xpedx/css/theme/xpedx-mil-new.css" />
 
 <!-- javascript -->
 <script type="text/javascript"
-	src="../../xpedx/ster/js/global/ext-base.js"></script>
+	src="../../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/global/ext-all.js"></script>
-<script type="text/javascript" src="../../xpedx/ster/js/swc.min.js"></script>
+	src="../../xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="../../xpedx/js/swc.min.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/global/validation.js"></script>
+	src="../../xpedx/js/global/validation.js"></script>
 <script type="text/javascript" 
-	src="../../xpedx/ster/js/common/ajaxValidation.js"></script>
+	src="../../xpedx/js/common/ajaxValidation.js"></script>
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/global/dojo.js'/>"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/global/dojoRequire.js"></script>
+	src="../../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/theme/theme-1/theme.js"></script>
+	src="../../xpedx/js/theme/theme-1/theme.js"></script>
 
 <script type="text/javascript"
-	src="../../xpedx/ster/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="../../xpedx/ster/js/swc.js"></script>
+	src="../../xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="../../xpedx/js/swc.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+	src="../../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
 
 <script type="text/javascript"
-	src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <link media="all" type="text/css" rel="stylesheet"
 	href="<s:url value='../../xpedx/css/user/my-account.css'/>" />
 <link media="all" type="text/css" rel="stylesheet"
@@ -100,7 +100,7 @@
 <!-- Web Trends tag end  -->
 <script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
 <script type="text/javascript"
-	src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript"
@@ -141,7 +141,7 @@
 <link rel="stylesheet" type="text/css"
 	href="../../xpedx/css/modals/checkboxtree/demo.css" />
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
-<script src="../../xpedx/ster/js/SpryTabbedPanels.js"
+<script src="../../xpedx/js/SpryTabbedPanels.js"
 	type="text/javascript"></script>
 	
 <script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
@@ -1141,8 +1141,8 @@ a.underlink:hover { text-decoration: underline !important; }
 </style>
 
 
-<link href="../../xpedx/ster/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript"	src="../../xpedx/ster/js/pngFix/jquery.pngFix.pack.js"></script>
+<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"	src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
@@ -1789,7 +1789,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			 		<label title="Estimator views available inventory and pricing.">
 					<s:checkbox tabindex="75" name='estimator' id='estimator' fieldValue="true" value="false" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
 				</s:else>
-				<s:if test='%{#viewInvoices=="T"}'>
+				<s:if test='%{#viewInvoices=="Y"}'>
 				<label
 				title="Permitted to view invoices online."> 
 				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"

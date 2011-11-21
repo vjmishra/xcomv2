@@ -249,7 +249,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String estimator = "F";
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
-	private String viewInvoices = "F";
+	private String viewInvoices = "N";
 
 	/* STARTS - Customer-User Profile Changes - adsouza */
 
@@ -642,7 +642,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
 			}
 		}
-		setViewInvoices(viewInvoices.equals("true")?"T":"F");		
+		setViewInvoices(viewInvoices.equals("true")?"Y":"N");		
 		setPunchoutUsers(punchoutUsers.equals("true")?"T":"F");
 		setStockCheckWebservice(stockCheckWebservice.equals("true")?"T":"F");
 		setEstimator(estimator.equals("true")?"T":"F");
@@ -673,7 +673,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
 			}
 		}
-		setViewInvoices(viewInvoices.equals("true")?"T":"F");		
+		setViewInvoices(viewInvoices.equals("true")?"Y":"N");		
 		setEstimator(estimator.equals("true")?"T":"F");
 		setViewPrices(viewPrices.equals("true")?"Y":"N");
 		setViewReports(viewReports.equals("true")?"Y":"N");

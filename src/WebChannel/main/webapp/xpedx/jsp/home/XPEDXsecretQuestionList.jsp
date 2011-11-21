@@ -92,7 +92,8 @@
         
         if(answerFiled.value.trim().length == 0)
         {
-            errorDiv.innerHTML = "Answer is required.";
+            //errorDiv.innerHTML = "Answer is required.";
+            errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.FORGOTPASSWORD.ERROR.ANSWERREQ' />";
             answerFiled.style.borderColor="#FF0000";
             errorDiv.style.display = 'inline';
             return returnval;
@@ -123,11 +124,9 @@
     	<div class="container">
       	<!-- breadcrumb -->
        		<s:set name='error' value="#_action.getErrorMessageType()"/>
-			<div class="errorMessage">
-			<s:if test='%{#error=="WrongAnswer"}'>
-		    <s:text name="wrong.answer"/>
-			</s:if>
-			</div>
+       		
+
+			
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
       		<div id="mid-col-mil"> 
 		    <div>
@@ -199,8 +198,16 @@
 						<td width="55%" class="grey  no-border-right-user">&nbsp;</td>
 					</tr>
 					<tr><td colspan="2">
-            			<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsgForAnswer" ></div>
+            			<div class="error"  style="float:right; margin-right: 12px;display:none;margin-right: 110px;" id="errorMsgForAnswer" ></div>
+            			 <s:if test='%{#error=="WrongAnswer"}'> 
+            				<div class="error"  style="float:right; margin-right: 12px;display:block; margin-right: 110px;" id="errorInvalidAnswer" > 
+            					<%-- <s:text name="wrong.answer"/> --%>
+            					<s:text name='MSG.SWC.MISC.FORGOTPASSWORD.ERROR.ANSWERINVALID' />
+            				</div>
+            				 </s:if> 
             		</td></tr>
+            		
+
             		
             		
 					<tr>

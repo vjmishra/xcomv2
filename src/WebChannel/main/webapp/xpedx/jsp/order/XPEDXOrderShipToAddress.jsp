@@ -24,10 +24,10 @@
 	<s:set name='addrtype' value='ShipTo' />
 	<title>
 	<s:if test='(#canChangeShipToAddress == true)'>
-		<s:text name="ChooseOrderShipToAddress" />
+		<s:property value="wCContext.storefrontId" /> - <s:text name="ChooseOrderShipToAddress" />
 	</s:if>
 	<s:else>
-		<s:text name="ShipToAddress" />
+		<s:property value="wCContext.storefrontId" /> - <s:text name="ShipToAddress" />
 	</s:else>
 	</title>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/order-address.css'/>" />

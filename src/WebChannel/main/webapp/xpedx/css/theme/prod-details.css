@@ -39,7 +39,9 @@ border:1px solid #D7D7D7;
 	padding: 0 3px;
 }
 .promo-txt {
-	padding-bottom: 25px;
+	color:#003399;	
+	font-size: 12px;
+	font-weight: bold;
 }
 .promo-txt p {
 	font-size:11px;

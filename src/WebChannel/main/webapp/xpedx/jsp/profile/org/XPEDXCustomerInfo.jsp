@@ -331,7 +331,7 @@ ul.checkboxTree li
     <td width="100%" class="no-border-right padding0" valign="top">
       <div class="question">
         <ul class="padding-top3 padding-bottom2">
-          <li> <strong>Customer Defined Fields</strong></li>
+          <li> <strong>Custom Fields</strong></li>
           <li><a href="#"><img height="12" width="12" border="0" title="Customized line level fields." alt="Customized line level fields." src="../../xpedx/images/icons/12x12_grey_help.png"/></a></li>
         </ul>
       </div>
@@ -343,7 +343,7 @@ ul.checkboxTree li
           </tr>
           <s:if test="(#_action.IsCustLineAccNoFlag())">  
           <tr>
-            <td>Customer Line Account #: </td>
+            <td>Line Account #: </td>
             <td valign="top" >
             	<s:textfield id='CustLineAccNoLabel' readonly="%{!#_action.IsCustLineAccNoFlag()}" cssClass="input-details-cart  x-input" tabindex="12"
 					maxlength="25" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="25" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
@@ -355,7 +355,7 @@ ul.checkboxTree li
             </s:else>
            <s:if test="(#_action.IsCustLinePONoFlag())">
             <tr class="odd" >
-              <td > Customer Line PO No: </td>
+              <td >Line PO #: </td>
               <td valign="top">
               	<s:text name="Line PO #"/>
               </td>
@@ -363,7 +363,7 @@ ul.checkboxTree li
             </s:if>
             <s:if test="(#_action.IsCustLineField1Flag())">
           <tr class="odd">
-            <td >Customer Line Field #1: </td>
+            <td >Line Field #1: </td>
             <td valign="top">
             	<s:textfield id='CustLineField1Label' readonly="%{!#_action.IsCustLineField2Flag()}" cssClass="input-details-cart  x-input"
 					maxlength="25" cssStyle="width: 180px;" name='CustLineField1Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField1Label")}'/>
@@ -375,7 +375,7 @@ ul.checkboxTree li
             </s:else>
             <s:if test="(#_action.IsCustLineField2Flag())">
             <tr>
-              <td> Customer Line Field #2: </td>
+              <td>Line Field #2: </td>
               <td valign="top">
               <s:textfield id='CustLineField2Label' readonly="%{!#_action.IsCustLineField2Flag()}" cssClass="input-details-cart  x-input"
 						maxlength="25" cssStyle="width: 180px;" name='CustLineField2Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField2Label")}'/>
@@ -387,7 +387,7 @@ ul.checkboxTree li
             </s:else>
             <s:if test="(#_action.IsCustLineField3Flag())">
             <tr class="odd" >
-              <td > Customer Line Field #3: </td>
+              <td >Line Field #3: </td>
               <td valign="top">
               	<s:textfield id='CustLineField3Label' readonly="%{!#_action.IsCustLineField3Flag()}" cssClass="input-details-cart  x-input"
 						maxlength="25" cssStyle="width: 180px;" name='CustLineField3Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField3Label")}'/>
