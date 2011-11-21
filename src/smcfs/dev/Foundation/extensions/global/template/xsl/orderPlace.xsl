@@ -163,7 +163,7 @@
          <OrderCode>
          
              <xsl:if test = "Order/Extn/@ExtnDeliveryHoldFlag = 'Y'">H</xsl:if>
-             <xsl:if test = "Order/Extn/@ExtnDeliveryHoldFlag = 'N'" > </xsl:if>
+             <xsl:if test = "Order/Extn/@ExtnDeliveryHoldFlag = 'N'" >O</xsl:if>
              
             <!--<xsl:value-of select="Order/Extn/@ExtnDeliveryHoldFlag" />-->
          </OrderCode>

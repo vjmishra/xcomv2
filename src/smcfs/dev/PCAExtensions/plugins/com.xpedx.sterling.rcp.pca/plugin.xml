@@ -402,7 +402,7 @@
                 actionId="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
                 filterRequired="false" groupId="Xpedx_Group"
                 id="ViewInvoices" isExtension="false"
-                name="ViewInvoices" permissionId="ycdRCPX006">
+                name="ViewInvoices" permissionId="ycdRCPX007">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
                 </categories>
