@@ -18,7 +18,7 @@
 	<head>
 	<!-- styles -->
 	<!-- styles -->
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/global-1.css" />
+<%-- 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/global-1.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/swc.min.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/home/home.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/home/portalhome.css" />
@@ -34,25 +34,62 @@
 	<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/theme/prod-details.css" />
 	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil.css" />
-	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil-new.css" />
+	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil-new.css" /> --%>
 	
 	<!-- javascript -->
-	<script type="text/javascript" src="../../xpedx/ster/js/global/ext-base.js"></script>
+<%-- 	<script type="text/javascript" src="../../xpedx/ster/js/global/ext-base.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/global/ext-all.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/global/validation.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/common/ajaxValidation.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/global/dojo.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/global/dojoRequire.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/theme/theme-1/theme.js"></script>
+	<script type="text/javascript" src="../../xpedx/ster/js/theme/theme-1/theme.js"></script> --%>
 	
-	<script type="text/javascript" src="../../xpedx/ster/js/catalog/catalogExt.js"></script>
+<%-- 	<script type="text/javascript" src="../../xpedx/ster/js/catalog/catalogExt.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/swc.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/pngFix/jquery.pngFix.pack.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript"></script> --%>
+	
+		<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/global-1.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.min.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/home.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/portalhome.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/narrowBy.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/catalogExt.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/styles.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/ext-all.css" />
+	
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-dan.css"/>
+	<link type="text/css" href="../../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/theme-xpedx_v1.2.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/prod-details.css" />
+	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil.css" />
+	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil-new.css" />
+	
+	<!-- javascript -->
+	<script type="text/javascript" src="../../xpedx/js/global/ext-base.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/global/ext-all.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/global/validation.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/common/ajaxValidation.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/global/dojo.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/global/dojoRequire.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/theme/theme-1/theme.js"></script>
+	
+	<script type="text/javascript" src="../../xpedx/js/catalog/catalogExt.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/swc.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 	<script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript"></script>
+	
 	
 	<!-- carousel scripts css  -->
 	
@@ -84,8 +121,8 @@
 	<script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 	<link rel="stylesheet" type="text/css" href="../../xpedx/css/modals/checkboxtree/demo.css"/>
 	<script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
-	<script src="../../xpedx/ster/js/SpryTabbedPanels.js" type="text/javascript"></script>
-    <script src="../../xpedx/ster/js/sorting.js" type="text/javascript"></script>
+	<script src="../../xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
+    <script src="../../xpedx/js/sorting.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="checkboxtree/demo.css"/>
@@ -206,7 +243,7 @@
 	</style>
 	
 	<!-- Facy Box (expand and collpse Modal Window -->
-	<link href="../../xpedx/ster/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+	<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 	<title><s:property value="wCContext.storefrontId" /> / Add New User Profile</title>
 	</head>
 	

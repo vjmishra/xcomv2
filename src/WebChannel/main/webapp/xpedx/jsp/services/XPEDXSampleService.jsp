@@ -913,7 +913,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                     <tbody>
                               <tr class="table-header-bar" id="none">
                                 <td width="16%" class=" table-header-bar-left padding8"><span class="white">Mfg. Item # </span></td>
-                                <td width="16%" class="border-left-gray padding8"><span class="white">Mil</span></td>
+                                <td width="16%" class="border-left-gray padding8"><span class="white">Mill</span></td>
                                  <td width="16%" class="border-left-gray padding8"><span class="white">Item #</span></td>
                                 <td class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Description</span></td>                               
                                 <td  width="8%" class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Qty</span> </td>

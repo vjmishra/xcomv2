@@ -81,9 +81,14 @@
           		<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a> / <span class="breadcrumb-inactive"><s:text name="tools.papercalculator.title" /></span> Commented for jira 1538-->
           		 </div>
 	        <div id="mid-col-mil">
-            <div style=" width: 600px;">
+            <div style=" width: 1000px;">
                <div class="clearview">&nbsp;</div>
               <h2>Paper Calculator</h2>
+              <br>
+                 <p>To estimate the total pounds of paper needed for a job based on the information entered, the tool will calculate</p>
+                 <p>total pounds needed. In order to get the most accurate estimate, enter all fields (waste % is optional)</p>
+                 <p><strong>Note:</strong> Sizes should be entered as decimals.</p>
+              <br />
               <div id="requestform">
                 <div class="clearview">&nbsp;</div>
                 

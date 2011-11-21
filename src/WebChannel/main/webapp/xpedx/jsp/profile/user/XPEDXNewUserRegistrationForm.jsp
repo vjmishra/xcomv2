@@ -51,14 +51,19 @@
 </script>
 <script type="text/javascript">
     function userRegSubmit(){
-    	var errorDiv = document.getElementById("errorMsg");
+    	//var errorDiv = document.getElementById("errorMsg");
+    	var errorDiv = document.getElementById("errorMsgForMandatoryFields");
      	document.getElementById('newUserName').value = document.getElementById('newUserFirstName').value ;
            	
      	if( document.getElementById('newUserFirstName').value.trim().length == 0 ||  document.getElementById('newUserCompanyName').value.trim().length == 0
     			||  document.getElementById('newUserEmail').value.trim().length == 0 ||  document.getElementById('newUserPhone').value.trim().length == 0)
    		{
-     		alert("Fields can't be empty, Input required");
-    		//errorDiv.innerHTML = "Input required.";
+     		//alert("Fields can't be empty, Input required");
+    		//errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.REGISTER.GENERIC.INVALIDFIELDS' />";
+    		
+    		 errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.REGISTER.GENERIC.INVALIDFIELDS' />";
+    	     //usernameField.style.borderColor="#FF0000";
+    	     errorDiv.style.display = 'inline';
     		//return false;
    		}     	
     	else
@@ -71,7 +76,7 @@
 
 </script>
 
-<title><s:property value="wCContext.storefrontId" /> / Registration</title>
+<title><s:property value="wCContext.storefrontId" /> / <s:text name='MSG.SWC.MISC.REGISTER.GENERIC.TABTITLE' /></title>
 </head>
 
 <body class="ext-gecko ext-gecko3">
@@ -96,11 +101,14 @@
 
 <div class="error" id="errorMsg" style="display : none"></div>
 
+
+
 <div>
-	<div class="padding-top3 black page-title"><strong class="black">Register</strong></div>
+	<div class="padding-top3 black page-title"><strong class="black"><s:text name='MSG.SWC.MISC.REGISTER.GENERIC.PGTITLE' /></strong></div>
 </div>
 <div class=" padding-bottom clearview"> </div>
-    <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p> 
+    <!-- <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p>  -->
+    <p> <s:text name='MSG.SWC.MISC.REGISTER.GENERIC.GENINFO' />  </p> 
 	<br>
 <table class="full-width">
 	<tbody>
@@ -153,9 +161,16 @@
 					<li class="float-right"><a href="javascript:userRegSubmit();" class="orange-ui-btn"><span>Submit</span></a></li>
                 </ul>
               </div></td>
+              
 		   <td class="underlines no-border-right-user">&nbsp;</td>
               <td class="underlines no-border-right-user">&nbsp;</td>
             </tr>
+            
+            
+             <tr>            
+              <td colspan="4" class="grey  no-border-right-user"><div id="errorMsgForMandatoryFields" style="float:right; margin-right: 12px;display:none; margin-right: 110px;" class="error" ></div></td>
+            </tr> 
+            
             <tr>
               <td colspan="4" class="grey  no-border-right-user">&nbsp;</td>
             </tr> 

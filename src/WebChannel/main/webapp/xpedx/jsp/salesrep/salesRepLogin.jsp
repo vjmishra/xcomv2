@@ -182,8 +182,8 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</s:if>
 
 <div>
-<!-- <h1>Sign In</h1> -->
-<h1> <s:text name="MSG.SWC.SREP.LGIN.GENERIC.PGTITLE"/></h1>
+ <h1>Sign In</h1> 
+<%-- <h1> <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.PGTITLE"/></h1> --%>
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td colspan="2">
