@@ -90,7 +90,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			{
 				try
 				{
-					
+					populatePrimeLineNum(outputDoc.getDocumentElement());
 					Document orderPriceInputDoc=createOrderPriceDocument(env,outputOrderElement.getAttribute("OrderHeaderKey"),outputDoc,
 							isPnACall,isCom,oldAdjustmentInfoList,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice);
 					if(createOrderExtnIfNoLine(orderPriceInputDoc,outputDoc,isPromotion,orderWithoutLineToProcess))
@@ -245,21 +245,24 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 									lineID +=1;
 								}
 								Element transactionLineElem= (Element)orderLineElem.getElementsByTagName("OrderLineTranQuantity").item(0);
-								String orderedQty=transactionLineElem.getAttribute("OrderedQty");
-								if(YFCCommon.isVoid(orderedQty))
+								if(transactionLineElem != null )
 								{
-									isAllRemoved=false;
-								}
-								else
-								{
-									double qty=Double.valueOf(orderedQty);
+									String orderedQty=transactionLineElem.getAttribute("OrderedQty");
+									if(YFCCommon.isVoid(orderedQty))
 									{
-										if(qty!=0)
-										{
-											isAllRemoved=false;
-										}
+										isAllRemoved=false;
 									}
-										
+									else
+									{
+										double qty=Double.valueOf(orderedQty);
+										{
+											if(qty!=0)
+											{
+												isAllRemoved=false;
+											}
+										}
+											
+									}
 								}
 								Node orderLineExtnElem=(Node)orederlineExtnMap.get(orderLineKey);
 								
@@ -269,69 +272,73 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 								{
 									 orderLineExtn=(Element)orderLineExtnElem;
 								}
-								if(orderLineExtnNode == null)
+								if( orderLineExtn != null)
 								{
-									
-									//orderLineElem.appendChild(orderLineExtnElem);
-									Element outputOrderLineExtn=SCXmlUtil.createChild(
-											orderLineElem, "Extn");
-									outputOrderLineExtn.setAttribute("ExtnAdjDollarAmt", orderLineExtn.getAttribute("ExtnAdjDollarAmt"));
-									outputOrderLineExtn.setAttribute("ExtnAdjUOMUnitPrice", orderLineExtn.getAttribute("ExtnAdjUOMUnitPrice"));
-									outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
-									outputOrderLineExtn.setAttribute("ExtnLineCouponDiscount", orderLineExtn.getAttribute("ExtnLineCouponDiscount"));
-									outputOrderLineExtn.setAttribute("ExtnLineOrderedTotal", orderLineExtn.getAttribute("ExtnLineOrderedTotal"));
-									outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
-									outputOrderLineExtn.setAttribute("ExtnReqUOMUnitPrice", orderLineExtn.getAttribute("ExtnReqUOMUnitPrice"));
-									outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
-									outputOrderLineExtn.setAttribute("ExtnUnitPriceDiscount", orderLineExtn.getAttribute("ExtnUnitPriceDiscount"));
-									outputOrderLineExtn.setAttribute("ExtnLegOrderLineAdjustments", orderLineExtn.getAttribute("ExtnLegOrderLineAdjustments"));
-								}
-								else
-								{
-									Element outputOrderLineExtn =(Element)orderLineExtnNode;
-									outputOrderLineExtn.setAttribute("ExtnAdjDollarAmt", orderLineExtn.getAttribute("ExtnAdjDollarAmt"));
-									outputOrderLineExtn.setAttribute("ExtnAdjUOMUnitPrice", orderLineExtn.getAttribute("ExtnAdjUOMUnitPrice"));
-									outputOrderLineExtn.setAttribute("ExtnUnitPriceDiscount", orderLineExtn.getAttribute("ExtnUnitPriceDiscount"));
-									outputOrderLineExtn.setAttribute("ExtnLineCouponDiscount", orderLineExtn.getAttribute("ExtnLineCouponDiscount"));
-									outputOrderLineExtn.setAttribute("ExtnLineOrderedTotal", orderLineExtn.getAttribute("ExtnLineOrderedTotal"));
-									outputOrderLineExtn.setAttribute("ExtnReqUOMUnitPrice", orderLineExtn.getAttribute("ExtnReqUOMUnitPrice"));
-									outputOrderLineExtn.setAttribute("ExtnLegOrderLineAdjustments", orderLineExtn.getAttribute("ExtnLegOrderLineAdjustments"));
-									if("true".equals(isCom))
+								
+									if(orderLineExtnNode == null)
 									{
-										if(!outputOrderLineExtn.hasAttribute("ExtnExtendedPrice"))
-										{
-											outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
-										}
-										if(!outputOrderLineExtn.hasAttribute("ExtnPricingUOM"))
-										{
-											outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
-										}									
-										if(!outputOrderLineExtn.hasAttribute("ExtnUnitPrice"))
-										{
-											outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
-										}
-										else
-										{
-											BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
-											BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
-											outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
-										}
 										
+										//orderLineElem.appendChild(orderLineExtnElem);
+										Element outputOrderLineExtn=SCXmlUtil.createChild(
+												orderLineElem, "Extn");
+										outputOrderLineExtn.setAttribute("ExtnAdjDollarAmt", orderLineExtn.getAttribute("ExtnAdjDollarAmt"));
+										outputOrderLineExtn.setAttribute("ExtnAdjUOMUnitPrice", orderLineExtn.getAttribute("ExtnAdjUOMUnitPrice"));
+										outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
+										outputOrderLineExtn.setAttribute("ExtnLineCouponDiscount", orderLineExtn.getAttribute("ExtnLineCouponDiscount"));
+										outputOrderLineExtn.setAttribute("ExtnLineOrderedTotal", orderLineExtn.getAttribute("ExtnLineOrderedTotal"));
+										outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
+										outputOrderLineExtn.setAttribute("ExtnReqUOMUnitPrice", orderLineExtn.getAttribute("ExtnReqUOMUnitPrice"));
+										outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
+										outputOrderLineExtn.setAttribute("ExtnUnitPriceDiscount", orderLineExtn.getAttribute("ExtnUnitPriceDiscount"));
+										outputOrderLineExtn.setAttribute("ExtnLegOrderLineAdjustments", orderLineExtn.getAttribute("ExtnLegOrderLineAdjustments"));
 									}
 									else
 									{
-										outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
-										if(!"".equals(orderLineExtn.getAttribute("ExtnPricingUOM")) && orderLineExtn.getAttribute("ExtnPricingUOM") != null)
+										Element outputOrderLineExtn =(Element)orderLineExtnNode;
+										outputOrderLineExtn.setAttribute("ExtnAdjDollarAmt", orderLineExtn.getAttribute("ExtnAdjDollarAmt"));
+										outputOrderLineExtn.setAttribute("ExtnAdjUOMUnitPrice", orderLineExtn.getAttribute("ExtnAdjUOMUnitPrice"));
+										outputOrderLineExtn.setAttribute("ExtnUnitPriceDiscount", orderLineExtn.getAttribute("ExtnUnitPriceDiscount"));
+										outputOrderLineExtn.setAttribute("ExtnLineCouponDiscount", orderLineExtn.getAttribute("ExtnLineCouponDiscount"));
+										outputOrderLineExtn.setAttribute("ExtnLineOrderedTotal", orderLineExtn.getAttribute("ExtnLineOrderedTotal"));
+										outputOrderLineExtn.setAttribute("ExtnReqUOMUnitPrice", orderLineExtn.getAttribute("ExtnReqUOMUnitPrice"));
+										outputOrderLineExtn.setAttribute("ExtnLegOrderLineAdjustments", orderLineExtn.getAttribute("ExtnLegOrderLineAdjustments"));
+										if("true".equals(isCom))
 										{
-											outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
+											if(!outputOrderLineExtn.hasAttribute("ExtnExtendedPrice"))
+											{
+												outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
+											}
+											if(!outputOrderLineExtn.hasAttribute("ExtnPricingUOM"))
+											{
+												outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
+											}									
+											if(!outputOrderLineExtn.hasAttribute("ExtnUnitPrice"))
+											{
+												outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
+											}
+											else
+											{
+												BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
+												BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
+												outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
+											}
+											
 										}
-										if(!"".equals(orderLineExtn.getAttribute("ExtnUnitPrice")) && orderLineExtn.getAttribute("ExtnUnitPrice") != null)
+										else
 										{
-											outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
-											outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", orderLineExtn.getAttribute("ExtnAdjUnitPrice"));
+											outputOrderLineExtn.setAttribute("ExtnExtendedPrice", orderLineExtn.getAttribute("ExtnExtendedPrice"));
+											if(!"".equals(orderLineExtn.getAttribute("ExtnPricingUOM")) && orderLineExtn.getAttribute("ExtnPricingUOM") != null)
+											{
+												outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
+											}
+											if(!"".equals(orderLineExtn.getAttribute("ExtnUnitPrice")) && orderLineExtn.getAttribute("ExtnUnitPrice") != null)
+											{
+												outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
+												outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", orderLineExtn.getAttribute("ExtnAdjUnitPrice"));
+											}
+											//outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
+											//outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
 										}
-										//outputOrderLineExtn.setAttribute("ExtnPricingUOM", orderLineExtn.getAttribute("ExtnPricingUOM"));
-										//outputOrderLineExtn.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
 									}
 								}
 							}
@@ -364,6 +371,28 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			
 			return outputDoc;
             }
+		
+		private void populatePrimeLineNum(Element outputDoc)
+		{
+			/*String isDraftOrder = outputDoc.getAttribute("DraftOrderFlag");
+			if("N".equals(isDraftOrder ))
+			{*/
+				ArrayList<Element> orderLinesElem=SCXmlUtil.getElements(outputDoc, "OrderLines/OrderLine");
+				if(orderLinesElem!=null && orderLinesElem.size()>0 )
+				{
+					Iterator<Element> outputLinesIter = orderLinesElem.iterator();
+					
+					while(outputLinesIter.hasNext())
+					{
+						Element orderLineItem = outputLinesIter.next();
+						Element newOrderLineElem = SCXmlUtil.createDocument("OrderLine").getDocumentElement();
+						String orderLineKey = orderLineItem.getAttribute("OrderLineKey");
+						String primeLineNum = orderLineItem.getAttribute("PrimeLineNo");
+						primeLineNumMap.put(orderLineKey, primeLineNum);
+					}
+				}
+		//	}
+		}
 		private boolean createOrderExtnIfNoLine(Document orderPriceInputDoc,Document outputDoc,boolean isCoupon,String orderWithoutLineToProcess)
 		{
 			if(isCoupon )
@@ -452,25 +481,14 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			YFCDocument inputDocument = YFCDocument.createDocument("Order");
 			YFCElement inputElement = inputDocument.getDocumentElement();
 			inputElement.setAttribute("OrderHeaderKey", orderHeaderKey);
-			env.setApiTemplate(
-							"getOrderList",
-							SCXmlUtil
-							.createFromString(""+"<OrderList>"
-									+ "<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
-									+"<Promotions/>"
-									+"<OrderLines><OrderLine>"
-									+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
-									+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
-									+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
-									+ "</OrderLine></OrderLines>"
-									+ "<Extn ><XPXOrderAdjustmentsInfoList><XPXOrderAdjustmentsInfo OrderAdjustmentInfoKey='' OrderHeaderKey=''/>"
-									+ "</XPXOrderAdjustmentsInfoList></Extn>"
-									+ "</Order></OrderList>"));
-			api = YIFClientFactory.getInstance().getApi();
+			
+			//api = YIFClientFactory.getInstance().getApi();
 			setProgressYFSEnvironmentForCompleteOrderDetailsVariables(env);
-			Document orderListDocument = api.invoke(env, "getOrderList",
-					inputDocument.getDocument());			
-			Element orderListElem=(Element)orderListDocument.getElementsByTagName("Order").item(0);
+			/*Document orderListDocument = api.invoke(env, "getOrderList",
+					inputDocument.getDocument());	*/
+			
+			//Element orderListElem=(Element)orderListDocument.getElementsByTagName("Order").item(0);
+			Element orderListElem=getOrderElement(env,outputDoc.getDocumentElement().getAttribute("DraftOrderFlag"),inputDocument);
 			Element orderPriceInfoElem=(Element)orderListElem.getElementsByTagName("PriceInfo").item(0);
 			Document orderPriceInputDoc=SCXmlUtil.createDocument("Order");
 			Element orderPriceInputElem=orderPriceInputDoc.getDocumentElement();
@@ -518,9 +536,11 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				while(it.hasNext())
 				{
 					Element orderLineElem=it.next();
+					if(orderLineElem.hasAttribute("isDeletedLine"))
+						continue;
 					Element orderLineItemElem=(Element)orderLineElem.getElementsByTagName("Item").item(0);
 					Element orderListLineElem=SCXmlUtil.createChild(orderPriceLinesElem, "OrderLine");
-					String orderLineKey=orderLineElem.getAttribute("OrderLineKey");	
+					String orderLineKey=orderLineElem.getAttribute("OrderLineKey");
 					//Element transactionLineElem=orderQtyMap.get(orderLineKey);
 					String primeLineNum=orderLineElem.getAttribute("PrimeLineNo");	
 					if(YFCCommon.isVoid(orderLineKey))
@@ -564,6 +584,50 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			
 			return orderPriceInputDoc;
 			
+		}
+		private Element getOrderElement(YFSEnvironment env,String isDraftOrder,YFCDocument inputDocument) throws Exception 
+		{
+			api = YIFClientFactory.getInstance().getApi();
+			if("N".equals(isDraftOrder))
+			{
+				env.setApiTemplate(
+						"getCompleteOrderDetails",
+						SCXmlUtil
+						.createFromString("<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
+								+"<Promotions/>"
+								+"<OrderLines><OrderLine>"
+								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
+								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
+								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
+								+ "</OrderLine></OrderLines>"
+								+ "<Extn ><XPXOrderAdjustmentsInfoList><XPXOrderAdjustmentsInfo OrderAdjustmentInfoKey='' OrderHeaderKey=''/>"
+								+ "</XPXOrderAdjustmentsInfoList></Extn>"
+								+ "</Order>"));
+				Document orderListDocument = api.invoke(env, "getCompleteOrderDetails",
+						inputDocument.getDocument());
+				return orderListDocument.getDocumentElement();
+			}
+			else
+			{
+				env.setApiTemplate(
+						"getOrderList",
+						SCXmlUtil
+						.createFromString(""+"<OrderList>"
+								+ "<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
+								+"<Promotions/>"
+								+"<OrderLines><OrderLine>"
+								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
+								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
+								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
+								+ "</OrderLine></OrderLines>"
+								+ "<Extn ><XPXOrderAdjustmentsInfoList><XPXOrderAdjustmentsInfo OrderAdjustmentInfoKey='' OrderHeaderKey=''/>"
+								+ "</XPXOrderAdjustmentsInfoList></Extn>"
+								+ "</Order></OrderList>"));
+				Document orderListDocument = api.invoke(env, "getOrderList",
+						inputDocument.getDocument());
+				return (Element)orderListDocument.getElementsByTagName("Order").item(0);
+			}
+						
 		}
 		
 		private void applayCoupon(Element outputDoc,Element orderPriceInputElem)
@@ -843,6 +907,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 							outputMap.remove(orderLineKey);
 							isDeleteLine=true;
 						}
+						outputMap.put(orderLineKey,createdDeletedLine(primeLineNumMap.get(orderLineKey)));
 						continue;
 					}
 					else
@@ -863,6 +928,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 											outputMap.remove(orderLineKey);
 											isDeleteLine=true;
 										}
+										outputMap.put(orderLineKey,createdDeletedLine(primeLineNumMap.get(orderLineKey)));
 										continue;
 									}
 								}
@@ -992,7 +1058,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 										
 								}
 								reqUnitPrice.put(orderLineKey, orderLineExtnElem.getAttribute("ExtnReqUOMUnitPrice"));
-								if("N".equals(isDraftOrder) && "N".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag"))) {	
+								if("N".equals(isDraftOrder) && (!"Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {	
 									newLinePriceInfoElem.setAttribute("IsPriceLocked", "N");
 								}
 								/*if(!"true".equals(isPnACall) || ("N".equals(draftOrderFlag) && !"Y".equals(orderLineExtnElem.getAttribute("ExtnEditOrderFlag")) ))
@@ -1033,7 +1099,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 										linePriceInfoElem.setAttribute("IsPriceLocked",  linePriceInfo.getAttribute("IsPriceLocked"));
 									}
 								}
-								if("N".equals(isDraftOrder) && "N".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag"))) {											
+								if("N".equals(isDraftOrder) && (!"Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {											
 									linePriceInfoElem.setAttribute("IsPriceLocked", "N");
 								}
 								if(!"".equals(linePriceInfo.getAttribute("UnitPrice")))
@@ -1049,6 +1115,14 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				
 			}
 		}
+		
+	private Element createdDeletedLine(String primeLineNo)
+	{
+		Element deletedOrderLine = SCXmlUtil.createDocument("OrderLine").getDocumentElement();
+		deletedOrderLine.setAttribute("isDeletedLine", "true");
+		deletedOrderLine.setAttribute("PrimeLineNo", primeLineNo);
+		return deletedOrderLine;
+	}
 	private void createUOMConversionFactorMap(Element orderLineElem,Map<String,Map<String,String>> uomListMap)	
 	{
 		ArrayList<Element> orderLinesElem=SCXmlUtil.getElements(orderLineElem, "ItemDetails");

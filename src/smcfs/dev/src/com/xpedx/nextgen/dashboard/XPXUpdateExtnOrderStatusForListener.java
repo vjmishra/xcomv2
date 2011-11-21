@@ -1,6 +1,5 @@
 package com.xpedx.nextgen.dashboard;
 
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -8,7 +7,6 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
-import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -40,16 +38,6 @@ public class XPXUpdateExtnOrderStatusForListener implements YIFCustomApi {
 		String orderStatus = "";
 		String orderStatusPrefix = "";
 		Element rootElement = inXML.getDocumentElement();
-		ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
-		HashMap envVariablesmap = clientVersionSupport.getClientProperties();
-		if(envVariablesmap != null)
-		{
-			String isChangeOrderForStatusCalled=(String)envVariablesmap.get("isChangeOrderForStatusCalled");
-			if(!YFCCommon.isVoid(isChangeOrderForStatusCalled) && "true".equals(isChangeOrderForStatusCalled))
-			{
-				return inXML;
-			}
-		}
 		log.info("updateCustomerExtnOrderStatusrootElement:" + SCXmlUtil.getString(rootElement));
 		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderLine")) {
 			Element orderElem = SCXmlUtil.getChildElement(rootElement, "Order");
@@ -87,22 +75,7 @@ public class XPXUpdateExtnOrderStatusForListener implements YIFCustomApi {
 			}
 				
 		}
-		setProgressYFSEnvironmentVariables(env);
 		return inXML;
 	}
-	private void setProgressYFSEnvironmentVariables(YFSEnvironment env) {
-		if (env instanceof ClientVersionSupport) {
-			ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
-			HashMap envVariablesmap = clientVersionSupport.getClientProperties();
-			if (envVariablesmap != null) {
-				envVariablesmap.put("isChangeOrderForStatusCalled", "true");
-			}
-			else
-			{
-				envVariablesmap=new HashMap();
-				envVariablesmap.put("isChangeOrderForStatusCalled", "true");
-			}
-			clientVersionSupport.setClientProperties(envVariablesmap);
-		}
-	}
+
 }
