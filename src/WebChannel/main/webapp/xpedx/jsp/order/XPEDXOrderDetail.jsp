@@ -584,7 +584,13 @@ function showSplitDiv(divId)
                         </table>
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
-                        			<td colspan="2"><span class="boldText">Order Status: </span> <s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
+                        			<td colspan="2"><span class="boldText">Order Status: </span> 
+                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") != "Awaiting FO Creation"}'>
+                        			<s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
+                        			</s:if>
+                        			<s:else>
+                        			  <s:property value='Submitted'/> 
+                        			</s:else>
                         			<s:if test='%{#status != "Cancelled"}'>
                         				<s:if test='%{#isOrderOnApprovalHold}'>
                         					(Pending Approval)
@@ -1270,7 +1276,9 @@ function showSplitDiv(divId)
 			<s:else>
 				<s:if test="!#isEstimator">
 				<s:if test="#_action.isEditableOrder()">
+				     <s:if test!="%{#isOrderOnCSRReviewHold}">
 					<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
+					</s:if>
 				</s:if>
 				</s:if>
 			</s:else>

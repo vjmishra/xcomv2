@@ -12,7 +12,7 @@
 	
 	<entry key="name">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Name</entry>
 	<entry key="desc">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Desc</entry>
-	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate</entry>
+	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate,XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@SharePrivate</entry>
 	<entry key="WCContext.customerId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@CustomerID</entry>
 	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createuserid,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Modifyuserid</entry>
 	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername</entry>

@@ -52,6 +52,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private static final String INVOICED_STATUS = "1100.5700";
 	private static final String PENDING_APPROVAL_STATUS = "1100.5150";
 	private static final String CSR_REVIEWING_STATUS = "1100.5155";
+	private static final String AWAITING_FO_CREATION = "1100.1310";	
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private boolean isPendingApprovalOrdersSearch = false;
 	private boolean isCSRReviewingOrdersSearch = false;
@@ -181,6 +182,10 @@ public class XPEDXOrderListAction extends OrderListAction {
         			setStatusSearchFieldName(PLACED_STATUS);
         		}
         		else if(getStatusSearchFieldName().equalsIgnoreCase(CSR_REVIEWING_STATUS)){
+        			isCSRReviewingOrdersSearch = true;
+        			setStatusSearchFieldName(PLACED_STATUS);
+        		}
+        		else if(getStatusSearchFieldName().equalsIgnoreCase(AWAITING_FO_CREATION)){
         			isCSRReviewingOrdersSearch = true;
         			setStatusSearchFieldName(PLACED_STATUS);
         		}
