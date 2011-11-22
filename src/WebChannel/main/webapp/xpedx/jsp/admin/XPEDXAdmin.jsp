@@ -36,7 +36,7 @@
 	href="<s:url value='/xpedx/css/theme/xpedx-mil-new.css'/>" />
 
 	
-
+<!-- Test -->
 <!-- javascript -->
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/global/ext-base.js'/>"></script>
