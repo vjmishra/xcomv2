@@ -1,19 +1,20 @@
 // WebTrends SmartSource Data Collector Tag
-// Version: 9.3.0     
-// Tag Builder Version: 3.1
-// Created: 12/10/2010 3:34:12 AM
+// Version: 9.4.0     
+// Tag Builder Version: 3.3
+// Created: 11/22/2011 12:30:55 AM
+//This comment should be overriden by the build. If you see this comment, then the swc build failed. 
 
 function WebTrends(){
 	var that=this;
 	// begin: user modifiable
-	this.dcsid="dcs5w0txb10000wocrvqy1nqm_6n1p";
-	this.domain="s29exvm03.na.ipaper.com";
+	this.dcsid="dcss65gy60000047oyttgyyh4_2w7y";
+	this.domain="wtsdc.ipaper.com";
 	this.timezone=-5;
-	this.fpcdom=".ngdev.ipaper.com";
+	this.fpcdom=".dev.xpedx.com";
 	this.onsitedoms="";
-	this.downloadtypes="xls,doc,pdf,txt,csv,zip";
+	this.downloadtypes="xls,xlsx,doc,docx,pdf,txt,csv,zip";
 	this.navigationtag="div,table";
-	this.metanames="DCSext.wtP_A_Item,DCSext.wtP_A_InStock,DCSext.w_x_sc,DCSext.w_x_scr,DCSext.w_x_list_edit,DCSext.w_x_list_addnew,DCSext.w_x_importlist,DCSext.w_x_ord_quickadd_cp,DCSext.w_x_list_export,DCSext.w_x_qa_special,DCSext.w_x_list_additem,DCSext.w_x_sharelist,WT.si_n,WT.tx_cartid,WT.si_x,DCSext.w_x_ord_ac,DCSext.w_x_narrowby,DCSext.w_x_item_repl_p,DCSext.w_x_item_alt_p,DCSext.w_x_item_crosssell_p,DCSext.w_x_item_upsell_p,DCSext.w_x_ss,WT.ossr,WT.oss,DCSext.w_x_tools_ti,DCSext.w_x_news_add,DCSext.w_x_news_edit,DCSext.w_x_news_fa,DCSext.w_x_news_fa_ti,DCSext.w_x_cart_save,DCSext.w_x_reorder,DCSext.w_x_reg,DCSext.w_x_reg_c,DCSext.w_x_rush,DCSext.w_x_ord_willcall,DCSext.w_x_po,DCSext.w_x_cart_new,DCSext.w_x_ord_shov_edit,DCSext.w_ut,DCSext.w_x_item_alt_ac,DCSext.w_x_item_repl_ac,DCSext.w_x_item_crosssell_ac,DCSext.w_x_item_upsell_ac";
+	this.metanames="DCSext.wtP_A_Item,DCSext.wtP_A_InStock";
 	this.trackevents=true;
 	this.enabled=true;
 	this.i18n=false;
@@ -201,7 +202,7 @@ WebTrends.prototype.dcsTypeMatch=function(pth, typelist){
 }
 WebTrends.prototype.dcsEvt=function(evt,tag){
 	var e=evt.target||evt.srcElement;
-	while (e.tagName&&(e.tagName.toLowerCase()!=tag.toLowerCase())){
+	while (e&&e.tagName&&(e.tagName.toLowerCase()!=tag.toLowerCase())){
 		e=e.parentElement||e.parentNode;
 	}
 	return e;
@@ -276,25 +277,28 @@ WebTrends.prototype.dcsSetProps=function(args){
 	}
 }
 WebTrends.prototype.dcsSaveProps=function(args){
-	var i,key,param;
+	var i,x,key,param;
 	if (this.preserve){
 		this.args=[];
-		for (i=0;i<args.length;i+=2){
+		for (i=0,x=0;i<args.length;i+=2){
 			param=args[i];
 			if (param.indexOf('WT.')==0){
 				key=param.substring(3);
-				this.args[i]=param;
-				this.args[i+1]=this.WT[key]||"";
+				this.args[x]=param;
+				this.args[x+1]=this.WT[key]||"";
+				x+=2;
 			}
 			else if (param.indexOf('DCS.')==0){
 				key=param.substring(4);
-				this.args[i]=param;
-				this.args[i+1]=this.DCS[key]||"";
+				this.args[x]=param;
+				this.args[x+1]=this.DCS[key]||"";
+				x+=2;
 			}
 			else if (param.indexOf('DCSext.')==0){
 				key=param.substring(7);
-				this.args[i]=param;
-				this.args[i+1]=this.DCSext[key]||"";
+				this.args[x]=param;
+				this.args[x+1]=this.DCSext[key]||"";
+				x+=2;
 			}
 		}
 	}
@@ -570,7 +574,7 @@ WebTrends.prototype.dcsVar=function(){
 			WT.le="unknown";
 		}
 	}
-	WT.tv="9.3.0";
+	WT.tv="9.4.0";
 	WT.sp=this.splitvalue;
 	WT.dl="0";
 	WT.ssl=(window.location.protocol.indexOf('https:')==0)?"1":"0";
@@ -645,9 +649,6 @@ WebTrends.prototype.dcsCreateImage=function(dcsSrc){
 		this.images[this.index].src=dcsSrc;
 		this.index++;
 	}
-	else{
-		document.write('<img alt="" border="0" name="DCSIMG" width="1" height="1" src="'+dcsSrc+'">');
-	}
 }
 WebTrends.prototype.dcsMeta=function(){
 	var elems;
@@ -662,8 +663,6 @@ WebTrends.prototype.dcsMeta=function(){
 		for (var i=0;i<length;i++){
 			var name=elems.item(i).name;
 			var content=elems.item(i).content;
-//alert("name="+name);
-//alert("content="+content);
 			var equiv=elems.item(i).httpEquiv;
 			if (name.length>0){
 				if (name.toUpperCase().indexOf("WT.")==0){
