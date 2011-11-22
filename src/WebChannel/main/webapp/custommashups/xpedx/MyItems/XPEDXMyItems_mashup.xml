@@ -425,7 +425,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API FlowName="changeXPEDX_MyItemsList">
             <Input>
-				<XPEDXMyItemsList MyItemsListKey=" ">
+				<XPEDXMyItemsList MyItemsListKey=" " SharePrivate="">
 					<XPEDXMyItemsListShareList Reset="true" /> 
 				</XPEDXMyItemsList>
             </Input>

@@ -601,6 +601,11 @@
                 <param name="draft">Y</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
             </result>
+             <result name="CartError" type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">Y</param>				
+            </result>
         </action>
         
         <action name="quickAddAction"
