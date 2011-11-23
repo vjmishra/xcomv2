@@ -1770,7 +1770,8 @@
 					<PersonInfoShipTo />
 					<PersonInfoBillTo />
 					<OrderLines>
-						<OrderLine OrderLineKey="" SubLineNo="" PrimeLineNo="" OrderedQty="" LineType="" ShipNode="" StatusQuantity=""> 
+						<OrderLine OrderLineKey="" SubLineNo="" PrimeLineNo="" OrderedQty="" LineType="" ShipNode="" StatusQuantity=""
+						CustomerPONo=""> 
 							<Item ItemID="" UnitOfMeasure="" ItemShortDesc="" ItemDesc=""/>
 							<LinePriceInfo UnitPrice="" LineTotal="" />
 							<Extn />
