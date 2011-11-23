@@ -45,12 +45,22 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
             FPlaceOrderE inputOrderXml = new FPlaceOrderE();
             FPlaceOrder inputPlaceOrder = new FPlaceOrder();
             String inputXMLString = SCXmlUtil.getString(inputXML);
-             log.info("Input xml for OrderPlace to Legacy: "+inputXMLString);
-             inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
-             inputOrderXml.setFPlaceOrder(inputPlaceOrder);
+            log.info("Input xml for OrderPlace to Legacy: "+inputXMLString);
+            inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
+            inputOrderXml.setFPlaceOrder(inputPlaceOrder);
+            FPlaceOrderResponseE orderResponse=null;
+			try {
+				orderResponse = testStub.fPlaceOrder(inputOrderXml);
+			
+			}catch (Exception oeException){
+				oeException = new Exception("Transaction has failed when trying to invoke Edit Order webservice."); 				
+ 				prepareErrorObject(oeException, "Order Edit", XPXLiterals.YFE_ERROR_CLASS, env, inputXML);
+ 				/*Begin - Changes made by Mitesh Parikh for JIRA 3045*/
+ 				env.setTxnObject("OrderEditTransactionFailure", "System Error - Please try after sometime.");
+ 				/*End - Changes made by Mitesh Parikh for JIRA 3045*/
+				throw oeException;
 				
-             FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
-
+			}
 
             orderEditResponseDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
              
@@ -59,15 +69,18 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
             Element orderElement = orderEditResponseDoc.getDocumentElement(); 
             NodeList tranStatusList = (NodeList)orderElement.getElementsByTagName("TransactionStatus");
      		if(tranStatusList.getLength() > 0){
-     		Node tranStatusNode = (Node)tranStatusList.item(0);
-     		String tranStatus = tranStatusNode.getTextContent();
+     			Node tranStatusNode = (Node)tranStatusList.item(0);
+     			String tranStatus = tranStatusNode.getTextContent();
      			// Transaction status has been checked for Failure.
      			if(tranStatus != null && tranStatus.equalsIgnoreCase("F")){
-     					// Error logged in CENT and thrown to revert the Order changes made in sterling database.
+     				// Error logged in CENT and thrown to revert the Order changes made in sterling database.
      				log.info("Order Edit - Transaction has failed when trying to modify order in Legacy.");	
      				Exception oeException = new Exception("Transaction has failed when trying to modify order in Legacy.");
      				// setErrorDescription("Transaction has failed when trying to modify order in Legacy.");
      				prepareErrorObject(oeException, "Order Edit", XPXLiterals.YFE_ERROR_CLASS, env, inputXML);
+     				/*Begin - Changes made by Mitesh Parikh for JIRA 3045*/
+     				env.setTxnObject("OrderEditTransactionFailure", "System Error - Please try after sometime.");
+     				/*End - Changes made by Mitesh Parikh for JIRA 3045*/
      				throw oeException;
      			}
      		}
