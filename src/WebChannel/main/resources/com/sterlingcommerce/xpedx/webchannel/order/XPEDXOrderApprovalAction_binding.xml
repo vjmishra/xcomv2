@@ -5,7 +5,7 @@
 	<entry key="WCContext.storefrontId">orderApprovalListWidget:/Page/API/Input/Order/@EnterpriseCode,orderApprovalList:/Page/API/Input/Order/@EnterpriseCode,userListForApproval:/CustomerContact/@OrganizationCode</entry>
 	<entry key="WCContext.LoggedInUserId">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ResolverUserId,checkApproverRoleForUser:/User/@Loginid</entry>	
 	<entry key="#parameters.OrderHeaderKey">orderApproval:/Order/@OrderHeaderKey,xpedxCreateLegacyOrderOnApproval:/Order/@OrderHeaderKey</entry>
-	<entry key="#parameters.ReasonText">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ReasonText,orderApproval:/Order/Notes/Note/@NoteText</entry>
+	<entry key="#parameters.ReasonText">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ReasonText</entry>
 	<entry key="#parameters.ApprovalAction">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@Status</entry>
 	<entry key="pageNumber.toString()">orderApprovalList:/Page/@PageNumber</entry>
 	<entry key="orderByAttribute">orderApprovalList:/Page/API/Input/Order/OrderBy/Attribute/@Name</entry>

@@ -165,7 +165,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				/*if(!isChangeOrderCalled)
 					isChangeOrderCalled=isNewLine(getMajorLineElements());*/
 				ajaxDisplayStatusCodeMsg = XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
-				if(isChangeOrderCalled)
+				//if(isChangeOrderCalled)
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
 		
 				/*			
@@ -418,8 +418,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		try
 		{
 			
-			if("true".equals(isEditOrder))
-			{
+			/*if("true".equals(isEditOrder))
+			{*/
 				XPEDXItem item=null;
 				Element orderLeme=(Element)getOrderElementFromOutputDocument().getElementsByTagName("PriceInfo").item(0);
 				String currencyCode=orderLeme.getAttribute("Currency");
@@ -433,7 +433,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					String extnEditOrderFlag=extnElem.getAttribute("ExtnEditOrderFlag");
 					Element orderLineTran=(Element)orderLineElem.getElementsByTagName("OrderLineTranQuantity").item(0);
 					String lineType=orderLineElem.getAttribute("LineType");
-					if(!"Y".equals(extnEditOrderFlag))
+					if("M".equals(lineType))
 					{
 						Element itemElem=(Element)orderLineElem.getElementsByTagName("Item").item(0);
 						item=new XPEDXItem();
@@ -444,8 +444,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						item.setRequestedQtyUOM(orderLineTran.getAttribute("TransactionalUOM"));
 						item.setUnitPricePerRequestedUOM(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
 						item.setLineNumber(orderLineElem.getAttribute("PrimeLineNo"));
-						if("M".equals(lineType))
-						{
+						
 							Element lineTypeMElem=SCXmlUtil.createChild(lineTypeElem, "Item");
 							lineTypeMElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
 							lineTypeMElem.setAttribute("UnitOfMeasure", extnElem.getAttribute("ExtnPricingUOM"));
@@ -453,13 +452,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 							primaryInfo.setAttribute("MinOrderQuantity", "1");
 							primaryInfo.setAttribute("PricingUOM", extnElem.getAttribute("ExtnPricingUOM"));
 							primaryInfo.setAttribute("PricingQuantityConvFactor", "1");
-						}
+						//}
 						pna.getItems().add(item);
 					}
 					if("Y".equals(extnEditOrderFlag))
 						newLine=true;
 				}
-			}
+			//}
 		}
 		catch(Exception e)
 		{

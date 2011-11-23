@@ -64,7 +64,14 @@ function validateForm()
     return rtn;
 }
 
+function validateOnEnter(e){
 
+	if (e.keyCode == 13) 
+	{ 
+		validateForm();        
+	  return ;     
+	} 
+}
 function loadWindow(){
    <s:url id='alogoutURL' namespace='/common' action='salesrepLogout'></s:url>
         
@@ -206,7 +213,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		</td>
 		</tr>
 		<td style="text-align:left;">
-			<input type="password" id="Password" name="Password" class="x-input" tabindex="2"/>
+			<input type="password" id="Password" name="Password" class="x-input" tabindex="2" onkeypress="return validateOnEnter(event);"/>
 		</td>
 	</tr>
 	<tr>
