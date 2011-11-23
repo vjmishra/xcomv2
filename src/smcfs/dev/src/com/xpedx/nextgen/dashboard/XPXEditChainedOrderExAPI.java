@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import org.w3c.dom.Document;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant;
@@ -206,7 +207,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			ex.printStackTrace();
 			((YFSContext)env).rollback();
 			prepareErrorObject(ex, "OrderEdit", ex.getMessage(), env, inXML);
-			inXML.getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());
+			inXML.getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());			
 			return inXML;
 		}
 		return inXML;
@@ -418,7 +419,15 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			ex.printStackTrace();
 			((YFSContext)env).rollback();
 			prepareErrorObject(ex, "OrderEdit", ex.getMessage(), env, editOrdEle.getOwnerDocument().getDocument());
-			editOrdEle.getOwnerDocument().getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());
+			/*Begin - Changes made by Mitesh Parikh for JIRA 3045*/
+			if(env.getTxnObject("OrderEditTransactionFailure") == null)
+				editOrdEle.getOwnerDocument().getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());
+			else
+				editOrdEle.getOwnerDocument().getDocumentElement().setAttribute("TransactionMessage",env.getTxnObject("OrderEditTransactionFailure").toString());
+			
+			log.info("Order Edit Transaction failure XML : "+SCXmlUtil.getString(editOrdEle.getOwnerDocument().getDocument()));			
+			/*End - Changes made by Mitesh Parikh for JIRA 3045*/
+			
 			return editOrdEle.getOwnerDocument().getDocument();
 		}
 		return editOrdEle.getOwnerDocument().getDocument();

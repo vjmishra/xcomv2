@@ -1270,13 +1270,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Document tempDoc = null;
 		
 		// Calculate Price Information.
-		// Fulfillment Order
-		setExtendedPriceInfo(env, chngfOrderEle, false);
-		// Customer Order.
-		if (chngcOrderEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle.getAttribute("OrderHeaderKey"))) {
-			setExtendedPriceInfoCO(chngcOrderEle, chngfOrderEle, cAndfOrderEle,"C");
-		} else {
-			setExtendedPriceInfoCO(chngcOrderEle1, chngfOrderEle, cAndfOrderEle,"C");
+		if(hasOrderLines(chngfOrderEle)) {
+			// Fulfillment Order
+			setExtendedPriceInfo(env, chngfOrderEle, false);
+			// Customer Order.
+			if (chngcOrderEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle.getAttribute("OrderHeaderKey"))) {
+				setExtendedPriceInfoCO(chngcOrderEle, chngfOrderEle, cAndfOrderEle,"C");
+			} else {
+				setExtendedPriceInfoCO(chngcOrderEle1, chngfOrderEle, cAndfOrderEle,"C");
+			}
 		}
 
 		if (chngcOrdStatusEle0.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))
@@ -1447,7 +1449,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement ordLineExtnEle = null;
 		YFCElement ordLinesEle = ordEle.getChildElement("OrderLines");
 		if (ordLinesEle != null) {
-			YFCIterable<YFCElement> yfcItr = ordLinesEle.getChildren("OrderLine");
+			YFCIterable<YFCElement> yfcItr = ordLinesEle.getChildren("OrderLine");			
 			while (yfcItr.hasNext()) {
 				YFCElement ordLineEle = (YFCElement) yfcItr.next();
 				String extPrice = null;
@@ -1457,11 +1459,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (!isCustOrder) {
 					if (ordLineEle.hasAttribute("LineProcessCode")) {
 						lineProcessCode = ordLineEle.getAttribute("LineProcessCode");
-						if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {
-							throw new Exception("Attribute LineProcessCode Cannot be NULL or Void!");
+						if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {							
+							break;
 						}
 					} else {
-						throw new Exception("Attribute LineProcessCode Not Available To Do Price Calculation!");
+						break;						
 					}
 				}
 				
@@ -1518,9 +1520,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					}
 				}
 			}
-						
+			
 			if (!isCustOrder) {	
-				if (ordExtnEle != null) {
+				if (ordExtnEle != null && ! new Double(extnOrdSubTotal).toString().equalsIgnoreCase("0.0")) {
 					ordExtnEle.setAttribute("ExtnOrderSubTotal", new Double(extnOrdSubTotal).toString());
 				}
 			} else {
@@ -5385,8 +5387,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (YFCObject.isNull(_ordSubTotal) || YFCObject.isVoid(_ordSubTotal)) {
 					_ordSubTotal = "0.0";
 				}
-			} else {
+			} else {				
 				_ordSubTotal = "0.0";
+				
 			}
 			// Order Adjustment from legacy.
 			if (orderExtnElement.hasAttribute("ExtnLegTotOrderAdjustments")) {
@@ -5441,6 +5444,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		double cOrderTax = 0.0;
 		double cOrderFreightCharge = 0.0;
 		double cTotalOrderValue = 0.0;
+		double cTotalOrderValueWithoutTax = 0.0;
 		YFCIterable<YFCElement> orderItr = cAndfOrderEle.getChildren("Order");
 		while (orderItr.hasNext()) {
 			YFCElement orderElem = (YFCElement) orderItr.next();
@@ -5500,8 +5504,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							orderFreightCharge = "0.0";
 						}
 					}
-					
-					
+							
 					if (orderHeaderKey.equalsIgnoreCase(_orderHeaderKey)) {
 						if (!headerProcessCode.equalsIgnoreCase("D")) {
 							cOrdSubTotal = cOrdSubTotal + Double.parseDouble(_ordSubTotal);
@@ -5526,6 +5529,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			cOrderFreightCharge = cOrderFreightCharge + Double.parseDouble(_orderFreightCharge);
 		}
 		
+		cTotalOrderValueWithoutTax = (cOrdSubTotal - cTotalOrdAdj);
 		cTotalOrderValue = (cOrdSubTotal - cTotalOrdAdj) + cOrderTax + cOrderFreightCharge;
 		
 		System.out.println("");
@@ -5536,12 +5540,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		System.out.println("ExtnTotalOrderValue:" + cTotalOrderValue);
 		
 		YFCElement ordExtnEle = chngcOrderEle.getChildElement("Extn");
-		if (ordExtnEle != null) {
+		if (ordExtnEle != null && ! new Double(cTotalOrderValue).toString().equalsIgnoreCase("0.0")) {
 			ordExtnEle.setAttribute("ExtnOrderSubTotal", new Double(cOrdSubTotal).toString());
 			ordExtnEle.setAttribute("ExtnLegTotOrderAdjustments", new Double(cTotalOrdAdj).toString());
 			ordExtnEle.setAttribute("ExtnOrderTax", new Double(cOrderTax).toString());
 			ordExtnEle.setAttribute("ExtnTotalOrderFreight", new Double(cOrderFreightCharge).toString());
 			ordExtnEle.setAttribute("ExtnTotalOrderValue", new Double(cTotalOrderValue).toString());
+			ordExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", new Double(cTotalOrderValueWithoutTax).toString());
 		}
 		
 		YFCElement ordLinesEle = chngcOrderEle.getChildElement("OrderLines");
@@ -5567,10 +5572,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				
 				// To get the order line total for the customer order line.
 				orderLineTotal = getOrderLineTotalForWebLineNo(webLineNo, chngfOrderEle, cAndfOrderEle, headerProcessCode);
-				
+				if (YFCObject.isNull(orderLineTotal) || YFCObject.isVoid(orderLineTotal)) {					
+					orderLineTotal = "0.0";
+				}
+
 				if (ordLineEle.hasAttribute("ExtendedPrice")) {
 					extPrice = ordLineEle.getAttribute("ExtendedPrice");
-					if (YFCObject.isNull(extPrice) || YFCObject.isNull(extPrice)) {
+					if (YFCObject.isNull(extPrice) || YFCObject.isVoid(extPrice)) {
 						extPrice = "0.0";
 					}
 				} else {
@@ -5580,7 +5588,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				String legOrdLineAdj = null;
 				if (ordLineEle.hasAttribute("LegOrderLineAdjustments")) {
 					legOrdLineAdj = ordLineEle.getAttribute("LegOrderLineAdjustments");
-					if (YFCObject.isNull(legOrdLineAdj) || YFCObject.isNull(legOrdLineAdj)) {
+					if (YFCObject.isNull(legOrdLineAdj) || YFCObject.isVoid(legOrdLineAdj)) {
 						legOrdLineAdj = "0.0";
 					}
 				} else {
@@ -5588,6 +5596,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 
 				if (ordLineExtnEle != null) {
+						
 						ordLineExtnEle.setAttribute("ExtnLineOrderedTotal", orderLineTotal);
 						ordLineExtnEle.setAttribute("ExtnExtendedPrice", extPrice);
 						ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", legOrdLineAdj);
@@ -5620,13 +5629,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	public String getOrderLineTotalForWebLineNo(String webLineNo, YFCElement chngfOrderEle, YFCElement cAndfOrderEle, String headerProcessCode) throws Exception {
 		
 		String _webLineNo = null;
-		double ordLineTotal = 0.0;
 		double ordLineTotalDB = 0.0;
 		double ordLineTotalLeg = 0.0;
-		String orderLineKey = null;
-		String _orderLineKey = null;
+		String orderLineKey = "";
+		String _orderLineKey = "";
 		String lineProcessCode = null;
-		
+				
 		// To get the line order total from the XML sent by Legacy.
 		YFCElement orderLinesElem = chngfOrderEle.getChildElement("OrderLines");
 		if (orderLinesElem != null) {
@@ -5647,10 +5655,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						if (orderLineElem.hasAttribute("LineProcessCode")) {
 							lineProcessCode = orderLineElem.getAttribute("LineProcessCode");
 							if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {
-								throw new Exception("Attribute LineProcessCode Cannot be Null or Void!");
+								lineProcessCode = "";
+								// throw new Exception("Attribute LineProcessCode Cannot be Null or Void!");
 							}
 						} else {
-							throw new Exception("Attribute LineProcessCode Not Available In The ChangeOrder XML! ");
+							lineProcessCode = "";
+							// throw new Exception("Attribute LineProcessCode Not Available In The ChangeOrder XML! ");
 						}
 						
 						// To retrieve Order Line Key from XML sent by Legacy.
@@ -5720,9 +5730,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								}
 								
 								String extnLineOrdTotal = _orderLineExtnElem.getAttribute("ExtnLineOrderedTotal");
-								if (!YFCObject.isNull(extnLineOrdTotal) && !YFCObject.isVoid(extnLineOrdTotal) 
-										&& !(lineProcessCode.equalsIgnoreCase("C") && orderLineKey.equalsIgnoreCase(_orderLineKey))) {
-									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal);
+								
+								if (orderLineKey.equalsIgnoreCase(_orderLineKey) || lineProcessCode.equalsIgnoreCase("A")) {
+									// Header Process Code is compared instead of Line Process Code as Legacy might not send Line information to delete an Order.
+									if (!headerProcessCode.equalsIgnoreCase("D")) {
+										ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg ;
+									}
+								} else {
+									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal) ;
 								}
 							}
 						}
@@ -5732,20 +5747,28 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 		
 		if (headerProcessCode.equalsIgnoreCase("A")) {
-			ordLineTotal = ordLineTotalLeg + ordLineTotalDB;
-		} else if (headerProcessCode.equalsIgnoreCase("D")) {
-			ordLineTotal = ordLineTotalDB - ordLineTotalLeg;
-		} else {
-			// Header Process Code C.
-			if (lineProcessCode.equalsIgnoreCase("C") || lineProcessCode.equalsIgnoreCase("A")) {
-				ordLineTotal = ordLineTotalLeg + ordLineTotalDB;
-			} else {
-				// Line Process Code D.
-				ordLineTotal = ordLineTotalDB - ordLineTotalLeg;
-			}	
-		} 
+			ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg ;
+		}
+			
+		System.out.println("");
+		System.out.println("CustomerOrder OrderLineTotal For WebLineNo :" + webLineNo + " is " + ordLineTotalDB);
 		
-		return new Double(ordLineTotal).toString();
+		return new Double(ordLineTotalDB).toString();
+	}
+	
+	private boolean hasOrderLines(YFCElement chngfOrderEle) {
+	
+		YFCElement orderLinesElem = chngfOrderEle.getChildElement("OrderLines");
+		if ( orderLinesElem != null) {
+			YFCIterable<YFCElement> yfcItr = orderLinesElem.getChildren("OrderLine");
+			if (yfcItr.hasNext()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	public void setProperties(Properties _prop) throws Exception {
