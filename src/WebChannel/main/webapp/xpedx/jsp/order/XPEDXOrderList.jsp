@@ -839,7 +839,13 @@
 											</s:if><br/>
 										</s:if>
 										<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-												<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+												<s:if test='%{#parentOrder.getAttribute("Status") != "Awaiting FO Creation"}'>
+														<s:property value="#parentOrder.getAttribute('Status')" />
+												</s:if>
+												<s:else>
+												 		Submitted
+												</s:else>	 
+                        				 			<s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 										</s:elseif>
 									</s:if> 
 									<s:else>

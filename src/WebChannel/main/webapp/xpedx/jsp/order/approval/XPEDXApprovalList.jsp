@@ -558,7 +558,15 @@ div.demo {
 								<br />
 								</td>
 					
-								<td><s:property value='#priceWithCurrency' /></td>
+								<td>
+									<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+									<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+		                    		</s:if>
+		                            <s:else>
+										(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+									</s:else>
+								</td>
 					
 								<td>
 									<s:set name="isPendingApproval" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_LIMIT_APPROVAL')}" />

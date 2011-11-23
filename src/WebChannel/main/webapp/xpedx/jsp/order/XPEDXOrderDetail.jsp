@@ -1275,10 +1275,8 @@ function showSplitDiv(divId)
 			</s:if>		
 			<s:else>
 				<s:if test="!#isEstimator">
-				<s:if test="#_action.isEditableOrder()">
-				     <s:if test!="%{#isOrderOnCSRReviewHold}">
-					<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
-					</s:if>
+				<s:if test="#_action.isEditableOrder()">				     
+					<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
 				</s:if>
 				</s:if>
 			</s:else>
