@@ -4,7 +4,8 @@
 <%@ taglib prefix="swc" uri="swc"%>
 <script type="text/javascript">
 function viewAccountDetails()
-{
+{	//Added For Jira 2903
+	Ext.Msg.wait("Processing..."); 
 	document.getElementById("selectAccountForm").submit();
 }
 </script>
