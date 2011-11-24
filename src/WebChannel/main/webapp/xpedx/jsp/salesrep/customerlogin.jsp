@@ -4,12 +4,23 @@
 <html>
 <head>
 <title>Auto Login Inprogress...</title>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+
 </head>
 
 <body onload="document.singForm.submit();">
+
+<script type="text/javascript">
+Ext.onReady(function() {    
+	//Added For Jira 2903
+	Ext.Msg.wait("Processing..."); 
+   });
+</script> 
+
 	<div>
   		<s:form action="login" namespace="/common" method="post" name="singForm" id="singForm" cssStyle="margin: 15px 0 0 50px;">
-			<h2>Please wait... the home page is loading ...</h2>
 			<s:hidden name="DisplayUserID" value="%{#request.dum_username}"/>
 			<s:hidden name="Password" value="%{#request.dum_password}"/>
 			<s:hidden name ="loggedInUserName" value="%{#session.loggedInUserName}"/>
