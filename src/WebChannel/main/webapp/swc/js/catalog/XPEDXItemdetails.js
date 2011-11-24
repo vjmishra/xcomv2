@@ -36,6 +36,8 @@ function updatePandA() {
 			.getElementById("qtyBox").value;
 	document.productDetailForm.action = document
 			.getElementById('updatePandAURL');
+	//Added For Jira 2903
+	Ext.Msg.wait("Processing..."); 
 	document.productDetailForm.submit();
 }
 
