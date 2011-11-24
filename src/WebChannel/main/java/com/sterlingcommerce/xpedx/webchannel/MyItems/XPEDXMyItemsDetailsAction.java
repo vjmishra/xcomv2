@@ -137,6 +137,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected String isPnAAvailable;
 	private String myItemsKey;
 	private String priceCurrencyCode;
+	//2964 Start
+	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
+		return itemIdConVUOMMap;
+	}
+
+	public void setItemIdConVUOMMap(
+			Map<String, Map<String, String>> itemIdConVUOMMap) {
+		this.itemIdConVUOMMap = itemIdConVUOMMap;
+	}
+   //2964 End
 	protected List bracketsPricingList = null;
 	List<String> DataList = new ArrayList();
 	private boolean filterBySelectedListChk = false;
@@ -145,6 +155,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String sharePrivateField;
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
 	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
+	//Start 2964
+	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+	//End 2964
 	
 	protected HashMap<String, String> itemImagesMap = new HashMap<String, String>();
 	protected HashMap<String, String> itemDescMap = new HashMap<String, String>();
@@ -560,6 +573,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					String itemIdForUom = iterator.next();
 					Map uommap = itemIdsUOMsMap.get(itemIdForUom);
 					Set<Entry<String, String>> set = uommap.entrySet();
+					Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
+					itemIdConVUOMMap.put(itemIdForUom, newUomMap);
 					for (Entry<String, String> entry : set) {
 						String uom = entry.getKey();
 						String convFactor = (String) uommap.get(entry.getKey());
