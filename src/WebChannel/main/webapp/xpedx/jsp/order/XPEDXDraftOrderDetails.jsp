@@ -877,7 +877,7 @@ $(document).ready(function(){
 			<s:set name="editOrderOrderLineExtn" value='#util.getElement(#editOrderOrderLine, "Extn")' />
 		</s:if>
 		 
-		<s:set name="itemuomMap" value='itemIdsUOMsMap[#itemIDVal]' />
+		<s:set name="itemuomMap" value='itemIdConVUOMMap[#itemIDVal]' />
 		<s:set name="displayUomMap" value='itemIdsUOMsDescMap[#itemIDVal]' />
 		<s:hidden name="itemUOMs" id="itemUOMs_%{#orderLineKey}" value='%{#uom}' /> 
 		<s:set name="convF" value='#itemuomMap[#uom]' />
