@@ -764,9 +764,11 @@ function showSharedListForm(){
 				formItemIds.orderHeaderKey.value = selCart;
 				//formItemIds.submit();
 				//START - Submit the form via ajax
-	                 //Ext.Msg.wait("Adding items to cart...Please wait!");
-	                     xpedx_working_start();
-                         setTimeout(xpedx_working_stop, 3000);
+	            //Added For Jira 2903
+				Ext.Msg.wait("Processing...");      
+				//Ext.Msg.wait("Adding items to cart...Please wait!");
+	                     //xpedx_working_start();
+                         //setTimeout(xpedx_working_stop, 3000);
 	                 Ext.Ajax.request({
 	                   url: '<s:property value='%{addToCartLink}' escape='false'/>',
 	                   form: 'formItemIds',
