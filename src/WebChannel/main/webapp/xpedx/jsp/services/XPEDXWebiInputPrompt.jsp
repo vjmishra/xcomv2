@@ -125,8 +125,8 @@
 	var docId = '<s:property value="id"/>';
 	var strUrl = "/swc/xpedx/jsp/reporting/viewers/cdz_adv/viewDocument.jsp?sEntry="+ strEntry +"&lang=en&id="+ docId +"&ViewType=H&sPageMode=QuickDisplay&sRefresh=yes&kind=Webi";
 	//strUrl += "&timeOutx=100&zoom=100&sNewDoc=false&sApplyFormat=&iDPIndex=&bValidateSQL=false&nAction=&advPrompts=yes&bCreateDefaultReportBody=false&defaultRepTitle=Report%2BTitle";
-	
-	
+	//Added For Jira 2810
+	//window.open(strUrl,'','toolbar=0');
 	window.open(strUrl);
 </s:if>
 
@@ -360,7 +360,9 @@
 
 				if(url!=null) {
 
-					Ext.Msg.wait("Getting the Accounts.... Please Wait..."); 
+					//Added For Jira 2903
+					Ext.Msg.wait("Processing..."); 
+					//Ext.Msg.wait("Getting the Accounts.... Please Wait..."); 
 
 
 					Ext.Ajax.request({
@@ -412,7 +414,9 @@
 
 				if(url!=null) {
 
-					Ext.Msg.wait("Getting the Bill-To Locations.... Please Wait..."); 
+					//Added For Jira 2903
+					Ext.Msg.wait("Processing..."); 
+					//Ext.Msg.wait("Getting the Bill-To Locations.... Please Wait..."); 
 
 
 					Ext.Ajax.request({
@@ -462,7 +466,9 @@
 
 				
 				if(url!=null) {
-					Ext.Msg.wait("Getting the Ship-To Locations.... Please Wait..."); 
+					//Added For Jira 2903
+					Ext.Msg.wait("Processing..."); 
+					//Ext.Msg.wait("Getting the Ship-To Locations.... Please Wait..."); 
 
 
 					Ext.Ajax.request({
