@@ -435,8 +435,9 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	    //Execute the call
 	    document.body.style.cursor = 'wait';
 	    $.fancybox.close();
-	    Ext.Msg.wait('Creating list...');
-	    
+	  //Added For Jira 2903
+        Ext.Msg.wait("Processing..."); 
+
 	    Ext.Ajax.request({
 	      url: url,
 	      form: xForm,
