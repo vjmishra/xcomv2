@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -1337,7 +1338,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				ArrayList<String> uomKeys = new ArrayList<String>();
 				uomKeys.addAll(uommap.keySet());
 				Iterator<String> uomIterator = uomKeys.iterator();
-				//Map<String, String> newUomMap = new HashMap<String, String>();
+				Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
+				itemIdConVUOMMap.put(itemIdForUom, newUomMap);
 				while(uomIterator.hasNext()) {
 					String uom = uomIterator.next();
 					String convFactor = (String) uommap.get(uom);
@@ -1354,7 +1356,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 			}
 		}
-		
 		for (int i = 0; i < items.size(); i++) {
 			String newItemID = (String)items.get(i);
 			String itemIDUOM = (String)itemIDToItemIDUOMMap.get(newItemID);
@@ -1903,6 +1904,19 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private float chargeAmount;
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
+	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
+		return itemIdConVUOMMap;
+	}
+
+	public void setItemIdConVUOMMap(
+			Map<String, Map<String, String>> itemIdConVUOMMap) {
+		this.itemIdConVUOMMap = itemIdConVUOMMap;
+	}
+
+
+
+	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+	
 	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	String lastModifiedDateString = "";
 	String lastModifiedUserId = "";
