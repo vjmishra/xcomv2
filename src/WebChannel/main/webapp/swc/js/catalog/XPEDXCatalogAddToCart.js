@@ -117,7 +117,9 @@ function addItemToCart(itemId) {
 			var selectedUom = uomList.options[uomList.selectedIndex].value;
 			var url = document.getElementById('checkAvailabilityURLId').value;
 			/*Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); */
-			Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
+			//Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
+			//Added For Jira 2903
+			Ext.Msg.wait("Processing...");
 			Ext.Ajax.request({
 	            url: url,
 	            params: {
