@@ -813,14 +813,16 @@
 							</s:if><br /></td>
 		
 							<td align="right">
-							
-							<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-							<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-                    		</s:if>
-                            <s:else>
-								(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
-							</s:else></td>
+								<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
+									<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+									<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+		                    		</s:if>
+		                            <s:else>
+										(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+									</s:else>
+								</s:if>							
+							</td>
 							<td class="right-cell">
 								<s:set name="isPendingApproval" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_LIMIT_APPROVAL')}" />
 								<s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
@@ -917,13 +919,15 @@
 				            	<td><s:property value='#OrderExtn.getAttribute("ExtnShipToName")'/></td>
 				            	
 				            	<td>
-				            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-										<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-			                    		</s:if>
-			                            <s:else>
-											(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
-										</s:else>
+				            		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
+					            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+											<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
+												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+				                    		</s:if>
+				                            <s:else>
+												(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+											</s:else>
+									</s:if>
 				            	</td>
 				            	
 				            	<td class="right-cell"><s:property value='#chainedOrder.getAttribute("Status")'/></td>
