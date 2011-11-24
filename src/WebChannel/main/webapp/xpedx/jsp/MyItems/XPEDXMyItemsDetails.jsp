@@ -1875,7 +1875,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name='showItemType' value='%{true}' />
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
 					
-					<s:set name="itemUOMsMap" value='itemIdsUOMsMap.get(#itemId)' />
+					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='%{#itemUomId}' />
 					<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name="YFSItmeExtn" value='masterItemExtnMap.get(#item.getAttribute("ItemId"))' />
@@ -2096,9 +2096,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 </tr>
 								
 								<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
-									<s:set name="itemIdUOMsMap" value='itemIdsUOMsMap.get(#itemId1)' />
-									<s:iterator value='itemIdUOMsMap'>
-										<s:set name='currentUomId' value='key' />
+									<%-- <s:set name="itemIdUOMsMap" value='itemIdsUOMsMap.get(#itemId1)' />
+									 --%>
+									 <s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
+									 <s:iterator value='itemIdUOMsMap'>
 										<s:set name='currentUomConvFact' value='value' />
 										<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
 									</s:iterator>
