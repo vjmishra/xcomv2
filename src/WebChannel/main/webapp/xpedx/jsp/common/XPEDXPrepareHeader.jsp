@@ -520,7 +520,8 @@
         //Execute the call
         document.body.style.cursor = 'wait';
         $.fancybox.close();
-        Ext.Msg.wait('Creating list...');
+		//Added For Jira 2903
+        Ext.Msg.wait("Processing..."); 
 
         Ext.Ajax.request({
           url: url,
@@ -859,18 +860,22 @@
         }
     }
     function showAssignedShipTo(url)
-    {
+    {	
+    	//Added For Jira 2903
+    	Ext.Msg.wait("Processing..."); 
     	var x = document.getElementById('ajax-assignedShipToCustomers');
-        x.innerHTML = "Loading Data... Please wait!";
+    	//x.innerHTML = "Loading Data... Please wait!";
         url = ReplaceAll(url,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
             method: 'POST',
             success: function (response, request){
 	        	document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
+	        	Ext.Msg.hide();
        		},
        		failure: function (response, request){
        			document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
+       			Ext.Msg.hide();
              }
         });     
     }
@@ -1080,7 +1085,9 @@
 
     function saveShipToChanges(url)
     {
-    	Ext.Msg.wait("Changing Ship To... Please wait.");
+    	//Added For Jira 2903
+    	Ext.Msg.wait("Processing..."); 
+    	//Ext.Msg.wait("Changing Ship To... Please wait.");
     	
         var selectedCustomer=document.FormToPost.selectedCustomerId.value;
         
@@ -1371,8 +1378,9 @@ var toaWin = new Ext.Window({
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
-	    x.innerHTML = "Loading Data... Please wait!";
-	    
+	    //x.innerHTML = "Loading Data... Please wait!";
+	    //Added For Jira 2903
+		Ext.Msg.wait("Processing..."); 
 	    //Execute the call
 	    document.body.style.cursor = 'wait';
 	    if(true){
@@ -1382,12 +1390,14 @@ var toaWin = new Ext.Window({
 	            success: function (response, request){
 	                document.body.style.cursor = 'default';
 	                setAndExecute(divId, response.responseText);
+	                Ext.Msg.hide();
 	            },
 	            failure: function (response, request){
 	                var x = document.getElementById(divId);
 	                x.innerHTML = "";
 	                alert('Failed to fecth the accounts');
-	                document.body.style.cursor = 'default';                                                  
+	                document.body.style.cursor = 'default'; 
+	                Ext.Msg.hide();
 	            }
 	        });     
 	    }
