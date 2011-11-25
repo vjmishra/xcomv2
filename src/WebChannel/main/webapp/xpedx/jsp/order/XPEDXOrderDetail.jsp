@@ -667,14 +667,14 @@ function showSplitDiv(divId)
 	    <div class="wc-table-header">
 	    <table class="full-width no-border">
 	    		<tr>
-	    			<td class="text-right table-header-bar-left white">My Price (USD)</td>
+	    			<td class="text-right table-header-bar-left white">My Price (<s:property value='%{currencyCode}'/>)</td>
 	    			<s:if test="#orderType != 'Customer'">
-						<td class="text-right white" width="125">Shippable Price (USD)</td>
+						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
 					</s:if>
 					<s:else>
 						<td class="text-right" width="125">&nbsp;</td>
 					</s:else>
-	    			<td class="text-right white table-header-bar-right" width="120">Extended Price (USD)</td>
+	    			<td class="text-right white table-header-bar-right" width="120">Extended Price (<s:property value='%{currencyCode}'/>)</td>
 	    		</tr>
 	    </table>
 	    </div>
@@ -712,6 +712,7 @@ function showSplitDiv(divId)
 				<s:set name='xpedxShippedQtyExtn' value='#xutil.getAttribute(#xpedxOrderLineExtn,"ExtnReqShipOrdQty")'/>
 				<s:set name='xpedxJobId' value='#xpedxOrderLineExtn.getAttribute("ExtnCustLineAccNo")'/>
 				<s:set name="orderLineStatIndexSize" value='#_action.getMajorLineElements().size()'/>
+				<s:set name="myPriceValue" value="%{'false'}" />
 				<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) == #item.getAttribute("ItemID")'>
 					<s:set name='showDesc' value='#_action.getDescriptionForOrderLine(#orderLine)'/>
 				</s:if>
@@ -822,15 +823,13 @@ function showSplitDiv(divId)
 						    			  <s:property value='%{#orderqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
 						    			 </s:if>
 					    			</td>
-					    			<td class="text-right" width="95">
-						    			<%--	Using CustomerContactBean object from session
-						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
-						    			--%>
+					    			<td class="text-right" width="95">						    		
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    				<s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
 						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">
-						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
+						    			     <s:set name="isMyPriceZero" value="%{'true'}" />
+						    			     <s:set name="myPriceValue" value="%{'true'}" />
+						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>						    			        
 											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
 											 </s:if> 
                                             </s:if>
@@ -842,32 +841,31 @@ function showSplitDiv(divId)
 	                                	</s:if>
 									</td>
 							     
-									<td class="text-right" width="127">
-						    			<%--	Using CustomerContactBean object from session
-						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
-						    			--%>
+									<td class="text-right" width="127">						    			
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    				<s:if test="#orderType != 'Customer'">
-						    				  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>		    					
-						    					<s:property value='#util.formatQuantity(wCContext, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
+						    				  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>	
+						    				  	<s:if test="%{#myPriceValue == 'false'}">	    					
+						    						<s:property value='#util.formatQuantity(wCContext, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
+						    					</s:if>
+						    					<s:else>
+						    						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+						    					</s:else>
 						    				  </s:if>
 						    				</s:if>
 						    			</s:if>
 									</td>
-									<td class="text-right" width="128">
-						    			<%--	Using CustomerContactBean object from session
-						    			<s:if test='%{#session.viewPricesFlag == "Y"}'>
-						    			--%>
+									<td class="text-right" width="128">						    			
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    			    <s:set name="theExtendedPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
-						    			    <s:if test="%{#theExtendedPrice==#priceWithCurrencyTemp}">
+						    			    <s:if test="%{#myPriceValue == 'true'}">
 						    			       <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
 											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 											   </s:if>
                                             </s:if>
                                             <s:else>
                                               <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
-	                                		    <s:property value='#theExtendedPrice'/> <%-- theExtendedPrice is Extended  --%>
+	                                		    <s:property value='#theExtendedPrice'/>
 	                                		  </s:if>
 	                                		</s:else>																															  
 										</s:if>
@@ -893,19 +891,13 @@ function showSplitDiv(divId)
 						    			<td class="text-right" width="81">&nbsp;</td>
 						    			<td class="text-left"  width="175">&nbsp;</td>
 					    			</s:else>
-					    			<td class="text-right">
-					    			<%--	Using CustomerContactBean object from session
-						    		<s:if test='%{#session.viewPricesFlag == "Y"}'>
-						    		--%>
+					    			<td class="text-right">					    			
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-						    			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">
-						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
-                                          </s:if>
-                                          <s:else>
+						    			  <s:if test="%{#myPriceValue == 'false'}">
                                               <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 					    						per <s:property value='#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute("ExtnPricingUOM"))'/>
 					    					  </s:if>
-					    				  </s:else>
+					    				  </s:if>
 					    			</s:if>
 					    			</td>
 					    			<td class="text-right">&nbsp;</td>
@@ -1142,99 +1134,130 @@ function showSplitDiv(divId)
 		
 		<s:set name='shippingCharges' value='#util.formatPriceWithCurrencySymbol(#wcContext,#,#overallTotals.getAttribute("HdrShippingTotal"))'/>
 		<s:set name='shippableOrderPrice' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderDetailExtn.getAttribute("ExtnTotalShipValue"))'/>
-		<div class="cart-sum-right">
-			<table cellspacing="0"  align="right">
-				<tr>
-					<th>Subtotal:</th>
-					<td> <%-- <s:property value='#subtotalWithoutTaxes'/> --%>
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))'/>
-	    			    
-				    	<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-                       	</s:if>
-                       	<s:else>
-                		   		 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
-                		</s:else>											
-					</td>
-				</tr>
-				<tr>
-					<th>Order Total Adjustments:</th>
-					<td><%-- <s:property value='#headerAdjustmentWithoutShipping'/> --%>
-					<s:set name="myPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' />
-	    			    	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
+			<div class="cart-sum-right">
+				<table cellspacing="0"  align="right">
+					<tr>
+						<th>Subtotal:</th>
+						<td> 	    			    
+					    	<s:if test="%{#isMyPriceZero == 'true'}">
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+	                       	</s:if>
+	                       	<s:else>
+	                		   		 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
+	                		</s:else>											
+						</td>
+					</tr>
+					<tr>
+						<th>Order Total Adjustments:</th>
+						<td>
+		                     <a
+								href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
+								tabindex="<s:property value='%{#tabIndex}'/>"> <span
+								class="nowrap underlink">
+		             		    <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span></a>
+						</td>
+					</tr>
+					<tr>
+						<th>Adjusted Subtotal:</th>
+						<td>
+								<s:if test="%{#isMyPriceZero == 'true'}">
+							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+	                       		</s:if>
+	                      		<s:else>
+	                		    		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+	                			</s:else>					
+							
+						</td>
+					</tr>
+					<s:if test="#orderType == 'DIRECT_ORDER'">
+						<tr>
+							<th>Shippable Total:</th>
+							<td><s:property value='#shippableOrderPrice'/></td>
+						</tr>
+					</s:if>
+					<tr>
+						<th>Tax:</th>
+						<td class="gray">					    	                        
+	                        <s:if test="%{#isMyPriceZero == 'false'}">
+	                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
+	                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
+	                        	</s:if>
+	                        	<s:else>
+	                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
+	                        			<s:set name="isInProgress" value="%{'false'}" />
+	                        			<s:iterator value="chainedFOMap" >												
+											<s:set name='chainedFONo' value="value"/>	
+											<s:if test='#chainedFONo == "In progress"'>
+												<s:set name="isInProgress" value="%{'true'}" />
+											</s:if>												
+										</s:iterator>             
+										<s:if test="%{#isInProgress == 'false'}">
+											<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
+										</s:if>    
+										<s:else>										
+											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+										</s:else>       				                        			
+	                        		</s:if>
+									<s:else>										
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+									</s:else>
+								</s:else>							
+							</s:if>
+							<s:else>								
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+							</s:else>
+						</td>
+					</tr>
+					<tr class="bottom-padding">
+						<th>Shipping &amp; Handling:</th>					
+						<td class="gray">
+						<s:if test="%{#isMyPriceZero == 'false'}">
+                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
+                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
                         	</s:if>
                         	<s:else>
-                        			<a
-									href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
-									tabindex="<s:property value='%{#tabIndex}'/>"> <span
-									class="nowrap underlink">
-                		   		 	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span></a>
-                			</s:else>
-                								
-					</td>
-				</tr>
-				<tr>
-					<th>Adjusted Subtotal:</th>
-					<td> <%-- <s:property value='#adjustedSubtotalWithoutTaxes'/> --%>
-					<s:set name="myPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-	    			     	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-                       		</s:if>
-                      		<s:else>
-                		    		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-                			</s:else>					
-						
-					</td>
-				</tr>
-				<s:if test="#orderType == 'DIRECT_ORDER'">
-					<tr>
-						<th>Shippable Total:</th>
-						<td><s:property value='#shippableOrderPrice'/></td>
-					</tr>
-				</s:if>
-				<tr>
-					<th>Tax:</th>
-					<td class="gray"><%-- <s:property value='#grandTax'/> --%>
-					    <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
-						<s:set name='taxValue' value='#OrderExtn.getAttribute("ExtnOrderTax")'/>
-						<s:if test='(#taxValue == null || #taxValue=="" || #taxValue=="0.00" || #isMyPriceZero == "true") && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"'><!-- jira 2337 and 2267(if MyPrice is 0)-->
-							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
+                        			<s:set name="isInProgress" value="%{'false'}" />
+                        			<s:iterator value="chainedFOMap" >												
+										<s:set name='chainedFONo' value="value"/>	
+										<s:if test='#chainedFONo == "In progress"'>
+											<s:set name="isInProgress" value="%{'true'}" />
+										</s:if>												
+									</s:iterator>             
+									<s:if test="%{#isInProgress == 'false'}">
+										<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
+									</s:if>    
+									<s:else>										
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+									</s:else>       				                        			
+                        		</s:if>
+								<s:else>										
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+								</s:else>
+							</s:else>							
 						</s:if>
-						<s:else>
-							<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
-						</s:else>
-					</td>
-				</tr>
-				<tr class="bottom-padding">
-					<th>Shipping &amp; Handling:</th>					
-					<td class="gray">
-					<s:set name='shipandHndlValue' value='#OrderExtn.getAttribute("ExtnTotalOrderFreight")'/>
-					<s:if test='#shipandHndlValue == null || #shipandHndlValue=="" || #shipandHndlValue=="0.00" || #isMyPriceZero == "true"'><!-- jira 2337 and 2267(if MyPrice is 0)-->
-						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-					</s:if>
-					<s:else>
-						<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
-					</s:else>					
-					</td>
-					<%-- <s:property value='#shippingCharges'/> --%>
-				</tr>
-				<tr class="order-total">
-					<th>Order Total (USD):</th>
-					<td><%-- <s:property value='#grandTotal'/> --%>
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
-					 	<s:if test="%{#myPrice==#priceWithCurrencyTemp}">
-						    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-                     	</s:if>
-                        <s:else> 
-                        	 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
-                		</s:else>			
-					</td>
-				</tr>
-			</table>
-			
-			<!-- image here -->
-		</div>
+						<s:else>								
+							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+						</s:else>									
+						</td>						
+					</tr>
+					<tr class="order-total">
+						<th>Order Total (<s:property value='%{currencyCode}'/>):</th>
+						<td>
+							<s:if test="%{#isMyPriceZero == 'true'}">
+							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+	                     	</s:if>
+	                        <s:else> 
+	                        	 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
+	                		</s:else>			
+						</td>
+					</tr>
+				</table>
+				
+				<!-- image here -->
+			</div>
+		</s:if>		
 		<div class="clearall">&nbsp;</div>
 		
 		<div id="wc-btn-bar" class="padding-top" style="width:98.3%">
