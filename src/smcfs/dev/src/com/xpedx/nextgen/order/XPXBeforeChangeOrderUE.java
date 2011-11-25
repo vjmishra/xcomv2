@@ -71,7 +71,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					if("COM".equals(map.get("applicationcode")) && SCUtil.isVoid(isDiscountCalculate))
 					{
 						isDiscountCalculate="true";
-						//isPnACall="true";
+						isPnACall="true";
 						isCom="true";
 					}
 
@@ -318,9 +318,16 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 											}
 											else
 											{
-												BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
-												BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
-												outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
+												try
+												{
+													BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
+													BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
+													outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
+												}
+												catch(Exception e)
+												{
+													log.info("ERROR while changing price !");
+												}
 											}
 											
 										}
@@ -351,7 +358,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					//}
 					catch(Exception e)
 					{
-						log.info("Error while updating the order"+e );
+						log.info("Error while updating the order "+e );
 					}
 					
 			}
@@ -595,7 +602,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						SCXmlUtil
 						.createFromString("<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
-								+"<OrderLines><OrderLine>"
+								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
 								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
 								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
@@ -615,7 +622,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						.createFromString(""+"<OrderList>"
 								+ "<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
-								+"<OrderLines><OrderLine>"
+								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
 								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
 								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
@@ -1007,7 +1014,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 							}*/
 	
 							
-							NodeList itemNodeList = orderLineItem.getElementsByTagName("Item");
+							NodeList itemNodeList = orderLineItem.getElementsByTagName("ItemDetails");
 							
 							//Element itemElem=(Element)orderLineItem.getElementsByTagName("Item").item(0);
 							Element newItemElem= SCXmlUtil.createChild(newOrderLineElem, "Item");
@@ -1017,6 +1024,16 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 								itemElem = (Element)itemNodeList.item(0);
 								newItemElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
 								
+							}
+							else
+							{
+								NodeList itemNodeListTemp = orderLineItem.getElementsByTagName("Item");
+								if(itemNodeListTemp != null && itemNodeListTemp.getLength() >0)
+								{
+									itemElem = (Element)itemNodeListTemp.item(0);
+									newItemElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
+									
+								}
 							}
 							newOrderLineElem.setAttribute("OrderedQty",orderLineItem.getAttribute("OrderedQty"));
 		
