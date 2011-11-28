@@ -1279,6 +1279,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			} else {
 				setExtendedPriceInfoCO(chngcOrderEle1, chngfOrderEle, cAndfOrderEle,"C");
 			}
+		} else {
+			// Remove the price attributes from the changeOrder XML as price shouldn't be calculated/stamped if line level information is not available.
+			if (chngcOrderEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle.getAttribute("OrderHeaderKey"))) {
+				removeExtendedPriceInfoCO(chngcOrderEle);
+			} else {
+				removeExtendedPriceInfoCO(chngcOrderEle1);
+			}
 		}
 
 		if (chngcOrdStatusEle0.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))
@@ -5768,6 +5775,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		} else {
 			return false;
+		}
+	}
+	
+	private void removeExtendedPriceInfoCO(YFCElement chngcOrderEle) {
+		
+		YFCElement extnElement = chngcOrderEle.getChildElement("Extn");
+		if (extnElement != null && extnElement.hasAttribute("ExtnTotalOrderValue") ) {
+			extnElement.removeAttribute("ExtnTotalOrderValue");
 		}
 	}
 
