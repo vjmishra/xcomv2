@@ -2,6 +2,7 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
@@ -48,6 +49,20 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		customerContactID =(String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
 		this.reInitPage();
 		initPage();
+		getUserGroupInfo();
+	}
+	public void getUserGroupInfo(){
+		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
+		String apinames = "getCustomerContactList";
+		if(!YRCPlatformUI.isVoid(customerKey)){
+			Document docInput = YRCXmlUtils.createFromString("<CustomerContact CustomerKey='"+customerKey+"'/>");
+			YRCApiContext ctx = new YRCApiContext();
+			ctx.setFormId("com.xpedx.sterling.rcp.pca.userprofile.screen.UserProfileInfoDetails");
+			ctx.setApiName(apinames);
+			ctx.setInputXml(docInput);
+			if (!page.isDisposed())
+				callApi(ctx, page);
+		}
 	}
 	
 	private void setCoustomerContactModel(Element customerContactElement) {
@@ -223,6 +238,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						
 					}
+					if ("getCustomerContactList".equals(ctx.getApiName())) {
+						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
+						adminCustomerContact(eleCustomerContactList);						
+						
+					}
 					if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
 						if(!YRCPlatformUI.isVoid(docPOList)){
@@ -264,6 +284,45 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		super.handleApiCompletion(ctx);
 		
 	}
+	private void adminCustomerContact(Element eleCustomerContactList){
+		Element elemModel = YRCXmlUtils.createDocument("CustomerContactList").getDocumentElement();
+		NodeList nodCustContact=eleCustomerContactList.getElementsByTagName("CustomerContact");
+		ArrayList CustomerContactIdList = new ArrayList();
+		for(int i=0;i<nodCustContact.getLength();i++){
+			Element eleCust=(Element) nodCustContact.item(i);
+			String customerID = eleCust.getAttribute("CustomerContactID");
+				NodeList nodGroupLists=eleCust.getElementsByTagName("UserGroupLists");			
+				for(int j=0;j<nodGroupLists.getLength();j++){
+					Element eleGroup=(Element) nodGroupLists.item(j);
+					NodeList nodGroupList=eleGroup.getElementsByTagName("UserGroupList");
+					for(int k=0;k<nodGroupList.getLength();k++){
+						Element eleGroupName=(Element) nodGroupList.item(k);
+					String groupId = eleGroupName.getAttribute("UsergroupKey");
+					//System.out.println("The groupID is" + groupId);
+					if ("BUYER-ADMIN".equalsIgnoreCase(groupId)){
+						CustomerContactIdList.add(customerID);
+						k = nodGroupList.getLength();
+					}
+					
+					}
+					
+					
+				
+			}
+		}
+		NodeList nodeCustContact=eleCustomerContactList.getElementsByTagName("CustomerContact");
+		for(int i=0;i<nodeCustContact.getLength();i++){
+			Element elementCust=(Element) nodCustContact.item(i);
+			String customerID = elementCust.getAttribute("CustomerContactID");
+			if (!CustomerContactIdList.contains(customerID)){
+				eleCustomerContactList.removeChild(elementCust);
+				i--;
+			}
+			
+		}
+		setModel("CustomerContactDetails",eleCustomerContactList);
+	}
+
 	private void updateAdditionalAttributes(Element customerContactElement) {
 		Element eleUserGroupsList = (Element) YRCXPathUtils.evaluate(customerContactElement, "./User/UserGroupLists", XPathConstants.NODE);
 		ArrayList listOfAssignedUserGroups = YRCXmlUtils.getChildren(eleUserGroupsList, "UserGroupList");
@@ -599,6 +658,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		if(!hasError() && hasValidInputData()){
 			if(!YRCPlatformUI.isVoid(customerContactID)){
 				targetModel.setAttribute("CustomerContactID", customerContactID);
+				targetModel.setAttribute("ApproverUserId", getFieldValue("comboPrimApprover"));
+				targetModel.setAttribute("ApproverProxyUserId", getFieldValue("comboAlterApprover"));
 				YRCApiContext ctx = new YRCApiContext();
 				ctx.setApiName("manageCustomer");
 				ctx.setInputXml(createManageCustomerOutputXml(targetModel).getOwnerDocument());
