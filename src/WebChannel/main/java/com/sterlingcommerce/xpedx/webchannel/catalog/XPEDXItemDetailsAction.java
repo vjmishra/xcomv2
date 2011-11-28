@@ -611,6 +611,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			while(iterator.hasNext()) {
 					String uomCode = iterator.next();
 					String convFactor = (String) itemUOMsMap.get(uomCode);
+					//Start 2964 
+					itemIdConVUOMMap.put(uomCode, convFactor);
+					//End 2964 
+					
 					long convFac = Math.round(Double.parseDouble(convFactor));
 					if(1 == convFac) {
 						displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));
@@ -1020,6 +1024,16 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	String itemCost = null;	
+	
+	LinkedHashMap<String, String> itemIdConVUOMMap = new LinkedHashMap<String, String>();
+	
+	public LinkedHashMap<String, String> getItemIdConVUOMMap() {
+		return itemIdConVUOMMap;
+	}
+
+	public void setItemIdConVUOMMap(LinkedHashMap<String, String> itemIdConVUOMMap) {
+		this.itemIdConVUOMMap = itemIdConVUOMMap;
+	}
 
 	public String getItemCost() {
 		return itemCost;
