@@ -552,6 +552,10 @@ public class XPEDXExtendedOrderDetailAction extends
 			return false;
 		}
 		
+		if(isOrderOnCSRReviewHold()) {
+			return false;
+		}
+		
 		//Condition to check if order is locked then user will not be able to see edit order and cancel order button
 		ArrayList<Element> orderExtnNode=SCXmlUtil.getElements(elementOrder,"Extn");//orderElement.getElementsByTagName("Extn").item(0);
 		Element orderExtn=null;
