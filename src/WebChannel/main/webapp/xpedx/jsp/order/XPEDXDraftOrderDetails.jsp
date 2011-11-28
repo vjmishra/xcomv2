@@ -803,6 +803,7 @@ $(document).ready(function(){
 	<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 	<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
+	<s:set name="myPriceValue" value="%{'false'}" />
 	
     <table class="mil-top-border" border="0px solid red" class="float-right">
 	   <tr>
@@ -1091,13 +1092,14 @@ $(document).ready(function(){
 											<tr>
 								  	  			<td class="text-right" width="147">
 								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C"  '>
-									 				TBD
+									 				
 									 			</s:if>
 									 			<s:else>
 									 			
 									 			  <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 									 			  <s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
 									 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
+									 			    	<s:set name="myPriceValue" value="%{'true'}" />
 														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
 												  </s:if>
 												  <s:else>
@@ -1109,16 +1111,14 @@ $(document).ready(function(){
 				                            	<td class="text-right" width="147" valign="top">
 					                            	<span class="mil-action-list-wrap-num-span">
 					                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
-														TBD
+														
 													</s:if>
 													<s:else>
 														<%-- <s:if test='%{#editOrderFlag == "true"}'>
 															<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#editOrderOrderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 														</s:if>
-														<s:else> --%>
-														  <s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
-											 			  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-											 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
+														<s:else> --%>														  
+											 			  <s:if test="%{#isMyPriceZero == 'true'}">											 			  
 																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 														  </s:if>
 														  <s:else>
@@ -1133,20 +1133,13 @@ $(document).ready(function(){
 				                        	</tr>
 				                        	<tr><td>&nbsp;</td></tr>											
 				                    	 </s:if>
-				                    	 <s:else>
-										<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
-						 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
-									  	</s:if>
-										<s:else>
+				                    	 <s:else>										
 				                    	 	<tr>
 					                        	<td class="text-right">
 					                        		<!--  Already formatted as required  -->
-					                        		<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
-									 			    	<td></td>
-												    </s:if>
-												  <s:else>
-													<s:property	value='#bracketPriceForUOM' />
-													</s:else>
+					                        		<s:if test="%{#isMyPriceZero == 'false'}">
+									 			    	<s:property	value='#bracketPriceForUOM' />
+												    </s:if>												  
 												</td>
 			    	                    	</tr>
 				                    	 <tr>
@@ -1154,19 +1147,15 @@ $(document).ready(function(){
 			            	            	<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 								 				&nbsp;
 								 			</s:if>
-								 			<s:else>
-								 			<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
-								 					<td></td>
-											</s:if>
-											<s:else>
-												per&nbsp;<s:property value="#bracketUOMDesc" />
-											</s:else>											
+								 			<s:else>									 			
+												<s:if test="%{#isMyPriceZero == 'false'}">
+													per&nbsp;<s:property value="#bracketUOMDesc" />
+												</s:if>											
 											</s:else>
 											</td>											 
 			                    	    </tr>
 			                    	    <!--  Add empty space between each price / UOM  -->
-			                    	    <tr><td>&nbsp;</td></tr>
-										</s:else>
+			                    	    <tr><td>&nbsp;</td></tr>										
 				                    	</s:else>
 		                    	    </s:if>
 			                    	   
@@ -1736,18 +1725,13 @@ var currentAadd2ItemList = new Object();
 					<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnOrderSubTotal"))' />
 				</s:if>
 				<s:else>
-					--%>
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
-						 
-						  <s:set name="isMyPriceZero" value="%{'true'}" />
-						   <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-						  		</s:if>
-						  </s:if>
-						  <s:else>
-						    	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
-						  </s:else>					
+					--%>					
+ 			  		<s:if test="%{#myPriceValue=='true'}">
+						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+			  		</s:if>						  
+				  	<s:else>
+				    	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
+				  	</s:else>					
 						  
 				<%--</s:else>
 			
@@ -1762,21 +1746,13 @@ var currentAadd2ItemList = new Object();
 				</s:if>
 				<s:else>
 					--%>
-					<s:set name="isMyPriceZero" value="%{'true'}" />
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' />
-						  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-						  		</s:if>
-						  </s:if>
-						  <s:else>
-						  	    <a
-									href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
-									tabindex="<s:property value='%{#tabIndex}'/>"> <span
-									class="nowrap underlink"><s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span>
-									</a>
-						  </s:else>							
-					
+				
+			  	    <a
+						href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
+						tabindex="<s:property value='%{#tabIndex}'/>"> <span
+						class="nowrap underlink"><s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span>
+						</a>
+						 												
 				<%--</s:else>
 			--%></td>
 		</tr>
@@ -1788,17 +1764,12 @@ var currentAadd2ItemList = new Object();
 				</s:if>
 				<s:else>
 					--%>
-					<s:set name="isMyPriceZero" value="%{'true'}" />
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-					<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-			 			  <s:if test="%{#isMyPriceZero=='true'}">
-								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-						  </s:if>
-					</s:if>
+					
+	 			  <s:if test="%{#myPriceValue=='true'}">
+						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+				  </s:if>					
 					<s:else>
-							<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />					
-							<s:set name="Tax" value='#grandTax'/>
-							<s:set name="shippingCharges" value='#shippingCharges'/>
+							<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />																			
 					</s:else>					
 			<%-- </s:else>
 				
@@ -1824,13 +1795,10 @@ var currentAadd2ItemList = new Object();
 					<s:property value='%{#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnTotalOrderValue"))}' />
 				</s:if>
 				<s:else>
-					--%><s:set name="isMyPriceZero" value="%{'true'}" />
-					<s:set name="theMyPrice" value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-						  <s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
-			 			  		<s:if test="%{#isMyPriceZero=='true'}">
-										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-						  		</s:if>
-						   </s:if>
+					--%>
+		 			  		<s:if test="%{#myPriceValue=='true'}">
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+					  		</s:if>						  
 						  <s:else>
 								<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
 								<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
