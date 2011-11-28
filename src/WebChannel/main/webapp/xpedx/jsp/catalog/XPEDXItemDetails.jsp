@@ -1329,7 +1329,10 @@ function SubmitActionWithValidation()
 				</s:textfield>
 
 				
-				<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
+				<%-- 2964 start<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
+				 --%>
+				 <s:if test="itemIdConVUOMMap != null && itemIdConVUOMMap.size() > 0">
+				
 					<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
 					
 					<s:hidden name="OrderMultiple" id="OrderMultiple"
@@ -1345,10 +1348,15 @@ function SubmitActionWithValidation()
 					<s:hidden name="uomId" id="uomId" value="" />
 					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
 					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
-					<s:set name="convFac" value='itemUOMsMap[#requestedUOM]' />
+					<%-- 2964 Start<s:set name="convFac" value='itemUOMsMap[#requestedUOM]' />
+					 --%>
+					 <s:set name="convFac" value='itemIdConVUOMMap[#requestedUOM]' />
+					
 					<s:hidden name="uomConvFactor" id="uomConvFactor" value="%{#convFac}" /> <!--  TODO : Purma -LP3- Conversion factor space -->
 					
-					<s:iterator value='itemUOMsMap'>
+					<%-- 2964 statt<s:iterator value='itemUOMsMap'>
+					 --%><s:iterator value='itemIdConVUOMMap'>
+					
 							<s:set name='currentUomId' value='key' />
 							<s:set name='currentUomConvFact' value='value' />
 							<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
@@ -1435,7 +1443,9 @@ function SubmitActionWithValidation()
 					
 				</div>
 				<br/>
-				<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
+				<%-- 2964 Start<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
+				 --%><s:if test="itemIdConVUOMMap != null && itemIdConVUOMMap.size() > 0">
+				
 					<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
 					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
 					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
