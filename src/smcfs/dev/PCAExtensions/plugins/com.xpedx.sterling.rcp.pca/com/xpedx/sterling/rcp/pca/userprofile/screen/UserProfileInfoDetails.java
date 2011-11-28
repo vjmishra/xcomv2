@@ -43,7 +43,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Object inputObject;
 
 	private ScrolledComposite bodyScrolledPanel = null;
-	
+	private Label lblPrimApprover;
+	private Label lblAlterApprover;
+	private Combo comboPrimApprover;
+	private Combo comboAlterApprover;
 	private Button btnUpdate;
 	private Label lblUserID;
 	private Label lblUserType;
@@ -886,6 +889,26 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtMaxOrderAmount.setTextLimit(20);
 		txtMaxOrderAmount.setData("name", "txtMaxOrderAmount");
 		
+		//Added For CR 2407
+		lblPrimApprover = new Label(pnlSiteSettings, SWT.NONE);
+		lblPrimApprover.setText("Primary Approver");
+		lblPrimApprover.setLayoutData(gridData2);
+		lblPrimApprover.setData("name", "lblPrimApprover");
+		comboPrimApprover = new Combo(pnlSiteSettings, 8);
+		comboPrimApprover.setLayoutData(gridData3);
+		comboPrimApprover.setTextLimit(50);
+		comboPrimApprover.setData("name", "comboPrimApprover");
+		
+		
+		lblAlterApprover = new Label(pnlSiteSettings, SWT.NONE);
+		lblAlterApprover.setText("Alternate Approver");
+		lblAlterApprover.setLayoutData(gridData2);
+		lblAlterApprover.setData("name", "lblAlterApprover");
+		comboAlterApprover = new Combo(pnlSiteSettings, 8);
+		comboAlterApprover.setLayoutData(gridData3);
+		comboAlterApprover.setTextLimit(50);
+		comboAlterApprover.setData("name", "comboAlterApprover");
+		
 		lblPreferredCatalogView = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPreferredCatalogView.setText("Preferred_Catalog_View");
 		lblPreferredCatalogView.setLayoutData(gridData2);
@@ -1558,6 +1581,24 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		cbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnDefaultShipTo");
 		cbd.setName("comboDefaultShipTo");
 		comboDefaultShipTo.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);*/
+		
+		cbd = new YRCComboBindingData();
+		cbd.setCodeBinding("@CustomerContactID");
+		cbd.setDescriptionBinding("@CustomerContactID");
+		cbd.setListBinding("CustomerContactDetails:/CustomerContactList/CustomerContact");
+		cbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@ApproverUserId");
+		//cbd.setTargetBinding("XPXCustomercontactExtn:/CustomerContact/@ApproverUserId");
+		cbd.setName("comboPrimApprover");
+		comboPrimApprover.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
+		
+		cbd = new YRCComboBindingData();
+		cbd.setCodeBinding("@CustomerContactID");
+		cbd.setDescriptionBinding("@CustomerContactID");
+		cbd.setListBinding("CustomerContactDetails:/CustomerContactList/CustomerContact");
+		cbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@ApproverProxyUserId");
+		//cbd.setTargetBinding("CustomerContactDetails:/CustomerContactList/CustomerContact/@CustomerContactID");
+		cbd.setName("comboAlterApprover");
+		comboAlterApprover.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
 		
 		YRCButtonBindingData radItem1ButtonBindingData = new YRCButtonBindingData();
 		radItem1ButtonBindingData.setName("radItem1");
