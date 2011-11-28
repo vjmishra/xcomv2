@@ -371,6 +371,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			String enteredQtyStr = (String) enteredQuantities.get(i);
 			String enteredProdDesc = (String) enteredProductDescs.get(i);
 			String enteredUOM = (String) enteredUOMs.get(i);
+			if(enteredUOM != null)
+				enteredUOM=enteredUOM.trim();
 			ArrayList errorStringArgs = new ArrayList();
 			errorStringArgs.add(itemID);
 			String errorString = null;
@@ -442,6 +444,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 
 	private String getUOM(String enteredUOM, String itemID) {
 		if(enteredUOM!=null && enteredUOM.trim().length()>0) {
+			enteredUOM=enteredUOM.trim();
 			if(enteredUOM.indexOf('(')!= -1 && enteredUOM.indexOf(')')!= -1) {
 				String UOMDesc = enteredUOM.substring(0,enteredUOM.indexOf('('));
 				String convFactor = enteredUOM.substring(enteredUOM.indexOf("(")+1, enteredUOM.lastIndexOf(")"));
