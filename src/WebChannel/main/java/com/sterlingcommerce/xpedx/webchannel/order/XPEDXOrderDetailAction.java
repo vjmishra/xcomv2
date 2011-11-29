@@ -412,7 +412,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					}
 				} commented for 2731*/
 				
-				if(!isFOCreated && !legacyOrderNumber.equals("")){
+				if (null != chainedOrderMap
+						&& chainedOrderMap.containsKey(chainedFromOrderLineKey)) {
 					isFOCreated = true;
 				}
 				
