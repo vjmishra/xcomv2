@@ -2261,4 +2261,33 @@
                     </API>
     </mashup>
     
+
+	<!-- BEGIN: For JIRA 2912: RUgrani -->    
+    <mashup id ='orderApproval' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER'
+		description="Order Approval">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="changeOrder">
+			<Input>
+				<Order OrderHeaderKey="">
+					<Notes>
+						<Note NoteText="Adjudicated" ReasonCode="YCD_HOLD_INFO" VisibleToAll="W"/>
+					</Notes>
+					<OrderHoldTypes>
+						<OrderHoldType HoldType="" ReasonText="" Status="" ResolverUserId=""/>
+					</OrderHoldTypes>
+				</Order>
+			</Input>
+			<Template>
+				<Order OrderNo="" EnterpriseCode="" HoldFlag="">
+					<OrderHoldTypes>
+						<OrderHoldType HoldType="" ReasonText="" Status=""/>
+					</OrderHoldTypes>
+				</Order>
+			</Template>
+		</API>
+		<APINamespace inputNS='orderApprovalInput' outPutNS='orderApprovalOutput'/>
+	</mashup>
+   <!-- END RUgrani: For JIRA 2912 --> 
+    
 </mashups>       
