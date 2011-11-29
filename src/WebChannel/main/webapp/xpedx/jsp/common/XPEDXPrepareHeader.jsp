@@ -162,7 +162,7 @@
 		
 		//Check for show root
 		if (showRoot == undefined ){
-			//showRoot = true;
+			showRoot = true;
 		}
 		
 		//Load the list if it has not been loaded before.
@@ -272,11 +272,14 @@
 				//alert('isCustomerSelected===>'+isCustomerSelected+", isInSelectedCustomersMap==>"+isInSelectedCustomersMap);
 				//If the parent customer is checked, check the child customer too
 				//if the parent customer is unchecked, uncheck the child, provided its not present in selectedCustomersMap
+				
+				isCustomerSelected = false;
+
 				if((isCustomerSelected==isInSelectedCustomersMap) || (isCustomerSelected==true && isInSelectedCustomersMap== false )){
 					updateSelectedCustomersMap(controlId,isCustomerSelected);
 					currentCB.checked = isCustomerSelected;
-					checkAll("customerIds_" + controlId, isCustomerSelected);
-					checkAll("customerDivs_" + controlId, isCustomerSelected);
+				//	checkAll("customerIds_" + controlId, isCustomerSelected);
+				//	checkAll("customerDivs_" + controlId, isCustomerSelected);
 				}
 			}
 	}
@@ -308,8 +311,8 @@
 	   if(divMainShareList!=null ) 
 	   		showSavedSharedSelection();
   	   //Make selectSavedCustomers to false so that it does not load the saved customers selection on every page load/getshareList call.
-	   //selectSavedCustomers = false;
-  	   	   selectSavedCustomers = true;
+	   selectSavedCustomers = false;
+  	   //selectSavedCustomers = true;
 	       isCustomerSelected = false;
 	   
 	   /*var x = div.getElementsByTagName("script");   
