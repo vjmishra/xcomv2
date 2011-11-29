@@ -532,10 +532,15 @@ function showSplitDiv(divId)
 												<s:url id="orderDetailsURL" action="orderDetail">
 												    <s:param name="orderHeaderKey" value="#chainedFOKey"/>
 												    <s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
-												</s:url>
-													<s:a href="%{orderDetailsURL}">
-												  	<s:property value='#chainedFONo'/>
-													</s:a>		
+												</s:url>												
+												   <s:if test='#chainedFONo=="In progress"'>
+														In Progress
+													</s:if>	
+													<s:else>
+															<s:a href="%{orderDetailsURL}">
+												  	     		<s:property value='#chainedFONo'/>
+															</s:a>                                  						
+                                  					</s:else> 
 											</s:iterator> 
                         				</s:else> 
                         			<s:else>          		
@@ -950,7 +955,17 @@ function showSplitDiv(divId)
 												<s:param name="orderHeaderKey" value='#splitOrderAttributes.get(0)'/>  
 												<s:param name="returnUrlForOrderList" value="%{orderListReturnUrl}"/>
 											</s:url>
-												Order #: <s:a href="%{legacyOrderDetailsURL}"><s:property value="#splitOrderAttributes.get(4)"/></s:a> 
+												Order #: 
+												<s:if test='#splitOrderAttributes.get(4)=="In progress"'>
+														In Progress
+													</s:if>
+													<s:else>
+														<s:a href="%{legacyOrderDetailsURL}">												  
+													           <s:property value="#splitOrderAttributes.get(4)"/>
+													     </s:a>
+													</s:else>
+													
+													 
 							    				<!--  <a class="underlink" href="#"> <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/> </a>-->
 												</td>
 								    			<td>&nbsp;</td>
