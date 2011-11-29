@@ -826,10 +826,10 @@ function showSplitDiv(divId)
 					    			<td class="text-right" width="95">						    		
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    				<s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
-						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">
-						    			     <s:set name="isMyPriceZero" value="%{'true'}" />
-						    			     <s:set name="myPriceValue" value="%{'true'}" />
-						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>						    			        
+						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">						    			     
+						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>	
+						    			     	<s:set name="isMyPriceZero" value="%{'true'}" />
+						    			     	<s:set name="myPriceValue" value="%{'true'}" />					    			        
 											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
 											 </s:if> 
                                             </s:if>
