@@ -1884,7 +1884,7 @@ public class XPEDXWCUtils {
 				while (iterator.hasNext()) {
 					String key = iterator.next();
 					String value = map.get(key);
-					if (value != null && value.contains(codeDescription)) {
+					if (value != null && value.equals(codeDescription)) {
 						imageLocation = key;
 						wcContext.getSCUIContext().getSession().setAttribute(sessionCommonCode,imageLocation);
 						break;
