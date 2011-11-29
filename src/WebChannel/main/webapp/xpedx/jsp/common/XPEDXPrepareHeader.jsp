@@ -304,10 +304,13 @@
 	   saveShareListForChild(divId, isCustomerSelected);
 	   var divMainShareList = $("div[id=divMainShareList]");
 	   //divMainShareList exists only for the Shared List popup in MIL details page(in other places the div is divMainShareListHL)
-	   if(divMainShareList!=null && selectSavedCustomers== true)
+	    //commented for jira 2940 if((divMainShareList!=null )&& (selectSavedCustomers== true)) 
+	   if(divMainShareList!=null ) 
 	   		showSavedSharedSelection();
   	   //Make selectSavedCustomers to false so that it does not load the saved customers selection on every page load/getshareList call.
-	   selectSavedCustomers = false;
+	   //selectSavedCustomers = false;
+  	   	   selectSavedCustomers = true;
+	       isCustomerSelected = false;
 	   
 	   /*var x = div.getElementsByTagName("script");   
 	   for( var i=0; i < x.length; i++) {  
@@ -318,6 +321,7 @@
 	//The below function is used to show the saved customer selection for a shared MIL in MIL Details page.
 	function showSavedSharedSelection()
 	{
+	      isCustomerSelected = false;	
 		var customerPathsCB = $("div[id=divMainShareList] input[name=customerPaths]");
 		if(customerPathsCB!=null){
 			for(var i=0;i<customerPathsCB.length;i++)
@@ -1919,6 +1923,8 @@ function callAjaxForSorting(url,divId)
 			var divId = $("input[id=customerPaths_"+id + "] ").parent().attr("id");
 			var allChildElements = $("div[id="+divId + "] :checkbox");
 			
+			/*commented for auto check of parents child for jira 2940 and check child and parent individually
+			
 			for(var j=0;j<allChildElements.length;j++)
 			{
 				var currentCB = allChildElements[j];
@@ -1936,11 +1942,11 @@ function callAjaxForSorting(url,divId)
 						checkAll("customerDivs_" + currentCBControlID, val);
 					}
 				}
-			}
+			}*/
 			
 			//Get the selected child customers from other pages
 			var selectedCustomers = selectedCustomerMap[id];
-			if(selectedCustomers!=null){
+			/*if(selectedCustomers!=null){
 				for(var i=0;i<selectedCustomers.length;i++)
 				{
 					var selCustomerControlId = selectedCustomers[i];
@@ -1950,14 +1956,14 @@ function callAjaxForSorting(url,divId)
 					checkAll("customerIds_" + selCustomerControlId, val);
 					checkAll("customerDivs_" + selCustomerControlId, val);	
 				}
-			}
+			}*/
        
 			
 	        var currentDiv = $("input[id=customerPaths_"+id + "] ");
 			
 			var currentDivParents = currentDiv.parents("div[id^=divShareList]");
 			//alert('currentDivParents len '+currentDivParents.length);
-			for(var i=0;i<currentDivParents.length;i++)
+			/*for(var i=0;i<currentDivParents.length;i++)
 			{
 				var currentDivShareParent = currentDivParents[i];
 				var currentParentId = currentDivShareParent.id;
@@ -2008,7 +2014,7 @@ function callAjaxForSorting(url,divId)
 						
 					
 		        }
-			}//for
+			}*///for
 			debug("selectNode - END for " + id + ", value: " + val);
 		}catch(e){
 			try{ console.log("Error selectin the node: " + e, e); }catch(ex){}
