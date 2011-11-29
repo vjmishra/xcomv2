@@ -520,6 +520,7 @@ function showSplitDiv(divId)
 						<s:else>
 							<td>
 							   <span class="boldText">Order #: </span> 
+							   <s:set name='ChangeStatusToSubmittedCSR' value='"false"'/>
 							   		<s:if test='chainedFOMap.size() > 0'>
 							   			<s:if test='chainedFOMap.size() > 1'>
 							   				<a id="split-order" class="underlink" href="#">Split Orders</a> 
@@ -535,6 +536,7 @@ function showSplitDiv(divId)
 												</s:url>												
 												   <s:if test='#chainedFONo=="In progress"'>
 														In Progress
+														<s:set name='ChangeStatusToSubmittedCSR' value='"true"'/>
 													</s:if>	
 													<s:else>
 															<s:a href="%{orderDetailsURL}">
@@ -549,6 +551,7 @@ function showSplitDiv(divId)
 							      	</s:else> 
                                   	</s:if>
                                   	<s:else>
+                                  	    <s:set name='ChangeStatusToSubmittedCSR' value='"true"'/>
                                   		In Progress
                                   	</s:else> 
                                   	
@@ -591,10 +594,15 @@ function showSplitDiv(divId)
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
                         			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") != "Awaiting FO Creation"}'>
-                        			<s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
+                        					<s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
                         			</s:if>
                         			<s:else>
-                        			  <s:property value='Submitted'/> 
+                        			  <s:if test="%{#ChangeStatusToSubmittedCSR}">
+	                        			  <s:property value='Submitted'/> (CSR Reviewing) 
+	                        			</s:if>
+	                        			<s:else>
+	                        				 <s:property value='Submitted'/>
+	                        			</s:else>                        			  
                         			</s:else>
                         			<s:if test='%{#status != "Cancelled"}'>
                         				<s:if test='%{#isOrderOnApprovalHold}'>
@@ -603,7 +611,7 @@ function showSplitDiv(divId)
                         				<s:elseif test="%{#isOrderOnCSRReviewHold}">
                         					(CSR Reviewing)
                         				</s:elseif>
-                        			</s:if>	
+                        			</s:if>	                        			
 	                        			<s:if test='%{#status == "Invoiced"}'>
 	                        				: Invoice #: 
 	                        				<s:if test='%{#isSalesRep}'>
@@ -612,6 +620,9 @@ function showSplitDiv(divId)
 	                        				<s:else>
 	                        				 <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
 	                        				</s:else>
+	                        			</s:if>
+	                        			<s:if test="%{#ChangeStatusToSubmittedCSR}">
+	                        			  <s:property value='Submitted'/> (CSR Reviewing) 
 	                        			</s:if>
                         			</td>
                         		</tr>
