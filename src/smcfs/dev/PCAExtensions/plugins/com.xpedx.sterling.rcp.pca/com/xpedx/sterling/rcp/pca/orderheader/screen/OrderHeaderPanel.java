@@ -876,15 +876,16 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			}
 		
+		String status = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/@Status");
 		orderPlaceError=getErrorValues();
-		if(orderPlaceError.size()!=0){
+		if(orderPlaceError.size()!=0 && !"Cancelled".equalsIgnoreCase(status)){
 			int count=orderPlaceError.size();
-			for(int i=0;i<count;i++){
-			 Label lblerrOrder=new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			 lblerrOrder.setText((String) orderPlaceError.get(i));
-			 lblerrOrder.setLayoutData(gridDataErrLbl1);
-			 lblerrOrder.setData("yrc:customType", "RedText10");
-			}
+				for(int i=0;i<count;i++){
+				 Label lblerrOrder=new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+				 lblerrOrder.setText((String) orderPlaceError.get(i));
+				 lblerrOrder.setLayoutData(gridDataErrLbl1);
+				 lblerrOrder.setData("yrc:customType", "RedText10");
+				}
 			}
 	}
 	
