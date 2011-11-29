@@ -2071,7 +2071,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onblur="javascript:updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
 													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2085,7 +2085,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											</s:if> <s:else>
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');" onchange="javascript:this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');" onblur="javascript:this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' '/>
