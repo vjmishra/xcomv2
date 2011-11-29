@@ -1575,16 +1575,18 @@ private void preparePlaceOrderLineErrors() {
 	{
 	
 		Element orginalOrderDetailsElem = getModel("OriginalOrder");
-		String extnOrderLockFlag = "",isDraftOrder,ordType;
+		String extnOrderLockFlag = "",isDraftOrder,ordType,isOrderStatus;		
 		if (!YRCPlatformUI.isVoid(orginalOrderDetailsElem))
 			{
 				extnOrderLockFlag = YRCXmlUtils.getAttributeValue(
 				orginalOrderDetailsElem, "Order/Extn/@ExtnOrderLockFlag");
 				isDraftOrder=YRCXmlUtils.getAttributeValue(
 				orginalOrderDetailsElem, "Order/@DraftOrderFlag");
+				isOrderStatus=YRCXmlUtils.getAttributeValue(
+						orginalOrderDetailsElem, "Order/@Status");
 				ordType=YRCXmlUtils.getAttributeValue(
 				orginalOrderDetailsElem, "Order/@OrderType");
-				if(extnOrderLockFlag.equalsIgnoreCase("Y") && !(ordType.equalsIgnoreCase("Customer")) && !(isDraftOrder.equalsIgnoreCase("Y")))
+				if(extnOrderLockFlag.equalsIgnoreCase("Y") && !(ordType.equalsIgnoreCase("Customer")) && !(isDraftOrder.equalsIgnoreCase("Y"))  &&  !(isOrderStatus.equalsIgnoreCase("Cancelled")))
 					{ 
 
 					return true;
