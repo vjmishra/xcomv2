@@ -455,18 +455,18 @@ function showSplitDiv(divId)
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
 				
 				<s:hidden name="test1" value='%{#test11}'/>
-				<s:if test='#_action.isFOCreated()'>					
-						<s:if test="#_action.isEditableOrder() && ! #_action.isCustomerOrder(#orderDetail)">
+				<s:if test="!#isEstimator">
+					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated()">
+								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
+							</s:if>
+					</s:if>				
+					<s:else>					
+						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">
 							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
-						</s:if>
-				</s:if>				
-				<s:else>
-					<s:if test="!#isEstimator">
-					<s:if test="#_action.isEditableOrder()">
-						<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
-					</s:if>
-					</s:if>
-				</s:else>
+						</s:if>					
+					</s:else>
+				</s:if>
 				 <s:if test = "#_action.isOrderInPendingChageState()" >
 					 <a href="javascript:refreshOrder('${urlResetOrderId}');" style="float:right" class="grey-ui-btn" id='refreshButtonId'><span>Refresh</span></a>
                		<%--OOTB button for refreshing order -Amar 
@@ -1268,18 +1268,18 @@ function showSplitDiv(divId)
 			</s:if>
 			<%-- Commented for bug# 1913
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
-			<s:if test='#_action.isFOCreated()'>			
-				<s:if test="#_action.isEditableOrder() && ! #_action.isCustomerOrder(#orderDetail)">
-			      <a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
-			     </s:if>
+			<s:if test="!#isEstimator">
+					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated()">
+			      				<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+			     			</s:if>
+					</s:if>
+					<s:else>				
+						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">
+							<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+					  	</s:if>				
+					</s:else>
 			</s:if>
-			<s:else>
-				<s:if test="!#isEstimator">
-					<s:if test="#_action.isEditableOrder()">
-						<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
-				  	</s:if>
-				</s:if>
-			</s:else>
 						
 			<s:if test ="#_action.approvalAllowed()" >
 				<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve / Reject Order</span></s:a>
@@ -1291,18 +1291,18 @@ function showSplitDiv(divId)
 					<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn re-order"><span>Re-Order</span></a>
 				</s:if>
 			</s:if>
-			<s:if test='#_action.isFOCreated()'>			
-				<s:if test="#_action.isEditableOrder() && ! #_action.isCustomerOrder(#orderDetail)">
-					<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
-				</s:if>
-			</s:if>		
-			<s:else>
-				<s:if test="!#isEstimator">
-				<s:if test="#_action.isEditableOrder()">				     
-					<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
-				</s:if>
-				</s:if>
-			</s:else>
+			<s:if test="!#isEstimator">
+					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated()">
+								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
+							</s:if>
+					</s:if>		
+					<s:else>				
+						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">			     
+							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
+						</s:if>				
+					</s:else>
+			</s:if>
 			<br/> <br/> <br/>
 		</div>
 		 <!-- end bottom section -->
