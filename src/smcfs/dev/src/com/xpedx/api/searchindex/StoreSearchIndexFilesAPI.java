@@ -106,8 +106,8 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			/*BEGIN: Make the search index copy, property driven.Return if there are no app servers configured in the property file*/
 			String endPointURLs= XpedxPropertyValueHelper.getPropertyValue("xpedx.searhindex.serverURLs");
 			if(YFCCommon.isVoid(endPointURLs)){
-				LOG.info("There are no app servers configured for for search index copy. The system will activate the search index and return gracefully.");
-				activateSearchIndex(env, searchIndexTriggerKey);
+				LOG.info("There are no app servers configured for for search index copy. The system will return gracefully.");
+				//activateSearchIndex(env, searchIndexTriggerKey);
 				return null;
 			}
 			/*END: Make the search index copy, property driven.Return if there are no app servers configured in the property file*/
@@ -125,8 +125,8 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			//Now that the search index is stored in database, we call the app servers to pick it up
 			LOG.info("Calling App Servers to pick up search index.");
 			if(copySearchIndexFiles(searchIndexTriggerKey,searchIndexCompletePath, baseName)){
-				LOG.info("Activate search index it is after successfully picked up by all app servers");
-				activateSearchIndex(env, searchIndexTriggerKey);
+				//LOG.info("Activate search index it is after successfully picked up by all app servers");
+				//activateSearchIndex(env, searchIndexTriggerKey);
 				LOG.info("Start cleaning up the temporary files and db tables");
 				SearchIndexCleanUp.cleanUp(null,env);
 				LOG.info("Finished cleaning up the temporary files and db tables");
