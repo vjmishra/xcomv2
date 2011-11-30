@@ -895,10 +895,12 @@ function showSharedListForm(){
 			{
 				var divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
-				
+
+				var quantity = arrQty[i].value;
+				quantity = ReplaceAll(quantity,",","");
 				divVal.setAttribute("class", "error");
 				
-				if((arrQty[i].value == '0' || arrQty[i].value== '' ) && isOnlyOneItem == true)
+				if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true)
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
@@ -917,8 +919,8 @@ function showSharedListForm(){
 						errorflag= false;
 					}
 				}
-				else if(arrQty[i].value>0){
-					var totalQty = arrUOM[i].value * arrQty[i].value;
+				else if(quantity>0){
+					var totalQty = arrUOM[i].value * quantity;
 					if(arrOrdMul[i].value == undefined || arrOrdMul[i].value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul[i].value == null)
 					{
 						arrOrdMul[i].value=1;
@@ -2071,7 +2073,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" onblur="javascript:updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
+												value="%{#qty}" onchange="javascript:isValidQuantity(this);resetQuantityError('%{#id}');updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
 													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2085,7 +2087,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											</s:if> <s:else>
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');" onblur="javascript:this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
+												value="%{#qty}" onchange="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' '/>
