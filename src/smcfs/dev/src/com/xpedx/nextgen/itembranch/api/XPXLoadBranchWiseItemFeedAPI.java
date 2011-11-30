@@ -422,7 +422,13 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 				eleItemExtn.setAttribute("OrderMultiple", eleWMItemBranch
 						.getAttribute("OrderMultiple"));
 			}
-			eleItemExtn.setAttribute("InventoryIndicator", eleWMItemBranch
+
+   /***Start of  Modified code for Change request 3079****/
+	eleItemExtn.setAttribute("TempIndicator", eleWMItemBranch
+					.getAttribute("InventoryIndicator"));
+					
+   /***End of  Modified code for Change request 3079****/
+				eleItemExtn.setAttribute("InventoryIndicator", eleWMItemBranch
 					.getAttribute("InventoryIndicator"));
 			eleItemExtn.setAttribute("CompanyCode", eleWMItemBranch
 					.getAttribute("CompanyCode"));
