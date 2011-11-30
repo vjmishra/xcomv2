@@ -314,6 +314,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 		}
 		
+		if(null != prodMweight && (prodMweight.equals("0") || prodMweight.equals("0.0")) ){
+			prodMweight = null;
+		}
+		
 //		displayUOMs.add(BaseUomDesc); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
 		if (XPEDXPriceandAvailabilityUtil.TH_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.TH_UOM_A.equalsIgnoreCase(pricingUOM)) {
@@ -331,7 +335,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			cwtUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.CWT_UOM_M);
 			if(cwtUOMDesc==null || cwtUOMDesc.length()==0)
 				cwtUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.CWT_UOM_A);
-			displayUOMs.add(cwtUOMDesc);
+				if(prodMweight != null){
+					displayUOMs.add(cwtUOMDesc);
+				}
 			}
 			
 			catch(Exception e) 
@@ -378,7 +384,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 //		displayPriceForUoms.add(basePrice.toString());  //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
-		if (priceForCWTUom != null){
+		if (priceForCWTUom != null && prodMweight != null){
 			displayPriceForUoms.add(priceForCWTUom.toString());
 		}
 		//Moved code from above to bottom for JIRA 1835
