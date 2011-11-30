@@ -795,6 +795,10 @@ public class XPEDXPriceandAvailabilityUtil {
 							"PricingQuantityConvFactor");
 					String baseUOM = SCXmlUtil.getAttribute(itemEle, "UnitOfMeasure");
 					String prodMweight = SCXmlUtil.getAttribute(itemExtnEle, "ExtnMwt");
+					//Added for JIRA 2600 - Rugrani
+					if(null != prodMweight && (prodMweight.equals("0") || prodMweight.equals("0.0"))){
+						prodMweight = null;
+					}
 					
 					
 					XPEDXItemPricingInfo pricingInfo = null;
@@ -895,8 +899,7 @@ public class XPEDXPriceandAvailabilityUtil {
 							
 							ArrayList<XPEDXBracket> displayPriceForUoms = new ArrayList<XPEDXBracket>();
 							
-							
-							if (priceForCWTUom != null)
+							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0)
 							{
 								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
