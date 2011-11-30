@@ -462,7 +462,7 @@ function showSplitDiv(divId)
 							</s:if>
 					</s:if>				
 					<s:else>					
-						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">
+						<s:if test="#_action.isEditableOrder()">
 							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 						</s:if>					
 					</s:else>
@@ -1275,7 +1275,7 @@ function showSplitDiv(divId)
 			     			</s:if>
 					</s:if>
 					<s:else>				
-						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">
+						<s:if test="#_action.isEditableOrder()">
 							<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
 					  	</s:if>				
 					</s:else>
@@ -1298,7 +1298,7 @@ function showSplitDiv(divId)
 							</s:if>
 					</s:if>		
 					<s:else>				
-						<s:if test="#_action.isEditableOrder() && #_action.isFOCreated()">			     
+						<s:if test="#_action.isEditableOrder()">			     
 							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
 						</s:if>				
 					</s:else>
