@@ -410,12 +410,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					{
 						chainedFOMap.put(orderHeaderKey, legacyOrderNo);						
 					}
-				} commented for 2731*/
-				
-				if (null != chainedOrderMap
-						&& chainedOrderMap.containsKey(chainedFromOrderLineKey)) {
-					isFOCreated = true;
-				}
+				} commented for 2731*/			
 				
 				//added for 2731
 				/*if(legacyOrderNumber == null || !legacyOrderNumber.equals("")){
@@ -470,6 +465,11 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						orderHeaderList.add(documentElement);
 						chainedOrderCountMap.put(chainedFromOrderLineKey, orderHeaderList);
 					}
+				}
+				
+				if (null != chainedOrderMap
+						&& chainedOrderMap.size() > 0) {
+					isFOCreated = true;
 				}
 			}
 		} catch (CannotBuildInputException e) {
