@@ -51,7 +51,7 @@
 }
 </style>
 <!-- <title>Choose a Ship To Address Modal</title> -->
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.TABTITLE"/> </title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/> </title>
 
 </head>
 <body>
@@ -62,7 +62,8 @@
     
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
-		<h2 class="no-border"  style="float:left;" >Change Ship-To</h2>
+		<!-- <h2 class="no-border"  style="float:left;" >Select Ship-To</h2> -->
+		<h2 class="no-border"  style="float:left;" > <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE" /></h2>
 		<img id="magGlass" class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();">		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToOrderSearchDiv','%{#searchURL}');" />	
 		<s:hidden id="magGlass" name="searchButton"></s:hidden>
@@ -71,9 +72,13 @@
 <div class="clearall">&nbsp;</div>
 
     <!-- START main body (with scroll bar) -->
-    <div class="paginationContainer" style="float: right;"><!-- pagination control -->
-       <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="shipToOrderSearchDiv" showMyUserFormat="false"/>
-    </div>
+   <div class="paginationContainer" style="float: right;"><!-- pagination control -->
+       <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
+       <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
+       urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="shipToOrderSearchDiv" 
+       showFirstAndLast="False" showMyUserFormat="false"/>
+    </div> 
+	
 	<div class="ship-to-body">
 		<div id="address-list" class="x-corners ship-to-address-list">
 
@@ -162,9 +167,12 @@
 <div class="clearall"></div>
 </div>
 
+<!-- 
 <div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />bb2Change Preferred Ship-To to Selected
-</div>
+	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
+	bb2Change Preferred Ship-To to Selected
+</div> 
+-->
 
 <div class="float-right">
 <ul id="tool-bar" class="tool-bar-bottom">

@@ -51,14 +51,14 @@
 }
 </style>
 <!-- <title>Choose a Ship To Address Modal</title> -->
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.TABTITLE"/> </title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE"/> </title>
 
 </head>
 <body>
 <%--	Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments --%>
 <s:if test="%{assignedShipToCount == 0 && comingFromSearch == 'false'}">
 <!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator..</div> -->
-<div align="center"> <s:text name="MSG.SWC.ADMN.PRFC.GENERIC.NOSHIPTO" /> </div> 
+<div align="center"> <s:text name="MSG.SWC.ADMN.PRF.GENERIC.NOSHIPTO" /> </div> 
 </s:if>
 <s:else>
  <!-- modal window container -->
@@ -66,7 +66,8 @@
     
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
-		<h2 class="no-border"  style="float:left;" >Change Ship-To</h2>
+		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
+		<h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();">&nbsp;</span>		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="Search Ship-To…" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
@@ -211,8 +212,13 @@
         
     <!-- START main body (with scroll bar) -->
     <div class="paginationContainer" style="float: right;"><!-- pagination control -->
-       <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="ajax-assignedShipToCustomers" showMyUserFormat="false"/>
+     	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
+		<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
+		urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="ajax-assignedShipToCustomers" 
+		showFirstAndLast="False" showMyUserFormat="false"/>
     </div>
+    
+			
 	<div class="ship-to-body">
 		<div id="address-list" class="x-corners ship-to-address-list">
 
@@ -302,7 +308,9 @@
 </div>
 
 <div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />bb1Change Preferred Ship-To to Selected
+	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
+	<!-- bb1Change Preferred Ship-To to Selected -->
+	 <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
 <div class="float-right" >
