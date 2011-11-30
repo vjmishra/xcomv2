@@ -467,8 +467,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					}
 				}
 				
-				if (null != chainedFOMap
-						&& chainedFOMap.size() > 0) {
+				if (null != chainedOrderMap
+						&& chainedOrderMap.size() > 0) {
 					isFOCreated = true;
 				}
 			}
