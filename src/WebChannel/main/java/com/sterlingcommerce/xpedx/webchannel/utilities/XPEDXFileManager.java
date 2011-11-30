@@ -22,6 +22,7 @@ public class XPEDXFileManager implements Serializable{
 	private static String PATH_SEPARATOR = System.getProperty("file.separator");
 
 	private static final Logger LOG = Logger.getLogger(XPEDXFileManager.class);
+	private static final boolean DEBUG_TRACE = false;
 
 	
 	/**
@@ -120,14 +121,14 @@ public class XPEDXFileManager implements Serializable{
 		// any filename would be fine, it is just to get the actual path of the context.
 		String destFilePath = context.getRealPath("test.xml");
 		if (YFCCommon.isVoid(destFilePath)){
-			System.out.println("-DYN-PROMO- (copyDirectory) 10 WebLogic Servlet real path came back as Empty or Null");
+			logMessage("-DYN-PROMO- (copyDirectory) 10 WebLogic Servlet real path came back as Empty or Null");
 			return;
 		}	
 		
 		String destDirName = destFilePath.substring(0, destFilePath.lastIndexOf(PATH_SEPARATOR));
 		
-		System.out.println("-DYN-PROMO- (copyDirectory) 20 srcDirName : " + srcDirName);
-		System.out.println("-DYN-PROMO- (copyDirectory) 30 Valiadated WebLogic Servlet) destDirName : " + destDirName);
+		logMessage("-DYN-PROMO- (copyDirectory) 20 srcDirName : " + srcDirName);
+		logMessage("-DYN-PROMO- (copyDirectory) 30 Valiadated WebLogic Servlet) destDirName : " + destDirName);
 		
 		copyDirectory(new File(srcDirName), new File(destDirName), forceCopy);
 	}
@@ -144,7 +145,7 @@ public class XPEDXFileManager implements Serializable{
 	public static void copyDirectory(File srcDir, File destDir, boolean forceCopy) throws IOException{
 		if (!srcDir.exists()){
 			//should not copy source directory that does not exist
-			System.out.println("-DYN-PROMO- (copyDirectory) 40 Source Dir not exists copy Failed.");
+			logMessage("-DYN-PROMO- (copyDirectory) 40 Source Dir not exists copy Failed.");
 			return;			
 		}
 
@@ -152,7 +153,7 @@ public class XPEDXFileManager implements Serializable{
 
 		// if the source dir is inside context path and forceCopy is not true do not copy
 		if (srcDirPath.startsWith(destDir.getPath()) && !forceCopy){
-			System.out.println("-DYN-PROMO- (copyDirectory) 50 source dir is inside context path and forceCopy is false, So DONOT copy.");
+			logMessage("-DYN-PROMO- (copyDirectory) 50 source dir is inside context path and forceCopy is false, So DONOT copy.");
 			return;
 		}
 		
@@ -181,13 +182,13 @@ public class XPEDXFileManager implements Serializable{
 		if (!isDirectoryRemote(srcDir.getPath()) &&  !isDriveGiven){
 			
 			//should not copy source directory that is not remote or if the path is within a webapp context
-			System.out.println("-DYN-PROMO- 60 .. (copyDirectory) should not copy source directory that is not remote or if the path is within a webapp context " + srcDir );
+			logMessage("-DYN-PROMO- 60 .. (copyDirectory) should not copy source directory that is not remote or if the path is within a webapp context " + srcDir );
 			return;		
 		}
 		// this apache.io.commons.FileUtils copies source to destination and preserves the timestamp on the files and folders
 		FileUtils.copyDirectory(srcDir, destDirectory, true);
-		System.out.println("-DYN-PROMO- (copyDirectory) 70 srcDir : " + srcDir );
-		System.out.println("-DYN-PROMO- (copyDirectory) 80 destDirectory : " + destDirectory );
+		logMessage("-DYN-PROMO- (copyDirectory) 70 srcDir : " + srcDir );
+		logMessage("-DYN-PROMO- (copyDirectory) 80 destDirectory : " + destDirectory );
 	}
 	
 	/**
@@ -206,8 +207,8 @@ public class XPEDXFileManager implements Serializable{
 	public static boolean checkFile(String filePath, IWCContext wcContext, boolean forceCopy) throws IOException{
 		// any filename would be fine, it is just to get the actual path of the context.
 		String searchDir = wcContext.getSCUIContext().getServletContext().getRealPath("test.xml");
-		System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 210 searchDir " + searchDir);
-		System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 220 filePath " + filePath);
+		logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 210 searchDir " + searchDir);
+		logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 220 filePath " + filePath);
 		if (YFCCommon.isVoid(searchDir)){
 			return false;
 		}
@@ -231,16 +232,16 @@ public class XPEDXFileManager implements Serializable{
 	public static boolean checkFile(String filePath, String searchDir, boolean forceCopy) throws IOException{
 		File givenFile = new File(filePath);
 		
-		System.out.println("-DYN-PROMO- (XPEDXFileManager)  ");
+		logMessage("-DYN-PROMO- (XPEDXFileManager)  ");
 		
 		// if the source dir is inside context path and forceCopy is not true do not copy
 		if (filePath.startsWith(searchDir) && !forceCopy){
-			System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 230.. dir is inside context path and forceCopy is not true do not copy");
+			logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 230.. dir is inside context path and forceCopy is not true do not copy");
 			return givenFile.exists();
 		}
 		else
 		{
-			System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 240 .. source dir is not inside .. promotions");
+			logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 240 .. source dir is not inside .. promotions");
 		}
 		
 		boolean isDriveGiven = false;
@@ -250,7 +251,7 @@ public class XPEDXFileManager implements Serializable{
 		}
 		
 		if (isDirectoryRemote(filePath) || isDriveGiven){
-			System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 250 .. Copying the File/Dir to promotions");
+			logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 250 .. Copying the File/Dir to promotions");
 			return copyFile(filePath,searchDir);
 		}
 		
@@ -258,12 +259,12 @@ public class XPEDXFileManager implements Serializable{
 			filePath = "/" + filePath;
 		}
 		File file = new File(searchDir + filePath);
-		System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 260 .. (searchDir + filePath)" +file );
+		logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 260 .. (searchDir + filePath)" +file );
 		if (!file.exists()){
-			System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 270 .. (searchDir + filePath) Promo file Not exists.: " );
+			logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 270 .. (searchDir + filePath) Promo file Not exists.: " );
 			return false;
 		}
-		System.out.println("-DYN-PROMO- (XPEDXFileManager-checkFile) 280 .. (searchDir + filePath) Promo FILE EXISTS. " );
+		logMessage("-DYN-PROMO- (XPEDXFileManager-checkFile) 280 .. (searchDir + filePath) Promo FILE EXISTS. " );
 		return true;
 	}
 
@@ -314,16 +315,26 @@ public class XPEDXFileManager implements Serializable{
 			+ destFile + ". Not copying the source file.";
 			
 			LOG.debug(strMsg);
-			System.out.println(" -DYN-PROMO- (XPEDXFileManager-checkFile) .. " + strMsg);
+			logMessage(" -DYN-PROMO- (XPEDXFileManager-checkFile) .. " + strMsg);
 			return true;
 		}
 		else {
 			strMsg = "The destination file " + destFile + " does not exist. Copying the source file.";
 			LOG.debug(strMsg);
-			System.out.println(" -DYN-PROMO- (XPEDXFileManager-checkFile) .. " + strMsg);
+			logMessage(" -DYN-PROMO- (XPEDXFileManager-checkFile) .. " + strMsg);
 			FileUtils.copyFile(srcFile, destFile, true);
 			return true;
 		}		
+	}
+	
+	/**
+	 * 
+	 * @param message
+	 */
+	private static void logMessage(String message) {
+		if(DEBUG_TRACE == true )
+			System.out.println( message );
+		
 	}
 	
 	/**
