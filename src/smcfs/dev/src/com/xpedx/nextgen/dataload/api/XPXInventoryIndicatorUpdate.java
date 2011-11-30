@@ -74,7 +74,7 @@ public class XPXInventoryIndicatorUpdate {
 		catch(Exception e){
 
 			log.error("Exception: " + e.getStackTrace());
-			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
+//			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
 
 		}
 
@@ -95,8 +95,8 @@ public class XPXInventoryIndicatorUpdate {
 
 			cstmt =m_Conn.prepareCall(query);
 			rSet  = cstmt.executeUpdate();
-
-			System.out.println("update Value issssss ::"+rSet);
+			
+//			System.out.println("update Value is ::"+rSet);
 			m_Conn.commit();
 
 		}
@@ -105,7 +105,7 @@ public class XPXInventoryIndicatorUpdate {
 			e.printStackTrace();
 			log.error("Exception: " + e.getStackTrace());
 
-			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
+			//prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
 
 
 		}finally{
