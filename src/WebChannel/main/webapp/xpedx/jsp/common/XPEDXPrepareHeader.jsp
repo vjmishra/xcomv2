@@ -1418,6 +1418,7 @@ var toaWin = new Ext.Window({
 			'width' 			: 300,
 			'height' 			: 200  
 		});
+    	/* BB3 Select Ship-To */
     	$("#shipToOrderSearch").fancybox({
     		'onStart' 	: function(){
 	    		if(isguestuser!="true") {
@@ -1429,7 +1430,7 @@ var toaWin = new Ext.Window({
 	    		}
     			},
 			'autoDimensions'	: false,
-			'width' 			: 780,
+			'width' 			: 781,
 	 		'height' 			: 485  
 		});
     	

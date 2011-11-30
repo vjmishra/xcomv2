@@ -2086,7 +2086,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				</ul>
 				</div>
 				<div class="clearview txt-small"  style="margin-left:2px;"><a
-					id='changeShipToForUserProfile' href='#shipToUserProfile' onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" class=" underlines">[Change]</a></div>
+					id='changeShipToForUserProfile' href='#shipToUserProfile' onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" class=" underlines">[Change3]</a></div>
 				</td>
 				<td width="81%" valign="top" class="no-border-right-user paddingtop0">
 						<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#defaultShipToId)" /><br/>
@@ -2117,7 +2117,8 @@ a.underlink:hover { text-decoration: underline !important; }
                     </td>
 						<td valign="top" class="no-borders paddingtop0"><div class="float-right">
 						<img height="12" border="0" width="12" alt="help" src="<s:url value='/xpedx/images/icons/12x12_grey_help.png'/>"/></div>
-							<s:text name="No Preferred Ship-To is selected"></s:text><br/>
+							<%-- <s:text name="No Preferred Ship-To is selected"></s:text><br/> --%>
+							<s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br/>
 							<s:url id='targetURL' namespace='/common' action='xpedxGetAssignedCustomers' />
 							
 						</td>
