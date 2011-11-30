@@ -1458,7 +1458,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
 		
-		skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds);
+		try {
+			skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds);
+		}
+		catch (Exception ex){
+			LOG.debug(ex.getMessage());
+		}
 		
 		/*//Fetch all the items in Cart and get their respective SKUs
 		Document orderDoc = getOutputDocument();
