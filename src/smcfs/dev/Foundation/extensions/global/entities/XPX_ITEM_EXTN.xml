@@ -27,7 +27,18 @@
 			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
 				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
 			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
-			</Attributes>
+			
+				<Attribute ColumnName="TEMP_INDICATOR" 
+				  DataType="Text-10"
+				  DefaultValue="' '" 
+				  Description="This is a flag with possible values of: W-Warehouse, I-Indirect- indicates assumed as direct item. It is duplicate column of Inventory Indicator "  
+				  Name="TempIndicator"
+				  Nullable="false" 
+				  XMLName="InventoryIndicator"
+				 />
+
+
+				</Attributes>
 			
 			<PrimaryKey Name="XPX_ITM_EXTN_PK">
                 <Attribute ColumnName="ITEM_EXTN_KEY" Name="ItemExtnKey" XmlName="ItemExtnKey"/>
