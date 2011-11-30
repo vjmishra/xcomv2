@@ -383,7 +383,7 @@ public class XPEDXExtendedOrderDetailAction extends
 	}
 
 	// Check if the current order has CSR Review hold or not
-	public boolean isOrderOnCSRReviewHold() {
+	public boolean isOrderOnCSRReviewHoldToEdit() {
 		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
 		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
 		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
@@ -397,6 +397,25 @@ public class XPEDXExtendedOrderDetailAction extends
 			if ((orderholdtypeelem.getAttribute(OrderConstants.STATUS).equals(openHoldStatus))
 					&& (orderHoldType.equals(holdTypeNeedsAttention)
 							|| orderHoldType.equals(holdTypeLegacyCnclOrd) 
+							|| orderHoldType.equals(holdTypeOrderException)))
+					return true;
+		}
+		return false;
+	}
+	
+	// Check if the current order has CSR Review hold or not
+	public boolean isOrderOnCSRReviewHold() {		
+		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
+		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
+		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;
+		
+		Element orderholdtypeselem = SCXmlUtil.getChildElement(this.elementOrder, OrderConstants.ORDER_HOLD_TYPES);
+		ArrayList<Element> orderholdtypeelemlist = SCXmlUtil.getElements(orderholdtypeselem, OrderConstants.ORDER_HOLD_TYPE);
+		for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter.hasNext();) {
+			Element orderholdtypeelem = (Element) iter.next();
+			String orderHoldType = orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE);
+			if ((orderholdtypeelem.getAttribute(OrderConstants.STATUS).equals(openHoldStatus))
+					&& (orderHoldType.equals(holdTypeLegacyCnclOrd) 
 							|| orderHoldType.equals(holdTypeOrderException)))
 					return true;
 		}
@@ -552,7 +571,7 @@ public class XPEDXExtendedOrderDetailAction extends
 			return false;
 		}
 		
-		if(isOrderOnCSRReviewHold()) {
+		if(isOrderOnCSRReviewHoldToEdit()) {
 			return false;
 		}
 		
