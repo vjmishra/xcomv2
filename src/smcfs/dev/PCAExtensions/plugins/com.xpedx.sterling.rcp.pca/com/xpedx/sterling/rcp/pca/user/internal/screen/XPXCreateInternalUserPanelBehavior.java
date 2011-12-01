@@ -263,7 +263,7 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 								strLastName += strLastName;
 							}
 						}
-						setFieldValue("txtName", strGivenName +", "+ strLastName);
+						setFieldValue("txtName", strGivenName +" "+ strLastName);
 						
 						String strEmployeeID = YRCXmlUtils.getXPathElement(eleOutput, "/User").getAttribute("EmployeeID");
 						if(YRCPlatformUI.isVoid(strEmployeeID)){
