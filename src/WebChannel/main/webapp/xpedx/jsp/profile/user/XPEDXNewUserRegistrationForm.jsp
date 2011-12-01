@@ -44,9 +44,14 @@
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 
+<script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
+<script type="text/javascript" src="../../xpedx/js/jquery.maskedinput-1.3.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(document).pngFix();
+		$('.phone-numeric').numeric(false); 
+		$("#newUserPhone").mask("999 999-9999");
 	});	
 </script>
 <script type="text/javascript">
@@ -64,14 +69,78 @@
     		 errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.REGISTER.GENERIC.INVALIDFIELDS' />";
     	     //usernameField.style.borderColor="#FF0000";
     	     errorDiv.style.display = 'inline';
-    		//return false;
-   		}     	
-    	else
-    	{
-	    	//alert("Submitting registrationForm ..");
+    		return;
+   		} 
+		//added for email validation
+     	if(document.getElementById("newUserEmail")!=null){
+			var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[(2([0-4]\d|5[0-5])|1?\d{1,2})(\.(2([0-4]\d|5[0-5])|1?\d{1,2})){3} \])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			var email=document.getElementById("newUserEmail").value;
+			if(!re.test(email)){
+				
+		        alert("Please enter valid Email address!");
+
+		    	//document.getElementById("errorMsgFor_validemailId").style.display = "inline";
+		        return;
+			}
+			
+		    len=email.length;
+		    alert("len"+len);
+		    var no=0;
+		    for(var i=0;i<len;i++)
+		    {
+		        if(email.charAt(i)=="@" || email.charAt(i)==",")
+		        {
+		            alert(i);
+		            no=no+1;
+		        }
+		    }
+		   
+		    if (email.indexOf("@") < 0)
+		    {
+		    	
+		        alert("Please enter valid Email address!");
+		        document.getElementById("newUserEmail").focus();
+		        return;
+		    }
+		    // Email Checker
+		    else if (email.indexOf(".") < 0)
+		    {
+		    	
+		        alert("Incorrect email address. Please re-enter!");
+		        document.getElementById("newUserEmail").focus();
+		        return;
+		    }
+		    // Email Checker
+		    else if (email.indexOf(" ") >= 0)
+		    {
+		    	//new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
+		        alert("Incorrect email address. Please re-enter!");
+		        document.getElementById("newUserEmail").focus();
+		        return;
+		    }
+		    else if (len > 50)
+		    {
+		        //length1=email.length;
+		        alert(length1);
+		       // new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
+		        alert("Email should not exceed more than 50 characters!");
+		        document.getElementById("newUserEmail").focus();
+		        return;
+		    }
+		    else if (no >= 2)
+		    {
+		        //length1=email.length;
+		        //alert(length1);
+		        //new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
+		        alert("Please do not enter more than one email address!");
+		        document.getElementById("newUserEmail").focus();
+		        return;
+		    }  
+     	}
+		    	//alert("Submitting registrationForm ..");
 	    	document.registrationForm.submit();
-	    	return true;
-    	} 
+	    	
+    	
     }
 
 </script>
@@ -110,30 +179,32 @@
     <!-- <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p>  -->
     <p> <s:text name='MSG.SWC.MISC.REGISTER.GENERIC.GENINFO' />  </p> 
 	<br>
-<table class="full-width">
-	<tbody>
+	<span class="smallfont">* - Required fields</span>
+	<br />
+	<table class="full-width">
+	  <tbody>
 		<tr>
-    		<td style="width:180px;" class="underlines no-border-right-user">Name: </td>
+    		<td style="width:180px;" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Name: </td>
 			<td style="width:278px;" class="underlines no-border-right-user" ><s:textfield name="newUserFirstName" id="newUserFirstName" cssClass="x-input width-250px" maxlength="50"/></td>
 		</tr>
 
 		<tr>
-  			<td width="160" class="underlines no-border-right-user">Company:</td>
-  			<td class="underlines no-border-right-user"><s:textfield id="newUserCompanyName" name="newUserCompanyName" theme="simple" cssClass="x-input width-250px" maxlength="35"/></td>
+  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Company:</td>
+  			<td class="underlines no-border-right-user"><s:textfield id="newUserCompanyName" name="newUserCompanyName" theme="simple" cssClass="x-input width-250px" maxlength="30"/></td>
   			<td class="underlines no-border-right-user">&nbsp;</td>
   			<td class="underlines no-border-right-user">&nbsp;</td>
 		</tr>
 		
 		<tr>
-  			<td width="160" class="underlines no-border-right-user">Email Address:</td>
+  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Email Address:</td>
   			<td class="underlines no-border-right-user"><s:textfield id="newUserEmail" name="newUserEmail" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
 			<td class="underlines no-border-right-user">&nbsp;</td>
 			<td class="underlines no-border-right-user">&nbsp;</td>
 		</tr>
 		
 		<tr>
-			<td width="160" class="underlines no-border-right-user">Phone (Include area code):</td>
-			<td class="underlines no-border-right-user"><s:textfield id="newUserPhone" name="newUserPhone" theme="simple" cssClass="x-input width-250px" maxlength="10"/></td>
+			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Phone (Include area code):</td>
+			<td class="underlines no-border-right-user"><s:textfield id="newUserPhone" name="newUserPhone" theme="simple" cssClass="x-input width-250px phone-numeric" maxlength="10"/></td>
   			<td class="underlines no-border-right-user">&nbsp;</td>
   			<td class="underlines no-border-right-user">&nbsp;</td>
   		</tr>
