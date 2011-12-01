@@ -38,6 +38,15 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 	private List<String> reasonreturn;
 	private List<String> othertext;
 	private String notes;
+	private String messageType="returnItemsRequest";
+
+	public String getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
 
 	public String getNotes() {
 		return notes;
