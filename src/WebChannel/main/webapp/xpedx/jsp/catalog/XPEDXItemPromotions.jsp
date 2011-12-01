@@ -28,7 +28,7 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 		        <div class="promo-bg-rpt">
-		        <a href="%{detailURLFromPromoProd}">
+		        <a href="%{detailURLFromPromoProd}" class="short-description">
 		        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 		        		<s:set name="itemAsset" value='#itemAssetList[0]' />
 						<s:set name='imageLocation'
@@ -49,7 +49,7 @@
 		        		<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 		        		<img src="<s:url value='%{#imageIdBlank}'/>" width="52" height="50" align="left" />
 		        	</s:else>
-		        	</a>
+
 		        	<div class="promo-txt">
 						<!-- #<s:property value='#xutil.getAttribute(#upgradeItem,"ItemID")' /> -->
 						<s:set name="description" value='#xutil.getAttribute(#promoItemPrimInfoElem,"ShortDescription")'></s:set>
@@ -60,11 +60,10 @@
 						<s:if test="%{(#description.length()) > 50}">
 							<s:set name='displayDescription' value='%{#description.substring(0,50) + "..."}'/>
 						</s:if>
-						<a href="%{detailURLFromPromoProd}">
+						
 		        		<p title='<s:property value="%{#description}" />' class="short-description">
 		        			<s:property	value='%{#displayDescription}' />
 						</p>
-						</a>
 		        		<s:url id='detailURLFromPromoProd' namespace='/catalog'
 							action='itemDetails.action'>
 							<s:param name='itemID'>
@@ -95,6 +94,7 @@
 								
 						
 		        	</div>
+		        	</a>
 		        </div>
 		        <div class="table-bottom-bar">
 			         <div class="table-bottom-bar-L"></div>
@@ -120,6 +120,7 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 	        <div class="promo-bg-rpt">
+	        	<a href="%{detailURLFromPromoProd}" class="short-description">
 	        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 					<s:set name="itemAsset" value='#itemAssetList[0]' />
 					<s:set name='imageLocation'
@@ -183,6 +184,7 @@
 					-->
 				
 				</div>
+				</a>
 			</div>
 			<div class="table-bottom-bar">
 		         <div class="table-bottom-bar-L"></div>
@@ -208,6 +210,7 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 	        <div class="promo-bg-rpt">
+	        <a href="%{detailURLFromPromoProd}" class="short-description">
 	        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 					<s:set name="itemAsset" value='#itemAssetList[0]' />
 					<s:set name='imageLocation'
@@ -280,6 +283,7 @@
 					
 					 -->
 					 </div>
+					 </a>
 				</div>
 				<div class="table-bottom-bar">
 			         <div class="table-bottom-bar-L"></div>
@@ -306,7 +310,7 @@
 			            <div class="table-top-bar-R"></div>
 			        </div>
 		        	<div class="promo-bg-rpt">
-	        		<a href="%{detailURLFromPromoProd}">
+	        		<a href="%{detailURLFromPromoProd}" class="short-description">
 		        		<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
@@ -324,7 +328,7 @@
 							<img src="<s:url value='%{#imageIdBlank}'/>"
 								width="52" height="50" align="left" />
 						</s:else>
-						</a>
+
 						<div class="promo-txt">
 							<!--  #<s:property value='#xutil.getAttribute(#complementItem,"ItemID")' /> -->
 							<s:set name="description" value='#xutil.getAttribute(#promoItemPrimInfoElem,"ShortDescription")'></s:set>
@@ -335,11 +339,9 @@
 							<s:if test="%{(#description.length()) > 50}">
 								<s:set name='displayDescription' value='%{#description.substring(0,50) + "..."}'/>
 							</s:if>
-							<a href="%{detailURLFromPromoProd}">
 			        		<p title='<s:property value="%{#description}" />' class="short-description">
 			        			<s:property	value='%{#displayDescription}' />
 							</p>
-							</a>
 		        			<s:url id='detailURLFromPromoProd' namespace='/catalog'
 								action='itemDetails.action'>
 								<s:param name='itemID'>
@@ -379,6 +381,7 @@
 							 -->
 							 
 							 </div>
+	 						</a>
 						</div>
 						<div class="table-bottom-bar">
 					         <div class="table-bottom-bar-L"></div>
@@ -405,6 +408,7 @@
 						            <div class="table-top-bar-R"></div>
 						        </div>
 					        	<div class="promo-bg-rpt">
+					        	<a href="%{detailURLFromPromoProd}" class="short-description">
 					        		<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 										<s:set name="itemAsset" value='#itemAssetList[0]' />
 										<s:set name='imageLocation'
@@ -473,6 +477,7 @@
 										 -->
 										 
 										 </div>
+										 </a>
 									</div>
 									<div class="table-bottom-bar">
 								         <div class="table-bottom-bar-L"></div>

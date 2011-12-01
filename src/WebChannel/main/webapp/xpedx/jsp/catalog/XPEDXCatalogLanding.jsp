@@ -334,8 +334,9 @@
 			</div>
 
 			<!-- end mid column -->
-			<div id="right-col-int" style="margin-top:0px;">
-				<div class="ad-float smallBody" style="margin-top: 0;"><img class="float-left" height="4" width="7" alt="" src="/swc/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
+			<div id="right-col-int cat-landing" style="margin-top:0px;">
+				<div class="ad-float smallBody" style="margin-top: 0;">
+				<img class="float-left" height="4" width="7" alt="" src="/swc/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
 				 <br/>
 				<!-- Ad Juggler Tag Starts  -->
 				<s:if test="#categoryDepth==1">

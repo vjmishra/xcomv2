@@ -1,9 +1,9 @@
 // JavaScript Document
 
 Ext.onReady(function () {
-
        jQuery('.jcarousel-skin-xpedx').jcarousel({
-		   wrap:'circular'
+		   wrap:'circular',
+		   scroll: 1		
 	   });
 	   
 	   jQuery('.jcarousel-skin-xpedx li a:first').each(function(){

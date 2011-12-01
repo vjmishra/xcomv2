@@ -57,7 +57,6 @@
 <!-- carousel scripts css  -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
@@ -65,6 +64,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
@@ -2323,18 +2323,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 				</s:if>
 				
 				
-            <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
-             <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
-             <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-			<div class="last-modified-div">Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> </div> 
-
+<br/>
 			<s:if test='editMode != true'>
             <!-- START Carousel -->
 		
 		<s:if test='xpedxYouMightConsiderItems.size() > 0'>
-            <div class="mil-cart-bg" style="margin-top:0px;">
+            <div class="mil-cart-bg mil" style="margin-top:0px;">
                 <div id="cross-sell" class="float-left">
-                    <span class="color:#333333;"> You might also consider...</span>
+                    <span class="consider-text"> You might also consider...</span>
                     <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
 					
 					<s:if test='xpedxYouMightConsiderItems.size() > 0'>
@@ -2364,7 +2360,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 									<li> 
-									    <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+									    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
 										<s:property value="%{#shortDesc}"/>
 											<br />
 											<br />
@@ -2392,6 +2388,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
         <!-- END carousel -->
 
 			</s:if>
+			            <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
+             <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
+             <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
+			<div class="last-modified-div">Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> </div> 
+			
 
         </div>
     </div>

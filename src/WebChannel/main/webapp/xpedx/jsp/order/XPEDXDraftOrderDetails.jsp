@@ -1881,7 +1881,7 @@ var currentAadd2ItemList = new Object();
 <div class="clearall">&nbsp;</div>
 	
 <s:if test='xpedxYouMightConsiderItems.size() > 0'>
-	<div class="mil-cart-bg carousel-div">
+	<div class="cart-bg carousel-div">
 	<div>
 	<span class="promotxt">You might also consider...</span>
 		<div id="cross-sell" class="float-left">
