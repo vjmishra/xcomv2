@@ -851,7 +851,12 @@
 										</s:elseif>
 									</s:if> 
 									<s:else>
-										<s:property value='#chainedOrder.getAttribute("Status")' />
+										<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
+														Submitted (CSR Reviewing)
+										</s:if>
+										<s:else>
+											<s:property value='#chainedOrder.getAttribute("Status")' />
+										</s:else>	
 									</s:else>
 								</s:if>
 			                    <s:else>
