@@ -32,7 +32,8 @@
 	<action name="saveServiceRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXSaveServicesAction">
 		<param name="mashups">saveSampleService</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices_binding.xml</param>
-		<result name="success">/xpedx/jsp/services/XPEDXSampleService.jsp</result>
+		<result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
+		<!--  <result name="success">/xpedx/jsp/services/XPEDXSampleService.jsp</result> 3128 jira -->
 	</action>
 	
 	<action name="returnItemsRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXReturnItemsRequestAction">
@@ -47,7 +48,8 @@
 		<param name="mashups">XPEDXOrderDetailMashup</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXReturnItems_binding.xml</param>
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
-		<result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result>
+		<result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
+		<!-- <result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result> jira 3128 -->
 		<result name="orderDetailError">/swc/jsp/order/OrderDetailError.jsp</result>
 	</action>
 	
