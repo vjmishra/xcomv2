@@ -203,7 +203,7 @@ function deleteCart(formObj){
 }
 function maxNewLength(field,maxlimit) {
 	if (field.value.length > maxlimit) // if too long...trim it!
-		alert(field.title + ' should not exceed '+maxlimit+ ' characters');
+	     // commented for jira 2923 alert(field.title + ' should not exceed '+maxlimit+ ' characters');
 		field.value = field.value.substring(0, maxlimit);
 		return false;
 	}
@@ -669,11 +669,11 @@ $(document).ready(function(){
 	<s:if test="#canChangeOrderName">
 		Name
 		<s:textfield name='cartName_new' id="cartName_new" size="35"
-			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'30');"
+			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'35');"
 			value='%{#orderDetails.getAttribute("OrderName")}' tabindex="3400" />
 	</s:if> 
 	<s:else>
-		<input type="hidden" name="cartName_new" id="cartName_new" value="<s:property value='%{#orderDetails.getAttribute("OrderName")}' />" />
+		<input type="hidden" name="cartName_new" id="cartName_new" onkeyup="javascript:maxNewLength(this,'35');" value="<s:property value='%{#orderDetails.getAttribute("OrderName")}' />" />
 	</s:else>
 	<br />
 	
@@ -689,19 +689,19 @@ $(document).ready(function(){
 			Description
 			<br/>
 			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
-				<textarea  id="cartDesc_new" name="cartDesc_new"></textarea>
+				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
 			</s:if>
 			<s:else>
-				<textarea  id="cartDesc_new" name="cartDesc_new"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
+				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
 			</s:else>
 								
 	</s:if> 
 	<s:else>	
 		<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
-			<textarea  id="cartDesc_new" name="cartDesc_new"></textarea>
+			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
 		</s:if>
 		<s:else>
-			<textarea  id="cartDesc_new" name="cartDesc_new"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
+			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
 		</s:else>
 	</s:else>
 </s:if>
