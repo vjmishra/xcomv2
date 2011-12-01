@@ -2679,7 +2679,7 @@ background-image:url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass
 	height: 308px;
 	margin-left: 4px;
 	width: 990px;
-}
+}   
 
 .mil-cart-bg {
 	margin-top: 50px; /* added */
@@ -2688,6 +2688,23 @@ background-image:url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass
 	background-repeat: repeat-x;
 	height: 206px;
 	padding-top: 15px;
+}
+
+.mil-cart-bg.mil {
+	margin-top: 50px; /* added */
+	background-image:
+		url("../../images/theme/theme-1/mil/mil-cart-rpt-bg.gif");
+	background-repeat: repeat-x;
+	height: 206px;
+	padding-top: 15px;
+	margin-left:20px;
+	width: 950px;
+}
+
+.mil-cart-bg.mil #cross-sell span.consider-text{
+	margin-left:20px;
+	color:#333333;
+	font-weight: bold;
 }
 
 #item-ct dd {
@@ -3528,13 +3545,6 @@ a.blue-ui-btn:active span {
 	clear: both;
 }
 /*
-.mil-cart-bg {
-	background-image:url(../../images/theme/theme-1/mil/mil-cart-rpt-bg.gif);
-	background-repeat:repeat-x;
-	height:256px;
-	padding-left:2px;
-	padding-top:15px;
-}
 .listTableHeader thead {
 	color:#FFFFFF;
 }
@@ -3781,6 +3791,10 @@ input.xpedx_select_sm,xpedx_select_sm {
 
 .advertisement,#right-col-int a img {
 	/* margin-left: 25px; */
+}
+
+.advertisement,#right-col-int.cat-landing a img {
+	float: right;
 }
 
 .promotxt {
@@ -6387,6 +6401,7 @@ div.catalog-search-container input#search_searchTerm {
 	cursor: pointer;
 	height: auto;
 	max-height: 200px;
+	text-decoration: none !important;
 }
 
 .eleven {
