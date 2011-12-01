@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -1168,16 +1169,29 @@ public class XPEDXOrderUtils {
 				//billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
 				billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
 				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
+				System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, billToKey = " +  billToKey);
+				//billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
+				//billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 			}
 			if(billToKey != null && billToKey.trim().length()>0) {
 				valueMap.put("/Order/@BillToKey", billToKey);
 			}
 		}
 //		Element shipToCustAddress = SCXmlUtil.getElementByAttribute(customerDetails.getDocumentElement(), "//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
-		Element shipToCustAddress = SCXmlUtil.getElementByAttribute(customerDetails.getDocumentElement(),"CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
+//		Element shipToCustAddress = SCXmlUtil.getElementByAttribute(customerDetails.getDocumentElement(),"CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
+				
+		List<Element> theShipToList = XMLUtilities.getElements(customerDetails.getDocumentElement(),"//Customer/CustomerAdditionalAddressList");
+		System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, theShipToList XML = " +  SCXmlUtil.getString(theShipToList.get(0)));
+		
+		List<Element> shipToCustAddress = XMLUtilities.getElements (theShipToList.get(0),"//CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo");
+		System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToCustAddress XML = " +  SCXmlUtil.getString(shipToCustAddress.get(0)));		
+						
+								 
 		if(shipToCustAddress!=null) {
-			String shipToKey = SCXmlUtil.getXpathAttribute(shipToCustAddress, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
+			//String shipToKey = SCXmlUtil.getXpathAttribute(shipToCustAddress, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
+			String shipToKey = SCXmlUtil.getAttribute(shipToCustAddress.get(0), "PersonInfoKey");
 			if(shipToKey!=null && shipToKey.trim().length()>0)
+				System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToKey IS NOT NULL = " +  shipToKey);
 				valueMap.put("/Order/@ShipToKey", shipToKey);
 		}
 		String defaultCarrierServiceCode = BusinessRuleUtil.getBusinessRule(
