@@ -64,12 +64,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
 
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7.css" />
-<![endif]-->
-
-<!--[if IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie.css" />
 <![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
