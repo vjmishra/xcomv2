@@ -4073,6 +4073,22 @@
     IsRealTime="N" Lockid="1" Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-10-07T13:54:28-04:00" Modifyuserid="ngmc"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="WLJMS"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2011-11-30T22:23:52-05:00" Createuserid="admin"
+    FlowGroupName="XPXDataLoad" FlowKey="20111130222352111661"
+    FlowName="XPXInventoryIndicatorUpdate" FlowType="00"
+    GraphUIKey="20111130222400111664" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2011-11-30T22:28:20-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2011-11-30T22:38:39-05:00" Createuserid="admin"
+    FlowGroupName="DefaultAgentGroup" FlowKey="20111130223839111710"
+    FlowName="INVENTORY_IND_UPDATE" FlowType="01"
+    GraphUIKey="AgentGraphUI" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2011-11-30T22:38:39-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
