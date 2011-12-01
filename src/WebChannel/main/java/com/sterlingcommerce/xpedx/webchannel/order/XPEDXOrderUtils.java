@@ -1165,7 +1165,9 @@ public class XPEDXOrderUtils {
 				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 			}
 			else {
-				billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
+				//billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
+				billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
+				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 			}
 			if(billToKey != null && billToKey.trim().length()>0) {
 				valueMap.put("/Order/@BillToKey", billToKey);
