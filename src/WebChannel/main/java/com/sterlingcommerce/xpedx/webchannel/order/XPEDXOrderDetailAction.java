@@ -350,12 +350,19 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				String orderHeaderKey = order.getAttribute("OrderHeaderKey");
 				String webConfNumber = orderExtn.getAttribute("ExtnWebConfNum");
 				String legacyOrderNo = orderExtn.getAttribute("ExtnLegacyOrderNo");
+				String headerStatusCode = orderExtn.getAttribute("ExtnHeaderStatusCode");
 				String quantity = orderLinetranQty.getAttribute("OrderedQty");
 				String legacyOrderNumber = orderExtn
 						.getAttribute("ExtnLegacyOrderNo");
 				String status = order.getAttribute("Status");
 				String extnInvoiceNumber = orderExtn.getAttribute("ExtnInvoiceNo");
 				String encInvoiceNumber = "";
+				
+				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) || null == headerStatusCode
+						|| "".equals(headerStatusCode.trim()) || !headerStatusCode.equals("M0000")) {
+					isCSRReview = true;
+				}
+				
 				if(extnInvoiceNumber != null && extnInvoiceNumber.trim().length() > 0) {
 					try {
 						encInvoiceNumber = XPEDXWCUtils.encrypt(extnInvoiceNumber);
@@ -595,6 +602,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean willCallFlag = false;
 	protected boolean shipComplete = false;
 	protected boolean isFOCreated = false;
+	protected boolean isCSRReview = false;
 	protected String userKey = "";
 	protected String headerComment = "";
 	private HashMap<String, HashMap<String,String>> skuMap;
@@ -610,8 +618,16 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	private String custSuffix = "";
 	private String invoiceURL = "";
 	private String encInvoiceNo = "";
-	private String encInvoiceDate = "";
+	private String encInvoiceDate = "";	
 	
+	public boolean isCSRReview() {
+		return isCSRReview;
+	}
+
+	public void setCSRReview(boolean isCSRReview) {
+		this.isCSRReview = isCSRReview;
+	}
+
 	public String getEncInvoiceNo() {
 		return encInvoiceNo;
 	}
