@@ -761,5 +761,15 @@ public class XPXLiterals {
 	public static final String A_MEMBERSHIP_LEVEL = "CustomerLevel";
 	//End: CR 2277
 	
+	/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
+	public static final String A_CUSTOMER_RECORD_TYPE="CustomerRecordType";
+	public static final String A_USERS = "Users";
+	public static final String OLD_SAP_PARENT_ACCOUNT_NO = "OldSAPParentAccountNumber";
+	public static final String OLD_SAP_PARENT_NAME = "OldSAPParentName";
+	public static final String NEW_SAP_PARENT_ACCOUNT_NO = "NewSAPParentAccountNumber";
+	public static final String NEW_SAP_PARENT_NAME = "NewSAPParentName";
+	public static final String A_SELLER_ORGANIZATION_CODE="SellerOrganizationCode";
+	/*End - Changes made by Mitesh Parikh for JIRA 3002*/
+	
 	
 }
