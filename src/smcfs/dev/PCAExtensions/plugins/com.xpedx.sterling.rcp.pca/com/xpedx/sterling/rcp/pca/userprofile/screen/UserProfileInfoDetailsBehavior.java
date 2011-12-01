@@ -299,16 +299,14 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						Element eleGroupName=(Element) nodGroupList.item(k);
 					String groupId = eleGroupName.getAttribute("UsergroupKey");
 					//System.out.println("The groupID is" + groupId);
-					if ("BUYER-ADMIN".equalsIgnoreCase(groupId)){
+					if ("BUYER-APPROVER".equalsIgnoreCase(groupId)){
 						CustomerContactIdList.add(customerID);
 						k = nodGroupList.getLength();
 					}
 					
 					}
 					
-					
-				
-			}
+				}
 		}
 		NodeList nodeCustContact=eleCustomerContactList.getElementsByTagName("CustomerContact");
 		for(int i=0;i<nodeCustContact.getLength();i++){
