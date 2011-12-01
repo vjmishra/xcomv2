@@ -27,6 +27,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	private String mailCCAddress = null;
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
+	private String messageType="NewUser";
+	private static final String SUCCESS = "success";
 	
 	
 		public String execute(){
@@ -143,6 +145,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 		}
 		public void setNewUserLastName(String newUserLastName) {
 			this.newUserLastName = newUserLastName;
+		}
+		public String getMessageType() {
+			return messageType;
+		}
+		public void setMessageType(String messageType) {
+			this.messageType = messageType;
 		}
 		
 }
