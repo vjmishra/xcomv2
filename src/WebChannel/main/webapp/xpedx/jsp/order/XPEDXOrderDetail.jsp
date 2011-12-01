@@ -389,7 +389,8 @@ function showSplitDiv(divId)
 </s:url>
 <s:url id="urlResetOrderId"  includeParams="none"  action='XPEDXResetPendingOrder' namespace = '/order' ></s:url>
 <s:set name="isOrderOnApprovalHold" value="%{#_action.isOrderOnApprovalHold()}"/>
-<s:set name="isOrderOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold()}"/>	
+<s:set name="isOrderOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold()}"/>
+<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>	
 <s:set name='grandTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("GrandTotal"))'/>
 <s:set name="status" value='#xutil.getAttribute(#orderDetail,"Status")'/>
 <s:set name="orderType" value='%{#xutil.getAttribute(#orderDetail, "OrderType")}' />
@@ -533,9 +534,14 @@ function showSplitDiv(divId)
 												    <s:param name="orderHeaderKey" value="#chainedFOKey"/>
 												    <s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 												</s:url>
+												<s:if test='%{#chainedFONo == "In progress"}'>
+													<s:property value='#chainedFONo'/>
+												</s:if>
+												<s:else>
 													<s:a href="%{orderDetailsURL}">
-												  	<s:property value='#chainedFONo'/>
-													</s:a>		
+												  		<s:property value='#chainedFONo'/>
+													</s:a>
+												</s:else>															
 											</s:iterator> 
                         				</s:else> 
                         			<s:else>          		
@@ -598,6 +604,9 @@ function showSplitDiv(divId)
                         				<s:elseif test="%{#isOrderOnCSRReviewHold}">
                         					(CSR Reviewing)
                         				</s:elseif>
+                        				<s:elseif test='%{#orderType == "Customer" && #isCSRReview}'>
+                        					(CSR Reviewing)
+                        				</s:elseif>                        				
                         			</s:if>	
 	                        			<s:if test='%{#status == "Invoiced"}'>
 	                        				: Invoice #: 
@@ -950,7 +959,13 @@ function showSplitDiv(divId)
 												<s:param name="orderHeaderKey" value='#splitOrderAttributes.get(0)'/>  
 												<s:param name="returnUrlForOrderList" value="%{orderListReturnUrl}"/>
 											</s:url>
-												Order #: <s:a href="%{legacyOrderDetailsURL}"><s:property value="#splitOrderAttributes.get(4)"/></s:a> 
+												Order #: 
+												<s:if test='%{#splitOrderAttributes.get(4) == "In progress"}'>
+													<s:property value="#splitOrderAttributes.get(4)"/>
+												</s:if>
+												<s:else>
+													<s:a href="%{legacyOrderDetailsURL}"><s:property value="#splitOrderAttributes.get(4)"/></s:a>
+												</s:else>												 
 							    				<!--  <a class="underlink" href="#"> <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/> </a>-->
 												</td>
 								    			<td>&nbsp;</td>
@@ -1033,7 +1048,7 @@ function showSplitDiv(divId)
 																		<s:param name="orderHeaderKey" value='#splitOrder.getAttribute("OrderHeaderKey")'/>  
 																		<s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 																</s:url>
-																Order #: <s:a href="%{legacyOrderDetailsURL}"><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:a> <s:property value='#splitOrder.getAttribute("Status")'/>: <s:property value='%{#splitqty}'/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+																Order #:<s:if test='%{#splitOrder.getAttribute("FormattedLegacyOrderNumber") == "In progress"}'><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:if><s:else> <s:a href="%{legacyOrderDetailsURL}"><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:a></s:else> <s:property value='#splitOrder.getAttribute("Status")'/>: <s:property value='%{#splitqty}'/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
 																<br/>
 															</s:iterator>				
 														</td>
@@ -1342,9 +1357,14 @@ function showSplitDiv(divId)
 							    <s:param name="orderHeaderKey" value="#chainedFOKey"/>
 							    <s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 							</s:url>
-						<s:a href="%{orderDetailsURL}">
-						  <s:property value='#chainedFONo'/>
-						</s:a>	
+							<s:if test='#chainedFONo == "In progress"'>
+								<s:property value='#chainedFONo'/>
+							</s:if>
+							<s:else>
+								<s:a href="%{orderDetailsURL}">
+								  <s:property value='#chainedFONo'/>
+								</s:a>
+							</s:else>						
 						<br>	
 					</s:iterator> 				
 				</td>
