@@ -42,6 +42,16 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private String zipCode;
 	private String country;
 	private String email;
+	private static final String SUCCESS = "success";
+	private String messageType="sampleRequest";
+
+	public String getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
 
 	public String getAddress1() {
 		return address1;
