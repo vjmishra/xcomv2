@@ -1089,6 +1089,11 @@
     	Ext.fly('Text1').dom.value='';
    		 return; 
    		 } 
+    function clearTxt() { 
+    	Ext.fly('newSearch_searchTerm').dom.value='';
+   		 return; 
+   		 } 
+    
 
     function saveShipToChanges(url)
     {
@@ -2236,9 +2241,9 @@ function callAjaxForSorting(url,divId)
 	   <s:form name='newSearch' action='newSearch' namespace='/catalog'>
 	   		<s:hidden name='path' id='path' value="/" />
 			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	        	type="text" value="Search Catalog..." onkeydown="javascript:validate(event)" onclick="javascript:newSearch_searchTerm_onclick()">
+	        	type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
-	                            onclick="validateVal(event);return;"></button>
+	                            onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
 	    </s:form>
 	    <!-- END wctheme.form-close.ftl --> 
 	  </div>
@@ -2248,9 +2253,9 @@ function callAjaxForSorting(url,divId)
 	  <s:form name='newSearch' action='newSearch' namespace='/catalog'>
 	  		<s:hidden name='path' id='path' value="/" />
 		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	         type="text" value="Search Catalog..." onkeydown="javascript:validate(event)" onclick="javascript:newSearch_searchTerm_onclick()">
+	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	           onclick="validateVal(event);return;"></button>
+	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
 	   </s:form>
 	 </div>
  </s:if> 
