@@ -516,7 +516,7 @@
         	function submitForm(tableRefOne, tableRefTwo){
 			    var phoneField = document.serviceRequestForm.phone;
 			    var emailField = document.serviceRequestForm.email;
-			    var contactField = document.serviceRequestForm.contact;
+			    var contactField = document.getElementById("serviceRequestForm_contact");
 			    var fedExServiceProviderNumberField = document.serviceRequestForm.serviceRequestForm_serviceProviderNumber_FedEx; 
 			    var upsServiceProviderNumberField = document.serviceRequestForm.serviceRequestForm_serviceProviderNumber_UPS; 
 
