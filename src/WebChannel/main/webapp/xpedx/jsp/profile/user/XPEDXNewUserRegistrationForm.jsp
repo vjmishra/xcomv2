@@ -84,13 +84,11 @@
 			}
 			
 		    len=email.length;
-		    alert("len"+len);
 		    var no=0;
 		    for(var i=0;i<len;i++)
 		    {
 		        if(email.charAt(i)=="@" || email.charAt(i)==",")
 		        {
-		            alert(i);
 		            no=no+1;
 		        }
 		    }
@@ -121,7 +119,7 @@
 		    else if (len > 50)
 		    {
 		        //length1=email.length;
-		        alert(length1);
+		        //alert(length1);
 		       // new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
 		        alert("Email should not exceed more than 50 characters!");
 		        document.getElementById("newUserEmail").focus();
