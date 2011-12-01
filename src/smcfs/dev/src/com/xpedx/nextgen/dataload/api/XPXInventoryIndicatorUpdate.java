@@ -91,6 +91,7 @@ public class XPXInventoryIndicatorUpdate {
 
 		try
 		{
+			long startTime = System.currentTimeMillis();
 			String query="{call INVENTORY_UPDATE()}";
 
 			cstmt =m_Conn.prepareCall(query);
@@ -98,6 +99,9 @@ public class XPXInventoryIndicatorUpdate {
 			
 //			System.out.println("update Value is ::"+rSet);
 			m_Conn.commit();
+			long endTime = System.currentTimeMillis();
+			log.info("Completed Update InventoryIndicator in  " + (endTime - startTime) + " milliseconds");
+
 
 		}
 		catch(Exception e)
