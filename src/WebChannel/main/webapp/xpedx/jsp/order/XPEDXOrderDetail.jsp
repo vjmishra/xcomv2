@@ -458,7 +458,7 @@ function showSplitDiv(divId)
 				<s:hidden name="test1" value='%{#test11}'/>
 				<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #isCSRReview">
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>				
@@ -1282,7 +1282,7 @@ function showSplitDiv(divId)
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #isCSRReview">
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
 			      				<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
 			     			</s:if>
 					</s:if>
@@ -1305,7 +1305,7 @@ function showSplitDiv(divId)
 			</s:if>
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #isCSRReview">
+							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>		
