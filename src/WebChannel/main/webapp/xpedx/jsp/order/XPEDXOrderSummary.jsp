@@ -881,10 +881,12 @@ from session . We have customer Contact Object in session .
 						</s:a>
 					</div>
 	                <div class="mil-attr-wrap">
-						<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
-							<ul class="mil-desc-attribute-list">
-								<s:property	value='%{#item.getAttribute("ItemDesc")}' escape="false" />
-							</ul>
+	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
+								<ul class="mil-desc-attribute-list">
+									<s:property	value='%{#item.getAttribute("ItemDesc")}' escape="false" />
+								</ul>
+							</s:if>
 						</s:if>
 	                </div>
 				</div>
@@ -969,17 +971,21 @@ from session . We have customer Contact Object in session .
 									<s:if test='%{#disUOMStatus.first}' >
 				                    	<tr>
 											<td class="text-right padding-right-0">
+												<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 												Qty: 
+												</s:if>
 											</td>
 											<td width="157">
 											<s:set name='orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
 											<s:set name='orderdqty' value='%{#_action.replaceString(#orderqty, ".00", "")}' />	
+											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 												&nbsp;<s:property value='%{#orderdqty}' />&nbsp;
 												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+											</s:if>
 											</td>
 			                         		
 									 		<td class="text-right" width="147">
-								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C"'>
+								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" && #orderLine.getAttribute("LineType") =="M" '>
 								  	  				<%--	Using CustomerContactBean object from session
 								  	  				<s:if test='%{#session.viewPricesFlag == "Y"}'>
 													--%>													
@@ -1036,9 +1042,9 @@ from session . We have customer Contact Object in session .
 											</span></td>
 			                        	</tr>
 			                        	<tr>
-			                        		<td colspan="5" class="text-left"> <!--  test by brian bridge -->
-											 	<s:if test='#orderLine.getAttribute("LineType") != "M"'>
-											 	<s:set name="itemID3" value='#item.getAttribute("ItemID")' />
+			                        		<td colspan="5" class="text-left"> 
+			                        			<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>											 	
+											 		<s:set name="itemID3" value='#item.getAttribute("ItemID")' />
 											    	<s:iterator value="inventoryIndicatorMap" id="inventoryIndicatorMap" status="status" >
 											    		<s:property value='#key'/>
 														<s:set name="inventoryChk" value="value" />
@@ -1056,7 +1062,7 @@ from session . We have customer Contact Object in session .
                         	
 		                        	<s:else> <!--  not first item -->
 		                        			
-	                        			<s:if test='#orderLine.getAttribute("LineType") !="C"'>
+	                        			<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 	                        			<tr><td colspan=4 class="center">&nbsp;</td></tr>
 			                    	 	<tr>
 			                    	 		<td class="center">&nbsp;</td>
@@ -1086,11 +1092,15 @@ from session . We have customer Contact Object in session .
 					 			<!-- PnA is not available -->
 					 			<tr>
 											<td class="text-right padding-right-0">
+											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 												Qty: 
+											</s:if>
 											</td>
-											<td width="157">	
+											<td width="157">
+											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>	
 												&nbsp;<s:property value='%{#lineTran.getAttribute("OrderedQty")}' />&nbsp;
 												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+											</s:if>
 											</td>
 											<td class="text-right" width="147">
 											</td>
@@ -1114,9 +1124,9 @@ from session . We have customer Contact Object in session .
 								<td></td>
 								<td></td>
 								<td colspan="2" style="text-align:right;"> 
-								
+								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-								
+								</s:if>
 								</td>
 							</tr>
 						</s:if>
