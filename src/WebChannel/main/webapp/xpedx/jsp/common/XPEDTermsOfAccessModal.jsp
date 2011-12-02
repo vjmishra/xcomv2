@@ -362,7 +362,7 @@ $(document).ready(function() {
 											class="grey-ui-btn"><span>Accept</span>
 										</a>
 										</li>
-										<li class="float-right margin-10 checkaddavail"><a href="javascript:toaSubmit('Y')"
+										<li class="float-right margin-10 checkaddavail"><a href="<s:url action='logout' namespace='/home' includeParams='none'/>"
 											class="grey-ui-btn"><span>Cancel</span>
 										</a>
 										</li>
