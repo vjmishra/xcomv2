@@ -308,12 +308,12 @@
 <div class="clearall"></div>
 </div>
 
-<!-- 
+
 <div class="right">
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
 	bb3Change Preferred Ship-To to Selected
 </div>
--->
+
 <div class="float-right" >
 <ul id="tool-bar" class="tool-bar-bottom" style="margin-top:3px;">
 	

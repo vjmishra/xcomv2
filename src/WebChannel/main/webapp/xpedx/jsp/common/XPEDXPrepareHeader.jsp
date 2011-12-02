@@ -1435,8 +1435,8 @@ var toaWin = new Ext.Window({
 	    		}
     			},
 			'autoDimensions'	: false,
-			'width' 			: 781,
-	 		'height' 			: 485  
+			'width' 			: 751,
+	 		'height' 			: 350  
 		});
     	
 

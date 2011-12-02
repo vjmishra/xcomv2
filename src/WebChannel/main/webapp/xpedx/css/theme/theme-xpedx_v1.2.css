@@ -832,6 +832,14 @@ h6 {
 	*/
 }
 
+.select-ship-to {
+	padding: 10px 0 0 10px;
+	float: left;
+	top: 38px;
+	width: 97px;
+	border-left: solid 1px #0a3679;
+	height: 48px; 
+}
 
 .shoppingfor {
 	padding: 10px 0 0 10px;
@@ -3793,7 +3801,7 @@ input.xpedx_select_sm,xpedx_select_sm {
 	/* margin-left: 25px; */
 }
 
-.advertisement,#right-col-int.cat-landing a img {
+#right-col-int.cat-landing a img {
 	float: right;
 }
 

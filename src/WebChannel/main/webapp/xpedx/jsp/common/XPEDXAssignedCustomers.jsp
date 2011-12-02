@@ -310,7 +310,7 @@
 <div class="right">
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
 	<!-- bb1Change Preferred Ship-To to Selected -->
-	 bb1-<s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
+	 bb1<s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
 <div class="float-right" >
