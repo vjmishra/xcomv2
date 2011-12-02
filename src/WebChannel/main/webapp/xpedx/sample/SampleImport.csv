@@ -1,3 +1,4 @@
-Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,Description,Price
-,220434,500,SHT,"Paper,IPCP&IP,Hammermill Fore,8-1tagfs2 x 14,Canary",
-,602428,1000,CTN,"Paper,NewPage,Sterling Ultra Digital,8-1tagfs2 x 11,White",
+Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,Line Acct #,Customer Field 1,Customer Field 2,Customer Field 3,Line PO #,Description,Price,Price UOM
+,2025884,100,CTN,,,,,,"Dart, Cup",1118.26,CTN
+,2025719,100,CTN,,,,,,"Dart, Cup Lid",1217.22,CTN
+,2025223,400,CTN,,,,,,"Sweetheart, Food Bucket",3133.63,CTN
