@@ -591,23 +591,20 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
-                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation"}'>
+                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType == "Customer" && #isCSRReview)}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>
                         			  <s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
-                        			</s:else>
-                        			<s:if test='%{#status != "Cancelled"}'>
+                        			  <s:if test='%{#status != "Cancelled"}'>
                         				<s:if test='%{#isOrderOnApprovalHold}'>
                         					(Pending Approval)
                         				</s:if>
                         				<s:elseif test="%{#isOrderOnCSRReviewHold}">
                         					(CSR Reviewing)
-                        				</s:elseif>
-                        				<s:elseif test='%{#orderType == "Customer" && #isCSRReview}'>
-                        					(CSR Reviewing)
-                        				</s:elseif>                        				
-                        			</s:if>	
+                        				</s:elseif>                        				                        				
+                        			  </s:if>
+                        			</s:else>                        				
 	                        			<s:if test='%{#status == "Invoiced"}'>
 	                        				: Invoice #: 
 	                        				<s:if test='%{#isSalesRep}'>
