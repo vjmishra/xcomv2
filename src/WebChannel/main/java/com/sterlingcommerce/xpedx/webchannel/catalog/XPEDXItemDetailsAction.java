@@ -233,49 +233,69 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	@SuppressWarnings("unchecked")
 	private void setMSDSUrls() {
+		//Modified this method for Jira 2634,3151
+		String msdsLink="";
+		String msdsLinkDesc="";
+		String assetLink="";
+		String assetLinkDesc="";
 		//Creating new Map for Jira 2634
 		assetLinkMap = new HashMap<String, String>();
+		ArrayList<Element> specAssetList = new ArrayList<Element>();
 		if(m_itemListElem!=null) {
 			ArrayList<Element> assetList = new ArrayList<Element>();
-			//Declaring it here.
-			String msdsLink="";
-			String msdsLinkDesc="";
-			ArrayList<Element> MSDSAssetList = SCXmlUtil.getElementsByAttribute(m_itemListElem, "Item/AssetList/Asset", "Type", XPEDXConstants.MSDS_ASSET_TYPE_URL);
-			ArrayList<Element> MSDSAssetListDataSheet = SCXmlUtil.getElementsByAttribute(m_itemListElem, "Item/AssetList/Asset", "Type", XPEDXConstants.MSDS_ASSET_TYPE_DATA_SHEET);
-			if(!SCUtil.isVoid(MSDSAssetList))
-				assetList.addAll(MSDSAssetList);
-			if(!SCUtil.isVoid(MSDSAssetListDataSheet))
-				assetList.addAll(MSDSAssetListDataSheet);
+			NodeList list = SCXmlUtil.getXpathNodes(m_itemListElem, "Item/AssetList/Asset");
+			Element reqNode;
+			for (int i = 0; i < list.getLength(); i++) {
+				  reqNode = (Element) list.item(i);
+				  assetList.add(reqNode);
+                 }
 			XPEDXSCXmlUtils xpedxSCXmlUtils = new XPEDXSCXmlUtils();
 			if(assetList!=null && assetList.size()>0) {
 				//commented for JIRA 2853, to display msds link
-				//Iterator<Element> msdsIter = MSDSAssetList.iterator();
-				Iterator<Element> msdsIter = assetList.iterator();
-				while(msdsIter.hasNext()) {
-					Element msdsAssetElem = msdsIter.next();
-					String assetType = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Type");
-					String msdsLocation = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentLocation");
-					String msdsContentId = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "ContentID");
-					String msdsAssetId = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "AssetID");
-					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
+				Iterator<Element> assetIter = assetList.iterator();
+				while(assetIter.hasNext()) {
+					Element AssetElem = assetIter.next();
+					String assetType = xpedxSCXmlUtils.getAttribute(AssetElem, "Type");
+					String msdsLocation = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentLocation");
+					String msdsContentId = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentID");
+					//Addding .pdf to the file, as per requirement
+					if(!msdsContentId.contains(".") && !msdsContentId.endsWith(".pdf")){
+						msdsContentId = msdsContentId + ".pdf";
+					}
+					String msdsAssetId = xpedxSCXmlUtils.getAttribute(AssetElem, "AssetID");
 					if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
-						 msdsLink = msdsLocation+msdsContentId;
-						 msdsLinkDesc = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Description");
+						 assetLink = msdsLocation+msdsContentId;
+						 assetLinkDesc = xpedxSCXmlUtils.getAttribute(AssetElem, "Description");
 					}else{
-					msdsLink = msdsLocation+"/"+msdsContentId;
-					msdsLinkDesc = xpedxSCXmlUtils.getAttribute(msdsAssetElem, "Description");
+						assetLink = msdsLocation+"/"+msdsContentId;
+						assetLinkDesc = xpedxSCXmlUtils.getAttribute(AssetElem, "Description");
 					}
-					if("URL".equalsIgnoreCase(assetType)) {
-						msdsLink = msdsLocation;
-						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
-					}
-					if(msdsLinkMap.isEmpty())
-						msdsLinkMap = new HashMap<String, String>();
-						assetLinkMap.put(msdsAssetId, msdsLink);
+					
+					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
+					if("URL".equalsIgnoreCase(assetType) || "ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
+						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;						
+						if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
+							 msdsLink = msdsLocation+msdsContentId;							 
+						}else{
+							msdsLink = msdsLocation+"/"+msdsContentId;							
+						}
+						if( msdsLinkMap.isEmpty())
+						{
+							msdsLinkMap = new HashMap<String, String>();						
+						}
 						msdsLinkMap.put(msdsLinkDesc, msdsLink);
+					}
+					
+					if(assetLinkMap.isEmpty() )
+					{
+						assetLinkMap = new HashMap<String, String>();
+					}
+					
+					assetLinkMap.put(msdsAssetId, assetLink);
+						
 				}
 			}
-		}		
+		}				
 	}
 
 
