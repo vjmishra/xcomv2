@@ -57,8 +57,8 @@
 <body>
 <%--	Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments --%>
 <s:if test="%{assignedShipToCount == 0 && comingFromSearch == 'false'}">
-<!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator..</div> -->
-<div align="center"> <s:text name="MSG.SWC.ADMN.PRF.GENERIC.NOSHIPTO" /> </div> 
+<!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator.</div> -->
+<div align="center"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.CONTACTADMIN" /> </div> 
 </s:if>
 <s:else>
  <!-- modal window container -->
@@ -310,7 +310,7 @@
 <div class="right">
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
 	<!-- bb1Change Preferred Ship-To to Selected -->
-	 <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
+	 bb1-<s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
 <div class="float-right" >
