@@ -2086,7 +2086,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				</ul>
 				</div>
 				<div class="clearview txt-small"  style="margin-left:2px;"><a
-					id='changeShipToForUserProfile' href='#shipToUserProfile' onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" class=" underlines">[Change3]</a></div>
+					id='changeShipToForUserProfile' href='#shipToUserProfile' onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" class=" underlines">[Change]</a></div>
 				</td>
 				<td width="81%" valign="top" class="no-border-right-user paddingtop0">
 						<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#defaultShipToId)" /><br/>
