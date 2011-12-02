@@ -906,8 +906,7 @@ $(document).ready(function(){
          	<div class="mil-container" >
                 <!--checkbox   -->
                 <div class="mil-checkbox-wrap">
-                     <%-- <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" /> --%>
-                    <!-- -FXD-1 fix me!!!!!  bb1 -->                    
+                     <%-- <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" /> --%>                    
                    <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' cssStyle="display:none" onclick="checkHiddenCheckboxAndDeleteItem(this, 'selectedLineItem_%{#orderLineKey}')" fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" />
                    <img src="/swc/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" /> 
                   </div>
@@ -927,10 +926,12 @@ $(document).ready(function(){
 						</s:else></span>
 					</div>
 	                <div class="mil-attr-wrap">
-						<s:if test='#item.getAttribute("ItemDesc") != ""'>
-						<ul class="mil-desc-attribute-list">
-							<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
-						</ul>
+	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+							<s:if test='#item.getAttribute("ItemDesc") != ""'>
+								<ul class="mil-desc-attribute-list">
+									<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
+								</ul>
+							</s:if>
 						</s:if>
 	                </div>
 				</div>
@@ -983,15 +984,12 @@ $(document).ready(function(){
 								</s:else>
 									<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
-									<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-										<s:textfield name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='EACH' disabled="#isUOMAndInstructions"/>
-									</s:if>
-									<s:else>
+									<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 										  <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
 											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
-									</s:else>
+									</s:if>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
 									</s:if>
@@ -1091,7 +1089,7 @@ $(document).ready(function(){
 										<s:if test='%{#disUOMStatus.first}' >
 											<tr>
 								  	  			<td class="text-right" width="147">
-								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C"  '>
+								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 									 				
 									 			</s:if>
 									 			<s:else>
@@ -1136,10 +1134,14 @@ $(document).ready(function(){
 				                    	 <s:else>										
 				                    	 	<tr>
 					                        	<td class="text-right">
-					                        		<!--  Already formatted as required  -->
-					                        		<s:if test="%{#isMyPriceZero == 'false'}">
-									 			    	<s:property	value='#bracketPriceForUOM' />
-												    </s:if>												  
+					                        		<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
+										 				&nbsp;
+										 			</s:if>
+										 			<s:else>
+										 				<s:if test="%{#isMyPriceZero == 'false'}">
+										 			    	<s:property	value='#bracketPriceForUOM' />
+													    </s:if>
+										 			</s:else>					                        														  
 												</td>
 			    	                    	</tr>
 				                    	 <tr>
@@ -1252,34 +1254,36 @@ $(document).ready(function(){
 					
 					
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
-			     	<div class="cart-availability text-left">
-			     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
-				 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
-					    	<tbody>
-					    		<tr>
-									<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
-									<td class="text-right"><strong>${jsonFmtTotal} </strong></td>
-									<td class="text-left"><strong>&nbsp;${jsonUOMDesc}</strong></td>
-					    		</tr>
-					    		<tr>
-									<td><p class="availability-indent">Next Day: </p></td>
-									<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
-									<td class="text-left">&nbsp;${jsonUOMDesc}</td>									
-					    		</tr>
-					    		<tr>
-									<td><p class="availability-indent">2+ Days: </p></td>
-									<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
-									<td class="text-left">&nbsp;${jsonUOMDesc}</td>
-					    		</tr>
-					    		<%-- <s:if test="(#divName != null)"> --%>
-					    		<tr>
-									<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
-									<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
-							    </tr>
-							    <%-- </s:if> --%>
-						    </tbody>
-				    	</table>
-			    	</div>
+					<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+				     	<div class="cart-availability text-left">
+				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
+					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
+						    	<tbody>
+						    		<tr>
+										<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
+										<td class="text-right"><strong>${jsonFmtTotal} </strong></td>
+										<td class="text-left"><strong>&nbsp;${jsonUOMDesc}</strong></td>
+						    		</tr>
+						    		<tr>
+										<td><p class="availability-indent">Next Day: </p></td>
+										<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
+										<td class="text-left">&nbsp;${jsonUOMDesc}</td>									
+						    		</tr>
+						    		<tr>
+										<td><p class="availability-indent">2+ Days: </p></td>
+										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
+										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
+						    		</tr>
+						    		<%-- <s:if test="(#divName != null)"> --%>
+						    		<tr>
+										<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
+										<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
+								    </tr>
+								    <%-- </s:if> --%>
+							    </tbody>
+					    	</table>
+				    	</div>
+			    	</s:if>
 			    	
 			    	<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
@@ -1297,7 +1301,7 @@ $(document).ready(function(){
 					--%>
 				<%-- </s:if> --%>
 			    	<div class="red">
-			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
@@ -1360,15 +1364,20 @@ $(document).ready(function(){
 			    		
 			    	</div>
 			    	<div class="special-instructions-div">
-			    		<p class="special-instructions-padding">Special Instructions:</p>
-			    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
-						<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />
-    					<s:textfield name='orderLineNote' maxlength="62"
-							id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
-							cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled='%{#isUOMAndInstructions}'/>
-						<s:if test='#isUOMAndInstructions'>
-							<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
-						</s:if>	
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+			    				<p class="special-instructions-padding">Special Instructions:</p>
+					    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
+								<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />
+		    					<s:textfield name='orderLineNote' maxlength="62"
+									id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
+									cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled='%{#isUOMAndInstructions}'/>
+								<s:if test='#isUOMAndInstructions'>
+									<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+								</s:if>	
+			    		</s:if>
+			    		<s:else>
+			    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+			    		</s:else>			    	
     				</div>
 			    	<div class="cust-defined-fields">
 			    		<table>
