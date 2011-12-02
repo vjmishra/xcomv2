@@ -521,6 +521,8 @@ width:424px;
 a.grey-ui-btn:hover, a.green-ui-btn:hover {text-decoration: none; }
 div.fp-btn-container {margin-left:90px;     margin-top: 10px; }
 .width160 { width:160px; }
-a.orange-ui-btn:hover { text-decoration: none; }
+a.orange-ui-btn:hover { text-decoration: none !important; }
+#customersOne { min-width:735px !important; height:150px !important; }
+div#customers1_div div { width: 730px !important; }
 /***************************End brian bridge changes ***********************************************/
 

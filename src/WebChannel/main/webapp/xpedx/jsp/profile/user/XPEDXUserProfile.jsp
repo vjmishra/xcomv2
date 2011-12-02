@@ -140,6 +140,9 @@
 	src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="../../xpedx/css/modals/checkboxtree/demo.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie.css" />
+<![endif]-->
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
 <script src="../../xpedx/js/SpryTabbedPanels.js"
 	type="text/javascript"></script>

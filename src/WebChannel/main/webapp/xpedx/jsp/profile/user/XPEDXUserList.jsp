@@ -225,7 +225,7 @@
 
 						<tr>
 						<td class="left-cell">
-							<div style="width:200px; word-wrap:break-word;">
+							<div style="width:230px; word-wrap:break-word;">
 								<input type="radio" onchange="javascript:setSelectedUrl('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />');" name="selectRadio" id="selectRadio"/>
 															<s:if test="#_action.isAdminMap.get(#userList.getAttribute('CustomerContactID'))">
 									<img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" />

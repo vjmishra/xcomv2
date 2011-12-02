@@ -363,7 +363,6 @@ ul.checkboxTree li
 						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/>
 					              	<span class="grey-italic">
-					              	<br/>
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
@@ -419,7 +418,6 @@ ul.checkboxTree li
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
 				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/>
 				            	<span class="grey-italic">
-				            		<br/>
 									<s:if test='%{#fmtCsr1Phone != ""}'>
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>

@@ -58,13 +58,14 @@
 
 
  <!-- modal window container -->
-    <div class="xpedx-light-box" id="change-ship-to">    
+    <div class="xpedx-light-box" id="select-ship-to">    
     
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
 		<!-- <h2 class="no-border"  style="float:left;" >Select Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" > <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE" /></h2>
-		<img id="magGlass" class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();">		
+		<!-- <img id="magGlass" class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();">		 -->
+		<span id="magGlass" class="searchButton"  onclick="javascript:searchShipToAddress();">&nbsp;</span>
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToOrderSearchDiv','%{#searchURL}');" />	
 		<s:hidden id="magGlass" name="searchButton"></s:hidden>
 </div>
@@ -167,12 +168,12 @@
 <div class="clearall"></div>
 </div>
 
-<!-- 
-<div class="right">
+
+<!-- <div class="right">
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
 	bb2Change Preferred Ship-To to Selected
-</div> 
--->
+</div>  -->
+
 
 <div class="float-right">
 <ul id="tool-bar" class="tool-bar-bottom">

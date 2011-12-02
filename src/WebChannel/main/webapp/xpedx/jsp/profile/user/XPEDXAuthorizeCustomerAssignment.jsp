@@ -110,7 +110,7 @@
 <!--                     <div class=" clearview">  -->
 					<div id="customers1_div">
 						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
-	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}" style="min-width:735px;height:150px;">
+	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}" >
 								<s:iterator value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@custFullAddresses(#customers1,wCContext.storefrontId,"true","true")'>
 									<s:set name='currentCustIdKey' value='key'/>
 			    					<s:set name='currentCustIdValue' value='value'/>
