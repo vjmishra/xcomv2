@@ -8,7 +8,7 @@ import com.yantra.yfc.rcp.YRCPlatformUI;
 
 public class XPXLineSeqNoComparator implements Comparator<Element> {
 
-	@Override
+	//@Override
 	public int compare(Element elem, Element elem1) {
 		Element extnElem = (Element)elem.getElementsByTagName("Extn").item(0);
 		Element extnElem1 = (Element)elem1.getElementsByTagName("Extn").item(0);
@@ -26,8 +26,17 @@ public class XPXLineSeqNoComparator implements Comparator<Element> {
 		if(YRCPlatformUI.isVoid(elem1ExtnLegacyOrderNo)){
 		return -1;
 		}
-		int op = elemExtnLegacyOrderNo.compareTo(elem1ExtnLegacyOrderNo);
-		return op;
+		
+		int legacyLineNo=Integer.parseInt(elemExtnLegacyOrderNo);
+		int legacyLineNo1=Integer.parseInt(elem1ExtnLegacyOrderNo);
+		if(legacyLineNo > legacyLineNo1)
+			return 1;
+		else if(legacyLineNo < legacyLineNo1)
+			return -1;
+		else
+			return 0;
+//		int op = elemExtnLegacyOrderNo.compareTo(elem1ExtnLegacyOrderNo);
+//		return op;
 	}
 
 	
