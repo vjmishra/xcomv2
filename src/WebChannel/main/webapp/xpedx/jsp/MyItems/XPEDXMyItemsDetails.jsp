@@ -909,7 +909,7 @@ function showSharedListForm(){
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
-					else{
+					if(quantity == '0' || quantity== '' ){
 						//Display Generic Message at Header level first then Update Line Level message.
 						displayMsgHdrLevelForLineLevelError ();
 						/* divVal.innerHTML='Qty Should be greater than 0'; */
@@ -2150,7 +2150,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 <li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
 	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
-	                               <div class="notice" id="test" style="display : inline">
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property>
 	                               	</div>
