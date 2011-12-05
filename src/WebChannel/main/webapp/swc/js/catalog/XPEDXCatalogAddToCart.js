@@ -8,7 +8,10 @@ function addItemToCart(itemId) {
 		{	
 			document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
 			document.getElementById('Qty_'+itemId).focus();
-			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline";
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Qty Should be greater than 0" ;
+			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			document.getElementById('Qty_Check_Flag_'+itemId).value = true;
 			document.getElementById('Qty_'+itemId).value = "";
 			return false;
