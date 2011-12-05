@@ -642,9 +642,12 @@
 					<s:set name="temChainedOrder" value='#chainedOrderList.get(0)'/>
 					<s:set name="sourceTabVal" value="#_action.getSourceTab()"></s:set>
 					
-					<s:if test='#sourceTabVal != null && #temChainedOrder.getAttribute("Status") == #sourceTabVal '>
+					<%-- Fix for Jira 3123, Added openOrder == true to if condition --%>
+					<s:if test='#openOrder == "true" && #sourceTabVal != null && #temChainedOrder.getAttribute("Status") == #sourceTabVal '>
 						<s:set name='openOrder' value="%{'false'}"/>
 					</s:if>
+					<%-- End Fix for Jira 3123 --%>
+					
 					<s:set name='customerOhk' value='#parentOrder.getAttribute("OrderHeaderKey")' />
 								
 					<%-- <tr <s:if test="#rowStatus.odd == true" >class="odd"</s:if> style="border-top: 1px solid #D7D7D7;">	 --%>		
