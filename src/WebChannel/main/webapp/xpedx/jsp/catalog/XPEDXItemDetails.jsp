@@ -607,7 +607,9 @@ function addItemToCart(data)
 	{
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
-		document.getElementById("errorMsgForQty").style.display = "inline";
+		document.getElementById("errorMsgForQty").innerHTML  = "Qty Should be greater than 0";
+  		 document.getElementById("errorMsgForQty").style.display = "inline"; 
+  		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
 	    return;
@@ -1448,7 +1450,7 @@ function SubmitActionWithValidation()
 					<s:hidden name="OrderMultiple" id="OrderMultiple"
 						value="%{#mulVal}" />
 				<s:if test='%{#mulVal >"1" && #mulVal !=null}'>		
-				<div class="temp_UOM" id="test" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/>
+				<div class="temp_UOM" id="errorMsgForQty" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/>
 				</s:if>
 				</s:if>	
 				<br/>
