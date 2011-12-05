@@ -768,10 +768,11 @@ public class XPEDXExtendedOrderDetailAction extends
 		if (!isSupportedFunction(false)) {
 			return false;
 		}
-		if (SCXmlUtils.getInstance().getAttribute(elementOrder,
+		/* Commenting below lines as per jira 3085 */
+		/*if (SCXmlUtils.getInstance().getAttribute(elementOrder,
 				"MaxOrderStatus").equals(OrderConstants.ORDER_CANCEL_STATUS)) {
 			return false;
-		}
+		}*/
 
 		return true;
 	}
