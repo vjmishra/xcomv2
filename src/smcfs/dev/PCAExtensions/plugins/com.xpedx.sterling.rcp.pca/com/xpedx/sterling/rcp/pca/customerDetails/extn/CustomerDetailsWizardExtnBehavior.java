@@ -8,7 +8,9 @@ package com.xpedx.sterling.rcp.pca.customerDetails.extn;
  
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -100,6 +102,45 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		return super.validateLinkClick(fieldName);
 	}
 	
+	 public void postSetModel(String model) {
+		
+		 if("getCustomerDetails_output".equalsIgnoreCase(model)){
+			 System.out.println("here is ***************************");
+			
+			 Document docOutput = getModel("getCustomerDetails_output").getOwnerDocument();
+			 Element eleCustomerContactDetails_output = docOutput.getDocumentElement();
+			 
+			 NodeList nodList=eleCustomerContactDetails_output.getElementsByTagName("CustomerContact");
+			 ArrayList eSalesRepList = new ArrayList();
+			 for(int i=0;i<nodList.getLength();i++){
+				
+				 Element  eleCust=(Element) nodList.item(i);
+				 String customerID = eleCust.getAttribute("CustomerContactID");			
+					Element statusElement = YRCXmlUtils.getXPathElement(eleCust, "/CustomerContact/Extn");
+					String eSalesRep = statusElement.getAttribute("ExtnIsSalesRep");
+					if("Y".equalsIgnoreCase(eSalesRep)){
+						eSalesRepList.add(customerID);
+					}
+				 }
+			 
+			 // Added to remove the elements
+			 NodeList nodeCustContact=eleCustomerContactDetails_output.getElementsByTagName("CustomerContact");
+				for(int i=0;i<nodeCustContact.getLength();i++){
+					Element elementCust=(Element) nodeCustContact.item(i);
+					String customerID = elementCust.getAttribute("CustomerContactID");
+					if (eSalesRepList.contains(customerID)){
+						elementCust.getParentNode().removeChild(elementCust);
+						i--;
+					}
+					
+				}
+			 
+			 repopulateModel("getCustomerDetails_output");
+			 repopulateModel("getCustomerContactDetails_output");
+	
+		 }
+		 super.postSetModel(model);
+	 }
 	/**
 	 * Create and return the binding data for advanced table columns added to the tables.
 	 */
