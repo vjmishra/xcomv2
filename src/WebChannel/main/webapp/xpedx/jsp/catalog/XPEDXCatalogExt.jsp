@@ -1411,7 +1411,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 														'<tr>',
 														'<td colspan="3">',
 														<s:if test='!#guestUser'>
-														'<div class="uomLink">{uomLink}</div>',
+														'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
 														</s:if>
 														'</td>',
 														'</tr>',
@@ -1562,7 +1562,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 														'<tr>',
 															'<td colspan="2">',
 															<s:if test='!#guestUser'>
-															'<div class="uomLink">{uomLink}</div>',
+															'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
 															</s:if>
 															'</td>',
 														'</tr>',
@@ -1628,7 +1628,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 																 </s:else>	
 															</s:if>
 															<s:if test='!#guestUser'>
-															'<div class="uomLink">{uomLink}</div>',
+															'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
 															'<br/>',
 															</s:if>
 														'</div>',
