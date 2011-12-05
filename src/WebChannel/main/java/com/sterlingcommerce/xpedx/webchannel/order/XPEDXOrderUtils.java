@@ -43,6 +43,8 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+
+
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -763,7 +765,7 @@ public class XPEDXOrderUtils {
 								//2964 Start
 								if (uomListNode != null) {
 									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
-									Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
+								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
 									
 									for (Element uomNode : listOfUOMElements) {
 									
@@ -1166,12 +1168,10 @@ public class XPEDXOrderUtils {
 				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 			}
 			else {
-				//billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
+				//billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");				
 				billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
 				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 				System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, billToKey = " +  billToKey);
-				//billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
-				//billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
 			}
 			if(billToKey != null && billToKey.trim().length()>0) {
 				valueMap.put("/Order/@BillToKey", billToKey);
