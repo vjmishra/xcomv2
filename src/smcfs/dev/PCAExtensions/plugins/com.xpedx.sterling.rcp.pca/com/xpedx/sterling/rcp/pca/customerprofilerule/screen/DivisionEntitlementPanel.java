@@ -1242,6 +1242,7 @@ public class DivisionEntitlementPanel extends Composite implements
 		divisionEntitlement.setLayoutData(gridData3);
 		divisionEntitlement.setData("name", "divisionEntitlement");
 		divisionEntitlement.setVisible(true);
+		divisionEntitlement.setTextLimit(1);
 		
 		addTab(gridData1,"dummyAddressLine1");
 		lblAddressLine1 = new Label(pnlCustomerProfileInfo, SWT.NONE);
