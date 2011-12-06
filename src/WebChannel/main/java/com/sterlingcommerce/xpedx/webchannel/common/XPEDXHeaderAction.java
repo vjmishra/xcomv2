@@ -202,7 +202,9 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				|| wcContext.getSCUIContext().getSession().getAttribute("showSampleRequest").equals(""))
 		{
 			XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("shipToCustomer");
-			XPEDXWCUtils.setSampleRequestFlag(shipToCustomer.getExtnSampleRequestFlag(),shipToCustomer.getExtnServiceOptCode(),wcContext);
+			//added for jira 2971
+			if(shipToCustomer.getBillTo() != null)
+				XPEDXWCUtils.setSampleRequestFlag(shipToCustomer.getBillTo().getExtnSampleRequestFlag(),shipToCustomer.getBillTo().getExtnServiceOptCode(),wcContext);
 			// Commented for performance issue
 			/*String billToCustomerId = XPEDXWCUtils.getParentCustomer(wcContext.getCustomerId(), wcContext);
 			XPEDXWCUtils.setSampleRequestFlag(billToCustomerId,wcContext);*/
