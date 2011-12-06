@@ -4340,20 +4340,34 @@ public class XPEDXWCUtils {
 	}
 
 
-
-	// ritesh Method added for ad juggler.. 
+	/**
+	 * 
+	 * HISTORY : ritesh : Method added for ad juggler.. 
+	 * 			 preddy : Updated to add prefix for the ad juggler keyword(s).
+	 * 
+	 * @param itemId
+	 * @param org
+	 * @return
+	 */
 	public static String getCatTwoDescFromItemId(String itemId, String org) {
 		String categoryValue = null;
 		String result = null;
 		String cat = null;
 		String categoryId = null;
+		String adjugglerKeywordPrefix = "";
 		ISCUITransactionContext scuiTransactionContext = null;
 		IWCContext context = null;
 		SCUIContext wSCUIContext = null;
 		
+    		
+    	
+		
+		
 		log.debug(" getCatTwoDescFromItemId  - Item Id " + itemId  + " org " + org );
 		try 
 		{
+			adjugglerKeywordPrefix = getAdJugglerKeywordPrefix();
+			
 			context = WCContextHelper.getWCContext(ServletActionContext
 					.getRequest());
 			wSCUIContext = context.getSCUIContext();
@@ -4433,8 +4447,11 @@ public class XPEDXWCUtils {
 	
 				YFCElement catEle = yfcElement2.getFirstChildElement();
 				result = catEle.getAttribute("ShortDescription");
+				
+				//JIRA-2890 
+				result = adjugglerKeywordPrefix + result;
 			}
-
+			
 			log.debug(" getCatTwoDescFromItemId  - result " + result);
 		}catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -4446,6 +4463,33 @@ public class XPEDXWCUtils {
 			}
 		}	
 			return result;
+	}
+
+	/**
+	 * 
+	 *  HISTORY : JIRA - 2890 :  preddy - Updated to add prefix for the adJuggler keyword.
+	 *  		  All AdJuggler keywords for PROD should send as is, For all other environments need to prefix with TEST.
+	 * @return
+	 */
+	private static String getAdJugglerKeywordPrefix() {
+		String keywordPrefix = "";
+		try{
+			
+			keywordPrefix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_KEYWORD_PREFIX_PROP);
+	    	if(keywordPrefix == null){
+	    		keywordPrefix="";
+	    	}
+	    	
+	    	keywordPrefix = keywordPrefix.trim();	    		
+	    	
+	    	
+		}catch(Exception e){
+    		log.debug("AD_JUGGLER Failed to get Prefix : (Property : yfs.xpedx.adjuggler.keyword.attribute.prefix) , Message : " + e.getMessage() );
+    	}
+		
+		
+		
+		return keywordPrefix;
 	}
 
 	public static boolean getReportsFlagForLoggedInUser(IWCContext wcContext){
