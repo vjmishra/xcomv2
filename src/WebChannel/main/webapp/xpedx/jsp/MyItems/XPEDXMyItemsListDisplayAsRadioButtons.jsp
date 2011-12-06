@@ -8,14 +8,22 @@
 	</script>	
 
 <div id="divAdd2ListRadio">
-
+<table>
 	<s:iterator id="listDetail" value="listOfItems" status="listIndex" >
+	<tr>
+	<td>
 		<input type="radio" name="itemListRadio" id="itemListRadio" value="<s:property value="#listDetail.getAttribute('MyItemsListKey')"/>"
 		onclick='javascript:currentAadd2ItemList =  this; currentAadd2ItemListIndex = "<s:property value='#listIndex.index'/>";' />
-		<s:property value="#listDetail.getAttribute('Name')"/>
-		<br/><br/>
+		</td><td>&nbsp;</td><td><s:if test="#listDetail.getAttribute('SharePrivate').length()>0">
+		     <img src="<s:url value='/xpedx/images/theme/theme-1/20x20_personal_list.png'/>" alt="List Img" />
+		</s:if>
+		<s:else>
+		    <img src="<s:url value='/xpedx/images/theme/theme-1/20x20_shared_list.png'/>" alt="List Img" />
+		</s:else>
+		</td><td>&nbsp;</td><td><s:property value="#listDetail.getAttribute('Name')"/></td>
+		</tr>
 	</s:iterator>
-	
+	</table>	
 	<s:iterator id="listSizeId" value="%{listSizeMap.keySet()}" status="listItemCountIndex" >
 		<s:set name="itemCount" value="%{listSizeMap.get(#listSizeId)}" />
 		<s:hidden name="itemCount_%{#listSizeId}" id="itemCount_%{#listSizeId}" value="%{#itemCount}" />
