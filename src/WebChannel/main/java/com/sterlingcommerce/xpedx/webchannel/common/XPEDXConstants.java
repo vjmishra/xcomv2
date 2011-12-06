@@ -25,6 +25,7 @@ public class XPEDXConstants {
 	// promo page URL, SharedPath
 	public static final String REQUEST_ATTR_PROMO_PAGE_URL = "PROMO_PAGE_URL";
 	public static final String DYN_PROMO_SHARED_PATH_PROP = "promotions_shared_path";
+	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "xpedx.adjuggler.keyword.attribute.prefix";
 	
 	public static final String CONTENT_LOCATION_CODE = "CONTENT_LOCATION";
 	public static final String IMAGE_SERVER_LOCATION = "IMAGE_SERVER_LOCATION";
