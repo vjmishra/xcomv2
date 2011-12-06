@@ -281,16 +281,16 @@ $(document).ready(function()
 			showShipTo('<s:property value="#assignedShipToURL"/>');
 			},
 			'autoDimensions'	: false,
-			'width' 			: 800,
-			'height' 			: 600  
+			'width' 			: 745,
+			'height' 			: 485 
 			});
 		$("#changeShipToForUserProfile").fancybox({
 			'onStart'	:	function(){			
 			showShipToForUserProfile('<s:property value="#assignedShipToURLforUserProfile"/>');
 			},
 			'autoDimensions'	: false,
-			'width' 			: 800,
-			'height' 			: 600  
+			'width' 			: 745,
+			'height' 			: 485  
 			});
 		$("#addNewQL").fancybox({
 			'onStart'		:	function(){
