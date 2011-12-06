@@ -82,6 +82,7 @@
 			<s:param name="orderHeaderKey" value='#orderHeaderKey'/>
 	        <s:param name="draft" value="#draftOrderFlag"/>
 		</s:url>
+		
 		<s:set name="isDraftOrder" value="#_action.isDraftOrder()"  />
 		<s:if test='#isDraftOrder'>
 				<s:url id="urlPrint"  includeParams="none" escapeAmp="false" action='PrintCartDetail.action' namespace = '/order' >
@@ -102,7 +103,7 @@
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb" >
                 <br/>
-                	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="<s:url action="portalHome" namespace="/home" includeParams='none'/>">
+                	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="<s:url action="orderList"></s:url>">
                 	<b>Orders</b></a> - <span class="page-title"> <s:text name='MSG.SWC.ORDR.WEBCONFERROR.GENERIC.PGTITLE' /></span>
                 	<br/>
                 	<br/>
