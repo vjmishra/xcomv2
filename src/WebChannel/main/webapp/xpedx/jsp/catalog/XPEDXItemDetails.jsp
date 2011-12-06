@@ -821,9 +821,21 @@ function SubmitActionWithValidation()
 				 upsServiceProviderNumberField.style.borderColor="";
 			}
 	    }
-	    
+	   
 	    if(returnval == true )
 	    {	
+	    //added for jira 2971
+	    	$(document).ready(function(){
+	    		$("#confirmSampleRequest").fancybox({
+	    			'autoDimensions'	: false,
+	    			'width' 			: 200,
+	    			'height' 			: 150  
+	    		}).trigger('click');
+	    	    
+	    	});
+	    
+	    	//end of jira 2971
+	    	
 	    	SubmitAction(); 
 	    }else {
 	    	errorDiv.innerHTML = errorDivMessage;
@@ -2047,7 +2059,9 @@ o.value=""
 		$("#rphone").mask("999 999-9999");
 	});
 </script>
-	
+<!-- added for jira 2971 -->
+<a id="confirmSampleRequest" href="#submitSampleRequestDiv"></a>
+<!-- end of jira 2971 -->
 <form id="dataform" name="dataform">
 <div id="inline1" class="xpedx-light-box">
 
@@ -2219,8 +2233,28 @@ Ext.onReady(function(){
 
 
 </script>
-
-
+<!-- added for jira 2971 --> 
+<div style="display: none;">
+	<div id="submitSampleRequestDiv">
+		 <h2> <s:text name='MSG.SWC.MISC.CONFIRMATION.GENERIC.PGTITLE'></s:text></h2> 		
+		<br /><hr /><br></br>
+		
+		 <p> <s:text name='MSG.SWC.MISC.SAMPLEREQUESTCONFIRMATION.GENERIC.GENINFO'></s:text></p><br></br> <br></br> 
+			<ul id="tool-bar" class="tool-bar-bottom">
+		<!-- 	<li>
+				<a class="grey-ui-btn" href="javascript:$.fancybox.close();">
+					<span>No</span>
+				</a>
+			</li>  -->
+			<li class="float-right">
+				<a class="green-ui-btn" href="javascript:$.fancybox.close();">
+					<span>Ok</span>
+				</a>
+			</li>
+			</ul>
+	</div>
+</div>        
+<!-- end of jira 2971 -->
 </body>
 </s:else>
 </swc:html>
