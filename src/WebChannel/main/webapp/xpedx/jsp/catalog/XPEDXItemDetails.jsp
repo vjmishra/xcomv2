@@ -525,7 +525,7 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	   
 	    <s:url id='getMyItemsList' includeParams="none" namespace="/xpedx/myItems" action='XPEDXMyItemsList'/> 
 	    
-	    var url = '<s:property value="#getMyItemsList"/>';
+	    var url = '<s:property value="#getMyItemsList"/>'+'&ShareList=ShareList';
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
