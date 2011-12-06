@@ -1594,7 +1594,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@CustomerContactID");
 		cbd.setDescriptionBinding("@CustomerContactID");
-		cbd.setListBinding("CustomerContactDetails:/CustomerContactList/CustomerContact");
+		cbd.setListBinding("CustomerContactDetails:/AdminCustomerList/CustomerContact");
 		cbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@ApproverProxyUserId");
 		//cbd.setTargetBinding("CustomerContactDetails:/CustomerContactList/CustomerContact/@CustomerContactID");
 		cbd.setName("comboAlterApprover");
