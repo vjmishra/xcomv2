@@ -38,6 +38,17 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	private String[] customerPaths;
 	private String[] customerIds;
 	private String[] customerDivs;
+	private String ShareList=null;
+
+	public String getShareList() {
+		return ShareList;
+	}
+
+
+	public void setShareList(String shareList) {
+		ShareList = shareList;
+	}
+
 
 	/**
 	 * @return the customerPaths
@@ -136,7 +147,13 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			
 			setSharedListOrValues(new ArrayList<String>());
 			setSharedListOrNames(new ArrayList<String>());
-			
+			if(ShareList!=null )
+			{    
+				if(ShareList.length()>0)
+			     {
+				filterByAllChk=true;
+			     }
+			}
 			if ((getFilterBySelectedListChk())){
 				if(deleteClicked && getCustomerIds()!=null && getCustomerIds().length>0){// in case of delete, the value comes as comma seperated customerids
 					for(int i=0; i< getCustomerIds().length; ){// there is only one value with comma separated customerIds
@@ -340,7 +357,13 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			setSharePrivate(getWCContext().getLoggedInUserId());
 //			setUserHRY(XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext()));// This is same as getting path for the Logged in customer which is MSAP
 			setUserHRY(XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()));
-			
+
+			if(ShareList!=null )
+			{  if(ShareList.length()>0)
+			     {
+					filterByMyListChk=false;
+			     }
+			}
 			if(!getFilterByMyListChk()) {
 				generateSelectedLists();
 			
@@ -403,7 +426,16 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			setModifyMap();
 			
 			processPermissions();
+			Set set = new HashSet();
+			List newList = new ArrayList();
 			
+			for(Element elem : listOfItems){
+				String MyItemsListKey = elem.getAttribute("MyItemsListKey");
+				if (set.add(MyItemsListKey))
+				      newList.add(elem);
+				    }			
+			 listOfItems.clear();
+			 listOfItems.addAll(newList);
 			if (displayAsSubMenu){
 				return "displayAsSubMenu";
 			}
