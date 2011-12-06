@@ -49,7 +49,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		customerContactID =(String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
 		this.reInitPage();
 		initPage();
-		getUserGroupInfo();
+		
 	}
 	public void getUserGroupInfo(){
 		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
@@ -105,6 +105,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		invokeSearchCatalogIndexAPI();
 //		invokeGetShiptoCustomerListAPI();
 		invokeCustomerPOListAPI();
+		getUserGroupInfo();
 
 	}	
 	private void invokeCustomerPOListAPI() {
@@ -238,11 +239,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						
 					}
-					if ("getCustomerContactList".equals(ctx.getApiName())) {
-						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
-						adminCustomerContact(eleCustomerContactList);						
-						
-					}
+					
 					if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
 						if(!YRCPlatformUI.isVoid(docPOList)){
@@ -256,6 +253,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						}
 						this.createModelForPOList();
 						this.createModelForAdditionalEmails();
+					}
+					if ("getCustomerContactList".equals(ctx.getApiName())) {
+						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
+						adminCustomerContact(eleCustomerContactList);						
+						
 					}
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
@@ -298,7 +300,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					for(int k=0;k<nodGroupList.getLength();k++){
 						Element eleGroupName=(Element) nodGroupList.item(k);
 					String groupId = eleGroupName.getAttribute("UsergroupKey");
-					//System.out.println("The groupID is" + groupId);
 					if ("BUYER-APPROVER".equalsIgnoreCase(groupId)){
 						CustomerContactIdList.add(customerID);
 						k = nodGroupList.getLength();
@@ -308,7 +309,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					
 				}
 		}
-		NodeList nodeCustContact=eleCustomerContactList.getElementsByTagName("CustomerContact");
+		Element inputElement = getModel("XPXCustomerContactIn");
+		String logINCustomerContactID = inputElement.getAttribute("CustomerContactID");
+		if(CustomerContactIdList.contains(logINCustomerContactID)){
+			CustomerContactIdList.remove(logINCustomerContactID);
+		}
+		Document docInput = YRCXmlUtils.createDocument("AdminCustomerList");
+		Element adminCustomerList = docInput.getDocumentElement();
+		for (int i=0; i<CustomerContactIdList.size() ;i++){
+			Element customerContactList = YRCXmlUtils.createChild(adminCustomerList, "CustomerContact");
+			customerContactList.setAttribute("CustomerContactID",(String)CustomerContactIdList.get(i) );
+			}
+	/*	NodeList nodeCustContact=eleCustomerContactList.getElementsByTagName("CustomerContact");
 		for(int i=0;i<nodeCustContact.getLength();i++){
 			Element elementCust=(Element) nodCustContact.item(i);
 			String customerID = elementCust.getAttribute("CustomerContactID");
@@ -317,8 +329,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				i--;
 			}
 			
-		}
-		setModel("CustomerContactDetails",eleCustomerContactList);
+		}*/
+		setModel("CustomerContactDetails",adminCustomerList);
 	}
 
 	private void updateAdditionalAttributes(Element customerContactElement) {
