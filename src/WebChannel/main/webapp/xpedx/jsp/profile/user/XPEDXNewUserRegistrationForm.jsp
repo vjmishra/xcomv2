@@ -237,7 +237,7 @@
             
             
              <tr>            
-              <td colspan="4" class="grey  no-border-right-user"><div id="errorMsgForMandatoryFields" style="float:right; margin-right: 12px;display:none; margin-right: 110px;" class="error" ></div></td>
+              <td colspan="4" class="grey  no-border-right-user"><div id="errorMsgForMandatoryFields" style="float:right; margin-right: 12px;display:none; margin-right: 20px;" class="error" ></div></td>
             </tr> 
             
             <tr>

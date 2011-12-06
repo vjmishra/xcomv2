@@ -8,7 +8,7 @@ function addItemToCart(itemId) {
 		{	
 			document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
 			document.getElementById('Qty_'+itemId).focus();
-			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Qty Should be greater than 0" ;
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again." ;
 			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
@@ -81,6 +81,7 @@ function addItemToCart(itemId) {
 						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Successfully added to cart" ;
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+					           document.getElementById('errorMsgForQty_'+itemId).style.float = "right";
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 						
 							
