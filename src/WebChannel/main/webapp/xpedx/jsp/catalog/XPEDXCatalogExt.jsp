@@ -2677,9 +2677,17 @@ function validationforDragToCompare()
 	<div class="normal-view" id="items">
 	<div id="items-control">
 	<div class="drag-to-compare" id="items-combox">
-	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
-	<s:text name="MSG.SWC.COMP.DRAGTOCOMPARE.GENERIC.PGTITLE" />
-	:<span id="comnum"> <s:text name='No_Items' /></span></a></h4>
+			
+
+<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
+	<s:if test="%{#totalNumberOfPages} == 0"> 
+	 	<div class="success"> Your search did not yield any results. Please try again. </div>
+	 </s:if> 
+	 <s:else>
+			<s:text name="MSG.SWC.COMP.DRAGTOCOMPARE.GENERIC.PGTITLE" />	
+			:<span id="comnum"> <s:text name='No_Items' /></span>
+	 </s:else>
+</a></h4>
 	</div>
 	<div id="items-cb"><img src="../xpedx/images/global/s.gif"
 		class="normal-view" title="Full View"><img
@@ -2687,11 +2695,8 @@ function validationforDragToCompare()
 		title="Condensed View"><img src="../xpedx/images/global/s.gif"
 		class="mini-view" title="Mini View"><!-- IW 7/16/2010: new icon/button for papergrid-view --><img src="../xpedx/images/global/s.gif" class="papergrid-view"
 		title="Grid View">
-		
-		<!-- -FXD-6 Fix -->
-		<s:if test="savedSharedList.size() == 0"> 
-		<h2>  There are no results found for Search ..... </h2>
-	 </s:if> 
+	
+
 	
 		
 		<s:if test='%{#session.selView != null}'>	
