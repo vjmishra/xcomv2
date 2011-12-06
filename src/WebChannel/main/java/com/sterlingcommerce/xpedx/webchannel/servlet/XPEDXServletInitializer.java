@@ -27,6 +27,11 @@ public class XPEDXServletInitializer extends HttpServlet {
   public synchronized void init(ServletConfig config) throws ServletException
    {
 	  
+	  //String wcPropertiesFile = "xpedx_webchannel.properties";
+	  	String custOverridePropertiesFile = "customer_overrides.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
+		String adJugglerKeyworPrefix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_KEYWORD_PREFIX_PROP);
+		
 		String wcPropertiesFile = "xpedx_webchannel.properties";
 		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
 		//String promoBeforeMassage = YFSSystem.getProperty(XPEDXConstants.DYN_PROMO_SHARED_PATH_PROP);
@@ -42,6 +47,7 @@ public class XPEDXServletInitializer extends HttpServlet {
 			
 			System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			//String promoPath = massageFileName(promoBeforeMassage );
+			System.out.println("-AD-JUGLLER-PREFIX- Advertizement Keyword Prefix : " + adJugglerKeyworPrefix );
 			System.out.println("-DYN-PROMO- Marketing Promo Files Path : " + promoPath );
 			System.out.println("-DYN-PROMO- (XPEDXServletInitializer) : config.getServletContext : "  + config.getServletContext() );
 		
