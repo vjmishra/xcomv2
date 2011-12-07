@@ -2172,10 +2172,17 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 				btnRemoveLine.setEnabled(false);
 				txtQuantity.setEnabled(false);
 				stxtUnitPrice.setEnabled(false);
-				txtComment.setEnabled(false);
+//				txtComment.setEnabled(false);
 			}
 		}
-		
+		/* Start - Changes made to fix issue 3173 */
+		if(XPXUtils.isFullFillmentOrder(this.orderEle)){
+			Control[] controls = new Control[]{
+					txtComment					
+			};
+			setControlsEnabled(controls, false);
+		}
+		/* End - Changes made to fix issue 3173 */
 		// LineComment
 		String strLineComment = (String)YRCXPathUtils.evaluate(this.eleOrderLine, "/OrderLine/Instructions/Instruction[@InstructionType='LINE']/@InstructionText", XPathConstants.STRING);
 		this.myBehavior.setFieldValue("txtComment", strLineComment);
