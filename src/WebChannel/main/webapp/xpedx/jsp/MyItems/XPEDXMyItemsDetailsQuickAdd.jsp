@@ -65,7 +65,7 @@
 	</div>
 <s:if test='%{isItemValid == false}'>
 	<s:div id="invalidItemMessage_%{#uId}">
-	The item '<s:property value="itemId"/>' is not valid. Please review it and try again or contact your CSR.
+	The item '<s:property value="itemId"/>' is not valid. Please review and try again or contact Customer Service.
 	<%-- The item '<s:property value="itemId"/>' is not a valid item. Please review your entry and try again or <a href="javascript:showSpecialItem('divSpecialItemContent_<s:property value="#uId"/>'); " >add as a non-catalog item.</a>--%>
 	</s:div>
 <%-- Hemantha --%>

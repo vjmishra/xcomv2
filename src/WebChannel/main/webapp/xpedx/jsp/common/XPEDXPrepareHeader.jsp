@@ -226,7 +226,7 @@
            url = ReplaceAll(url,"&amp;",'&');
            //Show the waiting box
            var x = document.getElementById(divId);
-           x.innerHTML = "Loading Data... Please wait!";
+           x.innerHTML = "Loading data... please wait!";
            
            
            //Execute the call
@@ -871,7 +871,7 @@
     	//Added For Jira 2903
     	Ext.Msg.wait("Processing..."); 
     	var x = document.getElementById('ajax-assignedShipToCustomers');
-    	//x.innerHTML = "Loading Data... Please wait!";
+    	//x.innerHTML = "Loading data... please wait!";
         url = ReplaceAll(url,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
@@ -889,7 +889,7 @@
     function showAssignedShipToForOrderSearch(url)
     {
     	var x = document.getElementById('shipToOrderSearchDiv');
-        x.innerHTML = "Loading Data... Please wait!";
+        x.innerHTML = "Loading data... please wait!";
     	Ext.Ajax.request({
             url :url,
             method: 'POST',
@@ -1390,7 +1390,7 @@ var toaWin = new Ext.Window({
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
-	    //x.innerHTML = "Loading Data... Please wait!";
+	    //x.innerHTML = "Loading data... please wait!";
 	    //Added For Jira 2903
 		Ext.Msg.wait("Processing..."); 
 	    //Execute the call
@@ -1612,7 +1612,7 @@ function searchShipToAddress(divId,url) {
 		else
 		{
 			var x = document.getElementById('address-list');
-	         x.innerHTML = "Loading Data... Please wait!";
+	         x.innerHTML = "Loading data... please wait!";
 			 Ext.Ajax.request({
 	                url: url,
 	                params: {
