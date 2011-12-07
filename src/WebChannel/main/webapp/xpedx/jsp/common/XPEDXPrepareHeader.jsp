@@ -516,7 +516,7 @@
 		clearTheArrays();// clearing the arrays
 		
 		//form.dom.submit();
-        //Submit the data via ajax
+        //Removed Submit the data via ajax
         
         //Init vars
         <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />
@@ -530,51 +530,8 @@
 		//Added For Jira 2903
         Ext.Msg.wait("Processing..."); 
 
-        Ext.Ajax.request({
-          url: url,
-          form: xForm,
-          method: 'POST',
-          success: function (response, request){
-              document.body.style.cursor = 'default';
-              //try{ console.debug("response" , response.responseText); }catch(e){}
-              //Get the data
-              var data = response.responseText;
-              var listKey 	= getValueFromHTML(data, 'listKey" value="');
-              var listName 	= getValueFromHTML(data, 'listName" value="');;
-              
-              //Add the items to the list
-              try{
-	              var dlItems = currentAadd2ItemList;
-	              var opt = document.createElement('option');
-				  opt.text	= listName;
-				  opt.value = listKey;
-				  if(dlItems != null)
-				  {				  
-					  try { dlItems.add(opt,null); } 
-					  catch(ex) { dlItems.add(opt); }
-					  dlItems.selectedIndex = dlItems.length-1;
-					  currentAadd2ItemList.onchange();
-				  }
-					  }catch(ex){
-					  }
-
-			  //addItemsToList(dlItems.selectedIndex);
-			  //$("#itemListSelect").trigger('change');
-			  
-			  /*Web Trends tag start */
-			  writeMetaTag('DCSext.w_x_list_addnew','1');
-			  /*Web Trends tag End */
-			  //reloadMenu();
-			  // Removal of MIL dropdown list from header for performance improvement
-			  Ext.Msg.hide();
-          },
-          failure: function (response, request){
-              document.body.style.cursor = 'default';
-              Ext.Msg.hide();
-              //alert("Error creating new list. Please try again later.");
-          }
-      });
-      document.body.style.cursor = 'default';
+        form.dom.submit();
+//      document.body.style.cursor = 'default';
 		
 		
 	}
