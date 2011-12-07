@@ -444,7 +444,7 @@
             url = ReplaceAll(url,"&amp;",'&');
             //Show the waiting box
             var x = document.getElementById(divId);
-            x.innerHTML = "Loading Data... Please wait!";
+            x.innerHTML = "Loading data... please wait!";
             
             
             //Execute the call

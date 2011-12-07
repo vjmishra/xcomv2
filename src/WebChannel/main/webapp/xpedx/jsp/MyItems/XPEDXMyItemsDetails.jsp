@@ -575,7 +575,7 @@ function showSharedListForm(){
 	           
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Loading Data... Please wait!";
+	           x.innerHTML = "Loading data... please wait!";
 	           
 	           
 	           //Execute the call
@@ -616,7 +616,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Loading Data...<br/> Please wait!";
+	           x.innerHTML = "Loading data...<br/> please wait!";
 	           
 	           
 	           //Execute the call
@@ -654,7 +654,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Loading Data...<br/> Please wait!";
+	           x.innerHTML = "Loading data...<br/> please wait!";
 	           
 	           
 	           //Execute the call
@@ -700,7 +700,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Validating item " + itemId + "...Please wait!";
+	           x.innerHTML = "Validating item " + itemId + "...please wait!";
 	           
 	           //Execute the call
 	           document.body.style.cursor = 'wait';
@@ -2150,7 +2150,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 <li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
 	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
-	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline">
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property>
 	                               	</div>
