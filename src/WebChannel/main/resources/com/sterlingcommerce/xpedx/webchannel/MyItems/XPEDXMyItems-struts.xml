@@ -215,10 +215,19 @@
 		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
-		<result name="copy">/xpedx/jsp/MyItems/XPEDXCopyListSuccess.jsp</result>
-		<result name="success" type="redirectAction">
-			<param name="actionName">XPEDXMyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+		 <result name="copy" type="redirectAction">
+			<param name="actionName">XPEDXMyItemsDetails</param>			
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="sharePrivateField">${sharePermissionLevel}</param>
+			<param name="sharePermissionLevel">${sharePermissionLevel}</param>
+			<param name="shareAdminOnly">${shareAdminOnly}</param>
+		</result> 
+		 <result name="success" type="redirectAction">
+			<param name="actionName">XPEDXMyItemsDetails</param>			
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
