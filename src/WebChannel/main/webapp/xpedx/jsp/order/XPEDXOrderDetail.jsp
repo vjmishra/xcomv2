@@ -1057,6 +1057,7 @@ function showSplitDiv(divId)
 																	<s:set name="extnInvcDt" value='#splitOrder.getAttribute("ExtnInvoicedDate")'/>
 																	<s:set name="splitCustSuff" value='#splitOrder.getAttribute("ShipToID")'/>
 																  Invoice #: <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#encInvcNo'/>&shipTo=<s:property value='#splitCustSuff'/>&InvoiceDate=<s:property value='extnInvcDt'/>"><s:property value='#extnInvcNo'/></a>
+																  <br/>
 											        			</s:if>
 											        			<s:else>
 											        				<br/>
