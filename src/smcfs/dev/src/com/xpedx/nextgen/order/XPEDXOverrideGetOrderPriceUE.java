@@ -48,6 +48,7 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 			HashMap<String,String> extendedPriceMap=new HashMap<String,String>();
 			HashMap<String,String> pricingUOMMap=new HashMap<String,String>();
 			Map<String,Map<String,String>> uomListMap=new HashMap<String,Map<String,String>>();
+			HashMap<String,String> isPriceLockMap=new HashMap<String,String>();
 			String ischangeOrderInprogress=null;
 			// default values set
 			String draftOrderFlag="Y";
@@ -69,6 +70,7 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					hasPendingChanges=(String)map.get("hasPendingChanges");
 					ischangeOrderInprogress=(String)map.get("ischangeOrderInprogress");
 					uomListMap=(Map<String,Map<String,String>>)map.get("uomListMap");
+					isPriceLockMap=(HashMap<String,String>)map.get("isPriceLockMap");
 				}
 			}
 			
@@ -184,6 +186,7 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					Element orderLineEle = (Element) orderLines.item(i);
 					String lineTotPrice = orderLineEle
 							.getAttribute("LineTotal");
+					String orderLineKey=orderLineEle.getAttribute("LineID");
 					String unitPrice = orderLineEle.getAttribute("UnitPrice");
 					String quantity = orderLineEle.getAttribute("Quantity");
 					BigDecimal qty = new BigDecimal(quantity);
@@ -192,30 +195,45 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					}
 					BigDecimal price = new BigDecimal(unitPrice);
 					BigDecimal discount = new BigDecimal("0");
-					Node orderLineAdjs = orderLineEle.getElementsByTagName(
-							"LineAdjustments").item(0);
-					NodeList lineAdjList = orderLineAdjs.getChildNodes();
-					for (int j = 0; j < lineAdjList.getLength(); j++) {
-						Element orderLineAdjEle = (Element) lineAdjList.item(j);
-						String adj = orderLineAdjEle
-								.getAttribute("AdjustmentPerLine"); 
-						// AdjustmentPerLine, we don't get every time even if we have discount so checking 
-						// AdjustmentAvailable if line is not present
-						if (adj == null || adj.trim().length() == 0) {
-							adj = orderLineAdjEle.getAttribute("AdjustmentAvailable");
+					String isPriceLockMapLock=isPriceLockMap.get(orderLineKey);
+					
+						Node orderLineAdjs = orderLineEle.getElementsByTagName(
+								"LineAdjustments").item(0);
+						NodeList lineAdjList = orderLineAdjs.getChildNodes();
+						String adj ="0.0";
+						double adjDouble=0;
+						double lockPriceDiscount=0;
+						for (int j = 0; j < lineAdjList.getLength(); j++) {
+							Element orderLineAdjEle = (Element) lineAdjList.item(j);
+							adj = orderLineAdjEle
+									.getAttribute("AdjustmentPerLine"); 
+							// AdjustmentPerLine, we don't get every time even if we have discount so checking 
+							// AdjustmentAvailable if line is not present
+							if (adj == null || adj.trim().length() == 0) {
+								adj = orderLineAdjEle.getAttribute("AdjustmentAvailable");
+							}
 							if(adj == null || adj.trim().length() == 0) {
 								adj = "0.0";
 							}
+								
+							if(!"Y".equals(isPriceLockMapLock))
+							{
+								adjDouble += Double.parseDouble(adj);
+							}
+							else
+							{
+								lockPriceDiscount +=Double.parseDouble(adj);
+							}
+							
 							
 						}
-						BigDecimal adjPrice = new BigDecimal(adj);						
+						BigDecimal adjPrice = new BigDecimal(adjDouble);						
 						discount = discount.subtract(adjPrice);
-					}
 					BigDecimal unitDiscount = new BigDecimal(discount.doubleValue() / qty.doubleValue() );
 					BigDecimal disUnitPrice = price.subtract(unitDiscount);
 					Element changedOrderLineEle = SCXmlUtil.createChild(
 							orderLinesEle, "OrderLine");
-					String orderLineKey=orderLineEle.getAttribute("LineID");
+					
 					if(YFCCommon.isVoid(orderLineKey))
 					{
 						orderLineKey=""+lineID;
@@ -227,9 +245,9 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					/*if( isPriceLock !=null && ("true".equals(isPriceLock.trim())))
 					{
 						*/
-							Element linePriceInfoElem= SCXmlUtil.createChild(
+							/*Element linePriceInfoElem= SCXmlUtil.createChild(
 									changedOrderLineEle, "LinePriceInfo");
-							linePriceInfoElem.setAttribute("IsPriceLocked", orderLineEle.getAttribute("IsPriceLocked"));
+							linePriceInfoElem.setAttribute("IsPriceLocked", orderLineEle.getAttribute("IsPriceLocked"));*/
 					//}
 					Element changedOrderLineExtnEle = SCXmlUtil.createChild(
 							changedOrderLineEle, "Extn");
@@ -244,7 +262,7 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					changedOrderLineExtnEle.setAttribute("ExtnAdjUOMUnitPrice",disUnitPrice.toString());					
 					changedOrderLineExtnEle.setAttribute("ExtnLineCouponDiscount",linCouponDiscountOnPrice.toString());
 					changedOrderLineExtnEle.setAttribute("ExtnUnitPriceDiscount",(unitLinediscount).toString());
-					if("Y".equals(orderLineEle.getAttribute("IsPriceLocked")))
+					if("Y".equals(isPriceLockMapLock))
 					{
 						changedOrderLineExtnEle.setAttribute("ExtnExtendedPrice", "".equals(orderLineEle.getAttribute("ExtendedPrice")) ?  "0" :orderLineEle.getAttribute("ExtendedPrice"));
 					}
@@ -282,6 +300,7 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					}
 					
 					extnLineTotal=new BigDecimal(lineTotPrice);
+					extnLineTotal=extnLineTotal.subtract(new BigDecimal(lockPriceDiscount));
 					extnOrderSubTotal=extnOrderSubTotal.add(extnLineTotal);
 					changedOrderLineExtnEle.setAttribute(
 							"ExtnLineOrderedTotal", extnLineTotal.toString());
