@@ -2128,7 +2128,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                             <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 144px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
-								<span class="mil-mpna">My Price &amp; Availablity</span></a></li>
+								<span class="mil-mpna">My Price &amp; Availability</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
