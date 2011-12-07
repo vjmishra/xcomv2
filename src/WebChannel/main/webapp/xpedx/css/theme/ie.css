@@ -88,7 +88,9 @@ div#home-image-rotation-nav-inner {
 }
 
 #right-col-int {
-	margin-top: -375px;
+	position: absolute;
+	right: 0px;
+	top: 185px;
 }
 #requestform .grey-ui-btn{
 	width: 75px;
