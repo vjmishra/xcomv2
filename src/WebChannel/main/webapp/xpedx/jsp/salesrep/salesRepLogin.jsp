@@ -8,6 +8,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+<!-- Show IE as IE8 -->
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <title>Sales Professional Sign In</title>
 <%-- <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.TABTITLE"/> </title> --%>
@@ -94,7 +96,7 @@ function loadWindow(){
 /* Green */
 a.green-ui-btn {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
+		url('/swc/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
 		no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
@@ -110,7 +112,7 @@ a.green-ui-btn {
 
 a.green-ui-btn span {
 	background: transparent
-		url('../../images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
+		url('/swc/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
 		no-repeat;
 	display: block;
 	line-height: 12px;
