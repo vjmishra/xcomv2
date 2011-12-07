@@ -356,7 +356,7 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
-	    x.innerHTML = "Loading Data... Please wait!";
+	    x.innerHTML = "Loading data... please wait!";
 	    
 	    
 	    //Execute the call
@@ -529,7 +529,7 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
-	    x.innerHTML = "Loading Data... Please wait!";
+	    x.innerHTML = "Loading data... please wait!";
 	    
 	    //Execute the call
 	    document.body.style.cursor = 'wait';
@@ -607,8 +607,8 @@ function addItemToCart(data)
 	{
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
-		document.getElementById("errorMsgForQty").innerHTML  = "Qty Should be greater than 0";
-  		 document.getElementById("errorMsgForQty").style.display = "inline"; 
+		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+  		// document.getElementById("errorMsgForQty").style.display = "inline-block"; 
   		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
@@ -617,7 +617,6 @@ function addItemToCart(data)
 	var validationSuccess = validateOrderMultiple();
 	
 	document.getElementById("Qty_Check_Flag").value = false;
-	document.getElementById("errorMsgForQty").style.display = "none";
 
 	if(validationSuccess){
 		var ItemId=document.getElementById("itemId").value;
@@ -657,7 +656,13 @@ function validateOrderMultiple() {
 	if(OrdMultiple!=null && OrdMultiple!=undefined && OrdMultiple.value!=0){
 		var ordMul = totalQty % OrdMultiple.value;
 		if (ordMul != 0) {
-			alert("Order Quantity must be a multiple of " + OrdMultiple.value);
+			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
+					   
+		    var myMessageDiv = document.getElementById("errorMsgForQty");	            
+            myMessageDiv.innerHTML = "Please order in units of " + OrdMultiple.value;	            
+            myMessageDiv.style.display = "inline-block"; 
+            myMessageDiv.setAttribute("class", "error");
+            
 			return false;
 		}
 	}
@@ -722,6 +727,13 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
             //myDiv.innerHTML = 'The product has been successfully added to the cart';	            
            // DialogPanel.show('modalDialogPanel1');	            
            // svg_classhandlers_decoratePage();
+           
+			
+             var myMessageDiv = document.getElementById("errorMsgForQty");	            
+             myMessageDiv.innerHTML = 'Item has been added to cart.';	            
+             myMessageDiv.style.display = "inline-block"; 
+             myMessageDiv.setAttribute("class", "success");
+		    
 			 
         },
         failure: function (response, request){
@@ -769,7 +781,7 @@ function SubmitActionWithValidation()
 	    {
 	        errorDivMessage= errorDivMessage + "-Phone ";
 	        phoneField.style.borderColor="#FF0000";
-	        errorDiv.style.display = 'inline';
+	        errorDiv.style.display = 'inline-block';
 	        returnval = false;
 	    }
 	    
@@ -777,7 +789,7 @@ function SubmitActionWithValidation()
 	    {
 	        errorDivMessage= errorDivMessage + "-Email Address ";
 	        emailField.style.borderColor="#FF0000";
-	        errorDiv.style.display = 'inline';
+	        errorDiv.style.display = 'inline-block';
 	        returnval = false;
 	    }
 	    
@@ -785,7 +797,7 @@ function SubmitActionWithValidation()
 	    {
 	        errorDivMessage= errorDivMessage + "-Attention ";
 	        contactField.style.borderColor="#FF0000";
-	        errorDiv.style.display = 'inline';
+	        errorDiv.style.display = 'inline-block';
 	        returnval = false;
 	    }
 	    
@@ -793,7 +805,7 @@ function SubmitActionWithValidation()
 	    {
 	        errorDivMessage= errorDivMessage + "-Qty ";
 	        quantityField.style.borderColor="#FF0000";
-	        errorDiv.style.display = 'inline';
+	        errorDiv.style.display = 'inline-block';
 	        returnval = false;
 	    }
 	    
@@ -809,12 +821,12 @@ function SubmitActionWithValidation()
 			 {
 		        errorDivMessage= errorDivMessage + "-FedEx/UPS Number ";
 		        fedExServiceProviderNumberField.style.borderColor="#FF0000";
-		        errorDiv.style.display = 'inline';
+		        errorDiv.style.display = 'inline-block';
 		        returnval = false;
 		        
 		        //errorDivMessage= errorDivMessage + "-FedEx/UPS Number ";
 		        upsServiceProviderNumberField.style.borderColor="#FF0000";
-		        errorDiv.style.display = 'inline';
+		        errorDiv.style.display = 'inline-block';
 		        returnval = false;
 			 }else{
 				 fedExServiceProviderNumberField.style.borderColor="";
@@ -1452,6 +1464,12 @@ function SubmitActionWithValidation()
 
 					
 				</div>
+				
+				<!--  DEFINE DIV TAG FOR MESSAGES -->		
+				<br/>
+				<div class="error" id="errorMsgForQty" style="display : none"> &nbsp; <br/></div>
+				
+				
 				<br/>
 				<%-- 2964 Start<s:if test="itemUOMsMap != null && itemUOMsMap.size() > 0">
 				 --%><s:if test="itemIdConVUOMMap != null && itemIdConVUOMMap.size() > 0">
@@ -1461,14 +1479,29 @@ function SubmitActionWithValidation()
 					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
 					<s:hidden name="OrderMultiple" id="OrderMultiple"
 						value="%{#mulVal}" />
+						
+				
 				<s:if test='%{#mulVal >"1" && #mulVal !=null}'>		
-				<div class="temp_UOM" id="errorMsgForQty" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/>
-				</s:if>
+				
+				<script>
+					var myMessageDiv = document.getElementById("errorMsgForQty");	            
+		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#mulVal}'></s:property> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+		            myMessageDiv.style.display = "inline-block"; 
+		            myMessageDiv.setAttribute("class", "notice");
+				</script>
+				
+				
+				<%-- <div class="temp_UOM" id="errorMsgForQty" style="display : inline-block"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/> --%>
+				
+				<%-- 
+				<div class="notice" id="errorMsgForQty" style="display : inline-block"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property> <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())"></s:property></div><br/>
+			 --%>	
+			 	</s:if>
 				</s:if>	
-				<br/>
+				
 				<!-- <div class="error" id="errorMsgForQty" style="display : none">Please enter a quantity greater than 0.<br/></div> -->
-				<div class="error" id="errorMsgForQty" style="display : none"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' /><br/></div>
-				<br />
+				<%-- <div class="error" id="errorMsgForQty" style="display : none"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' /><br/></div> --%>
+				<br /><br />
 		<script type="text/javascript">
 		
 		function qtyInputCheck(component){
@@ -1476,7 +1509,7 @@ function SubmitActionWithValidation()
 			if(qtyCheckFlag=="true"){
 				if(component.value==""){
             		component.style.borderColor="#FF0000";
-	            	document.getElementById('errorMsgForQty').style.display = "inline";
+	            	document.getElementById('errorMsgForQty').style.display = "inline-block";
     	    	}
         		else{
             		component.style.borderColor="";
@@ -1493,7 +1526,7 @@ function SubmitActionWithValidation()
 			if(qtyCheckFlag=="true"){
 				if(component.value==""){
             		component.style.borderColor="#FF0000";
-	            	document.getElementById('errorMsgForQty').style.display = "inline";
+	            	document.getElementById('errorMsgForQty').style.display = "inline-block";
     	    	}
         		else{
             		component.style.borderColor="";
@@ -1515,7 +1548,7 @@ function SubmitActionWithValidation()
 			{
 				document.getElementById("qtyBox").style.borderColor="#FF0000";
 				document.getElementById("qtyBox").focus();
-				document.getElementById("errorMsgForQty").style.display = "inline";
+				document.getElementById("errorMsgForQty").style.display = "inline-block";
 				document.getElementById("Qty_Check_Flag").value = true;
 				document.getElementById("qtyBox").value = "";
 			    return;
@@ -1634,7 +1667,14 @@ function SubmitActionWithValidation()
 					  		//reloadMenu();
 							// Removal of MIL dropdown list from header for performance improvement
 					  		itemCountValOfSelList.value = itemCountValOfSelList.value + 1;
-					  		alert("Successfully added item "+itemId+ " to the selected list.");
+					  		//alert("Successfully added item "+itemId+ " to the selected list.");
+					  		
+					  		var myMessageDiv = document.getElementById("errorMsgForQty");	            
+				            myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
+				            myMessageDiv.style.display = "inline-block"; 
+				            myMessageDiv.setAttribute("class", "success");
+
+					  		
 					  		/*Web Trends tag start*/ 
 					  		writeMetaTag("DCSext.w_x_list_additem","1");
 					  		/*Web Trends tag end*/
@@ -1643,7 +1683,12 @@ function SubmitActionWithValidation()
 		          		failure: function (response, request){
 		              		document.body.style.cursor = 'default';
 		              		Ext.Msg.hide();
-		              		alert("Error adding item to the list. Please try again later.");
+		              		//alert("Error adding item to the list. Please try again later.");
+		              		var myMessageDiv = document.getElementById("errorMsgForQty");	            
+				            myMessageDiv.innerHTML = "No list has been created. Please create new list." ;	            
+				            myMessageDiv.style.display = "inline-block"; 
+				            myMessageDiv.setAttribute("class", "notice");
+
 		          		}
 		       		});
 		        }
@@ -1656,7 +1701,15 @@ function SubmitActionWithValidation()
 		        $.fancybox.close();
 				}
 		    	else{
+		    		//alert('Please select a Wish List to add the item');
+		    		
 		    		alert('Please select a Wish List to add the item');
+		    		/*
+		    		var myMessageDiv = document.getElementById("errorMsgForQty");	  
+					myMessageDiv.innerHTML = "Please select a Wish List to add the item." ;	            
+				    myMessageDiv.style.display = "inline-block"; 
+				    myMessageDiv.setAttribute("class", "notice"); */
+				            
 		    		document.body.style.cursor = 'default';
 		    		return;
 		    	}
