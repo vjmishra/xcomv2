@@ -25,10 +25,9 @@
 		
 		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
-		  
-		<div id="errorMsgForRequiredField" class="error" style="display: none;" >
-		</div> 
-		
+			
+		  <span id="errorMsgForRequiredField" style="display:none;"></span> 
+		  <%--  Don't delete this 'errorMsgForRequiredField' tag it needed while close button js --%>
 		<div>
             <p>The import feature allows you to import a list of items into your My Items Lists. Lists can be imported as a new list or added to an existing My Items List. In order for the list to be imported, it first must be saved as a Comma Separated Values (CSV) file. </p>
             <p>Use the sample below as a template. Delete the contents and enter your own data.</p>
@@ -42,11 +41,8 @@
             
             
 			<s:file name="upload" size="50" id="File"/>
-			<!-- 
-			<div id="errorMsgForBrowsePath" class="error" style="display: none;" >
-			Required Field
-			</div> -->
-						<center><div id="errorMsgForBrowsePath" class="error error-msg-btm" style="display: none;" >
+	
+						<center><div id="errorMsgForBrowsePath" class="error error-msg-btm" style="display: none; width:120px;" >
 					<!-- Please enter file path -->
 					<s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.FILEPATH" />
 				</div></center>
@@ -92,7 +88,7 @@
 			<br>
 			<br>
 			<input type="button" value="Cancel" onclick="javascript:$.fancybox.close()" />
-			<!--  <div id="errorMsgForBrowsePath" class="error" style="display: none;" ></div> -->
+			
 			<center><div id="errorMsgForRequiredField" class="error" style="display: none;" ></div></center>
 			<!-- div for he errors are Required as there are JS issues on close -->
 		</s:form>
