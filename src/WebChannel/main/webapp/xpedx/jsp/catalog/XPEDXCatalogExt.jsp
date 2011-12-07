@@ -499,16 +499,21 @@
 	
 	 <div class="pagination">
                  <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>
+                 <s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
                      <select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
 						onchange="javascript:processSortByUpper()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
                 		<%-- <s:if test='%{#sortField.key.equals(sortField)}'> --%>
-							<option selected value="relevancy">Relevancy</option>
-							<option value="Item.ItemID--A">Item # (Low to High)</option>
-							<option value="Item.ItemID--D">Item # (High to Low)</option>
-							<option value="Item.SortableShortDescription--A">Description (A to Z)</option>
-							<option value="Item.SortableShortDescription--D">Description (Z to A)</option>
-							
+							<s:iterator id='sortListFeild' value='#sortList'>
+                         	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
+								<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
+									value='#sortListFeild.value' /></option>
+							</s:if>
+							<s:else>
+								<option value="<s:property value='#sortListFeild.key'/>"><s:property
+									value='#sortListFeild.value' /></option>
+							</s:else>		
+							</s:iterator>
 						<%-- </s:if> --%>
 						<%-- <s:else> --%>
 							<!-- <option  value="<s:property value='#sortField.key'/>"><s:property
@@ -2719,16 +2724,21 @@ function validationforDragToCompare()
 	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
 					<span class="checkboxtxt">Sort By:&nbsp;</span> 
+					<s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
 					<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldLower" name="sortFieldLower"
 						onchange="javascript:processSortByLower()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
                 		<%-- <s:if test='%{#sortField.key.equals(sortField)}'> --%>
-							<option selected value="relevancy">Relevancy</option>
-							<option value="Item.ItemID--A">Item # (Low to High)</option>
-							<option value="Item.ItemID--D">Item # (High to Low)</option>
-							<option value="Item.SortableShortDescription--A">Description (A to Z)</option>
-							<option value="Item.SortableShortDescription--D">Description (Z to A)</option>
-							
+							<s:iterator id='sortListFeild' value='#sortList'>
+                         	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
+								<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
+									value='#sortListFeild.value' /></option>
+							</s:if>
+							<s:else>
+								<option value="<s:property value='#sortListFeild.key'/>"><s:property
+									value='#sortListFeild.value' /></option>
+							</s:else>		
+							</s:iterator>
 						<%-- </s:if> --%>
 						<%-- <s:else> --%>
 							<!-- <option  value="<s:property value='#sortField.key'/>"><s:property
