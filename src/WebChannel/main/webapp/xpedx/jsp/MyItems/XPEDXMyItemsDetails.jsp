@@ -383,11 +383,11 @@ function showSharedListForm(){
 			//Clears previous messages if any
 			clearPreviousDisplayMsg()
      		
-			document.getElementById("msgForMILImportTop").innerHTML = msgImportMyItemsError ;
-            document.getElementById("msgForMILImportTop").style.display = "inline"; 
+			document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
+            document.getElementById("errorMsgTop").style.display = "inline"; 
             
-            document.getElementById("msgForMILImportBottom").innerHTML = msgImportMyItemsError ;
-            document.getElementById("msgForMILImportBottom").style.display = "inline"; 
+            document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
+            document.getElementById("errorMsgBottom").style.display = "inline"; 
 		}
 		
 		function deleteItems(){
@@ -426,11 +426,11 @@ function showSharedListForm(){
 					
 			  // var msgSelectItemFirst = "You have not selected any items to be deleted. Please select an item and try again";
 			   var msgSelectItemFirst = "<s:text name='MSG.SWC.MIL.NOITEMSELECT.ERROR.SELECTFORDELETE' />";
-				document.getElementById("msgForRemoveFunctionalityTop").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForRemoveFunctionalityTop").style.display = "inline";
+				document.getElementById("errorMsgTop").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgTop").style.display = "inline";
             
-				document.getElementById("msgForRemoveFunctionalityBottom").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForRemoveFunctionalityBottom").style.display = "inline";
+				document.getElementById("errorMsgBottom").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgBottom").style.display = "inline";
             
 				return;	
 			}
@@ -1133,17 +1133,17 @@ function showSharedListForm(){
 		function displayMsgHdrLevelForLineLevelError() {
 			//var msgGenericForLineLevelErrors = "Error occurred in One of the Line, Please Correct";
 			var msgGenericForLineLevelErrors = "<s:text name='MSG.SWC.MIL.GENHDRLEVELMSG.ERROR.LINELEVELERROS' />";
-			document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").innerHTML = msgGenericForLineLevelErrors ;
-            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").style.display = "inline";
+			document.getElementById("errorMsgTop").innerHTML = msgGenericForLineLevelErrors ;
+            document.getElementById("errorMsgTop").style.display = "inline";
 
-			document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").innerHTML = msgGenericForLineLevelErrors ;
-            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").style.display = "inline";
+			document.getElementById("errorMsgBottom").innerHTML = msgGenericForLineLevelErrors ;
+            document.getElementById("errorMsgBottom").style.display = "inline";
 			
 		}
 		
 		
 		function updateSelectedPAA() {
-			// alert("updateSelectedPAA" );
+			 //alert("updateSelectedPAA" );
 
 			var checkboxes = Ext.query('input[id*=checkItemKeys]');
 			var nLineSelected = 0;
@@ -1156,6 +1156,7 @@ function showSharedListForm(){
 					cnt++;
 				}
 			});
+
 			if(cnt == 1){
 				var itemId = document.getElementById("enteredProductIDs_"+singleSelectedKey).value;
 				checkAvailability(itemId,singleSelectedKey);
@@ -1171,13 +1172,15 @@ function showSharedListForm(){
 			}
 
 			if(cnt <=0 ){
+				
+				//alert("Please select at least one item for Price Check : " + cnt );
 				//var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
 				var msgSelectItemFirst = "<s:text name='MSG.SWC.MIL.NOITEMSELECT.ERROR.SELECTFORPNA' />";
-				document.getElementById("msgForPriceAndAvailabilityTop").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForPriceAndAvailabilityTop").style.display = "inline";
+				document.getElementById("errorMsgTop").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgTop").style.display = "inline";
 
-				document.getElementById("msgForPriceAndAvailabilityBottom").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForPriceAndAvailabilityBottom").style.display = "inline";
+				document.getElementById("errorMsgBottom").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgBottom").style.display = "inline";
 				
 				//Ext.MessageBox.alert('Alert','Please select at least one item for Price Check.');
 			}
@@ -1190,11 +1193,11 @@ function showSharedListForm(){
 
 			if(nLineSelected <=0 ){
 				var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
-				document.getElementById("msgForPriceAndAvailabilityTop").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForPriceAndAvailabilityTop").style.display = "inline";
+				document.getElementById("errorMsgTop").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgTop").style.display = "inline";
 
-				document.getElementById("msgForPriceAndAvailabilityBottom").innerHTML = msgSelectItemFirst ;
-                document.getElementById("msgForPriceAndAvailabilityBottom").style.display = "inline";
+				document.getElementById("errorMsgBottom").innerHTML = msgSelectItemFirst ;
+                document.getElementById("errorMsgBottom").style.display = "inline";
 				
 				//Ext.MessageBox.alert('Alert','Please select at least one item for Price Check.');
 			}*/
@@ -1251,24 +1254,13 @@ function showSharedListForm(){
 		function clearPreviousDisplayMsg( )
 		{
 			//alert("clearPreviousDisplayMsg ... Called " ); 
-			document.getElementById("msgForPriceAndAvailabilityTop").innerHTML = defaultMsg ;
-			document.getElementById("msgForPriceAndAvailabilityTop").style.display = "none";
+			document.getElementById("errorMsgTop").innerHTML = defaultMsg ;
+			document.getElementById("errorMsgTop").style.display = "none";
 			
-			document.getElementById("msgForPriceAndAvailabilityBottom").innerHTML = defaultMsg ; 
-            document.getElementById("msgForPriceAndAvailabilityBottom").style.display = "none";
-			
-            
-        	document.getElementById("msgForMILImportTop").innerHTML = defaultMsg ;
-			document.getElementById("msgForMILImportTop").style.display = "none";
-			
-			document.getElementById("msgForMILImportBottom").innerHTML = defaultMsg ; ;
-            document.getElementById("msgForMILImportBottom").style.display = "none";
-        
-        	document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").innerHTML = defaultMsg ; ;
-            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorTop").style.display = "none";
-        
-         	document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").innerHTML = defaultMsg ; ;
-            document.getElementById("msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom").style.display = "none";
+			document.getElementById("errorMsgBottom").innerHTML = defaultMsg ; 
+            document.getElementById("errorMsgBottom").style.display = "none";
+			    
+
             
 		}
 		
@@ -1830,19 +1822,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                <ul style="float:center;text-align: center; background-color:white !important;">
                  <li style="margin-bottom: 5px;">   
                  <div class="clearall"></div>
-                <!--    
-                    <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>       
-                    <div  id="msgDisplayGenericAtHeaderLevelForLineLevelErrorTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>    
-                    <div  id="msgForMILImportTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
-                    <div  id="msgForRemoveFunctionalityTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
-					<div  id="msgForPriceAndAvailabilityTop" style="display:none;text-align: center;color: #B50007;border: 1px solid #E8AAAD;background-color: #F9E5E6;" ></div>
-			 -->		
-			        <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>       
-			        <div class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorTop" style="display:none;" ></div>       
-			        <div class="error" id="msgForMILImportTop" style="display:none;" ></div>       
-			        <div class="error" id="msgForRemoveFunctionalityTop" style="display:none;" ></div>  
-			        <div class="error" id="msgForPriceAndAvailabilityTop" style="display:none;" ></div>  
-			             
+    	
+			 
+			 		<div class="error" id="errorMsgTop" style="display:none;" ></div> 
+
 	
 	
 			 <s:if test="%{errorMsg == 'ItemsOverLoad'}">
@@ -2295,16 +2278,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
             <ul>
 			<li style="text-align: center;">
                             
-          <!--   <div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom"></div></div>
-   			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForMILImportBottom"></div></div>
-			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForRemoveFunctionalityBottom"></div></div>
-			<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="msgForPriceAndAvailabilityBottom"></div></div> 
-			-->
  
-            <div class="error" id="msgDisplayGenericAtHeaderLevelForLineLevelErrorBottom" style="display:none;" ></div>  
-            <div class="error" id="msgForMILImportBottom" style="display:none;" ></div>  
-            <div class="error" id="msgForRemoveFunctionalityBottom" style="display:none;" ></div>  
-            <div class="error" id="msgForPriceAndAvailabilityBottom" style="display:none;" ></div>  
+ 
+ 			<div class="error" id="errorMsgBottom" style="display:none;" ></div> 
+ 
+            
             </li>
 			</ul>
             <div class="clearall"></div>
