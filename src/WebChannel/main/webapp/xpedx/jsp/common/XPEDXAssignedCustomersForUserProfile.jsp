@@ -39,7 +39,7 @@
 	</s:url>
 </s:if>
 <s:else>
-	<s:url id="assignedCustomersPaginated" action="xpedxGetAssignedCustomers" namespace="/common">
+	<s:url id="assignedCustomersPaginated" action="xpedxGetAssignedCustomersForUserProfile">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
@@ -214,9 +214,10 @@
         
     <!-- START main body (with scroll bar) -->
     <div class="paginationContainer" style="float: right;"><!-- pagination control -->
+     <!--divId Modified For XNGTP-3088  -->
      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
        <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#assignedCustomersPaginated}" 
-       isAjax="true" divId="ajax-assignedShipToCustomers" showFirstAndLast="False" showMyUserFormat="false"/>
+       isAjax="true" divId="shipToUserProfile" showFirstAndLast="False" showMyUserFormat="false"/>
     </div> 
 
 	
