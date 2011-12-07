@@ -36,6 +36,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 	private HashMap<String, String> primeLineNumMap = new LinkedHashMap<String, String>();
 	private boolean isDeleteLine=false;
 	private boolean isCreateLine=false;
+	String isCom=null;
 	private static YIFApi api = null;
 		public Document beforeChangeOrder(YFSEnvironment env, Document outputDoc)			
 			{
@@ -48,7 +49,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			String isPriceLock=null;
 			String isPnACall = null;
 			String orderWithoutLineToProcess=null;
-			String isCom=null;
+			
 			HashMap map =null;
 			Element adjustmentInfoElem=null;			
 			Element outputOrderElement = outputDoc.getDocumentElement();
@@ -57,6 +58,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			Map<String,String> pricingUOMMap=new HashMap<String,String>();
 			Map<String,String> unitPricePricingUOMMap=new HashMap<String,String>();
 			Map<String,String> reqUnitPrice=new HashMap<String,String>();
+			Map<String,String>isPriceLockMap=new  HashMap<String,String>();
 			if (env instanceof ClientVersionSupport) {
 				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
 				map = clientVersionSupport.getClientProperties();
@@ -92,13 +94,13 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				{
 					populatePrimeLineNum(outputDoc.getDocumentElement());
 					Document orderPriceInputDoc=createOrderPriceDocument(env,outputOrderElement.getAttribute("OrderHeaderKey"),outputDoc,
-							isPnACall,isCom,oldAdjustmentInfoList,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice);
+							isPnACall,isCom,oldAdjustmentInfoList,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice,isPriceLockMap);
 					if(createOrderExtnIfNoLine(orderPriceInputDoc,outputDoc,isPromotion,orderWithoutLineToProcess))
 					{
 						return outputDoc;
 					}
 					System.out.println("Input Doc for getOrderPeice is : "+SCXmlUtil.getString(orderPriceInputDoc));
-					setProgressYFSEnvironmentVariables(env,map,draftOrderFlag,hasPendingChanges, primeLineNumMap,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice); 
+					setProgressYFSEnvironmentVariables(env,map,draftOrderFlag,hasPendingChanges, primeLineNumMap,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice,isPriceLockMap); 
 					
 					env.setApiTemplate(
 							"getOrderPrice",
@@ -320,13 +322,13 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 											{
 												try
 												{
-													BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
-													BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
-													outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
+												BigDecimal extnUnitPrice=new BigDecimal(outputOrderLineExtn.getAttribute("ExtnUnitPrice"));
+												BigDecimal extnAdjustedUnitPrice=new BigDecimal(orderLineExtn.getAttribute("ExtnAdjustmentOfUnitPrice"));
+												outputOrderLineExtn.setAttribute("ExtnAdjUnitPrice", extnUnitPrice.subtract(extnAdjustedUnitPrice).toString());
 												}
 												catch(Exception e)
 												{
-													log.info("ERROR while changing price !");
+													
 												}
 											}
 											
@@ -374,6 +376,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				}
 			}
 			
+		
 			System.out.println("Output XML of Before Change Order UE "+SCXmlUtil.getString(outputDoc));
 			
 			return outputDoc;
@@ -477,7 +480,8 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 		
 		private Document createOrderPriceDocument(YFSEnvironment env,String orderHeaderKey,Document outputDoc,
 				String isPnACall,String isCom,List<Element> oldAdjustmentInfoList,Map<String,Map<String,String>> uomListMap,
-				Map<String,String> pricingUOMMap,Map<String,String> unitPricePricingUOMMap,Map<String,String> reqUnitPrice) throws Exception
+				Map<String,String> pricingUOMMap,Map<String,String> unitPricePricingUOMMap,Map<String,String> reqUnitPrice,
+				Map<String,String>isPriceLockMap) throws Exception
 		{
 			/*<Order Currency="USD" CustomerID="60-6806858-000002-M-60" OrganizationCode="xpedx" OrderReference="201105201254521473136" >
 			<OrderLines>
@@ -517,8 +521,8 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			//}
 			Map<String,Element> outputMap=new LinkedHashMap<String,Element>();
 			//Method to form the price input document with latest qty/uom changes, including the existing items.
-			updateOrderLinesElem(orderListElem, outputMap,isPnACall,1,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice);
-			updateOrderLinesElem(outputDoc.getDocumentElement(), outputMap,isPnACall,2,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice);
+			updateOrderLinesElem(orderListElem, outputMap,isPnACall,1,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice,isPriceLockMap);
+			updateOrderLinesElem(outputDoc.getDocumentElement(), outputMap,isPnACall,2,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice,isPriceLockMap);
 			
 			ArrayList<Element> orderLinesElem= null;
 			if(outputMap!=null && !outputMap.isEmpty())
@@ -665,11 +669,11 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					envVariablesmap.remove("hasPendingChanges");					
 					envVariablesmap.put("ischangeOrderInprogress", "true");
 				}
-				else
+				/*else
 				{
 					envVariablesmap=new HashMap();
 					envVariablesmap.put("ischangeOrderInprogress", "true");
-				}
+				}*/
 				clientVersionSupport.setClientProperties(envVariablesmap);
 			}
 		}
@@ -685,7 +689,8 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 		}
 		
 		private void setProgressYFSEnvironmentVariables(YFSEnvironment env,HashMap map,String hasPendingChanges,String draftOrderFlag, HashMap<String, String> primeLineNumMap,
-				Map<String,Map<String,String>> uomListMap,Map<String,String> pricingUOMMap,Map<String,String> unitPricePricingUOMMap,Map<String,String> reqUnitPrice) {
+				Map<String,Map<String,String>> uomListMap,Map<String,String> pricingUOMMap,Map<String,String> unitPricePricingUOMMap,Map<String,String> reqUnitPrice
+				,Map<String,String> isPriceLockMap) {
 			if (env instanceof ClientVersionSupport) {
 				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
 				//HashMap envVariablesmap = clientVersionSupport.getClientProperties();
@@ -698,6 +703,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					map.put("PricingUOMMap", pricingUOMMap);
 					map.put("unitPricePricingUOMMap", unitPricePricingUOMMap);
 					map.put("reqUnitPrice", reqUnitPrice);
+					map.put("isPriceLockMap", isPriceLockMap);
 					if(isCreateLine == true)
 					{
 						
@@ -766,7 +772,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				{
 					SCXmlUtil.importElement(orderLines, orderLineElem);
 				}
-				else
+				/*else
 				{
 					Element orderLinePriceLineInfoElem=priceInfoElem.get(orderLineKey);
 					Element linePriceInfoOutPut= (Element)orderLinePriceLineInfoElem.getElementsByTagName("LinePriceInfo").item(0);
@@ -776,12 +782,13 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						linePriceInfoOutPut=SCXmlUtil.createChild(orderLinePriceLineInfoElem, "LinePriceInfo");
 					}
 					String isPriceLockedOutput=linePriceInfoOutPut.getAttribute("IsPriceLocked");
+					
 					String isPriceLocked=linePriceInfo.getAttribute("IsPriceLocked");
 					if("".equals(isPriceLockedOutput) || isPriceLockedOutput == null)
 					{
 						linePriceInfoOutPut.setAttribute("IsPriceLocked", isPriceLocked);
 					}
-				}
+				}*/
 				outputMap.put(orderLineKey,orederLineExtnNode);
 				
 				
@@ -867,7 +874,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 		
 		private void updateOrderLinesElem(Element orderListDoc,Map<String,Element> outputMap,String isPnACall,int callNumber,
 				Map<String,Map<String,String>> uomListMap,Map<String,String> pricingUOMMap,Map<String,String> unitPricePricingUOMMap,
-				Map<String,String>reqUnitPrice){
+				Map<String,String>reqUnitPrice,Map<String,String>isPriceLockMap){
 			
 			String isDraftOrder = orderListDoc.getAttribute("DraftOrderFlag");
 			ArrayList<Element> orderLinesElem=SCXmlUtil.getElements(orderListDoc, "OrderLines/OrderLine");
@@ -1016,6 +1023,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 							
 							NodeList itemNodeList = orderLineItem.getElementsByTagName("ItemDetails");
 							
+							
 							//Element itemElem=(Element)orderLineItem.getElementsByTagName("Item").item(0);
 							Element newItemElem= SCXmlUtil.createChild(newOrderLineElem, "Item");
 							Element itemElem = null;
@@ -1075,8 +1083,16 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 										
 								}
 								reqUnitPrice.put(orderLineKey, orderLineExtnElem.getAttribute("ExtnReqUOMUnitPrice"));
-								if("N".equals(isDraftOrder) && (!"Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {	
-									newLinePriceInfoElem.setAttribute("IsPriceLocked", "N");
+								if((!"Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {
+									
+										newLinePriceInfoElem.setAttribute("IsPriceLocked", "N");
+									isPriceLockMap.put(orderLineKey, "N");
+								}
+								else
+								{
+									if("true".equals(isCom))
+										newLinePriceInfoElem.setAttribute("IsPriceLocked", "Y");
+									isPriceLockMap.put(orderLineKey, "Y");
 								}
 								/*if(!"true".equals(isPnACall) || ("N".equals(draftOrderFlag) && !"Y".equals(orderLineExtnElem.getAttribute("ExtnEditOrderFlag")) ))
 								{
@@ -1107,17 +1123,27 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 								if(linePriceInfoElem == null)
 								{
 									linePriceInfoElem=SCXmlUtil.createChild(orderOutputElem, "LinePriceInfo");
+									if("true".equals(isCom))
 										linePriceInfoElem.setAttribute("IsPriceLocked",  linePriceInfo.getAttribute("IsPriceLocked"));
+									else
+										linePriceInfoElem.setAttribute("IsPriceLocked",  "N");
+									isPriceLockMap.put(orderLineKey, linePriceInfo.getAttribute("IsPriceLocked"));
 								}
 								else
 								{
 									if(!"".equals(linePriceInfo.getAttribute("IsPriceLocked")))
 									{
-										linePriceInfoElem.setAttribute("IsPriceLocked",  linePriceInfo.getAttribute("IsPriceLocked"));
+										if("true".equals(isCom))
+											linePriceInfoElem.setAttribute("IsPriceLocked",  linePriceInfo.getAttribute("IsPriceLocked"));
+										else
+											linePriceInfoElem.setAttribute("IsPriceLocked",  "N");
+										isPriceLockMap.put(orderLineKey, linePriceInfo.getAttribute("IsPriceLocked"));
+										
 									}
 								}
-								if("N".equals(isDraftOrder) && (!"Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {											
-									linePriceInfoElem.setAttribute("IsPriceLocked", "N");
+								if(("Y".equals(orderLineExtnElem.getAttribute("ExtnPriceOverrideFlag")))) {	
+									if("true".equals(isCom))
+										linePriceInfoElem.setAttribute("IsPriceLocked", "Y");
 								}
 								if(!"".equals(linePriceInfo.getAttribute("UnitPrice")))
 								{
