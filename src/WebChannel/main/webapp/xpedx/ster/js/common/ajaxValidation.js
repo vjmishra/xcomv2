@@ -108,7 +108,7 @@ var mandatoryFieldList = [
                        		{"id": "prodId", "display": "Item #", "type": "text"}
                        	 ];
 var mandatoryFieldErrorList = [
-                     		{"id": "List Name", "display": "You must enter a name for this list, please enter a name and try again."}
+                     		{"id": "List Name", "display": "Name is required."}
                      	 ];
 
 var mandatoryFieldListHL = [
