@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.profile.user.UserProfileHelper;
 import com.sterlingcommerce.webchannel.utilities.WCConstants;
@@ -265,6 +267,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String mobilePhone;
 	private String AddnlEmailAddrText = "";
 	private String POListText = "";
+	private String addnlPOList = "";
+	private String extnLastLoginDate;
 
 	// Mode of operation
 	private String operation = "";
@@ -498,6 +502,15 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		}
 		attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_PO_LIST_ATTR, extnPoList.toString());
 		Element outDoc = (Element)XPEDXWCUtils.updateXPXCustomerContactExtn(wcContext,this.customerContactId, createCCExtn, attributeMap);
+		//Code Added For Fix XNGTP-3088
+		if(customerContactId.equals(getWCContext().getCustomerContactId())){
+			
+			getWCContext().setWCAttribute("addnlPOList",outDoc.getAttribute("POList"), WCAttributeScope.LOCAL_SESSION);
+			getWCContext().setWCAttribute("lastLoginDate",outDoc.getAttribute("LastLoginDate"), WCAttributeScope.LOCAL_SESSION);
+			getWCContext().setWCAttribute("addnlEmailAddrs",outDoc.getAttribute("AddnlEmailAddrs"), WCAttributeScope.LOCAL_SESSION);
+			
+		}
+		//End Fix For XNGTP-3088
 	}
 	
 	/**
