@@ -55,6 +55,7 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 			// <OrderLineKey, UOM>
 			HashMap<String,String> pricingUOMMap=new HashMap<String,String>();
 			HashMap<String,String> reqUnitPrice=new HashMap<String,String>();
+			HashMap<String,String> isPriceLockMap=new HashMap<String,String>();
 			// default values set
 			String draftOrderFlag="Y";
 			String hasPendingChanges="N";
@@ -77,6 +78,7 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 					hasPendingChanges=(String)map.get("hasPendingChanges");
 					primeLineNumMap = (HashMap<String,String>)map.get("primeLineNoMap");
 					reqUnitPrice = (HashMap<String,String>)map.get("reqUnitPrice");
+					isPriceLockMap=(HashMap<String,String>)map.get("isPriceLockMap");
 				}
 			}
 
@@ -203,6 +205,15 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 						String itemId=lineItemEle.getAttribute("ItemID");
 						lineItemEle.removeAttribute("LineNumber");
 						boolean isPriceApplied=false;
+						String isPriceLock=isPriceLockMap.get(orderlineKeyNumberMap.get(""+lineNum+itemId));
+						if("Y".equals(isPriceLock))
+						{
+							String unitPrice=reqUnitPrice.get(orderlineKeyNumberMap.get(""+lineNum+itemId));
+							lineItemEle.setAttribute("ListPrice", unitPrice);
+							lineItemEle.setAttribute("UnitPrice", unitPrice);
+							lineItemEle.setAttribute("LinePrice", unitPrice);
+							continue;
+						}
 						for (int i = 0; i < pAndAitems.size(); i++) {							
 							XPXItem paitem = pAndAitems.get(i);
 							int pnAlineNum=Integer.parseInt(paitem.getLineNumber());
