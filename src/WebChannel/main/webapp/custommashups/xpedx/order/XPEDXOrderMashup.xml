@@ -1517,7 +1517,7 @@
 						ChainedFromOrderLineKey="" OrderLineKey="" Status="">
 						<OrderLineTranQuantity OrderedQty="" />
 						<Order OrderNo="" OrderHeaderKey="" OrderDate="" Status="">
-							<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnHeaderStatusCode=""/>
+							<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnHeaderStatusCode="" ExtnInvoiceNo="" ExtnInvoicedDate=""/>
 						</Order>
 					</OrderLine>
 				</OrderLineList>
