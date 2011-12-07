@@ -23,17 +23,23 @@ public class XPXInventoryIndicatorAgent extends YCPBaseAgent{
     
 	public List getJobs(YFSEnvironment env, Document criteria,
 			Document lastMessageCreated) throws Exception {
+		log.info("Start of Method getJobs in XPXInventoryAgent");
 
 		List listOfJobs = new ArrayList();
 		if(updateTriggered==false){
+  		log.info("start if Condition of Method getJobs in XPXInventoryAgent Value of Update Triggered is :: "+updateTriggered);	
 		Document docCustContacts = SCXmlUtil.createFromString("<ItemBranch><OrderBy><Attribute Name='CustomerContactKey' Desc='N' /></OrderBy></ItemBranch>");
+		log.info("docCustContacts"+SCXmlUtil.getString(docCustContacts));
 		this.updateListOfJobs(criteria, listOfJobs, docCustContacts);
 		updateTriggered=true;
 		}
 		else if(updateTriggered==true){
+			log.info("start if Condition of Method getJobs in XPXInventoryAgent Value of Update Triggered is :: "+updateTriggered);		
 			Document docCustContacts = SCXmlUtil.createFromString("<ItemBranch></ItemBranch>");
+			log.info("docCustContacts"+SCXmlUtil.getString(docCustContacts));
 			this.updateListOfJobs(criteria, listOfJobs, docCustContacts);
 		}
+		log.info("End of Method getJobs in XPXInventoryAgent");
 		return listOfJobs;
 
 	}
@@ -63,11 +69,15 @@ public class XPXInventoryIndicatorAgent extends YCPBaseAgent{
 
 	@Override
 	public void executeJob(YFSEnvironment env, Document inputDoc) throws Exception {
+
+
 		// TODO Auto-generated method stub
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 
-		try {
+		try {  
+			log.info("Start of Method executeJob in XPXInventoryAgent");
 			api.executeFlow(env,"XPXInventoryIndicatorUpdate",inputDoc);
+			log.info("End of Method executeJob in XPXInventoryAgent");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
