@@ -2,11 +2,11 @@
 <YFS_USER_GROUPList TableName="YFS_USER_GROUP">
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T14:39:05-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T14:39:05-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
-    UsergroupDescription="XPEDX-CSR-GROUP" UsergroupId="XPEDX-CSR-GROUP"
-    UsergroupKey="2010113014390562250" UsergroupName="XPEDX-CSR-GROUP"/>
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-02T03:43:24-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup="" UsergroupDescription="Customer Service Rep  -GROUP"
+    UsergroupId="XPEDX-CSR-GROUP" UsergroupKey="2010113014390562250" UsergroupName="Customer Service Rep -GROUP"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:13:18-05:00"
     Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
@@ -30,32 +30,35 @@
     UsergroupId="XPXSecurityAdmin" UsergroupKey="2010113015442269534" UsergroupName="Security Admin"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:45:37-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T15:45:37-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
-    UsergroupDescription="Catalog Administrator"
-    UsergroupId="XPXCatalogAdmin" UsergroupKey="2010113015453771531" UsergroupName="Catalog Admin"/>
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-02T03:51:34-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup=""
+    UsergroupDescription="Business Center Catalog Admin"
+    UsergroupId="XPXCatalogAdmin" UsergroupKey="2010113015453771531" UsergroupName="Business Center Catalog Admin"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:46:16-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T15:46:16-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-05T06:53:27-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup=""
     UsergroupDescription="Customer Service Representative"
-    UsergroupId="XPXCSR" UsergroupKey="2010113015461673524" UsergroupName="Xpedx CSR"/>
+    UsergroupId="XPXCSR" UsergroupKey="2010113015461673524" UsergroupName="Customer Service Rep"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:46:46-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T15:46:46-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
-    UsergroupDescription="Support Desk" UsergroupId="XPXSupportDesk"
-    UsergroupKey="2010113015464675517" UsergroupName="Support Desk"/>
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-02T03:53:53-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup="" UsergroupDescription="eBusiness Support Admin"
+    UsergroupId="XPXSupportDesk" UsergroupKey="2010113015464675517" UsergroupName="eBusiness Support Admin"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:47:21-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T15:47:21-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
-    UsergroupDescription="Promotions Administrator"
-    UsergroupId="XPXPromotionAdmin" UsergroupKey="2010113015472177510" UsergroupName="Promotions Admin"/>
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-02T03:48:13-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup=""
+    UsergroupDescription="Business Center Pricing Admin"
+    UsergroupId="XPXPromotionAdmin" UsergroupKey="2010113015472177510" UsergroupName="Business Center Pricing Admin"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:52:13-05:00"
     Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
@@ -66,11 +69,11 @@
     UsergroupKey="2010113015521379515" UsergroupName="Manage My Items Admin"/>
 <UserGroup Activateflag="" BusinessKey="DEFAULT"
     Createprogid=".YCPGroupAPI" Createts="2010-11-30T15:52:58-05:00"
-    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-11-30T15:52:58-05:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
-    UsergroupDescription="Integration Administrator"
-    UsergroupId="XPXIntegrationAdmin" UsergroupKey="2010113015525881508" UsergroupName="Integration Admin"/>
+    Createuserid="admin" GroupOwnerId="" GroupType="" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-02T03:55:34-05:00"
+    Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=""
+    TemplateGroup="" UsergroupDescription="B2B Integration Admin"
+    UsergroupId="XPXIntegrationAdmin" UsergroupKey="2010113015525881508" UsergroupName="B2B Integration Admin"/>
 <UserGroup Activateflag="" BusinessKey="" Createprogid=".YCPGroupAPI"
     Createts="2011-11-10T06:52:48-05:00" Createuserid="admin"
     GroupOwnerId="" GroupType="" Lockid="0" Modifyprogid=".YCPGroupAPI"
