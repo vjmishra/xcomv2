@@ -69,13 +69,15 @@ function addProductsToOrder()
 					var ordMul = totalQty % orderMultiple; 
 					
 					if(enteredQuants == '' || enteredQuants=='0'){
-						divIdError.innerHTML='Quantity cannot be 0 or empty.';
+						document.getElementById(divId).innerHTML ='Quantity cannot be 0 or empty.';
+						document.getElementById(divId).setAttribute("class", "error");
 						isError = true;
 					}					
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
-						divIdError.innerHTML="Order Quantity must be a multiple of " + orderMultiple;
+						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple;
+						document.getElementById(divId).setAttribute("class", "error");
 					}
 				}
 			}else{
@@ -463,7 +465,6 @@ function redrawQuickAddList()
 		        }else{
 		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
 		        }
-		        code += '<h5 align="center"><br/><br/><b><font color="red"><div id="'+divIdErrorQty+'"></div></font></b></h5>';
 		        code += '</td>';
 		        if(QuickAddElems[i].isEntitled == "false")
 		        {
@@ -556,7 +557,7 @@ function redrawQuickAddList()
 		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
 		        code += '<tr>';
 		        code += '<td colspan="6">';
-		        code += '<div align="center" class="temp_UOM" id="test12" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
+		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
 		        code += '</td>';
 		        code += '</tr>';
 		        }
