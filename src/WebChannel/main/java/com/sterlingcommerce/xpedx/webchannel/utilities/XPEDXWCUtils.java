@@ -5000,8 +5000,10 @@ public class XPEDXWCUtils {
 				Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
 				Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
 				String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
-
-				String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
+				//Start- Code added to fix XNGTP 2964	
+				 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
+				//End- Code added to fix XNGTP 2964	
+				 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
 				if (defaultShipTo != null
 						&& defaultShipTo.trim().length() == 0) {
 					defaultShipTo = null;
@@ -5032,7 +5034,7 @@ public class XPEDXWCUtils {
 							viewReportFlag, viewPricesFlag,
 							newusergroupkey, defaultShipTo,
 							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,personInfoElement);
+							emailID,extnUseOrderMulUOMFlag,personInfoElement);
 			}
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;
