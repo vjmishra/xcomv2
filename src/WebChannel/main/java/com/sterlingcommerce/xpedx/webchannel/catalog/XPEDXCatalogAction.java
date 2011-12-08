@@ -1,6 +1,7 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -42,10 +44,12 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXWarehouseLocation;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfs.japi.YFSException;
 
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
@@ -65,8 +69,27 @@ public class XPEDXCatalogAction extends CatalogAction {
 	ArrayList<String> itemIDList = new ArrayList<String>();
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
+	private String msapOrderMultipleFlag="";
 	private Map <String, List<Element>> PLLineMap;
-	
+	//Start 2964
+	private Map <String,String>defaultShowUOMMap;
+	private Map<String,String>orderMultipleMap;
+	public Map<String, String> getOrderMultipleMap() {
+		return orderMultipleMap;
+	}
+
+	public void setOrderMultipleMap(Map<String, String> orderMultipleMap) {
+		this.orderMultipleMap = orderMultipleMap;
+	}
+
+	public Map<String, String> getDefaultShowUOMMap() {
+		return defaultShowUOMMap;
+	}
+
+	public void setDefaultShowUOMMap(Map<String, String> defaultShowUOMMap) {
+		this.defaultShowUOMMap = defaultShowUOMMap;
+	}
+
 	public Map<String, List<Element>> getPLLineMap() {
 		return PLLineMap;
 	}
@@ -511,23 +534,96 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// TODO: handle exception
 		}
 		if(itemIDList.size()>0) {
+			
+			//New method for getting order multiple .
+			//setInventoryAndOrderMultipleMap();
 			itemUomHashMap =	XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
-			if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
+			orderMultipleMap = new HashMap<String,String>();
+			
+			//Start - Code added to fix XNGTP 2964
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+			msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+			}
+			
+			try {
+				orderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(itemIDList);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				orderMultipleMap = new HashMap();
+			}
+			
+			double minFractUOM = 0.00;
+	    	double maxFractUOM = 0.00;
+	    	String lowestUOM = "";
+	    	String highestUOM = "";
+	    	String minUOMsDesc = "";
+	    	String maxUOMsDesc = "";
+	    	String defaultConvUOM = "";
+			String defaultUOM = "";
+			String orderMultiple = "";
+	    	
+			//End - Code added to fix XNGTP 2964
+	    	defaultShowUOMMap = new HashMap<String,String>();
+	    	if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
 				for(int i=0; i<itemIDList.size(); i++) {
+					
 					Map displayUomMap = new HashMap<String, String>();
-					displayUomMap = itemUomHashMap.get(itemIDList.get(i));
+					String strItemID = itemIDList.get(i);
+					displayUomMap = itemUomHashMap.get(strItemID);
+					defaultUOM = "";
+					defaultConvUOM = "";
+					minFractUOM = 0.00;
+			    	maxFractUOM = 0.00;
+			    	lowestUOM = "";
+			    	highestUOM = "";
+			    	minUOMsDesc = "";
+			    	maxUOMsDesc = "";
+			    	
 					for (Iterator it = displayUomMap.keySet().iterator(); it.hasNext();) {
 						try {
 							String uom = (String) it.next();
-							Object o = displayUomMap.get(uom);
-							// if object 'o' is a decimal, convert it into an Integer
-							if("1".equals(o))
+							Object objConversionFactor = displayUomMap.get(uom);
+							//Start- Code added to fix XNGTP 2964
+							orderMultiple = orderMultipleMap.get(strItemID);
+							if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(objConversionFactor)){
+								//orderMultiple = "12";
+								if(objConversionFactor.toString() == orderMultiple){
+									minFractUOM = 1;
+									lowestUOM = uom;
+									minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+									
+								}else {
+									double conversion = getConversion(objConversionFactor, orderMultiple);
+									if (conversion != -1 && uom != null
+											&& uom.length() > 0) {
+										if(conversion <= 1 && conversion >= minFractUOM){
+											minFractUOM = conversion;
+											lowestUOM = uom;
+											minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+											
+											
+										}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
+											maxFractUOM = conversion;
+											highestUOM = uom;
+											maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+											
+										
+										}
+									}
+								}
+								//End - Code added to fix XNGTP 2964								
+								
+							}		
+							if("1".equals(objConversionFactor))
 							{
 								displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom));
+								
 							}
 							else{
-								if(null != o && !"".equals(o)){//JIRA 1391 - Displaying an Integer instead of a decimal.
-									displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom)+ " (" + Math.round(Double.parseDouble((String)o)) + ")");
+								if(null != objConversionFactor && !"".equals(objConversionFactor)){//JIRA 1391 - Displaying an Integer instead of a decimal.
+									displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")");
 								}
 							}
 						} catch (Exception e) {
@@ -535,7 +631,34 @@ public class XPEDXCatalogAction extends CatalogAction {
 							e.printStackTrace();
 						}
 					}
-					itemUomHashMap.put(itemIDList.get(i), displayUomMap);
+					//Start- Code added to fix XNGTP 2964
+					if(minFractUOM == 1.0 && minFractUOM != 0.0){
+						defaultConvUOM = lowestUOM;
+						defaultUOM = minUOMsDesc;
+						
+					}else if(maxFractUOM > 1.0){
+						defaultConvUOM = highestUOM;
+						defaultUOM = maxUOMsDesc;
+						
+					}else{
+						
+						defaultConvUOM = lowestUOM;
+						defaultUOM = minUOMsDesc;
+					}
+					/*if(SCUtil.isVoid(orderMultiple) || Integer.valueOf(orderMultiple) == 0){
+						orderMultiple = "1";
+					}
+					orderMultipleMap.put(strItemID, orderMultiple);
+					*/
+					/*if(!SCUtil.isVoid(orderMultiple) && Integer.valueOf(orderMultiple)>1){
+						orderMultipleMap.put(strItemID, orderMultiple);
+					}*/
+					if(!SCUtil.isVoid(defaultUOM))
+						defaultShowUOMMap.put(strItemID, defaultUOM);
+					//End- Code added to fix XNGTP 2964
+					
+					itemUomHashMap.put(strItemID, displayUomMap);
+					
 				}
 			}
 		}
@@ -1442,7 +1565,22 @@ public class XPEDXCatalogAction extends CatalogAction {
 		getWCContext().setWCAttribute("StockedCheckbox",isStockedCheckeboxSelected(),WCAttributeScope.SESSION);
 		return SUCCESS;
 	}
-
+	/*Start - Code changes for 2964*/
+	private double getConversion(Object convFactor, String orderMultiple) {
+		if (convFactor != null && orderMultiple != null && orderMultiple.length() > 0) {
+			String parseConvFactor = convFactor.toString();
+			double convFactorD = Double.valueOf(parseConvFactor).doubleValue();
+			double orderMultipleD = Double.parseDouble(orderMultiple);
+			double factor = (convFactorD / orderMultipleD);
+			return factor;
+			/*if (Math.abs(factor) == factor) {
+				return (int) Math.abs(factor);
+			}*/
+		}
+		return -1;
+	}
+	/*End - Code changes for 2964*/
+	
 	
 	/**
 	 * @return the pnaItemId
