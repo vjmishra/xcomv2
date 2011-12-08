@@ -563,8 +563,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 			//order = XMLUtilities.getElement(orderLine, "Order");
 			//put the Order element in the xpedxChainedOrderListMap. The key will be the "OrderLine/ChainedFromOrderHeaderKey"
 			String orderType=order.getAttribute("OrderType");//SCXmlUtil.getXpathAttribute(order, "//Order/@OrderType");
-			if("Customer".equals(orderType))
-				continue;
+			
 			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(order, "Extn");
 			String extnWebConfNum="";
 			if(orderExtnList != null && orderExtnList.size() >0)
@@ -573,6 +572,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 			}
 			String orderHeaderKey = SCXmlUtil.getAttribute(order, "OrderHeaderKey");
 			String orderStatus = order.getAttribute("Status"); //SCXmlUtil.getAttribute(order, "Status");
+			if("Customer".equals(orderType))
+			{
+				xpedxParentOrderListMap.put(extnWebConfNum, order);
+				continue;
+			}
 			String chainedFromOHK =customerOrderMap.get(extnWebConfNum);
 			//xpedxChainedOrderListMap should have customer OHK as key, fullfillment orders as value
 			if(!alreadyAddedOrders.contains(orderHeaderKey)){
@@ -919,13 +923,31 @@ public class XPEDXOrderListAction extends OrderListAction {
 					.debug("getXpedxChainedOrderLineList: Atleast one order header key is required. Use getOrderLineList API to get all the orderlines");
 			return;
 		}
+		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
+		xpedxParentOrderListMap.clear();
 		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("Order");
 		if(orderElems!=null && orderElems.getLength()>0)
 		{
 			for(int i=0;i<orderElems.getLength();i++){
 				Element orderElem =  (Element)orderElems.item(i);
-				String orderHeaderKey = orderElem.getAttribute("OrderHeaderKey");
-				xpedxParentOrderListMap.put(orderHeaderKey, orderElem);
+				ArrayList<Element> orderExtnElements=SCXmlUtil.getElements(orderElem, "Extn");
+				if(orderExtnElements != null && orderExtnElements.size()>0)
+				{
+					Element orderExtnElement=orderExtnElements.get(0);
+					String extnWebConfNum=orderExtnElement.getAttribute("ExtnWebConfNum");
+					Element orderElement=customerorderMap.get(extnWebConfNum);
+					if(orderElement != null)
+					{
+						String orderHeaderKey = orderElement.getAttribute("OrderHeaderKey");
+						xpedxParentOrderListMap.put(orderHeaderKey, orderElement);
+					}
+					else
+					{
+						String orderHeaderKey = orderElem.getAttribute("OrderHeaderKey");
+						xpedxParentOrderListMap.put(orderHeaderKey, orderElem);
+					}
+				}
+				
 			}
 		}
 	}
