@@ -271,7 +271,10 @@
 <s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 <s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 
-<s:set name="itemUomHashMap" value ='%{#_action.getItemUomHashMap()}'/> 
+<s:set name="itemUomHashMap" value ='%{#_action.getItemUomHashMap()}'/>
+<s:set name="defaultShowUOMMap" value ='%{#_action.getDefaultShowUOMMap()}'/> <!-- Code added to fix XNGTP 2964 -->
+<s:set name="orderMultipleMap" value ='%{#_action.getOrderMultipleMap()}'/> <!-- Code added to fix XNGTP 2964 -->
+
 <s:set name="plLineMap" value ='%{#_action.getPLLineMap()}'/>
 <s:url id='addToCartURLId' namespace="/xpedx/myItems" action='addMyItemToCart' />
 <s:hidden id='addItemToCartURL' value='%{#addToCartURLId}' />
@@ -284,9 +287,10 @@
 <s:hidden id='currentCartInContextOHKVal' value='%{#currentCartInContextOHK}' />
 <s:url id='checkAvailabilityURL' action='getCatalogItemAvailabilty' namespace="/catalog" />
 <s:hidden id='checkAvailabilityURLId' value='%{#checkAvailabilityURL}' />
-<s:url id='orderMultipleURL' namespace="/common" action='getOrderMultiple' />
-<s:hidden name="orderMultipleURL" value='%{#orderMultipleURL}'/>
-<s:url id='getItemUomsURL' namespace="/common" action='getItemUomsURL' />
+<%-- <s:url id='orderMultipleURL' namespace="/common" action='getOrderMultiple' /> Code added to fix XNGTP 2964
+<s:hidden name="orderMultipleURL" value='%{#orderMultipleURL}'/> 
+ --%>
+ <s:url id='getItemUomsURL' namespace="/common" action='getItemUomsURL' />
 <s:hidden name="getItemUomsURL" value='%{#getItemUomsURL}'/>
 
 <s:set name="catalogView" value='#_action.getSelectedView()' /><!-- added for fix     XNGTP-216 used to get selected view -->
@@ -522,6 +526,7 @@
                          	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
 								<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
 									value='#sortListFeild.value' /></option>
+	
 							</s:if>
 							<s:else>
 								<option value="<s:property value='#sortListFeild.key'/>"><s:property
@@ -1129,6 +1134,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 							<s:set name='info' value='XMLUtils.getChildElement(#item, "PrimaryInformation")'/>
 							<s:set name='itemID' value='#item.getAttribute("ItemID")'/>
 							<s:set name='itemUOMList' value='%{#itemUomHashMap.get(#itemID)}'/>
+							<s:set name='defaultUOM' value='%{#defaultShowUOMMap.get(#itemID)}'/> /*Code added to fix XNGTP 2964*/							
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<s:set name='desc' value='#info.getAttribute("Description")'/>
 							<s:set name='itemKey' value='#item.getAttribute("ItemKey")'/>
@@ -1151,8 +1157,10 @@ function createNewFormElement(inputForm, elementName, elementValue){
 							
 							<s:set name='itemBranchBean' value='itemToItemBranchBeanMap.get(#itemID)'/>
 							/*itemBranchBean is of Type com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemBranchInfoBean*/
-							<s:set name='orderMultiple' value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getOrderMultipleForItem(#itemID)'/>
-							<s:set name='b2cItemExtn' value='XMLUtils.getChildElement(#item, "Extn")'/>
+							/* 2964 <s:set name='orderMultiple' value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getOrderMultipleForItem(#itemID)'/>
+							 */
+							 <s:set name='orderMultiple' value='%{#orderMultipleMap.get(#itemID)}'/> /*Code added to fix XNGTP 2964*/
+							  <s:set name='b2cItemExtn' value='XMLUtils.getChildElement(#item, "Extn")'/>
 							<s:set name='b2cSize' value='#b2cItemExtn.getAttribute("ExtnSize")'/>
 							<s:set name='b2cColor' value='#b2cItemExtn.getAttribute("ExtnColor")'/>
 							<s:set name='b2cMwt' value='#b2cItemExtn.getAttribute("ExtnMwt")'/>
@@ -1354,10 +1362,15 @@ function createNewFormElement(inputForm, elementName, elementValue){
 							 uomdisplay: "<div class=\'uom-select\'><select name='itemUomList' id='itemUomList_<s:property value='#itemID'/>'>"+
 								<s:iterator value='%{#itemUOMList}' id='itemUoms'>
 									<s:set name='key' value='key'/>
-									<s:set name='value' value='value' />
-								"<option value=\'<s:property value='#key' />\'>  <s:property value='#value' /></option>"+
-								</s:iterator>
-							"</select></div>",
+									<s:set name='value' value='value' />/*Code added to fix XNGTP 2964*/
+									<s:if test ='#defaultUOM != null && #value == #defaultUOM'>					           		
+					           				"<option  selected='selected' value=\'<s:property value='#key' />\'> <s:property value='#value'/></option>"+					           				
+					           		</s:if>
+					           		<s:else>
+					           				"<option value=\'<s:property value='#key' />\'><s:property value='#value' /></option>"+
+					           				</s:else> 
+									 </s:iterator>
+							"</select><input type='hidden' id='orderMultiple_<s:property value='#itemID'/>' value='<s:property value='#orderMultiple' />'/></div>",
 							itemtypedesc:<s:if test='%{#b2cstockStatus != "W" && !#guestUser}'>
 							"<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>"+
 							</s:if>""
