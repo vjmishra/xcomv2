@@ -76,6 +76,20 @@
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
+	<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+	<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
+	<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
+	<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
+	<script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXCatalogAddToCart.js'/>"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+	
+		<!-- START - Things needed for the new list popup -PN -->
+	<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+	<script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+	<link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" /><!-- link changed -->
+	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+	<!-- END - Things needed for the new list popup -PN -->
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
@@ -3050,12 +3064,7 @@ loadView();
 	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
 	<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 
-	<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
-	<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
-	<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
-	<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-	<script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXCatalogAddToCart.js'/>"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+
 
 	<!-- carousel scripts css  -->
 	<!-- carousel scripts js   -->
@@ -3086,12 +3095,7 @@ loadView();
 	<script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
 	<!-- end of addition  -->
 
-	<!-- START - Things needed for the new list popup -PN -->
-	<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-	<script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-	<link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" /><!-- link changed -->
-	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
-	<!-- END - Things needed for the new list popup -PN -->
+
 
 	<!-- script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script-->
 
