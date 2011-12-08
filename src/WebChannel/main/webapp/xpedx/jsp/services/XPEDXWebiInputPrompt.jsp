@@ -316,7 +316,7 @@
 			$('#varBillTo').trigger('click');			
 		}else {
 			var textElement = document.getElementById('txtLocation');
-    		textElement.value = "All Authorized Locations";
+    		textElement.value = "";
     		var hdnLocType = document.getElementById('selectedLocationType');
     		hdnLocType.value="All";
 		}
@@ -327,26 +327,27 @@
 --></script>
 
 <!--  REporting lightbox changes end -->
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
-	$(function() {
-		$(".datepicker").datepicker({
-			showOn: 'button',
-						numberOfMonths: 1,
-			buttonImage: '/swc/xpedx/images/theme/theme-1/calendar-icon.png',
-			buttonImageOnly: true
-		});
+$(function() {
+	$(".datepicker").datepicker({
+		showOn: 'button',
+					numberOfMonths: 1,
+		buttonImage: '/swc/xpedx/images/theme/theme-1/calendar-icon.png',
+		buttonImageOnly: true
+		
 	});
-			$(document).ready(function(){
-		$(document).pngFix();
-		$('#split-btn').click(function(){       
-				$('.split-rows').toggle();
-				return false;
-		});
-		$('#popup-window-close').click(function(){
-				$('#split-order-overlay').toggle();
-				return false;
-		});
+});
+		$(document).ready(function(){
+	$(document).pngFix();
+	$('#split-btn').click(function(){       
+			$('.split-rows').toggle();
+			return false;
+	});
+	$('#popup-window-close').click(function(){
+			$('#split-order-overlay').toggle();
+			return false;
+	});
 });
 
 					
@@ -588,28 +589,21 @@
 
 	});
 
---></script>
+</script>
 </head>
 
 
 <body class="ext-gecko ext-gecko3">
 <div id="main-container">
-  <div id="main">
+  <div id="main" class="min-height-fix">
      <s:action name="xpedxHeader" executeResult="true"
 		namespace="/common" />
     <div class="container">
       <!-- breadcrumb -->
-      <br/>
-       <br/>
-        <div align="left" id="searchBreadcrumb"> 
-       
-       <div class="padding-bottom3"> <span class="page-title"><s:property value="%{name}" /> </span>
-       </div>
-      <a href="javascript:window.print()"> </a> </div>
-      
-      <br/>
       <div id="mid-col-mil"> 
-      
+      <div class="clearview"> &nbsp;</div>
+   <div class="padding-bottom3"><p><span class="page-title"><s:property value="%{name}" /> </span></p>
+       </div>
     
           <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
              	<s:iterator value="getErrorNames()" status="errorListStatus" id="listId">
@@ -660,12 +654,11 @@
 		
         <!-- LB CODE End -->
            <table  cellpadding="0" cellspacing="0" width="60%" class="form"  id="order-filter">
-           
            <tr>
-           <td  valign="top"> Location:</td>
+           <td> Location:</td>
            
-           <td valign="top" > 
-           	<select id="optsLocations" cssClass="x-input" onchange="javascript:showLightBox();">
+           <td> 
+          	<select theme="simple" id="optsLocations" onchange="javascript:showLightBox();">
 				<option value="select" selected="yes">All Authorized Locations</option>
 				<option value="sap">Accounts </option>
 				<option value="billTo">Bill-To</option>
@@ -673,7 +666,7 @@
 			</select> 
 			</td> 
 			<td valign="top" rowspan="6"  style ="padding-left: 5px;" >
-		   <s:textarea id="txtLocation" name="txtLocation" cssStyle="width:300px;border:none;overflow:auto;" readonly="true" cols="200" rows="6" value="All Authorized Locations"/>
+		   <s:textarea id="txtLocation" name="txtLocation" cssStyle="width:300px;border:none;overflow:auto;" readonly="true" cols="200" rows="6" value=""/>
 		   </td>	
           	
            </tr>
@@ -703,9 +696,9 @@
 	           	 -->
 	           	 <s:if test="#beanId.prefix == 'mslb' || #beanId.prefix == 'msls'">    
 	           		  <tr>
-	           		  	<td> <s:property value="suffix"/> </td>
+	           		  	<td valign="top"> <s:property value="suffix"/> </td>
 	           		  	
-	           		  	<td valign="top">
+	           		  	<td>
 	           		  		<s:select name="%{#beanId.prmtName}" id="%{#beanId.prmtName}" theme="simple"  cssClass="x-input"  multiple="true" list="promptList"></s:select>
 	           		  	</td>
 	           		  </tr>           		  	        
@@ -714,12 +707,14 @@
 	           	 <s:if test="#beanId.prefix == 'caln'"> 
 	           	 
 	           	  <tr>
-	           		  	<td valign="top"  style ="padding-right: 5px;"> <s:property value="suffix"/> </td>
+	           		  		<td valign="top" style="padding-right: 5px"><s:property value="suffix"/> </td>
 	           		  	
-	           		  	<td>												   				
-	           		  		<s:textfield name="%{#beanId.prmtName}" cssClass="calendar-input-fields x-input datepicker" theme="simple" size="15"/>
+	           		 <td>												   				
+	           		  		<s:textfield  theme="simple" size="15" name="%{#beanId.prmtName}" cssClass='calendar-input-fields datepicker' />      		  	 
+	           		     		  	
 	           		  		&nbsp;<span style="padding-left: 1.5em;"></span>
-	           		  	</td>
+	           		  	</td> 
+	           		  	
 	           		  </tr> 
 	           	 </s:if>
 	           	 
@@ -728,7 +723,7 @@
 	           		  	<td> <s:property value="suffix"/> </td>
 	           		  	
 	           		  	<td valign="top">
-	           		  		<s:textfield name="%{#beanId.prmtName}" cssStyle="width:150px;" cssClass="search-by-input-field x-input"/>
+	           		  		<s:textfield theme="simple" name="%{#beanId.prmtName}" cssStyle="width:150px;" cssClass="search-by-input-field"/>
 	           		  	
 	           		  	</td>
 	           		  </tr>  
