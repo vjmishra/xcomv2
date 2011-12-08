@@ -158,7 +158,7 @@
 										EMailID="" />
 								</CustomerAdditionalAddress>
 							</CustomerAdditionalAddressList>
-							<Extn ExtnMyItemsLink="" ExtnUseCustSKU=""/>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU="" ExtnUseOrderMulUOMFlag=""/>
 						</Customer>
 						<Extn/>
 					</CustomerContact>
