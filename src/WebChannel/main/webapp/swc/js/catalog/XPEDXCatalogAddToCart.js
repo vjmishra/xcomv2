@@ -172,7 +172,10 @@ function addItemToCart(itemId) {
 	}
 	
 	function validateOrderMultiple(itemId) {
-		var orderMultiple = getOrderMultiple(itemId);
+		
+		//var orderMultiple = getOrderMultiple(itemId);
+		var orderMultiple = document.getElementById('orderMultiple_'+itemId).value;
+		
 		if(orderMultiple == "") {
 			alert("Failed getting the order multiple for the Item. Please try adding the item later again..");
 			return false;
