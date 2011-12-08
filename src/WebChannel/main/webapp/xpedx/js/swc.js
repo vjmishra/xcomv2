@@ -4126,8 +4126,8 @@ function refreshMiniCartLink(forceRefresh)
            //   $('.mini-cart-trigger').trigger("mouseenter.cluetip");
         	//$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
         	//$('.mini-cart-trigger').trigger('mouseover');
-        	//$('.mini-cart-trigger').trigger('click');
-        	document.getElementById("miniCartMouseoverArea1").click();
+        	$('.mini-cart-trigger').trigger('click');
+        	//document.getElementById("miniCartMouseoverArea1").click();
 // Have to include jqquery implementation to refresh cart
 // if(qvw !== null)
 // {
