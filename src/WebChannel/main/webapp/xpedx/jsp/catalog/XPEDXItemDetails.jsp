@@ -1835,18 +1835,17 @@ function SubmitActionWithValidation()
 				</ul>
 				
 				<p class="tablinks">&nbsp;
-			<%-- <s:set name="canRequestProductSample" value="#session.showSampleRequest" /> --%>
-		   <%-- <s:if test='#canRequestProductSample=="Y"'> --%>
- 			<%-- 	<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
-				<s:text
-					name='Request Sample' /> </a>&nbsp;&nbsp; --%>
-		  <%-- </s:if>  --%>
-			<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
+			 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
+		  	 	<s:if test='#canRequestProductSample=="Y"'>
+ 			 		<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
+					<s:text name='Request Sample' /> </a>&nbsp;&nbsp; 
+		   		</s:if> 
+				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
 					<s:set name="link" value="value" />
 					<s:set name="desc" value="key" />	
 					<a class="slightly_left" href="<s:property value='#link'/>" target="_blank">MSDS</a>
 				</p>
-			</s:iterator>
+				</s:iterator>
 				<!-- tab1 -->
 				<div id="tabs-1" class="ie_floatleft">
 					<%-- This will be filled by ajax as the P and A call happens on page load as Ajax --%>
