@@ -366,14 +366,26 @@
 				</Order>
 			</Input>
 			<Template>
-				<OrderList>
-						<Order OrderNo="" OrderHeaderKey="" OrderType=""
-							CustomerPONo="" CustomerLastName="" OrderDate="" Status="">
-							<PriceInfo Currency="" TotalAmount="" />
-							<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderedByName=""
-							ExtnOrderDivision="" ExtnGenerationNo="" ExtnShipToName="" ExtnTotalOrderValue=""/>
-						</Order>
-				</OrderList>
+							<OrderList>
+							
+								<Order OrderNo="" HoldFlag="" OrderName="" Modifyts=""
+									Createts="" Createuserid="" OrderHeaderKey="" CustomerPONo="" OrderDate=""
+									Status="" PaymentStatus="" CustomerFirstName=""
+									CustomerLastName="" Modifyuserid="" ShipToID="" OrderType="" >
+									<PriceInfo TotalAmount="" Currency="" />
+									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
+									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
+									<OrderLines>
+										<OrderLine ChainedFromOrderHeaderKey=""/>
+									</OrderLines>	
+									<OrderBy>
+										<Attribute Desc="" Name="" />
+									</OrderBy>
+									<OrderHoldTypes>
+									<OrderHoldType />
+									</OrderHoldTypes>
+								</Order>
+							</OrderList>
 			</Template>
 		</API>
 	</mashup>
