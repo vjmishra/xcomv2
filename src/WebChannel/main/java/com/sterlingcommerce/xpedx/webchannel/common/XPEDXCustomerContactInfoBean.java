@@ -27,17 +27,25 @@ public class XPEDXCustomerContactInfoBean {
     private String extnOrderConfEmailFlag;
     private String emailID;
     private String personInfoEmailID;
-	
-	public XPEDXCustomerContactInfoBean() {
+   //Start- Code added to fix XNGTP 2964	
+    private String msapExtnUseOrderMulUOMFlag;    
+		public XPEDXCustomerContactInfoBean() {
 		super();
 	}
+   public String getMsapExtnUseOrderMulUOMFlag() {
+			return msapExtnUseOrderMulUOMFlag;
+		}
 
-	public XPEDXCustomerContactInfoBean(String firstName, String lastName, String customerContactID, String msapEmailID,
+		public void setMsapExtnUseOrderMulUOMFlag(String msapExtnUseOrderMulUOMFlag) {
+			this.msapExtnUseOrderMulUOMFlag = msapExtnUseOrderMulUOMFlag;
+		}
+		//End- Code added to fix XNGTP 2964	
+      public XPEDXCustomerContactInfoBean(String firstName, String lastName, String customerContactID, String msapEmailID,
 			String localecode, String extnViewInvoices, Boolean isEstimator,
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String personInfoEmailID) {
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -59,6 +67,7 @@ public class XPEDXCustomerContactInfoBean {
 		this.extnOrderConfEmailFlag=extnOrderConfEmailFlag;
 		this.emailID=emailID;
 		this.personInfoEmailID=personInfoEmailID;
+		this.msapExtnUseOrderMulUOMFlag=extnUseOrderMulUOMFlag;
 	}
 
 	public String getFirstName() {
