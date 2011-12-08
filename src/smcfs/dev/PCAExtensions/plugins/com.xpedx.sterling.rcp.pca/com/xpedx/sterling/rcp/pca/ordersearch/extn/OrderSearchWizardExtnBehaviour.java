@@ -359,9 +359,15 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 					eleExp4.setAttribute("Value", XPXConstants.ORD_TYPE_FO_SPECIAL_ORDER);
 				}
 			}
-			Element eleExtn = YRCXmlUtils.getXPathElement(eleInput, "/Order/Extn");
-			Element eleExtn1 = YRCXmlUtils.getXPathElement(eleInput, "Order");
-			
+			//Added for JIRA 3038
+			Element eleExtn = YRCXmlUtils.getChildElement(eleInput, "Extn", true);
+			//Element eleExtn = YRCXmlUtils.getXPathElement(eleInput, "/Order/Extn");
+			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
+					
+				eleExtn.setAttribute("FromExtnOrderStatus",eleInput.getAttribute("FromStatus"));
+				eleExtn.setAttribute("ToExtnOrderStatus",eleInput.getAttribute("ToStatus"));
+				eleExtn.setAttribute("ExtnOrderStatusQryType","BETWEEN");
+				}
 			
 			if(!YRCPlatformUI.isVoid(eleExtn)&& !YRCPlatformUI.isVoid(eleExtn.getAttribute("ExtnShipToName")))
 			{
