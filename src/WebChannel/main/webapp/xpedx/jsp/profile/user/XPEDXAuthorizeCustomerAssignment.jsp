@@ -27,7 +27,8 @@
 		}
 	}
     </script>
-    
+
+	
     <s:set name='_action' value='[0]' />
 	<s:set name='customers1' value='#_action.getCustomers1()' />
 	<s:set name='customers2' value='#_action.getCustomers2()' />
@@ -87,16 +88,20 @@
                 <s:if test='%{isCustomerAdmin}'>                
 					<tr>
 	                    <td valign="top" class="no-border-right-user padding0">&nbsp;</td>
-	                    <td align="right" valign="top" class="no-border-right-user padding0">
-	                    	<div class="float-left padding-left0" style="" align="center">
-	                    		<a href='javascript:moveCustomers("customersTwo","customersOne")'>
-	                    			<img src="../../xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
-                    			</a>
-	                    		<a href='javascript:moveCustomers("customersOne","customersTwo")'>
-									<img src="../../xpedx/ster/images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
-	                    		</a>
-	                    	</div>
-	                    </td>
+	                    <%-- Fix for Jira 3048 issue item 2 --%>
+	                    <s:if test='%{disableSinceSelfApprover}'> 
+		                    <td align="right" valign="top" class="no-border-right-user padding0">
+		                    	<div class="float-left padding-left0" style="" align="center">
+		                    		<a href='javascript:moveCustomers("customersTwo","customersOne")'>
+		                    			<img src="../../xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
+	                    			</a>
+		                    		<a href='javascript:moveCustomers("customersOne","customersTwo")'>
+										<img src="../../xpedx/ster/images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
+		                    		</a>
+		                    	</div>
+		                    </td>
+	                   </s:if>
+	                   <%-- END Fix for Jira 3048 issue item 2 --%>
 	                </tr>	
 				</s:if>
 				<tr>
