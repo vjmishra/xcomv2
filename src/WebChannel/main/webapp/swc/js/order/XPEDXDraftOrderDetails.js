@@ -466,6 +466,7 @@ function redrawQuickAddList()
 		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
 		        }
 		        code += '</td>';
+		        code += '<div id="'+divIdErrorQty+'"></div>';
 		        if(QuickAddElems[i].isEntitled == "false")
 		        {
 			        code += '<td class="col-item">'; 
