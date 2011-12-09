@@ -55,6 +55,7 @@ function addProductsToOrder()
 						break;
 					}
 				}
+				enteredQuants = ReplaceAll(enteredQuants,",","");
 				orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
 				var divId="errorQty_"+entereditems+i;
 				var divIdError=document.getElementById(divId);
@@ -98,12 +99,12 @@ function addProductsToOrder()
 }
 function resetQuantityErrorForQuckAdd()
 {
-	
 	for(var i=0 ; i < QuickAddElems.length ; i++)
 	 {
 		var divId='errorQty_'+QuickAddElems[i].sku +i;
 		var divVal=document.getElementById(divId);
-		divVal.innerHTML='';
+		if(divVal != null)
+			divVal.innerHTML='';
 	}
 }
 function update()
@@ -442,6 +443,7 @@ function redrawQuickAddList()
 		    		code += '<tr id="' + encodeForHTML(fieldId) + '">';
 		    	}
 		    	var divIdErrorQty="errorQty_"+QuickAddElems[i].sku+i;
+		    	//var divIdErrorQty0="errorQty0_"+QuickAddElems[i].sku+i;
 		    	code += '<td class="wing-col-item">';
 			    code += '<a href="#" onclick="javascript:removeProductFromQuickAddList(' + i + ');" title="Remove" tabindex="' + tabIndex++ + '"><img src="/swc/xpedx/images/icons/12x12_red_x.png" /></a>';
 			    code += '</td>';
@@ -456,6 +458,7 @@ function redrawQuickAddList()
 		        code += '<td class="col-item"><p style="width:55px; word-wrap:break-word;">';
 		        code += encodeForHTML(QuickAddElems[i].sku);
 		        code += '</P><input type="hidden" name="enteredProductIDs" id="enteredProductIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].sku) + '"/>';
+		        
 		        code += '</td>';
 		        code += '<td class="col-item">';
 		// code += encodeForHTML(QuickAddElems[i].quantity);
@@ -464,9 +467,9 @@ function redrawQuickAddList()
 		        	code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
 		        }else{
 		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
+		        	
 		        }
 		        code += '</td>';
-		        code += '<div id="'+divIdErrorQty+'"></div>';
 		        if(QuickAddElems[i].isEntitled == "false")
 		        {
 			        code += '<td class="col-item">'; 
@@ -554,11 +557,17 @@ function redrawQuickAddList()
 		        }
 		        
 		        code += '</tr>';
-		       // code += '</div>';
 		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
 		        code += '<tr>';
 		        code += '<td colspan="6">';
 		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
+		        code += '</td>';
+		        code += '</tr>';
+		        }
+		        else{
+		        code += '<tr>';
+			    code += '<td colspan="6">';
+		        code += '<div id="'+divIdErrorQty+'"></div>';
 		        code += '</td>';
 		        code += '</tr>';
 		        }
