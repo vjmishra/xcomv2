@@ -1243,7 +1243,9 @@ a.underlink:hover { text-decoration: underline !important; }
 	<s:if test="%{wCContext.loggedInUserId == #displayUserID}">
 		<s:set name="disableSinceSelfApprover" value="%{true}"></s:set>
 	</s:if>
+
 	<tr>
+	
 	<s:set name='SalesRepUserId' value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('loggedInUserId')}" />
 		<td colspan="2" class="no-border-right-user">
 		<s:if test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false}"><span class="page-title">Username:</span><s:property value="%{#SalesRepUserId}" /></s:if>
@@ -1681,9 +1683,15 @@ a.underlink:hover { text-decoration: underline !important; }
 		<li class="TabbedPanelsTab" onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');" tabindex="0">Authorized Locations</li>
 		<li class="TabbedPanelsTab"  onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" tabindex="0">Site Preferences</li>
 		<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}">
+		<%-- Added for Jira 3048 issue item 3 --%>
+		 <s:set name="spendingLimitValue" value="%{getSpendingLimit()}" />
+		 <s:property value="%{getSpendingLimit()}" />
+		 <s:if test="%{#optedCurrency != null && #primaryApprover != null && #spendingLimitValue != null && #alternateApprover != null}"> 
 			<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
+		 </s:if>
 		</s:if>
+	   <%-- End Jira 3048 issue item 3 --%>
 	</ul>
 
 	<!-- ------------------------------------------------------------------------------------------------------------- -->
@@ -1707,11 +1715,12 @@ a.underlink:hover { text-decoration: underline !important; }
 				value="%{#customercontact.getAttribute('Title')}" /></td>
 		</tr>
 		
-		<s:if test='%{#isCustomerNotAdmin == false}'>
+		<s:if test='%{#isCustomerNotAdmin == false}'>		
 		<tr id="userNameRow">
 			<td width="13%" valign="top" class="no-border-right-user">User
 			Status:
 			</td>
+			<s:if test="%{#disableSinceSelfApprover}">		<%--Fix for Jira 3048 issue item 1 --%>
 			<td colspan="3" class="no-border-right-user">
 			<s:iterator value="getStatusList().keySet()" id="statusVal">
 				<s:set name="statusValue" value="value" />
@@ -1727,7 +1736,9 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="float-right"><span>Last Login: <s:property value="%{getExtnLastLoginDate()}"/> </span><span
 			class="padding-left2">User Created: <s:property value="%{getUserCreatedDate()}"/> </span></div>
 			</td>
+		</s:if>
 		</tr>
+		
 		</s:if>
 		<s:else>
 			<s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden>
@@ -1771,6 +1782,8 @@ a.underlink:hover { text-decoration: underline !important; }
 			</ul>
 			</div>
 			</td>
+			<s:if test='%{#isCustomerNotAdmin == false}'>
+			 <s:if test="%{#disableSinceSelfApprover}"> <%-- Fix for Jira 3048 item issue 1 --%>
 			<td colspan="3" class="no-border-right-user"><label
 				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
 			<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
@@ -1813,6 +1826,8 @@ a.underlink:hover { text-decoration: underline !important; }
 				name="viewReports" id="viewReports" fieldValue="true" 
 				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/> View Reports</label></td>
 		</tr>
+		</s:if> <%-- End Fix for Jira 3048 item issue 1 --%>
+		</s:if>
 		<tr style="display: none;">
 			<td class="boldText textAlignLeft"><s:text name="RB_jobTitle" />:</td>
 			<td><s:textfield tabindex="60" name="jobTitle"
@@ -2482,7 +2497,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
 			</s:select>
 			</s:else>
-			</td>
+			</td>						
 		</tr>
 		<tr>
 			<td width="16%" valign="top" class="no-border-right-user padding00">Spending
@@ -2491,7 +2506,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<s:textfield cssClass="x-input" cssStyle="width:148px;" 
 				id="spendingLt" readonly="#disableSinceSelfApprover" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield></td>
 		</tr>
-		<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}">
+		
 		<tr> <td style="border:0px; height:10px;"> &nbsp; </td></tr>
 			<tr>
 				<td width="100%" colspan="2" valign="top"
@@ -2517,7 +2532,7 @@ a.underlink:hover { text-decoration: underline !important; }
 					cssClass="x-input" cssStyle="width:150px;">
 				</s:select> </span></td>
 			</tr>
-		</s:if>
+		
 
 
 	</table>
