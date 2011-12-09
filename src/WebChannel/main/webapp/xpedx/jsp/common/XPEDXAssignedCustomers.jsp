@@ -308,9 +308,15 @@
 </div>
 
 <div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
+	<%-- Code added to fix XNGTP-3020 --%>
+	<s:if test="#defaultShipTo == null">
+	<h5 align="center"><b><font color="red"> Please select a preferred ship-to and click Apply </font></b></h5>
+	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" checked/>
+	</s:if>
+	<s:else> <input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to"/></s:else>
+	<%-- End fix for XNGTP-3020 --%>
 	<!-- bb1Change Preferred Ship-To to Selected -->
-	 bb1<s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
+	 <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
 <div class="float-right" >
