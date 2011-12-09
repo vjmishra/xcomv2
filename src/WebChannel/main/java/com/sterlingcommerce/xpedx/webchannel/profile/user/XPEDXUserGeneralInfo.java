@@ -588,7 +588,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			setPrimaryApprover(approverUserId);
 			setAlternateApprover(approverProxyUserId);
 			setSpendingLimit((spendingLimit==null)?"": spendingLimit);//default is null
+
 			setSpendingLtCurrency((spendingCurrency==null)?"": spendingCurrency);
+			
 			addAvailbleCurrencies(spendingCurrency);
 			addAvailableApprovers();
 			setLastModifiedUser();
@@ -679,7 +681,10 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			currencyElement = (Element)currencyNodes.item(i);
 			currency = currencyElement.getAttribute("Currency");
 			currencyDesc = currencyElement.getAttribute("CurrencyDescription");
-			currencyMap.put(currency, currencyDesc);
+			//Fix for Jira 3048 issue item 4
+			if(currency != null && !currency.equalsIgnoreCase("EUR"))
+			  currencyMap.put(currency, currencyDesc);
+			//End Fix for Jira 3048 issue item 4
 		}
 		
 		setCurrencyMap(currencyMap);
