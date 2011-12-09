@@ -18,7 +18,12 @@
 				<Attribute ColumnName="ITEM_STOCK_STATUS" DataType="ItemStockStatus" DefaultValue="' '" Description="Valid Values could be ‘CloseOut’, ‘WriteDown’,’Discontinued’ etc. This could be used for site messaging, no functionality driven from this." Name="ItemStockStatus" Nullable="true" XMLName="ItemStockStatus"/>
 				<Attribute ColumnName="ORDER_MULTIPLE" DataType="OrderMultiple" DefaultValue="1" Description="Order Multiple in Item's Base UOM." Name="OrderMultiple" Nullable="false" XMLName="OrderMultiple"/>
 				<Attribute ColumnName="INVENTORY_INDICATOR" DataType="Text-10" DefaultValue="' '" Description="This is a flag with possible values of: W-Warehouse, I-Indirect, M-MILL, BLANK value - indicates assumed as direct item." Name="InventoryIndicator" Nullable="false" XMLName="InventoryIndicator"/>
+			
+				<Attribute ColumnName="ORIGINAL_INDICATOR" DataType="Text-10" DefaultValue="' '" Description="This is a flag with possible values of: W-Warehouse, I-Indirect- indicates assumed as direct item. It is original column of Inventory Indicator "   Name="OriginalIndicator"	  Nullable="false"  XMLName="OriginalIndicator"/>
 
+
+
+				
 				<!-- Mandatory columns -->
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
 			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
@@ -28,9 +33,7 @@
 				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
 			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
 			
-				<Attribute ColumnName="TEMP_INDICATOR" DataType="Text-10" DefaultValue="' '" Description="This is a flag with possible values of: W-Warehouse, I-Indirect- indicates assumed as direct item. It is duplicate column of Inventory Indicator "   Name="TempIndicator"	  Nullable="false"  XMLName="TempIndicator"/>
-
-
+			
 				</Attributes>
 			
 			<PrimaryKey Name="XPX_ITM_EXTN_PK">
