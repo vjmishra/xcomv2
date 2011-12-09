@@ -449,7 +449,7 @@ function showSplitDiv(divId)
 	            <s:set name="isEstimator" value="%{#wcContext.getWCAttribute('isEstimator')}" />
 	            --%>
 	            <s:if test="!#isEstimator">   
-					<s:if test="#_action.canOrderAgain()">
+					<s:if test="#_action.canOrderAgain() && #orderType == 'Customer' ">
 						<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn orders"><span>Re-Order</span></a>
 					</s:if>
 				</s:if>
@@ -1300,7 +1300,7 @@ function showSplitDiv(divId)
 			</s:if>
 			
 			<s:if test="!#isEstimator">
-				<s:if test="#_action.canOrderAgain()">
+				<s:if test="#_action.canOrderAgain()  && #orderType == 'Customer'">
 					<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn re-order"><span>Re-Order</span></a>
 				</s:if>
 			</s:if>
