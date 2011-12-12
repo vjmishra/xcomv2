@@ -165,8 +165,10 @@ function validateOrderMultiple()
 		var qtyElement =  document.getElementById(arrQty[i].id);
 		if(arrQty[i].value == '' || arrQty[i].value ==0)
 		{
-			qtyElement.style.borderColor = "#FF0000";
+			//qtyElement.style.borderColor = "#FF0000";
 			divIdError.innerHTML='Quantity cannot be 0 or empty.';
+			divIdError.setAttribute("class", "error");
+			
 			retVal=false;
 			zeroError=true;
 		}else
@@ -189,6 +191,7 @@ function validateOrderMultiple()
 		{
 			
 			divIdError.innerHTML="Order Quantity must be a multiple of " +arrOrdMul[i].value;
+			divIdError.setAttribute("class", "error");
 			retVal=false;
 		}
 	}
