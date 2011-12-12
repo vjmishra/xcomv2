@@ -1743,9 +1743,9 @@
     CodeType="XPXCatBrowseCol" CodeValue="Bindery Supplies"
     CommonCodeKey="2010091520042157258" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:04:21-04:00" Createuserid="admin"
-    DocumentType="" DocumentTypeSpecific="" Lockid="2"
+    DocumentType="" DocumentTypeSpecific="" Lockid="4"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T06:54:00-05:00"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-07T08:04:12-05:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Environment,ListPrice"
