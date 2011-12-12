@@ -281,16 +281,16 @@ $(document).ready(function()
 			showShipTo('<s:property value="#assignedShipToURL"/>');
 			},
 			'autoDimensions'	: false,
-			'width' 			: 745,
-			'height' 			: 485 
+			'width' 			: 800,
+			'height' 			: 600  
 			});
 		$("#changeShipToForUserProfile").fancybox({
 			'onStart'	:	function(){			
 			showShipToForUserProfile('<s:property value="#assignedShipToURLforUserProfile"/>');
 			},
 			'autoDimensions'	: false,
-			'width' 			: 745,
-			'height' 			: 485  
+			'width' 			: 800,
+			'height' 			: 600  
 			});
 		$("#addNewQL").fancybox({
 			'onStart'		:	function(){
@@ -1684,8 +1684,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<li class="TabbedPanelsTab"  onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" tabindex="0">Site Preferences</li>
 		<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}">
 		<%-- Added for Jira 3048 issue item 3 --%>
-		 <s:set name="spendingLimitValue" value="%{getSpendingLimit()}" />
-		 <s:property value="%{getSpendingLimit()}" />
+		 <s:set name="spendingLimitValue" value="%{getSpendingLimit()}" />		 	
 		 <s:if test="%{#optedCurrency != null && #primaryApprover != null && #spendingLimitValue != null && #alternateApprover != null}"> 
 			<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
@@ -1720,23 +1719,32 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="13%" valign="top" class="no-border-right-user">User
 			Status:
 			</td>
-			<s:if test="%{#disableSinceSelfApprover}">		<%--Fix for Jira 3048 issue item 1 --%>
+
 			<td colspan="3" class="no-border-right-user">
 			<s:iterator value="getStatusList().keySet()" id="statusVal">
 				<s:set name="statusValue" value="value" />
 				<label>
-					<input type="radio" name="status" id='status'
-					value='<s:property value="statusVal"/>'
-					<s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
-					</input>
-					<s:if test ="%{#statusVal == 30}" >Suspended</s:if>
-					<s:else><s:property value="%{getStatusList().get(#statusVal)}" /></s:else>
+				 <%-- Fix for Jira 3048 --%>
+				    <s:if test="%{#disableSinceSelfApprover}">		
+					   <input type="radio" name="status" id='status' disabled = 'true' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
+					   </input>			        
+					</s:if>
+					<s:else>
+					  <input type="radio" name="status" id='status' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
+					  </input>
+					</s:else>
+				 <%-- END Fix for Jira 3048 --%>
+					<s:if test ="%{#statusVal == 30}" >
+					  Suspended
+					</s:if>
+					<s:else>
+					  <s:property value="%{getStatusList().get(#statusVal)}" />
+					</s:else>
 				</label>
         	</s:iterator>
 			<div class="float-right"><span>Last Login: <s:property value="%{getExtnLastLoginDate()}"/> </span><span
 			class="padding-left2">User Created: <s:property value="%{getUserCreatedDate()}"/> </span></div>
 			</td>
-		</s:if>
 		</tr>
 		
 		</s:if>
@@ -1782,8 +1790,13 @@ a.underlink:hover { text-decoration: underline !important; }
 			</ul>
 			</div>
 			</td>
+			
 			<s:if test='%{#isCustomerNotAdmin == false}'>
-			 <s:if test="%{#disableSinceSelfApprover}"> <%-- Fix for Jira 3048 item issue 1 --%>
+			<%-- Fix for Jira 3048 item issue 1 --%>
+			 <s:if test="%{#disableSinceSelfApprover}">
+			   <s:set name="checkBoxDisable" value='%{true}' />
+			 </s:if> 
+			<%-- End Fix for Jira 3048 item issue 1 --%> 
 			<td colspan="3" class="no-border-right-user"><label
 				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
 			<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
@@ -1795,7 +1808,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				disabled='%{#checkBoxDisable || #isDisabled}' /> Approver</label> <label
 				title="Buyer has the ability to submit orders."> <s:checkbox
 				tabindex="75" name='test' id='test' fieldValue="test123"
-				value="%{isInUserGroup('BUYER-USER')}" disabled="%{#userExists}" />
+				value="%{isInUserGroup('BUYER-USER')}" disabled="%{#userExists || #checkBoxDisable}" />
 			Buyer</label>
 				<s:if test='%{#estimator=="T"}'>
 		        	<label title="Estimator views available inventory and pricing.">
@@ -1826,7 +1839,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				name="viewReports" id="viewReports" fieldValue="true" 
 				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/> View Reports</label></td>
 		</tr>
-		</s:if> <%-- End Fix for Jira 3048 item issue 1 --%>
+		
 		</s:if>
 		<tr style="display: none;">
 			<td class="boldText textAlignLeft"><s:text name="RB_jobTitle" />:</td>
