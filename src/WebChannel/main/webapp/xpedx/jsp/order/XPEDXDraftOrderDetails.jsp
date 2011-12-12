@@ -984,7 +984,7 @@ $(document).ready(function(){
 								</s:else>
 									<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
-									<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+									<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 										  <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
 											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
