@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_PRINTER_TYPE_PRNT_DOCSList TableName="YFS_PRINTER_TYPE_PRNT_DOCS">
+<PrinterTypePrintDocument Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    PrintDocumentId="FEDX_CARRIER_LABEL" PrinterTypeKey="FeDx Printer" PrinterTypePrintDocumentKey="201004202102123588"/>
+</YFS_PRINTER_TYPE_PRNT_DOCSList>

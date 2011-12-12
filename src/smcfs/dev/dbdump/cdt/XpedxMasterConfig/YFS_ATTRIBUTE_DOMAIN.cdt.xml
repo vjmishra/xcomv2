@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_ATTRIBUTE_DOMAINList TableName="YFS_ATTRIBUTE_DOMAIN">
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="20100420210135836" Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
+    Lockid="0" LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:35-04:00"
+    Modifyuserid="ng" OrganizationCode="DEFAULT" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010042921443314272"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-04-29T21:44:32-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-29T21:44:32-04:00"
+    Modifyuserid="ng" OrganizationCode="xpedx" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090121411544313"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T21:41:14-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T21:41:14-04:00"
+    Modifyuserid="ng" OrganizationCode="BulkleyDunton" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090122242645403"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T22:24:26-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:24:26-04:00"
+    Modifyuserid="ng" OrganizationCode="CentralLewmar" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090122452846766"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T22:45:28-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:45:28-04:00"
+    Modifyuserid="ng" OrganizationCode="CentralMarquardt" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090123083347806"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:08:33-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:08:33-04:00"
+    Modifyuserid="ng" OrganizationCode="Saalfeld" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090123272648851"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:27:25-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:27:25-04:00"
+    Modifyuserid="ng" OrganizationCode="StrategicPaper" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090123393449738"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:39:34-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:39:34-04:00"
+    Modifyuserid="ng" OrganizationCode="WesternPaper" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090123510150622"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-01T23:51:00-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:51:00-04:00"
+    Modifyuserid="ng" OrganizationCode="WhitemanTower" Purpose="ITEM" ShortDescription="Item Attribute"/>
+<AttributeDomain AttributeDomainID="ItemAttribute"
+    AttributeDomainKey="2010090200014852683"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2010-09-02T00:01:47-04:00" Createuserid="admin" Lockid="0"
+    LongDescription="Domain For Item Attribute"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-02T00:01:47-04:00"
+    Modifyuserid="ng" OrganizationCode="Zellerbach" Purpose="ITEM" ShortDescription="Item Attribute"/>
+</YFS_ATTRIBUTE_DOMAINList>
