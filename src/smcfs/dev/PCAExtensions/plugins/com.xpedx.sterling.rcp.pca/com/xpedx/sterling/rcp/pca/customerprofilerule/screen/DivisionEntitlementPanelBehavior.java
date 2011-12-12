@@ -240,12 +240,28 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 	
 	public void updateProfile() {
 		
+		String retrieveShipFromBranch = null;
 		targetRulesModel = this.getTargetModel("XPXCustomerOut");
+		
+		//Start- Changes made for Jira 2301
+		Element customerInTargetModel = getModel("XPXCustomerIn");
+		Element extnShipFromEle = YRCXmlUtils.getXPathElement(customerInTargetModel, "/CustomerList/Customer/Extn");
+		if (extnShipFromEle != null) {
+			retrieveShipFromBranch = extnShipFromEle.getAttribute("ExtnShipFromBranch");
+		}
 		
 		if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
 			targetRulesModel.setAttribute("RelationshipType", "null");	
 		}
-		
+		else if ("Y".equalsIgnoreCase(getFieldValue("divisionEntitlement"))) {
+			if (retrieveShipFromBranch != null && retrieveShipFromBranch != "") {
+				targetRulesModel.setAttribute("RelationshipType",retrieveShipFromBranch);
+			}
+		}
+		else{
+			YRCPlatformUI.showInformation("TITLE_KEY_DIVISION_ENTITLEMENT","MANDATORY_APPLY_DIVISION_ENTITLEMENT");
+		}
+		//End- Changes made for Jira 2301
 		targetRulesModel.setAttribute("CustomerKey", customerKey);
 		
 		
