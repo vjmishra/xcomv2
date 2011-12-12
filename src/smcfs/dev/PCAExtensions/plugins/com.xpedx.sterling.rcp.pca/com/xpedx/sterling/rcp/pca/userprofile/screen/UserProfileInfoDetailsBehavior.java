@@ -309,8 +309,9 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					
 				}
 		}
-		Element inputElement = getModel("XPXCustomerContactIn");
-		String logINCustomerContactID = inputElement.getAttribute("CustomerContactID");
+		//Element inputElement = getModel("XPXCustomerContactIn");
+		String logINCustomerContactID = this.customerContactID;
+		//String logINCustomerContactID = inputElement.getAttribute("CustomerContactID");
 		if(CustomerContactIdList.contains(logINCustomerContactID)){
 			CustomerContactIdList.remove(logINCustomerContactID);
 		}
