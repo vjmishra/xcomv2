@@ -33,9 +33,13 @@
 	<s:set name='customers1' value='#_action.getCustomers1()' />
 	<s:set name='customers2' value='#_action.getCustomers2()' />
 	<s:set name='listSize' value='#_action.getListSize()' />
+	<s:set name='userelement' value="getUser()" />
+    <s:set name='user' value='#userelement' />
+	<s:set name='displayUserID' value='%{#user.getAttribute("DisplayUserID")}' />
 	<s:set name="isCustomerAdmin" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@isCurrentUserAdmin(wCContext)" />
     <s:hidden name="oldAssignedCustomers" value='%{#_action.getCustomers2()}'></s:hidden>
 				<tr>
+
                     <td valign="top" class="no-border-right-user padding0"><div class="question">
                         <ul>
                           <li>Authorized Locations:</li>
@@ -85,10 +89,14 @@
 					</td>
                 </tr>
                 	<s:hidden name="buyAdmin" value='%{isCustomerAdmin}'/>
-                <s:if test='%{isCustomerAdmin}'>                
+                <s:if test='%{isCustomerAdmin}'>            
 					<tr>
 	                    <td valign="top" class="no-border-right-user padding0">&nbsp;</td>
 	                    <%-- Fix for Jira 3048 issue item 2 --%>
+						<s:if test="%{wCContext.loggedInUserId == #displayUserID}">
+							<s:set name="disableSinceSelfApprover" value="%{true}" />
+						</s:if>	    						
+						            
 	                    <s:if test='%{disableSinceSelfApprover}'> 
 		                    <td align="right" valign="top" class="no-border-right-user padding0">
 		                    	<div class="float-left padding-left0" style="" align="center">
@@ -100,7 +108,9 @@
 		                    		</a>
 		                    	</div>
 		                    </td>
-	                   </s:if>
+	                    </s:if>
+
+	                   
 	                   <%-- END Fix for Jira 3048 issue item 2 --%>
 	                </tr>	
 				</s:if>
