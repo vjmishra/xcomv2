@@ -999,7 +999,7 @@ $(document).ready(function(){
 						 		<td>
 						 		<br/>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="test123" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
 						 		</s:if>
 						 		</td>
 						 	</tr>
@@ -1256,7 +1256,7 @@ $(document).ready(function(){
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 					<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 				     	<div class="cart-availability text-left">
-				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
+				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ></div> 
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 						    	<tbody>
 						    		<tr>
