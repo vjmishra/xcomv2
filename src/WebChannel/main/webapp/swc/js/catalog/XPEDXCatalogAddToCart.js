@@ -81,7 +81,7 @@ function addItemToCart(itemId) {
 						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Successfully added to cart" ;
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
-					           document.getElementById('errorMsgForQty_'+itemId).style.float = "right";
+					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 						
 							
@@ -198,7 +198,10 @@ function addItemToCart(itemId) {
 		var ordMul = totalQty % orderMultiple;
 		if(ordMul != 0 || totalQty==0)
 		{
-			alert("Order Quantity for " + itemId + " must be a multiple of " + orderMultiple);
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Order Quantity for " + itemId + " must be a multiple of " + orderMultiple ;
+			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			return false;
 		}
 		return true;
