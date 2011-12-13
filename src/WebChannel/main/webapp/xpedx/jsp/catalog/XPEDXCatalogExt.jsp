@@ -32,6 +32,7 @@
 		.table-header-bar A:visited {text-decoration: underline; color: white;}
 		.table-header-bar A:active {text-decoration: underline; color: white;}
 		.table-header-bar A:hover {text-decoration: underline; color: white;}
+		div#fancybox-content { padding-left:12px !important; padding-top:12px !important; }
     </style>
 	
 <!-- arun included for new verion -->	
@@ -89,6 +90,48 @@
 	<link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" /><!-- link changed -->
 	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
 	<!-- END - Things needed for the new list popup -PN -->
+	
+	<!-- javascript -->
+
+	<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
+	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
+
+
+
+	<!-- carousel scripts css  -->
+	<!-- carousel scripts js   -->
+
+	<!--  new include -->
+	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+	<!--  end of new include -->
+	<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+
+
+	<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
+
+	<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+	<!-- arun included for new verion -->	
+	<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
+	<!-- script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script-->
+	<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
+	<script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+
+	<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+	<script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
+	<!-- end of addition  -->
+
+
+
+	<!-- script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script-->
+	
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
@@ -297,7 +340,26 @@
 
 <swc:breadcrumbScope>
 	<div id="main-container">
+	
+	
+	
 	<s:if test='!#guestUser'>  
+		<div id="main">
+	</s:if>
+	<s:else>
+		<div id="main" class="anon-pages">
+	</s:else>
+	
+	
+	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	
+	<s:if test='!#guestUser'>  
+	<s:action name="xpedxShiptoHeaderCat3" executeResult="true"
+		namespace="/common" /> 
+	</s:if>
+	<!-- <div class="container catalog" style="overflow: auto;" > -->
+
+<%-- 	<s:if test='!#guestUser'>  
 		<div id="main">
 	</s:if>
 	<s:else>
@@ -305,7 +367,9 @@
 	</s:else>
 	<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
 		<s:param name='shipToBanner' value="%{'true'}" />
-	</s:action>
+	</s:action> --%>
+	
+	
 		<%--
 		<!-- ship to banner todo -->
 		<s:set name='customerId' value="wCContext.customerId" />
@@ -383,38 +447,41 @@
 								</s:if>
 							</s:iterator>
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
+				
+		<!-- aj_server: https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
+		
 		<s:if test="#ad_keyword != null" >
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118165'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:if>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
 								<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118201'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 									<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118194'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif >
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '115714'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif>
 			<s:else>
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '115714'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
@@ -423,35 +490,35 @@
 		<s:else>
 					<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118165'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:if>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
 								<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118201'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 									<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118194'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif >
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '115714'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif>
 			<s:else>
 				<script type="text/javascript" language="JavaScript">
-				aj_server = 'https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/'; aj_tagver = '1.0';
+				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '115714'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
@@ -958,6 +1025,8 @@ function populateDivGrid1(myData)
 		root: 'availList',
 		fields:['availability','availValue']		
     });
+	
+	
 	var grid = new Ext.grid.GridPanel({
         width:550,
         height:200,
@@ -1024,6 +1093,7 @@ function handleAjaxAvailabilityFailure(){
 
 function listAddToCartItem(url, productID, UOM, quantity,Job,customer) {
       
+	
    	Ext.Ajax.request({
     	// for testing only
         url: url,
@@ -3071,46 +3141,7 @@ loadView();
 //compileOnLoad();
 </script>		
 
-	<!-- javascript -->
-
-	<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
-	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
-
-
-
-	<!-- carousel scripts css  -->
-	<!-- carousel scripts js   -->
-
-	<!--  new include -->
-	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-	<!--  end of new include -->
-	<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-	<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-
-
-	<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
-
-	<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-	<!-- arun included for new verion -->	
-	<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-	<!-- script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script-->
-	<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
-	<script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-
-	<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
-	<!-- end of addition  -->
-
-
-
-	<!-- script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script-->
+	
 
 </body>
 </html>
