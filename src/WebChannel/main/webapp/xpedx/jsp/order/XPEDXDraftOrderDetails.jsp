@@ -463,7 +463,7 @@ $(document).ready(function(){
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
 						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
-						<input maxlength="25" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+						<input maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
 						<s:hidden name="#qaJobID.type" value="ItemID" />
 					</li>
 					</s:if>
@@ -475,7 +475,7 @@ $(document).ready(function(){
 					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 					<li>
 						<label><s:property value='#customerPONoFlag' />:</label>
-						<s:textfield maxlength="25" name="purchaseOrder" value=""></s:textfield>
+						<s:textfield maxlength="22" name="purchaseOrder" value=""></s:textfield>
 					</li>
 					</s:if>
 					<li>
@@ -734,8 +734,15 @@ $(document).ready(function(){
 	</s:else>
 
 </s:else>	
-
-	<ul class="float-right tool-bar-bottom sc-btn-list">
+	<div class="clearall">&nbsp;</div>
+	
+	<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>	
+		<ul class="float-right tool-bar-bottom sc-btn-list margin-top-15">
+	</s:if>
+	<s:else>
+		<ul class="float-right tool-bar-bottom sc-btn-list">
+	</s:else>
+	
 	<li class="float-right"><a id="quick-add-button" class="grey-ui-btn" href="#"><span>Quick Add</span></a></li>
     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
     	<li><a href="#" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
@@ -1401,14 +1408,14 @@ $(document).ready(function(){
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="25" />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" />
 												</s:if>
 												<s:else>
 													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="25" />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" />
 												</s:else>
 												<%-- Show error message against each required customer field --%>
 												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
@@ -1957,7 +1964,10 @@ var currentAadd2ItemList = new Object();
 
 <s:include value="XPEDXOrderTotalAdjustments.jsp" />
 <script type="text/javascript">
-	Ext.onReady(function(){             	          		 
+
+//Removed to prevent hover
+
+/* 	Ext.onReady(function(){             	          		 
         		  new Ext.ToolTip({        
         			  	 target: 'tip_${orderHeaderKey}',
 					 anchor: 'right',
@@ -1966,7 +1976,7 @@ var currentAadd2ItemList = new Object();
 					 closable: true
 				});
         		 	Ext.QuickTips.init();
-        		 });
+        		 }); */
 </script>
 
 <div style="display: none;">
