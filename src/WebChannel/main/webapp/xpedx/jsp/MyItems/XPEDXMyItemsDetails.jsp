@@ -503,7 +503,7 @@ function showSharedListForm(){
 					return;
 			}catch(err){
 			}
-			
+
 			//Check for maxlength description
 			if (document.getElementById("listDesc").value.length > 255){
 				document.getElementById("mandatoryFieldCheckFlag_"+docDivId).value = "true";
@@ -1643,14 +1643,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	                                    <li>
 	                                        <!-- label>Job Number:</label>  -->
 	                                        <label><s:property value="#jobIdFlag" />:</label>
-											<s:textfield maxlength="25" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=" "></s:textfield>
+											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=" "></s:textfield>
 	                                    </li>
 									</s:if>
 									<!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 										<li>
 											<label>Line PO #</label>
-											<s:textfield maxlength="25"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=" "></s:textfield>
+											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=" "></s:textfield>
 										</li>
 									</s:if>
 									<li>

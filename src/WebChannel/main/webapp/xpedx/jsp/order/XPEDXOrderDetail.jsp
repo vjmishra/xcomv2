@@ -1326,7 +1326,7 @@ function showSplitDiv(divId)
 
 <s:include value="XPEDXOrderTotalAdjustments.jsp" />
 <script type="text/javascript">
-	Ext.onReady(function(){             	          		 
+/* 	Ext.onReady(function(){             	          		 
         		  new Ext.ToolTip({        
         			  	 target: 'tip_${orderHeaderKey}',
 					 anchor: 'right',
@@ -1335,7 +1335,7 @@ function showSplitDiv(divId)
 					 closable: true
 				});
         		 	Ext.QuickTips.init();
-        		 });
+        		 }); */
 </script>
 
 <div id="split-order-overlay" style="display: none; right:893px; top:215.5px;">

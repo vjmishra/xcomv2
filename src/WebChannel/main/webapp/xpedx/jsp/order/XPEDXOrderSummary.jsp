@@ -770,7 +770,7 @@ from session . We have customer Contact Object in session .
 							</s:iterator>
 			</td>
 			<td valign="top">
-							<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Seperated Values)</div>
+							<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>
 							<s:textarea cssClass="font email-textarea" cols="16" rows="3"
 									cssStyle="margin-bottom: 5px;" name="newEmailAddr" id="newEmailAddr" readonly="%{! #_action.isDraftOrder()}" onkeyup="restrictTextareaMaxLength(this,'500');" /> 
 							<input type="checkbox" class="checkbox" name="EmailAddrSaveNeeded"
@@ -1004,7 +1004,7 @@ from session . We have customer Contact Object in session .
 												  		<s:else>
 															<s:property	value='#bracketPriceForUOM' />
 															<br/>
-															Per&nbsp;<s:property value="#bracketUOMDesc" />
+															per&nbsp;<s:property value="#bracketUOMDesc" />
 														</s:else>
 													</s:if>
 													
@@ -1332,7 +1332,7 @@ from session . We have customer Contact Object in session .
 			<%-- <div id="msgForCouponCode" style="display: none;" class="error" > <s:property value="couponOperationError" /> </div> --%>
 			
 			<script type="text/javascript">
-				Ext.onReady(function(){             	          		 
+			/* 	Ext.onReady(function(){             	          		 
 		         		  new Ext.ToolTip({        
 		         			  	 target: 'tip_${orderHeaderKey}',
 								 anchor: 'right',
@@ -1341,7 +1341,7 @@ from session . We have customer Contact Object in session .
 								 closable: true
 							});
 		         		 	Ext.QuickTips.init();
-		         		 });
+		         		 }); */
 			</script>
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>

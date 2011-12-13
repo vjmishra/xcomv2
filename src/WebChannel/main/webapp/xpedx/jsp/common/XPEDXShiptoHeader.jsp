@@ -26,7 +26,7 @@
 	         Shopping for : 
 	       </s:if>
 	       <s:else>
-	         Order's for :
+	         Orders for :
 	       </s:else>	        
 	       </span>
 	       <s:property   value='LoggerInUserCustomerName' />, 

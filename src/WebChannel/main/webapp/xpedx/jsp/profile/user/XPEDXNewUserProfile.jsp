@@ -271,7 +271,7 @@
 			        	<table class="form" width="100%" border="0" cellspacing="0" cellpadding="0">
 			  				<tr>
 			    				<td colspan="2" class="no-border-right-user" >Username:
-								<input name='userName' id='userName' type="text" class="x-input" style="width: 185px;" maxlength="20" /></td>
+								<input name='userName' id='userName' type="text" class="x-input" style="width: 185px;" /></td>
 			  				</tr>
 						</table>
 			        </div>

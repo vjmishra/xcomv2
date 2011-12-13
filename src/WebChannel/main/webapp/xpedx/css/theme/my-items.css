@@ -239,6 +239,7 @@ input:focus, textarea:focus {
 	font-size: 10px;
 	letter-spacing: 2.9px;
 	margin-top: -25px;
+	padding-right: 44px;
 }
 .left {
 	text-align:left;

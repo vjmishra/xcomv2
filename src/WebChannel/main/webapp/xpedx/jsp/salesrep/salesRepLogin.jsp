@@ -92,7 +92,7 @@ function loadWindow(){
 
 </script>
 
-<style>
+<style type="text/css">
 /* Green */
 a.green-ui-btn {
 	background: transparent
@@ -204,44 +204,44 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		<p><label for="DisplayUserID"><s:text name="Username"/></label></p>
 		
 		</td>
-		</tr>
+	</tr>
+	<tr>
 		<td width="66%">
 			<s:textfield id="DisplayUserID" name="DisplayUserID"  cssClass="x-input" tabindex="1"/>
 		</td>	
-		</tr>
+	</tr>
 	<tr>
 		<td>
 		<p><label for="Password"><s:text name="Password"/></label></p>
 		</td>
-		</tr>
+	</tr>
+	<tr>
 		<td style="text-align:left;">
 			<input type="password" id="Password" name="Password" class="x-input" tabindex="2" onkeypress="return validateOnEnter(event);"/>
 		</td>
 	</tr>
 	<tr>
-	<td><span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username / Password is the same as your Network ID / Password" id="sprytrigger1"> Forgot Password?</a></span></td>
-	<td>&nbsp;</td>
+		<td>
+			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username / Password is the same as your Network ID / Password" id="sprytrigger1"> Forgot Password?</a></span>
+		</td>
+		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		
-
 		<td style="text-align:left;">
-		 <a name="button" id="button"    class="green-ui-btn" href="#" onclick="return validateForm();"/> <span>Sign In</span></a><br /> 
+		 <a name="button" id="button" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /> 
 		
 		<%-- <input name="button" type="image" id="button"  value="Submit" src="<s:url value='/xpedx/images/salesrep/signin.png'/>" onClick="return validateForm();"/> <br /> --%>
 		 
 		</td>
 		<td>&nbsp;</td>
-
 	</tr>
+	<tr>
 		<td colspan="2">
 			<div id ="errMsg"></div>
-		</td>
-	<tr>
-	
+		</td>	
 	</tr>
 	<tr>
-		<td colspan="2"><span color:#999999;">Questions: Contact the support desk at 877 269-1784</span></td>
+		<td colspan="2"><span>Questions: Contact the support desk at 877 269-1784</span></td>
 		<%-- <td colspan="2"><span color:#999999;"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></span></td> --%>
 		
 	</tr>
@@ -257,13 +257,17 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 <!--  <div><img src="<s:url value='/xpedx/images/salesrep/login-bu.png'/>" width="300" height="39"
 	/></div>
 </div>-->
+
 <div id="footer">
-<p>© International Paper Company. All rights reserved.</p>
-</div>
+	<p>© International Paper Company. All rights reserved.</p>
 </div>
 
-<script type="text/javascript">
+</div> <!-- End id="login" -->
+</div> <!-- End id="container" -->
+
+<%-- <script type="text/javascript">
  //var sprytooltip1 = new Spry.Widget.Tooltip("sprytooltip1", "#sprytrigger1");
- </script>
+ </script> --%>
+ 
 </body>
 </html>

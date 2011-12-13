@@ -44,8 +44,6 @@
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
 <!-- carousel scripts css  -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
@@ -69,6 +67,8 @@
 <script type="text/javascript" src="../xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="../xpedx/js/global-xpedx-functions.js"></script>
 
+<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
