@@ -94,9 +94,11 @@
 	                    <td valign="top" class="no-border-right-user padding0">&nbsp;</td>
 	                    <%-- Fix for Jira 3048 issue item 2 --%>
 						<s:if test="%{wCContext.loggedInUserId == #displayUserID}">
-							<s:set name="disableSinceSelfApprover" value="%{true}" />
-						</s:if>	    						
-						            
+							<s:set name="disableSinceSelfApprover" value="%{false}" />
+						</s:if>	    
+						<s:else>						
+						    <s:set name="disableSinceSelfApprover" value="%{true}" />
+						</s:else>        
 	                    <s:if test='%{disableSinceSelfApprover}'> 
 		                    <td align="right" valign="top" class="no-border-right-user padding0">
 		                    	<div class="float-left padding-left0" style="" align="center">
