@@ -310,7 +310,7 @@
 <div class="right">
 	<%-- Code added to fix XNGTP-3020 --%>
 	<s:if test="#defaultShipTo == null">
-	<h5 align="center"><b><font color="red"> Please select a preferred ship-to and click Apply </font></b></h5>
+	<h5 align="center"><div class="error">Please select a preferred ship-to and click Apply </div></h5>
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" checked/>
 	</s:if>
 	<s:else> <input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to"/></s:else>
