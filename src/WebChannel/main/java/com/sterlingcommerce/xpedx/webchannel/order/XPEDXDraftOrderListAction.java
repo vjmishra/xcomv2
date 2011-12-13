@@ -171,7 +171,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 				if (!YFCCommon.isVoid(firstName)){
 					if (!YFCCommon.isVoid(lastName)){
 //						name =  " "+name;
-						name =  name+ " , ";
+						name =  name+ ", ";
 					}
 //					name = firstName + name ;
 					name =  name + firstName;

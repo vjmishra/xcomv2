@@ -37,6 +37,14 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
 			<result>/xpedx/jsp/common/XPEDXShiptoHeader.jsp</result>
 		</action>
+		<action name="xpedxShiptoHeaderCat3"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">3</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result>/xpedx/jsp/common/XPEDXShiptoHeader.jsp</result>
+		</action>
+		
 		<action name="displayAddressBook"
 			class="com.sterlingcommerce.xpedx.webchannel.common.address.XPEDXGetAddressBookAction">
 			<param name="mashupId">getAddressBook</param>
