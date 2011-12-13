@@ -140,6 +140,9 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				getCategories();
 	        }
 			setInvoiceDetails();
+			
+			setAdJuglerServerURL(XPEDXConstants.AJ_SERVER_URL );
+			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXConstants.AJ_SERVER_URL_KEY, getAdJuglerServerURL() );
 		}
 		/*String contextOrderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 		if(contextOrderHeaderKey == null && XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext) != null )
@@ -1194,6 +1197,26 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private String custSuffix = "";
 	private String userKey = "";
 	private String invoiceURL = "";
+	private String adJuglerServerURL = "";
+	
+	
+	public String getAdJuglerServerURL() {
+		return adJuglerServerURL;
+	}
+
+	public void setAdJuglerServerURL(String adJugURL) {
+		
+		String custOverridePropertiesFile = "customer_overrides.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
+		String adJugglerSuffix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_SUFFIX_PROP);
+		XPEDXConstants.logMessage("adJugglerSuffix : yfs.xpedx.adjuggler.suffix= " + adJugglerSuffix );
+		
+		if(adJugglerSuffix != null )
+			this.adJuglerServerURL = adJugURL + adJugglerSuffix.trim();
+		else
+			this.adJuglerServerURL = adJugURL;
+	}
+	
 	
 	public String getInvoiceURL() {
 		return invoiceURL;

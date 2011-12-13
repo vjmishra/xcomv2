@@ -25,10 +25,17 @@ public class XPEDXConstants {
 	// promo page URL, SharedPath
 	public static final String REQUEST_ATTR_PROMO_PAGE_URL = "PROMO_PAGE_URL";
 	public static final String DYN_PROMO_SHARED_PATH_PROP = "promotions_shared_path";
+	
+	//Ad Jugler URL related constants
 	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "xpedx.adjuggler.keyword.attribute.prefix";
+	public static final String AD_JUGGLER_SUFFIX_PROP = "xpedx.adjuggler.suffix";
+	public static final String AJ_SERVER_URL_KEY = "AJ_SERVER_URL_KEY";
+	public static final String AJ_SERVER_URL = "https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/";
 	
 	public static final String CONTENT_LOCATION_CODE = "CONTENT_LOCATION";
 	public static final String IMAGE_SERVER_LOCATION = "IMAGE_SERVER_LOCATION";
+	
+	
 	public static final String IMAGE_SERVER = "IMAGE_SERVER";
 	public static final String CONTENT_SERVER_FSC_LOCATION = "CONTENT_SERVER_FSC_LOCATION";
 	public static final String CONTENT_SERVER_FSC = "CONTENT_SERVER_FSC";
@@ -60,6 +67,7 @@ public class XPEDXConstants {
 	public static final String MSDS_ASSET_TYPE_DATA_SHEET="ITEM_DATA_SHEET";
 	public static final String IS_ESTIMATOR = "isEstimator";
 	public static final String IS_DEFAULT_CART_SET = "isDefaultCartSet";
+	public static final boolean DEBUG_TRACE = false;
 	
 	public static final String XPEDX_ITEM_LABEL = " Item #";
 	public static final String CUSTOMER_ITEM_LABEL = "My Item #"; /* <!-- -FXD-4 --> */
@@ -117,6 +125,12 @@ public class XPEDXConstants {
 	public static final String SHIP_TO_CUSTOMER = "shipToCustomer";
 	public static final String CHANGE_SHIP_TO_IN_TO_CONTEXT = "changeShipToContext";
 	public static final int MAX_ELEMENTS_IN_MINICART=5;
+
+    public static void logMessage(String msg) {
+ 	   if ( XPEDXConstants.DEBUG_TRACE == true )
+ 		  System.out.print (msg);
+    }
+    
 	static{
 		
 		MASTER_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.master.customer.suffix");
