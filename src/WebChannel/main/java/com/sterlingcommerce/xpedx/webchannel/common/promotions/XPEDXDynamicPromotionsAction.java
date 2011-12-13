@@ -178,10 +178,10 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
 		
 
-		System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		XPEDXConstants.logMessage(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		// get the relative path for the html page
 		XPEDX_MARKETING_PROMOTIONS_FILES_PATH = YFSSystem.getProperty(XPEDXConstants.DYN_PROMO_SHARED_PATH_PROP);
-		System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		XPEDXConstants.logMessage(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	
 		if (YFCCommon.isVoid(XPEDX_MARKETING_PROMOTIONS_FILES_PATH)){
 			log.error("This " + XPEDXConstants.DYN_PROMO_SHARED_PATH_PROP + " Application server property is missing.");
@@ -341,7 +341,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			String newCallerPageTag = "";
 			
 			log.debug("######################################################################################################### "  );
-			System.out.println("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			XPEDXConstants.logMessage("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
 			log.debug("######################################################################################################### "  );
 			
 			//Look for input parameters for this action class.
@@ -620,7 +620,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			
 			msgFileInfo = msgFileInfo + " , " + " getGeneratedFileFullPath ()  : " + getGeneratedFileFullPath() ;
 			
-			System.out.println(" POST-LOGIN-PROMO : msgFileInfo : " + msgFileInfo );
+			XPEDXConstants.logMessage(" POST-LOGIN-PROMO : msgFileInfo : " + msgFileInfo );
 			logMessage(" POST-LOGIN-PROMO : " + buildFileNameForPostLoginPage);
 			logMessage(" POST-LOGIN-PROMO : " + getGeneratedFileFullPath());
 		
@@ -804,7 +804,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	 */
 	private void setInRequest(String finalNameWithPath) {
 		LIZ_MESSAGE ="PROMO SUCCESS LIZ";
-		System.out.println("#### " +LIZ_MESSAGE + " ### - FILE-PROMO-SUCCESS - setInRequest + " +
+		XPEDXConstants.logMessage("#### " +LIZ_MESSAGE + " ### - FILE-PROMO-SUCCESS - setInRequest + " +
 				"\n PROMO HTML FILE-NAME : "  +getGeneratedFileName() + 
 				"\n FILE-PATH : " + finalNameWithPath 
 				);
@@ -830,7 +830,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		//isFileExists = simpleFileCheck(promoHtmlWithMarketingPromoPath);
 		String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + promoHtml;
 		isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
-		System.out.println ( "-DYN-PROMO--  FileName : " + promoHtmlWithMarketingPromoPath + " , isFileExists : " + isFileExists );
+		XPEDXConstants.logMessage ( "-DYN-PROMO--  FileName : " + promoHtmlWithMarketingPromoPath + " , isFileExists : " + isFileExists );
 		
 		String massagedPromoHtml = massagedFileName(promoHtmlWithMarketingPromoPath);
 		return massagedPromoHtml;
@@ -900,7 +900,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			
 			boolean isPreLoginFileBuild = setGeneratedFileName(buildFileNameForPreLoginPage );
 
-			System.out.println("buildFileNameForPreLoginPage : " + buildFileNameForPreLoginPage + " , for newCallerPageTag :" + callerPageTag);
+			XPEDXConstants.logMessage("buildFileNameForPreLoginPage : " + buildFileNameForPreLoginPage + " , for newCallerPageTag :" + callerPageTag);
 			return buildFileNameForPreLoginPage;
 			
 		} catch (Exception e) {
@@ -933,7 +933,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	 */
 	private void logMessage(String message) {
 		if(DEBUG_TRACE == true )
-			System.out.println( message );
+			log.debug( message );
 		
 	}
 
