@@ -503,7 +503,7 @@ function showSharedListForm(){
 					return;
 			}catch(err){
 			}
-
+			
 			//Check for maxlength description
 			if (document.getElementById("listDesc").value.length > 255){
 				document.getElementById("mandatoryFieldCheckFlag_"+docDivId).value = "true";
@@ -1823,7 +1823,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                  <li style="margin-bottom: 5px;">   
                  <div class="clearall"></div>
     	
-			 
+			 	    <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>  
 			 		<div class="error" id="errorMsgTop" style="display:none;" ></div> 
 
 	
