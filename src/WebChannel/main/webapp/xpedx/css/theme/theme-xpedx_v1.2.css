@@ -7101,5 +7101,25 @@ tr.whiteout, tr.whiteout td {
 	background-color:white; border: 0px solid white;
 }
 input#po_combo_input{ height:12px; }
-span#po_combo_arrow { height: 21px; } 
+span#po_combo_arrow { height: 21px; }
+
+div#ajax-termsOfAccessContent .checkaddavail {
+	margin-right:5px;	
+}
+
+li.order-edit-bg {
+	background: none repeat scroll 0 0 yellow;
+    margin-top: 4px;
+    padding-top: 0;
+}
+
+#main-navigation ul li.lighter.order-edit a {
+    border: 1px solid yellow;
+    font-weight: normal;
+}
+#main-navigation ul li.lighter.order-edit {
+    background: none repeat scroll 0 0 #EBEBEB;
+    margin-top: 4px;
+    padding-top: 0;
+}
 /* END bbridge updates */

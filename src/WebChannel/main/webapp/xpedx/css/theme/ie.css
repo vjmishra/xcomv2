@@ -101,5 +101,16 @@ div#home-image-rotation-nav-inner {
 	margin-bottom: 10px;
 } */
 
+#right-col-int.cat-landing a img {
+	float: right;
+	padding-right:17px;
+}
+.ad-float {
+	padding-right: 60px;
+	}
+
+.catalog .success { 
+	float: right;
+}
 /* END Catalog UI review Changes */
 

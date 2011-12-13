@@ -2407,7 +2407,7 @@ function callAjaxForSorting(url,divId)
 	         				Shopping for : 
 	       				</s:if>
 	       				<s:else>
-	         				Order's for :
+	         				Orders for :
 	      				 </s:else>	        
 						<a href="#" id="welcome-address-popup-close"><img title="Close" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
 						<s:if test="#isEditOrderHeaderKey == null ">
@@ -2872,7 +2872,7 @@ function callAjaxForSorting(url,divId)
 	            </li>
 	            </s:if>
 	            <s:else>
-	            	<li class="lighter">
+	            	<li class="lighter order-edit-bg">
 	            		<s:a href="">Order edit in progress...</s:a>
 	           		 </li>		
 	           		 
@@ -2885,14 +2885,14 @@ function callAjaxForSorting(url,divId)
 					<!--<s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
 						<s:param name="isEditOrder" value="%{'true'}" ></s:param>						
 					</s:url> -->
-	            	<li class="lighter">
+	            	<li class="lighter order-edit">
 	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
 	            	</li>
 	            	<s:url id="cancelEditOrderChanges" includeParams="none"
 							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 					</s:url>
-	            	<li class="lighter">
+	            	<li class="lighter order-edit">
 	            		<s:a href="%{cancelEditOrderChanges}">Cancel Changes</s:a>
 	            	</li>	
 	            
@@ -2970,7 +2970,7 @@ function callAjaxForSorting(url,divId)
 	         		Shopping for : 
 	       		</s:if>
 	      		 <s:else>
-	        		 Order's for :
+	        		 Orders for :
 	       		</s:else>	     
 		       </span>
 		       <s:property   value='LoggerInUserCustomerName' />, 
