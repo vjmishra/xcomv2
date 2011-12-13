@@ -1164,7 +1164,7 @@
              var defaultShipTo = '<%=request.getAttribute("defaultShipTo")%>';
              var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
             if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
-            	$('#shipToSelect,#shipToSelect1,,#shipToSelect2').trigger('click');
+            	$('#shipToSelect,#shipToSelect1,#shipToSelect2').trigger('click');
 //          Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 //          }else if(assgnCustomerSize==0){
             }else if((defaultShipTo=="" || defaultShipTo=="null" || defaultShipTo==null)&& 
@@ -1475,7 +1475,7 @@ var toaWin = new Ext.Window({
 			}
 		}
 		
-        $("#shipToSelect,#contactUsShipTo,#shipToSelect1,,#shipToSelect2").fancybox({
+        $("#shipToSelect,#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
  			'onStart' 	: function(){
  	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
        	 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';  
@@ -2982,7 +2982,7 @@ function callAjaxForSorting(url,divId)
 		       <s:property value="#defualtShipTAddress.getZipCode()" />
 		       <s:property value="#defualtShipTAddress.getCountry()" />
 		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect1">[Change]</a>
+		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
 		       </s:if>
 		    </p>
 	    	</div>
