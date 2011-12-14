@@ -468,7 +468,7 @@
                     namespace="/order" cssClass="myClass" method="post" validate="true">
                     <s:hidden name='#action.name' value='orderList'/>
                 	<s:hidden name='#action.namespace' value='/order'/>
-
+<br/>
                 <div class="rounded-border top-section ">
                 	<!-- begin content w/border -->
 			<fieldset class="x-corners mil-col-mil-div">

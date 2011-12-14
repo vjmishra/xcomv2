@@ -748,7 +748,7 @@ function showSplitDiv(divId)
 			    	    <!--begin left section -->
 			    	    <table>
 			    	    <tr>
-			    	    <td rowspan="2" width="310px">
+			    	    <td rowspan="2" width="310px" valign="top">
 			    	    <div class="left-section ODLS" >
 			    	    <div class="pin-height">
 				    	    <s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
@@ -787,15 +787,7 @@ function showSplitDiv(divId)
 							</p>
 	
 						</s:if>
-						<div class="od-special-instructions line-spacing" >
-							<s:if test='#orderLineSpecialInstruction != "" && #orderLineSpecialInstruction != null '>
-							<p class="special-instructions-padding">Special Instructions:</p>
-								<div class="checkout-special-instructions"><s:property value="#orderLineSpecialInstruction"/></div>
-							</s:if>
-							<s:else>
-								<div class="checkout-special-instructions"> <br/> </div>
-							</s:else>								
-						</div>
+
 					    </div>
 			    	    <!--end left section -->
 			    	    </td>
@@ -1086,6 +1078,17 @@ function showSplitDiv(divId)
 						</tr>
 						<tr>
 						<td>
+						
+		    			<div class="od-special-instructions line-spacing" >
+							<s:if test='#orderLineSpecialInstruction != "" && #orderLineSpecialInstruction != null '>
+							<p class="special-instructions-padding">Special Instructions:</p>
+								<div class="checkout-special-instructions"><s:property value="#orderLineSpecialInstruction"/></div>
+							</s:if>
+							<s:else>
+								<div class="checkout-special-instructions"> <br/> </div>
+							</s:else>								
+						</div>
+						
 			    	    <!--begin bottom-right-section -->
 					    <div class="wc-bottom-right-section" >
 						    <s:set name='linelineoverallTotals' value='#util.getElement(#orderLine, "LineOverallTotals")'/>

@@ -351,7 +351,7 @@ div.demo {
                 <!-- end breadcrumb -->
                 
                 <!-- begin top section -->
-                 <br/> 
+                 <br/>  <br/> 
                 <div class="rounded-border top-section">
                 	<!-- begin content w/border -->
 			<s:form name="approvalList" action="approvalList" id="approvalList" namespace="/order" method="POST">
