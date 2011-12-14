@@ -7103,7 +7103,7 @@ div#ajax-termsOfAccessContent .checkaddavail {
 	margin-right:5px;	
 }
 
-li.order-edit-bg {
+#main-navigation ul li.order-edit-bg {
 	background: none repeat scroll 0 0 yellow;
     margin-top: 4px;
     padding-top: 0;
@@ -7117,5 +7117,14 @@ li.order-edit-bg {
     background: none repeat scroll 0 0 #EBEBEB;
     margin-top: 4px;
     padding-top: 0;
+}
+div#dlgCopyAndPaste ul#tool-bar.tool-bar-bottom {
+	float:right;	
+}
+div#dlgCopyAndPaste textarea {
+	width: 400px;
+}
+table#mil-carts-list td.width-100 {
+	text-align: center;	
 }
 /* END bbridge updates */
