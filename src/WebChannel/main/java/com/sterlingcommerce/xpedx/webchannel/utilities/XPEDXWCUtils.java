@@ -6,7 +6,9 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -3307,6 +3309,15 @@ public class XPEDXWCUtils {
 				skuTypeList.put("4", XPEDXConstants.MPC_ITEM_LABEL);
 		}
 		return skuTypeList;
+	}
+	
+	//added for jira 3201
+	public static String getDecimalQty(String quantity){
+		String formattedDecimalQty = "";
+		Double doubleQty = Double.parseDouble(quantity);
+		NumberFormat formatter = new DecimalFormat("#0.#####");
+		formattedDecimalQty=formatter.format(doubleQty).toString();
+		return formattedDecimalQty;	
 	}
 	
 	public static String getFormattedQty(String quantity)
