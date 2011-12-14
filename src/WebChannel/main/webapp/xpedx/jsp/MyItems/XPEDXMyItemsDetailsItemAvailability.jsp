@@ -103,7 +103,9 @@
 						<td width="28%"><strong>Total Available:</strong></td>
 						<td width="19%" class="right"><strong>
 						<s:if test='%{#jsonTotal != null}'>
-							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
+						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />  -->
+							<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
+							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotal)" />
 						</s:if>
 						<s:else>
 							<s:set name="jsonTotal" value="%{'0'}"></s:set>
@@ -116,7 +118,9 @@
 						<td align="center">Next Day:</td>
 						<td class="right"> 
 						<s:if test='%{#jsonNextDay != null}'>
-							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />
+						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />  -->
+							<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
+							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonNextDay)" />
 						</s:if>
 						<s:else>
 							<s:set name="jsonNextDay" value="%{'0'}"></s:set>
@@ -129,7 +133,9 @@
 						<td align="center">2+ Days: </td>
 						<td class="right">
 						<s:if test='%{#jsonTwoPlus != null}'>
-							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />
+						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />  -->
+							<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
+							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />
 						</s:if>
 						<s:else>
 							<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
@@ -141,7 +147,9 @@
 					<tr>
 						<td colspan="3"><i>
 						<s:if test='%{#jsonImmediate != null}'>
-							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />
+							<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> -->
+							<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)" /> 
+							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />
 						</s:if>
 						<s:else>
 							<s:set name="jsonImmediate" value="%{'0'}"></s:set>
