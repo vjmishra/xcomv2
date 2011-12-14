@@ -494,10 +494,11 @@ public class XPEDXPriceandAvailabilityUtil {
 			log.debug("Start Creating the JSON object for "+ item.getLegacyProductCode());
 			Vector wareHouseList = item.getWarehouseLocationList();
 			XPEDXWarehouseLocation wareHouseItem = null;
-			Integer totalForImmediate = new Integer(0);
-			Integer totalForNextDay = new Integer(0);
-			Integer totalForTwoPlus = new Integer(0);
-			Integer toalAvailable = new Integer(0);
+			// changed datatype to double from integer for jira 3201
+			Double totalForImmediate = new Double(0);
+			Double totalForNextDay = new Double(0);
+			Double totalForTwoPlus = new Double(0);
+			Double toalAvailable = new Double(0);
 			for (Object wareHouse : wareHouseList) {
 				wareHouseItem = (XPEDXWarehouseLocation) wareHouse;
 				String availQtyStr = wareHouseItem.getAvailableQty();
@@ -510,12 +511,14 @@ public class XPEDXPriceandAvailabilityUtil {
 					log.error("Empty or Corrupt NumberOfDays for "+item.getLegacyProductCode()+" in warehouse "+wareHouseItem.getWarehouse());
 					continue;
 				}
-				Integer availQtyFloat;
+				//Integer availQtyFloat; modified for jira 3201
+				Double availQtyFloat;
 				try{
-					availQtyFloat = new BigDecimal(availQtyStr.trim()).intValue();
+					//modified for jira 3201
+					availQtyFloat = new BigDecimal(availQtyStr.trim()).doubleValue();
 				}catch (Exception e) {
 					log.error("Corrupt available Qty for item "+item.getLegacyProductCode()+" in warehouse "+wareHouseItem.getWarehouse());
-					availQtyFloat = new Integer(0);
+					availQtyFloat = new Double(0);
 				}
 				int noOfDays = Integer.parseInt(wareHouseItem.getNumberOfDays());
 				if (noOfDays == 0) {
