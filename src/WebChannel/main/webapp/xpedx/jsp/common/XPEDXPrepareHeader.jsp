@@ -2270,9 +2270,12 @@ function callAjaxForSorting(url,divId)
 		<s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
     	<s:set name='sessionOrderHeaderKey' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
     	<span id="miniCartLinkDiv" class="float-right">
+    		
+    		<s:if test='#sessionOrderHeaderKey == null'>
+    		<div id="progressDiv"> Processing ...</div>
     	   <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
-    			<s:if test='#sessionOrderHeaderKey == null'>
-		    		<div id ="XPEDXMiniCartLinkDisplayDiv">
+    			
+		    		<div id ="XPEDXMiniCartLinkDisplayDiv">	
 					</div>
 					<script>
 			    	Ext.onReady(function(){
@@ -2283,24 +2286,30 @@ function callAjaxForSorting(url,divId)
 			    		   	success: function (response, request)
 			       			{
 				    			var myDiv = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
+				    			var progressDiv = document.getElementById("progressDiv");
+				    			progressDiv.innerHTML = "";
 			    				myDiv.innerHTML = response.responseText;
 		        			},
 		        			failure: function ( response, request ) {
 
-		        	            alert("Error while loading mini cart!");
+		        	           // alert("Error while loading mini cart!");
 
 		        	        }
 						});
 					});
 					</script>
+					</a>
 	    		</s:if>
 	    		<s:else>
-	    			<div id ="XPEDXMiniCartLinkDisplayDiv">
-	    				<s:include value="/xpedx/jsp/order/XPEDXMiniCartLink.jsp"/>
-					</div>
+		    		 <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
+	    			
+		    			<div id ="XPEDXMiniCartLinkDisplayDiv">
+		    				<s:include value="/xpedx/jsp/order/XPEDXMiniCartLink.jsp"/>
+						</div>
+					</a>
 	    		</s:else>
     		
-			</a></span>
+			</span>
     	
 			
 			
