@@ -28,12 +28,15 @@
 			<s:if test='%{#jsonTotalQty == null}'>
 				<s:set name="jsonTotalQty" value="%{'0'}"></s:set>
 			</s:if>
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />
-			
+			<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />-->
+				<s:set name="jsonTotalQty" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotalQty)"/>	
+				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />
+					
 			<!-- Web Trends tag start -->
 			<s:if test='%{#session.isUpdatePA != null}'>	
 			<meta name ="DCSext.w_x_sc" content="1"/>	
-				<meta name ="DCSext.w_x_scr" content='<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />' />
+			<!-- 	<meta name ="DCSext.w_x_scr" content='<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />' />  -->
+			<meta name ="DCSext.w_x_scr" content='<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />' />
 				<s:set name="isUpdatePA" value="<s:property value=null />" scope="session"/> 							
 			</s:if>
 		<!-- Web Trends tag end -->		
@@ -47,8 +50,9 @@
 			<s:if test='%{#jsonNextDay == null}'>
 				<s:set name="jsonNextDay" value="%{'0'}"></s:set>
 			</s:if>
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />
-			
+			<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />-->
+				<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
+				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonNextDay)" />			
 				</td>
 				<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>				
 			</tr>
@@ -58,7 +62,10 @@
 			<s:if test='%{#jsonTwoPlus == null}'>
 				<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
 			</s:if>
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />
+			<!-- 
+			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" /> -->
+			<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
+			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />		
 			</td>
 			<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>				
 			</tr>
@@ -68,7 +75,9 @@
 			<s:if test='%{#jsonImmediate == null}'>
 				<s:set name="jsonImmediate" value="%{'0'}"></s:set>
 			</s:if>
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> 
+		<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />   -->
+			<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)" /> 
+			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />
 			&nbsp;<s:property value='%{#jsonUOMDesc}' /> 
 			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
 	</div>
