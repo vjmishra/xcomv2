@@ -1279,6 +1279,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						<s:set name="jsonImmediate" value="#json.get('Immediate')" />
 					</s:else>
 					
+					<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)"/>
 					<s:set name="jsonCommaFmtImmediate" value='#xpedxUtilBean.formatQuantityForCommas( #jsonImmediate )' />
  
 					
@@ -1289,6 +1290,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						<s:set name="jsonNextDay" value="#json.get('NextDay')" />
 					</s:else>
 					
+					<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
 					<s:set name="jsonFmtNextDay" value='#xpedxUtilBean.formatQuantityForCommas( #jsonNextDay )' />
 					
 					<s:if test="(#json.get('TwoPlusDays') == null)">
@@ -1298,6 +1300,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
 					</s:else>
 					
+					<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
 					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
@@ -1321,7 +1324,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:else>
 						<s:set name='DivisionName' value='#divName' />
 					</s:else>
-					
+					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
 					<s:set name="jsonFmtTotal" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTotal )' />
 					
 					
