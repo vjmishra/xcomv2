@@ -230,6 +230,8 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 							{
 								Element orderLineElem = (Element) orderLineNodeList.get(i);
 								String orderLineKey= orderLineElem.getAttribute("OrderLineKey");
+								String orderLineAction=orderLineElem.getAttribute("Action");
+								
 								if(!(YFCCommon.isVoid(isPriceLock)) && "true".equals(isPriceLock.trim()))
 								{
 									Element linePriceInfoElem=(Element)orderLineElem.getElementsByTagName("LinePriceInfo").item(0);
@@ -257,14 +259,20 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 									else
 									{
 										double qty=Double.valueOf(orderedQty);
+										if(qty!=0)
 										{
-											if(qty!=0)
-											{
-												isAllRemoved=false;
-											}
+											isAllRemoved=false;
+										}
+										else if(orderLineAction != null && !"REMOVE".equals(orderLineAction))
+										{
+											isAllRemoved=false;
 										}
 											
 									}
+								}
+								else if(orderLineAction != null && !"REMOVE".equals(orderLineAction))
+								{
+									isAllRemoved=false;
 								}
 								Node orderLineExtnElem=(Node)orederlineExtnMap.get(orderLineKey);
 								
@@ -771,6 +779,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				if(YFCCommon.isVoid(priceInfoElem.get(orderLineKey)))
 				{
 					SCXmlUtil.importElement(orderLines, orderLineElem);
+					orderLineElemList.add(orderLineElem);
 				}
 				/*else
 				{
