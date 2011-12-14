@@ -1844,6 +1844,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                
                
                
+               <s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
                
 				<s:iterator status="status" id="item"
 					value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
@@ -2138,7 +2139,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; 
-	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)"></s:property>
+	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
 	                               	</div>
 	                               </li>
                                 </s:if>
