@@ -271,5 +271,6 @@ div#wc-btn-bar a.re-order { margin-right: 0px; }
 div#wc-btn-bar a.ed-order { margin-right: 5px; }
 div.order-pages .cart-sum-right { margin-right: 18px; }
 div.order-pages .od-special-instructions {margin-left:0px; text-align: left; }
+.od-special-instructions .special-instructions-padding { margin-left: 0px; }
 
 
