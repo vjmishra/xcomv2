@@ -67,9 +67,9 @@ div.catalog-search-container input#search_searchTerm { margin-top:-14px; }
 div.narrowbyattributes  ul li { width:100%; }
 table#top-section { margin-top: 10px; }
 
-#fancybox-close {
+/* #fancybox-close {
 	background-image: url('fancybox.png');
-}
+} */
 
 div.catalog-search-container input#search_searchTerm {
 	height:16px;

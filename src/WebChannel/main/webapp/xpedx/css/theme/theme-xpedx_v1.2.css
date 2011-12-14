@@ -27,7 +27,7 @@ html {
 body {
 	color: #000000;
 	background: #fff url(../../images/theme/theme-1/1x700_background.png)
-		repeat-x scroll center top;
+	repeat-x scroll center top;
 }
 
 html,body {
@@ -4061,9 +4061,7 @@ td .inner {
 }
 
 #ext-gen5:hover {
-	background-image:
-		url(../../images/shape.svg_png?cssClass=submitBtnBg1BG&width=110&height=22&fillColor=%23bbbbbb&fillGradientType=t2b&outsideColor=%23ffffff&outsideOpacityPct=0&shadingStyle=sine&shadingLevelPct=98&borderWidth=1&borderColor=%23bbbbbb&curve=5);
-	background-color: transparent;
+background: #fff url(../../images/theme/theme-1/1x700_background.png)repeat-x scroll center top;
 }
 
 #ext-gen7:hover {
@@ -4090,9 +4088,7 @@ td .inner {
 }
 
 #ext-gen5 {
-	background-image:
-		url(../../images/shape.svg_png?cssClass=submitBtnBg1BG&width=110&height=22&fillColor=%23bbbbbb&fillGradientType=b2t&outsideColor=%23ffffff&outsideOpacityPct=0&shadingStyle=sine&shadingLevelPct=98&borderWidth=1&borderColor=%23bbbbbb&curve=5);
-	background-color: transparent;
+	background: #fff url(../../images/theme/theme-1/1x700_background.png)repeat-x scroll center top;
 }
 
 #ext-gen7 {

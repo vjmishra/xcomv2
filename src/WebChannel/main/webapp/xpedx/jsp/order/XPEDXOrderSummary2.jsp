@@ -442,7 +442,7 @@ font-size:11.7px;
 			<table class="address-block">
 				<tr><td><span class="bold">Ship-To:</span> <s:property value='orderShipToID'/> <s:if
 					test='#canChangeShipTo'>
-					<a href="#ajax-assignedShipToCustomers" style="text-decoration:underline;" id="shipToAnchor" tabindex="201">[Change]</a></s:if></td></tr>	
+					<a href="#ajax-assignedShipToCustomers" style="text-decoration:underline;" id="shipToAnchor" tabindex="201">[-bb4-Change]</a></s:if></td></tr>	
 							    
 				<tr><td><s:set name='renderPersonInfo' value='#shipTo' />
 				<s:include
