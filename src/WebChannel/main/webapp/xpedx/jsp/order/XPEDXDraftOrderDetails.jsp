@@ -212,6 +212,46 @@ function resetDeleteCart(formObj)
 {
 	document.getElementById("otherCartActions").value = "None";
 }
+function quickAddCopyAndPaste(data){
+	//Clean up the data
+	Ext.get('dlgCopyAndPasteText').dom.value = '';
+	$.fancybox.close();
+	
+	//console.debug("data: ", data);
+	var itemsString = data;
+	var char = '\n';
+	var itemLines = itemsString.split(char);
+				
+	for(var i=0;i < itemLines.length; i++)
+	{
+		var itemQty = null;
+		var itemSku = null;
+		var jobId = "";
+		var itemLine = itemLines[i].split('\t');
+		
+		if(itemLine.length > 1 )
+		{
+			itemQty = itemLine[0];
+			itemSku = itemLine[1];
+		}
+		itemLine = itemLines[i].split(',');
+		if(itemLine.length > 1 )
+		{
+			itemQty = itemLine[0];
+			itemSku = itemLine[1];
+		}
+		
+		itemSku = Ext.util.Format.trim(itemSku);
+		itemQty = Ext.util.Format.trim(itemQty);
+		
+		document.getElementById("qaProductID").value= itemSku;
+		document.getElementById("#qaProductID_type").value= itemQty;
+		qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
+	}
+	
+	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
+	//w.hide();
+}
 </script>
 
 <script type="text/javascript">
@@ -248,6 +288,28 @@ $(document).ready(function(){
 					<!-- Web Trends tag end -->		
 </head>
 
+<div style="display:none;">
+<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px;">
+<h2>Copy and Paste</h2>
+<%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
+<!-- Enter one item per line:<br /> -->
+<!-- Qty. [Tab or Comma] Item#</p> -->
+<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
+Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 <br />
+</p>
+<br />
+<form id="form1" name="form1" method="post" action=""><textarea
+	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
+<ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
+	<li><a class="grey-ui-btn" href="javascript:$.fancybox.close();"
+		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';"><span>Cancel</span></a></li>
+	<li style="float: right;"><a href="javascript: quickAddCopyAndPaste( document.form1.dlgCopyAndPasteText.value);" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
+	
+	
+</ul>
+</form>
+</div>
+</div>
 
 <s:set name='_action' value='[0]' />
 <s:bean
@@ -418,7 +480,7 @@ $(document).ready(function(){
 	<div class="tq-quick-add-form">
 		<span class="page-title">Quick Add</span>
 		<p class="quick-add-aux-links" style="margin-top:5px; margin-right:5px;"> 
-			<a href="javascript:showCopyPastePanel();" id="copyPaste" class="underlink">Copy and Paste</a>
+			<a class="modal underlink" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste" >Copy and Paste</a>
 			<img class="pointers" alt="[close]" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" id="quick-add-close" title="Close">
 		</p>
 		<div class="clear">&nbsp;</div>
@@ -1266,7 +1328,7 @@ $(document).ready(function(){
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 					<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 				     	<div class="cart-availability text-left">
-				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ></div> 
+				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 						    	<tbody>
 						    		<tr>
@@ -2217,15 +2279,15 @@ var currentAadd2ItemList = new Object();
 </swc:dialogPanel>
 <s:include value="modals/XPEDXDeleteCartModal.jsp" />
 
-<swc:dialogPanel title="Copy And Paste Quick Add" isModal="true"
+<%-- <swc:dialogPanel title="Copy And Paste Quick Add" isModal="true"
 	id="copyPasteDialog" cssClass="xpedx-light-box"
 	contentID="copyPasteContent">
+</swc:dialogPanel> --%>
 
-	<div id="dlgCopyAndPaste" class="xpedx-light-box"
-		style="width: 400px; height: 300px;">
+<%-- 	<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px; display:none;">
 	<h2>Copy and Paste Quick Add</h2>
 	<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
-		Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 <br />
+		Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 -bb2-<br />
 	</p>
 	<br />
 	<form id="form1" name="form1" method="post" action=""><textarea
@@ -2237,10 +2299,9 @@ var currentAadd2ItemList = new Object();
 <!-- 			href="javascript:addItemsToQuickAddList()"><img -->
 <!-- 			src="../xpedx/images/theme/theme-1/ui-buttons/ui-btn-add.gif" -->
 <!-- 			width="49" height="23" alt="Save" title="Save" /></a></li>			 -->
-			<li style="float: right;"><a href="#" onclick="javascript:addItemsToQuickAddList(); return false;" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
+			<li style="float: right;"><a href="#" onclick="javascript:addItemsToQuickAddList(); return false;" class="green-ui-btn" style="margin-left:5px;"><span>bb1Add to Quick List</span></a></li>
 	</ul>
-	</div>
-</swc:dialogPanel>
+	</div> --%>
 <s:include value="modals/XPEDXCopyCartModal.jsp" />
 
 <swc:dialogPanel title='' isModal="true" id="adjustmentsLightBox">
