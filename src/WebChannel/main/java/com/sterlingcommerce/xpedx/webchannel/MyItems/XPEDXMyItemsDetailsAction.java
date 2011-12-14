@@ -137,6 +137,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected String isPnAAvailable;
 	private String myItemsKey;
 	private String priceCurrencyCode;
+	
+	
+	public Map<String,String> baseUOMmap =new HashMap<String,String>();
+	
+
+	
+	public Map<String, String> getBaseUOMmap() {
+		return baseUOMmap;
+	}
+
+	public void setBaseUOMmap(Map<String, String> baseUOMmap) {
+		this.baseUOMmap = baseUOMmap;
+	}
+
 	//2964 Start
 	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
 		return itemIdConVUOMMap;
@@ -694,6 +708,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//ArrayList<Element> itemElements =  SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
 			for(int i =0; i<allItemIds.size();i++) {
 				Element itemElem = SCXmlUtil.getElementByAttribute(allItemsDoc.getDocumentElement(), "Item", "ItemID", allItemIds.get(i));
+				String Itemid = SCXmlUtil.getAttribute(itemElem,"ItemID");
+				baseUOMmap.put(Itemid,itemElem.getAttribute("UnitOfMeasure"));
 				if(itemElem!=null) {
 					Element primaryInfo = SCXmlUtil.getChildElement(itemElem, "PrimaryInformation");
 					String ImageLocation = xpedxScxmlUtil.getAttribute(primaryInfo, "ImageLocation");
