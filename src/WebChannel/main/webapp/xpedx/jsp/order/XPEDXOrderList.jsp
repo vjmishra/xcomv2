@@ -828,14 +828,16 @@
 							</td>
 							<td class="right-cell">
 								<s:set name="isPendingApproval" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_LIMIT_APPROVAL')}" />
-								<s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
-								<s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" />
-								<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
+								<%--   <s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
+								 <s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" /> 
+								<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />  --%>
+								<s:set name="isOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold(#parentOrder)}" />
+								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
 								<s:if test='%{#status != "Cancelled"}'>
-									<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-										<s:if test='#isPendingApproval'>
-											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+									<s:if test='#isPendingApproval || #isOnCSRReviewHold'>
+										<s:if test='#isPendingApproval && !#isOrderRejected'>
+											<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
 											<br/>
 											<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 										 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
@@ -843,15 +845,12 @@
 												<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 											</s:if><br/>
 										</s:if>
-										<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-												<s:if test='%{#parentOrder.getAttribute("Status") != "Awaiting FO Creation"}'>
-														<s:property value="#parentOrder.getAttribute('Status')" />
-												</s:if>
-												<s:else>
-												 		Submitted
-												</s:else>	 
-                        				 			<s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+										<s:elseif test='#isPendingApproval && #isOrderRejected'>
+												Submitted (Rejected)
 										</s:elseif>
+										<s:else> 
+											Submitted (CSR Reviewing)                    				 			
+										</s:else>
 									</s:if> 
 									<s:else>
 										<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
