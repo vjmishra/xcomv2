@@ -42,7 +42,6 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		Document docTemplate = null;
 		Document docOrderList = null;
 		
-		
 		//Log Begin Timer
 		log.beginTimer("getJobs()");
 		
@@ -74,7 +73,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		.createFromString(new StringBuffer()
 				.append("<Order Createts='")
 				.append(todaysDateStr)
-				.append("' CreatetsQryType='LT' OrderType='Customer' OrderTypeQryType='NE' ")
+				.append("' CreatetsQryType='LT' OrderType='Customer' OrderTypeQryType='NE' DraftOrderFlag='Y' DraftOrderFlagQryType='NE' ")
 				.append("><OrderBy><Attribute Name='OrderHeaderKey' Desc='N' /></OrderBy>" )
 				.append("<Extn ExtnIsReprocessibleFlag='Y'/></Order>").toString());
 		
