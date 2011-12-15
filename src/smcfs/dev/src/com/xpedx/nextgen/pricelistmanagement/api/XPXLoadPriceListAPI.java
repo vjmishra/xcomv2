@@ -234,7 +234,6 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 		Document  createPriceListLineInputDoc = null;
 		String priceListLineKey = null;
 		String operation = null;
-		
 		ArrayList pricelistlinekeyList = new ArrayList();
 		
 		String legacyProductCode = priceBookElement.getAttribute(XPXLiterals.E_LEGACY_PRODUCT_CODE);
@@ -247,13 +246,13 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 		String stockIndicator = priceBookElement.getAttribute(XPXLiterals.A_STOCK_INDICATOR);
 		
 		if(processCode.equalsIgnoreCase("A") || processCode.equalsIgnoreCase("C"))
-				{
-			           operation  = XPXLiterals.MANAGE;
-				}
+		{
+	           operation  = XPXLiterals.MANAGE;
+		}
 		else if(processCode.equalsIgnoreCase("D"))
-				{
-			           operation  = XPXLiterals.DELETE;
-				}
+		{
+	           operation  = XPXLiterals.DELETE;
+		}
 		
 		String priceListName = envtId.trim()+"-"+companyCode.trim()+"-"+wareHouse.trim();
 		
@@ -274,72 +273,70 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 			
 			log.debug("The getPriceListLineList output is: "+SCXmlUtil.getString(getPriceListLineListOutputDoc));
 			
-			
 			NodeList priceListLineList = getPriceListLineListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_PRICE_LIST_LINE);
-			
 			if(priceListLineList.getLength()> 0)
 			{
-			for(int i=0; i<priceListLineList.getLength(); i++)
-			{
-				Element priceListLine = (Element)priceListLineList.item(i);
-				
-				Element priceListQuantityTierList = (Element)priceListLine.getElementsByTagName(XPXLiterals.E_PRICE_LIST_LINE_QTY_TIER_LIST).item(0);
-				
-				if(priceListQuantityTierList!=null)
+				for(int i=0; i<priceListLineList.getLength(); i++)
 				{
-				NodeList priceListQuantityTier = priceListQuantityTierList.getElementsByTagName(XPXLiterals.E_PRICE_LIST_LINE_QTY_TIER);
-				
-				        if(priceListQuantityTier.getLength() > 0)
+					Element priceListLine = (Element)priceListLineList.item(i);
+					
+					Element priceListQuantityTierList = (Element)priceListLine.getElementsByTagName(XPXLiterals.E_PRICE_LIST_LINE_QTY_TIER_LIST).item(0);
+					
+					if(priceListQuantityTierList!=null)
+					{
+						NodeList priceListQuantityTier = priceListQuantityTierList.getElementsByTagName(XPXLiterals.E_PRICE_LIST_LINE_QTY_TIER);
+						/*Begin - Changes made by Mitesh Parikh for JIRA# 3206*/
+						priceListLineKey = priceListLine.getAttribute(XPXLiterals.A_PRICE_LIST_LINE_KEY);
+				        if(priceListLineKey!=null)
+				          pricelistlinekeyList.add(priceListLineKey);
+				        
+				        /*if(priceListQuantityTier.getLength() > 0)
 				        {
 					          priceListLineKey = priceListLine.getAttribute(XPXLiterals.A_PRICE_LIST_LINE_KEY);
 					          pricelistlinekeyList.add(priceListLineKey);
-				        }
+				        
+				        }*/
+				        /*End - Changes made by Mitesh Parikh for JIRA# 3206*/
+					}
 				}
-			}
+				
+			    if(pricelistlinekeyList.size()>0)
+			    {
+			    	//Delete all existing price list lines
+			    	Document managePriceListLineInputDoc = createDocument(XPXLiterals.E_PRICE_LIST_LINE_LIST);
+			    	managePriceListLineInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
+					
+					for(int i=0; i<pricelistlinekeyList.size(); i++)
+					{
+						Element priceListLineElement = managePriceListLineInputDoc.createElement(XPXLiterals.E_PRICE_LIST_LINE);
+						priceListLineElement.setAttribute(XPXLiterals.A_PRICE_LIST_LINE_KEY, (String)pricelistlinekeyList.get(i));
+						priceListLineElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.DELETE);
+						
+						managePriceListLineInputDoc.getDocumentElement().appendChild(priceListLineElement);
+					}
+					
+					log.debug("The input to managePricelistLineList is: "+SCXmlUtil.getString(managePriceListLineInputDoc));
+					try {
+						api.invoke(env,XPXLiterals.MANAGE_PRICE_LIST_LINE_API, managePriceListLineInputDoc);
+					} catch (YFSException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    }
 			
-		    if(pricelistlinekeyList.size()>0)
-		    {
-		    	//Delete all existing price list lines
-		    	Document managePriceListLineInputDoc = createDocument(XPXLiterals.E_PRICE_LIST_LINE_LIST);
-		    	managePriceListLineInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
-				
-				for(int i=0; i<pricelistlinekeyList.size(); i++)
-				{
-				Element priceListLineElement = managePriceListLineInputDoc.createElement(XPXLiterals.E_PRICE_LIST_LINE);
-				priceListLineElement.setAttribute(XPXLiterals.A_PRICE_LIST_LINE_KEY, (String)pricelistlinekeyList.get(i));
-				priceListLineElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.DELETE);
-				
-				managePriceListLineInputDoc.getDocumentElement().appendChild(priceListLineElement);
-				}
-				
-				log.debug("The input to managePricelistLineList is: "+SCXmlUtil.getString(managePriceListLineInputDoc));
-				try {
-					api.invoke(env,XPXLiterals.MANAGE_PRICE_LIST_LINE_API, managePriceListLineInputDoc);
-				} catch (YFSException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }
-		
-			}
-		
-		
+			}	
 		
 		YFCDate activeDate = new YFCDate();
 		//End date is TBD. Currently, giving it as High date from current date
-		//YFCDate endDate = activeDate.getNewDate(3650);
-		
-				
+		//YFCDate endDate = activeDate.getNewDate(3650);				
 		
 		Element priceBracketsElement = (Element)priceBookElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKETS).item(0);
 		Element firstPriceBracketElement = (Element)priceBracketsElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKET).item(0);
 		String tierUOM = firstPriceBracketElement.getAttribute(XPXLiterals.UOM);
-		String firstlistPrice = firstPriceBracketElement.getAttribute(XPXLiterals.PRICE);
-				
-		
+		String firstlistPrice = firstPriceBracketElement.getAttribute(XPXLiterals.PRICE);		
 		
         createPriceListLineInputDoc = createDocument(XPXLiterals.E_PRICE_LIST_LINE_LIST);
         createPriceListLineInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
@@ -412,9 +409,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
         priceListHeaderElement.setAttribute(XPXLiterals.A_PRICE_LIST_NAME, priceListName);
         priceListLineElement.appendChild(priceListHeaderElement);
         
-        createPriceListLineInputDoc.getDocumentElement().appendChild(priceListLineElement);
-        
-		
+        createPriceListLineInputDoc.getDocumentElement().appendChild(priceListLineElement);		
         
         log.debug("The manage Price List input doc is: "+SCXmlUtil.getString(createPriceListLineInputDoc));
 		return createPriceListLineInputDoc;
@@ -499,9 +494,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 		
 		/********Check if price list header already exists********************/
 		
-		Document getPricelistHeaderListOutputDoc = getPricelistHeaderList(env, priceListName); 
-		
-		
+		Document getPricelistHeaderListOutputDoc = getPricelistHeaderList(env, priceListName);		
 		
 		YFCDate activeDate = new YFCDate();
 		
