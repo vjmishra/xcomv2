@@ -389,6 +389,8 @@ function showSplitDiv(divId)
 </s:url>
 <s:url id="urlResetOrderId"  includeParams="none"  action='XPEDXResetPendingOrder' namespace = '/order' ></s:url>
 <s:set name="isOrderOnApprovalHold" value="%{#_action.isOrderOnApprovalHold()}"/>
+<s:set name="isOrderOnRejectionHold" value="%{#_action.isOrderOnRejctionHold()}"/>
+
 <s:set name="isOrderOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold()}"/>
 <s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>	
 <s:set name='grandTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("GrandTotal"))'/>
@@ -597,9 +599,12 @@ function showSplitDiv(divId)
                         			<s:else>
                         			  <s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
                         			  <s:if test='%{#status != "Cancelled"}'>
-                        				<s:if test='%{#isOrderOnApprovalHold}'>
+                        				<s:if test='%{#isOrderOnApprovalHold && !#isOrderOnRejectionHold }'>
                         					(Pending Approval)
                         				</s:if>
+                        				<s:elseif test="%{#isOrderOnApprovalHold && #isOrderOnRejectionHold }">
+                        					(Rejected)
+                        				</s:elseif>  
                         				<s:elseif test="%{#isOrderOnCSRReviewHold}">
                         					(CSR Reviewing)
                         				</s:elseif>                        				                        				
