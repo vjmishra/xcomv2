@@ -780,12 +780,18 @@
 		setNormallyStockedAjaxCall(isSelected);
 	}
 	function shipToSearchSubmit(e,divId,url){
+		var searchTxt = document.getElementById('Text1').value;
 		var keycode;
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
 		else return true;
 		if (keycode == 13)
 	   	{
+		   	if(searchTxt == "" || searchTxt == null){
+		   		document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
+		   		document.getElementById("errorText").setAttribute("class", "error");
+		}
+			
 			searchShipToAddress(divId,url);
 	   		return false;
 	   	}
@@ -793,6 +799,15 @@
 	   		return true;
 		}
 	}
+
+		function errorValidate(){
+			var searchTerm = document.getElementById("Text1").value;
+				if(searchTerm == "" ||searchText==null || searchTerm == "Search Ship-To…"){
+						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
+						document.getElementById("errorText").setAttribute("class", "error");
+				}
+		}
+			
 </script>
 <script type="text/javascript">
 	var w = new Ext.Window({
@@ -1054,6 +1069,20 @@
 
     function saveShipToChanges(url)
     {
+    	var radioCustomer=document.getElementsByName("selectedShipTo");
+		var selected=false;
+		for(var i=0;i<radioCustomer.length;i++)
+		{
+			if(radioCustomer[i].checked == true)
+				selected=true;
+				
+		}
+    	if(selected == false){
+            document.getElementById('errorText').innerHTML = "Please select a Ship-To.";
+            document.getElementById('errorText').setAttribute("class", "error");
+        }
+        
+        else{
     	//Added For Jira 2903
     	Ext.Msg.wait("Processing..."); 
     	//Ext.Msg.wait("Changing Ship To... Please wait.");
@@ -1129,6 +1158,7 @@
             });
         }
         document.body.style.cursor = 'default';
+      }
 
     }
     function editDetails()
@@ -1564,7 +1594,8 @@ function searchShipToAddress(divId,url) {
 */
 		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
 		{
-			//alert('Please Enter word or phrase seperated by commas(,) to search');
+			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
+			document.getElementById('errorText').setAttribute("class", "error");
 		}		
 		else
 		{
