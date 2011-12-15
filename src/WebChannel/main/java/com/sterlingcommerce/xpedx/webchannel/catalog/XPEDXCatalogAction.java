@@ -473,7 +473,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		//determine if the request is catalog landing or catalog page
 		boolean isCategoryLanding = determineCatalogLandingRedirection(bcl,pathDepth);
-		if(isCategoryLanding){
+		if(isCategoryLanding){			
+			getWCContext().removeWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
 			//call the catalog landing mashup
 			setMashupID(getCatalogLandingMashupID());
 		}
