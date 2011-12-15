@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.OrderListAction;
 import com.sterlingcommerce.webchannel.utilities.WCDataDeFormatHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -50,11 +51,13 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private static final String PLACED_STATUS = "1100.0100";
 	private static final String CANCELLED_STATUS = "9000";
 	private static final String INVOICED_STATUS = "1100.5700";
-	private static final String PENDING_APPROVAL_STATUS = "1100.5150";
-	private static final String CSR_REVIEWING_STATUS = "1100.5155";
+	private static final String PENDING_APPROVAL_STATUS = "1100.0100_Approval";
+	private static final String CSR_REVIEWING_STATUS = "1100.0100_CSRReview";
+	private static final String REJECTED_STATUS = "1100.0100_Rejected";
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private boolean isPendingApprovalOrdersSearch = false;
 	private boolean isCSRReviewingOrdersSearch = false;
+	private boolean isRejectedOrdersSearch = false;
 	private String custSuffix = null;
 	private String userKey = null;
 	private String invoiceURL = null;
@@ -182,6 +185,10 @@ public class XPEDXOrderListAction extends OrderListAction {
         		}
         		else if(getStatusSearchFieldName().equalsIgnoreCase(CSR_REVIEWING_STATUS)){
         			isCSRReviewingOrdersSearch = true;
+        			setStatusSearchFieldName(PLACED_STATUS);
+        		}
+        		else if(getStatusSearchFieldName().equalsIgnoreCase(REJECTED_STATUS)){
+        			isRejectedOrdersSearch = true;
         			setStatusSearchFieldName(PLACED_STATUS);
         		}
         		if(getStatusSearchFieldName().equalsIgnoreCase(PLACED_STATUS)){
@@ -844,16 +851,22 @@ public class XPEDXOrderListAction extends OrderListAction {
         		complexQueryElement.setAttribute("Operator", "AND"); 	      			
     		}   
         }
-        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch) {
+        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch || isRejectedOrdersSearch) {
         	String holdTypeToSearch = null;
         	if(isPendingApprovalOrdersSearch)
         		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
         	else if(isCSRReviewingOrdersSearch)
         		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
+        	else if(isRejectedOrdersSearch)
+        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
         	if(!SCUtil.isVoid(holdTypeToSearch)) {
         		YFCElement holdTypeElement = orderElem.createChild("OrderHoldType");
         		holdTypeElement.setAttribute(XPXLiterals.A_HOLD_TYPE, holdTypeToSearch);
-        		holdTypeElement.setAttribute(XPXLiterals.A_STATUS, "1100");
+        		if(isRejectedOrdersSearch){
+        			holdTypeElement.setAttribute(XPXLiterals.A_STATUS, "1200");
+        		}else {
+        			holdTypeElement.setAttribute(XPXLiterals.A_STATUS, "1100");
+        		}
         	}        	
         }
         
@@ -1015,6 +1028,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 			statusToSearch = PENDING_APPROVAL_STATUS;
 		else if(isCSRReviewingOrdersSearch)
 			statusToSearch = CSR_REVIEWING_STATUS;
+		else if(isRejectedOrdersSearch)
+			statusToSearch = REJECTED_STATUS;
 		if(SCUtil.isVoid(statusToSearch))
 			return getStatusSearchFieldName();
 		else
@@ -1267,6 +1282,49 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		return isOrderOnHold;
 	}
+	
+	public boolean isOrderOnRejectHold(Element OrderElement ) {
+		String holdTypeToCheck = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;;
+		boolean isOrderOnHold = false;
+		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
+			Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
+			ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
+			if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
+				for(int i=0; i<orderHoldTypeList.size();i++) {
+					Element orderHoldTypeElem = orderHoldTypeList.get(i);
+					String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
+					String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1200"))
+						isOrderOnHold = true;
+				}
+			}
+		}
+		return isOrderOnHold;
+	}
+	
+	// Check if the current order has CSR Review hold or not
+	public boolean isOrderOnCSRReviewHold(Element OrderElement) {		
+		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
+		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
+		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
+		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;
+		
+		Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
+		ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
+		if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
+			for(int i=0; i<orderHoldTypeList.size();i++) {
+				Element orderHoldTypeElem = orderHoldTypeList.get(i);
+				String orderHoldType = orderHoldTypeElem.getAttribute(OrderConstants.HOLD_TYPE);
+				if ((orderHoldTypeElem.getAttribute(OrderConstants.STATUS).equals(openHoldStatus))
+					&& (orderHoldType.equals(holdTypeNeedsAttention)
+							|| orderHoldType.equals(holdTypeLegacyCnclOrd) 
+							|| orderHoldType.equals(holdTypeOrderException)))
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
 		String resolverUserId=null;
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
