@@ -418,6 +418,7 @@
 							<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
 								<s:param name="callerPage">CatalogPage</s:param>
 								<s:param name="category" value='#parameters.cname'/>
+								<s:param name="categoryPath" value='#parameters.path'/>
 							</s:action>
 					</div>
 					
