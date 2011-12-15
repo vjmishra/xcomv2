@@ -71,7 +71,17 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private Integer totalNumberOfPages = new Integer(1);
     private String divId = "ajax-assignedShipToCustomers" ;
     private List<String> alreadySelectedCustomers;
+    
+    public boolean shipToResult=true;
 	
+	public boolean isShipToResult() {
+		return shipToResult;
+	}
+
+	public void setShipToResult(boolean shipToResult) {
+		this.shipToResult = shipToResult;
+	}
+
 	public boolean isSearch() {
 		return search;
 	}
@@ -472,6 +482,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(viewListElem, "XPXCustomerAssignmentView");
 		assignedShipToList = new ArrayList<XPEDXShipToCustomer>();
 		if(assignedCustElems.size()>0) {
+			shipToResult=false;
 			for(int i=0;i<assignedCustElems.size();i++) {
 				Element customer = assignedCustElems.get(i);
 				XPEDXShipToCustomer defualtShipToAssigned = new XPEDXShipToCustomer();
