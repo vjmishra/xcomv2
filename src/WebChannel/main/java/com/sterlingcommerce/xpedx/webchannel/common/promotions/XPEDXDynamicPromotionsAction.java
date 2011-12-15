@@ -73,6 +73,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	//Here Category and callerPage comes as Action Parameters.
 	private String callerPage;
 	private String category;
+	private String categoryPath;
 	
 	//Initialized for pre-login stage
 	private String storeFrontId;
@@ -277,6 +278,20 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		else
 			this.category = "";
 	}
+	
+	public String getCategoryPath() {
+		return categoryPath;
+	}
+	
+
+	public void setCategoryPath(String catPath) {
+		
+		if(catPath != null && catPath.trim().length() > 0)
+			this.categoryPath = catPath;
+		else
+			this.categoryPath = "";
+	}
+	
 
 	public String getStoreFrontId() {
 		return storeFrontId;
@@ -332,6 +347,40 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		this.generatedFileFullPath = generatedFileFullPath;
 	}
 	
+	/*
+	 * Setting AdJuggler URL
+	 */
+	private void setAdJugglerServerURLInSession() {
+
+		String ajServerKey = "";
+		ajServerKey = (String)getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.AJ_SERVER_URL_KEY);
+		if (ajServerKey == null || ajServerKey.trim().equals(""))
+		{
+		String adJuglerServerURLForGivenEnv = "";
+		String adJugURL = XPEDXConstants.AJ_SERVER_URL ;
+		
+		//Get the Suffix to append to AJ_Server (this helps to avoid incidents other than PROD box
+		String custOverridePropertiesFile = "customer_overrides.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
+		String adJugglerSuffix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_SUFFIX_PROP);
+		XPEDXConstants.logMessage("adJugglerSuffix : yfs.xpedx.adjuggler.suffix= " + adJugglerSuffix );
+		
+		if(adJugglerSuffix != null )
+			adJuglerServerURLForGivenEnv = adJugURL + adJugglerSuffix.trim();
+		else
+			adJuglerServerURLForGivenEnv = adJugURL;
+		
+		//Setting Aj Server Key
+		XPEDXConstants.logMessage( " Setting AJ Server Key : " );
+		getWCContext().getSCUIContext().getSession().setAttribute(XPEDXConstants.AJ_SERVER_URL_KEY, adJuglerServerURLForGivenEnv );
+		
+		//
+		XPEDXConstants.logMessage( " AJ Server Key is: " + getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.AJ_SERVER_URL_KEY )) ;
+		}
+
+		XPEDXConstants.logMessage( " Retriving AJ Server Key : " + getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.AJ_SERVER_URL_KEY )) ;
+		
+	}
 	
 	public String execute() {
 		String massagedPromoHtml = null;
@@ -340,8 +389,10 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			String callerPage = getCallerPage();
 			String newCallerPageTag = "";
 			
+			
 			log.debug("######################################################################################################### "  );
 			XPEDXConstants.logMessage("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			XPEDXConstants.logMessage("---- getCategoryPath  --------- " + getCategoryPath() );
 			log.debug("######################################################################################################### "  );
 			
 			//Look for input parameters for this action class.
@@ -350,6 +401,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 
 			// for guest user fetches the default html page.
 			if(wcContext.isGuestUser()){
+				setAdJugglerServerURLInSession( );
+				
 				newCallerPageTag = STD_PRE_LOGIN_PREFIX + callerPage;
 				massagedPromoHtml = generatePreLoginPromoFile(newCallerPageTag);
 				logMessage("EXECUTE METHOD CALLED (Pre Login page) : " + massagedPromoHtml);
