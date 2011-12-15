@@ -69,7 +69,7 @@
 		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
-		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();">&nbsp;</span>		
+		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();errorValidate();">&nbsp;</span>		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="Search Ship-To…" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
 		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
@@ -224,7 +224,6 @@
 
 			<form>
 				<ul>
-				
 		<s:set name="shipToAddressList" value="%{assignedShipToList}" />
 		<s:iterator value='#shipToAddressList' id='shipToAddress'>
 		<s:set name='customerID' value='#shipToAddress.customerID' />
@@ -297,7 +296,7 @@
 			</tr>	
 		</table>
 		</li>
-	</s:iterator>
+         </s:iterator>	
 </ul>
 </form>
 
@@ -320,8 +319,10 @@
 </div>
 
 <div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom" style="margin-top:3px;">
-	
+<ul id="tool-bar" class="tool-bar-bottom" style="margin-top:3px;margin-right:20px">
+<s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
+<s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
+
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
@@ -329,11 +330,18 @@
 	</s:if>
 	<li>
 <%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Apply</span></a>
+			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
 	
 	</li>
 </ul>
-	
+
+<s:if test="%{#NoShipTo}" >
+<div id="errorText" class="error float-right">No Ship-To locations were found that meet the seaqrch criteria. Please enter new search criteria or click the 'Cancel' button.</div>
+</s:if>
+<s:elseif test="#defaultShipTo != null">
+<div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
+</s:elseif>
+<div id="errorText" class="float-right"></div>
 </div>
 </div>
 
