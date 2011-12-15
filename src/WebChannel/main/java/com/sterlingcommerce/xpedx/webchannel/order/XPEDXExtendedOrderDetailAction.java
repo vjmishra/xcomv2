@@ -382,6 +382,42 @@ public class XPEDXExtendedOrderDetailAction extends
 		return false;
 	}
 	
+	// Check if the current order has rejection hold or not (any status) to show
+	// the approval-history link
+	public boolean isOrderOnRejctionHold() {
+		/*String holdTypeForApproval = (BusinessRuleUtil.getBusinessRule(
+				OrderConstants.HOLD_TO_BE_APPLIED_FOR_ORDER_APPROVAL_RULE,
+				wcContext)).trim();*/
+		String holdTypeForApproval = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
+		
+		if (holdTypeForApproval != null) {
+			Element orderholdtypeselem = SCXmlUtils.getInstance()
+					.getChildElement(this.elementOrder,
+							OrderConstants.ORDER_HOLD_TYPES);
+			ArrayList<Element> orderholdtypeelemlist = SCXmlUtils.getInstance()
+					.getChildren(orderholdtypeselem,
+							OrderConstants.ORDER_HOLD_TYPE);
+			for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter
+					.hasNext();) {
+				Element orderholdtypeelem = (Element) iter.next();
+				if ((orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE))
+						.trim().equals(holdTypeForApproval)) {
+					String holdstatus = orderholdtypeelem.getAttribute(
+							OrderConstants.STATUS).trim();
+					if(holdstatus.equalsIgnoreCase("1200"))
+						return true;
+					else
+						return false;
+					//this.approvalHoldStatus = holdstatus;
+					//this.resolverUserID = orderholdtypeelem
+					//		.getAttribute(OrderConstants.RESOLVER_USER_ID);
+					//return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	// Check if the current order has CSR Review hold or not
 	public boolean isOrderOnCSRReviewHold() {		
 		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
