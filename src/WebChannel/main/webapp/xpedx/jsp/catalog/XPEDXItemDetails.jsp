@@ -659,7 +659,7 @@ function validateOrderMultiple() {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
 					   
 		    var myMessageDiv = document.getElementById("errorMsgForQty");	            
-            myMessageDiv.innerHTML = "Please order in units of " + OrdMultiple.value;	            
+            myMessageDiv.innerHTML = "Please order in units of " + OrdMultiple.value + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
             
