@@ -176,6 +176,22 @@ public class XPXCustomerProfileRuleUtil {
 		}
 		
 	}
+	//Added By Manas
+	/* Order level */
+	public void validateWebHoldCustomer(YFSEnvironment env)
+			throws Exception {
+		//Override removed
+		Document inXML = getOrderXML();
+		if(null!= inXML){
+		Element extnElement = SCXmlUtil.getChildElement(inXML.getDocumentElement(), "Extn");
+		if(null!=extnElement){
+		extnElement.setAttribute("ExtnWebHoldFlag", "Y");
+		}
+		}
+		return;
+		
+		
+	}
 
 	/* Order level */
 	public void validateDuplicatePO(YFSEnvironment env) throws Exception {
