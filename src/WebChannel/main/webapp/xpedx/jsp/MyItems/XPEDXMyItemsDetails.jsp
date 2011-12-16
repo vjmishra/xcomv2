@@ -875,12 +875,14 @@ function showSharedListForm(){
 			var arrUOM = new Array();
 			var arrItemID = new Array();
 			var arrOrdMul = new Array();
+			var baseUOM = new Array();
 			if(isOnlyOneItem != undefined && isOnlyOneItem == true)
 			{
 				arrQty[0]=document.getElementById("qtys_"+listId);
 				arrUOM[0]=document.getElementById("UOMconversion_"+listId);
 				arrItemID[0]=document.getElementById("orderLineItemIDs_"+listId);
 				arrOrdMul[0]=document.getElementById("orderLineOrderMultiple_"+listId);
+				baseUOM[0]=document.getElementById("baseUOM_"+listId);
 			}
 			else
 			{
@@ -888,6 +890,7 @@ function showSharedListForm(){
 				arrUOM = document.getElementsByName("UOMconversion");
 				arrItemID = document.getElementsByName("orderLineItemIDs");
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
+				baseUOM = document.getElementsByName("baseUOM");
 			}
 
 			var errorflag=true;
@@ -905,7 +908,7 @@ function showSharedListForm(){
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
-						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value;
+						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value + " "+baseUOM[i].value;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -929,7 +932,7 @@ function showSharedListForm(){
 					if(ordMul!= 0)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
-						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value ;
+						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -1845,7 +1848,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                
                
                <s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
-               
+             
 				<s:iterator status="status" id="item"
 					value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
@@ -2127,6 +2130,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 
                             </table>
                             <!--  TODO FXD2-11 Display error message  -->
+                            <s:set name="baseUOM" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:set>
+	                        			<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}"/>
                             <div class="clear"></div>
 							<s:if test='editMode != true'>
                             <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
@@ -2153,6 +2158,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 
                             
 							</s:if>
+							 
                         </div>
                     </div>    
 
