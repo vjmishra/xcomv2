@@ -2501,23 +2501,31 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="16%" valign="top" class="no-border-right-user padding00">Currency
 			Type:</td>
 			<td valign="top" width="84%" class="no-border-right-user padding00">
-			<s:if test="#disableSinceSelfApprover">
-				<s:textfield id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}" readonly="%{true}" cssStyle="width: 148px;"/>
-			</s:if>
-			<s:else>
-			<s:select headerKey="" headerValue="- Select Currency -" tabindex="20" name="spendingLtCurrency"
-				id="spendingLtCurrency" value="%{#optedCurrency}"
-				list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
-			</s:select>
-			</s:else>
+				<s:if test="#optedCurrency != null && #optedCurrency != ''"  >
+					<s:if test="!#disableSinceSelfApprover">
+						<s:textfield id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}" readonly="%{true}" cssStyle="width: 148px;"/>
+					</s:if>
+					<s:else>
+					<s:select headerKey="" headerValue="- Select Currency -" tabindex="20" name="spendingLtCurrency"
+						id="spendingLtCurrency" value="%{#optedCurrency}"
+						list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
+					</s:select>
+					</s:else>
+				</s:if>
 			</td>						
 		</tr>
 		<tr>
 			<td width="16%" valign="top" class="no-border-right-user padding00">Spending
 			Limit:</td>
 			<td valign="top" width="84%" class="no-border-right-user padding00">
-			<s:textfield cssClass="x-input" cssStyle="width:148px;" 
-				id="spendingLt" readonly="#disableSinceSelfApprover" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield></td>
+			
+				 <s:set name='spendingLimit' value="%{getSpendingLimit()}"/>
+				 <s:if test="#spendingLimit != null && #spendingLimit != ''">
+				   <s:if test="!disableSinceSelfApprover">
+				     <s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" readonly="%{true}" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
+				   </s:if>
+				 </s:if>		 
+			</td>
 		</tr>
 		
 		<tr> <td style="border:0px; height:10px;"> &nbsp; </td></tr>
@@ -2529,21 +2537,32 @@ a.underlink:hover { text-decoration: underline !important; }
 				<td width="16%" valign="top" class="no-border-right-user padding00">Primary
 				Approver:</td>
 				<td valign="top" width="84%" class="no-border-right-user padding00 ">
-				<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
-					value="%{#primaryApprover}" list="availableApproversList"
-					cssClass="x-input" cssStyle="width: 150px;">
-				</s:select></td>
+					<s:if test="#primaryApprover != null && #primaryApprover != ''">
+					 <s:if test="!disableSinceSelfApprover">
+						<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
+							value="%{#primaryApprover}" list="availableApproversList"
+							cssClass="x-input" cssStyle="width: 150px;">
+						</s:select>				 
+					 </s:if>
+					</s:if>
+				</td>
 			</tr>
 			<tr>
 				<td valign="top" width="16%" class="no-border-right-user padding00">Alternate
 				Approver:</td>
-				<td valign="top" width="84%" class="no-border-right-user padding00"><span
-					class="no-border-right-user padding0 "> <s:select
-					headerKey="" headerValue="- Select Approver -" 
-					tabindex="20" name="alternateApprover" id="alternateApprover"
-					value="%{#alternateApprover}" list="availableApproversList" 
-					cssClass="x-input" cssStyle="width:150px;">
-				</s:select> </span></td>
+				<td valign="top" width="84%" class="no-border-right-user padding00">
+				<s:if test="#alternateApprover != null && #alternateApprover != ''">
+				 <s:if test="!disableSinceSelfApprover">
+					<span class="no-border-right-user padding0 "> 
+					  <s:select headerKey="" headerValue="- Select Approver -" 
+						tabindex="20" name="alternateApprover" id="alternateApprover"
+						value="%{#alternateApprover}" list="availableApproversList" 
+						cssClass="x-input" cssStyle="width:150px;">
+					</s:select> 
+					</span>				 
+				 </s:if>
+				</s:if>
+              </td>
 			</tr>
 		
 
