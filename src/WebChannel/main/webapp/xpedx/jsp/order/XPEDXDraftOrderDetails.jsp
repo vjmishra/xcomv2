@@ -929,7 +929,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
 		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
-				<s:set name="MultiUom" value='%{#item.getAttribute("UnitOfMeasure")}' /> 
+				<s:set name="MultiUom" value='%{#item.getAttribute("UnitOfMeasure")}' />
+				<s:set name="BaseUOMs" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)' /> 
+				<s:hidden name="BaseUOMs" id="BaseUOMs_%{#orderLineKey}" value='%{#BaseUOMs}' /> 
+				
 		<s:hidden name="selectedCustomerContactId" id="selectedCustomerContactId" value="" />
 		
 		<%-- 
@@ -1331,7 +1334,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 					<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 				     	<div class="cart-availability text-left">
-				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="color:red;" ></div> 
+				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />"></div> 
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 						    	<tbody>
 						    		<tr>
