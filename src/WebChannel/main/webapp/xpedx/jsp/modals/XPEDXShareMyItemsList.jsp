@@ -132,7 +132,37 @@
 		}*/
 		
 		function submitSL(){
-			Ext.get('XPEDXMyItemsDetailsChangeShareList').dom.submit();
+		//added for jira 2940
+			var customerPaths=document.getElementsByName("customerPaths");
+			var custID;
+			for(var i=0;i<customerPaths.length;i++)
+			{
+				var customerPath=customerPaths[i].value;
+				var isSelected=customerPaths[i].checked;
+				if(isSelected)
+				{
+					if(customerPath != null)
+					{
+						var custPath = customerPath.split("|");
+						var custPathlen = custPath.length;
+						if(custPathlen > 1)
+						{
+							custID = custPath[custPath.length-1];
+							custID = custID.replace(/-/g, '_');
+						}
+						else
+						{
+							custID = custPath[0];
+							custID = custID.replace(/-/g, '_');
+						}
+						selectNode(custID, true);
+					  }
+				}
+				
+			}
+			//end of jira 2940
+			
+		Ext.get('XPEDXMyItemsDetailsChangeShareList').dom.submit();
 		} 
 	</SCRIPT>
 
