@@ -29,6 +29,7 @@ function addProductsToOrder()
 		 var enteredUoms; 
 		 var enteredUomsConFact = new Array();
 		 var availUomsConFact = new Array();
+		 var baseUOM = new Array();
 		 var entereditems;
 		 var uomConvFac; 
 		 var selectedUomConvFac;
@@ -36,7 +37,7 @@ function addProductsToOrder()
 		 var selectedUomFromStr;
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
-		 
+		 baseUOM = document.getElementsByName("BaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
 			enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
@@ -77,7 +78,7 @@ function addProductsToOrder()
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
-						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple;
+						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple +" "+baseUOM[i].value;
 						document.getElementById(divId).setAttribute("class", "error");
 					}
 				}
@@ -152,11 +153,13 @@ function validateOrderMultiple()
 	var arrUOM = new Array();
 	var arrItemID = new Array();
 	var arrOrdMul = new Array();
+	var baseUOM = new Array();
 	var retVal=true;
 	arrQty = document.getElementsByName("orderLineQuantities");
 	arrUOM = document.getElementsByName("UOMconversion");
 	arrItemID = document.getElementsByName("orderLineItemIDs");
 	arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
+	baseUOM = document.getElementsByName("BaseUOMs");
 	for(var i = 0; i < arrItemID.length; i++)
 	{
 		var zeroError=false;
@@ -189,8 +192,7 @@ function validateOrderMultiple()
 			}		
 		if(ordMul != 0 && zeroError == false)
 		{
-			
-			divIdError.innerHTML="Order Quantity must be a multiple of " +arrOrdMul[i].value;
+			divIdError.innerHTML="Order Quantity must be a multiple of " +arrOrdMul[i].value +" "+baseUOM[i].value;
 			divIdError.setAttribute("class", "error");
 			retVal=false;
 		}
