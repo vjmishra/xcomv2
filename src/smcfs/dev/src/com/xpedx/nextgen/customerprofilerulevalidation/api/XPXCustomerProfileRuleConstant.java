@@ -73,6 +73,8 @@ public interface XPXCustomerProfileRuleConstant {
 	
 	/*Rule Id starts */
 	String ACCEPT_PRICE_OVERRIDE = "AcceptPriceOverRide";
+	
+	String WEB_HOLD_FLAG = "PlaceOrderOnWBHold";
 
 	String ACCEPT_PRICE_OVERRIDE_ERROR_TEXT = "AcceptPriceOverRideErrorText";
 
@@ -132,6 +134,6 @@ public interface XPXCustomerProfileRuleConstant {
 	//String PART_NUMBER_VALIDATION = "PartNumberValidation";
 	/*Rule Id Ends */
 	enum CustomerProfileRuleID {
-		AcceptPriceOverRide, PreventAutoPlace, HeaderCommentByCustomer, DuplicatePO, NonStandardShipMethod, CustomerSelectedShipComplete, ValidShiptoZipCode, ShipDateNotNextBusinessDay, /*IncorrectBuyerID,*/ IncorrectETradingID, LineCommentsByCustomer, RequiredCustomerLinePO, RequireCustomerLineField1, RequireCustomerLineField2, RequireCustomerLineField3, AllDeliveryDatesDoNotMatch, PreventBackOrder, ItemNotAvailableForNextDayShipment, /*LineLevelCodeByCustomer, PreventPriceBelowCost,*/ PriceDiscrepency/*, PartNumberValidation*/,RequiredCustomerLineSequenceNo,RequiredCustomerLineAccountNo, RequireCustomerPO,GrossTradingMargin
+		PlaceOrderOnWBHold,AcceptPriceOverRide, PreventAutoPlace, HeaderCommentByCustomer, DuplicatePO, NonStandardShipMethod, CustomerSelectedShipComplete, ValidShiptoZipCode, ShipDateNotNextBusinessDay, /*IncorrectBuyerID,*/ IncorrectETradingID, LineCommentsByCustomer, RequiredCustomerLinePO, RequireCustomerLineField1, RequireCustomerLineField2, RequireCustomerLineField3, AllDeliveryDatesDoNotMatch, PreventBackOrder, ItemNotAvailableForNextDayShipment, /*LineLevelCodeByCustomer, PreventPriceBelowCost,*/ PriceDiscrepency/*, PartNumberValidation*/,RequiredCustomerLineSequenceNo,RequiredCustomerLineAccountNo, RequireCustomerPO,GrossTradingMargin
 	};
 }
