@@ -1307,10 +1307,14 @@ function createNewFormElement(inputForm, elementName, elementValue){
 		                  tabidx: "<s:property value='#tabidx'/>",
 				            supersedelink: "",
 				            <s:if test='!#guestUser'>
-                           	availablelink:"<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability('<s:property value='#itemID'/>');\">My Price &amp; Availability</a></div>" + "",
+                           	availablelink:
+                           		"<input type='hidden' id='baseUOMs_<s:property value='#itemID'/>' name='baseUOMs_<s:property value='#itemID'/>' value='<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/>'/>"+
+                               	"<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability('<s:property value='#itemID'/>');\">My Price &amp; Availability</a></div>" + "",
                            	uomLink:
                            		<s:if test='%{#orderMultiple > "1" && #orderMultiple !=null }'>	
                                	"<div class=\"notice\" style=\"margin-right:5px; font-weight: normal;float:right; display:inline;\"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#orderMultiple}'/> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#unitOfMeasure)'/></div>"+
+                               	
+                               	
                                	</s:if>
                                	"",
                            </s:if>
