@@ -316,6 +316,11 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 			case HeaderCommentByCustomer:
 				util.validateHeaderCommentByCustomer(env);
 				break;
+				//Added By Manas
+				/* Order Level */
+			case PlaceOrderOnWBHold:
+				util.validateWebHoldCustomer(env);
+				break;
 			case DuplicatePO:
 				util.validateDuplicatePO(env);
 				break;
