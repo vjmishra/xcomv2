@@ -181,6 +181,7 @@ function addItemToCart(itemId) {
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
+		var baseUOM = document.getElementById('baseUOMs_'+itemId).value;
 		var selectedUom = uomList.options[uomList.selectedIndex].value;
 		var qty = document.getElementById('Qty_'+itemId).value;
 		var selectedUomConv;
@@ -198,7 +199,7 @@ function addItemToCart(itemId) {
 		var ordMul = totalQty % orderMultiple;
 		if(ordMul != 0 || totalQty==0)
 		{
-			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Order Quantity for " + itemId + " must be a multiple of " + orderMultiple ;
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Order Quantity for " + itemId + " must be a multiple of " + orderMultiple +" "+baseUOM;
 			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
