@@ -155,6 +155,12 @@ p{margin-bottom:8px;}
         
       
           <div class="clearview"> &nbsp;</div>
+          	<div class="inf"> Reports can be saved and printed using Adobe PDF or Microsoft Excel.<br/>
+          	If you do not have Adobe Reader, click the link below and follow the instructions to download and install this free software.</div>
+          	<br/>
+          	<a href="http://www.adobe.com/reader" class="underlink">
+          		<img src="../images/reader.png"/>	
+       		</a>
 
          
         <div class="clearview"> &nbsp;</div>
