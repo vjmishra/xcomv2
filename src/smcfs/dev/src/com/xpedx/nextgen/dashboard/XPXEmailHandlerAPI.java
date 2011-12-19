@@ -332,19 +332,18 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		
 		docCustomerContact.appendChild(CustomerContact);
 
-		//String strCustomerContactID = inputElement.getAttribute("CustomerContactID");
+		String strCustomerContactID = inputElement.getAttribute("CustomerContactID"); //Changes for JIRA 3157
 		
 		/*Changes done for order confirmation email - Issue Start*/
 		
-		String strCustomerContactID = SCXmlUtil.getXpathAttribute(
-				inputElement, "./CustomerContact/@CustomerContactID");
+		//String strCustomerContactID = SCXmlUtil.getXpathAttribute(
+				//inputElement, "./CustomerContact/@CustomerContactID");
 		
 		
 		/*Changes done for order confirmation email - Issue End*/
 		
 		
 		
-		// Changes made on 18/02/2011 to handle if Customer Contact Id is empty.
 		if (strCustomerContactID != null && strCustomerContactID != "") {
 			CustomerContact.setAttribute("CustomerContactID",
 					strCustomerContactID);
