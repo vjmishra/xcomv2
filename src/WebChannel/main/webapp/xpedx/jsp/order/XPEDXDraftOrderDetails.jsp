@@ -343,6 +343,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <s:set name='wcContext' value="wCContext" />
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isEstimator" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+<s:set name="msapExtnUseOrderMulUOMFlag" value='%{#xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()}' />
+
 <%--	Using CustomerContactBean object from session
 <s:set name="isEstimator" value="#wCContext.getWCAttribute('isEstimator')" />
  --%>
@@ -555,6 +557,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 				<s:a id='productValidateURL' href='%{#productValidateURLid}' />
 				<div id="QuickAddList" style="display: block;"></div>
 			</form>
+			<!-- Start 2964 -->
+			<s:hidden name="msapOrderMulUOMFlag" id="msapOrderMulUOMFlag" value="%{#msapExtnUseOrderMulUOMFlag}" />
+			
 			<div class="clear">&nbsp;</div>
 			<div id="addProdsToOrder" class="close-btn" style="display: none;">
 				<%-- <a href="#" id="quick-add-close" class="grey-ui-btn"><span>Close</span></a> --%>
