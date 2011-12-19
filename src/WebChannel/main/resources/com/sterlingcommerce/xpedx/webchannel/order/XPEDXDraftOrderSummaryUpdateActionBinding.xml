@@ -25,9 +25,10 @@
    	<entry key="#parameters.unitPrice">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/LinePriceInfo/@UnitPrice</entry> 	
  	<entry key="#parameters.itemId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Item/@ItemID</entry> 
  	<entry key="#parameters.uom">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Item/@UnitOfMeasure</entry>
- 	-->
+ 	
  	<entry key="#parameters.transactionalQty">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
  	<entry key="#parameters.transactionalUOM">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry> 
+   -->
     <!-- Added entry for binding Customer PO Number  -->
    	<entry key="customerPoNumber">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerPONo</entry>
     
@@ -42,8 +43,10 @@
 	<entry key="extnShipToName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipToName</entry>
 	<entry key="extnBillToName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnBillToName</entry>
 	<entry key="extnSourceType">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnSourceType</entry>
+	<!--
 	<entry key="orderLineKeyList">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
 	<entry key="orderLineShipNodeList">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/@ShipNode</entry>
+	-->
 	<entry key="recordPendingChanges">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/PendingChanges/@RecordPendingChanges</entry>
 	<entry key="skipBOMValidationsValue">me_dod_validateItemForOrdering:/Order/@SkipBOMValidations</entry>
 </properties>
