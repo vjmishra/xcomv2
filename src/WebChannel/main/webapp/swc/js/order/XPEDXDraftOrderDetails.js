@@ -490,23 +490,87 @@ function redrawQuickAddList()
 		        }
 		        else
 		        {
+		        	//Start - Code added to fix XNGTP 2964					
+		        	var msapExtnUseOrderMulUOMFlag = document.getElementById('msapOrderMulUOMFlag').value;
+		        	if((msapExtnUseOrderMulUOMFlag!=null && msapExtnUseOrderMulUOMFlag == 'Y')&&(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null))
+		        	 
+					  {
+		        		
 		        	var uomValues = QuickAddElems[i].uomList;
-		        	var _uomCodes = QuickAddElems[i].uomCodes;
-		        	code += '<td class="col-item">'; 
-				    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
-			        
+			        	var _uomCodes = QuickAddElems[i].uomCodes;
+			        	code += '<td class="col-item">'; 
+					    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
+					    var storeUOM = 0;
+						var minSelUOM;
+				    	var maxSelUOM;
+				    	var minFractUOM = 0.00;
+				    	var maxFractUOM = 0.00;
+				    	var defaultSelUOM;
+				    	var _oUomCode;
+				    	var _oUomDescription;
+				    	var firstIndex;
+				    	var lastIndex; 
+				    	var orderMultipleValue = QuickAddElems[i].orderMultiple;
+			        	 for(var oUomidx =0; oUomidx < uomValues.length; oUomidx++){
+				    		 _oUomCode = uomValues[oUomidx];  
+							 _oUomDescription=convertToUOMDescription(_oUomCode);
+							 firstIndex = uomValues[oUomidx].indexOf('(');
+					    	 lastIndex = uomValues[oUomidx].indexOf(')');
+					    	var convFactor;
+					    	var oFraction = 0.00;
+					    	if(lastIndex>0 && firstIndex>0){
+					    		 convFactor = uomValues[oUomidx].substring(firstIndex+1,lastIndex);
+				    	 	} else {
+				    	 		convFactor = 1;
+				    	 	}
+					    	if(convFactor == orderMultipleValue)
+						     {
+					    	 	minSelUOM = maxSelUOM = _oUomCode;
+					    		minFractUOM = maxFractUOM = 1;
+					    		break;
+						     } else {
+						    	 oFraction = convFactor/orderMultipleValue;
+						    	 if(oFraction <= 1 && oFraction > minFractUOM) {
+						    		 minFractUOM = oFraction;
+						    		 minSelUOM = _oUomCode;
+						    			
+							     } else if(oFraction > 1 && (oFraction < maxFractUOM || maxFractUOM == 0.00)){
+							    	 
+							    	 maxFractUOM = oFraction;
+							    	 maxSelUOM = _oUomCode;
+							    	 
+							     }
+						     }
+					    	
+				    	}
+				    	if(minFractUOM == 1){
+				    		 defaultSelUOM = minSelUOM;
+				    			
+				    		  
+				    	} else if(maxFractUOM > 0){
+					    		defaultSelUOM = maxSelUOM;						    	
+					    		
+					    } else if(minFractUOM != null){
+				    		defaultSelUOM = minSelUOM;
+				    		
+				    	}
+				    	
+			       			    			   
+		        	
 				    for(var uomidx =0; uomidx < uomValues.length; uomidx++)
 				    {
 				    	var _uomCode=encodeForHTML(uomValues[uomidx]);
-				    	var _uomDescription=convertToUOMDescription(_uomCode);
-				    	var firstIndex = uomValues[uomidx].indexOf('(');
-				    	var lastIndex = uomValues[uomidx].indexOf(')');
+				    	firstIndex = uomValues[uomidx].indexOf('(');
+				    	lastIndex = uomValues[uomidx].indexOf(')');
+				    	var _uomDescription;
 				    	if(firstIndex != -1 && lastIndex != -1 && lastIndex> firstIndex) 
 				    	{
 				    		_uomDescription = convertToUOMDescription(_uomCode.substring(0,firstIndex))+uomValues[uomidx].substring(firstIndex,lastIndex)+')';
+				    	} else {
+				    		_uomDescription = _uomCode;
 				    	}
-				    	//alert(QuickAddElems[i].uom + _uomCodes[uomidx]);
-				    	if(_uomCodes[uomidx].trim() == QuickAddElems[i].uom.trim())
+				    	
+				    	if(defaultSelUOM.trim() == uomValues[uomidx])
 				    	{
 				    		if(firstIndex!= -1) {				    			
 				    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) + '" selected="yes">' + _uomDescription + '</option>'
@@ -517,20 +581,63 @@ function redrawQuickAddList()
 				    	}
 				    	else
 				    	{
-				    		if(firstIndex!= -1) {				    			
+				    		if(firstIndex!= -1) {	
 				    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) +'" >' + _uomDescription + '</option>'
 				    		}
 				    		else {
 				    			code += '<option value="' + encodeForHTML(uomValues[uomidx])+ '" >' + _uomDescription + '</option>'
 				    		}
-				    	}    
+				    	} 
+				    	 
 				    }
-				    code += '</select>';
-				    code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
-				    code += '</td>';
-		        }
-		        //code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
-		        if(document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value !=null )
+			        	
+					    }			  
+					  				  
+					  else{						
+						  var uomValues = QuickAddElems[i].uomList;
+				        	var _uomCodes = QuickAddElems[i].uomCodes;
+				        	code += '<td class="col-item">'; 
+						    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
+					        
+						    for(var uomidx =0; uomidx < uomValues.length; uomidx++)
+						    {
+						    	var _uomCode=encodeForHTML(uomValues[uomidx]);
+						    	var _uomDescription=convertToUOMDescription(_uomCode);
+						    	var firstIndex = uomValues[uomidx].indexOf('(');
+						    	var lastIndex = uomValues[uomidx].indexOf(')');
+						    	if(firstIndex != -1 && lastIndex != -1 && lastIndex> firstIndex) 
+						    	{
+						    		_uomDescription = convertToUOMDescription(_uomCode.substring(0,firstIndex))+uomValues[uomidx].substring(firstIndex,lastIndex)+')';
+						    	}
+						    	if(_uomCodes[uomidx].trim() == QuickAddElems[i].uom.trim())
+						    	{
+						    		if(firstIndex!= -1) {				    			
+						    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) + '" selected="yes">' + _uomDescription + '</option>'
+						    		}
+						    		else {
+						    			code += '<option value="' + encodeForHTML(uomValues[uomidx])+ '" selected="yes">' + _uomDescription + '</option>'
+						    		}
+						    	}
+						    	else
+						    	{
+						    		if(firstIndex!= -1) {				    			
+						    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) +'" >' + _uomDescription + '</option>'
+						    		}
+						    		else {
+						    			code += '<option value="' + encodeForHTML(uomValues[uomidx])+ '" >' + _uomDescription + '</option>'
+						    		}
+						    	}    
+						    }
+						
+					  }
+				    	 code += '</select>';
+						    code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
+						    code += '</td>';
+
+				    	
+				    	
+		        }//End - Code added to fix XNGTP 2964					
+	        	if(document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value !=null )
 		            	 jobValue = document.QuickAddForm.jobIdValue.value;
 		        
 		        if(jobidFlag == true && jobValue !=null){
