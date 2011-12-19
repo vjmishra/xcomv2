@@ -206,6 +206,17 @@
 
           
         </Attributes>
+        <Indices>
+			<Index Name="XPX_YFS_ORG_I1" Unique="False">
+				<Column Name="CATALOG_ORGANIZATION_CODE" />
+			</Index>
+			<Index Name="XPX_YFS_ORG_I2" Unique="False">
+				<Column Name="PRICING_ORGANIZATION_CODE" />
+			</Index>
+			<Index Name="XPX_YFS_ORG_I3" Unique="False">
+				<Column Name="IS_ENTERPRISE" />
+			</Index>
+         </Indices>
       </Entity>
 	  <Entity ApiNeeded="Y" AuditRequired="Y" Description="XPedx Division and Brand Table"
 		 Prefix="XPX"	TableName="XPX_DIV_BRAND" >
