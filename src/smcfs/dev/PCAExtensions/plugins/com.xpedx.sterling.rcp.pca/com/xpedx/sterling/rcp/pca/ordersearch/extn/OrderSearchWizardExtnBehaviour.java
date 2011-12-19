@@ -42,7 +42,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 //		System.out.println("init()");
 		YRCApiContext apiConterxt = new YRCApiContext();
 		apiConterxt.setApiName("XPXGetStatusList");
-		apiConterxt.setInputXml(YRCXmlUtils.createFromString("<CommonCode CallingOrganizationCode='xpedx' CodeType='XpedxWCStatus' ><OrderBy><Attribute Name='CodeValue' Desc='N'/></OrderBy></CommonCode>"));
+		apiConterxt.setInputXml(YRCXmlUtils.createFromString("<CommonCode CallingOrganizationCode='xpedx' CodeLongDescription='GEN' CodeType='XpedxWCStatus' ><OrderBy><Attribute Name='CodeValue' Desc='N'/></OrderBy></CommonCode>"));
 		apiConterxt.setFormId("com.yantra.pca.ycd.rcp.tasks.orderSearch.wizards.YCDOrderSearchWizard");
 		callApi(apiConterxt);
 	}
