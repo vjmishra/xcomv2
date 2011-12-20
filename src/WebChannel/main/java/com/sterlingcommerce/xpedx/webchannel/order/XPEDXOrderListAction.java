@@ -1275,7 +1275,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 					Element orderHoldTypeElem = orderHoldTypeList.get(i);
 					String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
 					String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
-					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && (holdTypeStatus.equalsIgnoreCase("1100")
+							|| holdTypeStatus.equalsIgnoreCase("1200")))
 						isOrderOnHold = true;
 				}
 			}
