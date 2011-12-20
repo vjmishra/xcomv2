@@ -258,7 +258,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					String assetType = xpedxSCXmlUtils.getAttribute(AssetElem, "Type");
 					String msdsLocation = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentLocation");
 					String msdsContentId = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentID");
-					//Addding .pdf to the file, as per requirement
+					//Adding .pdf to the file, as per requirement
 					if(!msdsContentId.contains(".") && !msdsContentId.endsWith(".pdf")){
 						msdsContentId = msdsContentId + ".pdf";
 					}
@@ -272,19 +272,26 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					}
 					
 					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
-					if("URL".equalsIgnoreCase(assetType) || "ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
-						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;						
+					if("ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
+						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
 						if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
 							 msdsLink = msdsLocation+msdsContentId;							 
 						}else{
 							msdsLink = msdsLocation+"/"+msdsContentId;							
+						}
+					}
+						if("URL".equalsIgnoreCase(assetType)){
+							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+							if(!SCUtil.isVoid(msdsLocation)){
+								msdsLink = msdsLocation;							 
+							}
 						}
 						if( msdsLinkMap.isEmpty())
 						{
 							msdsLinkMap = new HashMap<String, String>();						
 						}
 						msdsLinkMap.put(msdsLinkDesc, msdsLink);
-					}
+					
 					
 					if(assetLinkMap.isEmpty() )
 					{
