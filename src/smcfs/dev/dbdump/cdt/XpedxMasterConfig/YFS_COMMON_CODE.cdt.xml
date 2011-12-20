@@ -5224,6 +5224,16 @@
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
     Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:43:32-05:00"
     Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+<CommonCode CodeLength="0"
+    CodeLongDescription="Place orders on Web (WB) Hold" CodeName=""
+    CodeShortDescription="Place orders on Web (WB) Hold" CodeSymbol=""
+    CodeType="XPXRuleID" CodeValue="PlaceOrderOnWBHold"
+    CommonCodeKey="20111220025440115230" Createprogid=".YEntityServlet"
+    Createts="2011-12-20T02:54:40-05:00" Createuserid="admin"
+    DocumentType="" DocumentTypeSpecific="" Lockid="0"
+    MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
+    Modifyprogid=".YEntityServlet" Modifyts="2011-12-20T02:54:40-05:00"
+    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="20" CodeLongDescription="Commercial Address"
     CodeName="" CodeShortDescription="Commercial" CodeSymbol=""
     CodeType="ADDR_DELIVERY_TYPE" CodeValue="COMMERCIAL"
