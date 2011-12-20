@@ -698,12 +698,12 @@
 							<s:set name="isOrderNeedsAttention" value="%{#_action.isOrderOnHold(#parentOrder,'NEEDS_ATTENTION')}" />
 							<s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" />
 							<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
-							
+							<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
 							
 							<s:if test='%{#status != "Cancelled"}'>
 								<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-									<s:if test='#isPendingApproval'>
+									<s:if test='#isPendingApproval && !#isOrderRejected'>
 										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 									</s:if>
 									<s:if test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
@@ -837,7 +837,7 @@
 								<s:if test='%{#status != "Cancelled"}'>
 									<s:if test='#isPendingApproval || #isOnCSRReviewHold'>
 										<s:if test='#isPendingApproval && !#isOrderRejected'>
-											<s:property value="#parentOrder.getAttribute('Status')" /> (Pending Approval)
+											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 											<br/>
 											<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 										 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
@@ -846,15 +846,15 @@
 											</s:if><br/>
 										</s:if>
 										<s:elseif test='#isPendingApproval && #isOrderRejected'>
-												Submitted (Rejected)
+												<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 										</s:elseif>
 										<s:else> 
-											Submitted (CSR Reviewing)                    				 			
+											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
 										</s:else>
 									</s:if> 
 									<s:else>
 										<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
-														Submitted (CSR Reviewing)
+														Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 										</s:if>
 										<s:else>
 											<s:property value='#chainedOrder.getAttribute("Status")' />
