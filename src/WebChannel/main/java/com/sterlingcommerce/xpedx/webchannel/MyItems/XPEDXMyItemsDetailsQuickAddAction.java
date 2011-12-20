@@ -147,7 +147,8 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		try {
 			//Map containing UOMCode as key and ConvFactor as value
 			uoms = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID, organizationCode);
-			displayItemUOMsMap = new HashMap();
+			//displayItemUOMsMap = new HashMap();
+			displayItemUOMsMap = uoms;
 			/*for (Iterator it = uoms.keySet().iterator(); it.hasNext();){
 				String uomDesc = (String) it.next();
 				Object o = uoms.get(uomDesc);
