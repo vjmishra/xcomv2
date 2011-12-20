@@ -384,7 +384,7 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				YRCXmlUtils.setAttributeValue(olElem,
 						"/OrderLine/Item/@UnitOfMeasure",
 						(itemElem != null) ? itemElem
-								.getAttribute("UnitOfMeasure") : "EACH");
+								.getAttribute("UnitOfMeasure") : "");
 				if (this.isValueNoneOrVoid(olElem,
 						"/OrderLine/LinePriceInfo/@PricingUOM")) {
 					YRCXmlUtils.setAttributeValue(olElem,
@@ -392,7 +392,7 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 							(itemElem != null) ? YRCXmlUtils.getAttributeValue(
 									itemElem,
 									"/Item/PrimaryInformation/@PricingUOM")
-									: "EACH");
+									: "");
 				}
 			} else if (YRCPlatformUI
 					.equals("M", getFieldValue("comboLineType"))) {
