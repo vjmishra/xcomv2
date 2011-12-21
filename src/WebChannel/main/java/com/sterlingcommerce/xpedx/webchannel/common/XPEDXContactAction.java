@@ -53,8 +53,8 @@ public class XPEDXContactAction extends WCMashupAction {
 				Element custExtnEle = XMLUtilities.getElement(customerElement, "Extn");
 				
 				shipToAddress = XPEDXWCUtils.getShipToAddressOfCustomer(customerElement);
-				
-				String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustomerDivision");
+				//Changed ExtnCustomerDivision to ExtnCustOrderBranch for Jira 3251
+				String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustOrderBranch");
 				String customerId=getWCContext().getCustomerId();
 				String envId= SCXmlUtil.getAttribute(custExtnEle, "ExtnEnvironmentCode");
 				
