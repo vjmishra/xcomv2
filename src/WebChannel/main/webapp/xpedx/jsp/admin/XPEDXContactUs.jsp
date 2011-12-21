@@ -138,7 +138,8 @@
 				<s:set name="orgListEle" value="organizationElement" />
 				<s:set name="orgElem" value='#xutil.getChildElement(#orgListEle,"Organization")' />
 				<s:set name="OrgName"  value='#xutil.getAttribute(#orgElem,"OrganizationName")' />
-				<s:set name="OrgCode" value='#xutil.getAttribute(#CustExtn,"ExtnCustomerDivision")' />
+				<!-- Changed ExtnCustomerDivision to  ExtnCustOrderBranch for JIRA 3251 -->
+				<s:set name="OrgCode" value='#xutil.getAttribute(#CustExtn,"ExtnCustOrderBranch")' />
 				<s:set name="orgCorpInfoEle" value='#xutil.getChildElement(#orgElem,"CorporatePersonInfo")' />
 				
 				<s:set name='orgAddress1' value='#xutil.getAttribute(#orgCorpInfoEle,"AddressLine1")' />
