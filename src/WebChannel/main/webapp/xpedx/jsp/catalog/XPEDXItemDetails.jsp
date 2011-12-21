@@ -1364,7 +1364,7 @@ function SubmitActionWithValidation()
 						cssClass="qty_selector"
 						list="itemuomMap" listKey="key"
 						listValue="value"
-						value='%{#_action.getRequestedUOM()}' disabled="%{#isReadOnly}"
+						value='%{#_action.getRequestedDefaultUOM()}' disabled="%{#isReadOnly}" 
 						tabindex="%{#tabIndex}" theme="simple" />
 					<s:hidden name="requestedUOM" id="requestedUOM" value="" />
 					<s:hidden name="uomId" id="uomId" value="" />
