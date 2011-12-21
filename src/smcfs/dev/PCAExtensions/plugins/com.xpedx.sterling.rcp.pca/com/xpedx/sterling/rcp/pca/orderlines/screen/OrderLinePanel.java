@@ -150,6 +150,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 	private Label lblComboItemId;
 	private StyledText stxtLegacyLineNumber;
 	private Text hiddenTxtOrderingUOM;
+	private Text hiddenTxtbaseUOM;
 	private StyledText hiddenStxtPricingUOM;
 	private Text txtOrginalLegacyItem;
 	private Text  txtOriginalCustomerItem;
@@ -1709,6 +1710,14 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			hiddenTxtOrderingUOM.setVisible(false);
 		}
 		
+		hiddenTxtbaseUOM = new Text(pnlCustInfo, SWT.SIMPLE);
+		hiddenTxtbaseUOM.setText("");
+		hiddenTxtbaseUOM.setLayoutData(gridDataLbl);
+		hiddenTxtbaseUOM.setVisible(false);
+		hiddenTxtbaseUOM.setData("name", "hiddenTxtbaseUOM");
+
+		
+		
 		hiddenStxtPricingUOM = new StyledText(pnlCustInfo, SWT.SIMPLE);
 		hiddenStxtPricingUOM.setText("");
 		hiddenStxtPricingUOM.setLayoutData(gridDataLbl);
@@ -2400,6 +2409,13 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			tbd.setName("hiddenTxtOrderingUOM");
 			hiddenTxtOrderingUOM.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		}		
+		
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("OrderLineTmp:/OrderLine/Item/@UnitOfMeasure");
+		
+		tbd.setName("hiddenTxtbaseUOM");
+		hiddenTxtbaseUOM.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
 		
 		
 		if(null != comboOrderingUOM){
