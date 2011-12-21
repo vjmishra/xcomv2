@@ -381,10 +381,17 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 			olElem.setAttribute("Action", "CREATE");
 			// TODO hardcoded UOM to EACH
 			if (YRCPlatformUI.equals("P", getFieldValue("comboLineType"))) {
+				
+				if("".equalsIgnoreCase(getFieldValue("hiddenTxtbaseUOM"))){
 				YRCXmlUtils.setAttributeValue(olElem,
 						"/OrderLine/Item/@UnitOfMeasure",
 						(itemElem != null) ? itemElem
 								.getAttribute("UnitOfMeasure") : "");
+				}else{
+					YRCXmlUtils.setAttributeValue(olElem,
+							"/OrderLine/Item/@UnitOfMeasure",getFieldValue("hiddenTxtbaseUOM"));
+				}
+				
 				if (this.isValueNoneOrVoid(olElem,
 						"/OrderLine/LinePriceInfo/@PricingUOM")) {
 					YRCXmlUtils.setAttributeValue(olElem,
