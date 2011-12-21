@@ -655,14 +655,23 @@ public class XPEDXOrderUtils {
 			Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
 					inputDocument.getDocument());
 			Element wElement = outputListDocument.getDocumentElement();
-			NodeList wNodeList = wElement.getChildNodes();
+			
+			List<Element> listConv = SCXmlUtil.getChildrenList(wElement);
+			
+			//NodeList wNodeList = wElement.getChildNodes();
+			
 			String convStr;
-			if (wNodeList != null) {
-				int length = wNodeList.getLength();
-				for (int i = 0; i < length; i++) {
-					Node wNode = wNodeList.item(i);
+			if (listConv != null) {
+				//2964 start
+				Collections.sort(listConv,new XpedxSortUOMListByConvFactor());
+				
+				//int length = listConv.size();
+				for (Element eleUOM : listConv) {					
+				//2964 end
+					/*Node wNode = listConv.item(element);
+					
 					if (wNode != null) {
-						NamedNodeMap nodeAttributes = wNode.getAttributes();
+					*/	NamedNodeMap nodeAttributes = eleUOM.getAttributes();
 						if (nodeAttributes != null) {
 							Node UnitOfMeasure = nodeAttributes
 									.getNamedItem("UnitOfMeasure");
@@ -679,7 +688,7 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
-			}
+			
 
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
