@@ -272,6 +272,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					}
 					
 					//Handling "/" if exist in msdsLocation, as an extra "/" was coming
+					boolean isMSDSLink=false;
 					if("ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
 						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
 						if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
@@ -279,17 +280,20 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 						}else{
 							msdsLink = msdsLocation+"/"+msdsContentId;							
 						}
+						isMSDSLink=true;
 					}
-						if("URL".equalsIgnoreCase(assetType)){
-							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
-							if(!SCUtil.isVoid(msdsLocation)){
-								msdsLink = msdsLocation;							 
-							}
+					if("URL".equalsIgnoreCase(assetType)){
+						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+						if(!SCUtil.isVoid(msdsLocation)){
+							msdsLink = msdsLocation;							 
 						}
-						if( msdsLinkMap.isEmpty())
-						{
-							msdsLinkMap = new HashMap<String, String>();						
-						}
+						isMSDSLink=true;
+					}
+					if( msdsLinkMap.isEmpty())
+					{
+						msdsLinkMap = new HashMap<String, String>();						
+					}
+					if(isMSDSLink)
 						msdsLinkMap.put(msdsLinkDesc, msdsLink);
 					
 					
