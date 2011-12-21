@@ -179,16 +179,34 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						getSharedListOrValues().add(customerPath);
 					}
 				}*/
-				if(customerList!=null){
-					customerList = getAssignedCustomers(customerList);
-					for (int i=0; i< customerList.length; i++) {// admin
-						String customerId = customerList[i];
+				if(ShareList!=null || customerList!=null)
+				{
+					if(customerList!=null){
+						customerList = getAssignedCustomers(customerList);
+						for (int i=0; i< customerList.length; i++) {// admin
+							String customerId = customerList[i];
+							getSharedListOrNames().add("CustomerID");
+							getSharedListOrValues().add(customerId);
+						}
+					}else{// buyer user customerIds are null
 						getSharedListOrNames().add("CustomerID");
-						getSharedListOrValues().add(customerId);
+						getSharedListOrValues().add(getWCContext().getCustomerId());
 					}
-				}else{// buyer user customerIds are null
-					getSharedListOrNames().add("CustomerID");
-					getSharedListOrValues().add(getWCContext().getCustomerId());
+				}
+				else
+				{
+					String customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
+					customerList = new String[] {getWCContext().getCustomerId()};
+					if(customerPathOfCurrentShipTo!=null)
+						customerList = customerPathOfCurrentShipTo.split("\\|");
+					
+					if(customerList!=null){
+							for (int i=0; i< customerList.length; i++) {// admin
+								String customerId = customerList[i];
+								getSharedListOrNames().add("CustomerID");
+								getSharedListOrValues().add(customerId);
+							}
+						}
 				}
 			}else if(getFilterByAllChk()){// on landing page - home page
 				
