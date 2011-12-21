@@ -137,6 +137,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					}
 					if ("showNormallyStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
+						System.out.println("showNormallyStockedItems=" + divisionForStockedItem.trim());
 						valueElement.setAttribute("Value",
 								divisionForStockedItem.trim());
 					}
