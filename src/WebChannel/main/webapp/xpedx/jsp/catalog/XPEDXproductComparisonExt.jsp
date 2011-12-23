@@ -940,11 +940,12 @@ var prodData = {
 </div>
 <!-- end container  -->
 <!-- BEGIN footer -->
-<div class="t1-footer commonFooter" id="t1-footer">
+<!-- <div class="t1-footer commonFooter" id="t1-footer">
 	<div id="footerContent"><s:action name="footer"
 		executeResult="true" namespace="/common" /></div>
-</div>
-
+</div>   -->
+<!-- added for jira  3222 -->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end --> <swc:dialogPanel title='Add To Cart Result'
 	isModal="true" id="addToCartFailure">
 	<div class="x-hidden dialog-body " id="modalDialogPanel1Content">
