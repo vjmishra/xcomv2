@@ -125,7 +125,10 @@ public class XPEDXConstants {
 	public static final String SHIP_TO_CUSTOMER = "shipToCustomer";
 	public static final String CHANGE_SHIP_TO_IN_TO_CONTEXT = "changeShipToContext";
 	public static final int MAX_ELEMENTS_IN_MINICART=5;
-
+	public static final String ENVELOPES_M = "M_ENV";
+	public static final String ENVELOPES_A = "A_ENV";
+	public static final String SHEET_M = "M_SHT";
+	public static final String SHEET_A = "A_SHT";
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print (msg);
