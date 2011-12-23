@@ -37,6 +37,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.util.YFCCommon;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import net.sf.json.JSONObject;
 
@@ -772,6 +773,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext
 				.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+		 Map<String,List<String>> itemsUOMMap= createItemUOMMap(pricingInfoDoc);
 		if(pricingInfoDoc!=null)
 		{
 			ArrayList<Element> allItemElems = SCXmlUtil.getElements(pricingInfoDoc.getDocumentElement(), "Item");
@@ -819,6 +821,7 @@ public class XPEDXPriceandAvailabilityUtil {
 								String custCurrencyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_CURRENCY_CODE);
 								pricingInfo.setPriceCurrencyCode(custCurrencyCode);
 							}
+							List<String> uomsList=itemsUOMMap.get(itemId);
 							priceCurrencyCode = pricingInfo.getPriceCurrencyCode();
 							pricingUOM = pandAItem.getPricingUOM();
 							String pricingUOMUnitPrice = pandAItem
@@ -902,7 +905,8 @@ public class XPEDXPriceandAvailabilityUtil {
 							
 							ArrayList<XPEDXBracket> displayPriceForUoms = new ArrayList<XPEDXBracket>();
 							
-							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0)
+							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0 &&
+									(uomsList.contains(CWT_UOM_M) || uomsList.contains(CWT_UOM_A)))
 							{
 								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
@@ -911,12 +915,17 @@ public class XPEDXPriceandAvailabilityUtil {
 							String fmtPricePerUom =  xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode,pricingUOMUnitPrice);
 							displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
 							
-							if (priceForTHUom != null)
+							if (priceForTHUom != null &&
+									(uomsList.contains(TH_UOM_M) || uomsList.contains(TH_UOM_A)))
 							{ 
 								String fmtPriceForTHUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForTHUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, thUOMDesc,fmtPriceForTHUom ));
 							}
-							if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM())) {
+							
+							if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) && !XPEDXConstants.ENVELOPES_M.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
+									&& !XPEDXConstants.ENVELOPES_A.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
+									&& !XPEDXConstants.SHEET_M.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
+									&& !XPEDXConstants.SHEET_A.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())) {
 								String fmtPricingUOM  = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, pandAItem.getUnitPricePerRequestedUOM());
 								displayPriceForUoms.add(new XPEDXBracket(null, RequestedQtyUOMDesc, fmtPricingUOM));
 							}
@@ -948,6 +957,23 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 	}
 	
+	private static Map<String,List<String>> createItemUOMMap(Document pricingInfoDoc)
+	{
+		Map<String,List<String>> itemUOMMap=new HashMap<String,List<String>>();
+		NodeList items=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
+		for(int i=0;i<items.getLength();i++)
+		{
+			List<String> uoms=new ArrayList<String>();
+			Element itemElem=(Element)items.item(i);
+			ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
+			for(Element alternateUOM :itemUomList)
+			{
+				uoms.add(alternateUOM.getAttribute("UnitOfMeasure"));
+			}
+			itemUOMMap.put(itemElem.getAttribute("ItemID"),uoms);
+		}
+		return itemUOMMap;
+	}
 	/*
 	 * This takes care of displaying message to Users based on 
 	 * 		1] ServiceDown 2] Transmission Error 3] HeaderLevelError, 4] LineItemError  
