@@ -544,6 +544,24 @@ function showSharedListForm(){
 			}
 		}
 
+		//added for jira 3057
+		function cancelChanges(){
+			var formItemIds = document.getElementById("formItemIds");
+			<s:url id='cancelchange' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			</s:url>
+			if (formItemIds){
+				formItemIds.action = "<s:property value='%{cancelchange}' escape='false'/>";
+				formItemIds.editMode.value = "false";
+				formItemIds.listName.value = Ext.get("listName").dom.value;
+				formItemIds.listDesc.value = Ext.get("listDesc").dom.value;
+				try{ console.log("Action: " + formItemIds.action); }catch(ee){}
+				try{ console.log("Key: " 	+ formItemIds.listKey.value); }catch(ee){}
+				try{ console.log("Desc: " 	+ formItemIds.listDesc.value); }catch(ee){}
+				formItemIds.submit();
+			}	
+		}
+		//end of jira 3057
+		
 		function listNameCheck(component, docDivId){
 			var mandatoryFieldCheckFlag = document.getElementById("mandatoryFieldCheckFlag_"+docDivId).value;
 			if(mandatoryFieldCheckFlag=="true"){
@@ -1786,7 +1804,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 
                 <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px;">
                     <li><a style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-                    <li><a class="grey-ui-btn float-right-imp" href="javascript:saveAllItems();"><span>Cancel</span></a></li>
+                    <li><a class="grey-ui-btn float-right-imp" href="javascript:cancelChanges();"><span>Cancel</span></a></li>
                 </ul>
 				
 			</s:else>
@@ -2277,7 +2295,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	
 							<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; ">
 								<li><a  style="margin-left:5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-								<li><a class="grey-ui-btn float-right-imp" href="javascript:saveAllItems();"><span>Cancel</span></a></li>																
+								<li><a class="grey-ui-btn float-right-imp" href="javascript:cancelChanges();"><span>Cancel</span></a></li>																
 							</ul>
 						</s:if>
 
