@@ -315,7 +315,7 @@ span.underlink:hover {
                         <s:param name="columnSpecs[1].align" value="'center'"/>
                         <s:param name="columnSpecs[1].dataField" value="'ModifyUserName'"/>
                         <s:param name="columnSpecs[1].labelCssClass" value="'width-140'"/>
-                        <s:param name="columnSpecs[1].sortable" value="'true'"/>
+                        <s:param name="columnSpecs[1].sortable" value="'false'"/>
                         <s:param name="columnSpecs[1].fieldCssClass" value="'createdby-lastmod'"/>
                         <%--
                         <s:param name="columnSpecs[1].dataCellBuilder" value="'xpedxDraftOrderListOwnerNameAnchor'"/>
