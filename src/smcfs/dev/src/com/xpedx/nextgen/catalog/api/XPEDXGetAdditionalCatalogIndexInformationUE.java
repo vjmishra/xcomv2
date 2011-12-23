@@ -36,6 +36,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 		if (stockStatus == null || stockStatus.trim().length() == 0) {
 			stockStatus = "W";
 		}
+		System.out.println("stockStatus = "+stockStatus);
 		try {
 			mEnvironment = environment;
 			YFCDocument inDocument = YFCDocument.getDocumentFor(inDocumentUE);
@@ -76,6 +77,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					.getAttribute("OrganizationCode");
 			String[] divisionsForStockedItem = getDivisionsForStockedItem(
 					itemID, organizationCode);
+			System.out.println("divisionsForStockedItem == "+divisionsForStockedItem);
 			NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 					mEnvironment);
 			int lengthC = XpxItemcustXrefList.getLength();
@@ -128,6 +130,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 				}
 				if (divisionsForStockedItem != null
 						&& divisionsForStockedItem.length > 0) {
+					System.out.println("divisionsForStockedItem="+divisionsForStockedItem);
 					String divisionForStockedItem = "";
 					for (String division : divisionsForStockedItem) {
 						if (division != null && division.trim().length() > 0) {
