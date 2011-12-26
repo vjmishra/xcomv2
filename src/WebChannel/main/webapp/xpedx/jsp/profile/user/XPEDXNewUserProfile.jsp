@@ -412,7 +412,7 @@
 			        <div class="clearview">&nbsp;</div>
 			          <div>
 			            <ul  class="float-right">
-			              <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Cancel</span></a></li>
+			              <li class="float-left margin-10"><a href="javascript:window.history.go(-1)"  class="grey-ui-btn"><span>Cancel</span></a></li>
 			              <li class="float-right"><a class="green-ui-btn" onclick="javascript: return addNewUser('addNewUserForm', []);" href="#" ><span>Save</span></a></li>
 			            </ul>
 			          </div>
