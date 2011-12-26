@@ -80,6 +80,7 @@
     <!-- hemantha -->
     <div class="ship-to-top">
     	<div id="address-list">
+    	<s:if test="#defaultShipTo != null">
     		<div class="ship-to-top-left" style="margin-left:0px;">
     		<div style="font-weight:bold;font-size:12px;" class="black">Currently Shopping For:</div>
 			<table valign="top" align="left">
@@ -129,7 +130,7 @@
 				</tr>
 			</table>
     		</div>
-
+    	</s:if>
 		<div style="">
 		<!-- preferred ship-to start-->
 		
