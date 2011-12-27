@@ -1,10 +1,12 @@
 package com.xpedx.sterling.rcp.pca.orderheader.screen;
 
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-
+import java.util.Date;
 import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.jface.viewers.deferred.SetModel;
@@ -52,7 +54,18 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         setLegacyOrderNo(eleOrderDetails);
         shipToId = eleOrderDetails.getAttribute("BuyerOrganizationCode");
 		Element eleExtn = YRCXmlUtils.getChildElement((Element)eleOrderDetails, "Extn");
-		invoiceDate = eleExtn.getAttribute("ExtnInvoicedDate");
+		//Added For Jira 3006: To change the Date fromat from YYYY-MM-DD to YYYYMMDD:
+		String dateTmp=eleExtn.getAttribute("ExtnInvoicedDate");
+		SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd");
+	    Date date=new Date();
+		try {
+			date = sdfSource.parse(dateTmp);
+			} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyyMMdd");
+	    invoiceDate = sdfDestination.format(date);
 		invoiceNo = eleExtn.getAttribute("ExtnInvoiceNo");
 //		userKey=YRCXmlUtils.getAttributeValue(getModel("UserList"), "/User/Customer/Extn/@userKey");	
 		this.pnaErrorValue= page.getOrderLinesPanel().getPageBehavior().getPnAErrorValue();
