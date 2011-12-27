@@ -251,22 +251,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			// Get custom fields labels & data
 			// get the data in csv format
-			String exportData = "Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
+			String exportData = "Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
 			StringBuilder sbCSV = new StringBuilder();
 			@SuppressWarnings("unused")
 			ArrayList<Element> items = getXMLUtils().getElements(
 					getOutDoc().getDocumentElement(), "XPEDXMyItemsItems");
 			ArrayList<String> itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
-			sbCSV.append("Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,");
+			sbCSV.append("Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,");
+			
+			
+			sbCSV.append("Description,Price,");
+			sbCSV.append("Price UOM,Line Acct #,Line PO #,Customer Field 1,Customer Field 2,Customer Field 3");
 			
 			// START - Display the custom fields
-			for (Iterator iterator = getCustomerFieldsMap().keySet().iterator(); iterator.hasNext();) {
+			/*for (Iterator iterator = getCustomerFieldsMap().keySet().iterator(); iterator.hasNext();) {
+				sbCSV.append(",");
 				String customKey = (String) iterator.next();
-				sbCSV.append((String) getCustomerFieldsMap().get(customKey)).append(",");
-			}
+				sbCSV.append((String) getCustomerFieldsMap().get(customKey));
+			}*/
 			// END - Display the custom fields
-			sbCSV.append("Description,Price,");
-			sbCSV.append("Price UOM");
 			sbCSV.append("\n");
 			for (Element item : items) {
 				String id 		 = item.getAttribute("MyItemsKey");
@@ -291,13 +294,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						.append(",");
 				*/
 				sbCSV.append("\"").append(
-						XPEDXMyItemsUtils.encodeStringForCSV(customerPartNumber)
-				).append("\"").append(",");
-				
-				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(item
 								.getAttribute("ItemId"))).append("\"").append(
 						",");
+				
+				sbCSV.append("\"").append(
+						XPEDXMyItemsUtils.encodeStringForCSV(customerPartNumber)
+				).append("\"").append(",");
+				
+				
 				sbCSV.append("").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(item
 								.getAttribute("Qty"))).append("").append(",");
@@ -309,7 +314,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				//Remove the UOM code
 				try {
 					if(itemListEntitled.contains(tmpItemId)){
-						uomId = uomId.substring(2, uomId.length());
+						uomId = uomId.substring(2, uomId.trim().length());
 					}
 				} catch (Exception e) {
 				}
@@ -317,21 +322,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(uomId)).append(
 						"\"").append(",");
-				// START - Display the custom fields
-				for (Iterator iterator = getCustomerFieldsDBMap().keySet()
-						.iterator(); iterator.hasNext();) {
-					String customKey = (String) iterator.next();
-					sbCSV
-							.append("\"")
-							.append("'"+XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey)))+"'")
-							.append("\"").append(",");
-				}
-				// END - Display the custom fields
+				
+				if(item.getAttribute("Name").trim().length()>0)
+				{
 				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(item
 								.getAttribute("Name"))).append("\"")
 						.append(",");
-
+				}
+				else
+				{
+					sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV(item
+									.getAttribute("Desc"))).append("\"")
+							.append(",");
+				}
+				//item.getAttribute("Desc");
 				// Get the Avail and price
 				String avail = "";
 				String price = "";
@@ -369,9 +375,30 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							"\"").append(",");
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(pricingUom)).append(
-									"\"").append(",");
+									"\"");
 				}
-				
+				else
+				{
+					sbCSV.append(",");// for price value
+					sbCSV.append(",");//for price uom value
+					
+				}
+				// START - Display the custom fields
+				for (Iterator iterator = getCustomerFieldsDBMap().keySet()
+						.iterator(); iterator.hasNext();) {
+					String customKey = (String) iterator.next();
+					
+					if(XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))).length()>0)
+					{
+					sbCSV.append("\"").append("'"+XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey)))+"'").append("\"");
+					}
+					else
+					{
+						sbCSV.append(" ");
+					}
+					sbCSV.append(",");
+				}
+				// END - Display the custom fields
 				sbCSV.append("\n");
 			}
 			exportData = sbCSV.toString();
@@ -919,6 +946,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		Element customerOrganizationExtnEle = XMLUtilities
 		.getChildElementByName(result, "Extn");
 		
+		
 		String custLineNoFlag = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnCustLineAccNoFlag");
 		String custPONoFlag = getXMLUtils().getAttribute(
@@ -950,6 +978,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
+		}
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
+			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
 		}
 		
 		if ("Y".equals(custField1Flag)) {
@@ -988,12 +1023,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						"Customer Field 3");
 		}
 		
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
-			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
-			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
-		}
+		
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*if ("Y".equals(custSeqNoFlag)) {
 			getCustomerFieldsMap().put("CustomerLinePONo",

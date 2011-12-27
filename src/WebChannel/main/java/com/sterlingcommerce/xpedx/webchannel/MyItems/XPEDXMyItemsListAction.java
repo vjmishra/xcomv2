@@ -179,7 +179,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						getSharedListOrValues().add(customerPath);
 					}
 				}*/
-				if(ShareList!=null || customerList!=null)
+				if((ShareList!=null || customerList!=null) && customerPaths!=null)
 				{
 					if(customerList!=null){
 						customerList = getAssignedCustomers(customerList);
