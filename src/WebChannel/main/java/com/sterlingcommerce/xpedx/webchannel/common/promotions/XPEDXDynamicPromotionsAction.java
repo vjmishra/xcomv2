@@ -1,12 +1,20 @@
 package com.sterlingcommerce.xpedx.webchannel.common.promotions;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXFileManager;
@@ -14,6 +22,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
+
 
 /**
  * @author reddypur
@@ -63,6 +72,7 @@ import com.yantra.yfs.core.YFSSystem;
  * Catalog Page - registered user
  * 		File name: <Storefront>_CP_<Cat1 of first item>_Promo.html
  * 		If file not found, default to <Storefront>_CP_Promo.hmtl
+ * 
  **/
 
 public class XPEDXDynamicPromotionsAction extends WCAction {
@@ -347,6 +357,92 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		this.generatedFileFullPath = generatedFileFullPath;
 	}
 	
+	
+
+	
+	/**
+	 * extracts catalog current category Name ...
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getCurrentCategoryName() throws Exception {
+		String currentCategoryName = "";
+		String cpath = getCategoryPath();
+		
+		
+		if (cpath != null && cpath.length() > 0 ){
+			
+			Map<String,String> mainCats = getMainCategories();
+			String pathElements[] = cpath.split("/");
+			for(int i = 0; i <pathElements.length ; i++) {
+				
+				if(mainCats !=null && mainCats.size() > 0 )
+					if( mainCats.containsKey(pathElements[i]) )
+						currentCategoryName = mainCats.get(pathElements[i]);
+				XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
+				currentCategoryName = currentCategoryName.replaceAll(" ", "");
+				
+			}
+		}
+			
+		
+		return currentCategoryName;
+	}
+	
+	/**
+	 * extracts catalog main categories...
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public Map<String,String> getMainCategories() throws Exception {
+		Map<String, String> MainCategories = new LinkedHashMap<String, String>();
+
+		Element outputXML = null;
+
+		Map<String, String> valueMap = new HashMap<String, String>();
+		String orgCode = wcContext.getStorefrontId();
+		String customerId = wcContext.getCustomerId();
+		valueMap.put("/SearchCatalogIndex/@CallingOrganizationCode", orgCode);
+		valueMap.put("/SearchCatalogIndex/Item/CustomerInformation/@CustomerID", customerId);
+
+		Element input = WCMashupHelper.getMashupInput("xpedx-PreferredCatalogOptions", valueMap, wcContext
+						.getSCUIContext());
+		
+		String inputXml = SCXmlUtil.getString(input);
+		LOG.debug("Input XML: " + inputXml);
+		
+		Object obj = WCMashupHelper.invokeMashup(
+				"xpedx-PreferredCatalogOptions", input, wcContext
+						.getSCUIContext());
+		outputXML = ((Element) obj).getOwnerDocument().getDocumentElement();
+		if (null != outputXML) {
+			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+		}
+		
+		//System.out.println("Output XML: " + SCXmlUtils.getString(oXML));
+		Element categoryList = XMLUtilities
+				.getChildElementByName(outputXML, "CategoryList");
+		if (categoryList == null) {
+			return MainCategories;
+		}
+		NodeList cat = categoryList.getElementsByTagName("Category");
+		int numCats = cat.getLength();
+		for (int i = 0; i < numCats; i++) {
+			Element catElem = (Element) cat.item(i);
+			String catID = catElem.getAttribute("CategoryID");
+			String sDesc = catElem.getAttribute("ShortDescription");
+			MainCategories.put(catID, sDesc);
+		}
+		
+		XPEDXConstants.logMessage("MainCategories List : " + MainCategories );
+
+		return MainCategories;
+	}
+
+	
 	/*
 	 * Setting AdJuggler URL
 	 */
@@ -389,11 +485,11 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			String callerPage = getCallerPage();
 			String newCallerPageTag = "";
 			
-			
 			log.debug("######################################################################################################### "  );
-			XPEDXConstants.logMessage("---- callerPage  --------- " + callerPage + "----------- CATEGORY " + getCategory() + "---------------------------" );
+			XPEDXConstants.logMessage("---- callerPage  --------- " + callerPage );
 			XPEDXConstants.logMessage("---- getCategoryPath  --------- " + getCategoryPath() );
 			log.debug("######################################################################################################### "  );
+			
 			
 			//Look for input parameters for this action class.
 			validateDynPromoActionParameter(callerPage);
@@ -576,6 +672,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		boolean isPostLoginFileBuild = false;
 		boolean isFileExists = false;
 		boolean goForDefault = false ;
+		boolean goForCurrentCatDefault = false ;
 		String msgFileInfo  ="";
 		
 		try {
@@ -606,7 +703,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					if(isPostLoginFileBuild == false ||  isFileExists == false)
 						goForDefault=true ;
 					
-					msgFileInfo = msgFileInfo + " , isFileExists " + isFileExists + " , goForDefault flag " + goForDefault ;
+					msgFileInfo = msgFileInfo + " , isFileExists : " + isFileExists + " , goForDefault flag : " + goForDefault ;
 					
 				
 				if (goForDefault == true ) {
@@ -626,16 +723,19 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			}
 			
 			goForDefault=false ;
+			goForCurrentCatDefault = false;
 			/**
 			* Catalog Page - registered user
 			* 		File name: <Storefront>_CP_<Cat1 of first item>_Promo.html
 			* 		If file not found, default to <Storefront>_CP_Promo.hmtl
 			*/
+			
 			if( XPEDX_PROMO_RESP_POST_LOGIN_CATALOG_PAGE.equalsIgnoreCase(newCallerPageTag ) ) {
 				isPostLoginFileBuild = false;
 				buildFileNameForPostLoginPage  = "";
 					msgFileInfo = "Catalog Category " + getCategory() + " , FistItemIn Category : "  + getFirstItemInCategory();
 				
+					/*				
 				if (  getFirstItemInCategory() != null && getFirstItemInCategory().length() > 0  )
 					{
 					buildFileNameForPostLoginPage = getStoreFrontId() + "_CP_"+ getFirstItemInCategory() + "_" + STD_PROMO_HTML_SUFFIX ;
@@ -648,12 +748,42 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 						String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + buildFileNameForPostLoginPage;
 						isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
 					}
+					*/
 					
+					//Go for Catalog Current Category Default page
+					//	File name: <Storefront>_CP_<Cat1 of first item>_Promo.html
+					if(isPostLoginFileBuild == false ||  isFileExists == false)
+						goForCurrentCatDefault=true ;
+					
+					msgFileInfo = msgFileInfo + " , isFileExists : " + isFileExists + " , goForCurrentCatDefault flag : " + goForCurrentCatDefault ;
+				
+					if (goForCurrentCatDefault == true ) {
+						
+						buildFileNameForPostLoginPage = getStoreFrontId() + "_CP_" + getCurrentCategoryName() + "_" +STD_PROMO_HTML_SUFFIX ;
+						
+						msgFileInfo = msgFileInfo + " , " + " -Catalog Current Category Default- File Name  : " + buildFileNameForPostLoginPage ;
+						
+						//Just to get copy latest file from external folder to WL path
+						simpleFileCheck(buildFileNameForPostLoginPage);
+						
+						//This sets two variables for one with filename, other with fullpath.
+						isPostLoginFileBuild = setGeneratedFileName( buildFileNameForPostLoginPage );
+					}
+					
+					if(isPostLoginFileBuild == true )
+					{	
+						String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + buildFileNameForPostLoginPage;
+						isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
+					}
+					
+					//Go for Catalog Home page Default
 					if(isPostLoginFileBuild == false ||  isFileExists == false)
 						goForDefault=true ;
 					
-					msgFileInfo = msgFileInfo + " , isFileExists " + isFileExists + " , goForDefault flag " + goForDefault ;
+					msgFileInfo = msgFileInfo + " , isFileExists : " + isFileExists + " , goForDefault flag : " + goForDefault ;
 				
+					
+					
 					
 					if (goForDefault == true ) {
 					setDefaultFileUsed(goForDefault);
@@ -670,10 +800,11 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				}
 				log.info( msgFileInfo );
 			}
-			
 			msgFileInfo = msgFileInfo + " , " + " getGeneratedFileFullPath ()  : " + getGeneratedFileFullPath() ;
 			
+			XPEDXConstants.logMessage(" =================== " );
 			XPEDXConstants.logMessage(" POST-LOGIN-PROMO : msgFileInfo : " + msgFileInfo );
+			XPEDXConstants.logMessage(" =================== " );
 			logMessage(" POST-LOGIN-PROMO : " + buildFileNameForPostLoginPage);
 			logMessage(" POST-LOGIN-PROMO : " + getGeneratedFileFullPath());
 		
