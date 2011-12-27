@@ -409,7 +409,7 @@
 					<div class="slideshow"> 
 							<s:action name="xpedxDynamicPromotions" executeResult="true" namespace="/common" >
 								<s:param name="callerPage">catalog</s:param>
-								<s:param name="category" value='#parameters.cname'/>
+								<s:param name="categoryPath" value='#parameters.path'/>
 							</s:action>
 					</div>  
 					--%>
@@ -417,7 +417,6 @@
 					<div class="slideshow"> 
 							<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
 								<s:param name="callerPage">CatalogPage</s:param>
-								<s:param name="category" value='#parameters.cname'/>
 								<s:param name="categoryPath" value='#parameters.path'/>
 							</s:action>
 					</div>
