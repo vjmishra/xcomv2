@@ -960,17 +960,23 @@ public class XPEDXPriceandAvailabilityUtil {
 	private static Map<String,List<String>> createItemUOMMap(Document pricingInfoDoc)
 	{
 		Map<String,List<String>> itemUOMMap=new HashMap<String,List<String>>();
-		NodeList items=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
-		for(int i=0;i<items.getLength();i++)
+		if(pricingInfoDoc !=null)
 		{
-			List<String> uoms=new ArrayList<String>();
-			Element itemElem=(Element)items.item(i);
-			ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
-			for(Element alternateUOM :itemUomList)
+			NodeList items=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
+			for(int i=0;i<items.getLength();i++)
 			{
-				uoms.add(alternateUOM.getAttribute("UnitOfMeasure"));
+				List<String> uoms=new ArrayList<String>();
+				Element itemElem=(Element)items.item(i);
+				ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
+				if(itemUomList != null)
+				{
+					for(Element alternateUOM :itemUomList)
+					{
+						uoms.add(alternateUOM.getAttribute("UnitOfMeasure"));
+					}
+					itemUOMMap.put(itemElem.getAttribute("ItemID"),uoms);
+				}
 			}
-			itemUOMMap.put(itemElem.getAttribute("ItemID"),uoms);
 		}
 		return itemUOMMap;
 	}
