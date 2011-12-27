@@ -182,6 +182,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 			String custField3Flag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField3Flag");
 			
 			
+			
 			XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			
 			String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
@@ -204,6 +205,10 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 				}
 			}
 			
+			if ("Y".equals(custPONoFlag)) {
+				getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+				getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
+			}
 			//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 			/*if ("Y".equals(custSeqNoFlag)) {
 				getCustomerFieldsMap().put("CustomerLinePONo", "Customer Seq No");
@@ -237,10 +242,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 					getCustomerFieldsMap().put("CustLineField3", "Customer Field 3");
 			}
 			
-			if ("Y".equals(custPONoFlag)) {
-				getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
-				getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
-			}
+			
 			
 		} catch (Exception e) {
 			LOG.error(e.toString());
@@ -291,8 +293,8 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 				•	Description – Product description, this will be used for special items or the items which we did not find in the catalog. For the ones we found in the catalog, the desc will be used from the catalog and will ignore this description.
 				 */
 				
-				vo.setCustomerPartNumber(nextLine[0]);
-				vo.setSupplierPartNumber(nextLine[1]);
+				vo.setCustomerPartNumber(nextLine[1]);
+				vo.setSupplierPartNumber(nextLine[0]);
 				vo.setQty(nextLine[2]);
 				/* Append the Uom Id in the import create action.
 				 * This way we can avoid the getComplteteItemList call in this class
@@ -306,13 +308,15 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 				//vo.setLineLevelCode(nextLine[4]);
 				
 				int counter = 0;
+				vo.setDescription(nextLine[counter+3+1]);
+				
 				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) {
 					counter++;
 					String currentField = (String)iterator.next();
-					String currentValue	= nextLine[counter+3];
+					String currentValue	= nextLine[counter+3+3];
 					vo.getCustomFields().put(currentField, currentValue);
 				}
-				vo.setDescription(nextLine[counter+3+1]);
+				//vo.setDescription(nextLine[counter+3+1]);
 				
 				//validate against the rules
 				boolean addVo = true;
