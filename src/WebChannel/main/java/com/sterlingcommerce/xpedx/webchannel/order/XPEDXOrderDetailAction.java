@@ -4,7 +4,10 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -302,6 +305,34 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				encInvoiceNo = URLEncoder.encode(encInvoiceNo);
 			}
 			String extnInvoicedDate = extnElem.getAttribute("ExtnInvoicedDate");
+			if (extnInvoicedDate != null && extnInvoicedDate.trim().length() > 0 && extnInvoicedDate!="") {
+				//Start -Date format change to YYYYMMDD
+			SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd");
+
+			Date date=new Date();
+
+			try {
+
+			//String dateTmp;
+			date = sdfSource.parse(extnInvoicedDate);
+
+			
+			} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+
+			}
+
+			SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyyMMdd");
+
+			extnInvoicedDate  = sdfDestination.format(date);
+			}
+			//End -Date format change to YYYYMMDD
+			
+			
+			
 			if (extnInvoicedDate != null && extnInvoicedDate.trim().length() > 0) {
 				encInvoiceDate = XPEDXWCUtils.encrypt(extnInvoicedDate);
 				encInvoiceDate = URLEncoder.encode(encInvoiceDate);
