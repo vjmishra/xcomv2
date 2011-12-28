@@ -853,6 +853,11 @@
 				<ItemList>
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" MinOrderQuantity="" PricingUOM="" PricingQuantityConvFactor=""/>
+						<AlternateUOMList>
+							<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""
+											UnitOfMeasure="" />
+						</AlternateUOMList>
+						
 						<Extn ExtnMwt="" />
 					</Item>
 				</ItemList>
