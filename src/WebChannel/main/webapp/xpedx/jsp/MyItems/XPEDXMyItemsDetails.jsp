@@ -2157,7 +2157,12 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
-                                <li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+                                	<li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                </s:if>
+                                <s:else>
+                                	<li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
+                                </s:else> 
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
 	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
