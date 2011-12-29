@@ -281,7 +281,6 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 						}
 					}
 					if(chngfOrdEle != null) {
-						validateWebHoldFlag(chngfOrdEle, buyerOrgCustEle);						
 						if(ordType.equalsIgnoreCase("Customer")) {
 							if(fOrderEle == null) {
 								if(chngfOrdEle.hasAttribute("OrderHeaderKey")) {
@@ -326,8 +325,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 				if(chngfOrdersArray[i].equalsIgnoreCase("AA")) {
 					chngfOrdEle = (YFCElement)chngfOrders.get("AA");
 					if(chngfOrdEle != null) {
-						validateWebHoldFlag(chngfOrdEle, buyerOrgCustEle);
-						Map<String, YFCElement> retDocMap = processOrderEditA(env, chngfOrdEle, fOrderEle, cOrderEle, buyerOrgCustEle);
+							Map<String, YFCElement> retDocMap = processOrderEditA(env, chngfOrdEle, fOrderEle, cOrderEle, buyerOrgCustEle);
 						if(retDocMap != null) {
 							if(retDocMap.size() > 0) {
 								YFCElement foDocEle = (YFCElement)retDocMap.get("FO");
