@@ -475,8 +475,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <body class="  ext-gecko ext-gecko3">
 <div id="main-container">
 
-<div id="main"><s:action name="xpedxHeader" executeResult="true"
-	namespace="/common" /> <!-- // t1-header end --> <!-- begin t1-navigate -->
+<div id="main">
+	<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+		<s:param name='shipToBanner' value="%{'true'}" />
+	</s:action> 
+	<!-- // t1-header end --> <!-- begin t1-navigate -->
 
 <div id="tq-quick-add-overlay" class="quick-add float-right" style="display: none;">
 	<div class="tq-quick-add-form">
@@ -574,15 +577,6 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			</div>
 	</div>
 </div><!-- id="tq-quick-add-overlay" -->
-
-
-
-	<!-- ship to banner -->
-	<s:action name="xpedxShiptoHeader"
-		executeResult="true" namespace="/common" />		
-	<!-- end ship to banner -->
-
-
 
 <div class="container shopping-cart">
 

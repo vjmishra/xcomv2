@@ -348,15 +348,16 @@
 	</s:if>
 	<s:else>
 		<div id="main" class="anon-pages">
-	</s:else>
-	
-	
-	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	</s:else>	
 	
 	<s:if test='!#guestUser'>  
-	<s:action name="xpedxShiptoHeaderCat3" executeResult="true"
-		namespace="/common" /> 
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+			<s:param name='shipToBanner' value="%{'true'}" />
+		</s:action> 
 	</s:if>
+	<s:else>
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	</s:else>
 	<!-- <div class="container catalog" style="overflow: auto;" > -->
 
 <%-- 	<s:if test='!#guestUser'>  
