@@ -139,13 +139,15 @@
 <s:else>
 <div id="main" class="anon-pages">
 </s:else>
-	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	
 <s:if test='!#guestUser'>  
-<s:action name="xpedxShiptoHeader" executeResult="true"
-		namespace="/common" /> 
+	<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+		<s:param name='shipToBanner' value="%{'true'}" />
+	</s:action> 
 <div class="container catalog" style="overflow: auto;" >
 </s:if>
 <s:else>
+	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 <div class="container" id="catalog-landing-page" style="overflow: auto;" >
 </s:else>
 
