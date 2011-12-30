@@ -174,6 +174,8 @@
 	}
 
 	function search_check(){
+		//Added For Jira 3232 for order search
+        	Ext.Msg.wait("Processing...");
 		if(Ext.fly('searchFieldName').dom.selectedIndex=='0' && 
 			 Ext.fly('FromDate').dom.value=='' && Ext.fly('shipToSearchFieldName').dom.selectedIndex=='0' && 
 			 	Ext.fly('ToDate').dom.value=='' )
@@ -279,6 +281,8 @@ div.demo {
 		}
 	// Added for JIRA 2770
 	function showShipTos(){		
+		//Added For Jira 3232 
+    		Ext.Msg.wait("Processing...");
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
 			//alert("hi");		
 			$('a[href="#shipToOrderSearchDiv"]').click(); 
