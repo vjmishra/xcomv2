@@ -263,12 +263,13 @@
 	}
 
 	// Added for JIRA 2770
-	function showShipTos(){		
+	function showShipTos(){	
+		//Added For Jira 3232
+    	Ext.Msg.wait("Processing...");	
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
 			//alert("hi");		
 			$('a[href="#shipToOrderSearchDiv"]').click(); 
 			//showAssignedShipToForOrderSearch('<s:property value="#shipToForOrderSearch"/>');
-			
 			}
 		else if(document.getElementById("shipToSearchFieldName").selectedIndex=='0'){
 			document.getElementById("shipToSearchFieldName1").value="";
@@ -276,12 +277,15 @@
 		else{
 			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value
 			}
+		
 		return;
 	}
 	
-	function submit_orderListForm()
-	{
-		//date validation
+	function submit_orderListForm(){
+		
+		//Added For Jira 3232
+    	Ext.Msg.wait("Processing...");
+        //date validation
 		var str1  = document.getElementById("FromDate").value; 
 		var str2  = document.getElementById("ToDate").value;
 		if(str1!=null && str1.length>0 && str2!=null && str2.length>0)
