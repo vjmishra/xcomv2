@@ -4282,7 +4282,8 @@ function deleteLine(orderHeaderKey, lineKey){
 
 
 function updateLines() {
-
+	//added for jira 3232
+	Ext.Msg.wait("Processing...");
     if(swc_validateForm("miniCartData") == false)
 
     {
@@ -4306,7 +4307,8 @@ function updateLines() {
         success: function (response, request){
 
             refreshMiniCartLink();
-
+            //added for jira 3232
+            Ext.MessageBox.hide();
         },
 
         failure: function (response, request){
@@ -4314,7 +4316,8 @@ function updateLines() {
         	//is successful. Just refresh the mini cart always.The application error if it happens, should
         	//be handled separately
         	refreshMiniCartLink();
-
+        	 //added for jira 3232
+        	Ext.MessageBox.hide();
         }
 
     });
