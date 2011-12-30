@@ -122,10 +122,17 @@ $(function() {
 });
 
 function xpedxOrderAgain(){
+	//Added For Jira 3232
+        Ext.Msg.wait("Processing...");
 	document.mainOrderForm.action = "orderAgain.action";
 	var form = Ext.get("mainOrderForm");
 	addCSRFToken(form.dom, 'form');
 	form.dom.submit();
+}
+
+//Added For Jira 3232
+function msgWait(){
+	Ext.Msg.wait("Processing...");
 }
 	
 function selectAllCheckBox(){
@@ -461,12 +468,12 @@ function showSplitDiv(divId)
 				<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
-								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
+								<a href="javascript:editOrder('${urlEditOrderId}');" onclick="javascript:msgWait();" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>				
 					<s:else>					
 						<s:if test="#_action.isEditableOrder()">
-							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
+							<a href="javascript:editOrder('${urlEditOrderId}');" onclick="javascript:msgWait();" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 						</s:if>					
 					</s:else>
 				</s:if>
@@ -1315,12 +1322,12 @@ function showSplitDiv(divId)
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
-								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
+								<a href="javascript:editOrder('${urlEditOrderId}');" onclick="javascript:msgWait();" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>		
 					<s:else>				
 						<s:if test="#_action.isEditableOrder()">			     
-							<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
+							<a href="javascript:editOrder('${urlEditOrderId}');" onclick="javascript:msgWait();" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
 						</s:if>				
 					</s:else>
 			</s:if>
