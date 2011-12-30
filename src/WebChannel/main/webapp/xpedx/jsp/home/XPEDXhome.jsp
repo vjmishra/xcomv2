@@ -28,53 +28,22 @@
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css">
 	    
 		<s:include value="../common/XPEDXStaticInclude.jsp"/>
-	 	
-	 	<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
-		<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
-		 
+	 	<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+	 	<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
 		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
-		<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-		<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
-		<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>	
-			
 		<!-- carousel scripts css  -->
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 	
 	    <!-- jQuery -->
-		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-	
-	    <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-	    
-		<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-		<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-		<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script>    
-	   
-	   
 	    <!-- Page Calls -->
-		<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
 		<!-- END head-calls.php -->
 	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
 	</s:if>
 	<s:else>
 	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
 		<s:include value="../common/XPEDXStaticInclude.jsp"/>
-		<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
-		<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
-		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-		<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-		<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-		<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script> 
-		<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
 	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-	
-	    <script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
 	</s:else>
 	
@@ -82,49 +51,37 @@
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
  <!-- Lightbox/Modal Window -->
-	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-	    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
 	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-	    
-	<script type="text/javascript">
-
-	function browserSupport(){
-
-		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
-			 if (ieversion < 7)
-			  alert("The application does not support this browser"); 	
-			}
-
-		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		    var NavigatorVersion=new Number(RegExp.$1)
-		         alert("The application does not support this browser"); 
-		}
-
-		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
-		    var ffversion=new Number(RegExp.$1)
-			 if(ffversion < 3.4)
-		 	    alert("The application does not support this browser"); 
-		 }
-
-		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
-		    var str= navigator.appVersion;
-			var str1= str.substring(89,90);
-			if(str1 < 4)
-		  	  alert("The application does not support this browser"); 
-		 }
-		
-		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		      alert("The application does not support this browser"); 
-		}
-		
-		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		     alert("The application does not support this browser"); 
-		}
-
-		}
-
 	
+    <s:set name="storefront"  value='wCContext.storefrontId'/>
+    <s:if test="#isGuestUser == true">
+		<title><s:property value="%{#storefront}"></s:property></title>
+		<!-- Webtrends Start -->
+		<meta name="WT.ti" content="<s:property value='%{#storefront}'/>"  /> 
+		 <!-- Webtrends End -->
+	</s:if>
+	<s:else>
+		<title><s:property value="%{#storefront}"/></title>
+		<!-- Webtrends Start -->
+		<meta name="WT.ti" content="<s:property value='%{#storefront}'/>" /> 
+		 <!-- Webtrends End -->
+	</s:else>
+	
+</head>
+<body class="ext-gecko ext-gecko3">
+    <s:if test="#isGuestUser == true">
+		<div id="main-container">
+			<div id="main" class="anon-pages">
+			
+				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+			 	<s:action name="login" executeResult="true" namespace="/common" />
+		  </div>
+		</div>
+		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+<script type="text/javascript">
+		browserSupport();
+		</script>
+	<script type="text/javascript">
 	$(document).ready(function() {
         $(document).pngFix();
         $("#video-tour").fancybox({
@@ -150,54 +107,7 @@
 	});
 	$(document).ready(function() { 
 		$("#primary-category td ul li a").shorten();});
-	function loginSubmit(myfield,e)
-	{
-		var keycode;
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		else return true;
-
-		if (keycode == 13)
-	   	{
-			document.singForm.submit();
-	   		return false;
-	   	}
-		else{
-	   		return true;
-		}
-	}
-	
-    </script>
-    <s:set name="storefront"  value='wCContext.storefrontId'/>
-    <s:if test="#isGuestUser == true">
-		<title><s:property value="%{#storefront}"></s:property></title>
-		<!-- Webtrends Start -->
-		<meta name="WT.ti" content="<s:property value='%{#storefront}'/>"  /> 
-		 <!-- Webtrends End -->
-	</s:if>
-	<s:else>
-		<title><s:property value="%{#storefront}"/></title>
-		<!-- Webtrends Start -->
-		<meta name="WT.ti" content="<s:property value='%{#storefront}'/>" /> 
-		 <!-- Webtrends End -->
-	</s:else>
-
-</head>
-<body class="ext-gecko ext-gecko3">
-    <s:if test="#isGuestUser == true">
-		<div id="main-container">
-			<div id="main" class="anon-pages">
-			
-				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-			 	<s:action name="login" executeResult="true" namespace="/common" />
-		  </div>
-		</div>
-		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-
-		<script type="text/javascript">
-		browserSupport();
 		</script>
-	
 </s:if>
 <!-- RUgrani BEGIN: Logged in User Home page -->
 <s:else>
@@ -276,7 +186,6 @@
 			</s:else>			
 			<!-- Ad Juggler Tag Ends -->
 			
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 		</div>
 		
 		<div class="clearall">&nbsp;</div>
@@ -353,6 +262,93 @@
 		
  		
 </s:else>
+
+<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+
+<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+
+<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
+
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script> 
+<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
+<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
+<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
+<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
+<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+	
+	
+<script type="text/javascript">
+
+	function browserSupport(){
+
+		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
+		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
+			 if (ieversion < 7)
+			  alert("The application does not support this browser"); 	
+			}
+
+		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		    var NavigatorVersion=new Number(RegExp.$1)
+		         alert("The application does not support this browser"); 
+		}
+
+		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
+		    var ffversion=new Number(RegExp.$1)
+			 if(ffversion < 3.4)
+		 	    alert("The application does not support this browser"); 
+		 }
+
+		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
+		    var str= navigator.appVersion;
+			var str1= str.substring(89,90);
+			if(str1 < 4)
+		  	  alert("The application does not support this browser"); 
+		 }
+		
+		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		      alert("The application does not support this browser"); 
+		}
+		
+		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		     alert("The application does not support this browser"); 
+		}
+
+		}
+
+	function loginSubmit(myfield,e)
+	{
+		var keycode;
+		if (window.event) keycode = window.event.keyCode;
+		else if (e) keycode = e.which;
+		else return true;
+
+		if (keycode == 13)
+	   	{
+			document.singForm.submit();
+	   		return false;
+	   	}
+		else{
+	   		return true;
+		}
+	}
+	
+    </script>
+
 </body>
 <!-- RUgrani END: Logged in User Home page -->
 <script>
