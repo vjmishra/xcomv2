@@ -538,6 +538,11 @@
 
 	var currentAadd2ItemList = null;
 	
+	//added for jira 3232
+	function msgWait(){
+        Ext.Msg.wait("Processing..."); 
+	}
+	
 	function getValueFromHTML(data, key, delimiter){
 		var res = "";
 		try{
@@ -866,9 +871,13 @@
             url :url,
             method: 'POST',
             success: function (response, request){
+                //added for jira 3232
+                Ext.MessageBox.hide();
 	        	document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
        		},
        		failure: function (response, request){
+       	        //added for jira 3232
+       	        Ext.MessageBox.hide();
        			document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
              }
         });     
@@ -2318,10 +2327,14 @@ function callAjaxForSorting(url,divId)
 			       			{
 				    			var myDiv = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
 				    			var progressDiv = document.getElementById("progressDiv");
+				    			//Added for jira 3232
+				    			Ext.MessageBox.hide();
 				    			progressDiv.innerHTML = "";
 			    				myDiv.innerHTML = response.responseText;
 		        			},
 		        			failure: function ( response, request ) {
+		        				//Added for jira 3232
+		        				Ext.MessageBox.hide();
 
 		        	           // alert("Error while loading mini cart!");
 
@@ -2701,7 +2714,7 @@ function callAjaxForSorting(url,divId)
 					<s:if test='#xpedxSelectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
 		            	 <!-- cssClass="active" -->
-		            	<s:a  href='%{catURL11}' cssClass="link" >Order Management</s:a>
+		            	<s:a  onclick="msgWait()"  href='%{catURL11}' cssClass="link" >Order Management</s:a>
 	            	</s:if>
 	            	<s:else>
 	            		<li>
@@ -2717,7 +2730,7 @@ function callAjaxForSorting(url,divId)
 						</s:url>
 						<s:if test="%{isApprover()}">
 							<li>
-								<s:a href='%{catURL10}' cssClass="link">
+								<s:a href='%{catURL10}' onclick="msgWait()" cssClass="link">
 									Pending Approval(s)
 								</s:a>
 							</li>
@@ -2728,7 +2741,7 @@ function callAjaxForSorting(url,divId)
 									<s:param name='scFlag'>Y</s:param>
 						</s:url>
 						<li>
-							<s:a href='%{catURL11}' cssClass="link">
+							<s:a href='%{catURL11}' onclick="msgWait()" cssClass="link">
 								Orders
 							</s:a>
 						</li>
@@ -2750,12 +2763,12 @@ function callAjaxForSorting(url,divId)
 							</li>
 						</s:if>
 						<li>
-							<s:a href='%{catURL11}' cssClass="link">
+							<s:a href='%{catURL11}' onclick="msgWait()" cssClass="link">
 								Return Requests
 							</s:a>
 						</li>
 						<li>
-							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />" tabindex="2003">My Carts</a>
+							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />" onclick="msgWait()" tabindex="2003">My Carts</a>
 						</li>
 			        </ul>
 	            </li>
