@@ -1,5 +1,7 @@
 function checkOut()
 {
+	//added for jira 3232
+	Ext.Msg.wait("Processing...");
 	if(validateOrderMultiple() == false)
 	{
 		return;
@@ -22,6 +24,8 @@ function checkOut()
 
 function addProductsToOrder()
 {
+	//added for jira 3232
+	Ext.Msg.wait("Processing...");
 	resetQuantityErrorForQuckAdd();
     if(QuickAddElems.length > 0)
     {
@@ -110,6 +114,8 @@ function resetQuantityErrorForQuckAdd()
 }
 function update()
 {
+	//added for jira 3232
+	Ext.Msg.wait("Processing...");
 	if(document.getElementById('cartName_new').value.trim() == "")
 	{
 		alert("Cart name can't be blank, please add a valid name for cart.");
@@ -273,6 +279,8 @@ var jobidFlag = false;
 
 function addProductToQuickAddList(element)
 {
+	//added for jira 3232
+	Ext.Msg.wait("Processing...");
 	//alert("-LP11- Shopping Cart addProductToQuickAddList ");
 	var theForm = element.form;
     var otherForm = document.OrderDetailsForm;
@@ -360,9 +368,10 @@ function addProductToQuickAddList(element)
     {
         addStringFromForm = theForm.localizedAddToCartLabel.value;
     }
-    
     redrawQuickAddList(element);
     validateItems();
+    //added for jira 3232
+    Ext.MessageBox.hide();
     theForm.qaProductID.focus();
 
     return false;
