@@ -139,8 +139,9 @@
                <xsl:value-of select="'9000'" />
             </xsl:if>
          </xsl:attribute>
-
-         <xsl:if test="string-length(normalize-space(//HeaderComments)) &gt; 0">
+		
+		 <!-- Begin - Changes made by Mitesh Parikh for JIRA 3248 -->         
+         <xsl:if test="((string-length(normalize-space(//HeaderComments)) &gt; 0) or ((string-length(normalize-space(//HeaderComments)) = 0) and (normalize-space(//HeaderProcessCode) = 'C' or normalize-space(//HeaderProcessCode) = 'D')))"> 
             <xsl:element name="Instructions">
                <xsl:element name="Instruction">
                   <xsl:attribute name="InstructionType">HEADER</xsl:attribute>
@@ -151,6 +152,7 @@
                </xsl:element>
             </xsl:element>
          </xsl:if>
+         <!--End - Changes made by Mitesh Parikh for JIRA 3248 -->
 
          <xsl:element name="Extn">
             <xsl:attribute name="ExtnEnvtId">
