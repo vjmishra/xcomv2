@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
@@ -375,8 +376,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (rootEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(rootEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(rootEle.getAttribute("OrderHeaderKey"))) {
 					setInstructionKeys(rootEle, fOrderEle);
 					setExtendedPriceInfo(env, rootEle, false);
-					filterAttributes(rootEle, false);
-
+					filterAttributes(rootEle, false);					
+					
 					System.out.println();
 					System.out.println("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:" + rootEle.getString());
 
@@ -4579,6 +4580,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									String instDtlKey = getOrderInstructionKey(extnWebConfNum, extnLegacyOrderNo, genNo, ordEle);
 									if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 										instructionEle.setAttribute("InstructionDetailKey", instDtlKey);
+										/*Begin - Changes made by Mitesh Parikh for JIRA 3248*/
+										String headerProcessCode=rootEle.getAttribute("HeaderProcessCode");
+										String newInstructionText=instructionEle.getAttribute("InstructionText");
+										boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
+										if(("D".equalsIgnoreCase(headerProcessCode) || "C".equalsIgnoreCase(headerProcessCode)) && (isNewInstructionTextVoid))
+										{
+											String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)ordEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
+											instructionEle.setAttribute("InstructionText", instructionTextInDB);
+											instructionEle.setAttribute("Action", "REMOVE");
+										}
+										/*End - Changes made by Mitesh Parikh for JIRA 3248*/
 									}
 								}
 							}
