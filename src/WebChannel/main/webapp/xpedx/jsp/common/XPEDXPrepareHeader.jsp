@@ -3,10 +3,15 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" /> 
+<!-- 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
+ --> 
+
+ 
+ <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
   <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	
   <!--<script type="text/javascript" src="/swc/xpedx/js/common/request.js"></script>	
   <script type="text/javascript" src="/swc/xpedx/js/common/applicationinfo.js"></script>
@@ -651,8 +656,6 @@
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
 	<script type="text/javascript">
 	$(document).ready(function() {
 	$('.mini-cart-trigger').cluetip({
