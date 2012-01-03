@@ -329,7 +329,9 @@
 
          <LineItems>
             <xsl:for-each select="Order/OrderLines/OrderLine">
+            <xsl:sort select="Extn/@ExtnWebLineNumber" order="ascending" />
                <LineItem>
+               
                   <WebLineNumber>
                      <xsl:value-of select="Extn/@ExtnWebLineNumber" />
                   </WebLineNumber>
@@ -532,4 +534,3 @@
       </Order>
    </xsl:template>
 </xsl:stylesheet>
-
