@@ -1,24 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-
-<!-- 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
- --> 
-
- 
  <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
   <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	
-  <!--<script type="text/javascript" src="/swc/xpedx/js/common/request.js"></script>	
-  <script type="text/javascript" src="/swc/xpedx/js/common/applicationinfo.js"></script>
-  <script type="text/javascript" src="/swc/xpedx/js/common/userpreferences.js"></script>
-  
-  <script type="text/javascript" src="/swc/xpedx/js/common/scuiplat.js"></script>
-  <script type="text/javascript" src="/swc/xpedx/js/common/debugger.js"></script> !-->
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
@@ -27,18 +13,13 @@
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 <script type="text/javascript">
 		function updateShareListChild(){
-		}
-		
-		var callShareList  = true;
-		
-		function doAction(action, idx, listKey, listName, numOfItems){
-			
+		}		
+		var callShareList  = true;		
+		function doAction(action, idx, listKey, listName, numOfItems){			
 			//Declare some vars
-			var showWait = true;
-			
+			var showWait = true;			
 			//Init the form
-			var form = Ext.get("doAction_" + action + "_" + idx);
-			
+			var form = Ext.get("doAction_" + action + "_" + idx);			
 			switch(action) {
 				case 'open':
 					form.dom.submit();
@@ -60,27 +41,21 @@
 					document.formImport.itemCount.value = numOfItems;
 					if(numOfItems<200){
 						document.getElementById("importWarning").innerHTML = "";
-						$("#dlgImportItemsLink").trigger('click');
-						
+						$("#dlgImportItemsLink").trigger('click');						
 					}
 					else{
 						  alert("Maximum number of element in a list can only be 200..\n Please try again with removing some items or create a new list.");
-					}
-					
-				  break;
-				  
+					}					
+				  break;				  
 				case 'copy':
-					callShareList = false;
-					
+					callShareList = false;					
 					var elemsToValidateHL = document.getElementsByTagName('input');
 					var invalidMandatoryFieldCountHL = 0;
 					for(var i=0; i< elemsToValidateHL.length; i++)
 					{			
 							elemsToValidateHL[i].style.borderColor="";
 							
-					} 
-					
-					
+					} 										
 					document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";
 					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clFromListId.value=listKey;
 					$("#various3").trigger('click');
@@ -93,8 +68,7 @@
 					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.listDesc.value="";
 					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clAjax.value=true;
 					showWait = false;
-				  break;
-				  
+				  break;				  
 				case 'delete':		
 					$.fancybox(
 						Ext.get("delete_my_item_list").dom.innerHTML,{
@@ -102,22 +76,17 @@
 					});
 					var form = Ext.get("doAction_delete_item_list");
 					form.dom.listKey.value=listKey;
-				  break;
-				  
+				  break;				  
 				case 'share':
-				  break;
-				  
+				  break;				  
 				default:
 					showWait = false; 
-			}
-			
+			}		
 			if (showWait){
 				//Ext.Msg.wait('Executing your request...Please wait.');
 			}		
-		}
-		
-	$(document).ready(function() {
-		
+		}		
+	$(document).ready(function() {		
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
 				if (isUserAdmin){
@@ -158,24 +127,20 @@
 			'height' 			: 475  
 		});
 		
-	});	
-	
+	});		
 	function showShareListHL(customerId, showRoot, clFromListId){
 		//Populate fields
 		var divMainId 	= "divMainShareListHL";
-		var divMain 	= document.getElementById(divMainId);
-		
+		var divMain 	= document.getElementById(divMainId);		
 		//Check for show root
 		if (showRoot == undefined ){
 			showRoot = true;
-		}
-		
+		}		
 		//Load the list if it has not been loaded before.
 		//if (!isShareListLoaded){
 			getShareList(customerId, divMainId, showRoot);
 			isShareListLoaded = true;
-		//}
-		
+		//}		
 		if (clFromListId != undefined || clFromListId != null){
 			var x = Ext.get("clFromListId");
 			x.dom.value = clFromListId;
@@ -183,7 +148,6 @@
 			try{ console.log("From list id: " + clFromListId); }catch(ee){} ;
 		}
 	}
-
 	function collapseTheDiv(customerId, divId, showRoot, controlId, customerPath, name, div){
 
 		var isInputChecked = "";
@@ -213,30 +177,23 @@
            if(showRoot == true){
         	   selectSavedCustomers = true;
            }
-
-    	   showRoot = null;
-    	   
+    	   showRoot = null;   	   
            <s:url id='getShareList' includeParams='none' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsGetShareList'/>
-           if (showRoot == null){ showRoot = false; }
-           
+           if (showRoot == null){ showRoot = false; }           
            var isCustomerSelected = false;
            //Replace all '-' with '_'
            var controlId = customerId.replace(/-/g, '_');
            //Get the current checkbox selection of the customer
 		   if(document.getElementById('customerPaths_'+controlId)!=null){
                isCustomerSelected = document.getElementById('customerPaths_'+controlId).checked;
-		   }
-		   
+		   }		   
            var url = "<s:property value='#getShareList'/>";
            url = ReplaceAll(url,"&amp;",'&');
            //Show the waiting box
            var x = document.getElementById(divId);
-           x.innerHTML = "Loading data... please wait!";
-           
-           
+           x.innerHTML = "Loading data... please wait!";          
            //Execute the call
            document.body.style.cursor = 'wait';
-           //alert("Customer id is: " + customerId + ", showRoot: " + showRoot);
            if(true){
                  Ext.Ajax.request({
                    url: url,
@@ -259,7 +216,6 @@
            }
        	document.body.style.cursor = 'default';
 	}
-
 	/**
 	* The below function is called in the setAndExecute method of getShareList function which is called to fetch the child customers
 	*
@@ -271,24 +227,17 @@
 			{
 				var currentCB = allChildElements[j];
 				var controlId = currentCB.id.replace("customerPaths_","");
-				//Check if the current child customer was selected
-				
+				//Check if the current child customer was selected				
 				var isInSelectedCustomersMap = checkIfControlIdInMap(controlId);
-				//alert('isCustomerSelected===>'+isCustomerSelected+", isInSelectedCustomersMap==>"+isInSelectedCustomersMap);
 				//If the parent customer is checked, check the child customer too
-				//if the parent customer is unchecked, uncheck the child, provided its not present in selectedCustomersMap
-				
+				//if the parent customer is unchecked, uncheck the child, provided its not present in selectedCustomersMap				
 				isCustomerSelected = false;
-
 				if((isCustomerSelected==isInSelectedCustomersMap) || (isCustomerSelected==true && isInSelectedCustomersMap== false )){
 					updateSelectedCustomersMap(controlId,isCustomerSelected);
 					currentCB.checked = isCustomerSelected;
-				//	checkAll("customerIds_" + controlId, isCustomerSelected);
-				//	checkAll("customerDivs_" + controlId, isCustomerSelected);
 				}
 			}
-	}
-	
+	}	
 	function ReplaceAll(Source,stringToFind,stringToReplace){
 	  var temp = Source;
 	    var index = temp.indexOf(stringToFind);
@@ -298,7 +247,6 @@
 			}
 	        return temp;
 	}
-
 	//The below function is used to display the child customers fetched by getShareList call
 	function setAndExecute(divId, innerHTML, isCustomerSelected) {  
 	   var div = document.getElementById(divId);  
@@ -307,8 +255,7 @@
 	   var x = div.getElementsByTagName("script");   
 	   for( var i=0; i < x.length; i++) {  
 	     eval(x[i].text);  
-	   }
-	   
+	   }	   
 	   saveShareListForChild(divId, isCustomerSelected);
 	   var divMainShareList = $("div[id=divMainShareList]");
 	   //divMainShareList exists only for the Shared List popup in MIL details page(in other places the div is divMainShareListHL)
@@ -317,15 +264,8 @@
 	   		showSavedSharedSelection();
   	   //Make selectSavedCustomers to false so that it does not load the saved customers selection on every page load/getshareList call.
 	   selectSavedCustomers = false;
-  	   //selectSavedCustomers = true;
-	       isCustomerSelected = false;
-	   
-	   /*var x = div.getElementsByTagName("script");   
-	   for( var i=0; i < x.length; i++) {  
-	     eval(x[i].text);  
-	   }*/
+	       isCustomerSelected = false;	   
 	}
-
 	//The below function is used to show the saved customer selection for a shared MIL in MIL Details page.
 	function showSavedSharedSelection()
 	{
@@ -360,24 +300,19 @@
 				}
 			}
 		}	
-	}
-	
+	}	
 	function showForm(formId){
-		var dlgForm 		= document.getElementById("dlg" + formId);
-		
+		var dlgForm 		= document.getElementById("dlg" + formId);		
 		if (dlgForm){
 			dlgForm.style.display = "block";
 		}
-	}
-	
+	}	
 	function hideForm(formId){
-		var dlgForm 		= document.getElementById("dlg" + formId);
-		
+		var dlgForm 		= document.getElementById("dlg" + formId);		
 		if (dlgForm){
 			dlgForm.style.display = "none";
 		}
 	}
-
 	var mandatoryFieldCheckFlagHL = false;
 	function listNameCheckHL(component){
 		if(mandatoryFieldCheckFlagHL){
@@ -405,18 +340,14 @@
 			document.getElementById("errorMsgForAddressFieldsHL").innerHTML =returnErrorMsgHL;
 			document.getElementById("errorMsgForAddressFieldsHL").style.display = "inline";
 			//mandatory passed when checking for address selection
-			document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";
-			
+			document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";			
 		}
 		else
 		{
 			document.getElementById("errorMsgForAddressFieldsHL").style.display = "none";
 		}
-		return returnErrorMsgHL;
-			
-	}
-	
-	
+		return returnErrorMsgHL;			
+	}		
 		function checkifShared() {
 			var radioObj =document.XPEDXMyItemsDetailsChangeShareListHL.sharePermissionLevel
 			if(!radioObj)
@@ -436,18 +367,15 @@
 				}
 			}
 			return "";
-		}
-		
+		}		
 		function submitNewlistHLNew(xForm){
 		try{
 			if (mandatoryFieldValidationHL() != "")
 			{
 				document.getElementById("errorMsgForAddressFieldsHL").style.display = "none";
-				//mandatory fields error don't show address error message
-				
+				//mandatory fields error don't show address error message				
 				return;
-			}
-			
+			}			
 			if (checkifShared() == "shared" && checkAddressSelection() != "")
 			{
 				document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";
@@ -456,7 +384,6 @@
 			}
 		}catch(err){
 		}
-
 		//Check for maxlength description
 		if (document.getElementById("listDescHL").value.length > 255){
 			var jasonErrorMess = "The description can contain a maximum of "+ 255 +" characters, please revise and try again.";
@@ -475,22 +402,17 @@
 		else
 			submitNewlistHL(xForm);
 	}
-
 	function submitImportForm(xForm){
 		var form = Ext.get(xForm);
 		var fileComponent = form.dom.upload;
 		if (fileComponent.value == null || fileComponent.value == "")
 		{
-			//alert(document.getElementById("errorMsgForBrowsePath").style.display);
 			document.getElementById("errorMsgForBrowsePath").style.display = "block";
-			//document.getElementById("errorMsgForRequiredField").innerHTML = "Mandatory Fields missing : Browse path";
 			document.getElementById("errorMsgForRequiredField").style.display = "block";
 			return;
-		}
-		
+		}		
 		form.dom.submit();
-	}
-	
+	}	
 	function submitNewlistHL(xForm){
 		//Validate the form
 		try{
@@ -499,8 +421,7 @@
 			}
 		}catch(er){
 			xForm = "XPEDXMyItemsDetailsChangeShareList";
-		}
-		
+		}		
 		var form = Ext.get(xForm);
 		
 		var dataParams = new Object();
@@ -509,45 +430,29 @@
 			var item = form.dom.elements[i];
 			if (item.name != ""){
 				dataParams[item.name] = item.value;
-			}
-			
-			//alert("name 1: " + item.name + ", value: " + item.value);
-			//alert("name 2: " + item.name + ", value: " + params[item.name]);
+			}			
 		}
 		try{ console.debug("params" , dataParams); }catch(e){}
-
 		//adding the already seleted as hidden checkboxes to the form 
 		createHiddenInputsForSelectedCustomers(xForm);
 		clearTheArrays();// clearing the arrays
-		
-		//form.dom.submit();
-        //Removed Submit the data via ajax
-        
+        //Removed Submit the data via ajax       
         //Init vars
-        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />
-        
+        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />       
         var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
-        url = ReplaceAll(url,"&amp;",'&');
-        
+        url = ReplaceAll(url,"&amp;",'&');        
         //Execute the call
         document.body.style.cursor = 'wait';
         $.fancybox.close();
 		//Added For Jira 2903
         Ext.Msg.wait("Processing..."); 
-
-        form.dom.submit();
-//      document.body.style.cursor = 'default';
-		
-		
+        form.dom.submit();	
 	}
-
-	var currentAadd2ItemList = null;
-	
+	var currentAadd2ItemList = null;	
 	//added for jira 3232
 	function msgWait(){
         Ext.Msg.wait("Processing..."); 
-	}
-	
+	}	
 	function getValueFromHTML(data, key, delimiter){
 		var res = "";
 		try{
@@ -560,15 +465,12 @@
 			res = tmp1[0];
 		}catch(e){
 			res = "";	
-		}
-		
+		}		
 		return res;
-	}
-	
+	}	
 	function deleteMyItemList(){
 		form.dom.submit();
-	}
-	
+	}	
 </script>
 <script type="text/javascript">
 	Ext.Ajax.timeout = 240000;
@@ -577,7 +479,6 @@
 	var customerPathMap = new Array();
 	var customersArray = new Array();
 	var customerDivMap = new Array();
-
 	function clearTheArrays(){
 		customerChildCountMap = [];
 		selectedCustomerMap = [];
@@ -595,8 +496,7 @@
 				var url= o + '&scCSRFToken=' +csrfToken;
 				url = ReplaceAll(url,"&amp;",'&');
 				return url;
-			}
-			
+			}			
 			//otherwise the o is assumed to be of form type.
 			var el = document.createElement("input");
 				el.type = "hidden";
@@ -606,30 +506,7 @@
 				o.appendChild(el);
 		}
 		return o;
-	}
-		
-		
-	/*function getCSRFToken()
-	{
-		var urlVal='<s:url value="/xpedx/js/jquery.dropdownPlain.js"/>';
-		alert("val="+urlVal);
-		var toks = urlVal.split("?");
-		for(var i=0;i<toks.length;i++)
-		{
-			var paramVal=toks[i];
-			var csrfParam=paramVal.split("=");	
-			if(csrfParam.length>0)
-			{			
-				if(csrfParam[0]=='scCSRFToken')
-				{
-					var csrfParam1=csrfParam[1].split("&");	
-					return csrfParam1[0];
-				}
-			}
-		}
-		return '';
-	}
-*/
+	}		
 	function addSelectedCustomer(firstname,lastname,age,eyecolor)
 	{
 	this.firstname=firstname;
@@ -639,9 +516,6 @@
 	}
 
 	if (!jQuery) { 
-// 	     jQuery is not loaded
-// 	     Dynamically include jquery if not already included in page
-// 		@import url('/swc/xpedx/js/jquery-1.4.2.min.js');
 		var headID = document.getElementsByTagName("head")[0];         
 		var newScript = document.createElement('script');
 		newScript.type = 'text/javascript';
@@ -649,8 +523,6 @@
 		headID.appendChild(newScript);
 	}
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
-	
-	
 </script>	
 <script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
 <!-- Web Trends tag start -->
@@ -659,7 +531,6 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 	$('.mini-cart-trigger').cluetip({
-
 				activation: 'click',
 				ajaxCache:		false,
 				positionBy:		'fixed',
@@ -684,16 +555,12 @@
 			}
 			document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
 		}
-
 	</script>	
-
-
 <%--This is to setup reference to the action object so we can make calls to 
     action methods explicitly in JSP's.
     This is to avoid a defect in Struts that's creating contention under load.
     The explicit call style will also help the performance in evaluating Struts'
     OGNL statements. --%>
-    
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='xpedxutil' />    
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
@@ -705,14 +572,6 @@
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 <s:set name="isProcurementUser" value="%{#_action.getWCContext().isProcurementUser()}"/>
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
-<%-- Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
-<s:if test="#_action.getAssignedShipTos().size() == 0">
-	<s:set name="assgnCustomers" value="#wcUtil.getPaginatedAssignedCustomers(wCContext)" />
-</s:if>
-<s:else>
-	<s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
-</s:else>
---%>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="isCustomerSelectedIntoConext" value="#wcUtil.isCustomerSelectedIntoConext(wCContext)"/>
 <s:set name='prodCategoryDocument' value="prodCategoryOutputDoc" />
@@ -730,15 +589,12 @@
 	id='hUtil' />
 <script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
-<%-- <script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-base.js'/>"></script> --%>
-<%-- <script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-all.js'/>"></script>  --%>
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
 <script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
 	<div id="ajax-assignedShipToCustomers"></div>
 </div>
-
 <s:url id='toaURL' namespace='/common' action='xpedxGetTermsOfAccess' />
 <div class='x-hidden dialog-body ' id="termsOfAccessContent">
 	<div id="ajax-termsOfAccessContent" class="xpedx-light-box"
@@ -751,7 +607,6 @@
 <script type="text/javascript">
 	function setNormallyStockedCheckbox() {
 		var isSelected = document.getElementById('stockedItemChk').checked;
-		//alert("FIRED FIRST!!!"); 
 		Ext.Ajax.request({
       		url: '<s:property value="#setStockedCheckboxURL"/>',
       		params: {
@@ -767,8 +622,7 @@
 	function setNormallyStockedSelectDropDown() {
 		var isSelected = document.getElementById('stockedItemChk').value;	
 		setNormallyStockedAjaxCall(isSelected);
-	}
-	
+	}	
 	function setNormallyStockedAjaxCall(isSelected) {
 		Ext.Ajax.request({
       		url: '<s:property value="#setStockedCheckboxURL"/>',
@@ -807,15 +661,13 @@
 	   		return true;
 		}
 	}
-
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
 				if(searchTerm == "" ||searchText==null || searchTerm == "Search Ship-To…"){
 						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
 						document.getElementById("errorText").setAttribute("class", "error");
 				}
-		}
-			
+		}		
 </script>
 <script type="text/javascript">
 	var w = new Ext.Window({
@@ -851,7 +703,6 @@
     	//Added For Jira 2903
     	Ext.Msg.wait("Processing..."); 
     	var x = document.getElementById('ajax-assignedShipToCustomers');
-    	//x.innerHTML = "Loading data... please wait!";
         url = ReplaceAll(url,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
@@ -923,19 +774,15 @@
       var elSel = document.getElementById('shipToSearchFieldName');
       var i;
       for (i = elSel.length - 1; i>1; i--) {                 
-          elSel.remove(i);
-     
+          elSel.remove(i);     
       }
-    }
-
-        
+    }        
     function appendOptionLast(num,formattedShipTo)
     {
       var elOptNew = document.createElement('option');
       elOptNew.text =  formattedShipTo;
       elOptNew.value =  num;
       var elSel = document.getElementById('shipToSearchFieldName');
-
       try {
         elSel.add(elOptNew, null); // standards compliant; doesn't work in IE
         elOptNew.selected=true;
@@ -945,7 +792,6 @@
         elOptNew.selected=true;
       }
     }
-
     function formatBillToShipToCustomer(customerId){
     	var custDetails = customerId.split("-");
 		if(custDetails!=null && custDetails.length>3)
@@ -960,7 +806,6 @@
 		//If the string cannot be properly split, return the customerId
 		return customerId;
 		}
-
     function setSelectedValue(selectedShipTo) {
         
 	    if(selectedShipTo!= null) {
@@ -978,8 +823,6 @@
 	        		appendOptionLast(selectedShipCustomer,formattedShipTo);
 	        		document.approvalList.shipToSearchFieldName1.value = selectedShipCustomer;
 	        	}
-	        	//var link = document.getElementById('shipToOrderSearch');        	
-	        	//link.innerHTML = '[Change]';	        		        	
 	        }
 	    }
 	}
@@ -1023,15 +866,12 @@
     	var quantity = component.value.trim();
     	var qtyLen = quantity.length;
     	var validVals = "0123456789";
-    	//var isValid=true;
     	var char;
     		for (i = 0; i < qtyLen ; i++) {
     		char = quantity.charAt(i);
     			if (validVals.indexOf(char) == -1)
     			{
     			quantity = quantity.substr(0,i) ;
-    			//alert (" quantity After" + quantity)
-    			// isValid = false;
     			}
     		}
     	component.value = quantity;
@@ -1046,29 +886,24 @@
     		}
     	return true;
     	}
-
 	function applyPreferred(defaultShipTo,url) {
 		if(defaultShipTo!='null' || defaultShipTo!= '') {
 			document.FormToPost.selectedCustomerId.value = defaultShipTo;
 			saveShipToChanges(url);
 		}
 	}
-
     function cancelShipToChanges(){
        	var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
        	if(isCustomerSelectedIntoConext=="true"){
            	var customerId='<s:property value="%{#_action.getWCContext().getCustomerId()}"/>';
            	selectedCustomer=customerId;
-           	//w.closable = true;
-           	//DialogPanel.hide('assignedShipToCustomers');
            	$.fancybox.close();// JIRA - 694 
         }
        	else {
            	w.closable = false;
            	return; 
        	}
-    }
-    
+    }    
     function clearText() { 
     	Ext.fly('Text1').dom.value='';
    		 return; 
@@ -1076,9 +911,7 @@
     function clearTxt() { 
     	Ext.fly('newSearch_searchTerm').dom.value='';
    		 return; 
-   		 } 
-    
-
+   		 }     
     function saveShipToChanges(url)
     {
     	var radioCustomer=document.getElementsByName("selectedShipTo");
@@ -1086,26 +919,20 @@
 		for(var i=0;i<radioCustomer.length;i++)
 		{
 			if(radioCustomer[i].checked == true)
-				selected=true;
-				
+				selected=true;				
 		}
     	if(selected == false){
             document.getElementById('errorText').innerHTML = "Please select a Ship-To.";
             document.getElementById('errorText').setAttribute("class", "error");
-        }
-        
+        }        
         else{
     	//Added For Jira 2903
-    	Ext.Msg.wait("Processing..."); 
-    	//Ext.Msg.wait("Changing Ship To... Please wait.");
-    	
-        var selectedCustomer=document.FormToPost.selectedCustomerId.value;
-        
+    	Ext.Msg.wait("Processing...");     	
+        var selectedCustomer=document.FormToPost.selectedCustomerId.value;       
 		// JIRA 1878 :  getting the userName of selected user, and sending as a parameter to Ajax request
         var selected_customerContactId=document.getElementById("customerContactId");
         if(selected_customerContactId)
-        	selected_customerContactId = selected_customerContactId.value
-        
+        	selected_customerContactId = selected_customerContactId.value        
         var setAsDefault= document.getElementById('setAsDefault');
         if(selectedCustomer=='' || selectedCustomer==null){
         	var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
@@ -1171,7 +998,6 @@
         }
         document.body.style.cursor = 'default';
       }
-
     }
     function editDetails()
     {   	
@@ -1196,8 +1022,7 @@
             }
         });
         document.body.style.cursor = 'default';
-    }
-    
+    }   
     function loadDialog(){
         var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
    	 	var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';           
@@ -1208,7 +1033,6 @@
             if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
             	$('#shipToSelect,#shipToSelect1,#shipToSelect2').trigger('click');
 //          Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
-//          }else if(assgnCustomerSize==0){
             }else if((defaultShipTo=="" || defaultShipTo=="null" || defaultShipTo==null)&& 
                     (assgnCustomerSize==0 || assgnCustomerSize==null) && isCustomerSelectedIntoConext!="true"){
              /*   $(function() {
@@ -1224,7 +1048,6 @@
             }
         }
     }
-
     function newSearch_searchTerm_onclick(){
     	if(Ext.fly('newSearch_searchTerm').dom.value =='Search Catalog...')
    		{
@@ -1233,9 +1056,7 @@
     	else{}
         return;
     }
-
 	// Added for removing the double quotes from an search term. Jira # 2415
-
     function validate(e){
   	  if (e.keyCode == 13) {  
   	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
@@ -1244,20 +1065,16 @@
   	 	}
   	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
   	}
-  }
-
-	
+  }	
   function validateVal(e){
 	    
 	 	var searchText = document.getElementById("newSearch_searchTerm").value;
 	 	while(searchText.indexOf("\"")!= -1){
     	 	searchText = searchText.replace("\"", "");    	  
 	 	}
-	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;
-	
+	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
 }
-  // End of Jira # 2415
-  
+  // End of Jira # 2415 
 var toaWin = new Ext.Window({
         autoScroll: true,
         closeAction: 'hide',
@@ -1274,26 +1091,21 @@ var toaWin = new Ext.Window({
         shadow: 'drop',
         baseCls: 'swc-ext',
         shadowOffset: 10
-        //title: 'Terms of Access'
-      	});
-  	
+      	}); 	
     loadTermsOfAccess();
     function loadTermsOfAccess()
     {
 		var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
         if(isguestuser!="true"){
-			var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 
-			
+			var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 			
 			if(isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")
          		showTermsOfAccessDialog('<s:property value="#toaURL"/>');
 	    }
     }
-
     function toaSubmit(key){
     	 document.getElementById('toaChecked').value=key;
     	 document.toaform.submit();
-    } 
-    
+    }     
     function showTermsOfAccessDialog(url)
     {
         Ext.get('ajax-termsOfAccessContent').load({
@@ -1303,16 +1115,6 @@ var toaWin = new Ext.Window({
                 if(success)
                 {
                 	DialogPanel.show('termsOfAccess');
-
-                    /* $.fancybox(
-                    		Ext.get('ajax-termsOfAccessContent').dom.innerHTML,
-                    		{
-                            	'autoDimensions'	: true,
-                    			'width'         	: 600,
-                    			'height'        	: 'auto'
-                    		}
-                    	);
-                	*/
                }
                 else
                 {	
@@ -1321,7 +1123,6 @@ var toaWin = new Ext.Window({
             }
         });     
     }
-
 	function showUsers(custID){
 		document.getElementById('viewUsersDlg').innerHTML = '';
 		var orderDesc=document.getElementById('orderDescending').value;
@@ -1336,8 +1137,7 @@ var toaWin = new Ext.Window({
 		else{
 			param={customerID : custID}
 		}
-		Ext.Ajax.request({
-			
+		Ext.Ajax.request({			
 			url: '<s:property value="#userListURL" escape='false'/>',
 			params: param,
 			method: 'POST',
@@ -1350,13 +1150,11 @@ var toaWin = new Ext.Window({
 				 }
 		});
 	}
-
 	function setOrderBy(val){
 		document.getElementById('orderDescending').value=val;
 		showUsers('<s:property value="#CurrentCustomerId"/>');
 		document.getElementById('orderDescending').value="";
 	}
-
 	function setSelectedUrl(contactId,customerId,storefrntId){
 		
 		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/xpedxManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
@@ -1364,7 +1162,6 @@ var toaWin = new Ext.Window({
 		url = url+"&customerContactId="+contactId+"&customerId="+customerId;
 		document.getElementById("seletedUrl").value=url;
 	}
-
 	function selectedUser()
 	{
 		var url=document.getElementById("seletedUrl").value;
@@ -1372,24 +1169,19 @@ var toaWin = new Ext.Window({
 		{
 			return false;
 		}
-		else{
-		
+		else{		
 		document.selectUserForm.action = url;
     	document.selectUserForm.submit();
 		}
 	}
-
 	function getCustomerAccounts(){
 		//Init vars
-	   var divId = "dlgSelectCustomerAccounts";
-	   
-	   <s:url id='selectAccountURL' namespace='/profile/org' action='xpedxGetCustomerAccounts' />
-	
+	   var divId = "dlgSelectCustomerAccounts";	   
+	   <s:url id='selectAccountURL' namespace='/profile/org' action='xpedxGetCustomerAccounts' />	
 	    var url = '<s:property value="#selectAccountURL"/>';
 	    url = ReplaceAll(url,"&amp;",'&');
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
-	    //x.innerHTML = "Loading data... please wait!";
 	    //Added For Jira 2903
 		Ext.Msg.wait("Processing..."); 
 	    //Execute the call
@@ -1414,7 +1206,6 @@ var toaWin = new Ext.Window({
 	    }
 		document.body.style.cursor = 'default';
 	}
-
     $(document).ready(function(){
         
     	$("#cancelShoppingLink").fancybox({
@@ -1436,9 +1227,7 @@ var toaWin = new Ext.Window({
 			'autoDimensions'	: false,
 			'width' 			: 751,
 	 		'height' 			: 350  
-		});
-    	
-
+		});   	
 		$('#cart-management-btn').click(function(){
 			$('#cart-management-popup').toggle();
 			return false;
@@ -1447,12 +1236,10 @@ var toaWin = new Ext.Window({
     		$('#welcome-address-popup').toggle();
     		return false;
     	});
-
 		$("#welcome-address-popup-close").click(function(){
     		$('#welcome-address-popup').hide();
     		return false;
-    	}); 
-    	
+    	});     	
 		try{
 		$("#selectusertomodify").fancybox({
 			'onStart' 	: function(){
@@ -1468,19 +1255,16 @@ var toaWin = new Ext.Window({
 			//Arun 3/3 Catalog and other pages are erroring when this box fails 
 			//doing try catch on temporary basis
 		}
-
         $(".btn-slide").click(function(){
                 $("#panel").slideToggle("slow");
                 $(this).toggleClass("slidetoggle"); return false;
         });
-
         var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			if((defaultShipTo == "" || defaultShipTo == "null") && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
-				
+			if((defaultShipTo == "" || defaultShipTo == "null") && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){
 			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
@@ -1515,8 +1299,7 @@ var toaWin = new Ext.Window({
 			 		'height' 			: 485  
 				}).trigger('click');
 			}
-		}
-		
+		}		
         $("#shipToSelect,#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
  			'onStart' 	: function(){
  	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
@@ -1524,14 +1307,6 @@ var toaWin = new Ext.Window({
  	          	if(isguestuser!="true"){
  	                var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
  	                var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-/*				Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
- 	               if(assgnCustomerSize>0){
- 	            	   showAssignedShipTo('<s:property value="#targetURL"/>');
- 	               }else if(assgnCustomerSize==0){
- 	                   alert("There are no shipTo locations assigned for your profile, Please contact administrator..");
- 	                  $.fancybox.close();
- 	               }
-*/
  	                showAssignedShipTo('<s:property value="#targetURL"/>');
  	           }
  			},
@@ -1591,9 +1366,7 @@ var toaWin = new Ext.Window({
 		});
  });
 </script>
-
 <script type="text/javascript">
-
 function searchShipToAddress(divId,url) {
     // look for window.event in case event isn't passed in
     	var searchText = document.getElementById('Text1').value
@@ -1630,7 +1403,6 @@ function searchShipToAddress(divId,url) {
 		        });
 		}
     }
-
 function callAjaxForPagination(url,divId)
 {
 	var custIdString = 'customerId';
@@ -1640,12 +1412,10 @@ function callAjaxForPagination(url,divId)
 	if(customerIdIndex != -1) {
 		var customerIdEndIndex = url.indexOf('&',customerIdIndex);
 		customerId = url.substring(customerIdIndex+custIdString.length+1,customerIdEndIndex);
-		//alert(customerId);
 		var controlId = customerId.replace(/-/g, '_');
 		if(document.getElementById('customerPaths_'+controlId)!=null){
            isCustomerSelected = document.getElementById('customerPaths_'+controlId).checked;
 	  	}
-	  	//alert(isCustomerSelected);
 	}
 	if(document.getElementById(divId) !=null){
         document.getElementById(divId).innerHTML = "Loading.....Please Wait";
@@ -1656,11 +1426,9 @@ function callAjaxForPagination(url,divId)
 			var lboTo=document.myAccount.customers2;
 			for ( var i=0; i < lboTo.options.length; i++ )
 			{
-				//lboTo.options[i].selected = true;
 				selAssignments.push(lboTo.options[i].value)
 			}
 		}
-		//alert(selAssignments);
 	}
 	document.body.style.cursor = 'wait';
 	Ext.Ajax.request({
@@ -1692,18 +1460,14 @@ function callAjaxForPagination(url,divId)
 
 //JIRA 2736
 function callAjaxForSorting(url,divId)
-{
-	
+{	
 	if(document.getElementById(divId) !=null){
         document.getElementById(divId).innerHTML = "Loading.....Please Wait";
-   	}    	
-	
+   	}    		
    	var orderDesc="Y";
 		var orderByAttribute=""
-		var param;			
-		
-	url = ReplaceAll(url,"&amp;",'&');
-	
+		var param;					
+	url = ReplaceAll(url,"&amp;",'&');	
          				Ext.Ajax.request({
 	         		        url:url,
 	         		        params: param,
@@ -1716,40 +1480,13 @@ function callAjaxForSorting(url,divId)
 	         		    });
 }
 </script>
-
-<script type="text/javascript">
-	
-	/*function reloadMenu(){
-		 <s:url id="menuRelodLink" action="XPEDXMyItemsList.action" escapeAmp="false" namespace="/xpedx/myItems" includeParams='none' >
-		 	<s:param name="filterByAllChk" 		value="%{true}" />
-			<s:param name="filterByMyListChk" 	value="%{true}" />
-			<s:param name="displayAsSubMenu" 	value="%{true}" />
-		 </s:url>
-		 
-		 var url = "<s:property value="#menuRelodLink"/>";
-		 url = ReplaceAll(url,"&amp;",'&');
-					
-	      Ext.Ajax.request({
-	        url: url,
-	        method: 'POST',
-	        success: function (response, request){
-	        	//response.responseText
-	        	Ext.get("MILSubMenu").dom.innerHTML = response.responseText; 
-	        },
-	        failure: function (response, request){
-	        }
-	     });
-	}*/
-</script>
-
 <script type="text/javascript">
 	function debug(msg){
 		try{
 			console.debug(msg);
 		}catch(ex){
 		}
-	}
-	
+	}	
 	function checkAll(id, value){
 		try{
 			var checkboxes = Ext.query('input[id*='+id+']');
@@ -1760,7 +1497,6 @@ function callAjaxForSorting(url,divId)
 		}catch(ex){
 		}
 	}
-
 	function checkIfControlIdInMap(id) {
 		var custPath = customerPathMap[id];
 		var parentCustomer;
@@ -1794,17 +1530,13 @@ function callAjaxForSorting(url,divId)
 		}
 		return isInMap;
 	}
-
-
 	function createCountAndPathMap(id,path,childCount,custDiv) {
 		if(customerPathMap[id] == null) {
 			customerPathMap[id] = path;
-			//alert(customerPathMap[id]);
 		}
 		if($.inArray(id, customersArray) == -1) {
 			customersArray[customersArray.length] = id;
-		}
-		
+		}		
 		if(childCount!=null) {
 			var custPath = customerPathMap[id];
 			var parentCustomer;
@@ -1820,7 +1552,6 @@ function callAjaxForSorting(url,divId)
 			}
 			if(customerChildCountMap[parentCustomer] == null) {
 				customerChildCountMap[parentCustomer] = childCount;
-				//alert('Child Count of '+parentCustomer+ ' is '+customerChildCountMap[parentCustomer]);
 			}
 		}
 		if(custDiv!=null){
@@ -1828,7 +1559,6 @@ function callAjaxForSorting(url,divId)
 				customerDivMap[id] = custDiv;
 		}
 	}
-
 	function preSelected(id) {
 		var custPath = customerPathMap[id];
 		var parentCustomer;
@@ -1842,16 +1572,12 @@ function callAjaxForSorting(url,divId)
 				parentCustomer = 'MSAP';
 			}
 			var preSelectedCustomers = selectedCustomerMap[parentCustomer];
-			//alert("preSelectedCustomers of" +parentCustomer+ " is" + preSelectedCustomers);
 			if(preSelectedCustomers!=null){
 				for(var i=0; i<preSelectedCustomers.length; i++) {
 					var selCustomer = preSelectedCustomers[i];
-					//alert(selCustomer + "Inside the preselectedCustomer loop");
 					if(selCustomer == id) {
-						//alert("Inside the chekBox loop" + selCustomer + "    " + id);
 						var fieldId = 'customerPaths_'+id;
 						var custCheckbox = $("input[id="+fieldId+"] ");
-						//alert(custCheckbox);
 						custCheckbox.attr('checked','checked');
 						selectNode(id, true);
 					}
@@ -1864,14 +1590,12 @@ function callAjaxForSorting(url,divId)
 			}catch(ex){}
 		}
 	}
-
 	function updateSelectedCustomersMap(id,val) {
 		var customerPath = customerPathMap[id];
 		// adding or removing the id to or from the parents selected map
 		if(customerPath!=null) {
 			var customerHierarchy = customerPath.split("|");
 			var parentCustomer;
-			//alert(val);
 			if(customerHierarchy.length >= 2) {
 				parentCustomer = customerHierarchy[customerHierarchy.length-2];
 				parentCustomer = parentCustomer.replace(/-/g, '_');
@@ -1879,159 +1603,58 @@ function callAjaxForSorting(url,divId)
 			else if(customerHierarchy.length == 1) {
 				parentCustomer = 'MSAP';
 			}
-			//alert(parentCustomer);
 			var selectedCustomers = selectedCustomerMap[parentCustomer];
 			if(val == true) {
 				if(selectedCustomers == null){
 					var newSelectedCustomers = new Array();
 					newSelectedCustomers[0]= id;
 					selectedCustomerMap[parentCustomer] = newSelectedCustomers;
-					//alert('selected of '+parentCustomer+' is '+selectedCustomerMap[parentCustomer]);
 				}
 				else {
 					var isAlreadyInSelected = false;
 					for(var k=0;k<selectedCustomers.length;k++) {
 						if(selectedCustomers[k]==id) {
-							//alert(id+"      " +selectedCustomers[k]);
 							isAlreadyInSelected = true;
 						}
 					}
 					if(isAlreadyInSelected == false) {
 						selectedCustomers[selectedCustomers.length] = id;
 						selectedCustomerMap[parentCustomer] = selectedCustomers;
-						//alert('selected of '+parentCustomer+' is '+selectedCustomerMap[parentCustomer]);
 					}
 				}
-			}
-	
+			}	
 			if(val == false && selectedCustomers != null) {
 				for(var j=0; j<selectedCustomers.length; j++) {
 					if(selectedCustomers[j]==id) {
-						//alert(id+"      " +selectedCustomers[j])
 						selectedCustomers.splice(j,1);
 					}
 				}
 				selectedCustomerMap[parentCustomer] = selectedCustomers;
-				//alert('selected of '+parentCustomer+' is '+selectedCustomerMap[parentCustomer]);
 			}
 		}		
 	}
-
-	function selectNode(id, val){
-		
+	function selectNode(id, val){		
 		try{
 			debug("selectNode - BEGIN for " + id + ", value: " + val); 
 			//change the hidden checkbox selections
 			checkAll("customerIds_" + id, val);
 			checkAll("customerDivs_" + id, val);
 			// update the selected customers map
-			updateSelectedCustomersMap(id, val);
-			
+			updateSelectedCustomersMap(id, val);			
 			//Krithika's Code Start
 			//changing the selection of all the childs of this Checkbox.(suppose B1 is selected, select all the Shiptos under that)
 			var divId = $("input[id=customerPaths_"+id + "] ").parent().attr("id");
-			var allChildElements = $("div[id="+divId + "] :checkbox");
-			
-			/*commented for auto check of parents child for jira 2940 and check child and parent individually
-			
-			for(var j=0;j<allChildElements.length;j++)
-			{
-				var currentCB = allChildElements[j];
-				var currentCBId = currentCB.id;
-				var firstIdx = currentCBId.indexOf('_');
-				if(firstIdx!=-1){
-					var currentCBControlID = currentCBId.substring(firstIdx+1);
-					var isAlreadyChecked = checkIfControlIdInMap(currentCBControlID);
-					//alert(currentCBControlID +' was already checked====>'+isAlreadyChecked);
-					if(isAlreadyChecked!=val)
-					{
-						updateSelectedCustomersMap(currentCBControlID,val);	
-						currentCB.checked = val;
-						checkAll("customerIds_" + currentCBControlID, val);
-						checkAll("customerDivs_" + currentCBControlID, val);
-					}
-				}
-			}*/
-			
+			var allChildElements = $("div[id="+divId + "] :checkbox");			
 			//Get the selected child customers from other pages
 			var selectedCustomers = selectedCustomerMap[id];
-			/*if(selectedCustomers!=null){
-				for(var i=0;i<selectedCustomers.length;i++)
-				{
-					var selCustomerControlId = selectedCustomers[i];
-					//alert(selCustomerControlId+' is set to '+val);
-					updateSelectedCustomersMap(selCustomerControlId,val);	
-					checkAll("customerPaths_" + selCustomerControlId, val);
-					checkAll("customerIds_" + selCustomerControlId, val);
-					checkAll("customerDivs_" + selCustomerControlId, val);	
-				}
-			}*/
-       
-			
-	        var currentDiv = $("input[id=customerPaths_"+id + "] ");
-			
+	        var currentDiv = $("input[id=customerPaths_"+id + "] ");			
 			var currentDivParents = currentDiv.parents("div[id^=divShareList]");
-			//alert('currentDivParents len '+currentDivParents.length);
-			/*for(var i=0;i<currentDivParents.length;i++)
-			{
-				var currentDivShareParent = currentDivParents[i];
-				var currentParentId = currentDivShareParent.id;
-			
-				var allChildCheckBoxesOfCurrentParent = $("div[id="+currentParentId + "] input[name=customerPaths]");
-				var allChecked = false;
-
-				//alert('allChildCheckBoxesOfCurrentParent '+allChildCheckBoxesOfCurrentParent.length);
-				for(var k=0;k<allChildCheckBoxesOfCurrentParent.length;k++)
-				{
-					var currentCB = allChildCheckBoxesOfCurrentParent[k];
-					if(currentCB.checked == false)
-					{
-						allChecked = false;
-						break;
-					}
-					else
-						allChecked = true;
-		        }
-		        //alert('all children in current page are checked===>'+allChecked);
-		        if(allChecked == val)
-		        {
-		        	
-						var cpCB = $("div[id="+currentParentId+"]").siblings("input[name=customerPaths]");
-						//alert(cpCB.length+' is cpCB.length');	
-						for(var m=0;m<cpCB.length;m++)
-						{
-							var currentCB = cpCB[m];
-							var currentCBId = currentCB.id;
-							var firstIdx = currentCBId.indexOf('_');
-							if(firstIdx!=-1){								
-								var currentCBControlID = currentCBId.substring(firstIdx+1);
-								var	currentParentChildCount = customerChildCountMap[currentCBControlID];
-								var currentParentSelCustomers = selectedCustomerMap[currentCBControlID];
-								var allChildsCheked = false;
-								if(currentParentSelCustomers!=null) {
-									if(currentParentSelCustomers.length == currentParentChildCount){
-										allChildsCheked = true;
-									}
-									updateSelectedCustomersMap(currentCBControlID,allChildsCheked);
-									currentCB.checked = allChildsCheked;
-									checkAll("customerIds_" + currentCBControlID, allChildsCheked);
-									checkAll("customerDivs_" + currentCBControlID, allChildsCheked);
-								}
-								
-							}
-						}
-						
-					
-		        }
-			}*///for
 			debug("selectNode - END for " + id + ", value: " + val);
 		}catch(e){
 			try{ console.log("Error selectin the node: " + e, e); }catch(ex){}
 		}
-	}
-	
+	}	
 	function createHiddenInputsForSelectedCustomers(xForm) {
-		//alert('inside the create hidden function');
 		if (xForm == undefined || xForm == null || xForm == ""){
 			return;
 		}else {
@@ -2045,8 +1668,6 @@ function callAjaxForSorting(url,divId)
 				var custDiv = customerDivMap[controlId]; 
 				var custId = ReplaceAll(controlId,"_",'-');;
 				if(isSelected) {
-					//alert('inside the create hidden function');
-					//alert(controlId);
 					//getting the corresponding checkbox of the document
 					var checkBoxofCtrlId = document.getElementById('customerPaths_'+controlId);
 					//checking if the document already has the checkbox, if not there then creating a hidden checkbox
@@ -2058,7 +1679,6 @@ function callAjaxForSorting(url,divId)
 						checkbox_path.value = custPath;
 						checkbox_path.id = "customerPaths_"+controlId;
 						checkbox_path.checked = true;
-
 						//creating customerIds checkbox
 						var checkbox_id = document.createElement('input');
 						checkbox_id.type = "checkbox";
@@ -2066,7 +1686,6 @@ function callAjaxForSorting(url,divId)
 						checkbox_id.value = custId;
 						checkbox_id.id = "customerIds_"+controlId;
 						checkbox_id.checked = true;
-
 						//creating customerDivs checkbox
 						var checkbox_div = document.createElement('input');
 						checkbox_div.type = "checkbox";
@@ -2083,13 +1702,11 @@ function callAjaxForSorting(url,divId)
 			form.appendChild(hiddenDiv);
 		}
 	}
-
 	function hideSharedListHLForm(){
 		document.getElementById("dynamiccontentHL").style.display = "none";
 		if(document.getElementById("shareAdminOnlyHL")!=null)
 		document.getElementById("shareAdminOnlyHL").style.display = "none";
-	}
-  	
+	} 	
   	function showSharedListHLForm(){
   		var dlgForm 		= document.getElementById("dynamiccontentHL");
 		if (dlgForm){
@@ -2097,8 +1714,7 @@ function callAjaxForSorting(url,divId)
   			if(document.getElementById("shareAdminOnlyHL")!=null)
   			document.getElementById("shareAdminOnlyHL").style.display = "";
   		}
-  	}
-  	
+  	}  	
   	function openHelp() {
   		 //-- Web Trends tag start --
 		writeMetaTag('WT.ti','Help');
@@ -2106,8 +1722,7 @@ function callAjaxForSorting(url,divId)
   		var load = window.open('https://content.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
   		}
 	function getCategorySubMenu()
-	{
-		
+	{		
 		   	var url = "<s:property value='#getCategoryMenu'/>";
    			url = ReplaceAll(url,"&amp;",'&');
        		Ext.Ajax.request({
@@ -2121,10 +1736,6 @@ function callAjaxForSorting(url,divId)
 	}	
 </script>
 <!-- WebTrends tag start -->
-<%--	Using CustomerContactBean object from session
-<s:if test='%{#session.UsergroupKeyList != null && #session.UsergroupKeyListActive == true}'>	
-	<s:set name="userGroupKeyList" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('UsergroupKeyList')}"/>	
---%>
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
 	<s:set name="userGroupKeyList" value ="%{#xpedxCustomerContactInfoBean.getUsergroupKeyList()}"/>	
 	<s:iterator value="#userGroupKeyList" id='userGroupKey' >
@@ -2133,11 +1744,9 @@ function callAjaxForSorting(url,divId)
 		
 </s:if>
 <!-- WebTrends tag end -->
-
 <style>
 <!-- Style for ship to address hover-->
-	#viewAll a:hover { text-decoration:underline; } 
-	
+	#viewAll a:hover { text-decoration:underline; } 	
 	a:focus {
 	       outline: none;
 	}
@@ -2157,16 +1766,10 @@ function callAjaxForSorting(url,divId)
 	}
 	.active2 { top:-125px;
 	}
-	
 .share-modal { /*width:399px!important; height:37	0px;*/}         
 .indent-tree { margin-left:15px; }       
-.indent-tree-act { margin-left:25px; } 
-   
-
-	
+.indent-tree-act { margin-left:25px; } 	
 </style>
-
-
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
@@ -2174,9 +1777,7 @@ function callAjaxForSorting(url,divId)
 <s:set name='isThereAUser' value="wCContext.thereAUser" />
 <noscript>
 <div class="noScript"><s:text name='NoScriptWarning' /></div>
-
 </noscript>
-
 <!-- begin t1-header -->
 <!-- <div id="noassignedShipto" style="display:none;color:red;">There are no shipTo locations assigned for your profile, Please contact administrator..</div> commented for jira2881-->
 <s:if test='(#isGuestUser == true)'>
@@ -2186,55 +1787,14 @@ function callAjaxForSorting(url,divId)
 <s:include value="../modals/XPEDXItemCopyModal.jsp"></s:include>
 <div class="t1-header commonHeader" id="headerContainer"> 
 </s:else>
-
   <!-- add content here for header information -->
 	<s:url id ='homeLink' action='home' namespace='/home' /> 
 	<div class="logo">
 		<s:a href="%{homeLink}">&nbsp;</s:a>
-	</div>
-  
+	</div> 
   <!-- Edit: IW-DH -->
- <s:if test='(isThereAUser == true) || (#isGuestUser != true)'>  
- 	
- 	<%--Hemantha: removed as this is not in new UI
-    <div id="customer-block">
-    	<s:set name='customerId' value="wCContext.customerId" />
-    	<s:set name='customerDetailsElem' value='customerOrganizationEle' />
-		<s:set name='storeFrontId' value="wCContext.storefrontId" />
-		<s:set name="defualtShipTAddress" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getShipToAddressOfCustomer(#customerDetailsElem)" />
-		<s:set name="shipToCustomerDisplayStr" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#customerId)" />
-		
-		<!-- TODO: Fill the address below -->
-        <div class="account-name">
-	        <div id="account-name-info"> 
-	            <p><s:property value='#shipToCustomerDisplayStr'/><br />
-	            <s:property value='LoggerInUserCustomerName'/> </p><s:property value="wCContext.storefrontId" />
-	        </div>
-	        
-        <a class="btn-slide" title="Display Ship-to Address" href="#"><img src="/swc/xpedx/static/<s:property value='wCContext.storefrontId' />/images/global/header-info-icon.jpg" class="info-icon" border="none"/></a> 
- 			<div id="panel" class="test"> 
-            	<p style="padding-top:75px; padding-left:15px;">
-            	<s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline' >
-            			<s:property value="addressline"/> &nbsp;
-            	</s:iterator>
-            	<s:property value="#defualtShipTAddress.getCity()"/>&nbsp;<s:property value="#defualtShipTAddress.getState()"/>&nbsp;<s:property value="#defualtShipTAddress.getZipCode()"/><br />
-                <!-- <a  href="#">edit</a>  -->
- 				</p> 
-			    <a title="Hide Ship-to Address" style="margin-top:-135px; height:54px;  width:185px;" class= "btn-slide" href="#"></a> 
-			</div> 
-		</div>
-			
-        <div class="change-ship-to">
-            <a href="#ajax-assignedShipToCustomers" id="shipToSelect">Change Ship-to<br />Address</a>
-        </div>
-        <div class="shoppingfor">
-        	<s:action name="xpedxDraftOrderDropDown" executeResult="true" namespace="/order" />
-        </div>
-        
-    </div>
-    --%>
-    <!-- Close Customer Block -->
-    
+ <s:if test='(isThereAUser == true) || (#isGuestUser != true)'>   	
+    <!-- Close Customer Block -->   
 	  <s:url id='newCatSearch' action='newSearch' namespace='/catalog' >
 	  </s:url>
 	  <div  class="searchbox-1">
@@ -2258,58 +1818,23 @@ function callAjaxForSorting(url,divId)
 	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
 	   </s:form>
 	 </div>
- </s:if> 
-  
-  
+ </s:if>   
   <s:if test='(isThereAUser == true) || (#isGuestUser != true)'>
   	<%-- Minicart --%>
 	<s:set name='shoppingCartResId' value='"/swc/order/guestShopping"' />
 	<s:if
-		test="@com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer@getInstance().isAuthorized(#shoppingCartResId,wCContext)">
-	
-	<%--Hemantha --%>	
-	
-    	
+		test="@com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer@getInstance().isAuthorized(#shoppingCartResId,wCContext)">	
+	<%--Hemantha --%>	   	
  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">	          	
     <div class="searchbox-2">
     <s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
-<%--          <s:bean name='com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction' id='XPEDXOrderMethod' /> --%>
-<%--          <s:set name="itemAndTotalList" value="#XPEDXOrderMethod.getOrderTotal()" /> --%>
-<%-- 		 <s:set name="numbrOfItems" value="#itemAndTotalList.get(1)" /> --%>
-<%-- 		<s:if test="(#numbrOfItems==0)"> --%>
-
 				<s:url id='miniCartDisplayURL' namespace='/order'  action='XPEDXMiniCartDisplay'>
 					<s:param name='miniCartListMaxElements'  value='%{#miniCartListMaxElements}' />
 				</s:url>
 				
 			<a  class="underlink mini-cart-trigger" href=""  id="miniCartMouseoverArea2" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
 				<img id="whitecart" src="/swc/xpedx/images/icons/16x16_white_cart.png" alt="" style="display:block;float:left;" />
-			</a> 
-			
-<%-- 		</s:if> --%>
-<%-- 		<s:else>		 --%>
-<!--     		<img id="whitecartfull" src="/swc/xpedx/images/icons/16x16_white_cart_full.png" alt="" style="display:block;float:left;"/> -->
-<%--     	</s:else> --%>
-    	
-<%-- Commenting it since it is not required as per performance issue
-    	<s:set name='orderHeaderKey' value='@com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper@getCartInContextOrderHeaderKey(wCContext)'/>
-<!--     	moved from minicart link jsp -->
-				<s:if test="#orderHeaderKey != null">
-				    <s:url id='cartDetailURL' action='draftOrderDetails.action'>
-				        <s:param name="orderHeaderKey" value='#orderHeaderKey'/>
-				        <s:param name='draft' value='"Y"'/>
-				    </s:url>
-				</s:if>
-				<s:else>
-				    <s:url id='cartDetailURL' action='draftOrderDetails.action'>
-				        <s:param name="orderHeaderKey" value='"_CREATE_NEW_"'/>
-				        <s:param name='draft' value='"Y"'/>
-				    </s:url>
-				</s:else>
---%>
-
-<!-- 		end of move -->
-
+			</a> 			
 		<s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
     	<s:set name='sessionOrderHeaderKey' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
     	<span id="miniCartLinkDiv" class="float-right">
@@ -2317,7 +1842,7 @@ function callAjaxForSorting(url,divId)
     		<s:if test='#sessionOrderHeaderKey == null'>
     		<div id="progressDiv"> Processing ...</div>
     	   <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
-    			
+   			
 		    		<div id ="XPEDXMiniCartLinkDisplayDiv">	
 					</div>
 					<script>
@@ -2338,9 +1863,6 @@ function callAjaxForSorting(url,divId)
 		        			failure: function ( response, request ) {
 		        				//Added for jira 3232
 		        				Ext.MessageBox.hide();
-
-		        	           // alert("Error while loading mini cart!");
-
 		        	        }
 						});
 					});
@@ -2348,27 +1870,16 @@ function callAjaxForSorting(url,divId)
 					</a>
 	    		</s:if>
 	    		<s:else>
-		    		 <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
-	    			
+		    		 <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">	    			
 		    			<div id ="XPEDXMiniCartLinkDisplayDiv">
 		    				<s:include value="/xpedx/jsp/order/XPEDXMiniCartLink.jsp"/>
 						</div>
 					</a>
 	    		</s:else>
     		
-			</span>
-    	
-			
-			
-<!--     	<div id="cart-management-popup" style="display: none;"> -->
-<%--     		<a href="<s:url action="draftOrderList" namespace="/order" />" tabindex="2003">My Carts</a> --%>
-<!--     	</div> -->
+			</span>			
 	</div>
 </s:if>
-
-
-	
-	
 	<div style='display: none;'><s:form name='miniCartForm'
 		id='miniCartForm'>
 		<s:if
@@ -2415,23 +1926,14 @@ function callAjaxForSorting(url,divId)
 			id='miniCartUpdateURL' href='%{#miniCartUpdateURL}' /></div>
 		</s:if>
   </s:if>
-  
   <ul class="header-subnav commonHeader-subnav">
 	  	<s:if test="%{!#isProcurementUser}">
-			 <s:if test='#isGuestUser != true' >
-			 	
+			 <s:if test='#isGuestUser != true' >			 	
 				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
 				<li> | </li>
 				<li><a
 					href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
-					tabindex="2006">Sign Out</a></li>
-				
-				<%-- 
-				<li><a
-					href="<s:url action="getUserInfo" namespace="/profile/user" includeParams='none'/>"
-					tabindex="2004">My Account</a></li>
-				--%>
-					
+					tabindex="2006">Sign Out</a></li>									
 				<!-- Open Welcome Message Block -->
 				<li> | </li>
 				<li class="text-right pointers" id="welcome-address-info-icon">
@@ -2454,9 +1956,7 @@ function callAjaxForSorting(url,divId)
 							, <s:property value='welcomeUserShipToName'/>
 							</s:if>
 						<img src="/swc/xpedx/images/icons/12x12_white_down.png" alt="" />
-					</s:else>
-					
-					
+					</s:else>										
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
 						 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -2468,17 +1968,12 @@ function callAjaxForSorting(url,divId)
 						<a href="#" id="welcome-address-popup-close"><img title="Close" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
 						<s:if test="#isEditOrderHeaderKey == null ">
 							<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
-						</s:if>
-						
+						</s:if>						
 						<br/> 
-					 <%-- 	<s:property value='welcomeUserShipToName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  --%>
-					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  
-											
-						
+					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  																	
 						 <s:if test="{#defualtShipTAddress.getLocationID()!=null && #defualtShipTAddress.getLocationID().trim().length() > 0}">
 							Local ID: <s:property value='#defualtShipTAddress.getLocationID()'/><br/>
-						</s:if>
-						
+						</s:if>						
 						<s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline' >
 							<s:if test='#addressline.length() > 30'>
 							<s:set name='addressline' value='%{#addressline.substring(0,30)}'/>
@@ -2501,10 +1996,6 @@ function callAjaxForSorting(url,divId)
 							<s:property value="#defualtShipTAddress.getCountry()"/>
 						</s:if>
 					    <br/>
-<%-- 						<a href="#" id="welcome-address-popup-close"><img title="Close" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
-						<s:if test="#isEditOrderHeaderKey == null ">
-							<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
-						</s:if> --%>
 					</div>
 		        </li>
 				<!-- Close Welcome Message Block -->
@@ -2515,21 +2006,14 @@ function callAjaxForSorting(url,divId)
 					tabindex="2004">My Account</a></li>
 			<li><a id="cancelShoppingLink" href="#cancelShopping"
 					tabindex="2006">Cancel Shopping</a></li>
-	   	</s:else>
-    
+	   	</s:else>   
   </ul>
-  
-  
   <s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
-  <s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>
-						
-	<%-- Get the SAPs under the MSAP and show the Select Account pop-up if there is more than 1 SAP entitled with the MSAP --%>	       	
-	
+  <s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>						
+	<%-- Get the SAPs under the MSAP and show the Select Account pop-up if there is more than 1 SAP entitled with the MSAP --%>	       		
 	<s:set name="custInfoMap" value="#session.loggedInFormattedCustomerIDMap" />
-	<s:set name="custInfoMapKey" value="%{#loggedInUserCustomerID + '_' + #loggedInUserOrgCode}" />
-	
-	<s:set name="sapCustSize" value='%{0}' />
-	
+	<s:set name="custInfoMapKey" value="%{#loggedInUserCustomerID + '_' + #loggedInUserOrgCode}" />	
+	<s:set name="sapCustSize" value='%{0}' />	
 	<s:if test='#custInfoMap!=null'>
 		<s:set name='map' value='%{#custInfoMap.get(#custInfoMapKey)}' />
 		<s:if test='#map!=null && #map.size>0'>
@@ -2540,7 +2024,6 @@ function callAjaxForSorting(url,divId)
 			</s:iterator>
 		</s:if>
 	</s:if>
-
   <s:set name="sapCustomerId" value='%{""}' />					
   <s:if test='#sapCustSize > 1' >					
   <!-- Modal to show multiple sap accounts -->
@@ -2555,32 +2038,10 @@ function callAjaxForSorting(url,divId)
 				</s:if>
 			</s:iterator>
   </s:elseif>
-  
-  
 <s:if test='(#isGuestUser != true)'>
 	<div id="main-navigation">
 	        <ul class="dropdown" id="main-nav">
-	         	<%-- Hemantha, removed since it is not in new UI screen --%>
-	         	<%--    
-	            <s:url id ='homeLink' action='home' namespace='/home'>
-	            	<s:param name="xpedxSelectedHeaderTab">HomeTab</s:param>
-	            </s:url>
-	            <li class="">
-	            	<s:if test='#xpedxSelectedHeaderTab=="HomeTab"'>
-		            	<s:a href="%{homeLink}" cssClass="active">
-		            		<span class="left">&nbsp;</span><span class="right">Home</span>
-		            	</s:a>
-	            	</s:if>
-	            	<s:else>
-	            		<s:a href="%{homeLink}">
-		            		<span class="left">&nbsp;</span><span class="right">Home</span>
-		            	</s:a>
-	            	</s:else>
-	            </li>
-	            --%>
-	            <%-- Hemantha, removed since it is not in new UI screen --%>
-	            
-	            
+	            <%-- Hemantha, removed since it is not in new UI screen --%>	            
 	            	<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
 		      			<s:param name="displayAllCategories" value="%{true}" />
 						<s:param name='newOP' value='%{true}'/>
@@ -2594,9 +2055,7 @@ function callAjaxForSorting(url,divId)
 	            		</s:if>
 	            		<s:else>
 	            			<s:a href="%{allCatURL}"  onmouseover="javascript:getCategorySubMenu();" cssClass="active">Catalog</s:a>
-	            		</s:else>
-	            		
-	            		
+	            		</s:else>	            			            		
 	            	</s:if>
 	            	<s:else>
 	            		<li>
@@ -2605,42 +2064,21 @@ function callAjaxForSorting(url,divId)
 	            		</s:if>
 	            		<s:else>
 	            			<s:a href="%{allCatURL}" onmouseover="javascript:getCategorySubMenu();">Catalog</s:a>
-	            		</s:else>
-	            		
+	            		</s:else>	            		
 	            	</s:else>
 	            	<ul class="sub_menu" style="visibility: hidden;" id="categorySubMenu" >
 	            		<s:if test="#categoryPath !=null">
 	            			<s:include value="/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp"></s:include>
 	            		</s:if>
 	            	</ul>
-	            	<%--
-	            	<ul class="sub_menu" style="visibility: hidden;" >
-			        <s:set name='categoryList' value="#xutil.getChildElement(#prodCategoryElement, 'CategoryList')" />
-						<s:iterator value='#xutil.getChildren(#categoryList, "Category")' id='category' status="iterCount">
-							<s:url id='catURL' namespace='/catalog' action='navigate.action'>
-								<s:param name='path' value='#xutil.getAttribute(#category,"CategoryPath")'/>
-								<s:param name='cname' value='#xutil.getAttribute(#category,"ShortDescription")'/>
-								<s:param name='newOP' value='%{true}'/>
-							</s:url>
-							<li>
-								<s:a href='%{catURL}' cssClass="link">
-									<s:property value='#xutil.getAttribute(#category,"ShortDescription")'/>
-								</s:a>
-							</li>
-				        </s:iterator>
-			        </ul>
-			         --%>
-			    </li>
-			    	            
+			    </li>			    	            
 	            <s:if test="%{#isProcurementUser}">
-	            	<s:if test="%{procurementMyItemsLinkFlag}">
-	            		
+	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
 						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
 							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
-						</s:url>
-		            	
+						</s:url>		            	
 		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">
@@ -2652,15 +2090,8 @@ function callAjaxForSorting(url,divId)
 		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">
 		            			<span class="left">&nbsp;</span><span class="right">My Items Lists</span>
 		            		</s:a>
-		            	</s:else>
-						
+		            	</s:else>						
 						<div id="MILSubMenu" style="display: inline">
-						<%-- Removal of MIL dropdown list from header for performance improvement
-							<s:action name="XPEDXMyItemsList" executeResult="true" namespace="/xpedx/myItems" >
-								<s:param name="filterByAllChk" value="%{true}" />
-								<s:param name="filterByMyListChk" value="%{true}" />
-								<s:param name="displayAsSubMenu" value="%{true}" />
-							</s:action> --%>
 						</div>
 		            </li>
 	            	</s:if>
@@ -2670,8 +2101,7 @@ function callAjaxForSorting(url,divId)
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
 							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
-						</s:url>
-		            	
+						</s:url>		            	
 		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">My Items Lists</s:a>
@@ -2680,22 +2110,12 @@ function callAjaxForSorting(url,divId)
 		            		<li>
 		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">My Items Lists</s:a>
 		            	</s:else>
-						<%-- Removal of MIL dropdown list from header for performance improvement
-						<div id="MILSubMenu" style="display: inline">
-							<s:action name="XPEDXMyItemsList" executeResult="true" namespace="/xpedx/myItems" >
-								<s:param name="filterByAllChk" value="%{true}" />
-								<s:param name="filterByMyListChk" value="%{true}" />
-								<s:param name="displayAsSubMenu" value="%{true}" />
-							</s:action>
-						</div> --%>
 		            </li>
-	            </s:else>
-	            
+	            </s:else>	            
 	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
 	            	<s:param name="xpedxSelectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
-	            </s:url>
-	            
+	            </s:url>	            
 	            	<s:if test='#xpedxSelectedHeaderTab=="QuickAdd"'>
 	            		<li class="active">
 		            	<s:a href="%{quickAddLink}" cssClass="active">Quick Add</s:a>
@@ -2705,14 +2125,8 @@ function callAjaxForSorting(url,divId)
 	            		<li>
 	            		<s:a href="%{quickAddLink}">Quick Add</s:a>
 	            		 </li>
-	            	</s:else>
-	           
-		      	
+	            	</s:else>		      	
 	            <s:if test="%{!#isProcurementUser}">
-	            
-	            	<%--	<s:url id="viewAccountActivity" action="portalHome" namespace="/home" >
-						<s:param name="xpedxSelectedHeaderTab">OrderTab</s:param>
-					</s:url>  Removed link for order landing page --%>
 				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 					<s:if test='#xpedxSelectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
@@ -2723,9 +2137,7 @@ function callAjaxForSorting(url,divId)
 	            		<li>
 	            		<s:a href='%{catURL11}'>Order Management</s:a>
 	            	</s:else>
-	            	<ul class="sub_menu" style="visibility: hidden;" >
-			        
-					
+	            	<ul class="sub_menu" style="visibility: hidden;" >			        					
 				        <s:url id='catURL10' namespace='/order' action='approvalList.action'>
 									<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 									<s:param name="pageNumber">1</s:param>
@@ -2737,8 +2149,7 @@ function callAjaxForSorting(url,divId)
 									Pending Approval(s)
 								</s:a>
 							</li>
-						</s:if>
-				        
+						</s:if>				        
 				         <s:url id='catURL11' namespace='/order' action='orderList.action'>
 									<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 									<s:param name='scFlag'>Y</s:param>
@@ -2747,17 +2158,7 @@ function callAjaxForSorting(url,divId)
 							<s:a href='%{catURL11}' onclick="msgWait()" cssClass="link">
 								Orders
 							</s:a>
-						</li>
-						
-				<%--	 <s:url id='catURL12' namespace='/order' action='draftOrderList.action'>
-									<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
-									<s:param name='scFlag'>Y</s:param>
-						</s:url>
-						<li>
-							<s:a href='%{catURL12}' cssClass="link">
-								My Carts
-							</s:a>
-						</li>     --%>
+						</li>					
 						<s:if test="%{isViewInvoices()}">
 							<li>
 								<a href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='%{userKey}' />&shipTo=<s:property value='%{custSuffix}' />" target="_blank" class="link">
@@ -2777,8 +2178,7 @@ function callAjaxForSorting(url,divId)
 	            </li>
 	            </s:if> 
 	          </s:if>   
-	            <s:if test="%{!#isProcurementUser}">
-	            
+	            <s:if test="%{!#isProcurementUser}">	            
 	                <s:url id='emailSampleLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
 						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
 					</s:url>
@@ -2796,9 +2196,7 @@ function callAjaxForSorting(url,divId)
 					</s:url>
 					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
 						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
-					</s:url>
-						
-						
+					</s:url>												
 					<s:if test='#xpedxSelectedHeaderTab=="ServicesTab"'>
 		            	<li class="active">	
 		            	<s:a href="#" cssClass="active">Resources</s:a>
@@ -2814,8 +2212,7 @@ function callAjaxForSorting(url,divId)
 								<s:text name="Reports"></s:text>
 							</s:a>
 						</li>
-						</s:if>
-					 
+						</s:if>					 
 					  <%-- <s:if test='#canRequestProductSample == "Y"'> --%>
 						<li>
 							<s:a href='%{RequestProdSampleLink}' cssClass="link">
@@ -2843,10 +2240,8 @@ function callAjaxForSorting(url,divId)
 						</li>
 		            </ul>
 	            </li>
-	            </s:if>
-	          
-	            <s:if test="%{!#isProcurementUser}"> 
-	            
+	            </s:if>	          
+	            <s:if test="%{!#isProcurementUser}"> 	            
 					<s:url id='adminProfile' namespace='/profile/user' action='XPEDXAdminProfile'>						
 						<s:param name="xpedxSelectedHeaderTab">AdminTab</s:param>
 					</s:url> 
@@ -2868,11 +2263,9 @@ function callAjaxForSorting(url,divId)
 							<s:a href='%{myProfile}' cssClass="link">
 								<s:text name="My Profile"></s:text>
 							</s:a>
-						</li>
-						
+						</li>						
 						<s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
-						<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>
-								       	
+						<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>								       	
 						<s:url id='sapCustProfile' namespace='/profile/org' action='xpedxGetCustomerInfo'>
 							<s:param name="customerId" value="#sapCustomerId" />
 							<s:param name="organizationCode" value="#loggedInUserOrgCode" />
@@ -2938,9 +2331,6 @@ function callAjaxForSorting(url,divId)
 							<s:param name="isEditOrder" value='true' />
 							<s:param name="isEditOrder" value='true' />
 					</s:url>
-					<!--<s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
-						<s:param name="isEditOrder" value="%{'true'}" ></s:param>						
-					</s:url> -->
 	            	<li class="lighter order-edit">
 	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
 	            	</li>
@@ -2950,39 +2340,12 @@ function callAjaxForSorting(url,divId)
 					</s:url>
 	            	<li class="lighter order-edit">
 	            		<s:a href="%{cancelEditOrderChanges}">Cancel Changes</s:a>
-	            	</li>	
-	            
+	            	</li>		            
 	            </s:else>
-	            <%--
-	            Removing as Per JIIRA 2775 . Peding approval count is removing for perofrmance perspective.
-		           <s:if test="%{isApprover()}">
-		           <s:url id='pendingApprovalURL'  namespace='/order'  action='xpedxpendingapprovalcount.action' ></s:url>
-		           <div id ="pendingApproverDiv">
-		           </div>
-		           <script>
-		           Ext.onReady(function(){
-		       		var url = "<s:property value='#pendingApprovalURL'/>";
-		       		url = ReplaceAll(url,"&amp;",'&');
-		       		Ext.Ajax.request({
-		       		   url:url,
-		       		   success: function (response, request)
-		       		   {
-			       			var myDiv = document.getElementById("pendingApproverDiv");
-			                myDiv.innerHTML = response.responseText;
-		           	   }
-		       		   
-		       		});
-		       					
-		      	 	});
-		           </script>
-		            </s:if>
-	            </li>
-	             --%>
 	        </ul>
 		</div>
 	</s:if>
 </div>
-
 <div style="display: none;">
 	<div id="viewUsersDlg">
 	</div>
@@ -2992,8 +2355,7 @@ function callAjaxForSorting(url,divId)
 		<p> Are you sure you want to leave this page? </p><br/><br/>
 		<p>If inactive, your current cart will automatically be purged in 7 days.</p>
 		<div class="float-right">
-			<ul id="tool-bar" class="tool-bar-bottom">
-			
+			<ul id="tool-bar" class="tool-bar-bottom">			
 			<s:url id='procurementPunchOutURL' action='procurementPunchOut' namespace="/order" escapeAmp="false">
 	            <s:param name='mode' value='"cancel"'/>
 	            <s:param name='draft' value='"Y"'/>
