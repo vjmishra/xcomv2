@@ -1836,11 +1836,12 @@ function SubmitActionWithValidation()
 				</ul>
 				
 				<p class="tablinks">&nbsp;
-			 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
-		  	 	<s:if test='#canRequestProductSample=="Y"'>
- 			 		<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
-					<s:text name='Request Sample' /> </a>&nbsp;&nbsp; 
-		   		</s:if> 
+			 	<%-- Commented for JIRA 3288	--%>	 	
+			 	<%-- <s:set name="canRequestProductSample" value="#session.showSampleRequest" />  --%>
+		  	 	<%-- <s:if test='#canRequestProductSample=="Y"'> --%>
+ 			 		<%-- 	<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
+					<s:text name='Request Sample' /> </a>&nbsp;&nbsp; --%>
+		   		<%-- </s:if>  --%>
 				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
 					<s:set name="link" value="value" />
 					<s:set name="desc" value="key" />	
