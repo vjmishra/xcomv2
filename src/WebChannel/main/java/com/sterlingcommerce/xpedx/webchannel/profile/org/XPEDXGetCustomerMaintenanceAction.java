@@ -399,6 +399,14 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public List empList;
 	public List otherSalesRepList;
 	public List empNames;
+	private boolean success;
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean isSuccess) {
+		this.success = isSuccess;
+	}
 	
 	protected Map<String, String> countriesMap;
 
