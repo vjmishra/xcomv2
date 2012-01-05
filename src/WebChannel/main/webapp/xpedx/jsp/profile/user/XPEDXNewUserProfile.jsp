@@ -268,10 +268,13 @@
 			      	<h2 class="table-hdr">Add User</h2>
 			        
 			        <div id="requestform">
-			        	<table class="form" width="100%" border="0" cellspacing="0" cellpadding="0">
+			        	<table class="form" width="5%" border="0" cellspacing="0" cellpadding="0">
 			  				<tr>
-			    				<td colspan="2" class="no-border-right-user" >Username:
-								<input name='userName' id='userName' type="text" class="x-input" style="width: 185px;" /></td>
+			  					<td class="no-border-right-user" colspan="2"><div class="mandatory float-left">*</div>Username:</td>
+			                    <td width="31%" class="no-border-right-user">
+			                    	<s:textfield tabindex="50" name="username" id="username" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');" 
+			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="20" cssClass="x-input" cssStyle="width: 185px;"/>                    
+			                   </td>
 			  				</tr>
 						</table>
 			        </div>
@@ -283,9 +286,8 @@
 						<div class="TabbedPanelsContentGroup" id="UserInformationsData">
 			            	<div class="TabbedPanelsContent" id="UserInformation">
 			              		<div id="requestform">              
-			              			<div class="error" id="errorMsgForMandatoryFields_addNewUserForm" style="display : none"/></div>
-			              			<div class="error" id="errorMsgFor_emailId" style="display : none"/><br/><br/>Please enter the same email in both Email and Confirm email fields.</div>
-			              			<table id="userDataTable"  width="100%" border="0" cellspacing="0" cellpadding="0" class="tabs">
+			              			
+							<table id="userDataTable"  width="100%" border="0" cellspacing="0" cellpadding="0" class="tabs">
 			              	  			<tr>
 			                    			<td width="13%" valign="top" class="no-border-right-user">User Status:</td>
 			                    			<td colspan="3" class="no-border-right-user"> 
@@ -359,7 +361,8 @@
 			                    			</td>
 			                    			<td class="no-border-right-user"><div class="mandatory float-left">*</div> Confirm Email Address:</td>
 			                    			<td class="no-border-right-user">
-			                    				<s:textfield tabindex="65" id="confirmEmailId" name="confirmEmailId" onkeyup="javascript:confirmFieldValidation(this, 'emailId');" 
+			                    			<!-- javascript:confirmFieldValidation(this, 'emailId'); -->
+			                    				<s:textfield tabindex="65" id="confirmEmailId" name="confirmEmailId" onkeyup="" 
 			                    				cssClass="x-input" cssStyle="width: 185px;"/>
 			                    			</td>
 			                  			</tr>
@@ -415,7 +418,14 @@
 			              <li class="float-left margin-10"><a href="javascript:window.history.go(-1)"  class="grey-ui-btn"><span>Cancel</span></a></li>
 			              <li class="float-right"><a class="green-ui-btn" onclick="javascript: return addNewUser('addNewUserForm', []);" href="#" ><span>Save</span></a></li>
 			            </ul>
-			          </div>
+			      </div>
+			      <div class="clearview">&nbsp;</div>
+			      <%--Code Added For XNGTP-3196 --%>
+			         <div class="error" id="errorMsgForMandatoryFields_addNewUserForm" style="display : none; float: right"/></div>
+			         <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
+			      <%-- End fix for XNGTP-3196 --%> 
+			     
+			          
 			        </div>
 			      </div>
 			    </div>
