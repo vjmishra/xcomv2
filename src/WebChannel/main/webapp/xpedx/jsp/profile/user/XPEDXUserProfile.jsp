@@ -2580,6 +2580,18 @@ a.underlink:hover { text-decoration: underline !important; }
 	</ul>
 	</div>
 	<div class="clearview">&nbsp;</div>
+<%--Code Added For XNGTP-3196 --%>
+
+<div class="success" id="msgFor_resetpassword" style="display : none; float: right"/>Instructions to reset this password have been sent to the registered user’s email address.</div> 
+
+<div class="error" id="errorMsgFor_userpassword" style="display : none; float: right"/>Please enter the same password in both Password and Confirm Password fields.</div>
+
+<div class="error" id="errorMsgForMandatoryFields_myAccount" style="display : none; float: right"></div>
+
+<div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
+
+<%-- End fix for XNGTP-3196 --%>
+
 
 	<div class="clearview textAlignCenter">Last modified by
 <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="%{getLastModifiedDate()}"/></div>
