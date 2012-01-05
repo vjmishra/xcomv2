@@ -1240,15 +1240,18 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 								chngcOrdStatusEle.setAttribute("OrderHeaderKey", cOrdHeaderKey);
 								YFCElement chngcOrdStatusLinesEle = chngcOrdStatusEle.getChildElement("OrderLines");
-								YFCElement chngcOrdStatusLineEle = chngcOrdStatusLinesEle.getOwnerDocument().createElement("OrderLine");
-								chngcOrdStatusLinesEle.appendChild(chngcOrdStatusLineEle);
-								chngcOrdStatusLineEle.setAttribute("OrderLineKey", cOrdLineKey);
-
-								YFCElement chngcOrdStatusLineTranQtyEle = chngcOrdStatusLineEle.getOwnerDocument().createElement("OrderLineTranQuantity");
-								chngcOrdStatusLineEle.appendChild(chngcOrdStatusLineTranQtyEle);
-								chngcOrdStatusLineTranQtyEle.setAttribute("Quantity", Float.parseFloat(fOrdQty));
-								if (!YFCObject.isNull(tuom) && !YFCObject.isVoid(tuom)) {
-									chngcOrdStatusLineTranQtyEle.setAttribute("TransactionalUOM", tuom);
+										
+								if ( !fOrdQty.equalsIgnoreCase("0") && !fOrdQty.equalsIgnoreCase("0.0") && !fOrdQty.equalsIgnoreCase("0.00")) {
+									YFCElement chngcOrdStatusLineEle = chngcOrdStatusLinesEle.getOwnerDocument().createElement("OrderLine");
+									chngcOrdStatusLinesEle.appendChild(chngcOrdStatusLineEle);
+									chngcOrdStatusLineEle.setAttribute("OrderLineKey", cOrdLineKey);
+	
+									YFCElement chngcOrdStatusLineTranQtyEle = chngcOrdStatusLineEle.getOwnerDocument().createElement("OrderLineTranQuantity");
+									chngcOrdStatusLineEle.appendChild(chngcOrdStatusLineTranQtyEle);
+									chngcOrdStatusLineTranQtyEle.setAttribute("Quantity", Float.parseFloat(fOrdQty));
+									if (!YFCObject.isNull(tuom) && !YFCObject.isVoid(tuom)) {
+										chngcOrdStatusLineTranQtyEle.setAttribute("TransactionalUOM", tuom);
+									}
 								}
 							}
 						} else {
@@ -5134,6 +5137,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			YFCElement billTo = chngOrdEle.getChildElement("PersonInfoBillTo");
 			if (billTo != null) {
 				chngOrdEle.removeChild(billTo);
+			}
+		}
+		
+		// To Validate Legacy Order Number and Generation Number are not stored for Customer Order.
+		if (isCustOrder) {
+			YFCElement extnElement = chngOrdEle.getChildElement("Extn");
+			if (extnElement != null) {
+				extnElement.setAttribute("ExtnLegacyOrderNo","");
+				extnElement.setAttribute("ExtnGenerationNo", "");
 			}
 		}
 	}
