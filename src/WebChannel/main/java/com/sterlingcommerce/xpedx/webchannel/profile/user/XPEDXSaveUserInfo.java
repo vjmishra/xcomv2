@@ -31,6 +31,8 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult.ResultType;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
@@ -368,6 +370,14 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						if (checkIfPasswordChanged()) {
 							String newPassword = wcContext.getSCUIContext()
 									.getRequest().getParameter("userpassword");
+							//Added For Jira-3106
+							if(newPassword.length()<8){
+
+								// This exception is put here to handle the password validation exceptions.
+								request.getSession().setAttribute("errorNote","The password must contain at least 8 characters. Please revise and try again.");
+								return REDIRECT;
+							}
+							//Fix End For Jira-3106
 							valuemap
 									.put("/Customer/CustomerContactList/CustomerContact/User/@Password",
 											newPassword);
@@ -440,7 +450,32 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		catch (XMLExceptionWrapper xmlEx) {
 			log.error("Error in saving the User/Contact Information", xmlEx
 					.getCause());
-			request.getSession().setAttribute("errorNote","The previous 5 password values are disallowed when creating a new password. Please choose another value.");
+			//Added For Jira-3106
+			YFCElement errorMsgElement=xmlEx.getXML();
+			
+			boolean isPPMesage=false;
+			if(errorMsgElement != null)
+			{
+				YFCNodeList<YFCElement> errors=errorMsgElement.getElementsByTagName("Error");			
+				if(errors != null)
+				{
+					YFCElement errorMessages=errors.item(0);
+					String errorMsg="";
+					if( errorMessages!=null )
+					{						
+						errorMsg=errorMessages.getAttribute("ErrorDescription");
+						if( errorMsg!=null && errorMsg.trim().length()!=0)
+						{
+							isPPMesage=true;
+							request.getSession().setAttribute("errorNote",errorMsg);
+						}
+					}
+					
+				}
+			}
+			if(!isPPMesage)
+			request.getSession().setAttribute("errorNote","The password is invalid. Please revise and try again.");
+			//Fix End For Jira-3106
 			return REDIRECT;
 		} catch (CannotBuildInputException e) {
 			log.error("Error in creating the User/Contact Information", e
