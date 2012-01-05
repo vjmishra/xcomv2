@@ -428,6 +428,9 @@ ul.checkboxTree li
             </ul>
           </div></div>
            <div class="clearview">&nbsp;</div>
+	           <s:if test="%{#_action.isSuccess()}">
+					<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Account Profile has been updated successfully.</div>
+				</s:if>
               <div class="clearview textAlignCenter">Last modified by <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/></div>
         
         <!-- Pricing -->
