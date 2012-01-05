@@ -1,7 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
@@ -44,12 +44,10 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXWarehouseLocation;
-import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
-import com.yantra.yfs.japi.YFSException;
 
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
@@ -69,8 +67,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 	ArrayList<String> itemIDList = new ArrayList<String>();
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
-	private String msapOrderMultipleFlag="";
-	private Map <String, List<Element>> PLLineMap;
+	private String msapOrderMultipleFlag = "";
+	private Map <String, List<Element>> PLLineMap;	
+	private String firstItem = "";
+	
 	//Start 2964
 	private Map <String,String>defaultShowUOMMap;
 	private Map<String,String>orderMultipleMap;
@@ -89,6 +89,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public void setDefaultShowUOMMap(Map<String, String> defaultShowUOMMap) {
 		this.defaultShowUOMMap = defaultShowUOMMap;
 	}
+	
+	public String getFirstItem() {
+		return firstItem;
+	}
 
 	public Map<String, List<Element>> getPLLineMap() {
 		return PLLineMap;
@@ -96,6 +100,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setPLLineMap(Map<String, List<Element>> pLLineMap) {
 		PLLineMap = pLLineMap;
+		wcContext.setWCAttribute("PLLineMap", PLLineMap, WCAttributeScope.REQUEST);
 	}
 
 	public String getCatalogLandingMashupID() {
@@ -169,8 +174,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String retVal=super.execute();
 		getSortFieldDocument();
 		setItemsUomsMap();
+		init();
 		return retVal;
 		
+	}
+	
+	private void init() {
+		req.setAttribute("Tag_WCContext", wcContext);	
+		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
+		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
 	}
 
 	private void getSortFieldDocument(){
@@ -230,6 +242,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	 */
 	@Override
 	public String filter() {
+		init();		
 		String returnString = super.filter();
 		//getting the customer bean object from session.
 		
@@ -381,6 +394,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String newSearch() {
+		init();
 		setCustomerNumber();
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
@@ -446,7 +460,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String navigate() {
-		
+		init();
 		if(!YFCCommon.isVoid(draft) && "N".equals(draft))
 		{
 			XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, editedOrderHeaderKey);
@@ -473,7 +487,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		//determine if the request is catalog landing or catalog page
 		boolean isCategoryLanding = determineCatalogLandingRedirection(bcl,pathDepth);
-		if(isCategoryLanding){			
+		if(isCategoryLanding){
 			getWCContext().removeWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
 			//call the catalog landing mashup
 			setMashupID(getCatalogLandingMashupID());
@@ -524,6 +538,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(itemList !=  null) {
 				for(int i=0; i<itemList.size();i++) {
 					String itemId = itemList.get(i).getAttribute("ItemID");
+					if(i == 0) firstItem = itemId;
 					if(itemIDList.contains(itemId))
 						continue ;
 					itemIDList.add(itemId);
@@ -535,7 +550,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// TODO: handle exception
 		}
 		if(itemIDList.size()>0) {
-			
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
 			itemUomHashMap =	XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
@@ -554,6 +568,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				e1.printStackTrace();
 				orderMultipleMap = new HashMap();
 			}
+			wcContext.setWCAttribute("orderMultipleMap",orderMultipleMap, WCAttributeScope.REQUEST);
 			
 			double minFractUOM = 0.00;
 	    	double maxFractUOM = 0.00;
@@ -567,9 +582,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	    	
 			//End - Code added to fix XNGTP 2964
 	    	defaultShowUOMMap = new HashMap<String,String>();
-	    	if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
+			if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
 				for(int i=0; i<itemIDList.size(); i++) {
-					
 					Map displayUomMap = new HashMap<String, String>();
 					String strItemID = itemIDList.get(i);
 					displayUomMap = itemUomHashMap.get(strItemID);
@@ -620,7 +634,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 							if("1".equals(objConversionFactor))
 							{
 								displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom));
-								
 							}
 							else{
 								if(null != objConversionFactor && !"".equals(objConversionFactor)){//JIRA 1391 - Displaying an Integer instead of a decimal.
@@ -632,37 +645,40 @@ public class XPEDXCatalogAction extends CatalogAction {
 							e.printStackTrace();
 						}
 					}
-					//Start- Code added to fix XNGTP 2964
-					if(minFractUOM == 1.0 && minFractUOM != 0.0){
-						defaultConvUOM = lowestUOM;
-						defaultUOM = minUOMsDesc;
-						
-					}else if(maxFractUOM > 1.0){
-						defaultConvUOM = highestUOM;
-						defaultUOM = maxUOMsDesc;
-						
-					}else{
-						
-						defaultConvUOM = lowestUOM;
-						defaultUOM = minUOMsDesc;
-					}
-					/*if(SCUtil.isVoid(orderMultiple) || Integer.valueOf(orderMultiple) == 0){
-						orderMultiple = "1";
-					}
-					orderMultipleMap.put(strItemID, orderMultiple);
-					*/
-					/*if(!SCUtil.isVoid(orderMultiple) && Integer.valueOf(orderMultiple)>1){
+						//Start- Code added to fix XNGTP 2964
+						if(minFractUOM == 1.0 && minFractUOM != 0.0){
+							defaultConvUOM = lowestUOM;
+							defaultUOM = minUOMsDesc;
+							
+						}else if(maxFractUOM > 1.0){
+							defaultConvUOM = highestUOM;
+							defaultUOM = maxUOMsDesc;
+							
+						}else{
+							
+							defaultConvUOM = lowestUOM;
+							defaultUOM = minUOMsDesc;
+						}
+						/*if(SCUtil.isVoid(orderMultiple) || Integer.valueOf(orderMultiple) == 0){
+							orderMultiple = "1";
+						}
 						orderMultipleMap.put(strItemID, orderMultiple);
-					}*/
-					if(!SCUtil.isVoid(defaultUOM))
-						defaultShowUOMMap.put(strItemID, defaultUOM);
-					//End- Code added to fix XNGTP 2964
-					
-					itemUomHashMap.put(strItemID, displayUomMap);
-					
+						*/
+						/*if(!SCUtil.isVoid(orderMultiple) && Integer.valueOf(orderMultiple)>1){
+							orderMultipleMap.put(strItemID, orderMultiple);
+						}*/
+						if(!SCUtil.isVoid(defaultUOM))
+							defaultShowUOMMap.put(strItemID, defaultUOM);
+						//End- Code added to fix XNGTP 2964
+						
+						itemUomHashMap.put(strItemID, displayUomMap);
+						
 				}
 			}
 		}
+		
+		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
+		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
 	}
 
 	protected void prepareMyItemListList() {
@@ -776,6 +792,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String search() {
+		init();
 		setCustomerNumber();
 		String returnString = super.search();
 		//getting the customer bean object from session.
@@ -807,9 +824,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		return SUCCESS;
 	}
+	
+	
 
 	@Override
 	public String sortResultBy() {
+		init();
 		String returnString = super.sortResultBy();
 		if (ERROR.equals(returnString)) {
 			return returnString;
@@ -826,6 +846,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String goToPage() {
+		init();
 		String returnString = super.goToPage();
 		if (ERROR.equals(returnString)) {
 			return returnString;
@@ -840,6 +861,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String selectPageSize() {
+		init();
 		String returnString = super.selectPageSize();
 		wcContext.getSCUIContext().getSession().setAttribute(
 				"selectedPageSize", pageSize);
@@ -930,6 +952,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 	public String praparePnAjaxData() {
+		init();
 		String pnaItemId = getPnaItemId();
 		Document itemDoc;
 		String requestedUOM = "";
@@ -1437,6 +1460,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				
 			}
 		}
+		wcContext.setWCAttribute("itemMap",itemMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("itemToItemBranchBeanMap",itemToItemBranchBeanMap, WCAttributeScope.SESSION);
 		
 	}
@@ -1563,6 +1587,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 	
 	public String setNormallyStockedCheckbox() {
+		init();
 		getWCContext().setWCAttribute("StockedCheckbox",isStockedCheckeboxSelected(),WCAttributeScope.SESSION);
 		return SUCCESS;
 	}
@@ -1581,7 +1606,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return -1;
 	}
 	/*End - Code changes for 2964*/
-	
+
 	
 	/**
 	 * @return the pnaItemId
