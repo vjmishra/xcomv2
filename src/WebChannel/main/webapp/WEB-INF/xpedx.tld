@@ -95,6 +95,39 @@
 	</tag>
 
 	<tag>
+		<description>
+			This tag is used in Catalog-C3 page. The purpose is to reduce the number of lines in javascript and improve performance. 
+		</description>
+		<name>catalogResultInit</name>
+		<tag-class>com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemsDataTemplateTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				The Item Element
+			</description>
+			<name>ItemElement</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The base currency for item price.
+			</description>
+			<name>currency</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>        
+		<example>
+		<![CDATA[
+			...
+			<s:url value='/removeButton.gif' id='rbtn'/>
+			<wc:catalogResultInit ItemElement='itemElement' WCContext='wcContext' currency='USD'/>
+			...
+		]]>
+		</example>
+	</tag>
+
+	<tag>
 	    <description>
 	      Generates a pagination control fragment.
 	    </description>
