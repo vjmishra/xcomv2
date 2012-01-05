@@ -14,6 +14,14 @@ public class XPEDXCustomerShipTo extends WCMashupAction{
 	private Element shipToAddress;
 	private Element associatedBillToAddress;
 	private Element billToCustElem;
+	private boolean success;
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean isSuccess) {
+		this.success = isSuccess;
+	}
 	private static final String XPEDX_CUSTOMER_SHIPTO_MASHUP = "getCustomerShipTo";
 	
 	private static final Logger log = Logger.getLogger(XPEDXCustomerShipTo.class);
@@ -29,6 +37,7 @@ public class XPEDXCustomerShipTo extends WCMashupAction{
 				shipToAddress = SCXmlUtil.getFirstChildElement(custAddtnlAddresses);
 				Element billToCustAddtnlAddresses = SCXmlUtil.getChildElement(billToCustElem, "CustomerAdditionalAddressList");
 				associatedBillToAddress = SCXmlUtil.getFirstChildElement(billToCustAddtnlAddresses);				
+				setSuccess(true);
 				return(SUCCESS);
 			}
 			catch (Exception e) 
