@@ -10,6 +10,14 @@ public class XPEDXSaveShipToInfo extends WCMashupAction{
 	private static final String BILL_TO_SHIP_TO_MASHUP = "xpedx-save-shipToInfo";
 	protected String customerId;
 	protected String organizationCode;
+	private boolean success;
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean isSuccess) {
+		this.success = isSuccess;
+	}
 
 	public String execute(){
 		try
@@ -20,6 +28,7 @@ public class XPEDXSaveShipToInfo extends WCMashupAction{
 			LOG.debug("Error while saving the ship to cust Info");
 			return(ERROR);
 		}
+		setSuccess(true);
 		return(SUCCESS);
 	}
 
