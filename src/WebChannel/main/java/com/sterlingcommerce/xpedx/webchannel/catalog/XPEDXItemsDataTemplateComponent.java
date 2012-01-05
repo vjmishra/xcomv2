@@ -21,7 +21,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 
 /**
@@ -101,7 +100,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//String isPickupable = validate(info.getAttribute("IsPickupAllowed"));
 		//String isShippable = validate(info.getAttribute("IsShippingAllowed"));
 		//String configurationKey = validate(info.getAttribute("ConfigurationKey"));
-		String deschtml = validate(XPEDXMyItemsUtils.formatEscapeCharactersHtml(desc));
+		String deschtml = XPEDXMyItemsUtils.formatEscapeCharactersHtml(validate(desc));
 		/*String isConfigurableBundle = "N";
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
@@ -122,7 +121,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String tierPrice = "";
 		List<Element> tierPriceList = tag.getPLLineMap().get(itemID);
 		if(tierPriceList != null) {
-			for (Element tierPrices : tag.getPLLineMap().get(itemID)) {
+			for (Element tierPrices : tierPriceList) {
 				String tierQty = tierPrices.getAttribute("FromQuantity");
 				tierQty = (tierQty == null || "".equals(tierQty)) ? "1" : tierQty;
 				hasTier = true;
@@ -165,24 +164,24 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//sb.append("icon: \"").append("https://www.xpedx.com/swc/xpedx/images/INF_150x150.jpg").append("\",");
 		sb.append("tabidx: \"").append(tabidx).append("\",");
 		
-		if(isGuestUser == false) {
-			try {
-				if(Integer.parseInt(orderMultiple) > 1) {
-					String uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
-					sb.append("uomLink: \"")
+		String uomDesc = "";
+		try {
+			uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
+			sb.append("uomDesc: \"").append(uomDesc).append("\",");
+		} catch (Exception e) {
+			sb.append("uomDesc: \"\",");
+		}
+		
+		if (isGuestUser == false) {
+			if (Integer.parseInt(orderMultiple) > 1) {
+				sb.append("uomLink: \"")
 						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
 						.append(tag.getOrderMultipleString()).append(orderMultiple).append(" ")
 						.append(uomDesc).append("</div>\",");
-					sb.append("uomDesc: \"").append(uomDesc).append("\",");
-				}
-				else {
-					sb.append("uomLink: \"\",");
-					sb.append("uomDesc: \"\",");
-				}
-			} catch (Exception e) {
+			} else {
 				sb.append("uomLink: \"\",");
-				sb.append("uomDesc: \"\",");
 			}
+
 		}
 		
 		sb.append("price: \"").append(TextUtils.htmlEncode(tierPrice)).append("\",");
@@ -211,13 +210,14 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
 		sb.append("partno: \"");
 		
-		if("2".equals(tag.getWcContext().getWCAttribute("customerUseSKU"))) {
+		String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
+		if("2".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
 				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
-		} else if("3".equals(tag.getWcContext().getWCAttribute("customerUseSKU"))) {
+		} else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
-		} else if("1".equals(tag.getWcContext().getWCAttribute("customerUseSKU"))) {
+		} else if("1".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
 		}
