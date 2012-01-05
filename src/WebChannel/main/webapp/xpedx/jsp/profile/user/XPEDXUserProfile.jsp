@@ -1260,7 +1260,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<s:hidden name="validateUserId" value="%{true}" />
 		</s:else></s:else></td>
 		<s:if test="%{#session.errorNote!= null}">
-		<td><h5 align="center"><b><font color="red"><s:property value='%{#session.errorNote}'/></font></b></h5></td>
+		<td><h5 align="left"><b><font color="red"><s:property value='%{#session.errorNote}'/></font></b></h5></td>
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</s:if>
 	</tr>
@@ -1701,7 +1701,6 @@ a.underlink:hover { text-decoration: underline !important; }
 	<div id="UserInformationsTab" class="TabbedPanelsContent">
 	<div>
 
-	<div class="error" id="errorMsgForMandatoryFields_myAccount" style="display : none"></div>
 	
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
 		class="tabs line-spacing-tr">
@@ -1905,7 +1904,6 @@ a.underlink:hover { text-decoration: underline !important; }
 		</tr>
 		
 		<s:if test="#orgQuestionList!=null">
-		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_userpassword" style="display : none"/>Please enter the same password in both password and confirm password fields.</div></td></tr>
 				<tr>
 			<td class="no-border-right-user">
 			<div class="mandatory float-left">*</div>
@@ -2841,7 +2839,9 @@ function resetPassword()
 			customerContactId:'<s:property value="#customercontact.getAttribute(\'CustomerContactID\')" />'},
 	        method: 'POST',
 	        success: function (response, request){
-	        	alert('User password will be sent to your registered email address!'); 
+	        	//alert('User password will be sent to your registered email address!');
+	        	//Added for Jira XNGTP-3196
+			document.getElementById("msgFor_resetpassword").style.display = "inline";
 	   		},
 	   		failure: function (response, request){
 	   			alert("Error sending reset password notification email!");
