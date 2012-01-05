@@ -318,6 +318,11 @@ ul.checkboxTree li
             </ul>
         </div>
         <div class="clearview">&nbsp;</div>
+        <%--Code Added For XNGTP-3196 --%>
+        <s:if test="%{#_action.isSuccess()}">
+	<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Ship-To Profile has been updated successfully.</div>
+	</s:if>
+         <%-- End fix for XNGTP-3196 --%>
         <div class="clearview textAlignCenter">Last modified by <s:property value="modifiedUser"/> on <s:property value="modifiedDate"/></div>
         <div class="clearview">&nbsp;</div>
         </s:form>
