@@ -4,7 +4,9 @@
 <%@ taglib prefix="swc" uri="swc"%>
  <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
-  <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	
+<%-- 
+  <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+  --%>	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
@@ -526,7 +528,9 @@
 </script>	
 <script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
 <!-- Web Trends tag start -->
+<%--
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+ --%>
 <!-- Web Trends tag end  -->
 	<script type="text/javascript">
 	$(document).ready(function() {
@@ -587,11 +591,16 @@
 	action='xpedxManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
+<%--	
 <script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
+
 <script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
+ --%>
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
+<%--
 <script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
+ --%>
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
 	<div id="ajax-assignedShipToCustomers"></div>
 </div>
