@@ -3368,6 +3368,12 @@ public class XPEDXWCUtils {
 		
 		Map<String, String> countryCodesMap = new LinkedHashMap<String, String>(); 
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		@SuppressWarnings("unchecked")
+		Map<String, String> countryCodesContextMap = (Map<String, String>)wcContext.getSCUIContext().getServletContext().getAttribute("COUNTRY_CODES");
+		if(null != countryCodesContextMap && countryCodesContextMap.size() > 0 ) { 			
+			return countryCodesContextMap;		
+		}
+		
 		Element input;
 		String countryCode = "";
 		String countryDesc = "";
@@ -3389,6 +3395,8 @@ public class XPEDXWCUtils {
 			countryDesc = countryElem.getAttribute("CodeShortDescription");
 			countryCodesMap.put(countryCode, countryDesc);
 		}
+		
+		wcContext.getSCUIContext().getServletContext().setAttribute("COUNTRY_CODES", countryCodesMap);
 		return countryCodesMap;
 	}
 	
