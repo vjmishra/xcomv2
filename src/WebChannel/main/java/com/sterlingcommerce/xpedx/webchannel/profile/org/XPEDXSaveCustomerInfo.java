@@ -43,6 +43,14 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 		private String txtZipCode;
 		private String addtnlAddressID;
 		private String addtnlAddressKey;
+		private boolean success;
+		public boolean isSuccess() {
+			return success;
+		}
+
+		public void setSuccess(boolean isSuccess) {
+			this.success = isSuccess;
+		}
 			
 		public String getBodyData() {
 			return bodyData;
@@ -65,7 +73,7 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 			if (null != outputDoc) {
 				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 			}
-			
+			setSuccess(true);
 			return REDIRECT;
 		}
 		
