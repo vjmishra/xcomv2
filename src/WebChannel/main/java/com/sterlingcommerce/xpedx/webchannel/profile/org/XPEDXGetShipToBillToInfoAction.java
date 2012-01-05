@@ -40,6 +40,14 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 	protected String Phone1FormatChange;
 	protected String Fax1FormatChange;
 	protected String locationId;
+	private boolean success;
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean isSuccess) {
+		this.success = isSuccess;
+	}
 	
 
 	public String getLocationId() {
