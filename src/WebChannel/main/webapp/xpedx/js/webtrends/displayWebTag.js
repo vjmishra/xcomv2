@@ -1,62 +1,77 @@
-/* This file is sepcific to any methods related to General Information page in User Profile.
- * 
- */
-
-/**
- * @author Ragini
- * Created: 03/18/2011 3:34:12 PM
- */
-/**
- * writeMetaTag function. Does the following tasks:
- *  1. Takes Name of meta Tag and content as input parameters of type String 
- *  2. creates a iFrame and loads XPEDXWebtrends.jsp, after processing it, then delete the iFrame 
- * 
- */
-function writeMetaTag(tag,content) { 
-	
-		var iframeElement = document.createElement("iframe"); 
-		iframeElement.id = 'iframeElement'; 
-		document.body.appendChild(iframeElement);
-
-		iframeElement.onreadystatechange = function () { 
-
-		if (iframeElement.readyState == 'complete') { 
-
-		if (document.getElementById('iframeElement')) 
-		document.body.removeChild(iframeElement);
-
-		}		
-		} 
-		iframeElement.style.width = '0px' 
-		iframeElement.style.height ='0px' 
-		iframeElement.style.display = 'none'; 
+function writeMetaTag(tag,content) { 			
 		var linkUrl="/swc/xpedx/jsp/common/XPEDXWebtrends.jsp?tag="+tag+"&content="+content;
 		linkUrl=addCSRFToken(linkUrl, 'link');
-		iframeElement.src =  linkUrl;
+		try {
+	        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+	    } catch (e) {
+	        try {
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        } catch (E) {
+	            xmlhttp = false;
+	        }
+	    }
+	    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	        try {
+	            xmlhttp = new XMLHttpRequest();
+	        } catch (e) {
+	            xmlhttp = false;
+	        }
+	    }
+	    if (!xmlhttp && window.createRequest) {
+	        try {
+	            xmlhttp = window.createRequest();
+	        } catch (e) {
+	            xmlhttp = false;
+	        }
+	    }	    
+	    xmlhttp.open("GET", linkUrl, true);
+	    
+	    xmlhttp.onreadystatechange = function() {
+	        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	             //alert(xmlhttp.responseText)
+	            // OR write code which you want to execute after completing the async code.
+	        }
+	    }
+	    xmlhttp.send(null)
 }
-
 function writeMetaTag(tagList,contentList,cnt){ 	
+	//alert("hi111");
 	
-	var iframeElement = document.createElement("iframe"); 
-	iframeElement.id = 'iframeElement'; 
-	document.body.appendChild(iframeElement);
-
-	iframeElement.onreadystatechange = function () { 
-
-	if (iframeElement.readyState == 'complete') { 
-
-	if (document.getElementById('iframeElement')) 
-	document.body.removeChild(iframeElement);
-
-	}		
-	} 
-	iframeElement.style.width = '0px' 
-	iframeElement.style.height ='0px' 
-	iframeElement.style.display = 'none'; 
 	var linkUrl= "/swc/xpedx/jsp/common/XPEDXWebtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
 	linkUrl=addCSRFToken(linkUrl, 'link');
-	iframeElement.src =linkUrl;
-}
+	linkUrl=addCSRFToken(linkUrl, 'link');
+	try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+        try {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (E) {
+            xmlhttp = false;
+        }
+    }
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    if (!xmlhttp && window.createRequest) {
+        try {
+            xmlhttp = window.createRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }	    
+    xmlhttp.open("GET", linkUrl, true);
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+             //alert(xmlhttp.responseText)
+            // OR write code which you want to execute after completing the async code.
+        }
+    }
+    xmlhttp.send(null)}
 
 function ReplaceAll(Source,stringToFind,stringToReplace){
 	  var temp = Source;
@@ -67,4 +82,42 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 	        }
 	        return temp;
 	}
+
+function createDummyAsyncRequest() {  
+	//alert("in createDummy");
+    try {
+        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+        try {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (E) {
+            xmlhttp = false;
+        }
+    }
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    if (!xmlhttp && window.createRequest) {
+        try {
+            xmlhttp = window.createRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    var linkUrl="/swc/xpedx/jsp/common/XPEDXWebtrends.jsp?tag=tagname1"+"&content=content1";
+    xmlhttp.open("GET", linkUrl, true);
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            // alert(xmlhttp.responseText)
+            // OR write code which you want to execute after completing the async code.
+        }
+    }
+    xmlhttp.send(null)
+    
+}
 
