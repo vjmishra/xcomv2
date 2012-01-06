@@ -1031,9 +1031,10 @@ function toggleStockSort()
    processSortByUpperTroy("showNormallyStockedItems--A","sortUp","directionMArrow");
   }
 }
-function processSortByUpperTroyJS(theValue,directionValue,theSpanNameValue,theUrl)
+function processSortByUpperTroyJS(theValue,directionValue,theSpanNameValue,pUrl)
 {
 	var sortFieldValue;
+	theUrl = pUrl;
 
 	if(theValue.indexOf("showNormallyStockedItems") > -1)
 	{
