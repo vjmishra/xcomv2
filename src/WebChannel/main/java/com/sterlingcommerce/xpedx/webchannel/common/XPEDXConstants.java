@@ -131,7 +131,7 @@ public class XPEDXConstants {
 	public static final String SHEET_A = "A_SHT";
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
- 		  System.out.print (msg);
+ 		  System.out.print ("\n"+msg);
     }
     
 	static{

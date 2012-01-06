@@ -4361,7 +4361,7 @@ public class XPEDXWCUtils {
 
 	/**
 	 * 
-	 * HISTORY : ritesh : Method added for ad juggler.. 
+	 * HISTORY : ritesh : Method added for ad juggler (aj_server, aj_keyword).. 
 	 * 			 preddy : Updated to add prefix for the ad juggler keyword(s).
 	 * 
 	 * @param itemId
@@ -4481,7 +4481,37 @@ public class XPEDXWCUtils {
 						scuiTransactionContext, wSCUIContext);
 			}
 		}	
+		
+			result = sanitizeAJKeywords(result);
+			
 			return result;
+	}
+
+	/**
+	 * preddy: This methods sanitized ad_Jugler keywords before sending.
+	 * It replaces space, comma, / , & 
+	 * This is done for all keywords all environments before sending to AJ_Server.
+	 * 
+	 * @param ajkeyword
+	 * @return
+	 */
+	private static String sanitizeAJKeywords(String ajkeyword) {
+		
+		log.debug("Ad_Jugler Keword Before sanitize: " + ajkeyword  );
+		
+		if(ajkeyword !=null && ajkeyword.length() > 0 ) {
+		//Replace Comma, Space,/, &, '
+		ajkeyword = ajkeyword.replaceAll(",", "");
+		ajkeyword = ajkeyword.replaceAll(" ", "");
+		ajkeyword = ajkeyword.replaceAll("&", "");
+		ajkeyword = ajkeyword.replaceAll("/", "");
+		ajkeyword = ajkeyword.replaceAll("'", "");
+		//ajkeyword = ajkeyword.replaceAll("\"", "");
+		}
+		
+		log.debug("Ad_Jugler Keword After sanitize: " + ajkeyword  );
+		
+		return ajkeyword;
 	}
 
 	/**
