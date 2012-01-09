@@ -137,9 +137,6 @@ function setTotalPrice(val){
 	
 	
 	function validateFormSubmit(){
-		//Added For Jira 3232
-	    Ext.Msg.wait("Processing...");
-		
 		setCustomerPONumber();
 	
 	//Special Instructions field validation
