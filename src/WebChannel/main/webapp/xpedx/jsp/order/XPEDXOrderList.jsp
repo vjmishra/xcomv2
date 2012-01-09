@@ -400,6 +400,7 @@ function printPOs(customerPos) {
 	            	<s:set name='state' value='%{#shipToAddr.getAttribute("State")}'/>
 	            	<s:set name='country' value='%{#shipToAddr.getAttribute("Country")}'/>
 	            	<s:set name='zip' value='%{#shipToAddr.getAttribute("ZipCode")}'/>
+	            	<s:set name='zip' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#zip)"/>
 	            	<s:set name="shipToId" value='#parentOrder.getAttribute("ShipToID")' />
 	            	<s:set name="createuserid" value='#parentOrder.getAttribute("Createuserid")' />
 					<s:set name='extnInvoiceNo' value='#OrderExtn.getAttribute("ExtnInvoiceNo")' />
