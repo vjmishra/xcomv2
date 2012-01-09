@@ -95,7 +95,7 @@ String.prototype.trim = function () {
     return this.replace(/^\s*/, "").replace(/\s*$/, "");
 }
 
-var mandatoryFieldList = [
+var mandatoryFieldList = [	{"id": "username", "display": "Username", "type": "text"},
                        		{"id": "listName", "display": "Name", "type": "text"},
                        		{"id": "firstName", "display": "First Name", "type": "text"},
                        		{"id": "lastName", "display": "Last Name", "type": "text"},
@@ -168,7 +168,7 @@ function mandatoryFieldValidation(docDivId, ignoreDivIds){
 		}
 		else{
 			returnErrorMsg = returnErrorMsg;
-			document.getElementById("errorMsgForMandatoryFields_"+docDivId).innerHTML = "Mandatory Fields missing : "+returnErrorMsg;
+			document.getElementById("errorMsgForMandatoryFields_"+docDivId).innerHTML = "Required fields missing: "+returnErrorMsg;
 		}
 		
 		document.getElementById("errorMsgForMandatoryFields_"+docDivId).style.display = "inline";
