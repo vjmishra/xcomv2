@@ -169,8 +169,6 @@ function showSharedListForm(){
  		}
 
 function copyNewCart() {
-	//added for jira 3232
-	Ext.Msg.wait("Processing...");
 	if( $.trim($("#copyCartName").val()).length > 0) {
 		$("#cp-cart-err-msg").hide();
 		document.copyOrder.submit();
@@ -253,11 +251,6 @@ function quickAddCopyAndPaste(data){
 	
 	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
 	//w.hide();
-}
-
-//Added For Jira 3232
-function msgWait(){
-	Ext.Msg.wait("Processing...");
 }
 </script>
 
@@ -1933,19 +1926,19 @@ var currentAadd2ItemList = new Object();
                    <a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
           </s:if>
 	    <s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn" onclick="javascript:msgWait();" href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
+			<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
 		</s:if>
 		   				   
 	</s:if>
 	<s:elseif test='#isProcurementUser'>
 		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>SaveAndReturn</span></a>
 		<s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn cont-shopping-margin" onclick="javascript:msgWait();" href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
+			<a id="cont-shopping" class="grey-ui-btn cont-shopping-margin"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
 		</s:if>
 	</s:elseif>
 	<s:else>
 		<s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn" onclick="javascript:msgWait();" href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
+			<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
 		</s:if>
 	</s:else>
 	</s:if>
@@ -2377,8 +2370,6 @@ function validateMinOrder()
 
 	function actionOnList(oKey){
 		if(oKey=="Copy"){
-			//added for jira 3232
-			Ext.Msg.wait("Processing...");
 			document.getElementById("copyCartName").value="";
 			document.getElementById("copyCartDescription").value="";
 			<s:url id="cartActionURL" value="/order/draftOrderCopy.action" />
