@@ -480,6 +480,7 @@ div.demo {
 			            	<s:set name='state' value='%{#shipToAddr.getAttribute("State")}'/>
 			            	<s:set name='country' value='%{#shipToAddr.getAttribute("Country")}'/>
 			            	<s:set name='zip' value='%{#shipToAddr.getAttribute("ZipCode")}'/>
+	            			<s:set name='zip' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#zip)"/>
 			            	<s:set name="shipToId" value='#parentOrder.getAttribute("ShipToID")' />
 							<s:set name='currencyCode'
 								value='%{#priceInfo.item(0).getAttribute("Currency")}' />
@@ -548,17 +549,16 @@ div.demo {
 										<s:property value='#state' />
 									</s:if> 
 									<s:if test='%{#zip!=null && #zip.length()>0}'>
-										<s:property value='#zip' />									
-									</s:if> 
+										<s:property value='#zip' />						
+									</s:if>
+									<s:if test='%{#country!=null && #country.length()>0}'>
+										<s:property value='#country' />
+									</s:if>  
 									<br /> 
 									<s:if test='%{#shipToId!=null && #shipToId.length()>0}'>
 										<s:property
 											value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#shipToId)' />
 									</s:if>
-									
-									<s:if test='%{#country!=null && #country.length()>0}'>
-										<s:property value='#country' />
-									</s:if> 
 								
 								<br />
 								</td>
