@@ -27,7 +27,7 @@
      
      <s:property value="#displayCity"/>
      <s:property value="#renderPersonInfo.getAttribute('State')"/>
-     <s:property value="#renderPersonInfo.getAttribute('ZipCode')"/>
+     <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#renderPersonInfo.getAttribute('ZipCode'))"/>
      <yfc:i18ndb><s:property value="#util.getCommonCodes('COUNTRY', @com.sterlingcommerce.webchannel.core.CommonCodeDescriptionType@SHORT, wCContext)[#renderPersonInfo.getAttribute('Country')]"/></yfc:i18ndb><br/>
      
 <%--   No need to display Phone and Email.
