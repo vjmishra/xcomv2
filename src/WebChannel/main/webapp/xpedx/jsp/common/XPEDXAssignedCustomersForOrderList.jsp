@@ -8,18 +8,6 @@
 <head>
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
-
-<script type="text/javascript">
-//Added For Jira 3232
-function msgWait(){
-	Ext.Msg.wait("Processing...");
-}
-
-function hideMsg(){
-	Ext.MessageBox.hide();
-}
-</script>
-
 <meta name="DCSext.w_x_ord_shov_edit" content="1" />
 <!-- Web Trends tag end  -->
 <s:set name='_action' value='[0]' />
@@ -197,7 +185,7 @@ function hideMsg(){
 		</li>
 	</s:if>
 	<li>
-		   <a class="green-ui-btn" onclick="javascript:msgWait();" href="javascript:$.fancybox.close();"><span>Select</span></a> 		
+		   <a class="green-ui-btn"  href="javascript:$.fancybox.close();"><span>Select</span></a> 		
 	</li>
 </ul>
 	
@@ -211,10 +199,5 @@ function hideMsg(){
 
 
 </div>
-<script type="text/javascript">
-//added for jira 3232
-hideMsg();
-</script>
-
 </body>
 </html>
