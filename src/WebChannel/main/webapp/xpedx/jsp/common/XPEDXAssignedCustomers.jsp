@@ -125,7 +125,10 @@
 						</s:if>
 						<s:if test="%{#currentShipTo.zipCode!=''}">
 							<s:property value="%{#currentShipTo.zipCode}" />
-						</s:if>						
+						</s:if>	
+						<s:if test="%{#currentShipTo.country!=''}"> 
+							<s:property value="%{#currentShipTo.country}" />
+						</s:if> 					
 					</td>
 				</tr>
 			</table>
@@ -186,6 +189,9 @@
 				<s:if test="%{defualtShipToAssigned.zipCode!=''}">
 					<s:property value="%{defualtShipToAssigned.zipCode}" />
 				</s:if>	
+				<s:if test="%{defualtShipToAssigned.country!=''}"> 
+					<s:property value="%{defualtShipToAssigned.country}" />
+				</s:if> 
 				</td>
 				
 			</tr>
@@ -237,6 +243,7 @@
 		<s:set name='hTMLValue' value='#shipToAddress.hTMLValue' />
 		<s:set name='state' value='#shipToAddress.state' />
 		<s:set name='zipCode' value='#shipToAddress.zipCode' />
+		<s:set name='country' value='#shipToAddress.country'/>
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
 		<s:set name='orgName' value="#shipToAddress.getOrganizationName()"/>
 		<li class="ship-to-list">	
@@ -293,7 +300,7 @@
 			</s:iterator>			
 			<tr>
 				<td>&nbsp;</td>
-				<td style="padding-left: 15px"><s:property value='#city' />&nbsp;<s:property value='#state' />&nbsp;<s:property value='#zipCode' /></td>
+				<td style="padding-left: 15px"><s:property value='#city' />&nbsp;<s:property value='#state' />&nbsp;<s:property value='#zipCode' />&nbsp;<s:property value='#country' /></td>
 			</tr>	
 		</table>
 		</li>
