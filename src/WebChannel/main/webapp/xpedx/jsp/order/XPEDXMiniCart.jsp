@@ -14,18 +14,6 @@
 	id='priceUtil' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' /> <!-- added for 2769jira -->
 
-<script type="text/javascript">
-//added for jira 3232
-function msgWait(){
-    Ext.Msg.wait("Processing..."); 
-	}
-	
-function hideMsg(){
-	Ext.MessageBox.hide();
-	}
-
-</script>
-
 <div class="xpedx-light-box" id="mini-cart">
 <%-- <h2>Mini Cart<span style="font-size:10px;font-family:Arial;"> (Last five items)</span></h2> --%>
 <h2><s:text name='MSG.SWC.CART.MINICART.GENERIC.DLGTITLE' /> <span style="font-size:10px;font-family:Arial;"> <s:text name='MSG.SWC.CART.MINICART.INFO.LAST5ITEMS' /> </span></h2>
@@ -230,7 +218,7 @@ function hideMsg(){
 --%>
 	<s:if test="!#isEstimator">
 		<s:if test="(majorLineElements.size() > 0) && !#isReadOnly">
-			<a class="orange-ui-btn" style="float:right;margin-right: -5px;" onclick="javascript:msgWait()" href="javascript:miniCartCheckout();"><span>Checkout</span></a>
+			<a class="orange-ui-btn" style="float:right;margin-right: -5px;"  href="javascript:miniCartCheckout();"><span>Checkout</span></a>
 		</s:if>
 	</s:if>	
 
@@ -241,7 +229,7 @@ function hideMsg(){
 	
 	        
 	<s:if test='(majorLineElements.size() > 0) && (isCartManagementAllowed == true) && (!#isProcurementUser)'>
-		<s:a cssClass='grey-ui-btn' cssStyle='float: right; margin-right: 6px;' onclick="javascript:msgWait()" href='%{cartDetailURL}'><span><s:text name='View Cart'/></span></s:a>
+		<s:a cssClass='grey-ui-btn' cssStyle='float: right; margin-right: 6px;'  href='%{cartDetailURL}'><span><s:text name='View Cart'/></span></s:a>
 	</s:if>
 	
 	 
