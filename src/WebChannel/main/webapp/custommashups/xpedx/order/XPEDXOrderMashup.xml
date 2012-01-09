@@ -374,7 +374,7 @@
 									CustomerLastName="" Modifyuserid="" ShipToID="" OrderType="" >
 									<PriceInfo TotalAmount="" Currency="" />
 									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
-									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
+									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
 									<OrderLines>
 										<OrderLine ChainedFromOrderHeaderKey=""/>
 									</OrderLines>	
@@ -653,7 +653,7 @@
 									CustomerLastName="" Modifyuserid="" ShipToID="">
 									<PriceInfo TotalAmount="" Currency="" />
 									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
-									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
+									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
 									<OrderLines>
 										<OrderLine ChainedFromOrderHeaderKey=""/>
 									</OrderLines>	
@@ -700,7 +700,7 @@
 									CustomerLastName="" Modifyuserid="" ShipToID="">
 									<PriceInfo TotalAmount="" Currency="" />
 									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
-									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
+									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
 									<OrderLines>
 										<OrderLine ChainedFromOrderHeaderKey=""/>
 									</OrderLines>	
@@ -1378,7 +1378,7 @@
 									SellerOrganizationCode="" Status="" isHistory="" CustomerPONo=""
 									PaymentStatus="" CustomerFirstName="" CustomerLastName="" ShipToID="">
 									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderedByName=""/>
-									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode=""/>
+									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
 									<PriceInfo Currency="" EnterpriseCurrency=""
 										TotalAmount="" />
 									<OrderHoldTypes>
