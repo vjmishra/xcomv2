@@ -152,6 +152,9 @@ function toggleFields (str, el)
 <!-- end header -->
 
 <s:set name='customerId' value="wCContext.customerId" />
+<!-- added for jira 3245 -->
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+<s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
 <s:set name="shipToCustomerDisplayStr" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#customerId)" />
 <%-- <s:set name="shipToCustomerDisplayStr" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#customerId)" /> --%>
 
@@ -185,8 +188,59 @@ function toggleFields (str, el)
 					    <tr>
 							<td>Ship-To: </td>
 							<td><s:property value='#shipToCustomerDisplayStr'/></td>
-							<td>&nbsp; <!-- this row intentionally left blank --></td>
-					    </tr>
+						</tr>
+						<tr>
+							<td></td>
+							<td><s:if test="%{currentShipTo.firstName!='' || currentShipTo.middleName!='' || currentShipTo.lastName!=''}">
+								<s:if test="%{#currentShipTo.firstName!='' && #currentShipTo.firstName!= null}">
+									<s:property value='%{#currentShipTo.firstName}' /> <s:property value=',' />
+								</s:if> 
+								<s:if test="%{#currentShipTo.middleName!='' && #currentShipTo.middleName!= null}">
+									<s:property value='%{#currentShipTo.middleName}' /> <s:property value=',' />
+								</s:if> 
+								<s:if test="%{#currentShipTo.lastName!='' && #currentShipTo.lastName!= null}">
+									<s:property value='%{#currentShipTo.lastName}' />
+								</s:if>
+								</s:if>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><s:if test="%{#currentShipTo.getOrganizationName()!='' && #currentShipTo.getOrganizationName()!= null}">
+									<s:property value='%{#currentShipTo.getOrganizationName()}' />
+								</s:if>
+								</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><s:if test="%{#currentShipTo.LocationID!='' && #currentShipTo.LocationID!= null}">
+									Local ID: <s:property value='%{#currentShipTo.locationID}' />
+								</s:if>
+							</td>
+						</tr>
+							<s:iterator value='%{#currentShipTo.addressList}' id='adressLine'>
+								<tr>
+									<td></td>
+									<td><s:property value='adressLine' />
+									</td>
+								</tr>
+							</s:iterator>
+						<tr>
+							<td></td>
+							<td><s:if test="%{#currentShipTo.city!=''}">
+									<s:property value='%{#currentShipTo.city}' />,<%-- &nbsp;--%>
+								</s:if>
+								<s:if test="%{#currentShipTo.state!=''}">
+									<s:property value="%{#currentShipTo.state}" />&nbsp;
+								</s:if>
+								<s:if test="%{#currentShipTo.zipCode!=''}">
+									<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#currentShipTo.zipCode)}" />&nbsp;
+								</s:if>	
+								<s:if test="%{#currentShipTo.country!=''}"> 
+									<s:property value="%{#currentShipTo.country}" />
+								</s:if>
+							</td>
+					  </tr>			
 					    <tr>
 							<td>Requested By: </td>
 							<td colspan="2"><s:property value='%{drequestedName}' />, (<s:property value='%{duserName}' />)</td>
@@ -198,8 +252,8 @@ function toggleFields (str, el)
 									onkeyup="formatPhone('Telephone No.',returnItemForm.returnsph);" maxlength="10" ></s:textfield></td>
 							<td rowspan="2"> 					    <!-- begin right side comment box with label -->
 								    <div class="float-right return-comment-div">
-									    <div class="label"> <label for="">Comments:</label></div>
-									   	<s:textarea name="notes" cols="57" rows="3" id="textfield3"></s:textarea>
+									    <div class="label"> <label for="">Comments: </label></div>
+									   	<s:textarea name="notes" cols="56" rows="3" id="textfield3"></s:textarea>
 								    </div>
 					    	<!-- end right side comment box with label --> 
 					    	</td>
