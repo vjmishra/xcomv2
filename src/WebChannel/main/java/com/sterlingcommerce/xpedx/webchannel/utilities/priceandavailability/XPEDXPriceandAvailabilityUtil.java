@@ -922,10 +922,16 @@ public class XPEDXPriceandAvailabilityUtil {
 								displayPriceForUoms.add(new XPEDXBracket(null, thUOMDesc,fmtPriceForTHUom ));
 							}
 							
-							if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) && !XPEDXConstants.ENVELOPES_M.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
-									&& !XPEDXConstants.ENVELOPES_A.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
-									&& !XPEDXConstants.SHEET_M.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())
-									&& !XPEDXConstants.SHEET_A.equalsIgnoreCase(pandAItem.getRequestedQtyUOM())) {
+							boolean isDisplayReqUOM=true;
+							for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
+							{
+								if(XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS[i].equals(pandAItem.getRequestedQtyUOM()))
+								{
+									isDisplayReqUOM=false;
+									break;
+								}
+							}
+							if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) && isDisplayReqUOM) {
 								String fmtPricingUOM  = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, pandAItem.getUnitPricePerRequestedUOM());
 								displayPriceForUoms.add(new XPEDXBracket(null, RequestedQtyUOMDesc, fmtPricingUOM));
 							}
@@ -967,6 +973,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			{
 				List<String> uoms=new ArrayList<String>();
 				Element itemElem=(Element)items.item(i);
+				uoms.add(itemElem.getAttribute("UnitOfMeasure"));
 				ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
 				if(itemUomList != null)
 				{
