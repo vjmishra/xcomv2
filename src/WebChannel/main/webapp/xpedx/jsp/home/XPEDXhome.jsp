@@ -185,7 +185,7 @@
 				</script>
 			</s:else>			
 			<!-- Ad Juggler Tag Ends -->
-			
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 		</div>
 		
 		<div class="clearall">&nbsp;</div>
@@ -289,7 +289,7 @@
 <script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
 <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
 <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
-<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+
 	
 	
 <script type="text/javascript">
