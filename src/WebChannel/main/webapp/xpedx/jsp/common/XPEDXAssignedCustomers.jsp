@@ -124,7 +124,7 @@
 							<s:property value="%{#currentShipTo.state}" />&nbsp; 
 						</s:if>
 						<s:if test="%{#currentShipTo.zipCode!=''}">
-							<s:property value="%{#currentShipTo.zipCode}" />
+							<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#currentShipTo.zipCode)}" />&nbsp;
 						</s:if>	
 						<s:if test="%{#currentShipTo.country!=''}"> 
 							<s:property value="%{#currentShipTo.country}" />
@@ -187,7 +187,7 @@
 					<s:property value="%{defualtShipToAssigned.state}" />&nbsp;
 				</s:if> 
 				<s:if test="%{defualtShipToAssigned.zipCode!=''}">
-					<s:property value="%{defualtShipToAssigned.zipCode}" />
+					<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(defualtShipToAssigned.zipCode)}"  />
 				</s:if>	
 				<s:if test="%{defualtShipToAssigned.country!=''}"> 
 					<s:property value="%{defualtShipToAssigned.country}" />
@@ -243,6 +243,7 @@
 		<s:set name='hTMLValue' value='#shipToAddress.hTMLValue' />
 		<s:set name='state' value='#shipToAddress.state' />
 		<s:set name='zipCode' value='#shipToAddress.zipCode' />
+		<s:set name='zipCode' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(zipCode)"/>  
 		<s:set name='country' value='#shipToAddress.country'/>
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
 		<s:set name='orgName' value="#shipToAddress.getOrganizationName()"/>
