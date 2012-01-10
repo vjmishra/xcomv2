@@ -1682,14 +1682,17 @@ a.underlink:hover { text-decoration: underline !important; }
 		<li class="TabbedPanelsTab" onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /User information');" tabindex="0">User Information</li>
 		<li class="TabbedPanelsTab" onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');" tabindex="0">Authorized Locations</li>
 		<li class="TabbedPanelsTab"  onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" tabindex="0">Site Preferences</li>
-		<%--<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}"> --%>
+		 
 		<%-- Added for Jira 3048 issue item 3 --%>
 		 <s:set name="spendingLimitValue" value="%{getSpendingLimit()}" />		 	
-		 <s:if test="%{#optedCurrency != null && #primaryApprover != null && #spendingLimitValue != null && #alternateApprover != null}"> 
+		 <s:if test="%{(#optedCurrency != null && #optedCurrency!='') || ( #primaryApprover != null && #primaryApprover !='' ) || ( #spendingLimitValue != null && #spendingLimitValue !='') || (#alternateApprover != null && #spendingLimitValue !='')}">		 	 
 			<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
 		 </s:if>
-		<%-- </s:if> --%>
+		 <s:elseif test="%{#buyerApproverValue && !#disableSinceSelfApprover}">
+		 	<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
+			Approvers</li>
+		 </s:elseif> 
 	   <%-- End Jira 3048 issue item 3 --%>
 	</ul>
 
