@@ -181,6 +181,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
+			Ext.Msg.hide();
 		}
 	});
 }
@@ -2276,15 +2277,19 @@ Ext.onReady(function(){
 
 <script type="text/javascript">
 	Ext.onReady(function(){
-		var itemId = '<s:property value="#itemID" />';
-		var requestedUom = '<s:property value="#selectedUOM" />';
-		var Quantity = '<s:property value="#requestedQty" />';
-		var baseUom = '<s:property value="#unitOfMeasure" />';
-		var prodMweight = '<s:property value="#prodMweight" />';
-		var pricingUOMConvFactor = '<s:property value="#pricingUOMConvFactor" />';
-		pandaByAjax(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
+		callPnA();
 	});
 
+function callPnA()
+{
+	var itemId = '<s:property value="#itemID" />';
+	var requestedUom = '<s:property value="#selectedUOM" />';
+	var Quantity = '<s:property value="#requestedQty" />';
+	var baseUom = '<s:property value="#unitOfMeasure" />';
+	var prodMweight = '<s:property value="#prodMweight" />';
+	var pricingUOMConvFactor = '<s:property value="#pricingUOMConvFactor" />';
+	pandaByAjax(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
+}
 
 </script>
 <!-- added for jira 2971 --> 
