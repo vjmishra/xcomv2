@@ -2502,8 +2502,8 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="16%" valign="top" class="no-border-right-user padding00">Currency
 			Type:</td>
 			<td valign="top" width="84%" class="no-border-right-user padding00">
-				<s:if test="#optedCurrency != null && #optedCurrency != ''"  >
-					<s:if test="!#disableSinceSelfApprover">
+				<s:if test="#optedCurrency != null && #optedCurrency !=''"  >
+					<s:if test="#disableSinceSelfApprover">
 						<s:textfield id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}" readonly="%{true}" cssStyle="width: 148px;"/>
 					</s:if>
 					<s:else>
@@ -2511,13 +2511,15 @@ a.underlink:hover { text-decoration: underline !important; }
 						id="spendingLtCurrency" value="%{#optedCurrency}"
 						list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
 					</s:select>
-					</s:else>
+				</s:else>
 				</s:if>
 				<s:else>
-					<s:select headerKey="" headerValue="- Select Currency -" tabindex="20" name="spendingLtCurrency"
+					<s:if test="!#disableSinceSelfApprover">
+						<s:select headerKey="" headerValue="- Select Currency -" tabindex="20" name="spendingLtCurrency"
 						id="spendingLtCurrency" value="- Select Currency -"
 						list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
-					</s:select>
+						</s:select>
+					</s:if>	
 				</s:else>
 				
 			</td>						
@@ -2529,7 +2531,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			
 				 <s:set name='spendingLimit' value="%{getSpendingLimit()}"/>
 				 <s:if test="#spendingLimit != null && #spendingLimit != ''">
-				   <s:if test="!#disableSinceSelfApprover">
+				   <s:if test="#disableSinceSelfApprover">
 				     <s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" readonly="%{true}" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
 				   </s:if>
 				   <s:else>
@@ -2537,7 +2539,9 @@ a.underlink:hover { text-decoration: underline !important; }
 				  </s:else>	
 				 </s:if>
 				 <s:else>
-				 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value=""></s:textfield>
+				 	<s:if test="!#disableSinceSelfApprover">
+				 		<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value=""></s:textfield>
+				 	</s:if>	
 				  </s:else>		 
 			</td>
 		</tr>
@@ -2552,18 +2556,23 @@ a.underlink:hover { text-decoration: underline !important; }
 				Approver:</td>
 				<td valign="top" width="84%" class="no-border-right-user padding00 ">
 					<s:if test="#primaryApprover != null && #primaryApprover != ''">
-					 <s:if test="!disableSinceSelfApprover">
-						<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
+					 <s:if test="#disableSinceSelfApprover">
+					 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="primaryApprover"  readonly="%{true}" name="primaryApprover" maxlength="6" value="%{#primaryApprover}"></s:textfield>						 
+					 </s:if>
+					  <s:else> 
+					  	<s:select  headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
 							value="%{#primaryApprover}" list="availableApproversList"
 							cssClass="x-input" cssStyle="width: 150px;">
-						</s:select>				 
-					 </s:if>
+						</s:select>		
+					  </s:else>
 					</s:if>
 					<s:else> 
-						<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
+						<s:if test="!#disableSinceSelfApprover">
+							<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
 							value="- Select Approver -" list="availableApproversList"
 							cssClass="x-input" cssStyle="width: 150px;">
-						</s:select>	
+							</s:select>	
+						</s:if>	
 					</s:else>
 				</td>
 			</tr>
@@ -2572,25 +2581,31 @@ a.underlink:hover { text-decoration: underline !important; }
 				Approver:</td>
 				<td valign="top" width="84%" class="no-border-right-user padding00">
 				<s:if test="#alternateApprover != null && #alternateApprover != ''">
-				 <s:if test="!disableSinceSelfApprover">
+				 <s:if test="#disableSinceSelfApprover">
 					<span class="no-border-right-user padding0 "> 
+					  <s:textfield cssClass="x-input" cssStyle="width:148px;" id="alternateApprover"  readonly="%{true}" name="alternateApprover" maxlength="6" value="%{#alternateApprover}"></s:textfield>					  
+					</span>				 
+				 </s:if>
+				 <s:else> 
+				 	<span class="no-border-right-user padding0 "> 
 					  <s:select headerKey="" headerValue="- Select Approver -" 
 						tabindex="20" name="alternateApprover" id="alternateApprover"
 						value="%{#alternateApprover}" list="availableApproversList" 
 						cssClass="x-input" cssStyle="width:150px;">
 					</s:select> 
 					</span>				 
-				 </s:if>
+				 </s:else>
 				</s:if>
 				<s:else> 
-					<span class="no-border-right-user padding0 "> 
-					  <s:select headerKey="" headerValue="- Select Approver -" 
+					<s:if test="!#disableSinceSelfApprover">
+						<span class="no-border-right-user padding0 "> 
+					 	 <s:select headerKey="" headerValue="- Select Approver -" 
 						tabindex="20" name="alternateApprover" id="alternateApprover"
 						value="- Select Approver -" list="availableApproversList" 
 						cssClass="x-input" cssStyle="width:150px;">
-					</s:select> 
-					</span>		
-				
+						</s:select> 
+						</span>	
+					</s:if>
 				</s:else>
               </td>
 			</tr>
