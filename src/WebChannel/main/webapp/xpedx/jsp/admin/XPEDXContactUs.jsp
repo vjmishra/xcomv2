@@ -148,6 +148,7 @@
 				<s:set name="orgCity" value='#xutil.getAttribute(#orgCorpInfoEle,"City")' />
 				<s:set name="orgState" value='#xutil.getAttribute(#orgCorpInfoEle,"State")' />
 				<s:set name="orgZip" value='#xutil.getAttribute(#orgCorpInfoEle,"ZipCode")' />
+				<s:set name="orgZip" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(orgZip)' />
 				<s:set name="orgCountry" value='#xutil.getAttribute(#orgCorpInfoEle,"Country")' />
 				
  				<s:set name="orgPhone" value='#xutil.getAttribute(#orgCorpInfoEle,"DayPhone")' /> 
@@ -200,7 +201,7 @@
 											<s:property value="%{#shipToAddress.state}" />&nbsp; 
 										</s:if>
 										<s:if test="%{#shipToAddress.zipCode!=''}">
-											<s:property value="%{#shipToAddress.zipCode}" />
+											<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#shipToAddress.zipCode)}" />
 										</s:if>
 										<s:if test="%{#shipToAddress.country!=''}">
 											<s:property value="%{#shipToAddress.country}" />
