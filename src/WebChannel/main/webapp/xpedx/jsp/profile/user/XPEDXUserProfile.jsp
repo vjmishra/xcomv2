@@ -2127,7 +2127,7 @@ a.underlink:hover { text-decoration: underline !important; }
 						</s:iterator><br/>
 						<s:property value ="#shipTo.getCity()" />,
 						<s:property value ="#shipTo.getState()" />
-						<s:property value ="#shipTo.getZipCode()" />
+						<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#shipTo.getZipCode())}" />&nbsp;
 						<s:property value ="#shipTo.getCountry()" /><br/>
 						<!-- JIRA 1878 -->
 						<s:url id='targetURL' namespace='/common' action='xpedxGetAssignedCustomersForDefaultShipTo' />
