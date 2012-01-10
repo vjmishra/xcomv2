@@ -98,6 +98,7 @@
 		<s:set name='hTMLValue' value='#shipToAddress.hTMLValue' />
 		<s:set name='state' value='#shipToAddress.state' />
 		<s:set name='zipCode' value='#shipToAddress.zipCode' />
+		<s:set name='zipCode' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(zipCode)"/>
 		<s:set name='country' value='#shipToAddress.country' />
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
 		<s:set name='orgName' value="#shipToAddress.getOrganizationName()"/>
