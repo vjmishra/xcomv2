@@ -234,7 +234,7 @@ function toggleFields (str, el)
 									<s:property value="%{#currentShipTo.state}" />&nbsp;
 								</s:if>
 								<s:if test="%{#currentShipTo.zipCode!=''}">
-									<s:property value="%{#currentShipTo.zipCode}" />&nbsp;
+									<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#currentShipTo.zipCode)}" />&nbsp;
 								</s:if>	
 								<s:if test="%{#currentShipTo.country!=''}"> 
 									<s:property value="%{#currentShipTo.country}" />
