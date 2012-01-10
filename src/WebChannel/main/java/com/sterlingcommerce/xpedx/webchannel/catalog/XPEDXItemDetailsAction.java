@@ -349,14 +349,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		} catch (Exception e) {
 
 		}
-		
+		List<String> uomsList= createItemUOMMap(pandAItem.getLegacyProductCode());
 		if(null != prodMweight && (prodMweight.equals("0") || prodMweight.equals("0.0")) ){
 			prodMweight = null;
 		}
 		
 //		displayUOMs.add(BaseUomDesc); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
-		if (XPEDXPriceandAvailabilityUtil.TH_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.TH_UOM_A.equalsIgnoreCase(pricingUOM)) {
+		if ((XPEDXPriceandAvailabilityUtil.TH_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.TH_UOM_A.equalsIgnoreCase(pricingUOM)) && 
+				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))) {
 			// hardcode for now.
 			//displayUOMs.add("Cwt");
 			if (prodMweight != null && prodMweight.trim().length() > 0 )
@@ -384,7 +385,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}
 		//Moved code from above to bottom for JIRA 1835
 		displayUOMs.add(PricingUOMDesc);
-		if (XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM)) {
+		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
+				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
 			//displayUOMs.add("Thousand");
 			if (prodMweight != null && prodMweight.trim().length() > 0 )
 				prodWeight = new BigDecimal(prodMweight);
@@ -405,7 +407,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				priceForTHUom = pricingUOMPrice;
 			}
 		}
-		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()))
+		boolean isDisplayReqUOM=true;
+		for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
+		{
+			if(XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS[i].equals(pandAItem.getRequestedQtyUOM()))
+			{
+				isDisplayReqUOM=false;
+				break;
+			}
+		}
+		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) 
+				&& isDisplayReqUOM)
 			displayUOMs.add(RequestedQtyUOMDesc);
 		displayUOMs.add(" ");
 
@@ -420,16 +432,19 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 //		displayPriceForUoms.add(basePrice.toString());  //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
-		if (priceForCWTUom != null && prodMweight != null){
+		if (priceForCWTUom != null && prodMweight != null &&
+				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))){
 			displayPriceForUoms.add(priceForCWTUom.toString());
 		}
 		//Moved code from above to bottom for JIRA 1835
 		displayPriceForUoms.add(pricingUOMUnitPrice);
 
-		if (priceForTHUom != null){
+		if (priceForTHUom != null &&
+				(uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M ) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))){
 			displayPriceForUoms.add(priceForTHUom.toString());
 		}
-		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()))
+		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM())
+				&& isDisplayReqUOM)
 			displayPriceForUoms.add(pandAItem.getUnitPricePerRequestedUOM());
 		displayPriceForUoms.add(pandAItem.getExtendedPrice());
 
@@ -441,6 +456,42 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	}
 
+	private  List<String> createItemUOMMap(String itemID)
+	{
+		
+		List<String> uoms=new ArrayList<String>();
+		ArrayList<String> itemIDList=new ArrayList<String>();
+		itemIDList.add(itemID);
+		try
+		{
+			Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext
+					.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			if(pricingInfoDoc !=null)
+			{
+				NodeList items=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
+				for(int i=0;i<items.getLength();i++)
+				{
+					
+					Element itemElem=(Element)items.item(i);
+					uoms.add(itemElem.getAttribute("UnitOfMeasure"));
+					ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
+					if(itemUomList != null)
+					{
+						for(Element alternateUOM :itemUomList)
+						{
+							uoms.add(alternateUOM.getAttribute("UnitOfMeasure"));
+						}
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			LOG.error("Error while getting aleternate UOM for validation!");
+		}
+		return uoms;
+	}
+	
 	private void getItemDetails() throws Exception {
 		Element itemEle = XMLUtilities.getElement(m_itemListElem, "Item");
 		Element primaryInfoEle = XMLUtilities.getElement(itemEle,"PrimaryInformation");
