@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -49,8 +50,41 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		customerContactID =(String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
 		this.reInitPage();
 		initPage();
+		getCurrencyType();
 		
 	}
+	/* Start- For Jira 3264  */
+	public void getCurrencyType(){
+		Element elemModel = YRCXmlUtils.createDocument("GetCurrenyType").getDocumentElement();
+		
+		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "CurrencyType");
+		
+		attrElemComplex1.setAttribute("CurrencyType", "US Dollar");
+		attrElemComplex1.setAttribute("CurrencyValue", "USD");
+
+		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "CurrencyType");;
+
+		attrElemComplex2.setAttribute("CurrencyType", "Canadian Dollar");
+		attrElemComplex2.setAttribute("CurrencyValue", "CAD");
+		
+		setModel("GetCurrencyType",elemModel);
+	}
+	
+	public void getApprover(){
+		
+		Element eleApprover = getModel("XPXCustomerContactIn");
+		Element eleBuyerApprover = YRCXmlUtils.getXPathElement(eleApprover, "/CustomerContact/User/UserGroupLists");
+		String buyerApprover = eleBuyerApprover.getAttribute("BuyerApprover");
+		if("Y".equalsIgnoreCase(buyerApprover)&& buyerApprover!=null){
+			getControl("comboCurrencyType").setEnabled(true);
+			getControl("txtSpendingLimit").setEnabled(true);
+		}
+		else{
+			getControl("comboCurrencyType").setEnabled(false);
+			getControl("txtSpendingLimit").setEnabled(false);
+		}
+	}
+	/*End- For Jira 3264 */
 	public void getUserGroupInfo(){
 		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
 		String apinames = "getCustomerContactList";
@@ -71,9 +105,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		if("T".equalsIgnoreCase(viewInvoices)){
 			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
 		}
-		setModel("XPXCustomerContactIn", customerContactElement);	
+		setModel("XPXCustomerContactIn", customerContactElement);
+		
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
+		this.getApprover();
 	}
 
 	private void getDefaultShipToAddress() {
@@ -299,12 +335,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					NodeList nodGroupList=eleGroup.getElementsByTagName("UserGroupList");
 					for(int k=0;k<nodGroupList.getLength();k++){
 						Element eleGroupName=(Element) nodGroupList.item(k);
-					String groupId = eleGroupName.getAttribute("UsergroupKey");
-					if ("BUYER-APPROVER".equalsIgnoreCase(groupId)){
-						CustomerContactIdList.add(customerID);
-						k = nodGroupList.getLength();
-					}
-					
+						String groupId = eleGroupName.getAttribute("UsergroupKey");
+						if ("BUYER-APPROVER".equalsIgnoreCase(groupId)){
+							CustomerContactIdList.add(customerID);
+							k = nodGroupList.getLength();
+						}
 					}
 					
 				}
@@ -671,6 +706,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				targetModel.setAttribute("CustomerContactID", customerContactID);
 				targetModel.setAttribute("ApproverUserId", getFieldValue("comboPrimApprover"));
 				targetModel.setAttribute("ApproverProxyUserId", getFieldValue("comboAlterApprover"));
+				targetModel.setAttribute("SpendingLimit", getFieldValue("txtSpendingLimit"));
+				targetModel.setAttribute("SpendingLimitCurrency", getFieldValue("comboCurrencyType"));		
 				YRCApiContext ctx = new YRCApiContext();
 				ctx.setApiName("manageCustomer");
 				ctx.setInputXml(createManageCustomerOutputXml(targetModel).getOwnerDocument());
@@ -734,6 +771,34 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			    return false;
 		    }
 	    }
+		/*Start- For Jira 3264 */
+		int spendLimit;
+		String spendingLimit=getFieldValue("txtSpendingLimit");
+		if(spendingLimit != null && !spendingLimit.equalsIgnoreCase("")){
+			try
+			{
+			  double d = new Double(spendingLimit);
+			  spendLimit = (int)d;
+			  System.out.println(spendingLimit);
+			  if(spendLimit<1){
+					YRCPlatformUI.showWarning("SpendingLimit", "Minimum Spending Limit is 1");
+					getControl("txtSpendingLimit").setFocus();
+					return false;
+				}
+				else if(spendLimit>999999){
+					YRCPlatformUI.showWarning("SpendingLimit", "Maximum Spending Limit is 999999");
+					getControl("txtSpendingLimit").setFocus();
+					return false;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				YRCPlatformUI.showWarning("warning", "Please Enter Spending Limit in Numerical between 1 to 999999");
+				getControl("txtSpendingLimit").setFocus();
+				return false;
+			}
+		}
+		/*End- For Jira 3264 */
 	    return hasValidData;
 	}
 
