@@ -23,7 +23,7 @@ function validateOrderMultiple() {
 }
 
 function updatePandA() {
-	var UOMelement = document.getElementById("itemUOMsSelect");
+	/*var UOMelement = document.getElementById("itemUOMsSelect");
 	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;
 	var uomvalue1 = UOMelement.options[UOMelement.selectedIndex].value;
 	document.getElementById("requestedUOM").value = uomvalue;
@@ -38,7 +38,9 @@ function updatePandA() {
 			.getElementById('updatePandAURL');
 	//Added For Jira 2903
 	Ext.Msg.wait("Processing..."); 
-	document.productDetailForm.submit();
+	document.productDetailForm.submit();*/
+	Ext.Msg.wait("Processing...");
+	callPnA(); 
 }
 
 function updateUOMFields() {
