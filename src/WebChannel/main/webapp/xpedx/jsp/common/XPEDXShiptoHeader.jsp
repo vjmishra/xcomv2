@@ -52,7 +52,7 @@
 						</s:if>
 						
 						<s:if test="{#defualtShipTAddress.getZipCode()!=''}">
-							<s:property value="#defualtShipTAddress.getZipCode()"/> 
+						   <s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#defualtShipTAddress.getZipCode())}"/>
 						</s:if>
 						<s:if test="{#defualtShipTAddress.getCountry()!=''}">
 							<s:property value="#defualtShipTAddress.getCountry()"/>
