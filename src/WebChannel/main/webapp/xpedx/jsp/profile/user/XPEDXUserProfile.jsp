@@ -1682,14 +1682,14 @@ a.underlink:hover { text-decoration: underline !important; }
 		<li class="TabbedPanelsTab" onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /User information');" tabindex="0">User Information</li>
 		<li class="TabbedPanelsTab" onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');" tabindex="0">Authorized Locations</li>
 		<li class="TabbedPanelsTab"  onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');" tabindex="0">Site Preferences</li>
-		<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}">
+		<%--<s:if test="%{#buyerApproverValue || !#disableSinceSelfApprover}"> --%>
 		<%-- Added for Jira 3048 issue item 3 --%>
 		 <s:set name="spendingLimitValue" value="%{getSpendingLimit()}" />		 	
 		 <s:if test="%{#optedCurrency != null && #primaryApprover != null && #spendingLimitValue != null && #alternateApprover != null}"> 
 			<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
 		 </s:if>
-		</s:if>
+		<%-- </s:if> --%>
 	   <%-- End Jira 3048 issue item 3 --%>
 	</ul>
 
@@ -2510,6 +2510,13 @@ a.underlink:hover { text-decoration: underline !important; }
 					</s:select>
 					</s:else>
 				</s:if>
+				<s:else>
+					<s:select headerKey="" headerValue="- Select Currency -" tabindex="20" name="spendingLtCurrency"
+						id="spendingLtCurrency" value="- Select Currency -"
+						list="currencyMap" cssClass="x-input" cssStyle="width: 150px;">
+					</s:select>
+				</s:else>
+				
 			</td>						
 		</tr>
 		<tr>
@@ -2519,10 +2526,16 @@ a.underlink:hover { text-decoration: underline !important; }
 			
 				 <s:set name='spendingLimit' value="%{getSpendingLimit()}"/>
 				 <s:if test="#spendingLimit != null && #spendingLimit != ''">
-				   <s:if test="!disableSinceSelfApprover">
+				   <s:if test="!#disableSinceSelfApprover">
 				     <s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" readonly="%{true}" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
 				   </s:if>
-				 </s:if>		 
+				   <s:else>
+				 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
+				  </s:else>	
+				 </s:if>
+				 <s:else>
+				 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value=""></s:textfield>
+				  </s:else>		 
 			</td>
 		</tr>
 		
@@ -2543,6 +2556,12 @@ a.underlink:hover { text-decoration: underline !important; }
 						</s:select>				 
 					 </s:if>
 					</s:if>
+					<s:else> 
+						<s:select headerKey="" headerValue="- Select Approver -" tabindex="20" name="primaryApprover" id="primaryApprover" 
+							value="- Select Approver -" list="availableApproversList"
+							cssClass="x-input" cssStyle="width: 150px;">
+						</s:select>	
+					</s:else>
 				</td>
 			</tr>
 			<tr>
@@ -2560,6 +2579,16 @@ a.underlink:hover { text-decoration: underline !important; }
 					</span>				 
 				 </s:if>
 				</s:if>
+				<s:else> 
+					<span class="no-border-right-user padding0 "> 
+					  <s:select headerKey="" headerValue="- Select Approver -" 
+						tabindex="20" name="alternateApprover" id="alternateApprover"
+						value="- Select Approver -" list="availableApproversList" 
+						cssClass="x-input" cssStyle="width:150px;">
+					</s:select> 
+					</span>		
+				
+				</s:else>
               </td>
 			</tr>
 		
