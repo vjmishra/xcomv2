@@ -129,6 +129,7 @@ public class XPEDXConstants {
 	public static final String ENVELOPES_A = "A_ENV";
 	public static final String SHEET_M = "M_SHT";
 	public static final String SHEET_A = "A_SHT";
+	public static final String DO_NOT_DISPLAY_REQUESTED_UOMS[]={"M_ENV","A_ENV","M_SHT","A_SHT"};
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print ("\n"+msg);
