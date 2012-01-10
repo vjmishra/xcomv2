@@ -2394,7 +2394,7 @@ function callAjaxForSorting(url,divId)
 		       </s:iterator>
 		       <s:property value="#defualtShipTAddress.getCity()" />,
 		       <s:property value="#defualtShipTAddress.getState()" />
-		       <s:property value="#defualtShipTAddress.getZipCode()" />
+		       <s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#defualtShipTAddress.getZipCode())}" /> 
 		       <s:property value="#defualtShipTAddress.getCountry()" />
 		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
