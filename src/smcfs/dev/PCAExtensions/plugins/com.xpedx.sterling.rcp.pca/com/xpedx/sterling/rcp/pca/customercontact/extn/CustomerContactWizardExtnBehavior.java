@@ -51,7 +51,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			}
 		
 		//In case of Invoke API failure
-		else if(ctx.getInvokeAPIStatus()==-1){
+		else if(ctx.getInvokeAPIStatus()==-1 ){
 				Element outXml = ctx.getOutputXml().getDocumentElement();
 				if("Errors".equals(outXml.getNodeName())){
 					YRCPlatformUI.trace("Failed while getting Customer Child List: ", outXml);
@@ -447,6 +447,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			docInputQry.getDocumentElement().setAttribute("BrandName", orgCode);
 			docInputQry.getDocumentElement().setAttribute("EntryType", entryType);
 			docInputQry.getDocumentElement().setAttribute("AccountNumber", CustomerId);
+			//CustomerContactID added for JIRA 3256
+			docInputQry.getDocumentElement().setAttribute("CustomerContactID", CustomerId);
 			docInputQry.getDocumentElement().setAttribute("FirstName", firstName);
 			docInputQry.getDocumentElement().setAttribute("LastName", lastName);
 			docInputQry.getDocumentElement().setAttribute("cEmailAddress", mailId);
