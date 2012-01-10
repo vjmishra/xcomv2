@@ -47,6 +47,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Label lblAlterApprover;
 	private Combo comboPrimApprover;
 	private Combo comboAlterApprover;
+	private Label lblCurrencyType;
+	private Label lblSpendingLimit;
+	private Combo comboCurrencyType;
+	private Text txtSpendingLimit;
 	private Button btnUpdate;
 	private Label lblUserID;
 	private Label lblUserType;
@@ -909,6 +913,28 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		comboAlterApprover.setTextLimit(50);
 		comboAlterApprover.setData("name", "comboAlterApprover");
 		
+		/* Start- For Jira 3264 */
+		lblCurrencyType = new Label(pnlSiteSettings, SWT.NONE);
+		lblCurrencyType.setText("Currency Type");
+		lblCurrencyType.setLayoutData(gridData2);
+		lblCurrencyType.setData("name", "lblCurrencyType");
+		comboCurrencyType = new Combo(pnlSiteSettings, 8);
+		comboCurrencyType.setLayoutData(gridData3);
+		comboCurrencyType.setTextLimit(50);
+		comboCurrencyType.setData("name", "comboCurrencyType");
+		
+		lblSpendingLimit = new Label(pnlSiteSettings, SWT.LEFT);
+		lblSpendingLimit.setText("Spending Limit");
+		lblSpendingLimit.setLayoutData(gridData2);
+		lblSpendingLimit.setData("name", "lblSpendingLimit");
+		txtSpendingLimit = new Text(pnlSiteSettings, SWT.BORDER);
+		txtSpendingLimit.setText("");
+		txtSpendingLimit.setLayoutData(gridData3);
+		txtSpendingLimit.setTextLimit(15);
+		txtSpendingLimit.setData("name", "txtSpendingLimit");
+		
+		/*End- For Jira 3264 */
+		
 		lblPreferredCatalogView = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPreferredCatalogView.setText("Preferred_Catalog_View");
 		lblPreferredCatalogView.setLayoutData(gridData2);
@@ -1599,6 +1625,21 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		//cbd.setTargetBinding("CustomerContactDetails:/CustomerContactList/CustomerContact/@CustomerContactID");
 		cbd.setName("comboAlterApprover");
 		comboAlterApprover.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
+		
+		/*Start- For Jira 3264*/
+		cbd = new YRCComboBindingData();
+		cbd.setCodeBinding("@CurrencyValue");
+		cbd.setDescriptionBinding("@CurrencyType");
+		cbd.setListBinding("GetCurrencyType:/CurrencyType");
+		cbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@SpendingLimitCurrency");
+		cbd.setName("comboCurrencyType");
+		comboCurrencyType.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
+		
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@SpendingLimit");
+		tbd.setName("txtSpendingLimit");
+		txtSpendingLimit.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		/*End- For Jira 3264*/
 		
 		YRCButtonBindingData radItem1ButtonBindingData = new YRCButtonBindingData();
 		radItem1ButtonBindingData.setName("radItem1");
