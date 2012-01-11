@@ -93,7 +93,7 @@ public class UploadUom implements YIFCustomApi {
 	        	rSet=fireQuery(env,finalQuery,inXML);
 	        	/*if(rSet!=-1)
 	        	{
-	        		System.out.println(UomDescription+"YFS_UOM Record not Inserted in YFS_UOM table");
+	        		log.info(UomDescription+"YFS_UOM Record not Inserted in YFS_UOM table");
 	        		
 	        	}*/
 	        	
@@ -124,7 +124,7 @@ public class UploadUom implements YIFCustomApi {
 	        	rSet=fireQuery(env,finalQuery,inXML);
 	        	/*if(rSet!=-1)
 	        	{
-	        		//System.out.println(UomDescription+"YFS_ITEM_UOM_MASTER Record not Inserted");
+	        		//log.info(UomDescription+"YFS_ITEM_UOM_MASTER Record not Inserted");
 	        	}*/
 	        }	       
 		}catch (NullPointerException ne) {
@@ -169,10 +169,9 @@ public class UploadUom implements YIFCustomApi {
 	        int rSet = 0;
 	        try
 	        {
-	        //System.out.println("finalQuery:-"+str);
-	        stmt =m_Conn.createStatement();
+	       stmt =m_Conn.createStatement();
 	        rSet = stmt.executeUpdate(str);	
-	        //System.out.println("rSet:-"+rSet);	
+	        	
 	        	        
 	        }
 	        catch(Exception e)
@@ -193,14 +192,14 @@ public class UploadUom implements YIFCustomApi {
         String datetime = dateFormat.format(date);
         long uniqueSequenceNo = CallDBSequence.getNextDBSequenceNo(env, XPXLiterals.SEQ_XPEDX_UOMSEQ);
         String Data=new Long(uniqueSequenceNo).toString();
-       // System.out.println("------------------------:-"+Data);
+       
         int l=(new Long(uniqueSequenceNo)).toString().length();
         for(int i=6;i!=l;i--)
         {
         	Data="0"+Data;
         }
         
-        // System.out.println("------------------------:-"+(datetime+Data));
+        
         return (datetime+Data);
 	}	
 }
