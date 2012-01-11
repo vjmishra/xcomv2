@@ -225,7 +225,7 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 		long length = file.length();
 		byte[] bytes = new byte[(int)length];
 
-		System.out.println("length "+length);
+		LOG.info("Length_storeSearchIndexFiles():"+length);
 		int offset = 0;
 		int numRead = 0;
 		while ( (offset < bytes.length)
