@@ -4757,7 +4757,7 @@ public class XPEDXWCUtils {
 	 */
 	public static void main(String args[]){
 		 //Testing Comma separated qty-LP1-
-		 String originalQty1 = "1234567890" ;
+		/* String originalQty1 = "1234567890" ;
 		 String originalQty = "ABCefgHIJklmNOPqrsTUVwxy" ;
 		 String commaFmtQty =  commaSeparatedStringFmt( originalQty );
 		 
@@ -4765,7 +4765,9 @@ public class XPEDXWCUtils {
 		 System.out.println(" Fmt Qty : " + commaFmtQty );
 		 System.out.println(" Fmt Qty Size : " + commaFmtQty.length() );
 		 
-		 System.out.println("\n Fmt Qty Size : " + originalQty.split("", 3) );
+		 System.out.println("\n Fmt Qty Size : " + originalQty.split("", 3) );*/
+		
+		System.out.println(trimItemDescription("<ul><li>11 x 17</li><li>21.1M</li><li>W/C/P</li><li>Smooth</li><li>Straight</li><li>3 Part</li><li>3/Set, 2505/Ctn</li></ul>"));
 		 
 		 
 	}	
@@ -5241,6 +5243,28 @@ public class XPEDXWCUtils {
 	        mashupEx.printStackTrace();
 	        return false;*/
 	    }
+	 
+	 /*
+	  * Trim the bullet points that are more than five.
+	  */
+	 public static String trimItemDescription(String desc) {
+		 if(desc != null) {
+			 int fromIndex = 0;
+			 int startIndex = 0;
+			 int counter = 0;
+			 while ((startIndex = desc.indexOf("<li>", fromIndex)) >= 0) {
+				 if (counter == 5) { counter++; break;}
+				 fromIndex = desc.indexOf("</li>", startIndex);
+				 counter++; 
+				
+			}
+			 if(counter > 5) 
+				 return (desc.substring(0, (fromIndex)) + desc.substring(desc.lastIndexOf("</li>"), desc.length()));
+			 else 
+				 return desc;
+		 }
+		 return  desc;
+	 }
 	
 
 }
