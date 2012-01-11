@@ -343,7 +343,7 @@ function createNewFormElement(inputForm, elementName, elementValue){
 		document.getElementById("selectedView").value = Ext.getDom('items').className;
 		/******* IW Update the extJS View ******/
 		updateView();
-		shortenItemDescriptions();
+		//shortenItemDescriptions();
 
 		var url = p_url;//'/swc/catalog/setSelectedView.action?sfId=xpedx&amp;scFlag=Y&amp;scGuestUser=Y';
 		url = ReplaceAll(url,"&amp;",'&');
@@ -370,7 +370,7 @@ function loadViewJS(p_url)
 	//updateView();
 	//shortenItemDescriptions();
 	//var url = '/swc/catalog/setSelectedView.action?sfId=xpedx&amp;scFlag=Y';
-	 initializeView(); updateView(); shortenItemDescriptions(); 
+	 initializeView(); updateView(); //shortenItemDescriptions(); 
 	 var url = p_url;
 	 url = ReplaceAll(url,"&amp;",'&');
 	Ext.Ajax.request({
@@ -442,7 +442,8 @@ function updateView() {
 }
 function shortenItemDescriptions()
 {
-	var selectedView = Ext.getDom('items').className;
+	return;
+	/*var selectedView = Ext.getDom('items').className;
 
 	ddescWidth = 0;
 
@@ -459,7 +460,7 @@ function shortenItemDescriptions()
 		$('#item-box-inner li').each(function(){
 				$(this).shorten({noblock: true, width: ($(this).width() - 20)});
 		});
-	}
+	} */
 }
 
 function setItemDragZone(v) {
