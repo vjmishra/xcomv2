@@ -6,20 +6,14 @@
 	
 	<xsl:template match="Customer">
 	
-		<xsl:variable name="brandLogo" select="./@BrandLogo"></xsl:variable>
 		<html>
 		<xsl:comment>CONTENT_TYPE=text/html</xsl:comment>
 	
 			<body>
-				<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
-					<tr>
-						<td>
-							<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
-						</td>
-					</tr>
+				<table width="600" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
 						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-							<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
+							<table width="100%" border="0" cellpadding="0"  style="border: solid 1px #999;  padding:20px 20px 0px 20px;">
 								<tr>
 									<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 										<table width="" border="0">
@@ -27,47 +21,55 @@
 												<td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"></td>
 											</tr>
 											<tr>
-												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													This is an automated email to notify you that there has been a change in the Parent SAP # in your <xsl:value-of select="./@SellerOrganizationCode"/>.com account. Please review the details below.
-													<span ></span>
+												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px;">
+													This is an automated email notification. Please note that the parent SAP # has been changed in following  <xsl:value-of select="./@SellerOrganizationCode"/>.com account. Please review the details below.
 												</td>
 											</tr>
-											<tr>
-												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-											</tr>
-										</table>
-										<table width="75%" border="0">	
+											<br></br>									
+										  </table>
+										  <table width="80%" border="0">	
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<table width="100%" border="0" cellpadding="0" cellspacing="0">
+													<table width="65%" border="0" cellpadding="0" cellspacing="0">
 														<tr>															
-															<td width="25%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><xsl:value-of select="./@CustomerRecordType"/> Customer #: </td>
-															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding:10px 2px; ">																																	<xsl:value-of select="./@CustomerID"/>
+															<td width="29%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" nowrap="nowrap"><xsl:value-of select="./@CustomerRecordType"/> Customer #: </td>
+															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding:10px 2px; padding-left:2px">																																	<xsl:value-of select="./@CustomerID"/>
 															</td>
 														</tr>																				  
 														<tr>
-															<td width="25%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Old Parent SAP #: </td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" nowrap="nowrap">Old Parent SAP #: </td>
 															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; padding:10px 2px; "><xsl:value-of select="./@OldSAPParentAccountNumber"/></td>
 														</tr>
 														<tr>
-															<td width="25%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">New Parent SAP #: </td>															
+															<td width="27%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" nowrap="nowrap">New Parent SAP #: </td>															
 															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="./@NewSAPParentAccountNumber"/></td>
 														</tr>
 														<tr>
 															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" height="10"></td>
 														</tr>
 														<tr>
-															<td width="25%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >Username: </td>
-															<td width="30%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">																																
-																<select size="5" style="width:100%;" multiple="multiple">
-																<xsl:for-each select="Users/User">
-																	<option>
-																		<xsl:value-of select="./@UserId"/>
-																	</option>
-																	</xsl:for-each>
-																</select> 																																										
+															<td width="27%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Username: </td>
+															<td width="42%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">																																
+																<xsl:choose>
+																	<xsl:when test="count(./Users/User) &gt; 0">
+																		<select size="7" style="width:100%;" multiple="multiple" >
+																			<option><b>user defined email address</b></option>	
+																			<xsl:for-each select="Users/User">
+																			<option>
+																				<xsl:value-of select="./@UserId"/>
+																			</option>
+																			</xsl:for-each>
+																		</select>
+																	</xsl:when>
+																	<xsl:otherwise>
+																		<select style="width:100%;" >
+																			<option><b>user defined email address</b></option>																				
+																		</select>																		
+																	</xsl:otherwise>
+																</xsl:choose>																																																									
 															</td>
-														</tr>	
+														</tr>
+														<br></br>	
 													</table>
 												</td>
 											  </tr>
@@ -77,8 +79,8 @@
 													<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
 												</tr>										    
 											    <tr>
-													<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-														<div align="left"> Please do not reply to this email. This mailbox is not monitored and you will not receive a response.</div>                
+													<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:6px;">
+														<div>Please do not reply to this email. This mailbox is not monitored and you will not receive a response.</div>                
 													</td>
 											    </tr>
 											    <tr>
