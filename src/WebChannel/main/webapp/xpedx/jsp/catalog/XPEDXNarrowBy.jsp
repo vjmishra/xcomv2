@@ -102,19 +102,19 @@ function setStockItemFlag()
 			<s:set name='count1' value='%{#count1 + 1}' />
 			<s:set name='facetList'
 				value='XMLUtils.getElements(#facets, "AssignedValueList/AssignedValue")' />
-			<s:set name='showFacet' value='"Y"' />
+			<%-- <s:set name='showFacet' value='"Y"' /> --%>
 			
 			
 			<!-- Webtrends tag start -->
 				<META Name="DCSext.w_x_narrowby" Content="1" />
 			<!-- Webtrends tag end -->
 			
-				<s:set name='showFacet' value='"N"' />
+				<%-- <s:set name='showFacet' value='"N"' />
 				<s:iterator id='facetVal' value='#facetList'>
 					<s:if test='%{#facetVal.getAttribute("IsProvidedFilter") != "Y"}'>
 						<s:set name='showFacet' value='"Y"' /> 
 					</s:if>
-				</s:iterator>
+				</s:iterator> --%>
 			
 			
 				<s:set name='headercount' value='%{#headercount + 1}' />
@@ -158,6 +158,7 @@ function setStockItemFlag()
 </div>
 <!-- end left column -->
 
+<%-- I believe xpedx doesn't use this piece of code - commenting it out for performance 
 <s:iterator id='facets'
 	value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")'>
 	<s:set name='count1' value='%{#count1 + 1}' />
@@ -213,7 +214,7 @@ function setStockItemFlag()
 		</swc:dialogPanel>
 	</s:if>
 </s:iterator>
-
+--%>
 <script>
 function showViewAllDialog(attr)
 {
