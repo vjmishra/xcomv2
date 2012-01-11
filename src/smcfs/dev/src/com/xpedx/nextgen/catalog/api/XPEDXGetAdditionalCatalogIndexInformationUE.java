@@ -16,6 +16,7 @@ import com.yantra.ycm.japi.ue.YCMGetAdditionalCatalogIndexInformationUE;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -26,7 +27,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 	private static YIFApi api = null;
 	YFSEnvironment mEnvironment = null;
 	public static String stockStatus;
-
+	private static final YFCLogCategory log = YFCLogCategory.instance(XPEDXGetAdditionalCatalogIndexInformationUE.class.getName());
 	public Document getAdditionalCatalogIndexInformation(
 			YFSEnvironment environment, Document inDocumentUE)
 			throws YFSUserExitException {
@@ -36,7 +37,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 		if (stockStatus == null || stockStatus.trim().length() == 0) {
 			stockStatus = "W";
 		}
-		System.out.println("stockStatus = "+stockStatus);
+		log.info("XPEDXGetAdditionalCatalogIndexInformationUE_StockStatus : "+stockStatus);
 		try {
 			mEnvironment = environment;
 			YFCDocument inDocument = YFCDocument.getDocumentFor(inDocumentUE);
@@ -77,7 +78,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					.getAttribute("OrganizationCode");
 			String[] divisionsForStockedItem = getDivisionsForStockedItem(
 					itemID, organizationCode);
-			System.out.println("divisionsForStockedItem == "+divisionsForStockedItem);
+			log.info("getLocaleDoc_divisionsForStockedItem : "+divisionsForStockedItem);
 			NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 					mEnvironment);
 			int lengthC = XpxItemcustXrefList.getLength();
@@ -116,7 +117,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 			for (YFCElement searchFieldElement : searchFieldListIterator) {
 				YFCElement valueElement = valueListElement
 						.createChild("AdditionalCatalogIndexInformation");
-				System.out.println("searchFieldElement=" + searchFieldElement);
+				log.info("getLocaleDoc_searchFieldElement:" + searchFieldElement);
 				valueElement.setAttribute("IndexFieldName", searchFieldElement
 						.getAttribute("IndexFieldName"));
 				if (customerNumberPlusPartNumber != null
@@ -130,7 +131,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 				}
 				if (divisionsForStockedItem != null
 						&& divisionsForStockedItem.length > 0) {
-					System.out.println("divisionsForStockedItem="+divisionsForStockedItem);
+					log.info("getLocaleDoc_divisionsForStockedItem="+divisionsForStockedItem);
 					String divisionForStockedItem = "";
 					for (String division : divisionsForStockedItem) {
 						if (division != null && division.trim().length() > 0) {
@@ -140,7 +141,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					}
 					if ("showNormallyStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
-						System.out.println("showNormallyStockedItems=" + divisionForStockedItem.trim());
+						log.info("getLocaleDoc_showNormallyStockedItems=" + divisionForStockedItem.trim());
 						valueElement.setAttribute("Value",
 								divisionForStockedItem.trim());
 					}
