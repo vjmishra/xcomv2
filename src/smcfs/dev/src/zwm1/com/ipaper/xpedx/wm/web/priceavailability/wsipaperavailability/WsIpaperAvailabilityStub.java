@@ -175,22 +175,22 @@ import org.apache.axiom.om.OMException;
                                                     optimizeContent(new javax.xml.namespace.QName("http://zwm1/com/ipaper/xpedx/wm/web/priceavailability/wsIpaperAvailability",
                                                     "fGetAvailability")));
                                                     
-                                                    //System.out.println("The env is: "+env.getBody());
+                                                    
                                       
                                                 
         //adding SOAP soap_headers
          _serviceClient.addHeadersToEnvelope(env);
          
-         //System.out.println("The service client is: "+_serviceClient.toString());
+         
         // set the message context with that soap envelope
         _messageContext.setEnvelope(env);
-        //System.out.println("The message context is: "+_messageContext.getEnvelope());
+        
         // add the message contxt to the operation client
         _operationClient.addMessageContext(_messageContext);
         
         org.apache.axis2.context.MessageContext testContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_OUT_VALUE);
 
-       // System.out.println("The message context added to operation client is: "+testContext.getEnvelope());
+       
         
         
         //execute the operation client
