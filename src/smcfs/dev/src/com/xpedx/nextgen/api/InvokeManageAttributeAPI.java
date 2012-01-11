@@ -72,9 +72,7 @@ public class InvokeManageAttributeAPI {
 	 */
 	private void prepareErrorObject(Exception e, String transType,
 			String errorClass, YFSEnvironment env, Document inXML) {
-		System.out.println("---> prepareErrorObject() input: "
-				+ SCXmlUtil.getString(inXML));
-
+		yfcLogCatalog.info("CENT_Logging_ErrorObject:"+ SCXmlUtil.getString(inXML));
 		com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
 		errorObject.setTransType(transType);
 		errorObject.setErrorClass(errorClass);
