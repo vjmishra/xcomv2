@@ -466,7 +466,7 @@
 
  XMLName="OrganizationKey" />
 
- <Attribute ColumnName="DIVISION_NO" DataType="OrgCode"  DefaultValue=" "	Nullable="true"
+ <Attribute ColumnName="DIVISION_NO" DataType="DivisionNo"  DefaultValue=" "	Nullable="true"
 
  XMLName="DivisionNo"  />
 
