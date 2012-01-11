@@ -22,6 +22,7 @@ import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 /**
  * @author vgovindan
@@ -100,6 +101,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//String isPickupable = validate(info.getAttribute("IsPickupAllowed"));
 		//String isShippable = validate(info.getAttribute("IsShippingAllowed"));
 		//String configurationKey = validate(info.getAttribute("ConfigurationKey"));
+		desc = XPEDXWCUtils.trimItemDescription(desc);
 		String deschtml = XPEDXMyItemsUtils.formatEscapeCharactersHtml(validate(desc));
 		/*String isConfigurableBundle = "N";
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
