@@ -1892,13 +1892,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
 					<s:set name='desc' value='#YFSItmePrimaryInfo.getAttribute("Description")' />
 					<s:set name='name' value='#YFSItmePrimaryInfo.getAttribute("ShortDescription")' />
-					<s:if test='%{#itemUOMsMap!=null}' >
+					
+					<%-- <s:if test='%{#itemUOMsMap!=null}' >
 						<s:iterator value='#itemUOMsMap' status='uomIndex'>
 							<s:if test="%{#uomIndex.index == 0}" >
 								<s:set name='itemBaseUom' value='key' />
 							</s:if>
 						</s:iterator>
-					</s:if>
+					</s:if> --%>
 						
 					
 					<s:set name='itemId1' value='#item.getAttribute("ItemId")' />
