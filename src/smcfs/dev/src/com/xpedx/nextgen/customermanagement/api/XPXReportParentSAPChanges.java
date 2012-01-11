@@ -46,17 +46,16 @@ public class XPXReportParentSAPChanges implements YIFCustomApi {
 		log.info("Entering XPXReportParentSAPChanges - reportParentSAPChanges : "
 				+ SCXmlUtil.getString(reportParentSAPChangeDoc));
 		api = YIFClientFactory.getInstance().getApi();
-		
-		XPXUtils utilObj = new XPXUtils();
-		reportParentSAPChangeDoc = utilObj.stampBrandLogo(env, reportParentSAPChangeDoc);
-		
-		String custRecordType = reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_CUSTOMER_RECORD_TYPE);		
-		String subjectLine = "Notification: Parent SAP # change for a ".concat(custRecordType).concat(" Customer");
+		/*Begin - Changes made by Mitesh Parikh for JIRA 3283*/
+		String emailBrand = reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE) + ".com";
+		String subjectLine = emailBrand + " Parent SAP # Changed Notification";
 		reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine);
 		
-		String reportParentSAPChangeToEmailID = YFSSystem.getProperty("reportParentSAPChangeToEmailID");
-		reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", reportParentSAPChangeToEmailID);
-		
+		StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
+		reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
+		reportParentSAPChangeDoc.getDocumentElement().setAttribute("FromEmailID", reportParentSAPChangeEmailID.toString());
+		reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", reportParentSAPChangeEmailID.toString()) ;
+		/*End - Changes made by Mitesh Parikh for JIRA 3283*/
 		log.info("Exiting XPXReportParentSAPChanges - reportParentSAPChanges : "
 				+ SCXmlUtil.getString(reportParentSAPChangeDoc));
 		
