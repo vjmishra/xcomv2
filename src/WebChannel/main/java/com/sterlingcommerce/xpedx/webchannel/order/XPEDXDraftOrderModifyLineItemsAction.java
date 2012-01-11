@@ -314,7 +314,7 @@ DraftOrderModifyLineItemsAction
 	protected void manipulateMashupInputs(Map mashupInputs)
     throws com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException
 	{
-		if (!"true".equals(isComingFromCheckout))		// Removing changeOrder call for Performance improvement, while checkout
+		//if (!"true".equals(isComingFromCheckout))		// Removing changeOrder call for Performance improvement, while checkout
 			manipulateMashupInputs(mashupInputs,zeroOrderLines);
 	}
 	
