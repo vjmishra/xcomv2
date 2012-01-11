@@ -46,7 +46,7 @@ public class ErrorLogger {
 		try{
 			
 			//SAYAN - START
-			//System.out.println("IN CODE");
+			
 			String userID = yfsEnv.getUserId();
 			String progID = yfsEnv.getProgId();
 			
