@@ -4926,6 +4926,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setExtnSampleRequestFlag(extnElement.getAttribute("ExtnSampleRequestFlag"));
 				if(!YFCCommon.isVoid(parentElem))
 				{
+					billToCustomer.setParentCustomerKey(parentElem.getAttribute("ParentCustomerKey")); //Jira 3162 done Changes
 					Element parentExtnElem = SCXmlUtil.getChildElement(parentElem, "Extn");
 					billToCustomer.setExtnCurrencyCode(parentExtnElem.getAttribute("ExtnCurrencyCode"));
 					billToCustomer.setExtnCustomerDivision(parentExtnElem.getAttribute("ExtnCustomerDivision"));
@@ -4936,6 +4937,8 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnMinChargeAmount(parentExtnElem.getAttribute("ExtnMinChargeAmount"));
 					billToCustomer.setCustomerID(parentElem.getAttribute("CustomerID"));					
 					billToCustomer.setOrganizationName(SCXmlUtil.getChildElement(parentElem, "BuyerOrganization").getAttribute("OrganizationName"));
+					billToCustomer.setExtnECsr1EMailID(parentExtnElem.getAttribute("ExtnECsr1EMailID")); //Jira 3162 done Changes
+					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
