@@ -33,7 +33,6 @@ public class XPXDeleteDummyData {
 		customerElement.setAttribute("OrganizationCode", "xpedx");
 		customerElement.setAttribute("CustomerID", "N3");
 		Document outCustomerListDoc = api.invoke(env, "getCustomerList",customerDocument);
-		//System.out.println("outCustomerListDoc"+SCXmlUtil.getString(outCustomerListDoc));
 		NodeList listNode = outCustomerListDoc.getElementsByTagName("Customer");
 		for(int i=0;i<listNode.getLength();i++)
 		{
@@ -50,14 +49,12 @@ public class XPXDeleteDummyData {
 			
 			if(customerId.contains("MSAP"))
 			{
-				//System.out.println("inputDoc"+SCXmlUtil.getString(inputDoc));
 				api.invoke(env, "manageCustomer", inputDoc);
 			}
 		}
 		}
 		catch(Exception e)
 		{
-			//System.out.println("e"+e.getMessage());
 		}
 	}
 
