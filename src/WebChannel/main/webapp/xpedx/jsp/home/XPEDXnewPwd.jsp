@@ -130,6 +130,10 @@
 <div id="main-container">
 	<div id="main" class="anon-pages">
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+    	<script type="text/javascript">
+			document.getElementById("newSearch").style.display = 'none';
+		</script>
+    	
     	<div class="container">
       	<!-- breadcrumb -->
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
@@ -154,7 +158,12 @@
       		<div id="mid-col-mil"> 
 		    <div>
       		<%-- <div class="padding-top3 page-title black"><strong class="black"> Forgot Password</strong></div> --%>
+      		<% if(null != request.getParameter("requestId")){%>
+		     <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
+		    <%}
+		    else{ %>
       		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+      		<%}%>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
 			
@@ -162,6 +171,7 @@
 	        <s:hidden name="#action.namespace" value="/home"/>
 			<s:hidden id="actionName" name="#action.name" value="changePwdForgotPwd"/>
 			<s:hidden id="validationField" name="validationField" value="true"/>
+			<input type="hidden" id="requestId" name="requestId" value='<%=request.getParameter("requestId")%>'/>
 			
 			<s:url id='homePage' namespace='/home' action='home' />
 

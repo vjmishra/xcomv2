@@ -93,16 +93,24 @@
 <div id="main-container">
 	<div id="main" class="anon-pages">
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+    	<script type="text/javascript">
+			document.getElementById("newSearch").style.display = 'none';
+		</script>
     	<div class="container">
       	<!-- breadcrumb -->
       		<div id="mid-col-mil"> 
 		    <div>
-      			<div class="padding-top3  page-title  black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+      			<% if(null != request.getParameter("requestId")){%>
+		           <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
+		   	    <%}else{ %>
+      		       <div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+      		     <%}%>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
 			
 		<!-- begin progress bar -->
 		<div id="second-navigation">
+		<% if(null != request.getParameter("requestId")){%>
              <ul id="main-nav" class="dropdown">
 				<li >
 				     <span class="link" >Confirm your identity</span>
@@ -114,6 +122,7 @@
 				    <span class="link" >Password reset confirmation</span>
 				 </li>
              </ul>
+              <%}%>
 		</div>
 		<div class="clearall">&nbsp;</div>
 		
