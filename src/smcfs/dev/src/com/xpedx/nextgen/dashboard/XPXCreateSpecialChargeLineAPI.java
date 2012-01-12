@@ -44,11 +44,9 @@ public class XPXCreateSpecialChargeLineAPI {
 			Document outDoc =null;
 			//get the customerID(BillToID)
 			Element inputElement = inputXML.getDocumentElement();
-			//System.out.println("inputElement"+SCXmlUtil.getString(inputElement));
 			String customerId = inputElement.getAttribute("ShipToID");
 			String enterpriseCode=inputElement.getAttribute("EnterpriseCode");
 			com.sterlingcommerce.baseutil.SCXmlUtil.getString(inputXML);
-			//System.out.println("customerId"+customerId);
 			//inputElement.setAttribute("Action", "MODIFY");
 			//create a new doc
 			Document changeOrderDoc = YFCDocument.createDocument("Order").getDocument();
@@ -69,10 +67,8 @@ public class XPXCreateSpecialChargeLineAPI {
 				//get the order total
 				String orderTotal = SCXmlUtil.getXpathAttribute(inputElement, "./Extn/@ExtnTotalOrderValue");
 				//String orderTotal = inputElement.getAttribute("OriginalTotalAmount");
-				//System.out.println("orderTotal"+orderTotal);
 				
 				float totalAmount = Float.parseFloat(orderTotal);
-				//System.out.println("totalAmount"+totalAmount);
 				if(totalAmount <minOrderTotal)
 				{
 					//get the orderlines element
@@ -94,7 +90,6 @@ public class XPXCreateSpecialChargeLineAPI {
 					changeOrderElement.appendChild(orderExtnElement);
 					Element orderLinesElement = changeOrderDoc.createElement("OrderLines");
 					//create a special charge line
-					//System.out.println("Special charge line creation");
 					Element specialElement = changeOrderDoc.createElement("OrderLine");
 					specialElement.setAttribute("OrderedQty", "1");
 					specialElement.setAttribute("ValidateItem", "N");
@@ -126,7 +121,6 @@ public class XPXCreateSpecialChargeLineAPI {
 			}
 			
 			
-			//System.out.println("outDoc"+SCXmlUtil.getString(outDoc));
 			return inputXML;
 		}
 			
@@ -167,7 +161,6 @@ public class XPXCreateSpecialChargeLineAPI {
 		//invoke a getCustomerList
 		env.setApiTemplate("getCustomerList", customerListTemplate);
 		Document customerList = api.invoke(env, "getCustomerList", inputCustomerDoc);
-		//System.out.println("customerList"+SCXmlUtil.getString(customerList));
 		env.clearApiTemplate("getCustomerList");
 		NodeList customerNodeList = customerList.getElementsByTagName("Customer");
 		int customerLength = customerNodeList.getLength();
@@ -221,7 +214,6 @@ public class XPXCreateSpecialChargeLineAPI {
 					"getCustomerList", inputCustomerDoc.getDocumentElement(), customerListTemplate
 							.getDocumentElement(), wcContext.getSCUIContext());*/
 			//Document customerList = api.invoke(env, "getCustomerList", inputCustomerDoc);
-			//System.out.println("customerList"+SCXmlUtil.getString(customerList));
 			//env.clearApiTemplate("getCustomerList");
 			
 			YFCNodeList customerNodeList = customerList.getElementsByTagName("Customer");
