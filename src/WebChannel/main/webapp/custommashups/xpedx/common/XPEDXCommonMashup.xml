@@ -10,7 +10,7 @@
 			 <Template>
 			    <Customer CallingOrganizationCode="" CustomerKey="" CustomerType="" CustomerID="" ModifyFlag="" 
 		              OrganizationCode="" OwnerOrganizationCode=""  Status="" AggregateStatus="" RelationshipType="" CustomerLevel="" Vertical="">
-		              <ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="" Status="" AggregateStatus="">
+		              <ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="" Status="" AggregateStatus="" ParentCustomerKey="">
 		              	<BuyerOrganization OrganizationName="" OrganizationKey=""/>
 	 	 	    	  	<Extn></Extn>
 		              </ParentCustomer>
@@ -380,7 +380,43 @@
 			</Template>
 		</API>
 	</mashup>
-	
+	<!--Start JIRA 3162 GET SalesCustomer EMAIL ID -->
+	<mashup id='getXpedxSalesRepList' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Organization  mashup">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="getCSRListService">
+			<Input>
+				<XPEDXSalesRep  SalesCustomerKey="" />
+			</Input>
+			<Template>
+			<XPEDXSalesRepList>
+				<XPEDXSalesRep>
+				</XPEDXSalesRep>
+			</XPEDXSalesRepList>
+		</Template>
+		</API>
+	</mashup>
+	<!-- End JIRA 3162 GET SalesCustomer EMAIL ID -->
+	<!-- Start JIRA 3162 -->
+	<mashup id='getUserListWithContactPersonInfo' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Bill-To CSR mashup">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getUserList">
+			<Input>
+				<User><ComplexQuery Operation="AND"><Or>
+				</Or></ComplexQuery></User>
+			</Input>
+			<Template>
+				<UserList>
+					<User>
+						<ContactPersonInfo/>
+					</User>
+				</UserList>
+			</Template>
+		</API>
+	</mashup>	
+	<!-- End -->
 	<mashup id='XPEDXPendingApprovalOrders' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER'
 		description="Update Contact General Information">
