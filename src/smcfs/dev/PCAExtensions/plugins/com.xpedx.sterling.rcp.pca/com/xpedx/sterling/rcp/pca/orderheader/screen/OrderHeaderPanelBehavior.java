@@ -247,7 +247,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	}
 	private void setOrderedByName(Element eleCustomerContact) {
 		Element referenceElement = getModel("OrderDetails");
-		if(YRCPlatformUI.isVoid(YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnOrderedByName"))||! YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnOrderedByName").contains(",") )
+		if(YRCPlatformUI.isVoid(YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnOrderedByName"))||! YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnOrderedByName").contains(" ") )
 		{
 			StringBuffer sb= new StringBuffer();
 			sb.append(eleCustomerContact.getAttribute("FirstName"));
