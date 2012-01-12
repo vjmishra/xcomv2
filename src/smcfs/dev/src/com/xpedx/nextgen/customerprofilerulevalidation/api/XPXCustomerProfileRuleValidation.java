@@ -154,7 +154,6 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 		   {
 			   outputCustListDoc = createGetCustomerListInput(env,customerId);
 			   env.setTxnObject("ShipToCustomerProfile", outputCustListDoc);
-			   //System.out.println("The ship to customer profile details are: "+SCXmlUtil.getString(outputCustListDoc));
 		   }
 		   else
 		   {
@@ -162,7 +161,6 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 		      Document template = createTemplateForCustomerList();
 		      env.setApiTemplate("getCustomerList", template);
 		      outputCustListDoc = api.invoke(env, "getCustomerList",custListXML);
-		      //System.out.println("The other customers in the hierarchy profile output is: "+SCXmlUtil.getString(outputCustListDoc));
 		      env.clearApiTemplate("getCustomerList");
 		   }
 		}
@@ -188,7 +186,6 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
         env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
 		Document getCustomerDetailsOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerDetailsInputDoc.getDocument());
 		
-		//System.out.println("GETCustomerDetailsOutpurDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
 		log.debug("GETCustomerDetailsOutputDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
 		  
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
