@@ -22,7 +22,7 @@
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
 <script type="text/javascript">
 		function updateShareListChild(){
 		}		
