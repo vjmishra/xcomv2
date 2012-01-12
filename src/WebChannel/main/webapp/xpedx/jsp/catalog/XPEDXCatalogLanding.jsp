@@ -10,7 +10,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
-
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <!-- INCLUDES GO HERE -->
 <!-- Version 1.1 Updated 8-18-10 -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
