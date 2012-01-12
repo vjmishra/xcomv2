@@ -46,7 +46,6 @@ public class XPXBulkPasswordResetAgent extends YCPBaseAgent {
 		log.debug("lastMessageCreated doc is: " + SCXmlUtil.getString(lastMessageCreated));
 		if (lastMessageCreated != null) 
 		{
-			//System.out.println("In the loop for last message created");
 			// get the CustomerContact which have failed
 			//this.formInputToContactListWithLastMessageCreated(lastMessageCreated, inputCustomerContactDoc, inputCustomerContactElement);
 			
