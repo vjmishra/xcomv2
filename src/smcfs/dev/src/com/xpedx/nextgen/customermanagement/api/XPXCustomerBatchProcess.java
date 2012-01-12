@@ -1930,10 +1930,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 //    api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
       //log.debug("manageCustomerInputDoc:" + manageCustomerInputDoc);
-//    System.out.println("Doc for creating manageCustomer"+SCXmlUtil.getString( manageCustomerInputDoc.getDocument()));
 
       manageCustomerOutputDoc = api.invoke(env,XPXLiterals.MANAGE_CUSTOMER_API,manageCustomerInputDoc.getDocument());            
-//    System.out.println("Doc for creating manageCustomer1"+SCXmlUtil.getString(manageCustomerOutputDoc));
       return  manageCustomerOutputDoc;
 }
 
