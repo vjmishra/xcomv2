@@ -121,6 +121,9 @@
 <div id="main-container">
 	<div id="main" class="anon-pages">
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+    	<script type="text/javascript">
+			document.getElementById("newSearch").style.display = 'none';
+		</script>
     	<div class="container">
       	<!-- breadcrumb -->
        		<s:set name='error' value="#_action.getErrorMessageType()"/>

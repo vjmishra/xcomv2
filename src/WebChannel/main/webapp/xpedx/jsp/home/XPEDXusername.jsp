@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
-
+<%@page import="java.util.*" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -117,12 +117,22 @@ function usernameSubmit(){
 <div id="main-container">
 	<div id="main" class="anon-pages">
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+    	<script type="text/javascript">
+			document.getElementById("newSearch").style.display = 'none';
+		</script>
     	<div class="container">
       	<!-- breadcrumb -->
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
       		<div id="mid-col-mil"> 
 		    <div>
-      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+		   
+		    
+		    <% if(null != request.getParameter("requestId")){%>
+		     <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
+		    <%}
+		    else{ %>		    
+      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>      		
+      		<%} %>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
 				
@@ -149,6 +159,8 @@ function usernameSubmit(){
 	        <s:hidden name="#action.namespace" value="/home"/>
 			<s:hidden id="actionName" name="#action.name" value="usernameSubmit"/>
 			<s:hidden id="validationField" name="validationField" value="true"/>
+			<input type="hidden" id="requestId" name="requestId" value='<%=request.getParameter("requestId")%>'/>
+			
 			
 			<s:url id='homePage' namespace='/home' action='home' />
 			
@@ -160,9 +172,16 @@ function usernameSubmit(){
             		
             		<tr>
               			<td width="7%" class="underlines no-border-right-user">Username:</td>
+              			 <% if(null != request.getParameter("requestId")){%>
+		    				<td colspan="2" class="underlines no-border-right-user"><span class="noBorder-left">
+<%--                 			<s:textfield id="UserId" name="UserId" value='<%=request.getParameter("UserId")%>' cssClass="x-input width-250px" maxlength="255" title="Username"/> --%>
+                			<input type="text" class="x-input width-250px" maxlength="255" title="Username" id="UserId" name="UserId" value='<%=request.getParameter("userID")%>'/>
+						</span></td>
+		   				 <%} else{ %>
 						<td colspan="2" class="underlines no-border-right-user"><span class="noBorder-left">
                 			<s:textfield id="UserId" name="UserId" value="%{#wcContext.getRememberedDisplayUserId()}" cssClass="x-input width-250px" maxlength="255" title="Username"/>
 						</span></td>
+						<%}%>
             		</tr>
             		
   
