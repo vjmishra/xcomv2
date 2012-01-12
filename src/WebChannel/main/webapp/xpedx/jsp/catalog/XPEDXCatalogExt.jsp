@@ -12,7 +12,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta content='IE=8' http-equiv='X-UA-Compatible' />
-
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <%-- <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" /> --%>
@@ -20,9 +22,11 @@
 <%-- <s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/> --%>
 <%--<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' /> --%>
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+ <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />  --%>
 <style type="text/css">
 	.table-header-bar A:link {text-decoration: none; color: white;}
 	.table-header-bar A:visited {text-decoration: underline; color: white;}
@@ -30,18 +34,19 @@
 	.table-header-bar A:hover {text-decoration: underline; color: white;}
 	div#fancybox-content { padding-left:12px !important; padding-top:12px !important; }
 </style>	
-<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
+<%--<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" /> 
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="#storefrontId" />/css/sfskin-<s:property value="#storefrontId" />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css" />--%>
+<s:include value="../common/XPEDXStaticInclude.jsp"/>
+<%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="#storefrontId" />/css/sfskin-<s:property value="#storefrontId" />.css" /> 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />--%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalog-views.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/my-price-and-availability.css" />
@@ -50,7 +55,7 @@
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
-<link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" />
+<%-- <link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" />--%>
 
 <!-- end carousel scripts js   -->
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
