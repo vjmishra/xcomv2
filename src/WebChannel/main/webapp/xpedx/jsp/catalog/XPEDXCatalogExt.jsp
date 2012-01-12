@@ -50,10 +50,15 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalog-views.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/my-price-and-availability.css" />
-<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
+<!--<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
+--><script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 <%-- <link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" />--%>
 
@@ -1230,29 +1235,34 @@ function validationforDragToCompare()
 </script>
 <script type="text/javascript" src="../xpedx/js/catalog/XPEDXCatalogExt.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+
+<!--<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
+-->
 <script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXCatalogAddToCart.js'/>"></script>
-<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+
+<!--<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+-->
+<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+
 <script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+--><script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
 
 </body>
