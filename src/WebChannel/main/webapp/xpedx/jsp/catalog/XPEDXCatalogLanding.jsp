@@ -13,16 +13,20 @@
 
 <!-- INCLUDES GO HERE -->
 <!-- Version 1.1 Updated 8-18-10 -->
-
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
+ --%>
 
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
-
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
-
+ --%>
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -31,23 +35,27 @@
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
+<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-
+ --%>
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
+ --%>
 
 <!-- Page Calls -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/prod-details.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/my-items.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/>
-
+ --%>
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
 <!-- Facy Box (Lightbox/Modal Window -->
-
+<%--
 <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+ --%>
 <!-- starting here.. above very little done -->
 
 
