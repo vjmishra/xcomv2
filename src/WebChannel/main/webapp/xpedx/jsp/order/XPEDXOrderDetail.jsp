@@ -10,27 +10,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" /> 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+ 
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />  
 <!--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> jira 2128 -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/prod-details.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />--%>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" />
+<%--  Moved narrowBy.css to catalogExt.css
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" /> --%>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
-<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css"/> 
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />--%>
+<%-- <link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" /> --%>
 <link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/demos/demos.css" rel="stylesheet" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
+<s:include value="../common/XPEDXStaticInclude.jsp"/>
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />--%>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-mil.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/checkout.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" />  --%>
 
 <!-- javascript -->
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -80,8 +90,8 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/> 
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/> --%>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
@@ -98,12 +108,12 @@
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+<%-- <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" /> --%>
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
 
 <!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 
 <!-- Page Calls -->
