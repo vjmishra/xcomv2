@@ -40,7 +40,6 @@ public class XPXCheckETradingIdCondition implements YCPDynamicConditionEx
 	
 	public boolean evaluateCondition(YFSEnvironment env, String arg1, Map arg2, Document inputXML)
 	{
-		System.out.println("The input xml in CheckEtradingId is: "+SCXmlUtil.getString(inputXML));
 		boolean isEtradingIdInavlidOrMissing = false;
 		String eTradingId = null;
 		

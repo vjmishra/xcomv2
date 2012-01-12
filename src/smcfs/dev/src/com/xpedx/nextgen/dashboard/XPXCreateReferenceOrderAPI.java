@@ -207,28 +207,26 @@ public class XPXCreateReferenceOrderAPI implements YIFCustomApi{
 	
 	public static void setRefDetailsInTransation(YFSEnvironment env, Document inputXML)
 	{		
-		System.out.println("In method : setRefDetailsInTransation() ");
 		String refOrderLineKey = "";
 		String msgLineId = "";
 		Map refOrderLineMap = new HashMap();
 		try{
 		NodeList refOrderLineList = inputXML.getDocumentElement().getElementsByTagName("XPXRefOrderLine");
 		int refOrderLineListSize = refOrderLineList.getLength();
-		System.out.println("refOrderLineList size = " + refOrderLineListSize );
 		for(int lineCounter=0;lineCounter<refOrderLineListSize;lineCounter++){
 		Element refOrderLineElement = (Element) refOrderLineList.item(lineCounter);
-		System.out.println("refOrderLineElement === " + SCXmlUtil.getString(refOrderLineElement));
+		log.debug("refOrderLineElement :" + SCXmlUtil.getString(refOrderLineElement));
 		refOrderLineKey = refOrderLineElement.getAttribute("RefOrderLineKey");
-		System.out.println("refOrderLineKey === " + refOrderLineKey);
+		log.debug("refOrderLineKey :" + refOrderLineKey);
 		msgLineId = refOrderLineElement.getAttribute("MsgLineId");
-		System.out.println("msgLineId === " + msgLineId);
+		log.debug("msgLineId:" + msgLineId);
 		refOrderLineMap.put(msgLineId,refOrderLineKey);
 		}		
 		env.setTxnObject("refOrderLineMap", refOrderLineMap);						
 		
         // Pass the refOrderKey to the environmnent's TransactionObject		
 		String refOrderHeaderKey = inputXML.getDocumentElement().getAttribute("RefOrderHdrKey");
-		System.out.println("refOrderHeaderKey in TO ------- " + refOrderHeaderKey);
+		log.debug("refOrderHeaderKey:" + refOrderHeaderKey);
 		env.setTxnObject("ReferenceOrderHeaderKey", refOrderHeaderKey);
 		}catch(Exception e){
 			// Error logged in CENT tool.

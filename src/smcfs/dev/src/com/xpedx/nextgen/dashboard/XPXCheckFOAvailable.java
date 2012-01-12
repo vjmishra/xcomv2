@@ -67,9 +67,6 @@ public class XPXCheckFOAvailable implements YCPDynamicConditionEx
 		{
 			e.printStackTrace();
 		}
-		
-		
-		System.out.println("The flag whether FO order is existing is: "+isFOAvailable);
 		return isFOAvailable;
 	 }
 
