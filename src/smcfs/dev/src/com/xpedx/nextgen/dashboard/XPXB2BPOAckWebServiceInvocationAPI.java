@@ -52,7 +52,9 @@ public class XPXB2BPOAckWebServiceInvocationAPI implements YIFCustomApi
 		FPlaceOrderE inputOrderXml = new FPlaceOrderE();
 		FPlaceOrder inputPlaceOrder = new FPlaceOrder();
 		String inputXMLString = SCXmlUtil.getString(inputXML);
+		if(log.isDebugEnabled()){
 		log.debug("The input string is: "+inputXMLString);
+		}
 		inputPlaceOrder.setWsIpaperOrderResponseInput(inputXMLString);
 		inputOrderXml.setFPlaceOrder(inputPlaceOrder);
 		
@@ -67,7 +69,6 @@ public class XPXB2BPOAckWebServiceInvocationAPI implements YIFCustomApi
 		 */
 		
 		} /*catch(Exception ex) {
-			System.out.println("exception caught in XPXB2BPOAckWebServiceInvocationAPI ");
 			strExtnIsProcessedFlag = "N";
 			
 		}*/
@@ -95,7 +96,9 @@ public class XPXB2BPOAckWebServiceInvocationAPI implements YIFCustomApi
 		Document inputChangeOrderDoc = SCXmlUtil.createDocument("Order");
 		Element inputChangeOrderElement = inputChangeOrderDoc.getDocumentElement();
 		String strOrderHeaderKey = env.getTxnObject("orderHeaderKey").toString();
-		System.out.println("strOrderHeaderKey ::" + strOrderHeaderKey);
+		if(log.isDebugEnabled()){
+		log.debug("strOrderHeaderKey :" + strOrderHeaderKey);
+		}
 		inputChangeOrderElement.setAttribute("OrderHeaderKey",strOrderHeaderKey );
 		Element extnElement = inputChangeOrderDoc.createElement("Extn");
 		extnElement.setAttribute("ExtnIsProcessedFlag", strExtnIsProcessedFlag);
