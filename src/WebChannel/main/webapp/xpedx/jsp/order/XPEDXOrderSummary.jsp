@@ -19,6 +19,9 @@
 <!-- Webtrends Tag starts -->
 <meta name="WT.si_n" content="ShoppingCart" />
 <meta name="WT.si_x" content="3" />
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <!-- Webtrends Tag ends -->
 
 <s:set name="shipComplY" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_Y"/>
@@ -177,17 +180,21 @@ function setTotalPrice(val){
 
 <!-- BEGIN head-calls.php -->
 <!-- styles --> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+ 
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-
+--%>
 <link media="all" rel="stylesheet" type="text/css"
 	href="/swc/xpedx/css/theme/xpedx-mil-new.css" />
-<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<%-- <link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" /> --%>
 
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/> --%>
 <!--[if lt IE 8]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie7.css" />
 <![endif]-->
@@ -219,14 +226,15 @@ function setTotalPrice(val){
 	href="../xpedx/css/order/draft-order-list.css" />
 <link media="all" type="text/css" rel="stylesheet"
 	href="../xpedx/css/order/shopping-cart-detail.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/order-adjustment.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
+<%-- <link media="all" type="text/css" rel="stylesheet"
+	href="../xpedx/css/order/order-adjustment.css" /> --%>
 <link media="all" type="text/css" rel="stylesheet"
 	href="../xpedx/css/common/email/email.css" />
 
 <!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 --><!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -238,7 +246,7 @@ function setTotalPrice(val){
 --><script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/> --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
@@ -262,7 +270,7 @@ function setTotalPrice(val){
 <!-- new ui -->
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> --%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css"/>
 <!-- new ui -->
 
