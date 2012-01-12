@@ -6,19 +6,27 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta content='IE=9' http-equiv='X-UA-Compatible' />
-
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="SelectedCustomerId" value="wCContext.customerId" />
 <!-- styles -->
 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
 
 <!-- Hemantha -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
+ --%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
@@ -26,7 +34,8 @@
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-
+--%>
+<s:include value="../common/XPEDXStaticInclude.jsp"/>
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
@@ -43,14 +52,18 @@
 
 <!-- carousel scripts css  -->
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /><!--  fixed path -->
+ --%>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/demo.css"/><!--  fixed path -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/><!--  fixed path -->
+ --%>
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
@@ -69,26 +82,29 @@
 
 <!-- Page Calls -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
 
 
 <!-- link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" / -->
-
+--%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
 
 <script type="text/javascript" src="../../xpedx/ster/js/common/ajaxValidation.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1/development-bundle/ui/jquery.ui.accordion.js"></script>
+<%--
 <link type="text/css" href="../js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-
+ --%>
 <script type="text/javascript" src="../js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script type="text/javascript" src="../js/sorttable.js"></script>
+<%--
 <link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /><!--  fixed path -->
-
+ --%>
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
