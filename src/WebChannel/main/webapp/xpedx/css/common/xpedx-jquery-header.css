@@ -1,3 +1,21 @@
+/* Included files inside this css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.core.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.resizable.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.selectable.css	
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.accordion.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.autocomplete.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.button.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.dialog.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.slider.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.tabs.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.datepicker.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.progressbar.css
+*		xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.theme.css
+*		../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css
+*		/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css    // removed this ../xpedx/js/fancybox/jquery.fancybox-1.3.1.css
+*		/swc/xpedx/js/cluetip/jquery.cluetip.css
+*		
+*/
 
 /*Add xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.core.css
 */
@@ -197,7 +215,7 @@ button.ui-button::-moz-focus-inner{border:0;padding:0;}
 /*End xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.datepicker.css
 */
 
-/*End xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.progressbar.css
+/*Add xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.progressbar.css
 */
 
 /* Progressbar
@@ -458,14 +476,14 @@ button.ui-button::-moz-focus-inner{border:0;padding:0;}
 .ui-widget-shadow { margin: -8px/*{offsetTopShadow}*/ 0 0 -8px/*{offsetLeftShadow}*/; padding: 8px/*{thicknessShadow}*/; background: #aaaaaa/*{bgColorShadow}*/ url(/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png)/*{bgImgUrlShadow}*/ 50%/*{bgShadowXPos}*/ 50%/*{bgShadowYPos}*/ repeat-x/*{bgShadowRepeat}*/; opacity: .3;filter:Alpha(Opacity=30)/*{opacityShadow}*/; -moz-border-radius: 8px/*{cornerRadiusShadow}*/; -webkit-border-radius: 8px/*{cornerRadiusShadow}*/; border-radius: 8px/*{cornerRadiusShadow}*/; }
 /* End xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.theme.css
 
-/*Added <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
+/*Added <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
 */
 /* just a little eye pleasure ... */
 table#tree { border-collapse:collapse; border: 0px; margin-bottom: 10px; border: 2px dotted #ccc; width: 80%;}
 th#tree { font-weight: bold; border-bottom: 4px dotted #ccc;}
 td#tree { border-bottom: 1px dotted #ccc; }
 caption { background-color: #31557f; color: #fff; font-weight: bold; font-size: 1.1em; width: 80%; height: 30px; }
-/*Added <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
+/*End <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
 */
 
 /*Added <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
@@ -522,7 +540,7 @@ text-decoration:none;
 */
 
 
-/*Added <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+/*Added <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox//swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 */
 /*
  * FancyBox - jQuery Plugin
@@ -531,8 +549,9 @@ text-decoration:none;
  * Examples and documentation at: http://fancybox.net
  * 
  * Copyright (c) 2008 - 2010 Janis Skarnelis
- *
- * Version: 1.3.1 (05/03/2010)
+ * That said, it is hardly a one-person project. Many people have submitted bugs, code, and offered their advice freely. Their support is greatly appreciated.
+ * 
+ * Version: 1.3.4 (11/11/2010)
  * Requires: jQuery v1.3+
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -544,8 +563,8 @@ text-decoration:none;
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	height: 40px;
 	width: 40px;
+	height: 40px;
 	margin-top: -20px;
 	margin-left: -20px;
 	cursor: pointer;
@@ -554,34 +573,22 @@ text-decoration:none;
 	display: none;
 }
 
-* html #fancybox-loading {	/* IE6 */
-	position: absolute;
-	margin-top: 0;
-}
-
 #fancybox-loading div {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 40px;
 	height: 480px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 }
 
 #fancybox-overlay {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	bottom: 0;
-	right: 0;
-	background: #000;
+	width: 100%;
 	z-index: 1100;
 	display: none;
-}
-
-* html #fancybox-overlay {	/* IE6 */
-	position: absolute;
-	width: 100%;
 }
 
 #fancybox-tmp {
@@ -596,9 +603,9 @@ text-decoration:none;
 	position: absolute;
 	top: 0;
 	left: 0;
-	margin: 0;
 	padding: 20px;
 	z-index: 1101;
+	outline: none;
 	display: none;
 }
 
@@ -606,19 +613,18 @@ text-decoration:none;
 	position: relative;
 	width: 100%;
 	height: 100%;
-	background: #FFF;
+	background: #fff;
 }
 
-#fancybox-inner {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 1px;
-	height: 1px;
+#fancybox-content {
+	width: 0;
+	height: 0;
 	padding: 0;
-	margin: 0;
 	outline: none;
+	position: relative;
 	overflow: hidden;
+	z-index: 1102;
+	border: 0px solid #fff;
 }
 
 #fancybox-hide-sel-frame {
@@ -628,6 +634,7 @@ text-decoration:none;
 	width: 100%;
 	height: 100%;
 	background: transparent;
+	z-index: 1101;
 }
 
 #fancybox-close {
@@ -636,24 +643,16 @@ text-decoration:none;
 	right: -15px;
 	width: 30px;
 	height: 30px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
-	background-position: -40px 0px;
+	background: transparent url('fancybox.png') -40px 0px;
 	cursor: pointer;
 	z-index: 1103;
 	display: none;
 }
 
-#fancybox_error {
+#fancybox-error {
 	color: #444;
 	font: normal 12px/20px Arial, Helvetica, sans-serif;
-	padding: 7px;
-	margin: 0;
-}
-
-#fancybox-content {
-	height: auto;
-	width: auto;
-	padding: 0;
+	padding: 14px;
 	margin: 0;
 }
 
@@ -666,79 +665,13 @@ text-decoration:none;
 	outline: none;
 	line-height: 0;
 	vertical-align: top;
-	-ms-interpolation-mode: bicubic;
 }
 
 #fancybox-frame {
-	position: relative;
 	width: 100%;
 	height: 100%;
 	border: none;
 	display: block;
-}
-
-#fancybox-title {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	z-index: 1102;
-}
-
-.fancybox-title-inside {
-	padding: 10px 0;
-	text-align: center;
-	color: #333;
-}
-
-.fancybox-title-outside {
-	padding-top: 5px;
-	color: #FFF;
-	text-align: center;
-	font-weight: bold;
-}
-
-.fancybox-title-over {
-	color: #FFF;
-	text-align: left;
-}
-
-#fancybox-title-over {
-	padding: 10px;
-	background-image: url('fancy_title_over.png');
-	display: block;
-}
-
-#fancybox-title-wrap {
-	display: inline-block;
-}
-
-#fancybox-title-wrap span {
-	height: 32px;
-	float: left;
-}
-
-#fancybox-title-left {
-	padding-left: 15px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
-	background-position: -40px -90px;
-	background-repeat: no-repeat;
-}
-
-#fancybox-title-main {
-	font-weight: bold;
-	line-height: 29px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox-x.png');
-	background-position: 0px -40px;
-	color: #FFF;
-}
-
-#fancybox-title-right {
-	padding-left: 15px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
-	background-position: -55px -90px;
-	background-repeat: no-repeat;
 }
 
 #fancybox-left, #fancybox-right {
@@ -748,7 +681,7 @@ text-decoration:none;
 	width: 35%;
 	cursor: pointer;
 	outline: none;
-	background-image: url('/swc/xpedx/js/fancybox/blank.gif');
+	background: transparent url('blank.gif');
 	z-index: 1102;
 	display: none;
 }
@@ -774,17 +707,17 @@ text-decoration:none;
 }
 
 #fancybox-left-ico {
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -30px;
 }
 
 #fancybox-right-ico {
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -60px;
 }
 
 #fancybox-left:hover, #fancybox-right:hover {
-	visibility: visible;    /* IE6 */
+	visibility: visible; /* IE6 */
 }
 
 #fancybox-left:hover span {
@@ -796,7 +729,7 @@ text-decoration:none;
 	right: 20px;
 }
 
-.fancy-bg {
+.fancybox-bg {
 	position: absolute;
 	padding: 0;
 	margin: 0;
@@ -806,65 +739,369 @@ text-decoration:none;
 	z-index: 1001;
 }
 
-#fancy-bg-n {
+#fancybox-bg-n {
 	top: -20px;
 	left: 0;
 	width: 100%;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox-x.png');
+	background-image: url('fancybox-x.png');
 }
 
-#fancy-bg-ne {
+#fancybox-bg-ne {
 	top: -20px;
 	right: -20px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -162px;
 }
 
-#fancy-bg-e {
+#fancybox-bg-e {
 	top: 0;
 	right: -20px;
 	height: 100%;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox-y.png');
+	background-image: url('fancybox-y.png');
 	background-position: -20px 0px;
 }
 
-#fancy-bg-se {
+#fancybox-bg-se {
 	bottom: -20px;
 	right: -20px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -182px; 
 }
 
-#fancy-bg-s {
+#fancybox-bg-s {
 	bottom: -20px;
 	left: 0;
 	width: 100%;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox-x.png');
+	background-image: url('fancybox-x.png');
 	background-position: 0px -20px;
 }
 
-#fancy-bg-sw {
+#fancybox-bg-sw {
 	bottom: -20px;
 	left: -20px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -142px;
 }
 
-#fancy-bg-w {
+#fancybox-bg-w {
 	top: 0;
 	left: -20px;
 	height: 100%;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox-y.png');
+	background-image: url('fancybox-y.png');
 }
 
-#fancy-bg-nw {
+#fancybox-bg-nw {
 	top: -20px;
 	left: -20px;
-	background-image: url('/swc/xpedx/js/fancybox/fancybox.png');
+	background-image: url('fancybox.png');
 	background-position: -40px -122px;
 }
 
-/* Default */
+#fancybox-title {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	z-index: 1102;
+}
 
-/*End <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+.fancybox-title-inside {
+	padding-bottom: 10px;
+	text-align: center;
+	color: #333;
+	background: #fff;
+	position: relative;
+}
+
+.fancybox-title-outside {
+	padding-top: 10px;
+	color: #fff;
+}
+
+.fancybox-title-over {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	color: #FFF;
+	text-align: left;
+}
+
+#fancybox-title-over {
+	padding: 10px;
+	background-image: url('fancy_title_over.png');
+	display: block;
+}
+
+.fancybox-title-float {
+	position: absolute;
+	left: 0;
+	bottom: -20px;
+	height: 32px;
+}
+
+#fancybox-title-float-wrap {
+	border: none;
+	border-collapse: collapse;
+	width: auto;
+}
+
+#fancybox-title-float-wrap td {
+	border: none;
+	white-space: nowrap;
+}
+
+#fancybox-title-float-left {
+	padding: 0 0 0 15px;
+	background: url('fancybox.png') -40px -90px no-repeat;
+}
+
+#fancybox-title-float-main {
+	color: #FFF;
+	line-height: 29px;
+	font-weight: bold;
+	padding: 0 0 3px 0;
+	background: url('fancybox-x.png') 0px -40px;
+}
+
+#fancybox-title-float-right {
+	padding: 0 0 0 15px;
+	background: url('fancybox.png') -55px -90px no-repeat;
+}
+
+
+/*End <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+*/
+
+/*Add <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
+*/
+/* Adding the lines from the css class jquery.ui.all.css */
+/* global */
+#cluetip-close img {
+  border: 0;
+}
+#cluetip-title {
+  overflow: hidden;
+}
+#cluetip-title #cluetip-close {
+  float: right;
+  position: relative;
+}
+#cluetip-waitimage {
+  width: 43px;
+  height: 11px;
+  position: absolute;
+  background-image: url(../../images/common/wait.gif);
+}
+.cluetip-arrows {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: -11px;
+  height: 22px;
+  width: 11px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+#cluetip-extra {
+  display: none;
+}
+/***************************************
+   =cluetipClass: 'default' 
+-------------------------------------- */
+
+.cluetip-default {
+  background-color: #d9d9c2;
+}
+.cluetip-default #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #d9d9c2;
+}
+.cluetip-default h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 8px 10px 4px;
+  font-size: 1.1em;
+  font-weight: normal;
+  background-color: #87876a;
+  color: #fff;
+}
+.cluetip-default #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-default #cluetip-inner {
+  padding: 10px;
+}
+.cluetip-default div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+/* default arrows */
+
+.clue-right-default .cluetip-arrows {
+  background-image: url(images/darrowleft.gif);
+}
+.clue-left-default .cluetip-arrows {
+  background-image: url(images/darrowright.gif);
+  left: 100%;
+  margin-right: -11px;
+}
+.clue-top-default .cluetip-arrows {
+  background-image: url(images/darrowdown.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-default .cluetip-arrows {
+  background-image: url(images/darrowup.gif);
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+/***************************************
+   =cluetipClass: 'jtip'
+-------------------------------------- */
+.cluetip-jtip {
+  background-color: transparent;
+}
+.cluetip-jtip #cluetip-outer {
+  border: 2px solid #ccc;
+  position: relative;
+  background-color: #fff;
+}
+
+.cluetip-jtip h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 2px 5px;
+  font-size: 16px;
+  font-weight: normal;
+  background-color: #ccc;
+  color: #333;
+}
+
+.cluetip-jtip #cluetip-inner {
+  padding: 0 5px 5px;
+  display: inline-block;
+}
+.cluetip-jtip div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+/* jtip arrows */
+
+.clue-right-jtip .cluetip-arrows {
+  background-image: url(images/arrowleft.gif);
+}
+.clue-left-jtip .cluetip-arrows {
+  background-image: url(images/arrowright.gif);
+  left: 100%;
+  margin-right: -11px;
+}
+.clue-top-jtip .cluetip-arrows {
+  background-image: url(images/arrowdown.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-jtip .cluetip-arrows {
+  background-image: url(images/arrowup.gif);
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+/***************************************
+   =cluetipClass: 'rounded'
+-------------------------------------- */
+
+.cluetip-rounded {
+  background: transparent url(images/bl.gif) no-repeat 0 100%;
+  margin-top: 10px;
+  margin-left: 12px;
+}
+
+.cluetip-rounded #cluetip-outer {
+  background: transparent url(images/tl.gif) no-repeat 0 0;
+  margin-top: -12px;
+}
+
+.cluetip-rounded #cluetip-title {
+  background-color: transparent;
+  padding: 12px 12px 0;
+  margin: 0 -12px 0 0;
+  position: relative;
+}
+.cluetip-rounded #cluetip-extra {
+  position: absolute;
+  display: block;
+  background: transparent url(images/tr.gif) no-repeat 100% 0;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 30px;
+  margin: -12px -12px 0 0;
+}
+.cluetip-rounded #cluetip-inner {
+  background: url(images/br.gif) no-repeat 100% 100%;
+  padding: 5px 12px 12px;
+  margin: -18px -12px 0 0;
+  position: relative;
+}
+
+.cluetip-rounded div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #009;
+  background: transparent;
+}
+.cluetip-rounded div#cluetip-close a {
+  color: #777;
+}
+
+/* rounded arrows */
+
+.clue-right-rounded .cluetip-arrows {
+  background-image: url(images/rarrowleft.gif);
+}
+.clue-left-rounded .cluetip-arrows {
+  background-image: url(images/rarrowright.gif);
+  left: 100%;
+  margin-left: 12px;
+}
+.clue-top-rounded .cluetip-arrows {
+  background-image: url(images/rarrowdown.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-rounded .cluetip-arrows {
+  background-image: url(images/rarrowup.gif);
+  top: -23px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+
+
+/* stupid IE6 HasLayout hack */
+.cluetip-rounded #cluetip-title,
+.cluetip-rounded #cluetip-inner {
+  zoom: 1;
+}
+/*End <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
 */
