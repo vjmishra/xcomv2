@@ -6,9 +6,9 @@
 
 <s:bean  name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
-<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
-    This is to avoid a defect in Struts that�s creating contention under load. 
-    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
+<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
+    This is to avoid a defect in Struts that?s creating contention under load. 
+    The explicit call style will also help the performance in evaluating Struts? OGNL statements. --%>
 <s:set name='_action' value='[0]' />
 
 <html>
@@ -25,7 +25,9 @@
 <s:set name="shipComplC" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_C"/>
 <s:set name="shipComplN" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_N"/>
 <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
-	
+	<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript">
 
 function processDetail(itemid, uom) {
@@ -137,6 +139,9 @@ function setTotalPrice(val){
 	
 	
 	function validateFormSubmit(){
+		//Added For Jira 3232
+	    Ext.Msg.wait("Processing...");
+		
 		setCustomerPONumber();
 	
 	//Special Instructions field validation
@@ -193,16 +198,21 @@ function setTotalPrice(val){
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+
+
+
+<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>-->
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
 <script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
 
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+--><!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <link media="all" type="text/css" rel="stylesheet"
 	href="../xpedx/css/order/shipping-option.css" />
 <link media="all" type="text/css" rel="stylesheet"
@@ -217,38 +227,37 @@ function setTotalPrice(val){
 <!-- carousel scripts css  -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<!-- carousel scripts js   -->
+<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+--><!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+--><!--<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+--><script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+-->
+<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+--><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 
 
-<!-- Facy Box (Lightbox/Modal Window -->
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
+--><!-- Facy Box (Lightbox/Modal Window -->
+<!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>-->
+
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <!-- Page Calls -->
 
 <!-- END head-calls.php -->
 <%-- <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script> --%>
-<script type="text/javascript" src="/swc/xpedx/FlexBox/js/jquery.flexbox.js"></script>
 <link type="text/css" rel="stylesheet" href="/swc/xpedx/FlexBox/css/jquery.flexbox.css" />
 <!-- new ui -->
 
@@ -256,14 +265,16 @@ function setTotalPrice(val){
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css"/>
 <!-- new ui -->
-<script type="text/javascript" src="../xpedx/js/order/email.js"></script>
+
+<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderSummaryCommon.js"></script>
+<!--<script type="text/javascript" src="../xpedx/js/order/email.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/order.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/orderSummary.js"></script>
 <script type="text/javascript"
 	src="../xpedx/js/order/orderAdjustment.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/addCoupon.js"></script>
 
-<script type="text/javascript">
+--><script type="text/javascript">
 // See http://www.fairwaytech.com/flexbox
 
 	
