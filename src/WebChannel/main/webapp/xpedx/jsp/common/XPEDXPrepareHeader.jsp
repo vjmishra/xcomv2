@@ -2,11 +2,21 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
- <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
-<%-- 
+ <%-- 
   <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
   --%>	
+	<s:set name="isMergedCSSJS" value="(#request.isMergedCSSJS )"/>
+  
+    <%
+  		request.removeAttribute("isMergedCSSJS");
+  	  %>
+  	<s:if test="(#isMergedCSSJS != 'true')"> 
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" /> 
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
+ 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
+  
+	</s:if>
+	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
