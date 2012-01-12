@@ -3,8 +3,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 
-<s:include value="../../htmls/webtrends/webtrends.html"/>
-
 <div class="t1-footer commonFooter" id="t1-footer">
 		<table>
 			<tr>
@@ -69,3 +67,4 @@
 			</tr>
 		</table>
 </div>
+<s:include value="../../htmls/webtrends/webtrends.html"/>
