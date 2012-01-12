@@ -3012,4 +3012,4 @@ this.addEvents('ready','change');if(onReady){this.on('ready',onReady,scope,{sing
 startUp();},add:function(token,preventDup){if(preventDup!==false){if(this.getToken()==token){return true;}}
 if(Ext.isIE){return updateIFrame(token);}else{top.location.hash=token;return true;}},back:function(){history.go(-1);},forward:function(){history.go(1);},getToken:function(){return ready?currentToken:getHash();}};})();Ext.apply(Ext.History,new Ext.util.Observable());
 
-//Add of order list ../xpedx/js/global/ext-all.js
+//End of order list ../xpedx/js/global/ext-all.js
