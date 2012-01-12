@@ -15,7 +15,7 @@ public class XPEDXConstants {
 	public static final int XPEDX_B2B_CONDENCED_VIEW = 1;
 	public static final int XPEDX_B2B_MINI_VIEW = 2;
 	public static final int XPEDX_B2B_PAPER_GRID_VIEW = 3;
-	
+	public static final String EMAILIDSEPARATOR = ","; //Jira 3162
 	// CallerPage Type
 	public static final String XPEDX_CALLER_HOME_PAGE="HomePage";
 	public static final String XPEDX_CALLER_CATALOG_PAGE="Catalog";
