@@ -324,7 +324,6 @@ public class XpedxUtil {
 			Security.addProvider(new BouncyCastleProvider());
 			SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
-			System.out.println(new String(input));
 
 			// encryption pass
 			cipher.init(Cipher.ENCRYPT_MODE, key);
