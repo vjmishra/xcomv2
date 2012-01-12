@@ -84,10 +84,14 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		 * On successful reprocess of the reference order, invalid etrading id flag in Reference Order Header table needs to be updated to 'N' */
 			Object tranObject = env.getTxnObject("ReferenceOrderHeaderKey");
 			if(tranObject != null){
-			log.debug("refOrderHeaderKey from Transaction object.");
+				if(log.isDebugEnabled()){
+					log.debug("refOrderHeaderKey from Transaction object.");
+				}
 			refOrderHeaderKey = tranObject.toString();
 			}else{
-			log.debug("refOrderHeaderKey not present in transaction object.");	
+				if(log.isDebugEnabled()){
+					log.debug("refOrderHeaderKey not present in transaction object.");
+				}
 			}
 		int IsInvalidEtradingIDExist = 	inputXML.getElementsByTagName("IsInvalidEtradingID").getLength();	
 		// To check if attribute 'IsInvalidEtradingID' exist in Input xml.
@@ -112,14 +116,18 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		if(SCXmlUtil.getXpathElement(inputXMLRoot, "./CustomerPO")!=null)
 		{
 		   h_customerPONumber = SCXmlUtil.getXpathElement(inputXMLRoot, "./CustomerPO").getTextContent();
+			if(log.isDebugEnabled()){
 		   log.debug("The customer PO Number is: "+h_customerPONumber);
+			}
 		}
 		
 		//String h_orderDate = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderHeader/OrderIssueDate").getTextContent();
 		if(SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderCreateDate")!=null)
 		{
 		   h_orderDate = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderCreateDate").getTextContent();
+			if(log.isDebugEnabled()){
 		   log.debug("The order creation date is: "+h_orderDate);
+			}
 		}
 		
 		//String h_currencyCode = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderHeader/OrderCurrency/Currency/CurrencyCoded").getTextContent();
@@ -132,28 +140,36 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		{
 			h_currencyCode = "USD";
 		}
+		if(log.isDebugEnabled()){
 		log.debug("The currency code is: "+h_currencyCode);
+		}
 		//String eTradingId = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderHeader/OrderParty/ShipToParty/" +
 				//"Party/PartyID/Identifier/Ident").getTextContent();
 				
 		String eTradingId = SCXmlUtil.getXpathElement(inputXMLRoot, "./EtradingId").getTextContent();
+		if(log.isDebugEnabled()){
 		log.debug("The etradingID is: "+eTradingId);
-		
+		}
 		//String headerLiaisonId = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderHeader/OrderNumber/ListOfMessageID/MessageID").getTextContent();
 		if(SCXmlUtil.getXpathElement(inputXMLRoot, "./LiaisonMessageId")!=null)
 		{
 		   headerLiaisonMessageId = SCXmlUtil.getXpathElement(inputXMLRoot, "./LiaisonMessageId").getTextContent();
-		   log.debug("The header liaison message id is: "+headerLiaisonMessageId);
+			if(log.isDebugEnabled()){
+				log.debug("The header liaison message id is: "+headerLiaisonMessageId);
+			}
 		}
         //Getting the parent SAP customer of the BillTo customer with the BuyerId
 		
 		//String buyerId = SCXmlUtil.getXpathElement(inputXMLRoot, "./OrderHeader/OrderParty/BuyerParty/Party/PartyID/Identifier/Ident").getTextContent();
 		String buyerId = SCXmlUtil.getXpathElement(inputXMLRoot, "./BuyerId").getTextContent();
+		if(log.isDebugEnabled()){
 		log.debug("The buyerId is: "+buyerId);
-		
+		}
 		
 		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env,buyerId); 
+		if(log.isDebugEnabled()){
 		log.debug("The SAP Customer details output is: "+SCXmlUtil.getString(getSAPCustomerDetailsOutputDoc));
+		}
 		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
 		String sapCustOrgCode = sapCustomerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);	
 		
@@ -161,13 +177,12 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		//With the SAP parent customer org code and the etrading id,we retrieve the ship to customer
 		
 		Document getShipToCustomerDetailsOutputDoc = getCustomerDetailsOutput(env,eTradingId,sapCustOrgCode);  
-		//System.out.println("The shipTo customer details are: "+SCXmlUtil.getString(getShipToCustomerDetailsOutputDoc));
+		if(log.isDebugEnabled()){
 		log.debug("The shipTo customer details are: "+SCXmlUtil.getString(getShipToCustomerDetailsOutputDoc));
+		}
 		Element customerElement = (Element) getShipToCustomerDetailsOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
 		String buyerOrganizationCode = customerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);		
-		//System.out.println("buyerOrgcode 167::"+buyerOrganizationCode);
 		Element parentCustomerElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_PARENT_CUSTOMER).item(0);
-		//System.out.println("PARENT ELEMENT CUSTID"+parentCustomerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID));
 		String billToId = parentCustomerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
 		
         //Fix added for JIRA 1710
@@ -488,13 +503,17 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 					legacyItemNumber = getLegacyItemNumberFromXref(env,customerPartNo,envtId,companyCode,legacyCustomerNumber);
 					
 					itemElement.setAttribute(XPXLiterals.A_ITEM_ID, legacyItemNumber);
+					if(log.isDebugEnabled()){
 					log.debug("The item id is: "+legacyItemNumber);
+					}
 				}
 				
 				else
 				{
 					itemElement.setAttribute(XPXLiterals.A_ITEM_ID, legacyProductCode);
+					if(log.isDebugEnabled()){
 					log.debug("The item id is: "+legacyProductCode);
+					}
 				}
 				
 				/* Start - changes made for CR - 850 
@@ -506,8 +525,10 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 					// To get the Reference Order Line key from the transaction object.
 					refOrderLineKey = getRefOrdLineKey(env,lineLiaisonMessageId);			
 					// Update IsInvalidItemFlag in xpx_ref_order_line table.
-					updateInvalidFlag(env,refOrderHeaderKey,refOrderLineKey,"Item");					
+					updateInvalidFlag(env,refOrderHeaderKey,refOrderLineKey,"Item");
+					if(log.isDebugEnabled()){
 					log.debug("Item ID is empty.");
+					}
 					// Error logged in CENT tool.				
 					
 					/*Start CR-1182 changes*/
@@ -531,7 +552,9 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 					// Call getItemList					
 					Document outputItemDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, itemInputDoc);					
 					if(!outputItemDoc.getDocumentElement().hasChildNodes()){
+						if(log.isDebugEnabled()){
 						log.debug("Item ID is invalid.");
+						}
 						// To get the Reference Order Line key from the transaction object.
 						refOrderLineKey = getRefOrdLineKey(env,lineLiaisonMessageId);
 						// Stamp IsInvalidItemFlag in xpx_ref_order_line table.
@@ -579,8 +602,10 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 						// To get the Reference Order Line key from the transaction object.
 						refOrderLineKey = getRefOrdLineKey(env,lineLiaisonMessageId);
 						// Update IsInvalidItemFlag in xpx_ref_order_line table.
-						updateInvalidFlag(env,refOrderHeaderKey,refOrderLineKey,"UOM");					
+						updateInvalidFlag(env,refOrderHeaderKey,refOrderLineKey,"UOM");	
+						if(log.isDebugEnabled()){
 						log.debug("Invalid UOM");
+						}
 						/* End - changes made for CR - 850 */
 						
 						/*Start CR-1182 changes*/
@@ -654,7 +679,9 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		}
 		else
 		{
+			if(log.isDebugEnabled()){
 			log.debug("There are no items sent and hence no order will be created...");
+			}
 			
 			YFSException exceptionMessage = new YFSException();
 			exceptionMessage.setErrorDescription("No Items Sent in input xml...Exception thrown from XPXB2BOPTranslationAPI");
@@ -667,7 +694,9 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		}
 		catch(NullPointerException ne)
 		{
+			if(log.isDebugEnabled()){
 			log.debug("Inside null pointer catch block in XPXB2BOrderTranslationAPI");
+			}
                   	
 	        log.error("Exception in XPXB2BOPTranslationAPI...NullPointerException");
 			throw ne;
@@ -682,7 +711,9 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 		
 		
 		setProgressYFSEnvironmentVariables(env);
+		if(log.isDebugEnabled()){
 		log.debug("The draft order creation input xml is: "+SCXmlUtil.getString(createDraftOrderInputDoc.getDocument()));
+		}
 		return createDraftOrderInputDoc.getDocument();
 	}
 	
@@ -920,12 +951,10 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 						refOrderLinesElement.appendChild(reforderLineElement);
 					}	
 					
-					//System.out.println("Email for Reference Order"+SCXmlUtil.getString(sendEmailInputDoc));
 				}			
 				
 				try
                 {
-					//System.out.println("The input to the ecsr mail component is: "+SCXmlUtil.getString(sendEmailInputDoc));
 					api.executeFlow(env, "XPXSendBilltoECSRMails", sendEmailInputDoc);
 					
 				} catch (YFSException e) {
@@ -980,9 +1009,10 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
          getItemXRefListDoc.getDocumentElement().setAttribute("CustomerItemNumber", customerPartNo);
          
          try {
-        	 log.debug("The input to getXrefList is: "+SCXmlUtil.getString(getItemXRefListDoc));
-			getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
+        	getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
+        	if(log.isDebugEnabled()){
 			log.debug("The output of getXrefList is: "+SCXmlUtil.getString(getItemXRefListOutputDoc));
+        	}
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1003,9 +1033,10 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 			        Element XREFElement = (Element) XREFCustElementList.item(0);
 			        
 			        legacyItemNumber = XREFElement.getAttribute("LegacyItemNumber");
+			        if(log.isDebugEnabled()){
 			        log.debug("The legacy item number is: "+legacyItemNumber);
-			        			        
-			
+			        }
+			        			        	
 		}
 		
 	    }         
@@ -1057,15 +1088,13 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
            
            getCustomerDetailsInputDoc.getDocumentElement().appendChild(extnElement);
 
-           
-            
-            //System.out.println("GETCustomerDetailsInputDoc::"+SCXmlUtil.getString(getCustomerDetailsInputDoc.getDocument()));
 		   try {
 			   env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
 			getCustomerDetailsOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerDetailsInputDoc.getDocument());
 			
-			  //System.out.println("GETCustomerDetailsOutpurDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
+			if(log.isDebugEnabled()){
 			  log.debug("GETCustomerDetailsOutputDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
+			}
 			  
 			  env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 			
@@ -1107,12 +1136,15 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 			XPXRefOrderLineElement.setAttribute("IsInvalidItemID", "Y");
 			}
 		}
-		
+		if(log.isDebugEnabled()){
 		log.debug("refOrderInputDoc = " + SCXmlUtil.getString(refOrderInputDoc));
+		}
 			// Call to save the invalid item flag in the xpx_ref_order_line table.
 			try{
 			refOrderOutputDoc = api.executeFlow(env, "changeXPXRefOrderHdr", refOrderInputDoc);
+			if(log.isDebugEnabled()){
 			log.debug("outputDoc = " + SCXmlUtil.getString(refOrderOutputDoc));
+			}
 			}catch(Exception e){
 				// Error logged in CENT tool.
 				YFSException exceptionMessage = new YFSException();
