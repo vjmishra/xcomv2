@@ -111,13 +111,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
 		}
 		
-		//Remove the below sysouts after LDAP testing
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
-		//System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+		
 
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
@@ -136,7 +130,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         DirContext ctx = new InitialDirContext(env);
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-		System.out.println("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+		
 		// need this attribute set in request to avoid customer contact lookup by post authentication
 		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		String userName = (String)request.getAttribute("loggedInUserName");
@@ -183,7 +177,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 	public boolean isPlatformLoginNeeded(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: ::::::::::::::::::::::::: Authentication isPlatformLoginNeeded check :::::::::::::::::::::::::");
-		System.out.println("XPEDXSSOAuthenticationImplementation:: ::::::::::::::::::::::::: Authentication isPlatformLoginNeeded check :::::::::::::::::::::::::");
+		
 		// Check the YFS_USER table and see if the user is internal or external
 		// If the user is internal return false so that SSO Authentication (this class's getUser(...)) 
 		// method will be called.
@@ -274,7 +268,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		}
 		
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: User " + loggedInUser + " is " +userType);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: User " + loggedInUser + " is " +userType);
+		
 		  // if the user is internal then it goes through authentication
 		if(userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())){
 			if (request.getSession(false) != null){
@@ -285,8 +279,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				request.setAttribute("loggedInUserName", userName);
 				request.setAttribute("loggedInUserId", loggedInUser);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
-				System.out.println("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName);
-			}
+				}
 			isInternal = true;
 		}else 
 			isInternal = false;
