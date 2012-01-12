@@ -303,9 +303,24 @@ public class XPEDXShipToCustomer {
 	public void setExtnOrigEnvironmentCode(String extnOrigEnvironmentCode) {
 		this.extnOrigEnvironmentCode = extnOrigEnvironmentCode;
 	}
-
-
-
+	public String getExtnECsr1EMailID() {
+		return extnECsr1EMailID;
+	}
+	public void setExtnECsr1EMailID(String extnECsr1EMailID) {
+		this.extnECsr1EMailID = extnECsr1EMailID;
+	}
+	public String getExtnECsr2EMailID() {
+		return extnECsr2EMailID;
+	}
+	public void setExtnECsr2EMailID(String extnECsr2EMailID) {
+		this.extnECsr2EMailID = extnECsr2EMailID;
+	}
+	public String getParentCustomerKey() {
+		return parentCustomerKey;
+	}
+	public void setParentCustomerKey(String parentCustomerKey) {
+		this.parentCustomerKey = parentCustomerKey;
+	}
 
 	private String FirstName;
 	private String MiddleName;
@@ -314,7 +329,9 @@ public class XPEDXShipToCustomer {
 	private String EMailID;
 	private String City;
 	private String CityCode;
-	
+	private String extnECsr1EMailID; //JIRA 3162
+	private String extnECsr2EMailID; //JIRA 3162
+    private String parentCustomerKey;//JIRA 3162
 	private String Company;
 	private List<String> addressList;
 	private String customerID;
