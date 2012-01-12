@@ -360,8 +360,9 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 				}
 				else
 				{*/
-				System.out.println("Input doc in Price UE : "+SCXmlUtil.getString(inputDocument));
-				
+				if(log.isDebugEnabled()){
+				log.debug("Input doc in Price UE : "+SCXmlUtil.getString(inputDocument));
+				}
 					setProgressYFSEnvironmentVariables(env,inputDocument,isDiscountCalculate,isCouponApply,orderReference,
 							createAdjustmentInfoDocument(env,outputDoc,orderReference));
 				//}
