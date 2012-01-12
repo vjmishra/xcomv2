@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Date;
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.core.internal.jobs.OrderedLock;
 import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -88,6 +89,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         //setModel("selectedCustomer",page.getOrderLinesPanel().getPageBehavior().getCustomerDetails());
         setDirty(false);
         createShipComplete();
+
         
     }
 	public Element getInputElement(){
@@ -250,7 +252,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 			StringBuffer sb= new StringBuffer();
 			sb.append(eleCustomerContact.getAttribute("FirstName"));
 			if(!YRCPlatformUI.isVoid(eleCustomerContact.getAttribute("FirstName")))
-			sb.append(", ");
+			sb.append(" ");
 			sb.append(eleCustomerContact.getAttribute("LastName"));
 			YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").setAttribute("ExtnOrderedByName",sb.toString());
 		}
