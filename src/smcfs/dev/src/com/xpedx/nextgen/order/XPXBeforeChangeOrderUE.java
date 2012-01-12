@@ -40,7 +40,9 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 	private static YIFApi api = null;
 		public Document beforeChangeOrder(YFSEnvironment env, Document outputDoc)			
 			{
-			System.out.println("Inside Before Change Order UE");
+			if(log.isDebugEnabled()){
+			log.debug("Inside Before Change Order UE");
+			}
 			
 			Document inputDoc=null;
 			String ischangeOrderInprogress=null;
@@ -99,7 +101,9 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					{
 						return outputDoc;
 					}
-					System.out.println("Input Doc for getOrderPeice is : "+SCXmlUtil.getString(orderPriceInputDoc));
+					if(log.isDebugEnabled()){
+					log.debug("Input Doc for getOrderPeice is : "+SCXmlUtil.getString(orderPriceInputDoc));
+					}
 					setProgressYFSEnvironmentVariables(env,map,draftOrderFlag,hasPendingChanges, primeLineNumMap,uomListMap,pricingUOMMap,unitPricePricingUOMMap,reqUnitPrice,isPriceLockMap); 
 					
 					env.setApiTemplate(
@@ -384,9 +388,9 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				}
 			}
 			
-		
-			System.out.println("Output XML of Before Change Order UE "+SCXmlUtil.getString(outputDoc));
-			
+			if(log.isDebugEnabled()){
+			log.debug("Output XML of Before Change Order UE "+SCXmlUtil.getString(outputDoc));
+			}
 			return outputDoc;
             }
 		
