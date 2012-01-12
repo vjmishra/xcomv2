@@ -674,7 +674,10 @@ function funDivOpenClose(val1)
 		    }
 		}
 
-		var spendingLimit = document.getElementById("spendingLt").value;
+		var spendingLimit="";
+		if(document.getElementById("spendingLt") != null){
+		 	document.getElementById("spendingLt").value;
+		}
 		
 		// Added AND condition for jira 2055
 		if(spendingLimit!="" && spendingLimit != null && (document.getElementById("primaryApprover") !=null)){
