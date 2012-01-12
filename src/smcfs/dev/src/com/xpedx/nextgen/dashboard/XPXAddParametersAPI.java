@@ -363,7 +363,6 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					masterCustomerName  = customerExtnElement.getAttribute(XPXLiterals.A_SAP_PARENT_NAME);
 					
 					customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
-					//System.out.println("The orig envt code is: "+customerEnvtId);
 					customerOrderingDivision = customerExtnElement.getAttribute("ExtnCustOrderBranch")+"_"+envtCode;
 					//log.info("The customer ordering division is: "+customerOrderingDivision);
 					customerDivision = customerExtnElement.getAttribute("ExtnCustomerDivision")+"_"+envtCode;
@@ -586,7 +585,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 			Element orderLine = (Element)orderLineList.item(i);
 			
 		    String lineStatus = orderLine.getAttribute("Status");
+			if(log.isDebugEnabled()){
 			log.debug("The status of the line is: "+lineStatus);
+			}
 		    /***Added for CR # 2591 by Prasanth Kumar M.**************/
 		    if(!"Cancelled".equalsIgnoreCase(lineStatus))
 		    {	
@@ -718,7 +719,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 							    if(itemId.equalsIgnoreCase(legacyItemNumber))
 							    {
 								 customerItem = XREFElement.getAttribute("CustomerItemNumber");
+								if(log.isDebugEnabled()){
 								 log.debug("The customer item no is: "+customerItem);
+								}
 								 item.setAttribute(XPXLiterals.A_CUSTOMER_ITEM, customerItem);
 								 break;
 							    }
@@ -780,7 +783,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					     // Changes made for issue 1501 
 					    if("W".equalsIgnoreCase(inventoryIndicator) || "I".equalsIgnoreCase(inventoryIndicator))
 					    {	
-						   log.debug("Line type is a stock !!!");
+					    	if(log.isDebugEnabled()){
+					    		log.debug("Line type is a stock !!!");
+					    	}
 						   orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, "STOCK");
 						   break;
 					    }
@@ -847,7 +852,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 							  Element itemElem = (Element) ItemElementList.item(itemIterator);
 						      if(itemId.equalsIgnoreCase(itemElem.getAttribute("ItemID")))
 						      { 
+						    	if(log.isDebugEnabled()){
 						    	 log.debug("Setting item type as direct");
+						    	}
 							     orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, XPXLiterals.DIRECT);
 							     break;
 						      }	 
@@ -877,8 +884,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, XPXLiterals.DIRECT);
 				
 				}	*/
-					
+					if(log.isDebugEnabled()){
 					log.debug("Into the else loop of no item branch record");
+					}
 					itemListDocRoot = getComplexQueryOutputForItem.getDocumentElement();
 					
 					NodeList ItemElementList = itemListDocRoot.getElementsByTagName(XPXLiterals.E_ITEM);
@@ -890,7 +898,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 						  Element itemElem = (Element) ItemElementList.item(itemIterator);
 					      if(itemId.equalsIgnoreCase(itemElem.getAttribute("ItemID")))
 					      { 
+					    	if(log.isDebugEnabled()){
 					    	 log.debug("Setting item type as direct");
+					    	  }
 						     orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, XPXLiterals.DIRECT);
 						     break;
 					      }	 
@@ -903,7 +913,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					{
 						//Item does not exist in YFS_ITEM table and its a Special charge line
 						orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, XPXLiterals.STOCK);
+						if(log.isDebugEnabled()){
 						log.debug("Setting item type as stock");
+						}
 						
 					}
 					if(lineType.equalsIgnoreCase("C"))
@@ -931,7 +943,9 @@ public class XPXAddParametersAPI implements YIFCustomApi
 
 		log.endTimer("XPXAddParametersAPI.beforeChangeOrder");
 		
+		if(log.isDebugEnabled()){
 		log.debug("The final input to changeOrder from XPXAddParameters API is: "+SCXmlUtil.getString(inputXML));
+		}
 		//this was changed for special chargeline requirement
 		//log.info("inputDocRoot"+SCXmlUtil.getString(inputDocRoot));
 		/*Document newInputDoc = YFCDocument.createDocument().getDocument();
@@ -1006,10 +1020,13 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				legacyItemIdExpElement.setAttribute("Value", itemID);
 				secondaryAndElement.appendChild(legacyItemIdExpElement);
 			}
-	        
+	    	if(log.isDebugEnabled()){
 	        log.debug("The complex query input to getItemBranchListService is: "+SCXmlUtil.getString(getComplexQueryInputForItemBranch));
+	    	}
 	        getComplexQueryOutputForItemBranch = api.executeFlow(env, "getItemBranchListForOPService", getComplexQueryInputForItemBranch);
+	    	if(log.isDebugEnabled()){
 	        log.debug("The complex query output of getItemBranchListService is: "+SCXmlUtil.getString(getComplexQueryOutputForItemBranch));
+	    	}
 		  }
 		  catch(Exception e)
 		  {
@@ -1062,12 +1079,13 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				secondaryOrElement.appendChild(itemIdExpElement);
 				
 			}
-	        
-	        log.debug("The complex query input to getItemListService is: "+SCXmlUtil.getString(getComplexQueryInputForItem));
+	    	
 	        env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, template);
 	        getComplexQueryOutputForItem = api.invoke(env, "getItemList", getComplexQueryInputForItem);
 	        env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API);
-	        log.debug("The complex query output of getItemListService is: "+SCXmlUtil.getString(getComplexQueryOutputForItem));  
+	    	if(log.isDebugEnabled()){
+	        log.debug("The complex query output of getItemListService is: "+SCXmlUtil.getString(getComplexQueryOutputForItem));
+	    	}
 			
 			
 		}
@@ -1163,9 +1181,11 @@ public class XPXAddParametersAPI implements YIFCustomApi
 			secondaryAndElement.appendChild(legacyItemIdExpElement);
 		}
         
-        log.debug("The complex query input to getItemCustXrefListService is: "+SCXmlUtil.getString(getComplexQueryInputForXref));
+    	
         getComplexQueryOutputForXref = api.executeFlow(env, "getItemCustXrefListService", getComplexQueryInputForXref);
+    	if(log.isDebugEnabled()){
         log.debug("The complex query output of getItemCustXrefListService is: "+SCXmlUtil.getString(getComplexQueryOutputForXref));
+    	}
 	  }
 	  catch(Exception e)
 	  {
