@@ -21,26 +21,30 @@
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-	 
+	
 	   <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />  
 		<!--     <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> -->
 	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" /> --%>
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-	
+	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
 	    <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" /> --%>
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
+	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
 	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />  --%>
 	    
-		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css">
+	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css">
 	    
 		<s:include value="../common/XPEDXStaticInclude.jsp"/>
-	 	<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-	 	<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+		
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
+	 	<!--<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
+		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script> -->
+		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+		<!--<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>-->
 		<!-- carousel scripts css  -->
 		<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
-	
+		
 	    <!-- jQuery -->
 	    <!-- Page Calls -->
 		<!-- END head-calls.php -->
@@ -50,7 +54,10 @@
 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-		<s:include value="../common/XPEDXStaticInclude.jsp"/> 
+		<s:include value="../common/XPEDXStaticInclude.jsp"/>
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
 	</s:else>
 	
 <!--[if IE]>
@@ -84,6 +91,46 @@
 		  </div>
 		</div>
 		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+		
+		<script type="text/javascript">
+		function browserSupport(){
+
+		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
+		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
+			 if (ieversion < 7)
+			  alert("The application does not support this browser"); 	
+			}
+
+		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		    var NavigatorVersion=new Number(RegExp.$1)
+		         alert("The application does not support this browser"); 
+		}
+
+		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
+		    var ffversion=new Number(RegExp.$1)
+			 if(ffversion < 3.4)
+		 	    alert("The application does not support this browser"); 
+		 }
+
+		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
+		    var str= navigator.appVersion;
+			var str1= str.substring(89,90);
+			if(str1 < 4)
+		  	  alert("The application does not support this browser"); 
+		 }
+		
+		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		      alert("The application does not support this browser"); 
+		}
+		
+		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
+		     alert("The application does not support this browser"); 
+		}
+
+		}
+		
+		
+		</script>
 <script type="text/javascript">
 		browserSupport();
 		</script>
@@ -269,72 +316,45 @@
  		
 </s:else>
 
-<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+<script type="text/javascript" src="../xpedx/js/common/xpedx-home-common.js"></script>
 
-<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+<!--<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script> -->
+
+<!-- End of files in xpedx-home-common.js -->
+
+<!-- Added the below commented scripts in xpedx-header.js -->
+
+
+ <!-- <script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script> -->
 
-<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<!-- End of files in xpedx-header.js -->
+
+<!--  Added the below commented scripts in xpedx-ext-header.js -->
+
+<!--<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
+<!-- End of files in xpedx-ext-header.js -->
+
+
+
+<!-- Added the below commented scripts in xpedx-jquery-header.js -->
+
+<!--<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+
+
+<!-- End of files in xpedx-jquery-header.js -->
 <script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery.shorten.js"></script> 
-<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
-<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
-<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
-
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 	
 	
 <script type="text/javascript">
-
-	function browserSupport(){
-
-		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
-			 if (ieversion < 7)
-			  alert("The application does not support this browser"); 	
-			}
-
-		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		    var NavigatorVersion=new Number(RegExp.$1)
-		         alert("The application does not support this browser"); 
-		}
-
-		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
-		    var ffversion=new Number(RegExp.$1)
-			 if(ffversion < 3.4)
-		 	    alert("The application does not support this browser"); 
-		 }
-
-		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
-		    var str= navigator.appVersion;
-			var str1= str.substring(89,90);
-			if(str1 < 4)
-		  	  alert("The application does not support this browser"); 
-		 }
-		
-		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		      alert("The application does not support this browser"); 
-		}
-		
-		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		     alert("The application does not support this browser"); 
-		}
-
-		}
 
 	function loginSubmit(myfield,e)
 	{
