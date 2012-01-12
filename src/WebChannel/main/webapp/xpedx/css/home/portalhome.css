@@ -1,9 +1,332 @@
-@import url(../catalog/narrowBy.css);
-@import url(../common/address/readOnlyAddress.css);
-@import url(../common/address/addressBook.css);
-@import url(../order/approval.css);
-@import url(../order/order-list.css);
+/* Included in this css
+*  readOnlyAddress.css
+*  addressBook.css
+*  approval.css
+*  ../order/order-list.css
+*/
+/*Start readOnlyAddress.css
+*/
+/*****************************************************************************
+	read-only address
+*****************************************************************************/
 
+ul.readOnlyAddress
+{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+/*End readOnlyAddress.css*/
+/*Start addressBook.css
+*/
+/*****************************************************************************
+    address book address
+*****************************************************************************/
+
+td.addressBook {
+    padding-bottom:1em;
+}
+
+#addressBookTable {
+  border-color: #ffffff;
+}
+
+/* initially hidden address */
+.additionalAddress {
+  display:none;
+}
+/*End addressBook.css
+*/
+/* Start approval.css
+*/
+/*****************************************************************************
+     approval List
+*****************************************************************************/
+
+.approvalListTableContainer
+{
+	margin:10px;
+    border:0px;
+}
+
+.listWidgetTable
+{
+	height:150px;
+}
+
+.approvalListWidgetTableHeader2
+{
+	clear:both;
+	padding:0;
+	margin:0;
+	width:97%;
+    border:0px;
+}
+
+.more-link{
+	color: #2E8B57;
+}
+.xclass{
+	 background-color:#48D1CC;
+     padding-left: 20px;
+     border: 1px solid #ccc;
+}
+.approvalListTable
+{
+	margin: 0 0 0 0;
+    width: 95%;
+    padding-left: 10px;
+}
+
+.approvalListTable td
+{
+      padding:10px;
+}
+.approvalListTable th
+{
+     padding:10px;
+}
+.orderNoColumnHeader{
+    width: 20%;
+}
+.modifytsColumnHeader{
+    width: 22%;
+}
+.buyerUserIdColumnHeader{
+	width: 16%;
+}
+.resolverUserIdColumnHeader{
+	width: 16%;
+    text-align: center;
+}
+.amountColumnHeader{
+	width: 8%;
+}
+.statusColumnHeader{
+	width: 16%;
+}
+.orderNoColumnData{
+    width: 20%;
+}
+.modifytsColumnData{
+    width: 22%;
+}
+.buyerUserIdColumnData{
+	width: 16%;
+}
+.resolverUserIdColumnData{
+	width: 16%;
+}
+.amountColumnData{
+	width: 8%;
+}
+.statusColumnData{
+	width: 16%;
+}
+.approvalListWidgetTable
+{
+	margin: 0 0 0 0;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.approvalListWidgetTable td
+{
+      padding:10px;
+}
+.approvalListWidgetTable th
+{
+     padding:10px;
+}
+.widgetOrderNoColumnHeader{
+    width: 23%;
+}
+.widgetModifytsColumnHeader{
+    width: 26%;
+}
+.widgetBuyerUserIdColumnHeader{
+	width: 19%;
+}
+.widgetResolverUserIdColumnHeader{
+	width: 19%;
+}
+.widgetAmountColumnHeader{
+	width: 12%;
+}
+.widgetOrderNoColumnData{
+    width: 23%;
+
+}
+.widgetModifytsColumnData{
+    width: 26%;
+
+}
+.widgetBuyerUserIdColumnData{
+	width: 19%;
+
+}
+.widgetResolverUserIdColumnData{
+	width: 19%;
+
+}
+.widgetAmountColumnData{
+	width: 12%;
+
+}
+
+
+/*End approval.css
+*/
+/*Start ../order/order-list.css
+*/
+
+/*****************************************************************************
+     order list
+*****************************************************************************/
+/* TODO: REMOVE ONCE CPH HAS FINISHDED seeing if this can be promoted to common.css or grid.css */
+.listTableHeader .listTableHeaderText
+{
+    padding-left: 15px;
+}
+
+.listWidgetTable
+{
+  height:150px;
+}
+.xclass{
+     padding-left: 30px;
+     border: 1px solid #ccc;
+}
+.orderListTable
+{
+    margin: 0 0 0 0;
+    width: 95%;
+    padding-left: 10px;
+    margin-left: 10px;
+}
+
+.orderListTable td
+{
+      padding:10px;
+}
+.orderListTable th
+{
+     padding:10px;
+}
+.widgetTableHeader2
+{
+  clear:both;
+  padding:0;
+  margin:0;
+  width:97%;
+    border:0px;
+}
+
+
+.salesOrderNoColumnHeader{
+    width: 22%;
+}
+.purchaseOrderNoColumnHeader{
+    width: 22%;
+}
+.overallStatusColumnHeader {
+    width: 22%;
+}
+.paymentStatusColumnHeader {
+    width: 22%;
+}
+
+.modifytsColumnHeader{
+    width: 22%;
+}
+.salesOrderNoColumnData{
+    width: 22%;
+}
+.purchaseOrderNoColumnData{
+    width: 22%;
+}
+
+.modifytsColumnData{
+    width: 22%;
+}
+.overallStatusColumnData {
+    width: 22%;
+}
+.paymentStatusColumnData {
+    width: 22%;
+}
+
+/*
+    Definitions for Order List Table
+ */
+.olActionColumnHeader{
+    width: 7%;
+}
+.olOrderNoColumnHeader{
+    width: 12%;
+}
+.olOrderPONumberColumnHeader{
+    width: 13%;
+}
+.olModifytsColumnHeader{
+    width: 11%;
+}
+.olOrderDateColumnHeader{
+    width: 11%;
+}
+.olOrderAmountColumnHeader{
+    width: 10%;
+}
+.olOrderStatusColumnHeader{
+    width: 10%;
+}
+.olOrderPaymentStatusColumnHeader{
+    width: 10%;
+}
+.olOwnerNameColumnHeader{
+    width: 16%;
+}
+
+
+
+.olActionColumnData{
+    width: 5%;
+}
+.olOrderNoColumnData{
+    width: 16%;
+}
+.olOrderPONumberColumnData{
+    width: 11%;
+}
+.modifytsColumnData{
+    width: 11%;
+}
+.olOrderDateColumnData{
+    width: 11%;
+}
+.olOrderAmountColumnData{
+    width: 10%;
+}
+.olOrderStatusColumnData{
+    width: 10%;
+}
+.olOrderPaymentStatusColumnData{
+    width: 10%;
+}
+.olOwnerNameColumnData{
+    width: 16%;
+}
+.heldOrderIconLayout{
+    padding-left:20px;
+    float:left;
+}
+.orderListOrderNoLink{
+    line-height:20px;
+    float:left;
+}
+
+/*End ../order/order-list.css
+*/
 /*****************************************************************************
 	product list style
 *****************************************************************************/
