@@ -286,9 +286,9 @@
         <categories id="com.xpedx.sterling.rcp.pca.categories1">
             <category id="YCD_GLOBAL_RELATED">
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks1">
-                    <task id="CreateUser"/>
-                    <task id="ModifyUser"/>
-                    <task id="DivisionSearch"/>
+                    <task id="Create Internal Users"/>
+                    <task id="Modify Internal Users"/>
+                    <task id="Division Maintennance"/>
                     <task id="ReferenceOrderSearch"/>
                     <task id="ArticleMaintenance"/>
                     <task id="MyItemsSearch"/>
@@ -297,12 +297,12 @@
             </category>
             <category id="XPX_CREATE_USER">
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks3">
-                    <task id="CreateUser"/>
+                    <task id="Create Internal Users"/>
                 </tasks>
             </category>
             <category id="XPX_MODIFY_USER">
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks4">
-                    <task id="ModifyUser"/>
+                    <task id="Modify Internal Users"/>
                 </tasks>
             </category>
             <category id="XPX_GLOBAL">
@@ -312,7 +312,7 @@
             </category>
             <category id="XPX_DIVISIONMAINTAINANCE_CATEGORY">
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks5">
-                    <task id="DivisionSearch"/>
+                    <task id="Division Maintennance"/>
                 </tasks>
             </category>
             <category id="YCD_ORDER_RELATED">
@@ -330,10 +330,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXCreateUserTaskAction"
                 filterRequired="false"
-                groupId="User_Tasks"
-                id="CreateUser"
+                groupId="Other_Tasks"
+                id="Create Internal Users"
                 isExtension="false"
-                name="CreateUser"
+                name="Create Internal Users"
                 permissionId="ycdRCP0302">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_MODIFY_USER"/>
@@ -342,10 +342,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXModifyUserTaskAction"
                 filterRequired="false"
-                groupId="User_Tasks"
-                id="ModifyUser"
+                groupId="Other_Tasks"
+                id="Modify Internal Users"
                 isExtension="false"
-                name="ModifyUser"
+                name="Modify Internal Users"
                 permissionId="ycdRCP0302">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_CREATE_USER"/>
@@ -354,10 +354,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
                 filterRequired="false"
-                groupId="Xpedx_Group"
-                id="DivisionSearch"
+                groupId="Other_Tasks"
+                id="Division Maintennance"
                 isExtension="false"
-                name="DivisionSearch"
+                name="Division Maintennance"
                 permissionId="ycdRCPXPX002">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
@@ -366,10 +366,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIAction"
                 filterRequired="false"
-                groupId="Xpedx_Group"
+                groupId="Other_Tasks"
                 id="ReferenceOrderSearch"
                 isExtension="false"
-                name="ReferenceOrderSearch" permissionId="ycdRCPX008">
+                name="Reference Order Search" permissionId="ycdRCPX008">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
                 </categories>
@@ -377,10 +377,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
                 filterRequired="false"
-                groupId="Xpedx_Group"
+                groupId="Other_Tasks"
                 id="ArticleMaintenance"
                 isExtension="false"
-                name="ArticleMaintenance"
+                name="Article Maintenance"
                 permissionId="ycdRCPXPX004">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
@@ -389,10 +389,10 @@
             <task
                 actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
                 filterRequired="false"
-                groupId="Xpedx_Group"
+                groupId="Other_Tasks"
                 id="MyItemsSearch"
                 isExtension="false"
-                name="MyItemsSearch"
+                name="My Items Search"
                  permissionId="ycdRCPX006">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
@@ -400,9 +400,9 @@
             </task>
              <task
                 actionId="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
-                filterRequired="false" groupId="Xpedx_Group"
+                filterRequired="false" groupId="Other_Tasks"
                 id="ViewInvoices" isExtension="false"
-                name="ViewInvoices" permissionId="ycdRCPX007">
+                name="View Invoices" permissionId="ycdRCPX007">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
                 </categories>
