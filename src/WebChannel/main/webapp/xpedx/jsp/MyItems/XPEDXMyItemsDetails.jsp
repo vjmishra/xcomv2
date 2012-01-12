@@ -7,7 +7,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <s:set name="CurrentCustomerId"
 	value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
@@ -25,18 +27,24 @@
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
 </script>
 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+
 <!-- Version 1.1 Updated 8-18-10 -->
+<%-- 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
+--%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/my-price-and-availability.css" />
 
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
-
+<%-- 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css"/>
-
+--%>
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
@@ -55,14 +63,18 @@
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <!-- carousel scripts css  -->
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
+ --%>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
+ --%>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
@@ -81,12 +93,14 @@
 <!-- Lightbox/Modal Window --> 
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<!-- 
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
+  -->
 <!-- Page Calls -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-
+ --%>
 <!-- page specific JS includes -->
 <script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXMyItemsDetails.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXAddToCartAndAvailability.js'/>"></script>
@@ -97,10 +111,13 @@
 <s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/mil-quick-add-large.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
+ --%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
-
+ --%>
 <!-- For the number formatting -->
 <script type="text/javascript"
 	src="../js/jquery.numberformatter-1.1.0.js"></script>
