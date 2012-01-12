@@ -676,7 +676,7 @@ function funDivOpenClose(val1)
 
 		var spendingLimit="";
 		if(document.getElementById("spendingLt") != null){
-		 	document.getElementById("spendingLt").value;
+			spendingLimit = document.getElementById("spendingLt").value;
 		}
 		
 		// Added AND condition for jira 2055
