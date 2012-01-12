@@ -55,8 +55,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/order-adjustment.css" />
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js">  Commented for Jira 2922</script>-->
 
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.7.min.js"></script><!-- added for Jira 2922 -->
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
