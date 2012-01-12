@@ -215,7 +215,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 
 function replacementAddToList(uId) {
 	if (uId == ""){
-		alert("Please select an item first.");
+		 alert("Please select an item first.");
 		return;
 	}
 	
@@ -246,7 +246,8 @@ function replacementAddToList(uId) {
 function replacementReplaceInList(uId) {
 	
 	if (uId == ""){
-		Ext.Msg.alert('Error', 'Please select an item first.');
+		alert("Please select an item first."); /*Modified code For Jira 2922*/
+		//Ext.Msg.alert('Error', 'Please select an item first.');
 		return;
 	}
 	
