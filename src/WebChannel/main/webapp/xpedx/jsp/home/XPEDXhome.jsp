@@ -14,16 +14,22 @@
 	<s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta content='IE=9' http-equiv='X-UA-Compatible' />       
-	
+	<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 	<s:if test="#isGuestUser != true">
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+	 
+	   <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />  
 		<!--     <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> -->
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
+	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" /> --%>
 	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
 	
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" />
+	    <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" /> --%>
 	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
+	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />  --%>
 	    
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css">
 	    
@@ -32,26 +38,26 @@
 	 	<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
 		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
 		<!-- carousel scripts css  -->
-		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
+		<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
 		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 	
 	    <!-- jQuery -->
 	    <!-- Page Calls -->
 		<!-- END head-calls.php -->
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
+	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" /> --%>
 	</s:if>
 	<s:else>
-	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
-		<s:include value="../common/XPEDXStaticInclude.jsp"/>
-	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+		<s:include value="../common/XPEDXStaticInclude.jsp"/> 
 	</s:else>
 	
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
  <!-- Lightbox/Modal Window -->
-	    <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
+	    <%--<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" /> --%> 
 	
     <s:set name="storefront"  value='wCContext.storefrontId'/>
     <s:if test="#isGuestUser == true">
