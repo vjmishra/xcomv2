@@ -6,29 +6,43 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-
+<%
+  		request.setAttribute("isMergedCSSJS","true");
+  	  %>
 <s:url id='uomDescriptionURL' namespace="/common" action='getUOMDescription' />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+ 
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" /> commented for jira 1833 -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
+
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" /> -->
+<!-- Moved global-1.css, prod-details.css, home.css,
+	ext-all.css,xpedx-forms.css,banner.css, theme.css, skin.css, demo.css, shopping-cart.css to xpedx-header.css-->
+<!-- Moved narrowBy.css to catalogExt.css -->
+<!-- Moved jquery.checkboxtree.css to xpedx-jquery-header.css -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" /> -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" /> -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/> -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" /> -->
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css" /> -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css" /> -->
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-dan.css" />
+ --%>
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
+ --%>
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/> -->
 
 <!--[if lt IE 8]>
 <link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7.css" />
@@ -56,9 +70,12 @@
 <script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
 <!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> -->
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/order-adjustment.css" />
+ --%>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
 <!-- carousel scripts js   -->
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -78,10 +95,10 @@
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 -->
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-
+<%--
 <link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/jquery.checkboxtree.css"/>
-
+--%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
@@ -110,12 +127,13 @@
 <!-- Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
+<%---
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
+ --%>
 <!-- Page Calls -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/mil-quick-add-large.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
+<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css" />
 
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
