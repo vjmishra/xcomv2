@@ -25,39 +25,17 @@
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script> 
-<script type="text/javascript" src="../xpedx/js/swc.js"></script>
-
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+ <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 
-
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <!-- carousel scripts css  -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<!-- carousel scripts js   -->
-<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
-<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="../xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<script type="text/javascript" src="../xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="../xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="../xpedx/js/quick-add/jquery-ui.min.js"></script>
-
-<script type="text/javascript" src="../xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="../xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="../xpedx/js/global-xpedx-functions.js"></script>
-
-
 
 <!-- Page Calls -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/prod-details.css" />
@@ -68,28 +46,10 @@
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
 <![endif]-->
 <!-- Facy Box (Lightbox/Modal Window -->
-<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
+
 <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <!-- starting here.. above very little done -->
-<script type="text/javascript">
-	$(document).ready(function() {
-		$(document).pngFix();
-	});
 
-
-	//Added for removing double quote from the search srting. Jira # 2415
-	 function validateDQuote(e){
-	   	  if (e.keyCode == 13) {  
-	   	 	var searchValue = document.getElementById("search_searchTerm").value;
-	   	 	while(searchValue.indexOf("\"")!= -1){
-	       	 	 searchValue = searchValue.replace("\"", "");    	  
-	   	 	}
-	   	 	Ext.fly('search_searchTerm').dom.value=searchValue;
-	   	}
-	   }
-		
-</script>
 
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
@@ -374,5 +334,55 @@
 <!-- end container  -->
 <!-- FOOTER GOES HERE -->
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
+<!--<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script> 
+<script type="text/javascript" src="../xpedx/js/swc.js"></script>
+-->
+<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<!-- carousel scripts js   -->
+
+
+<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+ 
+<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<!--<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="../xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript" src="../xpedx/js/quick-add/quick-add.js"></script>
+
+--><script type="text/javascript" src="../xpedx/js/quick-add/jquery.form.js"></script>
+
+<!--<script type="text/javascript" src="../xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="../xpedx/js/pseudofocus.js"></script>-->
+<!--<script type="text/javascript" src="../xpedx/js/global-xpedx-functions.js"></script>
+-->
+<!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+-->
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(document).pngFix();
+	});
+
+
+	//Added for removing double quote from the search srting. Jira # 2415
+	 function validateDQuote(e){
+	   	  if (e.keyCode == 13) {  
+	   	 	var searchValue = document.getElementById("search_searchTerm").value;
+	   	 	while(searchValue.indexOf("\"")!= -1){
+	       	 	 searchValue = searchValue.replace("\"", "");    	  
+	   	 	}
+	   	 	Ext.fly('search_searchTerm').dom.value=searchValue;
+	   	}
+	   }
+		
+</script>
 </body>
 </html>
