@@ -12,11 +12,13 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXChangeProcessFlagAPI implements YIFCustomApi{
 	
 	private static YIFApi api = null;
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXChangeProcessFlagAPI.class);
 	String contactTemplate = "global/template/api/getCustomerContactList.XPXChangeProcessFlagAPI.xml";
 	static {
 		
@@ -64,7 +66,9 @@ public class XPXChangeProcessFlagAPI implements YIFCustomApi{
 				Element extnElement = changeContactDoc.createElement("Extn");
 				extnElement.setAttribute("ExtnProcessedFlag", "N");
 				customerContactElement.appendChild(extnElement);
-				System.out.println("changeContactDoc"+SCXmlUtil.getString(changeContactDoc));
+				if(log.isDebugEnabled()){
+				log.debug("changeContactDoc:"+SCXmlUtil.getString(changeContactDoc));
+				}
 				Document outDoc = api.invoke(env, "manageCustomer", changeContactDoc);
 			}
 		}
@@ -91,7 +95,9 @@ public class XPXChangeProcessFlagAPI implements YIFCustomApi{
 				Element extnElement = changeCustomerDoc.createElement("Extn");
 				extnElement.setAttribute("ExtnProcessedFlag", "N");
 				changeCustomerElement.appendChild(extnElement);
-				System.out.println("changeCustomerDoc"+SCXmlUtil.getString(changeCustomerDoc));
+				if(log.isDebugEnabled()){
+				log.debug("changeCustomerDoc:"+SCXmlUtil.getString(changeCustomerDoc));
+				}
 				Document outDoc = api.invoke(env, "manageCustomer", changeCustomerDoc);
 			}
 		}
