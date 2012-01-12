@@ -2,6 +2,7 @@ package com.sterlingcommerce.xpedx.webchannel.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,9 @@ import com.sterlingcommerce.webchannel.order.OrderDetailAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderConstants;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
@@ -31,7 +33,7 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 	
 	private static final String customerExtnMashUp= "xpedx-customer-getCustomerAllExtnInformation";
-
+	
 	private String returnsph;
 	private String returnsEmail;
 	private List<String> returnsqty;
@@ -108,18 +110,65 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 
 	public String sendMailToCSR() {
 		String returnString = null;
+		String csrEmailID = "";
+		String toMail = "";
 		try {
 			returnString = super.execute();
 			setUserName(getWCContext().getLoggedInUserName());
 			Element eleUserInfo = XPEDXWCUtils.getUserInfo(getWCContext()
 					.getCustomerContactId(), getWCContext().getStorefrontId());
 			setRequestedBy(getUserDetails(eleUserInfo));
-
-			String divisionEmail = getDivisionEmail();
+			
+			/*Start Jira 3162 
+			 * Getting CSR EmailIds from BillTo Customer, earlier it use to be retrieved from Division's Email address .
+			 * For email JIRA 2134- 'To' address should be CSR email id and 'CC' address should be Sales RP email id.
+			 * 
+			 * */
+           /*String divisionEmail = getDivisionEmail();
+			*/
+			
+			
+			XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			String extnECsr1EmailID = shipToCustomer.getBillTo().getExtnECsr1EMailID();
+			String extnECsr2EmailID = shipToCustomer.getBillTo().getExtnECsr2EMailID();
+			String sapCustomerKey = shipToCustomer.getBillTo().getParentCustomerKey();
+			
+			csrEmailID = setCSREmails(extnECsr1EmailID,extnECsr2EmailID);
+			
+			String saleRepEmail = getSalesRepEmail(sapCustomerKey);
+			
+			/*Jira 3162
+			 * If csrEmailID null or empty in that case saleRepEmail id should be tomail address 
+			 *	  
+			 * */
+			if(csrEmailID != null && csrEmailID.trim().length() > 0){
+				toMail = csrEmailID;
+			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
+				toMail = saleRepEmail;				
+			}
+			/*End -JIRA 3162 done changes*/
+			
+			/* 
+			 * 
+			 * 
+			 * */
+			/*Start Jira 3162 
+			 * 
+			 * Getting CSR EmailIds from BillTo Customer, earlier it use to be retrieved from Division's Email address .
+			 * For email JIRA 2134- 'To' address should be CSR email id and 'CC' address should be Sales RP email id.
+			 * 
+			 * */
+           			
+			/*Element eleToSend = prepareDocumentToSend(
+					getUserEmail(eleUserInfo), csrEmailIDList);
+			
+			*
+			*/
+            
 
 			Element eleToSend = prepareDocumentToSend(
-					getUserEmail(eleUserInfo), divisionEmail);
-
+					saleRepEmail, toMail);
+			
 			String inputXml = SCXmlUtil.getString(eleToSend);
 //			Element email = SCXmlUtil.getChildElement(eleToSend, "Email");
 //			email.setAttribute("ToEmail", email.getAttribute("InputEmail"));
@@ -196,7 +245,7 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 		return divisionEmail;
 	}
 
-	private Element prepareDocumentToSend(String fromEmail, String divisionEmail) {
+	private Element prepareDocumentToSend(String fromEmail, String toMail) {
 		Document doc = getOutputDocument();
 		Element elementOrder = doc.getDocumentElement();
 		Element elePaymentMethods = SCXmlUtil.getChildElement(elementOrder,
@@ -213,7 +262,7 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 		Element templateElement = templateEmailDoc.getDocumentElement();
 		Element emailElement = templateEmailDoc.createElement("Email");
 		emailElement.setAttribute("FromEmail", fromEmail);
-		emailElement.setAttribute("ToEmail", divisionEmail);
+		emailElement.setAttribute("ToEmail", toMail);
 		emailElement.setAttribute("AccountNumber", accountNumber);
 		emailElement.setAttribute("WCNumber", wcNumber);
 		emailElement.setAttribute("OrderNumber", orderNo);
@@ -394,7 +443,92 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 		return SCXmlUtils.getBooleanAttribute(cancelModificationRuleAtOrder,
 				"ModificationAllowed");
 	}
+	
+	private String setCSREmails(String strExtnECsr1EMailID,String strExtnECsr2EMailID) 
+    {
+		String strExtnECsrEMailID = "";
+	   if((strExtnECsr1EMailID != null && !strExtnECsr1EMailID.equalsIgnoreCase("")) && (strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase(""))){
+		   strExtnECsrEMailID = strExtnECsr1EMailID + XPEDXConstants.EMAILIDSEPARATOR + strExtnECsr2EMailID;
+		}else if(strExtnECsr1EMailID != null && !strExtnECsr1EMailID.equalsIgnoreCase("")){
+			strExtnECsrEMailID = strExtnECsr1EMailID;
+			}
+		else if(strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase("")){
+			strExtnECsrEMailID  = strExtnECsr2EMailID;
+		}
+		
+	 
+	  return strExtnECsrEMailID;
+	 
+	}
 
+ 	public String getSalesRepEmail(String sapCustomerKey) {
+ 		
+	 String totalSalesRepEmail = "";
+	 
+ 	 if (sapCustomerKey != null && !sapCustomerKey.equalsIgnoreCase("")) {
+ 		 
+ 		Element xpedxSalesRep = SCXmlUtil.createDocument("XPEDXSalesRep").getDocumentElement();
+ 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);  
+ 		
+ 		Document outputDoc;
+		
+ 		Object obj = WCMashupHelper.invokeMashup("getXpedxSalesRepList", xpedxSalesRep, wcContext.getSCUIContext());
+		outputDoc = ((Element) obj).getOwnerDocument();
+        
+ 		
+ 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");  
+		int salesRepLength = nodeList.getLength();
+		List<String> salesRepUserKeysList = new ArrayList<String>();
+		
+		for (int counter = 0; counter < salesRepLength ; counter++) {
+			Element salesRepElem = (Element) nodeList.item(counter);
+			String salesUserKey = "";
+			if (salesRepElem.hasAttribute("SalesUserKey")) {
+				salesUserKey = salesRepElem.getAttribute("SalesUserKey");
+			}
+			if(salesUserKey !=null && salesUserKey.trim().length() > 0)
+				salesRepUserKeysList.add(salesUserKey);
+		}
+		
+		if(salesRepUserKeysList.size() > 0){
+			try {
+			Element inputElem = WCMashupHelper.getMashupInput("getUserListWithContactPersonInfo", wcContext);
+			Element complexQueryElem = SCXmlUtil.getChildElement(inputElem, "ComplexQuery");
+			Element OrElem = SCXmlUtil.getChildElement(complexQueryElem, "Or");
+			Iterator<String> itr = salesRepUserKeysList.iterator();
+			while(itr.hasNext()) {
+				String userKey = (String)itr.next();
+				if(userKey!=null && !userKey.equals("")){
+					Element exp = inputElem.getOwnerDocument().createElement("Exp");
+					exp.setAttribute("Name", "UserKey");
+					exp.setAttribute("Value", userKey);
+					SCXmlUtil.importElement(OrElem, exp);
+				}
+			}
+			 
+			outputDoc =((Element) WCMashupHelper.invokeMashup("getUserListWithContactPersonInfo", inputElem, wcContext.getSCUIContext())).getOwnerDocument();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			 
+			NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
+	 		int contactPersonInfoLength = personInfoList.getLength();
+ 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
+ 				Element personInfoElem = (Element) personInfoList.item(counter);
+ 				if (personInfoElem != null && personInfoElem.hasAttribute("EmailID")) {
+ 					String salesRepEmail = personInfoElem.getAttribute("EmailID");
+ 					if (salesRepEmail != null && !salesRepEmail.equalsIgnoreCase("")) {
+ 						totalSalesRepEmail = totalSalesRepEmail + XPEDXConstants.EMAILIDSEPARATOR + salesRepEmail;
+ 					}
+ 				}
+ 			}
+	 		
+	    }	
+ 	}
+ 	return totalSalesRepEmail;
+ 	}
+ 	
 	public String getUserName() {
 		return userName;
 	}
