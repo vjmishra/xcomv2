@@ -50,12 +50,16 @@ public class XPXB2BInvoiceWebServiceInvocationAPI implements YIFCustomApi{
 		FPlaceOrderE inputOrderXml = new FPlaceOrderE();
 		FPlaceOrder inputPlaceOrder = new FPlaceOrder();
 		String inputXMLString = SCXmlUtil.getString(inputXML);
+		if(log.isDebugEnabled()){
 		log.debug("The input string is: "+inputXMLString);
+		}
 		inputPlaceOrder.setWsIpaperInvoiceInput(inputXMLString);
 		inputOrderXml.setFPlaceOrder(inputPlaceOrder);
 		
         //Response need not be sent at all on B2B invoice
-		System.out.println(" invoiceStub.fSendInvoice inputXML :: " + SCXmlUtil.getString(inputXML));
+		if(log.isDebugEnabled()){
+		log.debug(" invoiceStub.fSendInvoice inputXML : " + SCXmlUtil.getString(inputXML));
+		}
 		
 		//comment below line for local testing only when there s no stub or webservice
 		log.beginTimer("Calling-the-webmethod-B2BInvoice-webservice");
@@ -70,12 +74,13 @@ public class XPXB2BInvoiceWebServiceInvocationAPI implements YIFCustomApi{
 	}	
 	
 	private void callchangeXPXInvoiceHdrService(YFSEnvironment env) throws ParserConfigurationException, FactoryConfigurationError, YIFClientCreationException, YFSException, RemoteException {
-		
-		System.out.println("entering callchangeXPXInvoiceHdrService in  XPXB2BInvoiceWebServiceInvocationAPI");
-		
+		if(log.isDebugEnabled()){
+		log.debug("entering callchangeXPXInvoiceHdrService in  XPXB2BInvoiceWebServiceInvocationAPI");
+		}
 		String strInvoiceHeaderKey = env.getTxnObject("strInvoiceHeaderKey").toString();
-		
-		System.out.println(" strInvoiceHeaderKey :: " + strInvoiceHeaderKey);
+		if(log.isDebugEnabled()){
+		log.debug(" strInvoiceHeaderKey :" + strInvoiceHeaderKey);
+		}
 		
 		//prepare input xml for changeXPXInvoiceHdrService
 		//sample <XPXInvoiceHdr InvoiceHeaderKey="20110112192944487414" ProcessedFlag="Y"/>
@@ -87,11 +92,9 @@ public class XPXB2BInvoiceWebServiceInvocationAPI implements YIFCustomApi{
 		api = YIFClientFactory.getInstance().getApi();
 		Document changeXPXInvoiceHdrOutDoc =  api.executeFlow(env, "changeXPXInvoiceHdrService", docXPXInvoiceHdr);
 		
-		System.out.println(" changeXPXInvoiceHdrOutDoc :: " + SCXmlUtil.getString(changeXPXInvoiceHdrOutDoc));
-		
-		
-		
-		
+		if(log.isDebugEnabled()){
+		log.debug(" changeXPXInvoiceHdrOutDoc :" + SCXmlUtil.getString(changeXPXInvoiceHdrOutDoc));
+		}	
 		
 	}
 
