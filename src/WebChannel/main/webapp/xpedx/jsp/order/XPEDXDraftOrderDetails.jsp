@@ -16,7 +16,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
- 
+ <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/mil-quick-add-large.css" />
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" /> commented for jira 1833 -->
 
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" /> -->
@@ -130,9 +131,8 @@
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
  --%>
 <!-- Page Calls -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/mil-quick-add-large.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> -->
+
+ <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css" />
 
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
