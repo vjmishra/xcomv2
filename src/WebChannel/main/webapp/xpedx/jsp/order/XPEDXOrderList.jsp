@@ -47,9 +47,13 @@
 
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
  --%>
+ <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
  <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+ 
+ <%--
  <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
+ --%>
 <script type="text/javascript">
 $(function() {
 		$(".datepicker").datepicker({
@@ -750,8 +754,7 @@ function printPOs(customerPos) {
 
 <!-- Added the below commented scripts in xpedx-header.js -->
 
-<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
-
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <!--<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>-->
@@ -769,10 +772,9 @@ function printPOs(customerPos) {
 <!-- End of files in xpedx-ext-header.js -->
 
 <!-- Added the below commented scripts in xpedx-jquery-header.js -->
-<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-header.js"></script>
 <!--<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 -->
+
 <!--<script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
@@ -791,12 +793,12 @@ function printPOs(customerPos) {
 
 <!-Added the below commented scripts in xpedx-order-common.js -->
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
-<!-- End of files in xpedx-order-common.js -->
+<!--<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
+--><!-- End of files in xpedx-order-common.js -->
 
 <!--<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script>
---><script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+--><!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+--><script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <%--
 <script type="text/javascript" src="../swc/js/jQuery.js"></script> 
