@@ -108,7 +108,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 
 --><!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.datepicker.js"></script>
---><script type="text/javascript" src="../swc/js/jQuery.js"></script>  
+-->  
 <!-- Facy Box (Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>-->
