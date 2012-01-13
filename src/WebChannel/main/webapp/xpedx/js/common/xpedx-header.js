@@ -16614,7 +16614,7 @@ Ext.onReady(function () {
 	
 //Adding order list swc/xpedx/js/quick-add/quick-add.js
 	
-	$(document).ready(function(){
+	Ext.onReady(function(){
 	    var options = { 
 	        //target:        '.quick-add-to-cart-form tbody',   // target element(s) to be updated with server response 
 	        //beforeSubmit:  showRequest,  // pre-submit callback 
@@ -17198,7 +17198,7 @@ Ext.get('ajax-prodAvailability').load({
 //End order list xpedx/js/catalog/catalogExt.js
 
 //Adding global-xpedx-function.js
-$(document).ready(function() {
+Ext.onReady(function() {
 	$("#varous1").fancybox();
 	$("#various2").fancybox();
 	$("#various3").fancybox();
