@@ -6,7 +6,7 @@
 				<Attribute ColumnName="ARTICLE_KEY" DataType="Key" DefaultValue="' '" Description="The primary key for the XPX_ARTICLE table." Name="ArticleKey" Nullable="false" XMLName="ArticleKey"/>
 				<Attribute ColumnName="ORGANIZATION_CODE" DataType="OrgCode" DefaultValue="' '" Description="Storefront code" Name="OrganizationCode" Nullable="false" XMLName="OrganizationCode"/>
 				<Attribute ColumnName="CUSTOMER_ID" DataType="CustomerId" DefaultValue="'N/A'" Description="Customer Id" Name="CustomerId" Nullable="false" XMLName="CustomerID"/>
-				<Attribute ColumnName="XPX_DIVISION" DataType="OrgCode"  DefaultValue="'N/A'" Description="XPEDX Division/Branch against which this association is made." Name="XPXDivision" Nullable="false" XMLName="XPXDivision"  />
+				<Attribute ColumnName="XPX_DIVISION" DataType="DivisionNo"  DefaultValue="'N/A'" Description="XPEDX Division/Branch against which this association is made." Name="XPXDivision" Nullable="false" XMLName="XPXDivision"  />
 				<Attribute ColumnName="ARTICLE_TYPE" DataType="Text-1"  DefaultValue="D" Description="Article type can be either Division(D), Customer(C) or StoreFront(S) specific" Name="ArticleType" Nullable="false" XMLName="ArticleType"  />
 				
 				<Attribute ColumnName="ARTICLE_NAME" DataType="Text-50" DefaultValue="' '" Description="Article name" Name="ArticleName" Nullable="false" XMLName="ArticleName"/>
