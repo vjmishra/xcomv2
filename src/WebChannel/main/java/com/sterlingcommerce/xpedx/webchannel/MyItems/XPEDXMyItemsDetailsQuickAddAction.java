@@ -327,7 +327,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 			//Populate all the fields
 				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsDetailsAddFromCatalog");
 				//Element itemEle1 		= getXMLUtils().getChildElement(res1, "Item");
-				ArrayList<Element> itemEle1 = getXMLUtils().getElements(res, "Item");
+			
+				//ArrayList<Element> itemEle1 = getXMLUtils().getElements(res, "Item");
+				ArrayList<Element> itemEle1 = getXMLUtils().getElements(res1, "Item");/* Modified code for Jira 3294 ****/
 				//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle1, "PrimaryInformation");
 				//itemEle will be null if item is not entitled
 				if (itemEle1 != null){
