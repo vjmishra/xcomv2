@@ -23,10 +23,6 @@ public class XPXEmailOnChangeOrderSuccessAPI implements YIFCustomApi{
 		
 	}
 	
-	
-	
-
-
 	public Document createEmailOrderList(YFSEnvironment p_env,Document p_dInXML) throws Exception{
 			api = YIFClientFactory.getInstance().getApi();	
 		
@@ -47,9 +43,7 @@ public class XPXEmailOnChangeOrderSuccessAPI implements YIFCustomApi{
 			custElement.setAttribute("OrganizationCode","xpedx");
 			Document outListDoc = api.invoke(p_env,"getCustomerList",custDoc);
 			//Document outListDoc = api.invoke(p_env,"getCustomerList",custDoc);
-			//System.out.println("getCustomerList"+SCXmlUtil.getString(outListDoc));
-			
-			
+						
 			p_env.clearApiTemplate("getCustomerList");
 			Element emailElement = outListDoc.getDocumentElement();
 
@@ -96,14 +90,8 @@ public class XPXEmailOnChangeOrderSuccessAPI implements YIFCustomApi{
 				oLinesElement.appendChild(oLineElement);
 			}
 
-			//System.out.println("EmailOrderdoc"+SCXmlUtil.getString(orderTemplateDoc));
 			return orderTemplateDoc;
-
-		}
-	
-	
-	
-	
+		}	
 
 	private Document setCustomerListTemplate()throws Exception
 		{
@@ -120,7 +108,6 @@ public class XPXEmailOnChangeOrderSuccessAPI implements YIFCustomApi{
 			
 			Element ContactPersonInfo= templateEmailDoc.createElement("ContactPersonInfo");
 			BuyerOrg.appendChild(ContactPersonInfo);
-			//System.out.println("templateEmailDoc: " + YFCDocument.getDocumentFor(templateEmailDoc));
 			return templateEmailDoc;
 		}
 

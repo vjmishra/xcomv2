@@ -134,7 +134,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		if (getCCListDoc != null) {
 			Element getCustomerContactElement = (Element) getCCListDoc
 					.getElementsByTagName("CustomerContact").item(0);
-			System.out.println("");
+			
 			String strToEmailid = getCustomerContactElement
 					.getAttribute("EmailID");
 			customerDoc.getDocumentElement().setAttribute("strToEmailid",
@@ -581,7 +581,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	private Document formInputToGetCustomerOrder(YFSEnvironment env,
 			Element inputElement) throws YFSException, RemoteException {
-		System.out.println("formInputToGetCustomerOrder++=================+++++++++++++++++++++++++++++++++++++++");
+
 		yfcLogCatalog.info("entering formInputToGetCustomerOrder ");
 		Document outDoc = null;
 		Document orderListDoc = null;
@@ -593,10 +593,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				.getTxnObject("WebConfirmationNumber");
 						
 		
-		yfcLogCatalog.debug("strWebConfirmationNumber in order confirmation email flow is::"
-				+ strWebConfirmationNumber);
-		System.out.println("strWebConfirmationNumber=-----------------------------------"+strWebConfirmationNumber);
-		
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug("strWebConfirmationNumber :"+strWebConfirmationNumber);
+		}
 		if (strWebConfirmationNumber == null
 				|| strWebConfirmationNumber.isEmpty()) {
 			strWebConfirmationNumber = SCXmlUtil.getXpathAttribute(

@@ -119,10 +119,8 @@ public class XPXGetChildOrganizationList implements YIFCustomApi{
 		outputCustomerTemplateElement.appendChild(outputParentCustomerTemplateElement);
 		env.setApiTemplate("getCustomerList", outputCustomerListTemplateDoc
 				.getDocument());
-		// System.out.println(YFCDocument.getDocumentFor(inputCustomerDocument.getDocument()));
 		Document outputCustomerDocument = api.invoke(env, "getCustomerList",
 				inputCustomerDocument.getDocument());
-		// System.out.println(YFCDocument.getDocumentFor(outputCustomerDocument));
 		env.clearApiTemplate("getCustomerList");
 		Element outputCustomerElement = outputCustomerDocument
 				.getDocumentElement();
@@ -211,20 +209,17 @@ public class XPXGetChildOrganizationList implements YIFCustomApi{
 				.appendChild(outputCustomerTemplateElement);
 		env.setApiTemplate("getCustomerList", outputCustomerListTemplateDoc
 				.getDocument());
-		// System.out.println(inputCustomerDocument);
-		// System.out.println(YFCDocument.getDocumentFor(inputCustomerDocument.getDocument()));
 		// Document outputCustomerDocument = api.invoke(env, "getCustomerList",
 		// inputCustomerDocument.getDocument());
 		Document outputCustomerDocument = api.invoke(env, "getCustomerList",
 				inputCustomerDocument.getDocument());
-		// System.out.println(YFCDocument.getDocumentFor(outputCustomerDocument));
 		env.clearApiTemplate("getCustomerList");
 		if (!outputCustomerDocument.getDocumentElement().getAttribute(
 				"TotalNumberOfRecords").equals("0")) {
 			Element outputCustomerElement = (Element) outputCustomerDocument
 					.getElementsByTagName("Customer").item(0);
 			customerKey = outputCustomerElement.getAttribute("CustomerKey");
-			//System.out.println("CustomerKey" + customerKey);
+
 		}
 		return customerKey;
 	}
