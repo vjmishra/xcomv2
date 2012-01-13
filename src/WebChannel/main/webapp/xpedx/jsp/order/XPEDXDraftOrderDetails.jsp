@@ -67,7 +67,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 -->
-<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
 <!-- carousel scripts css  -->
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
