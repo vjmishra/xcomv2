@@ -49,10 +49,8 @@ public class XPXHandleTransactionFailure implements YIFCustomApi {
 			YFCElement rootEle = YFCDocument.getDocumentFor(inXML)
 					.getDocumentElement();
 
-			System.out.println();
-			System.out.println("Transaction response:" + rootEle.getString());
-			System.out.println();
-
+			log.info("XPXHandleTransactionFailure_InXML:" + rootEle.getString());
+		
 			if (rootEle.hasChildNodes()) {
 				YFCElement headerCodeElem = rootEle
 						.getChildElement("HeaderStatusCode");
@@ -111,8 +109,9 @@ public class XPXHandleTransactionFailure implements YIFCustomApi {
 							.setAttribute("ReasonText",
 									"Hold applied due to invalid data sent to WebMethods or Legacy");
 					ordHoldTypeEle.setAttribute("Status", "1100");
-					System.out.println("InputXML"
-							+ SCXmlUtil.getString(changeOrdDoc));
+					if(log.isDebugEnabled()){
+						log.debug("InputXML to the changeOrder API is :"+ SCXmlUtil.getString(changeOrdDoc));
+					}
 					Document outputDoc = api.invoke(env, "changeOrder",
 							changeOrdDoc);
 				}

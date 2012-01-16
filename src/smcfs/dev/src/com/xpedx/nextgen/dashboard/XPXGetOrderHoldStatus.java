@@ -6,8 +6,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-
-
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
@@ -35,13 +33,12 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 		}
 	}
 
-
-
 	public Document getOrderHoldStatus(YFSEnvironment env, Document docConfirmDraftOrderXml)
 	{
 
 		try{
-			log.debug("The input to XPXGetOrderHoldStatus is: "+SCXmlUtil.getString(docConfirmDraftOrderXml));
+			
+			log.info("The input to XPXGetOrderHoldStatus is: "+SCXmlUtil.getString(docConfirmDraftOrderXml));
 
 			NodeList nlOrdHoldTypes = docConfirmDraftOrderXml.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_HOLD_TYPES);
 			if(nlOrdHoldTypes!=null && nlOrdHoldTypes.getLength()==0){
@@ -53,13 +50,17 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 				env.setApiTemplate("getOrderList",orderListTemplateDoc);
 
 				Document orderListDocument = api.invoke(env,"getOrderList",inputOrderDoc);
-				log.debug("The  getOrderList doc is: "+SCXmlUtil.getString(orderListDocument));
+				if(log.isDebugEnabled()){
+					log.debug("The getOrderList doc is: "+SCXmlUtil.getString(orderListDocument));
+				}
 				env.clearApiTemplate("getOrderList");
 				Element eleOrdHoldType =(Element) orderListDocument.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_HOLD_TYPES).item(0);    
 				Element eleConfirmDraftOrder = docConfirmDraftOrderXml.getDocumentElement();
 				eleConfirmDraftOrder.appendChild(docConfirmDraftOrderXml.importNode(eleOrdHoldType,true));
 			}
-			//	System.out.println("getOrderList"+SCXmlUtil.getString(docConfirmDraftOrderXml));
+			if(log.isDebugEnabled()){
+				log.debug("getOrderList:"+SCXmlUtil.getString(docConfirmDraftOrderXml));
+			}
 
 		}
 		catch(Exception e){
@@ -69,8 +70,6 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 
 		return  docConfirmDraftOrderXml; 
 	}
-
-
 
 	private Document setOrderListTemplate(YFSEnvironment env)
 	{
@@ -86,8 +85,6 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 		orderHoldTypes.appendChild(orderHoldType);
 		return orderTemplateDoc;
 	}
-
-
 
 	@Override
 	public void setProperties(Properties arg0) throws Exception {

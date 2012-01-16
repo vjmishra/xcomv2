@@ -14,12 +14,13 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
 public class XPXGetPOAckDetailsAPI implements YIFCustomApi{
 	private static YIFApi api = null;
-	
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXGetPOAckDetailsAPI.class);
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -32,6 +33,7 @@ public class XPXGetPOAckDetailsAPI implements YIFCustomApi{
 		ArrayList<String> orderArray = new ArrayList<String>();
 		String orderNo = "";
 		String etradingID = "";
+		log.info("The input XML for XPXGetPOAckDetailsAPI is :" + SCXmlUtil.getString(inXML));
 		orderArray = getOrderDetails(env,inXML);
 		orderNo = orderArray.get(0);
 		etradingID = orderArray.get(1);
@@ -41,7 +43,9 @@ public class XPXGetPOAckDetailsAPI implements YIFCustomApi{
 		//get the order details
 		env.setApiTemplate("getOrderList", getOrderListTemplate);
 		Document orderListDoc = api.invoke(env, "getOrderList", inXML);
-		//System.out.println("4444444444444"+SCXmlUtil.getString(orderListDoc));
+		if(log.isDebugEnabled()){
+			log.debug("The output document after calling getOrderList is :"+SCXmlUtil.getString(orderListDoc));
+		}
 		env.clearApiTemplate("getOrderList");
 		NodeList orderNodeList = orderListDoc.getElementsByTagName("Order");
 		int orderLength = orderNodeList.getLength();
