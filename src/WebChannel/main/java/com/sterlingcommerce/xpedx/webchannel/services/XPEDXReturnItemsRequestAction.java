@@ -167,7 +167,7 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
             
 
 			Element eleToSend = prepareDocumentToSend(
-					saleRepEmail, toMail);
+					getUserEmail(eleUserInfo), toMail);
 			
 			String inputXml = SCXmlUtil.getString(eleToSend);
 //			Element email = SCXmlUtil.getChildElement(eleToSend, "Email");
