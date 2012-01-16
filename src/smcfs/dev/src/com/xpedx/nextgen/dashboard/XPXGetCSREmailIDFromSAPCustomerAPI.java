@@ -47,7 +47,9 @@ public class XPXGetCSREmailIDFromSAPCustomerAPI implements YIFCustomApi
 		   Element inputDocRoot = b2bInputXML.getDocumentElement();
 		   
 		   String buyerId = SCXmlUtil.getXpathElement(inputDocRoot, "./BuyerId").getTextContent();
-		   System.out.println("The buyerid retrieved is: "+buyerId);
+		   if(log.isDebugEnabled()){
+		   		log.debug("The buyerid retrieved is: "+buyerId);
+		   }
 		   Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env,buyerId); 
 	 	   Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
 	 	   Element customerExtnElement = (Element) sapCustomerElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);

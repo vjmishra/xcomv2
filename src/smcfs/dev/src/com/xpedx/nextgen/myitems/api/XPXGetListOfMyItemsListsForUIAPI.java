@@ -63,10 +63,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 	public Document getListOfMyItemsListsForUIAPI(YFSEnvironment env,
 			Document inputXML) throws ParserConfigurationException,
 			FactoryConfigurationError, YFSException, RemoteException {
-		System.out
-				.println("XPXGetListOfMyItemsListsForUIAPI :: getListOfMyItemsListsForUIAPI ");
-		System.out.println("inputXML ::" + SCXmlUtil.getString(inputXML));
-
+	
+		log.info("PXGetListOfMyItemsListsForUIAPI_InputXML :" + SCXmlUtil.getString(inputXML));
+		
 		Document getXPEDX_MyItemsList_ListInputXML = prepareXPEDX_MyItemsList_ListInputXML(inputXML);
 		Element elemXPEDXMyItemsList = getXPEDX_MyItemsList_ListInputXML
 				.getDocumentElement();
@@ -76,41 +75,41 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 		Document outDoc = null;
 
 		if (strInvokeMultiAPI.equalsIgnoreCase("Y")) {
-			System.out
-					.println("invoke multiapi and format output to equivalent output of getXPEDX_MyItemsList_List service ");
+			if(log.isDebugEnabled()){
+				log.debug("Invoke MultiAPI and format output to equivalent output of getXPEDX_MyItemsList_List service.");
+			}
 			Element elemMultiApi = (Element) elemXPEDXMyItemsList
 					.getElementsByTagName("MultiApi").item(0);
 			String strMultiAPI = "multiApi";
-			System.out.println("invoke api " + strMultiAPI);
+			if(log.isDebugEnabled()){
+				log.debug("Invoke API:" + strMultiAPI);
+			}
 			Document docMultiApi = SCXmlUtil.getDocumentBuilder().newDocument();
 			Node tempNode = docMultiApi.importNode(elemMultiApi, true);
 			docMultiApi.appendChild(tempNode);
-			System.out.println("input document  "
-					+ SCXmlUtil.getString(docMultiApi));
+			if(log.isDebugEnabled()){
+				log.debug("Input document for the API :"+ SCXmlUtil.getString(docMultiApi));
+			}
 			// outDoc = api.invoke(env, strMultiAPI, docMultiApi);
 
 			Document docMultiAPIOutdoc = api.invoke(env, strMultiAPI,
 					docMultiApi);
-			System.out.println("calling getFormattedOutDoc ::");
+
 			outDoc = getFormattedOutDoc(docMultiAPIOutdoc);
 
 		} else {
 			String strgetXPEDX_MyItemsList_List = "getXPEDX_MyItemsList_List";
-			System.out.println("invoke  service : "
-					+ strgetXPEDX_MyItemsList_List);
-			System.out.println("input xml : "
-					+ SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
-
+			if(log.isDebugEnabled()){
+				log.debug("Invoke  Service : "+ strgetXPEDX_MyItemsList_List);
+				log.debug("Input XML : " + SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
+			}
 			outDoc = api.executeFlow(env, strgetXPEDX_MyItemsList_List,
 					getXPEDX_MyItemsList_ListInputXML);
 
 		}
-
-		System.out.println("outDoc abcd :: " + SCXmlUtil.getString(outDoc));
-
-		System.out.println("getXPEDX_MyItemsList_ListInputXML ::"
-				+ SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
-
+		if(log.isDebugEnabled()){
+			log.debug("Output Document:" + SCXmlUtil.getString(outDoc));
+		}
 		return inputXML;
 	}
 
@@ -124,8 +123,6 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 	private Document getFormattedOutDoc(Document docDuplicateRecords)
 			throws ParserConfigurationException, FactoryConfigurationError {
 
-		System.out.println("entering getFormattedOutDoc ::");
-
 		Document docUniqueRecords = SCXmlUtil.getDocumentBuilder()
 				.newDocument();
 
@@ -137,9 +134,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				.getElementsByTagName("XPEDXMyItemsList");
 
 		int nlXPEDXMyItemsListLen = nlXPEDXMyItemsList.getLength();
-
-		System.out
-				.println("nlXPEDXMyItemsList length " + nlXPEDXMyItemsListLen);
+		if(log.isDebugEnabled()){
+			log.debug("nlXPEDXMyItemsList length:" + nlXPEDXMyItemsListLen);
+		}
 		Element tempNode = null;
 		HashMap hmXPEDXMyItemsList = new HashMap();
 		String strMyItemsListKey = null;
@@ -149,10 +146,14 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 			strMyItemsListKey = tempNode.getAttribute("MyItemsListKey");
 
 			if (hmXPEDXMyItemsList.containsKey(strMyItemsListKey)) {
-				System.out.println("duplicate entry ::" + strMyItemsListKey);
+				if(log.isDebugEnabled()){
+					log.debug("Duplicate Entry :" + strMyItemsListKey);
+				}
 			} else {
 				hmXPEDXMyItemsList.put(strMyItemsListKey, tempNode);
-				System.out.println("inserting ::" + strMyItemsListKey);
+				if(log.isDebugEnabled()){
+					log.debug("Inserting where MyItemsListKey is :" + strMyItemsListKey);
+				}
 				tempNode = (Element) docUniqueRecords
 						.importNode(tempNode, true);
 				XPEDXMyItemsListList.appendChild(tempNode);
@@ -160,9 +161,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 			}
 
 		}
-		System.out.println(" returning docUniqueRecords "
-				+ SCXmlUtil.getString(docUniqueRecords));
-
+		if(log.isDebugEnabled()){
+			log.debug("Returning docUniqueRecords which are : " + SCXmlUtil.getString(docUniqueRecords));
+		}
 		return docUniqueRecords;
 	}
 
@@ -187,18 +188,18 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				.getAttribute("BillToCustomerID");
 		String strShipToCustomerID = XPEDXMyItemsList
 				.getAttribute("ShipToCustomerID");
-
-		System.out.println("strMasterCustomerID ::" + strMasterCustomerID);
-		System.out.println("strCustomerID ::" + strCustomerID);
-		System.out.println("strBillToCustomerID ::" + strBillToCustomerID);
-		System.out.println("strShipToCustomerID ::" + strShipToCustomerID);
-
+		if(log.isDebugEnabled()){
+			log.debug("strMasterCustomerID ::" + strMasterCustomerID);
+			log.debug("strCustomerID ::" + strCustomerID);
+			log.debug("strBillToCustomerID ::" + strBillToCustomerID);
+			log.debug("strShipToCustomerID ::" + strShipToCustomerID);
+		}
 		String strCustomerPath = null;
 		String strSeparator = "|";
 
 		if (strMasterCustomerID.isEmpty()) {
 			// CustomerPath is null
-			System.out.println("customer path is null");
+			log.info("customer path is null");
 
 		} else {
 			// CustomerPath is not null ignore DivisionId
@@ -235,9 +236,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 			// !strMasterCustomerID.isEmpty()){
 
 		}// end if(strMasterCustomerID.isEmpty()){
-
-		System.out.println("strCustomerPath ::" + strCustomerPath);
-
+		if(log.isDebugEnabled()){
+			log.debug("strCustomerPath :" + strCustomerPath);
+		}
 		Document getXPEDX_MyItemsList_ListInputXML = prepareInputXML(
 				XPEDXMyItemsList, strCustomerPath);
 
@@ -290,13 +291,13 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 					.createElement("XPEDXMyItemsItems");
 			elemXPEDXMyItemsItemsList.appendChild(elemXPEDXMyItemsItems);
 			elemXPEDXMyItemsItems.setAttribute("ItemId", strItemID);
-
-			System.out.println("getXPEDX_MyItemsList_ListInputXML :: "
-					+ SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
+			if(log.isDebugEnabled()){
+				log.debug("getXPEDX_MyItemsList_ListInputXML :" + SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
+			}
 
 		} else {
 			// prepare input with division id
-			System.out.println("Customer Path is Null");
+			log.info("Customer Path is Null");
 
 			// prepare input xml with division id
 			String strDivisionID = xPEDXMyItemsList.getAttribute("DivisionID");
@@ -314,7 +315,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				 * </XPEDXMyItemsItemsList> </XPEDXMyItemsList>
 				 **/
 
-				System.out.println("Division  ID is Null ");
+				log.info("Division  ID is Null");
 
 				Element elemXPEDXMyItemsItemsList = getXPEDX_MyItemsList_ListInputXML
 						.createElement("XPEDXMyItemsItemsList");
@@ -324,18 +325,16 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 						.createElement("XPEDXMyItemsItems");
 				elemXPEDXMyItemsItemsList.appendChild(elemXPEDXMyItemsItems);
 				elemXPEDXMyItemsItems.setAttribute("ItemId", strItemID);
-
-				System.out.println("getXPEDX_MyItemsList_ListInputXML :: "
-						+ SCXmlUtil
-								.getString(getXPEDX_MyItemsList_ListInputXML));
-
+				if(log.isDebugEnabled()){
+					log.debug("getXPEDX_MyItemsList_ListInputXML : "+ SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
+				}
 			}
 
 			else if (!strDivisionID.contains(",")) {
 				// if total no of division id is 1 send input xml with division
 				// id and item id
 
-				System.out.println("only one division id ");
+				log.info("Only one Division ID.");
 
 				// prepare input xml with customer path
 				/**
@@ -367,11 +366,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 						.createElement("XPEDXMyItemsItems");
 				elemXPEDXMyItemsItemsList.appendChild(elemXPEDXMyItemsItems);
 				elemXPEDXMyItemsItems.setAttribute("ItemId", strItemID);
-
-				System.out.println("getXPEDX_MyItemsList_ListInputXML :: "
-						+ SCXmlUtil
-								.getString(getXPEDX_MyItemsList_ListInputXML));
-
+				if(log.isDebugEnabled()){
+					log.debug("getXPEDX_MyItemsList_ListInputXML: "+ SCXmlUtil.getString(getXPEDX_MyItemsList_ListInputXML));
+				}
 			} else {
 				// if total no of division id s is greater then 1 prepare
 				// multiapi
@@ -383,9 +380,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 
 				String strDivisionIDArr[] = strDivisionID.split(strToken);
 				int intNoOfDivIDs = strDivisionIDArr.length;
-
-				System.out.println("Number of Division ID s " + intNoOfDivIDs);
-
+				if(log.isDebugEnabled()){
+					log.debug("Number of Division ID's: " + intNoOfDivIDs);
+				}
 				elemXPEDXMyItemsList.setAttribute("isMultiApi", "Y");
 
 				/**
@@ -407,7 +404,9 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				Node tempNode = null;
 				for (int i = 0; i < intNoOfDivIDs; i++) {
 					strTempDivID = strDivisionIDArr[i];
-					System.out.println("strTempDivID" + strTempDivID);
+					if(log.isDebugEnabled()){
+						log.debug("strTempDivID" + strTempDivID);
+					}
 					if (!strTempDivID.isEmpty()) {
 						tempNode = getAPINode(strTempDivID, strItemID);
 						tempNode = getXPEDX_MyItemsList_ListInputXML
