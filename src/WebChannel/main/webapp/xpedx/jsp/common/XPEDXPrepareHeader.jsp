@@ -2185,11 +2185,11 @@ function callAjaxForSorting(url,divId)
 								</a>
 							</li>
 						</s:if>
-						<li>
+					<!--  	<li>
 							<s:a href='%{catURL11}' cssClass="link">
 								Return Requests
 							</s:a>
-						</li>
+						</li> -->
 						<li>
 							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />"  tabindex="2003">My Carts</a>
 						</li>
