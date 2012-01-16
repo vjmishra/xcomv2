@@ -64,8 +64,9 @@ public class XPXProcessAckAgentAPI extends YCPBaseAgent{
 		}
 		//add EntryType="B2B" to input xml 
 		inputOrderElement.setAttribute("EntryType", "B2B");
-		
-		System.out.println("the input doc"+SCXmlUtil.getString(inputOrderDocument));
+		if(log.isDebugEnabled()){
+			log.debug("The Input Document for getOrderList of XPXProcessAckAgentAPI is :"+SCXmlUtil.getString(inputOrderDocument));
+		}
 		//get the order list
 		env.setApiTemplate("getOrderList", getOrderListTemplate);
 		Document orderListDocument = api.invoke(env, "getOrderList", inputOrderDocument);
@@ -92,7 +93,9 @@ public class XPXProcessAckAgentAPI extends YCPBaseAgent{
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		//XPXPOAckReProcessService
 		try {
-			System.out.println("inputDoc"+SCXmlUtil.getString(inputDoc));
+			if(log.isDebugEnabled()){
+				log.debug("Input document for executing jobs of XPXProcessAckAgentAPI is : "+SCXmlUtil.getString(inputDoc));
+			}
 			api.executeFlow(env, "SendPOAckOnCreateOrder", inputDoc);
 		} 
 		/**@author asekhar-tw on 21-Jan-2011
