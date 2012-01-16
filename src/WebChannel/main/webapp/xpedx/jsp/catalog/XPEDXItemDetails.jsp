@@ -79,56 +79,18 @@
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
-<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
---><!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 
 <!-- carousel scripts css  -->
 <%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> --%>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<!-- carousel scripts js   -->
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>--%>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-
--->
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>
-
-<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
---><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
---><script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
-
-
-<script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
-
-<!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
-<!-- Web Trends tag end  -->
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>-->
@@ -137,7 +99,6 @@
 <%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />--%>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
 
-<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
 <!-- END head-calls.php -->
@@ -2328,6 +2289,45 @@ function callPnA()
 	</div>
 </div>        
 <!-- end of jira 2971 -->
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
+<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>-->
+
+<!-- carousel scripts js   -->
+
+<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/>--%>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
+
+-->
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
+--><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+--><script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+
+<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
+
+<!-- Web Trends tag start -->
+<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<!-- Web Trends tag end  -->
 </body>
 </s:else>
 </swc:html>
