@@ -13,9 +13,6 @@
 
 <html>
 <head>
-<!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
-<!-- Web Trends tag end  -->
 <!-- Webtrends Tag starts -->
 <meta name="WT.si_n" content="ShoppingCart" />
 <meta name="WT.si_x" content="3" />
@@ -29,7 +26,7 @@
 <s:set name="shipComplN" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_N"/>
 <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
 	<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+
 <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript">
 
@@ -205,21 +202,7 @@ function setTotalPrice(val){
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-
-
-
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>-->
-
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
-<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
-
---><!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <link media="all" type="text/css" rel="stylesheet"
 	href="../xpedx/css/order/shipping-option.css" />
 <link media="all" type="text/css" rel="stylesheet"
@@ -243,8 +226,7 @@ function setTotalPrice(val){
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
 --><!--<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
---><script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+-->
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> -->
 <%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/> --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
@@ -274,7 +256,6 @@ function setTotalPrice(val){
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css"/>
 <!-- new ui -->
 
-<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderSummaryCommon.js"></script>
 <!--<script type="text/javascript" src="../xpedx/js/order/email.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/order.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/orderSummary.js"></script>
@@ -1534,6 +1515,24 @@ from session . We have customer Contact Object in session .
 	id='updateURLid' namespace='/order' action='draftOrderSummaryUpdate' />
 <s:a id='updateURL' href='%{#updateURLid}' /></div>
 
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>-->
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
+<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>-->
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderSummaryCommon.js"></script>
+
+<!-- Web Trends tag start -->
+<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<!-- Web Trends tag end  -->
 </body>
 <script>
 //setTotalPrice('<s:property value="#totalPrice" />');
