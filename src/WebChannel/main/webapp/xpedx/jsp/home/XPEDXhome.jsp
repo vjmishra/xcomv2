@@ -33,13 +33,14 @@
 	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css" />
 	    
 		<s:include value="../common/XPEDXStaticInclude.jsp"/>
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
+	
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 		
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
 	 	<!--<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
 		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script> -->
 		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+			<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
 		<!--<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>-->
 		<!-- carousel scripts css  -->
 		<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
@@ -351,9 +352,7 @@
 <!-- End of files in xpedx-jquery-header.js -->
 <script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
-	
-	
+
 <script type="text/javascript">
 
 	function loginSubmit(myfield,e)
