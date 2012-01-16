@@ -36,6 +36,7 @@
   
 <!-- Webtrends Tag stops -->
 <!-- styles -->
+
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
@@ -61,41 +62,19 @@
 
 <!-- jQuery -->
 <%--<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" /> --%>
+<script type="text/javascript" src="../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-
 <!--<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
 -->
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 
-<!--<script type="text/javascript" src="../xpedx/js/common/ajaxValidation.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="../xpedx/js/swc.js"></script>
--->
-
-<script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
-<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/jQuery.js'/>"></script> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='../xpedx/css/order/order-confirmation.css'/>" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:url includeParams="none" value='../xpedx/css/common/email/email.css'/>" />
 
-<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderConfirmation.js"></script>
-<!--<script type="text/javascript" src="../xpedx/js/theme/green/theme.js"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/order/email.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/order/orderConfirmation.js'/>"></script>
---><!-- addition of js for jira 2128 -->
-<!--<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script> 
---><script type="text/javascript" src="../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 <!-- carousel scripts css  -->
 <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" /> --%>
@@ -105,16 +84,14 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
---><script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+-->
 <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/> --%>
 <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/> --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 --><!--<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
---><script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-
+-->
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 --><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
@@ -421,6 +398,28 @@
         <div class="dialog-body" id="ajax-body-1"></div>
 </swc:dialogPanel>
 	<!-- end container  -->
+	<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<!--<script type="text/javascript" src="../xpedx/js/common/ajaxValidation.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="../xpedx/js/swc.js"></script>
+-->
+
+<script type="text/javascript" src="../xpedx/js/jQuery.js"></script> 
+<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderConfirmation.js"></script>
+<!--<script type="text/javascript" src="../xpedx/js/theme/green/theme.js"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/email.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/orderConfirmation.js'/>"></script>
+--><!-- addition of js for jira 2128 -->
+<!--<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script> 
+-->
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 </body>
 
 </html>
