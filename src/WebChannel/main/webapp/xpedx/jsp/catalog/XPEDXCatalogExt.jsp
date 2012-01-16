@@ -52,13 +52,12 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/my-price-and-availability.css" />
 
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 
 <!--<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
 --><script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 <%-- <link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" />--%>
 
@@ -1233,6 +1232,7 @@ function validationforDragToCompare()
     
 }
 </script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <script type="text/javascript" src="../xpedx/js/catalog/XPEDXCatalogExt.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 
@@ -1264,6 +1264,7 @@ function validationforDragToCompare()
 --><script type="text/javascript" src="/swc/xpedx/js/jquery.cycle.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+
 
 </body>
 </html>
