@@ -26,8 +26,8 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
 	
 	public Document invokeWebService(YFSEnvironment env, Document inputXML) throws Exception
 	{
-			log.info("OrderEditInterface_InputXML:" + SCXmlUtil.getString(inputXML));
-			System.out.println("OrderEditInterface_InputXML:" + SCXmlUtil.getString(inputXML));
+			
+			log.info("OrderEditInterface_InputXML:" + SCXmlUtil.getString(inputXML));	
             Document orderEditResponseDoc = null;
             String endPointURL = null;
             

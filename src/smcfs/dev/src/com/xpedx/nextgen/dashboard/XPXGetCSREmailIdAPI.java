@@ -55,8 +55,9 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
 	           
 	    String webConfirmationNumber = null;
 	    String csrEmailId = null;
-	
-	    //log.debug("The input to XPXGetCSREmailIDAPI is: "+SCXmlUtil.getString(getOrderDetailsOutput));       
+	    if(log.isDebugEnabled()){
+	    	log.debug("The input to XPXGetCSREmailIDAPI is: "+SCXmlUtil.getString(getOrderDetailsOutput));
+	    }
 		Element getOrderDetailsOutputRoot = getOrderDetailsOutput.getDocumentElement();
 		
 		
@@ -84,13 +85,16 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
       		  
       		env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, getOrganizationListTemplate);	  
       	    Document getOrganizationListOutputDoc = api.invoke(env, XPXLiterals.GET_ORGANIZATION_LIST_API,getOrganizationListInputDoc);
-      	   // System.out.println("The getOrgList o/p is: "+SCXmlUtil.getString(getOrganizationListOutputDoc));
+      	    if(log.isDebugEnabled()){
+      	    	log.debug("The getOrgList o/p is: "+SCXmlUtil.getString(getOrganizationListOutputDoc));
+      	    }
       	    env.clearApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API);  
       	  
       	     Element extnElem = (Element)getOrderDetailsOutputRoot.getElementsByTagName("Extn").item(0);
     	    webConfirmationNumber = extnElem.getAttribute(XPXLiterals.A_WEB_CONF_NUMBER);
-    	    //System.out.println("webConfirmationNumber for CSR Email Id :: " + webConfirmationNumber);
-    	    
+    	    if(log.isDebugEnabled()){
+    	    	log.debug("webConfirmationNumber for CSR Email Id: " + webConfirmationNumber);
+    	    }
     	    if(webConfirmationNumber == null || webConfirmationNumber.trim().length()<=0)
     	    {
     	    	 webConfirmationNumber = generateWebConfirmationNumber(orderHeaderKey,getOrderDetailsOutputRoot);
@@ -110,13 +114,15 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
       	        	    
       	          	  
       	    Document changeOrderInputDoc = createChangeOrderInputDoc(env,orderHeaderKey,webConfirmationNumber);
-      	    log.debug("The changeOrder input doc is: "+SCXmlUtil.getString(changeOrderInputDoc));
+      	    if(log.isDebugEnabled()){
+      	    	log.debug("The changeOrder input doc is: "+SCXmlUtil.getString(changeOrderInputDoc));
+      	    }
       	    env.setApiTemplate(XPXLiterals.CHANGE_ORDER_API, changeOrderTemplate);	  
     	    changeOrderOutputDoc = api.invoke(env, XPXLiterals.CHANGE_ORDER_API,changeOrderInputDoc);
     	    env.clearApiTemplate(XPXLiterals.CHANGE_ORDER_API);     
-      	  
-      	    log.debug("The changeOrder Output doc is: "+SCXmlUtil.getString(changeOrderOutputDoc));
-      	    
+    	    if(log.isDebugEnabled()){
+      	    	log.debug("The changeOrder Output doc is: "+SCXmlUtil.getString(changeOrderOutputDoc));
+    	    }
       	      if(csrEmailId!=null && csrEmailId.trim().length() > 0) 
       	      {
     	         changeOrderOutputDoc.getDocumentElement().setAttribute("CSREmailId", csrEmailId);
@@ -124,7 +130,9 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
       	      }
       	      else
       	      {
-      	    	//System.out.println("There is no csr email id and hence no email will be sent");
+      	    	if(log.isDebugEnabled()){
+      	    		log.debug("There is no csr email id and hence no email will be sent.");
+      	    	}
       	    	Document centErrorLoggerXmlInput = YFCDocument.createDocument("Order").getDocument();
       	    	Element extnCentErrorLogger = centErrorLoggerXmlInput.createElement("Extn");
       	    	extnCentErrorLogger.setAttribute("ExtnWebConfNum", webConfirmationNumber);
@@ -240,7 +248,9 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
 		{
 			Element customerElement = (Element)customerList.item(0);
 			shipNode = SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnShipFromBranch");
-			System.out.println("The ship from branch is PRASANTH: "+shipNode);
+			if(log.isDebugEnabled()){
+				log.debug("The ship from branch is : "+shipNode);
+			}
 			if(shipNode.equals(""))
 			{
 				shipNode = SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnCustOrderBranch");
@@ -296,7 +306,9 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
 		
 		YFCDate currentSystemDate = new YFCDate();
 		String currentSystemDateString = currentSystemDate.toString();
-		log.debug("The current systemDate is : "+currentSystemDateString);
+		if(log.isDebugEnabled()){
+			log.debug("The current systemDate is : "+currentSystemDateString);
+		}
 		year = currentSystemDateString.substring(2,4);
 		month = currentSystemDateString.substring(4,6);
 		day = currentSystemDateString.substring(6,8);
@@ -323,7 +335,9 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
 		}
 		
 		webConfirmationNumber = year+month+day+envtCode+uniqueSequence;
-		log.debug("The web confirmation number is: "+webConfirmationNumber);
+		if(log.isDebugEnabled()){
+			log.debug("The web confirmation number is: "+webConfirmationNumber);
+		}
 
 		return webConfirmationNumber;
 	}
