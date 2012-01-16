@@ -54,9 +54,8 @@
 <![endif]-->
 
 <!-- javascript -->
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
@@ -68,7 +67,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 -->
-<script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
+
 <!-- carousel scripts css  -->
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
 <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> -->
@@ -79,14 +78,14 @@
 <!-- carousel scripts js   -->
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.numeric.js"></script>
+
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
 
---><script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-
+-->
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
@@ -94,7 +93,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 -->
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <%--
 <link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/jquery.checkboxtree.css"/>
@@ -102,26 +100,16 @@
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
---><script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
-
-
-<script type="text/javascript" src="/swc/xpedx/js/jquery.numeric.js"></script>
+-->
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
-<script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js"
-	type="text/javascript" charset="utf-8"></script>
-<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js"
-	type="text/javascript" charset="utf-8"></script>
+
 
 <!--[if IE]>
 <script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script>
 <![endif]-->
 
-<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+
 <s:hidden name="uomDescriptionURL" value='%{#uomDescriptionURL}'/>
-<script type="text/javascript" src="<s:url includeParams="all" value='/swc/js/order/XPEDXDraftOrderDetails.js'/>"></script>
-<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/XPEDXOrder.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/order/XPEDXItemAssociation.js'/>"></script>
-<script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
 <!-- /STUFF -->
 
 <!-- Lightbox/Modal Window -->
@@ -134,8 +122,6 @@
 
  <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css" />
-
-<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
 
 <script type="text/javascript">
@@ -2418,5 +2404,22 @@ function validateMinOrder()
 	openQuickAdd();
 </script>
 
+<script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
+
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js"
+	type="text/javascript" charset="utf-8"></script>
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js"
+	type="text/javascript" charset="utf-8"></script>
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="<s:url includeParams="all" value='/swc/js/order/XPEDXDraftOrderDetails.js'/>"></script>
+<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/XPEDXOrder.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/XPEDXItemAssociation.js'/>"></script>
+<script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 </body>
 </html>
