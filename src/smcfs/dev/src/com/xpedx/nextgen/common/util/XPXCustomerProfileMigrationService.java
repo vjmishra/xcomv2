@@ -8,6 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import java.rmi.RemoteException;
 import com.yantra.interop.japi.YIFApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfc.log.YFCLogCategory;
@@ -70,14 +71,12 @@ public class XPXCustomerProfileMigrationService {
 				Element custRulesProfileEle = (Element) customerRulesProfileList
 						.item(i);
 				ruleID = custRulesProfileEle.getAttribute("RuleID");
-				yfcLogCatalog.info("RuleID: " + ruleID);
-
+				
 				if (ruleID == null || ruleID.trim().length() == 0) {
-					// Do nothing
-					System.out
-							.println("Input document doesn't have any value for the attribute 'RuleID'");
+					yfcLogCatalog.info("Input document doesn't have any value for the attribute 'RuleID'");
 				} else {
 					/** Call the service 'XPXGetRuleDefnList' **/
+					yfcLogCatalog.info("RuleID: " + ruleID);
 					ruleDefinitionListOutput = getRuleDefinitionList(env,
 							ruleID);
 
@@ -129,18 +128,14 @@ public class XPXCustomerProfileMigrationService {
 	 **/
 	public Document getRuleDefinitionList(YFSEnvironment env, String ruleID)
 			throws YFSException, RemoteException {
-		yfcLogCatalog.info("---> getRuleDefinitionList()");
 		Document getRuleDefnInputDoc = YFCDocument
 				.createDocument("XPXRuleDefn").getDocument();
 		getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", ruleID);
-		yfcLogCatalog.info("The input xml to XPXGetRuleDefnList is: "
-				+ SCXmlUtil.getString(getRuleDefnInputDoc));
+		yfcLogCatalog.info("The input xml to XPXGetRuleDefnList is: " + SCXmlUtil.getString(getRuleDefnInputDoc));
 		Document getRuleDefnOutputDoc = api.executeFlow(env,
 				"XPXGetRuleDefnList", getRuleDefnInputDoc);
-		yfcLogCatalog.info("The output xml of XPXGetRuleDefnList is: "
-				+ SCXmlUtil.getString(getRuleDefnOutputDoc));
+		yfcLogCatalog.info("The output xml of XPXGetRuleDefnList is: "+ SCXmlUtil.getString(getRuleDefnOutputDoc));
 
-		yfcLogCatalog.info("<--- getRuleDefinitionList()");
 		return getRuleDefnOutputDoc;
 	}
 
@@ -150,8 +145,6 @@ public class XPXCustomerProfileMigrationService {
 	 **/
 	public boolean checkIfRuleDefExistsInDB(Document ruleDefinitionListOutput) {
 
-		yfcLogCatalog.info("---> checkIfRuleDefExistsInDB()");
-
 		int ruleDefnCount = 0;
 		boolean ruleDefExists = false;
 
@@ -159,20 +152,16 @@ public class XPXCustomerProfileMigrationService {
 				.getElementsByTagName(XPXLiterals.RULE_DEFINITION);
 
 		ruleDefnCount = ruleDefnList.getLength();
-		yfcLogCatalog.info("ruleDefnCount: " + ruleDefnCount);
-
+		
 		if (ruleDefnCount > 0) {
-			yfcLogCatalog
-					.info("Rule definition for this RuleID exists in the DataBase...");
+			yfcLogCatalog.info("ruleDefnCount: " + ruleDefnCount);
 			ruleDefExists = true;
 			yfcLogCatalog.info("ruleDefExists: " + ruleDefExists);
 		} else {
-			yfcLogCatalog
-					.info("Rule definition for this RuleID does NOT exist in the DataBase...");
+			yfcLogCatalog.info("Rule definition for this RuleID does NOT exist in the DataBase.");
 			ruleDefExists = false;
 			yfcLogCatalog.info("ruleDefExists: " + ruleDefExists);
 		}
-		yfcLogCatalog.info("<--- checkIfRuleDefExistsInDB()");
 		return ruleDefExists;
 	}
 
@@ -182,15 +171,14 @@ public class XPXCustomerProfileMigrationService {
 	 **/
 	public String getRuleKey(Document ruleDefinitionListOutput) {
 
-		yfcLogCatalog.info("---> getRuleKey()");
-
 		String ruleKey = "";
 		Element ruleDefnEle = (Element) ruleDefinitionListOutput
 				.getDocumentElement()
 				.getElementsByTagName(XPXLiterals.RULE_DEFINITION).item(0);
 		ruleKey = ruleDefnEle.getAttribute("RuleKey");
-		yfcLogCatalog.info("ruleKey: " + ruleKey);
-		yfcLogCatalog.info("<--- getRuleKey()");
+		if(!YFCObject.isNull(ruleKey) && !YFCObject.isVoid(ruleKey)){
+			yfcLogCatalog.info("ruleKey: " + ruleKey);
+		}
 		return ruleKey;
 	}
 
