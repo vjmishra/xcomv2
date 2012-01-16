@@ -37,7 +37,7 @@ function addProductsToOrder()
 		 var selectedUomFromStr;
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
-		 baseUOM = document.getElementsByName("BaseUOMs");
+		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
 			enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
@@ -466,6 +466,7 @@ function redrawQuickAddList()
 		        
 		        code += '</td>';
 		        code += '<td class="col-item">';
+		        code +='<input type="hidden" name="quickAddBaseUOMs" value='+encodeForHTML(QuickAddElems[i].uom) +' />';
 		// code += encodeForHTML(QuickAddElems[i].quantity);
 		        if(QuickAddElems[i].itemTypeText == "Special Item"){
 		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
