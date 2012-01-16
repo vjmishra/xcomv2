@@ -7,12 +7,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 /*
@@ -38,7 +40,7 @@ public class XPXGetShipToListAPI implements YIFCustomApi
 {
 	
 	private static YIFApi api = null;
-
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXGetShipToListAPI.class);
 
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
@@ -74,13 +76,13 @@ public class XPXGetShipToListAPI implements YIFCustomApi
 		{
 		//get the list of child orgs under this customer
 			BillToDoucument = getChildOrgList(env, BillToDoucument, shipToListElement, customerKey);
-			
-			//System.out.println("The un-formatted document is: "+ SCXmlUtil.getString(BillToDoucument));
-			
+			if(log.isDebugEnabled()){
+				log.debug("The Un-formatted BillTo Document is: "+ SCXmlUtil.getString(BillToDoucument));
+			}
 			formattedBillToDoc = formatBillToDocument(BillToDoucument);
-			
-			//System.out.println("The formatted document is: "+ SCXmlUtil.getString(formattedBillToDoc));
-			
+			if(log.isDebugEnabled()){
+				log.debug("The Formatted BillTo Document is: "+ SCXmlUtil.getString(formattedBillToDoc));
+			}
 		}
 		return formattedBillToDoc;
 	}

@@ -12,6 +12,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 /*
@@ -25,12 +26,13 @@ import com.yantra.yfs.japi.YFSException;
  */
 public class XPXGetSKUDetails implements YIFCustomApi{
 	private static YIFApi api = null;
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXGetSKUDetails.class);
 	public static final String getItemListTemplate = "global/template/api/getItemList.XPXGetSKUDetails.xml";
 	public Document getSKUDetails(YFSEnvironment env, Document inputXML)  throws Exception
 	{
 		
 		api = YIFClientFactory.getInstance().getApi();
-		//System.out.println("inputXML"+SCXmlUtil.getString(inputXML));
+		log.info("InputXML for getSKUDetails is : "+SCXmlUtil.getString(inputXML));
 		Element inputElement = inputXML.getDocumentElement();
 		String sku = inputElement.getAttribute("SKU");
 		String organizationCode = inputElement.getAttribute("OrganizationCode");
@@ -44,8 +46,6 @@ public class XPXGetSKUDetails implements YIFCustomApi{
 			YFSException exception = new YFSException("SKU or SKUType is empty");
 			
 			throw exception;
-			
-
 		}
 		//form the input xml for fetching the Item details
 		Document inputItemDocument = formInputItemListDocument(env, sku, organizationCode, skuType, itemId,envId,Company,customerNumber);
@@ -95,6 +95,9 @@ public class XPXGetSKUDetails implements YIFCustomApi{
 		Document inputItemDocument = YFCDocument.createDocument("Item").getDocument();
 		Element inputItemElement = inputItemDocument.getDocumentElement();
 		inputItemElement.setAttribute("OrganizationCode", organizationCode);
+		if(log.isDebugEnabled()){
+			log.debug("The SKU Type is " + skuType);
+		}
 		if(skuType.equals("LPC"))
 		{
 			itemId = sku;
@@ -124,8 +127,6 @@ public class XPXGetSKUDetails implements YIFCustomApi{
 		return inputItemDocument;
 	}
 
-	
-
 	private String getItemIDFromItemCust(YFSEnvironment env, String sku, String itemId, String envId, String company, String customerNumber) throws RemoteException {
 		
 		//form the input
@@ -142,9 +143,7 @@ public class XPXGetSKUDetails implements YIFCustomApi{
 		{
 		Element itemCustElement = (Element)itemCustList.item(0);
 		itemId = itemCustElement.getAttribute("LegacyItemNumber");
-		}
-		
-		
+		}	
 		return itemId;
 	}
 	
