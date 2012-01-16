@@ -105,21 +105,15 @@ public class XPXLdapSearchDetails implements YIFCustomApi {
 			ldapDN = (new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
 		}
 
-		// Remove the below sysouts after LDAP testing
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
-		// System.out.println("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-		System.out.println("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
-
-		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
-		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
-		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
-		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
-		// LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-		LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
-
+		
+		if(LOG.isDebugEnabled()){
+			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+			// LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+			LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+		}
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
 		env.put(Context.PROVIDER_URL, ldapServerURL);
@@ -148,7 +142,7 @@ public class XPXLdapSearchDetails implements YIFCustomApi {
 	 */
 	public Document invoke(YFSEnvironment yfsenv, Document inDoc) throws YFCException, NamingException {
 
-		LOG.debug("invoke() Input XML:" + SCXmlUtil.getString(inDoc));
+		LOG.debug("Input XML for invoke method in XPXLdapSearchDetails:" + SCXmlUtil.getString(inDoc));
 
 		Document resultDoc = SCXmlUtil.createDocument("User");
 		Element resultEle = resultDoc.getDocumentElement();
