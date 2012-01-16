@@ -69,7 +69,7 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 		Document outputInvoiceHeaderListDoc = api.executeFlow(env, "getXPXInvoiceHdrListService", inputInvoiceHeaderDoc);
 //		NodeList invoiceHdrNodeList = outputInvoiceHeaderListDoc.getElementsByTagName("XPXInvoiceHdr");
 //		int invoiceHdrLength = invoiceHdrNodeList.getLength();
-		
+		log.info("The output from the invoice agent service getXPXInvoiceHdrListService is :" + SCXmlUtil.getString(outputInvoiceHeaderListDoc));
 		List listOrders = SCXmlUtil.getChildrenList(outputInvoiceHeaderListDoc.getDocumentElement());
 		List listOfJobs = new ArrayList();
 		for(int counter = 0;counter<listOrders.size();counter++)
@@ -92,6 +92,7 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 		// TODO Auto-generated method stub
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		String strTransType = "B2B-Inv";
+		log.info("The input to the XPXInvoiceProcessMessage service is : "+ inputDoc);
 		try {
 			api.executeFlow(env, "XPXInvoiceProcessMessage", inputDoc);
 		/**old exception catch block replaced with CENT Tool
@@ -101,7 +102,9 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 			invoiceHeaderKeys.add(SCXmlUtil.getAttribute(inputDoc.getDocumentElement(), "InvoiceHeaderKey"));
 			**/
 		} catch (NullPointerException ne) {
-			System.out.println("Invoice Agent execute job strTransType : " + strTransType );
+			if(log.isDebugEnabled()){
+				log.debug("Invoice Agent execute job strTransType : " + strTransType );
+			}
 			log.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, strTransType,
 					XPXLiterals.NE_ERROR_CLASS, env, inputDoc);
@@ -111,7 +114,9 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 			throw ne;
 		} catch (YFSException yfe) {
 			log.error("YFSException: " + yfe.getStackTrace());
-			System.out.println("Invoice Agent execute job strTransType : " + strTransType );
+			if(log.isDebugEnabled()){
+				log.debug("Invoice Agent execute job strTransType : " + strTransType );
+			}
 			prepareErrorObject(yfe, strTransType,
 					XPXLiterals.NE_ERROR_CLASS, env, inputDoc);
 			// invoiceHeaderKeys.add(SCXmlUtil.getAttribute(inputDoc.getDocumentElement(), "InvoiceHeaderKey"));
@@ -119,7 +124,9 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 			
 			throw yfe;
 		} catch (Exception e) {
-			System.out.println("Invoice Agent execute job strTransType : " + strTransType );
+			if(log.isDebugEnabled()){
+				log.debug("Invoice Agent execute job strTransType : " + strTransType );
+			}
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, strTransType,
 					XPXLiterals.NE_ERROR_CLASS, env, inputDoc);

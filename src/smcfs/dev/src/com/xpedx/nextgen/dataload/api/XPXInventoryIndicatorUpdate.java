@@ -19,13 +19,8 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXInventoryIndicatorUpdate {
 
-
-
-
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
-
-
 
 	static
 	{
@@ -45,11 +40,6 @@ public class XPXInventoryIndicatorUpdate {
 		}
 	}
 
-
-
-
-
-
 	private void prepareErrorObject(Exception e, String transType, String errorClass, YFSEnvironment env,Document inXML){
 		com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();	
 		errorObject.setTransType(transType);
@@ -58,11 +48,6 @@ public class XPXInventoryIndicatorUpdate {
 		errorObject.setException(e);
 		ErrorLogger.log(errorObject, env);
 	}
-
-
-
-
-
 
 	private Connection getDBConnection(YFSEnvironment env,Document inputXML)
 	{
@@ -81,8 +66,6 @@ public class XPXInventoryIndicatorUpdate {
 		return m_Conn;
 	}
 
-
-
 	public  Document updateInventoryIndicator(YFSEnvironment env,Document inputXML) throws Exception
 	{
 		Connection m_Conn   = getDBConnection(env,inputXML);
@@ -96,8 +79,9 @@ public class XPXInventoryIndicatorUpdate {
 
 			cstmt =m_Conn.prepareCall(query);
 			rSet  = cstmt.executeUpdate();
-			
-//			System.out.println("update Value is ::"+rSet);
+			if(log.isDebugEnabled()){
+				log.debug("Update Value after inventory update is :"+rSet);
+			}
 			m_Conn.commit();
 			long endTime = System.currentTimeMillis();
 			log.info("Completed Update InventoryIndicator in  " + (endTime - startTime) + " milliseconds");
@@ -113,14 +97,9 @@ public class XPXInventoryIndicatorUpdate {
 
 
 		}finally{
-
 		//	cstmt.close();
 		//	m_Conn.close();
-
 		}
-
-
 		return inputXML;
-
 	}
 }
