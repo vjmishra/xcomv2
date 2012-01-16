@@ -30,7 +30,7 @@
 	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
 	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />  --%>
 	    
-	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css">
+	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css" />
 	    
 		<s:include value="../common/XPEDXStaticInclude.jsp"/>
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
