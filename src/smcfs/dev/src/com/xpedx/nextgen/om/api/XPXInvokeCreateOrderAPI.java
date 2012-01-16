@@ -9,6 +9,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
@@ -20,23 +21,21 @@ import com.yantra.yfs.japi.YFSEnvironment;
  */
 
 public class XPXInvokeCreateOrderAPI implements YIFCustomApi{
-	
-	
+		
 	private static YIFApi api = null;
+	YFCLogCategory log = YFCLogCategory.instance(XPXInvokeCreateOrderAPI.class);
 	
 	public Document invokeCreateOrderAPI(YFSEnvironment env, Document inXML) throws Exception {
-		
-		System.out.println("XPXInvokeCreateOrderAPI : invokeCreateOrderAPI inxml ::" + (YFCDocument.getDocumentFor(inXML)).toString());
-		
+		if(log.isDebugEnabled()){
+			log.debug("XPXInvokeCreateOrderAPI_InXML:" + (YFCDocument.getDocumentFor(inXML)).toString());
+		}
 		api = YIFClientFactory.getInstance().getApi();
 		
 		Document outDoc =  api.executeFlow(env, XPXLiterals.SERVICE_XPX_CREATE_CUSTOMER_ORDER_FOR_INBOUND_B2B_OP_XML, inXML);
-		
-		System.out.println("outDoc " + (YFCDocument.getDocumentFor(outDoc)).toString());
-		
-		return outDoc;
-		
-		
+		if(log.isDebugEnabled()){
+			log.debug("XPXInvokeCreateOrderAPI_OutXML: " + (YFCDocument.getDocumentFor(outDoc)).toString());
+		}
+		return outDoc;	
 	}
 
 	/**

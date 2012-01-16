@@ -40,6 +40,8 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 	{
 		Document getCustomerProfileDetailsDoc = null;
 		
+		log.info("The input xml in XPXInvokeOrderPlaceActions: "+ SCXmlUtil.getString(inputXML));
+		
 		try
 		{
 		   Element inputRoot = inputXML.getDocumentElement();
@@ -51,7 +53,9 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 			  //Getting the ship to customer profile details and setting in the env object which will be used throughout OP flow
 			   getCustomerProfileDetailsDoc = createGetCustomerListInput(env,buyerOrgCode);
 			   env.setTxnObject("ShipToCustomerProfile", getCustomerProfileDetailsDoc);
-			   log.debug("The customer profile details are: "+SCXmlUtil.getString(getCustomerProfileDetailsDoc));
+			   if(log.isDebugEnabled()){
+			   		log.debug("The customer profile details are: "+SCXmlUtil.getString(getCustomerProfileDetailsDoc));
+			   }
 		   }
 		 
 		   //Invoking the order place actions which are
@@ -130,9 +134,9 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
         env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
 		Document getCustomerDetailsOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerDetailsInputDoc.getDocument());
 		
-		//System.out.println("GETCustomerDetailsOutpurDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
-		log.debug("GETCustomerDetailsOutputDoc::"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
-		  
+		if(log.isDebugEnabled()){
+			log.debug("GETCustomerDetailsOutputDoc:"+SCXmlUtil.getString(getCustomerDetailsOutputDoc));
+		}
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
         
         
