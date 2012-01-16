@@ -43,13 +43,6 @@
 
 <!-- javascript -->
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/order/order.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/order/approval.js'/>"></script>
-<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/email.js'/>"></script>
-<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/orderAdjustment.js'/>"></script>
-
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 
 <!--<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
@@ -76,13 +69,7 @@
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <!--<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
@@ -94,15 +81,9 @@
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 --><%-- <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> --%>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 --><link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
-
-<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-
-<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
@@ -113,17 +94,17 @@
 <!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>-->
 <%-- <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" /> --%>
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-
 
 <!-- carousel scripts css  -->
 <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 
 <!-- Page Calls -->
-<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
 <!-- END head-calls.php -->
-
+<script type="text/javascript" src="../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript">
 $(function() {
 	$(".datepicker").datepicker({
@@ -1594,5 +1575,19 @@ function displayLineAdjustments(panelId, lineKey) {
 	DialogPanel.show(panelId);
 	}
 </script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/order.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/approval.js'/>"></script>
+<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/email.js'/>"></script>
+<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/orderAdjustment.js'/>"></script>
+<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script>
+<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 </body>
 </html>
