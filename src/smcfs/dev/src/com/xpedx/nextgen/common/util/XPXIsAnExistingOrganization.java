@@ -43,13 +43,7 @@ public class XPXIsAnExistingOrganization implements YCPDynamicConditionEx {
 	public boolean evaluateCondition(YFSEnvironment env, String arg1, Map arg2,
 			Document inXML) {
 
-		System.out
-				.println("*********************************************************");
-		System.out
-				.println("Inside XPXIsAnExistingOrganization :: evaluateCondition()");
-		System.out
-				.println("*********************************************************");
-
+		yfcLogCatalog.info("The input to the XPXIsAnExistingOrganization: "+ SCXmlUtil.getString(inXML));
 		int orgCount = 0;
 		String orgCode = null;
 		boolean isAnExistingOrg = false;
@@ -74,32 +68,33 @@ public class XPXIsAnExistingOrganization implements YCPDynamicConditionEx {
 			 **/
 			orgHeaderElement.setAttribute("OrganizationKey", orgCode);
 
-			System.out.println("getOrganizationListInput: "
-					+ SCXmlUtil.getString(getOrganizationListInput));
-
 			getOrganizationListOutput = api.invoke(env,
 					XPXLiterals.GET_ORGANIZATION_LIST_API,
 					getOrganizationListInput);
-
-			System.out.println("getOrganizationListOutput: "
-					+ SCXmlUtil.getString(getOrganizationListOutput));
-
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("getOrganizationListOutput: "+ SCXmlUtil.getString(getOrganizationListOutput));
+			}
 			NodeList organizationList = getOrganizationListOutput
 					.getDocumentElement().getElementsByTagName(
 							XPXLiterals.ORGANIZATION);
 
 			orgCount = organizationList.getLength();
 			yfcLogCatalog.info("orgCount: " + orgCount);
-			System.out.println("orgCount: " + orgCount);
-
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("orgCount:" + orgCount);
+			}
 			if (orgCount > 0) {
 				yfcLogCatalog.info("This is an existing Organization...");
 				isAnExistingOrg = true;
-				System.out.println("isAnExistingOrg: " + isAnExistingOrg);
+				if(yfcLogCatalog.isDebugEnabled()){
+					yfcLogCatalog.debug("isAnExistingOrg: " + isAnExistingOrg);
+				}
 			} else {
 				yfcLogCatalog.info("This is a new Organization...");
 				isAnExistingOrg = false;
-				System.out.println("isAnExistingOrg: " + isAnExistingOrg);
+				if(yfcLogCatalog.isDebugEnabled()){
+					yfcLogCatalog.debug("isAnExistingOrg: " + isAnExistingOrg);
+				}
 			}
 
 		} catch (NullPointerException ne) {
