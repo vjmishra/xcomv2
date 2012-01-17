@@ -44,17 +44,18 @@ public class XPXSetRefOrderDetailsInTransaction implements YIFCustomApi
 	
 	public Document setRefDetailsInTransation(YFSEnvironment env, Document inputXML)
 	{		
-		System.out.println("inputXML === == " + SCXmlUtil.getString(inputXML));		
+		if(inputXML != null){
+			log.info("Input xml for setRefDetailsInTransation in XPXSetRefOrderDetailsInTransaction is :  " + SCXmlUtil.getString(inputXML));
+		}
 		NodeList xpxRefOrderHdrList = inputXML.getElementsByTagName("XPXRefOrderHdr");
 		Element xpxRefOrderHdrElement = (Element) xpxRefOrderHdrList.item(0);
 		Document tranInputDoc = YFCDocument.createDocument().getDocument();
 		tranInputDoc.appendChild(tranInputDoc.importNode(xpxRefOrderHdrElement, true));
-		
-		System.out.println("tranInputDoc === " + SCXmlUtil.getString(tranInputDoc));
-		System.out.println("In XPXSetRefOrderDetailsInTransaction class.....");
+		if(log.isDebugEnabled()){
+			log.debug("Output xml for setRefDetailsInTransation in XPXSetRefOrderDetailsInTransaction is :  " + SCXmlUtil.getString(tranInputDoc));
+		}
 		// To set the RefOrdHdrKey and RefOdrLineKey in transaction object.
 		XPXCreateReferenceOrderAPI.setRefDetailsInTransation(env, tranInputDoc);
-		System.out.println("After setting the transactional values.");
 		return inputXML;		
 	}
 

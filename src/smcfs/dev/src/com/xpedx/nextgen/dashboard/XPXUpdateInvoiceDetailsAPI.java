@@ -57,8 +57,10 @@ public class XPXUpdateInvoiceDetailsAPI {
 			String webConfNUmber = "";
 			String legacyOrderNo = "";
 			
-			Element inputElement = inXML.getDocumentElement();			
-			log.info("inXML in updateInvoice() = " + SCXmlUtil.getString(inputElement));		
+			Element inputElement = inXML.getDocumentElement();	
+			if(inXML != null){
+				log.info("inXML in updateInvoice(): " + SCXmlUtil.getString(inputElement));
+			}
 			String isB2BCustomer = inputElement.getAttribute("IsB2BCustomer");
 			if(YFCObject.isNull(isB2BCustomer) || YFCObject.isVoid(isB2BCustomer)){
 				throw new Exception(" 'isB2BCustomer' flag cannot be empty in Invoice transaction. Flag denotes 'B2B' or 'B2C' "); 	
@@ -110,7 +112,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 					Element orderElement = (Element)orderList.item(0);
 					orderHeaderKey = orderElement.getAttribute("OrderHeaderKey");
 //					division = orderElement.getAttribute("ShipNode");
-//					System.out.println("division"+division);
+//					log.debug("division"+division);
 					//customer = orderElement.getAttribute("BillToID");
 					customer = orderElement.getAttribute("BuyerOrganizationCode");					
 				} else {
@@ -122,9 +124,9 @@ public class XPXUpdateInvoiceDetailsAPI {
 				
 			//these attributes come in Invoice feed
 			//stampDivisionInfo(env, inputElement, division);
-			//System.out.println("after division stamp"+SCXmlUtil.getString(inputElement));
+			//log.debug("after division stamp"+SCXmlUtil.getString(inputElement));
 			//stampCustomerInfo(env, inputElement, customer);
-			//System.out.println("after customer stamp"+SCXmlUtil.getString(inputElement));
+			//log.debug("after customer stamp"+SCXmlUtil.getString(inputElement));
 			//stampInvoiceLineLevelAttribute(env,inputElement);
 			
 			// form the input for creating invoice elements
@@ -151,7 +153,9 @@ public class XPXUpdateInvoiceDetailsAPI {
 			invoiceHeaderListElement.appendChild(inputNewElement);			
 			invoiceDetailsDoc = api.invoke(env, "changeOrder", inputChangeOrderDoc);			
 		    // invoiceDetailsDoc = sendInvoiceDetailsToWebMethods(env, inXML, customer);
-		    log.info("invoiceDetailsDoc for B2B = " + SCXmlUtil.getString(invoiceDetailsDoc));
+			if(invoiceDetailsDoc != null){
+		    	log.info("invoiceDetailsDoc for B2B : " + SCXmlUtil.getString(invoiceDetailsDoc));
+			}
 		    
 			} else {
 				// Source Type B2C
@@ -173,7 +177,9 @@ public class XPXUpdateInvoiceDetailsAPI {
 				}
 				inputChangeOrderElement.appendChild(extnOrderElement);				
 				invoiceDetailsDoc = api.invoke(env, "changeOrder", inputChangeOrderDoc);
-				log.info(" invoiceDetailsDoc for B2C = " + SCXmlUtil.getString(invoiceDetailsDoc));
+				if(invoiceDetailsDoc != null){
+					log.info(" invoiceDetailsDoc for B2C = " + SCXmlUtil.getString(invoiceDetailsDoc));
+				}
 			}
 			
 			// To change the FO status.
@@ -325,19 +331,19 @@ public class XPXUpdateInvoiceDetailsAPI {
 				if(name.equals("Brand"))
 				{
 					brand = attributeElement.getAttribute("Value");
-					System.out.println("brand"+brand);
+					log.info("brand"+brand);
 					itemMap.put("Brand", brand);
 				}
 			}
 	
 		}
-		System.out.println("itemmap size"+itemMap.size());
-		System.out.println("brand"+itemMap.get("Brand"));
+		log.info("itemmap size"+itemMap.size());
+		log.info("brand"+itemMap.get("Brand"));
 		Collection<String> c = itemMap.values();
 		Iterator<String> i = c.iterator();
 		while(i.hasNext())
 		{
-			System.out.println("brand"+i.next());
+			log.info("brand"+i.next());
 		}
 		//invoiceLineElement.setAttribute("FSCCertCode", fscCertCode);
 		//invoiceLineElement.setAttribute("SFICertCode", sfiCertCode);
@@ -366,20 +372,28 @@ public class XPXUpdateInvoiceDetailsAPI {
 			
 			// UNSPSC replacement.			
 			xpedxUNSPSC = SCXmlUtil.getXpathAttribute(itemElement, "./Extn/@ExtnUNSPSC");
-			log.info("xpedxUNSPSC = " + xpedxUNSPSC);
+			if(!YFCObject.isNull(xpedxUNSPSC) && !YFCObject.isVoid(xpedxUNSPSC)) {
+				log.info("xpedxUNSPSC : " + xpedxUNSPSC);
+			}
 			if(!YFCObject.isNull(xpedxUNSPSC) && !YFCObject.isVoid(xpedxUNSPSC)){
 				customerUNSPSC = translateUnspscSterlingToCustomerInvoice(env,customerID,itemID,orgCode,xpedxUNSPSC);
-				log.info("customerUNSPSC = " + customerUNSPSC);
+				if(!YFCObject.isNull(customerUNSPSC) && !YFCObject.isVoid(customerUNSPSC)) {
+					log.info("customerUNSPSC : " + customerUNSPSC);
+				}
 				if( !YFCObject.isNull(customerUNSPSC) && !YFCObject.isVoid(customerUNSPSC)){
 					replacedUNSPSC = customerUNSPSC;
 				} else {
 					replacedUNSPSC = xpedxUNSPSC;
 				}
 			} 
-			log.info("replacedUNSPSC = " + replacedUNSPSC);
+			if(!YFCObject.isNull(replacedUNSPSC) && !YFCObject.isVoid(replacedUNSPSC)) {
+				log.info("replacedUNSPSC : " + replacedUNSPSC);
+			}
 			invoiceLineElement.setAttribute("Unspsc", replacedUNSPSC);
-		}		
-		log.info("invoiceLineElement"+SCXmlUtil.getString(invoiceLineElement));	
+		}
+		if(invoiceLineElement != null){
+			log.info("invoiceLineElement: "+SCXmlUtil.getString(invoiceLineElement));
+		}
 	}
 	
 	/*private void stampDivisionInfo(YFSEnvironment env, Element inputElement, String division) throws YFSException, RemoteException
@@ -462,10 +476,14 @@ public class XPXUpdateInvoiceDetailsAPI {
 				if(mSAPCustomerLength != 0){
 					Element mSAPCustomerElement = (Element)mSAPCustomerList.item(0);
 					customerBuyerID = SCXmlUtil.getXpathAttribute(mSAPCustomerElement, "./Extn/@ExtnBuyerID");
-					log.info("");
-					log.info("MSAP_customerBuyerID:" + customerBuyerID);
-					System.out.println("MSAP_customerBuyerID:" + customerBuyerID);
-					
+
+					if(!YFCObject.isNull(customerBuyerID) && !YFCObject.isVoid(customerBuyerID)) {
+						log.info("");
+						log.info("MSAP_customerBuyerID:" + customerBuyerID);
+					}
+					if(log.isDebugEnabled()){
+						log.debug("MSAP_customerBuyerID:" + customerBuyerID);
+					}
 				}
 			}		
 			/**** End -  Added code to get the Buyer ID from MSAP level. ***/
@@ -476,14 +494,18 @@ public class XPXUpdateInvoiceDetailsAPI {
 			
 			inputCustomerElement.setAttribute("CustomerID", billToCustomerId);
 			Document getBillToCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
-			//System.out.println("The second getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
+			if(log.isDebugEnabled()){
+				log.debug("The second getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
+			}
 			Element billToCustomerElement = (Element) getBillToCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 			Element billToParentCustomerElement = (Element) billToCustomerElement.getElementsByTagName("ParentCustomer").item(0);
 			String sapCustomerId  = billToParentCustomerElement.getAttribute("CustomerID");
 			
 			inputCustomerElement.setAttribute("CustomerID", sapCustomerId);
 			Document getSAPCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
-			//System.out.println("The third getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
+			if(log.isDebugEnabled()){
+				log.debug("The third getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
+			}
 			Element sapCustomerElement = (Element) getSAPCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 			Element sapExtnCustomerElement = (Element) sapCustomerElement.getElementsByTagName("Extn").item(0);
 			
@@ -560,14 +582,16 @@ public class XPXUpdateInvoiceDetailsAPI {
 		ordChngEle.setAttribute("ChangeForAllAvailableQty", "Y");
 		ordChngEle.setAttribute("TransactionId", tranId);
 		ordChngEle.setAttribute("BaseDropStatus", toStatus);
-		
-		System.out.println();
-		System.out.println("OrderStatus:"+toStatus);
-		System.out.println("ChangeFOStatus-InXML:"+chngOrdStatusInXML.getString());
-		
-		log.verbose("");
-		log.verbose("OrderStatus:"+toStatus);
-		log.verbose("ChangeFOStatus-InXML:"+chngOrdStatusInXML.getString());
+		if(log.isDebugEnabled()){
+			log.debug("");
+			log.debug("OrderStatus:"+toStatus);
+			log.debug("ChangeFOStatus-InXML:"+chngOrdStatusInXML.getString());
+		}
+		if(log.isVerboseEnabled()){
+			log.verbose("");
+			log.verbose("OrderStatus:"+toStatus);
+			log.verbose("ChangeFOStatus-InXML:"+chngOrdStatusInXML.getString());
+		}
 		// To call changeOrderStatus API.
 		Document tempDoc = this.api.executeFlow(env, "XPXChangeOrderStatus", chngOrdStatusInXML.getDocument());
 		if(tempDoc != null) {

@@ -58,8 +58,10 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		String orderType = "";
 		Document custContactOutputDoc = null;
 		Document fOrderOutputDoc = null;
-		Element fOrderElement = null;		
-		
+		Element fOrderElement = null;	
+		if(inXML != null){
+			log.info("Input XML for selectEmailTemplate in XPXSendUserUpdateEmailOnStatus is :  " + SCXmlUtil.getString(inXML));
+		}
 		Element rootElement = inXML.getDocumentElement();		
 		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderStatusChange")){
 			// For change order status.
@@ -80,11 +82,14 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 			log.info("Unknown document received to send email on order status change!!!");
 			emailRequired = "N";
 		}
-		
-		log.info("");
-		log.info("orderStatus = " + orderStatus);
-		System.out.println("");
-		System.out.println("orderStatus = " + orderStatus);
+		if(!YFCObject.isNull(orderStatus) && !YFCObject.isVoid(orderStatus)) {
+			log.info("");
+			log.info("orderStatus = " + orderStatus);
+		}
+		if(log.isDebugEnabled()){
+			log.debug("");
+			log.debug("orderStatus = " + orderStatus);
+		}
 		
 				
 		if(orderStatus != null && orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) 
@@ -93,7 +98,9 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 						|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS)){
 		// To get the fulfillment order details that needs to be sent in email.	
 		fOrderHeaderKey = rootElement.getAttribute("OrderHeaderKey");
-		log.info("Fulfillment order header key = " + fOrderHeaderKey);
+		if(!YFCObject.isNull(fOrderHeaderKey) && !YFCObject.isVoid(fOrderHeaderKey)) {
+			log.info("Fulfillment order header key : " + fOrderHeaderKey);
+		}
 		// To build input doc to call getOrderList API.
 		Document fOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
 		fOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, fOrderHeaderKey);		
@@ -101,7 +108,9 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		env.setApiTemplate("getOrderList", getOrderListTemplate);
 		
 		fOrderOutputDoc = api.invoke(env,"getOrderList", fOrderInputDoc);
-		System.out.println("Fulfillment order details = " + SCXmlUtil.getString(fOrderOutputDoc));
+		if(fOrderOutputDoc != null){
+			log.info("Fulfillment order details in XPXSendUserUpdateEmailOnStatus are : " + SCXmlUtil.getString(fOrderOutputDoc));
+		}
 		
 		// To clear API template for getOrderList
 		env.clearApiTemplate("getOrderList");
@@ -129,7 +138,9 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 				if(fOrderElement.hasAttribute("CustomerContactID")){
 					custContactID = fOrderElement.getAttribute("CustomerContactID");					
 				}
-				log.info("custContactID = " + custContactID);							
+				if(!YFCObject.isNull(custContactID) && !YFCObject.isVoid(custContactID)) {
+					log.info("custContactID : " + custContactID);	
+				}
 				
 			// To check email needs to be sent based on the flags set in customer contact table.			
 			if(!YFCObject.isNull(custContactID) && !YFCObject.isVoid(custContactID)){
@@ -140,8 +151,9 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 				Document custContactInputDoc = YFCDocument.createDocument("CustomerContact").getDocument();
 				custContactInputDoc.getDocumentElement().setAttribute("CustomerContactID", custContactID);				
 				custContactOutputDoc = api.invoke(env,"getCustomerContactList", custContactInputDoc);
-				log.info("custContactOutputDoc = " + SCXmlUtil.getString(custContactOutputDoc));
-				
+				if(custContactOutputDoc != null){
+					log.info("Customer Contact output doc : " + SCXmlUtil.getString(custContactOutputDoc));
+				}
 				// To clear API template.
 				env.clearApiTemplate("getCustomerContactList");
 				NodeList extnNodeList = custContactOutputDoc.getElementsByTagName("Extn");
@@ -219,10 +231,13 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		} 				
 		
 		fOrderOutputDoc.getDocumentElement().setAttribute("EmailRequired", emailRequired);
-		System.out.println();
-		System.out.println("fOrderOutputDoc in selectEmailTemplate() = " + SCXmlUtil.getString(fOrderOutputDoc));
-		log.info("");
-		log.info("fOrderOutputDoc in selectEmailTemplate() = " + SCXmlUtil.getString(fOrderOutputDoc));
+		if(log.isDebugEnabled()){
+			log.debug("fOrderOutputDoc in selectEmailTemplate() : " + SCXmlUtil.getString(fOrderOutputDoc));
+		}
+		if(fOrderOutputDoc != null){
+			log.info("");
+			log.info("fOrderOutputDoc in selectEmailTemplate() : " + SCXmlUtil.getString(fOrderOutputDoc));
+		}
 		
 		return fOrderOutputDoc;
 	}
@@ -267,9 +282,12 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 				}
 			}	
 		}
-				
-		log.info(" strcEmailAddress = " + strcEmailAddress);
-		log.info(" strToEmailAddress = " + strToEmailAddress);
+		if(!YFCObject.isNull(strcEmailAddress) && !YFCObject.isVoid(strcEmailAddress)) {
+			log.info(" String email address : strcEmailAddress is " + strcEmailAddress);
+		}
+		if(!YFCObject.isNull(strToEmailAddress) && !YFCObject.isVoid(strToEmailAddress)) {
+			log.info(" String to email address is : strToEmailAddress is " + strToEmailAddress);
+		}
 
 		Document customerEmailDoc = YFCDocument.createDocument("Customer").getDocument();		
 		customerEmailDoc.getDocumentElement().setAttribute("cEmailAddress", strcEmailAddress);
