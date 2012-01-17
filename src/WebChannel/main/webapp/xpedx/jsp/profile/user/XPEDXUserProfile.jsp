@@ -1263,13 +1263,13 @@ a.underlink:hover { text-decoration: underline !important; }
 			<s:hidden name="validateUserId" value="%{true}" />
 		</s:else></s:else></td>
 		<s:if test="%{#session.errorNote!= null}">
-		<td><h5 align="left"><b><font color="red"><s:property value='%{#session.errorNote}'/></font></b></h5></td>
+		<td><h5 align="center"><b><font color="red"><s:property value='%{#session.errorNote}'/></font></b></h5></td>
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</s:if>
 	</tr>
 	<s:if test='%{#isCustomerNotAdmin == false && !#isSalesRep}'>
 	<tr>
-		<td width="13%" class="padding-left0 no-border-right-user">
+		<td width="30%" class="padding-left0 no-border-right-user">
 		<div class="question">
 		<ul>
 			<li><a id="selectusertomodifyProfile" href="#viewUsersDlg" class="underlink">Show My Users&nbsp;</a></li>
@@ -2632,7 +2632,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<div class="clearview">&nbsp;</div>
 <%--Code Added For XNGTP-3196 --%>
 
-<div class="success" id="msgFor_resetpassword" style="display : none; float: right"/>Instructions to reset this password have been sent to the registered user’s email address.</div> 
+<div class="success" id="msgFor_resetpassword" style="display : none; float: right"/>Instructions to reset this password have been sent to the registered userï¿½s email address.</div> 
 
 <div class="error" id="errorMsgFor_userpassword" style="display : none; float: right"/>Please enter the same password in both Password and Confirm Password fields.</div>
 
