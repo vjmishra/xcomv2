@@ -84,9 +84,11 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
  --%>
 <!-- For the number formatting -->
+
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <script type="text/javascript" src="../js/jquery.numeric.js"></script>
 <script type="text/javascript">
 function maxLength(field,maxlimit) {
@@ -2590,7 +2592,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	
 	
 	
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
 
 <!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
@@ -2627,7 +2629,6 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXMyItemsDetails.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXAddToCartAndAvailability.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
-
 <!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
 -->
 <script type="text/javascript" src="../js/jquery.numberformatter-1.1.0.js"></script>
