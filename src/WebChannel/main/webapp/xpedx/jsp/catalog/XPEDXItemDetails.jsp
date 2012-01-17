@@ -78,10 +78,6 @@
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 
@@ -131,6 +127,11 @@
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 </head>
 <!-- END swc:head -->
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <script>
 function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor) {
 	if(itemId == null || itemId == "null" || itemId == "") {
@@ -2289,7 +2290,7 @@ function callPnA()
 	</div>
 </div>        
 <!-- end of jira 2971 -->
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
@@ -2319,9 +2320,9 @@ function callPnA()
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 --><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
---><script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
+-->
+<script type="text/javascript" src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
-
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
 
