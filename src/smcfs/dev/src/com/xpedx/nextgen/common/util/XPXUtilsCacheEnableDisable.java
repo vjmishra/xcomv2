@@ -52,15 +52,15 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 		try{
 
-
-			log.debug("inXML"+SCXmlUtil.getString(inXML));
-
+			if(inXML != null){
+				log.info("inXML"+SCXmlUtil.getString(inXML));
+			}
 
 			//String feedName = inXML.getDocumentElement().getAttribute("FeedName");
 			feedName =_properties.getProperty("FeedName");
 			//	String cacheType=_properties.getProperty("CacheType");
 			String strRoot = inXML.getDocumentElement().getNodeName();
-			log.debug("feedName::"+feedName);
+			log.info("feedName in CacheEnableDisable is :"+feedName);
 
 			Document modifyCacheInput = YFCDocument.createDocument(
 			"CachedGroups").getDocument();
@@ -180,9 +180,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					}
 				}
 
-				//	System.out.println("The modifyCache input is: "+SCXmlUtil.getString(modifyCacheInput));
-				log.debug("The modifyCache input is: "
-						+ SCXmlUtil.getString(modifyCacheInput));
+				log.info("The modifyCache input is: "+ SCXmlUtil.getString(modifyCacheInput));
 				api.invoke(env,"modifyCache",modifyCacheInput);
 
 

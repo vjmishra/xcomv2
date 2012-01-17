@@ -22,6 +22,7 @@ import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.log.YFCLogCategoryFactory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -39,10 +40,10 @@ public class XPXUtils implements YIFCustomApi {
 	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";	
 	/** API object. */
 	private static YIFApi api = null;
-	private static ISCILogger log = null;
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXUtils.class);
+
 	static {
-		log = new YFCLogCategoryFactory().getLogger(XPXUtils.class
-				.getCanonicalName());
+		
 		try {
 
 			api = YIFClientFactory.getInstance().getApi();
@@ -64,23 +65,19 @@ public class XPXUtils implements YIFCustomApi {
 		// exception
 		if (env == null) {
 			// Throw new YFSException with the description
-			throw new YFSException(
-					"YFSEnvironment cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
+			throw new YFSException("YFSEnvironment cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
 		}
 		if (inXML == null) {
 			// Throw new YFSException with the description
-			throw new YFSException(
-					"Input XML document cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
+			throw new YFSException("Input XML document cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
 		}
 
 		// api = YIFClientFactory.getInstance().getApi();
-		log.info("XPXUtils.postOrderManageMsgToLegacy()--> Input XML"
-				+ SCXmlUtil.getString(inXML));
+		log.info("XPXUtils.postOrderManageMsgToLegacy() Input XML: " + SCXmlUtil.getString(inXML));
 		if (true)
 			throw new YFSException("");
 
-		log.info("XPXUtils.postOrderManageMsgToLegacy()--> Output XML"
-				+ SCXmlUtil.getString(inXML));
+		log.info("XPXUtils.postOrderManageMsgToLegacy() Output XML: " + SCXmlUtil.getString(inXML));
 		// api = null;
 		return inXML;
 	}
@@ -203,7 +200,9 @@ public class XPXUtils implements YIFCustomApi {
 			 */
 
 			String strRoot = inXML.getDocumentElement().getNodeName();
-			log.debug("The root Node is: " + strRoot);
+			if(log.isDebugEnabled()){
+				log.debug("The Root Node in manageFeedServices of XPXUtils is: " + strRoot);
+			}
 			messageAttrbs = validateIncomingMessage(env, inXML, strRoot);
 			TRANS_TYPE = messageAttrbs[0];
 			prepareEOFOrSOFMsgObject(TRANS_TYPE, messageAttrbs[1],
@@ -312,10 +311,10 @@ public class XPXUtils implements YIFCustomApi {
 			feedName = inXML.getDocumentElement().getAttribute(
 					"YantraMessageGroupID");
 		}
-
+		if(log.isDebugEnabled()){
 		log.debug("Processing " + strRoot + " Message:"
 				+ SCXmlUtil.getString(inXML));
-
+		}
 		// Create a list of all the SOF and EOF feedNames
 
 		/*
@@ -398,15 +397,14 @@ public class XPXUtils implements YIFCustomApi {
 					}
 
 				}
-
-				log.debug("modifyServer API Input XML:"
-						+ SCXmlUtil.getString(docInput));
-
+				if(log.isDebugEnabled()){
+					log.debug("ModifyServer API Input XML of XPXUtils is :" + SCXmlUtil.getString(docInput));
+				}
 				// Invoke modifyServer API
 				if (docInput.getDocumentElement().hasChildNodes()) {
 					api.invoke(env, "modifyServer", docInput);
 				} else {
-					log.debug("no service id found in Service Arguments to disable or enable: Root Element Name-"
+					log.info("No service id found in Service Arguments to disable or enable: Root Element Name-"
 							+ strRoot + "LoadIdentifier" + strRoot);
 				}
 
@@ -588,17 +586,18 @@ public class XPXUtils implements YIFCustomApi {
 				}
 
 				// Inoking modifyCache api
-
+				if(log.isDebugEnabled()){
 				log.debug("The modifyCache input is: "
 						+ SCXmlUtil.getString(modifyCacheInput));
+				}
 				api.invoke(env, "modifyCache", modifyCacheInput);
 
 			} else {
-				log.debug("Unable to find the ServerId for given ServerName:"
+				log.info("Unable to find the ServerId for given ServerName:"
 						+ strServerName);
 			}
 		} else {
-			log.debug("Argument 'IntegrationServerName' is either blank or not configured.");
+			log.info("Argument 'IntegrationServerName' is either blank or not configured.");
 		}
 
 		// method to trigger catalog index build
@@ -665,12 +664,15 @@ public class XPXUtils implements YIFCustomApi {
 			feedName = inXML.getDocumentElement().getAttribute(
 					"YantraMessageGroupID");
 		}
-		log.debug("The feedName is : " + feedName);
+		if(log.isDebugEnabled()){
+			log.debug("The feedName in XPXUtils is : " + feedName);
+		}
 		/** Getting the value of the feed **/
 		String TRANS_TYPE = _properties.getProperty(feedName + "TransType");
 		messageAttributes[0] = TRANS_TYPE;
-		log.debug("TRANS_TYPE: " + messageAttributes[0]);
-
+		if(log.isDebugEnabled()){
+			log.debug("TRANS_TYPE: " + messageAttributes[0]);
+		}
 		/**
 		 * Check if this is an EOF Feed Assumption: The Root Node of an EOF
 		 * message will be 'EOFDivisions'
@@ -791,9 +793,9 @@ public class XPXUtils implements YIFCustomApi {
 			throw new YFSException(
 					"Invalid Input XPXUtils.getXPXArticleDetailsForCOM(): ArticleKey and RequestedByUsersTeamId are mandatory");
 		}
-		log.debug("getXPXArticleDetailsForCOM() Input XML:"
-				+ SCXmlUtil.getString(docInput));
-
+		if(log.isDebugEnabled()){
+			log.debug("getXPXArticleDetailsForCOM() Input XML:"+ SCXmlUtil.getString(docInput));
+		}
 		// api = YIFClientFactory.getInstance().getApi();
 
 		// -->Get Article Details
@@ -846,10 +848,9 @@ public class XPXUtils implements YIFCustomApi {
 		// import the Organization List element to XPXArticle/Divisions element
 		SCXmlUtil.importElement(eleDivisions,
 				docOrganizationList.getDocumentElement());
-
-		log.debug("getXPXArticleDetailsForCOM() Output XML:"
-				+ SCXmlUtil.getString(docResponse));
-
+		if(log.isDebugEnabled()){
+			log.debug("getXPXArticleDetailsForCOM() Output XML:" + SCXmlUtil.getString(docResponse));
+		}
 		// api = null;
 		return docResponse;
 	}
@@ -987,9 +988,9 @@ public class XPXUtils implements YIFCustomApi {
 			throw new YFSException(
 					"Invalid Input XPXUtils.getDivisionsManagedByTeam(): RequestedByUsersTeamId is mandatory");
 		}
-
-		log.debug("getDivisionsManagedByTeam() Input XML:"
-				+ SCXmlUtil.getString(docInput));
+		if(log.isDebugEnabled()){
+			log.debug("getDivisionsManagedByTeam() Input XML:" + SCXmlUtil.getString(docInput));
+		}
 		// api = YIFClientFactory.getInstance().getApi();
 
 		// -->Get Assignable Divisions List for the User's TeamId
@@ -1020,8 +1021,9 @@ public class XPXUtils implements YIFCustomApi {
 		} else {
 			docOrganizationList = SCXmlUtil.createDocument("OrganizationList");
 		}
-		log.debug("getDivisionsManagedByTeam() Output XML:"
-				+ SCXmlUtil.getString(docOrganizationList));
+		if(log.isDebugEnabled()){
+			log.debug("getDivisionsManagedByTeam() Output XML:" + SCXmlUtil.getString(docOrganizationList));
+		}
 		// api = null;
 		return docOrganizationList;
 	}
@@ -1075,12 +1077,14 @@ public class XPXUtils implements YIFCustomApi {
 
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,
 				getCustomerListTemplate);
-		log.debug("The input doc is: "
-				+ SCXmlUtil.getString(getCustomerListInputDoc));
+		if(log.isDebugEnabled()){
+			log.debug("The input doc in getDivisionCode is: " + SCXmlUtil.getString(getCustomerListInputDoc));
+		}
 		Document outputCustomerListDoc = api.invoke(env,
 				XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
-		log.debug("The output doc is: "
-				+ SCXmlUtil.getString(outputCustomerListDoc));
+		if(log.isDebugEnabled()){
+			log.debug("The output doc in getDivisionCode is: " + SCXmlUtil.getString(outputCustomerListDoc));
+		}
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
 		if (outputCustomerListDoc.getDocumentElement()
@@ -1108,23 +1112,28 @@ public class XPXUtils implements YIFCustomApi {
 			if (customerDivision.trim().length() > 0) {
 
 				customerDivision = updateNodeSyntax(envtCode, customerDivision);
-				log.debug("The returned customer division code is: "
-						+ customerDivision);
+				if(log.isDebugEnabled()){
+					log.debug("The returned customer division code is: " + customerDivision);
+				}
 				divisionCodes.put("ExtnCustomerDivision", customerDivision);
 			}
 			if (shipFromBranch.trim().length() > 0) {
 
 				shipFromBranch = updateNodeSyntax(envtCode, shipFromBranch);
-				log.debug("The returned ship from branch code is: "
+				if(log.isDebugEnabled()){
+					log.debug("The returned ship from branch code is: "
 						+ shipFromBranch);
+				}
 				divisionCodes.put("ExtnShipFromBranch", shipFromBranch);
 			}
 			if (customerOrderBranch.trim().length() > 0) {
 
 				customerOrderBranch = updateNodeSyntax(envtCode,
 						customerOrderBranch);
-				log.debug("The returned customer order branch is: "
+				if(log.isDebugEnabled()){
+					log.debug("The returned customer order branch is: "
 						+ customerOrderBranch);
+				}
 				divisionCodes.put("ExtnCustOrderBranch", customerOrderBranch);
 			}
 
@@ -1210,11 +1219,15 @@ public class XPXUtils implements YIFCustomApi {
 				}
 				if (i == 3) {
 					environment_id = splitArrayOnBuyerOrgCode[i];
-					log.debug("The envt code is: " + environment_id);
+					if(log.isDebugEnabled()){
+						log.debug("The envt code is: " + environment_id);
+					}
 				}
 				if (i == 4) {
 					company_code = splitArrayOnBuyerOrgCode[i];
-					log.debug("The comp code is: " + company_code);
+					if(log.isDebugEnabled()){
+						log.debug("The comp code is: " + company_code);
+					}
 				}
 
 			}
@@ -1245,7 +1258,9 @@ public class XPXUtils implements YIFCustomApi {
 
 		if (XREFOutputDoc.getDocumentElement()
 				.getElementsByTagName("XPXItemcustXref").getLength() > 0) {
-			log.debug("Inside the loop where there is a item cust xref entry");
+			if(log.isDebugEnabled()){
+				log.debug("Inside the loop where there is a item cust xref entry");
+			}
 
 			Element itemCustElement = (Element) XREFOutputDoc
 					.getDocumentElement()
@@ -1254,7 +1269,9 @@ public class XPXUtils implements YIFCustomApi {
 			String legacyUom = itemCustElement.getAttribute("LegacyUom");
 
 			if (incomingUOM.equals(legacyUom)) {
-				log.debug("Inside the loop where incoming uom = legacy uom in itemcustxref");
+				if(log.isDebugEnabled()){
+					log.debug("Inside the loop where incoming uom = legacy uom in itemcustxref");
+				}
 				replacedUOM = itemCustElement.getAttribute("CustomerUom");
 			}
 
@@ -1262,9 +1279,9 @@ public class XPXUtils implements YIFCustomApi {
 
 		if (replacedUOM == null || replacedUOM.trim().length() <= 0) {
 			// Not in Xref table, so query B2B UOM table
-
-			log.debug("Inside the loop where there is no entry in the item cust xref table");
-
+			if(log.isDebugEnabled()){
+				log.debug("Inside the loop where there is no entry in the item cust xref table");
+			}
 			Document getB2BUOMXRefOutputDoc = null;
 			String customerUom = null;
 			String xpedxUom = null;
@@ -1276,14 +1293,16 @@ public class XPXUtils implements YIFCustomApi {
 					"MasterCustomerID", buyerID);
 			getB2BUOMXRefInputDoc.getDocumentElement().setAttribute(
 					"LegacyUOM", incomingUOM);
-
-			log.debug("The input to B2BUOMXref list is: "
+			if(log.isDebugEnabled()){
+				log.debug("The input to B2BUOMXref list is: "
 					+ SCXmlUtil.getString(getB2BUOMXRefInputDoc));
+			}
 			getB2BUOMXRefOutputDoc = api.executeFlow(env, "XPXB2BUOMXrefList",
 					getB2BUOMXRefInputDoc);
-			log.debug("The output of B2BUOMXref list is: "
+			if(log.isDebugEnabled()){ 
+				log.debug("The output of B2BUOMXref list is: "
 					+ SCXmlUtil.getString(getB2BUOMXRefOutputDoc));
-
+			}
 			// Document getEffectiveUomList = getXPXUomList(env,itemID,
 			// customerID, sapCustOrgCode);
 			// Element itemElement = (Element)
@@ -1303,7 +1322,9 @@ public class XPXUtils implements YIFCustomApi {
 					customerUom = b2UomElement.getAttribute("CustomerUOM");
 					xpedxUom = b2UomElement.getAttribute("LegacyUOM");
 					if (xpedxUom.equals(incomingUOM)) {
-						log.debug("Inside the loop where the xpedx uom equals the incoming uom");
+						if(log.isDebugEnabled()){
+							log.debug("Inside the loop where the xpedx uom equals the incoming uom");
+						}
 						// for(int j=0; j < uomList.getLength(); j++)
 						// {
 						// Element uomElement = (Element) uomList.item(j);
@@ -1334,7 +1355,9 @@ public class XPXUtils implements YIFCustomApi {
 			// Xpedx uom not in effective list so go to method 3.
 
 			if (replacedUOM == null || replacedUOM.trim().length() <= 0) {
-				log.debug("Inside the loop where there is no entry in b2b uom table or where there is no xpedx uom in effective list");
+				if(log.isDebugEnabled()){
+					log.debug("Inside the loop where there is no entry in b2b uom table or where there is no xpedx uom in effective list");
+				}
 				Document legacyUomOutputDoc = null;
 				Document legacyUomInputDoc = YFCDocument.createDocument(
 						"XPEDXLegacyUomXref").getDocument();
@@ -1342,13 +1365,16 @@ public class XPXUtils implements YIFCustomApi {
 						"LegacyType", environment_id);
 				legacyUomInputDoc.getDocumentElement().setAttribute(
 						"LegacyUOM", incomingUOM);
-
-				log.debug("The input to getLegacyUomXrefService is : "
+				if(log.isDebugEnabled()){
+					log.debug("The input to getLegacyUomXrefService is : "
 						+ SCXmlUtil.getString(legacyUomInputDoc));
+				}
 				legacyUomOutputDoc = api.executeFlow(env,
 						"XPXGetLegacyUomXrefService", legacyUomInputDoc);
-				log.debug("The output of getLegacyUomXrefService is : "
+				if(log.isDebugEnabled()){
+					log.debug("The output of getLegacyUomXrefService is : "
 						+ SCXmlUtil.getString(legacyUomOutputDoc));
+				}
 
 				if (extnUomType.equalsIgnoreCase("E")) {
 					log.debug("Inside the loop where the uom type is E");
@@ -1376,7 +1402,7 @@ public class XPXUtils implements YIFCustomApi {
 								"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
 					}
 				} else {
-					log.debug("Inside the loop where the uom type is L");
+					log.info("Inside the loop where the uom type is L");
 					replacedUOM = incomingUOM;
 				}
 			}
@@ -1391,14 +1417,17 @@ public class XPXUtils implements YIFCustomApi {
 			for (int i = 0; i < splitArrayOnUom.length; i++) {
 				if (i == 1) {
 					replacedUOM = splitArrayOnUom[i];
-					log.debug("The replacedUOM UOM after the split is: "
+					if(log.isDebugEnabled()){
+						log.debug("The replacedUOM UOM after the split is: "
 							+ replacedUOM);
+					}
 				}
 			}
 		}
-
-		log.debug("The final replaced uom in the replaceOutgoing method is: "
+		if(log.isDebugEnabled()){
+			log.debug("The final replaced uom in the replaceOutgoing method is: "
 				+ replacedUOM);
+		}
 		return replacedUOM;
 	}
 
@@ -1478,15 +1507,20 @@ public class XPXUtils implements YIFCustomApi {
 			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
 				if (i == 1) {
 					legacyCustomerNumber = splitArrayOnBuyerOrgCode[i];
+					
 					log.info("The shipToSuffix is: " + legacyCustomerNumber);
 				}
 				if (i == 3) {
 					environment_id = splitArrayOnBuyerOrgCode[i];
-					log.debug("The envt code is: " + environment_id);
+					if(log.isDebugEnabled()){
+						log.debug("The envt code is: " + environment_id);
+					}
 				}
 				if (i == 4) {
 					company_code = splitArrayOnBuyerOrgCode[i];
-					log.debug("The comp code is: " + company_code);
+					if(log.isDebugEnabled()){
+						log.debug("The comp code is: " + company_code);
+					}
 				}
 
 			}
@@ -1515,8 +1549,9 @@ public class XPXUtils implements YIFCustomApi {
 			String customerUom = itemCustElement.getAttribute("CustomerUom");
 			String customerExclFlag = itemCustElement
 					.getAttribute("IsCustUOMExcl");
-
-			log.debug("The customer exclusive flag is: " + customerExclFlag);
+			if(log.isDebugEnabled()){
+				log.debug("The customer exclusive flag is: " + customerExclFlag);
+			}
 			/**
 			 * The customer exclusive flag check has been added so that the
 			 * comparison between the uoms should only take place if this value
@@ -1526,7 +1561,9 @@ public class XPXUtils implements YIFCustomApi {
 					&& "Y".equalsIgnoreCase(customerExclFlag)) {
 
 				if (incomingUOM.equals(customerUom)) {
-					log.debug("Inside second loop where incoming uom = customer uom");
+					if(log.isDebugEnabled()){
+						log.debug("Inside second loop where incoming uom = customer uom");
+					}
 					String legacyUom = itemCustElement
 							.getAttribute("LegacyUom");
 
@@ -1552,7 +1589,9 @@ public class XPXUtils implements YIFCustomApi {
 				}
 
 			} else {
-				log.debug("Inside loop where customeExclFlag is N");
+				if(log.isDebugEnabled()){
+					log.debug("Inside loop where customeExclFlag is N");
+				}
 				// Method 2;
 				replacedUOM = checkB2BUOMTable(env, itemID, customerID,
 						sapCustOrgCode, buyerID, incomingUOM, extnUomType);
@@ -1568,7 +1607,9 @@ public class XPXUtils implements YIFCustomApi {
 				}
 			}
 		} else {
-			log.debug("Inside the third loop where no entry in cust xref table");
+			if(log.isDebugEnabled()){
+				log.debug("Inside the third loop where no entry in cust xref table");
+			}
 			// Method2;
 			replacedUOM = checkB2BUOMTable(env, itemID, customerID,
 					sapCustOrgCode, buyerID, incomingUOM, extnUomType);
@@ -1580,7 +1621,9 @@ public class XPXUtils implements YIFCustomApi {
 			return replacedUOM;
 		} else {
 			convertedUOM = environment_id + "_" + replacedUOM;
-			log.debug("convertedUOM === " + convertedUOM);
+			if(log.isDebugEnabled()){
+				log.debug("convertedUOM: " + convertedUOM);
+			}
 			validateUOMWithItemUOMMaster(env, convertedUOM, sapCustOrgCode,
 					itemID);
 			return convertedUOM;
@@ -1609,8 +1652,10 @@ public class XPXUtils implements YIFCustomApi {
 		getCustomerDetailsOutputDoc = api.invoke(env,
 				XPXLiterals.GET_CUSTOMER_LIST_API,
 				getCustomerDetailsInputDoc.getDocument());
-		log.debug("The shipto customer details are: "
+		if(log.isDebugEnabled()){
+			log.debug("The shipto customer details are: "
 				+ SCXmlUtil.getString(getCustomerDetailsOutputDoc));
+		}
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
 		return getCustomerDetailsOutputDoc;
@@ -1650,7 +1695,9 @@ public class XPXUtils implements YIFCustomApi {
 			RemoteException, NullPointerException, Exception
 
 	{
-		log.debug("Inside check B2BUOMTable");
+		if(log.isDebugEnabled()){
+			log.debug("Inside check B2BUOMTable");
+		}
 		String b2bUOM = null;
 		Document getB2BUOMXRefOutputDoc = null;
 		String customerUom = null;
@@ -1663,18 +1710,22 @@ public class XPXUtils implements YIFCustomApi {
 		// buyerID="123456";
 		getB2BUOMXRefInputDoc.getDocumentElement().setAttribute(
 				"MasterCustomerID", buyerID);
-
-		log.debug("The input to b2b uom xref table is: "
+		if(log.isDebugEnabled()){
+			log.debug("The input to b2b uom xref table is: "
 				+ SCXmlUtil.getString(getB2BUOMXRefInputDoc));
+		}
 		getB2BUOMXRefOutputDoc = api.executeFlow(env, "XPXB2BUOMXrefList",
 				getB2BUOMXRefInputDoc);
-		log.debug("The output of b2b uom xref table is: "
+		if(log.isDebugEnabled()){
+			log.debug("The output of b2b uom xref table is: "
 				+ SCXmlUtil.getString(getB2BUOMXRefOutputDoc));
-
+		}
 		Document getEffectiveUomList = getXPXUomList(env, itemID, customerID,
 				organizationCode);
-		log.debug("The getEffectiveUomList output is: "
+		if(log.isDebugEnabled()){
+			log.debug("The getEffectiveUomList output is: "
 				+ SCXmlUtil.getString(getEffectiveUomList));
+		}
 		/*
 		 * Element itemElement = (Element)
 		 * getEffectiveUomList.getDocumentElement
@@ -1687,7 +1738,9 @@ public class XPXUtils implements YIFCustomApi {
 
 		if (getB2BUOMXRefOutputDoc.getDocumentElement()
 				.getElementsByTagName("XPXB2bLegacyUomXref").getLength() > 0) {
-			log.debug("Inside loop of XPXB2bLegacyUomXref");
+			if(log.isDebugEnabled()){
+				log.debug("Inside loop of XPXB2bLegacyUomXref");
+			}
 			NodeList b2bUomList = getB2BUOMXRefOutputDoc.getDocumentElement()
 					.getElementsByTagName("XPXB2bLegacyUomXref");
 			for (int i = 0; i < b2bUomList.getLength(); i++) {
@@ -1696,18 +1749,23 @@ public class XPXUtils implements YIFCustomApi {
 				// Added for testing
 				// customerUom ="XXX";
 				xpedxUom = b2UomElement.getAttribute("LegacyUOM");
-
-				log.debug("The customer uom is: " + customerUom
+				if(log.isDebugEnabled()){
+					log.debug("The customer uom is: " + customerUom
 						+ " and the incoming uom is: " + incomingUOM);
+				}
 				if (customerUom.equals(incomingUOM)) {
-					log.debug("Inside loop of customer uom =incoming uom");
+					if(log.isDebugEnabled()){
+						log.debug("Inside loop of customer uom = incoming uom");
+					}
 					for (int j = 0; j < uomList.getLength(); j++) {
 						Element uomElement = (Element) uomList.item(j);
 						String unitOfMeasure = uomElement
 								.getAttribute("UnitOfMeasure");
 						if (xpedxUom != null && xpedxUom.trim().length() > 0
 								&& xpedxUom.equals(unitOfMeasure)) {
-							log.debug("The alternate uom equals the xpedx uom");
+							if(log.isDebugEnabled()){
+								log.debug("The alternate uom equals the xpedx uom");
+							}
 							b2bUOM = xpedxUom;
 							return b2bUOM;
 						}
@@ -1732,14 +1790,18 @@ public class XPXUtils implements YIFCustomApi {
 				}
 			}
 			// Means no entry found in B2B UOM table where the UOM matches
-			log.debug("Inside the second loop of b2bUOM ==NULL");
+			if(log.isDebugEnabled()){
+				log.debug("Inside the second loop of b2bUOM == NULL");
+			}
 			b2bUOM = checkCustomerProfileUom(env, incomingUOM, customerID,
 					organizationCode, extnUomType, itemID);
 			return b2bUOM;
 
 		}
 		// Means there is no entry in B2B UOM table where the buyer id exists.
-		log.debug("Inside the third loop of b2bUOM ==NULL");
+		if(log.isDebugEnabled()){
+			log.debug("Inside the third loop of b2bUOM == NULL");
+		}
 		b2bUOM = checkCustomerProfileUom(env, incomingUOM, customerID,
 				organizationCode, extnUomType, itemID);
 
@@ -1750,20 +1812,25 @@ public class XPXUtils implements YIFCustomApi {
 			String incomingUOM, String customerID, String organizationCode,
 			String extnUomType, String itemID) throws YFSException,
 			RemoteException, NullPointerException, Exception {
-		log.debug("Inside checkCustomerProfileUom");
+		if(log.isDebugEnabled()){
+			log.debug("Inside checkCustomerProfileUom");
+		}
 		String customerProfileUOM = null;
 		String environment_id = null;
 		Document legacyUomOutputDoc = null;
-
-		log.debug("The customer id is: " + customerID);
+		if(log.isDebugEnabled()){
+			log.debug("The customer id is: " + customerID);
+		}
 		String[] splitArrayOnBuyerOrgCode = customerID.split("-");
 
 		for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
 
 			if (i == 3) {
 				environment_id = splitArrayOnBuyerOrgCode[i];
-				log.debug("The envt code in checkCustomerProfileUom is: "
+				if(log.isDebugEnabled()){
+					log.debug("The envt code in checkCustomerProfileUom is: "
 						+ environment_id);
+				}
 			}
 
 		}
@@ -1785,19 +1852,22 @@ public class XPXUtils implements YIFCustomApi {
 		 * } }
 		 */
 		legacyUomInputDoc.getDocumentElement().setAttribute("UOM", incomingUOM);
-
-		log.debug("The i/p doc to getlegacyUomXref is: "
+		if(log.isDebugEnabled()){
+			log.debug("The i/p doc to getlegacyUomXref is: "
 				+ SCXmlUtil.getString(legacyUomInputDoc));
+		}
 		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService",
 				legacyUomInputDoc);
-		log.debug("The o/p doc o getlegacyUomXref is: "
+		if(log.isDebugEnabled()){
+			log.debug("The o/p doc o getlegacyUomXref is: "
 				+ SCXmlUtil.getString(legacyUomOutputDoc));
-
-		log.debug("The extn uom type in the last loop is: " + extnUomType);
-
+			log.debug("The extn uom type in the last loop is: " + extnUomType);
+		}
 		if (extnUomType.equalsIgnoreCase("E")) {
 			// EDI UOM
-			log.debug("Inside the loop where extn uom type is E");
+			if(log.isDebugEnabled()){
+				log.debug("Inside the loop where extn uom type is E");
+			}
 			Element legacyUomXrefElement = (Element) legacyUomOutputDoc
 					.getDocumentElement()
 					.getElementsByTagName("XPEDXLegacyUomXref").item(0);
@@ -1805,7 +1875,9 @@ public class XPXUtils implements YIFCustomApi {
 				String legacyUom = legacyUomXrefElement
 						.getAttribute("LegacyUOM");
 				if (legacyUom != null && legacyUom.trim().length() > 0) {
-					log.debug("The legacy uom is: " + legacyUom);
+					if(log.isDebugEnabled()){
+						log.debug("The legacy uom is: " + legacyUom);
+					}
 					customerProfileUOM = legacyUom;
 				} else {
 					// No Legacy UOM attribute value available
@@ -1820,7 +1892,7 @@ public class XPXUtils implements YIFCustomApi {
 
 			}
 		} else {
-			log.debug("Inside the loop where extn uom type is not E");
+			log.info("Inside the loop where extn uom type is not E");
 			customerProfileUOM = incomingUOM;
 		}
 		return customerProfileUOM;
@@ -1879,17 +1951,19 @@ public class XPXUtils implements YIFCustomApi {
 				XPXLiterals.A_CUSTOMER_NO, legacyCustomerNumber);
 		XREFInputDoc.getDocumentElement().setAttribute(
 				XPXLiterals.A_LEGACY_ITEM_NO, itemID);
-
+		if(log.isDebugEnabled()){
 		log.debug("The input to getXrefList is: "
 				+ SCXmlUtil.getString(XREFInputDoc));
+		}
 		// <XPXItemcustXrefList />
 
 		// log.debug("The input to getXRefList is: "+SCXmlUtil.getString(XREFInputDoc));
 		XREFOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST,
 				XREFInputDoc);
-
+		if(log.isDebugEnabled()){
 		log.debug("The output of getXrefList is: "
 				+ SCXmlUtil.getString(XREFOutputDoc));
+		}
 
 		return XREFOutputDoc;
 	}
@@ -1924,7 +1998,9 @@ public class XPXUtils implements YIFCustomApi {
 	private static void validateUOMWithItemUOMMaster(YFSEnvironment env,
 			String incomingUOM, String organizationCode, String itemID)
 			throws YFSException, NullPointerException, Exception {
-		log.debug("Validate UOM with the Item UOM master table.");
+		if(log.isDebugEnabled()){
+			log.debug("Validate UOM with the Item UOM master table.");
+		}
 		boolean itemIDUOMExist = false;
 		boolean entryInItemMaster = false;
 		boolean validUOM = false;
@@ -1950,12 +2026,14 @@ public class XPXUtils implements YIFCustomApi {
 
 		// To set API Template for getItemUOMList
 		env.setApiTemplate("getItemUOMList", itemUOMTemplate);
-
-		log.debug("itemUOMInputDoc = " + SCXmlUtil.getString(itemUOMInputDoc));
+		if(log.isDebugEnabled()){
+			log.debug("itemUOMInputDoc = " + SCXmlUtil.getString(itemUOMInputDoc));
+		}
 		Document itemUOMOutputDoc = api.invoke(env, "getItemUOMList",
 				itemUOMInputDoc);
-		log.debug("itemUOMOutputDoc = " + SCXmlUtil.getString(itemUOMOutputDoc));
-
+		if(log.isDebugEnabled()){
+			log.debug("itemUOMOutputDoc = " + SCXmlUtil.getString(itemUOMOutputDoc));
+		}
 		// To clear the api template.
 		env.clearApiTemplate("getItemUOMList");
 
@@ -1981,7 +2059,9 @@ public class XPXUtils implements YIFCustomApi {
 						if (!YFCObject.isNull(isOrderingUOM)) {
 							// To check if the UOM is an ordering UOM.
 							if (isOrderingUOM.equalsIgnoreCase("Y")) {
-								log.debug("Valid UOM");
+								if(log.isDebugEnabled()){
+									log.debug("Valid UOM");
+								}
 								validUOM = true;
 								break;
 							}
@@ -2127,12 +2207,15 @@ public class XPXUtils implements YIFCustomApi {
 				"SellerOrganizationCode");
 		_subjectLine = "Notification: User Profile Update on ".concat(brand)
 				.concat(".com").concat(" account ");
-		System.out.println("_subjectLine: " + _subjectLine);
-
+		if(log.isDebugEnabled()){
+			log.debug("_subjectLine: " + _subjectLine);
+		}
 		inputDocument.getDocumentElement()
 				.setAttribute("Subject", _subjectLine);
-		System.out.println("inputDocument with SubjectLine: "
+		if(log.isDebugEnabled()){
+			log.debug("inputDocument with SubjectLine: "
 				+ SCXmlUtil.getString(inputDocument));
+		}
 		return inputDocument;
 	}
 	
@@ -2145,12 +2228,15 @@ public class XPXUtils implements YIFCustomApi {
 				"SellerOrganizationCode");
 		_subjectLine = "Notification: User Profile Email Address Change on ".concat(brand)
 				.concat(".com").concat(" account ");
-		System.out.println("_subjectLine: " + _subjectLine);
-
+		if(log.isDebugEnabled()){
+			log.debug("_subjectLine: " + _subjectLine);
+		}
 		inputDocument.getDocumentElement()
 				.setAttribute("Subject", _subjectLine);
-		System.out.println("inputDocument with SubjectLine: "
+		if(log.isDebugEnabled()){
+		log.debug("inputDocument with SubjectLine: "
 				+ SCXmlUtil.getString(inputDocument));
+		}
 		return inputDocument;
 	}
 
@@ -2162,12 +2248,15 @@ public class XPXUtils implements YIFCustomApi {
 				"SellerOrganizationCode");
 		_subjectLine = "Notification: Buyer added to your ".concat(brand)
 				.concat(".com").concat(" account.");
-		System.out.println("_subjectLine: " + _subjectLine);
-
+		if(log.isDebugEnabled()){
+			log.debug("_subjectLine: " + _subjectLine);
+		}
 		inputDocument.getDocumentElement()
 				.setAttribute("Subject", _subjectLine);
-		System.out.println("inputDocument with SubjectLine: "
+		if(log.isDebugEnabled()){
+		log.debug("inputDocument with SubjectLine: "
 				+ SCXmlUtil.getString(inputDocument));
+		}
 		return inputDocument;
 	}
 
@@ -2179,12 +2268,15 @@ public class XPXUtils implements YIFCustomApi {
 				"SellerOrganizationCode");
 		_subjectLine = "Notification: Buyer Removed from ".concat(brand)
 				.concat(".com").concat(" account ");
-		System.out.println("_subjectLine: " + _subjectLine);
-
+		if(log.isDebugEnabled()){
+			log.debug("_subjectLine: " + _subjectLine);
+		}
 		inputDocument.getDocumentElement()
 				.setAttribute("Subject", _subjectLine);
-		System.out.println("inputDocument with SubjectLine: "
+		if(log.isDebugEnabled()){
+		log.debug("inputDocument with SubjectLine: "
 				+ SCXmlUtil.getString(inputDocument));
+		}
 		return inputDocument;
 	}
 
@@ -2205,23 +2297,25 @@ public class XPXUtils implements YIFCustomApi {
 		inputElement.setAttribute("CodeType", "XPXBrandSF");
 		inputElement.setAttribute("CodeValue", brandName);
 		inputElement.setAttribute("OrganizationCode", "DEFAULT");
-
-		System.out.println("The input to getCommonCodeList is: "
+		if(log.isDebugEnabled()){
+		log.debug("The input to getCommonCodeList is: "
 				+ SCXmlUtil.getString(inputDoc.getDocument()));
+		}
 		Document outputListDoc = api.invoke(env, "getCommonCodeList",
 				inputDoc.getDocument());
-		System.out.println("The output of getCommonCodeList is: "
+		if(log.isDebugEnabled()){
+		log.debug("The output of getCommonCodeList is: "
 				+ SCXmlUtil.getString(outputListDoc));
-
+		}
 		NodeList orgList = outputListDoc.getElementsByTagName("CommonCode");
 		int orgLength = orgList.getLength();
 		if (orgLength != 0) {
 			Element listElement = (Element) orgList.item(0);
 			organizationCode = listElement.getAttribute("CodeShortDescription");
 		}
-		System.out
-				.println("The organizationCode retruned from method to retrieve the OrgCode is: "
-						+ organizationCode);
+		if(log.isDebugEnabled()){
+			log.debug("The organizationCode retruned from method to retrieve the OrgCode is: " + organizationCode);
+		}
 		return organizationCode;
 	}
 	/***************************** Arun's changes end here **************************************/
@@ -2242,10 +2336,9 @@ public class XPXUtils implements YIFCustomApi {
 		String stockType = "";
 		boolean callItemList = false;
 		Document itemDoc;
-		
-		System.out.println("Inventory Indicator = " + invIndicator);
-		log.info("Inventory Indicator = " + invIndicator);
-		
+		if(log.isDebugEnabled()){
+			log.info("Inventory Indicator : " + invIndicator);
+		}
 		if(YFCObject.isNull(invIndicator) || YFCObject.isVoid(invIndicator)) {
 			callItemList = true;
 		} else {			
@@ -2263,9 +2356,9 @@ public class XPXUtils implements YIFCustomApi {
 			YFCElement itemListEle = getItemListInXML.getDocumentElement();
 			itemListEle.setAttribute("ItemID", itemId);
 			
-			System.out.println();
-			System.out.println("XPXUtils-XPXGetItemList-InXML:"+getItemListInXML.getString());
-			
+			if(log.isDebugEnabled()){
+				log.debug("XPXUtils-XPXGetItemList-InXML:"+getItemListInXML.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXUtils-XPXGetItemList-InXML:"+getItemListInXML.getString());
 			
@@ -2312,19 +2405,20 @@ public class XPXUtils implements YIFCustomApi {
 				allowDirectOrderFlag = extnElement.getAttribute("ExtnAllowDirectOrderFlag");
 			} 
 		}
-		
-		System.out.println("");
-		System.out.println("allowDirectOrderFlag = " + allowDirectOrderFlag);		
-		log.info("");
-		log.info("allowDirectOrderFlag = " + allowDirectOrderFlag);
-		
+		if(log.isDebugEnabled()){
+			log.debug("");
+			log.debug("allowDirectOrderFlag : " + allowDirectOrderFlag);		
+			log.info("");
+			log.info("allowDirectOrderFlag = " + allowDirectOrderFlag);
+		}
 		return allowDirectOrderFlag;
 	}
 	
 	public Document getAdditionalAttributes(YFSEnvironment env,
 			Document inputDocument) throws Exception {
-		
-		System.out.println("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
+		if(log.isDebugEnabled()){
+			log.debug("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
+		}
 		String storeFrontId = SCXmlUtil.getAttribute(
 				inputDocument.getDocumentElement(), "EnterpriseCode");
 		StringBuffer sb = new StringBuffer();
@@ -2396,7 +2490,9 @@ public class XPXUtils implements YIFCustomApi {
 						urlElem.setAttribute("URL", url);
 					}
 		}
-		System.out.println("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
+		if(log.isDebugEnabled()){
+			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
+		}
 		return inputDocument;
 	}
 }
