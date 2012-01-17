@@ -110,7 +110,7 @@
 				//Ext.Msg.wait('Executing your request...Please wait.');
 			}		
 		}		
-	$(document).ready(function() {		
+		Ext.onReady(function(){		
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
 				if (isUserAdmin){
