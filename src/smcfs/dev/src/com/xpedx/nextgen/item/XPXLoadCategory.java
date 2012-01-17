@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.dashboard.XPXInvoiceAgent;
@@ -43,6 +44,9 @@ public class XPXLoadCategory implements YIFCustomApi {
 			/** Modified from getApi() to getLocalApi() by Arun.Sekhar on 21-Jan-2011 for  logging
 			 */
 			api = YIFClientFactory.getInstance().getLocalApi();
+			if(inXML != null){
+				log.info("Input XML for XPXLoadCategory : " + SCXmlUtil.getString(inXML));
+			}
 			
 			Element eCategoryList = inXML.getDocumentElement();
 			
@@ -112,17 +116,18 @@ public class XPXLoadCategory implements YIFCustomApi {
 	{
 	
 		HashMap hmValidAttrValue = new HashMap();
-		//System.out.println("Setting " + sItemAttrValue + " as valid value for " + sAttrName);
-		
+		if(log.isDebugEnabled()){
+			log.debug("Setting " + sItemAttrValue + " as valid value for " + sAttrName);
+		}
 		YFCDocument getAttrListInDoc = YFCDocument.createDocument("Attribute");
 		YFCElement eAttributeIn = getAttrListInDoc.getDocumentElement();
 		eAttributeIn.setAttribute("AttributeDomainID", "ItemAttribute");
 		eAttributeIn.setAttribute("AttributeGroupID", _ATTR_GROUP_ID);
 		eAttributeIn.setAttribute("AttributeID", sAttrName);
 		eAttributeIn.setAttribute("CallingOrganizationCode", _ORG_CODE);
-		
-		//System.out.println("getAttrListInDoc:" + getAttrListInDoc);
-		
+		if(log.isDebugEnabled()){
+			log.debug("Get Attribute List Input Document is :" + getAttrListInDoc.toString());
+		}
 		//set template for getAttributeList
 		YFCDocument getAttrListTemp = YFCDocument.createDocument("AttributeList");
 		YFCElement eAttrListTemp = getAttrListTemp.getDocumentElement();
@@ -140,9 +145,9 @@ public class XPXLoadCategory implements YIFCustomApi {
 		
 		eAttAllowedValueTemp.setAttribute("Value", "");
 		eAttAllowedValueTemp.setAttribute("ShortDescription", "");
-		
-		//System.out.println("docAttrList:" + getAttrListTemp); 
-		
+		if(log.isDebugEnabled()){
+			log.debug("Document for attribute list is :" + getAttrListTemp.toString()); 
+		}
 		env.setApiTemplate("getAttributeList", getAttrListTemp.getDocument());
 		
 		Document docAttrList = api.invoke(env, "getAttributeList", getAttrListInDoc.getDocument());
@@ -152,7 +157,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 		/*
 		if("Y".equals(sVerbose))
 		{*/
-			//System.out.println("docAttrList:" + YFCDocument.getDocumentFor(docAttrList));
+			//log.debug("docAttrList:" + YFCDocument.getDocumentFor(docAttrList));
 		/*}*/
 		
 		Element eAttrListOut = docAttrList.getDocumentElement();
@@ -171,12 +176,14 @@ public class XPXLoadCategory implements YIFCustomApi {
 		/*
 		if("Y".equals(sVerbose))
 		{*/
-			//System.out.println("hmValidAttrValue:" + hmValidAttrValue);
+			//log.debug("hmValidAttrValue:" + hmValidAttrValue);
 		/*}*/
 		
 		if(!hmValidAttrValue.containsKey(sItemAttrValue))
 		{
-			//System.out.println("adding " + sItemAttrValue);
+			if(log.isDebugEnabled()){
+				log.debug("Adding item attribute value : " + sItemAttrValue);
+			}
 			//update the attribute to add the valid value
 			YFCDocument manageAttributeIn = YFCDocument.createDocument("AttributeList");
 			YFCElement eAttributeListIn = manageAttributeIn.getDocumentElement();
@@ -198,7 +205,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 			/*
 			if("Y".equals(sVerbose))
 			{*/
-				//System.out.println("manageAttributeIn:" + manageAttributeIn);
+				//log.debug("manageAttributeIn:" + manageAttributeIn);
 			/*}
 			if("Y".equals(sExecuteAPI))
 			{*/
