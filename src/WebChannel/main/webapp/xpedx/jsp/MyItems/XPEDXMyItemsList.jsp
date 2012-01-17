@@ -77,6 +77,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <!-- Arun uses value Current customer id for this javascript  -->
 <script type="text/javascript">
 			$(document).ready(function() {
@@ -1078,7 +1079,6 @@ isFirstDesc=true;
 <s:include value="../modals/XPEDXItemsListImportModal.jsp" />
 
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
