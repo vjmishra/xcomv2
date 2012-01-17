@@ -61,7 +61,10 @@ public class XPXRRDSecurityFileGenerationAgent extends YCPBaseAgent {
 			Element customerTemplateElement = customerContactListTemplateDoc.createElement("Customer");
 			customerContactTemplateElement.appendChild(customerTemplateElement);
 			env.setApiTemplate("getCustomerContactList",customerContactListTemplateDoc);
-
+			if(log.isDebugEnabled())
+			{
+				log.debug("The input document for getCustomerContactList in XPXRRDSecurityFileGenerationAgent is  "+SCXmlUtil.getString(inputCustomerDoc));
+			}
 			// get the invoice list
 			Document outputInvoiceHeaderListDoc = api.invoke(env, "getCustomerContactList", inputCustomerDoc);
 			env.clearApiTemplate("getCustomerContactList");
@@ -85,7 +88,10 @@ public class XPXRRDSecurityFileGenerationAgent extends YCPBaseAgent {
 				Element customerTemplateElement1 = customerContactListTemplateDoc1.createElement("Customer");
 				customerContactTemplateElement1.appendChild(customerTemplateElement1);
 				env.setApiTemplate("getCustomerContactList",customerContactListTemplateDoc1);
-		
+				if(log.isDebugEnabled())
+				{
+					log.debug("The input document for getCustomerContactList in XPXRRDSecurityFileGenerationAgent is  "+SCXmlUtil.getString(inputCustomerDoc));
+				}
 				// get the invoice list
 				Document outputInvoiceHeaderListDoc1 = api.invoke(env, "getCustomerContactList", inputCustomerDoc);
 				env.clearApiTemplate("getCustomerContactList");
@@ -135,7 +141,10 @@ public class XPXRRDSecurityFileGenerationAgent extends YCPBaseAgent {
 			Element customerTemplateElement1 = customerListTemplateDoc.createElement("Customer");
 			customerListTemplateElement.appendChild(customerTemplateElement1);
 			env.setApiTemplate("getCustomerList",customerListTemplateDoc);
-
+			if(log.isDebugEnabled())
+			{
+				log.debug("The input document for getCustomerList in XPXRRDSecurityFileGenerationAgent is  "+SCXmlUtil.getString(inputCsrDoc));
+			}
 			// get the invoice list
 			Document outputCustomerListDoc = api.invoke(env, "getCustomerList", inputCsrDoc);
 			env.clearApiTemplate("getCustomerList");
@@ -215,7 +224,9 @@ public class XPXRRDSecurityFileGenerationAgent extends YCPBaseAgent {
 		{
 			lastCElement = (Element)cNodeList.item(cLength-1);
 			customerKeyInLastCreatedMessage = lastCElement.getAttribute("CustomerKey");
-		System.out.println("customerKeyInLastCreatedMessage"+ customerKeyInLastCreatedMessage);
+		if(log.isDebugEnabled()){
+		log.debug("customerKeyInLastCreatedMessage"+ customerKeyInLastCreatedMessage);
+		}
 		Element expNextElement = inputCsrDoc.createElement("Exp");
 		expNextElement.setAttribute("Name", "CustomerKey");
 		expNextElement.setAttribute("Value",customerKeyInLastCreatedMessage);
@@ -292,7 +303,9 @@ public class XPXRRDSecurityFileGenerationAgent extends YCPBaseAgent {
 			lastCCElement = (Element)ccNodeList.item(ccLength-1);
 		
 		customerContactKeyInLastCreatedMessage = lastCCElement.getAttribute("CustomerContactKey");
-		System.out.println("customerKeyInLastCreatedMessage"+ customerContactKeyInLastCreatedMessage);
+		if(log.isDebugEnabled()){
+		log.debug("customerKeyInLastCreatedMessage :"+ customerContactKeyInLastCreatedMessage);
+		}
 		Element expNextElement = inputCustomerDoc.createElement("Exp");
 		expNextElement.setAttribute("Name", "CustomerContactKey");
 		expNextElement.setAttribute("Value",customerContactKeyInLastCreatedMessage);
