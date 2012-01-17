@@ -6,12 +6,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.woodstock.util.frame.log.base.ISCILogger;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
-import com.yantra.yfc.log.YFCLogCategoryFactory;
+import com.yantra.yfc.core.YFCObject;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
@@ -23,12 +23,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		
 	}
 	private static YIFApi api = null;
-	private static ISCILogger log = null;
-	
-	static {
-		log = new YFCLogCategoryFactory().getLogger(XPXUtils.class
-				.getCanonicalName());
-	}
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXTranslationUtilsAPI.class);
 	
 	static String getCustomerListTemplate = "global/template/api/getCustomerList.XPXTranslationUtilsAPI.xml";
 	
@@ -40,7 +35,9 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		String itemID = "";
 		String xpedxUnspsc = "";
 		api = YIFClientFactory.getInstance().getApi();
-				
+		if(inputXML != null){
+			log.info("The inputXML to translateUomCustomerToSterlingForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+		}
 		//get the customer id for the b2b order place
 		Element inputElement = inputXML.getDocumentElement();
 		String orgCode = inputElement.getAttribute("EnterpriseCode");
@@ -62,6 +59,9 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		api = YIFClientFactory.getInstance().getApi();
 		String orgCode = "";		
 		//get the customer id for the b2b order place
+		if(inputXML != null){
+			log.info("The inputXML to translateUnspscSterlingToCustomerForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+		}
 		Element inputElement = inputXML.getDocumentElement();
 		String customerID = inputElement.getAttribute("CustomerID");
 		orgCode = inputElement.getAttribute("EnterpriseCode");
@@ -499,10 +499,14 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 			e.printStackTrace();
 		}
 		
-		System.out.println("");
-		System.out.println("XPXTranslationUtilsAPI : buyerID = " + buyerID);
-		log.info("");
-		log.info("XPXTranslationUtilsAPI : buyerID = " + buyerID);
+		if(log.isDebugEnabled()){
+			log.debug("");
+			log.debug("XPXTranslationUtilsAPI : buyerID = " + buyerID);
+		}
+		if(!YFCObject.isNull(buyerID) && !YFCObject.isVoid(buyerID)) {
+			log.info("");
+			log.info("XPXTranslationUtilsAPI : buyerID = " + buyerID);
+		}
 		
 		return buyerID;
 	}
@@ -533,11 +537,14 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 				}
 			}		
 		}
-		
-		System.out.println("");
-		System.out.println("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
-		log.info("");
-		log.info("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
+		if(log.isDebugEnabled()){
+			log.debug("");
+			log.debug("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
+		}
+		if(!YFCObject.isNull(parentCustID) && !YFCObject.isVoid(parentCustID)) {
+			log.info("");
+			log.info("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
+		}
 		
 		return parentCustID;
 	}

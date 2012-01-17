@@ -36,10 +36,13 @@ public class XPXStampLinePocessCodes implements YIFCustomApi
 	public Document stampLineProcessCodes(YFSEnvironment env, Document inputXML)
 	{
 		
+		if(inputXML != null){
+			log.info("The input to stampLineProcessCodes in XPXStampLinePocessCodes is : " + SCXmlUtil.getString(inputXML));
+		}
 		Element inputDocRoot = inputXML.getDocumentElement();
-		//System.out.println("entering stampLineProcessCodes ");
-		//System.out.println(" inputDocRoot :: " + SCXmlUtil.getString(inputDocRoot));
-		
+		if(log.isDebugEnabled()){
+			log.debug("StampLineProcessCodes_inputDocRoot :" + SCXmlUtil.getString(inputDocRoot));
+		}
 		
 		
 		Element orderLinesElement = (Element)inputDocRoot.getElementsByTagName(XPXLiterals.E_ORDER_LINES).item(0);

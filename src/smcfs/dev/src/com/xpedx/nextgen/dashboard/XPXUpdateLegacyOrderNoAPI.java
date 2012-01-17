@@ -66,8 +66,9 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 		//String customerOrderHeaderKey = getCustomerOrderHeaderKey(env,webConfirmationNumber);
 		
 		changeOrderInputDoc = getChangeOrderInputDoc(foDetailsMap,webLineNumberList,legacyOrderNumber,generationNumber);
-		
-		log.info("UpdateSterlingOrders_ChangeOrderInputDoc:"+ SCXmlUtil.getString(changeOrderInputDoc));
+		if(inputXML != null){
+			log.info("UpdateSterlingOrders_ChangeOrderInputDoc:"+ SCXmlUtil.getString(changeOrderInputDoc));
+		}
 		try {
 			api.invoke(env, XPXLiterals.CHANGE_ORDER_API, changeOrderInputDoc);
 		} catch (YFSException e) {
@@ -123,9 +124,9 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 
 		}
 		changeOrderInputDoc.getDocumentElement().appendChild(orderLines);
-		
-		System.out.println("The final changeOrder input doc is: "+SCXmlUtil.getString(changeOrderInputDoc));
-		
+		if(log.isDebugEnabled()){
+			log.debug("The final changeOrder input doc is: "+SCXmlUtil.getString(changeOrderInputDoc));
+		}
 		return changeOrderInputDoc;
 	}
 	
@@ -186,7 +187,9 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 		Element orderLineExtn = getOrderLineListInputDoc.createElement(XPXLiterals.E_EXTN);
 		
 		String firstWebLineNumber = getFirstWebLineNumber(inputDocRoot);
-        System.out.println("The first webline number is:"+firstWebLineNumber); 
+		if(log.isDebugEnabled()){
+        	log.debug("The first webline number is:"+firstWebLineNumber); 
+		}
 		orderLineExtn.setAttribute("ExtnWebLineNumber", firstWebLineNumber);
 		
 		getOrderLineListInputDoc.getDocumentElement().appendChild(orderLineExtn);
@@ -217,20 +220,23 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 		getOrderLineListTemplate.getDocumentElement().appendChild(orderLine);
 			
 		//Document getOrderLineListTemplate = getGetOrderLineListOutputTemplate();
-		log.debug("The template to getOrderLineList API is: "+SCXmlUtil.getString(getOrderLineListTemplate));
-		
+		if(log.isDebugEnabled()){
+			log.debug("The template to getOrderLineList API is: "+SCXmlUtil.getString(getOrderLineListTemplate));
+		}
 		
 		try
 		
 		{
-			log.debug("The template to getOrderLineList API is: "+SCXmlUtil.getString(getOrderLineListTemplate));
-			System.out.println("The input to getOrderLineListAPI is: "+SCXmlUtil.getString(getOrderLineListInputDoc));
+			if(log.isDebugEnabled()){
+				log.debug("The template to getOrderLineList API is: "+SCXmlUtil.getString(getOrderLineListTemplate));
+				log.debug("The input to getOrderLineListAPI is: "+SCXmlUtil.getString(getOrderLineListInputDoc));
+			}
 			env.setApiTemplate(XPXLiterals.GET_ORDER_LINE_LIST_API, getOrderLineListTemplate);
 			Document getOrderLineListOutputDoc = api.invoke(env, XPXLiterals.GET_ORDER_LINE_LIST_API, getOrderLineListInputDoc);
 			env.clearApiTemplate(XPXLiterals.GET_ORDER_LINE_LIST_API);
-			
-			System.out.println("The output of getOrderLineList api is: "+SCXmlUtil.getString(getOrderLineListOutputDoc));
-			
+			if(log.isDebugEnabled()){
+				log.debug("The output of getOrderLineList api is: "+SCXmlUtil.getString(getOrderLineListOutputDoc));
+			}
 			
 			Element orderLineElements = (Element)getOrderLineListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_LINE).item(0);
 			fulfillmentOrderHeaderKey = orderLineElements.getAttribute("OrderHeaderKey");
@@ -243,7 +249,6 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 			//NodeList orderLineList = getOrderLineListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_LINE);
 			//Element firstOrderLineElement = (Element) orderLineList.item(0);
 			fulfillmentOrderHeaderKey = orderLineElements.getAttribute("OrderHeaderKey");
-			System.out.println("The fulfillment ohk is : "+fulfillmentOrderHeaderKey);
 			
 			
 			for(int i=0; i<orderLineList.getLength(); i++)
@@ -259,9 +264,9 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 			fulfilOrderDetails.put("OrderHeaderKey", fulfillmentOrderHeaderKey);
 			
 			
-			
-			log.debug("The customer order header key is: "+fulfillmentOrderHeaderKey);
-						
+			if(log.isDebugEnabled()){
+				log.debug("The fulfillment order header key is: "+fulfillmentOrderHeaderKey);
+			}			
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -336,7 +341,9 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 			Document getOrderListOutputDoc = api.invoke(env, XPXLiterals.GET_ORDER_LIST_API, getOrderListInputDoc);
 			Element orderElement = (Element) getOrderListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER).item(0);
 			customerOrderHeaderKey = orderElement.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
-			log.debug("The customer order header key is: "+customerOrderHeaderKey);
+			if(log.isDebugEnabled()){
+				log.debug("The customer order header key is: "+customerOrderHeaderKey);
+			}
 						
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
