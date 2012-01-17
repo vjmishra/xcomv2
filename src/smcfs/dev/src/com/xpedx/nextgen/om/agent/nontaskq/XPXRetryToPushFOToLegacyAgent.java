@@ -107,10 +107,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		setOrderHeaderKeys.removeAll(setOrderHeaderKeys);
 		
 		if(log.isDebugEnabled()){
-			System.out.println((new StringBuilder()).append(
-				"User:" + env.getUserId()).append(
-				" Input document[docInQry] is ").append(
-				YFCLogUtil.toString(docInQry)).toString());
+			log.debug((new StringBuilder()).append("User:" + env.getUserId()).append(" Input document[docInQry] is ").append(YFCLogUtil.toString(docInQry)).toString());
 		}
 		
 		docTemplate = SCXmlUtil
@@ -119,20 +116,19 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 						.append("<OrderHoldTypes><OrderHoldType HoldType='' Status=''/></OrderHoldTypes></Order></OrderList>")
 						.toString());
 		if(log.isDebugEnabled()){
-			System.out.println((new StringBuilder()).append(" Template document[docTemplate] is ")
-				.append( YFCLogUtil.toString(docTemplate)).toString());
+			log.debug((new StringBuilder()).append(" Template document[docTemplate] is ").append( YFCLogUtil.toString(docTemplate)).toString());
 		}
-		
-		log.info("The input to getOrderList is: "+SCXmlUtil.getString(docInQry));
-		
+		if(docInQry != null){
+			log.info("The input to getOrderList is: "+SCXmlUtil.getString(docInQry));
+		}
 		env.setApiTemplate("getOrderList", docTemplate);
 		docOrderList = api.invoke(env, "getOrderList", docInQry);
 		env.clearApiTemplate("getOrderList");
 		
-		log.debug("The getOrderList output is: "+SCXmlUtil.getString(docOrderList));
+		
 
 		if(log.isDebugEnabled()){
-			System.out.println((new StringBuilder())
+			log.debug((new StringBuilder())
 				.append(" Output document[docOrderList] is ")
 				.append(YFCLogUtil.toString(docOrderList)).toString());
 		}
@@ -141,7 +137,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		List listOfJobs = getProcessOrderList(docOrderList);
 
 		if(log.isDebugEnabled()){
-			System.out.println("listOfJobs:----------->" + listOfJobs.size());
+			log.debug("The length of listOfJobs is : " + listOfJobs.size());
 		}
 		log.endTimer("getJobs()");
 		return listOfJobs;
@@ -164,7 +160,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		for (Object objOrder : listOrders) {
 			Element eleOrder = (Element) objOrder;
 			if(log.isDebugEnabled()){
-				System.out.println((new StringBuilder())
+				log.debug((new StringBuilder())
 					.append( " Order document[eleOrder] is ")
 					.append( YFCLogUtil.toString(eleOrder)).toString());
 			}
@@ -177,7 +173,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 							"./OrderHoldTypes/OrderHoldType[@HoldType='NEEDS_ATTENTION' and @Status='1100']");
 
 			if(log.isDebugEnabled()){
-				System.out.println((new StringBuilder())
+				log.debug((new StringBuilder())
 					.append( " No. of ./OrderHoldTypes/OrderHoldType are ")
 					.append( nlOrderHoldType.getLength()).toString());
 			}
@@ -215,7 +211,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		
 		if(log.isDebugEnabled()){
-			System.out.println((new StringBuilder("executeJobs():--->"))
+			log.debug((new StringBuilder("executeJobs():"))
 				.append(" Order document[docIn] is ")
 				.append(YFCLogUtil.toString(docIn)).toString());
 		}

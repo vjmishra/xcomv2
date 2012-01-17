@@ -51,11 +51,15 @@ public class XPXSendInvoiceMessage {
 			Element inputElement = inXML.getDocumentElement();
 			//inputElement.setAttribute("ProcessedFlag", "Y");
 			String strInvoiceHeaderKey = inputElement.getAttribute("InvoiceHeaderKey");
-			System.out.println(" strInvoiceHeaderKey :: " + strInvoiceHeaderKey);
+			if(log.isDebugEnabled()){
+				log.debug("Invoice HeaderKey :" + strInvoiceHeaderKey);
+			}
 			//Set in txn object to invoke changeXPXInvoiceHdrService after invoking the web service 
 			//successfully in XPXB2BInvoiceWebServiceInvocationAPI
 			env.setTxnObject("strInvoiceHeaderKey", strInvoiceHeaderKey);
-			System.out.println("changeXPXInvoiceHdrService :: inputElement : " + SCXmlUtil.getString(inputElement));
+			if(log.isDebugEnabled()){
+				log.debug("changeXPXInvoiceHdrService_InputElement : " + SCXmlUtil.getString(inputElement));
+			}
 			//Document processedDoc = api.executeFlow(env,
 				//	"changeXPXInvoiceHdrService", inXML);
 			// get the list of invoice header details
@@ -76,6 +80,10 @@ public class XPXSendInvoiceMessage {
 			Element inputHeaderElement = inputHeaderDoc.getDocumentElement();
 			inputHeaderElement.setAttribute("InvoiceHeaderKey", inputElement
 					.getAttribute("InvoiceHeaderKey"));
+			if(log.isDebugEnabled())
+			{
+				log.debug("The input XML to getXPXInvoiceHdrListService in XPXSendInvoiceMessage is "+ SCXmlUtil.getString(inputHeaderDoc ));
+			}
 			Document outputInvoiceListDocument = api.executeFlow(env,
 					"getXPXInvoiceHdrListService", inputHeaderDoc);
 			NodeList invoiceList = outputInvoiceListDocument
@@ -140,7 +148,9 @@ public class XPXSendInvoiceMessage {
 				.getDocument();
 		Element failureMsgElement = failureMsg.getDocumentElement();
 		failureMsgElement.setAttribute("ErrorFlag", "Y");
-		log.debug("failureMsg: " + SCXmlUtil.getString(failureMsg));
+		if(log.isDebugEnabled()){
+			log.debug("Failure Message : " + SCXmlUtil.getString(failureMsg));
+		}
 		return failureMsg;
 	}
 
@@ -150,6 +160,9 @@ public class XPXSendInvoiceMessage {
 		Document inputOrderDoc = SCXmlUtil.createDocument("Order");
 		inputOrderDoc.getDocumentElement().setAttribute("OrderHeaderKey",
 				invoiceDoc.getDocumentElement().getAttribute("OrderHeaderKey"));
+		if(log.isDebugEnabled()){
+			log.debug("The input document for getOrderList in XPXSendInvoiceMessage is  "+SCXmlUtil.getString(inputOrderDoc));
+		}
 		Document orderListDoc = api.invoke(env, "getOrderList", inputOrderDoc);
 		NodeList orderNodeList = orderListDoc.getElementsByTagName("Order");
 		int orderLength = orderNodeList.getLength();

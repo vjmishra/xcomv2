@@ -16,6 +16,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -70,10 +71,9 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		 */
 		try{
 			
-		
-		System.out.println("entering sendPOAckWrapper");
-		System.out.println("inXML :: " + SCXmlUtil.getString(inXML));
-		
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("SendPOAckWrapper_InXML :" + SCXmlUtil.getString(inXML));
+		}
 		/*****Start JIRA fix for # 2318 by Prasanth Kumar M.****************************/
 		//String strExtnWebConfNum = env.getTxnObject("strExtnWebConfNum").toString();
 		String strExtnWebConfNum ="";
@@ -82,18 +82,18 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 			strExtnWebConfNum = SCXmlUtil.getXpathElement(inXML.getDocumentElement(), "./WebConfirmationNumber").getTextContent();
 		   
 		}
-		
-		yfcLogCatalog.debug("strExtnWebConfNum :: " + strExtnWebConfNum);
-		
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("strExtnWebConfNum : " + strExtnWebConfNum);
+		}
 		String legacyOrderNumber ="";
 		if(SCXmlUtil.getXpathElement(inXML.getDocumentElement(), "./LegacyOrderNumber")!=null)
 		{
 			legacyOrderNumber = SCXmlUtil.getXpathElement(inXML.getDocumentElement(), "./LegacyOrderNumber").getTextContent();
 		   
 		}
-		
-		yfcLogCatalog.debug("legacyOrderNumber :: " + legacyOrderNumber);
-		
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("legacyOrderNumber : " + legacyOrderNumber);
+		}
 		/***********End JIRA fix for # 2318**********************************************/
 		if(strExtnWebConfNum == null){
 			YFSException exceptionMessage = new YFSException();
@@ -122,8 +122,9 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		orderElem.appendChild(extnElement);
 		
 		sendPOAckOnCreateOrderInDoc.appendChild(orderElem);
-		
-		System.out.println("sendPOAckOnCreateOrderInDoc :: " + SCXmlUtil.getString(sendPOAckOnCreateOrderInDoc));
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("SendPOAckOnCreateOrderInDoc : " + SCXmlUtil.getString(sendPOAckOnCreateOrderInDoc));
+		}
 		api.executeFlow(env, "SendPOAckOnCreateOrder", sendPOAckOnCreateOrderInDoc);
 		
 		}catch (NullPointerException ne) {
@@ -168,13 +169,14 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		api = YIFClientFactory.getInstance().getApi();
 		Document getOrderListOutDoc = api.invoke(env, "getOrderList", getOrderListInDoc);
 		env.clearApiTemplate("getOrderList");
-		
-		System.out.println("getOrderListOutDoc ::" + SCXmlUtil.getString(getOrderListOutDoc));
-		
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("getOrderListOutDoc :" + SCXmlUtil.getString(getOrderListOutDoc));
+		}
 		Element orderOutElem = (Element) getOrderListOutDoc.getElementsByTagName("Order").item(0);
 		String strOrderNo = orderOutElem.getAttribute("OrderNo");
-		System.out.println("strOrderNo :: " + strOrderNo);
-
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("strOrderNo : " + strOrderNo);
+		}
 		return strOrderNo;
 	}
 
@@ -308,7 +310,9 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 //		inputOrderNumber = inputElement.getAttribute("OrderNo");
 		try{
 		inputOrderNumber = env.getTxnObject("fullfilmentOrderNo").toString();
-		System.out.println("inputOrderNumber === " + inputOrderNumber);
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("inputOrderNumber : " + inputOrderNumber);
+		}
 		}catch(Exception e){
 			// Error logged in CENT tool if the fullfilment Order number is empty.
 			YFSException exceptionMessage = new YFSException();
@@ -435,23 +439,26 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		inputCustomerElement.setAttribute("CustomerID", customerID);
 		env.setApiTemplate("getCustomerList", getCustomerListTemplate);
 		Document getCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
-		yfcLogCatalog.info("The shipTo getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
+		if(getCustomerListOutputDoc != null){
+			yfcLogCatalog.info("The shipTo getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
+		}
 		Element customerElement = (Element) getCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element parentCustomerElement = (Element) customerElement.getElementsByTagName("ParentCustomer").item(0);
 		String billToCustomerId  = parentCustomerElement.getAttribute("CustomerID");
 		
 		inputCustomerElement.setAttribute("CustomerID", billToCustomerId);
 		Document getBillToCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
-		yfcLogCatalog.info("The billTo getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
-		
+		if(getBillToCustomerListOutputDoc != null){
+			yfcLogCatalog.info("The billTo getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
+		}
 		Element billToCustomerElement = (Element) getBillToCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element billToParentCustomerElement = (Element) billToCustomerElement.getElementsByTagName("ParentCustomer").item(0);
 		String sapCustomerId  = billToParentCustomerElement.getAttribute("CustomerID");
-		
 		inputCustomerElement.setAttribute("CustomerID", sapCustomerId);
 		Document getSAPCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
-		yfcLogCatalog.info("The SAP getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
-		
+		if(getSAPCustomerListOutputDoc != null){
+			yfcLogCatalog.info("The SAP getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
+		}
 		Element sapCustomerElement = (Element) getSAPCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element sapExtnCustomerElement = (Element) sapCustomerElement.getElementsByTagName("Extn").item(0);
 		String poAckRequired  = sapExtnCustomerElement.getAttribute("ExtnPOAckFlag");
@@ -470,7 +477,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 			}			
 		}*/
 		/*yfcLogCatalog.info("MSAPCustomerkey = " + mSAPCustomerkey);
-		System.out.println("MSAPCustomerkey = " + mSAPCustomerkey);*/
+		log.debug("MSAPCustomerkey = " + mSAPCustomerkey);*/
 		// To check PO Ack is required.
 		/*if(mSAPCustomerkey != null && mSAPCustomerkey != ""){
 			// removed the attribute below to re-use the existing document.
@@ -492,8 +499,9 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 			throw new Exception("PO Acknowledgement will not be sent as MSAP customer isn't available.");
 		}*/		
 		env.clearApiTemplate("getCustomerList");
-		yfcLogCatalog.info("isPOACKRequired = " + isPOACKRequired);
-		//System.out.println("isPOACKRequired = " + isPOACKRequired);
+		if(!YFCObject.isNull(isPOACKRequired) && !YFCObject.isVoid(isPOACKRequired)) {
+			yfcLogCatalog.info("isPOACKRequired = " + isPOACKRequired);
+		}
 		return isPOACKRequired;
 	}
 	

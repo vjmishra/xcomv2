@@ -13,6 +13,7 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -20,6 +21,7 @@ import com.yantra.yfs.japi.YFSException;
 public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	
 	private static YIFApi api = null;
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXRRDSecurityFileGenerationAPI.class);
 	static {
 		
 		try 
@@ -54,7 +56,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	
 	public Document securityFileGeneration(YFSEnvironment env, Document inputXML)  throws Exception
 	{
-		System.out.println("inputXML"+SCXmlUtil.getString(inputXML));
+		if(inputXML != null){
+			log.info("InputXML to securityFileGeneration"+SCXmlUtil.getString(inputXML));
+		}
 		Element inputElement = inputXML.getDocumentElement();
 		String nodeName = inputElement.getNodeName();
 		//form the outPut Doc
@@ -74,15 +78,16 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 		}
 		
 		
-		
-		System.out.println("fileListDoc"+SCXmlUtil.getString(fileListDoc));
+		if(log.isDebugEnabled()){
+			log.debug("RRDUserList document is : "+SCXmlUtil.getString(fileListDoc));
+		}
 		return fileListDoc;
 	}
 
 	private void formFileGenarationXMLForCustomer(YFSEnvironment env,
 			Document inputXML, Document fileListDoc, Element fileListElement)
 			throws RemoteException {
-		System.out.println("input is customer list");
+	
 		String customerID = "";
 		String invoiceViewFlag = "";
 		String teamKey = "";
@@ -91,8 +96,10 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 		for(int i=0;i<customerLength;i++)
 		{
 			Element customerElement = (Element)customerList.item(i);
-			System.out.println("customerElement"+SCXmlUtil.getString(customerElement));
-			System.out.println("customerElement.getAttribute"+customerElement.getAttribute("CustomerKey"));
+			if(log.isDebugEnabled()){
+				log.debug("Customer Element : "+SCXmlUtil.getString(customerElement));
+				log.debug("Customer Key : "+customerElement.getAttribute("CustomerKey"));
+			}
 			customerID = customerElement.getAttribute("CustomerID");
 							
 			Document getCustomerDoc = getCustomerList(env, customer);
@@ -156,7 +163,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	private void formFileGenerationXMLForCustomerContact(YFSEnvironment env,
 			Document inputXML, Document fileListDoc, Element fileListElement)
 			throws RemoteException {
-		System.out.println("did enter the customer contact loop");
+		if(log.isDebugEnabled()){
+			log.debug("Entered the customer contact loop");
+		}
 		//get the customer mark the process flag to 'Y'
 		//Element inputElement = inputXML.getDocumentElement();
 		NodeList contactList = inputXML.getElementsByTagName("CustomerContact");
@@ -178,17 +187,21 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 			{
 				for(int count = 0;count < contactLength;count++)
 				{
-					System.out.println("Entered the for loop");
+					
 					Element contactElement = (Element)customerContactList.item(count);
 					viewInvoiceRole = SCXmlUtil.getXpathAttribute(contactElement, "./Extn/@ExtnViewInvoiceRole");
 					viewInvoice = SCXmlUtil.getXpathAttribute(contactElement, "./Extn/@ExtnViewInvoice");
 					userType = SCXmlUtil.getXpathAttribute(contactElement, "./Extn/@ExtnUserType");
 					if((viewInvoiceRole.equals("Y")&&(userType.equals("EXTERNAL")))||((viewInvoice.equals("Y"))&&(userType.equals("INTERNAL"))))
 					{
-						System.out.println("user is eligible to be in the file");
+						if(log.isDebugEnabled()){
+							log.debug("User is eligible to be in the file");
+						}
 						if(userType.equals("EXTERNAL"))
 						{
-							System.out.println("external user");
+							if(log.isDebugEnabled()){
+								log.debug("External User");
+							}
 							envID = SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnEnvironmentCode");
 							customerBranch = SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnCustomerDivision");
 							customerNumber = SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnLegacyCustNumber");
@@ -212,7 +225,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 						else
 							if(userType.equals("INTERNAL"))
 							{
-								System.out.println("internal user");
+								if(log.isDebugEnabled()){
+									log.debug("Internal User");
+								}
 								customer = "admin";
 								//email
 								emailID = "Do not Email";
@@ -251,7 +266,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	
 	private Document getUserProfile(YFSEnvironment env, String customerContactUserID) throws YFSException, RemoteException
 	{
-		System.out.println("getUserProfile");
+		if(log.isDebugEnabled()){
+			log.debug("getCustomerContactList in XPXRRDSecurityFileGenerationAPI ");
+		}
 		Document inputCustomerContactDoc = YFCDocument.createDocument("CustomerContact").getDocument();
 		Element inputCustomerContactElement = inputCustomerContactDoc.getDocumentElement();
 		inputCustomerContactElement.setAttribute("UserID", customerContactUserID);
@@ -261,6 +278,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 		Element extnCustomerContactTemplateElement = customerContactTemplateDoc.createElement("Extn");
 		customerContactTemplateElement.appendChild(extnCustomerContactTemplateElement);
 		env.setApiTemplate("getCustomerContactList", customerContactTemplateDoc);
+		if(log.isDebugEnabled()){
+			log.debug("The input to getCustomerContactList in XPXRRDSecurityFileGenerationAPI is : "+SCXmlUtil.getString(inputCustomerContactDoc));
+		}
 		Document customerContactList = api.invoke(env, "getCustomerContactList", inputCustomerContactDoc);
 		env.clearApiTemplate("getCustomerContactList");
 		return customerContactList;
@@ -268,7 +288,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	
 	private Document getCustomerList(YFSEnvironment env, String customerID) throws YFSException, RemoteException
 	{
-		System.out.println("getCustomer list");
+		if(log.isDebugEnabled()){
+			log.debug("getCustomer list in XPXRRDSecurityFileGenerationAPI");
+		}
 		Element customerElement = null;
 		//form the input doc
 		Document inputCustomerDoc = YFCDocument.createDocument("Customer").getDocument();
@@ -280,6 +302,9 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 		Element extnCustomerTemplateElement = customerTemplateDoc.createElement("Extn");
 		customerTemplateElement.appendChild(extnCustomerTemplateElement);
 		env.setApiTemplate("getCustomerList", customerTemplateDoc);
+		if(log.isDebugEnabled()){
+			log.debug("The input to getCustomerList in XPXRRDSecurityFileGenerationAPI is : "+ SCXmlUtil.getString(inputCustomerDoc));
+		}
 		Document outputCustomerListDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
 		env.clearApiTemplate("getCustomerList");
 		NodeList customerList = outputCustomerListDoc.getElementsByTagName("Customer");
