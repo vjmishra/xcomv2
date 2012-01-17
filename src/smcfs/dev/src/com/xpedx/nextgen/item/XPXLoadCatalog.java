@@ -10,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
@@ -50,7 +52,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 					.getDocumentElement();
 			eModifyCategoryItems.setAttribute("CallingOrganizationCode",
 					_ORG_CODE);
-
+			log.info("Input XML in the invoke method of XPXLoadCatalog :" + SCXmlUtil.getString(inXML));
 			Element eItemList = inXML.getDocumentElement();
 
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
@@ -100,26 +102,28 @@ public class XPXLoadCatalog implements YIFCustomApi {
 				 * Ajit: Temporary Fix to truncate item shortdescription field
 				 * END
 				 */
-
-				log.debug("Before Manage Item:" + eItem.getAttribute("ItemID"));
+				if(log.isDebugEnabled()){
+					log.debug("Before Manage Item:" + eItem.getAttribute("ItemID"));
+				}
 			}
 
 			// create the item
-			// System.out.println("manageItem...");
 			api.invoke(env, "manageItem", inXML);
-			// System.out.println("manageItem...END");
-			log.debug("Before Manage Item Successfull");
+			if(log.isDebugEnabled()){
+				log.debug("Before Manage Item Successfull");
+			}
 			// attach the item to the category tree
-			// System.out.println("modifyCategoryItemsDoc:" +
-			// modifyCategoryItemsDoc);
-			log.debug("modifyCategoryItem :" + modifyCategoryItemsDoc);
+
+			if(log.isDebugEnabled()){
+				log.debug("modifyCategoryItem :" + modifyCategoryItemsDoc.toString());
+			}
 			if (iCat > 0) {
-				// System.out.println("modifyCategoryItem...");
 				api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc
 						.getDocument());
-				// System.out.println("modifyCategoryItem...END");
 			}
-			log.debug("Before Manage Item Successfull");
+			if(log.isDebugEnabled()){
+				log.debug("Before Manage Item Successfull");
+			}
 			// post a message to the response queue
 			generateResponse(env, inXML, "SUCCESS", null);
 
@@ -207,12 +211,14 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		eItemResult.setAttribute("ItemIdentifier", strCorrelationID);
 
 		if ("".equals(_RESPONSE_MSG_SERVICE)) {
-			// System.out.println("responseDoc:" + responseDoc);
+			// log.debug("ResponseDoc:" + responseDoc);
 		} else {
 			api.executeFlow(env, _RESPONSE_MSG_SERVICE, responseDoc
 					.getDocument());
 		}
-		log.debug("Response Msg :" + responseDoc);
+		if(log.isDebugEnabled()){
+			log.debug("ResponseMsg_xcomg2ItemResponse" + responseDoc.toString());
+		}
 
 	}
 
@@ -231,7 +237,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			YFCDocument modifyCategoryItemsDoc, Element eItem,
 			ArrayList<HashMap<String, String>> alCategoryAssociations)
 			throws Exception {
-		// System.out.println("addItemToCategory...START");
+
 		int counter = 0;
 		YFCElement eModifyCategoryItems = modifyCategoryItemsDoc
 				.getDocumentElement();
@@ -249,7 +255,6 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			String strCatPath = eCategory.getAttribute("CategoryPath");
 			String strOrgCode = eCategory.getAttribute("OrganizationCode");
 
-			// System.out.println("Adding...");
 			if (!assocatedToCategory(strCatPath, strOrgCode,
 					alCategoryAssociations)) {
 				counter++;
@@ -275,7 +280,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			}
 
 		}
-		// System.out.println("Removing...");
+		
 		for (int j = 0; j < alCategoryAssociations.size(); j++) {
 			HashMap<String, String> hmCat = alCategoryAssociations.get(j);
 			String sMatched = hmCat.get("Matched");
@@ -287,8 +292,9 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			} else {
 				// these are the associations which need to be removed
 				counter++;
-				// System.out.println("strCatPath|strOrgCode:" + strCatPath +
-				// "|" + strOrgCode);
+				if(log.isDebugEnabled()){
+					log.debug("strCatPath|strOrgCode:" + strCatPath + "|" + strOrgCode);
+				}
 				YFCElement eCategoryToModify = modifyCategoryItemsDoc
 						.createElement("Category");
 				eCategoryToModify.setAttribute("CategoryPath", strCatPath);
@@ -311,11 +317,10 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			}
 
 		}
-
-		// System.out.println("modifyCategoryItemsDoc:" +
-		// modifyCategoryItemsDoc);
+		if(log.isDebugEnabled()){
+			log.debug("modifyCategoryItemsDoc:" + modifyCategoryItemsDoc.toString());
+		}
 		eItem.removeChild(eCategoryList);
-		// System.out.println("addItemToCategory...END");
 		return counter;
 
 	}
@@ -335,7 +340,9 @@ public class XPXLoadCatalog implements YIFCustomApi {
 				break;
 			}
 		}
-		// System.out.println(sCatPath + "|" + bAssociated);
+		if(log.isDebugEnabled()){
+			log.debug("Category Path: " + sCatPath + "|" + bAssociated);
+		}
 		return bAssociated;
 	}
 
@@ -344,7 +351,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 
 		/*
 		 * HashMap <String, String>hmValidAttrValue = new HashMap<String,
-		 * String>(); System.out.println("Setting " + sItemAttrValue + " as
+		 * String>(); log.debug("Setting " + sItemAttrValue + " as
 		 * valid value for " + sAttrName);
 		 * 
 		 * YFCDocument getAttrListInDoc =
@@ -355,7 +362,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		 * eAttributeIn.setAttribute("AttributeID", sAttrName);
 		 * eAttributeIn.setAttribute("CallingOrganizationCode", _ORG_CODE);
 		 * 
-		 * //System.out.println("getAttrListInDoc:" + getAttrListInDoc);
+		 * //log.debug("getAttrListInDoc:" + getAttrListInDoc);
 		 * 
 		 * //set template for getAttributeList YFCDocument getAttrListTemp =
 		 * YFCDocument.createDocument("AttributeList"); YFCElement eAttrListTemp =
@@ -376,7 +383,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		 * 
 		 * eAttAllowedValueTemp.setAttribute("Value", "");
 		 * eAttAllowedValueTemp.setAttribute("ShortDescription", ""); Ajit
-		 * //System.out.println("docAttrList:" + getAttrListTemp);
+		 * //log.debug("docAttrList:" + getAttrListTemp);
 		 * 
 		 * env.setApiTemplate("getAttributeList",
 		 * getAttrListTemp.getDocument());
@@ -388,7 +395,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		 * env.clearApiTemplate("getAttributeList"); log.debug("docAttrList :" +
 		 * SCXmlUtils.getString(docAttrList));
 		 * 
-		 * if("Y".equals(sVerbose)) { //System.out.println("docAttrList:" +
+		 * if("Y".equals(sVerbose)) { //log.debug("docAttrList:" +
 		 * YFCDocument.getDocumentFor(docAttrList)); }
 		 * 
 		 * Element eAttrListOut = docAttrList.getDocumentElement(); Element
@@ -405,12 +412,12 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		 * hmValidAttrValue.put(sAttrValue, sAttrShortDesc); }
 		 * 
 		 * 
-		 * if("Y".equals(sVerbose)) { //System.out.println("hmValidAttrValue:" +
+		 * if("Y".equals(sVerbose)) { //log.debug("hmValidAttrValue:" +
 		 * hmValidAttrValue); }
 		 * 
 		 * 
 		 * if(!hmValidAttrValue.containsKey(sItemAttrValue)) {
-		 * //System.out.println("adding " + sItemAttrValue); //update
+		 * //log.debug("adding " + sItemAttrValue); //update
 		 */
 
 		YFCDocument manageAttributeIn = YFCDocument
@@ -437,14 +444,12 @@ public class XPXLoadCatalog implements YIFCustomApi {
 		eAttrAllowedValue.setAttribute("Value", sItemAttrValue);
 		eAttrAllowedValue.setAttribute("Operation", "Manage");
 
-		/*
-		 * if("Y".equals(sVerbose)) {
-		 */
-		// System.out.println("manageAttributeIn:" + manageAttributeIn);
-		/*
-		 * } if("Y".equals(sExecuteAPI)) {
-		 */
-		log.verbose("ManageAttribute :" + manageAttributeIn.getDocument());
+		if(log.isDebugEnabled()){
+			log.debug("manageAttributeIn:" + manageAttributeIn.toString());
+		}
+		if(log.isVerboseEnabled()){
+			log.verbose("ManageAttribute :" + manageAttributeIn.getDocument());
+		}
 
 		YFCDocument manageAttrTemp = YFCDocument
 				.createDocument("AttributeList");
@@ -465,7 +470,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 
 	private ArrayList<HashMap<String, String>> getCategoryAssociations(
 			YFSEnvironment env, Element eItem) throws Exception {
-		// System.out.println("getCategoryAssociations...START");
+
 		String sItemID = eItem.getAttribute("ItemID");
 		String sUOM = eItem.getAttribute("UnitOfMeasure");
 		String sOrgCode = eItem.getAttribute("OrganizationCode");
@@ -519,12 +524,13 @@ public class XPXLoadCatalog implements YIFCustomApi {
 			hmCategoryDtl.put("CategoryID", sCategoryID);
 			hmCategoryDtl.put("CategoryPath", sCategoryPath);
 			hmCategoryDtl.put("OrganizationCode", sOrganizationCode);
-			// System.out.println("CategoryID|CategoryPath|OrganizationCode:" +
-			// sCategoryID + "|" + sCategoryPath + "|" + sOrganizationCode);
+			if(log.isDebugEnabled()){
+				log.debug("CategoryID|CategoryPath|OrganizationCode:" + sCategoryID + "|" + sCategoryPath + "|" + sOrganizationCode);
+			}
 			alCategory.add(hmCategoryDtl);
 
 		}
-		// System.out.println("getCategoryAssociations...START");
+		
 		return alCategory;
 	}
 
