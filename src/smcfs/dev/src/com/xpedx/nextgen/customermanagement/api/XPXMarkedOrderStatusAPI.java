@@ -14,6 +14,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.log.YFCLogCategory;
 
 
 public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
@@ -21,6 +22,7 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 	private static String BASE_DROP_STATUS = "3700.0300";
 	private static String MODIFICATION_REASON_CODE= "Mark As Complete With Exceptions";
 	private static String MARK_COMPLETE ="XPX_MARK_COMPLETE.0001.ex";
+	private static YFCLogCategory log = YFCLogCategory.instance(XPXMarkedOrderStatusAPI.class);
 	private YIFApi api = null;
 	String sOrderNo="";
 	String sEntrCode="";
@@ -42,7 +44,10 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 
 		api = YIFClientFactory.getInstance().getApi();
 		String sOrderHeaderKey="";
-		
+		if(inXML != null)
+		{
+			log.info("The input XML for getOrderDetails is : " + SCXmlUtil.getString(inXML));
+		}
 		// create and set output template for the customer list API
 		String sTemplate ="<Order> <OrderLines><OrderLine></OrderLine></OrderLines><PersonInfoShipTo></PersonInfoShipTo></Order>";
 		env.setApiTemplate("getOrderDetails", SCXmlUtil.createFromString(sTemplate));
@@ -56,7 +61,9 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 
 		// Invoke getOrderDetails API
 		Document OrderDetails = api.invoke(env,"getOrderDetails",inputOrderDocument.getDocument());
-		//System.out.println("xml file"+YFCDocument.getDocumentFor(OrderDetails));
+		if(log.isDebugEnabled()){
+			log.debug("The output XML file of getOrderDetails is : "+YFCDocument.getDocumentFor(OrderDetails).toString());
+		}
 		getAllOrderDetails(OrderDetails);
 
 		confirmShipment(env,OrderDetails);
@@ -75,8 +82,9 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 			sBuyrOrgCode =SCXmlUtil.getAttribute(eleOrder,"BuyerOrganizationCode");
 			sSellrOrgCode =SCXmlUtil.getAttribute(eleOrder, "SellerOrganizationCode");
 			sShpNode = eleOrder.getAttribute("ShipNode");
-			//System.out.println("strOrderNo"+sOrderNo+"strEntrCode"+sEntrCode+"strDocType"+sDocType);
-
+			if(log.isDebugEnabled()){
+				log.debug("Order Details : strOrderNo"+sOrderNo+"strEntrCode"+sEntrCode+"strDocType"+sDocType);
+			}
 
 	}
 
@@ -142,7 +150,9 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 
 		//confrmShipmntDocument.getDocumentElement().appendChild(eToAddress);
 		confrmShipmntDocument.getDocumentElement().appendChild(eShipmentLines);
-		//System.out.println("shipment xml file"+confrmShipmntDocument);
+		if(log.isDebugEnabled()){
+			log.debug("Shipment input xml file is :"+confrmShipmntDocument.toString());
+		}
 		api.invoke(env,"confirmShipment",confrmShipmntDocument.getDocument());
 		changeOrderStatus( env);
 
@@ -165,8 +175,9 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 		eleChangeOrderStatus.setAttribute("OrderNo",sOrderNo);
 		eleChangeOrderStatus.setAttribute("TransactionId",MARK_COMPLETE);
 
-
-		//System.out.println("xml file ChangeOrderStatus"+docChangeOrderStatus);
+		if(log.isDebugEnabled()){
+			log.debug("Input XML  file for ChangeOrderStatus :"+docChangeOrderStatus.toString());
+		}
 		api.invoke(env,"changeOrderStatus",docChangeOrderStatus.getDocument());
 
 	}

@@ -50,7 +50,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			YFCDocument modifyCategoryItemsDoc = YFCDocument.createDocument("ModifyCategoryItems");
 			YFCElement eModifyCategoryItems = modifyCategoryItemsDoc.getDocumentElement();
 			eModifyCategoryItems.setAttribute("CallingOrganizationCode", _ORG_CODE);
-			
+			if(inXML != null){
+				log.info("Input to XPXLoadCatalog : " + SCXmlUtil.getString(inXML));
+			}
 			Element eItemList = inXML.getDocumentElement();
 			
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
@@ -74,12 +76,16 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 					textNode.appendChild(txt);
 					
 					iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
-					log.debug("modifyCategoryItem for delete operation :" + modifyCategoryItemsDoc);
-					//System.out.println("modifyCategoryItem for delete operation :\n"+modifyCategoryItemsDoc);
+					if(log.isDebugEnabled()){
+						log.debug("modifyCategoryItem for delete operation :" + modifyCategoryItemsDoc.toString());
+					}
+					
 					api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
 					//delete the item
-					log.debug("manageItem for delete operation :" + inXML);
-					//System.out.println("manageItem for delete operation :\n"+inXML);
+					if(log.isDebugEnabled()){
+						log.debug("manageItem for delete operation :" + SCXmlUtil.getString(inXML));
+					}
+					
 					api.invoke(env, "manageItem", inXML);
 					//generate the response
 					outXML = generateResponse(env, inXML, "SUCCESS", null);
@@ -116,25 +122,29 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				primInfoEle.setAttribute("ExtendedDescription", shortDescription);
 				
 				 Ajit: Temporary Fix to truncate item shortdescription field END */
-				
-				log.debug("Before Manage Item:" + eItem.getAttribute("ItemID") );
+				if(log.isDebugEnabled()){
+					log.debug("Before Manage Item:" + eItem.getAttribute("ItemID") );
+				}
 			}
 			
 			//create the item
-			//System.out.println("manageItem...");
+	
 			api.invoke(env, "manageItem", inXML);
-			//System.out.println("manageItem...END");
-			log.debug("Before Manage Item Successfull" );
+			if(log.isDebugEnabled()){
+				log.debug("Before Manage Item Successfull" );
+			}
 			//attach the item to the category tree
-			//System.out.println("modifyCategoryItemsDoc:" + modifyCategoryItemsDoc);
-			log.debug("modifyCategoryItem :" + modifyCategoryItemsDoc);
+			
+			if(log.isDebugEnabled()){
+				log.debug("modifyCategoryItem :" + modifyCategoryItemsDoc.toString());
+			}
 			if(iCat > 0)
 			{
-				//System.out.println("modifyCategoryItem...");
 			api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
-			//System.out.println("modifyCategoryItem...END");
 			}
-			log.debug("Before Manage Item Successfull" );
+			if(log.isDebugEnabled()){
+				log.debug("Before Manage Item Successfull" );
+			}
 			//post a message to the response queue
 			outXML = generateResponse(env, inXML, "SUCCESS", null);
 			
@@ -230,14 +240,15 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		
 		/*if("".equals(_RESPONSE_MSG_SERVICE))
 		{
-			//System.out.println("responseDoc:" + responseDoc);
+			//log.debug("responseDoc:" + responseDoc);
 		}
 		else
 		{
 			api.executeFlow(env, _RESPONSE_MSG_SERVICE, responseDoc.getDocument());
 		}*/
-		
-		log.debug("Response Msg :" + responseDoc);
+		if(log.isDebugEnabled()){
+			log.debug("Response Msg in XPXLoadCatalog:" + responseDoc.toString());
+		}
 		return responseDoc.getDocument();
 	}
 	
@@ -258,7 +269,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private int addItemToCategory(YFSEnvironment env, YFCDocument modifyCategoryItemsDoc, Element eItem, ArrayList <HashMap <String, String>> alCategoryAssociations)
 	throws Exception
 	{
-		//System.out.println("Modifield item XML for delete testing: \n"+SCXmlUtil.getString(eItem));
+		if(log.isDebugEnabled()){
+			log.debug("Modified item XML for delete testing: \n"+SCXmlUtil.getString(eItem));
+		}
 		int counter = 0;
 		YFCElement eModifyCategoryItems = modifyCategoryItemsDoc.getDocumentElement();
 		
@@ -274,8 +287,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			Element eCategory = (Element)nlCategoryList.item(k);
 			String strCatPath = eCategory.getAttribute("CategoryPath");
 			String strOrgCode = eCategory.getAttribute("OrganizationCode");
-			
-			//System.out.println("Adding...");
+			if(log.isDebugEnabled()){
+				log.debug("Adding item to category.");
+			}
 			if(!assocatedToCategory(strCatPath, strOrgCode, alCategoryAssociations))
 			{
 				counter++;
@@ -297,7 +311,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			}
 			
 		}
-		//System.out.println("Removing...");
+		if(log.isDebugEnabled()){
+			log.debug("Removing item.");
+		}
 		for(int j=0; j<alCategoryAssociations.size(); j++)
 		{
 			HashMap <String, String> hmCat = alCategoryAssociations.get(j);
@@ -354,7 +370,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				break;
 			}
 		}
-		//System.out.println(sCatPath + "|" + bAssociated);
+		if(log.isDebugEnabled()){
+			log.debug("Category Path : "+ sCatPath + "|" + bAssociated);
+		}
 		return bAssociated;
 	}
 	
@@ -439,7 +457,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		
 		env.setApiTemplate("getItemList", getItemListTemplate.getDocument());
 		Document itemListOutDoc = api.invoke(env, "getItemList", getItemListInDoc.getDocument());
-		//System.out.println("itemlistoutput: \n"+SCXmlUtil.getString(itemListOutDoc));
+		if(log.isDebugEnabled()){
+			log.debug("getItemlist Output: \n"+SCXmlUtil.getString(itemListOutDoc));
+		}
 		env.clearApiTemplate("getItemList");
 		
 		Element eItemListOut = itemListOutDoc.getDocumentElement();

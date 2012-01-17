@@ -32,8 +32,6 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			Document orderPlaceResponseDoc = null;
 			String endPointURL = null;
 			
-			
-			
 			endPointURL = YFSSystem.getProperty("OrderPlaceWSDL");
 			if(endPointURL ==  null || endPointURL.trim().length()<=0)
 			{//No customer overrides entry so property value is retrieved from the SDF
@@ -46,8 +44,10 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			//End of Setting the time out
 			FPlaceOrderE inputOrderXml = new FPlaceOrderE();
 			FPlaceOrder inputPlaceOrder = new FPlaceOrder();
+			if(inputXML != null){
+				log.info("Input xml for OrderPlace to Legacy: "+SCXmlUtil.getString(inputXML));
+			}
 			String inputXMLString = SCXmlUtil.getString(inputXML);
-			log.info("Input xml for OrderPlace to Legacy: "+inputXMLString);
 			inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
 			inputOrderXml.setFPlaceOrder(inputPlaceOrder);
 			
@@ -55,7 +55,6 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
 			log.endTimer("Calling-the-webmethod-OrderPlace-webservice");
 			//Document outputXml = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
-			//System.out.println("output"+orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput());
 			//YFCDocument outDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput());
 			
 			orderPlaceResponseDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();

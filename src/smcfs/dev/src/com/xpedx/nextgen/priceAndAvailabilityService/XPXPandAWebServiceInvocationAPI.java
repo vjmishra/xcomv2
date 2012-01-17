@@ -60,9 +60,9 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
             String isPriceLock=null;
             String timeout = null;
 			Integer timeoutInSecs;
-			
-			
-			
+			if(inputXML != null){
+				log.info("The input XML to the Price and Availability Webservice is " + SCXmlUtil.getString(inputXML));
+			}
 			endPointURL = YFSSystem.getProperty("PandAWSDL");
 			
 			if (env instanceof ClientVersionSupport) {
@@ -114,13 +114,16 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			//Creating the SOAP request input
 			fAvailability.setWsIpaperAvailabilityInput(inputXMLString);
 			input.setFGetAvailability(fAvailability);
-			log.debug(input.getFGetAvailability().getWsIpaperAvailabilityInput());        
-	                  
+			if(log.isDebugEnabled()){
+				log.debug("Availability of webservice input : " + input.getFGetAvailability().getWsIpaperAvailabilityInput());        
+			}        
 	        //Invoking the WSDL and receiving the response simultaneously
 			log.beginTimer("Calling-the-webmethod-PnA-webservice");
 	        FGetAvailabilityResponseE response = testStub.fGetAvailability(input) ; 
 	        log.endTimer("Calling-the-webmethod-PnA-webservice");
-			log.debug("The output is: "+response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput());
+	        if(log.isDebugEnabled()){
+				log.debug("The response of availability of the webservice is: "+response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput());
+	        }
 			
 			//Converting the string reponse to XML Document format to return it to the calling app		
 			outputXML = YFCDocument.getDocumentFor(response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput()).getDocument();
@@ -188,7 +191,7 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 	wsIpaperAvailabilityInput.setAvailabilityInput(availabilityInput);
 	fAvailability.setWsIpaperAvailabilityInput(wsIpaperAvailabilityInput);
 
-	System.out.println("The source indicator is: "
+	log.debug("The source indicator is: "
 			+ (String) inputAttributes.get(XPXLiterals.E_SOURCE_INDICATOR));
 
 	FGetAvailabilityResponseE fGetAvailabilityResponseE = testStub
