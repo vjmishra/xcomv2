@@ -248,20 +248,20 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
 		boolean exceededMaxRepeatedChars = false;
 		for (int i=0; i<cArray.length ; i++) {
 			c1 = cArray[i];
-			System.out.println("c1="+c1);
+			log.debug("c1="+c1);
 			if((i+1)<cArray.length)
 				for(int j=i+1;j<cArray.length; j++){
 					c2 = cArray[j];
-					System.out.println("c2="+c2);
+					log.debug("c2="+c2);
 					if(c1==c2){
-						System.out.println("added char in repeated");
+						log.debug("added char in repeated");
 						setOfRepeatedChars.add(String.valueOf(c1));
-						System.out.println("size="+setOfRepeatedChars.size());						
+						log.debug("size="+setOfRepeatedChars.size());						
 					}
 				}
 			if(setOfRepeatedChars.size()>maxRepeatedChars){
 				exceededMaxRepeatedChars = true;
-				System.out.println("exceededMaxRepeatedChars=true");
+				log.debug("exceededMaxRepeatedChars=true");
 				break;
 			}
 		}
@@ -366,10 +366,11 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             disallowUserLastName = Boolean.getBoolean(sDisallowUserLastName);
 		}
         
-        
+        if(cat.isDebugEnabled()){
         cat.debug((new StringBuilder()).append("param values : minNoOfAlphabeticalChars").append(minNoOfAlphabeticalChars)
         		.append("minNoOfNumericChars").append(minNoOfNumericChars)
         		.append("minNoOfUpperCaseChars").append(minNoOfUpperCaseChars).toString());
+        }
 
 	}
 

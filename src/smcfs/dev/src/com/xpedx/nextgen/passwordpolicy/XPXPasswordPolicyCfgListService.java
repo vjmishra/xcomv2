@@ -58,13 +58,16 @@ public class XPXPasswordPolicyCfgListService implements YIFCustomApi {
 			 *				</ParamList>
 			 *				" PasswordPolicyKey="2010092120425558488" PasswordRuleCfgKey="2010092120425558489" PasswordRuleDefnKey="2010092120055658444"/>
 			 */
-			
+			if(inputXML != null)
+			{
+				log.info("Input XML for the getPasswordPolicyList is " + SCXmlUtil.getString(inputXML));
+			}
 			// invoke getPasswordPolicyDetails API
-			//System.out.println(" IP XML for password policy service: " +SCXmlUtil.getString(inputXML));
-			Document pwdPolicyDetailDoc = api.invoke(env, "getPasswordPolicyList", inputXML);
-
-			//System.out.println(" OP document: " + SCXmlUtil.getString(pwdPolicyDetailDoc));
 			
+			Document pwdPolicyDetailDoc = api.invoke(env, "getPasswordPolicyList", inputXML);
+			if(log.isDebugEnabled()){
+				log.debug("Output document of getPasswordPolicyList is: " + SCXmlUtil.getString(pwdPolicyDetailDoc));
+			}
 			String pwdPolicyKey = null;
 			if(null!=pwdPolicyDetailDoc){
 				NodeList policyElemsList = pwdPolicyDetailDoc.getElementsByTagName("PasswordPolicy");
@@ -75,7 +78,9 @@ public class XPXPasswordPolicyCfgListService implements YIFCustomApi {
 					break;
 				}
 			}
-			System.out.println("pwdPolicyKey: " +pwdPolicyKey);
+			if(log.isDebugEnabled()){
+				log.debug("Password policy key is: " +pwdPolicyKey);
+			}
 			if(!YFCUtils.isVoid(pwdPolicyKey)){
 				
 				Document inputPwdKeyDoc = SCXmlUtil.createDocument("PasswordRuleCfg");
@@ -88,8 +93,9 @@ public class XPXPasswordPolicyCfgListService implements YIFCustomApi {
 				
 			}
 			if(pwdRulesElemDoc!=null)opDoc = YFCDocument.getDocumentFor(pwdRulesElemDoc);
-			//System.out.println("Password Policies Document :opDoc "+opDoc);
-			
+			if(log.isDebugEnabled()){
+				log.debug("Password Policies Document output: "+opDoc.toString());
+			}
 			log.verbose("Password Policies Document:  "+opDoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

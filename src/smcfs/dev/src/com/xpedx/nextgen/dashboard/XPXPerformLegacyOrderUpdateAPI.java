@@ -76,12 +76,10 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		String isOrderPlaceFlag = null;
 		
 		try {
-			
-			System.out.println("**********************************************************************************************************************");
-			System.out.println();
-			System.out.println("XPXPerformLegacyOrderUpdateAPI-InXML:"+YFCDocument.getDocumentFor(inXML).getString());
-			System.out.println();
-			
+			if(log.isDebugEnabled()){
+			log.debug("**********************************************************************************************************************");
+			log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:"+YFCDocument.getDocumentFor(inXML).getString());
+			}
 			log.verbose("**********************************************************************************************************************");
 			log.verbose("");
 			log.verbose("XPXPerformLegacyOrderUpdateAPI-InXML:"+YFCDocument.getDocumentFor(inXML).getString());
@@ -106,10 +104,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			
 			validateInXML(rootEle);
 			
-			System.out.println();
-			System.out.println("InXML After Validation:"+YFCDocument.getDocumentFor(inXML).getString());
-			System.out.println();
-			
+			if(log.isDebugEnabled()){
+			log.debug("InXML After Validation:"+YFCDocument.getDocumentFor(inXML).getString());
+			}
 			//Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(rootEle.hasAttribute("IsOrderPlace")) {
 				isOrderPlaceFlag = rootEle.getAttribute("IsOrderPlace");
@@ -150,9 +147,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					// To get fulfillment order details.
 					String fOrdHeaderKey = (String)env.getTxnObject("FOKEY");
 					
-					System.out.println();
-					System.out.println("Fulfillment OrderHeaderKey:"+fOrdHeaderKey);
-					
+					if(log.isDebugEnabled()){
+					log.debug("Fulfillment OrderHeaderKey:"+fOrdHeaderKey);
+					}
 					log.verbose("");
 					log.verbose("Fulfillment OrderHeaderKey:"+fOrdHeaderKey);
 					
@@ -294,10 +291,10 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				YFCElement chngCOStatusLinesEle = chngcOrdStatusEle.getOwnerDocument().createElement("OrderLines");
 				chngcOrdStatusEle.appendChild(chngCOStatusLinesEle);
 				
-				System.out.println();
-				System.out.println("fOrderEle_OrderType:"+fOrderEle.getAttribute("OrderType"));
-				System.out.println("cOrderEle_OrderType:"+cOrderEle.getAttribute("OrderType"));
-				System.out.println();
+				if(log.isDebugEnabled()){
+				log.debug("fOrderEle_OrderType:"+fOrderEle.getAttribute("OrderType"));
+				log.debug("cOrderEle_OrderType:"+cOrderEle.getAttribute("OrderType"));
+				}
 				
 				log.verbose("");
 				log.verbose("fOrderEle_OrderType:"+fOrderEle.getAttribute("OrderType"));
@@ -328,9 +325,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					setExtendedPriceInfo(env, rootEle, false);
 					filterAttributes(rootEle, false);
 					
-					System.out.println();
-					System.out.println("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:"+rootEle.getString());
-					
+					if(log.isDebugEnabled()){
+					log.debug("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:"+rootEle.getString());
+					}
 					log.verbose("");
 					log.verbose("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:"+rootEle.getString());
 					
@@ -347,8 +344,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					setExtendedPriceInfo(env, chngcOrderEle0, true);
 					filterAttributes(chngcOrderEle0, true);
 					
-					System.out.println();
-					System.out.println("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:"+chngcOrderEle0.getString());
+					if(log.isDebugEnabled()){
+					log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:"+chngcOrderEle0.getString());
+					}
 					
 					log.verbose("");
 					log.verbose("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:"+chngcOrderEle0.getString());
@@ -404,11 +402,11 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			}
 		}
 		
-		System.out.println();
-		System.out.println("ReturnToLegacyDoc:"+returnToLegacyDoc);
-		
+		if(log.isDebugEnabled()){
+		log.debug("ReturnToLegacyDoc:"+returnToLegacyDoc.toString());
+		}
 		log.verbose("");
-		log.verbose("ReturnToLegacyDoc:"+returnToLegacyDoc);
+		log.verbose("ReturnToLegacyDoc:"+returnToLegacyDoc.toString());
 		
 		return returnToLegacyDoc.getDocument();
 	}
@@ -466,11 +464,11 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			}
 		}
 		
-		System.out.println();
-		System.out.println("CO_ExtnCustomerNo:"+_custNo);
-		System.out.println("CO_ExtnEnvtId:"+_envId);
-		System.out.println("CO_ExtnCompanyId:"+_compId);
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("CO_ExtnCustomerNo:"+_custNo);
+		log.debug("CO_ExtnEnvtId:"+_envId);
+		log.debug("CO_ExtnCompanyId:"+_compId);
+		}
 		
 		log.verbose("");
 		log.verbose("CO_ExtnCustomerNo:"+_custNo);
@@ -814,10 +812,10 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					}
 				}
 				
-				System.out.println();
-				System.out.println("ExtnWebLineNumber:"+webLineNo);
-				System.out.println("ExtnLegacyLineNumber:"+legacyLineNo);
-				System.out.println();
+				if(log.isDebugEnabled()){
+				log.debug("ExtnWebLineNumber:"+webLineNo);
+				log.debug("ExtnLegacyLineNumber:"+legacyLineNo);
+				}
 				
 				if(!YFCObject.isNull(webLineNo) && !YFCObject.isVoid(webLineNo)) {
 					String fOrdLineKey = null;
@@ -911,9 +909,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		Document tempDoc = null;
 		
 		if(chngcOrdStatusEle0.hasAttribute("OrderHeaderKey")) {
-			System.out.println();
-			System.out.println("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle0.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle0.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle0.getString());
 			
@@ -927,9 +925,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			setExtendedPriceInfo(env,chngcOrderEle, true);
 			filterAttributes(chngcOrderEle, true);
 			
-			System.out.println();
-			System.out.println("XPXChangeOrder_CO-InXML:"+chngcOrderEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrder_CO-InXML:"+chngcOrderEle.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXChangeOrder_CO-InXML:"+chngcOrderEle.getString());
 			
@@ -948,9 +946,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			setExtendedPriceInfo(env,chngfOrderEle, false);
 			filterAttributes(chngfOrderEle, false);
 			
-			System.out.println();
-			System.out.println("XPXChangeOrder_FO-InXML:"+chngfOrderEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrder_FO-InXML:"+chngfOrderEle.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXChangeOrder_FO-InXML:"+chngfOrderEle.getString());
 			
@@ -967,9 +965,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		
 		if(chngcOrdStatusEle.hasAttribute("OrderHeaderKey")) {
 
-			System.out.println();
-			System.out.println("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXChangeOrderStatus_CO-InXML:"+chngcOrdStatusEle.getString());
 			
@@ -1318,12 +1316,12 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 						String fOrdLineKey = getOrderLineKeyForWebLineNo(webLineNo, legacyLineNo, fOrderEle);
 						String cOrdLineKey = getOrderLineKeyForWebLineNo(webLineNo, null, cOrderEle);
 						
-						System.out.println();
-						System.out.println("preparefoChange_webLineNo:"+webLineNo);
-						System.out.println("preparefoChange_legacyLineNo:"+legacyLineNo);
-						System.out.println("preparefoChange_fOrdLineKey:"+fOrdLineKey);
-						System.out.println("preparefoChange_cOrdLineKey:"+cOrdLineKey);
-						System.out.println();
+						if(log.isDebugEnabled()){
+						log.debug("preparefoChange_webLineNo:"+webLineNo);
+						log.debug("preparefoChange_legacyLineNo:"+legacyLineNo);
+						log.debug("preparefoChange_fOrdLineKey:"+fOrdLineKey);
+						log.debug("preparefoChange_cOrdLineKey:"+cOrdLineKey);
+						}
 						
 						log.verbose("");
 						log.verbose("preparefoChange_webLineNo:"+webLineNo);
@@ -1466,11 +1464,11 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 								}
 								
 								Float _ordLineQtyInXML = Float.parseFloat(ordQty);
-								
-								System.out.println("_ordLineQtyInXML:"+_ordLineQtyInXML);
-								System.out.println("_ordLineQtyInCO:"+_ordLineQtyInCO);
-								System.out.println("_ordLineQtyInFO:"+_ordLineQtyInFO);
-								
+								if(log.isDebugEnabled()){
+								log.debug("_ordLineQtyInXML:"+_ordLineQtyInXML);
+								log.debug("_ordLineQtyInCO:"+_ordLineQtyInCO);
+								log.debug("_ordLineQtyInFO:"+_ordLineQtyInFO);
+								}
 								log.verbose("_ordLineQtyInXML:"+_ordLineQtyInXML);
 								log.verbose("_ordLineQtyInCO:"+_ordLineQtyInCO);
 								log.verbose("_ordLineQtyInFO:"+_ordLineQtyInFO);
@@ -1510,12 +1508,12 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			}
 		}	
 
-		System.out.println();
-		System.out.println("hasLineA:"+hasLineA);
-		System.out.println("hasLineC:"+hasLineC);
-		System.out.println("hasLineD:"+hasLineD);
-		System.out.println("Boolean:"+(!hasLineA && !hasLineC && hasLineD));
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("hasLineA:"+hasLineA);
+		log.debug("hasLineC:"+hasLineC);
+		log.debug("hasLineD:"+hasLineD);
+		log.debug("Boolean:"+(!hasLineA && !hasLineC && hasLineD));
+		}
 		
 		return (!hasLineA && !hasLineC && hasLineD);
 	}
@@ -1577,12 +1575,12 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			_ordLineQtyInFO = _ordLineQtyInXML;
 		}
 		
-		System.out.println();
-		System.out.println("_ordLineQtyInXML:"+_ordLineQtyInXML);
-		System.out.println("_unSchLineQtyInCO:"+_unSchLineQtyInCO);
-		System.out.println("_ordLineQtyInCO:"+_ordLineQtyInCO);
-		System.out.println("_ordLineQtyInFO:"+_ordLineQtyInFO);
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("_ordLineQtyInXML:"+_ordLineQtyInXML);
+		log.debug("_unSchLineQtyInCO:"+_unSchLineQtyInCO);
+		log.debug("_ordLineQtyInCO:"+_ordLineQtyInCO);
+		log.debug("_ordLineQtyInFO:"+_ordLineQtyInFO);
+		}
 		
 		log.verbose("");
 		log.verbose("_ordLineQtyInXML:"+_ordLineQtyInXML);
@@ -1819,9 +1817,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			extnCustInXMLEle.setAttribute("ExtnSuffixType", suffixType.trim());
 		}
 		
-		System.out.println();
-		System.out.println("XPXGetCustomerList-InXML:"+getCustListInXML.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXGetCustomerList-InXML:"+getCustListInXML.getString());
+		}
 		log.verbose("");
 		log.verbose("XPXGetCustomerList-InXML:"+getCustListInXML.getString());
 		
@@ -1830,9 +1828,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers!");
 		}
 		
-		System.out.println();
-		System.out.println("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
+		}
 		log.verbose("");
 		log.verbose("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
 		
@@ -1860,9 +1858,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				rootCustInXMLEle.setAttribute("CustomerKey", rootCustKey);
 				rootCustInXMLEle.setAttribute("ExtnSuffixType", suffixType.trim());
 				
-				System.out.println();
-				System.out.println("XPXGetCustomerList-InXML:"+getRootCustListInXML.getString());
-				
+				if(log.isDebugEnabled()){
+				log.debug("XPXGetCustomerList-InXML:"+getRootCustListInXML.getString());
+				}
 				log.verbose("");
 				log.verbose("XPXGetCustomerList-InXML:"+getRootCustListInXML.getString());
 				
@@ -1871,9 +1869,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					throw new Exception("XPXGetCustomerList - MSAP Customer Not Found!");
 				}
 				
-				System.out.println();
-				System.out.println("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
-				
+				if(log.isDebugEnabled()){
+				log.debug("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
+				}
 				log.verbose("");
 				log.verbose("XPXGetCustomerList-OutXML:"+YFCDocument.getDocumentFor(tempDoc).getString());
 				
@@ -2080,10 +2078,10 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		// To remove all the existing web line numbers from the new line list that needs to be created.
 		_newLinesList.removeAll(webLineNosExistingCO);
 		_existingLinesList.retainAll(webLineNosInXML);
-		
-		System.out.println("_NewLinesList:"+_newLinesList);
-		System.out.println("_ExistingLinesList:"+_existingLinesList);
-		
+		if(log.isDebugEnabled()){
+		log.debug("_NewLinesList:"+_newLinesList);
+		log.debug("_ExistingLinesList:"+_existingLinesList);
+		}
 		log.verbose("_NewLinesList:"+_newLinesList);
 		log.verbose("_ExistingLinesList:"+_existingLinesList);
 		
@@ -2144,9 +2142,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		this.setExtendedPriceInfo(env,chngcOrdEle, true);
 		this.filterAttributes(chngcOrdEle, true);
 		
-		System.out.println();
-		System.out.println("XPXChangeOrder_CO-InXML:"+chngcOrdEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXChangeOrder_CO-InXML:"+chngcOrdEle.getString());
+		}
 		log.verbose("");
 		log.verbose("XPXChangeOrder_CO-InXML:"+chngcOrdEle.getString());
 		// Change order call to update the customer order.
@@ -2574,12 +2572,12 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					
 					rootOrdLineEle.setAttribute("OrderLineKey", _ordLineKey);
 					
-					System.out.println();
-					System.out.println("Customer Order Update...");
-					System.out.println("ordQtyInCO:"+ordQtyInCO);
-					System.out.println("ordQtyInCOUnSch:"+ordQtyInCOUnSch);
-					System.out.println("ordQtyInXML:"+ordQtyInXML);
-					System.out.println();
+					if(log.isDebugEnabled()){
+					log.debug("Customer Order Update...");
+					log.debug("ordQtyInCO:"+ordQtyInCO);
+					log.debug("ordQtyInCOUnSch:"+ordQtyInCOUnSch);
+					log.debug("ordQtyInXML:"+ordQtyInXML);
+					}
 					
 					if(ordQtyInCOUnSch > 0) {
 						Float tempQty = ordQtyInXML - ordQtyInCOUnSch;
@@ -2622,9 +2620,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			
 			if(isChngCOStatusReq) {
 				
-				System.out.println();
-				System.out.println("XPXChangeOrderStatus_CO-InXML:"+chngCOStatusInXML.getString());
-				
+				if(log.isDebugEnabled()){
+				log.debug("XPXChangeOrderStatus_CO-InXML:"+chngCOStatusInXML.getString());
+				}
 				log.verbose("");
 				log.verbose("XPXChangeOrderStatus_CO-InXML:"+chngCOStatusInXML.getString());
 				
@@ -2720,9 +2718,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		
 		filterAttributes(rootEle, true);
 		
-		System.out.println();
-		System.out.println("XPXCreateOrder_CO-InXML:"+rootEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXCreateOrder_CO-InXML:"+rootEle.getString());
+		}
 		log.verbose("");
 		log.verbose("XPXCreateOrder_CO-InXML:"+rootEle.getString());
 		
@@ -2736,14 +2734,14 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 	}
 	
 	private String getInventoryIndicator(YFSEnvironment env, String itemId, String shipNode, String envtId, String lineType) throws Exception {
+		if(log.isDebugEnabled()){
+		log.debug("**************************************GetInventoryIndicator*******************************************");
 		
-		System.out.println("**************************************GetInventoryIndicator*******************************************");
-		System.out.println();
-		System.out.println("ItemID:"+itemId);
-		System.out.println("ShipNode:"+shipNode);
-		System.out.println("EnvtId:"+envtId);
-		System.out.println("LineType:"+lineType);
-		System.out.println();
+		log.debug("ItemID:"+itemId);
+		log.debug("ShipNode:"+shipNode);
+		log.debug("EnvtId:"+envtId);
+		log.debug("LineType:"+lineType);
+		}
 		
 		log.verbose("**************************************GetInventoryIndicator*******************************************");
 		log.verbose("");
@@ -2773,9 +2771,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		getItemExtnListEle.setAttribute("XPXDivision", shipNode);
 		/* End - changes made to fix Issue 1501 */
 		
-		System.out.println();
-		System.out.println("getXPXItemBranchListService-InXML:"+getItemExtnListInXML.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("getXPXItemBranchListService-InXML:"+getItemExtnListInXML.getString());
+		}
 		log.verbose("");
 		log.verbose("getXPXItemBranchListService-InXML:"+getItemExtnListInXML.getString());
 		
@@ -2815,9 +2813,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			YFCElement itemListEle = getItemListInXML.getDocumentElement();
 			itemListEle.setAttribute("ItemID", itemId);
 			
-			System.out.println();
-			System.out.println("XPXGetItemList-InXML:"+getItemListInXML.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXGetItemList-InXML:"+getItemListInXML.getString());
+			}
 			log.verbose("");
 			log.verbose("XPXGetItemList-InXML:"+getItemListInXML.getString());
 			
@@ -2841,10 +2839,11 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		log.verbose("");
 		log.verbose("*****************************************************************************************************");
 		
-		System.out.println();
-		System.out.println("ExtnLineType:"+stockType);
-		System.out.println();
-		System.out.println("*****************************************************************************************************");
+		if(log.isDebugEnabled()){
+		log.debug("ExtnLineType:"+stockType);
+		
+		log.debug("*****************************************************************************************************");
+		}
 		return stockType;
 	}
 	
@@ -2982,9 +2981,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		
 		filterAttributes(rootEle, false);
 		
-		System.out.println();
-		System.out.println("XPXCreateOrder_FO-InXML:"+rootEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXCreateOrder_FO-InXML:"+rootEle.getString());
+		}
 		log.verbose("");
 		log.verbose("XPXCreateOrder_FO-InXML:"+rootEle.getString());
 		// To create fulfillment order.
@@ -3102,9 +3101,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			}
 		}
 		
-		System.out.println();
-		System.out.println("ChangeCOStatus-InXML:"+chngcOrdStatusEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("ChangeCOStatus-InXML:"+chngcOrdStatusEle.getString());
+		}
 		// To call changeOrderStatus API.
 		Document tempDoc = this.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle.getOwnerDocument().getDocument());
 		if(tempDoc != null) {
@@ -3118,9 +3117,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			String chngfOrdStatusStr = (String)itr.next();
 			YFCElement chngfOrdStatusEle = YFCDocument.getDocumentFor(chngfOrdStatusStr).getDocumentElement();
 			
-			System.out.println();
-			System.out.println("ChangeFOStatus-InXML:"+chngfOrdStatusEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("ChangeFOStatus-InXML:"+chngfOrdStatusEle.getString());
+			}
 			// To call changeOrderStatus API.
 			tempDoc = this.api.executeFlow(env, "XPXChangeOrderStatus", chngfOrdStatusEle.getOwnerDocument().getDocument());
 			if(tempDoc != null) {
@@ -3135,9 +3134,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			String chngfOrdStatusStr = (String)itr.next();
 			YFCElement chngfOrdStatusEle = YFCDocument.getDocumentFor(chngfOrdStatusStr).getDocumentElement();
 			
-			System.out.println();
-			System.out.println("ChangeFOStatus-InXML:"+chngfOrdStatusEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("ChangeFOStatus-InXML:"+chngfOrdStatusEle.getString());
+			}
 			// To call changeOrderStatus API.
 			tempDoc = this.api.executeFlow(env, "XPXChangeOrderStatus", chngfOrdStatusEle.getOwnerDocument().getDocument());
 			if(tempDoc != null) {
@@ -3179,13 +3178,13 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 							}
 							if(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)) {
 								
-								System.out.println();
-								System.out.println("webLineNo:"+webLineNo);
-								System.out.println("_webLineNo:"+_webLineNo);
-								System.out.println("legacyLineNo:"+legacyLineNo);
-								System.out.println("_legacyLineNo:"+_legacyLineNo);
-								System.out.println("OrderHeaderKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
-								System.out.println();
+								if(log.isDebugEnabled()){
+								log.debug("webLineNo:"+webLineNo);
+								log.debug("_webLineNo:"+_webLineNo);
+								log.debug("legacyLineNo:"+legacyLineNo);
+								log.debug("_legacyLineNo:"+_legacyLineNo);
+								log.debug("OrderHeaderKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
+								}
 								
 								log.verbose("");
 								log.verbose("webLineNo:"+webLineNo);
@@ -3434,13 +3433,13 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 							}
 							if(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)) {
 								
-								System.out.println();
-								System.out.println("webLineNo:"+webLineNo);
-								System.out.println("_webLineNo:"+_webLineNo);
-								System.out.println("legacyLineNo:"+legacyLineNo);
-								System.out.println("_legacyLineNo:"+_legacyLineNo);
-								System.out.println("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
-								System.out.println();
+								if(log.isDebugEnabled()){
+								log.debug("webLineNo:"+webLineNo);
+								log.debug("_webLineNo:"+_webLineNo);
+								log.debug("legacyLineNo:"+legacyLineNo);
+								log.debug("_legacyLineNo:"+_legacyLineNo);
+								log.debug("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
+								}
 								
 								log.verbose("");
 								log.verbose("webLineNo:"+webLineNo);
@@ -3496,11 +3495,11 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 							
 							if(_webLineNo.equalsIgnoreCase(webLineNo)) {
 								
-								System.out.println();
-								System.out.println("webLineNo:"+webLineNo);
-								System.out.println("_webLineNo:"+_webLineNo);
-								System.out.println("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo)));
-								System.out.println();
+								if(log.isDebugEnabled()){
+								log.debug("webLineNo:"+webLineNo);
+								log.debug("_webLineNo:"+_webLineNo);
+								log.debug("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo)));
+								}
 								
 								log.verbose("");
 								log.verbose("webLineNo:"+webLineNo);
@@ -3559,13 +3558,13 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 							
 							if(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)) {
 								
-								System.out.println();
-								System.out.println("webLineNo:"+webLineNo);
-								System.out.println("_webLineNo:"+_webLineNo);
-								System.out.println("legacyLineNo:"+legacyLineNo);
-								System.out.println("_legacyLineNo:"+_legacyLineNo);
-								System.out.println("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
-								System.out.println();
+								if(log.isDebugEnabled()){
+								log.debug("webLineNo:"+webLineNo);
+								log.debug("_webLineNo:"+_webLineNo);
+								log.debug("legacyLineNo:"+legacyLineNo);
+								log.debug("_legacyLineNo:"+_legacyLineNo);
+								log.debug("OrderLineKeyCheck_Boolean:"+(_webLineNo.equalsIgnoreCase(webLineNo) && _legacyLineNo.equalsIgnoreCase(legacyLineNo)));
+								}
 								
 								log.verbose("");
 								log.verbose("webLineNo:"+webLineNo);
@@ -4531,9 +4530,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		ordListInEle.appendChild(extnEle);
 		extnEle.setAttribute("ExtnWebConfNum", extnWebConfNum);
 		
-		System.out.println();
-		System.out.println("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-InXML:"+getOrdListInDoc.getString());
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-InXML:"+getOrdListInDoc.getString());
+		}
 		
 		log.verbose("");
 		log.verbose("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-InXML:"+getOrdListInDoc.getString());
@@ -4544,9 +4543,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		if(tempDoc != null) {
 			getOrdListOutDoc = YFCDocument.getDocumentFor(tempDoc);
 			
-			System.out.println();
-			System.out.println("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:"+getOrdListOutDoc.getString());
-			System.out.println();
+			
+			log.debug("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:"+getOrdListOutDoc.getString());
+			
 			
 			log.verbose("");
 			log.verbose("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:"+getOrdListOutDoc.getString());
@@ -4596,16 +4595,16 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		Set itemIds = this.getItemIds(rootEle);
 		YFCElement itemEle = this.getItemUOMListInXML(itemIds);
 		
-		System.out.println();
-		System.out.println("getItemUOMList-InXML:"+itemEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("getItemUOMList-InXML:"+itemEle.getString());
+		}
 		Document temp = this.api.invoke(env, "getItemUOMList", itemEle.getOwnerDocument().getDocument());
 		if(temp != null) {
 			itemUOMListEle = YFCDocument.getDocumentFor(temp).getDocumentElement();
 			
-			System.out.println();
-			System.out.println("getItemUOMList-OutXML:"+itemUOMListEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("getItemUOMList-OutXML:"+itemUOMListEle.getString());
+			}
 		} else {
 			return;
 		}
@@ -4709,14 +4708,14 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			}
 		}
 		
-		System.out.println();
-		System.out.println("itemId:"+itemId);
-		System.out.println("reqUOM:"+reqUOM);
-		System.out.println("prcUOM:"+prcUOM);
-		System.out.println("unitPrice:"+unitPrice);
-		System.out.println("cnvrFctrPUOM:"+cnvrFctrPUOM);
-		System.out.println("cnvrFctrRUOM:"+cnvrFctrRUOM);
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("itemId:"+itemId);
+		log.debug("reqUOM:"+reqUOM);
+		log.debug("prcUOM:"+prcUOM);
+		log.debug("unitPrice:"+unitPrice);
+		log.debug("cnvrFctrPUOM:"+cnvrFctrPUOM);
+		log.debug("cnvrFctrRUOM:"+cnvrFctrRUOM);
+		}
 		
 		double dReqUOMPrice = 0.0;
 		if(!YFCObject.isNull(unitPrice) && !YFCObject.isVoid(unitPrice)
@@ -4724,9 +4723,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				&& !YFCObject.isNull(cnvrFctrRUOM) && !YFCObject.isVoid(cnvrFctrRUOM)) {
 			dReqUOMPrice = (Double.parseDouble(unitPrice)/Double.parseDouble(cnvrFctrPUOM)) * Double.parseDouble(cnvrFctrRUOM); 
 		}
-		
-		System.out.println("dReqUOMPrice:"+dReqUOMPrice);
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("dReqUOMPrice:"+dReqUOMPrice);
+		}
 		
 		return dReqUOMPrice;
 	}
@@ -4827,10 +4826,10 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				}
 			}
 		}
-		
-		System.out.println("hasOtherLines:"+hasOtherLines);
-		System.out.println("isOrderDelete:"+isOrderDelete);
-		System.out.println();
+		if(log.isDebugEnabled()){
+		log.debug("hasOtherLines:"+hasOtherLines);
+		log.debug("isOrderDelete:"+isOrderDelete);
+		}
 		
 		if(!hasOtherLines || isOrderDelete) {
 			if(chngOrdEle.hasAttribute("ReqDeliveryDate")) {
