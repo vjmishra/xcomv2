@@ -1692,7 +1692,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
 		 </s:if>
-		 <s:elseif test="%{#buyerApproverValue && !#disableSinceSelfApprover}">
+		 <s:elseif test="%{!#disableSinceSelfApprover}">
 		 	<li class="TabbedPanelsTab" tabindex="0">Spending Limit &
 			Approvers</li>
 		 </s:elseif> 
