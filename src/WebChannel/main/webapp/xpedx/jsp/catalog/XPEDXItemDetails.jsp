@@ -1410,7 +1410,7 @@ function SubmitActionWithValidation()
 
 				</s:if>
 			</s:if>
-				<div class="orderbtns line-spacing">
+				<div class="orderbtns">
 					<a href="javascript:updatePandA()">My Price & Availability</a>
 					
 				<s:if test='%{#isFlowInContext == true}'>
