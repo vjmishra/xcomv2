@@ -37,7 +37,9 @@ public class XPXPurgePunchOutOrders extends YCPBaseAgent {
 			throws Exception {
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		try {
-			log.debug("The input document to deleteOrder Api is: "+SCXmlUtil.getString(orderToDeleteDoc));
+			if(log.isDebugEnabled()){
+				log.debug("The input document to deleteOrder Api is: "+SCXmlUtil.getString(orderToDeleteDoc));
+			}
 			api.invoke(env, "deleteOrder", orderToDeleteDoc);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,6 +70,10 @@ public class XPXPurgePunchOutOrders extends YCPBaseAgent {
 		
 		Document userOutputDoc = SCXmlUtil.createFromString("<UserList><User EnterpriseCode='' Loginid='' DisplayUserID=''><UserGroupLists><UserGroupList UserGroupListKey='' UserKey='' UsergroupKey=''/></UserGroupLists></User></UserList>");
 		env.setApiTemplate("getUserList",userOutputDoc);
+		if(log.isDebugEnabled())
+		{
+			log.debug("The input to getUserList of  XPXPurgePunchOutOrders is : "+ SCXmlUtil.getString(userInputDoc));
+		}
 		Document docProcUsers = api.invoke(env, "getUserList", userInputDoc);
 		env.clearApiTemplate("getUserList");
 		
@@ -122,8 +128,9 @@ public class XPXPurgePunchOutOrders extends YCPBaseAgent {
 		
 		if (lastMessageCreated != null) 
 		{
-			//System.out.println("In the loop for last message created");
-			
+			if(log.isDebugEnabled()){
+				log.debug("In the loop for last message created");
+			}
 			String lastDeletedOrderHeaderKey = "";
 			Element lastOrderElement = null;
 			NodeList orderNodeList = lastMessageCreated.getElementsByTagName("Order");
@@ -142,7 +149,9 @@ public class XPXPurgePunchOutOrders extends YCPBaseAgent {
 			orderInputDoc.getDocumentElement().setAttribute("OrderHeaderKey", "");
 			orderInputDoc.getDocumentElement().setAttribute("OrderHeaderKeyQryType", "GT");
 		}
-		
+		if(log.isDebugEnabled()){
+			log.debug("The input to getOrderList in XPXPurgePunchOutOrders  is : "+ SCXmlUtil.getString(orderInputDoc));
+		}
 		Document orderOutputDoc = SCXmlUtil.createFromString("<OrderList><Order/></OrderList>");
 		env.setApiTemplate("getOrderList",orderOutputDoc);
 		Document docProcOrdersToPurge = SCXmlUtil.createFromString("<OrderList/>");

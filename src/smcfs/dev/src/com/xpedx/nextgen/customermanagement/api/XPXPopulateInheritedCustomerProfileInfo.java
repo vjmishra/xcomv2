@@ -15,6 +15,7 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 
@@ -24,6 +25,7 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 	static String _GET_CUSTOMER_LIST_SERVICE = "getCustomerList";
 	public  int apiCounter=0;
 	private static Properties propInheritedFields = new Properties();
+	YFCLogCategory logger = YFCLogCategory.instance(XPXPopulateInheritedCustomerProfileInfo.class);
 	@Override
 	
 	public void setProperties(Properties arg0) throws Exception 
@@ -43,6 +45,10 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 		api = YIFClientFactory.getInstance().getApi();
 
 		Document outXML = getCustomerProfileInfo(env, inXML, null);
+		if(logger.isDebugEnabled())
+		{
+			logger.debug("The output of getCustomerProfileInfo is : "+ SCXmlUtil.getString(outXML));
+		}
 		YFCDocument outDoc = YFCDocument.getDocumentFor(outXML);
 		YFCElement eCustomerList = outDoc.getDocumentElement();
 		YFCElement eCustomer = (YFCElement)eCustomerList.getElementsByTagName("Customer").item(0);
@@ -64,6 +70,10 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 		{
 			env.setApiTemplate("getCustomerList",createTemplateForCustomerList());
 			Document getCustomerList = api.invoke(env, _GET_CUSTOMER_LIST_SERVICE, searchXML);
+			if(logger.isDebugEnabled())
+			{
+				logger.debug("The input to the getCustomerList service is:"+SCXmlUtil.getString(searchXML));
+			}
 			apiCounter++;
 			env.clearApiTemplate("getCustomerList");
 			Document docUpdatedCustProfile = updateMissingProfileInfo(alMissingProfileInfo, customerProfileXML, getCustomerList);
@@ -146,7 +156,9 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 			Element eCustomerList = getCustomerList.getDocumentElement();
 			SCXmlUtil.getString(eCustomerList);
 			eCustomerList.setAttribute("FieldsEmpty", "Y");
-			System.out.println("FieldsEmpty: Y");
+			if(logger.isDebugEnabled()){
+				logger.debug("FieldsEmpty: Y");
+			}
 		}
 		else
 		{
@@ -204,13 +216,16 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 				{
 					//all fields have values
 					eCustomerProfileList.setAttribute("FieldsEmpty", "N");
-					System.out.println("FieldsEmpty: N");
-					
+					if(logger.isDebugEnabled()){
+						logger.debug("FieldsEmpty: N");
+					}
 				}
 				else
 				{
 					eCustomerProfileList.setAttribute("FieldsEmpty", "Y");
-					System.out.println("FieldsEmpty: Y");
+					if(logger.isDebugEnabled()){
+						logger.debug("FieldsEmpty: Y");
+					}
 				}
 			}
 			docUpdatedCustomerProfile = customerProfileXML;
