@@ -235,6 +235,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			
 			// Fix the Long to integer problem. -PN
 			enteredQtyStr = StringUtils.replace(enteredQtyStr, ".00", "");
+			enteredQtyStr = StringUtils.replace(enteredQtyStr, ",", "");
 
 			ArrayList errorStringArgs = new ArrayList();
 			errorStringArgs.add(itemID); // The first arg to any error message
