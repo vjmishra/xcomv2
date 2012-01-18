@@ -697,6 +697,7 @@
 		}		
 </script>
 <script type="text/javascript">
+  var valuesSet = null;
 	var w = new Ext.Window({
     autoScroll: true,
     cls: 'swc-ext',
@@ -830,7 +831,7 @@
 		return customerId;
 		}
     function setSelectedValue(selectedShipTo) {
-        
+        valuesSet = null;
 	    if(selectedShipTo!= null) {
 	        var selectedShipCustomer = selectedShipTo.value;
 	        if(selectedShipCustomer!=null) {	        	
@@ -850,18 +851,24 @@
 	    }
 	}
     function clearShipToField() {
-		if(document.orderListForm != null && document.orderListForm.shipToSearchFieldName1 != null) {
-    		document.orderListForm.shipToSearchFieldName1.value = '';
-    		removeOptionSelected();
+    	if(valuesSet !="selected"){
+    		 valuesSet = null;
+		 if(document.orderListForm != null && document.orderListForm.shipToSearchFieldName1 != null) { 
+		 	document.orderListForm.shipToSearchFieldName1.value = '';
+			removeOptionSelected();
     	}
     	if(document.approvalList != null && document.approvalList.shipToSearchFieldName != null) {
     		document.approvalList.shipToSearchFieldName.value = '';
     	}
 		var link = document.getElementById('shipToOrderSearch');
-		if(link != null){
-    		link.innerHTML = '[Select]';
-		}
+		//if(link != null){
+    		//link.innerHTML = '[Select]';
+//		}
 	}
+    }
+    function setVariable(){
+    	valuesSet = "selected";
+    }
     function isValidString(stringValue)
     {
         var numaric = stringValue;
@@ -1247,6 +1254,9 @@ var toaWin = new Ext.Window({
 		    		$fancybox.close();
 	    		}
     			},
+    			'onClosed' : function() {
+   				 clearShipToField();      				
+   			},
 			'autoDimensions'	: false,
 			'width' 			: 751,
 	 		'height' 			: 350  
