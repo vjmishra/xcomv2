@@ -937,6 +937,8 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	</div>
+	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
+	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>	
 </swc:breadcrumbScope>
 <!-- // container end -->
 <!-- begin swc:dialogPanel -->
@@ -1188,31 +1190,26 @@ function addCompare(itemKey) {
 	});
 }   
 function processSortByUpperTroy(theValue,directionValue,theSpanNameValue)
-{
-	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
+{	
 	theUrl = "<s:property value='%{sortFieldsURL}' escape='false'/>";
 	processSortByUpperTroyJS(theValue,directionValue,theSpanNameValue, theUrl);
 }               
 function processSortByUpper(){
-	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
 	var sortFieldValue = Ext.fly('sortFieldUpper').dom.value;
 	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue;
 }
 
 function processSortByLower(){
-	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
 	var sortFieldValue = Ext.fly('sortFieldLower').dom.value;
 	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue;
 }
 
 function processPageSizeUpper(){
-	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>
 	var pageSizeValue = Ext.fly('pageSizeUpper').dom.value;
 	window.location.href="<s:property value='%{pageSizeURL}' escape='false'/>" + "&pageSize=" + pageSizeValue;
 }
 
 function processPageSizeLower(){
-	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>
 	var pageSizeValue = Ext.fly('pageSizeLower').dom.value;
 	window.location.href="<s:property value='%{pageSizeURL}' escape='false'/>" + "&pageSize=" + pageSizeValue;
 }
