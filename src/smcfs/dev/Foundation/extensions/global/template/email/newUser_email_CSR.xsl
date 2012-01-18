@@ -64,10 +64,18 @@
 													<table width="100%" border="0">
 														<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																User's Name:
+																First Name:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="@Name"/>
+																<xsl:value-of select="@FirstName"/>
+															</td>
+															</tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Last Name:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@LastName"/>
 															</td>
 															</tr>
 															<tr>
@@ -78,6 +86,47 @@
 																<xsl:value-of select="@CompanyName"/><BR/>
 															</td>
 														   </tr>
+														   <tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Address:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@Address1"/>
+															</td>
+															</tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@Address2"/>
+															</td>
+															</tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																City:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@City"/>
+															</td>
+															</tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																State:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@State"/>
+															</td>
+															</tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Postal Code:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@PostalCode"/>
+															</td>
+															</tr>
+															
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Email Address:
@@ -92,6 +141,14 @@
 															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Phone"/><BR/>
 															</td></tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Comments :
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@Comments"/>
+															</td>
+															</tr>
 															
 														</table>
 												</td>
