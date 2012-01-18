@@ -186,7 +186,7 @@
 		</li>
 	</s:if>
 	<li>
-		   <a class="green-ui-btn"  href="javascript:$.fancybox.close();"><span>Select</span></a> 		
+		   <a class="green-ui-btn"  href="#" onclick = "setVariable();$.fancybox.close();"><span>Select</span></a> 		
 	</li>
 </ul>
 	
