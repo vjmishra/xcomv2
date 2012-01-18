@@ -58,7 +58,7 @@
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"> &#160; </td>
 											</tr>                                                                                   
                                             
-										
+										<!--Start for Jira 3269  -->
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 													<table width="100%" border="0">
@@ -67,14 +67,7 @@
 																First Name:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="@FirstName"/>
-															</td>
-															</tr>
-															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Last Name:
-															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@FirstName"/><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
 																<xsl:value-of select="@LastName"/>
 															</td>
 															</tr>
@@ -150,6 +143,7 @@
 															</td>
 															</tr>
 															
+															<!-- End for Jira 3269  -->
 														</table>
 												</td>
 											</tr>
