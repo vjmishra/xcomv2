@@ -15,10 +15,16 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(XPEDXNewUserRegistration.class);
 	
-	private String newUserName = null;
+/*	private String newUserName = null;*/
 	private String newUserEmail=null;
 	private String newUserPhone = null;
 	private String newUserCompanyName = null;
+	private String newUserAddress1 = null;
+	private String newUserAddress2 = null;
+	private String newUserCity = null;
+	private String newUserState = null;
+	private String newUserZipCode = null;
+	private String newUserComments = null;
 	private String mailHost= null;
 	private String mailSubject = null;
 	private String appendedCSREmailIDs = null;
@@ -74,6 +80,18 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			}
 			return SUCCESS;
 		}
+		public String getNewUserAddress1() {
+			return newUserAddress1;
+		}
+		public void setNewUserAddress1(String newUserAddress1) {
+			this.newUserAddress1 = newUserAddress1;
+		}
+		public String getNewUserAddress2() {
+			return newUserAddress2;
+		}
+		public void setNewUserAddress2(String newUserAddress2) {
+			this.newUserAddress2 = newUserAddress2;
+		}
 		public String getNewUserCompanyName() {
 			return newUserCompanyName;
 		}
@@ -86,17 +104,41 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 		public void setNewUserEmail(String newUserEmail) {
 			this.newUserEmail = newUserEmail;
 		}
-		public String getNewUserName() {
+		/*public String getNewUserName() {
 			return newUserName;
 		}
 		public void setNewUserName(String newUserName) {
 			this.newUserName = newUserName;
-		}
+		}*/
 		public String getNewUserPhone() {
 			return newUserPhone;
 		}
 		public void setNewUserPhone(String newUserPhone) {
 			this.newUserPhone = newUserPhone;
+		}
+		public String getNewUserCity() {
+			return newUserCity;
+		}
+		public void setNewUserCity(String newUserCity) {
+			this.newUserCity = newUserCity;
+		}
+		public String getNewUserState() {
+			return newUserState;
+		}
+		public void setNewUserState(String newUserState) {
+			this.newUserState = newUserState;
+		}
+		public String getNewUserZipCode() {
+			return newUserZipCode;
+		}
+		public void setNewUserZipCode(String newUserZipCode) {
+			this.newUserZipCode = newUserZipCode;
+		}
+		public String getNewUserComments() {
+			return newUserComments;
+		}
+		public void setNewUserComments(String newUserComments) {
+			this.newUserComments = newUserComments;
 		}
 		public String getMailHost() {
 			return mailHost;
