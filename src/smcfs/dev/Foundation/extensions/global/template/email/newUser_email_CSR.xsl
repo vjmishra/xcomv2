@@ -119,20 +119,19 @@
 																<xsl:value-of select="@PostalCode"/>
 															</td>
 															</tr>
-															
-															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Email Address:
-															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="@EmailID"/>
-															</td></tr>
 															<tr>
 															<td width="22%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																Phone:
 															</td>
 															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Phone"/><BR/>
+															</td></tr>
+															<tr>
+															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Email Address:
+															</td>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																<xsl:value-of select="@EmailID"/>
 															</td></tr>
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
