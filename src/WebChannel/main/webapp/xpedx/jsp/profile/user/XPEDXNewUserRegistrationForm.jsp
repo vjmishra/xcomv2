@@ -60,8 +60,9 @@
     	var errorDiv = document.getElementById("errorMsgForMandatoryFields");
      	document.getElementById('newUserName').value = document.getElementById('newUserFirstName').value ;
            	
-     	if( document.getElementById('newUserFirstName').value.trim().length == 0 ||  document.getElementById('newUserCompanyName').value.trim().length == 0
-    			||  document.getElementById('newUserEmail').value.trim().length == 0 ||  document.getElementById('newUserPhone').value.trim().length == 0)
+     	if( document.getElementById('newUserFirstName').value.trim().length == 0 ||  document.getElementById('newUserLastName').value.trim().length == 0 || document.getElementById('newUserCompanyName').value.trim().length == 0
+    			||  document.getElementById('newUserEmail').value.trim().length == 0 ||  document.getElementById('newUserPhone').value.trim().length == 0 || document.getElementById('newUserAddress1').value.trim().length == 0
+    			|| document.getElementById('newUserState').value.trim().length == 0 || document.getElementById('newUserCity').value.trim().length == 0 || document.getElementById('newUserComments').value.trim().length == 0)
    		{
      		//alert("Fields can't be empty, Input required");
     		//errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.REGISTER.GENERIC.INVALIDFIELDS' />";
@@ -140,6 +141,14 @@
 	    	
     	
     }
+    
+    function textCounter(field,cntfield,maxlimit) {
+    	if (field.value.length > maxlimit) // if too long...trim it!
+    	field.value = field.value.substring(0, maxlimit);
+    	// otherwise, update 'characters left' counter
+    	else
+    	cntfield.value = maxlimit - field.value.length;
+    	}
 
 </script>
 
@@ -176,35 +185,72 @@
 <div class=" padding-bottom clearview"> </div>
     <!-- <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p>  -->
     <p> <s:text name='MSG.SWC.MISC.REGISTER.GENERIC.GENINFO' />  </p> 
-	<br>
-	<span class="smallfont">* - Required fields</span>
-	<br />
 	<table class="full-width">
 	  <tbody>
 		<tr>
-    		<td style="width:180px;" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Name: </td>
-			<td style="width:278px;" class="underlines no-border-right-user" ><s:textfield name="newUserFirstName" id="newUserFirstName" cssClass="x-input width-250px" maxlength="50"/></td>
+    		<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">First Name</div>&nbsp;*</td>
+    		<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Last Name</div>&nbsp;*</td>
+			
+		</tr>
+		
+		<tr>
+    		<td style="width:278px;" class="underlines no-border-right-user" ><s:textfield name="newUserFirstName" id="newUserFirstName" cssClass="x-input width-250px" maxlength="50"/></td>
+			<td style="width:278px;" class="underlines no-border-right-user" ><s:textfield name="newUserLastName" id="newUserLastName" cssClass="x-input width-250px" maxlength="50"/></td>
 		</tr>
 
 		<tr>
-  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Company:</td>
-  			<td class="underlines no-border-right-user"><s:textfield id="newUserCompanyName" name="newUserCompanyName" theme="simple" cssClass="x-input width-250px" maxlength="30"/></td>
-  			<td class="underlines no-border-right-user">&nbsp;</td>
-  			<td class="underlines no-border-right-user">&nbsp;</td>
+  			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Company</div>&nbsp;*</td>
 		</tr>
 		
 		<tr>
-  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Email Address:</td>
+			<td colspan="3" class="underlines no-border-right-user"><s:textfield id="newUserCompanyName" name="newUserCompanyName" theme="simple" cssClass="x-input width-525px" maxlength="30"/></td>
+		</tr>
+		
+		<tr>
+  			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Address</div>&nbsp;*</td>
+		</tr>
+		
+		<tr>
+			<td class="underlines no-border-right-user"><s:textfield id="newUserAddress1" name="newUserAddress1" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
+			<td class="underlines no-border-right-user"><s:textfield id="newUserAddress2" name="newUserAddress2" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
+		</tr>
+		<tr>
+  			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">City</div>&nbsp;*</td>
+  			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">State / Province</div>&nbsp;*</td>
+  			<td style="width:180px;color:black" class="underlines no-border-right-user"><div style="position:relative;left:-150px" >&nbsp;Postal Code</div></td>
+		</tr>
+		
+		<tr>
+  			<td class="underlines no-border-right-user"><s:textfield id="newUserCity" name="newUserCity" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
+  			<td class="underlines no-border-right-user"><s:textfield id="newUserState" name="newUserState" theme="simple" cssClass="x-input width-125px" maxlength="150"/></td>
+  			<td class="underlines no-border-right-user"><div style="position:relative;left:-150px" >&nbsp;<s:textfield id="newUserZipCode" name="newUserZipCode" theme="simple" cssClass="x-input width-115px" maxlength="150"/></div></td>
+		</tr>
+		
+		<tr>
+			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Phone</div>&nbsp;*</td>
+			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Email Address</div>&nbsp;*</td>
+  		</tr>
+  		
+  		<tr>
+  			<td class="underlines no-border-right-user"><s:textfield id="newUserPhone" name="newUserPhone" theme="simple" cssClass="x-input width-250px phone-numeric" maxlength="10"/></td>
   			<td class="underlines no-border-right-user"><s:textfield id="newUserEmail" name="newUserEmail" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
-			<td class="underlines no-border-right-user">&nbsp;</td>
-			<td class="underlines no-border-right-user">&nbsp;</td>
 		</tr>
 		
 		<tr>
-			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">*</div> Phone (Include area code):</td>
-			<td class="underlines no-border-right-user"><s:textfield id="newUserPhone" name="newUserPhone" theme="simple" cssClass="x-input width-250px phone-numeric" maxlength="10"/></td>
-  			<td class="underlines no-border-right-user">&nbsp;</td>
-  			<td class="underlines no-border-right-user">&nbsp;</td>
+			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Questions/Comments</div>&nbsp;*</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3" class="underlines no-border-right-user"><s:textarea id="newUserComments" name="newUserComments" theme="simple" cssClass="x-input width-525px" rows="6" cols="20" onkeydown="textCounter(document.registrationForm.newUserComments,document.registrationForm.remLen2,2000)" onkeyup="textCounter(document.registrationForm.newUserComments,document.registrationForm.remLen2,2000)"/></td>
+		</tr>
+		
+		<tr>
+  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left" style="position:relative;left:10px"><input readonly type="text" name="remLen2" size="2" maxlength="2" value="2000"></input></div>&nbsp;&nbsp;&nbsp;&nbsp;characters remanining</td>
+		</tr>
+  		  		
+  		<tr>
+			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left">&nbsp;&nbsp;&nbsp;*=required</div></td>
+  		
   		</tr>
 		
 		<!-- 
