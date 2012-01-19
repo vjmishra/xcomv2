@@ -117,7 +117,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 //    		Element customerInfo = XPEDXWCUtils.getCustomerDetails(customerId, wcContext.getStorefrontId(), customerDivisionMashUp).getDocumentElement();
     		String customerID= wcContext.getCustomerId();
     		String[] customerIdParts = customerID.split("-");
-    		customerDivisionToQry='|'+customerIdParts[0]+'|';
+    		customerDivisionToQry=customerIdParts[0];
 //    		String customerDivision = SCXmlUtil.getXpathAttribute(customerInfo, "/Customer/Extn/@ExtnCustomerDivision");
 //    		customerDivisionToQry = '|'+customerDivision+'|';
     		custArticleSearchName.add("XPXDivision");
