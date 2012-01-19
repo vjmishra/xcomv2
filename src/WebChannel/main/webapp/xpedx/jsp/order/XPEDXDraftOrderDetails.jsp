@@ -993,7 +993,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                 <div class="mil-checkbox-wrap">
                      <%-- <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" /> --%>                    
                    <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' cssStyle="display:none" onclick="checkHiddenCheckboxAndDeleteItem(this, 'selectedLineItem_%{#orderLineKey}')" fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" />
-                   <img src="/swc/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" /> 
+                   <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+                   	<img src="/swc/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" />
+                   </s:if> 
                   </div>
                 <!-- end checkbox   -->
                         
