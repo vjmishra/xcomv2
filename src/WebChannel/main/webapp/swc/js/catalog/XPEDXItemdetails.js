@@ -9,7 +9,7 @@ function itemDetailValidateAndAddToCart(itemId) {
 	itemDetailAddToCart(itemId, uomvalue, '', '');
 }
 
-function validateOrderMultiple() {
+/*function validateOrderMultiple() {
 	var Qty = document.getElementById("qtyBox");
 	var UOM = document.getElementById("itemUOMsSelect");
 	var OrdMultiple = document.getElementById("OrderMultiple");
@@ -20,7 +20,7 @@ function validateOrderMultiple() {
 		return false;
 	}
 	return true;
-}
+}*/
 
 function updatePandA() {
 	/*var UOMelement = document.getElementById("itemUOMsSelect");
@@ -39,8 +39,11 @@ function updatePandA() {
 	//Added For Jira 2903
 	Ext.Msg.wait("Processing..."); 
 	document.productDetailForm.submit();*/
+	//added for jira 3253
+	var UOMelement = document.getElementById("itemUOMsSelect");
+	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;
 	Ext.Msg.wait("Processing...");
-	callPnA(); 
+	callPnA(uomvalue); 
 }
 
 function updateUOMFields() {
