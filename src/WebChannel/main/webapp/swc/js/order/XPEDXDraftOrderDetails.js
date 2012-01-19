@@ -22,7 +22,7 @@ function checkOut()
 
 function addProductsToOrder()
 {
-	resetQuantityErrorForQuckAdd();
+	//for jira 3253 resetQuantityErrorForQuckAdd();
     if(QuickAddElems.length > 0)
     {
      	 var enteredQuants;
@@ -78,7 +78,7 @@ function addProductsToOrder()
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
-						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple +" "+baseUOM[i].value;
+						document.getElementById(divId).innerHTML = "Please order in units of " + addComma(orderMultiple) +" "+baseUOM[i].value;
 						document.getElementById(divId).setAttribute("class", "error");
 					}
 				}
@@ -149,7 +149,7 @@ function update()
 
 function validateOrderMultiple()
 {
-	 resetQuantityErrorMessage();
+	 //resetQuantityErrorMessage();
 	var arrQty = new Array();
 	var arrUOM = new Array();
 	var arrItemID = new Array();
@@ -193,7 +193,8 @@ function validateOrderMultiple()
 			}		
 		if(ordMul != 0 && zeroError == false)
 		{
-			divIdError.innerHTML="Order Quantity must be a multiple of " +arrOrdMul[i].value +" "+baseUOM[i].value;
+			divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+			divIdError.style.display = "inline-block"; 
 			divIdError.setAttribute("class", "error");
 			retVal=false;
 		}
@@ -673,7 +674,7 @@ function redrawQuickAddList()
 		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
 		        code += '<tr>';
 		        code += '<td colspan="6">';
-		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline">Must be ordered in units of '+QuickAddElems[i].orderMultiple+'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
+		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline">Must be ordered in units of '+ addComma(QuickAddElems[i].orderMultiple) +'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
 		        code += '</td>';
 		        code += '</tr>';
 		        }
