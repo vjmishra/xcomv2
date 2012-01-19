@@ -36,6 +36,7 @@ import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
+import com.yantra.yfs.core.YFSSystem;
 
 /**
  * @author vsriram
@@ -1476,23 +1477,56 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private void UpdateEMailAddress(String oldMailId, String changedMailId) {
 		String[] apinames = null;
 		Document[] docInput = null;
-		String strEnterpriseCode = "";
+		//String strEnterpriseCode = "";
+		String strEnterpriseCode = "";  //
+		StringBuffer sb = new StringBuffer();
 		strEnterpriseCode = wcContext.getStorefrontId();
 		String entryType=XPEDXConstants.ENTRY_TYPE_EMAIL_UPDATE;
+		String EmailFromAddresses = "";
+		/*Start - JIRA 3262 */
 		
+		/**
+		 * Value of username and suffix is retrieve by customer_overrides.properties
+		 * 
+		 * */
+		if(strEnterpriseCode!=null && strEnterpriseCode.trim().length() > 0){
+			String userName = YFSSystem.getProperty("fromAddress.username");
+			String suffix = YFSSystem.getProperty("fromAddress.suffix");
+			sb.append(userName).append("@").append(strEnterpriseCode).append(suffix);
+			EmailFromAddresses = sb.toString();
+			
+		}
+		
+		/**
+		 * Value of imagesRootFolder is retrieve by customer_overrides.properties
+		 * 
+		 **/
+		
+		String imageUrl = "";
+		if(strEnterpriseCode!=null && strEnterpriseCode.trim().length() > 0){
+			String imageName = getLogoName(strEnterpriseCode);
+			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
+			imageUrl = imagesRootFolder + imageName;
+			}
+		}
+		/*End - JIRA 3262 */
+			
 		// Creating input xml to send an email
 		Document outputDoc = null;
 		Document templateEmailDoc = YFCDocument.createDocument("UserUpdateEmail")
 		.getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
+		System.out.println(""+SCXmlUtil.getString(templateElement));
 		Element emailElement = templateEmailDoc.createElement("UserUpdateEmail");
 		emailElement.setAttribute("BrandName", strEnterpriseCode);
 		emailElement.setAttribute("EntryType", entryType);
 		emailElement.setAttribute("OldEmailID", oldMailId);
 		emailElement.setAttribute("newEmailID", changedMailId);
 		emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
-				
-		//Element input = createInputXML(customerEmail, sampleRoomEmail);
+		emailElement.setAttribute("EmailFromAddresses",EmailFromAddresses);  //Start -Jira 3262 
+		emailElement.setAttribute("ImageUrl",imageUrl);  //Start -Jira 3262 
+		
 		String inputXml = SCXmlUtil.getString(emailElement);
 		LOG.debug("Input XML: " + inputXml);
 		Object obj = WCMashupHelper.invokeMashup(
@@ -1502,8 +1536,35 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		if (null != outputDoc) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
+		System.out.println("SCXmlUtil.getString((Element) obj)"+SCXmlUtil.getString((Element) obj));
 		
-		
+	}
+	//Start - Jira 3262 
+	private String getLogoName(String sellerOrgCode)
+	{
+		String _imageName = "";
+		if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/xpedx_r_rgb_lo.jpg";
+		} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
+		} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/CentralLewmar_r_rgb_lo.jpg";
+		} else if ("CentralMarquardt".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
+		} else if ("Saalfeld".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/Saalfeld_r_rgb_lo.jpg";
+		} else if ("StrategicPaper".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/StrategicPaper_r_rgb_lo.jpg";
+		} else if ("WesternPaper".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/WesternPaper_r_rgb_lo.jpg";
+		} else if ("WhitemanTower".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/WhitemanTower_r_rgb_lo.jpg";
+		} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/Zellerbach_r_rgb_lo.jpg";
+		} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
+			_imageName = "/xpedx_r_rgb_lo.jpg";
+		} 
+		return _imageName;
 	}
 	/**JIRA 1998
 	 * Checks whether user has changed email address from the UserProfile by comparing to the
