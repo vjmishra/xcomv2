@@ -911,7 +911,7 @@ function showSharedListForm(){
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
-						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value + " "+baseUOM[i].value;
+						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) + " "+baseUOM[i].value;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -935,7 +935,9 @@ function showSharedListForm(){
 					if(ordMul!= 0)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
-						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
+						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
+						//added for jira 3253
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
@@ -2064,7 +2066,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onchange="javascript:isValidQuantity(this);resetQuantityError('%{#id}');updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
+												value="%{#qty}" onchange="javascript:isValidQuantity(this);updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
 													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2078,7 +2080,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											</s:if> <s:else>
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onchange="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);resetQuantityError('%{#id}');this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
+												value="%{#qty}" onchange="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);this.value=addcomma(this);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' '/>
@@ -2149,7 +2151,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
 	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
-	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#mulVal}"></s:property>&nbsp; 
+	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
 	                               	</div>
 	                               </li>
