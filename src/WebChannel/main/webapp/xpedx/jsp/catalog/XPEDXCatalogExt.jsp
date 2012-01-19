@@ -732,7 +732,8 @@ return new Ext.XTemplate(
    '<tr>','<td class="item_number">{partno}</td>',
     '<td class="uom_cell">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</td>','</tr>',
    '<tr>','<td class="mill-mfg">{itemtypedesc}</td>',
-    '<td class="add_to_cart">',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else></s:if>'</td>',
+    '<td class="add_to_cart">',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else>
+    '<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',</s:if>'</td>',
    '</tr>','<tr>',
     '<td colspan="2">',<s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>',
    '</tr>','<tr>','<tr>','</tr>','<td class="line_error" colspan="2" style="width:50px;">',
@@ -760,7 +761,8 @@ return new Ext.XTemplate(
 	'<div class="qty">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="10" maxlength="10" onclick="javascript:setFocus(this);" onkeyup="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>
    '</div>','<div class="uom-select">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</div>',
    '<div class="clearall">&nbsp;</div>',
-   <s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#" onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else></s:if>
+   <s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#" onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else>
+   '<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',</s:if>
    <s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>','<br/>',</s:if>
   '</div>','<div class="line_error" >',
    <s:if test='!#guestUser'>'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',</s:if>
@@ -1252,7 +1254,7 @@ function validationforDragToCompare()
 <script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
 <script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
