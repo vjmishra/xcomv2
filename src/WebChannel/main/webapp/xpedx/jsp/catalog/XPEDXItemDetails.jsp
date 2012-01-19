@@ -636,7 +636,7 @@ function validateOrderMultiple() {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
 					   
 		    var myMessageDiv = document.getElementById("errorMsgForQty");	            
-            myMessageDiv.innerHTML = "Please order in units of " + OrdMultiple.value + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+            myMessageDiv.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
             
@@ -1463,7 +1463,7 @@ function SubmitActionWithValidation()
 				
 				<script>
 					var myMessageDiv = document.getElementById("errorMsgForQty");	            
-		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#mulVal}'></s:property> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#xpedxutil.formatQuantityForCommas(#mulVal)}'></s:property> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
 		            myMessageDiv.style.display = "inline-block"; 
 		            myMessageDiv.setAttribute("class", "notice");
 				</script>
@@ -1508,7 +1508,7 @@ function SubmitActionWithValidation()
     	    	}
         		else{
             		component.style.borderColor="";
-            		document.getElementById('errorMsgForQty').style.display = "none";
+            		// commented for jira 3253 document.getElementById('errorMsgForQty').style.display = "none";
 	    	    }
     		}
     	}	
@@ -2253,13 +2253,14 @@ Ext.onReady(function(){
 
 <script type="text/javascript">
 	Ext.onReady(function(){
-		callPnA();
+		//added for jira 3253
+		var requestedUom = '<s:property value="#selectedUOM" />';
+		callPnA(requestedUom);
 	});
 
-function callPnA()
+function callPnA(requestedUom)
 {
 	var itemId = '<s:property value="#itemID" />';
-	var requestedUom = '<s:property value="#selectedUOM" />';
 	var Quantity = '<s:property value="#requestedQty" />';
 	var baseUom = '<s:property value="#unitOfMeasure" />';
 	var prodMweight = '<s:property value="#prodMweight" />';
