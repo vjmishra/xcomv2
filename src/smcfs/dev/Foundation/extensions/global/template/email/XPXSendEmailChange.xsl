@@ -1,36 +1,42 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:lxslt="http://xml.apache.org/xslt" version="1.0">
-	<xsl:template match="/">
+<xsl:variable name="imageURL">    
+		<xsl:value-of select="//@ImageUrl"/>
+	</xsl:variable> 
+	    <xsl:template match="/">
 		<html>
 		<xsl:call-template name="applyStyle"/>
 		<body>
-		<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
-		  <tr>
-		    <td height="44"><img src="xpedx_r_rgb_lo.jpg" width="216" height="69" alt="xpedx"  /></td>
-		  </tr>
+		<table width="600" border="0" align="left" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
+		<tr>
+		<td>
+		<img src="{$imageURL}"	width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
+	     </td>
+		</tr>
 		  <tr>
 		    <td><table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
 		      <tr>
 		        <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><table width="" border="0" cellpadding="0">
 		          <tr>
-		            <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com. If you did not change your profile,please contact us at <a href="mailto:distribution.webmaster@ipaper.com" style="color:#000;">distribution.webmaster@ipaper.com</a> or  <strong> 877-269-1784</strong>.</td>
-		          </tr>
-		           <tr>
-		            <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Changes to your profile could be Password, User Name, or Security Question/Answer being changed.
-					</td>
-		          </tr>
-		         
-		          <tr>
+		          <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+		          This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com.If you did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
+		          <a><xsl:attribute name="href">
+			       mailto:ebusiness@<xsl:value-of select='//@BrandName' />.com</xsl:attribute>
+			       ebusiness@<xsl:value-of select="//@BrandName" />.com</a> or  <strong> 877 269-1784</strong>
+			</td>
+			</tr>
+		            <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><br />
 		              Thank  you for your business!</td>
 		          </tr>
 		          <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
 		          </tr>
-		          <tr>
-		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"> Please do not reply  to this email. This mailbox is not monitored and you will not receive a response</td>
+		           <tr>
+		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+		              Please do not reply  to this email. This mailbox is not monitored and you will not receive a response.</td>
 		          </tr>
-		          <tr>
+		           <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
 		          </tr>
 		        </table>
