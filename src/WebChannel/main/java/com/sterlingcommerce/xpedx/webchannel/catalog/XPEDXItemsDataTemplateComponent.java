@@ -173,12 +173,13 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		} catch (Exception e) {
 			sb.append("uomDesc: \"\",");
 		}
-		
+		//modified for jira 3253 to format quantity of ordermultiple
 		if (isGuestUser == false) {
 			if (Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
 						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
-						.append(tag.getOrderMultipleString()).append(orderMultiple).append(" ")
+						.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
+						.append(" ")
 						.append(uomDesc).append("</div>\",");
 			} else {
 				sb.append("uomLink: \"\",");
