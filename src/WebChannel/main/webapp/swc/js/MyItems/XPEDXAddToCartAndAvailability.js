@@ -49,7 +49,7 @@
 	
 	function addItemToCart(itemId,uid) {
 
-		 resetQuantityError(uid);
+		 //commented for jira 3253 resetQuantityError(uid);
 		 if(validateOrderMultiple(true,uid) == false)
 		 {
 					return;
@@ -107,6 +107,15 @@
 					else
 					{
 						refreshMiniCartLink();
+						//Succesfully Added to Cart Info message for jira 3253
+						var divId = 'errorDiv_qtys_'+uid;
+						var divVal=document.getElementById('errorDiv_qtys_'+uid);
+						divVal.innerHTML ="Item successfully added to cart";
+					   	//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
+						divVal.style.display = "inline-block"; 
+						divVal.setAttribute("style", "margin-right:5px;float:right;");
+						divVal.setAttribute("class", "success");
+				       		 //end of addition 3253
 						//JQuery Popup: 3 sec popup dispaly. 
 						$.jqDialog.notify("Item successfully added to cart", 3);
 						Ext.MessageBox.hide(); 
