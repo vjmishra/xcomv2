@@ -255,7 +255,7 @@ public class XPEDXUtilBean extends UtilBean {
 	     * Converts to Comma formatted string.
 	     * This handles the decimal part and NonDecimal part.
 	     */
-		public  String formatQuantityForCommas (String strOriginal ) {
+		public static String formatQuantityForCommas (String strOriginal ) {
 			String nonDecimalQtyPart = strOriginal;
 			String onlyDecimalQtyPart = "";
 			
@@ -291,7 +291,7 @@ public class XPEDXUtilBean extends UtilBean {
 		/*
 		 * This will not handle the decimal part.
 		 */
-		private String formatQtyForCommasWithoutDecimals(String strOriginal) {
+		private static String formatQtyForCommasWithoutDecimals(String strOriginal) {
 			try {
 				char data[] = new char[2*strOriginal.length()]; //Needs some extra spaces for commas
 					for(int k = 0; k < data.length; k++ )
