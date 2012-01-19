@@ -198,9 +198,9 @@ function addItemToCart(itemId) {
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
 		if(ordMul != 0 || totalQty==0)
-		{
-			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Order Quantity for " + itemId + " must be a multiple of " + orderMultiple +" "+baseUOM;
-			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+		{		
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please order in units of " + addComma(orderMultiple) + " " + baseUOM;
+			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			return false;
@@ -253,7 +253,7 @@ function addItemToCart(itemId) {
         	}
         	else{
             	component.style.borderColor="";
-            	document.getElementById('errorMsgForQty_'+itemId).style.display = "none";
+            	//commented for jira 3253 document.getElementById('errorMsgForQty_'+itemId).style.display = "none";
     	    }
     	}
     }
