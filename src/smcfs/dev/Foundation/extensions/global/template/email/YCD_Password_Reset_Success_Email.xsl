@@ -96,8 +96,8 @@
 	If we may be of further assistance, please contact us via e-mail at 
 
 	<xsl:element name="a">
-		<xsl:attribute name="href">mailto:<xsl:value-of select="$Brand"/>@<xsl:value-of select="$Brand"/>.com</xsl:attribute>
-		<xsl:value-of select="$Brand"/>@<xsl:value-of select="$Brand"/>.com
+		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>.com</xsl:attribute>
+		ebusiness@<xsl:value-of select="$Brand"/>.com
 	</xsl:element>
 	or by calling <xsl:value-of select="$BrandPhoneNumber"/>. 
 	<xsl:copy-of select="$AdditionalClosing" />
@@ -140,12 +140,12 @@
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
 		<p>
-		Your account was recently created or modified.
+		Your account was recently created.
 		</p>
-		<p>Your login name is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
+		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
 		<p>Your initial password is: <b><xsl:value-of select="/User/User/@GeneratedPassword" /></b></p>
 		<p>
-			Please reset your password the next time you log into <a><xsl:attribute name="href">http://www.<xsl:value-of select="$Brand"/>.com/<xsl:value-of select="$Brand"/></xsl:attribute>
+			Please reset your password the next time you sign into <a><xsl:attribute name="href">http://www.<xsl:value-of select="$Brand"/>.com/<xsl:value-of select="$Brand"/></xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
 			http://www.<xsl:value-of select="$Brand"/>.com/order</a>.
 		</p>
