@@ -2205,8 +2205,8 @@ public class XPXUtils implements YIFCustomApi {
 
 		String brand = inputDocument.getDocumentElement().getAttribute(
 				"SellerOrganizationCode");
-		_subjectLine = "Notification: User Profile Update on ".concat(brand)
-				.concat(".com").concat(" account ");
+		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Update Notification"); //Start - Jira 3262
+		
 		if(log.isDebugEnabled()){
 			log.debug("_subjectLine: " + _subjectLine);
 		}
