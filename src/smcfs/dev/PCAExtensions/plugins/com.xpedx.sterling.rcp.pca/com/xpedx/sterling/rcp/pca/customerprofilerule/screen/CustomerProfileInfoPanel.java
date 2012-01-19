@@ -991,7 +991,8 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCustLineAcct.setLayoutData(gridData2);
 		txtCustLineAcct.setTextLimit(500);
 		txtCustLineAcct.setData("name", "txtCustLineAcct");		
-		
+
+		if(!("C".equals(suffixType))){
 		chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustLineField1.setText("");
 		chkCustLineField1.setVisible(true);
@@ -1039,7 +1040,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCustLineField3.setLayoutData(gridData2);
 		txtCustLineField3.setTextLimit(500);
 		txtCustLineField3.setData("name", "txtCustLineField3");	
-		
+		}
 		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustomerLinePONumber.setText("");
 		chkCustomerLinePONumber.setVisible(true);
@@ -1989,7 +1990,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCustLineAcct.setData(
 				YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
-
+		if(!("C".equals(suffixType))){
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -2049,7 +2050,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		tbd.setName("txtCustLineField3");
 		txtCustLineField3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
 				tbd);
-
+		}
 		tbd = new YRCTextBindingData();
 		tbd
 				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnAttnName");
