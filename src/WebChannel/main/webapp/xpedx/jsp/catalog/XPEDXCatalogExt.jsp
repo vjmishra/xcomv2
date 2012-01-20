@@ -858,13 +858,17 @@ var ct = Ext.get('item-box-inner');
 	   </s:else>
 		</div>
 	</div>
+	<%--Added For Jira 3195 --%>
+	<s:if test="#numResult == 0"> 
+	 <div class="error">Your search did not yield any results. Please try again. </div>
+	 </s:if> 
+	 <%--End For Jira 3195 --%>
 	<div id="item-box"><!-- Begin: dynamic filled in by javascript -->
 	<div id="item-box-inner"></div>
 	<!-- End: dynamic filled in by javascript --></div>
 	</div>
 	<!-- end Ext list component --> <!-- START wctheme.form-close.ftl --></form>
 	<!-- END wctheme.form-close.ftl -->
-	
 	<div class="clearall">&nbsp;</div>
 	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
