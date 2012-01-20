@@ -222,7 +222,7 @@
 		
 		<tr>
   			<td class="underlines no-border-right-user"><s:textfield id="newUserCity" name="newUserCity" theme="simple" cssClass="x-input width-250px" maxlength="150"/></td>
-  			<td class="underlines no-border-right-user"><s:textfield id="newUserState" name="newUserState" theme="simple" cssClass="x-input width-125px" maxlength="150"/></td>
+  			<td class="underlines no-border-right-user"><s:textfield id="newUserState" name="newUserState" theme="simple" cssClass="x-input width-115px" maxlength="150"/></td>
   			<td class="underlines no-border-right-user"><div style="position:relative;left:-150px" >&nbsp;<s:textfield id="newUserZipCode" name="newUserZipCode" theme="simple" cssClass="x-input width-115px" maxlength="150"/></div></td>
 		</tr>
 		
