@@ -6,10 +6,12 @@
 <script type="text/javascript">
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	</script>	
-
 <div id="divAdd2ListRadio">
 <table>
-	<s:iterator id="listDetail" value="listOfItems" status="listIndex" >
+<s:if test="listOfItems == null || listOfItems.size()==0">
+<div class="error" align="center">No lists have been created. Please create a new list. </div>
+</s:if>
+<s:iterator id="listDetail" value="listOfItems" status="listIndex" >
 	<tr>
 	<td>
 		<input type="radio" name="itemListRadio" id="itemListRadio" value="<s:property value="#listDetail.getAttribute('MyItemsListKey')"/>"
@@ -28,5 +30,4 @@
 		<s:set name="itemCount" value="%{listSizeMap.get(#listSizeId)}" />
 		<s:hidden name="itemCount_%{#listSizeId}" id="itemCount_%{#listSizeId}" value="%{#itemCount}" />
 	</s:iterator>
-	
 </div>
