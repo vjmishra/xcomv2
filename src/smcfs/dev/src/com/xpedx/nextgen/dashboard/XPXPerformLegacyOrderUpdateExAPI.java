@@ -4743,7 +4743,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			return null;
 		}
 
-		if (webConfNum.equalsIgnoreCase(webConfNum) && legacyOrderNo.equalsIgnoreCase(_legacyOrderNo) && genNo.equalsIgnoreCase(_genNo)) {
+		if (webConfNum.equalsIgnoreCase(_WebConfNum) && legacyOrderNo.equalsIgnoreCase(_legacyOrderNo) && genNo.equalsIgnoreCase(_genNo)) {
 			YFCElement instructionsEle = ordEle.getChildElement("Instructions");
 			if (instructionsEle != null) {
 				YFCIterable<YFCElement> yfcItr = instructionsEle.getChildren("Instruction");
@@ -5056,6 +5056,23 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (isCustOrder) {
 			if (chngOrdEle.getChildElement("Instructions") != null) {
 				chngOrdEle.removeChild(chngOrdEle.getChildElement("Instructions"));
+			}
+		} else {
+			
+			// Fulfillment Order - Remove the Instructions element if instruction text is empty.
+			if (chngOrdEle.getChildElement("Instructions") != null) {
+				YFCElement instructionsElem = chngOrdEle.getChildElement("Instructions");
+				YFCIterable<YFCElement> yfcItr = instructionsElem.getChildren("Instruction");
+				while (yfcItr.hasNext()) {
+					YFCElement instrElem = (YFCElement) yfcItr.next();
+					if (instrElem.hasAttribute("InstructionText")) {
+						String instrText = instrElem.getAttribute("InstructionText");
+						if (YFCObject.isNull(instrText) || YFCObject.isVoid(instrText)) {
+							instructionsElem.removeChild(instrElem);
+						}
+					}
+				}
+				
 			}
 		}
 
