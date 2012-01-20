@@ -467,7 +467,7 @@ function redrawQuickAddList()
 		        
 		        code += '</td>';
 		        code += '<td class="col-item">';
-		        code +='<input type="hidden" name="quickAddBaseUOMs" value='+encodeForHTML(QuickAddElems[i].uom) +' />';
+		        code +='<input type="hidden" name="quickAddBaseUOMs" value='+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) +' />';
 		// code += encodeForHTML(QuickAddElems[i].quantity);
 		        if(QuickAddElems[i].itemTypeText == "Special Item"){
 		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
