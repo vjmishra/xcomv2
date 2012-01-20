@@ -28,6 +28,8 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.date.YDate;
 import com.yantra.yfc.util.YFCCommon;
@@ -115,11 +117,16 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
     public void setArticleElements(){
     	try{
 //    		Element customerInfo = XPEDXWCUtils.getCustomerDetails(customerId, wcContext.getStorefrontId(), customerDivisionMashUp).getDocumentElement();
+    		XPEDXShipToCustomer shipCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+    		customerDivisionToQry = shipCustomer.getExtnCustOrderBranch();
     		String customerID= wcContext.getCustomerId();
+    		
+    		/*Comment since the article is created on order branch level not on customer division.
     		String[] customerIdParts = customerID.split("-");
     		customerDivisionToQry=customerIdParts[0];
-//    		String customerDivision = SCXmlUtil.getXpathAttribute(customerInfo, "/Customer/Extn/@ExtnCustomerDivision");
-//    		customerDivisionToQry = '|'+customerDivision+'|';
+    		String customerDivision = SCXmlUtil.getXpathAttribute(customerInfo, "/Customer/Extn/@ExtnCustomerDivision");
+    		customerDivisionToQry = '|'+customerDivision+'|';*/
+    		
     		custArticleSearchName.add("XPXDivision");
     		custArticleSearchValue.add(customerDivisionToQry);
     		custArticleSearchName.add("ArticleType");
