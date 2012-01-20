@@ -283,7 +283,7 @@ function addProductToQuickAddList(element)
 
     var sku = trim(theForm.qaProductID.value);
     var quantity = trim(theForm.qaQuantity.value);
-    var jobId = '';
+    var jobId = "";
     if(theForm.qaJobID != null){
     	jobId = trim(theForm.qaJobID.value);
     	jobidFlag = true;
