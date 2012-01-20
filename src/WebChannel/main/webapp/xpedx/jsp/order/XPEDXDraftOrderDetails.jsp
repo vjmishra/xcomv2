@@ -256,8 +256,10 @@ function quickAddCopyAndPaste(data){
 		itemQty = Ext.util.Format.trim(itemQty);
 		
 		document.getElementById("qaProductID").value= itemSku;
-		document.getElementById("#qaProductID_type").value= itemQty;
-		qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
+		document.getElementById("qaQuantity").value= itemQty;
+		//call metods for quick add 3349 by balkhi
+		  addProductToQuickAddList(document.getElementById('quickAddButton'));
+		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' ); 
 	}
 	
 	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
