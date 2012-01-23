@@ -15,7 +15,7 @@
     MODIFYTS="2011-07-14T14:32:33-04:00" MODIFYUSERID="admin"
     RULE_DESC="Prevent orders from being auto placed" RULE_GROUP="GR"
     RULE_ID="PreventAutoPlace"
-    RULE_KEY="201010250721156463564                             " RULE_LONG_DESC="Prevent orders from being placed automatically on ordering system"/>
+    RULE_KEY="201010250721156463564                             " RULE_LONG_DESC="Prevent orders from being placed automatically on ordering system "/>
 <XPX_RULE_DEFN B2B_FLAG="Y" CREATEPROGID="SterlingHttpTester"
     CREATETS="2010-10-25T00:00:00-04:00"
     CREATEUSERID="SterlingHttpTester" INTERACTIVE_FLAG="Y" LOCKID="2"
@@ -149,11 +149,4 @@
     RULE_DESC="Gross Trading Margin" RULE_GROUP="LR"
     RULE_ID="GrossTradingMargin"
     RULE_KEY="20110512162308135535                              " RULE_LONG_DESC="Gross Trading Margin"/>
-<XPX_RULE_DEFN B2B_FLAG="Y" CREATEPROGID="SterlingHttpTester"
-    CREATETS="2011-12-21T05:10:42-05:00" CREATEUSERID="admin"
-    INTERACTIVE_FLAG="Y" LOCKID="0" MODIFYPROGID="SterlingHttpTester"
-    MODIFYTS="2011-12-21T05:10:42-05:00" MODIFYUSERID="admin"
-    RULE_DESC="Place orders on Web (WB) Hold" RULE_GROUP="GR"
-    RULE_ID="PlaceOrderOnWBHold"
-    RULE_KEY="20111221051042115257                              " RULE_LONG_DESC="Place orders on Web (WB) Hold"/>
 </XPX_RULE_DEFNList>
