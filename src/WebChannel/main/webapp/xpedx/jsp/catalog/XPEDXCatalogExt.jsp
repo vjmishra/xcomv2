@@ -860,7 +860,7 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<%--Added For Jira 3195 --%>
 	<s:if test="#numResult == 0"> 
-	 <div class="error">Your search did not yield any results. Please try again. </div>
+	 <center><div class="error">Your search did not yield any results. Please try again. </div> </center>
 	 </s:if> 
 	 <%--End For Jira 3195 --%>
 	<div id="item-box"><!-- Begin: dynamic filled in by javascript -->
