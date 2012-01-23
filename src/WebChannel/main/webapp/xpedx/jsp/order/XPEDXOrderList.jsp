@@ -605,36 +605,35 @@ function printPOs(customerPos) {
 								<s:set name="isOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold(#parentOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
-								<s:if test='%{#status != "Cancelled"}'>
-									<s:if test='#isPendingApproval || #isOnCSRReviewHold'>
-										<s:if test='#isPendingApproval && !#isOrderRejected'>
-											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
-											<br/>
-											<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
-										 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
-										 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && #resolverId == #loggedInUser}'>
-												<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
-											</s:if><br/>
-										</s:if>
-										<s:elseif test='#isPendingApproval && #isOrderRejected'>
-												<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
-										</s:elseif>
-										<s:else> 
-											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
-										</s:else>
-									</s:if> 
-									<s:else>
-										<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
-														Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
-										</s:if>
-										<s:else>
-											<s:property value='#chainedOrder.getAttribute("Status")' />
-										</s:else>	
-									</s:else>
+								
+								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
+												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
-			                    <s:else>
-									<s:property value='#chainedOrder.getAttribute("Status")' />
-								</s:else></td>
+								<s:else>
+									<s:if test='%{#status != "Cancelled"}'>
+											<s:property value="#parentOrder.getAttribute('Status')" />
+											<s:if test='#isPendingApproval && !#isOrderRejected'>
+												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+												<br/>
+												<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
+											 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
+											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && #resolverId == #loggedInUser}'>
+													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
+												</s:if><br/>
+											</s:if>
+											<s:elseif test='#isPendingApproval && #isOrderRejected'>
+												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
+											</s:elseif>
+											<s:elseif test='#isOnCSRReviewHold'> 
+												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
+											</s:elseif>
+										
+									</s:if>
+									<s:else>
+										<s:property value='#chainedOrder.getAttribute("Status")' />
+									</s:else>
+								</s:else>								
+								</td>
 		
 						</s:else>
 	            		
