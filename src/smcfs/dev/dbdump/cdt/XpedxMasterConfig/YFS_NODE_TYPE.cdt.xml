@@ -2,12 +2,12 @@
 <YFS_NODE_TYPEList TableName="YFS_NODE_TYPE">
 <NodeType Createprogid="XMLMigrator"
     Createts="2010-04-20T21:02:14-04:00" Createuserid="SYSTEM"
-    Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-20T21:02:14-04:00" Modifyuserid="ng"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2010-04-20T21:02:14-04:00" Modifyuserid="SYSTEM"
     NodeTypeDescription="Distribution Center" NodeTypeID="DC" NodeTypeKey="201004202102143601"/>
 <NodeType Createprogid="XMLMigrator"
     Createts="2010-04-20T21:02:14-04:00" Createuserid="SYSTEM"
-    Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-20T21:02:14-04:00" Modifyuserid="ng"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2010-04-20T21:02:14-04:00" Modifyuserid="SYSTEM"
     NodeTypeDescription="Store" NodeTypeID="Store" NodeTypeKey="201004202102143602"/>
 </YFS_NODE_TYPEList>
