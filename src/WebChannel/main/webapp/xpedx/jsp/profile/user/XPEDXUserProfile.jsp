@@ -1724,7 +1724,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="13%" valign="top" class="no-border-right-user">User
 			Status:
 			</td>
-
+			<s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden>
 			<td colspan="3" class="no-border-right-user">
 			<s:iterator value="getStatusList().keySet()" id="statusVal">
 				<s:set name="statusValue" value="value" />
@@ -1753,8 +1753,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		</tr>
 		
 		</s:if>
-		<s:else>
-			<s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden>
+		<s:else>						
 			<s:set name='userStatus' value="%{getContactStatus()}" />
 			<tr id="userNameRow">
 			<td width="13%" valign="top" class="no-border-right-user">User
