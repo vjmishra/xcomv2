@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<%@ taglib prefix="swc" uri="swc" %>
 <div id="right-col-int">
 <s:set name='associationTypeList' value='#xutil.getChildElement(#itemElem, "AssociationTypeList")' />
 <s:set name='numOfItemsPerPromotion' value='numOfItemsPerPromotion' />
@@ -28,7 +27,21 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 		        <div class="promo-bg-rpt">
-		        <a href="%{detailURLFromPromoProd}" class="short-description">
+		        <s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
+					<s:param name='itemID'>
+						<s:property value='#xutil.getAttribute(#upgradeItem,"ItemID")' />
+					</s:param>
+					<s:param name='unitOfMeasure'>
+						<s:property
+							value='#xutil.getAttribute(#upgradeItem,"UnitOfMeasure")' />
+					</s:param>
+					<!--  WebTrends tag start -- -->
+					<s:param name='prItemtype'>
+					<s:property value="R" />
+					</s:param>
+					<!--  WebTrends tag end -- -->
+				</s:url>
+		        <a href="<s:property value='%{detailURLFromPromoProd}' escape="false"/>" class="short-description">
 		        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 		        		<s:set name="itemAsset" value='#itemAssetList[0]' />
 						<s:set name='imageLocation'
@@ -63,22 +76,7 @@
 						
 		        		<p title='<s:property value="%{#description}" />' class="short-description">
 		        			<s:property	value='%{#displayDescription}' />
-						</p>
-		        		<s:url id='detailURLFromPromoProd' namespace='/catalog'
-							action='itemDetails.action'>
-							<s:param name='itemID'>
-								<s:property value='#xutil.getAttribute(#upgradeItem,"ItemID")' />
-							</s:param>
-							<s:param name='unitOfMeasure'>
-								<s:property
-									value='#xutil.getAttribute(#upgradeItem,"UnitOfMeasure")' />
-							</s:param>
-							<!--  WebTrends tag start -- -->
-							<s:param name='prItemtype'>
-							<s:property value='R' />
-							</s:param>
-							<!--  WebTrends tag end -- -->
-						</s:url>
+						</p>		        		
 						<!-- 
 						<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 							<span>View Details</span>
@@ -120,7 +118,24 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 	        <div class="promo-bg-rpt">
-	        	<a href="%{detailURLFromPromoProd}" class="short-description">
+	        	<s:url id='detailURLFromPromoProd' namespace='/catalog'
+						action='itemDetails.action'>
+						<s:param name='itemID'>
+							<s:property
+								value='#xutil.getAttribute(#upItemElem,"ItemID")' />
+						</s:param>
+						<s:param name='unitOfMeasure'>
+							<s:property
+								value='#xutil.getAttribute(#upItemElem,"UnitOfMeasure")' />
+						</s:param>
+						<!--  WebTrends tag start -- -->
+						<s:param name='prItemtype'>
+							<s:property
+								value="U" />
+						</s:param>
+						<!--  WebTrends tag end -- -->
+				</s:url>
+	        	<a href="<s:property value='%{detailURLFromPromoProd}' escape="false"/>" class="short-description">
 	        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 					<s:set name="itemAsset" value='#itemAssetList[0]' />
 					<s:set name='imageLocation'
@@ -154,23 +169,7 @@
 		        		<p title='<s:property value="%{#description}" />'>
 		        			<s:property	value='%{#displayDescription}' />
 						</p>
-	        		<s:url id='detailURLFromPromoProd' namespace='/catalog'
-						action='itemDetails.action'>
-						<s:param name='itemID'>
-							<s:property
-								value='#xutil.getAttribute(#upItemElem,"ItemID")' />
-						</s:param>
-						<s:param name='unitOfMeasure'>
-							<s:property
-								value='#xutil.getAttribute(#upItemElem,"UnitOfMeasure")' />
-						</s:param>
-						<!--  WebTrends tag start -- -->
-						<s:param name='prItemtype'>
-							<s:property
-								value='U' />
-						</s:param>
-						<!--  WebTrends tag end -- -->
-					</s:url><!-- 
+	        		<!-- 
 					<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 						<span>View Details</span>
 					</s:a>
@@ -210,7 +209,23 @@
 		            <div class="table-top-bar-R"></div>
 		        </div>
 	        <div class="promo-bg-rpt">
-	        <a href="%{detailURLFromPromoProd}" class="short-description">
+	        <s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
+				<s:param name='itemID'>
+					<s:property
+						value='#xutil.getAttribute(#alternateItem,"ItemID")' />
+				</s:param>
+				<s:param name='unitOfMeasure'>
+					<s:property
+						value='#xutil.getAttribute(#alternateItem,"UnitOfMeasure")' />
+				</s:param>
+				<!--  WebTrends tag start -- -->
+				<s:param name='prItemtype'>
+					<s:property
+						value="A" />
+				</s:param>
+				<!--  WebTrends tag end -- -->
+			</s:url>
+	        <a href="<s:property value='%{detailURLFromPromoProd}' escape="false"/>" class="short-description">
 	        	<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 					<s:set name="itemAsset" value='#itemAssetList[0]' />
 					<s:set name='imageLocation'
@@ -245,23 +260,7 @@
 		        		<p title='<s:property value="%{#description}" />'>
 		        			<s:property	value='%{#displayDescription}' />
 						</p>
-					<s:url id='detailURLFromPromoProd' namespace='/catalog'
-						action='itemDetails.action'>
-						<s:param name='itemID'>
-							<s:property
-								value='#xutil.getAttribute(#alternateItem,"ItemID")' />
-						</s:param>
-						<s:param name='unitOfMeasure'>
-							<s:property
-								value='#xutil.getAttribute(#alternateItem,"UnitOfMeasure")' />
-						</s:param>
-						<!--  WebTrends tag start -- -->
-						<s:param name='prItemtype'>
-							<s:property
-								value='A' />
-						</s:param>
-						<!--  WebTrends tag end -- -->
-					</s:url><!-- 
+					<!-- 
 					<s:set name='ipTabIndex' value='%{#ipTabIndex+1}' />
 					<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 						<span>View Details</span>
@@ -310,7 +309,22 @@
 			            <div class="table-top-bar-R"></div>
 			        </div>
 		        	<div class="promo-bg-rpt">
-	        		<a href="%{detailURLFromPromoProd}" class="short-description">
+		        	<s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
+						<s:param name='itemID'>
+							<s:property
+								value='#xutil.getAttribute(#complementItem,"ItemID")' />
+						</s:param>
+						<s:param name='unitOfMeasure'>
+							<s:property
+								value='#xutil.getAttribute(#complementItem,"UnitOfMeasure")' />
+						</s:param>
+						<!--  WebTrends tag start -- -->
+						<s:param name='prItemtype'>
+							<s:property value="C" />
+						</s:param>
+						<!--  WebTrends tag end -- -->
+					</s:url>
+	        		<a href="<s:property value='%{detailURLFromPromoProd}' escape="false"/>" class="short-description">
 		        		<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
@@ -341,23 +355,7 @@
 							</s:if>
 			        		<p title='<s:property value="%{#description}" />' class="short-description">
 			        			<s:property	value='%{#displayDescription}' />
-							</p>
-		        			<s:url id='detailURLFromPromoProd' namespace='/catalog'
-								action='itemDetails.action'>
-								<s:param name='itemID'>
-									<s:property
-										value='#xutil.getAttribute(#complementItem,"ItemID")' />
-								</s:param>
-								<s:param name='unitOfMeasure'>
-									<s:property
-										value='#xutil.getAttribute(#complementItem,"UnitOfMeasure")' />
-								</s:param>
-								<!--  WebTrends tag start -- -->
-								<s:param name='prItemtype'>
-									<s:property value='C' />
-								</s:param>
-								<!--  WebTrends tag end -- -->
-							</s:url>
+							</p>		        			
 							<s:set name='ipTabIndex' value='%{#ipTabIndex+1}' />
 								<!-- 
 							<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
@@ -408,7 +406,22 @@
 						            <div class="table-top-bar-R"></div>
 						        </div>
 					        	<div class="promo-bg-rpt">
-					        	<a href="%{detailURLFromPromoProd}" class="short-description">
+					        	<s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
+									<s:param name='itemID'>
+										<s:property
+											value='#xutil.getAttribute(#crossItemElem,"ItemID")' />
+									</s:param>
+									<s:param name='unitOfMeasure'>
+										<s:property
+											value='#xutil.getAttribute(#crossItemElem,"UnitOfMeasure")' />
+									</s:param>
+									<!--  WebTrends tag start -- -->
+									<s:param name='prItemtype'>
+										<s:property value="Cr" />
+									</s:param>
+									<!--  WebTrends tag end -- -->
+								</s:url>
+								<a href="<s:property value='%{detailURLFromPromoProd}' escape="false"/>" class="short-description">
 					        		<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 										<s:set name="itemAsset" value='#itemAssetList[0]' />
 										<s:set name='imageLocation'
@@ -439,22 +452,8 @@
 						        		<p title='<s:property value="%{#description}" />'>
 			        						<s:property	value='%{#displayDescription}' />
 										</p>
-										<s:url id='detailURLFromPromoProd' namespace='/catalog'
-											action='itemDetails.action'>
-											<s:param name='itemID'>
-												<s:property
-													value='#xutil.getAttribute(#crossItemElem,"ItemID")' />
-											</s:param>
-											<s:param name='unitOfMeasure'>
-												<s:property
-													value='#xutil.getAttribute(#crossItemElem,"UnitOfMeasure")' />
-											</s:param>
-											<!--  WebTrends tag start -- -->
-											<s:param name='prItemtype'>
-												<s:property value='Cr' />
-											</s:param>
-											<!--  WebTrends tag end -- -->
-										</s:url><!-- 
+										
+										<!-- 
 										<s:set name='ipTabIndex' value='%{#ipTabIndex+1}' />
 										<s:a href="%{detailURLFromPromoProd}" cssClass="grey-ui-btn" tabindex="%{#ipTabIndex}" theme="simple">
 											<span>View Details</span>
