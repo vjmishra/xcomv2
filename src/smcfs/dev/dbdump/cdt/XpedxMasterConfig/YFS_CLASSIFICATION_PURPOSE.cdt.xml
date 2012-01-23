@@ -6,16 +6,18 @@
     ClassificationPurposeDesc=""
     ClassificationPurposeKey="20100420210135834"
     Createprogid="XMLMigrator" Createts="2010-04-20T21:01:35-04:00"
-    Createuserid="SYSTEM" Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-20T21:01:35-04:00" Modifyuserid="ng" ModuleName="" OrganizationCode="DEFAULT"/>
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2010-04-20T21:01:35-04:00" Modifyuserid="SYSTEM"
+    ModuleName="" OrganizationCode="DEFAULT"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="20100420210135833"
     ClassificationPurposeCode="SellingCatalog"
     ClassificationPurposeDesc=""
     ClassificationPurposeKey="20100420210135835"
     Createprogid="XMLMigrator" Createts="2010-04-20T21:01:35-04:00"
-    Createuserid="SYSTEM" Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-20T21:01:35-04:00" Modifyuserid="ng" ModuleName="" OrganizationCode="DEFAULT"/>
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2010-04-20T21:01:35-04:00" Modifyuserid="SYSTEM"
+    ModuleName="" OrganizationCode="DEFAULT"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010042921443214269"
     ClassificationPurposeCode="MasterCatalog"
@@ -23,8 +25,9 @@
     ClassificationPurposeKey="2010042921443314270"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-04-29T21:44:32-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-29T21:44:32-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="xpedx"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-04-29T21:44:32-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="xpedx"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010042921443214269"
     ClassificationPurposeCode="SellingCatalog"
@@ -32,8 +35,9 @@
     ClassificationPurposeKey="2010042921443314271"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-04-29T21:44:32-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-29T21:44:32-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="xpedx"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-04-29T21:44:32-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="xpedx"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090121411544310"
     ClassificationPurposeCode="MasterCatalog"
@@ -41,8 +45,9 @@
     ClassificationPurposeKey="2010090121411544311"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T21:41:14-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T21:41:14-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="BulkleyDunton"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T21:41:14-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="BulkleyDunton"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090121411544310"
     ClassificationPurposeCode="SellingCatalog"
@@ -50,8 +55,9 @@
     ClassificationPurposeKey="2010090121411544312"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T21:41:14-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T21:41:14-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="BulkleyDunton"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T21:41:14-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="BulkleyDunton"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090122242645400"
     ClassificationPurposeCode="MasterCatalog"
@@ -59,8 +65,9 @@
     ClassificationPurposeKey="2010090122242645401"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:24:25-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:24:25-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="CentralLewmar"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:24:25-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="CentralLewmar"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090122242645400"
     ClassificationPurposeCode="SellingCatalog"
@@ -68,8 +75,9 @@
     ClassificationPurposeKey="2010090122242645402"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:24:25-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:24:25-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="CentralLewmar"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:24:25-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="CentralLewmar"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090122452846763"
     ClassificationPurposeCode="MasterCatalog"
@@ -77,8 +85,9 @@
     ClassificationPurposeKey="2010090122452846764"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:45:28-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:45:28-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="CentralMarquardt"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:45:28-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="CentralMarquardt"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090122452846763"
     ClassificationPurposeCode="SellingCatalog"
@@ -86,8 +95,9 @@
     ClassificationPurposeKey="2010090122452846765"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:45:28-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:45:28-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="CentralMarquardt"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T22:45:28-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="CentralMarquardt"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123083347803"
     ClassificationPurposeCode="MasterCatalog"
@@ -95,8 +105,9 @@
     ClassificationPurposeKey="2010090123083347804"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:08:33-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:08:33-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="Saalfeld"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:08:33-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="Saalfeld"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123083347803"
     ClassificationPurposeCode="SellingCatalog"
@@ -104,8 +115,9 @@
     ClassificationPurposeKey="2010090123083347805"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:08:33-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:08:33-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="Saalfeld"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:08:33-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="Saalfeld"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123272648848"
     ClassificationPurposeCode="MasterCatalog"
@@ -113,8 +125,9 @@
     ClassificationPurposeKey="2010090123272648849"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:27:25-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:27:25-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="StrategicPaper"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:27:25-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="StrategicPaper"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123272648848"
     ClassificationPurposeCode="SellingCatalog"
@@ -122,8 +135,9 @@
     ClassificationPurposeKey="2010090123272648850"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:27:25-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:27:25-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="StrategicPaper"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:27:25-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="StrategicPaper"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123393449735"
     ClassificationPurposeCode="MasterCatalog"
@@ -131,8 +145,9 @@
     ClassificationPurposeKey="2010090123393449736"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:39:34-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:39:34-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="WesternPaper"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:39:34-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="WesternPaper"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123393449735"
     ClassificationPurposeCode="SellingCatalog"
@@ -140,8 +155,9 @@
     ClassificationPurposeKey="2010090123393449737"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:39:34-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:39:34-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="WesternPaper"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:39:34-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="WesternPaper"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123510150619"
     ClassificationPurposeCode="MasterCatalog"
@@ -149,8 +165,9 @@
     ClassificationPurposeKey="2010090123510150620"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:51:00-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:51:00-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="WhitemanTower"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:51:00-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="WhitemanTower"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090123510150619"
     ClassificationPurposeCode="SellingCatalog"
@@ -158,8 +175,9 @@
     ClassificationPurposeKey="2010090123510150621"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:51:00-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:51:00-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="WhitemanTower"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-01T23:51:00-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="WhitemanTower"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090200014852680"
     ClassificationPurposeCode="MasterCatalog"
@@ -167,8 +185,9 @@
     ClassificationPurposeKey="2010090200014852681"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-02T00:01:47-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-02T00:01:47-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="Zellerbach"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-02T00:01:47-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="Zellerbach"/>
 <ClassificationPurpose AttributeName=""
     CategoryDomainKey="2010090200014852680"
     ClassificationPurposeCode="SellingCatalog"
@@ -176,6 +195,7 @@
     ClassificationPurposeKey="2010090200014852682"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-02T00:01:47-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-02T00:01:47-04:00"
-    Modifyuserid="ng" ModuleName="" OrganizationCode="Zellerbach"/>
+    Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2010-09-02T00:01:47-04:00" Modifyuserid="admin"
+    ModuleName="" OrganizationCode="Zellerbach"/>
 </YFS_CLASSIFICATION_PURPOSEList>
