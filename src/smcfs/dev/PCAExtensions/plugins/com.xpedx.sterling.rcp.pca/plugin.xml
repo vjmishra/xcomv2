@@ -288,7 +288,7 @@
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks1">
                     <task id="Create Internal Users"/>
                     <task id="Modify Internal Users"/>
-                    <task id="Division Maintennance"/>
+                    <task id="Division Maintenance"/>
                     <task id="ReferenceOrderSearch"/>
                     <task id="ArticleMaintenance"/>
                     <task id="MyItemsSearch"/>
@@ -312,7 +312,7 @@
             </category>
             <category id="XPX_DIVISIONMAINTAINANCE_CATEGORY">
                 <tasks id="com.xpedx.sterling.rcp.pca.tasks5">
-                    <task id="Division Maintennance"/>
+                    <task id="Division Maintenance"/>
                 </tasks>
             </category>
             <category id="YCD_ORDER_RELATED">
