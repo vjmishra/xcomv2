@@ -1721,10 +1721,9 @@ a.underlink:hover { text-decoration: underline !important; }
 		
 		<s:if test='%{#isCustomerNotAdmin == false}'>		
 		<tr id="userNameRow">
-			<td width="13%" valign="top" class="no-border-right-user">User
-			Status:
+			<td width="13%" valign="top" class="no-border-right-user">User Status:
 			</td>
-			<s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden>
+			
 			<td colspan="3" class="no-border-right-user">
 			<s:iterator value="getStatusList().keySet()" id="statusVal">
 				<s:set name="statusValue" value="value" />
@@ -1732,7 +1731,8 @@ a.underlink:hover { text-decoration: underline !important; }
 				 <%-- Fix for Jira 3048 --%>
 				    <s:if test="%{#disableSinceSelfApprover}">		
 					   <input type="radio" name="status" id='status' disabled = 'true' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
-					   </input>			        
+					   </input>	
+					   	<s:if test ="%{#statusVal == getContactStatus()}" ><s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden> </s:if>	        
 					</s:if>
 					<s:else>
 					  <input type="radio" name="status" id='status' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
@@ -1753,7 +1753,8 @@ a.underlink:hover { text-decoration: underline !important; }
 		</tr>
 		
 		</s:if>
-		<s:else>						
+		<s:else>
+			<s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden>						
 			<s:set name='userStatus' value="%{getContactStatus()}" />
 			<tr id="userNameRow">
 			<td width="13%" valign="top" class="no-border-right-user">User
@@ -1795,45 +1796,63 @@ a.underlink:hover { text-decoration: underline !important; }
 			</div>
 			</td>
 			
-			<s:if test='%{#isCustomerNotAdmin == false}'>
-			<%-- Fix for Jira 3048 item issue 1 --%>
+		<s:if test='%{#isCustomerNotAdmin == false}'>
+			<%-- Fix for Jira 3048 item issue 1 
 			 <s:if test="%{#disableSinceSelfApprover}">
 			   <s:set name="checkBoxDisable" value='%{true}' />
 			 </s:if> 
-			<%-- End Fix for Jira 3048 item issue 1 --%> 
-			<td colspan="3" class="no-border-right-user"><label
+			 End Fix for Jira 3048 item issue 1 --%> 
+			<td colspan="3" class="no-border-right-user">
+			<s:if test="%{!#disableSinceSelfApprover}">
+				<label
 				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
-			<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
-				fieldValue="true" value='%{isInUserGroup("BUYER-ADMIN")}'
-				disabled='%{#checkBoxDisable || #isDisabled}' /> Admin</label> <label
-				title="Authorizes submission of orders."> <s:checkbox
-				tabindex="85" name='buyerApprover' id='buyerApprover'
-				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true"
-				disabled='%{#checkBoxDisable || #isDisabled}' /> Approver</label> <label
-				title="Buyer has the ability to submit orders."> <s:checkbox
-				tabindex="75" name='test' id='test' fieldValue="test123"
-				value="%{isInUserGroup('BUYER-USER')}" disabled="%{#userExists || #checkBoxDisable}" />
-			Buyer</label>
-				<s:if test='%{#estimator=="T"}'>
+				<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
+				fieldValue="true" value='%{isInUserGroup("BUYER-ADMIN")}'/> Admin</label> 
+				<label
+				title="Authorizes submission of orders."> 
+				<s:checkbox	tabindex="85" name='buyerApprover' id='buyerApprover'
+				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true"/> Approver</label> 
+				<label
+				title="Buyer has the ability to submit orders."> 
+				<s:checkbox	tabindex="75" name='test' id='test' fieldValue="test123"
+				value="%{isInUserGroup('BUYER-USER')}" />Buyer</label>
+			</s:if>	
+			<s:else> 
+				<label
+				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
+				<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
+				fieldValue="true" value='%{isInUserGroup("BUYER-ADMIN")}' disabled="true"/> Admin</label> 
+				<s:hidden name="buyerAdmin" id='buyerAdmin' value='%{isInUserGroup("BUYER-ADMIN")}' ></s:hidden>
+				<label
+				title="Authorizes submission of orders."> 
+				<s:checkbox	tabindex="85" name='buyerApprover' id='buyerApprover'
+				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true" disabled="true"/> Approver</label> 
+				<s:hidden name="buyerApprover" id='buyerApprover' value='%{isInUserGroup("BUYER-APPROVER")}' ></s:hidden>
+				<label
+				title="Buyer has the ability to submit orders."> 
+				<s:checkbox	tabindex="75" name='test' id='test' fieldValue="test123"
+				value="%{isInUserGroup('BUYER-USER')}" disabled="true"/>Buyer</label>							
+			</s:else>
+			<s:if test='%{#estimator=="T"}'>
 		        	<label title="Estimator views available inventory and pricing.">
 					<s:checkbox tabindex="75" name='estimator' id='estimator' fieldValue="true" value="true" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
-				</s:if>
-				<s:else>
+			</s:if>
+			<s:else>
 			 		<label title="Estimator views available inventory and pricing.">
 					<s:checkbox tabindex="75" name='estimator' id='estimator' fieldValue="true" value="false" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
-				</s:else>
-				<s:if test='%{#viewInvoices=="Y"}'>
+			</s:else>
+			<s:if test='%{#viewInvoices=="Y"}'>
 				<label
 				title="Permitted to view invoices online."> 
 				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
 				value="true" disabled='%{#checkBoxDisable || #isDisabled}'/> View Invoices</label> 
-				</s:if>
-				<s:else>
+			</s:if>
+			<s:else>
 			 	<label
 				title="Permitted to view invoices online."> 
 				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
 				value="false" disabled='%{#checkBoxDisable || #isDisabled}'/> View Invoices</label> 
-				</s:else>
+			</s:else>
 			 	<label	title="Permitted to view prices."> 
 				<s:checkbox fieldValue="true" 
 				name="viewPrices" id="viewPrices"
@@ -1842,9 +1861,17 @@ a.underlink:hover { text-decoration: underline !important; }
 				title="Permitted to view reports."> <s:checkbox
 				name="viewReports" id="viewReports" fieldValue="true" 
 				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/> View Reports</label></td>
+		</s:if>
+		<s:else><td colspan="3" class="no-border-right-user">			
+			<s:if test='%{isInUserGroup("BUYER-USER")}'>Buyer </s:if>
+			<s:if test='%{#estimator=="T"}'>Estimator </s:if>
+			<s:if test='%{#viewInvoices=="Y"}'>View Invoices </s:if>
+			<s:if test='%{isViewPrices()}'> View Prices </s:if>
+			<s:if test='%{isViewReports()}'>View Reports </s:if>		
+		 </td> </s:else>
 		</tr>
 		
-		</s:if>
+		
 		<tr style="display: none;">
 			<td class="boldText textAlignLeft"><s:text name="RB_jobTitle" />:</td>
 			<td><s:textfield tabindex="60" name="jobTitle"
