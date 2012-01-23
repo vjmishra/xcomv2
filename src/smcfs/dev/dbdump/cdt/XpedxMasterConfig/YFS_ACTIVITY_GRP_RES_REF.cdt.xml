@@ -2,27 +2,27 @@
 <YFS_ACTIVITY_GRP_RES_REFList TableName="YFS_ACTIVITY_GRP_RES_REF">
 <ActivityGrpResRef ActivityGroupId="OUTBOUND_PICKING"
     ActivityGrpResRefKey="ActGrpResRefKey_1" Createprogid="XMLMigrator"
-    Createts="2010-04-20T21:06:39-04:00" Createuserid="SYSTEM"
+    Createts="2011-07-14T14:41:53-04:00" Createuserid="SYSTEM"
     Lockid="0" Modifyprogid="XMLMigrator"
-    Modifyts="2010-04-20T21:06:39-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
+    Modifyts="2011-07-14T14:41:53-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
 <ActivityGrpResRef ActivityGroupId="PUTAWAY"
     ActivityGrpResRefKey="ActGrpResRefKey_2" Createprogid="XMLMigrator"
-    Createts="2010-04-20T21:06:39-04:00" Createuserid="SYSTEM"
+    Createts="2011-07-14T14:41:53-04:00" Createuserid="SYSTEM"
     Lockid="0" Modifyprogid="XMLMigrator"
-    Modifyts="2010-04-20T21:06:39-04:00" Modifyuserid="SYSTEM" ResourceId="rfputaway"/>
+    Modifyts="2011-07-14T14:41:53-04:00" Modifyuserid="SYSTEM" ResourceId="rfputaway"/>
 <ActivityGrpResRef ActivityGroupId="RETRIEVAL"
     ActivityGrpResRefKey="ActGrpResRefKey_3" Createprogid="XMLMigrator"
-    Createts="2010-04-20T21:06:39-04:00" Createuserid="SYSTEM"
+    Createts="2011-07-14T14:41:53-04:00" Createuserid="SYSTEM"
     Lockid="0" Modifyprogid="XMLMigrator"
-    Modifyts="2010-04-20T21:06:39-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
+    Modifyts="2011-07-14T14:41:53-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
 <ActivityGrpResRef ActivityGroupId="REPLENISHMENT"
     ActivityGrpResRefKey="ActGrpResRefKey_4" Createprogid="XMLMigrator"
-    Createts="2010-04-20T21:06:39-04:00" Createuserid="SYSTEM"
+    Createts="2011-07-14T14:41:53-04:00" Createuserid="SYSTEM"
     Lockid="0" Modifyprogid="XMLMigrator"
-    Modifyts="2010-04-20T21:06:39-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
+    Modifyts="2011-07-14T14:41:53-04:00" Modifyuserid="SYSTEM" ResourceId="rfretrieval"/>
 <ActivityGrpResRef ActivityGroupId="COUNT"
     ActivityGrpResRefKey="ActGrpResRefKey_5" Createprogid="XMLMigrator"
-    Createts="2010-04-20T21:06:39-04:00" Createuserid="SYSTEM"
+    Createts="2011-07-14T14:41:53-04:00" Createuserid="SYSTEM"
     Lockid="0" Modifyprogid="XMLMigrator"
-    Modifyts="2010-04-20T21:06:39-04:00" Modifyuserid="SYSTEM" ResourceId="rfcount"/>
+    Modifyts="2011-07-14T14:41:53-04:00" Modifyuserid="SYSTEM" ResourceId="rfcount"/>
 </YFS_ACTIVITY_GRP_RES_REFList>
