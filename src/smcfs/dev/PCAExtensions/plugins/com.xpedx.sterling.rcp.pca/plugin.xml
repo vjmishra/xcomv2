@@ -355,9 +355,9 @@
                 actionId="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
                 filterRequired="false"
                 groupId="Other_Tasks"
-                id="Division Maintennance"
+                id="Division Maintenance"
                 isExtension="false"
-                name="Division Maintennance"
+                name="Division Maintenance"
                 permissionId="ycdRCPXPX002">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
