@@ -111,6 +111,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 	            {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return;
 				}
 
 	        }	        //System.out.println("Main Categories " + SCXmlUtils.getString(outDoc));
