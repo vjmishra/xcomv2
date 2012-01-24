@@ -1,10 +1,12 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.yantra.yfs.core.YFSSystem;
 
 public class XPEDXNewUserRegistration extends WCMashupAction{
@@ -34,13 +36,14 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
 	private String messageType="NewUser";
+	private String imageUrl = null; //Start -Jira 3261
 	private static final String SUCCESS = "success";
 	
 	
 		public String execute(){
 			mailHost = YFSSystem.getProperty("EMailServer");	
 			if(mailHost==null){
-				mailHost="mail.qa.local";
+				mailHost=XPEDXConstants.MAIL_HOSTUSEREMAIL;
 			}
 			StringBuffer sb = new StringBuffer();
 			String storeFrontId = wcContext.getStorefrontId();
@@ -50,6 +53,25 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
 			}
+			
+			/** Start ------- JIRA 3261 for logo changes
+			 * 
+			 * 
+			 * */
+			String imageUrl = "";
+			if(storeFrontId!=null && storeFrontId.trim().length() > 0){
+			String imageName = getLogoName(storeFrontId);
+			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
+				imageUrl = imagesRootFolder + imageName;
+			    setImageUrl(imageUrl); 	
+			}
+			}
+			/** End ------- JIRA 3261 for logo changes
+			 * 
+			 * 
+			 * */
+			
 			setMailCCAddress(sb.toString());
 			setMailFromAddress(sb.toString());
 			
@@ -80,6 +102,49 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			}
 			return SUCCESS;
 		}
+		/**
+		 * Start JIRA 3261
+		 * 
+		 * 
+		 * */
+		private String getLogoName(String sellerOrgCode)
+		{
+			String _imageName = "";
+			if (XPEDXConstants.XPEDX_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/xpedx_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.BULKLEYDUNTON_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.CENTRAILEWMAR_LOG0.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/CentralLewmar_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.CENTRALMARQUARDT_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.SAALFELD_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.STRATEGICPAPER_LOG0.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/StrategicPaper_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.WESTERNPAPER_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/WesternPaper_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.WHITEMANTOWER_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/WhitemanTower_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.ZELLERBACH_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/Zellerbach_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.XPEDXCANADA_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/xpedx_r_rgb_lo.jpg";
+			} 
+			return _imageName;
+		}
+		public String getImageUrl() {
+			return imageUrl;
+		}
+		public void setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
+		}
+		/**
+		 * End JIRA 3261
+		 * 
+		 * 
+		 * */
+		
 		public String getNewUserAddress1() {
 			return newUserAddress1;
 		}
