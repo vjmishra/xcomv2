@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -460,7 +461,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			APIException = ex;
-			prepareErrorObject(ex, "LegacyOrderUpdate", ex.getMessage(), env, inXML);
+			prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 
 			// Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(log.isDebugEnabled()){
