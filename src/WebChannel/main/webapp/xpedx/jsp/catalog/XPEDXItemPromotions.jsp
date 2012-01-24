@@ -37,7 +37,7 @@
 					</s:param>
 					<!--  WebTrends tag start -- -->
 					<s:param name='prItemtype'>
-					<s:property value="R" />
+					<s:property value="%{'R'}" />
 					</s:param>
 					<!--  WebTrends tag end -- -->
 				</s:url>
@@ -131,7 +131,7 @@
 						<!--  WebTrends tag start -- -->
 						<s:param name='prItemtype'>
 							<s:property
-								value="U" />
+								value="%{'U'}" />
 						</s:param>
 						<!--  WebTrends tag end -- -->
 				</s:url>
@@ -221,7 +221,7 @@
 				<!--  WebTrends tag start -- -->
 				<s:param name='prItemtype'>
 					<s:property
-						value="A" />
+						value="%{'A'}" />
 				</s:param>
 				<!--  WebTrends tag end -- -->
 			</s:url>
@@ -320,7 +320,7 @@
 						</s:param>
 						<!--  WebTrends tag start -- -->
 						<s:param name='prItemtype'>
-							<s:property value="C" />
+							<s:property value="%{'C'}" />
 						</s:param>
 						<!--  WebTrends tag end -- -->
 					</s:url>
@@ -417,7 +417,7 @@
 									</s:param>
 									<!--  WebTrends tag start -- -->
 									<s:param name='prItemtype'>
-										<s:property value="Cr" />
+										<s:property value="%{'Cr'}" />
 									</s:param>
 									<!--  WebTrends tag end -- -->
 								</s:url>
