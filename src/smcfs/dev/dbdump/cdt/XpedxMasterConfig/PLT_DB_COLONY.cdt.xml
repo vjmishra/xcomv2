@@ -3,6 +3,6 @@
 <Colony ColonyId="DEFAULT" ColonyKey="20100420210131818"
     ColonyVersion="9.0" Createprogid="YSCPreInstallMetadataCreator"
     Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
-    Lockid="0" Modifyprogid="YSCPreInstallMetadataCreator"
-    Modifyts="2010-04-20T21:01:31-04:00" Modifyuserid="SYSTEM" PkPrefix="20"/>
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:01:31-04:00" Modifyuserid="ng" PkPrefix="20"/>
 </PLT_DB_COLONYList>
