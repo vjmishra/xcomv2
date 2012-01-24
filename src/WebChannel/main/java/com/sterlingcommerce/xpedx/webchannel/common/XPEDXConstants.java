@@ -119,6 +119,19 @@ public class XPEDXConstants {
 	public static String HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD = "LEGACY_CNCL_ORD_HOLD";
 	public static String HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD = "ORDER_EXCEPTION_HOLD";
 	public static String REQUIRE_CUSTOMER_PO_NO_RULE="RequireCustomerPO";
+	//Start Added for JIRA 3261
+	public static String MAIL_HOSTUSEREMAIL = "smtp.ipaper.com";
+	public static String  XPEDX_LOGO = "xpedx";
+	public static String  BULKLEYDUNTON_LOGO = "BulkleyDunton";
+	public static String  CENTRAILEWMAR_LOG0 = "CentralLewmar";
+	public static String  CENTRALMARQUARDT_LOGO = "CentralMarquardt";
+	public static String  SAALFELD_LOGO = "Saalfeld";
+	public static String  STRATEGICPAPER_LOG0 = "StrategicPaper";
+	public static String  WESTERNPAPER_LOGO = "WesternPaper";
+	public static String  WHITEMANTOWER_LOGO = "WhitemanTower";
+	public static String  ZELLERBACH_LOGO = "Zellerbach";
+	public static String  XPEDXCANADA_LOGO = "xpedxCanada";
+	//End Added for JIRA 3261
 	
 	// Added for JIRA 1998
 	public static final String ENTRY_TYPE_EMAIL_UPDATE = "EmailChange";
