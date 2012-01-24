@@ -35,6 +35,7 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 	private String customerKey;	
 	private String extSuffixType;
 	private List HideRulesList=null;
+	private List ShowRulesList=null;
 
 	/**
 	 * Constructor for the behavior class.
@@ -122,10 +123,18 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 				 }else if("OR".equalsIgnoreCase(ruleGroup)){
 					 orderRules.add(tmpEle);
 				 }else if("LR".equalsIgnoreCase(ruleGroup)){
-					 orderLinesRules.add(tmpEle);
-				 }}
+					 if ("C".equals(extSuffixType)) {
+							ShowRulesList = getShowRulesList();
+							if (ShowRulesList.contains(RuleID)) {
+								orderLinesRules.add(tmpEle);
+							}	
+					 }else{
+						 orderLinesRules.add(tmpEle);
+					 
+				 }
 			}
 		}
+			}}
 		if (generalRules.size()>0) {
 			page.createLines(generalRules, "General Rule");
 		}
@@ -142,11 +151,21 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 	private List getRulesList() {
 		List<String> lst=new ArrayList<String>();
 		String [] rules={"HeaderCommentByCustomer","DuplicatePO","NonStandardShipMethod","CustomerSelectedShipComplete",
-				"ValidShiptoZipCode","ShipDateNotNextBusinessDay"};
+				"ValidShiptoZipCode","ShipDateNotNextBusinessDay","AcceptPriceOverRide","PreventAutoPlace","RequireCustomerLineField1","RequireCustomerLineField2","RequireCustomerLineField3","AllDeliveryDatesDoNotMatch"
+				,"ItemNotAvailableForNextDayShipment","RequiredCustomerLineSequenceNo","GrossTradingMargin"};
 		//"RequireCustomerPO" is removed from he list as per sunith's comments.		
 		lst=Arrays.asList(rules);
 		return lst;
 	}
+	@SuppressWarnings("unchecked")
+	private List getShowRulesList() {
+		List<String> list=new ArrayList<String>();
+		String [] rules={"RequiredCustomerLineAccountNo","RequiredCustomerLinePO"};
+		//"RequireCustomerPO" is removed from he list as per sunith's comments.		
+		list=Arrays.asList(rules);
+		return list;
+	}
+	
 	private void callApi(String apinames, Document inputXml) {
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId("com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileRulePanel");
