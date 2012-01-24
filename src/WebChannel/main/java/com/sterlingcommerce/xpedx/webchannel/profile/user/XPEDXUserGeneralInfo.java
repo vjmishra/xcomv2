@@ -1771,23 +1771,25 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Object obj = WCMashupHelper.invokeMashup(
 				"xpedx-PreferredCatalogOptions", input, wcContext
 						.getSCUIContext());
-		oXML = ((Element) obj).getOwnerDocument().getDocumentElement();
-		if (null != oXML) {
-			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
-		}
-		//System.out.println("Output XML: " + SCXmlUtils.getString(oXML));
-		Element cList = XMLUtilities
+		if(obj != null){
+			oXML = ((Element) obj).getOwnerDocument().getDocumentElement();
+			if (null != oXML) {
+				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));			
+			//System.out.println("Output XML: " + SCXmlUtils.getString(oXML));
+			Element cList = XMLUtilities
 				.getChildElementByName(oXML, "CategoryList");
-		if (cList == null) {
-			return MainCategories;
-		}
-		NodeList cat = cList.getElementsByTagName("Category");
-		int numCats = cat.getLength();
-		for (int i = 0; i < numCats; i++) {
-			Element catElem = (Element) cat.item(i);
-			String catID = catElem.getAttribute("CategoryID");
-			String sDesc = catElem.getAttribute("ShortDescription");
-			MainCategories.put(catID, sDesc);
+			if (cList == null) {
+				return MainCategories;
+			}
+			NodeList cat = cList.getElementsByTagName("Category");
+			int numCats = cat.getLength();
+			for (int i = 0; i < numCats; i++) {
+				Element catElem = (Element) cat.item(i);
+				String catID = catElem.getAttribute("CategoryID");
+				String sDesc = catElem.getAttribute("ShortDescription");
+				MainCategories.put(catID, sDesc);
+			}
+		 }
 		}
 
 		return MainCategories;
