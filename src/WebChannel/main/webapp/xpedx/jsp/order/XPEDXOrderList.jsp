@@ -476,21 +476,22 @@ function printPOs(customerPos) {
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
 							
 							<s:if test='%{#status != "Cancelled"}'>
-								<s:if test='#isPendingApproval || #isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+								<s:property value="#parentOrder.getAttribute('Status')" />
+								
 									<s:if test='#isPendingApproval && !#isOrderRejected'>
-										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 									</s:if>
-									<s:if test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
-										<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
-									</s:if>
-								</s:if>
-								<s:else>
-									<s:property value="#parentOrder.getAttribute('Status')" />
-								</s:else>
+									<s:elseif test='#isPendingApproval && #isOrderRejected'>
+										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
+									</s:elseif>
+									<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
+										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+									</s:elseif>
 							</s:if>
 							<s:else>
 								<s:property value="#parentOrder.getAttribute('Status')" />
-							</s:else>
+							</s:else>							
+							
 				    	</td>
             	
 	                    </s:if>	                    
@@ -606,7 +607,7 @@ function printPOs(customerPos) {
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
 								
-								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
+								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
 												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
 								<s:else>
@@ -702,7 +703,14 @@ function printPOs(customerPos) {
 									</s:if>
 				            	</td>
 				            	
-				            	<td class="right-cell"><s:property value='#chainedOrder.getAttribute("Status")'/></td>
+				            	<td class="right-cell">
+					            	<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"'>
+													Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+									</s:if>
+									<s:else>
+					            		<s:property value='#chainedOrder.getAttribute("Status")'/>
+					            	</s:else>
+				            	</td>
 				            </tr>
 				            </s:if>				            
 	            		</s:iterator>	
