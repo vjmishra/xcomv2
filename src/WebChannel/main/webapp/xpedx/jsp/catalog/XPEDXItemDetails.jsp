@@ -1346,7 +1346,8 @@ function SubmitActionWithValidation()
 					<s:hidden name="requestedUOM" id="requestedUOM" value="" />
 					<s:hidden name="uomId" id="uomId" value="" />
 					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
-					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
+					<%-- <s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" /> 3253--%>
+					<s:hidden name="selectedUOM" value="%{#_action.getRequestedDefaultUOM()}" id="selectedUOM" />
 					<%-- 2964 Start<s:set name="convFac" value='itemUOMsMap[#requestedUOM]' />
 					 --%>
 					 <s:set name="convFac" value='itemIdConVUOMMap[#requestedUOM]' />
