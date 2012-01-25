@@ -150,7 +150,6 @@
 		return;
 	}
 function qaAddItem(jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
-		
 	//Validate the data
 		try{
 			if (mandatoryFieldValidation('quick-add', []) != "")
@@ -203,6 +202,10 @@ function qaAddItem(jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 	
 	function qaAddItem1(form){
 		//Validate the data
+		//Added For Jira 3197
+		document.getElementById('errorMsgFor_QL').innerHTML = "";
+		document.getElementById("errorMsgFor_QL").style.display = "none";
+		// Code Fix For Jira 3197
 		try{
 			if (mandatoryFieldValidation('quick-add', []) != "")
 				return;
