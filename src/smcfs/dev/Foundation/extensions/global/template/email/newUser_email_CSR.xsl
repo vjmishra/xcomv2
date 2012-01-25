@@ -68,7 +68,7 @@
 													<table width="100%" border="0">
 														<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																First Name:
+																Name:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@FirstName"/><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
@@ -139,7 +139,7 @@
 															</td></tr>
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Comments :
+																Questions / Comments :
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Comments"/>
