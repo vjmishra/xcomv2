@@ -103,9 +103,14 @@ public class XPEDXGetAssignedLocationsForReporting
 				for(int i=0;i<customerListElem.getLength();i++)
 				{
 					Element customerElem = (Element) customerListElem.item(i);
+					//Modified For Jira 3216
+					Element extElement = (Element) customerElem.getFirstChild();
+					String extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
+					
 					if(customerElem!=null) {
 						String strCustId = SCXmlUtil.getAttribute(customerElem, "CustomerID");
-						if(strCustId.startsWith("CD") && strCustId.endsWith("CC")) {
+						if(extSuffixType.equalsIgnoreCase("C")){
+						//if(strCustId.startsWith("CD") && strCustId.endsWith("CC")) {
 							LOG.debug("---- " + strCustId);
 							childCustomerList.add(strCustId);
 							//Code Added for Bill To
@@ -116,9 +121,8 @@ public class XPEDXGetAssignedLocationsForReporting
 						
 						//Check if explicitly assigned bill to location
 						else if(processBillTo.equalsIgnoreCase("true") == true){
-							Element extElement = (Element) customerElem.getFirstChild();
-							String extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
-							
+							 //extElement = (Element) customerElem.getFirstChild();
+							//extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
 							if(extSuffixType.equalsIgnoreCase("B") == true && ! billToList.contains(strCustId)){
 								LOG.debug("Adding to bill to list ---- "+ strCustId);
 								billToList.add(strCustId);
