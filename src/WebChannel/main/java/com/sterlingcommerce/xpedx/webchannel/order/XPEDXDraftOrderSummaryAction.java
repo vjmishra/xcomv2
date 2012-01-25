@@ -79,7 +79,18 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 //added for 2769
 	protected YFCDate lastModifiedDate = new YFCDate();
 	protected String lastModifiedDateString = "";
+	//added for jira 2885
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	
+	public Map<String, String> getPnALineErrorMessage() {
+		return pnALineErrorMessage;
+	}
+
+	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
+		this.pnALineErrorMessage = pnALineErrorMessage;
+	}
+	//end of jira 2885
+
 	public String getLastModifiedUserId() {
 		return lastModifiedUserId;
 	}
@@ -195,7 +206,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 			//PNA call end
 			//Setting the price hover map
-			
+			//added for jira 2885 
+			pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
 			// Code for displaying Last Modified by in cart page
 			String createUserIDStr = "";
