@@ -56,9 +56,14 @@ function updateUOMFields() {
 
 function setPandAData() {
 	var ajaxAvailDiv = document.getElementById("jsonAvalabilityDiv");
+	var errorValue = document.getElementById("lineStatusCodeMsg");
+
 	var itemAvailDiv = document.getElementById("tabs-1");
 	var displayPricesDiv = document.getElementById("displayPricesDiv");
 	var pricedDiv = document.getElementById("pricesDiv");
+	
+	var errorMsgDiv = document.getElementById("errorMessageDiv"); //Added for Fix of Jira 2885
+
 	if(ajaxAvailDiv!=null && itemAvailDiv!=null) {
 		itemAvailDiv.innerHTML = ajaxAvailDiv.innerHTML;
 	}
@@ -67,6 +72,9 @@ function setPandAData() {
 		displayPricesDiv.innerHTML = pricedDiv.innerHTML;
 	}
 	document.getElementById("pricesDiv").innerHTML = "";
+	
+	errorMsgDiv.innerHTML = "<h5><b><font color=red>" + errorValue.value + "</font></b></h5>"; 
+	document.getElementById("lineStatusCodeMsg").innerHTML = "";
 }
 
 function addItemToList() {
