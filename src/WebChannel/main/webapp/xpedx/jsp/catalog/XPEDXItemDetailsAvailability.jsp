@@ -23,6 +23,11 @@
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
 			<tr>
+			   <!-- Fix for Jira 2885 -->
+			    <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+			    <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)" />
+			    <s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
+			   <!-- Fix for Jira 2885 -->
 				<td class="table_center" width="163"><strong>Total Available:</strong></td>
 				<td class="table_right"><strong>
 			<s:if test='%{#jsonTotalQty == null}'>
