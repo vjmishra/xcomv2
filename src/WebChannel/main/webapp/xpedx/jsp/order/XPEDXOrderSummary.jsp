@@ -1498,9 +1498,6 @@ from session . We have customer Contact Object in session .
 	id="OrderDetailsForm" namespace="/order" method="POST" validate="true">
 </s:form>
 
-
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-
 <s:url id='updateNotesURLid' namespace='/order'
 	action='xpedxOrderSummaryModifyLineNotes' />
 <s:a id='updateNotesURL' href='%{#updateNotesURLid}' />
@@ -1533,8 +1530,11 @@ from session . We have customer Contact Object in session .
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
-</body>
 <script>
 //setTotalPrice('<s:property value="#totalPrice" />');
 </script>
+<!-- Footer Start --> 
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" /> 
+<!-- Footer End --> 
+</body>
 </html>
