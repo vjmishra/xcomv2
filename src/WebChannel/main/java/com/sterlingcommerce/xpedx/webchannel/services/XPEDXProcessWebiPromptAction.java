@@ -180,7 +180,9 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 						Element extElement = (Element) customerElem.getFirstChild();
 						String extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
 						//Checking For Account,Bill To, Ship to
-						if(strCustId.startsWith("CD") && strCustId.endsWith("CC")) {
+						//Modified For Jira 3216
+						if(extSuffixType.equalsIgnoreCase("C")){
+						//if(strCustId.startsWith("CD") && strCustId.endsWith("CC")) {
 							String account= getCustomerNo(strCustId);
 							accountList.add(account);
 						}else if(extSuffixType.equalsIgnoreCase("B") == true){
