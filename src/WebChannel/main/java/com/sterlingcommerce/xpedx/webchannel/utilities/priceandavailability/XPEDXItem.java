@@ -26,7 +26,16 @@ public class XPEDXItem {
 	private String lineStatusCode;
 	private Vector brackets;
 	private Vector warehouseLocationList;
-	
+	//added for jira 2885
+	private String lineStatusErrorMsg;
+	public String getLineStatusErrorMsg() {
+		return lineStatusErrorMsg;
+	}
+
+	public void setLineStatusErrorMsg(String lineStatusErrorMsg) {
+		this.lineStatusErrorMsg = lineStatusErrorMsg;
+	}
+
 	/**
 	 * Constructor
 	 */
