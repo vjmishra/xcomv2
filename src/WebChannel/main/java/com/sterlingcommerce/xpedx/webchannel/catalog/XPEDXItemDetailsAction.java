@@ -161,6 +161,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		String lineStatusErrorMsg = "";
 		for (XPEDXItem pandAItem1 : items) {
 			if (pandAItem1.getLegacyProductCode().equals(itemID)) {
+				//added for jira 2885
+				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 						.getPnALineErrorMessage(pandAItem1);
 				ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + lineStatusErrorMsg ;
@@ -1849,6 +1851,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String pnaRequestedQty;
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXItemDetailsAction.class);
+
+	//added for jira 2885
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
+	
+	public Map<String, String> getPnALineErrorMessage() {
+		return pnALineErrorMessage;
+	}
+
+	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
+		this.pnALineErrorMessage = pnALineErrorMessage;
+	}
 
 	public Map getAssetLinkMap() {
 		return assetLinkMap;
