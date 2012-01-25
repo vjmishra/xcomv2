@@ -370,7 +370,7 @@ function showSharedListForm(){
      		
 			document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
             document.getElementById("errorMsgTop").style.display = "inline"; 
-            
+                        
             document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
             document.getElementById("errorMsgBottom").style.display = "inline"; 
 		}
@@ -448,6 +448,12 @@ function showSharedListForm(){
 			var itemCountNum = Number(itemCount);
 			if(itemCount<=200){
 				if((itemCountNum+document.getElementById('qaTable').rows.length)<=200){
+					//Added For Jira 3197
+					if(document.getElementById('qaTable').rows.length==0){
+						document.getElementById("errorMsgFor_QL").style.display = "inline";
+						return false;
+					}
+					//Code Fix For Jira 3197
 					var formItemIds = document.getElementById("formAdd2List");
 					if (formItemIds){
 						//form already submitted.
@@ -905,8 +911,8 @@ function showSharedListForm(){
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
 				divVal.setAttribute("class", "error");
-				
-				if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true)
+				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
+				if((quantity == '0' || quantity== '' ) || isOnlyOneItem == true)
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
@@ -1140,11 +1146,12 @@ function showSharedListForm(){
 
 		function displayMsgHdrLevelForLineLevelError() {
 			//var msgGenericForLineLevelErrors = "Error occurred in One of the Line, Please Correct";
-			var msgGenericForLineLevelErrors = "<s:text name='MSG.SWC.MIL.GENHDRLEVELMSG.ERROR.LINELEVELERROS' />";
-			document.getElementById("errorMsgTop").innerHTML = msgGenericForLineLevelErrors ;
+			//Added For 3197 - No items with quantity defined. Please review the list and try again.
+			//var msgGenericForLineLevelErrors = "<s:text name='MSG.SWC.MIL.GENHDRLEVELMSG.ERROR.LINELEVELERROS' />";
+			document.getElementById("errorMsgTop").innerHTML = "No items with quantity defined. Please review the list and try again." ;
             document.getElementById("errorMsgTop").style.display = "inline";
-
-			document.getElementById("errorMsgBottom").innerHTML = msgGenericForLineLevelErrors ;
+            
+            document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
             document.getElementById("errorMsgBottom").style.display = "inline";
 			
 		}
@@ -1431,8 +1438,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 
 			<s:hidden id="mandatoryFieldCheckFlag_mil-edit" name="mandatoryFieldCheckFlag_mil-edit" value="%{false}"></s:hidden>
-
-			<s:if test='itemDeleted == true'>			
+		<s:if test='itemDeleted == true'>			
 <!-- 				<div   style="color:green" align="center"><h3><br/>Item(s) has been removed from list</h3></div> -->
 			</s:if>
 			
@@ -1710,7 +1716,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                             </s:form> <!-- CODE_END Quick Add - PN -->
 							
                             <div class="clear">&nbsp;</div>
-                            <div class="quick-add-form-bot"></div>
+                            <div class="quick-add-form-bot">
+                            <!-- Added For Jira 3197 -->
+                            <center><div class="error" id="errorMsgFor_QL" style="display : none"/>Click the Add to Quick List button once you have entered an item number.</div> </center>
+                             <!-- Code Fix For Jira 3197 -->
+                            </div>
                         </div>
 
                     </div>
@@ -1765,10 +1775,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                     </div>
                     <div class="clear">&nbsp;</div>
                 </div>
-               
+                
                 <!-- Close mil-edit -->
 				<div class="clear"></div>
                 <br />
+                
 				<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>	
 					<fieldset class="mil-edit-field">
 	                    <legend>For Selected Items:</legend>
@@ -1833,10 +1844,17 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
     	
 			 	    <div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display:none;" ></div>  
 			 		<div class="error" id="errorMsgTop" style="display:none;" ></div> 
-
-	
-	
-			 <s:if test="%{errorMsg == 'ItemsOverLoad'}">
+			 		
+				<%-- Added For Jira 3197 - InvalidImport condition --%>
+				<s:if test="%{errorMsg == 'InvalidImport'}">
+							
+					<script type="text/javascript">
+								document.getElementById("errorMsgTop").innerHTML = "The import file must be in .csv format." ;
+					           	document.getElementById("errorMsgTop").style.display = "inline"; 
+					            
+					</script>
+				</s:if>
+				<s:if test="%{errorMsg == 'ItemsOverLoad'}">
 							<div style="color:red">
 							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
 							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
@@ -2300,7 +2318,15 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
  
  			<div class="error" id="errorMsgBottom" style="display:none;" ></div> 
  
-            
+            <%-- Added For Jira 3197 - InvalidImport condition --%>
+				<s:if test="%{errorMsg == 'InvalidImport'}">
+							
+					<script type="text/javascript">
+								document.getElementById("errorMsgBottom").innerHTML = "The import file must be in .csv format." ;
+					            document.getElementById("errorMsgBottom").style.display = "inline"; 
+					
+					</script>
+				</s:if>
             </li>
 			</ul>
             <div class="clearall"></div>
@@ -2312,9 +2338,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						<br />
 					
 						<script type="text/javascript">
-						//var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
-						var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
-							importItems(milFileImportMsg );
+						//Modified For Jira 3197 - milFileImportMsg
+						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
+						//var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
+						importItems(milFileImportMsg);
 						</script>
 				</s:if>
 				
