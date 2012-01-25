@@ -65,8 +65,7 @@
         <action name="forgotPwd" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
 			<param name="mashups">userNameForgotPwd</param>
 			<param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
-			<result name="success">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
-			<!-- <result name="success">/xpedx/jsp/home/XPEDXusername.jsp</result>  -->
+			<result name="success">/xpedx/jsp/home/XPEDXusername.jsp</result> 
 		</action>
 		
 		<action name="usernameSubmit" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
