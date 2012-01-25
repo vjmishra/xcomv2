@@ -77,10 +77,10 @@ public class XPEDXPriceandAvailabilityUtil {
 	
 	public static int PANDA_WS_MODE = PANDA_WS_PROD ;
 	
-	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Sorry, Price & Availability is not available, please try again later or contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Sorry, Price & Availability is not available, please try again or contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Sorry, Price & Availability is not available, please contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Sorry, real time price and availability is not available at this time, please contact customer service.";//"Sorry, Price & Availability is not available, please try again later or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Sorry, there was a problem processing your request.  Please contact customer service or try again later.";//Sorry, Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";//"Sorry, Price & Availability is not available, please contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Sorry, the item information for this item is not valid.  Please contact customer service for price and availability.";// "Price & Availability is not available, please try again or contact customer service.";
 			
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_SERVICESTATUSDOWN_ERROR = "WSPriceAndAvailabilityOutputXmldocWithServiceStatusDownError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
@@ -194,7 +194,9 @@ public class XPEDXPriceandAvailabilityUtil {
 			}	
 		}
 		if(null == outputDoc){
-			
+			//jira 2885
+			displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ; 
+			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
 			log.error("PnA did not respond or it sent a Empty xml back.");		
 			return pnaOutput;
 			
@@ -239,7 +241,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		displayErrorMsgToUser = "";
 		
 		//Check for validity of the responseDoc and set appropriate message 
-		if (outputDoc == null ) {
+		if (outputDoc == null ) {			
 			displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR ;
 			pna.setStatusVerboseMsg(displayErrorMsgToUser);
 			return displayErrorMsgToUser;
@@ -463,6 +465,17 @@ public class XPEDXPriceandAvailabilityUtil {
 			digester.setValidating(false);
 			output = (XPEDXPriceAndAvailability) digester
 					.parse(new StringInputStream(SCXmlUtil.getString(outputDoc)));
+			//added for jira 2885
+			Vector<XPEDXItem> items=output.getItems(); 
+			if(items !=null)
+			{
+				for(int i=0;i<items.size();i++)
+				{
+					XPEDXItem item=items.get(i);
+					if(!"00".equals(item.getLineStatusCode()))
+						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
+				}
+			}
 		} catch (MalformedURLException e) {
 			log
 					.error("Unable to create XPEDXPriceAndAvailability bean. Unable to locate rule file XPEDXPriceaAndAvailabilityOutputDigester.xml ...URL:"
@@ -670,7 +683,28 @@ public class XPEDXPriceandAvailabilityUtil {
 				errorMessage = "Overflow error";
 				break;
 			case 5:
-				errorMessage = "Price Error";
+				errorMessage = "Order Branch Missing";//Price Error";
+				break;
+			case 6:
+				errorMessage = "Item is suspended";
+				break;
+			case 7:
+				errorMessage = "Item is non-standard";
+				break;
+			case 8:
+				errorMessage = " Item Balance record is missing";
+				break;
+			case 9:
+				errorMessage = "Suspended Item Balance";
+				break;
+			case 10:
+				errorMessage = "Requested Quantity has non-numeric data";
+				break;
+			case 11:
+				errorMessage = "Requested UOM missing";
+				break;
+			case 12:
+				errorMessage = " Requested UOM not in eCommerce UOM";
 				break;
 			default:
 				errorMessage = "Unknown error";
@@ -1092,7 +1126,29 @@ public class XPEDXPriceandAvailabilityUtil {
 	return newDocument;
 	}
 	
-	
+	//added for jira 2885
+	public static Map<String,String> getLineErrorMessageMap(Vector<XPEDXItem> items)
+	{
+		HashMap<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
+		String errorMessage = "";
+		if(items !=null)
+		{
+			for(int i=0;i<items.size();i++)
+			{
+				XPEDXItem item=items.get(i);
+				String itemID=item.getLegacyProductCode();
+				//if(!"00".equals(item.getLineStatusCode())){
+				if(item.getLineStatusErrorMsg() == null){
+					errorMessage="";
+				}
+				else{
+				       errorMessage = item.getLineStatusErrorMsg()+".";
+				}
+				pnALineErrorMessage.put(itemID, errorMessage);
+			}
+		}
+		return pnALineErrorMessage;
+	}
 	
 	/**
 	 * Logger
