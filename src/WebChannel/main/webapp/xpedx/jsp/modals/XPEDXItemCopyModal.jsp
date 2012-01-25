@@ -54,8 +54,8 @@ function restrictMaxLength(Object, maxLen){
 	
 	<p>Description</p>
 	<div class="clear"></div>
-
-	<textarea style="" rows="2" id="listDescHL" name="listDesc" value="" onkeyup="javascript:restrictTextareaMaxLength(this,255);" maxlength="255" title="Description"
+<%--Jira 3197  maxlength=250--%>
+	<textarea style="" rows="2" id="listDescHL" name="listDesc" value="" onkeyup="javascript:restrictTextareaMaxLength(this,255);" maxlength="250" title="Description"
 		class="x-input standard-textarea"></textarea>
 
 	<s:hidden name="listKey" value="new"></s:hidden>
