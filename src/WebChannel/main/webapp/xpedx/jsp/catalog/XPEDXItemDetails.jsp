@@ -1081,6 +1081,9 @@ function SubmitActionWithValidation()
 	<div class="prod_detail">
 			<!-- -FXD1-4  change for change location of error and location --> <h5><b><font color="red"><s:property
 			value="ajaxLineStatusCodeMsg" /></font></b></h5> 
+			<!-- for Jira 2885 -->
+			  <div id="errorMessageDiv"></div>
+			<!-- End of Jira 2885 -->
 		<div class="prod_detail_top">&nbsp;</div>
 		<div class="prod_detail_rpt">
 			<!-- right -->
@@ -1999,6 +2002,7 @@ function SubmitActionWithValidation()
 				<!-- end Tabs -->
                 <!-- end main left column -->
 		</s:form>
+		
 		<div class="prod_detail_bot">&nbsp;</div>
 		 <!-- begin right column -->
 		
