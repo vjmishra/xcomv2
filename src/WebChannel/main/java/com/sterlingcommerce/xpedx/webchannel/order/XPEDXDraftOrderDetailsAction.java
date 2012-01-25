@@ -185,6 +185,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 				//Setting the price hover map
+				//added for jira 2885 
+				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
@@ -1935,6 +1937,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected String customerFieldsValidated = "N";
 	protected String validateCustomerFields = "N";
 	protected HashMap xpedxItemIDToItemExtnMap;
+	//added for jira 2885
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	
@@ -2110,6 +2114,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setRequiredCustFieldsErrorMap(
 			HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap) {
 		this.requiredCustFieldsErrorMap = requiredCustFieldsErrorMap;
+	}
+//added for jira 2885
+	public Map<String, String> getPnALineErrorMessage() {
+		return pnALineErrorMessage;
+	}
+
+	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
+		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
 	
 	
