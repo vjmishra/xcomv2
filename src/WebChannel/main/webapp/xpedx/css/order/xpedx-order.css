@@ -772,7 +772,7 @@ span.print-ico-xpedx.item-detail { margin-top: 0px; margin-right: 15px; }
 .special-instructions-div input.special-instructions-input {  width: 255px; font-size: 12px; margin-left:170px;}
 .special-instructions-td { margin-left: 20px; }
 .special-instructions-div { width:700px; margin-left: 15px; margin-bottom: 10px;}
-.special-instructions-div#checkout-special-instructions { margin-left: 310px;}
+.special-instructions-div#checkout-special-instructions { margin-left: 305px;}
 .special-instructions-div#checkout-special-instructions .checkout-special-instructions{ margin-left: 145px; height:25px; width: 196px;}
 .cust-defined-fields {    margin-left: 246px; width: 700px; }
 .checkout-body#checkout-container { width:951px; margin: 0 20px 0 20px; padding:0px;}
