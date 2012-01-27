@@ -5279,6 +5279,125 @@ public class XPEDXWCUtils {
 		 }
 		 return  desc;
 	 }
+	 /**
+	  * JIRA 3160 START
+	  * @param strExtnECsr1EMailID
+	  * @param strExtnECsr2EMailID
+	  * @return
+	  */
+	 public static String setCSREmails(String strExtnECsr1EMailID,String strExtnECsr2EMailID) 
+	    {
+			String strExtnECsrEMailID = "";
+		   if((strExtnECsr1EMailID != null && !strExtnECsr1EMailID.equalsIgnoreCase("")) && (strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase(""))){
+			   strExtnECsrEMailID = strExtnECsr1EMailID + XPEDXConstants.EMAILIDSEPARATOR + strExtnECsr2EMailID;
+			}else if(strExtnECsr1EMailID != null && !strExtnECsr1EMailID.equalsIgnoreCase("")){
+				strExtnECsrEMailID = strExtnECsr1EMailID;
+				}
+			else if(strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase("")){
+				strExtnECsrEMailID  = strExtnECsr2EMailID;
+			}
+			
+		 
+		  return strExtnECsrEMailID;
+		 
+		}
+	 public static String getSalesRepEmail(String sapCustomerKey,IWCContext wcContext) {
+	 		
+		 String totalSalesRepEmail = "";
+		 
+	 	 if (sapCustomerKey != null && !sapCustomerKey.equalsIgnoreCase("")) {
+	 		 
+	 		Element xpedxSalesRep = SCXmlUtil.createDocument("XPEDXSalesRep").getDocumentElement();
+	 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);  
+	 		
+	 		Document outputDoc;
+			
+	 		Object obj = WCMashupHelper.invokeMashup("getXpedxSalesRepList", xpedxSalesRep, wcContext.getSCUIContext());
+			outputDoc = ((Element) obj).getOwnerDocument();
+	        
+	 		
+	 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");  
+			int salesRepLength = nodeList.getLength();
+			List<String> salesRepUserKeysList = new ArrayList<String>();
+			
+			for (int counter = 0; counter < salesRepLength ; counter++) {
+				Element salesRepElem = (Element) nodeList.item(counter);
+				String salesUserKey = "";
+				if (salesRepElem.hasAttribute("SalesUserKey")) {
+					salesUserKey = salesRepElem.getAttribute("SalesUserKey");
+				}
+				if(salesUserKey !=null && salesUserKey.trim().length() > 0)
+					salesRepUserKeysList.add(salesUserKey);
+			}
+			
+			if(salesRepUserKeysList.size() > 0){
+				try {
+				Element inputElem = WCMashupHelper.getMashupInput("getUserListWithContactPersonInfo", wcContext);
+				Element complexQueryElem = SCXmlUtil.getChildElement(inputElem, "ComplexQuery");
+				Element OrElem = SCXmlUtil.getChildElement(complexQueryElem, "Or");
+				Iterator<String> itr = salesRepUserKeysList.iterator();
+				while(itr.hasNext()) {
+					String userKey = (String)itr.next();
+					if(userKey!=null && !userKey.equals("")){
+						Element exp = inputElem.getOwnerDocument().createElement("Exp");
+						exp.setAttribute("Name", "UserKey");
+						exp.setAttribute("Value", userKey);
+						SCXmlUtil.importElement(OrElem, exp);
+					}
+				}
+				 
+				outputDoc =((Element) WCMashupHelper.invokeMashup("getUserListWithContactPersonInfo", inputElem, wcContext.getSCUIContext())).getOwnerDocument();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				 
+				NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
+		 		int contactPersonInfoLength = personInfoList.getLength();
+	 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
+	 				Element personInfoElem = (Element) personInfoList.item(counter);
+	 				if (personInfoElem != null && personInfoElem.hasAttribute("EmailID")) {
+	 					String salesRepEmail = personInfoElem.getAttribute("EmailID");
+	 					if (salesRepEmail != null && !salesRepEmail.equalsIgnoreCase("")) {
+	 						totalSalesRepEmail = totalSalesRepEmail + XPEDXConstants.EMAILIDSEPARATOR + salesRepEmail;
+	 					}
+	 				}
+	 			}
+		 		
+		    }	
+	 	}
+	 	return totalSalesRepEmail;
+	 	}
+	 
+	 public static String getLogoName(String sellerOrgCode)
+		{
+			String _imageName = "";
+			if (XPEDXConstants.XPEDX_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/xpedx_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.BULKLEYDUNTON_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.CENTRAILEWMAR_LOG0.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/CentralLewmar_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.CENTRALMARQUARDT_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.SAALFELD_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.STRATEGICPAPER_LOG0.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/StrategicPaper_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.WESTERNPAPER_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/WesternPaper_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.WHITEMANTOWER_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/WhitemanTower_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.ZELLERBACH_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/Zellerbach_r_rgb_lo.jpg";
+			} else if (XPEDXConstants.XPEDXCANADA_LOGO.equalsIgnoreCase(sellerOrgCode)) {
+				_imageName = "/xpedx_r_rgb_lo.jpg";
+			} 
+			return _imageName;
+		}
+       /**
+        JIRA 3160 END
+        */
 	
 
 }
