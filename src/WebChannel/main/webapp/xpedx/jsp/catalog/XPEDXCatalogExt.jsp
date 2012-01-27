@@ -21,7 +21,6 @@
 <s:set name="storefrontId" value="wCContext.storefrontId" />
 <%-- <s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/> --%>
 <%--<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' /> --%>
-<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
@@ -71,6 +70,7 @@
 
 
 <s:set name='_action' value='[0]'/>
+<s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 <%-- <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />	--%>
 <s:bean	name='com.sterlingcommerce.webchannel.catalog.utils.CatalogUtilBean' id='catUtil' />
