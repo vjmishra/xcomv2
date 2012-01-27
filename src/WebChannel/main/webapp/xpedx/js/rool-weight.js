@@ -6,7 +6,9 @@ function validateForm() {
 
 	if (document.eform.rDiameter.value == "")
 		{
-		alert("Enter Roll Diameter (inches).");
+		/*Start- Jira 3109 */
+		alert("Roll Diameter (Inches) is required.");
+		/*End- Jira 3109 */
 		document.eform.rDiameter.focus();
 		return (false);
 		}
@@ -20,7 +22,9 @@ function validateForm() {
 
 	if (document.eform.cDiameter.value == "")
 		{
-		alert("Enter Core Diameter (inches).");
+		/*Start- Jira 3109 */
+		alert("Core Diameter (inches) is required.");
+		/*End- Jira 3109 */
 		document.eform.cDiameter.focus();
 		return (false);
 		}
@@ -35,7 +39,9 @@ function validateForm() {
 
 	if (document.eform.rWidth.value == "")
 		{
-		alert("Enter Roll Width (inches).");
+		/*Start- Jira 3109 */
+		alert("Roll Width (inches) is required.");
+		/*End- Jira 3109 */
 		document.eform.rWidth.focus();
 		return (false);
 		}
