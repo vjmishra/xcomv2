@@ -316,6 +316,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	protected void setXPEDXFields() throws Exception {
 		try {			
 			
+			Boolean isSalesRep = (Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 			//Document custProfileDoc = //getCustomerDetails();
 			/*Element custExtn = SCXmlUtil.getChildElement(custProfileDoc
 					.getDocumentElement(), "Extn");*/
@@ -341,8 +342,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 						shipToCustomer.getExtnCustOrderBranch()/*custExtn.getAttribute("ExtnCustOrderBranch")*/+"_"+envCode);
 			setExtnCustomerDivision(shipToCustomer.getExtnCustomerDivision()/*custExtn.getAttribute("ExtnCustomerDivision")*/+"_"+envCode);
 			XPEDXCustomerContactInfoBean custContBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+			//Added to sent the user name for sales rep as an input
+			if(isSalesRep!=null && isSalesRep){
+				String salesRepUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+				setOrderedByName(salesRepUserName);
+			}
+			else{
 			setOrderedByName(custContBean.getFirstName()+" "+custContBean.getLastName());
-			
+			}
 			// OP Task 88
 			if("true".equals(getRushOrdrFlag())){
 				setExtnWebHoldFlag("Y");
