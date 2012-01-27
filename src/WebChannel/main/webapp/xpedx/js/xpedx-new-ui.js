@@ -20,14 +20,16 @@ document.getElementById(thediv).style.display = "block";
 function checkCalculatorValues() { 
 	  
 	if(document.getElementById("sheetSizeW").value=="" || document.getElementById("sheetSizeH").value=="" || document.getElementById("sheetSizeW").value < 1 || document.getElementById("sheetSizeH").value < 1)
-    {        
-        alert('Sheet Size must be greater than 0');        
+    {   
+		/*Start- Jira 3109 */
+        alert('Sheet Size and Trim Size must be greater than 0.');        
         return false;    
     }
 	
 	if(document.getElementById("trimSizeW").value=="" || document.getElementById("trimSizeH").value=="" || document.getElementById("trimSizeW").value < 1 || document.getElementById("trimSizeH").value < 1)
     {
-        alert('Trim Size must be greater than 0');        
+        alert('Sheet Size and Trim Size must be greater than 0.'); 
+        /*End- Jira 3109 */       
         return false;    
     }
 	
