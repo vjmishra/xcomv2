@@ -67,6 +67,12 @@
 			<param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
 			<result name="success">/xpedx/jsp/home/XPEDXusername.jsp</result> 
 		</action>
+		<action name="resetPassword" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+			<param name="mashups">userNameForgotPwd</param>
+			<param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordFormsValidation</param>
+			<result name="success">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
+		</action>
 		
 		<action name="usernameSubmit" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
             <param name="mashups">getAuthQuestionList</param>
