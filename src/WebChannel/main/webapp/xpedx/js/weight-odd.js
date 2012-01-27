@@ -15,7 +15,7 @@ function validatePrompt (Ctrl, PromptStr) {
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
 			if (objField.value == "") {
-				validatePrompt (objField, "\""+FieldName+"\" cannot be blank.")
+				validatePrompt (objField, "\""+FieldName+"\" is required.")
 				return (false);
 			} else {
 				return (true);
