@@ -75,13 +75,16 @@
 	              			        {
 		                			        if(theValue.indexOf("-") > -1)
 		                			        {
-			                			        theNewValue = "Account: " + theValue;
+			                			        theNewValue = theValue;//jira 3244
 			                			        document.write(theNewValue);
 		                			        }
 	              			        }               			      
 	              			      }		                			    
 	              			    </script>
-								<%-- <s:property value='#currentCustIdValue'/> --%>									<s:property value='#currentCustIdValue'/>
+								<%-- <s:property value=theNewValue/> added by balkhi for remove ? 3244 duplicate values --%>	
+									<option>
+									<s:property value='#currentCustIdValue'/>									
+								
 								</option>
 							</s:iterator>
 						</select>
@@ -152,12 +155,13 @@
 	                			        {
 		                			        if(theValue2.indexOf("-") > -1)
 		                			        {
-			                			        theNewValue2 = "Account: " + theValue2;
+			                			        theNewValue2 = theValue2;
 			                			        document.write(theNewValue2);
 		                			        }
 	                			        }		                			      
 	                			      }		                			    
-	                			    </script>										  
+	                			    </script>
+	                			    <!--removed Account: for zira 3244 by balkhi-->										  
 	                			    <%-- <s:property value='#currentCustIdValue'/> --%>										<s:property value='#currentCustIdValue'/>
 									</option>								
 								</s:iterator>
