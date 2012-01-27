@@ -14,16 +14,19 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfs.core.YFSSystem;
 
 @SuppressWarnings("serial")
 public class XPEDXSaveServicesAction extends WCMashupAction {
 
 	private static final Logger log = Logger
 	.getLogger(XPEDXSaveServicesAction.class);
-	
+	private static final String customerExtnInformation = "xpedx-customer-getCustomerAllExtnInformation";
 	private static final String customerShipToInformationMashUp = "xpedx-customer-getCustomerAddressInformation";
 	private String bodyData;
 	private List<String> serviceProviderList;
@@ -42,6 +45,8 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private String zipCode;
 	private String country;
 	private String email;
+	private String imageUrl;
+	
 	private static final String SUCCESS = "success";
 	private String messageType="sampleRequest";
 
@@ -188,6 +193,15 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	public List<String> getServiceProviderList() {
 		return this.serviceProviderList;
 	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 
 	public String execute() {
 
@@ -198,7 +212,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			Document customerDetailsDoc = null;
 			String customerId = getWCContext().getCustomerId();
 			String storefrontId = getWCContext().getStorefrontId();
-
+			StringBuffer sb = new StringBuffer();
+			
+			
 			// Getting ship to address and customer details
 
 			shipToCustomer = XPEDXWCUtils.getShipToAdress(customerId,
@@ -226,26 +242,121 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			setServiceProviderList(list);
 
 			String customerEmail = "";
-
+ 
+			/**
+			 JIRA 3160 -Start
+			 From email should be ebusiness@<brand>.com
+			 */
 			// Sending customer details to get the email id of customer
-			if (null != customerDetailsDoc) {
+			/*if (null != customerDetailsDoc) {
 				customerEmail = getCustomerEmail(customerDetailsDoc);
+				customerEmail = "apurva.vyas@mphasis.com";  //From Mail
+			}*/
+			/**
+			 JIRA 3160 -End
+			 */
+			
+			/**
+			 JIRA 3160 -Start
+			 From email address should be ebusiness@brand.com
+			 */
+			
+			if(storefrontId!=null && storefrontId.trim().length() > 0){
+				String userName = YFSSystem.getProperty("fromAddress.username");
+				String suffix = YFSSystem.getProperty("fromAddress.suffix");
+				sb.append(userName).append("@").append(storefrontId).append(suffix);
+				customerEmail = sb.toString();
+				
 			}
-
+			 /**
+			  JIRA 3160 -Start
+			  Changes for imageLogo
+			  */
+			
+			String imageUrl = "";
+			if(storefrontId!=null && storefrontId.trim().length() > 0){
+			String imageName = XPEDXWCUtils.getLogoName(storefrontId);
+			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
+				imageUrl = imagesRootFolder + imageName;
+				setImageUrl(imageUrl);
+			   }
+			}
+			/**
+			 JIRA 3160 -End
+			 */
+			
 			// Getting email id of sample room
-			Element rootEle = null;
+			/*Element rootEle = null;
 
 			rootEle = prepareAndInvokeMashup("xpedxgetCustomerList");
+*/			
+			/**
+			 JIRA 3160 -Start
+			 Changed toEmail address as per Jira 3160.
+			 */
 
-			String sampleRoomEmail = "";
+			/*String sampleRoomEmail = "";
 			if (null != rootEle) {
 				sampleRoomEmail = getSampleRoomEmail(rootEle);
+				sampleRoomEmail = "apmca786@gmail.com"; //To Mail
+			}*/
+			/**
+			 JIRA 3160 -End
+			 */
+			/**
+			 JIRA 3160 -Start
+			 */
+			String ccEMail = "";
+			
+			XPEDXShipToCustomer shipToCustomerObject =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			String extnECsr1EmailID = shipToCustomerObject.getBillTo().getExtnECsr1EMailID();
+			String extnECsr2EmailID = shipToCustomerObject.getBillTo().getExtnECsr2EMailID();
+			String sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
+			
+			String csrEmailID = XPEDXWCUtils.setCSREmails(extnECsr1EmailID,extnECsr2EmailID);
+			
+			String saleRepEmail = XPEDXWCUtils.getSalesRepEmail(sapCustomerKey,wcContext);
+			
+			
+			if(csrEmailID != null && csrEmailID.trim().length() > 0 && saleRepEmail!=null && saleRepEmail.trim().length() > 0){
+				ccEMail = csrEmailID + XPEDXConstants.EMAILIDSEPARATOR +saleRepEmail;
+			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
+				ccEMail = saleRepEmail;				
+			}else if(csrEmailID != null && csrEmailID.trim().length() > 0){
+				ccEMail = csrEmailID;				
+				
 			}
+			String paperFSObj = "";
+			String paperPSObj = "";
+			if(getBodyData()!=null && getBodyData().trim().length() > 0){
+				Pattern p = Pattern.compile("[+\\s][=\\s][_\\s]");
+				String[] getPaperNonPaper = 
+		                 p.split(getBodyData());
+		        int i = 1;
+		        for (int j=0; j<getPaperNonPaper.length; j++){
+					String token = getPaperNonPaper[j];//st.nextToken();
+				if(token.equalsIgnoreCase("facilitySupplies")){
+					paperFSObj = token;
+				}else if(token.equalsIgnoreCase("PaperSupplies")){
+					paperPSObj = token;
 
+				}
+		        }
+		        
+			}
+			String toEmailGen = getPaperorGeneralPaperEmail(paperFSObj);
+			String toEmailPaper = getPaperorGeneralPaperEmail(paperPSObj);
+			
+			/**
+			 JIRA 3160 -End
+			 */
+			
+		if(	toEmailGen != null && toEmailGen.trim().length() > 0){
 			// Creating input xml to send an email
 			Document outputDoc = null;
 			
-			Element input = createInputXML(customerEmail, sampleRoomEmail);
+			Element input = createInputXML(customerEmail, toEmailGen,ccEMail);
 			String inputXml = SCXmlUtil.getString(input);
 			LOG.debug("Input XML: " + inputXml);
 			Object obj = WCMashupHelper.invokeMashup(
@@ -255,7 +366,23 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			if (null != outputDoc) {
 				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 			}
-
+		}
+			if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
+			// Creating input xml to send an email
+			Document outputDoc1 = null;
+			
+			Element input = createInputXML(customerEmail, toEmailPaper,ccEMail);
+			String inputXml = SCXmlUtil.getString(input);
+			LOG.debug("Input XML: " + inputXml);
+			Object obj = WCMashupHelper.invokeMashup(
+					"SendSampleServiceRequest", input, wcContext
+							.getSCUIContext());
+			outputDoc1 = ((Element) obj).getOwnerDocument();
+			if (null != outputDoc1) {
+				LOG.debug("Output1 XML: " + SCXmlUtil.getString((Element) obj));
+			}
+		}
+		
 		} catch (Exception ex) {
 			if (ex.getMessage()!=null) {
 				setErrorMesage("Your request can not be processed at this time due to technical issues. Please contact administrator");
@@ -271,6 +398,53 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		Element extnEle = (Element) rootEle.getFirstChild().getFirstChild();
 		String sampleEmail = extnEle.getAttribute("ExtnSampleRoomEmailAddress");
 		return sampleEmail;
+	}
+	public String getPaperorGeneralPaperEmail(String paperFSObj){
+		String extnDivEmailNonPaper = "";
+		String extnDivEmailPaper = "";
+		String paperEmailID = "";
+		try{
+		Document outputDoc = null;
+		
+		outputDoc = XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext()
+				.getStorefrontId(), customerExtnInformation);
+		Element customerElement = outputDoc.getDocumentElement();
+		
+		Element custExtnEle = XMLUtilities.getElement(customerElement, "Extn");
+			
+		String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustomerDivision");
+		String envId= SCXmlUtil.getAttribute(custExtnEle, "ExtnEnvironmentCode");
+		if(custDivison!=null && custDivison.trim().length() > 0)
+		{
+			if(envId!=null && envId.trim().length()>0 && !custDivison.contains("_")){
+				outputDoc = XPEDXWCUtils.getOrganizationDetails(custDivison+"_"+envId);
+				System.out.println(""+SCXmlUtil.getString(outputDoc));
+				
+			}else{
+				outputDoc = XPEDXWCUtils.getOrganizationDetails(custDivison);
+			}
+			Element organizationElement = null;
+			organizationElement = outputDoc.getDocumentElement();
+			
+			Element eleobj = (Element)organizationElement.getFirstChild().getFirstChild();
+			extnDivEmailNonPaper = eleobj.getAttribute("ExtnDivEmailNonPaper"); //ExtnDivEmailPaper
+			extnDivEmailPaper = eleobj.getAttribute("ExtnDivEmailPaper"); //ExtnDivEmailPaper
+			
+			
+		}
+		
+		}catch (Exception ex) {
+		if (ex.getMessage()!=null) {
+			setErrorMesage("Your request can not be processed at this time due to technical issues. Please contact administrator");
+		}}
+			
+		if(paperFSObj!=null && paperFSObj.trim().length() > 0 && paperFSObj.equalsIgnoreCase("facilitySupplies") ){
+			paperEmailID = extnDivEmailNonPaper;
+		}else if(paperFSObj!=null && paperFSObj.trim().length() > 0 && paperFSObj.equalsIgnoreCase("PaperSupplies")){
+			paperEmailID = extnDivEmailPaper;
+		}		
+			
+       return paperEmailID;
 	}
 
 	private String getCustomerEmail(Document customerDetailsDoc) {
@@ -289,7 +463,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		return emailId;
 	}
 
-	private Element createInputXML(String customerEmail, String sampleRoomEmail) {
+	private Element createInputXML(String customerEmail, String sampleRoomEmail ,String ccEMail) {
 
 		Document templateEmailDoc = YFCDocument.createDocument("Emails")
 				.getDocument();
@@ -326,8 +500,12 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				|| (sampleRoomEmail != null && sampleRoomEmail.trim().length() == 0)){
 			setErrorMesage("Your 'From Email'/'To Email' addresses can not be empty in the profile");
 		}
+		if(getImageUrl()!=null && getImageUrl().trim().length() > 0){
+			emailElement.setAttribute("ImageUrl",getImageUrl());
+		}
 		emailElement.setAttribute("FromEmail", customerEmail);
 		emailElement.setAttribute("ToEmail", sampleRoomEmail);
+		emailElement.setAttribute("CCEmail",ccEMail);
 		emailElement.setAttribute("RequestType", "SampleServiceRequest");
 
 		List<String> cutomerAddressList = getAddressList();
