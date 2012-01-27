@@ -5,7 +5,7 @@
 		<API FlowName="SampleEmailRequest">
 			<Input>
 				<Emails>
-					<Email Contact="" Phone="" Notes="" ServiceProvider="" ServiceProviderNumber="" FromEmail="" ToEmail="" RequestType="SampleServiceRequest">
+					<Email Contact="" Phone="" Notes="" ServiceProvider="" ServiceProviderNumber="" FromEmail="" ToEmail="" CCEmail="" ImageUrl="" RequestType="SampleServiceRequest">
 						<ShippingAddress address=""/>
 						<SampleRequest ItemNumber="" ProductType="" MfgSku="" Mfg="" Description="" Qty=""/>					
 					</Email>
