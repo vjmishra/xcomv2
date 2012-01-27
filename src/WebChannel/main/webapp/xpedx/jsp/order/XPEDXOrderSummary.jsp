@@ -221,6 +221,7 @@ function setTotalPrice(val){
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 --><!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/FlexBox/js/jquery.flexbox.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
@@ -272,8 +273,14 @@ function setTotalPrice(val){
 	$('#po_combo').flexbox({  
 					"results": [
 					            
-					         <s:iterator value="addnlPoNumberList.values()">
-								{ "id": "<s:property/>", "name": "<s:property/>" },  
+				         	<s:iterator value="addnlPoNumberList.values()" status="POValue">
+				         	<s:if test='#POValue.last'>
+								{ "id": "<s:property/>", "name": "<s:property/>" }
+							</s:if>
+							<s:else>
+								{ "id": "<s:property/>", "name": "<s:property/>" },
+							</s:else>
+								
 							</s:iterator>
 						], "total": <s:property value="addnlPoNumberList.size()"/>
 			}, {
