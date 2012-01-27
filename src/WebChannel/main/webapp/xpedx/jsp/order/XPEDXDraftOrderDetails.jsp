@@ -54,12 +54,13 @@
 <![endif]-->
 
 <!-- javascript -->
-
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
+
+
 <script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
@@ -2052,7 +2053,7 @@ var currentAadd2ItemList = new Object();
 </div>
 </div>
 <!-- end main  -->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+
 <!-- end container  -->
 
 <s:include value="XPEDXOrderTotalAdjustments.jsp" />
@@ -2078,7 +2079,8 @@ var currentAadd2ItemList = new Object();
 <div style=" height:202px; width:995px; overflow:auto;">
 <!-- START of Hidden Layer -PN --> <!-- CODE_START Replacement items - PN -->
 <!-- START: XPEDX Panel for Replacement items --> <s:set name='tabIndex'
-	value='3001' /> <s:iterator value='xpedxItemIDUOMToReplacementListMap'>
+	value='3001' /> 
+	<s:iterator value='xpedxItemIDUOMToReplacementListMap'>
 	<s:set name='altItemList' value='value' />
 	
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
@@ -2161,7 +2163,7 @@ var currentAadd2ItemList = new Object();
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p>  -->
                         
-							 <p>xpedx Item #: <s:property value="#rItemID" /> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
+							 <p>xpedx Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
 								 <s:if test='#certFlagVal=="Y"'>
 								 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
@@ -2177,11 +2179,10 @@ var currentAadd2ItemList = new Object();
 				
 				<%-- --%>                
   			</div>
-	</div>
-  </s:iterator>
-  </div>
-  </div>
-</s:iterator>
+	 </s:iterator></div></div>
+  </s:iterator>   </div>
+  
+
 </div>
 <s:form action="addComplementaryItemToCart"
 	name="addReplacementItemToCartForm" id="addReplacementItemToCartForm"
@@ -2192,21 +2193,15 @@ var currentAadd2ItemList = new Object();
 		value='addReplacementItemToCart' />
 	<s:hidden name='#action.namespace' value='/order' />
 
-	<div id="replacementItemBody"  class="xpedx-light-box"/>
-	
-</div> 
-
-<!--  <div id="table-bottom-bar">-->
-<!--<div id="table-bottom-bar-L"/>-->
-<!--<div id="table-bottom-bar-R"/>-->
-<!--</div>-->
+	<div id="replacementItemBody"  class="xpedx-light-box"> 
 
  <ul class="tool-bar-bottom" id="tool-bar" style="margin-right:10px;float:right;">
 	<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
 	<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
 	<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
 </ul>
-
+</div>
+</div>
 </s:form> 
 <s:form id="formRIAddToList" action="draftOrderAddReplacementOrderLines"
 	method="post">
@@ -2433,5 +2428,6 @@ function validateMinOrder()
 <script type="text/javascript" src="<s:url value='/swc/js/order/XPEDXItemAssociation.js'/>"></script>
 <script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 </html>
