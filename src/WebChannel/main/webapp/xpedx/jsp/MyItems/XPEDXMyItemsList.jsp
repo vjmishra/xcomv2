@@ -11,67 +11,18 @@
   	  %>
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="SelectedCustomerId" value="wCContext.customerId" />
-<!-- styles -->
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
+<!-- begin styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
+<!-- end styles -->
 
-<!-- Hemantha -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
- --%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" /> -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
---%>
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-
-<!-- carousel scripts css  -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /><!--  fixed path -->
- --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 --><!-- carousel scripts js   -->
 
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/demo.css"/><!--  fixed path -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/><!--  fixed path -->
- --%>
 
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
  
-
-<!-- Page Calls -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-
-
-<!-- link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" / -->
---%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-
-<%--
-<link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /><!--  fixed path -->
- --%>
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
-
 
 <!-- Hemantha -->
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -705,7 +656,7 @@
 <!-- CODE_END Header - PN -->
 
 
-<div class="container"><!-- breadcrumb -->
+<div class="container mil-list"><!-- breadcrumb -->
 <div id="breadcumbs-list-name" class="page-title"><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></div>
 
 <div id="mid-col-mil">
