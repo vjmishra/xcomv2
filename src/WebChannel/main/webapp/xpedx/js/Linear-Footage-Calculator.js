@@ -26,7 +26,9 @@
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
 			if (objField.value == "") {
-				validatePrompt (objField, "\""+FieldName+"\" cannot be blank.")
+				/*Start- Jira 3109 */
+				validatePrompt (objField, "\""+FieldName+"\" is required.")
+				/*End- Jira 3109 */
 				return (false);
 			} else {
 				return (true);
@@ -60,8 +62,8 @@
 		function validateForm() {
 			var form=document.eform;
 			if (!testValue(form.rWeight,"Roll Weight")) return false;
-			if (!testValue(form.hArea,"Basic Size (height)")) return false;
-			if (!testValue(form.wArea,"Basic Size (width)")) return false;
+			if (!testValue(form.hArea,"Basic Size (Length)")) return false;
+			if (!testValue(form.wArea,"Basic Size (Width)")) return false;
 			if (!testValue(form.bWeight,"Basis Weight")) return false;
 			if (!testValue(form.rWidth,"Roll Width")) return false;
 			CalculateLinearFootage(form.rWeight.value,form.hArea.value,form.wArea.value,form.bWeight.value,form.rWidth.value);
