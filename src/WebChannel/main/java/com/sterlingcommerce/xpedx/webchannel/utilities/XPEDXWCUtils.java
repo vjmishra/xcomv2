@@ -2878,14 +2878,18 @@ public class XPEDXWCUtils {
 													//default behaviour
 													custDisplayId = formatBillToShipToCustomer(customerID);
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Ship-To - "+custDisplayId;
+														//changed Ship-To : by balkhi jira 3244
+														custDisplayId = "Ship-To: "+custDisplayId;
+													//custDisplayId = "Ship-To - "+custDisplayId;
 												}
 												else
 												{
 													custDisplayId = shareformatBillToShipToCustomer(customerID,false);
 													//special display criteria for share modal
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Ship-To - "+custDisplayId;
+														//changed Ship-To : by balkhi 3244
+														custDisplayId = "Ship-To: "+custDisplayId;
+													//custDisplayId = "Ship-To - "+custDisplayId;
 												}
 											}
 											else if (custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)))
@@ -2895,14 +2899,14 @@ public class XPEDXWCUtils {
 													//default behaviour
 													custDisplayId = formatBillToShipToCustomer(customerID);
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Bill-To - "+custDisplayId;
+														custDisplayId = "Bill-To: "+custDisplayId;
 												}
 												else
 												{
 													custDisplayId = shareformatBillToShipToCustomer(customerID,true);
 													//special display criteria for share modal
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Bill-To - "+custDisplayId;
+														custDisplayId = "Bill-To: "+custDisplayId;
 												}
 											}
 											else {
@@ -2920,7 +2924,8 @@ public class XPEDXWCUtils {
 									if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && !formatBilltoShipto)
 									{
 										YFCElement element = custElement.getChildElement("BuyerOrganization");
-										if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
+										if (element.getAttribute("OrganizationName") != null 
+												&& element.getAttribute("OrganizationName").trim().length() > 0) 
 											custFullAddr += element.getAttribute("OrganizationName")+" ";
 										custFullAddr += "("+ custDisplayId +")";
 									}
@@ -2937,12 +2942,12 @@ public class XPEDXWCUtils {
 										custFullAddr += custDisplayId+" ";
 										
 										if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
-											custFullAddr += buyerOrgElement.getAttribute("OrganizationName")+" ";
+											custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//added by balkhi to change ' ,' to ',' jira 3244
 										/*added for 2769*/
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 											
 											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
-												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";
+												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber");//removed by balkhi to change ' ,' to ',' jira 3244
 										}
 										
 										if(addrElement!=null) {
@@ -2957,7 +2962,7 @@ public class XPEDXWCUtils {
 											if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0) 
 												custFullAddr += " "+getFormattedZipCode(addrElement.getAttribute("ZipCode"));
 											if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0) 
-												custFullAddr += ", "+addrElement.getAttribute("Country");
+												custFullAddr += " "+addrElement.getAttribute("Country");
 											
 										}
 									}
@@ -3024,14 +3029,18 @@ public class XPEDXWCUtils {
 												//default behaviour
 												custDisplayId = formatBillToShipToCustomer(customerID);
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Ship-To - "+custDisplayId;
+													//changed Ship-To : by balkhi jira 3244
+													custDisplayId = "Ship-To: "+custDisplayId;
+												//custDisplayId = "Ship-To - "+custDisplayId;
 											}
 											else
 											{
 												custDisplayId = shareformatBillToShipToCustomer(customerID,false);
 												//special display criteria for share modal
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Ship-To - "+custDisplayId;
+													//changed Ship-To : by balkhi jira 3244
+													custDisplayId = "Ship-To: "+custDisplayId;
+												//custDisplayId = "Ship-To - "+custDisplayId;
 											}
 										}
 										else if (custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)))
@@ -3041,14 +3050,14 @@ public class XPEDXWCUtils {
 												//default behaviour
 												custDisplayId = formatBillToShipToCustomer(customerID);
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Bill-To - "+custDisplayId;
+													custDisplayId = "Bill-To: "+custDisplayId;
 											}
 											else
 											{
 												custDisplayId = shareformatBillToShipToCustomer(customerID,true);
 												//special display criteria for share modal
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Bill-To - "+custDisplayId;
+													custDisplayId = "Bill-To: "+custDisplayId;
 											}
 										}
 										else {
@@ -3069,6 +3078,8 @@ public class XPEDXWCUtils {
 									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
 										custFullAddr += element.getAttribute("OrganizationName")+" ";
 									custFullAddr += "("+ custDisplayId +")";
+									custFullAddr = "Account: "+ custFullAddr;
+								//jira 3244
 								}
 								else{
 									YFCElement buyerOrgElement = custElement.getChildElement("BuyerOrganization");
@@ -3083,7 +3094,7 @@ public class XPEDXWCUtils {
 									custFullAddr += custDisplayId+" ";
 									
 									if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
-										custFullAddr += buyerOrgElement.getAttribute("OrganizationName")+" ";
+										custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//removed by balkhi for 3244 jira
 									
 									/*added for 2769*/
 									if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
@@ -3104,7 +3115,7 @@ public class XPEDXWCUtils {
 										if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0) 
 											custFullAddr += " "+getFormattedZipCode(addrElement.getAttribute("ZipCode"));
 										if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0) 
-											custFullAddr += ", "+addrElement.getAttribute("Country");
+											custFullAddr += " "+addrElement.getAttribute("Country");//removed by balkhi for 3244 jira
 										
 									}
 								}
