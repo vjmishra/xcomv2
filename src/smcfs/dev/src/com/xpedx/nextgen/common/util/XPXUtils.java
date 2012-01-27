@@ -2476,13 +2476,13 @@ public class XPXUtils implements YIFCustomApi {
 		String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
 		
 		if(!YFCUtils.isVoid(resetPasswordUrl)){
-			resetPasswordUrl = resetPasswordUrl + "/swc/home/forgotPwd.action?";
+			resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
 			Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 			"URLInfo");			
 			urlElem.setAttribute("URL", resetPasswordUrl);
 		} else {
 					if(!(YFCUtils.isVoid(ipaddress)) && !(YFCUtils.isVoid(portno))){
-						url = "http://" +ipaddress+":"+portno+"/swc/home/forgotPwd.action?";
+						url = "http://" +ipaddress+":"+portno+"/swc/home/resetPassword.action?";
 					}
 					if(!YFCUtils.isVoid(url)){
 						Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
