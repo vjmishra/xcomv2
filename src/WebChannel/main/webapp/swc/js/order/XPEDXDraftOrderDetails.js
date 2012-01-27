@@ -55,6 +55,9 @@ function addProductsToOrder()
 						selectedUomConvFac = selectedUomConvFacFromStr;
 						break;
 					}
+					else{
+						selectedUomConvFac = selectedUomConvFacFromStr;
+					}
 				}
 				enteredQuants = ReplaceAll(enteredQuants,",","");
 				orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
@@ -569,7 +572,7 @@ function redrawQuickAddList()
 				    	{
 				    		_uomDescription = convertToUOMDescription(_uomCode.substring(0,firstIndex))+uomValues[uomidx].substring(firstIndex,lastIndex)+')';
 				    	} else {
-				    		_uomDescription = _uomCode;
+				    		_uomDescription = convertToUOMDescription(_uomCode);
 				    	}
 				    	
 				    	if(defaultSelUOM.trim() == uomValues[uomidx])
