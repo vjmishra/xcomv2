@@ -456,6 +456,9 @@
         		var rowCountTableRefOne = tbodyOne.rows.length;
         		
         		var completeData = "";
+        		var finalCompleteData = "";
+        		var FacilitySupplies = "";
+        		var PaperSupplies = "";
         	    var tbodyTwo = document.getElementById(tableRefTwo);
         		var rowCountTableRefTwo = tbodyTwo.rows.length;
         	
@@ -473,8 +476,8 @@
                 			completeData = completeData + "+=_" + temp;                			                			
             			}
         			}
-        			            		
-        		}
+        			FacilitySupplies = completeData + "+=_facilitySupplies";
+            } 
         		
         		for(var i=1; i<rowCountTableRefTwo; i++) {
         			var row = tbodyTwo.rows[i];
@@ -494,13 +497,20 @@
                 			completeData = completeData + "+=_" + temp;                			                			
             			}
         			}
-        			            		
+        			PaperSupplies = completeData + "+=_PaperSupplies";
+            		            		
+        		} 
+        		if(FacilitySupplies!='' && PaperSupplies == '' ){
+        			finalCompleteData = FacilitySupplies;
+        		}else if(PaperSupplies!='' && FacilitySupplies == ''){
+        			
+        			finalCompleteData = PaperSupplies;
+        		}else if(FacilitySupplies!='' && PaperSupplies!=''){
+        			
+        			finalCompleteData = FacilitySupplies+PaperSupplies;
+        			
         		}
-        		
-        		//alert (" completeData " + completeData ) ;
-        		//alert (" rowCountTableRefOne " + rowCountTableRefOne + " , rowCountTableRefTwo " + rowCountTableRefTwo ) ;
-        		
-        		if(completeData!='' || rowCountTableRefOne > 1 || rowCountTableRefTwo > 1)
+        		if(finalCompleteData!='' || rowCountTableRefOne > 1 || rowCountTableRefTwo > 1)
              	{
                  	//alert("Data succes..completeData : " + completeData );	
              	}
@@ -508,8 +518,8 @@
                  	alert('At least one row of Facility Supplies or Paper Supplies item should be added to the List');	
              	}
         		
-        		document.getElementById('bodyData').value = completeData;    
-        		return completeData;
+        		document.getElementById('bodyData').value = finalCompleteData;    
+        		return finalCompleteData;
         		}
         	
         	//Form Submit function
