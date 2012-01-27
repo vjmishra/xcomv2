@@ -146,8 +146,11 @@
                       </tr>
                       <tr >
                         <td width="268"><strong>Paper Estimate: </strong></td>
-                        <td width="320"><div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px">Paper 
-                          Estimate: 0 pounds </div></td>
+                        <td width="320"><div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px">Paper
+                        <!--Start- Jira 3109  --> 
+                          Estimate: 0 Pounds </div></td>
+                          <!--End- Jira 3109  -->
+                      
                       </tr>
                     </tbody>
                   </table>
