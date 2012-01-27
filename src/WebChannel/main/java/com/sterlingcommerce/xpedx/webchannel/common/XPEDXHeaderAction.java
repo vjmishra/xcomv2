@@ -22,6 +22,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.catalog.helper.CatalogContextHelper;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.IWCContextBuilder;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
@@ -105,10 +106,17 @@ public class XPEDXHeaderAction extends WCMashupAction {
 */
 	public String execute() {		
 		try {
+			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {				
+				//get the builder object            
+		        IWCContextBuilder builder = WCContextHelper.getBuilder(wcContext.getSCUIContext().getRequest(), wcContext.getSCUIContext().getResponse());
+		        builder.setCustomerId(null);
+			}	
+			
 			if (!getWCContext().isGuestUser()){
 				handleChangeInContextForDefaultShipTo();
+				prepareLoggerInUsersCustomerName();
 			}
-			prepareLoggerInUsersCustomerName();
+			
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "false");
 			setupLogoURL();
 			String servletPath = request.getServletPath();
