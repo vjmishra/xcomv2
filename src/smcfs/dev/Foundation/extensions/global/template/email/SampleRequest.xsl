@@ -3,6 +3,10 @@
     xmlns:emailformatters="com.yantra.pca.email.formatters"
     xmlns:java="java"
     exclude-result-prefixes="java emailformatters">
+    <xsl:variable name="imageURL">    
+		<xsl:value-of select="//@ImageUrl"/>
+	</xsl:variable> 
+    
 		<xsl:template match="/">
 		<html>
 		<xsl:comment>CONTENT_TYPE=text/html</xsl:comment>
@@ -13,7 +17,7 @@
 			<body>
 				<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
 					<tr>
-						<td><img src="xpedx_r_rgb_lo.jpg" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
 					</tr>
 					<tr>
 					<xsl:if test = 'Emails/Email/@RequestType ="SampleServiceRequest"'>
