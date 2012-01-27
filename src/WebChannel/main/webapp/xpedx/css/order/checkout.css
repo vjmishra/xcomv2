@@ -134,7 +134,7 @@ div.checkout-left{
     margin-left: 16px;
 }
 .placed-by { margin-top: 10px; text-align:center;}
-.cust-field-summary { float: right; margin-top:-30px; }
+.cust-field-summary { float: right; margin-top:27px; }
 .cust-field-summary td { padding: 3px 3px; }
 .cust-field-summary td.left { min-width: 8em; }
 .mil-action-list-wrap td { vertical-align: top; padding-right: 10px; }
