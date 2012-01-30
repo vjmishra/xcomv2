@@ -5398,6 +5398,57 @@ public class XPEDXWCUtils {
        /**
         JIRA 3160 END
         */
+
+
+
+
+
+
+/* Method created for JIra 2599 ****/
+
+	public static String getCategoryPathPromo(String itemId,String org){
+
+		IWCContext context = null;
+		SCUIContext wSCUIContext = null;
+
+		context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		wSCUIContext = context.getSCUIContext();
+		
+		ISCUITransactionContext scuiTransactionContext = null;
+		String sCategoryPath="";
+
+		try{
+		YFCDocument getItemListInXML = YFCDocument.createDocument("Item");
+
+		YFCElement itemListEle = getItemListInXML.getDocumentElement();
+		itemListEle.setAttribute("ItemID", itemId);
+		itemListEle.setAttribute("OrganizationCode", org);
+
+		
+		YFCDocument template = YFCDocument.getDocumentFor("<ItemList>" + "<Item>" + "<CategoryList>"+"<Category/>"+ "</CategoryList>" + "</Item>" + "</ItemList>");
+
+		scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+		YFCElement yfcElement = SCUIPlatformUtils.invokeXAPI("getItemList",	getItemListInXML.getDocumentElement(),template.getDocumentElement(), wSCUIContext);
+
+		YFCElement itemEle = yfcElement.getFirstChildElement();
+		YFCElement categoryListEle = itemEle.getFirstChildElement();
+		YFCElement categoryEle = categoryListEle.getFirstChildElement();
+		sCategoryPath = categoryEle.getAttribute("CategoryPath");
+
+
+		return sCategoryPath;
+		}
+		finally {
+			if (scuiTransactionContext != null) {
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+			}
+		}
+	}
+
+
+	/* Method created for JIra 2599 ****/
+
 	
 
 }
