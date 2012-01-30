@@ -2155,8 +2155,8 @@ a.underlink:hover { text-decoration: underline !important; }
 							<s:property	value='#shipTo.getOrganizationName()'/><br/>
 						</s:if>
 						<s:iterator value="#shipTo.getAddressList()" id="adressLine">
-							<s:property value="adressLine"/> &nbsp;			
-						</s:iterator><br/>
+							<s:property value="adressLine"/> <br>	<!-- break for user address line 2 and  jira 3244--->		
+						</s:iterator>
 						<s:property value ="#shipTo.getCity()" />,
 						<s:property value ="#shipTo.getState()" />
 						<s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#shipTo.getZipCode())}" />&nbsp;
