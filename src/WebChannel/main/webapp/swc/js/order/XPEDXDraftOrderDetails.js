@@ -37,15 +37,18 @@ function addProductsToOrder()
 		 var selectedUomFromStr;
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
+		 var selectedUOM = new Array();
+		 selectedUOM= document.getElementsByName("enteredUOMs");
 		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
+			var enteredUOM = selectedUOM[i].value;
+			enteredUOM = enteredUOM.split(" ");
 			enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
 			entereditems = encodeForHTML(QuickAddElems[i].sku);
-			enteredUoms = encodeForHTML(QuickAddElems[i].uom);
+			enteredUoms = enteredUOM[0];
 			uomConvFac = encodeForHTML(QuickAddElems[i].itemUomAndConvString);
 			if(enteredUoms){
-				//alert(" validating order multiple ");
 				if(uomConvFac!=null)enteredUomsConFact = uomConvFac.split("|");
 				for(var j=0; j<enteredUomsConFact.length; j++){
 					availUomsConFact = enteredUomsConFact[j].split("-");
@@ -54,9 +57,6 @@ function addProductsToOrder()
 					if(enteredUoms.trim() == selectedUomFromStr.trim()){
 						selectedUomConvFac = selectedUomConvFacFromStr;
 						break;
-					}
-					else{
-						selectedUomConvFac = selectedUomConvFacFromStr;
 					}
 				}
 				enteredQuants = ReplaceAll(enteredQuants,",","");
@@ -636,7 +636,7 @@ function redrawQuickAddList()
 						
 					  }
 				    	 code += '</select>';
-						    code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
+						    code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + _uomCode + '" />';
 						    code += '</td>';
 
 				    	
