@@ -140,6 +140,10 @@
 
 <s:set name="catalogView" value='#_action.getSelectedView()' /><!-- added for fix     XNGTP-216 used to get selected view -->
 
+<!-- start of code for Promotions Jira 2599 -->
+<s:set name="patheTemp" value='#_action.getPath()'/>
+<!-- End of code for Promotions Jira 2599 -->
+
 <swc:breadcrumbScope>
 	<div id="main-container">
 	<s:if test='!#guestUser'>  
@@ -193,11 +197,12 @@
 					
 					<div class="slideshow"> 
 							<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
-								<s:param name="callerPage">CatalogPage</s:param>
-								<s:param name="categoryPath" value='#parameters.path'/>
+							  <s:param name="callerPage">CatalogPage</s:param>
+							  <!-- Start of code for Promotions Jira 2599 -->
+							  <s:param name="categoryPath" value="#patheTemp"/>
+							  <!-- End of code for Promotions Jira 2599 -->
 							</s:action>
 					</div>
-					
 					<div id="catalog-image-rotation-nav"> 
 							<div class="img-navi-left"></div> 
 							<div id="catalog-image-rotation-nav-inner"></div> 
@@ -869,6 +874,7 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<!-- end Ext list component --> <!-- START wctheme.form-close.ftl --></form>
 	<!-- END wctheme.form-close.ftl -->
+	
 	<div class="clearall">&nbsp;</div>
 	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
