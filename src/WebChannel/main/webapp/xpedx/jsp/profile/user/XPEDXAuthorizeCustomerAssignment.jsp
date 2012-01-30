@@ -55,34 +55,7 @@
 								<s:set name='currentCustIdKey' value='key'/>
 		    					<s:set name='currentCustIdValue' value='value'/>
 	                			<option value='<s:property value="#currentCustIdKey"/>'>
-                			    <script>
-	              			      var theValue='<s:property value='#currentCustIdValue'/>';
-	              			      if(theValue.indexOf("Billto") > -1)
-	              			      {
-		                			      theValueParts = theValue.split("-");
-		                			      theNewValue = theValue.replace("Billto", "Bill-To");
-		                			      document.write(theNewValue);
-	              			      }
-	              			      else
-	              			      {
-		                			    if(theValue.indexOf("Shipto") > -1)  
-	              			        {
-		                			      theValueParts = theValue.split("-");
-		                			      theNewValue = theValue.replace("Shipto", "Ship-To");
-		                			      document.write(theNewValue);
-	              			        }		 
-	              			        else
-	              			        {
-		                			        if(theValue.indexOf("-") > -1)
-		                			        {
-			                			        theNewValue = theValue;//jira 3244
-			                			        document.write(theNewValue);
-		                			        }
-	              			        }               			      
-	              			      }		                			    
-	              			    </script>
 								<%-- <s:property value=theNewValue/> added by balkhi for remove ? 3244 duplicate values --%>	
-									<option>
 									<s:property value='#currentCustIdValue'/>									
 								
 								</option>
@@ -135,34 +108,8 @@
 									<s:set name='currentCustIdKey' value='key'/>
 			    					<s:set name='currentCustIdValue' value='value'/>
 		                			<option value='<s:property value="#currentCustIdKey"/>'>
-	                			    <script>
-	                			      var theValue2='<s:property value='#currentCustIdValue'/>';
-	                			      if(theValue2.indexOf("Billto") > -1)
-	                			      {
-		                			      theValueParts2 = theValue2.split("-");
-		                			      theNewValue2 = theValue2.replace("Billto", "Bill-To");
-		                			      document.write(theNewValue2);
-	                			      }
-	                			      else
-	                			      {
-		                			    if(theValue2.indexOf("Shipto") > -1)  
-	                			        {
-		                			      theValueParts2 = theValue2.split("-");
-		                			      theNewValue2 = theValue2.replace("Shipto", "Ship-To");
-		                			      document.write(theNewValue2);
-	                			        }
-	                			        else
-	                			        {
-		                			        if(theValue2.indexOf("-") > -1)
-		                			        {
-			                			        theNewValue2 = theValue2;
-			                			        document.write(theNewValue2);
-		                			        }
-	                			        }		                			      
-	                			      }		                			    
-	                			    </script>
-	                			    <!--removed Account: for zira 3244 by balkhi-->										  
-	                			    <%-- <s:property value='#currentCustIdValue'/> --%>										<s:property value='#currentCustIdValue'/>
+	                			    <!--removed Account: for zira 3244 by balkhi-->										  	
+									 <s:property value='#currentCustIdValue'/>
 									</option>								
 								</s:iterator>
 							</select>
