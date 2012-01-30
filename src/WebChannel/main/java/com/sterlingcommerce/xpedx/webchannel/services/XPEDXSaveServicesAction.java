@@ -213,7 +213,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String customerId = getWCContext().getCustomerId();
 			String storefrontId = getWCContext().getStorefrontId();
 			StringBuffer sb = new StringBuffer();
-			
+			System.out.println("XPEDXSaveServicesAction():execute()");
 			
 			// Getting ship to address and customer details
 
@@ -266,6 +266,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
 				sb.append(userName).append("@").append(storefrontId).append(suffix);
 				customerEmail = sb.toString();
+				System.out.println("customerEmail from email"+customerEmail);
 				
 			}
 			 /**
@@ -321,9 +322,12 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			
 			if(csrEmailID != null && csrEmailID.trim().length() > 0 && saleRepEmail!=null && saleRepEmail.trim().length() > 0){
 				ccEMail = csrEmailID + XPEDXConstants.EMAILIDSEPARATOR +saleRepEmail;
+				System.out.println("ccEMail"+ccEMail);
 			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
+				System.out.println("ccEMail"+ccEMail);				
 				ccEMail = saleRepEmail;				
 			}else if(csrEmailID != null && csrEmailID.trim().length() > 0){
+				System.out.println("ccEMail"+ccEMail);
 				ccEMail = csrEmailID;				
 				
 			}
@@ -353,12 +357,13 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			 */
 			
 		if(	toEmailGen != null && toEmailGen.trim().length() > 0){
+			System.out.println("toEmailGen"+toEmailGen);
 			// Creating input xml to send an email
 			Document outputDoc = null;
 			
 			Element input = createInputXML(customerEmail, toEmailGen,ccEMail);
 			String inputXml = SCXmlUtil.getString(input);
-			LOG.debug("Input XML: " + inputXml);
+			LOG.debug("XPEDXSaveServicesAction() Input XML: " + inputXml);
 			Object obj = WCMashupHelper.invokeMashup(
 					"SendSampleServiceRequest", input, wcContext
 							.getSCUIContext());
@@ -368,12 +373,14 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			}
 		}
 			if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
+				System.out.println("toEmailPaper"+toEmailPaper);
+				
 			// Creating input xml to send an email
 			Document outputDoc1 = null;
 			
 			Element input = createInputXML(customerEmail, toEmailPaper,ccEMail);
 			String inputXml = SCXmlUtil.getString(input);
-			LOG.debug("Input XML: " + inputXml);
+			LOG.debug("XPEDXSaveServicesAction() Input XML : " + inputXml);
 			Object obj = WCMashupHelper.invokeMashup(
 					"SendSampleServiceRequest", input, wcContext
 							.getSCUIContext());
