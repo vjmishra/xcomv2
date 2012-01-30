@@ -423,7 +423,9 @@
        		  var str = elem.value;
        		    var re = /.+/;
        		    if(!str.match(re)) {
-       		        alert("Please fill in the required field(s) in table.");
+       		    	/*Start- Jira 3109  */
+       		        alert("Required fields missing. Please review and try again.");
+       		    	/*End- Jira 3109  */
        		        setTimeout("focusElement('" + elem.form.name + "', '" + elem.name + "')", 0);
        		        return true;
        		    } else {
@@ -515,7 +517,9 @@
                  	//alert("Data succes..completeData : " + completeData );	
              	}
         		else{
-                 	alert('At least one row of Facility Supplies or Paper Supplies item should be added to the List');	
+        			/*Start- Jira 3109  */
+                 	alert('Please enter at least one row of Facilites Supplies or Paper items to the list.');
+        			/*End- Jira 3109  */
              	}
         		
         		document.getElementById('bodyData').value = finalCompleteData;    
