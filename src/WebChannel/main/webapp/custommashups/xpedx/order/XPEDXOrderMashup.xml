@@ -1766,7 +1766,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getCompleteOrderDetails">
 			<Input>
-				<Order OrderHeaderKey="" SortingType="ITEM" ApplicationCode="SWC"
+				<Order OrderHeaderKey="" ApplicationCode="SWC"
 					ApplicationVersion="9.0">
 				</Order>
 			</Input>
