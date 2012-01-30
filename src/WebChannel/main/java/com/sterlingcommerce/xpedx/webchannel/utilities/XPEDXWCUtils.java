@@ -2947,7 +2947,7 @@ public class XPEDXWCUtils {
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 											
 											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
-												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber");//removed by balkhi to change ' ,' to ',' jira 3244
+												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244
 										}
 										
 										if(addrElement!=null) {
@@ -2962,7 +2962,7 @@ public class XPEDXWCUtils {
 											if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0) 
 												custFullAddr += " "+getFormattedZipCode(addrElement.getAttribute("ZipCode"));
 											if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0) 
-												custFullAddr += " "+addrElement.getAttribute("Country");
+												custFullAddr += " "+addrElement.getAttribute("Country");//removed , for 3244
 											
 										}
 									}
@@ -2997,6 +2997,7 @@ public class XPEDXWCUtils {
 			
 			YFCIterable<YFCElement> iteartor = yfcElement.getChildren();
 			YFCElement custElement = null;
+			int countCustWithoutNumber = 0;//jira 3244 variable
 			while (iteartor.hasNext()) {
 				custElement = iteartor.next();
 				if (custElement != null) {
@@ -3077,8 +3078,12 @@ public class XPEDXWCUtils {
 									YFCElement element = custElement.getChildElement("BuyerOrganization");
 									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
 										custFullAddr += element.getAttribute("OrganizationName")+" ";
-									custFullAddr += "("+ custDisplayId +")";
-									custFullAddr = "Account: "+ custFullAddr;
+									if(countCustWithoutNumber==1){
+										custFullAddr = custFullAddr;
+									}else{
+										custFullAddr += "("+ custDisplayId +")";
+										custFullAddr = "Account: "+ custFullAddr;
+									}
 								//jira 3244
 								}
 								else{
@@ -3122,6 +3127,7 @@ public class XPEDXWCUtils {
 							customerHashMap.put(customerID, custFullAddr);
 						}
 					}
+				countCustWithoutNumber++;//jira 3244 variable
 				}
 		}
 		
