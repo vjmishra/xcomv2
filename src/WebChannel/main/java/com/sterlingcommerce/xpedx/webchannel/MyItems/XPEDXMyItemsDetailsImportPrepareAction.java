@@ -36,7 +36,19 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
     private String contentType;
     private String filename;
     
-    private List<XPEDXCsvVO> dataList;
+	public String getFilename() {
+		return filename;
+	}
+	boolean csvVar;
+	public boolean isCsvVar() {
+		return csvVar;
+	}
+
+	public void setCsvVar(boolean csvVar) {
+		this.csvVar = csvVar;
+	}
+
+	private List<XPEDXCsvVO> dataList;
     
     private String[] itemsIds;
     private String[] itemsName;
@@ -60,7 +72,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
     private String listOwner = "";
     private String listCustomerId = "";
 	
-    public String getSharePermissionLevel() {
+public String getSharePermissionLevel() {
 		return sharePermissionLevel;
 	}
 
@@ -336,7 +348,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 				}
 			}
 			LOG.debug("Record: " + nextLine);
-		}
+			}
 		
 		itemCountInFile = tmp.size();
 		
@@ -387,6 +399,14 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	@SuppressWarnings("unused")
 	public String execute() {
 		try {
+			//Added For Jira 3197 - Invaid Import condition
+			if(!(getFilename().endsWith(".csv"))){
+				System.out.println("ERROR...");
+				//csvVar= true;
+				setErrorMsg("InvalidImport");
+				editMode = true;
+				return "failure";
+			}
 			getCustomerDisplayFields();
 			
 			//Read the file
