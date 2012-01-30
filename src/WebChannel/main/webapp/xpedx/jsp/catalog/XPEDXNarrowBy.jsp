@@ -131,12 +131,17 @@ function setStockItemFlag()
 					
 						<s:set name='count1' value='%{#count1 + 1}' />
 						<s:url id='narrowURL' namespace='/catalog' action='filter.action'>
+						
+							
 							<s:param name='indexField'
 								value='#facets.getAttribute("IndexFieldName")' />
 							<s:param name='facet' value='#facetVal.getAttribute("Value")' />
 							<s:param name='cname' value='#facetVal.getAttribute("Value")' />
 							<s:param name='filterDesc' value='#ShortDescription1' />
+							<s:param name="categoryPath" value='#parameters.path'/>
+							<s:param name="path" value='#parameters.path'/>
 						</s:url>
+						
 						<li class="roll close"><s:a href="%{narrowURL}"
 							tabindex="%{#count1}">
 							<s:property value='#facetVal.getAttribute("Value")' />
