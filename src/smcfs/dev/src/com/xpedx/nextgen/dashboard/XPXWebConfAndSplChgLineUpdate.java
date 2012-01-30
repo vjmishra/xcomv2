@@ -6,7 +6,6 @@ import java.util.Properties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
@@ -22,6 +21,8 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
+
+import java.util.Collections;
 
 public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 {
@@ -135,8 +136,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		if(customerDetailsList.get(2)!=null && !"".equals(customerDetailsList.get(2)))
 		{
 		     chargeAmount = Float.parseFloat(customerDetailsList.get(2));
-		}     
-		
+		}		
 		
 		changeOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
 		changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
@@ -155,10 +155,14 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		Element changeOrderLinesElement = changeOrderInputDoc.createElement(XPXLiterals.E_ORDER_LINES);
 		
 		Element orderLines = (Element) inputDocRoot.getElementsByTagName(XPXLiterals.E_ORDER_LINES).item(0);
-		NodeList orderLinesList = orderLines.getElementsByTagName(XPXLiterals.E_ORDER_LINE);
-		for(int i=0; i<orderLinesList.getLength(); i++)
+		
+		/*Begin - Code changes made by Mitesh Parikh for JIRA 3372*/
+		ArrayList<Element> orderLinesListElements = SCXmlUtil.getChildren(orderLines, XPXLiterals.E_ORDER_LINE);		
+		Collections.sort(orderLinesListElements, new XpedxPrimeLineNoComparator());		
+		for(int i=0; i<orderLinesListElements.size(); i++)
 		{
-			Element orderLineElement = (Element) orderLinesList.item(i);
+			Element orderLineElement = (Element)orderLinesListElements.get(i);
+		/*End - Code changes made by Mitesh Parikh for JIRA 3372*/
 			String orderLineKey = orderLineElement.getAttribute(XPXLiterals.A_ORDER_LINE_KEY);
 			
 			Element changeOrderLineElement = changeOrderInputDoc.createElement(XPXLiterals.E_ORDER_LINE);
@@ -186,8 +190,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 			if(orderTotal!=null && !"".equals(orderTotal))
 			{
 			    totalAmount = Float.parseFloat(orderTotal);
-			}    
-			    
+			} 			    
 			
 			if(totalAmount <minOrderTotal)
 			{
@@ -201,8 +204,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 				if(extnOrderSubTotal != null && !"".equals(extnOrderSubTotal))
 				{
 					extnSubtotal = Float.parseFloat(extnOrderSubTotal)+new Float(chargeAmount);
-				}
-				
+				}			
 				
 				orderExtn.setAttribute("ExtnTotOrdValWithoutTaxes", ""+reTotalAmount);
 				orderExtn.setAttribute("ExtnTotalOrderValue", ""+reTotalAmount) ;
@@ -244,8 +246,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 								
 			}
 			
-		}
-		
+		}	
 		
 		return changeOrderInputDoc;
 	}
@@ -254,14 +255,12 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 	{
 		ArrayList<String> customerArrayList = new ArrayList<String>();
 		try
-		{
-			
+		{			
 			float minOrderAmount=0;
 			float chargeAmount=0;
 			String maxOrderAmount="0";
 			
-			YFCElement customerList = null;
-			
+			YFCElement customerList = null;			
 			
 			Document shipToCustomerProfileDoc = (Document)env.getTxnObject("ShipToCustomerProfile");
 			if(shipToCustomerProfileDoc!=null)
@@ -296,7 +295,6 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 			customerList=YFCDocument.getDocumentFor(api.invoke(env, "getCustomerList", inputCustomerDoc.getDocument())).getDocumentElement();
 			
 			}
-			
 						
 			YFCNodeList customerNodeList = customerList.getElementsByTagName("Customer");
 			int customerLength = customerNodeList.getLength();
@@ -421,11 +419,8 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		if (orderHeaderKey != null && orderHeaderKeylength != 0 
 				&& orderHeaderKeylength > 8)
 		{
-			
-
 			int startIndex = orderHeaderKeylength-uniqueSequenceLength;
 			uniqueSequence = orderHeaderKey.substring(startIndex);
-
 		}	
 
 		entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
@@ -446,5 +441,5 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 	public void setProperties(Properties arg0) throws Exception {
 		this.arg0 = arg0;
 	}
-
+	
 }
