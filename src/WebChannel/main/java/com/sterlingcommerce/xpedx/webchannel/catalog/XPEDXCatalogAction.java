@@ -245,9 +245,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();		
 		String returnString = super.filter();
 		//getting the customer bean object from session.
-		
+		/***** Start of  Code changed for Promotions Jira 2599 ********/ 
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
+		Map<String, String> params = lastBc.getParams();
+		String[] pathDepth = StringUtils.split(path, "/");
+		path = params.get("path");       
+
+
+		/****End of Code Changed for Promotions JIra 2599 *******/
+
+
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		
+
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -255,6 +266,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
+		
+	   		/****Start of Code Changed for Promotions JIra 2599 *******/
+			if((path==null||path.equals("/")) && getFirstItem().trim()!=""){
+				
+				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+			}
+			/****End of Code Changed for Promotions JIra 2599 *******/
+		
+
 		}
 		return SUCCESS;
 	}
@@ -400,7 +420,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 		//getting the customer bean object from session.
 		
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+	
+		/***** Start of  Code changed for Promotions ********/ 
+
 		
+
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
+		Map<String, String> params = lastBc.getParams();
+		String[] pathDepth = StringUtils.split(path, "/");
+		path = params.get("path");  
+
+		
+		/****End of Code Changed for Promotions *******/
+
+
+
+
+
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		}
@@ -417,7 +455,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
-		}		
+	
+	/****Start of Code Changed for Promotions JIra 2599 *******/			
+			
+			if(path.equals("/") && getFirstItem().trim()!=""){
+			
+				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+			}
+			
+			/****End of Code Changed for Promotions JIra 2599 *******/
+		
+
+	}		
 		return SUCCESS;
 	}
 
@@ -465,12 +514,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		{
 			XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, editedOrderHeaderKey);
 		}
+
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
-		String path = params.get("path");
+		path = params.get("path");
 
 		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
 			if (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) {
@@ -480,11 +530,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 				// file
 			}
 		}
-		
 		//getting the customer bean object from session.
-		
+
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		
+
 		//determine if the request is catalog landing or catalog page
 		boolean isCategoryLanding = determineCatalogLandingRedirection(bcl,pathDepth);
 		if(isCategoryLanding){
@@ -498,7 +547,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
-			
 			setAttributeListForUI();
 			if (isCategoryLanding || displayAllCategories.equalsIgnoreCase("true")) {
 				log.info("Search for Category Domain. Need to show the asset widget for Category Images");
@@ -506,7 +554,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			if (wcContext.isGuestUser())
 				isGuestUser = "Y";
-			
 			setItemsUomsMap();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
@@ -799,6 +846,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		
+				/***** Start of  Code changed for Promotions Jira 2599 ********/ 
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
+		Map<String, String> params = lastBc.getParams();
+		String[] pathDepth = StringUtils.split(path, "/");
+		path = params.get("path");       
+
+
+		/****End of Code Changed for Promotions JIra 2599 *******/
+		
+
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else if (isSingleItem()) {
@@ -814,7 +873,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
-		}
+			
+			/**start of code for JIra 2599****/
+			if((path==null||path.equals("/")) && getFirstItem().trim()!=""){
+				
+				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+			}
+			
+			/**End of code for JIra 2599****/
+					
+
+
+	}
 		//Webrtends	tag start
 		setStockedItemFromSession();				
 		if(isStockedItem){
@@ -824,8 +894,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		return SUCCESS;
 	}
-	
-	
+
+
+
 
 	@Override
 	public String sortResultBy() {
@@ -1862,6 +1933,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private HashMap<String, HashMap<String, String>> itemMap = new HashMap<String, HashMap<String,String>>();
 	protected String editedOrderHeaderKey="";
 	protected String draft;
+	protected String path;
 
 	/**
 	 * @return the itemMap
@@ -1921,5 +1993,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.shipToCustomer = shipToCustomer;
 	}
 
-	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+
 }
