@@ -3078,7 +3078,7 @@ public class XPEDXWCUtils {
 									YFCElement element = custElement.getChildElement("BuyerOrganization");
 									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
 										custFullAddr += element.getAttribute("OrganizationName")+" ";
-									if(countCustWithoutNumber==1){
+									if(countCustWithoutNumber==0){
 										custFullAddr = custFullAddr;
 									}else{
 										custFullAddr += "("+ custDisplayId +")";
