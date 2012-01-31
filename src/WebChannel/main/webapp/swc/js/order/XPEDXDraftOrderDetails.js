@@ -38,7 +38,7 @@ function addProductsToOrder()
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
 		 var selectedUOM = new Array();
-		 selectedUOM= document.getElementsByName("enteredUOMs");
+		 selectedUOM= document.getElementsByName("enteredUOMForAddToCart");
 		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
@@ -636,7 +636,9 @@ function redrawQuickAddList()
 						
 					  }
 				    	 code += '</select>';
-						    code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + _uomCode + '" />';
+				    	 	code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
+				    	 																							
+						    code += '<input type="hidden" name="enteredUOMForAddToCart" id="enteredUOMForAddToCart' + i + '" value="' + _uomCode + '" />';
 						    code += '</td>';
 
 				    	
