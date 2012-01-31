@@ -230,11 +230,11 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 
 			//InitialContext context = new InitialContext(ht);
 			DataSource dataSource = (DataSource) env.lookup(DBName);
-
 			connection = dataSource.getConnection();
-			System.out.println("Connection successful..");
-
-			String Query="select distinct RPT_CUID, RPT_NAME,RPT_ID,RPT_KIND, RPT_DESC from reds.xpedx_custom_rpt_dtl where XCOM_MST_CUST=" + "'"+ XCOM_MST_CUST +"'"+"AND CUST_ROLE in (";
+			//System.out.println("Connection successful..");
+			//String schemaName=YFSSystem.getProperty("schemaname");
+			//String Query="select distinct RPT_CUID, RPT_NAME,RPT_ID,RPT_KIND, RPT_DESC from " + schemaName + ".xpedx_custom_rpt_dtl where XCOM_MST_CUST=" + "'"+ XCOM_MST_CUST +"'"+"AND CUST_ROLE in (";
+			String Query="select distinct RPT_CUID, RPT_NAME,RPT_ID,RPT_KIND, RPT_DESC from DH.xpedx_custom_rpt_dtl where XCOM_MST_CUST=" + "'"+ XCOM_MST_CUST +"'"+"AND CUST_ROLE in (";
 			Query=getUserRole(Query);
 			stmt = connection.createStatement();
 			boolean test=stmt.execute(Query);
@@ -264,8 +264,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 		}
 		catch (Exception e) {
 			log.info("Not able to connect to DEV Datasource:->" + e.getMessage());
-			
-		}
+			}
 		finally{
 			stmt.close();
 			connection.close();	
