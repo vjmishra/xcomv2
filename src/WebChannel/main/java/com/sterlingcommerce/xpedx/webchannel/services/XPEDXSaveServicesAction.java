@@ -419,7 +419,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		
 		Element custExtnEle = XMLUtilities.getElement(customerElement, "Extn");
 			
-		String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustomerDivision");
+		String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustOrderBranch");
 		String envId= SCXmlUtil.getAttribute(custExtnEle, "ExtnEnvironmentCode");
 		if(custDivison!=null && custDivison.trim().length() > 0)
 		{
