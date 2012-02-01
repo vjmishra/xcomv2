@@ -72,13 +72,21 @@ function addItemToCart(itemId) {
 						else
 						{
 							refreshMiniCartLink();
-							//JQuery Popup: 3 sec popup dispaly. 
-							$.jqDialog.notify("Item successfully added to cart", 3);
+							//JQuery Popup: 3 sec popup dispaly. 							
+							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+								$.jqDialog.notify("Item successfully added to order", 3);
+							else
+								$.jqDialog.notify("Item successfully added to cart", 3);
 							Ext.MessageBox.hide(); 
 							//alert("Successfully added item "+itemId+" with quantity "+qty+" and Unit of Measure "+selectedUomText+" to the cart");
 							document.getElementById('Qty_Check_Flag_'+itemId).value = false;
 							//Succesfully Added to Cart Info message
-						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Successfully added to cart" ;
+							/*Start- Jira 3104 */
+							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
+							else
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to cart." ;
+						    /*End- Jira 3104 */
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
