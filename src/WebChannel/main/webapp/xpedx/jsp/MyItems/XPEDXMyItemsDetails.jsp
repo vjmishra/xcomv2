@@ -1888,7 +1888,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
 					
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
-					<s:set name="itemBaseUom"  value='%{#itemUomId}' />
+					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
 					<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name="YFSItmeExtn" value='masterItemExtnMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
