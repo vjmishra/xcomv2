@@ -104,7 +104,7 @@
 			<Input>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" " />
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" "/>
 			</Input>			
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
