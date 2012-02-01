@@ -508,7 +508,7 @@
 	</s:else>
 	
 	<s:set name="saCV" value="%{''}" />
-	<s:if test='%{shareAdminOnly == "Y"}'>
+	<s:if test='%{#spShareAdminOnly == "Y"}'>
 		<s:set name="saCV" value="%{' checked '}" />
 	</s:if>
 
