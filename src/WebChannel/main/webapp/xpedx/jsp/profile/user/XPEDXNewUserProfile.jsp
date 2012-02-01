@@ -272,7 +272,7 @@
 			  				<tr>
 			  					<td class="no-border-right-user" colspan="2"><div class="mandatory float-left">*</div>Username:</td>
 			                    <td width="31%" class="no-border-right-user">
-			                    	<s:textfield tabindex="50" name="username" id="username" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');" 
+			                    	<s:textfield tabindex="50" name="userName" id="userName" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');" 
 			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="20" cssClass="x-input" cssStyle="width: 185px;"/>                    
 			                   </td>
 			  				</tr>
