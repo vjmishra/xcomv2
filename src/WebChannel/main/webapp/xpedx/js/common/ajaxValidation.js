@@ -95,7 +95,7 @@ String.prototype.trim = function () {
     return this.replace(/^\s*/, "").replace(/\s*$/, "");
 }
 
-var mandatoryFieldList = [	{"id": "username", "display": "Username", "type": "text"},
+var mandatoryFieldList = [	{"id": "userName", "display": "Username", "type": "text"},
                        		{"id": "listName", "display": "Name", "type": "text"},
                        		{"id": "firstName", "display": "First Name", "type": "text"},
                        		{"id": "lastName", "display": "Last Name", "type": "text"},
