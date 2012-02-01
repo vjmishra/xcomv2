@@ -708,9 +708,9 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 			
              var myMessageDiv = document.getElementById("errorMsgForQty");
              if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
-            	 myMessageDiv.innerHTML = 'Item has been added to order.' ;
+            	 myMessageDiv.innerHTML = "Item has been added to order." ;
 			 else
-				 myMessageDiv.innerHTML = 'Item has been added to cart.' ;	            
+				 myMessageDiv.innerHTML = "Item has been added to cart." ;	            
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
 		    
