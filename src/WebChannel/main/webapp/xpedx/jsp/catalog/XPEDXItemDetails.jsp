@@ -706,8 +706,11 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
            // svg_classhandlers_decoratePage();
            
 			
-             var myMessageDiv = document.getElementById("errorMsgForQty");	            
-             myMessageDiv.innerHTML = 'Item has been added to cart.';	            
+             var myMessageDiv = document.getElementById("errorMsgForQty");
+             if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+            	 myMessageDiv.innerHTML = 'Item has been added to order.' ;
+			 else
+				 myMessageDiv.innerHTML = 'Item has been added to cart.' ;	            
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
 		    
@@ -1416,7 +1419,7 @@ function SubmitActionWithValidation()
 			</s:if>
 				<div class="orderbtns">
 					<a href="javascript:updatePandA()">My Price & Availability</a>
-					
+				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
 					<s:a
 						href="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');"
@@ -1666,8 +1669,10 @@ function SubmitActionWithValidation()
 		              		document.body.style.cursor = 'default';
 		              		Ext.Msg.hide();
 		              		//alert("Error adding item to the list. Please try again later.");
-		              		var myMessageDiv = document.getElementById("errorMsgForQty");	            
-				            myMessageDiv.innerHTML = "No list has been created. Please create new list." ;	            
+		              		var myMessageDiv = document.getElementById("errorMsgForQty");
+		              		//Start fix for 3104
+				            myMessageDiv.innerHTML = "No lists have been created. Please create new list." ;	
+		              		//End fix for 3104
 				            myMessageDiv.style.display = "inline-block"; 
 				            myMessageDiv.setAttribute("class", "notice");
 
@@ -1684,8 +1689,11 @@ function SubmitActionWithValidation()
 				}
 		    	else{
 		    		//alert('Please select a Wish List to add the item');
+		    		/*Start- Jira 3104  */
 		    		
-		    		alert('Please select a Wish List to add the item');
+		    		alert('Please select a list or create a new list.');
+		    		
+		    		/*End- Jira 3104  */
 		    		/*
 		    		var myMessageDiv = document.getElementById("errorMsgForQty");	  
 					myMessageDiv.innerHTML = "Please select a Wish List to add the item." ;	            
