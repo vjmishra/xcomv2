@@ -95,7 +95,7 @@
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
     	<script type="text/javascript">
 			document.getElementById("newSearch").style.display = 'none';
-		</script>
+		</script>  
     	<div class="container">
       	<!-- breadcrumb -->
       		<div id="mid-col-mil"> 
@@ -110,7 +110,7 @@
 			
 		<!-- begin progress bar -->
 		<div id="second-navigation">
-		<% if(null != request.getParameter("requestId")){%>
+		<% if(null == request.getParameter("requestId")){%>
              <ul id="main-nav" class="dropdown">
 				<li >
 				     <span class="link" >Confirm your identity</span>
