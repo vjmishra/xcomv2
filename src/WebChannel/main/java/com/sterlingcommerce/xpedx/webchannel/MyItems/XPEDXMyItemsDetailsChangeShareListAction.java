@@ -77,6 +77,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setName(getListName());
 				setDesc(getListDesc());
 				setSharePrivate(getSharePermissionLevel());
+				setShareAdminOnly(shareAdminOnly); //JIRA 3377
 				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				LOG.info("Check 1 - Done: getListKey = " + getListKey());
