@@ -110,14 +110,35 @@
 						//Succesfully Added to Cart Info message for jira 3253
 						var divId = 'errorDiv_qtys_'+uid;
 						var divVal=document.getElementById('errorDiv_qtys_'+uid);
-						divVal.innerHTML ="Item successfully added to cart";
+						//Start- fix for 3105
+						if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+						{
+								divVal.innerHTML = "Item has been added to order." ;
+						}
+						else
+						{
+							divVal.innerHTML = "Item has been added to cart." ;
+						}
+
+						// commented for 3105
+						//divVal.innerHTML ="Item successfully added to cart";
 					   	//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 						divVal.style.display = "inline-block"; 
 						divVal.setAttribute("style", "margin-right:5px;float:right;");
 						divVal.setAttribute("class", "success");
 				       		 //end of addition 3253
 						//JQuery Popup: 3 sec popup dispaly. 
-						$.jqDialog.notify("Item successfully added to cart", 3);
+						// commented for 3105
+						//$.jqDialog.notify("Item successfully added to cart", 3);
+						if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+						{
+							$.jqDialog.notify("Item successfully added to order", 3);
+						}
+						else{
+							$.jqDialog.notify("Item successfully added to cart", 3);
+						}
+						
+						//End- fix for 3105
 						Ext.MessageBox.hide(); 
 						//alert("Successfully added item "+itemId+" with quantity "+qty+" to the cart");
 						//-- Web Trends tag start --
