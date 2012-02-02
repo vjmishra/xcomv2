@@ -119,7 +119,7 @@
 <script type="text/javascript" src="<s:url value='/swc/js/home/forgotPassword.js'/>"></script>
 
 <!-- <title>Forgot Password</title> -->
-<title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/> </title>
+<title>Reset Password</title>
 
 </head>
 <!-- END swc:head -->
