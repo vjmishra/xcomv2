@@ -36,6 +36,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.ui.backend.util.Util;
@@ -619,9 +620,32 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	private void setLastModifiedUser() {
 		UtilBean utilBean = new UtilBean();
 		Element contactElement = getContact();
-		
-		setContactFirstName(contactElement.getAttribute("FirstName"));
-		setContactLastName(contactElement.getAttribute("LastName"));
+		String modifyUserIdBy=contactElement.getAttribute("Modifyuserid");
+		String loginID=contactElement.getAttribute("CustomerContactID");
+		if(getWCContext().getCustomerContactId().equals(modifyUserIdBy))
+		{
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+			
+			setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
+			setContactLastName(xpedxCustomerContactInfoBean.getLastName());
+		}
+		else if(loginID!= null && loginID.equals(modifyUserIdBy))
+		{
+			setContactFirstName(contactElement.getAttribute("FirstName"));
+			setContactLastName(contactElement.getAttribute("LastName"));
+		}
+		else
+		{
+			ArrayList<Element> customerContact=new ArrayList<Element>();
+			customerContact.add(contactElement);
+			Map<String,String> modifiedUserMap=XPEDXWCUtils.createModifyUserNameMap(customerContact);
+			String modifyFirstLastName=modifiedUserMap.get(modifyUserIdBy);
+			String name[]=modifyFirstLastName.split(", ");
+			if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
+				setContactFirstName(name[1]);
+			if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
+				setContactLastName(name[0]);
+		}
 			
 		lastModifiedDate = contactElement.getAttribute("Modifyts");
 		setLastModifiedDate(utilBean.formatDate(lastModifiedDate, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
