@@ -18,6 +18,7 @@
 				<param name="parse">true</param>
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
+				<param name="saveAddUser">${saveAddUser}</param>
 			</result>
 		</action>
 		<action name="createUser"
@@ -105,7 +106,8 @@
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
 				<param name="selectedTab">${selectedTab}</param>
-			</result>
+				<param name="success">${success}</param>
+				</result>
 		</action>
 		<action name="xpedxAnonymousQuickLink" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXAnonymousQuickLinkAction">
 			<param name="mashups">xpedxGetCustomCommonCodesForQuickLinks</param>
@@ -166,7 +168,8 @@
 				<param name="customerId">${customerId}</param>
 				<param name="bodyData">${bodyData}</param>
 				<param name="selectedTab">${selectedTab}</param>
-			</result>
+				<param name="success">${success}</param>
+				</result>
 		</action>
 		<action name="xpedxGetUserList"
             class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserList">
