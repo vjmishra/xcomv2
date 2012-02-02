@@ -1709,7 +1709,7 @@ public class XPEDXOrderUtils {
 		   	 itemAndTotalList.add("0");
 		   	 itemAndTotalList.add(webContext.getDefaultCurrency());
 		   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-		   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements);
+		   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
 		   	 return;
 		 }
 		if(isGetCompleteOrder == false) 
@@ -1745,9 +1745,9 @@ public class XPEDXOrderUtils {
 	   	 
 	   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
 	   	 XPEDXWCUtils.setObectInCache("OrderHeaderInContext", orderElement.getAttribute("OrderHeaderKey"));
-	   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements);
+	   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
 	}
-	public static void refreshMiniCartDisplay(IWCContext webContext,Element orderElement,boolean readOrderLinesFromStart,int maxElements)
+	public static void refreshMiniCartDisplay(IWCContext webContext,Element orderElement,boolean readOrderLinesFromStart,int maxElements,boolean isOrderByModifyTs)
 	{
 		try
 		{
@@ -1757,9 +1757,33 @@ public class XPEDXOrderUtils {
 	            NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
 	            int length = orderLines.getLength();
 	            boolean hasMore = false;
-	            if(readOrderLinesFromStart){
+	            if(isOrderByModifyTs)
+	            {
 	            	for (int i = 0; i < length; i++) {
-	                    Element currNode = (Element) orderLines.item(i);
+	            		Element currNode = (Element) orderLines.item(i);
+	                    String lineKey = currNode.getAttribute("OrderLineKey");
+	                    log.info("linekey-->"+lineKey);
+	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+	                    if ( (bundleParentLines.getLength() == 0) &&
+	                         (!OrderHelper.isCancelledLine(currNode)) )
+	                    {	                        
+	                            // Haven't hit the max number yet, so go ahead and add it to the list.
+	                            majorLineElements.add(currNode);
+	                    }
+	                }
+	            	
+	            	Collections.sort(majorLineElements, new XPEDXMiniCartComparator());
+	            	for (int i = majorLineElements.size()-1; i >0 ;) {
+	            		if(i>4)
+	            			majorLineElements.remove(i);
+	            		else
+	            			break;
+	            		i=majorLineElements.size()-1;
+	            	}
+	            }
+	            else if(readOrderLinesFromStart){
+	            	for (int i = 0; i < length; i++) {
+	            		Element currNode = (Element) orderLines.item(i);
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
 	                    log.info("linekey-->"+lineKey);
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
