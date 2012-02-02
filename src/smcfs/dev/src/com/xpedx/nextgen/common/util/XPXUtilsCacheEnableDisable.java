@@ -14,9 +14,15 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfc.log.YFCLogCategoryFactory;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
@@ -156,6 +162,12 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 								.getProperty(cachedObjectProperty));
 						cachedGroup.appendChild(cachedObject);
 					}
+					if(strRoot.equals("EOF")){
+
+						deletePriceListLine(env);
+					
+					}
+
 				}
 
 				else if (feedName.equalsIgnoreCase("Uom")) {
@@ -210,6 +222,28 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 		errorObject.setInputDoc(inXML);
 		errorObject.setException(e);
 		ErrorLogger.log(errorObject, env);
+	}
+
+
+
+	public  void deletePriceListLine(YFSEnvironment env)throws Exception{
+
+				try{
+
+			String sDel ="Delete from ypm_pricelist_line where modifyts <current_date-1";
+			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
+			Connection m_Conn= connHolder.getDBConnection();
+			Statement stmt =m_Conn.createStatement();
+			stmt.execute(sDel);
+			m_Conn.commit();
+			
+		}
+		catch(Exception e){
+			log.error("Exception: " + e.getStackTrace());
+
+		}
+
+
 	}
 
 
