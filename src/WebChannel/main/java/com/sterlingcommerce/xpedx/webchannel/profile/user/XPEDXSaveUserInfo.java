@@ -109,7 +109,25 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String currentSelTab;
 	private String userPwdToValidate;
 	private Map<String, String> pwdValidationResultMap;
+	private boolean success;
+	private boolean saveAddUser;
 	
+	public boolean isSaveAddUser() {
+		return saveAddUser;
+	}
+
+	public void setSaveAddUser(boolean saveAddUser) {
+		this.saveAddUser = saveAddUser;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	public String getSelectedTab() {
 		return selectedTab;
 	}
@@ -323,11 +341,20 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			this.customerContactId = getUserName();
 		} catch (XMLExceptionWrapper xmlEx) {
 			log.error("Error in creating the User/Contact ", xmlEx.getCause());
+			//For My Profile- Success on Save - Jira 3196
+			setSuccess(false);
+			setSaveAddUser(false);
 			return ERROR;
 		} catch (CannotBuildInputException e) {
 			log.error("Error in creating the User/Contact ", e.getCause());
+			//For My Profile- Success on Save - Jira 3196
+			setSuccess(false);
+			setSaveAddUser(false);
 			return ERROR;
 		}
+		//For My Profile- Success on Save - Jira 3196
+		setSuccess(true);
+		setSaveAddUser(true);
 		return REDIRECT;
 	}
 
@@ -376,6 +403,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 								// This exception is put here to handle the password validation exceptions.
 								request.getSession().setAttribute("errorNote","The password must contain at least 8 characters. Please revise and try again.");
+								setSuccess(false);
+								setSaveAddUser(false);
 								return REDIRECT;
 							}
 							//Fix End For Jira-3106
@@ -446,6 +475,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			pwdValidationResultMap = new HashMap<String, String>();
 			pwdValidationResultMap.put(((YFCException) passexp).getAttribute("ErrorCode"), ((YFCException) passexp).getAttribute("ErrorDescription"));
 			setPwdValidationResultMap(pwdValidationResultMap);
+			setSuccess(false);
+			setSaveAddUser(false);
 			return ERROR;
 		} 
 		catch (XMLExceptionWrapper xmlEx) {
@@ -477,13 +508,18 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			if(!isPPMesage)
 			request.getSession().setAttribute("errorNote","The password is invalid. Please revise and try again.");
 			//Fix End For Jira-3106
+			setSuccess(false);
+			setSaveAddUser(false);
 			return REDIRECT;
 		} catch (CannotBuildInputException e) {
 			log.error("Error in creating the User/Contact Information", e
 					.getCause());
+			setSuccess(false);
+			setSaveAddUser(false);
 			return ERROR;
 		}
-		
+		setSuccess(true);
+		setSaveAddUser(true);
 		return REDIRECT;
 	}
 	
