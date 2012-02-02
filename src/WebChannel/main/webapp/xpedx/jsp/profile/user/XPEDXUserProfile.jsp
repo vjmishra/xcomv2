@@ -2666,6 +2666,17 @@ a.underlink:hover { text-decoration: underline !important; }
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 
+<s:hidden name='test_success' id="test_success" value="%{#_action.isSuccess()}" />
+	<s:if test="%{#_action.isSuccess() && #disableSinceSelfApprover }">
+		<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Profile has been updated successfully.</div> 	
+	</s:if>
+	<s:elseif test="%{#_action.isSuccess() && !#disableSinceSelfApprover}">
+		<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Profile for <s:property value="%{#displayUserID}" /> has been updated successfully.</div>
+	</s:elseif> 
+	<s:elseif test="%{#_action.isSaveAddUser()}">
+		<div class="success" id="successMsgFor_save" style="display : inline; float: right"/><s:property value="%{#displayUserID}" /> has been added successfully.</div>
+	</s:elseif> 
+	
 <%-- End fix for XNGTP-3196 --%>
 
 
