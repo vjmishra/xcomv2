@@ -150,7 +150,25 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	protected String contactLastName = "";
 	protected Map<String, String> countriesMap = new HashMap<String, String>();
 	private String currentSelTab;
-	
+	private boolean success;
+	private boolean saveAddUser;
+
+	public boolean isSaveAddUser() {
+		return saveAddUser;
+	}
+
+	public void setSaveAddUser(boolean saveAddUser) {
+		this.saveAddUser = saveAddUser;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	public String getSelectedTab() {
 		return selectedTab;
 	}
