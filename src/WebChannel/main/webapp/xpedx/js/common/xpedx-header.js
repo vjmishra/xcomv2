@@ -17260,8 +17260,9 @@ function toggleCost(id)
 function restrictTextareaMaxLength(Object, maxLen){
  var txtTextArea = Object.value;
  
- if( txtTextArea.length > maxLen ) { 
- alert(Object.title + ' should not exceed '+ maxLen + ' characters');
+ if( txtTextArea.length > maxLen ) {
+//Commented for 3105	 
+// alert(Object.title + ' should not exceed '+ maxLen + ' characters');
  var txtTruckTextArea = txtTextArea.substring(0, maxLen);
  Object.value = txtTruckTextArea;
  return false;
