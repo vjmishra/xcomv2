@@ -709,7 +709,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Validating item " + itemId + "...please wait!";
+	           x.innerHTML = "Validating item " + itemId + "...please wait;
 	           
 	           //Execute the call
 	           document.body.style.cursor = 'wait';
@@ -1766,10 +1766,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                         <br />
                           <p >Description</p>
 						<s:if test="%{#disableListNameAndDesc == true}">
-							<textarea class="x-input" id="listDesc" disabled="disabled" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; height: 92px; word-wrap:break-word;"><s:property
+							<textarea class="x-input" id="listDesc" disabled="disabled" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,250);" style="width:220px; height: 92px; word-wrap:break-word;"><s:property
 							value="listDesc"   /></textarea>
 						</s:if><s:else>
-							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,255);" style="width:220px; height: 92px; word-wrap:break-word; "><s:property
+							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,250);" style="width:220px; height: 92px; word-wrap:break-word; "><s:property
 							value="listDesc"  /></textarea>
 						</s:else>
                     </div>
@@ -1855,7 +1855,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</script>
 				</s:if>
 				<s:if test="%{errorMsg == 'ItemsOverLoad'}">
-							<div style="color:red">
+							<div class="error">
 							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
 							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
 							</div>
@@ -2155,7 +2155,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	                        			<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}"/>
                             <div class="clear"></div>
 							<s:if test='editMode != true'>
-                            <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
+							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
+							    <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 144px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability</span></a></li>
