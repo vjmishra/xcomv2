@@ -19,7 +19,16 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 	private String customerId;
 	private String frmUserProfile1Flag = "";
 	private String selectedTab;
+	private boolean success;
 	
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	public String getSelectedTab() {
 		return selectedTab;
 	}
@@ -73,7 +82,15 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 		if (null != outputDoc) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
+		//Added condition For Jira 3196
+		if(isSuccess()){
+			setSuccess(true);
+		}
 		
+		else{
+			setSuccess(false);
+			}
+		//Fix End For Jira 3196
 		return REDIRECT;
 	}
 	
