@@ -130,17 +130,15 @@
 <div id="main-container">
 	<div id="main" class="anon-pages">
     	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-          	<script type="text/javascript">
+    	<script type="text/javascript">
 			document.getElementById("newSearch").style.display = 'none';
 		</script>
     	
     	<div class="container">
       	<!-- breadcrumb -->
-      	
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
 			<s:set name='error' value="#_action.getErrorMessageType()"/>
-			<set name='UserId' value='<%=request.getParameter("userID")%>'/>
-   			<div class="errorMessage">
+			<div class="errorMessage">
 			<s:if test='%{#error=="OldPwdNotAllwdError"}'>
 		    <s:text name="old.password.not.allowed"/>
 			</s:if>
@@ -174,11 +172,6 @@
 			<s:hidden id="actionName" name="#action.name" value="changePwdForgotPwd"/>
 			<s:hidden id="validationField" name="validationField" value="true"/>
 			<input type="hidden" id="requestId" name="requestId" value='<%=request.getParameter("requestId")%>'/>
-			<input type="hidden" id="userID" name="userID" value='<%=request.getParameter("userID")%>'/>
-			<input type="hidden" id="DisplayUserID" name="DisplayUserID" value='<%=request.getParameter("userID")%>'/>
-			<input type="hidden" id="USER_IN_PROCESS" name="USER_IN_PROCESS" value="USER_IN_PROCESS" />
-			<!-- <input type="hidden" id="loginId" name="loginId" value='<%=request.getParameter("userID")%>'/>  -->
-			
 			
 			<s:url id='homePage' namespace='/home' action='home' />
 
