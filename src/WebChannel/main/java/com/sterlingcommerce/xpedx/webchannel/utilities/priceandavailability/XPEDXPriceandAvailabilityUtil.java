@@ -77,10 +77,12 @@ public class XPEDXPriceandAvailabilityUtil {
 	
 	public static int PANDA_WS_MODE = PANDA_WS_PROD ;
 	
-	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Sorry, real time price and availability is not available at this time, please contact customer service.";//"Sorry, Price & Availability is not available, please try again later or contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Sorry, there was a problem processing your request.  Please contact customer service or try again later.";//Sorry, Price & Availability is not available, please try again or contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";//"Sorry, Price & Availability is not available, please contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Sorry, the item information for this item is not valid.  Please contact customer service for price and availability.";// "Price & Availability is not available, please try again or contact customer service.";
+	//Start- Fix for 3105
+	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Price & Availability is not available, please try again later or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Price & Availability is not available, please contact customer service.";
+	//End- Fix for 3105
+	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Price & Availability is not available, please try again or contact customer service.";
 			
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_SERVICESTATUSDOWN_ERROR = "WSPriceAndAvailabilityOutputXmldocWithServiceStatusDownError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
