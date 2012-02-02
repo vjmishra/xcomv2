@@ -80,11 +80,13 @@
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/css/user/my-account.css'/>" />
 <script type="text/javascript" src="<s:url value='/swc/js/home/forgotPassword.js'/>"></script>
-
-<!-- <title>Forgot Password</title> -->
-<title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/> </title>
-
-</head>
+<!-- <title>Forgot Password</title>
+<% if(null != request.getParameter("requestId")){%>
+	<title>Reset Password </title>
+<%}else{ %>
+   <title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/>
+<%}%>
+ </head>
 <!-- END swc:head -->
 
 <s:set name='_action' value='[0]' />
