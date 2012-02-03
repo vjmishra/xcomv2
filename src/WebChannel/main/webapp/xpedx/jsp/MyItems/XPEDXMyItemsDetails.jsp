@@ -709,7 +709,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Validating item " + itemId + "...please wait;
+	           x.innerHTML = "Validating item " + itemId + "...please wait";
 	           
 	           //Execute the call
 	           document.body.style.cursor = 'wait';
