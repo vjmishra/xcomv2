@@ -622,12 +622,36 @@ function validateOrderMultiple() {
 	}
 	var UOM = document.getElementById("itemUOMsSelect");
 	var OrdMultiple = document.getElementById("OrderMultiple");
-	var selectedUOM = document.getElementById("selectedUOM");
-	var uomConvFactor = document.getElementById("uomConvFactor");
-	var uomCF = 1;// default if not available
-	if(uomConvFactor!=null && uomConvFactor!=undefined){
-		uomCF = uomConvFactor.value;
+	var uomCF = 1;
+	if(OrdMultiple != null && OrdMultiple!=undefined && OrdMultiple.value != 1){
+		var selectedUOM = UOM.options[UOM.selectedIndex].text;
+		var selectedUOMQty = selectedUOM.split(" ");
+			if(selectedUOMQty.length == 2){
+				var splitUOMQty = selectedUOMQty[1];
+				var splitUOMQty1 = splitUOMQty.split("(");
+				var splitUOMQty2 = splitUOMQty1[1];
+				splitUOMQty2 = splitUOMQty2.split(")");
+				var uomConvFactor = splitUOMQty2[0];
+					if(uomConvFactor!=null && uomConvFactor!=undefined){
+						uomCF = uomConvFactor;
+				}
+		}
+		else{
+			var selectedUOM = document.getElementById("selectedUOM");
+			var uomConvFactor = document.getElementById("uomConvFactor");
+				if(uomConvFactor!=null && uomConvFactor!=undefined){
+					uomCF = uomConvFactor.value;
+			}
+		}
 	}
+	else{
+			var selectedUOM = document.getElementById("selectedUOM");
+			var uomConvFactor = document.getElementById("uomConvFactor");
+				if(uomConvFactor!=null && uomConvFactor!=undefined){
+					uomCF = uomConvFactor.value;
+			}
+		}
+	
 	var totalQty =  uomCF * Qty.value;
 	//alert("Qty.value:"+Qty.value+" UOM:"+UOM.value+ " selectedUOM:"+selectedUOM.value+" uomConvFactor:"+uomConvFactor.value+" OrdMultiple:"+OrdMultiple.value +" uomCF:"+uomCF+ " totalQty:"+totalQty);
 	if(OrdMultiple!=null && OrdMultiple!=undefined && OrdMultiple.value!=0){
