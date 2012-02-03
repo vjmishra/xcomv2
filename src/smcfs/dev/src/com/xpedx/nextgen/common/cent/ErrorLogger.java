@@ -1,6 +1,7 @@
 package com.xpedx.nextgen.common.cent;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.util.ToStringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -163,28 +164,25 @@ public class ErrorLogger {
 	public static void populateNotificationTable(Error errorObj,
 			YFSEnvironment yfsEnv) {
 		try {
-			Document createErrorNotificatnInDoc = XmlUtils
-
-			.createDocument("XPXErrorNotification");
+			Document createErrorNotificatnInDoc = XmlUtils.createDocument("XPXErrorNotification");
 			Element xpxErrorNotifyRootElem = createErrorNotificatnInDoc
 					.getDocumentElement();
 			if (errorObj != null) {
 				if (errorObj.getException() != null
 						&& errorObj.getException().getMessage() != null) {
-					/*yfcLogCatlog.error("Exception message:errorObj" + errorObj
-					.getException().getMessage());
-					log4jLogger.error("Exception message:errorObj" + errorObj
-							.getException().getMessage());*/
-					//if(errorObj.getException().getMessage().length() > 3999){
-						xpxErrorNotifyRootElem.setAttribute("StackTrace", errorObj
-								.getException().getMessage());
-					/*}
-					else{
-						xpxErrorNotifyRootElem.setAttribute("StackTrace", errorObj
-								.getException().getMessage());
-					}*/
-				
-				/** Added by Arun Sekhar on 31-Jan-20100 for CENT tool logging of EOF/SOF messages **/
+					//handle the case where stack reaches more than 3800 char
+					if(errorObj.getException().getMessage().length()>3800)
+					{
+					String StackTrace=((String)errorObj.getException().getMessage());
+					StackTrace=StackTrace.substring(0, 3800);					
+					 xpxErrorNotifyRootElem.setAttribute("StackTrace",StackTrace);
+					}
+					else
+					{
+						xpxErrorNotifyRootElem.setAttribute("StackTrace",errorObj.getException().getMessage());
+					}
+					 
+					 /** Added by Arun Sekhar on 31-Jan-20100 for CENT tool logging of EOF/SOF messages **/
 				}else if(null != errorObj.getErrorDesc()){
 					xpxErrorNotifyRootElem.setAttribute("StackTrace",errorObj.getErrorDesc());
 				}
@@ -192,25 +190,24 @@ public class ErrorLogger {
 					xpxErrorNotifyRootElem.setAttribute("StackTrace","");
 				}
 				
-				if(errorObj.getInputDoc() != null){
-					xpxErrorNotifyRootElem.setAttribute("XmlFile",  XmlUtils.getString(errorObj.getInputDoc()));
+				if(errorObj.getInputDoc() != null){	
+					if(XmlUtils.getString(errorObj.getInputDoc()).length()>3800)
+					{
+						String XmlFile=XmlUtils.getString(errorObj.getInputDoc()).substring(0, 3800);
+						xpxErrorNotifyRootElem.setAttribute("XmlFile",XmlFile);
+					}
+					else
+					{
+					xpxErrorNotifyRootElem.setAttribute("XmlFile",XmlUtils.getString(errorObj.getInputDoc()));
+					}
 				}
 				else{
 					xpxErrorNotifyRootElem.setAttribute("XmlFile","");
 				}
-				
-				/*yfcLogCatlog.debug("XPXCreateErrorNotificatnService i/p Doc"
-						+ XmlUtils.getString(createErrorNotificatnInDoc));
-				log4jLogger.debug("XPXCreateErrorNotificatnService i/p Doc"
-						+ XmlUtils.getString(createErrorNotificatnInDoc));*/
-				
 				Document createErrorNotificatnOutputDoc = api.executeFlow(
 						yfsEnv, "XPXCreateErrorNotificatnService",
 						createErrorNotificatnInDoc);
-				/*yfcLogCatlog.debug("XPXCreateErrorNotificatnService o/p Doc"
-						+ XmlUtils.getString(createErrorNotificatnOutputDoc));
-				log4jLogger.debug("XPXCreateErrorNotificatnService o/p Doc"
-						+ XmlUtils.getString(createErrorNotificatnOutputDoc));*/
+				
 			}
 		} catch (Exception e) {
 			yfcLogCatlog.error(e.getMessage());
