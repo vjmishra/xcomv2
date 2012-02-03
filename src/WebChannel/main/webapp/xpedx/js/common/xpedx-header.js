@@ -17210,20 +17210,20 @@ Ext.onReady(function() {
 	$(document).pngFix();
 //	$('.jq-shorten').shorten();
 	
-	/* $('#tree').checkboxTree();
-	$('#collapseAllButtonsTree').checkboxTree({
-			collapseAllButton: 'Collapse all',
-			expandAllButton: 'Expand all'
-	}); */
-	
 	//for div alt row zebra stripes
 	//$("div.mil-wrap-condensed-container:odd").css("background-color", "#fafafa");
 	//$("div.mil-wrap-condensed-container:even").css("background-color", "#fff");
+	
+	
+	$("#OrderSummaryForm_rushOrdrFlag").click( function() {
+		$("#OrderSummaryForm_SpecialInstructions").focus();
+	}); 
 	
 	$(".btn-slide").click(function(){
 		$("#panel").slideToggle("slow");
 		$(this).toggleClass("slide"); return false;
 	});
+
 });
 /*  roundy corners for IE */ 
 	/* IE only */
