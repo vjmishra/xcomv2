@@ -81,6 +81,19 @@ public class XPEDXContactAction extends WCMashupAction {
 					csr2UserEle = XPEDXWCUtils.getUserInfo(custCSR2UserId, getWCContext()
 						.getStorefrontId());
 				}
+				
+				/** Modified code for Jira 3307 ***/
+				
+				String custCSR1UserKey = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR1Key");
+				String custCSR2UserKey = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR2Key");
+				if(custCSR1UserKey!=null && custCSR1UserKey.trim().length()>0) {
+					 csr1CustServEle = getUserPersonInfo(custCSR1UserKey, null);
+				}					
+				if(custCSR2UserKey!=null && custCSR2UserKey.trim().length()>0) {
+					csr2CustServEle = getUserPersonInfo(custCSR2UserKey, null);
+				}	
+				
+				/** Modified code for Jira 3307 ***/
 			}
 		}
 		catch (Exception e) {
@@ -128,6 +141,37 @@ public class XPEDXContactAction extends WCMashupAction {
 		contactUsResp = "Your Query/Comments was successfully registered";
 		return SUCCESS;
 	}
+	
+	/*** Start of Modified code for Jira 3307 ***/
+	
+	private Element getUserPersonInfo(String userKey, String loginId) {
+		IWCContext wcContext = WCContextHelper
+		.getWCContext(ServletActionContext.getRequest());
+		
+		Map<String, String> valueMap = new HashMap<String, String>();
+		if(userKey != null && userKey.trim().length()>0)
+			valueMap.put("/User/@UserKey", userKey);
+		if(loginId !=null && loginId.trim().length()>0)
+			valueMap.put("/User/@Loginid", loginId);
+		
+		Element input = null;
+		try {
+			input = WCMashupHelper.getMashupInput(
+					"getXpedxUserPersonInfo", valueMap, wcContext
+							.getSCUIContext());
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get User Person Info. "+ userKey + " " + loginId +e.getMessage());
+		}
+		Object obj = WCMashupHelper.invokeMashup(
+				"getXpedxUserPersonInfo", input, wcContext
+						.getSCUIContext());
+		Document outputDocPersonInfo = ((Element) obj).getOwnerDocument();
+		Element wElement = outputDocPersonInfo.getDocumentElement();
+		Element userEle = SCXmlUtil.getChildElement(wElement, "User");	
+		return userEle;
+	}
+	
+		/*** End of Modified code for Jira 3307 ***/
 	
 	public Element getOrganizationElement() {
 		return organizationElement;
@@ -361,6 +405,9 @@ public class XPEDXContactAction extends WCMashupAction {
 	private String czipcode = null;
 	private String eBusinessEmailID = null;
 	private XPEDXShipToCustomer shipToAddress = null;
+	private Element csr1CustServEle=null;
+	private Element csr2CustServEle=null;
+	
 	
 	private static final Logger log = Logger.getLogger(XPEDXContactAction.class);
 	public String geteBusinessEmailID() {
@@ -381,4 +428,29 @@ public class XPEDXContactAction extends WCMashupAction {
 	public void setShipToAddress(XPEDXShipToCustomer shipToAddress) {
 		this.shipToAddress = shipToAddress;
 	}
+	
+	
+	
+	public Element getCsr1CustServEle() {
+		return csr1CustServEle;
+	}
+
+
+	public void setCsr1CustServEle(Element csr1CustServEle) {
+		this.csr1CustServEle = csr1CustServEle;
+	}
+
+
+	public Element getCsr2CustServEle() {
+		return csr1CustServEle;
+	}
+
+
+	public void setCsr2CustServEle(Element csr1CustServEle) {
+		this.csr1CustServEle = csr1CustServEle;
+	}
+
+	
+
 }
+
