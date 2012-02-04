@@ -1360,12 +1360,12 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						    		<tr>
 										<td><p class="availability-indent">Next Day: </p></td>
 										<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
-										<td class="text-left">&nbsp;${jsonUOMDesc}</td>									
+										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>									
 						    		</tr>
 						    		<tr>
 										<td><p class="availability-indent">2+ Days: </p></td>
 										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
-										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
+										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
 						    		<tr>
