@@ -323,8 +323,8 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 
 				}
 				if (formattedCusotmer != null && orgName != null)
-					displayCustomerFormat = formattedCusotmer + " " + orgName
-							+ ", " + billtoAddr;
+					displayCustomerFormat = formattedCusotmer + " " + orgName;
+						//	+ ", " + billtoAddr;
 			}
 
 			else if (suffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE)) {
@@ -364,8 +364,8 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 								+ shipToAddress.getAttribute("Country");
 				}
 				if (formattedCusotmer != null)
-					displayCustomerFormat = formattedCusotmer + " " + orgName
-							+ ", " + shipToAddr;
+					displayCustomerFormat = formattedCusotmer + " " + orgName;
+							//+ ", " + shipToAddr;
 
 			}
 		}
