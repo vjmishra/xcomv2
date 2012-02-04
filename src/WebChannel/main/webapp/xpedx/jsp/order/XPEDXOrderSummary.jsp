@@ -986,7 +986,7 @@ from session . We have customer Contact Object in session .
 											<s:set name='orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
 											<s:set name='orderdqty' value='%{#_action.replaceString(#orderqty, ".00", "")}' />	
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-												&nbsp;<s:property value='%{#orderdqty}' />&nbsp;
+												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas( #orderdqty )' />&nbsp;
 												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
 											</s:if>
 											</td>
@@ -1105,7 +1105,7 @@ from session . We have customer Contact Object in session .
 											</td>
 											<td width="157">
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>	
-												&nbsp;<s:property value='%{#lineTran.getAttribute("OrderedQty")}' />&nbsp;
+												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas(#lineTran.getAttribute("OrderedQty"))' />&nbsp;
 												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
 											</s:if>
 											</td>
@@ -1494,7 +1494,8 @@ from session . We have customer Contact Object in session .
 <div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
      <!--   Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/>  -->
-    Last modified by <s:property value="#modifiedBy"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/> 
+    
+    Last modified  <s:if test="#modifiedBy!=''"> by </s:if> <s:property value="#modifiedBy"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/> 
     
 </div>
 
