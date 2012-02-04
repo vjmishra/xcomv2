@@ -265,6 +265,89 @@
 								 	</tr>
 								 </s:if>
 							</s:if>
+	          			<s:set name="csr1ListEle" value="csr1CustServEle" />
+					<s:set name="csr2ListEle" value="csr2CustServEle" />
+					<s:if test='#csr1ListEle != null'>
+						<s:set name="csr1Ele" value='#xmlUtil.getChildElement(#csr1ListEle,"ContactPersonInfo")' />
+						<s:set name="csr1FirstName" value='#xmlUtil.getAttribute(#csr1Ele,"FirstName")' />
+						<s:set name="csr1LastName" value='#xmlUtil.getAttribute(#csr1Ele,"LastName")' />
+						<s:set name="csr1EMailID" value='#xmlUtil.getAttribute(#csr1Ele,"EMailID")' />
+						<s:set name="csr1Phone" value='#xmlUtil.getAttribute(#csr1Ele,"DayPhone")' />
+						<s:set name="fmtCsr1Phone" value='#xpedxUtilBean.getFormattedPhone( #csr1Phone )' />
+					</s:if>
+					<s:if test='#csr2ListEle != null'>
+						<s:set name="csr2Ele" value='#xmlUtil.getChildElement(#csr2ListEle,"ContactPersonInfo")' />
+						<s:set name="csr2FirstName" value='#xmlUtil.getAttribute(#csr2Ele,"FirstName")' />
+						<s:set name="csr2LastName" value='#xmlUtil.getAttribute(#csr2Ele,"LastName")' />
+						<s:set name="csr2EMailID" value='#xmlUtil.getAttribute(#csr2Ele,"EMailID")' />
+						<s:set name="csr2Phone" value='#xmlUtil.getAttribute(#csr2Ele,"DayPhone")' />
+						<s:set name="fmtCsr2Phone" value='#xpedxUtilBean.getFormattedPhone( #csr2Phone )' />
+					</s:if>
+					
+					
+					<s:set name="customerService" value="%{'false'}" />
+					<s:if test='#csr1Ele != null'>
+						<s:if test="%{#customerService == 'false'}">
+							<tr class="padding-bottom1">
+				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
+				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/>
+				            	<span class="grey-italic">
+									<s:if test='%{#fmtCsr1Phone != ""}'>
+							          	<s:property value='%{#fmtCsr1Phone}'/>
+							          	 <br/>
+							        </s:if>
+							       <s:a href="#csr1EMailID"><s:property value="#csr1EMailID"/></s:a>
+								</span></td>
+				          	</tr>
+				          	<s:set name="customerService" value="%{true}" />
+						</s:if>
+						<s:else>
+							<tr class="padding-bottom1">
+				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
+				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
+				            	<span class="grey-italic">
+				            		<br/>
+				            	<s:if test='%{#fmtCsr2Phone != ""}'>
+						           	<s:property value='%{#fmtCsr2Phone}'/><br/>
+						           	<br/>
+						        </s:if>
+						              	 <s:a href="#csr1EMailID"><s:property value="#csr1EMailID"/></s:a></span></td>
+				          	</tr>
+						</s:else>
+					</s:if>
+					
+					<s:if test='#csr2Ele != null'>
+						<s:if test="#customerService == 'false'">
+							<tr class="padding-bottom1">
+				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
+				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
+				            	<span class="grey-italic">
+  					            <br />
+				            	<s:if test="%{#csr2Phone != ''}">
+				            		<s:property value="#csr2Phone"/>,
+				            		<br/>
+				            	</s:if>
+				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>
+				          	</tr>
+						</s:if>
+						<s:else>
+							<tr class="padding-bottom1">
+				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
+				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
+				            	<span class="grey-italic">
+				            	<br />
+				            	<s:if test="%{#csr2Phone != ''}">
+				            		<s:property value="#csr2Phone"/>,
+				            		 <br/>
+				            	</s:if>
+				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>
+				          	</tr>
+						</s:else>
+					</s:if>
 							
 							    <tr>
                                 <td valign="top" class="underlines no-border-right-user">
