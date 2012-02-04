@@ -310,10 +310,13 @@ ul.checkboxTree li
 				    </tr> --%> 
 			   		<tr>  
 				    <td class="no-border-right">Phone 1:</td>
-					    
+				
 					    <td width="31%" class="no-border-right"> 	
+					     <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} && {#extnElem.getAttribute('ExtnPhone1')!=null} ">
 					    <s:set id="Phone1FormatChange" name="Phone1FormatChange" value="%{#extnElem.getAttribute('ExtnPhone1')}" />								    				    
 				        <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Phone1FormatChange)'/>
+					    	</s:if>
+					    	
 					    	<s:hidden name='txtExtnPhone1' value='%{#extnElem.getAttribute("ExtnPhone1")}'></s:hidden>
 					    	 <%--<s:textfield id='txtExtnPhone1' name='txtExtnPhone1' size="25" tabindex="" disabled="true"
 							value='%{#extnElem.getAttribute("ExtnPhone1")}' cssStyle="width:230px;" cssClass="x-input"/> --%>
@@ -329,8 +332,10 @@ ul.checkboxTree li
 				    <tr>
 					    <td class="no-border-right">Fax 1:</td>
 					    <td class="no-border-right">
+					    	 <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} && {#extnElem.getAttribute('ExtnFax1')!=null}">
 					    	<s:set id="Fax1FormatChange" name="Fax1FormatChange" value="%{#extnElem.getAttribute('ExtnFax1')}" />									    
 				            <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Fax1FormatChange)'/>
+				            </s:if>
 					    	<s:hidden name='txtExtnFax1' value='%{#extnElem.getAttribute("ExtnFax1")}'></s:hidden>
 					    	<%-- <s:textfield id='txtExtnFax1' name='txtExtnFax1' size="25" tabindex="" disabled="true"
 							value='%{#extnElem.getAttribute("ExtnFax1")}' cssStyle="width:230px;" cssClass="x-input"/> --%>
@@ -366,11 +371,11 @@ ul.checkboxTree li
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
+							         <s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></span></td>
 					             <!-- <s:if test="%{#salesRepUserInfo.getAttribute('DayPhone') != ''}">
 					              		<s:property value="%{#salesRepUserInfo.getAttribute('DayPhone')}"/>, 
 					              	</s:if>	 -->	
-							    	<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></span></td>
-					          	</tr>		          				
+							   </tr>		          				
 						    	<s:set name="salesProfessionalSet" value="%{true}" />	          				
 	          				</s:if>
 	          				<s:else>
@@ -416,14 +421,13 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/>
+				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/>
 				            	<span class="grey-italic">
 									<s:if test='%{#fmtCsr1Phone != ""}'>
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>
 							        </s:if>
-							       
-									<s:property value="#csr1EMailID"/>
+							    <s:a href="#csr1EMailID" /><s:property value="#csr1EMailID"/></s:a>
 								</span></td>
 				          	</tr>
 				          	<s:set name="customerService" value="%{true}" />
@@ -709,7 +713,7 @@ ul.checkboxTree li
         
 		        
 		        <s:set name="modifiedUser" value="modifiedUser" />
-                <s:if test='#modifiedUser != ""'>
+                <s:if test='modifiedUser!=""'>
 			     	<div class="clearview textAlignCenter">Last modified by <s:property value="modifiedUser"/> on <s:property value="#_action.getModifiedDate()"/></div>
 		        </s:if>
 		        <div class="clearview">&nbsp;</div>
