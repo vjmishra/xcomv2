@@ -2722,8 +2722,8 @@ public class XPEDXWCUtils {
 			}
 			else
 			{
-				sb.append(suffix).append(" - ");
-				//shipto add only suffix
+						sb.append(division).append("-").append(suffix).append(" - "); //Modified code for jira 3307
+				
 			}
 			return sb.toString();
 		}
