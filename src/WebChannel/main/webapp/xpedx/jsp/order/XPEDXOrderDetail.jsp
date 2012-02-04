@@ -820,7 +820,7 @@ function showSplitDiv(divId)
 									<s:set name='orderdqty' value="#xpedxUtilBean.formatQuantityForCommas(#orderdqty)"/>
 					    			<td class="text-left"  width="175">	
 						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
-						    			  <s:property value='%{#orderqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
 						    			 </s:if>
 					    			</td>
 					    			<td class="text-right" width="95">						    		
