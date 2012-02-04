@@ -127,7 +127,7 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />
 						</s:else>
 						</td>
-						<td class="left" ><s:property value="#jsonUOMDesc" /></td>
+						<td class="left" ><%--<s:property value="#jsonUOMDesc" />--%></td>
 					</tr>
 					<tr>
 						<td align="center">2+ Days: </td>
@@ -142,7 +142,7 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />
 						</s:else>
 						</td>
-						<td class="left" ><s:property value="#jsonUOMDesc" /></td>
+						<td class="left" ><%--<s:property value="#jsonUOMDesc" />--%></td>
 					</tr>
 					<tr>
 						<td colspan="3"><i>
