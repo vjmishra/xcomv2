@@ -75,7 +75,7 @@
 				
 				
 					</td>
-					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
+					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-timeframe">2+ Days: </td>
@@ -88,7 +88,7 @@
 					<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
 					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />
 					</td>
-					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
+					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-local-availability" colspan="3">
@@ -97,9 +97,7 @@
 					</s:if>
 					<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)"/>
 					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />&nbsp;<s:property value="#jsonUOMDesc" />
-				<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> -->
-						
-					
+				<%-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" /> --%>
 					&nbsp;available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></td>
 					
 				</TR>
