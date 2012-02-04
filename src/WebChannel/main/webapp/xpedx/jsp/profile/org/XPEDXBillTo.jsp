@@ -427,7 +427,7 @@ ul.checkboxTree li
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>
 							        </s:if>
-							    <s:a href="#csr1EMailID" /><s:property value="#csr1EMailID"/></s:a>
+							    <s:a href="#csr1EMailID" ><s:property value="#csr1EMailID"/></s:a>
 								</span></td>
 				          	</tr>
 				          	<s:set name="customerService" value="%{true}" />
@@ -444,10 +444,11 @@ ul.checkboxTree li
 						           	<br/>
 						        </s:if>
 						     
-				            	<s:property value="#csr1EMailID"/></span></td>
+				            	<s:a href="#csr1EMailID" ><s:property value="#csr1EMailID"/></s:a></span></td>
 				          	</tr>
 						</s:else>
 					</s:if>
+					
 					<s:if test='#csr2Ele != null'>
 						<s:if test="#customerService == 'false'">
 							<tr class="padding-bottom1">
@@ -460,7 +461,7 @@ ul.checkboxTree li
 				            		<s:property value="#csr2Phone"/>,
 				            		<br/>
 				            	</s:if>
-				            	<s:property value="#csr2EMailID"/></span></td>
+				            	<s:a href="#csr2EMailID" ><s:property value="#csr2EMailID"/></s:a></span></td>
 				          	</tr>
 						</s:if>
 						<s:else>
@@ -474,7 +475,7 @@ ul.checkboxTree li
 				            		<s:property value="#csr2Phone"/>,
 				            		 <br/>
 				            	</s:if>
-				            	<s:property value="#csr2EMailID"/></span></td>
+				            	<s:a href="#csr2EMailID" ><s:property value="#csr2EMailID"/></s:a></span></td>
 				          	</tr>
 						</s:else>
 					</s:if>
