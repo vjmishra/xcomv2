@@ -277,8 +277,10 @@ ul.checkboxTree li
 			    <tr>
 				    <td class="no-border-right">Phone 1:</td>
 				    <td width="31%" class="no-border-right">
-				    <s:set id="Phone1FormatChange" name="Phone1FormatChange" value="%{#extnElem.getAttribute('ExtnPhone1')}" />								    				    
-				    <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Phone1FormatChange)'/>
+				    <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} && {#extnElem.getAttribute('ExtnPhone1')!=null} ">
+				    <s:set id="Phone1FormatChange" name="Phone1FormatChange" value="%{#extnElem.getAttribute('ExtnPhone1')}" />
+				   	<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Phone1FormatChange)'/>
+				    </s:if>
 					<s:hidden name='txtExtnPhone1' value='%{#extnElem.getAttribute("ExtnPhone1")}'></s:hidden>
 				    	<%--<s:textfield id='txtExtnPhone1' name='txtExtnPhone1' size="25" tabindex="" disabled="true"
 						value='%{#extnElem.getAttribute("ExtnPhone1")}' cssStyle="width:230px;" cssClass="x-input"/>  --%> 
@@ -293,8 +295,11 @@ ul.checkboxTree li
 			    <tr>
 				    <td class="no-border-right">Fax 1:</td>
 				    <td class="no-border-right">
+				   
+				    <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} && {#extnElem.getAttribute('ExtnFax1')!=null}">
 				     <s:set id="Fax1FormatChange" name="Fax1FormatChange" value="%{#extnElem.getAttribute('ExtnFax1')}" />									    
-				     <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Fax1FormatChange)'/>
+					 <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Fax1FormatChange)'/>
+					</s:if>
 					    	<s:hidden name='txtExtnFax1' value='%{#extnElem.getAttribute("ExtnFax1")}'></s:hidden>
 				    <%-- <s:textfield id='txtExtnFax1' name='txtExtnFax1' size="25" tabindex="" disabled="true"
 						value='%{#extnElem.getAttribute("ExtnFax1")}' cssStyle="width:230px;" cssClass="x-input"/>  --%>
@@ -323,8 +328,11 @@ ul.checkboxTree li
 	<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Ship-To Profile has been updated successfully.</div>
 	</s:if>
          <%-- End fix for XNGTP-3196 --%>
+         <s:if test='modifiedUser!=""'>
         <div class="clearview textAlignCenter">Last modified by <s:property value="modifiedUser"/> on <s:property value="modifiedDate"/></div>
         <div class="clearview">&nbsp;</div>
+        </s:if>
+       
         </s:form>
         <div style="display: none;">
 			<div title="Showing the Locations" id="showLocationsDlg" >
