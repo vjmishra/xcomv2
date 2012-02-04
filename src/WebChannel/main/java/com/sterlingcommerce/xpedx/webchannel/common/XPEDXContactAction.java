@@ -14,6 +14,13 @@ import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
 
+import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import org.apache.struts2.ServletActionContext;
+
+
 public class XPEDXContactAction extends WCMashupAction {
 
 	private static final String customerExtnInformation = "xpedx-customer-getCustomerAllExtnInformation";
