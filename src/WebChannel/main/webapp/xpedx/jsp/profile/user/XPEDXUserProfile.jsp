@@ -289,8 +289,8 @@ $(document).ready(function()
 			showShipToForUserProfile('<s:property value="#assignedShipToURLforUserProfile"/>');
 			},
 			'autoDimensions'	: false,
-			'width' 			: 800,
-			'height' 			: 600  
+			'width' 			: 751,
+			'height' 			: 350  
 			});
 		$("#addNewQL").fancybox({
 			'onStart'		:	function(){
