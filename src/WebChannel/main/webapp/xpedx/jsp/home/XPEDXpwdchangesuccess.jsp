@@ -80,7 +80,7 @@
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/css/user/my-account.css'/>" />
 <script type="text/javascript" src="<s:url value='/swc/js/home/forgotPassword.js'/>"></script>
-<!-- <title>Forgot Password</title>
+<!-- <title>Forgot Password</title> -->
 <% if(null != request.getParameter("requestId")){%>
 	<title>Reset Password </title>
 <%}else{ %>
@@ -142,6 +142,10 @@
 					    	<td style="border:0px; padding-left:0px;"><s:text name="request.pwdreset"/></td>
 					    </s:elseif>
           			</tr>
+          			<tr>
+              			<td colspan="3" class="grey no-border-right-user"width= "75%" style="float:left; margin-right: 10px;">
+              			<a href="<s:url action="login" namespace="/common"/>">Click Here to Login</a> 
+               		</tr>
 					<tr>
               			<td colspan="3" class="grey no-border-right-user"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
             		</tr>
