@@ -101,27 +101,41 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 		ArrayList orderRules = new ArrayList();
 		ArrayList orderLinesRules = new ArrayList();
 		if (listCustomerProfileRules.size() > 0) {
+			ShowRulesList = getShowRulesList();
 			for (int i = 0; i < listCustomerProfileRules.size(); i++){
 				 Element tmpEle = (Element) listCustomerProfileRules.get(i);
 				 String ruleGroup= tmpEle.getAttribute("RuleGroup");
 				 String RuleID= tmpEle.getAttribute("RuleID");
 				 if("B".equals(extSuffixType)){
 					 HideRulesList=getRulesList(); 
+					 
 					 if(!(HideRulesList.contains(RuleID))){
 						 if("GR".equalsIgnoreCase(ruleGroup)){
-							 generalRules.add(tmpEle);
+							 
+							 if (ShowRulesList.contains(RuleID)) {
+								 generalRules.add(tmpEle);
+							}
 						 }else if("OR".equalsIgnoreCase(ruleGroup)){
-							 orderRules.add(tmpEle);
+							 if (ShowRulesList.contains(RuleID)) {
+								 orderRules.add(tmpEle);
+							 }
 						 }else if("LR".equalsIgnoreCase(ruleGroup)){
 							 orderLinesRules.add(tmpEle);
 						 }
 					 }
 				 }
 				 else  {
-				 if("GR".equalsIgnoreCase(ruleGroup)){
+				 if("GR".equalsIgnoreCase(ruleGroup) &&  !("C".equals(extSuffixType))){
 					 generalRules.add(tmpEle);
 				 }else if("OR".equalsIgnoreCase(ruleGroup)){
-					 orderRules.add(tmpEle);
+					 if("C".equals(extSuffixType)){
+						 ShowRulesList = getShowRulesList();
+						 if (ShowRulesList.contains(RuleID)) {
+							 orderRules.add(tmpEle);
+						 }
+					 }else{
+						 orderRules.add(tmpEle);
+					 }
 				 }else if("LR".equalsIgnoreCase(ruleGroup)){
 					 if ("C".equals(extSuffixType)) {
 							ShowRulesList = getShowRulesList();
@@ -160,8 +174,7 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 	@SuppressWarnings("unchecked")
 	private List getShowRulesList() {
 		List<String> list=new ArrayList<String>();
-		String [] rules={"RequiredCustomerLineAccountNo","RequiredCustomerLinePO"};
-		//"RequireCustomerPO" is removed from he list as per sunith's comments.		
+		String [] rules={"RequiredCustomerLineAccountNo","RequiredCustomerLinePO","PlaceOrderOnWBHold","RequireCustomerPO"};	
 		list=Arrays.asList(rules);
 		return list;
 	}
