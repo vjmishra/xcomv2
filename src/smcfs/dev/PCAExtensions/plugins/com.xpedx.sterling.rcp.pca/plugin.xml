@@ -290,9 +290,11 @@
                     <task id="Modify Internal Users"/>
                     <task id="Division Maintenance"/>
                     <task id="ReferenceOrderSearch"/>
-                    <task id="ArticleMaintenance"/>
-                    <task id="MyItemsSearch"/>
+                    <task id="ArticleMaintenance"/>                                     
                     <task id="ViewInvoices"/>
+                    <task id="BusinessExchange"/> 
+                   	<task id="Help"/>                    
+                    <task id="MyItemsSearch"/>
                 </tasks>
             </category>
             <category id="XPX_CREATE_USER">
@@ -392,7 +394,7 @@
                 groupId="Other_Tasks"
                 id="MyItemsSearch"
                 isExtension="false"
-                name="My Items Search"
+                name=""
                  permissionId="ycdRCPX006">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_GLOBAL"/>
@@ -407,6 +409,25 @@
                     <category id="XPX_GLOBAL"/>
                 </categories>
             </task>
+             <task
+                actionId="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="BusinessExchange" isExtension="false"
+                name="Business Exchange" permissionId="">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+             <task
+                actionId="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+                filterRequired="false" groupId="Other_Tasks"
+                id="Help" isExtension="false"
+                name="Help Documents" permissionId="">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                   <category id="XPX_GLOBAL"/>
+               </categories>
+            </task>
+
               <task
                 actionId=""
                 filterRequired="false"
@@ -502,6 +523,24 @@
 			label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
 			state="true" style="push"/>
 			</actionSet> 
+			  <actionSet
+		 	id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+			label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction" visible="true">
+			<action
+			class="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+			id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+			label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+			state="true" style="push"/>
+			</actionSet> 
+			<actionSet
+		 	id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+			label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments" visible="true">
+			<action
+			class="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+			id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+			label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+			state="true" style="push"/>
+		</actionSet> 
          <actionSet
             id="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
             label="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail" visible="true">
