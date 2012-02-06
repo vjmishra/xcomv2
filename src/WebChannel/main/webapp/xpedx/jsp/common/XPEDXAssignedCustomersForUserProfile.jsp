@@ -62,7 +62,7 @@
 </s:if>
 <s:else>
  <!-- modal window container -->
-    <div class="xpedx-light-box" id="change-ship-to">    
+    <div  id="change-ship-to">    
     
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
@@ -70,7 +70,7 @@
 		<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();">&nbsp;</span>		
-		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="Search Ship-To…" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
+		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
 		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
 <div class="clearall">&nbsp;</div>
@@ -312,13 +312,10 @@
 </div>
 
 
-<div class="right">
-	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" />
-	bb3Change Preferred Ship-To to Selected
-</div>
 
-<div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom" style="margin-top:3px;">
+
+<div class="float-right" style="margin-top:30px;" >
+<ul id="tool-bar" class="tool-bar-bottom" >
 	
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
@@ -327,7 +324,7 @@
 	</s:if>
 	<li>
 <%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Apply</span></a>
+			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
 	
 	</li>
 </ul>
