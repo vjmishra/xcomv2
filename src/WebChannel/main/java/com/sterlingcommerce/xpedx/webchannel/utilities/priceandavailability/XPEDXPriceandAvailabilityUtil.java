@@ -79,7 +79,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	
 	//Start- Fix for 3105
 	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Price & Availability is not available. Please try again later or contact Customer Service.";
-	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Price & Availability is not available. Please try again later or contact Customer Service..";
+	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Price & Availability is not available. Please try again later or contact Customer Service.";
 	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Price & Availability is not available. Please contact Customer Service.";
 	//End- Fix for 3105
 	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Price & Availability is not available, please try again or contact customer service.";
