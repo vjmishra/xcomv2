@@ -1485,7 +1485,8 @@ function SubmitActionWithValidation()
 				
 					<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
 					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
-					<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />
+					<%--<s:hidden name="selectedUOM" value="%{#requestedUOM}" id="selectedUOM" />  --%>
+					<s:hidden name="selectedUOM" value="%{#_action.getRequestedDefaultUOM()}" id="selectedUOM" />
 					<s:hidden name="OrderMultiple" id="OrderMultiple"
 						value="%{#mulVal}" />
 						
@@ -2291,7 +2292,8 @@ Ext.onReady(function(){
 <script type="text/javascript">
 	Ext.onReady(function(){
 		//added for jira 3253
-		var requestedUom = '<s:property value="#selectedUOM" />';
+		updateUOMFields();
+		var requestedUom = document.getElementById("selectedUOM").value;
 		callPnA(requestedUom);
 	});
 
