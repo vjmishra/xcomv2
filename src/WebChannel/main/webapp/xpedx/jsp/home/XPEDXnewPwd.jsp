@@ -186,8 +186,9 @@
             		
 					<tr>
 						<td width="7%" class="underlines no-border-right-user"><s:text name="newPassword"/></td>
-						<td colspan="2" class="underlines no-border-right-user"><span
-							class=" noBorder-left"><s:password id="newPassword" name="newPassword" showPassword="true" cssClass="x-input width-250px" maxlength="14" title="New Password"/></span>
+						<td colspan="2" class="underlines no-border-right-user">
+						<span
+							class=" noBorder-left"><s:password id="newPassword" name="newPassword" showPassword="true" cssClass="x-input width-250px" maxlength="14" title="New Password" onchange="javaScript:clearErrorDiv();" /></span>
 						</td>
 					</tr>
 					<tr>
@@ -205,7 +206,8 @@
 										class="grey-ui-btn"><span>Cancel</span>
 									</a>
 									</li>
-									<li class="float-right"><a href="javascript:forgotPwdSubmit();"
+									<s:url id="ValidatePasswordURL" action="validateResetPassword" namespace="/profile/user"/>
+									<li class="float-right"><a href="javascript:validateResetPassword();"
 										class="orange-ui-btn"><span>Submit</span>
 									</a>
 									</li>
@@ -218,6 +220,9 @@
 					<tr><td colspan="2">
 					    <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsgForPassword" ></div>
 					</td></tr>
+					<tr><td colspan="3">
+					    <div class="error"  style="float:left; margin-right: 12px;" id="pwdErrorDiv" ></div>
+					</td></tr>
 					
 					<tr>
               			<td colspan="3" class="grey  no-border-right-user"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
@@ -229,8 +234,7 @@
 			
 			<s:form id="cancelforgotPwdForm" name="cancelforgotPwdForm" action="cancelForgotPassword" namespace="/home" method="POST">
         	</s:form>
-        	
-        	<div class=" bot-margin"> &nbsp; </div>
+          	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
   
 			</div>
@@ -239,7 +243,46 @@
 	</div>
 </div>
 <!-- end main  -->
-    
+<Script>
+function validateResetPassword(){
+	var url = '<s:property value="#ValidatePasswordURL" />';
+		Ext.Ajax.request({
+	        url :url,
+	        params:{loginId :'<s:property value="#loginid" />',
+			userPwdToValidate : document.getElementById("newPassword").value},
+	        method: 'POST',
+	        success: function (response, request){
+	           var responseText = response.responseText;
+	           errorDiv = document.getElementById("pwdErrorDiv");
+	           if(errorDiv){            	   
+               		if(responseText.indexOf("error")>-1){
+	                    errorDiv.innerHTML = response.responseText;
+	                    errorDiv.style.border = 'none';
+	                    errorDiv.style.background = 'none';
+               		}
+               		else {
+               			errorDiv.innerHTML ="";
+               			errorDiv.style.display = 'none';
+               			forgotPwdSubmit();
+               		}
+               }
+	   		},
+	   		failure: function (response, request){
+	   		   errorDiv = document.getElementById("pwdValidationDiv");
+               if(errorDiv){
+                errorDiv.style.display = 'none';
+               }
+	    	   alert("Error in service.");
+	        }
+	    });
+}
+</Script>
+<Script>
+function clearErrorDiv(){
+		errorDiv = document.getElementById("pwdErrorDiv");
+		errorDiv.innerHTML ="";
+  }
+</Script>
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	
 <!-- end container  -->
