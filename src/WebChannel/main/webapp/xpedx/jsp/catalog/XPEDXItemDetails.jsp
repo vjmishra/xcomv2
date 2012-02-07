@@ -1053,33 +1053,26 @@ function SubmitActionWithValidation()
 		
 	<!--- begin breadcrumbs header--->
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
-			<!-- start of 2422 jira -->	
+			<!-- Begin - Changes made by Mitesh Parikh for 2422 JIRA -->	
 			<script type="text/javascript">
-			function getbackPageUrl(){	
+			function getbackPageUrl(){				
 				var backPageUrl = document.getElementById("backPageUrl").value;
 				window.location.href=backPageUrl;
-				}
+			}
 			</script>
 			
-			<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span> 				 
+			<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
 			<% 
 			HttpServletRequest httpRequest = (HttpServletRequest) request; 
 			String referer1 = httpRequest.getHeader("referer");
-			if(httpRequest.getSession().getAttribute("ItemDetailLastPageUrl")==null){
-				httpRequest.getSession().setAttribute("ItemDetailLastPageUrl",referer1);
-			} else {
-				referer1 = (String)httpRequest.getSession().getAttribute("ItemDetailLastPageUrl");
-			}
+			if(referer1!=null){
+				httpRequest.getSession().setAttribute("itemDtlBackPageURL",referer1);				
+			} 
 						
-			%>		
-			<s:hidden id='backPageUrl' name='backPageUrl' value="%{#session.ItemDetailLastPageUrl}" />
-			<s:if test='%{#session.ItemDetailLastPageUrl != null}'>	
-				<s:hidden id='backPageUrl' name='backPageUrl' value="%{#session.ItemDetailLastPageUrl}" />
-			</s:if>
-			<s:else>
-				<s:hidden id='backPageUrl' name='backPageUrl' value="" />
-			</s:else>
-<!-- end of 2422 jira -->
+			%>	
+			<s:hidden id='backPageUrl' name='backPageUrl' value="%{#session.itemDtlBackPageURL}" />
+			
+			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
 			
 			<a href="javascript:window.print()"><span class="print-ico-xpedx" style="margin-right: 15px;"> <img src="<s:url value='/xpedx/images/common/print-icon.gif'/>" width="16"
 			height="15" alt="Print Page" />Print Page</span>
