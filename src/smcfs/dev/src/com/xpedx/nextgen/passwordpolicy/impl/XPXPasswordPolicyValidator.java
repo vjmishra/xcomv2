@@ -122,6 +122,7 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
 
 	public PasswordPolicyResult onPasswordChange(String newPassword,
 			String oldPassword) {
+		
 		if(!YFCObject.isVoid(newPassword))
         {
             int length = newPassword.length();
@@ -211,6 +212,85 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             }*/
         }
 		return PasswordPolicyResult.SUCCESS();
+	}
+//Adding a new method for jira 3992 with return type as HashMap
+	public HashMap onResetPassword(String newPassword,
+			String oldPassword) {
+		HashMap errorMap = new HashMap();
+		if(!YFCObject.isVoid(newPassword))
+        {
+            int length = newPassword.length();
+            int iNoOfAlphabeticalChars = 0;
+            int iNoOfNumericChars = 0;
+            int iNoOfUpperCaseChars = 0;
+            int iNoOfAllowedSplChars = 0;
+            int iNoOfDisallowedChars = 0;
+            for(int i = 0; i < length; i++)
+            {
+                char c = newPassword.charAt(i);
+                if(Character.isUpperCase(c) || Character.isLowerCase(c)){
+                	iNoOfAlphabeticalChars++;
+                }
+                if(Character.isDigit(c)){
+                	iNoOfNumericChars++;
+                }
+                if(Character.isUpperCase(c)){
+                	iNoOfUpperCaseChars++;
+                }
+                for (char allowedSplChar : allowedSplChars) {
+					if(allowedSplChar==c){
+						iNoOfAllowedSplChars++;
+						break;
+					}
+				}
+                
+                for (char disallowedChar : disallowedChars) {
+					if(disallowedChar==c){
+						iNoOfDisallowedChars++;
+						break;
+					}
+				}
+                
+            }
+            boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
+            if(iNoOfAlphabeticalChars < minNoOfAlphabeticalChars)
+            {
+               	errorMap.put("EXTNXPX0001", "The password must have atleast "+Integer.toString(minNoOfAlphabeticalChars)+" Alphabetical Characters.");
+            }
+            if(iNoOfNumericChars < minNoOfNumericChars)
+            {
+              	errorMap.put("EXTNXPX0002", "The password must have atleast "+Integer.toString(minNoOfNumericChars)+" Numerical Characters.");
+            }
+            if(iNoOfUpperCaseChars < minNoOfUpperCaseChars)
+            {
+            	errorMap.put("EXTNXPX0003", "The password must have atleast "+Integer.toString(minNoOfUpperCaseChars)+" Upper case Characters.");
+            }
+            
+            if(loginId!=null && newPassword.toUpperCase().contains(loginId.toUpperCase())){
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0006");
+            	errorMap.put("EXTNXPX0006", "The password must not contain the users loginId");
+            }
+            
+            if(iNoOfDisallowedChars > 0){
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0008");
+            	errorMap.put("EXTNXPX0008", "The password must NOT contain " +Arrays.toString(disallowedChars) +" Characters");
+            }
+            
+            if(exceededMaxRepeatedChars){
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");
+            	errorMap.put("EXTNXPX0009", "The password has exceeded Maximum number "+maxRepeatedChars+" of repeated Characters");
+            }
+            if(length < 8){
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");
+            	errorMap.put("EXTNXPX0010", " The password must contain at least 8 characters");
+            }
+            if(length >14 ){
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");
+            	errorMap.put("EXTNXPX0011", " The password has a maximum length of 14 characters");
+            }
+           
+        }
+		return errorMap;
 	}
 
 	private PasswordPolicyResult setPasswordPolicyResult(final String errorCode, final String errorMessage){
