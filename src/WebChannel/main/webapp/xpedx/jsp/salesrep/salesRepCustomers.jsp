@@ -43,6 +43,13 @@ function clearTextField(field){
     	field.value = field.defaultValue;
 }
 var data="false";
+
+//Start fix for 3108
+function logoutMessage(){
+	alert("Sales Pro site must be relaunched for your next sign-in to be successful.");
+	return ;
+}
+//End fix for 3108
 </script>
 </head>
 <body>
@@ -52,7 +59,7 @@ var data="false";
   <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>					
 					  
   <div id="logout-text">
-  <s:a href="%{#logoutURL}" >Sign Out</s:a>
+  <s:a onclick="javascript:return logoutMessage();" href="%{#logoutURL}" >Sign Out</s:a>
   </div>
        <div class="textbox"> 
       <s:form name="login2" id="login2" action="searchCustomer.action" namespace="/common" method="post">
