@@ -133,17 +133,17 @@
  		<!--- begin breadcrumbs header--->
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
 			<!-- <a href="javascript:window.history.back();">Back</a> / Compare Items -->			
-			<!-- jira 2422 -->
+			<!-- Begin - Changes made by Mitesh Parikh for 2422 JIRA -->
 			<script type="text/javascript">
 			function getbackUrl()
 			{
 				var backUrl = document.getElementById("backUrl").value;
 				window.location.href=backUrl;
-				}
+			}
 			</script>
 			<a href="javascript:getbackUrl();">Back</a> / <span class="page-title"> Compare Items </span>
-			<s:property value='%{#session.lastPage}' />
-			<% String referer = request.getHeader("referer");
+			<%--<s:property value='%{#session.lastPage}' />
+			 String referer = request.getHeader("referer");
 			
 			if(session.getAttribute("lastPageUrl")==null){
 				session.setAttribute("lastPageUrl",referer);
@@ -151,16 +151,10 @@
 			else{
 				referer = (String)session.getAttribute("lastPageUrl");
 			}
-		%>
-			
-			<s:hidden id='backUrl' name='backUrl' value="%{#session.lastPageUrl}" />
-			<s:if test='%{#session.lastPageUrl != null}'>		
-				<s:hidden id='backUrl' name='backUrl' value="%{#session.lastPageUrl}" />
-							</s:if>
-			<s:else>
-			<s:hidden id='backUrl' name='backUrl' value="" />
-			</s:else>
-         </div>
+		--%>
+			<s:hidden id='backUrl' name='backUrl' value="%{#session.productCompareBackPageURL}" />
+			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
+		</div>
 		<!--- clearall puts stuff below 'floating' items. nonbreaking space is for IE--->				
 		<div class="clearall">&nbsp;</div>
 		<!--- end breadcrumbs header --->
@@ -470,6 +464,9 @@ function checkUpdateAvailability()
 function processDetail(itemid, uom) {
 	<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	</s:url>
+	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
+	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+	// End - Changes made by Mitesh Parikh for 2422 JIRA
 	location.href="<s:property value='%{detailURL}' escape='false'/>" + "&itemID=" + itemid + "&unitOfMeasure=" + uom;
 }
 Ext.onReady(function(){
@@ -613,6 +610,9 @@ Ext.onReady(function(){
 function removeItem(itmKey, action) {
 	<s:url id='removeCompSetURL' namespace='/catalog' action='prodCompare.action'>
 	</s:url>
+	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
+	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+	// End - Changes made by Mitesh Parikh for 2422 JIRA
 	location.href="<s:property value='%{removeCompSetURL}' escape='false'/>" + "&itemKeys=" + itmKey + "&prodCompareAction=" + action;
 }
 
@@ -806,7 +806,7 @@ var prodData = {
 			<s:set name='isModelItem' value='#xutil.getAttribute(#primeInfo,"IsModelItem")'/>
 			<s:set name='isConfigurable' value='#xutil.getAttribute(#primeInfo,"IsConfigurable")'/>
 			<s:set name='isPreConfigured' value='#xutil.getAttribute(#primeInfo,"IsPreConfigured")'/>
-			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><s:property value="#shortDesc"/><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/><s:property value="#shortDesc"/></a>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
+			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/><s:property value="#shortDesc"/></a>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
     <s:if test='!#isReadOnly'>            
 			 
 			<s:if test='{!#guestUser}'>
@@ -1011,7 +1011,7 @@ var prodData = {
 	<div id="Price_Grid"></div>
 
 </swc:dialogPanel>
-<!-- for jira 2422 killing the session in item details --> <s:set name='ItemDetailLastPageUrl' value='<s:property value=null />' scope='session'/>
+<!-- for jira 2422 killing the session in item details --> <%--s:set name='ItemDetailLastPageUrl' value='<s:property value=null />' scope='session'/> --%>
 
 <!-- // main end -->
 </body>
