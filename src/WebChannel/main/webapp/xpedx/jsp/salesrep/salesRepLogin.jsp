@@ -42,29 +42,39 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 	        return temp;
 }
 
-
+//Start- fix for 3108
 function validateForm()
 {
 	var rtn = true;
 	var eDiv = document.getElementById("errMsg");
-    if(document.salesRepForm.DisplayUserID.value=="")
+	if(document.salesRepForm.Password.value=="" && document.salesRepForm.DisplayUserID.value=="")
+    {
+      document.salesRepForm.DisplayUserID.focus();
+      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username and Password.</div>"
+      rtn = false;
+    }
+	else if(document.salesRepForm.DisplayUserID.value=="")
     {
       document.salesRepForm.DisplayUserID.focus();
       rtn = false;
+      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username.</div>"
     }
     else if(document.salesRepForm.Password.value=="")
     {
       document.salesRepForm.Password.focus();
+      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Password.</div>"
       rtn = false;
     }
 	if (rtn == false){
-		eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter username and password.</div>"
+		//commented for 3108
+		//eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter username and password.</div>"
 	}
 	else {
 		document.salesRepForm.submit();
 	}
     return rtn;
 }
+//End- fix for 3108
 
 function validateOnEnter(e){
 
@@ -184,7 +194,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	<s:if
 		test="%{(#session.ERROR_MESSAGE != '') && (#session.ERROR_MESSAGE != null) }">
 		<div class="error" style="display: inline; font-size: 1.1em; text-align: left;">
-		<s:text name="Please enter a valid user name and password" />
+		<s:text name="Please enter a valid Username and Password" />
 		<br/>
 		<s:property value="%{#session.REQUEST_URL}"/>
 		</div>
@@ -222,7 +232,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td>
-			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username / Password is the same as your Network ID / Password" id="sprytrigger1"> Forgot Password?</a></span>
+			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username/Password is the same as your Network ID/Password" id="sprytrigger1"> Forgot Password?</a></span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
