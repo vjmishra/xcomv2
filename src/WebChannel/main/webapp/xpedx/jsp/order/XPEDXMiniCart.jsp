@@ -90,7 +90,7 @@
 		</table>
 	</div>
  	<div class="mini-cart-rows">
-	  	<table width="100%" border="0px solid red">
+	  	<table width="100%" border="0px solid red" >
 		<tbody>  
 	    	<s:set name="counter" value="0" />			
 	        <s:iterator value='majorLineElements' id='orderLine'>
@@ -137,7 +137,8 @@
 	            <s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
 	          <!--<s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#util.formatQuantity(wCContext, #orderLineTran.getAttribute("OrderedQty"))}' onkeyup="isValidQuantity(this)" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />  -->  
 	              <s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#qty}' onkeyup="isValidQuantity(this)" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />
-	            </td>
+	             
+ 				</td>
 	            <td>
 	            	<s:hidden name="orderLineReqUOMs" id="orderLineReqUOMs_%{#orderLineKey}" value="%{#orderLineTran.getAttribute('TransactionalUOM')}" />       
 	            	<s:property value='#xpedxWCUtils.getUOMDescription(#orderLineTran.getAttribute("TransactionalUOM"))'/>
@@ -162,6 +163,13 @@
 		        	<td  class="text-right">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		        </s:else>
 	        </tr>
+	        <%-- Added errorDiv for Jira 3366 --%>
+	        <tr>
+	        <td colspan='4'>
+	       <div  class="error" id="errorDiv_orderLineQtys_<s:property value='%{#orderLineKey}' />" style="display:none"></div> 
+	      
+	      </td>
+	     </tr>
 	        </s:if>
 	        </s:iterator>
 	        <!--
