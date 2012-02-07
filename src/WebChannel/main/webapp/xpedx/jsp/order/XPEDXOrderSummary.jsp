@@ -33,6 +33,9 @@
 function processDetail(itemid, uom) {
 	<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	</s:url>
+	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
+	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+	// End - Changes made by Mitesh Parikh for 2422 JIRA
 	window.location.href="<s:property value='%{detailURL}' escape='false'/>" + "&itemID=" + itemid + "&unitOfMeasure=" + uom;
 }
 
