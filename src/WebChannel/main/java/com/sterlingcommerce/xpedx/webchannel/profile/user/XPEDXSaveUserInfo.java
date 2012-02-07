@@ -44,7 +44,7 @@ import com.yantra.yfs.core.YFSSystem;
  */
 public class XPEDXSaveUserInfo extends WCMashupAction
 
-{
+{ 
 	private Element customer;
 	private Element contact;
 	private Element user;
@@ -53,7 +53,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String organizationCode;
 	private Element loc;
 	private String userId;
-	private String selectedTab;
+	private String selectedTab; 
 
 	// Logger
 	private static final Logger log = Logger.getLogger(XPEDXSaveUserInfo.class);
@@ -609,6 +609,30 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					resultMap.put("ErrorMsg", errorMsg);
 					setPwdValidationResultMap(resultMap);
 				}
+			}
+		} catch (Exception e) {
+			if(e instanceof YFCException){
+				pwdValidationResultMap = new HashMap<String, String>();
+				pwdValidationResultMap.put(((YFCException) e).getAttribute("ErrorCode"), ((YFCException) e).getAttribute("ErrorDescription"));
+			}
+		}
+		return returnStr;
+	}
+	//Adding a new method for jira 3992 with return type as HashMap
+	public String validateResetPassword(){
+		HashMap<String, String> userInfoMap = new HashMap<String, String>();
+		HashMap errorMap = new HashMap();
+		//userInfoMap.put("firstName", getFirstName());
+		//userInfoMap.put("lastName", getLastName());
+		userInfoMap.put("newPassword", getUserPwdToValidate());
+		userInfoMap.put("loginId", wcContext.getLoggedInUserId());
+		String returnStr = SUCCESS;
+		
+		try {
+			// validate Reset password
+			errorMap = XPEDXClientPasswordValidator.validateClientAllPassword(userInfoMap);
+			if(null!= errorMap && errorMap.size()>0){
+		    	setPwdValidationResultMap(errorMap);
 			}
 		} catch (Exception e) {
 			if(e instanceof YFCException){
