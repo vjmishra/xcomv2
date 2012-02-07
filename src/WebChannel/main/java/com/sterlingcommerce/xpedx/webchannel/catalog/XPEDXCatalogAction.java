@@ -74,6 +74,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 	//Start 2964
 	private Map <String,String>defaultShowUOMMap;
 	private Map<String,String>orderMultipleMap;
+	private String itemDtlBackPageURL="";
+	private String productCompareBackPageURL;
+	
+	public String getProductCompareBackPageURL() {
+		return productCompareBackPageURL;
+	}
+
+	public void setProductCompareBackPageURL(String productCompareBackPageURL) {
+		this.productCompareBackPageURL = productCompareBackPageURL;
+	}
+
+	public String getItemDtlBackPageURL() {
+		return itemDtlBackPageURL;
+	}
+
+	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
+		this.itemDtlBackPageURL = itemDtlBackPageURL;
+	}
+	
 	public Map<String, String> getOrderMultipleMap() {
 		return orderMultipleMap;
 	}
@@ -166,10 +185,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		setPageSize("20");
 		//Setting default selected view with empty string, so that the b2bview can be loaded by default
 		this.selectedView = "";
+		
 	}
 
 	@Override
-	public String execute() {
+	public String execute() {		
 		setCustomerNumber();
 		String retVal=super.execute();
 		getSortFieldDocument();
@@ -183,6 +203,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		req.setAttribute("Tag_WCContext", wcContext);	
 		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
 		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
+		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+	    /* End - Changes made by Mitesh Parikh for 2422 JIRA */
 	}
 
 	private void getSortFieldDocument(){
@@ -509,7 +533,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String navigate() {
-		init();
+		init();		
 		if(!YFCCommon.isVoid(draft) && "N".equals(draft))
 		{
 			XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, editedOrderHeaderKey);
@@ -1933,8 +1957,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private HashMap<String, HashMap<String, String>> itemMap = new HashMap<String, HashMap<String,String>>();
 	protected String editedOrderHeaderKey="";
 	protected String draft;
-	protected String path;
-
+	protected String path;	
+	
 	/**
 	 * @return the itemMap
 	 */
