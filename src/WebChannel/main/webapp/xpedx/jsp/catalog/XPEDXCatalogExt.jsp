@@ -1170,7 +1170,11 @@ function loadView()
 }
 function processDetail(itemid, uom) {
 	var selView = document.getElementById("selectedView").value; 
-	var storeFrontId = "<s:property value='wCContext.storefrontId' />";                   	
+	var storeFrontId = "<s:property value='wCContext.storefrontId' />";
+	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
+	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+	<s:set name="productCompareBackPageURL" value="%{productCompareBackPageURL}" scope="session"/>
+	// End - Changes made by Mitesh Parikh for 2422 JIRA             	
 	window.location.href = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;;
 }
 <s:set name='wccontext' value="#_action.getWCContext()"/>
@@ -1235,6 +1239,7 @@ function validationforDragToCompare()
     }
     else
     {    	
+    	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
         window.location.href="<s:property value='%{compareURL}' escape='false'/>";
     }
     
