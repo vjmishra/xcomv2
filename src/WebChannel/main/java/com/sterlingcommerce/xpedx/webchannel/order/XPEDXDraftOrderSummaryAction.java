@@ -124,6 +124,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	public String execute() {
 		XPEDXWCUtils xpedxwcUtils = new XPEDXWCUtils();
 		XPEDXOrderUtils orderUtils = new XPEDXOrderUtils();
+		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		//Commented for JIRA 2909
 		/*try {
 			boolean committedDateProcessingSuccessful = processCommittedDatesIfRequired();
@@ -1154,6 +1157,16 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
+	
+	private String itemDtlBackPageURL="";
+	
+	public String getItemDtlBackPageURL() {
+		return itemDtlBackPageURL;
+	}
+
+	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
+		this.itemDtlBackPageURL = itemDtlBackPageURL;
+	}
 
 	public String getInstructionText() {
 		return instructionText;

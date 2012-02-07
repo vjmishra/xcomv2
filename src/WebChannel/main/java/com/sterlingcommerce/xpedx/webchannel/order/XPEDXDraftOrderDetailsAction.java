@@ -9,14 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -30,20 +27,18 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
-import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderDetailsAction;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
@@ -54,13 +49,9 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
-import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-import com.yantra.yfc.dom.YFCElement;
-import java.util.Comparator;
 /**
  * @author rugrani/Manohar/Manoj
  */
@@ -68,11 +59,16 @@ import java.util.Comparator;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	public String execute() {
+		//XPEDXWCUtils.setBackPageURLinSession();
+		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		XPEDXWCUtils.checkMultiStepCheckout();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		String ajaxDisplayStatusCodeMsg = "";
 		boolean isChangeOrderCalled=false;
 		try {
+			
 			setDefaultShipToIntoContext();
 			getCustomerLineDetails();
 			
@@ -1941,7 +1937,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
+	private String itemDtlBackPageURL="";
 	
+	public String getItemDtlBackPageURL() {
+		return itemDtlBackPageURL;
+	}
+
+	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
+		this.itemDtlBackPageURL = itemDtlBackPageURL;
+	}
+
 	public String getResetDesc() {
 		return resetDesc;
 	}
@@ -2122,9 +2127,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
 		this.pnALineErrorMessage = pnALineErrorMessage;
-	}
+	}	
 	
-	
-	
-
 }
