@@ -4580,6 +4580,29 @@ function deleteLine(orderHeaderKey, lineKey){
 
 
 function updateLines() {
+	//Added For Jira 3366
+	var arrQty = new Array();
+	var arrItemID = new Array();
+
+	arrQty = document.getElementsByName("orderLineQtys");
+	arrItemID = document.getElementsByName("lineKeys");
+	var error=false;
+	for(var i = 0; i < arrItemID.length; i++)
+		
+	{   
+		var divId='errorDiv_'+arrQty[i].id;
+		var divVal=document.getElementById(divId);
+
+		var quantity = arrQty[i].value;
+		quantity = ReplaceAll(quantity,",","");
+		if(quantity == '0' || quantity== '' )
+		{
+			divVal.innerHTML= "Quantity cannot be 0 or empty.";
+			divVal.style.display='inline';
+			error=true;
+		}
+	}
+	//End Fix For Jira 3366
 	//added for jira 3232
 	Ext.Msg.wait("Processing...");
     if(swc_validateForm("miniCartData") == false)
