@@ -193,6 +193,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private Map<String,Element> descriptionMap=new HashMap<String,Element>();
 	private Map<String,Element> masterItemExtnMap=new HashMap<String,Element>();
 	
+	private String itemDtlBackPageURL="";
+	
+	public String getItemDtlBackPageURL() {
+		return itemDtlBackPageURL;
+	}
+
+	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
+		this.itemDtlBackPageURL = itemDtlBackPageURL;
+	}
+	
 	public Map<String, Element> getMasterItemExtnMap() {
 		return masterItemExtnMap;
 	}
@@ -499,6 +509,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	@Override
 	public String execute() {
 		try {
+			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+			if(!isEditMode())
+				setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+			else
+			{
+				StringBuffer editListURL=new StringBuffer();
+				editListURL.append(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append("listKey="+getListKey()).append("&").
+								   append("listName="+getListName()).append("&").append("listDesc="+getListDesc()).append("&").append("itemCount="+getItemCount()).append("&").
+								   append("shareAdminOnly="+getShareAdminOnly()).append("&").append("filterBySelectedListChk="+isFilterBySelectedListChk()).append("&").
+								   append("filterByMyListChk="+isFilterByMyListChk()).append("&").append("filterByAllChk="+isFilterByAllChk()).append("&").
+								   append("sharePrivateField="+getSharePrivateField()).append("&").append("editMode="+isEditMode()));
+								   						
+				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", editListURL.toString());
+						
+			}
+			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 			Map<String, Element> out;
 
 			// Init vars
