@@ -35,8 +35,12 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	
 	public String execute() {
 		String returnVal = null;
-		try {
+		try {			
 			returnVal = super.execute();
+			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+			setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
+			
 			//PnA call removed as per Pawan's mail dated 9/4/2011
 			getProductComparisonOutputDetails();
 			/**** Code for adding of additional attributes ********/
@@ -360,6 +364,16 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 
 	public void setListSizeMap(HashMap<String, String> listSizeMap) {
 		this.listSizeMap = listSizeMap;
+	}
+	
+	private String itemDtlBackPageURL="";
+	
+	public String getItemDtlBackPageURL() {
+		return itemDtlBackPageURL;
+	}
+
+	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
+		this.itemDtlBackPageURL = itemDtlBackPageURL;
 	}
 
 }
