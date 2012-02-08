@@ -566,9 +566,9 @@
     Createts="2011-07-14T14:37:48-04:00" Createuserid="SYSTEM"
     DelPackage="" DocumentType="0001"
     ErrFileName="order_purge_error.log" LastRunEndTs="2001-06-27"
-    LastRunStartTs="2001-06-27" LeadDays="30" Lockid="0"
-    LogFileName="order_purge_data.log" Modifyprogid="XMLMigrator"
-    Modifyts="2011-07-14T14:37:48-04:00" Modifyuserid="SYSTEM"
+    LastRunStartTs="2001-06-27" LeadDays="180" Lockid="1"
+    LogFileName="order_purge_data.log" Modifyprogid=".YEntityServlet"
+    Modifyts="2012-02-06T04:38:11-05:00" Modifyuserid="admin"
     OrganizationCode="DEFAULT" PurgeCode="ORDERPRG"
     PurgeCodeDescription="Order Purge" PurgeCriteriaKey="ORDERPRG"
     RbSegment="" SelPackage="" WriteToLog="N"/>

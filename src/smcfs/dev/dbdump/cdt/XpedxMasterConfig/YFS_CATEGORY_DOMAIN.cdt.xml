@@ -86,4 +86,12 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-02T00:01:47-04:00" Modifyuserid="ng"
     OrganizationCode="Zellerbach" ShortDescription="Master Catalog"/>
+<CategoryDomain AttributeName="" CategoryDomain="xpedxMasterCatalog"
+    CategoryDomainKey="20120203062832116986"
+    Createprogid=".YCPOrgDetailsAPI"
+    Createts="2012-02-03T06:28:31-05:00" Createuserid="admin"
+    Description="Master Catalog for xpedx" IsClassification="N"
+    Lockid="0" Modifyprogid=".YCPOrgDetailsAPI"
+    Modifyts="2012-02-03T06:28:31-05:00" Modifyuserid="admin"
+    OrganizationCode="xpedx" ShortDescription="Master Catalog"/>
 </YFS_CATEGORY_DOMAINList>
