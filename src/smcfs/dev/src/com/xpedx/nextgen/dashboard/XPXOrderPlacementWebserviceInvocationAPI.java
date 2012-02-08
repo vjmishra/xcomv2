@@ -20,7 +20,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 		private static Properties props;
 		//private static final Logger log = Logger.getLogger(XPXOrderPlacementWebserviceInvocationAPI.class);
-		private static YFCLogCategory log = YFCLogCategory.instance(XPXOrderPlacementWebserviceInvocationAPI.class);
+		private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		public void setProperties(Properties arg0) throws Exception {
 			// TODO Auto-generated method stub
@@ -47,6 +47,7 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			if(inputXML != null){
 				log.info("Input xml for OrderPlace to Legacy: "+SCXmlUtil.getString(inputXML));
 			}
+			
 			String inputXMLString = SCXmlUtil.getString(inputXML);
 			inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
 			inputOrderXml.setFPlaceOrder(inputPlaceOrder);
