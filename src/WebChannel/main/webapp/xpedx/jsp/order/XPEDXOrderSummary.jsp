@@ -492,7 +492,9 @@ from session . We have customer Contact Object in session .
 <s:if test='!#canChangeOthers'>
 	<s:set name='poNumberEditability' value='"disabled"' />
 </s:if>
+<%--jira 2885 --%>
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+<s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <body class="ext-gecko ext-gecko3">
 <div id="main-container">
 <div id="main">
@@ -510,6 +512,11 @@ from session . We have customer Contact Object in session .
 		</div>
 		
 		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div>
+		<%--jira 2885 --%>
+		<div id="errorMessageDiv"><s:if test='#pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5>
+			</s:if>
+			</div>
 		
 		<div class="clearall">&nbsp;</div>
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
