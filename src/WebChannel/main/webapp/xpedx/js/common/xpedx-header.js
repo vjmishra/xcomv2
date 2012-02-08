@@ -4608,7 +4608,7 @@ function updateLines() {
     if(swc_validateForm("miniCartData") == false || error)
 
     {
-
+    	Ext.MessageBox.hide();
         return;
 
     }
