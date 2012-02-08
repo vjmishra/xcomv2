@@ -187,4 +187,11 @@
         <appender-ref ref="CUSTOMER_APPENDER" />
     </category>   -->
 
+
+<category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="DEBUG"  />
+               <appender-ref ref="ALL" />
+   </category>
+
+
 </log4j:configuration>
