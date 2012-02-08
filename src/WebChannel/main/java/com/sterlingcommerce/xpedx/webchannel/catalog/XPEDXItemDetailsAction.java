@@ -165,7 +165,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 						.getPnALineErrorMessage(pandAItem1);
-				ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + lineStatusErrorMsg ;
+
+//	for jira 2885	ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
+				
 				if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
 				} else {
