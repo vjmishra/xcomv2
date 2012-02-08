@@ -316,7 +316,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	protected void setXPEDXFields() throws Exception {
 		try {			
 			
-			Boolean isSalesRep = (Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			//Boolean isSalesRep = (Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			Boolean isSalesRep = null;
+			String isSalesRepStr = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			if(isSalesRepStr != null){
+			isSalesRep = Boolean.valueOf(isSalesRepStr);
+			}
+
 			//Document custProfileDoc = //getCustomerDetails();
 			/*Element custExtn = SCXmlUtil.getChildElement(custProfileDoc
 					.getDocumentElement(), "Extn");*/
