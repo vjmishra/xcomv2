@@ -194,9 +194,14 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 				//}
 				// PNA call
 				XPXPriceAndAvailability pna = XPXPriceandAvailabilityUtil.getPriceAndAvailability(env, inputItems, customerId);
-					if (pna != null && (!"F".equals(pna.getTransactionStatus()))) {
+				//added for jira 2885
+					if(pna != null){
 					String responseXML=pna.getResponseXml();
 					storeResponseString(env,responseXML,orderHeaderKey);
+					}
+					//end of jira 2885
+					if (pna != null && (!"F".equals(pna.getTransactionStatus()))) {
+					
 					Vector<XPXItem> pAndAitems = pna.getItems();
 					for(int idx=0;idx<lineItems.getLength();idx++){
 						Element lineItemEle = (Element)lineItems.item(idx);
@@ -255,7 +260,11 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 						lineItemEle.setAttribute("UnitPrice", "0");
 						lineItemEle.setAttribute("LinePrice","0");
 					}
-					deleteResponseFromUEAttrTable( env, orderHeaderKey);
+					//added for jira 2885
+					if(pna == null){
+						deleteResponseFromUEAttrTable( env, orderHeaderKey);
+					}
+					//end for jira 2885
 				}
 					
 			}
