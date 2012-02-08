@@ -57,7 +57,7 @@ function updateUOMFields() {
 function setPandAData() {
 	var ajaxAvailDiv = document.getElementById("jsonAvalabilityDiv");
 	var errorValue = document.getElementById("lineStatusCodeMsg");
-
+	var errorVal=document.getElementById("pnaErrorStatusMsg");
 	var itemAvailDiv = document.getElementById("tabs-1");
 	var displayPricesDiv = document.getElementById("displayPricesDiv");
 	var pricedDiv = document.getElementById("pricesDiv");
@@ -73,7 +73,19 @@ function setPandAData() {
 	}
 	document.getElementById("pricesDiv").innerHTML = "";
 	
-	errorMsgDiv.innerHTML = "<h5><b><font color=red>" + errorValue.value + "</font></b></h5>"; 
+	//added for jira 2885
+	if(errorValue.value != null && errorValue.value != ""){
+		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorValue.value + "</font></b></h5>";
+	}
+	
+	if(errorVal.value != null && errorVal.value != ""){
+		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorVal.value + "</font></b></h5>";
+	}
+	//if(displayPricesDiv!=null && pricedDiv!=null) 
+	if(errorValue.value == null && errorValue.value == "") {
+		errorMsgDiv.innerHTML= "";
+	}
+	
 	document.getElementById("lineStatusCodeMsg").innerHTML = "";
 }
 
