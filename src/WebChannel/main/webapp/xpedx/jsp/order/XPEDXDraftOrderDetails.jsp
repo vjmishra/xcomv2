@@ -404,7 +404,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	value='#_action.isOrderModificationAllowed("CHANGE_ORDER_DATE")' />
 <s:set name="emailDialogTitle" scope="page"
 	value="#_action.getText('Email_Title')" />
+	<%--jira 2885 --%>
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+<s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:url includeParams="none" id="orderNotesListURL"
 	action="orderNotesList.action">
 	<s:param name="OrderHeaderKey" value='#orderHeaderKey' />
@@ -601,7 +603,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <div class="container shopping-cart">
 
 <s:if test='ajaxLineStatusCodeMsg!=null'>
-	<div id="mid-col-mil">
+	<div id="errorMsgDiv">
+	<s:if test='#pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+	<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+	</s:if>
 <%--	<h5 align="center"><b><font color="red"><s:property
 		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
 	</div>
