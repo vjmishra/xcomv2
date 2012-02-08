@@ -443,7 +443,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
                     String instructionType = instructionElement.getAttribute("InstructionType");
                     log.info("instructionType = " + instructionType);
                     if(!YFCObject.isNull(instructionType) && !YFCObject.isVoid(instructionType) 
-                                && (instructionType.equalsIgnoreCase("HEADER") || instructionType.equalsIgnoreCase("LINE")) ){
+                                && (instructionType.equalsIgnoreCase("HEADER") ) ){
                     	setWebHoldFlag = true;
                           break;
                     }
