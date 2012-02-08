@@ -42,12 +42,21 @@ function addProductsToOrder()
 		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
+			orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
+			if(orderMultiple != null || orderMultiple!=undefined || orderMultiple != 1 || orderMultiple.replace(/^\s*|\s*$/g,"") =='' || orderMultiple !=0){
 			var enteredUOM = selectedUOM[i].value;
 			enteredUOM = enteredUOM.split(" ");
 			enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
 			entereditems = encodeForHTML(QuickAddElems[i].sku);
 			enteredUoms = enteredUOM[0];
 			uomConvFac = encodeForHTML(QuickAddElems[i].itemUomAndConvString);
+			}
+			else {
+				enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
+				entereditems = encodeForHTML(QuickAddElems[i].sku);
+				enteredUoms = encodeForHTML(QuickAddElems[i].uom);
+				uomConvFac = encodeForHTML(QuickAddElems[i].itemUomAndConvString);
+			}
 			if(enteredUoms){
 				if(uomConvFac!=null)enteredUomsConFact = uomConvFac.split("|");
 				for(var j=0; j<enteredUomsConFact.length; j++){
@@ -60,7 +69,6 @@ function addProductsToOrder()
 					}
 				}
 				enteredQuants = ReplaceAll(enteredQuants,",","");
-				orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
 				var divId="errorQty_"+entereditems+i;
 				var divIdError=document.getElementById(divId);
 				//alert("entered item is: " + entereditems +" enteredUoms:" +enteredUoms + "  enteredQuants:" +enteredQuants+ " orderMultiple:" +orderMultiple + " selectedUomConvFacFromStr:"+selectedUomConvFacFromStr + "  selectedUomConvFac:"+selectedUomConvFac);
