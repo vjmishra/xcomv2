@@ -79,10 +79,9 @@ public class XPEDXPriceandAvailabilityUtil {
 	
 	//Start- Fix for 3105
 	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Price & Availability is not available. Please try again later or contact Customer Service.";
-	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Price & Availability is not available. Please try again later or contact Customer Service.";
-	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Price & Availability is not available. Please contact Customer Service.";
-	//End- Fix for 3105
-	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Sorry, there was a problem processing your request. Please contact customer service or try again later.";//Sorry, Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";//"Sorry, Price & Availability is not available, please contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Sorry, the item information for this item is not valid. Please contact customer service for price and availability.";// "Price & Availability is not available, please try again or contact customer service.";
 			
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_SERVICESTATUSDOWN_ERROR = "WSPriceAndAvailabilityOutputXmldocWithServiceStatusDownError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
@@ -270,15 +269,18 @@ public class XPEDXPriceandAvailabilityUtil {
 				pna.setHeaderStatusCode ( headerStatusCode );
 				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR  ; 
 			}
-			else
+			/* (commented for jira 2885 as there is a seperate method for setting lineStatus error msg) else
 			{
 				//LineStatusCode
 				String lineStatusCodeCode = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/PriceAndAvailability/Items/Item/LineStatusCode");
-				System.out.println( " lineStatusCodeCode  : " + lineStatusCodeCode );
+				System.out.println( " \nlineStatusCodeCode  : " + lineStatusCodeCode );
+
 				if(YFCCommon.isVoid(lineStatusCodeCode) || !lineStatusCodeCode.equalsIgnoreCase("00")){
 					displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR  ; 
+					pna.setStatusVerboseMsg(displayErrorMsgToUser);
+					
 				}
-			}
+			}*/
 		}
 		
 		
@@ -1030,8 +1032,8 @@ public class XPEDXPriceandAvailabilityUtil {
 	public static String getAjaxDisplayStatusCodeMsg(XPEDXPriceAndAvailability pna) {
 		
 		String ajaxMsg = "";	
-		
-		if( pna == null || pna.getItems().size()==0)
+		//modified for jira 2885
+		if(( pna == null || pna.getItems().size()==0) && (!"F".equals(pna.getTransactionStatus())))
 			ajaxMsg  =   XPEDXPriceandAvailabilityUtil.WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR;
 		else
 			ajaxMsg  =   pna.getStatusVerboseMsg();
