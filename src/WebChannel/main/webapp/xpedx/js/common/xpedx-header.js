@@ -4605,7 +4605,7 @@ function updateLines() {
 	//End Fix For Jira 3366
 	//added for jira 3232
 	Ext.Msg.wait("Processing...");
-    if(swc_validateForm("miniCartData") == false)
+    if(swc_validateForm("miniCartData") == false || error)
 
     {
 
