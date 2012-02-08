@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld" %>
+<%@page import="java.util.Date"%>
+
+
 
 <s:set name='_action' value='[0]' />
 <s:set name="xutil" value="XMLUtils" />
@@ -159,7 +162,13 @@
 		var expirationDate=document.getElementById("submittedTSTo").value;
 		var currentArtList=document.getElementById("currentArtList").value.split(",");
 		var articleName=document.getElementById("articleName").value;
-
+		// Added For Jira 3315
+			var currentDate = new Date()
+	 		var day = currentDate.getDate()
+	  		var month = currentDate.getMonth() + 1
+	  		var year = currentDate.getFullYear()
+	  		var currentday = month+"/" + day + "/"+year;
+	  	//End Fix For 3315
 		if(currentArtList.length>0) {
 			for(var i=0; i<currentArtList.length; i++) {
 				if(currentArtList[i].trim() == articleName) {
@@ -199,14 +208,28 @@
 		 	document.getElementById("submittedTSTo").focus();
 	        	return false;    
 			}
-		
-		if(document.getElementById("submittedTSTo").value < document.getElementById("submittedTSFrom").value){
-			document.getElementById("submittedTSTo").style.borderColor="#FF0000";
-			alert("Article expiration date cannot be less than effective date. Please re-enter the expiration date");
-		 	document.getElementById("submittedTSTo").focus();
+		// Start Fix For Jira 3315
+		var effectiveDateDay = new Date(document.getElementById("submittedTSFrom").value); 
+		var expirationDateDay = new Date(document.getElementById("submittedTSTo").value);
+		var currentDateDay=new Date(currentday);
+		//Expiration date > or = Current Date Jira 3315
+		if(expirationDateDay < currentDateDay){
+		document.getElementById("submittedTSTo").style.borderColor="#FF0000";
+		document.getElementById("submittedTSFrom").style.borderColor="";        
+		alert("Article expiration date should be greater than or equal to current date. Please re-enter the expiration date");
+	 	document.getElementById("submittedTSTo").focus();
+		return false;
+		}
+		//Effective Date < or = Expiration Date Jira 3315
+		if(effectiveDateDay > expirationDateDay){
+			document.getElementById("submittedTSFrom").style.borderColor="#FF0000";
+			document.getElementById("submittedTSTo").style.borderColor="";
+			alert("Article effective date should be less than or equal to expiration date. Please re-enter the effective date");
+		 	document.getElementById("submittedTSFrom").focus();
 			return false;
-			}
+		}
 		
+		// End Fix For Jira 3315
 		else{
 			document.newArticleForm.submit();
 			}
@@ -273,8 +296,7 @@ margin-top:2px; }
 		              <td width="87">Expiration Date:</td>
 		              <td ><div class="demo"><input type="text" name="submittedTSTo" id="submittedTSTo" class="x-input  datepicker" value="" size="14" maxlength="10"/></div></td>
 		            </tr> 
-		            
-		            <tr>
+		          <tr>
 		              <td  colspan="4"  style="padding-bottom: 0;">
  				  		<span class="dkcharcole"> 
  				  		<!-- Note: It is not possible to attach or paste a local file (like an image) directly to a website. Please ensure files can be accessed from the Internet. -->
