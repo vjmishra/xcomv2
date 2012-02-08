@@ -51,7 +51,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 	static {
 
-		log = YFCLogCategory.instance(XPXPerformLegacyOrderUpdateExAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException yifEx) {
