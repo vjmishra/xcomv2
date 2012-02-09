@@ -46,7 +46,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXCreateChainedOrderService.xml";
 
 	static {
-		log = YFCLogCategory.instance(XPXAddParametersAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
