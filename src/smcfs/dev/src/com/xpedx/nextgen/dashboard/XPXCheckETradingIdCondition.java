@@ -27,7 +27,7 @@ public class XPXCheckETradingIdCondition implements YCPDynamicConditionEx
 	
 	
 	static {
-		log = YFCLogCategory.instance(XPXCheckETradingIdCondition.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
