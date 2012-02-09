@@ -31,7 +31,7 @@ public class XPXB2BInvoiceWebServiceInvocationAPI implements YIFCustomApi{
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
 	static {
-		log = YFCLogCategory.instance(XPXB2BInvoiceWebServiceInvocationAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 	
 	
