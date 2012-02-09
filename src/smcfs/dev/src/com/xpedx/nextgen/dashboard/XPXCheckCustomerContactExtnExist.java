@@ -22,7 +22,7 @@ public class XPXCheckCustomerContactExtnExist implements YCPDynamicConditionEx
 	private static YIFApi api = null;
 	
 	static {
-		log = YFCLogCategory.instance(XPXCheckCustomerContactExtnExist.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
