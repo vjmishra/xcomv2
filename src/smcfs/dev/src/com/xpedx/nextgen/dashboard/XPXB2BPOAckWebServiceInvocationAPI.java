@@ -28,7 +28,7 @@ public class XPXB2BPOAckWebServiceInvocationAPI implements YIFCustomApi
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
 	static {
-		log = YFCLogCategory.instance(XPXB2BPOAckWebServiceInvocationAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 	
 	public Document invokeWebService(YFSEnvironment env, Document inputXML)
