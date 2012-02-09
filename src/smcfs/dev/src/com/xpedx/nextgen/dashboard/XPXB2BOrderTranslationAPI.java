@@ -30,7 +30,7 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXB2BOrderTranslationAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
