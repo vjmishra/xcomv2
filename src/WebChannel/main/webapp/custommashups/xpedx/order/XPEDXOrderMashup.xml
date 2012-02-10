@@ -30,31 +30,23 @@
 				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
 					Refresh="Y">
 					<PreviousPage PageNumber="" />
-					<API Name="getOrderList">
+					<API Name="XPXOrderListDetails" IsFlow="Y">
 						<Input>
-							<Order EnterpriseCode="" DraftOrderFlag="Y" DocumentType="0001"
-								AuthorizedClient="Web" BuyerOrganizationCode="">
-
+							<XPEDXOrderListView DraftOrderFlag="Y" DocumentType="0001"
+								AuthorizedClient="Web" BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
+								
 								<OrderBy>
 									<Attribute Desc="N" Name="Modifyts" />
 								</OrderBy>
-							</Order>
+							</XPEDXOrderListView>
 						</Input>
 						<Template>
-							<OrderList>
-								<Order OrderNo="" OrderName="" Modifyts="" Createts=""
-									OrderHeaderKey="" CustomerContactID="" CustomerFirstName=""
-									CustomerLastName="" Modifyuserid="" >
-									<Extn/>
-									<OrderLines TotalNumberOfRecords="" />
-									<Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
-									<OrderLineTranQuantity TransactionalUOM=""	OrderedQty="" />
-									<Extn ExtnOrderDesc="" />
-									<OrderBy>
-										<Attribute Desc="" Name="" />
-									</OrderBy>
-								</Order>
-							</OrderList>
+							<XPEDXOrderListViewList TotalNumberOfRecords="">
+									<XPEDXOrderListView OrderedByName="" Modifyts="" OrderName="" 
+									BuyerOrganizationCode=""  AuthorizedClient=""
+    								OrderHeaderKey="" DocumentType="" DraftOrderFlag="" OrderNo="" 
+    								WebConfNum="" TotalNumberOfItems="" ExtnOrderDesc=""/>
+							</XPEDXOrderListViewList>
 						</Template>
 					</API>
 				</Page>
