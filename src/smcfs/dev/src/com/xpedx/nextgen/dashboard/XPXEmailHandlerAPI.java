@@ -42,7 +42,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	private static YFCLogCategory yfcLogCatalog;
 
 	static {
-		yfcLogCatalog = YFCLogCategory.instance(XPXEmailHandlerAPI.class);
+		yfcLogCatalog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 
 	/***************************************************************/
