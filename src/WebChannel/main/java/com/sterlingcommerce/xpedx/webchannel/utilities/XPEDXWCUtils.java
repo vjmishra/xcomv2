@@ -5456,5 +5456,11 @@ public class XPEDXWCUtils {
 	/* Method created for JIra 2599 ****/
 
 	
+	public static void setItemDetailBackPageURLinSession()
+	{
+		IWCContext wcContext =WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String backPageURL=(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString();
+		wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);		
+	}
 
 }
