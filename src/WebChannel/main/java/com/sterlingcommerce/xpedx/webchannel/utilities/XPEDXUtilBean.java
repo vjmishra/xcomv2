@@ -6,6 +6,8 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +15,8 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
+import com.yantra.yfc.date.YDate;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author Administrator
@@ -312,6 +316,21 @@ public class XPEDXUtilBean extends UtilBean {
 			}
 		}
 
-	   
+		public String formatDate(String inputDate,  String inputFormat, String outputFormat)
+	    {
+	        
+	        if(YFCCommon.isVoid(inputFormat))
+	            inputFormat = "yyyy-MM-dd'T'HH:mm:ss";
+	        if(YFCCommon.isVoid(outputFormat))
+	            outputFormat = "yyyy-MM-dd'T'HH:mm:ss";
+	        //YDate yDate = new YDate(inputDate, inputFormat, true);
+	        SimpleDateFormat dateFormat=new SimpleDateFormat(outputFormat);
+	        String date[]=inputDate.split("-");
+	       // Date d=new Date(inputDate);
+	       // dateFormat.format(d);
+	       // String returnValue = yDate.getString(outputFormat);
+	        
+	        return date[1]+"/"+date[2]+"/"+date[0];
+	    }
 	    
 }
