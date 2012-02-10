@@ -26,7 +26,7 @@ import com.yantra.yfs.japi.YFSException;
  */
 public class XPXGetSKUDetails implements YIFCustomApi{
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXGetSKUDetails.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	public static final String getItemListTemplate = "global/template/api/getItemList.XPXGetSKUDetails.xml";
 	public Document getSKUDetails(YFSEnvironment env, Document inputXML)  throws Exception
 	{
