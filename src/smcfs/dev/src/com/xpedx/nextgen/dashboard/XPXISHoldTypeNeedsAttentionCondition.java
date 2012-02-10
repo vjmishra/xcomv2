@@ -21,7 +21,7 @@ public class XPXISHoldTypeNeedsAttentionCondition implements YCPDynamicCondition
 	
 	
 	static {
-		log = YFCLogCategory.instance(XPXCheckIfOrderOnHoldCondition.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
