@@ -26,7 +26,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXBulkPasswordResetAgent extends YCPBaseAgent {
 
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXBulkPasswordResetAgent.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static Set<String> customerContactKeys = new HashSet<String>();
 	
 	private static HashMap customerContactUserContactKeys = new HashMap();
