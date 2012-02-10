@@ -295,7 +295,7 @@ span.underlink:hover {
                 <div class="clear">&nbsp;</div>
                
                 <swc:sortctl sortField="%{orderByAttribute}" sortDirection="%{orderDesc}" down="Y" up="N" urlSpec="%{#draftOrderListSortURL}">
-                    <s:set name="iter" value="#util.getElements(#sdoc, '//Page/Output/OrderList/Order')"/>
+                    <s:set name="iter" value="#util.getElements(#sdoc, '//Page/Output/XPXOrderListViewList/XPXOrderListView')"/>
                     <s:action name="xpedxBuildSimpleTable" executeResult="true" namespace="/common" >
                         <s:param name="id" value="'mil-carts-list'"/>
                         <s:param name="summary" value="'Draft Order List Table'"/>
@@ -313,9 +313,9 @@ span.underlink:hover {
 		    			
                         <s:param name="columnSpecs[1].label" value="' Last Modified By'"/>
                         <s:param name="columnSpecs[1].align" value="'center'"/>
-                        <s:param name="columnSpecs[1].dataField" value="'ModifyUserName'"/>
+                        <s:param name="columnSpecs[1].dataField" value="'OrderedByName'"/>
                         <s:param name="columnSpecs[1].labelCssClass" value="'width-140'"/>
-                        <s:param name="columnSpecs[1].sortable" value="'false'"/>
+                        <s:param name="columnSpecs[1].sortable" value="'true'"/>
                         <s:param name="columnSpecs[1].fieldCssClass" value="'createdby-lastmod'"/>
                         <%--
                         <s:param name="columnSpecs[1].dataCellBuilder" value="'xpedxDraftOrderListOwnerNameAnchor'"/>
@@ -328,7 +328,7 @@ span.underlink:hover {
                         <s:param name="columnSpecs[2].sortable" value="'true'"/>
                         <!-- <s:param name="columnSpecs[2].fieldCssClass" value="'createdby-lastmod'"/> -->
                         <s:param name="columnSpecs[2].fieldCssClass" value="'width-100'"/> 
-                       	<s:param name="columnSpecs[2].dataCellBuilder" value="'simpleTableDate'"/>  
+                       	<s:param name="columnSpecs[2].dataCellBuilderProperties['namespace']" value="'/order'"/>
 
 						<s:param name="columnSpecs[3].label" value="''"/>
 						 <s:param name="columnSpecs[3].align" value="''"/>
