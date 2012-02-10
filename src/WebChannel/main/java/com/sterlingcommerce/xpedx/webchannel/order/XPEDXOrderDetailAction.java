@@ -57,7 +57,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	public String execute() {
 		//XPEDXWCUtils.resetPendingChanges(getOrderHeaderKey(),wcContext);
 		String returnString = super.execute();
-		
+		XPEDXWCUtils.setItemDetailBackPageURLinSession();
 		setHeaderComment(getHeaderCommentValue());
 		//BEGIN: sort the orderlines based on legacy line number
 		ArrayList<Element> tempMajorLineElements = getMajorLineElements();
