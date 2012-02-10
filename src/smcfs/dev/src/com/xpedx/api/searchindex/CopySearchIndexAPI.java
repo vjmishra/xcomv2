@@ -22,12 +22,13 @@ import com.xpedx.constants.XpedxConstants;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class CopySearchIndexAPI extends XpedxYIFCustomApi implements XpedxConstants {
 //	private static final YFCLogCategory LOG = YFCLogCategory.instance(CopySearchIndexAPI.class.getName());
 //	private static final Logger LOG = new Logger(CopySearchIndexAPI.class.getName());
-	private static final Logger LOG =Logger.getLogger(CopySearchIndexAPI.class.getName());
+	private static final YFCLogCategory LOG =(YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
 	/**
 	 * ServiceName = copysearchindex
