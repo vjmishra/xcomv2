@@ -19,7 +19,7 @@ public class XPXCheckFOAvailable implements YCPDynamicConditionEx
 	
 	String getOrderListTemplate = "global/template/api/getOrderList.checkFOAvailable.xml";
 	static {
-		log = YFCLogCategory.instance(XPXCheckFOAvailable.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
