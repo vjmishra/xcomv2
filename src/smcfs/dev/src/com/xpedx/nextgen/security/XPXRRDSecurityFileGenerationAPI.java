@@ -21,7 +21,7 @@ import com.yantra.yfs.japi.YFSException;
 public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXRRDSecurityFileGenerationAPI.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	static {
 		
 		try 
