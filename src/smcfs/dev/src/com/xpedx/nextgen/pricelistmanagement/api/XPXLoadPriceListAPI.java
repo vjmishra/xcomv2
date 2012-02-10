@@ -34,7 +34,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 
 	String getPricelistLineListTemplate = "global/template/api/getPricelistLineList.XPXCreatePriceListService.xml";
 	static {
-		log = YFCLogCategory.instance(XPXLoadPriceListAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
