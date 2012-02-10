@@ -25,7 +25,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXCreateChainedOrderService.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXInvokeOrderPlaceActions.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
