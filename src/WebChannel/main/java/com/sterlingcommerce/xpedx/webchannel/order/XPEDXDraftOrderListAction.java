@@ -6,6 +6,7 @@
 
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -88,6 +89,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			}		
 			
 			String messageType = getMessageType();
+			
 			if(messageType != null && messageType.equals("XPEDXCartListWidget"))
 	        {
 				setOrderByAttribute("Modifyts");
@@ -97,10 +99,10 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 	        {
 	            setRecordPerPage(CART_LIST_RECORD_PER_PAGE);
 	        }
-			outputDoc = (Element) prepareAndInvokeMashup("xpedxDraftOrderList");				
+			outputDoc = prepareAndInvokeMashup("xpedxDraftOrderList");				
 			if(copyFlag!=null && copyFlag.trim().length()>0)
 			{
-				NodeList OrderList = outputDoc.getElementsByTagName("Order");
+				NodeList OrderList = outputDoc.getElementsByTagName("XPEDXOrderListView");
 				for(int OrderCounter = 0;OrderCounter<OrderList.getLength();OrderCounter++)
 				{
 					Element OrderElement = (Element)OrderList.item(OrderCounter);
@@ -114,11 +116,13 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 				}
 			}
 			UtilBean utilBean=new UtilBean();
-			List<Element> orderList =utilBean.getElements(outputDoc, "//Page/Output/OrderList/Order");
-			Map<String,String> userNameMap=createModifyUserNameMap(outputDoc);
+			ArrayList<Element> orderList =SCXmlUtil.getElements(outputDoc, "Output/XPXOrderListViewList/XPXOrderListView");
+			
+			//Commented since the call is not required.
+			/*Map<String,String> userNameMap=createModifyUserNameMap(outputDoc);
 			for(Element order : orderList) {
-				order.setAttribute("ModifyUserName", userNameMap.get(order.getAttribute("Modifyuserid")));
-			}
+				order.setAttribute("ModifyUserName", userNameMap.get(order.getAttribute("OrderedByName")));
+			}*/
 			if(orderList != null && orderList.size()==0)
 			{
 				XPEDXOrderUtils.refreshMiniCart(wcContext, null, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
@@ -126,8 +130,18 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			}
 			else if("true".equals(deleteOrder))
 			{
-				if(orderList != null && orderList.size()>0 )
-				XPEDXOrderUtils.refreshMiniCart(wcContext, orderList.get(0), true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+				
+				Element orderNewList = orderList.get(0);
+				String orderHeaderKey = orderNewList.getAttribute("OrderHeaderKey");
+				Map<String, String> valueMap = new HashMap<String, String>();
+			    valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
+			    Element input = WCMashupHelper.getMashupInput("XPEDXgetOrderList", valueMap, getWCContext());
+			    Object obj = WCMashupHelper.invokeMashup("XPEDXgetOrderList", input,wcContext.getSCUIContext());
+			    Document outputDoc = ((Element) obj).getOwnerDocument();
+			    ArrayList<Element> orderListNew= SCXmlUtil.getElements(outputDoc.getDocumentElement(),"Order");
+					if(orderListNew != null && orderListNew.size()>0 ){
+						XPEDXOrderUtils.refreshMiniCart(wcContext, orderListNew.get(0), true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+				}
 			}
 			processOutput(outputDoc);
 		} catch (Exception ex) {
@@ -135,8 +149,8 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 		}				
 		return "success";
 	}
-	
-	private Map<String,String> createModifyUserNameMap(Element ordersElement)
+	//Commented since this method is not called.
+	/*private Map<String,String> createModifyUserNameMap(Element ordersElement)
 	{
 		Map<String,String> modifyUserMap=new HashMap<String,String>();
 		try
@@ -185,7 +199,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			log.error("Error while getting modify UserName for order!");
 		}
 		return modifyUserMap;
-	}
+	}*/
 	public void setProductIdValue(String productID) {
 		if (!productID.equals("")) {
 			setProductIdSearchValue(productID);
