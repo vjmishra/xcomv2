@@ -34,7 +34,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 	String changeOrderTemplate = "global/template/api/getSalesOrderDetails.XPXGetOrderDetailsService.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXWebConfAndSplChgLineUpdate.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
