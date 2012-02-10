@@ -458,7 +458,7 @@ div.demo {
 	    				<th style="min-width: 6em;"><swc:sortable fieldname="%{'OrderDate'}"><span class="underlink" style="color:white">Ordered</span></swc:sortable> </th>
 	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'Extn_'+'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
 	    				<th style="min-width: 10em;"><swc:sortable fieldname="%{'Extn_'+'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
-	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'TotalAmount'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
+	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'Extn_'+'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
 	    				<th style="min-width: 10em;" class="table-header-bar-right"><span class="underlink" style="color:white">Status </span></th>
 	    			</tr>
 	    		</thead>
@@ -480,12 +480,17 @@ div.demo {
 			            	<s:set name="shipToId" value='#parentOrder.getAttribute("ShipToID")' />
 							<s:set name='currencyCode'
 								value='%{#priceInfo.item(0).getAttribute("Currency")}' />
-							<s:set name='priceWithCurrency'
-								value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #priceInfo.item(0).getAttribute("TotalAmount"))' />
-							<s:set name="orderDate"
-								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />
 							<s:set name='OrderExtn'
 								value='#xutil.getChildElement(#parentOrder,"Extn")' />
+							<s:set name='priceWithCurrency'
+								value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #OrderExtn.getAttribute("ExtnTotalOrderValue"))'/>
+								
+							<s:set name="orderDate"
+								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />						
+								
+							<s:set name='shipToName'
+								value='#OrderExtn.getAttribute("ExtnShipToName")' />
+								
 							<s:set name='webConfirmationNumber'
 								value='#OrderExtn.getAttribute("ExtnWebConfNum")' />
 							
@@ -523,10 +528,10 @@ div.demo {
 								</td>
 								
 								<td>
-										<s:property value='#OrderExtn.getAttribute("ExtnShipToName")'/>
-										<br/>
-										<s:property value='#OrderExtn.getAttribute("ExtnShipToName")' /> 
+										<s:if test='%{#shipToName!=null && #shipToName.length()>0}'>
+										<s:property value='#shipToName' /> 
 										<br />
+										</s:if> 
 									<s:if test='%{#addressLine1!=null && #addressLine1.length()>0}'>
 										<s:property value='#addressLine1' />
 										<br />
@@ -566,7 +571,7 @@ div.demo {
 											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 			                    		</s:if>
 			                            <s:else>
-											(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+											(<s:property value='#currencyCode' />)<s:property value='#priceWithCurrency' /> 
 										</s:else>
 									</s:if>
 								</td>
