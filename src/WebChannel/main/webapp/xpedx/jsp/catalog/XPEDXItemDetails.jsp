@@ -1065,7 +1065,8 @@ function SubmitActionWithValidation()
 			<% 
 			HttpServletRequest httpRequest = (HttpServletRequest) request; 
 			String referer1 = httpRequest.getHeader("referer");
-			if(referer1!=null){
+			if(httpRequest.getSession().getAttribute("itemDtlBackPageURL")==null)
+			{
 				httpRequest.getSession().setAttribute("itemDtlBackPageURL",referer1);				
 			} 
 						
