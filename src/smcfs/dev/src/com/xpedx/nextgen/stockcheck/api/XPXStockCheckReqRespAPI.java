@@ -45,7 +45,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
 	
 	static {
-		log = YFCLogCategory.instance(XPXStockCheckReqRespAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
