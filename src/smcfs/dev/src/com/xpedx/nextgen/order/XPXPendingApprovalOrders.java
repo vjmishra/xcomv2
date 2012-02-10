@@ -41,7 +41,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	public Document invokeIsPendingApprovalOrder(YFSEnvironment env,Document inXML) throws Exception
 	{
 		
-		log = YFCLogCategory.instance(XPXPendingApprovalOrders.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		boolean isApprovalReq = false;
 		String orderHeaderKey = inXML.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
 		if(orderHeaderKey == null || orderHeaderKey.trim().length() == 0)
@@ -175,7 +175,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	
 	public Document invoekApprovalOrderEmailForContact(YFSEnvironment env,Document inXML) throws Exception {
 
-		log = YFCLogCategory.instance(XPXPendingApprovalOrders.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e) {
