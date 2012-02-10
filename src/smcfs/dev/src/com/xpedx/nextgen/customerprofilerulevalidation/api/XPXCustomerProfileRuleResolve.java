@@ -24,7 +24,7 @@ public class XPXCustomerProfileRuleResolve {
 	static {
 		try 
 		{
-			log = YFCLogCategory.instance(XPXCustomerProfileRuleValidation.class);
+			log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e1) {
 			
