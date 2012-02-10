@@ -30,7 +30,7 @@ public class XPXShipNodeUpdateAPI  implements YIFCustomApi
 	String entryType = "";
 	
 	static {
-		log = YFCLogCategory.instance(XPXShipNodeUpdateAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
