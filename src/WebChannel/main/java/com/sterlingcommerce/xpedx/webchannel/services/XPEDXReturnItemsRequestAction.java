@@ -105,6 +105,9 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 		setUserName(getWCContext().getLoggedInUserName());
 		setRequestedBy(getUserDetails(eleUserInfo));
 		getCustomerLineDetails();
+		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		XPEDXWCUtils.setItemDetailBackPageURLinSession();
+		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		return returnString;
 	}
 
