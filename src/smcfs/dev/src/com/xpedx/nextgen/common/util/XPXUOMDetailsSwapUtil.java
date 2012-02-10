@@ -28,7 +28,7 @@ public class XPXUOMDetailsSwapUtil implements YIFCustomApi
 	Properties props;
 	
 	static {
-		log = YFCLogCategory.instance(XPXAddParametersAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
