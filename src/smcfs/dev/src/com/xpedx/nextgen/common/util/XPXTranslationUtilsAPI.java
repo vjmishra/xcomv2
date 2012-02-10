@@ -23,7 +23,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		
 	}
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXTranslationUtilsAPI.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	
 	static String getCustomerListTemplate = "global/template/api/getCustomerList.XPXTranslationUtilsAPI.xml";
 	
