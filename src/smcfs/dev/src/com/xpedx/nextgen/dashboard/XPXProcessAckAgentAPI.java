@@ -21,8 +21,8 @@ import com.yantra.yfs.japi.YFSException;
 public class XPXProcessAckAgentAPI extends YCPBaseAgent{
 
 	
-	private static YFCLogCategory log = YFCLogCategory
-	.instance(XPXInvoiceAgent.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory
+	.getLogger("com.xpedx.nextgen.log");
 	String getOrderListTemplate = "global/template/api/getOrderList.XPXSendPOAckOnCreateOrderAPI.xml";
 	public List getJobs(YFSEnvironment env, Document criteria,Document lastMessageCreated) throws Exception {
 		// get YIFApi instance.
