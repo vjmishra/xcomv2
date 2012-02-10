@@ -30,7 +30,7 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 	private String getcustContactListTemplate = "global/template/api/getCustomerContactList.XPXSendOrderUpdateEmail.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXPerformLegacyOrderUpdateAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException yifEx) {
