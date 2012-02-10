@@ -15,6 +15,7 @@ import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -22,7 +23,7 @@ import com.yantra.yfs.japi.YFSException;
 public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
 
 	private static Properties props;
-	private static final Logger log = Logger.getLogger(XPXEditOrderWebServiceInvocationAPI.class);
+	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	
 	public Document invokeWebService(YFSEnvironment env, Document inputXML) throws Exception
 	{
