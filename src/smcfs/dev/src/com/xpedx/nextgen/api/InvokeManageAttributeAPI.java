@@ -29,7 +29,7 @@ public class InvokeManageAttributeAPI {
 	private static YFCLogCategory yfcLogCatalog;
 
 	static {
-		yfcLogCatalog = YFCLogCategory.instance(InvokeManageAttributeAPI.class);
+		yfcLogCatalog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException yifce) {
