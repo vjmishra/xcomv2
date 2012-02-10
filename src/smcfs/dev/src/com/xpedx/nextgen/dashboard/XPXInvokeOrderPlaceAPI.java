@@ -21,7 +21,7 @@ public class XPXInvokeOrderPlaceAPI implements YIFCustomApi
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
 	static {
-		log = YFCLogCategory.instance(XPXInvokeOrderPlaceAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
