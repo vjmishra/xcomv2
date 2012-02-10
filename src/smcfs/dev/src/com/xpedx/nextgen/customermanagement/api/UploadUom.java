@@ -35,7 +35,7 @@ public class UploadUom implements YIFCustomApi {
 	
 	static
 	{
-		log = YFCLogCategory.instance(UploadUom.class);		
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");		
 	}
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
