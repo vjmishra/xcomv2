@@ -27,7 +27,7 @@ public class XPXGetCSREmailIDFromSAPCustomerAPI implements YIFCustomApi
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";
 
 	static {
-		log = YFCLogCategory.instance(XPXGetCSREmailIDFromSAPCustomerAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
             //Getting the YIF api handle
