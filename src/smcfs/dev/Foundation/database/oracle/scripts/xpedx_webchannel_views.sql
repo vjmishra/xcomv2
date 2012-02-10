@@ -1,3 +1,24 @@
+CREATE OR REPLACE VIEW XPEDX_ORDER_LIST_VIEW
+AS
+SELECT
+yus.username AS ORDERED_BY_NAME,
+ohr.modifyts AS LAST_MODIFYTS,
+ohr.order_name ,
+ohr.order_header_key ,
+ohr.order_no,
+ohr.draft_order_flag,
+ohr.document_type ,
+ohr.authorized_client,
+ohr.buyer_organization_code ,
+ohr.extn_web_conf_num,
+ohr.extn_order_description AS extn_order_description,
+count(yor.order_line_key) as total_number_of_item
+FROM yfs_order_header ohr
+LEFT JOIN yfs_order_line yor ON yor.order_header_key=ohr.order_header_key
+JOIN yfs_user yus ON (ohr.modifyuserid = trim(yus.loginid))
+GROUP BY ohr.order_header_key ,ohr.order_no, yus.username,ohr.modifyts,ohr.order_name,ohr.draft_order_flag,ohr.document_type,ohr.AUTHORIZED_CLIENT,ohr.BUYER_ORGANIZATION_CODE,extn_web_conf_num,ohr.extn_order_description,yus.username;
+
+
 CREATE OR REPLACE VIEW XPEDX_SALES_REP_CUSTOMERS 
 AS 
 SELECT DISTINCT 
