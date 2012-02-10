@@ -74,5 +74,5 @@ public class SearchIndexCleanUp {
 	      }
 	    }
 	}
-	private static final YFCLogCategory logger = YFCLogCategory.instance(SearchIndexCleanUp.class);
+	private static final YFCLogCategory logger = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 }
