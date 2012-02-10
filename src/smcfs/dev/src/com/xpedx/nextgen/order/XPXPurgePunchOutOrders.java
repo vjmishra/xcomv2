@@ -30,7 +30,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
  */
 
 public class XPXPurgePunchOutOrders extends YCPBaseAgent {
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXPurgePunchOutOrders.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
 	@Override
 	public void executeJob(YFSEnvironment env, Document orderToDeleteDoc)
