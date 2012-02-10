@@ -65,7 +65,7 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXUpdateChainedOrderAPI.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXUpdateChainedOrderAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
