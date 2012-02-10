@@ -1377,7 +1377,7 @@
 									OrderDate="" OrderHeaderKey="" OrderNo="" OrderName=""
 									SellerOrganizationCode="" Status="" isHistory="" CustomerPONo=""
 									PaymentStatus="" CustomerFirstName="" CustomerLastName="" ShipToID="">
-									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderedByName=""/>
+									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderedByName="" ExtnShipToName="" ExtnTotalOrderValue=""/>
 									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
 									<PriceInfo Currency="" EnterpriseCurrency=""
 										TotalAmount="" />
