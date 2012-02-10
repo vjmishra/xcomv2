@@ -46,7 +46,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
 
 	static {
 		try {
-			log = YFCLogCategory.instance(XPXUOMListAPI.class);
+			log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e1) {
 			log.info(e1.getMessage());
