@@ -23,7 +23,7 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 	private static YIFApi api = null;
 
 	static {
-		log = YFCLogCategory.instance(XPXGetOrderHoldStatus.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
 		try {
 			api = YIFClientFactory.getInstance().getApi();
