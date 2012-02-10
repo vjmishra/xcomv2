@@ -56,7 +56,7 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
     static 
     {
         className = XPXPasswordPolicyValidator.class.getName();
-        cat = YFCLogCategory.instance(className);
+        cat = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
     }
     /**
      * Default
