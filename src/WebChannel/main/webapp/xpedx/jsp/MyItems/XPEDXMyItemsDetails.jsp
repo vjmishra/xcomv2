@@ -1254,7 +1254,9 @@ function showSharedListForm(){
 			<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 			</s:url>
 			// Begin - Changes made by Mitesh Parikh for 2422 JIRA
-			<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+			<s:if test='editMode != true'>			
+				<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
+			</s:if>
 			// End - Changes made by Mitesh Parikh for 2422 JIRA
 			window.location.href="<s:property value='%{detailURL}' escape='false'/>" + "&itemID=" + itemid + "&unitOfMeasure=" + uom;
 		}
@@ -2359,7 +2361,11 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                 <div id="cross-sell" class="float-left">
                     <span class="consider-text"> You might also consider...</span>
                     <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
-					
+                    <!-- Begin - Changes made by Mitesh for JIRA 3186 -->
+					<s:if test='xpedxYouMightConsiderItems.size() < 4'>
+			    		<div disabled="disabled" class="jcarousel-prev jcarousel-prev-disabled"></div>
+	   			 		<div disabled="disabled" class="jcarousel-next jcarousel-next-disabled"></div>
+		    		</s:if>
 					<s:if test='xpedxYouMightConsiderItems.size() > 0'>
 						<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
 							<s:set name="itemAssetList"
@@ -2399,7 +2405,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 							
 						</s:iterator>
 					</s:if>
-
+					<!-- End - Changes made by Mitesh for JIRA 3186 -->
                         <!-- I will leave this piece of sampe html for reference -->
 						<!-- li> <a href="#"> <img src="/swc/xpedx/images/catalog/carousel-demo-1.jpg" width="91" height="94" alt="" /> <b>Rubbermaid Ridget Can Liners</b><br />
                             <br />
