@@ -18,7 +18,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class XPXChangeProcessFlagAPI implements YIFCustomApi{
 	
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXChangeProcessFlagAPI.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	String contactTemplate = "global/template/api/getCustomerContactList.XPXChangeProcessFlagAPI.xml";
 	static {
 		
