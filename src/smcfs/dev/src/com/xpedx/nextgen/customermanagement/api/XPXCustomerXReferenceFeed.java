@@ -45,7 +45,7 @@ public class XPXCustomerXReferenceFeed implements YIFCustomApi  {
 	private static YFCLogCategory log;
 	
 	static {
-		log = YFCLogCategory.instance(XPXCustomerXReferenceFeed.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
