@@ -28,7 +28,7 @@ public class XPXCreateSpecialChargeLineAPI {
 	private static YFCLogCategory log;
 	static
 	{
-	log = YFCLogCategory.instance(XPXUpdateSterlingOrderAPI.class);
+	log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 
 	public void setProperties(Properties arg0) throws Exception {
