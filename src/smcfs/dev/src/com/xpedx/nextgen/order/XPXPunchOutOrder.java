@@ -36,7 +36,7 @@ public class XPXPunchOutOrder implements YIFCustomApi {
 	}
 	
 	public Document invokePunchOut(YFSEnvironment env,Document inXML) throws Exception {
-		log = YFCLogCategory.instance(XPXPunchOutOrder.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		Element punchout = inXML.getDocumentElement();
 		Element  headerInfo = SCXmlUtil.getChildElement(punchout, "HeaderInfo");
 		if(!SCUtil.isVoid(headerInfo)) {
