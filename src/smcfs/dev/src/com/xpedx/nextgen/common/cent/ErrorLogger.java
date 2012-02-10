@@ -22,7 +22,7 @@ public class ErrorLogger {
 	private static YFCLogCategory yfcLogCatlog;
 	private static Logger log4jLogger;
 	static {
-		yfcLogCatlog = YFCLogCategory.instance(ErrorLogger.class);
+		yfcLogCatlog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		log4jLogger = YFCLogCategory.getLogger("cent");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
