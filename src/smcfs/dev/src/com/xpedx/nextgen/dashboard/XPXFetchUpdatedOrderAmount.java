@@ -32,7 +32,7 @@ public class XPXFetchUpdatedOrderAmount implements YIFCustomApi{
 	private String getOrderListTemplate = "global/template/api/getOrderList.XPXFetchUpdatedOrderAmount.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXFetchUpdatedOrderAmount.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException yifEx) {
