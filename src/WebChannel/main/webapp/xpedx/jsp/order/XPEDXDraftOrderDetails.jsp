@@ -2002,12 +2002,15 @@ var currentAadd2ItemList = new Object();
 <div class="clearall">&nbsp;</div>
 	
 <s:if test='xpedxYouMightConsiderItems.size() > 0'>
-	<div class="cart-bg carousel-div">
-	<div>
-	<span class="promotxt">You might also consider...</span>
+	<div class="cart-bg carousel-div" style="margin-top:0px;">
 		<div id="cross-sell" class="float-left">
-		    <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
-		    
+            <span class="promotxt"> You might also consider...</span>
+			<ul id="youMightConsiderCarousel" class="jcarousel-skin-xpedx">
+			<!-- Begin - Changes made by Mitesh for JIRA 3186 -->
+		    <s:if test='xpedxYouMightConsiderItems.size() < 4'>
+			    	<div disabled="disabled" class="jcarousel-prev jcarousel-prev-disabled"></div>
+	   			 	<div disabled="disabled" class="jcarousel-next jcarousel-next-disabled"></div>
+		    </s:if>
 		    <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 				<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
 					<s:set name="itemAssetList"
@@ -2015,47 +2018,43 @@ var currentAadd2ItemList = new Object();
 						<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
-								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentLocation')" />
+								value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
 							<s:set name='imageId'
 								value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
 							<s:set name='imageLabel'
 								value="#xutil.getAttribute(#itemAsset, 'Label')" />
 							<!--Removed "/" -->
-							<s:set name='imageURL' value="#imageLocation + #imageId " />
+							<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 							<s:if test='%{#imageURL=="/"}'>
-											<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
-									</s:if>
+								<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
+							</s:if>					   				
 							<!--Jira 2918 - Modified For Image Path -->
-							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+							<%--<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
 							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
 								<br />
-								</s:a>  </li>
+								</s:a>  </li> --%>
 
 						</s:if> <s:else>								
 									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
 									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
-							<%-- <s:if test='#info.size() > 0 || #shortDesc().size() > 0 '> --%>
-				<%-- 			<li> <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
-							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
-								<s:property value="%{#shortDesc}"/>
-								<br />
-								<br />
-								<br />
-								</s:a> </li> --%>
-								<%-- </s:if> --%>
-
+									<li> 
+									    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+										<s:property value="%{#shortDesc}"/>
+											<br />
+											<br />
+											<br />
+										</s:a> 
+									</li>
 						</s:else>
-					
+						<!-- End - Changes made by Mitesh for JIRA 3186 -->					
 				</s:iterator>
-			</s:if>
-		    
+			</s:if>		    
 	        </ul>
 		</div>
-	</div>
 	</div>
 </s:if>
 <!-- END carousel -->
@@ -2424,6 +2423,7 @@ function validateMinOrder()
 
 <script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
 
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
