@@ -33,7 +33,7 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 	
 	static
 	{
-		log = YFCLogCategory.instance(XPXPandAWebServiceInvocationAPI.class);
+		log =  (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
      
 	}
 	public Document invokeWebService(YFSEnvironment env, Document inputXML)
