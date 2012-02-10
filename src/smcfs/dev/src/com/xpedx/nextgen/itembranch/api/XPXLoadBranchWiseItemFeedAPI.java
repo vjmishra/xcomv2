@@ -36,7 +36,7 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 
 	static {
 		try {
-			log = YFCLogCategory.instance(XPXLoadBranchWiseItemFeedAPI.class);
+			log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e1) {
 
