@@ -20,7 +20,7 @@ import com.yantra.yfs.japi.YFSException;
 
 public class XPXIsEOFOrSOFDynaCondEx implements YCPDynamicConditionEx {
 
-	private static YFCLogCategory cat = YFCLogCategory.instance(XPXIsEOFOrSOFDynaCondEx.class);
+	private static YFCLogCategory cat = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private Properties _properties  = null;
 	private static YIFApi api = null;
 	
