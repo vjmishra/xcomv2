@@ -18,8 +18,8 @@ import com.yantra.yfs.japi.YFSException;
 
 public class XPXInvoiceAgent extends YCPBaseAgent {
 	
-	private static YFCLogCategory log = YFCLogCategory
-	.instance(XPXInvoiceAgent.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory
+	.getLogger("com.xpedx.nextgen.log");
 
 	// private static Set<String> invoiceHeaderKeys = new HashSet<String>();
 	
