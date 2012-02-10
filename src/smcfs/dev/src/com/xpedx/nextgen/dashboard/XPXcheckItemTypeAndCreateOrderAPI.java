@@ -40,7 +40,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 	private static YFCLogCategory log;
 
 	static {
-		log = YFCLogCategory.instance(XPXcheckItemTypeAndCreateOrderAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
             //Getting the YIF api handle
