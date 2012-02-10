@@ -47,7 +47,7 @@ public class XPXUpdateSterlingOrderAPI implements YIFCustomApi {
 
 	String origEnvtId = "";
 	static {
-		log = YFCLogCategory.instance(XPXUpdateSterlingOrderAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		// log.getLogger(XPXUpdateSterlingOrderAPI.class);
 		// log = YFCLogCategory.getLogger(XPXUpdateSterlingOrderAPI.class);
 
