@@ -20,7 +20,7 @@ public class XPXCheckIfOrderOnPendingAppHoldCondition implements YCPDynamicCondi
 	
 	
 	static {
-		log = YFCLogCategory.instance(XPXCheckIfOrderOnPendingAppHoldCondition.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		/*try {
 			api = YIFClientFactory.getInstance().getApi();
