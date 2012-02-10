@@ -30,7 +30,7 @@ public class XPXPasswordExpireCheck extends YCPLoginValidator {
 	static 
     {
         className = XPXPasswordExpireCheck.class.getName();
-        cat = YFCLogCategory.instance(className);
+        cat = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
     }
     /**
      * Default
