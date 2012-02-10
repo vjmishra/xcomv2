@@ -29,7 +29,7 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 	private static YFCLogCategory yfcLogCatalog;
 
 	static {
-		yfcLogCatalog = YFCLogCategory.instance(XPXSendBuyerAddedAPI.class);
+		yfcLogCatalog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 
 	/***************************************************************/
