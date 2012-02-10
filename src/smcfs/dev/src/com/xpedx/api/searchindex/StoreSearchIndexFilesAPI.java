@@ -56,7 +56,7 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 	private static final String STATUS_COMPLETE = "03";
 	private static final String STATUS_ACTIVE = "04";
 	//private static final Logger LOG = new Logger(StoreSearchIndexFilesAPI.class.getName());
-	private static final YFCLogCategory LOG = YFCLogCategory.instance(CopySearchIndexAPI.class.getName());
+	private static final YFCLogCategory LOG = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static YIFApi api = null;
 	
 	static {
