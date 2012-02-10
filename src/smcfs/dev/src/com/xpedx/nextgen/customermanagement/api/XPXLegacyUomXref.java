@@ -33,7 +33,7 @@ public class XPXLegacyUomXref implements YIFCustomApi {
 	
 	static
 	{
-		log = YFCLogCategory.instance(XPXLegacyUomXref.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 	}
 	
