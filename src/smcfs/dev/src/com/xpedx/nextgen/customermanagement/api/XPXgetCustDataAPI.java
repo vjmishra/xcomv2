@@ -15,7 +15,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXgetCustDataAPI implements YIFCustomApi{
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXgetCustDataAPI.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
