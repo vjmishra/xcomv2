@@ -40,7 +40,7 @@ public class XPXUtils implements YIFCustomApi {
 	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";	
 	/** API object. */
 	private static YIFApi api = null;
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXUtils.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
 	static {
 		
