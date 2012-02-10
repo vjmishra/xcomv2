@@ -24,7 +24,7 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 	Properties props;
 	
 	static {
-		log = YFCLogCategory.instance(XPXInvokeRulesEngineServiceAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		
 		try {
 			api = YIFClientFactory.getInstance().getApi();
