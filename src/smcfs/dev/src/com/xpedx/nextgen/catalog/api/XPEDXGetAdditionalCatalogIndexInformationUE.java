@@ -27,7 +27,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 	private static YIFApi api = null;
 	YFSEnvironment mEnvironment = null;
 	public static String stockStatus;
-	private static final YFCLogCategory log = YFCLogCategory.instance(XPEDXGetAdditionalCatalogIndexInformationUE.class.getName());
+	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	public Document getAdditionalCatalogIndexInformation(
 			YFSEnvironment environment, Document inDocumentUE)
 			throws YFSUserExitException {
