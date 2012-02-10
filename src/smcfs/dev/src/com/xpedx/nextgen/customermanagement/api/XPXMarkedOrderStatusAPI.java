@@ -22,7 +22,7 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 	private static String BASE_DROP_STATUS = "3700.0300";
 	private static String MODIFICATION_REASON_CODE= "Mark As Complete With Exceptions";
 	private static String MARK_COMPLETE ="XPX_MARK_COMPLETE.0001.ex";
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXMarkedOrderStatusAPI.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private YIFApi api = null;
 	String sOrderNo="";
 	String sEntrCode="";
