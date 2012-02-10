@@ -74,7 +74,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	private String existingMSAPName = null;
 
 	static {
-		log = YFCLogCategory.instance(XPXCustomerBatchProcess.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		/*try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
