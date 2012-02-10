@@ -59,9 +59,8 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	public String execute() {
-		//XPEDXWCUtils.setBackPageURLinSession();
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
-		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		XPEDXWCUtils.checkMultiStepCheckout();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
