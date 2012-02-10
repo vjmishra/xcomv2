@@ -39,7 +39,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 	
 	static {
 		
-		log = YFCLogCategory.instance(XPXEditChainedOrderExAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		}
