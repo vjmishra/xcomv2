@@ -24,7 +24,7 @@ public class XPXInventoryIndicatorUpdate {
 
 	static
 	{
-		log = YFCLogCategory.instance(XPXInventoryIndicatorUpdate.class);		
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");		
 	}
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
