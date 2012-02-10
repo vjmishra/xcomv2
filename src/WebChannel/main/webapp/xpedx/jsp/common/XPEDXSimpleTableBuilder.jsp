@@ -8,7 +8,8 @@
     OGNL statements. --%>
 <s:set name='_action' value='[0]'/>
 	   
-           
+<s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='util'/> 
+         
 <%--
 Class Model for this component:
   * This component creates a single table. The table is, by default
@@ -81,6 +82,7 @@ Class Model for this component:
                             </s:if>
                             <s:else>
                                 <s:set name="nmspace" value="%{#columnSpec1.dataCellBuilderProperties['namespace']}" />
+                                
                                 <s:if test='%{#nmspace == null || #nmspace == "" }' >
                                     <s:set name="nmspace" value="%{'/common'}" />
                                 </s:if>
@@ -96,9 +98,13 @@ Class Model for this component:
                             </s:else>
                         </s:if>
                         <s:else>
-                            <s:if test='!#value.equals("")'>
-                                <s:property value="#value" />
+                        <s:set name="date" value="%{#columnSpec1.dataCellBuilderProperties['namespace']}" />
+                        	<s:if test='!#value.equals("") && !#date.equals("")'>
+                                <s:property value="#util.formatDate(#value,'MM/dd/yyyy','MM/dd/yyyy')" />
                             </s:if>
+                            <s:elseif test='!#value.equals("")'>
+                                <s:property value="#value" />
+                            </s:elseif>
                             <s:else>
                                 &nbsp;
                             </s:else>
