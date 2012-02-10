@@ -23,7 +23,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class XPXInvokeCreateOrderAPI implements YIFCustomApi{
 		
 	private static YIFApi api = null;
-	YFCLogCategory log = YFCLogCategory.instance(XPXInvokeCreateOrderAPI.class);
+	YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	
 	public Document invokeCreateOrderAPI(YFSEnvironment env, Document inXML) throws Exception {
 		if(log.isDebugEnabled()){
