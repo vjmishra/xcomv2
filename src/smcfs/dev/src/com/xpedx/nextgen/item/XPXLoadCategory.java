@@ -28,7 +28,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 
 	/** YFCLogCategory Added by Arun.Sekhar on 21-Jan-2011 for  logging
 	 */
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXLoadCategory.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
