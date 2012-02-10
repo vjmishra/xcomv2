@@ -24,7 +24,7 @@ public class XPXRemoveOrderListElement implements YIFCustomApi
 	private static YIFApi api = null;
 	
 	static {
-		log = YFCLogCategory.instance(XPXRemoveOrderListElement.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
