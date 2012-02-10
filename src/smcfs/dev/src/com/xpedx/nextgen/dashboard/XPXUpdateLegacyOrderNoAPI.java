@@ -34,7 +34,7 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 	String getOrganizationListTemplate = "global/template/api/getOrderList.XPXUpdateExtnOrderStatus.xml";
 	
 	static {
-		log = YFCLogCategory.instance(XPXUpdateLegacyOrderNoAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
