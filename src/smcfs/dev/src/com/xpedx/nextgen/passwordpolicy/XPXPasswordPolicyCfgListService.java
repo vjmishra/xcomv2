@@ -29,7 +29,7 @@ public class XPXPasswordPolicyCfgListService implements YIFCustomApi {
 	
 	static {
 		
-		log = YFCLogCategory.instance(XPXPasswordPolicyCfgListService.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		}
