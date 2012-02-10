@@ -25,7 +25,7 @@ public class XPXPopulateInheritedCustomerProfileInfo implements YIFCustomApi {
 	static String _GET_CUSTOMER_LIST_SERVICE = "getCustomerList";
 	public  int apiCounter=0;
 	private static Properties propInheritedFields = new Properties();
-	YFCLogCategory logger = YFCLogCategory.instance(XPXPopulateInheritedCustomerProfileInfo.class);
+	YFCLogCategory logger = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	@Override
 	
 	public void setProperties(Properties arg0) throws Exception 
