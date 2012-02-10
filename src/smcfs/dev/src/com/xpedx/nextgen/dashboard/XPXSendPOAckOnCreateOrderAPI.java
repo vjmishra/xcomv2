@@ -53,7 +53,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		yfcLogCatalog = YFCLogCategory.instance(XPXSendPOAckOnCreateOrderAPI.class);	
+		yfcLogCatalog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");	
 	}
 	
 	public void setProperties(Properties arg0) throws Exception {
