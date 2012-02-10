@@ -61,7 +61,7 @@ public class XPXUpdateOrderWithNewItemsAPI implements YIFCustomApi{
 	String customerItem = null;
 
 	static {
-		log = YFCLogCategory.instance(XPXUpdateOrderWithNewItemsAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
         try {
 			api = YIFClientFactory.getInstance().getApi();
