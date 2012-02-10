@@ -511,7 +511,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		try {
 			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 			if(!isEditMode())
+			{
 				setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+			}
 			else
 			{
 				StringBuffer editListURL=new StringBuffer();
@@ -522,15 +524,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								   append("sharePrivateField="+getSharePrivateField()).append("&").append("editMode="+isEditMode()));
 								   						
 				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", editListURL.toString());
-						
+				
 			}
 			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 			Map<String, Element> out;
 
 			// Init vars
-			imageMap = new HashMap<String, String>();
-
-			
+			imageMap = new HashMap<String, String>();			
 
 			setRbPermissionShared("");
 			setRbPermissionPrivate(" checked=\"checked\" ");
