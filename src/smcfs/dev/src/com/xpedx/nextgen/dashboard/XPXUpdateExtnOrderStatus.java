@@ -33,7 +33,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 	private static YFCLogCategory log;
 	private String getOrderListTemplate = "global/template/api/getOrderList.XPXUpdateExtnOrderStatus.xml";
 	static {
-		log = YFCLogCategory.instance(XPXUpdateExtnOrderStatus.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException yifEx) {
