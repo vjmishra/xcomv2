@@ -23,7 +23,7 @@ public class XPXReportParentSAPChanges implements YIFCustomApi {
 	
 	static {
 		
-		log = YFCLogCategory.instance(XPXReportParentSAPChanges.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		}
