@@ -1773,7 +1773,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(!(requestedUOM!= null && requestedUOM.trim().length()>0))
 				requestedUOM = SCXmlUtil.getAttribute(itemEle, "UnitOfMeasure");
 			LOG.debug("Requested UOM: " + requestedUOM);
-			ArrayList<XPEDXItem> inputItems = getPnAInputDoc(getPnaItemId(),requestedUOM,myItemsKey);
+			//modified for jira 3392
+			ArrayList<XPEDXItem> inputItems = getPnAInputDoc(getPnaItemId(),requestedUOM,"1");
 			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems);
 			
 			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
