@@ -28,7 +28,7 @@ import com.yantra.yfc.util.YFCCommon;
 
 public class XPXLoadCatalog2 implements YIFCustomApi {
 
-	private static YFCLogCategory log = YFCLogCategory.instance(XPXLoadCatalog2.class);
+	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private YIFApi api = null;
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
