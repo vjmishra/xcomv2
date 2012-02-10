@@ -21,7 +21,7 @@ public class XPXUpdateReprocessFlagAPI implements YIFCustomApi {
 	private static YFCLogCategory log;
 
 	static {
-		log = YFCLogCategory.instance(XPXUpdateReprocessFlagAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
 		{
 			api = YIFClientFactory.getInstance().getApi();
