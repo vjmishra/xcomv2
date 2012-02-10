@@ -21,7 +21,7 @@ public class XPXReturnDummyLegacyResponseAPI implements YIFCustomApi{
 	private static YFCLogCategory log;
 
 	static {
-		log = YFCLogCategory.instance(XPXGetCSREmailIdAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
 	public Document dummyResponse(YFSEnvironment env, Document inputXML) throws Exception
 	{
