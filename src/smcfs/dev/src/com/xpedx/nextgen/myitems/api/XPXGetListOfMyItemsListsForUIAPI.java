@@ -38,7 +38,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 	private static YIFApi api = null;
 
 	static {
-		log = YFCLogCategory.instance(XPXGetListOfMyItemsListsForUIAPI.class);
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e1) {
