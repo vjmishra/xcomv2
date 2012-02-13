@@ -1123,11 +1123,19 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				while (yfcItr.hasNext()) {
 					String fOrderLineKey = null;
 					String webLineNo = null;
+					String tranUOM = null;
 					
 					YFCElement fOrderLineElem = (YFCElement) yfcItr.next();
 					if (fOrderLineElem.hasAttribute("OrderLineKey")) {
 						fOrderLineKey = fOrderLineElem.getAttribute("OrderLineKey");
 					}
+					
+					// To get Transactional UOM.
+					YFCElement orderLineTranQtyElem = fOrderLineElem.getChildElement("OrderLineTranQuantity");
+					if (orderLineTranQtyElem != null && orderLineTranQtyElem.hasAttribute("TransactionalUOM")) {
+						tranUOM = orderLineTranQtyElem.getAttribute("TransactionalUOM");
+					}
+					
 					YFCElement fOrderLineExtnElem = fOrderLineElem.getChildElement("Extn");
 					if (fOrderLineExtnElem != null) {
 						if (fOrderLineExtnElem.hasAttribute("ExtnWebLineNumber")) {
@@ -1141,6 +1149,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					YFCElement _fOrdLineTranQtyEle = _fOrderLineElem.createChild("OrderLineTranQuantity");
 					if (!isOrdPlace.equalsIgnoreCase("Y")) {		
 						_fOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
+						if (!YFCObject.isNull(tranUOM) && !YFCObject.isVoid(tranUOM)) {
+							_fOrdLineTranQtyEle.setAttribute("TransactionalUOM", tranUOM);
+						}
 					}
 					
 					YFCElement _fOrdExtnElem = _fOrderLineElem.createChild("Extn");
