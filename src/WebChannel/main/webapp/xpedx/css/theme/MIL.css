@@ -5396,22 +5396,25 @@ input label {
     border-bottom: 0 none;
 }
 .mil-wrap-condensed {
-    -moz-border-bottom-colors: none;
+/*     -moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
     border-color: #CCCCCC #CCCCCC -moz-use-text-color;
-    border-radius: 6px 6px 0 0;
+    
     border-style: solid solid none;
-    border-width: 1px 1px 0;
+    border-width: 1px 1px 0; */
+    
+    border-radius: 6px 6px 0 0;
+    border: 1px solid #cccccc;
     height: 270px;
 }
 #replacementItemBody .mil-wrap-condensed {
     border: 0 solid #CCCCCC;
 }
 .mil-wrap-condensed-bot {
-    -moz-border-bottom-colors: none;
+/*     -moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -5419,11 +5422,13 @@ input label {
     border-color: -moz-use-text-color #CCCCCC #CCCCCC;
     border-right: 1px solid #CCCCCC;
     border-style: none solid solid;
-    border-width: 0 1px 1px;
+    border-width: 0 1px 1px; */
+    border: 1px solid #cccccc;
+    border-top: 0px;
     height: 270px;
 }
 .mil-wrap-condensed-mid {
-    -moz-border-bottom-colors: none;
+/*     -moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -5431,7 +5436,9 @@ input label {
     border-color: -moz-use-text-color #CCCCCC #CCCCCC;
     border-right: 1px solid #CCCCCC;
     border-style: none solid solid;
-    border-width: 0 1px 1px;
+    border-width: 0 1px 1px; */
+    border: 1px solid #cccccc;
+    border-top: 0px;
     height: 270px;
 }
 .slidingDiv2 {
@@ -5480,7 +5487,7 @@ table.mil-my-price-availability td {
     margin-left: 15px;
     margin-top: 10px;
     overflow: hidden;
-    width: 435px;
+    /* width: 435px; */
 }
 #replacementItemBody .mil-wrap-condensed-desc {
     width: 200px;
@@ -5506,7 +5513,7 @@ div#replacementItemBody .mil-wrap-condensed {
 .mil-action-list-wrap {
     float: left;
     padding-top: 10px;
-    width: auto;
+    width: 450px;
 }
 .mil-replace-condensed a {
     color: #FF0000 !important;
@@ -5595,7 +5602,7 @@ input:focus, textarea:focus {
 .mil-desc-wrap {
     float: left;
     height: auto;
-    width: 412px;
+    width: 300px;
 }
 #replacementItemBody .mil-desc-wrap {
     width: 206px;
@@ -5610,6 +5617,37 @@ input:focus, textarea:focus {
     padding: 2px 2px 16px;
     width: 145px;
 }
+ .mil-action-list-wrap table.mil-config {
+	margin-left: 15px;
+    text-align: right;
+    float: right;
+}
+
+input.x-input {
+	height: 11px;	
+}
+
+.ad-float {
+    padding-right: 0px;
+}
+
+select, table.mil-config select.xpedx_select_sm {
+	
+	display: block;
+    float: right;
+    height: 19px;
+    margin-left: 3px;
+}
+
+select.xpedx_select_sm {
+	float: none;
+	margin: auto;
+}
+
+.mil-wrap-condensed-container.mil-only.last div.mil-wrap-condensed-bot {
+	border-radius: 0 0 5px 5px;
+}
+	
 .mil-non-edit-field {
     border: 1px solid #CCCCCC;
     border-radius: 8px 8px 8px 8px;
@@ -5819,15 +5857,15 @@ div table.mil-my-price-availability {
 	padding:8px;
 }
 
-#mil-list td,
+ #mil-list td,
 #mil-carts-list td {
 	padding:15px;
-	border-color:#ccc;
+	/*border-color:#ccc;
 	border-style:solid;
 	border-width:1px;
 	border-top:none;
-	border-bottom:none;
-}
+	border-bottom:none;*/
+} 
 
 #cart-mgmt td { 	
 	padding:15px;
@@ -5913,7 +5951,7 @@ tr:hover {
  
 #etended-price { width:55px; } 
 
-#mil-list tr:hover { none; }  
+/* #mil-list tr:hover { none; }   */
 
 .mil-bot {
 	background-image:url(../../images/theme/theme-1/mil/bot-table.gif);
@@ -6076,3 +6114,46 @@ div#main.userProfile { min-height: 850px; }
 ***********************************************************************************************************************
 **********************************************************************************************************************/
 
+#prodlist li, .prodlist li {
+	width: ;
+	word-wrap: break-word;
+}
+.dlgForm {
+	display: none;
+	border-color: black;
+	border-width: 10px;
+	padding: 20px;
+	background-color: white;
+	position: absolute;
+	left: 25%;
+	top: 40%;
+	z-index: 9999;
+	width: auto;
+	height: 50%;
+	overflow: auto;
+}
+
+.dlgFormShareList {
+	display: none;
+	border-color: black;
+	border-width: 10px;
+	padding: 20px;
+	background-color: white;
+	position: absolute;
+	left: 25%;
+	top: 40%;
+	z-index: 9999;
+	width: 400px;
+	height: 200px;
+	overflow: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
+
+#wwgrp_listOfCarts.wwgrp,#wwctrl_listOfCarts.wwctrl {
+	display: inline;
+}
+
+.xpedx-light-box p {
+}
