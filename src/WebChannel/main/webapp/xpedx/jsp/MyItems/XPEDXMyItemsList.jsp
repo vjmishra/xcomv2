@@ -12,7 +12,7 @@
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="SelectedCustomerId" value="wCContext.customerId" />
 
-<!-- begin styles -->
+<!-- begin styles. These should be the only two styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
 <!-- end styles -->
@@ -760,7 +760,7 @@
 
 <div class="clearview">&nbsp;</div>
 <div id="divMyItemLists">
-<table id="mil-list" class="sortable">
+<table id="mil-list" class="sortable standard-table">
 	<tbody>
 		<tr id="none" class="table-header-bar ">
 			<td class=" sortable table-header-bar-left" ><span class="white"> Name</span>
@@ -838,8 +838,11 @@
 				<s:set name='showAllActions' value="%{true}" />
 			</s:if>
 
-			<tr <s:if test="%{!#status.isOdd()}"><s:property value="%{'class=odd'}"/></s:if>>
-				<td ><s:a  href="javascript:doAction('view', '%{#uId}'); ">
+
+			<%-- <s:property value="%{'class=odd'}"/> --%>
+			<tr class="<s:if test="%{!#status.isOdd()}">odd</s:if>
+				<s:if test="#status.last" > last</s:if>">
+				<td class="left-cell"><s:a  href="javascript:doAction('view', '%{#uId}'); ">
 					<s:property value="#name" /> (<s:property value="#numOfItems" />)</s:a>
 					<!--  removed bold text and the word items -->	
 				<p class="grey-mil" style="width:440px; word-wrap:break-word;"><s:property value="#desc" /></p>
@@ -847,7 +850,7 @@
 				<td class="createdby-lastmod"><s:property value="#modifiedBy" /></td>
 				<td class="createdby-lastmod"><s:property value='%{#util.formatDate(#lastMod, #wcContext, null, "MM/dd/yyyy")}' /></td>
 				<s:if test="%{#showAllActions == true}">
-					<td class="actions">
+					<td class="actions right-cell">
 						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
 							<option value="select" selected="selected">- Select Action -</option>
 							<option value="view">Open List</option>
@@ -859,7 +862,7 @@
 					</td>
 				</s:if>
 				<s:else>
-					<td class="actions">
+					<td class="actions right-cell">
 						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
 							<option value="select" selected="selected">- Select Action -</option>
 							<option value="view">Open List</option>
@@ -876,10 +879,10 @@
 </table>
 </div>
 
-<div id="table-bottom-bar">
+<!-- <div id="table-bottom-bar">
 <div id="table-bottom-bar-L"></div>
 <div id="table-bottom-bar-R"></div>
-</div>
+</div> -->
 
 <div style="display:none;">
 <a class=" modal"   id="various3" name="dlgShareListLinkHL" href="#dlgShareListHL">&nbsp;</a>
