@@ -308,7 +308,7 @@ auto_clicked:function(thisS)
       sortrevind = document.createElement('span');
       sortrevind.setAttribute("class","white");
       sortrevind.id = "sorttable_sortrevind";
-      sortrevind.innerHTML = '&nbsp; <img alt="" src="/swc/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
+      sortrevind.innerHTML = '&nbsp<img alt="" src="/swc/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
       thisS.appendChild(sortrevind);
       return;
     }
