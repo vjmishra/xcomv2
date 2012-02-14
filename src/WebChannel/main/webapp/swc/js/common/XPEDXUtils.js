@@ -64,7 +64,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 
 function replacementAddToList(uId) {
 	if (uId == ""){
-		Ext.Msg.alert('Error', 'Please select an item first.');
+		Ext.Msg.alert('Error', 'Please select a replacement item.');
 		return;
 	}
 	
@@ -97,7 +97,7 @@ function replacementAddToList(uId) {
 function replacementReplaceInList(uId) {
 	
 	if (uId == ""){
-		Ext.Msg.alert('Error', 'Please select an item first.');
+		Ext.Msg.alert('Error', 'Please select a replacement item.');
 		return;
 	}
 	
