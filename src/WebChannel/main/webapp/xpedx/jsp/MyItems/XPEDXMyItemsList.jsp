@@ -23,6 +23,7 @@
 
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
  
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
 
 <!-- Hemantha -->
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -41,7 +42,7 @@
 				$("#various5").fancybox({
 					'onStart' 	: function(){
 						showSelectedList('<s:property value="#CurrentCustomerId"/>');
-						Ext.get("smilTitle_2").dom.innerHTML = "Select My Items for Location(s)";
+						Ext.get("smilTitle_2").dom.innerHTML = "Manage My Items List for Selected Locations";//Changes made for JIRA 2774
 					
 					},
 					'onClosed' : function(){
@@ -151,8 +152,11 @@
 
 </head>
 <!-- END swc:head -->
-
-
+ <s:url id="orderListPaginationURL" action="XPEDXMyItemsList">
+    	 <s:param name="pageNumber" value="'{0}'"/>
+    
+    	</s:url>
+   
 <!-- CODE_START - Global Vars -PN -->
 <s:set name='wcContext' value="wCContext" />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
@@ -661,7 +665,57 @@
 
 <div id="mid-col-mil">
 <s:form id="filterByForm" action="XPEDXMyItemsList.action" method="post">
- <div class="float-left" style="width:325px;"> List Type: &nbsp;
+<div class="float-left" style="width:325px;"> 
+<table>
+<tr>
+<td>
+<img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/mil/20x20_personal_list.png"/>
+<label>Personal</label>
+</td>
+<td>&nbsp;</td>
+<td>
+<img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/mil/20x20_shared_list.png"/>	
+<label>Shared</label>						
+</td>
+</tr>
+</table>
+
+<!-- <img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/icons/20x20_personal_list.png">
+
+           <input 
+							onclick="javascript:showListForSelectedOption();" 
+							id="rbFilterByPrivate"
+							type="radio" 
+							name="filterByOption" 
+							<s:if test="%{#_action.getFilterByMyListChk()}"> 
+								checked="checked"
+							</s:if>
+							value="1" 
+			/> 
+						
+			 
+			 <label>Personal</label>
+
+            <img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/icons/20x20_shared_list.png">		
+					
+           <input
+							onclick="javascript:showListForSelectedOption();" 
+							id="rbFilterBySelected"
+							type="radio"
+							name="filterByOption"
+							<s:if test="%{#_action.getFilterBySelectedListChk()}"> 
+								checked="checked "
+							</s:if>
+							value="2"
+						/>
+						<label>Share</label>
+						
+ -->						 
+						
+ <s:a href="#dlgSelectedList" id="various5" cssStyle="display:none;"></s:a> 
+           						</div>
+
+ <%-- <div class="float-left" style="width:325px;"> List Type: &nbsp;
 
            <input 
 							onclick="javascript:showListForSelectedOption();" 
@@ -690,7 +744,8 @@
 						 <label>Shared</label>
 						<s:a href="#dlgSelectedList" id="various5" cssStyle="display:none;"></s:a> 
            						</div>
-
+ --%>
+ 
 <s:hidden name="filterBySelectedListChk" value="%{#_action.getFilterBySelectedListChk()}"/>
 <s:hidden name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}"/>
 <s:hidden name="filterByAllChk" value="%{#_action.getFilterByAllChk()}"/>
@@ -699,8 +754,8 @@
 
 <script type="text/javascript">
 
-	function showListForSelectedOption(){
-
+	 /* function showListForSelectedOption(){
+		alert("showListForSelectedOption()--++++++++++");
 		var filterByOption = Ext.get("filterByForm").dom.filterByOption;
 
 		var radioBtnVal;
@@ -728,6 +783,18 @@
 				break;
 	        }
 	    }
+	} */
+ 
+  function showListForSelectedOption(){
+			    		Ext.get("XPEDXMyItemsSelectedList").dom.filterByMyListChk.value='false';
+				    	Ext.get("XPEDXMyItemsSelectedList").dom.filterBySelectedListChk.value='true';
+			    		if (isUserAdmin) {
+					    	$('#various5').trigger('click');
+						}else{
+							Ext.get("XPEDXMyItemsSelectedList").dom.customerIds.value='<s:property value="#SelectedCustomerId"/>';
+			            	Ext.get("XPEDXMyItemsSelectedList").dom.submit();
+						}
+				
 	}
 
 	function orderByLastModified(){
@@ -752,12 +819,31 @@
 	}
 
 </script>
-
- <div id="tool-bar-bottom" class="float-right"> 
- <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
- <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a> 
+<!-- <table align="right">
+<tr>
+<td>
+<label><a href="javascript:showListForSelectedOption();">Manage My Items List for Other Locations</a></label>		 
+</td>
+</tr>
+</table>
+ --> <div id="tool-bar-bottom" class="float-right">
+  <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
+  <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a>
+ 
  </div>
-
+  <div id="tool-bar-bottom" class="float-right">
+  <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
+  <a class=""   id="" name="" href="javascript:showListForSelectedOption();">  
+  <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px">Manage My Items List for Other Locations</div></a></div>
+  
+ <div id="tool-bar-bottom" class="float-bottom">
+  
+ <div class="search-pagination-bottom">
+                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}"/>
+			</div>
+		</div>
+		
 <div class="clearview">&nbsp;</div>
 <div id="divMyItemLists">
 <table id="mil-list" class="sortable standard-table">
@@ -773,18 +859,26 @@
 		</tr>
 		<!-- CODE_START  Table - PN-->
 		<s:set name="listModifiedByMap" value="getListModifiedByMap()" />
+		<s:set name="listSizeMap" value="getListSizeMap()" />		
 		<s:iterator status="status" id="item" value="listOfItems">
 			<s:set name='id' value='#item.getAttribute("MyItemsListKey")' />
-			<s:set name='name' value='#item.getAttribute("Name")' />
-			<s:set name='name2' value='#item.getAttribute("Name").replace("\'", "\\\\\'")' />
-			<s:set name='desc' value='#item.getAttribute("Desc")' />
+			<s:set name='name' value='#item.getAttribute("ListName")' />
+			<s:set name='name2' value='#item.getAttribute("ListName").replace("\'", "\\\\\'")' />
+			<s:set name='desc' value='#item.getAttribute("ListDesc")' />
 			<s:set name='customerId' value='#item.getAttribute("CustomerID")' />
 			<s:set name='CustomerContactID' value='#item.getAttribute("Modifyuserid")' />
 			<s:set name='modifiedBy' value='%{#listModifiedByMap.get(#id)}' />
 			<s:set name='lastMod' value='#item.getAttribute("Modifyts")' />
 			<s:set name="childrenEle" value='XMLUtils.getChildElement(#item,"XPEDXMyItemsItemsList")' />
-			<s:set name="numOfItems" value='#childrenEle.getAttribute("TotalNumberOfRecords")' />
-			<s:set name="spLevels" value='#item.getAttribute("SharePrivate")' />
+			<s:set name="sharePrivateFlag" value='#item.getAttribute("SharePrivate")'/>
+			
+			<%-- <s:set name="numOfItems" value='#childrenEle.getAttribute("TotalNumberOfRecords")' />
+			 --%>
+			 <%-- <s:set name="numOfItems" value='#item.getAttribute("NumberOFItems")' />
+			  --%> 
+			  <s:set name="numOfItems" value='%{#listSizeMap.get(#id)}' />
+			 
+			  <s:set name="spLevels" value='#item.getAttribute("SharePrivate")' />
 			<s:set name="spShareAdminOnly" value='#item.getAttribute("ShareAdminOnly")' />
 			<s:set name="listOwner" value='#item.getAttribute("ShareAdminOnly")' />
 			
@@ -844,6 +938,12 @@
 				<s:if test="#status.last" > last</s:if>">
 				<td class="left-cell"><s:a  href="javascript:doAction('view', '%{#uId}'); ">
 					<s:property value="#name" /> (<s:property value="#numOfItems" />)</s:a>
+					<s:if test='%{#sharePrivateFlag.trim() != ""}'>
+					<img id="whitecart" style="display:block;" alt="" src="/swc/xpedx/images/mil/20x20_personal_list.png"/>
+					</s:if>
+					<s:else>
+					<img id="whitecart" style="display:block;" alt="" src="/swc/xpedx/images/mil/20x20_shared_list.png"/>
+					</s:else>
 					<!--  removed bold text and the word items -->	
 				<p class="grey-mil" style="width:440px; word-wrap:break-word;"><s:property value="#desc" /></p>
 				</td> 
