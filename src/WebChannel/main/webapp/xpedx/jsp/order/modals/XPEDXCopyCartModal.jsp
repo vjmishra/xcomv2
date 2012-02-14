@@ -28,8 +28,10 @@
      	<li><a class="grey-ui-btn" href="#" onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
      	<li><a class="green-ui-btn button-margin" href="javascript:copyNewCart();"><span>Save</span></a></li>
       </ul>
- 	</div> 
-
+ 	</div>
+ 	<!--3098  -->
+ 	<div id="cp-cart-err-msg" style="display: none;"><h5 align="right" style="position:relative;bottom:20px;"><b><font color="red"> <s:text name='MSG.SWC.CART.VERIFY.ERROR.NONAME' /> </font></b></h5></div> 
+	<!--3098  -->
  </s:form> 
 	</div> 
 </div>
