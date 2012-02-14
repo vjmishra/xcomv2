@@ -366,7 +366,7 @@ function qaAddItem(jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 	
 	function replacementAddToList(uId) {
 		if (uId == ""){
-			Ext.Msg.alert('Error', 'Please select an item first.');
+			Ext.Msg.alert('Error', 'Please select a replacement item.');
 			return;
 		}
 		
@@ -399,7 +399,7 @@ function qaAddItem(jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 	function replacementReplaceInList(uId) {
 		
 		if (uId == ""){
-			Ext.Msg.alert('Error', 'Please select an item first.');
+			Ext.Msg.alert('Error', 'Please select a replacement item.');
 			return;
 		}
 		
