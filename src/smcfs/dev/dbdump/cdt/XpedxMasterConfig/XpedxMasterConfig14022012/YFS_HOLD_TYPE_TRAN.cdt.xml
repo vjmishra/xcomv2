@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_HOLD_TYPE_TRANList TableName="YFS_HOLD_TYPE_TRAN">
+<HoldTypeTran Createprogid=".YEntityServlet"
+    Createts="2010-05-06T20:14:52-04:00" Createuserid="admin"
+    HoldEffectLevel="ORDER" HoldTypeKey="2010050620134217218"
+    HoldTypeTranKey="2010050620145217224" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-05-06T20:14:52-04:00"
+    Modifyuserid="ng" Purpose="PREVENT" TransactionId="CHAINED_ORDER_CREATE"/>
+</YFS_HOLD_TYPE_TRANList>
