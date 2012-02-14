@@ -17,6 +17,10 @@
 <s:set name='showCurrencySymbol' value='true' />
 <s:set name='id' value='myItemsKey' />
 <s:set name='addToCartError' value= "addToCartError" />
+<s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
+<s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
+<s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
@@ -213,11 +217,19 @@
 </s:else>
 </s:if>
 <s:else>
-		<tr >
-			<td width="100%">
-				<h5 align="center"><b><font color="red"><s:property value="ajaxLineStatusCodeMsg" /></font></b></h5>
-			</td>
-		</tr>
+<%-- start of jira 2885 --%>
+<tr >
+	<td width="100%">
+			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>:<s:property value="{#test}"/>::<s:property value="%{#test}"/>
+			</s:if>		
+    	
+    			<s:if test='%{#lineStatusCodeMsg != null}'>
+				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+			</s:if>
+	</td>
+</tr>	
+<%-- end of jira 2885 --%>    
 </s:else>
 
 	</tbody>
