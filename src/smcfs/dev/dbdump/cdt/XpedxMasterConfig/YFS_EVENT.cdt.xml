@@ -3875,13 +3875,13 @@
     ExtendSupplierFlag="" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:40-04:00" Modifyuserid="SYSTEM"
     ShipnodeKey="" TransactionKey="CUSTOMER_DEFINITION" Version=""/>
-<Event ActionKey="" ActiveFlag="Y" Createprogid="XMLMigrator"
+<Event ActionKey="" ActiveFlag="N" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:40-04:00" Createuserid="SYSTEM"
     EnterpriseKey="DEFAULT" EventKey="ON_ASSIGNMENTS_CHANGE"
     EventName="On Assignments Change" Eventid="ON_ASSIGNMENTS_CHANGE"
     ExceptionType="ON_ASSIGNMENTS_CHANGE" ExtendEnterpriseFlag=""
-    ExtendSupplierFlag="" Lockid="1" Modifyprogid=".YCPWFRepositoryAPI"
-    Modifyts="2012-02-08T05:16:15-05:00" Modifyuserid="admin"
+    ExtendSupplierFlag="" Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:40-04:00" Modifyuserid="SYSTEM"
     ShipnodeKey="" TransactionKey="CUSTOMER_DEFINITION" Version=""/>
 <Event ActionKey="" ActiveFlag="N" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:40-04:00" Createuserid="SYSTEM"
