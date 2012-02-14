@@ -365,7 +365,7 @@ a{text-decoration:none;color:#003399;}
 strong{font-weight:bold;}
 body,a,form{font-family:Arial, Helvetica, sans-serif;}
 .clearall{clear:both;height:0px;}
-a:hover{text-decoration:none;}
+a:hover{text-decoration:underline;}
 a.underlink:hover{text-decoration:underline !important;}
 a.underlink{cursor:pointer;}
 .p-black{color:#000;}
@@ -1459,7 +1459,9 @@ ul li a.grey-ui-btn span{color:black;}
 .width-168{width:168px;}
 .width-460{width:460px;}
 .search-pagination-top{color:#333;font-size:11px;text-align:right;font-weight:bold;margin-bottom:9px;}
-.search-pagination-bottom{color:#333;font-size:11px;text-align:right;font-weight:bold;margin-top:5px;margin-bottom:5px;margin-right:5px;}
+.search-pagination-bottom{color:#000000;font-size:11px;text-align:right;font-weight:bold;margin-top:5px;margin-bottom:5px;margin-right:5px;}
+.search-pagination-bottom span{font-size:12px;font-weight:bold;}
+.search-pagination-bottom a{font-size:11px;font-weight:bold;}
 legend{color:#333333;}
 fieldset.x-corners{border:1px solid #CCCCCC;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
 td.Environment-hname span{float:right;height:10px;margin-left:5px;margin-top:-13px;}
@@ -2929,7 +2931,7 @@ border-collapse: separate;
 }
 a:hover
 {
-text-decoration:none;	
+text-decoration:underline;	
 }
 
 .mil-list-item-description
