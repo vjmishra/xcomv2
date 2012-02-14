@@ -436,6 +436,7 @@ div.demo {
 	    <div class="midsection"> <!-- Begin mid-section container -->
 	    	
 	       <div class="search-pagination-top">
+	       		  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
                   <s:if test="%{totalNumberOfPages>1}">
                   	Page
                   </s:if>
@@ -597,6 +598,7 @@ div.demo {
 			</swc:sortctl>
 	    	
 			<div class="search-pagination-bottom">
+			        <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
 			        <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
 			       	urlSpec="%{#approvalListPaginationURL}"/>
 			</div>
