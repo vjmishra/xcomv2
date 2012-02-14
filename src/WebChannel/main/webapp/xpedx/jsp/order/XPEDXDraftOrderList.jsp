@@ -141,7 +141,8 @@ function maxLength(field,maxlimit) {
 function maxNewLength(field,maxlimit)
 {
 	if (field.value.length > maxlimit) // if too long...trim it!
-		alert(field.title + ' should not exceed '+maxlimit+ ' characters');
+	//commeneted for 3098	
+	//alert(field.title + ' should not exceed '+maxlimit+ ' characters');
 		field.value = field.value.substring(0, maxlimit);
 		return false;
 }
