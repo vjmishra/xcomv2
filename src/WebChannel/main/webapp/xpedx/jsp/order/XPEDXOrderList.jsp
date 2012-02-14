@@ -360,6 +360,7 @@ function printPOs(customerPos) {
 		
              <div id="open-orders-Msg-top"  style="display: none; align: center;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">
+            	  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
                  	urlSpec="%{#orderListPaginationURL}"/>
 			</div>
@@ -723,6 +724,7 @@ function printPOs(customerPos) {
     		<!-- <div id="table-bottom-bar" class="search-bottom-table-bar"><div id="table-bottom-bar-L"></div><div id="table-bottom-bar-R"></div></div> -->
     		
             <div class="search-pagination-bottom">
+				 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
                  	urlSpec="%{#orderListPaginationURL}"/>
 			</div>
