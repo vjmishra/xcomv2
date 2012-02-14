@@ -65,7 +65,7 @@
 		<!-- <h2 class="no-border"  style="float:left;" >Select Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" > <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE" /></h2>
 		<!-- <img id="magGlass" class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();">		 -->
-		<span id="magGlass" class="searchButton"  onclick="javascript:searchShipToAddress();">&nbsp;</span>
+		<span id="magGlass" class="searchButton"  onclick="javascript:searchShipToAddress('shipToOrderSearchDiv');">&nbsp;</span>
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToOrderSearchDiv','%{#searchURL}');" />	
 		<s:hidden id="magGlass" name="searchButton"></s:hidden>
 </div>
@@ -186,7 +186,7 @@
 		</li>
 	</s:if>
 	<li>
-		   <a class="green-ui-btn"  href="#" onclick = "setVariable();$.fancybox.close();"><span>Select</span></a> 		
+		   <a class="green-ui-btn"  href="#" onclick = "setVariable('<s:property value="#defaultShipTo"/>' , '<s:property value="#assgnCustomers.size()"/>');$.fancybox.close();"><span>Select</span></a> 		
 	</li>
 </ul>
 	
