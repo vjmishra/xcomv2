@@ -4121,6 +4121,22 @@
     IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
     Modifyts="2012-02-07T03:26:39-05:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-02-14T07:57:00-05:00" Createuserid="admin"
+    FlowGroupName="Miscellaneous" FlowKey="20120214075700118116"
+    FlowName="getXPEDXLandingMilList" FlowType="00"
+    GraphUIKey="20120214080949118172" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2012-02-14T08:13:24-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-02-14T08:19:29-05:00" Createuserid="admin"
+    FlowGroupName="XPXOrderUpdate" FlowKey="20120214081929118231"
+    FlowName="XPXOrderListDetails" FlowType="00"
+    GraphUIKey="20120214081936118234" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2012-02-14T08:24:39-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
