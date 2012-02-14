@@ -253,10 +253,18 @@ function printPOs(customerPos) {
                 </div>
                 <!-- end breadcrumb -->
                 <!-- begin top section -->
-	     	<s:form id="orderListForm" name="orderListForm"  action="orderList"
+                <s:set name="selectedHeaderTab" value="#_action.getXpedxSelectedHeaderTab()"> </s:set>
+                <s:set name="blankValue" value="%{#selectedHeaderTab ==#blankValue}" />
+	     		<s:form id="orderListForm" name="orderListForm"  action="orderList"
                     namespace="/order" cssClass="myClass" method="post" validate="true">
                     <s:hidden name='#action.name' value='orderList'/>
                 	<s:hidden name='#action.namespace' value='/order'/>
+                	<%-- start of Fix : JIRA - 3123 --%>
+                	<s:if test='!#blankValue '> 
+	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
+	                	<s:hidden name='sourceTab' value="%{'Open'}"/>
+	                	<%-- End of Fix : JIRA - 3123 --%>
+                	</s:if>
 <br/>
                 <div class="rounded-border top-section ">
                 	<!-- begin content w/border -->
@@ -284,11 +292,16 @@ function printPOs(customerPos) {
 													<td colspan="2"></td>
 												</tr>
 												<tr>
-													<td>Order Status: </td>
+												<%-- start of Fix : JIRA - 3123 --%>
+	            									<s:if test='#blankValue '> 
+	            							<td>Order Status: </td>
 													<td>
 														<s:select cssClass=" " name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
 													</td>
 													<td colspan="2"></td>
+													
+							</s:if>
+							<%-- End of Fix : JIRA - 3123 --%>
                         </tr>
                         <tr>
 													 <td>Ordered Date:</td>
@@ -833,7 +846,8 @@ function printPOs(customerPos) {
 	} 
 	setErrorMessage('<s:property value="#openOrder"/>',"divid");
 	*/
-	
+	<%-- start of Fix : JIRA - 3123 --%>
+	/*
 	function setErrorMessage(flag, divIdTop, divIdBottom)
 	{
 		if(flag == "true")
@@ -851,6 +865,8 @@ function printPOs(customerPos) {
 	}
 	
 	setErrorMessage('<s:property value="#openOrder"/>',"open-orders-Msg-top", "open-orders-Msg-bottom");
+	*/
+	<%-- End of Fix : JIRA - 3123 --%>
 	</script>
 
 <script type="text/javascript">
