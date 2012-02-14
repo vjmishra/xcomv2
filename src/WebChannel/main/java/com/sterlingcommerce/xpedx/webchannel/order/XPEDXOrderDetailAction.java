@@ -301,6 +301,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				shipComplete = true;
 			String extnInvoiceNo = extnElem.getAttribute("ExtnInvoiceNo");
 			if (extnInvoiceNo != null && extnInvoiceNo.trim().length() > 0) {
+				extnInvoiceNo = XPEDXWCUtils.getInvoiceNoWithoutDate(extnInvoiceNo);
 				encInvoiceNo = XPEDXWCUtils.encrypt(extnInvoiceNo);
 				encInvoiceNo = URLEncoder.encode(encInvoiceNo);
 			}
@@ -396,6 +397,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				
 				if(extnInvoiceNumber != null && extnInvoiceNumber.trim().length() > 0) {
 					try {
+						extnInvoiceNumber = XPEDXWCUtils.getInvoiceNoWithoutDate(extnInvoiceNumber);
 						encInvoiceNumber = XPEDXWCUtils.encrypt(extnInvoiceNumber);
 						encInvoiceNumber = URLEncoder.encode(encInvoiceNumber);
 					} catch (Exception e) {

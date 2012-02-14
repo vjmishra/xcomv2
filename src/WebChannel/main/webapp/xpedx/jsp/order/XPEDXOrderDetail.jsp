@@ -304,6 +304,7 @@ function showSplitDiv(divId)
 <s:set name="createuserkey" value='userKey' />
 <s:set name='extnInvoicedDate' value='#OrderExtn.getAttribute("ExtnInvoicedDate")' />
 <s:set name='extnInvoiceNo' value='#OrderExtn.getAttribute("ExtnInvoiceNo")' />
+<s:set name='extnInvoiceNo' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getInvoiceNoWithoutDate(#extnInvoiceNo)' />
 <s:set name='xpedxAttentionName' value='#OrderExtn.getAttribute("ExtnAttentionName")' />
 <s:set name='xpedxRushOrderComments' value='#OrderExtn.getAttribute("ExtnRushOrderComments")' />
 <s:set name='xpedxExtnDeliveryHoldDate' value='#OrderExtn.getAttribute("ExtnDeliveryHoldDate")' />
@@ -613,7 +614,7 @@ function showSplitDiv(divId)
 	                        				     <s:property value='#extnInvoiceNo'/>
 	                        				</s:if>
 	                        				<s:else>
-	                        				 <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
+	                        				 <a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
 	                        				</s:else>
 	                        			</s:if>
                         			</td>
@@ -1050,7 +1051,7 @@ function showSplitDiv(divId)
 																	<s:set name="encInvcNo" value='#splitOrder.getAttribute("EncInvoiceNo")'/>
 																	<s:set name="extnInvcDt" value='#splitOrder.getAttribute("ExtnInvoicedDate")'/>
 																	<s:set name="splitCustSuff" value='#splitOrder.getAttribute("ShipToID")'/>
-																  Invoice #: <a class="underlink" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#encInvcNo'/>&shipTo=<s:property value='#splitCustSuff'/>&InvoiceDate=<s:property value='extnInvcDt'/>"><s:property value='#extnInvcNo'/></a>
+																  Invoice #: <a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNo=<s:property value='#encInvcNo'/>&shipTo=<s:property value='#splitCustSuff'/>&InvoiceDate=<s:property value='extnInvcDt'/>"><s:property value='#extnInvcNo'/></a>
 																  <br/>
 											        			</s:if>
 											        			<s:else>
