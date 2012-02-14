@@ -849,6 +849,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	<br />
 	
 </div>
+<br/><div class="error" id="errorMsgTop" style="display:none;position:relative;margin-left:445px;" ></div>
 <div class="clear">&nbsp;</div>
 <!-- end item description -->
 
@@ -1524,7 +1525,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 												</s:else>
 												<%-- Show error message against each required customer field --%>
 												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-													<br/><span class="red">Please enter value</span> <br/>	
+							
+													<br/><span class="red">Required fields missing. Please review and try again.</span> <br/>
+	
 												</s:if>
 												
 												<%-- --%>
@@ -2383,7 +2386,10 @@ function validateMinOrder()
 		var divId=document.getElementById("minOrderErrorMessage");
 		if(divId != null)
 		{
-			divId.innerHTML="Order amount is less than "+minAmount+". Penalty of "+chargeAmount+" will be charged.";
+			//Start fix for 3098
+			divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			document.getElementById("errorMsgBottom").innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			//End fix for 3098
 		}
 	}
 }
