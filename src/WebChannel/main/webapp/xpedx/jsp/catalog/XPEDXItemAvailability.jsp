@@ -221,7 +221,7 @@
 <tr >
 	<td width="100%">
 			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
-				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>:<s:property value="{#test}"/>::<s:property value="%{#test}"/>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 			</s:if>		
     	
     			<s:if test='%{#lineStatusCodeMsg != null}'>
