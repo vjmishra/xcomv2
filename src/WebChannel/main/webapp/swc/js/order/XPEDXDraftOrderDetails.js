@@ -82,14 +82,16 @@ function addProductsToOrder()
 					var ordMul = totalQty % orderMultiple; 
 					
 					if(enteredQuants == '' || enteredQuants=='0'){
-						document.getElementById(divId).innerHTML ='Quantity cannot be 0 or empty.';
+						//3098
+						document.getElementById(divId).innerHTML ='Please enter a valid quantity and try again.';
+						//3098
 						document.getElementById(divId).setAttribute("class", "error");
 						isError = true;
 					}					
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
-						document.getElementById(divId).innerHTML = "Please order in units of " + addComma(orderMultiple) +" "+baseUOM[i].value;
+						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple +" "+baseUOM[i].value;
 						document.getElementById(divId).setAttribute("class", "error");
 					}
 				}
@@ -124,7 +126,15 @@ function update()
 {
 	if(document.getElementById('cartName_new').value.trim() == "")
 	{
-		alert("Cart name can't be blank, please add a valid name for cart.");
+		//commented for 3098
+		//alert("Cart name can't be blank, please add a valid name for cart.");
+		document.getElementById("errorMsgTop").innerHTML = "Name is required." ;
+        	document.getElementById("errorMsgTop").style.display = "inline";
+        
+        	document.getElementById("errorMsgBottom").innerHTML = "Name is required." ;
+        	document.getElementById("errorMsgBottom").style.display = "inline";
+		//3098
+		
 		return;
 	}
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
@@ -180,8 +190,8 @@ function validateOrderMultiple()
 		var qtyElement =  document.getElementById(arrQty[i].id);
 		if(arrQty[i].value == '' || arrQty[i].value ==0)
 		{
-			//qtyElement.style.borderColor = "#FF0000";
-			divIdError.innerHTML='Quantity cannot be 0 or empty.';
+			//qtyElement.style.borderColor = "#FF0000"
+			divIdError.innerHTML='Please enter a valid quantity and try again.';
 			divIdError.setAttribute("class", "error");
 			
 			retVal=false;
@@ -316,10 +326,18 @@ function addProductToQuickAddList(element)
     }
     if(sku == "")
     {
-        alertString = theForm.localizedMissingProductIDMessage.value;
-        alert(alertString);
+        //Added to fix 3098
+    	//alertString = theForm.localizedMissingProductIDMessage.value;
+        //alert(alertString);
+    	document.getElementById("errorMsgBottom").innerHTML = "Please enter a valid Item #." ;
+        document.getElementById("errorMsgBottom").style.display = "inline";
         return;
     }
+    else
+    	{
+        document.getElementById("errorMsgBottom").innerHTML = "";
+        document.getElementById("errorMsgBottom").style.display = "none";
+    	}
     if(quantity == "")
     {
         quantity = 1;
@@ -710,10 +728,12 @@ function redrawQuickAddList()
 				    code += '<a href="#" class="del-quick-add" onclick="javascript:removeProductFromQuickAddList(' + i + ');" title="Remove" tabindex="' + tabIndex++ + '"><img src="/swc/xpedx/images/icons/12x12_red_x.png" /></a>';
 				    code += '</td>';
 				    
-			    	code += '<td class="col-item" >';
+				  //Start Jira 3098
+			    	code += '<td class="col-item" style="color:red" colspan="3" >';
 			    	// TODO -FXD- : make the following line colspan '3' instead of two if the other customer defined fields are shown.
 			    	// ie. stretch into three columns if there are three, or two if there are two
-			    	code += 'The item</td> <td><p style="width:50px; word-wrap:break-word;">' + encodeForHTML(QuickAddElems[i].sku) + '</p></td> <td colspan="2">is not valid. Please review it and try again or contact your CSR.';
+			    	code += 'Invalid item #. Please review and try again or contact Customer Service.</td>';
+			    	//End Jira 3098
 			    	//code += '<a href="javascript:showSpecialItem(\'' + encodeForHTML(specialDivId) + '\'); ">add it as an Special item</a> </span>';
 			    	
 			    	
