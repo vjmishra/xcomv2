@@ -24,6 +24,10 @@
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name='showCurrencySymbol' value='true' />
 <s:set name='id' value='myItemsKey' />
+<s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
+<s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
+<s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
@@ -298,14 +302,21 @@
 <s:else>
 
 <tbody>
-		<tr >
-			<td width="100%">
-				<h5 align="center"><b><font color="red"><s:property value="ajaxLineStatusCodeMsg" /></font></b></h5>
-			</td>
-		</tr>
-		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
-			<td></td>
-		</tr>
+<%-- start of jira 2885 --%>
+<tr >
+	<td width="100%">
+		<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+		</s:if>		
+    		<s:if test='%{#lineStatusCodeMsg != null}'>
+				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+		</s:if>
+	</td>
+</tr>	    				
+<%-- end of jira 2885 --%>
+<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
+	<td></td>
+</tr>
 		
 		
 </tbody>
