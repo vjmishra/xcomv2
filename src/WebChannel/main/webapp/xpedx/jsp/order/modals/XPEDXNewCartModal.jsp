@@ -29,7 +29,7 @@
       	<li><a class="green-ui-btn" href="javascript:saveNewCart();"><span>Save</span></a></li>
       </ul>
  	</div> 
-
+    <div id="cr-cart-err-msg" style="display: none;"><h5 align="right" style="position:relative;bottom:20px;"><b><font color="red"> <s:text name='MSG.SWC.CART.VERIFY.ERROR.NONAME' /> </font></b></h5></div>
  </s:form>
 	</div> 
 </div>
