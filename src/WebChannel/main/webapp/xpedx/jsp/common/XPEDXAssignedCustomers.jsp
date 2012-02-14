@@ -318,7 +318,7 @@
 <div class="right">
 	<%-- Code added to fix XNGTP-3020 --%>
 	<s:if test="#defaultShipTo == null">
-	<h5 align="center"><div class="error">Please select a preferred ship-to and click Apply </div></h5>
+	<!-- <h5 align="center"><div class="error">Please select a preferred ship-to and click Apply </div></h5> -->
 	<input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to" checked/>
 	</s:if>
 	<s:else> <input type='checkbox' name="setAsDefault" id="setAsDefault" class="change-preferred-ship-to"/></s:else>
@@ -344,8 +344,16 @@
 	</li>
 </ul>
 
+<!--Added to fix 3098  -->
+<div class="error float-right">
+	<s:if test="#defaultShipTo == null">
+	<h5 align="right">Please select a Ship-To.</h5>
+	</s:if>
+</div>
+
+
 <s:if test="%{#NoShipTo}" >
-<div id="errorText" class="error float-right">No Ship-To locations were found that meet the seaqrch criteria. Please enter new search criteria or click the 'Cancel' button.</div>
+<div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
 </s:if>
 <s:elseif test="#defaultShipTo != null">
 <div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
