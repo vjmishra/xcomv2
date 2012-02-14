@@ -118,7 +118,9 @@
 	<div class="clear"></div>
 	<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="formFieldValidationErrorMsg"></div></div>
 	<ul id="tool-bar" class="tool-bar-bottom">
-		<li style="float: right;"><a class="green-ui-btn" href="javascript:submitSelectedList();"> <span>Apply</span> </a></li>
+	Click on "+" to expand the account hierarchy or "-" to callapse.</br>
+    Selecting an account or location will display all lists authorized for that location
+	<li style="float: right;"><a class="green-ui-btn" href="javascript:submitSelectedList();"> <span>Apply</span> </a></li>
 		<li  class="cancel-float-right"><a class="grey-ui-btn" href="javascript:$.fancybox.close(); resetclFromSelectedListId() ;"><span>Cancel</span></a></li>
 	</ul>
 </div>
