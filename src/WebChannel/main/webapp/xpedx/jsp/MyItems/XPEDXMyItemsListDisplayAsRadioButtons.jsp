@@ -6,11 +6,13 @@
 <script type="text/javascript">
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	</script>	
+<%--Added condition for Jira 3195 --%>
 <div id="divAdd2ListRadio">
-<table>
 <s:if test="listOfItems == null || listOfItems.size()==0">
-<div class="error" align="center">No lists have been created. Please create a new list. </div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" style="margin-top:60px;">No lists have been created. Please create a new list. </div>
 </s:if>
+<table>
+
 <s:iterator id="listDetail" value="listOfItems" status="listIndex" >
 	<tr>
 	<td>
