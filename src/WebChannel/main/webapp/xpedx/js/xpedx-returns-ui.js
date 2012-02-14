@@ -14,7 +14,7 @@ function check(itemSize)
  
 if(document.getElementById("returnsph").value=="")
     {
-        alert('Please enter Your Ph No.');
+		alert('Please enter your phone number.');
         document.getElementById("returnsph").focus();
         return false;    
     }
@@ -37,13 +37,13 @@ if(document.getElementById("returnsph").value=="")
     //document.getElementById("txtstran").value=dat;
     if (email == 0 || email=="" )
     {
-        alert("Please enter your email address!");
+    	alert("Please enter your email address.");
         document.getElementById("returnsEmail").focus();
         return false;
     }
     else if (email.indexOf("@") < 0)
     {
-        alert("Please enter valid Email address!");
+    	alert("The email address entered is not in the proper format. Please revise and try again.");
         document.getElementById("returnsEmail").focus();
         return false;
     }
@@ -91,8 +91,8 @@ if(document.getElementById("returnsph").value=="")
 	    	orderLineQuantity = Number(orderLineQuantity);
 	    	
 	    	if (returnqty == "" || returnqty <= 0
-					|| orderLineQuantity < returnqty) {	    			    		
-				alert('Please enter valid Qty to Return');
+					|| orderLineQuantity < returnqty) {
+				alert('Please enter a valid return quantity and try again');
 				returnqty = "returnsqty[" + i + "]";
 				document.getElementById(returnqty).focus();
 				return false;
@@ -110,7 +110,7 @@ if(document.getElementById("returnsph").value=="")
     	}
      }
     if(!atLeastOneSelected){
-		alert("Please select atleast one item");
+		alert("Please select at least one item to return.");
 		return false;
 	}
     
