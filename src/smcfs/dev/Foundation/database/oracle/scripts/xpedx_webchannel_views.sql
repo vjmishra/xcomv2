@@ -140,14 +140,14 @@ LIST.CREATEUSERNAME AS CREATEUSERNAME,
 LIST.SHARE_ADMIN_ONLY 
 AS SHARE_ADMIN_ONLY,
 LIST.SHARE_PRIVATE AS SHARE_PRIVATE,
-max(litem.modifyts) as modifyts
+NVL(max(litem.modifyts),list.modifyts) as modifyts
 FROM
 XPEDX_MY_ITEMS_LIST list
 LEFT JOIN XPEDX_MY_ITEMS_ITEMS litem  ON  litem.my_items_list_key=list.my_items_list_key
 LEFT JOIN XPEDX_MY_ITEMS_LIST_SHARE 
 ls ON ls.my_items_list_key = list.my_items_list_key
 LEFT JOIN yfs_user yu ON trim(yu.loginid)=list.modifyuserid
-GROUP BY list.my_items_list_key, yu.username, ls.customer_id, LIST.LIST_DESC, LIST.LIST_NAME, LIST.CREATEUSERNAME, LIST.SHARE_ADMIN_ONLY, LIST.SHARE_PRIVATE;
+GROUP BY list.my_items_list_key, yu.username, ls.customer_id, LIST.LIST_DESC, LIST.LIST_NAME, LIST.CREATEUSERNAME, LIST.SHARE_ADMIN_ONLY, LIST.SHARE_PRIVATE,litem.modifyts,list.modifyts;
 
 
 COMMIT;
