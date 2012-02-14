@@ -174,7 +174,12 @@
 <h2><span style="margin:0px;">My Users</span></h2> 
 <p class="less-margin">  <img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
    <!-- <div class="paginationContainer">-- pagination control -->
-       <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page</span>&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true"/></span>
+       <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page&nbsp;
+       <%--added for jira 3317 --%>
+                 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">
+		 	<s:property value="%{pageNumber}"/>
+       		 </s:if>
+       <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true"/></span>
    </p>
        <!--</div> -->
 
@@ -287,9 +292,13 @@
     </div>-->
     
         <div class="paginationContainer " style="margin-right: 13px; margin-bottom: 10px; margin-top: 0px;"><!-- pagination control -->
-        <span class="bold">Page</span>&nbsp;
+        <span class="bold">Page&nbsp;
+         <%--added for jira 3317 --%>
+                 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">
+		 	<s:property value="%{pageNumber}"/>
+		 </s:if>
         <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true"  divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true" /> 
-    </div><br/>
+        </span> </div><br/>
 		<ul id="tool-bar" class="tool-bar-bottom"  style="float:right; margin-right:13px;"  >
 	        <li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
             <li ><a class="green-ui-btn" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
