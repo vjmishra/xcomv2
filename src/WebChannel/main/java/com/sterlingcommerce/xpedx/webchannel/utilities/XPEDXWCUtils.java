@@ -4722,6 +4722,10 @@ public class XPEDXWCUtils {
 		return emailAddress;
 	}
 	
+	public static String getInvoiceNoWithoutDate(String invoiceNo) {
+		return invoiceNo.substring(9, invoiceNo.length());
+	}
+	
 	public static String encrypt(String plaintext) throws Exception {
 		Cipher c = Cipher.getInstance("DESede/CBC/PKCS5Padding");
 		c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(sharedkeyfinal, "DESede"),
