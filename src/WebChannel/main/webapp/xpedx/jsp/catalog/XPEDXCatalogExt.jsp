@@ -394,8 +394,12 @@
                     </s:if>
                  </div>   
                
-                 <p class="pageresults"><s:property value='#numResult' /> Results<span>&nbsp;|&nbsp;Page&nbsp</span>
+                 <p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
                  <!-- Webtrend Meta Tag start -->
+                 <%--added for jira 3317 --%>
+                 <s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
+				 <s:property value="%{#pageNumber}"/>
+		 </s:if></span>
                  <s:if test='searchMetaTag == true'>
 					<META Name="DCSext.w_x_ss" content="1">
 					<META Name="WT.ossr" content="<s:property value='%{#numResult}' />">
@@ -933,7 +937,10 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	
 	
-	<p class="pageresults"><s:property value='#numResult' /> Results<span>&nbsp;|&nbsp;Page&nbsp</span>
+	<p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
+	<s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
+		<s:property value="%{#pageNumber}"/>
+	</s:if></span>
 	<s:url id="goToPageURL" action="goToPage">
 		<s:param name="pageNumber" value="'{0}'" />
 	</s:url> 
