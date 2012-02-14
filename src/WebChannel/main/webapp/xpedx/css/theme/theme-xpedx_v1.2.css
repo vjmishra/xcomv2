@@ -100,7 +100,7 @@ body,a,form {
 /******************************************************************** BASE Styles */
 /******************************************************************** BASE Styles */
 a:hover {
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 a.underlink:hover {
@@ -5513,8 +5513,9 @@ ul#prodlist,ul.prodlist {
 }
 
 .pagination span {
-	color: #333;
+	color: #000000;
 	font-size: 12px;
+	font-weight: bold;
 }
 span.pageresults a {
     font-size: 11px;
@@ -5589,6 +5590,18 @@ table.catalog-row-five td img {
 .bold {
 	font-weight: bold;
 }
+
+.xpedx-light-box span.bold span{
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.xpedx-light-box span.bold a{
+	font-weight: bold;
+	font-size: 11px;
+
+}
+
 
 .italic {
 	font-style: italic;
@@ -6924,7 +6937,7 @@ ul li a.grey-ui-btn span {
 /*end standard widths */
 
 .search-pagination-top {
-	color: #333;
+	color: #000000;
 	font-size: 11px;
 	text-align: right;
 	font-weight: bold;
@@ -6932,7 +6945,7 @@ ul li a.grey-ui-btn span {
 }
 
 .search-pagination-bottom {
-	color: #333;
+	color: #00000;
 	font-size: 11px;
 	text-align: right;
 	font-weight: bold;
