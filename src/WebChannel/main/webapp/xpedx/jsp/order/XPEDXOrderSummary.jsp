@@ -161,7 +161,7 @@ function setTotalPrice(val){
     
     if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
-        errorDiv.innerHTML = "Please enter Special Instructions field for Rush Order.";
+    	errorDiv.innerHTML = "Rush Order delivery information is required. Please enter in the Comments field.";
         splInstructionsField.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
         return returnval;
@@ -1142,7 +1142,7 @@ from session . We have customer Contact Object in session .
 								<td></td>
 								<td colspan="2" style="text-align:right;"> 
 								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-									<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+									<p class="red" id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
 								</s:if>
 								</td>
 							</tr>
