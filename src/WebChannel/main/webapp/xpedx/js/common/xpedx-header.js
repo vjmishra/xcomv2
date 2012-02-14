@@ -4597,7 +4597,8 @@ function updateLines() {
 		quantity = ReplaceAll(quantity,",","");
 		if(quantity == '0' || quantity== '' )
 		{
-			divVal.innerHTML= "Quantity cannot be 0 or empty.";
+			
+			divVal.innerHTML= "Please enter a valid quantity and try again.";
 			divVal.style.display='inline';
 			error=true;
 		}
