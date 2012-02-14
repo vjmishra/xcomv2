@@ -137,8 +137,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected String isPnAAvailable;
 	private String myItemsKey;
 	private String priceCurrencyCode;
+	//added for jira 2885
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	
 	
+	public Map<String, String> getPnALineErrorMessage() {
+		return pnALineErrorMessage;
+	}
+
+	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
+		this.pnALineErrorMessage = pnALineErrorMessage;
+	}
 	public Map<String,String> baseUOMmap =new HashMap<String,String>();
 	
 
@@ -1828,7 +1837,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						// set the line status erros mesages if any
 						String lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 								.getPnALineErrorMessage(pandAItem);
-						ajaxDisplayStatusCodeMsg =  ajaxDisplayStatusCodeMsg + " : " + lineStatusErrorMsg;
+						//added for jira 2885 
+						pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+						if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
+							setIsPnAAvailable("false");
+						}
+						//end of jira 2885
 						if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
 							setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
 						}
