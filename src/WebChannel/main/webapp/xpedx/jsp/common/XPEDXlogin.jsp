@@ -108,7 +108,9 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="stores-cell">
+		
+		<%-- start of Fix : JIRA - 3385 --%>
+			<!--  td class="stores-cell">
 				<s:if test="#sfid == 'xpedx' ">
 					<a href="http://xpedxstores.com" target="new">
 						<img src="http://content.ipaper.com/storefront/xpedxSignIn.png" />	
@@ -126,7 +128,8 @@
 				<s:if test="#sfid == 'Saalfeld' ">
 						<img src="http://content.ipaper.com/storefront/SaalfeldSignIn.png" />	
 				</s:if>
-			</td>
+			</td-->
+			<%-- End of Fix : JIRA - 3385 --%>
 		</tr>
 		
 		<s:action name="xpedxMainCategoriesHomeAction" executeResult="true" namespace="/catalog" />
