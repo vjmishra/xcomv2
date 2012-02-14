@@ -55,6 +55,51 @@
 		</API>
 	</mashup>
 	
+	<mashup id='XPEDXLandingMyItemsList' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+
+		<API Name="getPage">
+			<Input>
+
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
+					Refresh="Y">
+					<PreviousPage PageNumber="" />
+					<API Name="getXPEDXLandingMilList" IsFlow="Y">
+						<Input>
+							<XPEDXLandingMil>
+
+								<ComplexQuery>
+									<Or>
+										<Exp Name="" Value="" />
+									</Or>
+								</ComplexQuery>
+							</XPEDXLandingMil>
+						</Input>
+						<Template>
+						<XPEDXLandingMILList>
+							<XPEDXLandingMil NumberOFItems="" MyItemsListKey=""
+								UserName="" CustomerID="" ListDesc="" ListName=""
+								CreateUserName="" ShareAdminOnly="" SharePrivate="" Modifyts="">
+							</XPEDXLandingMil>
+							</XPEDXLandingMILList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="" IsLastPage="" IsValidPage=""
+					PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
+ 
+ 		
+			
+ 
 	<mashup id ='XPEDXMyItemsListPrivate' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="getXPEDX_MyItemsList_List_Hdr">
