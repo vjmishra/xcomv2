@@ -36,6 +36,7 @@
 </s:url>
 
 <script type="text/javascript">
+var selectedShipCustomer = null;
 		function updateShareListChild(){
 		}		
 		var callShareList  = true;		
@@ -605,6 +606,8 @@
 	action='xpedxGetAssignedCustomers' />
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
+<s:url id='shipToSearchForOrderList' namespace='/common'
+	action='xpedxSearchAssignedCustomersForOrderList' />	
 <s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
 	action='xpedxManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
@@ -748,6 +751,7 @@
     function showAssignedShipToForOrderSearch(url)
     {
     	var x = document.getElementById('shipToOrderSearchDiv');
+    	valuesSet = null;
         x.innerHTML = "Loading data... please wait!";
     	Ext.Ajax.request({
             url :url,
@@ -810,6 +814,7 @@
       try {
         elSel.add(elOptNew, null); // standards compliant; doesn't work in IE
         elOptNew.selected=true;
+        selectedShipCustomer = null;
       }
       catch(ex) {
         elSel.add(elOptNew); // IE only
@@ -833,8 +838,8 @@
     function setSelectedValue(selectedShipTo) {
         valuesSet = null;
 	    if(selectedShipTo!= null) {
-	        var selectedShipCustomer = selectedShipTo.value;
-	        if(selectedShipCustomer!=null) {	        	
+	        selectedShipCustomer = selectedShipTo.value;
+	        /* if(selectedShipCustomer!=null) {	        	
 	        	if(document.orderListForm) {
 	        		removeOptionAll();
 		        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
@@ -847,27 +852,62 @@
 	        		appendOptionLast(selectedShipCustomer,formattedShipTo);
 	        		document.approvalList.shipToSearchFieldName1.value = selectedShipCustomer;
 	        	}
-	        }
+	        } */
 	    }
 	}
     function clearShipToField() {
-    	if(valuesSet !="selected"){
-    		 valuesSet = null;
-		 if(document.orderListForm != null && document.orderListForm.shipToSearchFieldName1 != null) { 
-		 	document.orderListForm.shipToSearchFieldName1.value = '';
-			removeOptionSelected();
+       	if(valuesSet !="selected"){      		
+      		 valuesSet = null;
+   	      	 var elSel = document.getElementById('shipToSearchFieldName');
+     	     elSel.selectedIndex=0;
+   		 if(document.orderListForm != null && document.orderListForm.shipToSearchFieldName1 != null) { 
+ 			document.orderListForm.shipToSearchFieldName1.value = elSel.selectedIndex ;
     	}
     	if(document.approvalList != null && document.approvalList.shipToSearchFieldName != null) {
-    		document.approvalList.shipToSearchFieldName.value = '';
+    		document.approvalList.shipToSearchFieldName.value ='';
     	}
 		var link = document.getElementById('shipToOrderSearch');
-		//if(link != null){
-    		//link.innerHTML = '[Select]';
-//		}
 	}
     }
-    function setVariable(){
+    
+    function setVariable(defaultShipToValue, size){
     	valuesSet = "selected";
+         if(selectedShipCustomer!=null) {
+        	if(document.orderListForm) {
+        		removeOptionAll();
+	        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
+        		appendOptionLast(selectedShipCustomer,formattedShipTo);
+        		document.orderListForm.shipToSearchFieldName1.value = selectedShipCustomer;
+        	}
+        	if(document.approvalList) { 
+        		removeOptionAll();
+	        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
+        		appendOptionLast(selectedShipCustomer,formattedShipTo);
+        		document.approvalList.shipToSearchFieldName1.value = selectedShipCustomer;
+        	}
+        }
+         else{
+        	 if(document.orderListForm) {
+ 	        	var formattedShipTo = formatBillToShipToCustomer(defaultShipToValue); 
+ 	        	if(size > 20){
+ 	        	 valuesSet = null;
+ 	        	}else{
+ 	        	if(size < 20){
+ 	   		     removeOptionAll();
+ 	        	}
+         		appendOptionLast(defaultShipToValue,formattedShipTo);
+         		document.orderListForm.shipToSearchFieldName1.value = defaultShipToValue;
+ 	        	}
+        	 }
+         	if(document.approvalList) {
+         		removeOptionAll();
+         		removeOptionSelected();
+ 	        	var formattedShipTo = formatBillToShipToCustomer(defaultShipToValue); 
+         		appendOptionLast(defaultShipToValue,formattedShipTo);
+         		document.approvalList.shipToSearchFieldName1.value = defaultShipToValue;
+         	}
+         }
+       
     }
     function isValidString(stringValue)
     {
@@ -1405,18 +1445,23 @@ function searchShipToAddress(divId,url) {
     	var searchText = document.getElementById('Text1').value
     	if(divId == null)
 			divId = 'ajax-assignedShipToCustomers';
+    	if(divId == 'shipToOrderSearchDiv' && searchText == '')
+    		url = '<s:property value="#shipToForOrderSearch"/>';
+   		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
+   			url = '<s:property value="#shipToSearchForOrderList"/>';
 		if(url == null)
 			url = '<s:property value="%{searchURL}"/>';
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 		if(searchText==''|| searchText==null)
 */
+		/* JIRA 3331 if search text is blank then all ship tos should be shown
 		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
 		}		
 		else
-		{
+		{*/
 			var x = document.getElementById('address-list');
 	         x.innerHTML = "Loading data... please wait!";
 			 Ext.Ajax.request({
@@ -1434,7 +1479,7 @@ function searchShipToAddress(divId,url) {
 		            	 document.getElementById(divId).innerHTML = response.responseText;
 		             }
 		        });
-		}
+		//}
     }
 function callAjaxForPagination(url,divId)
 {
