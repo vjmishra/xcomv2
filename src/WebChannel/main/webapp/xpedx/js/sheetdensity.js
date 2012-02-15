@@ -4,20 +4,31 @@
 			alert (PromptStr)
 			/*if (ver == "n3") {
 				Ctrl.focus();*/
-			if (eform.bWeight.value == "") {
+			//Modified For Jira 3109
+			if (document.eform.bWeight.value == "") {
+				document.getElementById("bWeight").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.caliper.value == "") {
+			if (document.eform.caliper.value == "") {
+				document.getElementById("caliper").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
 			return;
 		}
 
+//Added for Jira 3109
+  function resetPromptForSheetDen () {
+  	document.getElementById("bWeight").style.borderColor="";	
+  	document.getElementById("caliper").style.borderColor="";	
+ }
+
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
+			//Added resetPromptForSheetDen()for Jira 3109
+			resetPromptForSheetDen ();
 			if (objField.value == "") {
 				/*Start- Jira 3109 */
-				validatePrompt (objField, "\""+FieldName+"\" is required.")
+				validatePrompt (objField, "Required fields missing. Please review and try again.")
 				/*End- Jira 3109 */
 				return (false);
 			} else {
