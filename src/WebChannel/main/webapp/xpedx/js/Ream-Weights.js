@@ -4,32 +4,51 @@ function validatePrompt (Ctrl, PromptStr) {
 	/*if (ver == "n3") {
 		Ctrl.focus();
 	}*/
-	if (eform.hSize.value == "") {
+	if (document.eform.hSize.value == "") {
+		document.getElementById("hSize").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
-	if (eform.wSize.value == "") {
+	if (document.eform.wSize.value == "") {
+		document.getElementById("wSize").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
-	if (eform.bWeight.value == "") {
+	if (document.eform.bWeight.value == "") {
+		document.getElementById("bWeight").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
-	if (eform.hArea.value == "") {
+	if (document.eform.hArea.value == "") {
+		document.getElementById("hArea").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
-	if (eform.wArea.value == "") {
+	if (document.eform.wArea.value == "") {
+		document.getElementById("wArea").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
-	if (eform.hSize.value == "") {
+	/*if (document.eform.hSize.value == "") {
+		document.getElementById("hSize").style.borderColor="#FF0000";
 		Ctrl.focus();
-	}
+	}*/
 	return;
 }
+//Added for Jira 3109
+function resetPromptForReamW () {
+document.getElementById("hSize").style.borderColor=""; 
+document.getElementById("wSize").style.borderColor=""; 
+document.getElementById("bWeight").style.borderColor="";
+document.getElementById("hArea").style.borderColor="";
+document.getElementById("wArea").style.borderColor="";
+
+}
+
+
 
 function testBlank(objField, FieldName) {
 	var strField = new String(objField.value);
+	//Added resetPromptForReamW()for Jira 3109
+	resetPromptForReamW ();
 	if (objField.value == "") {
 		/*Start- Jira 3109 */
-		validatePrompt (objField, "\""+FieldName+"\" is required.")
+		validatePrompt (objField, "Required fields missing. Please review and try again.")
 		/*End- Jira 3109*/
 		return (false);
 	} else {
