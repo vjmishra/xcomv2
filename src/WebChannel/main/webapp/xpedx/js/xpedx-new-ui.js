@@ -17,22 +17,64 @@ document.getElementById("div3").style.display = "none";
 document.getElementById(thediv).style.display = "block";
 } 
 
+function resetPromptForImposCalc () {
+	document.getElementById("sheetSizeW").style.borderColor="";	
+	document.getElementById("sheetSizeH").style.borderColor="";	
+	document.getElementById("trimSizeW").style.borderColor="";
+	document.getElementById("trimSizeH").style.borderColor="";
+	
+}
 function checkCalculatorValues() { 
-	  
-	if(document.getElementById("sheetSizeW").value=="" || document.getElementById("sheetSizeH").value=="" || document.getElementById("sheetSizeW").value < 1 || document.getElementById("sheetSizeH").value < 1)
+	/*Start- Jira 3109 */
+	resetPromptForImposCalc (); 
+	var errorflag= false;
+	var valuelesserror =  false;
+	if(document.getElementById("sheetSizeW").value=="" || document.getElementById("sheetSizeH").value=="" || document.getElementById("sheetSizeW").value < 1 || document.getElementById("sheetSizeH").value < 1 )
     {   
-		/*Start- Jira 3109 */
-        alert('Sheet Size and Trim Size must be greater than 0.');        
-        return false;    
+		if(document.getElementById("sheetSizeW").value=="" || document.getElementById("sheetSizeW").value < 1)
+        	{
+        	document.getElementById("sheetSizeW").style.borderColor="#FF0000";
+        	document.getElementById("sheetSizeW").focus();
+            }
+        if(document.getElementById("sheetSizeH").value=="" || document.getElementById("sheetSizeH").value < 1)
+    	{
+    	document.getElementById("sheetSizeH").style.borderColor="#FF0000";
+    	document.getElementById("sheetSizeH").focus();
+    	}
+        if(document.getElementById("sheetSizeW").value=="" || document.getElementById("sheetSizeH").value=="")
+        	errorflag= true; 
+        else if(document.getElementById("sheetSizeW").value < 1 || document.getElementById("sheetSizeH").value < 1)        	
+        	valuelesserror =  true;		
     }
 	
-	if(document.getElementById("trimSizeW").value=="" || document.getElementById("trimSizeH").value=="" || document.getElementById("trimSizeW").value < 1 || document.getElementById("trimSizeH").value < 1)
+	if( document.getElementById("trimSizeW").value=="" || document.getElementById("trimSizeH").value=="" || document.getElementById("trimSizeW").value < 1 || document.getElementById("trimSizeH").value < 1)
     {
-        alert('Sheet Size and Trim Size must be greater than 0.'); 
-        /*End- Jira 3109 */       
-        return false;    
+        if(document.getElementById("trimSizeW").value=="" || document.getElementById("trimSizeW").value < 1)
+    	{
+    	document.getElementById("trimSizeW").style.borderColor="#FF0000";
+    	document.getElementById("trimSizeW").focus();
+    	//return false; 
+    	}
+	    if(document.getElementById("trimSizeH").value=="" || document.getElementById("trimSizeH").value < 1)
+		{
+		document.getElementById("trimSizeH").style.borderColor="#FF0000";
+		document.getElementById("trimSizeH").focus();
+		//return false; 
+		}     
+	    if(document.getElementById("trimSizeW").value=="" || document.getElementById("trimSizeH").value=="")
+        	errorflag= true; 
+        else if(document.getElementById("trimSizeW").value < 1 || document.getElementById("trimSizeH").value < 1)        	
+        	valuelesserror =  true;	
     }
-	
+	if(errorflag){
+		alert('Required fields missing. Please review and try again.');
+		return false;
+	}
+	if(valuelesserror){
+		alert('Sheet Size and Trim Size must be greater than 0.');
+		return false;
+	}
+	/*End- Jira 3109 */
 	if(document.getElementById("gripperWidth").value < 0)
     {
 		alert('Gripper Width can not be less than 0');
