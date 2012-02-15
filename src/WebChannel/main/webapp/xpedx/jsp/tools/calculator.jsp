@@ -175,19 +175,87 @@
       </div>
     </div>
     <script>  
+//Added For Jira 3109
+    function resetPromptForCalc () {
+    	document.getElementById("pagew").style.borderColor="";	
+    	document.getElementById("pageh").style.borderColor="";	
+    	document.getElementById("weight").style.borderColor="";
+    	document.getElementById("pages").style.borderColor="";
+    	document.getElementById("pieces").style.borderColor="";
+    	document.getElementById("waste").style.borderColor="";
+    	document.getElementById("size").style.borderColor="";
+    	
+    }
+    
+    function validateblank(){
+    	var errorflag= false;
+    	/* if (document.calculator.pagew.value == "" || document.calculator.pageh.value == "" || document.calculator.weight.value == "" || document.calculator.pages.value == ""
+			|| document.calculator.pieces.value ==""|| document.calculator.waste.value == "" || document.calculator.size.value =="")
+	{
+		
+		
+	
+	} */
+    	if (document.calculator.pagew.value == ""){
+    		document.getElementById("pagew").style.borderColor="#FF0000";
+    		document.calculator.pagew.focus();
+    		errorflag= true;
+    	}
+    	if (document.calculator.pageh.value == ""){
+    		document.getElementById("pageh").style.borderColor="#FF0000";
+    		document.calculator.pageh.focus();
+    		errorflag= true;
+    	}	
+    	if (document.calculator.weight.value == ""){
+    		document.getElementById("weight").style.borderColor="#FF0000";
+    		document.calculator.weight.focus();
+    		errorflag= true;
+    	}	
+    	if (document.calculator.pages.value == ""){
+    		document.getElementById("pages").style.borderColor="#FF0000";
+    		document.calculator.pages.focus();
+    		errorflag= true;
+    	}	
+    	if (document.calculator.pieces.value == ""){
+    		document.getElementById("pieces").style.borderColor="#FF0000";
+    		document.calculator.pieces.focus();
+    		errorflag= true;
+    	}	
+    	if (document.calculator.waste.value == ""){
+    		document.getElementById("waste").style.borderColor="#FF0000";
+    		document.calculator.waste.focus();
+    		errorflag= true;
+    	}
+    	if (document.calculator.size.value == ""){
+    		document.getElementById("size").style.borderColor="#FF0000";
+    		document.calculator.size.focus();
+    		errorflag= true;
+    	}
+		if(errorflag)
+			{
+			alert("Required fields missing. Please review and try again.");
+			return true;
+			}
+    	
+    }
+    function calc()
 
-function calc()
 
-
-{  
+{  //Added For Jira 3109
+    	resetPromptForCalc();
+	if(validateblank())
+	{
+		return false;
+	}
+	
 	if (isNaN(document.calculator.pagew.value))
 		{
-			width = 0;
+		width = 0;
 			document.calculator.pagew.value = '';
 		}
 	else
-		{
-			width = document.calculator.pagew.value;
+		{	width = document.calculator.pagew.value;
+			
 		}
 	if (isNaN(document.calculator.pageh.value))
 		{
