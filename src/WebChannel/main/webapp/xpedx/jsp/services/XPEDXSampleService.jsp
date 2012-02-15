@@ -518,7 +518,7 @@
              	}
         		else{
         			/*Start- Jira 3109  */
-                 	alert('Please enter at least one row of Facilites Supplies or Paper items to the list.');
+                 	alert('Please enter at least one row of General or Paper items to the list.');
         			/*End- Jira 3109  */
              	}
         		
