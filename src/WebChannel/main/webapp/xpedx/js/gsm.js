@@ -2,22 +2,26 @@
 
   function validatePrompt (Ctrl, PromptStr) {
 			alert (PromptStr)
-			/*if (ver == "n3") {
+			if (document.eform.bSize.value == "Please Select an Option") {
+				document.getElementById("bSize").style.borderColor="#FF0000";
 				Ctrl.focus();
-			}
-			return;*/
-			if (eform.bSize.value == "") {
-				Ctrl.focus();
-			} if (eform.bWeight.value == "") {
+			} if (document.eform.bWeight.value == "") {
+				document.getElementById("bWeight").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
 		}
-
+		//Added for Jira 3109
+		  function resetPromptForGSM () {
+		  	document.getElementById("bSize").style.borderColor="";	
+		  	document.getElementById("bWeight").style.borderColor="";	
+		  	}
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
+			//Added resetPromptForGSM()for Jira 3109
+			resetPromptForGSM ();
 			if (objField.value == "") {
 				/*Start- Jira 3109 */
-				validatePrompt (objField, "\""+FieldName+"\" is required.")
+				validatePrompt (objField, "Required fields missing. Please review and try again.")
 				/*End- Jira 3109 */
 				return (false);
 			} else {
@@ -27,9 +31,8 @@
 
 		function testNumber(objField, FieldName) {
 			var numField = objField.value;
-
 			if (isNaN(numField)) {
-				validatePrompt (objField, "Select a valid "+FieldName+" from the drop-down.")
+				validatePrompt (objField, "Required fields missing. Please review and try again.")
 				return (false);
 			}
 		    
@@ -51,6 +54,7 @@
 
 		function validateForm() {
 			var form=document.eform;
+			var myindex=form.bSize.selectedIndex;
 			if (!testValue(form.bWeight,"Basis Weight")) return false;
 			if (!testValue(form.bSize,"Standard Size")) return false;
 			CalculateConvert(form.bWeight.value,form.bSize.value);
