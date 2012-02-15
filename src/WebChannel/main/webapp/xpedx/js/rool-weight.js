@@ -1,18 +1,34 @@
 // JavaScript Document
-
+//Added for Jira 3109
+function resetPromptForRollWeight () {
+	document.getElementById("rDiameter").style.borderColor="";	
+	document.getElementById("cDiameter").style.borderColor="";	
+	document.getElementById("rWidth").style.borderColor="";
+	document.getElementById("factor").style.borderColor="";
+	
+}
 function validateForm() {
 	var form=document.eform;
 	var myindex=form.factor.selectedIndex;
-
-	if (document.eform.rDiameter.value == "")
+	//Added for Jira 3109
+	resetPromptForRollWeight();
+	
+	if (document.eform.rDiameter.value == "" || document.eform.cDiameter.value == "" || document.eform.rWidth.value == "" || form.factor.options[myindex].value == "")
 		{
 		/*Start- Jira 3109 */
-		alert("Roll Diameter (Inches) is required.");
+		alert("Required fields missing. Please review and try again.");
 		/*End- Jira 3109 */
-		document.eform.rDiameter.focus();
-		return (false);
+		//return (false);
 		}
-
+	if (document.eform.rDiameter.value == "" )
+	{
+	/*Start- Jira 3109 */
+	//alert("Required fields missing. Please review and try again.");
+	/*End- Jira 3109 */
+	document.getElementById("rDiameter").style.borderColor="#FF0000";
+	document.eform.rDiameter.focus();
+	//return (false);
+	}
 	if (isNaN(document.eform.rDiameter.value))
 		{
 		alert("Roll Diameter must be a number.");
@@ -23,10 +39,11 @@ function validateForm() {
 	if (document.eform.cDiameter.value == "")
 		{
 		/*Start- Jira 3109 */
-		alert("Core Diameter (inches) is required.");
+		//alert("Core Diameter (inches) is required.");
 		/*End- Jira 3109 */
+		document.getElementById("cDiameter").style.borderColor="#FF0000";
 		document.eform.cDiameter.focus();
-		return (false);
+		//return (false);
 		}
 
 	if (isNaN(document.eform.cDiameter.value))
@@ -40,10 +57,11 @@ function validateForm() {
 	if (document.eform.rWidth.value == "")
 		{
 		/*Start- Jira 3109 */
-		alert("Roll Width (inches) is required.");
+		//alert("Roll Width (inches) is required.");
 		/*End- Jira 3109 */
+		document.getElementById("rWidth").style.borderColor="#FF0000";
 		document.eform.rWidth.focus();
-		return (false);
+		//return (false);
 		}
 
 	if (isNaN(document.eform.rWidth.value))
@@ -55,9 +73,9 @@ function validateForm() {
 
 	if (form.factor.options[myindex].value == "")
 		{
-		alert("Select Factor.");
+		document.getElementById("factor").style.borderColor="#FF0000";
 		document.eform.factor.focus();
-		return (false);
+		//return (false);
 		}
 	CalculateRollEstimation(form.rDiameter.value,form.cDiameter.value,form.rWidth.value,form.factor.options[myindex].value);
 	return true;
