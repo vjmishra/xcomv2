@@ -329,14 +329,14 @@ function addProductToQuickAddList(element)
         //Added to fix 3098
     	//alertString = theForm.localizedMissingProductIDMessage.value;
         //alert(alertString);
-    	document.getElementById("errorMsgBottom").innerHTML = "Please enter a valid Item #." ;
-        document.getElementById("errorMsgBottom").style.display = "inline";
+    	document.getElementById("errorMsgItemBottom").innerHTML = "Please enter a valid Item #." ;
+        document.getElementById("errorMsgItemBottom").style.display = "inline";
         return;
     }
     else
     	{
-        document.getElementById("errorMsgBottom").innerHTML = "";
-        document.getElementById("errorMsgBottom").style.display = "none";
+        document.getElementById("errorMsgItemBottom").innerHTML = "";
+        document.getElementById("errorMsgItemBottom").style.display = "none";
     	}
     if(quantity == "")
     {
