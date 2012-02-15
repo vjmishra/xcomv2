@@ -571,6 +571,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 				<s:url id='productValidateURLid' namespace='/order' action='validateProduct' />
 				<s:a id='productValidateURL' href='%{#productValidateURLid}' />
 				<div id="QuickAddList" style="display: block;"></div>
+				<div class="error" id="errorMsgItemBottom" style="display:none;position:relative;left:340px" ></div>
+				
 			</form>
 			<!-- Start 2964 -->
 			<s:hidden name="msapOrderMulUOMFlag" id="msapOrderMulUOMFlag" value="%{#msapExtnUseOrderMulUOMFlag}" />
