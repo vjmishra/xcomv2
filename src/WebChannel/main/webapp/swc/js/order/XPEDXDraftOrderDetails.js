@@ -43,7 +43,7 @@ function addProductsToOrder()
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
 			orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
-			if(orderMultiple != null && orderMultiple!=undefined && orderMultiple != 1 && orderMultiple.replace(/^\s*|\s*$/g,"") =='' && orderMultiple !=0){
+			if(orderMultiple!=undefined && orderMultiple > 1 && orderMultiple.replace(/^\s*|\s*$/g,"") !='' && orderMultiple != null && orderMultiple !=0){
 			var enteredUOM = selectedUOM[i].value;
 			enteredUOM = enteredUOM.split(" ");
 			enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
