@@ -4,18 +4,28 @@ function validatePrompt (Ctrl, PromptStr) {
 			alert (PromptStr)
 			/*if (ver == "n3") {
 				Ctrl.focus();*/
-			if (eform.Msheets.value == ""){
+			//Modified For Jira 3109
+			if (document.eform.Msheets.value == ""){
+				document.getElementById("Msheets").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.NumSheets.value == ""){
+			if (document.eform.NumSheets.value == ""){
+				document.getElementById("NumSheets").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}return;
 		}
-
+//Added for Jira 3109
+function resetPromptForWOdd () {
+	document.getElementById("Msheets").style.borderColor="";	
+	document.getElementById("NumSheets").style.borderColor="";	
+	
+}
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
+			//Added resetPromptForWOdd()for Jira 3109
+			resetPromptForWOdd ();
 			if (objField.value == "") {
-				validatePrompt (objField, "\""+FieldName+"\" is required.")
+				validatePrompt (objField, "Required fields missing. Please review and try again.")
 				return (false);
 			} else {
 				return (true);
