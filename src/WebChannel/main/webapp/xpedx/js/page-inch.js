@@ -2,17 +2,26 @@
 
 function validatePrompt (Ctrl, PromptStr) {
 	alert (PromptStr)
-	if (eform.caliper.value == "") {
+	//Modified For Jira 3109
+	if (document.eform.caliper.value == "") {
+		document.getElementById("caliper").style.borderColor="#FF0000";
 		Ctrl.focus();
 	}
 	return;
 	}
 
+//Added for Jira 3109
+function resetPromptForPageInch () {
+	document.getElementById("caliper").style.borderColor="";	
+	
+}
 	function testBlank(objField, FieldName) {
 		var strField = new String(objField.value);
+		//Added resetPromptForPageInch()for Jira 3109
+		resetPromptForPageInch ();
 		if (objField.value == "") {
 			/*Start- Jira 3109 */
-			validatePrompt (objField, "\""+FieldName+"\" is required.")
+			validatePrompt (objField, "Required fields missing. Please review and try again.")
 			/*End- Jira 3109 */
 			return (false);
 		} else {
