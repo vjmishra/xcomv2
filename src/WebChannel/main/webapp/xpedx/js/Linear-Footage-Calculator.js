@@ -5,29 +5,44 @@
 			/*-if (ver == "n3") {
 				Ctrl.focus();
 			}*/
-			if (eform.rWeight.value == "") {
+			if (document.eform.rWeight.value == "") {
+				document.getElementById("rWeight").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.hArea.value == "") {
+			if (document.eform.hArea.value == "") {
+				document.getElementById("hArea").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.wArea.value == "") {
+			if (document.eform.wArea.value == "") {
+				document.getElementById("wArea").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.bWeight.value == "") {
+			if (document.eform.bWeight.value == "") {
+				document.getElementById("bWeight").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
-			if (eform.rWidth.value == "") {
+			if (document.eform.rWidth.value == "") {
+				document.getElementById("rWidth").style.borderColor="#FF0000";
 				Ctrl.focus();
 			}
 			return;
 		}
-
+ //Added For Jira 3109
+ function resetPromptForLinearFootage () {
+		document.getElementById("rWeight").style.borderColor="";	
+		document.getElementById("hArea").style.borderColor="";	
+		document.getElementById("wArea").style.borderColor="";
+		document.getElementById("bWeight").style.borderColor="";
+		document.getElementById("rWidth").style.borderColor="";
+		
+	}
 		function testBlank(objField, FieldName) {
 			var strField = new String(objField.value);
+			//Added resetPromptForLinearFootage () for Jira 3109
+			resetPromptForLinearFootage ();
 			if (objField.value == "") {
 				/*Start- Jira 3109 */
-				validatePrompt (objField, "\""+FieldName+"\" is required.")
+				validatePrompt (objField, "Required fields missing. Please review and try again.")
 				/*End- Jira 3109 */
 				return (false);
 			} else {
