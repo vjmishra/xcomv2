@@ -1987,6 +1987,8 @@ var currentAadd2ItemList = new Object();
 	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
 </s:else>
 </div>
+<!--Added for 3098  -->
+<br/><br/><div class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px" ></div> 
 
 <div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
