@@ -4,7 +4,7 @@
 <%@ taglib prefix="swc" uri="swc"%>
 
 <div style="display: none;">
-<div id='copyCartNameDlg' style="width:305px;height:260px;overflow:auto;">
+<div id='copyCartNameDlg' style="width:325px;height:300px;overflow:auto;">
  		 <s:form name="copyOrder" id="copyOrder" method="post" action="draftOrderCopy" validate="true">
      <s:hidden name="OrderHeaderKey" id="OrderHeaderKey" value=""/>
 
@@ -30,7 +30,7 @@
       </ul>
  	</div>
  	<!--3098  -->
- 	<div id="cp-cart-err-msg" style="display: none;"><h5 align="right" style="position:relative;bottom:20px;"><b><font color="red"> <s:text name='MSG.SWC.CART.VERIFY.ERROR.NONAME' /> </font></b></h5></div> 
+ 	<br/><br/><div id="cp-cart-err-msg" style="display: none;"><h5 align="right" style="position:relative;bottom:20px;"><b><font color="red"> <s:text name='MSG.SWC.CART.VERIFY.ERROR.NONAME' /> </font></b></h5></div> 
 	<!--3098  -->
  </s:form> 
 	</div> 
