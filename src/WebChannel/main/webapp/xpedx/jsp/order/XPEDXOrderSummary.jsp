@@ -143,7 +143,8 @@ function setTotalPrice(val){
 	
 	function validateFormSubmit(){
 		//Added For Jira 3232
-	    Ext.Msg.wait("Processing...");
+	    //Commented for 3475
+		//Ext.Msg.wait("Processing...");
 		
 		setCustomerPONumber();
 	
@@ -167,6 +168,8 @@ function setTotalPrice(val){
         return returnval;
     }
     else{
+    	//Added for 3475
+    	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
    // document.OrderSummaryForm.submit();
     returnval = true;
@@ -510,8 +513,8 @@ from session . We have customer Contact Object in session .
 	<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
 		<img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
 		</div>
-		
-		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div>
+		<!--Commented for 3098  -->
+		<!-- <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div> -->
 		<%--jira 2885 --%>
 		<div id="errorMessageDiv"><s:if test='#pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5>
@@ -1493,7 +1496,8 @@ from session . We have customer Contact Object in session .
 		
 		<!-- <div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div> -->
 		<div id="requiredCustomerPOErrorDiv" style="display: none;  float: right; margin-right: 28px; margin-top: 5px;" class="error" >PO #: is required field</div>
-
+		<!--Added for 3098  -->
+		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div>
   
 <!-- class="container" -->
 		
