@@ -1990,7 +1990,8 @@ var currentAadd2ItemList = new Object();
 </s:else>
 </div>
 <!--Added for 3098  -->
-<br/><br/><div class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px" ></div> 
+<br/><br/><b><div  id="minOrderErrorMessageBottom" style="position:relative;left:550px;color:red" ></div></b>
+<br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
 <div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
@@ -2388,11 +2389,15 @@ function validateMinOrder()
 	if(minAmount >totalAmountNum)
 	{
 		var divId=document.getElementById("minOrderErrorMessage");
+		var divId1=document.getElementById("minOrderErrorMessageBottom");
 		if(divId != null)
-		{
+		{		
 			//Start fix for 3098
 			divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			document.getElementById("errorMsgBottom").innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+		}
+		if(divId1 != null)
+		{
+			divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
 			//End fix for 3098
 		}
 	}
