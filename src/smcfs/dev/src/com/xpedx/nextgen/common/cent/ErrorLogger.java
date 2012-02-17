@@ -70,6 +70,7 @@ public class ErrorLogger {
 			xpxErrorLookupRootElem.setAttribute("SourceSystem", "Sterling");
 			xpxErrorLookupRootElem.setAttribute("TransType", errorObj
 					.getTransType());
+
 			/*yfcLogCatlog.debug("XPXGetErrorLookupListService i/p Doc"
 					+ XmlUtils.getString(getErrorLookupInDoc));
 			log4jLogger.debug("XPXGetErrorLookupListService i/p Doc"
@@ -106,7 +107,7 @@ public class ErrorLogger {
 					if (xpxErrorElem != null) {
 						/*yfcLogCatlog.debug(XmlUtils.getString(xpxErrorElem));
 						log4jLogger.debug(XmlUtils.getString(xpxErrorElem));*/
-						String logString = xpxErrorElem
+						/*String logString = xpxErrorElem
 								.getAttribute("TargetSystem")
 								+ "|"
 								+ xpxErrorElem.getAttribute("SourceSystem")
@@ -117,7 +118,28 @@ public class ErrorLogger {
 								+ "|"
 								+ xpxErrorElem.getAttribute("QueueName")
 								+ "|"
-								+ xpxErrorElem.getAttribute("ErrorClass");
+								+ xpxErrorElem.getAttribute("ErrorClass")
+						        + "|"
+						        + errorObj.getErrorDesc()
+						        + "|"
+						        + errorObj.getException(); */
+						        
+						
+						StringBuffer logString = new StringBuffer(xpxErrorElem.getAttribute("TargetSystem"));
+						logString.append("|");
+						logString.append(xpxErrorElem.getAttribute("SourceSystem"));
+						logString.append("|");
+						logString.append(xpxErrorElem.getAttribute("TransType"));
+						logString.append("|");
+						logString.append(xpxErrorElem.getAttribute("CommMethod"));
+						logString.append("|");
+						logString.append(xpxErrorElem.getAttribute("QueueName"));
+						logString.append("|");
+						logString.append(xpxErrorElem.getAttribute("ErrorClass"));
+						logString.append("|");
+						logString.append(errorObj.getException());
+						
+						     
 						/*yfcLogCatlog.debug("yfcLogCatalog.debug");
 						yfcLogCatlog.info("yfcLogCatlog.info");
 						yfcLogCatlog.error("yfcLogCatlog.error");
@@ -128,7 +150,7 @@ public class ErrorLogger {
 
 						/*yfcLogCatlog.debug(logString);
 						yfcLogCatlog.info(logString);*/
-						yfcLogCatlog.error(logString);
+						yfcLogCatlog.error(logString.toString());
 						/*yfcLogCatlog.verbose(logString);
 						log4jLogger.info(logString);
 						log4jLogger.debug(logString);
@@ -156,7 +178,6 @@ public class ErrorLogger {
 		}
 		}catch(Exception e){
 			log4jLogger.error(e.getMessage());
-
 			yfcLogCatlog.error(e.getMessage());
 		}
 	}
