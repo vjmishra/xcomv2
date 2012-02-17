@@ -91,7 +91,8 @@ function addProductsToOrder()
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
-						document.getElementById(divId).innerHTML ="Order Quantity must be a multiple of " + orderMultiple +" "+baseUOM[i].value;
+						//Added for 3098
+						document.getElementById(divId).innerHTML ="Please order in units of " + orderMultiple +" "+baseUOM[i].value;
 						document.getElementById(divId).setAttribute("class", "error");
 					}
 				}
