@@ -2688,36 +2688,7 @@ a.underlink:hover { text-decoration: underline !important; }
 </s:form></div>
 </div>
 
-<div style="display: none;">
-<div title="Add New Quick Link" id="newQL"
-	style="width: 400px; height: 220px; overflow: auto;"
-	class="xpedx-light-box">
-<h2>Add New</h2>
-<p><strong></strong></p>
-<s:hidden id="operation" value=""></s:hidden>
 
-<table class="form" width="100%" style="clear: both">
-	<tr>
-		<td width="24%" valign="top" class="noBorders-fff padding-td"
-			style="border-left: solid 1px #fff;">Name:</td>
-		<td width="76%" valign="top" class="noBorders-fff padding-td"><s:textfield
-			cssClass="x-input" id="linkName" name="linkName" value=''  maxlength="35" /></td>
-	</tr>
-	<tr>
-		<td width="24%" valign="top" class="noBorders-fff padding-td"
-			style="border-left: solid 1px #fff;">URL:</td>
-		<td width="76%" valign="top" class="noBorders-fff padding-td"><s:textfield
-			cssClass="x-input" id="url" name="url" value='' maxlength="150" /></td>
-	</tr>
-</table>
-<div></div>
-<ul class="tool-bar-bottom float-right" id="tool-bar">
-     	<li><a href="#addNewQL" onclick="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a>&nbsp;&nbsp;&nbsp;</li>
-     	<li><a href="#addNewQL" onclick="javascript:saveClick();" class="green-ui-btn"><span>Add</span></a></li>
-</ul>
-
-</div>
-</div>
 
 <!-- Loading Quick Link Dialog -->
 <script>
