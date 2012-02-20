@@ -388,15 +388,15 @@ function printPOs(customerPos) {
 	    		<thead>
 	    			<tr id="top-bar">
 	    				<th class="table-header-bar-left " style="min-width: 10em;">
-						<swc:sortable fieldname="%{'Extn_'+'ExtnWebConfNum'}">
+						<swc:sortable fieldname="%{'ExtnWebConfNum'}">
 						<span style="color:white" class="underlink">Web&nbsp;Confirmation </span></swc:sortable>
 						</th>
 	    				<th style="min-width: 5.5em;" ><span style="color:white">Order&nbsp;#</span></th>
-	    				<th style="min-width: 9.5em;"><swc:sortable fieldname="%{'CustomerPONo'}"><span style="color:white" class="underlink"> PO # </span></swc:sortable></th>
+	    				<th style="min-width: 9.5em;"><swc:sortable fieldname="%{'CustomerPoNo'}"><span style="color:white" class="underlink"> PO # </span></swc:sortable></th>
 	    				<th style="min-width: 6em;"><swc:sortable fieldname="%{'OrderDate'}"><span class="underlink" style="color:white">Ordered</span></swc:sortable> </th>
-	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'Extn_'+'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
-	    				<th style="min-width: 9.3em;" ><swc:sortable fieldname="%{'Extn_'+'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
-	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'Extn_'+'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
+	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
+	    				<th style="min-width: 9.3em;" ><swc:sortable fieldname="%{'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
+	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
 	    				<th style="min-width: 10.7em;" class="table-header-bar-right"><span style="color:white">Status</span></th>
 	    			</tr>
 	    		</thead>
@@ -408,12 +408,12 @@ function printPOs(customerPos) {
 	            
 	            <s:iterator  status='rowStatus' value='xpedxParentOrderListMap' >
 	            	<s:set name='parentOrder' value='value' />
-	            	<s:set name="priceInfo" value='#parentOrder.getElementsByTagName("PriceInfo")'/>
-	            	<s:set name='currencyCode' value='%{#priceInfo.item(0).getAttribute("Currency")}'/>
+	            	<s:set name="priceInfo" value='#parentOrder'/>
+	            	<s:set name='currencyCode' value='%{#priceInfo.getAttribute("Currency")}'/>
 	            	<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}'/>
-	            	<s:set name='OrderExtn' value='#xutil.getChildElement(#parentOrder,"Extn")'/>
+	            	<s:set name='OrderExtn' value='#parentOrder'/>
 	            	<s:set name='priceWithCurrency' value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #OrderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-	            	<s:set name='shipToAddr' value='#xutil.getChildElement(#parentOrder,"PersonInfoShipTo")'/>
+	            	<s:set name='shipToAddr' value='#parentOrder'/>
 	            	<s:set name='addressLine1' value='%{#shipToAddr.getAttribute("AddressLine1")}'/>
 	            	<s:set name='addressLine2' value='%{#shipToAddr.getAttribute("AddressLine2")}'/>
 	            	<s:set name='addressLine3' value='%{#shipToAddr.getAttribute("AddressLine3")}'/>
@@ -490,7 +490,7 @@ function printPOs(customerPos) {
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
 							
 							<s:if test='%{#status != "Cancelled"}'>
-								<s:property value="#parentOrder.getAttribute('Status')" />
+								<s:property value="#status" />
 								
 									<s:if test='#isPendingApproval && !#isOrderRejected'>
 										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
@@ -503,7 +503,7 @@ function printPOs(customerPos) {
 									</s:elseif>
 							</s:if>
 							<s:else>
-								<s:property value="#parentOrder.getAttribute('Status')" />
+								<s:property value="#status" />
 							</s:else>							
 							
 				    	</td>
@@ -519,7 +519,7 @@ function printPOs(customerPos) {
 								<s:set name="chainedOrder" value='#parentOrder' />
 							</s:else>
 							<s:set name='ChainedOrderExtn'
-								value='#xutil.getChildElement(#chainedOrder,"Extn")' />
+								value='#chainedOrder' />
 							<s:set name='ChainedLegacyOrderNumber'
 								value='#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")' />
 								
@@ -535,7 +535,7 @@ function printPOs(customerPos) {
 							<s:if test='#ChainedLegacyOrderNumber!=""'>
 							<span class="underlink">
 								<s:a href="%{chainedOrderDetailsURL}">
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn)' />
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn.getAttribute("ExtnOrderDivision"),#ChainedLegacyOrderNumber,#ChainedOrderExtn.getAttribute("ExtnGenerationNo"))' />
 									<s:param name="parentOrderKey" value='#parentOrder.getAttribute("OrderHeaderKey")'/>
 									<s:param name="theWebConfNumber" value='#webConfirmationNumber'/>
 								</s:a>
@@ -558,7 +558,7 @@ function printPOs(customerPos) {
 								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />
 		
 							<td><s:set name='customerPO'
-								value='%{#parentOrder.getAttribute("CustomerPONo")}' /> <SCRIPT type="text/javascript">
+								value='%{#parentOrder.getAttribute("CustomerPoNo")}' /> <SCRIPT type="text/javascript">
 								printPOs('<s:property value="#customerPO" escape='false'/>');
 								</SCRIPT></td>
 		
@@ -662,7 +662,7 @@ function printPOs(customerPos) {
 	                		<s:set name="priceInfo" value='#parentOrder.getElementsByTagName("PriceInfo")'/>
 			            	<s:set name='currencyCode' value='%{#priceInfo.item(0).getAttribute("Currency")}'/>
 			            	<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}'/>
-			            	<s:set name='ChainedOrderExtn' value='#xutil.getChildElement(#chainedOrder,"Extn")'/>
+			            	<s:set name='ChainedOrderExtn' value='#chainedOrder'/>
 							<s:set name='ChainedLegacyOrderNumber' value='#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")'/>
 							<s:set name='priceWithCurrency' value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #ChainedOrderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 							
@@ -689,11 +689,11 @@ function printPOs(customerPos) {
 									</s:if>
 									<s:else>
 										<s:a href="%{chainedOrderDetailsURL}">
-							  				<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn)'/>
+							  				<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn.getAttribute("ExtnOrderDivision"),#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo"),#ChainedOrderExtn.getAttribute("ExtnGenerationNo"))' />
 										</s:a>
 									</s:else>
 				            	</td>
-			            		<td><s:set name='customerPO' value='%{#parentOrder.getAttribute("CustomerPONo")}'/>
+			            		<td><s:set name='customerPO' value='%{#parentOrder.getAttribute("CustomerPoNo")}'/>
 									<SCRIPT type="text/javascript">
 									printPOs('<s:property value="#customerPO" escape='false'/>');
 									</SCRIPT>
