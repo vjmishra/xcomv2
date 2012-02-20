@@ -1364,7 +1364,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td valign="top" colspan="2" class="no-border-right-user padding00">
 			<div class="question">
 			<ul>
-				<li><strong>Catalog Preferences</strong></li>
+				<li><span class="subtitle">Catalog Preferences</span></li>
 			</ul>
 			</div>
 			</td>
@@ -1431,7 +1431,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				style="padding-top: 20px;">
 			<div class="question">
 			<ul>
-				<li><span="subtitle">PO List&nbsp;</span></li>
+				<li><strong>PO List&nbsp;</strong></li>
 				<li><a href="#"><img
 					alt="List of PO numbers made available at order submission."
 					title="List of PO numbers made available at order submission."
@@ -1496,7 +1496,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td valign="top" class="no-border-right-user padding0">
 			<div class="question">
 			<ul>
-				<li><span class="title-page">Email Preferences&nbsp;</span></li>
+				<li><span class="subtitle">Email Preferences&nbsp;</span></li>
 				<li><a href="#"><img
 					title="Types of email notifications regarding order status."
 					alt="Types of email notifications regarding order status."
@@ -1628,40 +1628,40 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td valign="top" colspan="2" class="no-border-right-user padding00">
 			<div class="question">
+
 			<ul class="padding-top3">
-				<li><span="subtitle">Quick Links&nbsp;</span></li>
+				<li><strong>Quick Links&nbsp;</strong></li>
 				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					alt="User defined bookmarked links which display on the homepage."
 					title="User defined bookmarked links which display on the homepage."
 					width="12" height="12" border="0" /></a></li>
+				 <li><a class="underlink" onclick="setInLineChange();" id="NewQL">[Add New]</a></li> 				
 			</ul>
 			</div>
+
 			<div class="txt-small clearview"></div>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb1">
 			<tbody>
 				<tr class="table-header-bar">
-					<td width="35%" class="no-border table-header-bar-left"><span
-						class="white txt-small"> Name</span></td>
-					<td width="48%" align="left" class="no-border  "><span
-						class="white txt-small">URL</span></td>
-					<td width="8%" align="left" class="no-border"><span
-						class="white txt-small">Show</span></td>
+					<td width="35%" class="no-border-left table-header-bar-left"><span
+						class="white"> Name</span></td>
+					<td width="48%" align="left" class="  "><span
+						class="white">URL</span></td>
+					<td width="8%" align="left" ><span
+						class="white">Show</span></td>
 					<td width="9%" align="left"
 						class="no-border-right table-header-bar-right"><span
-						class="white txt-small">Sequence</span></td>
+						class="white">Sequence</span></td>
 				</tr>
-				</tbody>				
+				</tbody>			
 			</table>
+
 			<div id="table-bottom-bar" style="width: 100%;">
 			<div id="table-bottom-bar-L"></div>
 			<div id="table-bottom-bar-R"></div>
 			</div>
-			<div class="txt-small clearview padding-top2"><a
-				href="#newQL" class="underlines" id="addNewQL">[Add
-			New]</a></div>
 			</td>
 		</tr>
-		
 		<s:set name='custContactAddtnlAddress'
 			value="#_action.getCustContactAddtnlAddress()" />
 		<s:set name='personInfo'
@@ -1676,7 +1676,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			value="%{#personInfo.getAttribute('IsCommercialAddress')}" />
 	</table>
 	</div>
-		
+	
 		
 		</div>
 	</s:if>
