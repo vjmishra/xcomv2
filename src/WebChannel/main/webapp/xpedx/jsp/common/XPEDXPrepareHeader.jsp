@@ -470,7 +470,8 @@ var selectedShipCustomer = null;
         document.body.style.cursor = 'wait';
         $.fancybox.close();
 		//Added For Jira 2903
-        Ext.Msg.wait("Processing..."); 
+		//Coomented for 3475
+        //Ext.Msg.wait("Processing..."); 
         form.dom.submit();	
 	}
 	var currentAadd2ItemList = null;	
@@ -732,7 +733,8 @@ var selectedShipCustomer = null;
     function showAssignedShipTo(url)
     {	
     	//Added For Jira 2903
-    	Ext.Msg.wait("Processing..."); 
+    	//Commented for 3475
+    	//Ext.Msg.wait("Processing..."); 
     	var x = document.getElementById('ajax-assignedShipToCustomers');
         url = ReplaceAll(url,"&amp;",'&');
     	Ext.Ajax.request({
@@ -997,7 +999,8 @@ var selectedShipCustomer = null;
         }        
         else{
     	//Added For Jira 2903
-    	Ext.Msg.wait("Processing...");     	
+    	//Commented for 3475
+    	//Ext.Msg.wait("Processing...");     	
         var selectedCustomer=document.FormToPost.selectedCustomerId.value;       
 		// JIRA 1878 :  getting the userName of selected user, and sending as a parameter to Ajax request
         var selected_customerContactId=document.getElementById("customerContactId");
@@ -1253,7 +1256,8 @@ var toaWin = new Ext.Window({
 	    //Show the waiting box
 	    var x = document.getElementById(divId);
 	    //Added For Jira 2903
-		Ext.Msg.wait("Processing..."); 
+	    //Commented for 3475
+	    //Ext.Msg.wait("Processing..."); 
 	    //Execute the call
 	    document.body.style.cursor = 'wait';
 	    if(true){
