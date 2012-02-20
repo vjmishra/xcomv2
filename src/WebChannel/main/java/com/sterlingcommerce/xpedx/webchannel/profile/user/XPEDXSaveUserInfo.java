@@ -368,7 +368,12 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		// in action class based on the values changed
 		
 		saveChanges();
-		Boolean isSalesRep = (Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+		Boolean isSalesRep = null;
+		String isSalesRepStr = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+		if(isSalesRepStr != null){
+			isSalesRep = Boolean.valueOf(isSalesRepStr);
+		}
+		
 		try {
 			if (YFCCommon.isVoid(wcContext.getSCUIContext().getRequest()
 					.getParameter("userName"))) {
@@ -466,8 +471,10 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			//For Jira 1998 - checking if emaill address is updated, if yes, then calling service to send the email			
 			String newEmailId = (String) wcContext.getSCUIContext().getRequest().getParameter("emailId");
 			String oldEmailId = (String) wcContext.getSCUIContext().getSession().getAttribute("emailId");
-			if(checkIfEmailChanged(oldEmailId,newEmailId)){
-				UpdateEMailAddress(oldEmailId,newEmailId);
+			if(oldEmailId!=null || newEmailId!=null){
+				if(checkIfEmailChanged(oldEmailId,newEmailId)){
+					UpdateEMailAddress(oldEmailId,newEmailId);
+				}
 			}
 		} catch (YFCException passexp) {
 			// This exception is put here to handle the password validation exceptions.
