@@ -32,7 +32,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXOrderListDetails" IsFlow="Y">
 						<Input>
-							<XPEDXOrderListView DraftOrderFlag="Y" DocumentType="0001"
+							<XPEDXOrderListView EnterpriseCode="" DraftOrderFlag="Y" DocumentType="0001"
 								AuthorizedClient="Web" BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
 								
 								<OrderBy>
@@ -345,6 +345,44 @@
 		description="get all the chained orderlinelist for a set of orders">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="XPXGetOrderSearchListViewService">
+			<Input>
+				<XPEDXOrderSearchListView>
+					<ComplexQuery Operator="AND">
+						<And>
+							<Exp Name="ExtnWebConfNum" QryType="NOTNULL" />
+							<Or>
+							</Or>								
+						</And>
+					</ComplexQuery>
+				</XPEDXOrderSearchListView>
+			</Input>
+			<Template>							
+				<XPEDXOrderSearchListViewList>
+                	<XPEDXOrderSearchListView AddressLine1=""
+                   	 	AddressLine2="" AddressLine3="" AddressLine4=""
+                   		 AddressLine5="" AddressLine6="" City="" Country=""
+                   		 Currency="" CustomerPoNo="" DraftOrderFlag=""
+                   		 ExtnLegacyOrderNo="" ExtnLegacyOrderType=""
+                  	 	 ExtnOrderDivision="" ExtnOrderStatus=""
+                 	  	 ExtnOrderSubTotal="" ExtnOrderedByName=""
+                	  	  ExtnShipToName="" ExtnTotOrdValWithoutTaxes=""
+               	    	 ExtnTotalOrderValue="" ExtnWebConfNum=""
+              	    	  HoldStatus="" Modifyts="" Modifyuserid=""
+                  	    OrderDate="" OrderHeaderKey="" OrderName=""
+                 	   OrderStatus="" OrderType="" ShipToID="" State=""
+                 	   StatusQuantity="" ZipCode=""/>
+            </XPEDXOrderSearchListViewList>
+			</Template>
+		</API>
+	</mashup>
+
+<!--
+<mashup id='xpedxChainedOrderList' transactional='true'
+		mashuptype='XAPI' endpoint='DRAFT_ORDER'
+		description="get all the chained orderlinelist for a set of orders">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getOrderList">
 			<Input>
 				<Order>
@@ -381,7 +419,7 @@
 			</Template>
 		</API>
 	</mashup>
-
+-->
 	<mashup id='XPEDXOrderDetailMashup' transactional='true'
 		mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Order Detail">
 		<classInformation
@@ -628,35 +666,62 @@
 				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC"
 					Refresh="Y">
 					<PreviousPage PageNumber="" />
-					<API Name="getOrderList">
+					<API Name="XPXGetOrderSearchListViewService" IsFlow="Y">
 						<Input>
-							<Order ReadFromHistory="N" DraftOrderFlag="N" DocumentType="0001"
-								EnterpriseCode="" OrderComplete="">
+							<XPEDXOrderSearchListView  DraftOrderFlag="N" DocumentType="0001"
+								EnterpriseCode="" >
 								<OrderBy>
 									<Attribute Desc="N" Name="Modifyts" />
 								</OrderBy>
-							</Order>
+							</XPEDXOrderSearchListView>
 						</Input>
 						<Template>
-							<OrderList>
-								<Order OrderNo="" HoldFlag="" OrderName="" Modifyts=""
-									Createts="" Createuserid="" OrderHeaderKey="" CustomerPONo="" OrderDate=""
-									Status="" PaymentStatus="" CustomerFirstName=""
-									CustomerLastName="" Modifyuserid="" ShipToID="">
-									<PriceInfo TotalAmount="" Currency="" />
-									<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnOrderStatus="" ExtnOrderStatusPrefix="" ExtnOrderedByName="" ExtnShipToName="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnTotalOrderValue=""/>
-									<PersonInfoShipTo AddressLine1="" City="" State="" ZipCode="" Country=""/>
-									<OrderLines>
-										<OrderLine ChainedFromOrderHeaderKey=""/>
-									</OrderLines>	
-									<OrderBy>
-										<Attribute Desc="" Name="" />
-									</OrderBy>
-									<OrderHoldTypes>
-									<OrderHoldType />
-									</OrderHoldTypes>
-								</Order>
-							</OrderList>
+							<XPEDXOrderSearchListViewList>
+ 								 <XPEDXOrderSearchListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPoNo="" OrderDate="" 
+ 								 		Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" 
+ 								 		ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus=""
+ 								 		 HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State="" 
+ 								 		 ZipCode="" Country="" StatusQuantity="" OrderStatus="" /> 
+  							</XPEDXOrderSearchListViewList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='XPEDXOrderLineList' transactional='true' mashuptype='XAPI'
+		endpoint='CONFIRMED_ORDER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC"
+					Refresh="Y">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXGetOrderSearchLineListViewService" IsFlow="Y">
+						<Input>
+							<XPEDXOrderSearchLineListView  DraftOrderFlag="N" DocumentType="0001"
+								EnterpriseCode="" >
+								<OrderBy>
+									<Attribute Desc="N" Name="Modifyts" />
+								</OrderBy>
+							</XPEDXOrderSearchLineListView>
+						</Input>
+						<Template>
+							<XPEDXOrderSearchLineListViewList>
+ 								 <XPEDXOrderSearchLineListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPoNo="" OrderDate="" 
+ 								 		Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" 
+ 								 		ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus=""
+ 								 		 HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State="" 
+ 								 		 ZipCode="" Country="" StatusQuantity="" OrderStatus="" /> 
+  							</XPEDXOrderSearchLineListViewList>
 						</Template>
 					</API>
 				</Page>
@@ -2294,5 +2359,24 @@
 		<APINamespace inputNS='orderApprovalInput' outPutNS='orderApprovalOutput'/>
 	</mashup>
    <!-- END RUgrani: For JIRA 2912 --> 
+   
+    <mashup id="xpedxOrderListForContext" transactional="true" mashuptype="XAPI" endpoint="DRAFT_ORDER" description="Draft Order List">
+  		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" /> 
+	  
+ 		<API FlowName="XPXOrderListDetails">
+		 <Input>
+ 			<XPEDXOrderListView DraftOrderFlag="Y" DocumentType="0001" AuthorizedClient="Web" BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
+ 				<OrderBy>
+ 					<Attribute Desc="N" Name="Modifyts" /> 
+  				</OrderBy>
+  			</XPEDXOrderListView>
+ 		 </Input>
+		 <Template>
+ 			<XPEDXOrderListViewList>
+  				<XPEDXOrderListView OrderedByName="" Modifyts="" OrderName="" BuyerOrganizationCode="" AuthorizedClient="" OrderHeaderKey="" DocumentType="" DraftOrderFlag="" OrderNo="" WebConfNum="" TotalNumberOfItems="" ExtnOrderDesc="" /> 
+ 			 </XPEDXOrderListViewList>
+  		</Template>
+  		</API>
+  </mashup>
     
 </mashups>       
