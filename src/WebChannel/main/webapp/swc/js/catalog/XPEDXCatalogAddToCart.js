@@ -131,7 +131,8 @@ function addItemToCart(itemId) {
 			/*Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); */
 			//Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
 			//Added For Jira 2903
-			Ext.Msg.wait("Processing...");
+			//Commented for 3475
+			//Ext.Msg.wait("Processing...");
 			Ext.Ajax.request({
 	            url: url,
 	            params: {
