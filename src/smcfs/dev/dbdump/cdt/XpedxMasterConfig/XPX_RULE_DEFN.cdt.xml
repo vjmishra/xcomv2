@@ -131,17 +131,17 @@
     MODIFYPROGID="SterlingHttpTester"
     MODIFYTS="2010-10-25T00:00:00-04:00"
     MODIFYUSERID="SterlingHttpTester"
-    RULE_DESC="Require customer line account #" RULE_GROUP="LR"
+    RULE_DESC="Require Customer Line Account #" RULE_GROUP="LR"
     RULE_ID="RequiredCustomerLineAccountNo"
-    RULE_KEY="201010250721166463600                             " RULE_LONG_DESC="Require customer line account #"/>
+    RULE_KEY="201010250721166463600                             " RULE_LONG_DESC="Require Customer Line Account #"/>
 <XPX_RULE_DEFN B2B_FLAG="Y" CREATEPROGID="SterlingHttpTester"
     CREATETS="2011-03-23T00:00:00-04:00"
     CREATEUSERID="SterlingHttpTester" INTERACTIVE_FLAG="Y" LOCKID="0"
     MODIFYPROGID="SterlingHttpTester"
     MODIFYTS="2011-03-23T00:00:00-04:00"
-    MODIFYUSERID="SterlingHttpTester" RULE_DESC="Customer PO Required"
+    MODIFYUSERID="SterlingHttpTester" RULE_DESC="Require Customer PO #"
     RULE_GROUP="OR" RULE_ID="RequireCustomerPO"
-    RULE_KEY="2011032312015239695621                            " RULE_LONG_DESC="Customer PO Required"/>
+    RULE_KEY="2011032312015239695621                            " RULE_LONG_DESC="Require Customer PO #"/>
 <XPX_RULE_DEFN B2B_FLAG="Y" CREATEPROGID="SterlingHttpTester"
     CREATETS="2011-05-12T16:23:08-04:00" CREATEUSERID="admin"
     INTERACTIVE_FLAG="Y" LOCKID="2" MODIFYPROGID="SterlingHttpTester"
