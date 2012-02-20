@@ -362,7 +362,8 @@ $(function() {
 				if(url!=null) {
 
 					//Added For Jira 2903
-					Ext.Msg.wait("Processing..."); 
+					//Commented for 3475
+					//Ext.Msg.wait("Processing..."); 
 					//Ext.Msg.wait("Getting the Accounts.... Please Wait..."); 
 
 
@@ -416,7 +417,8 @@ $(function() {
 				if(url!=null) {
 
 					//Added For Jira 2903
-					Ext.Msg.wait("Processing..."); 
+					//Commented for 3475
+					//Ext.Msg.wait("Processing..."); 
 					//Ext.Msg.wait("Getting the Bill-To Locations.... Please Wait..."); 
 
 
@@ -468,7 +470,8 @@ $(function() {
 				
 				if(url!=null) {
 					//Added For Jira 2903
-					Ext.Msg.wait("Processing..."); 
+					//Commented for 3475
+					//Ext.Msg.wait("Processing..."); 
 					//Ext.Msg.wait("Getting the Ship-To Locations.... Please Wait..."); 
 
 
