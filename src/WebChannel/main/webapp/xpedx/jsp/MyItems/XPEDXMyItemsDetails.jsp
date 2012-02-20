@@ -732,7 +732,8 @@ function showSharedListForm(){
 				//formItemIds.submit();
 				//START - Submit the form via ajax
 	            //Added For Jira 2903
-				Ext.Msg.wait("Processing...");      
+	            //Commented for 3475
+				//Ext.Msg.wait("Processing...");      
 				//Ext.Msg.wait("Adding items to cart...Please wait!");
 	                     //xpedx_working_start();
                          //setTimeout(xpedx_working_stop, 3000);
