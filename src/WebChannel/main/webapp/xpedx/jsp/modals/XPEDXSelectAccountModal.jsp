@@ -5,7 +5,8 @@
 <script type="text/javascript">
 function viewAccountDetails()
 {	//Added For Jira 2903
-	Ext.Msg.wait("Processing..."); 
+	//Commented for 3475
+	//Ext.Msg.wait("Processing..."); 
 	document.getElementById("selectAccountForm").submit();
 }
 </script>
