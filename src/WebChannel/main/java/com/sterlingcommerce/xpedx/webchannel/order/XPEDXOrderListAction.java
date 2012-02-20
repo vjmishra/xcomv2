@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -62,6 +64,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private String userKey = null;
 	private String invoiceURL = null;
 	private Integer assignedShipToSize;
+	private String MASHUP_NAME="XPEDXOrderList";
+	private String rootElementName="XPEDXOrderSearchListView";
 	
 	public Integer getAssignedShipToSize() {
 		return assignedShipToSize;
@@ -122,6 +126,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 
 		String result = "success";
+		if("ProductIdValue".equals(getSearchFieldName()))
+        {
+			rootElementName="XPEDXOrderSearchLineListView";
+			MASHUP_NAME="XPEDXOrderLineList";
+        }
         String messageType = getMessageType();
         if(messageType != null && messageType.equals("OrderListWidget"))
         {
@@ -353,7 +362,9 @@ public class XPEDXOrderListAction extends OrderListAction {
 	@Override public void setSearchFieldValue(String value)
     {
         if("ProductIdValue".equals(getSearchFieldName()))
+        {
             setProductIdValue(value);
+        }
         else
         if("OrderNameValue".equals(getSearchFieldName()))
             setOrderNameValue(value);
@@ -404,7 +415,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 			log.debug("orderListDoc is empty. Returning...");
 			return webConfList;
 		}
-		NodeList nlOrderList = orderListDoc.getElementsByTagName("Order");
+		NodeList nlOrderList = orderListDoc.getElementsByTagName(rootElementName);
 		//Element orderElement = null;
 		int length = nlOrderList.getLength();
 		for(int i=0;i<length;i++){
@@ -413,10 +424,10 @@ public class XPEDXOrderListAction extends OrderListAction {
 			//Extract OrderHeaderKey
 			//If Order status is not empty and not equal to Placed(1100.0100), then the below will be Fulfillment Order's Order Header Key
 			//String chainedFromOHK = SCXmlUtil.getAttribute(orderElement, "OrderHeaderKey");	
-			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(orderElement, "Extn");
+			/*ArrayList<Element> orderExtnList=SCXmlUtil.getElements(orderElement, "Extn");
 			if(orderExtnList != null && orderExtnList.size() >0)
-			{
-				String webConfNum=orderExtnList.get(0).getAttribute("ExtnWebConfNum");SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnWebConfNum");
+			{*/
+				String webConfNum=orderElement.getAttribute("ExtnWebConfNum");//SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnWebConfNum");
 			
 			 
 			String orderName = SCXmlUtil.getAttribute(orderElement, "OrderName");
@@ -437,7 +448,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 			log.debug("Ordername and WebConfNum of the All order: "+orderName+" , "+webConfNum);
 			if(!webConfList.contains(webConfNum))
 				webConfList.add(webConfNum);
-			}
+			//}
 		}
 		return webConfList;
 	}
@@ -557,7 +568,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 			return;
 		}
 		//get all the Orderlines from the document
-		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName("Order");
+		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName(rootElementName);
 		int length = nlOrderList.getLength();
 		ArrayList chainedOrders = new ArrayList();
 		ArrayList<String> alreadyAddedOrders = new ArrayList<String>();
@@ -571,12 +582,12 @@ public class XPEDXOrderListAction extends OrderListAction {
 			//put the Order element in the xpedxChainedOrderListMap. The key will be the "OrderLine/ChainedFromOrderHeaderKey"
 			String orderType=order.getAttribute("OrderType");//SCXmlUtil.getXpathAttribute(order, "//Order/@OrderType");
 			
-			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(order, "Extn");
+			//ArrayList<Element> orderExtnList=SCXmlUtil.getElements(order, "Extn");
 			String extnWebConfNum="";
-			if(orderExtnList != null && orderExtnList.size() >0)
-			{
-				extnWebConfNum=orderExtnList.get(0).getAttribute("ExtnWebConfNum");
-			}
+			/*if(orderExtnList != null && orderExtnList.size() >0)
+			{*/
+				extnWebConfNum=order.getAttribute("ExtnWebConfNum");
+			//}
 			String orderHeaderKey = SCXmlUtil.getAttribute(order, "OrderHeaderKey");
 			String orderStatus = order.getAttribute("Status"); //SCXmlUtil.getAttribute(order, "Status");
 			if("Customer".equals(orderType))
@@ -630,22 +641,22 @@ public class XPEDXOrderListAction extends OrderListAction {
 	{
 		Map<String,Map> outputMap=new LinkedHashMap<String, Map>();
 		Map<String,String> customerOrderMap=new LinkedHashMap<String, String>();
-		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName("Order");
+		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName(rootElementName);
 		Element orderElem=null;
 		for(int i=0;i<nlOrderList.getLength();i++){
 			orderElem = (Element) nlOrderList.item(i);
-			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(orderElem, "Extn");
+			//ArrayList<Element> orderExtnList=SCXmlUtil.getElements(orderElem, "Extn");
 			String extnWebConfNum="";
-			if(orderExtnList != null && orderExtnList.size() >0)
-			{
-				extnWebConfNum=orderExtnList.get(0).getAttribute("ExtnWebConfNum");SCXmlUtil.getXpathAttribute(orderElem, "//Order/Extn/@ExtnWebConfNum");
+			/*if(orderExtnList != null && orderExtnList.size() >0)
+			{*/
+				extnWebConfNum=orderElem.getAttribute("ExtnWebConfNum");//SCXmlUtil.getXpathAttribute(orderElem, "//Order/Extn/@ExtnWebConfNum");
 			
 				//String extnWebConfNum=SCXmlUtil.getXpathAttribute(orderElem, "//Order/Extn/@ExtnWebConfNum"); 
 				String orderType=orderElem.getAttribute("OrderType") ;//SCXmlUtil.getXpathAttribute(orderElem, "//Order/@OrderType"); 
 				String orderHeaderKey=orderElem.getAttribute("OrderHeaderKey") ; // SCXmlUtil.getXpathAttribute(orderElem, "//Order/@OrderHeaderKey"); 
 				if(orderType != null && "Customer".equals(orderType))
 					customerOrderMap.put(extnWebConfNum, orderHeaderKey);
-			}	
+			//}	
 		}
 		
 		return customerOrderMap;
@@ -775,11 +786,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 	
 	protected void manipulateInputs(Map mashupInputs)
     {
-        Element orderListInput = (Element)mashupInputs.get("XPEDXOrderList");
+        Element orderListInput = (Element)mashupInputs.get(MASHUP_NAME);
         YFCElement yorderListInput = YFCDocument.getDocumentFor(orderListInput.getOwnerDocument()).getDocumentElement();
         YFCElement apiElement = yorderListInput.getChildElement("API");
         YFCElement inpElement = apiElement.getChildElement("Input");
-        YFCElement orderElem = inpElement.getChildElement("Order");
+        YFCElement orderElem = inpElement.getChildElement(rootElementName);
         YFCElement complexQueryElement =null;
         /* Including only the logged in ship to Id as This is causing the performance Issue -- Jagadeesh
          * Including all the assigned ship to only if assignedShipToSize is less than or equal to 30 -- Discussed with pawan on call  */
@@ -810,41 +821,41 @@ public class XPEDXOrderListAction extends OrderListAction {
     			{
     				complexQueryElement = orderElem.createChild("ComplexQuery");
     			}
-    			YFCElement extnElement = orderElem.getChildElement("Extn");
+    			YFCElement extnElement = orderElem;
     			extnElement.setAttribute("ExtnOrderLockFlag", "N");
         		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
 			    YFCElement expElementCreated = complexQueryOrElement.createChild("Exp");
-			    expElementCreated.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementCreated.setAttribute("Name", "ExtnOrderStatus");
 			    expElementCreated.setAttribute("Value","1100");
 				complexQueryOrElement.appendChild((YFCNode)expElementCreated);
 				
 			    YFCElement expElementPlaced = complexQueryOrElement.createChild("Exp");
-			    expElementPlaced.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementPlaced.setAttribute("Name", "ExtnOrderStatus");
 			    expElementPlaced.setAttribute("Value","1100.0100");
 				complexQueryOrElement.appendChild((YFCNode)expElementPlaced);
 				
 			    YFCElement expElementPA = complexQueryOrElement.createChild("Exp");
-			    expElementPA.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementPA.setAttribute("Name", "ExtnOrderStatus");
 			    expElementPA.setAttribute("Value","1100.5150");
 				complexQueryOrElement.appendChild((YFCNode)expElementPA);
 				
 			    YFCElement expElementLOpen = complexQueryOrElement.createChild("Exp");
-			    expElementLOpen.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementLOpen.setAttribute("Name", "ExtnOrderStatus");
 			    expElementLOpen.setAttribute("Value","1100.5250");
 				complexQueryOrElement.appendChild((YFCNode)expElementLOpen);
 				
 			    YFCElement expElementCHold = complexQueryOrElement.createChild("Exp");
-			    expElementCHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementCHold.setAttribute("Name", "ExtnOrderStatus");
 			    expElementCHold.setAttribute("Value","1100.5350");
 				complexQueryOrElement.appendChild((YFCNode)expElementCHold);
 				
 			    YFCElement expElementLWHold = complexQueryOrElement.createChild("Exp");
-			    expElementLWHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementLWHold.setAttribute("Name", "ExtnOrderStatus");
 			    expElementLWHold.setAttribute("Value","1100.5450");
 				complexQueryOrElement.appendChild((YFCNode)expElementLWHold);
 				
 			    YFCElement expElementSHold = complexQueryOrElement.createChild("Exp");
-			    expElementSHold.setAttribute("Name", "Extn_ExtnOrderStatus");
+			    expElementSHold.setAttribute("Name", "ExtnOrderStatus");
 			    expElementSHold.setAttribute("Value","1100.5400");
 				complexQueryOrElement.appendChild((YFCNode)expElementSHold);
 				
@@ -860,12 +871,13 @@ public class XPEDXOrderListAction extends OrderListAction {
         	else if(isRejectedOrdersSearch)
         		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
         	if(!SCUtil.isVoid(holdTypeToSearch)) {
-        		YFCElement holdTypeElement = orderElem.createChild("OrderHoldType");
+        		YFCElement holdTypeElement = orderElem;
         		holdTypeElement.setAttribute(XPXLiterals.A_HOLD_TYPE, holdTypeToSearch);
+        		holdTypeElement.setAttribute("HoldTypeQryType", "FLIKE");
         		if(isRejectedOrdersSearch){
-        			holdTypeElement.setAttribute(XPXLiterals.A_STATUS, "1200");
+        			holdTypeElement.setAttribute("HoldStatus", "1200");
         		}else {
-        			holdTypeElement.setAttribute(XPXLiterals.A_STATUS, "1100");
+        			holdTypeElement.setAttribute("HoldStatus", "1100");
         		}
         	}        	
         }
@@ -889,10 +901,12 @@ public class XPEDXOrderListAction extends OrderListAction {
 	protected void populateOrderList()
     throws CannotBuildInputException, XMLExceptionWrapper
 	{
-	    Map mashupInputs = prepareMashupInputs(getMashupIds());
+		Set mashupId=new HashSet();
+		mashupId.add(MASHUP_NAME);
+	    Map mashupInputs = prepareMashupInputs(mashupId);
 	    manipulateInputs(mashupInputs);
 	    Map mashupOutputs = invokeMashups(mashupInputs);
-	    outputDoc = (Element)mashupOutputs.get("XPEDXOrderList");
+	    outputDoc = (Element)mashupOutputs.get(MASHUP_NAME);
 	}
 	
 	private Document populateCustomerOrderList(LinkedList chainedOrderFromKeylist) throws Exception {
@@ -938,16 +952,16 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
 		xpedxParentOrderListMap.clear();
-		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("Order");
+		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName(rootElementName);
 		if(orderElems!=null && orderElems.getLength()>0)
 		{
 			for(int i=0;i<orderElems.getLength();i++){
 				Element orderElem =  (Element)orderElems.item(i);
 				ArrayList<Element> orderExtnElements=SCXmlUtil.getElements(orderElem, "Extn");
-				if(orderExtnElements != null && orderExtnElements.size()>0)
-				{
-					Element orderExtnElement=orderExtnElements.get(0);
-					String extnWebConfNum=orderExtnElement.getAttribute("ExtnWebConfNum");
+				/*if(orderExtnElements != null && orderExtnElements.size()>0)
+				{*/
+					//Element orderExtnElement=orderExtnElements.get(0);
+					String extnWebConfNum=orderElem.getAttribute("ExtnWebConfNum");
 					Element orderElement=customerorderMap.get(extnWebConfNum);
 					if(orderElement != null)
 					{
@@ -959,7 +973,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 						String orderHeaderKey = orderElem.getAttribute("OrderHeaderKey");
 						xpedxParentOrderListMap.put(orderHeaderKey, orderElem);
 					}
-				}
+			//	}
 				
 			}
 		}
@@ -1259,8 +1273,18 @@ public class XPEDXOrderListAction extends OrderListAction {
 	public void setInitialToDateString(String initialToDateString) {
 		this.initialToDateString = initialToDateString;
 	}
+	
+	
 
-/*	
+public String getRootElementName() {
+		return rootElementName;
+	}
+
+	public void setRootElementName(String rootElementName) {
+		this.rootElementName = rootElementName;
+	}
+
+	/*	
 	public void setStatusSearchList(Map statusSearchList) {
 		this.statusSearchList = statusSearchList;
 	}
@@ -1268,23 +1292,34 @@ public class XPEDXOrderListAction extends OrderListAction {
 	public boolean isOrderOnHold(Element OrderElement , String holdTypeToCheck) {
 		boolean isOrderOnHold = false;
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
-			Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
+			/*Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
 			ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
 			if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
 				for(int i=0; i<orderHoldTypeList.size();i++) {
-					Element orderHoldTypeElem = orderHoldTypeList.get(i);
-					String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
-					String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
+					Element orderHoldTypeElem = orderHoldTypeList.get(i);*/
+					String holdType = OrderElement.getAttribute("HoldType");
+					String holdTypeStatus = OrderElement.getAttribute("HoldStatus");
 					if(holdType.equalsIgnoreCase(holdTypeToCheck) && (holdTypeStatus.equalsIgnoreCase("1100")
 							|| holdTypeStatus.equalsIgnoreCase("1200")))
 						isOrderOnHold = true;
 				}
-			}
-		}
+			//}
+		//}
 		return isOrderOnHold;
 	}
 	
 	public boolean isOrderOnRejectHold(Element OrderElement ) {
+		String holdTypeToCheck = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;;
+		boolean isOrderOnHold = false;
+		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {		
+					String holdType = OrderElement.getAttribute("HoldType");
+					String holdTypeStatus = OrderElement.getAttribute("HoldStatus");
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1200"))
+						isOrderOnHold = true;		
+		}
+		return isOrderOnHold;
+	}
+	/*public boolean isOrderOnRejectHold(Element OrderElement ) {
 		String holdTypeToCheck = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;;
 		boolean isOrderOnHold = false;
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
@@ -1302,9 +1337,26 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		return isOrderOnHold;
 	}
+	*/
 	
 	// Check if the current order has CSR Review hold or not
 	public boolean isOrderOnCSRReviewHold(Element OrderElement) {		
+		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
+		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
+		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
+		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;	
+		
+				String orderHoldType = OrderElement.getAttribute(OrderConstants.HOLD_TYPE);
+				if ((OrderElement.getAttribute("HoldStatus").equals(openHoldStatus))
+					&& (orderHoldType.equals(holdTypeNeedsAttention)
+							|| orderHoldType.equals(holdTypeLegacyCnclOrd) 
+							|| orderHoldType.equals(holdTypeOrderException)))
+					return true;		
+		return false;
+	}
+	
+	// Check if the current order has CSR Review hold or not
+	/*public boolean isOrderOnCSRReviewHold(Element OrderElement) {		
 		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
 		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
 		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
@@ -1325,8 +1377,21 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		return false;
 	}
+	*/
 	
 	public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
+		String resolverUserId=null;
+		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {		
+					String holdType = OrderElement.getAttribute("HoldType");
+					String holdTypeStatus = OrderElement.getAttribute("HoldStatus");
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
+						resolverUserId = OrderElement.getAttribute("ResolverUserId");
+			
+		}
+		return resolverUserId;
+	}
+	
+	/*public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
 		String resolverUserId=null;
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
 			Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
@@ -1342,5 +1407,5 @@ public class XPEDXOrderListAction extends OrderListAction {
 			}
 		}
 		return resolverUserId;
-	}
+	}*/
 }
