@@ -197,7 +197,8 @@
 			alert("Item ID cannot be null to make a PnA call");
 		}
 		else{
-			Ext.Msg.wait("Processing..."); 
+			//Commented for 3475
+			//Ext.Msg.wait("Processing..."); 
 			Ext.Ajax.request({
 	            url: url,
 	            params: {
