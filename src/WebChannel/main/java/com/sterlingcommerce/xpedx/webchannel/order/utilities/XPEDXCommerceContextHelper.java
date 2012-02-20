@@ -190,25 +190,25 @@ public class XPEDXCommerceContextHelper
 	     String orderHeaderKey = null;
 	     Map<String, String> valueMap = new HashMap<String, String>();
 	     String storefrontId = webContext.getStorefrontId();
-	     valueMap.put("/Order/@EnterpriseCode", storefrontId);
+	     valueMap.put("/XPEDXOrderListView/@EnterpriseCode", storefrontId);
 	     String billToID = XPEDXWCUtils.getLoggedInCustomerFromSession(webContext);
 	     if(billToID==null || billToID.trim().length()<=0)// will be null if there is no ship to selected
 	    	 billToID = webContext.getCustomerId();
-	     valueMap.put("/Order/@BillToID", billToID);
+	     valueMap.put("/XPEDXOrderListView/@BillToID", billToID);
 	     String customerId = "";
 	     if(XPEDXWCUtils.isCustomerSelectedIntoConext(webContext))
 	    	 customerId = webContext.getCustomerId();
-	     valueMap.put("/Order/@BuyerOrganizationCode", customerId);
+	     valueMap.put("/XPEDXOrderListView/@BuyerOrganizationCode", customerId);
 	     String customerContactId = webContext.getCustomerContactId();
-	     valueMap.put("/Order/@CustomerContactID", customerContactId);
+	     valueMap.put("/XPEDXOrderListView/@CustomerContactID", customerContactId);
 	     if(storefrontId == null || customerId == null || customerContactId == null)
 	         return null;
-	     Element input = WCMashupHelper.getMashupInput("xpedxlistForCartInContext", valueMap, webContext);
-	     Element output = (Element)WCMashupHelper.invokeMashup("xpedxlistForCartInContext", input, webContext.getSCUIContext());
-	     Element orderListElement = XMLUtilities.getElement(output, "//OrderList");
+	     Element input = WCMashupHelper.getMashupInput("xpedxOrderListForContext", valueMap, webContext);
+	     Element output = (Element)WCMashupHelper.invokeMashup("xpedxOrderListForContext", input, webContext.getSCUIContext());
+	     Element orderListElement = XMLUtilities.getElement(output, "//XPXOrderListViewList");
 	     if(orderListElement != null)
 	     {
-	         List<Element> orderList = XMLUtilities.getChildElements(orderListElement, "Order");
+	         List<Element> orderList = XMLUtilities.getChildElements(orderListElement, "XPXOrderListViewList");
 	         if(orderList != null && orderList.size() > 0)
 	         {
 	             Element listOrderElement = (Element)orderList.get(0);

@@ -1667,7 +1667,14 @@ public class XPEDXOrderUtils {
 			String orderBranch = orderElement.getAttribute("ExtnOrderDivision");
 			String legacyOrderNum = orderElement.getAttribute("ExtnLegacyOrderNo");
 			String generationNum = orderElement.getAttribute("ExtnGenerationNo");
-			
+			return getFormattedOrderNumber(orderBranch,legacyOrderNum,generationNum);
+		}
+		return sb.toString().replaceAll("_M","");
+	}
+	public static String getFormattedOrderNumber(String orderBranch,String legacyOrderNum,String generationNum)
+	{
+		StringBuffer sb = new StringBuffer();
+		
 			
 			
 			if(orderBranch!=null && orderBranch.length()>0)
@@ -1689,7 +1696,6 @@ public class XPEDXOrderUtils {
 				sb.append(generationNum);
 				
 			}
-		}
 		//as per data the order number which come from legacy will not contain any -,_ or any character .
 		return sb.toString().replaceAll("_M","");
 	}
