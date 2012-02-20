@@ -409,7 +409,8 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	    document.body.style.cursor = 'wait';
 	    $.fancybox.close();
 	  //Added For Jira 2903
-        Ext.Msg.wait("Processing..."); 
+	  //Commented for 3475
+      //Ext.Msg.wait("Processing..."); 
 
 	    Ext.Ajax.request({
 	      url: url,
