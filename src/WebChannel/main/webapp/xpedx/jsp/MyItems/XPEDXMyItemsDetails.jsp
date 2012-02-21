@@ -1558,11 +1558,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 </div>
 </s:if>
 		 	<s:if test='editMode != true'> 
-                <div class="mil-edit">
-
-        
-                    	   <span class="grey" style="width:421px; word-wrap:break-word; float:left;"><s:property value="listDesc" /></span></div>
-                <!-- Close mil-edit -->
+                <div>
+					 <span class="grey" style="width:421px; word-wrap:break-word; float:left;"><s:property value="listDesc" /></span>
+               	</div><!-- Close mil-edit -->
                 <div class="clear"></div>
                 <fieldset class="mil-non-edit-field">
                     <legend>For Selected Items:</legend>
@@ -1592,7 +1590,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			</s:if>
 			<s:else>
 				<div id="mil-edit" class="mil-edit" style="width:100%">
-                    <div id="quick-add" class="quick-add float-right">
+                    <div id="quick-add" class="quick-add float-right ">
                         <div class="clear">&nbsp;</div>
 						<s:hidden id="mandatoryFieldCheckFlag_quick-add" name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
                         <h2 style="float: left; margin-top:5px;">Quick Add</h2>
@@ -2028,7 +2026,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" 
 											cssStyle="width: 50px;" theme="simple"/>
 										--%>
-									   <s:select cssClass="xpedx_select_sm" cssStyle="width: 50px; margin-right:16px;" name="orders"
+									   <s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;" name="orders"
 											list="itemOrderList" value="itemOrder2" onfocus="this.oldvalue = this.value;" 
 											onchange="onChangeItemOrder(this, this.oldvalue, this.value);"
 											id="itemOrder_%{#itemOrder2}" headerKey="-1"  emptyOption="false" theme="simple"/>
@@ -2036,8 +2034,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									</tr>
 								</s:if>
 								<tr>
-                                    <td  valign="top" align="right" width="102"><label style="text-align:right;">Qty:</label></td>
-                                    <td width="152" colspan="2">
+                                    <td align="right" width="112"><label style="text-align:right;">Qty:</label></td>
+                                    <td width="142" colspan="2">
                                     <s:set name='qty' value="#xpedxUtilBean.formatQuantityForCommas(#qty)"/>
                                     
 										<!-- Qty --> <s:hidden
@@ -2103,7 +2101,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 											<td align="right"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
-												<s:textfield cssStyle="width:173px;" cssClass="x-input" maxlength="25"
+												
+												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
+												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="25"
 													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
 													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
 													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>
@@ -2120,19 +2120,19 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                             <div class="clear"></div>
 							<s:if test='editMode != true'>
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
-							    <ul style="float: right; width: 281px; margin-right:9px;" class="tool-bar-bottom" id="tool-bar">
-                                <li style="float: left; display: block; position: absolute; right: 144px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
+							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
+                                <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-                                	<li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                	<li style="margin-left: 180px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                 </s:if>
                                 <s:else>
-                                	<li style="margin-left: 172px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
+                                	<li style="margin-left: 180px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
                                 </s:else> 
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
-	                               <li style="float: right; display: block; margin-right: 10px; margin-top: 3px; width: 225px;"> 
+	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 225px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
@@ -2222,9 +2222,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			%>
 			
 			<!-- This piece of code should be evaluated  end -->
-
+					<div class="clear"></div><br/>
                     <s:if test='editMode != true'>
-						<div class="clear"></div><br/>
+						
 						<fieldset class="mil-non-edit-field">
 							<legend>For Selected Items:</legend>
 							<input class="forselected-input" type="checkbox" id="selAll2"/>
