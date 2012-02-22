@@ -9,8 +9,8 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
+<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />    
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" />
@@ -35,7 +35,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />    
 <script type="text/javascript">
 $(document).ready(function() {
 	$(document).pngFix();
