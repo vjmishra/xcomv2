@@ -656,8 +656,6 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx//js/fancybox/jquery.fancybox-1.3.1.js"></script>
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 
 <!-- Facy Box (Lightbox/Modal Window -->
 
@@ -1000,7 +998,10 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
             <ul id="cart-actions" class="float-right">
-              <li class="float-left"><s:a href="%{emailSampleLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
+            <s:url id='RequestProdSampleLink' namespace='/xpedx/services'
+					action='XPEDXServices'></s:url>
+           
+              <li class="float-left"><s:a href="%{RequestProdSampleLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
               <li ><a class="orange-ui-btn" href="#" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');">             
               <span>Submit Request</span></a></li>
             </ul>
