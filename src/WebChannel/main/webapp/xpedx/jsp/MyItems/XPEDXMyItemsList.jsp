@@ -652,10 +652,20 @@
 <!-- CODE_END - Global HTML -PN -->
 
 <div id="main-container">
-<div id="main">
-
-<!-- CODE_START Header - PN --> 
-<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	<s:if test='!#guestUser'>  
+		<div id="main">
+	</s:if>
+	<s:else>
+		<div id="main" class="anon-pages">
+	</s:else>
+	<s:if test='!#guestUser'>  
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+			<s:param name='shipToBanner' value="%{'true'}" />
+		</s:action>
+	</s:if>
+	<s:else>
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	</s:else>
 
 <!-- CODE_END Header - PN -->
 
@@ -830,12 +840,19 @@
   <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
   <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a>
  
- </div>
+ </div> <!-- 2774 CR Start -->
+ <s:if test="#isUserAdmin">				
   <div id="tool-bar-bottom" class="float-right">
   <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
   <a class=""   id="" name="" href="javascript:showListForSelectedOption();">  
   <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px">Manage My Items List for Other Locations</div></a></div>
-  
+ </s:if>
+ <s:else>
+   <div id="tool-bar-bottom" class="float-right">
+  <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
+  <a class=""   id="" name="" href="">  
+  <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px"></div></a></div>
+ </s:else><!-- 2774 CR End -->
  <div id="tool-bar-bottom" class="float-bottom">
   
  <div class="search-pagination-bottom">
