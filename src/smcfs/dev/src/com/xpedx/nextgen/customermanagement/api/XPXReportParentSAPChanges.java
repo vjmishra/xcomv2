@@ -48,8 +48,9 @@ public class XPXReportParentSAPChanges implements YIFCustomApi {
 		api = YIFClientFactory.getInstance().getApi();
 		/*Begin - Changes made by Mitesh Parikh for JIRA 3283*/
 		String emailBrand = reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE) + ".com";
-		String subjectLine = emailBrand + " Parent SAP # Changed Notification";
-		reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine);
+		StringBuffer subjectLine = new StringBuffer(emailBrand); 
+		subjectLine.append(" Parent SAP # Changed Notification in ").append(YFSSystem.getProperty("environment")).append(" environment");
+		reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine.toString());
 		
 		StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
 		reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
