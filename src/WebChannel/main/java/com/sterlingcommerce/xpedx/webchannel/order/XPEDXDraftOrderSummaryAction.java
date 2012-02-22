@@ -241,6 +241,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
 		}
 		checkIfCouponEntryAllowed();
 		relayCouponOperationError();
