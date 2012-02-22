@@ -5466,5 +5466,24 @@ public class XPEDXWCUtils {
 		String backPageURL=(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString();
 		wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);		
 	}
-
+   
+   public static void logExceptionIntoCent(String ExceptionMsg)
+	{
+		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		Map<String, String> valueMap1 = new HashMap<String, String>();
+		valueMap1.put("/Exception/@StackTrace", ExceptionMsg);		
+		Element input1;
+		try {		
+			
+				input1 = WCMashupHelper.getMashupInput("XpedxSwcCentLog",valueMap1, wcContext.getSCUIContext());
+				Object obj1 = WCMashupHelper.invokeMashup("XpedxSwcCentLog",input1, wcContext.getSCUIContext());
+				Document outputDoc1 = ((Element) obj1).getOwnerDocument();
+			} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.toString();
+			e.toString();
+			e.printStackTrace();
+		} 
+		
+	}
 }

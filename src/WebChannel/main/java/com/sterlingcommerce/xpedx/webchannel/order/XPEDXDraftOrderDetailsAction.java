@@ -209,6 +209,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					&& ex.toString().contains("YFC0101")) {
 				this.execute();
 			}
+			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
 			LOG.debug(ex.getMessage());
 		}
 		return SUCCESS;
