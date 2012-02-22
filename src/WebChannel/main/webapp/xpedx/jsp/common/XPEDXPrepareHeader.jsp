@@ -26,7 +26,6 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
 	</s:if>
 	<s:else>
-		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
@@ -34,7 +33,11 @@
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-
+		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+		<link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+		
+		<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+			
 <script type="text/javascript">
 var selectedShipCustomer = null;
 		function updateShareListChild(){
