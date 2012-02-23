@@ -1838,14 +1838,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						String lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 								.getPnALineErrorMessage(pandAItem);
 						//added for jira 2885 
-						pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
-						if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
-							setIsPnAAvailable("false");
+						if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
+							pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+							if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
+								setIsPnAAvailable("false");
+							}
 						}
-						//end of jira 2885
-						if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
-							setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-						}
+						//end of jira 2885			
 					}
 				}
 			}
