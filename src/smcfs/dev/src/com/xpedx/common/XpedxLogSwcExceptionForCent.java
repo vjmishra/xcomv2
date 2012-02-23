@@ -58,15 +58,15 @@ import java.sql.*;
 		        }	       
 			catch (NullPointerException ne) {
 				log.error("NullPointerException: " + ne.getStackTrace());	
-				//prepareErrorObject(ne, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
+				prepareErrorObject(ne, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
 				throw ne;
 			} catch (YFSException yfe) {
 				log.error("YFSException: " + yfe.getStackTrace());
-				//prepareErrorObject(yfe, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);	
+				prepareErrorObject(yfe, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);	
 				throw yfe;
 			} catch (Exception e) {
 				log.error("Exception: " + e.getStackTrace());
-				//prepareErrorObject(e, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
+				prepareErrorObject(e, XPXLiterals.SWC_ORDER_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 				throw e;
 			}
 			finally
