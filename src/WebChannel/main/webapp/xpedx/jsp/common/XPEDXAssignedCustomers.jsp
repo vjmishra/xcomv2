@@ -219,10 +219,11 @@
         
     <!-- START main body (with scroll bar) -->
     <div class="paginationContainer" style="float: right;"><!-- pagination control -->
+    <span class="bold">
      	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
 		<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
 		urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="ajax-assignedShipToCustomers" 
-		showFirstAndLast="False" showMyUserFormat="false"/>
+		showFirstAndLast="False" showMyUserFormat="true"/></span>
     </div>
     
 			
@@ -328,7 +329,7 @@
 </div>
 
 <div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom" style="margin-top:3px;margin-right:20px">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-top:3px;margin-right:20px">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 
