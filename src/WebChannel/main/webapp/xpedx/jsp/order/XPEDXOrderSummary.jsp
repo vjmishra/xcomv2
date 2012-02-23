@@ -1240,14 +1240,6 @@ from session . We have customer Contact Object in session .
 			    		</p>
 			    		</s:if>
 					</div>
-					<%--jira 2885 --%>
-    				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
-    				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
-						<div id="mid-col-mil">
-							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
-						</div>
-					</s:if>
-    				<%-- end of it 2885 --%>
 			    		<table class="cust-field-summary">
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
@@ -1288,6 +1280,15 @@ from session . We have customer Contact Object in session .
 				</div>
                 <br/>
 		    	<div class="clear"></div>
+		    	
+                        <%--jira 2885 --%>
+    				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
+    				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
+						<div id="mid-col-mil">
+							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
+						</div>
+					</s:if>
+    				<%-- end of it 2885 --%>
 			</div>
 		</div>
 	    <!-- end iterator -->
