@@ -210,7 +210,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			//PNA call end
 			//Setting the price hover map
 			//added for jira 2885 
-			pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+			if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
+				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+			}
 			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
 			// Code for displaying Last Modified by in cart page
 			String createUserIDStr = "";
