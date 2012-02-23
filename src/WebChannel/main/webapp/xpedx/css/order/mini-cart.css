@@ -148,7 +148,7 @@ width: 740px;
 .ship-to-address-list
 {
 border: 1px solid #CCC; 
-height: 216px;
+height: auto;
 overflow: auto;
 }
 .apply-ship-to-btn
