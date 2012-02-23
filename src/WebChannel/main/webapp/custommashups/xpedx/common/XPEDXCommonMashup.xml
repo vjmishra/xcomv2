@@ -634,6 +634,7 @@
 				</Customer>
 			 </Template>
 		</API>
+		</mashup>
 		<mashup id ='XpedxSwcCentLog' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Organization  mashup">
 				<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 				<API FlowName="XpedxSwcCentLog">
