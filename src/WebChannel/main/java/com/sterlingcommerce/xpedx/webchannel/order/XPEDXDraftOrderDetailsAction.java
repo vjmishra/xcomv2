@@ -181,7 +181,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 				//Setting the price hover map
 				//added for jira 2885 
-				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+				if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
+					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+				}
 				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
