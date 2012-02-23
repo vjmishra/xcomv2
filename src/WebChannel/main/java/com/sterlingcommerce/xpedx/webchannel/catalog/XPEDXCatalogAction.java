@@ -1477,13 +1477,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			e.printStackTrace();
 		}
 
-		Document YPMPricelistLineElement = null;
+// Commented since its not being used anywhere.
+		/*Document YPMPricelistLineElement = null;
 		try {
 			YPMPricelistLineElement = getYPMPricelistLineList(itemIds, wcContext);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		for (int i = 0; i < itemNodeList.getLength(); i++) {
 			// get the item node
