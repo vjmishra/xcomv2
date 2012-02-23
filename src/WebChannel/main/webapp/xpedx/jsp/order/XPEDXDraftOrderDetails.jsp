@@ -1486,14 +1486,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
 			    		</s:else>			    	
     				</div>
-    				<%--jira 2885 --%>
-    				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
-    				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
-						<div id="mid-col-mil">
-							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
-						</div>
-					</s:if>
-    				<%-- end of it 2885 --%>
+    
 			    	<div class="cust-defined-fields">
 			    		<table>
 			    			<tbody>
@@ -1542,6 +1535,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                         </table>
 					</div>
 				</div>
+				<%--jira 2885 --%>
+    				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
+    				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
+						<div id="mid-col-mil">
+							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
+						</div>
+					</s:if>
+    				<%-- end of it 2885 --%>
                 <br/>
 				<div class="clear"></div>
 			</div>
