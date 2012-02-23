@@ -208,11 +208,11 @@ public class XPEDXCommerceContextHelper
 	     Element orderListElement = XMLUtilities.getElement(output, "//XPXOrderListViewList");
 	     if(orderListElement != null)
 	     {
-	         List<Element> orderList = XMLUtilities.getChildElements(orderListElement, "XPXOrderListViewList");
+	         List<Element> orderList = XMLUtilities.getChildElements(orderListElement, "XPXOrderListView");
 	         if(orderList != null && orderList.size() > 0)
 	         {
 	             Element listOrderElement = (Element)orderList.get(0);
-	             if(listOrderElement != null)
+	             if(listOrderElement  != null)
 	                 orderHeaderKey = listOrderElement.getAttribute("OrderHeaderKey");
 	         }
 	         else
