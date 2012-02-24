@@ -3049,7 +3049,7 @@ public class XPEDXWCUtils {
 											if(formatBilltoShipto)
 											{
 												//default behaviour
-												custDisplayId = formatBillToShipToCustomer(customerID);
+												custDisplayId = shareformatBillToShipToCustomer(customerID, true);//added for 3244 reopen
 												if(appendBillToShipTo)// This is for Authorize locations
 													custDisplayId = "Bill-To: "+custDisplayId;
 											}
