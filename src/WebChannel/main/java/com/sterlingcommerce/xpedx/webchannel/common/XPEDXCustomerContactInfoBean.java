@@ -27,7 +27,9 @@ public class XPEDXCustomerContactInfoBean {
     private String extnOrderConfEmailFlag;
     private String emailID;
     private String personInfoEmailID;
-   //Start- Code added to fix XNGTP 2964	
+    private String addEmailID;  //JIRA 3382
+  
+	//Start- Code added to fix XNGTP 2964	
     private String msapExtnUseOrderMulUOMFlag;    
 		public XPEDXCustomerContactInfoBean() {
 		super();
@@ -232,6 +234,14 @@ public class XPEDXCustomerContactInfoBean {
 
 	public void setPersonInfoEmailID(String personInfoEmailID) {
 		this.personInfoEmailID = personInfoEmailID;
+	}
+
+	public String getAddEmailID() {
+		return addEmailID;
+	}
+
+	public void setAddEmailID(String addEmailID) {
+		this.addEmailID = addEmailID;
 	}
 
 
