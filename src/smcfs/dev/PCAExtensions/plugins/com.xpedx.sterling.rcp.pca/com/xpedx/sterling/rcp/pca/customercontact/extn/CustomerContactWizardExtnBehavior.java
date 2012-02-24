@@ -453,9 +453,9 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			docInputQry.getDocumentElement().setAttribute("LastName", lastName);
 			docInputQry.getDocumentElement().setAttribute("cEmailAddress", mailId);
 			
-	    	apinames = new String[]{"XPXSendUserUpdateEmailService"};
+	    	/*apinames = new String[]{"XPXSendUserUpdateEmailService"};
 	    	docInputcustomerAdded = new Document[]{docInputQry};
-	    	callApis(apinames, docInputcustomerAdded);
+	    	callApis(apinames, docInputcustomerAdded);*/
 	 }
 	 
 	 private void callApis(String apinames[], Document inputXmls[]) {
