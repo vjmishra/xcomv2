@@ -61,14 +61,12 @@ public class XPEDXMyItemsUtils {
 	
 	public static String encodeStringForCSV(String data){
 		String res = null;
-		System.out.println("data:" + data);
 		try {
 			res = StringUtils.replace(data, "\"", "\"\"");
 			res = StringUtils.replace(res, "'", "");
 		} catch (Exception e) {
 			log.error(e.toString());
 		}
-		System.out.println("res:" + res);
 		return res;
 	}
 	
