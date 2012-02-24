@@ -691,9 +691,25 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		//YFCElement custContactEle = custContactListEle.getElementsByTagName(elementName)
 		YFCElement custExtnEle = custContactListEle.getElementsByTagName("Extn").item(0);
 		/*String addnlEmailAddrs = custExtnEle.getAttribute("ExtnAddnlEmailAddrs");*/
+		/**
+		 * Changes Start for JIRA 3382
+		 */
+		String userEmailIdinSession = "";
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-		String userEmailId = xpedxCustomerContactInfoBean.getMsapEmailID();
-		
+		String userEmailId = "";
+		userEmailIdinSession = (String) wcContext.getWCAttribute("emailId");
+		if(userEmailIdinSession != null && !userEmailIdinSession.trim().equalsIgnoreCase("")){
+			userEmailId = userEmailIdinSession;
+			xpedxCustomerContactInfoBean.setPersonInfoEmailID(userEmailIdinSession);
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
+			
+		}
+		else{
+			userEmailId = xpedxCustomerContactInfoBean.getMsapEmailID();
+		}
+		/**
+		 * Changes End for JIRA 3382
+		 */
 //		Element xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, wcContext.getCustomerContactId());
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
@@ -703,7 +719,18 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			addnlPOList = xpxCustContExtnEle.getAttribute("POList");
 		}*/
 		
-		addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
+		//addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
+		if(xpedxCustomerContactInfoBean.getAddEmailID()!=null && xpedxCustomerContactInfoBean.getAddEmailID().trim()!=""){
+		addnlEmailAddrs = xpedxCustomerContactInfoBean.getAddEmailID();
+		}else{
+			addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
+		}
+		
+		/*Element xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, wcContext.getCustomerContactId());
+		
+		if(xpxCustContExtnEle!=null){
+			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
+		}*/
 		addnlPOList = (String) wcContext.getWCAttribute("addnlPOList");;
 		
 		if(YFCCommon.isVoid(addnlEmailAddrs))
