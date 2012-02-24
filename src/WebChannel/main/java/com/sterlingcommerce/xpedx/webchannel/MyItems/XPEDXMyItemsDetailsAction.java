@@ -299,7 +299,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemcustXrefDoc == null)
 					itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allMyItemsListItemIds, getWCContext());
 				if(itemcustXrefDoc!=null) {
-					Element itemXref = SCXmlUtil.getChildElement(itemcustXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber='"+tmpItemId+"]");
+					//Added for 3051
+					Element itemXref = XMLUtilities.getElement(itemcustXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber='"+tmpItemId+"']");
 					if(itemXref!=null)
 						customerPartNumber = itemXref.getAttribute("CustomerItemNumber");
 					//customerPartNumber = XPEDXMyItemsUtils.getCustomerPartNumber(tmpItemId);
@@ -392,9 +393,19 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(price)).append(
 							"\"").append(",");
-					sbCSV.append("\"").append(
-							XPEDXMyItemsUtils.encodeStringForCSV(pricingUom)).append(
-									"\"");
+					//Start- Added for 3051
+					if(pricingUom != null && pricingUom.trim().length()>0 && pricingUom.indexOf('_') == 1){
+						pricingUom = pricingUom.substring(2, pricingUom.trim().length());
+						sbCSV.append("\"").append(
+								XPEDXMyItemsUtils.encodeStringForCSV(pricingUom)).append(
+										"\"").append(",");
+					}
+					else{
+						sbCSV.append("\"").append(
+								XPEDXMyItemsUtils.encodeStringForCSV(pricingUom)).append(
+										"\"").append(",");
+					}
+				//End for 3051
 				}
 				else
 				{
