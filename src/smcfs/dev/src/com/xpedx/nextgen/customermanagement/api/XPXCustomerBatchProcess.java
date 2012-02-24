@@ -69,9 +69,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	public static final String exceptionType = "BusinessAlert";
 	public static final String referenceType = "Extended Field";
 	private boolean isCustomerActive = false;
-	private ArrayList<String> arrChildCustomerIds = new ArrayList<String>();
-	private String existingMSAPNumber = null;
-	private String existingMSAPName = null;
+	private ArrayList<String> arrChildCustomerIds = null;
 
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -131,6 +129,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			ArrayList customerAssignmentKeys = new ArrayList();
 
 			HashMap salesRepTeam = new HashMap();
+			arrChildCustomerIds=new ArrayList<String>();
+			String existingMSAPNumber = null;
+			String existingMSAPName = null;
 
 			api = YIFClientFactory.getInstance().getApi();
 			//populate the team name array list
@@ -336,10 +337,14 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 						} else if(processCode.equalsIgnoreCase("C")){					
 
 							long startTime = System.currentTimeMillis();
-							boolean isMSAPChanged = checkIsMSAPChanged(env, customerID, organizationCode, masterSapAccountNumber);
+							Element custMSAPElement = getMSAPCustomerElement(env, customerID, organizationCode);
+							existingMSAPNumber = custMSAPElement.getAttribute("ExtnSAPParentAccNo");
+							existingMSAPName = custMSAPElement.getAttribute("ExtnSAPParentName");
+							boolean masterSAPUnchanged=existingMSAPNumber.trim().equals(masterSapAccountNumber);												
+								
 							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
 							{
-								if(isMSAPChanged)
+								if(!masterSAPUnchanged)
 								{
 									boolean isAnExistingMSAP=checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
 									if(isAnExistingMSAP){
@@ -3212,7 +3217,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		this.isCustomerActive = isCustomerActive;
 	}
 
-	private boolean checkIsMSAPChanged(YFSEnvironment env, String customerID, String organizationCode, String newmSAPAccountNumber) throws RemoteException{
+	private Element getMSAPCustomerElement(YFSEnvironment env, String customerID, String organizationCode) throws RemoteException{
 		YFCDocument getCustomerListInputDoc = createGetCustomerListInput(env, customerID, organizationCode);
 		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 		getCustomerListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
@@ -3229,25 +3234,19 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		templateCustElement.appendChild(templateExtnElement);
 		templateListElement.appendChild(templateCustElement);
 
-		log.info("checkIsMSAPChanged - Extn Template : "+SCXmlUtil.getString(templateListDoc));
+		log.info("getMSAPCustomerElement - Extn Template : "+SCXmlUtil.getString(templateListDoc));
 
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, templateListDoc);
 		Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
-		log.info("checkIsMSAPChanged - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
+		log.info("getMSAPCustomerElement - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
 
 		NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_EXTN);
 		Element custElement = (Element)customerList.item(0);
-		//Check if  custelement is null or not 
-		existingMSAPNumber = custElement.getAttribute("ExtnSAPParentAccNo");
-		existingMSAPName = custElement.getAttribute("ExtnSAPParentName");
-		if(existingMSAPNumber.trim().equals(newmSAPAccountNumber))
-		{
-			return false;
-		}		
-
-		return true;
+		
+		return custElement;
+		
 	}	
 
 	private void updateCustomerWithMSAPAccountNumber(YFSEnvironment env, String organizationCode, String customerId, String masterSapCustomerId, String newMSAPAccountNumber, String newMSAPName, String suffixType)
