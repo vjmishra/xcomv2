@@ -430,11 +430,27 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 					extnLastLoginDate = xpxCustContExtnEle.getAttribute("LastLoginDate");
 				}
 			}
-			else {
-				addnlEmailAddrs = (String) getWCContext().getWCAttribute("addnlEmailAddrs");
+			else {  
+				/*
+				 * Changes for Jira 3382
+				 */
+				Element xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, this.customerContactId);
+				
+				if(xpxCustContExtnEle!=null){
+					addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
+					
+				}
 				addnlPOList = (String) getWCContext().getWCAttribute("addnlPOList");
 				extnLastLoginDate = (String) getWCContext().getWCAttribute("lastLoginDate");
-			}
+				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				xpedxCustomerContactInfoBean.setAddEmailID(addnlEmailAddrs);
+				XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
+				
+		
+				/*addnlEmailAddrs = (String) getWCContext().getWCAttribute("addnlEmailAddrs");
+				addnlPOList = (String) getWCContext().getWCAttribute("addnlPOList");
+				extnLastLoginDate = (String) getWCContext().getWCAttribute("lastLoginDate");
+		*/	}
 			
 			if (!YFCCommon.isVoid(addnlEmailAddrs)){
 				String[] emailListSplit = addnlEmailAddrs.split(",");
