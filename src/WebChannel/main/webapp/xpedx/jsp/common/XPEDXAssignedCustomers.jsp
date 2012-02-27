@@ -329,7 +329,7 @@
 </div>
 
 <div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-top:3px;margin-right:20px">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-top:2px;margin-right:20px">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 
@@ -351,8 +351,7 @@
 	<h5 align="right">Please select a Ship-To.</h5>
 	</s:if>
 </div>
-
-
+<div class="class=" style="float:right;margin-top:1px;width:100%;">
 <s:if test="%{#NoShipTo}" >
 <div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
 </s:if>
@@ -360,6 +359,7 @@
 <div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
 </s:elseif>
 <div id="errorText" class="float-right"></div>
+</div>
 </div>
 </div>
 
