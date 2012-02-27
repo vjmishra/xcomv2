@@ -389,7 +389,7 @@
             <Input>
                 <Order OrderHeaderKey="">
                     <OrderLines>
-                        <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="N" LineType="">
+                        <OrderLine Action="CREATE" OrderedQty="" ReservationMandatory="N" ValidateItem="Y" LineType="">
                             <Item ItemID="" UnitOfMeasure="" ProductClass=""/>
                             <Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
 								ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
