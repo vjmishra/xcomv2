@@ -1376,7 +1376,7 @@ var toaWin = new Ext.Window({
 			 		'enableEscapeButton': false,
 			 		'autoDimensions'	: false,
 			 		'width' 			: 780,
-			 		'height' 			: 485  
+			 		'height' 			: 495  
 				}).trigger('click');
 			}
 		}		
@@ -1403,7 +1403,7 @@ var toaWin = new Ext.Window({
  			},
  			'autoDimensions'	: false,
  			'width' 			: 745,
- 			'height' 			: 485  
+ 			'height' 			: 495 
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
@@ -1432,8 +1432,8 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: true,
- 			'width' 			: 780,
- 			'height' 			: 485  
+ 			'width' 			: 745,
+ 			'height' 			: 495  
  			});
         
         $("#dlgSelectAccount").fancybox({
