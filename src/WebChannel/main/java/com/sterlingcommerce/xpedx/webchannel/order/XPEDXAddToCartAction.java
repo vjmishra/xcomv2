@@ -1,17 +1,13 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
-import java.util.ArrayList;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
-import com.yantra.yfc.util.YFCI18NUtils;
 
 public class XPEDXAddToCartAction extends AddToCartAction {
 
@@ -118,13 +114,19 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		private void organizeProductInformationResults()
 		throws XPathExpressionException
 		{
-		    String itemID = productID;
+			XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
+		    
+			/* Begin - Changes made by Mitesh Parikh
+			 * Service call to getItemListForOrdering API commented to improve performance of addToCart action. 
+			 * Task of checking the entitlement of an item is accomplished by changing the value of attribute ValidateItem (of changeOrder API) to 'Y' 
+			 * */
+			/*String itemID = productID;
 		           
 		    ArrayList errorStringArgs = new ArrayList();
 		    errorStringArgs.add(productID); // The first arg to any error message is always the product ID.
-		    String errorString = null;
-		    XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
-		    ItemValidationResult result = processGetCompleteItemListResult(productID, verificationElem);
+		    String errorString = null;*/
+		    
+		    /*ItemValidationResult result = processGetCompleteItemListResult(productID, verificationElem);
 		    if(result.isValid())
 		    {
 		        productID = result.getItemID();
@@ -157,9 +159,9 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		        errorString = this.getText("QAInvalidQuantity", errorStringArgs);
 		        errorText = errorString; 
 		        return;
-		    } 
-		}
-		
+		    } */
+		    /* End - Changes made by Mitesh Parikh */
+		}		
 		
 		 /**
 	     * Sends the requested product ID to MASHUP_DOD_GET_COMPLETE_ITEM_LIST mashup, 
@@ -174,7 +176,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	            LOG.error("AddToCartAction called without product ID");
 	            return false;
 	        }
-	        try
+	        /*try
 	        {
 	            // call the draftOrderGetCompleteItemList mashup once for each product ID in the list
 	        	//XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);      
@@ -187,7 +189,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	        {
 	            LOG.error("Unable to retrieve information about the entered products");
 	            return false;
-	        }
+	        }*/
 	       // XPEDXWCUtils.releaseEnv(wcContext);
 	        return true;
 	    }
