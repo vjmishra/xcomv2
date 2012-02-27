@@ -1281,7 +1281,7 @@
 				<Order OrderHeaderKey="">
 					<OrderLines>
 						<OrderLine Action="CREATE" OrderedQty=""
-							ReservationMandatory="N" ValidateItem="N" LineType="" CustomerPONo="">
+							ReservationMandatory="N" ValidateItem="Y" LineType="" CustomerPONo="">
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" />
 							<OrderLineTranQuantity TransactionalUOM=""
 								OrderedQty="" />
