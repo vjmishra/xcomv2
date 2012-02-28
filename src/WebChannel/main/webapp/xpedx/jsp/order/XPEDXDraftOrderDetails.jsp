@@ -1826,8 +1826,8 @@ var currentAadd2ItemList = new Object();
 
 <s:set name='headerAdjustmentWithoutShipping'
 	value='%{#hdrAdjustmentWithoutShipping - #hdrShippingTotal + #hdrShippingBaseCharge}' />
-<s:set name='adjustedSubtotalWithoutTaxes'
-	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,(#overallTotals.getAttribute("AdjustedSubtotalWithoutTaxes") - #hdrShippingTotal + #hdrShippingBaseCharge))' />
+<%--s:set name='adjustedSubtotalWithoutTaxes'
+	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,(#overallTotals.getAttribute("AdjustedSubtotalWithoutTaxes") - #hdrShippingTotal + #hdrShippingBaseCharge))' /--%>
 <s:set name='grandTax'
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("GrandTax"))' />
 
@@ -1837,7 +1837,9 @@ var currentAadd2ItemList = new Object();
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("HdrShippingTotal"))' />
 <s:set name="shippingAdjCounter" value="false" /> <s:set
 	name="allAdjCounter" value="false" />
-
+	<%--Fix for JIRA 3469 --%>
+	<s:set name='nettotalAmount'  value='#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes")'/>
+	<%--End of Fix for JIRA 3469 --%>
 <!-- Pricing -->
 <%--	Using CustomerContactBean object from session
 <s:if test='%{#session.viewPricesFlag == "Y"}'>
@@ -1927,7 +1929,7 @@ var currentAadd2ItemList = new Object();
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 					  		</s:if>						  
 						  <s:else>
-								<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
+							<%--	<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />--%>
 								<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 					     </s:else>					
 					
@@ -2385,7 +2387,7 @@ function validateMinOrder()
 {
 	var minAmount='<s:property value="#minOrderAmount"/>';
 	var chargeAmount='<s:property value="#chargeAmount"/>';
-	var totalAmount='<s:property value='#adjustedSubtotalWithoutTaxes' />';
+	var totalAmount='<s:property value='#nettotalAmount' />';
 	var totalAmountNum=Number(totalAmount);
 	if(minAmount >totalAmountNum)
 	{
