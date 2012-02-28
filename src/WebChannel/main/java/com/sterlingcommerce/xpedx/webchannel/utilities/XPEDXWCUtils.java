@@ -2730,6 +2730,35 @@ public class XPEDXWCUtils {
 		//If the string cannot be properly split, return the customerId
 		return customerId;
 	}
+	//reopen 3244 due to dependency 3307 above created new methods below
+	
+	public static String shareFormatSuffixShipToCustomer(String custDisplayId){
+		//method calling fro Jire 3244 reopen
+		String[] custDetails = custDisplayId.split("-");
+		int strShipto = custDisplayId.indexOf("Ship-To:");
+		int strBillTo = custDisplayId.indexOf("Bill-To:");
+		if(custDetails!=null)
+		{
+					StringBuffer sb = new StringBuffer();
+						
+			if(custDetails.length==3 && strShipto!=0 && strBillTo!=0)
+			{
+				String division = custDetails[0];
+				String customerNumber = custDetails[1];
+				String suffix = custDetails[2];
+				//suffix= customerNumber.replace(" ", "");
+				sb.append(customerNumber).append(suffix);
+				return sb.toString();
+			}
+			else{
+				custDisplayId = custDisplayId;
+			}
+			
+		}
+		return custDisplayId;
+	}
+	//end methods reopen 3244 due to dependency 3307 above created new methods above 
+	
 	
 	public static String formatBillToShipToCustomer(String customerId){
 		String[] custDetails = customerId.split("-");
@@ -2897,7 +2926,8 @@ public class XPEDXWCUtils {
 												if(formatBilltoShipto)
 												{
 													//default behaviour
-													custDisplayId = formatBillToShipToCustomer(customerID);
+													//added by balkhi 27th Feb 2012 3244 reopen
+													custDisplayId = shareformatBillToShipToCustomer(customerID,true);
 													if(appendBillToShipTo)// This is for Authorize locations
 														custDisplayId = "Bill-To: "+custDisplayId;
 												}
@@ -2915,8 +2945,8 @@ public class XPEDXWCUtils {
 													custDisplayId = customerID;
 												}
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "SAP Account:  "+custDisplayId;
-													
+													custDisplayId = "Account:  "+custDisplayId;
+												//added by balkhi 27th Feb 2012 3244 reopen
 											}
 										}
 									}		
@@ -2945,9 +2975,14 @@ public class XPEDXWCUtils {
 											custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//added by balkhi to change ' ,' to ',' jira 3244
 										/*added for 2769*/
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
+											 custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
+											  // this above method for Jira 3244 reopen
 											
-											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
-												custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244
+											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
+													&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0){ 
+												custFullAddr += ", "+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244 and Local ID
+											   
+											}
 										}
 										
 										if(addrElement!=null) {
@@ -3067,7 +3102,7 @@ public class XPEDXWCUtils {
 												custDisplayId = customerID;
 											}
 											if(appendBillToShipTo)// This is for Authorize locations
-												custDisplayId = "SAP Account:  "+custDisplayId;
+												custDisplayId = "Account:  "+custDisplayId; //SAP removed for Jira 3244 reopen
 												
 										}
 									}
@@ -3104,8 +3139,13 @@ public class XPEDXWCUtils {
 									/*added for 2769*/
 									if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 										
-										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null && extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) 
-											custFullAddr += ", Local ID: "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";
+										custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
+										// this above method for Jira 3244 reopen
+										
+										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
+												&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) {
+											custFullAddr += ", "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";//3244 reopen removed Local ID
+										}
 									}
 									
 									if(addrElement!=null) {
