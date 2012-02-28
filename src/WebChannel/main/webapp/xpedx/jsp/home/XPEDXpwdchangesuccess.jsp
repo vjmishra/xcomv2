@@ -84,7 +84,7 @@
 <% if(null != request.getParameter("requestId")){%>
 	<title>Reset Password </title>
 <%}else{ %>
-   <title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/>
+  <title>Forgot Password </title>
 <%}%>
  </head>
 <!-- END swc:head -->
