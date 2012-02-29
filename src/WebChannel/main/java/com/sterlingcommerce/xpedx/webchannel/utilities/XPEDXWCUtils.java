@@ -2945,7 +2945,8 @@ public class XPEDXWCUtils {
 													custDisplayId = customerID;
 												}
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Account:  "+custDisplayId;
+													//custDisplayId = "Account:  "+custDisplayId;
+													custDisplayId = userProfileAuthorizeLocationAccount(custDisplayId);
 												//added by balkhi 27th Feb 2012 3244 reopen
 											}
 										}
@@ -3102,8 +3103,8 @@ public class XPEDXWCUtils {
 												custDisplayId = customerID;
 											}
 											if(appendBillToShipTo)// This is for Authorize locations
-												custDisplayId = "Account:  "+custDisplayId; //SAP removed for Jira 3244 reopen
-												
+												//custDisplayId = "Account:  "+custDisplayId; //SAP removed for Jira 3244 reopen
+												custDisplayId = userProfileAuthorizeLocationAccount(custDisplayId);					
 										}
 									}
 								}		
@@ -5525,5 +5526,17 @@ public class XPEDXWCUtils {
 			e.printStackTrace();
 		} 
 		
+	}
+	//Jira 3244 reopen method
+	public static String userProfileAuthorizeLocationAccount(String custDisplayId){
+		String customerInfo=null;
+		String[] custDetails = custDisplayId.split(" ");
+		if(custDetails!=null)
+		{
+			String customerNumber = custDetails[0];
+			customerInfo = custDisplayId.replaceFirst(customerNumber, "");
+			custDisplayId="Account:"+customerInfo +"("+ customerNumber +")";
+		}
+		return custDisplayId;
 	}
 }
