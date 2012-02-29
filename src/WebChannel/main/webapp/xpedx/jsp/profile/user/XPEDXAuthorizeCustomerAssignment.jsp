@@ -75,8 +75,7 @@
 						<s:else>						
 						    <s:set name="disableSinceSelfApprover" value="%{true}" />
 						</s:else>        
-	                    <s:if test='%{disableSinceSelfApprover}'> 
-		                    <td align="right" valign="top" class="no-border-right-user padding0">
+	                        <td align="right" valign="top" class="no-border-right-user padding0">
 		                    	<div class="float-left padding-left0" style="" align="center">
 		                    		<a href='javascript:moveCustomers("customersTwo","customersOne")'>
 		                    			<img src="../../xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
@@ -86,8 +85,6 @@
 		                    		</a>
 		                    	</div>
 		                    </td>
-	                    </s:if>
-
 	                   
 	                   <%-- END Fix for Jira 3048 issue item 2 --%>
 	                </tr>	
