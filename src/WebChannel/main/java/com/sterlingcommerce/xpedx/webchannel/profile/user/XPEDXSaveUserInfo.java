@@ -646,6 +646,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				pwdValidationResultMap = new HashMap<String, String>();
 				pwdValidationResultMap.put(((YFCException) e).getAttribute("ErrorCode"), ((YFCException) e).getAttribute("ErrorDescription"));
 			}
+			log.error("Error in ValidateResetPassword method ", e.getCause());
 		}
 		return returnStr;
 	}
