@@ -4,10 +4,7 @@
 <%@ taglib prefix="c" 		uri="/WEB-INF/c.tld"%>
 <%@ taglib prefix="xpedx" 	uri="/WEB-INF/xpedx.tld"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!--  my-price-and-availability is changed -->
-<!--  catalog-views.css and theme-xpedx-v1.2 is replaced -->
-<!--  dot-gray is added to images  -->
-<!--  narrow by jsp is changed  -->
+
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -21,34 +18,15 @@
 <s:set name="storefrontId" value="wCContext.storefrontId" />
 <%-- <s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/> --%>
 <%--<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' /> --%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
- <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />  --%>
-<style type="text/css">
-	.table-header-bar A:link {text-decoration: none; color: white;}
-	.table-header-bar A:visited {text-decoration: underline; color: white;}
-	.table-header-bar A:active {text-decoration: underline; color: white;}
-	.table-header-bar A:hover {text-decoration: underline; color: white;}
-	div#fancybox-content { padding-left:12px !important; padding-top:12px !important; }
-</style>	
-<%--<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css" />--%>
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<%--<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="#storefrontId" />/css/sfskin-<s:property value="#storefrontId" />.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />--%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalog-views.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/my-price-and-availability.css" />
+
+<!-- begin styles. These should be the only three styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/catalog.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
+<!-- end styles -->
+
 
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 
@@ -57,8 +35,6 @@
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
 --><script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
-<%-- <link media="screen" type="text/css" rel="stylesheet" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" />--%>
 
 <!-- end carousel scripts js   -->
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
@@ -786,9 +762,9 @@ function getGridView() {
 return new Ext.XTemplate(
 '<div class="clearview">&nbsp;</div>',
  '<div id="item-ct">',
-  '<table id="x-tbl-cmmn" class="listTableHeader ${templateName}">','<thead class="table-header-bar">',
+  '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="no-border table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" ><a href="#" title="Mill / Mfg. Item" onclick="toggleStockSort();">M<span id="directionMArrow"></span></a></td>',</s:if>
+   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" ><a href="#" title="Mill / Mfg. Item" onclick="toggleStockSort();">M<span id="directionMArrow"></span></a></td>',</s:if>
   '<td class="Item-hname"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
@@ -800,8 +776,8 @@ return new Ext.XTemplate(
   <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname"><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></td>',</s:if>				                
   <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname"><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></td>',</s:if>			                    				  <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>			                    
   <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
-  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 10px;" src="/swc/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
-  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 30px;" src="/swc/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
+  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="/swc/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
+  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="/swc/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
   <s:if test='!#isReadOnly && !#guestUser'>'<td class="no border table-header-bar-right lprice-hname"><span style="color:white;">List Price</span></td>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'>//	'<td class="no border table-header-bar-right sorttable_nosort" align="center">Action</td>',</s:if>
   '</tr>','</thead>',
@@ -826,7 +802,6 @@ return new Ext.XTemplate(
 	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname">{listprice}</td>',</s:if>
     '</tr>',
   '</tpl>','</tbody>','</table>','</tpl>',
- '<div id="table-bottom-bar" style="width:724px;">','<div id="table-bottom-bar-L"></div>','<div id="table-bottom-bar-R"></div>','</div>',
 '</div>');
 }
 

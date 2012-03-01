@@ -7,6 +7,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
 <%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
@@ -37,9 +38,13 @@
 <s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 <s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
+<!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
+<!-- end styles -->
 
 <!-- For the number formatting -->
 
@@ -255,7 +260,7 @@ function showSharedListForm(){
 			},
 			'autoDimensions'	:false,
 			'width'				: 620,
-			'height'			: 465
+			'height'			: 375
 		});
 		
 		$("#linkToReplacement").fancybox({
@@ -763,6 +768,7 @@ function showSharedListForm(){
 			var divVal=document.getElementById(divId);
 			if(divVal!=null)
 				divVal.innerHTML='';
+			divVal.style.display = 'none';
 		}
 		
 		function resetQuantityError()
@@ -774,6 +780,7 @@ function showSharedListForm(){
 				var divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
 				divVal.innerHTML='';
+				divVal.style.display = 'none';
 			}
 		}
 		
@@ -1310,13 +1317,13 @@ function showSharedListForm(){
 <s:include value="../modals/XPEDXShareMyItemsList.jsp" />
 
 <div id="dlgCopyAndPaste" class="xpedx-light-box"
-	style="width: 400px; height: 300px;">
+	style="width: 400px; height: 350px;">
 <h2>Copy and Paste</h2>
 <%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
-<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
-Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 <br />
+<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
+<p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
 </p>
 <br />
 <form id="form1" name="form1" method="post" action=""><textarea
@@ -1673,8 +1680,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>width="694"</s:if><s:else>width="524"</s:else>>
 								</table>
 								<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="errorMsgForMandatoryFields_quick-add"></div></div> 
-                                <input id="btnQLAdd2Cart" type="image" src="/swc/xpedx/images/theme/theme-1/quick-add/addtolist.png" 
-								class="add-to-cart-btn" onclick="add2List();return false;" />
+                              <!-- <input id="btnQLAdd2Cart" type="image" src="/swc/xpedx/images/theme/theme-1/quick-add/addtolist.png" 
+								class="add-to-cart-btn" onclick="add2List();return false;" /> -->
+								<a href="#" id="btnQLAdd2Cart" class="orange-ui-btn add-to-cart-btn" onclick="add2List();return false;"><span>Add to My Items List</span></a>
                             </s:form> <!-- CODE_END Quick Add - PN -->
 							
                             <div class="clear">&nbsp;</div>
@@ -1899,8 +1907,14 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</s:url>
 
 
+    				<s:if test="#status.last" >
+                   		<div class="mil-wrap-condensed-container mil-only last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >    
+           			</s:if>
+           			<s:else>
+           				<div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >  
+           			</s:else>
+           
     
-                   <div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >    
            
                     <div 
 					<s:if test='%{#status.count == 1}'>class="mil-wrap-condensed"</s:if>

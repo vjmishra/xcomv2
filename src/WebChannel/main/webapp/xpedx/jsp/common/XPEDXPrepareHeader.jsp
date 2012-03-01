@@ -12,20 +12,29 @@
   	  %>
   	  
   	<s:if test="(#isMergedCSSJS == null && #isMergedCSSJS != 'true')"> 
+		<!-- BEGIN Styles -->
 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
  		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
-  		<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-  		<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
+		<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
+		<!-- END Styles -->
+		
+		<!-- BEGIN JS -->
 		<!-- Web Trends tag start -->
 		<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 		<!-- Web Trends tag end  -->
-		<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
+		
+		<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+  		<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+  		<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
 		<script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
+		<script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
+		<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
+		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+		<!-- END JS -->
 	</s:if>
 	<s:else>
+		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
@@ -33,10 +42,6 @@
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-		<link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-		
-		<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 			
 <script type="text/javascript">
 var selectedShipCustomer = null;
@@ -570,6 +575,10 @@ var selectedShipCustomer = null;
 				sticky:				true,
 				closeText:		'<img src="/swc/xpedx/images/icons/12x12_charcoal_x.png" title="Close" />',
 				delayedClose:	false /* 5000 */
+		});
+		$('.mini-cart-trigger').click(function() {
+			var a = 'display: block; position: absolute; width: 435px; top: 55px; right:' + ($(window).width()-1000)/2 +'px;';
+			$('#cluetip').attr("style",a);
 		});
 	});
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
@@ -1376,7 +1385,7 @@ var toaWin = new Ext.Window({
 			 		'enableEscapeButton': false,
 			 		'autoDimensions'	: false,
 			 		'width' 			: 780,
-			 		'height' 			: 495  
+			 		'height' 			: 485  
 				}).trigger('click');
 			}
 		}		
@@ -1402,8 +1411,8 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: false,
- 			'width' 			: 745,
- 			'height' 			: 495 
+ 			'width' 			: 755,
+ 			'height' 			: 495  
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
@@ -1432,8 +1441,8 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: true,
- 			'width' 			: 745,
- 			'height' 			: 495  
+ 			'width' 			: 780,
+ 			'height' 			: 485  
  			});
         
         $("#dlgSelectAccount").fancybox({

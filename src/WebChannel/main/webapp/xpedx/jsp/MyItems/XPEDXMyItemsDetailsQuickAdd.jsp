@@ -11,11 +11,11 @@
 		
 		<table class="qaOTFTable" width="100%" >
 			<tr>
-				<td class="col-item" style="width: 100px;  padding-left: 0px;">
+				<td class="col-item" style="width: 62px; padding: 0px;">
 					<s:div id="siItemTypeText_%{#uId}"><s:property value="itemTypeText"/></s:div>
 					<s:hidden id="siItemType_%{#uId}" name="itemTypes" value="%{itemType}"></s:hidden>
 				</td>
-				<td class="col-item" style="width: 68px;">
+				<td class="col-item" style="width: 63px; padding: 0px;">
 					&nbsp; 
 					<s:if test='itemCustomerPartId!= ""'>
 						<s:property value="itemCustomerPartId"/>
@@ -31,10 +31,10 @@
 					</s:else>
 					<s:hidden id="siItemId_%{#uId}" name="itemIds" value="%{itemId}"></s:hidden>
 				</td>
-				<td class="col-item" style="width: 39px;">
+				<td class="col-item" style="width: 39px; padding: 0px;">
 					<s:textfield id="siQty_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="qtys" value="%{qty}" onkeyup="javascript:isValidQuantity(this);"  onchange="javascript:this.value=addComma(this.value);"></s:textfield>
 				</td>
-				<td class="col-item" style="width: 99px;">
+				<td class="col-item" style="width: 110px; padding: 0px;">
 					<s:if test='%{isItemValid == true}'>
 						<s:set name='uomList' value='%{#_action.getDisplayItemUOMsMap(wCContext.customerId, itemId, wCContext.storefrontId)}'/>
 						<s:select 
@@ -52,12 +52,12 @@
 				</td>
 				<s:if test='jobIdFlag'>
 					<td class="col-item" style="width: 53px;">
-						<s:textfield id="siJobId_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="jobIds" value="%{jobId}"></s:textfield>
+						<s:textfield id="siJobId_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="jobIds" maxlength="24"  value="%{jobId}"></s:textfield>
 					</td>
 				</s:if>
 				<s:if test="customerPOFlag">
 				<td class="col-item" style="">
-					<s:textfield id="siPurchaseOrder_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="purchaseOrders" value="%{purchaseOrder}" ></s:textfield>
+					<s:textfield id="siPurchaseOrder_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="purchaseOrders" maxlength="22"  value="%{purchaseOrder}" ></s:textfield>
 				</td>
 				</s:if>
 			</tr>
