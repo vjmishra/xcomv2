@@ -12,9 +12,12 @@
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="SelectedCustomerId" value="wCContext.customerId" />
 
-<!-- begin styles. These should be the only two styles. -->
+<!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 <!-- end styles -->
 
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
@@ -23,7 +26,6 @@
 
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
  
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
 
 <!-- Hemantha -->
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -652,20 +654,10 @@
 <!-- CODE_END - Global HTML -PN -->
 
 <div id="main-container">
-	<s:if test='!#guestUser'>  
-		<div id="main">
-	</s:if>
-	<s:else>
-		<div id="main" class="anon-pages">
-	</s:else>
-	<s:if test='!#guestUser'>  
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
-			<s:param name='shipToBanner' value="%{'true'}" />
-		</s:action>
-	</s:if>
-	<s:else>
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-	</s:else>
+<div id="main">
+
+<!-- CODE_START Header - PN --> 
+<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
 <!-- CODE_END Header - PN -->
 

@@ -5597,7 +5597,7 @@ input:focus, textarea:focus {
     width: 69px;
 }
 .quick-add-form th.item-col {
-    width: 39px;
+    width: 50px;
 }
 .mil-desc-wrap {
     float: left;
@@ -6099,7 +6099,7 @@ div#main.userProfile { min-height: 850px; }
 	font-weight:bold!important;
 }
 .quick-add-form th.job-col {
-	width: 135px;
+	width: 160px;
 }
 
 .quick-add-form-bot {
@@ -6160,4 +6160,8 @@ div#main.userProfile { min-height: 850px; }
 }
 
 .xpedx-light-box p {
+}
+.x-input {
+	padding-left: 0px;
+	padding-right: 0px;	
 }
