@@ -6,7 +6,6 @@ import org.w3c.dom.Document;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
-import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -55,7 +54,7 @@ public class XPXReportParentSAPChanges implements YIFCustomApi {
 		StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
 		reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
 		reportParentSAPChangeDoc.getDocumentElement().setAttribute("FromEmailID", reportParentSAPChangeEmailID.toString());
-		reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", reportParentSAPChangeEmailID.toString()) ;
+		reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", YFSSystem.getProperty("reportParentSAPChangeToEmailID")) ;
 		/*End - Changes made by Mitesh Parikh for JIRA 3283*/
 		log.info("Exiting XPXReportParentSAPChanges - reportParentSAPChanges : "
 				+ SCXmlUtil.getString(reportParentSAPChangeDoc));
