@@ -173,7 +173,7 @@
 			<s:hidden id="validationField" name="validationField" value="true"/>
 			<input type="hidden" id="requestId" name="requestId" value='<%=request.getParameter("requestId")%>'/>
 			
-			<s:url id='homePage' namespace='/home' action='home' />
+		 	<!-- <s:url id='homePage' namespace='/home' action='home' /> --> 
 
 			<table class="full-width">
 				<tbody>
