@@ -1214,15 +1214,23 @@ public class XPEDXHeaderAction extends WCMashupAction {
 
 	public void setAdJuglerServerURL(String adJugURL) {
 		
-		String custOverridePropertiesFile = "customer_overrides.properties";
-		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
-		String adJugglerSuffix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_SUFFIX_PROP);
-		XPEDXConstants.logMessage("adJugglerSuffix : yfs.xpedx.adjuggler.suffix= " + adJugglerSuffix );
-		
-		if(adJugglerSuffix != null )
-			this.adJuglerServerURL = adJugURL + adJugglerSuffix.trim();
-		else
-			this.adJuglerServerURL = adJugURL;
+//		String custOverridePropertiesFile = "customer_overrides.properties";
+//		XPEDXWCUtils
+//				.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
+
+		// JIRA 2890 - AdJuggler keyword, TEST was added in url which is wrong,
+		// so removed it
+		/*
+		 * String adJugglerSuffix =
+		 * YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_SUFFIX_PROP);
+		 * XPEDXConstants
+		 * .logMessage("adJugglerSuffix : yfs.xpedx.adjuggler.suffix= " +
+		 * adJugglerSuffix );
+		 * 
+		 * if(adJugglerSuffix != null ) this.adJuglerServerURL = adJugURL +
+		 * adJugglerSuffix.trim(); else this.adJuglerServerURL = adJugURL;
+		 */
+		this.adJuglerServerURL = adJugURL;
 	}
 	
 	
