@@ -455,7 +455,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		String adJuglerServerURLForGivenEnv = "";
 		String adJugURL = XPEDXConstants.AJ_SERVER_URL ;
 		
-		//Get the Suffix to append to AJ_Server (this helps to avoid incidents other than PROD box
+		//jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging
+		/*
 		String custOverridePropertiesFile = "customer_overrides.properties";
 		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(custOverridePropertiesFile);
 		String adJugglerSuffix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_SUFFIX_PROP);
@@ -465,6 +466,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			adJuglerServerURLForGivenEnv = adJugURL + adJugglerSuffix.trim();
 		else
 			adJuglerServerURLForGivenEnv = adJugURL;
+			*/
+		adJuglerServerURLForGivenEnv = adJugURL;
 		
 		//Setting Aj Server Key
 		XPEDXConstants.logMessage( " Setting AJ Server Key : " );
