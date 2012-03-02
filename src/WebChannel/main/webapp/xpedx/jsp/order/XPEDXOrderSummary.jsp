@@ -182,48 +182,16 @@ function setTotalPrice(val){
 
 
 <!-- BEGIN head-calls.php -->
-<!-- styles --> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
- 
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
---%>
-<link media="all" rel="stylesheet" type="text/css"
-	href="/swc/xpedx/css/theme/xpedx-mil-new.css" />
-<%-- <link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" /> --%>
 
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/> --%>
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie7.css" />
+<!-- begin styles. These should be the only three styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
-
-<!--[if IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie.css" />
-<![endif]-->
+<!--  End Styles -->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/shipping-option.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/draft-order-list.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/shopping-cart-detail.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
-<%-- <link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/order-adjustment.css" /> --%>
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/common/email/email.css" />
-
-<!-- carousel scripts css  -->
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> --%>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 --><!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -231,46 +199,28 @@ function setTotalPrice(val){
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-
---><!--<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
--->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/demo.css"/> -->
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.css"/> --%>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-
--->
-<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
---><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-
-
---><!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<!-- Facy Box (Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>-->
 
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <!-- Page Calls -->
 
 <!-- END head-calls.php -->
-<%-- <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script> --%>
-<link type="text/css" rel="stylesheet" href="/swc/xpedx/FlexBox/css/jquery.flexbox.css" />
-<!-- new ui -->
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<%-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> --%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css"/>
-<!-- new ui -->
-
-<!--<script type="text/javascript" src="../xpedx/js/order/email.js"></script>
+<!-- <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script> -->
+<script type="text/javascript" src="../xpedx/js/order/email.js"></script> 
 <script type="text/javascript" src="../xpedx/js/order/order.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/orderSummary.js"></script>
-<script type="text/javascript"
-	src="../xpedx/js/order/orderAdjustment.js"></script>
+<script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
 <script type="text/javascript" src="../xpedx/js/order/addCoupon.js"></script>
 
---><script type="text/javascript">
+<script type="text/javascript">
 // See http://www.fairwaytech.com/flexbox
 
 	
@@ -1145,7 +1095,7 @@ from session . We have customer Contact Object in session .
 								<td></td>
 								<td colspan="2" style="text-align:right;"> 
 								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-									<p class="red" id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+									<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
 								</s:if>
 								</td>
 							</tr>
