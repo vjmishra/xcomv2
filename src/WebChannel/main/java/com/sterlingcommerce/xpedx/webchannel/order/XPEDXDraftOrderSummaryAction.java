@@ -125,6 +125,13 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		XPEDXWCUtils xpedxwcUtils = new XPEDXWCUtils();
 		XPEDXOrderUtils orderUtils = new XPEDXOrderUtils();
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
+		LOG.debug("jira2422 HTTPServletRequest.getScheme() is " + wcContext.getSCUIContext().getRequest().getScheme());
+		LOG.debug("jira2422 HTTPServletRequest.isSecure() is " + wcContext.getSCUIContext().getRequest().isSecure());
+		LOG.debug("jira2422 HTTPServletRequest.header(user-agent) is " + wcContext.getSCUIContext().getRequest().getHeader("user-agent"));
+		LOG.debug("jira2422 HTTPServletRequest.header(CERT_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("CERT_KEYSIZE"));
+		LOG.debug("jira2422 HTTPServletRequest.header(HTTPS_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("HTTPS_KEYSIZE"));
+		LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		//Commented for JIRA 2909
