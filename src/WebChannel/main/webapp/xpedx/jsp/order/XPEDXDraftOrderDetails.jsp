@@ -13,45 +13,15 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/my-items.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/mil-quick-add-large.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" /> commented for jira 1833 -->
 
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" /> -->
-<!-- Moved global-1.css, prod-details.css, home.css,
-	ext-all.css,xpedx-forms.css,banner.css, theme.css, skin.css, demo.css, shopping-cart.css to xpedx-header.css-->
-<!-- Moved narrowBy.css to catalogExt.css -->
-<!-- Moved jquery.checkboxtree.css to xpedx-jquery-header.css -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" /> -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" /> -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" /> -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" /> -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/> -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" /> -->
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
 
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css" /> -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css" /> -->
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-dan.css" />
- --%>
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
- --%>
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/> -->
-
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7.css" />
+<!-- begin styles. These should be the only three styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
-
-<!--[if gt IE 7]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie.css" />
-<![endif]-->
+<!--  End Styles -->
 
 <!-- javascript -->
 <script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
@@ -69,13 +39,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 -->
 
-<!-- carousel scripts css  -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" /> -->
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" /> -->
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/order-adjustment.css" />
- --%>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
 <!-- carousel scripts js   -->
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -94,10 +57,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 -->
-<%--
-<link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/demo.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/jquery.checkboxtree.css"/>
---%>
+
 <!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
@@ -114,16 +74,10 @@
 <!-- /STUFF -->
 
 <!-- Lightbox/Modal Window -->
-<!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
-<%---
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
- --%>
-<!-- Page Calls -->
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 
- <!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" /> -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/checkout.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jqdialog/jqdialog.css" />
+<!-- Page Calls -->
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -1114,7 +1068,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 				 --%>
 				 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 				 	<s:if test="#rowStatus.first == true ">
-				 		<table class="float-right pricing-table" style="margin-top:-60px;">
+				 		<table class="float-right pricing-table" >
 				 	</s:if>
 				 	<s:else>
 				 		<table class="float-right pricing-table">
@@ -1192,7 +1146,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:if test='%{!#disUOMStatus.last}' >
 										<s:if test='%{#disUOMStatus.first}' >
 											<tr>
-								  	  			<td class="text-right" width="147">
+								  	  			<td class="text-right" width="130">
 								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 									 				
 									 			</s:if>
@@ -1407,7 +1361,9 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</s:if>
 					--%>
 				<%-- </s:if> --%>
-			    	<div class="red">
+				<br/> 
+				<div class="clearall">&nbsp; </div>
+			    	<div class="red float-left">
 			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
 				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />

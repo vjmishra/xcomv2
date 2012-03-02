@@ -21,7 +21,6 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/salesrep/SpryTooltip.js'/>"></script>
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/style.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/SpryTooltip.css'/>" />
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript">
@@ -145,9 +144,6 @@ td p{margin-bottom: 0px; }
     margin-top: 50px;
     padding-top: 0;
 }
- padding-top:0px;}
-
-
 .error {
 	background-color: #F9E5E6;
 	border: 1px solid #E8AAAD;
