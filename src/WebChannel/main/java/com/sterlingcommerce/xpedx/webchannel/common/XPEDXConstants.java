@@ -27,7 +27,8 @@ public class XPEDXConstants {
 	public static final String DYN_PROMO_SHARED_PATH_PROP = "promotions_shared_path";
 	
 	//Ad Jugler URL related constants
-	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "xpedx.adjuggler.keyword.attribute.prefix";
+	//jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging, added "yfs." to the key
+	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "yfs.xpedx.adjuggler.keyword.attribute.prefix";
 	public static final String AD_JUGGLER_SUFFIX_PROP = "xpedx.adjuggler.suffix";
 	public static final String AJ_SERVER_URL_KEY = "AJ_SERVER_URL_KEY";
 	public static final String AJ_SERVER_URL = "https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/";
