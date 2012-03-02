@@ -282,10 +282,12 @@
 				<img class="float-left" height="4" width="7" alt="" src="/swc/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
 				 <br/>
 				<!-- Ad Juggler Tag Starts  -->
+				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
+				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 				<s:if test="#categoryDepth==1">
 					<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />'; aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw='<s:property value="%{#ad_keyword}" />';
+				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />'; aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw='<s:property value="%{#prependTestString}" /><s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = ''; </script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:if>
