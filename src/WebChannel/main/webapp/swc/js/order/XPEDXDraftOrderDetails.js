@@ -704,14 +704,14 @@ function redrawQuickAddList()
 		        
 		        code += '</tr>';
 		        if(QuickAddElems[i].orderMultiple >"1" && QuickAddElems[i].orderMultiple != null){
-		        code += '<tr>';
+		        code += '<tr class="error-row">';
 		        code += '<td colspan="6">';
-		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline">Must be ordered in units of '+ addComma(QuickAddElems[i].orderMultiple) +'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
+		        code += '<div align="center" class="notice" id="'+divIdErrorQty+'" style="display : inline;">Must be ordered in units of '+ addComma(QuickAddElems[i].orderMultiple) +'&nbsp;'+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom))+'</div>';
 		        code += '</td>';
 		        code += '</tr>';
 		        }
 		        else{
-		        code += '<tr>';
+		        code += '<tr class="error-row">';
 			    code += '<td colspan="6">';
 		        code += '<div id="'+divIdErrorQty+'"></div>';
 		        code += '</td>';
