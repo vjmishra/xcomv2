@@ -1701,9 +1701,9 @@ public class XPEDXWCUtils {
 					Element itemEl = XMLUtilities.getElement(promItemoutputEl,
 							"Item");
 					String inputXml = SCXmlUtil.getString(itemEl);
-					System.out
-							.println("+++++++++++++++++++++ input xml +++++++++++++++++++++++++"
-									+ inputXml);
+//					System.out
+//							.println("+++++++++++++++++++++ input xml +++++++++++++++++++++++++"
+//									+ inputXml);
 					if (itemEl != null) {
 						promotionItems.add(itemEl);
 					}
@@ -1932,7 +1932,7 @@ public class XPEDXWCUtils {
 	public static String getFormattedUOMCode(String UOMCode) throws XPathExpressionException, XMLExceptionWrapper,CannotBuildInputException {
 		String UOMDesc;
 		String [] theCodeParts;
-		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode PASSED IN = " + UOMCode);
+//		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode PASSED IN = " + UOMCode);
 	    if(UOMCode != null){
 		  theCodeParts = UOMCode.split("_");
 	      UOMCode = theCodeParts[1];
@@ -1940,7 +1940,7 @@ public class XPEDXWCUtils {
 	    else{
 	    	getUOMDescription(UOMCode);
 	    }
-		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode = " + UOMCode);
+//		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode = " + UOMCode);
 		return UOMCode;
 	}	
 	
@@ -4576,9 +4576,10 @@ public class XPEDXWCUtils {
 	 * 
 	 *  HISTORY : JIRA - 2890 :  preddy - Updated to add prefix for the adJuggler keyword.
 	 *  		  All AdJuggler keywords for PROD should send as is, For all other environments need to prefix with TEST.
+	 * jira 2890 - made this method public so that it can return value to XPEDXCalatolLanding.jsp
 	 * @return
 	 */
-	private static String getAdJugglerKeywordPrefix() {
+	public static String getAdJugglerKeywordPrefix() {
 		String keywordPrefix = "";
 		try{
 			
@@ -4586,8 +4587,10 @@ public class XPEDXWCUtils {
 	    	if(keywordPrefix == null){
 	    		keywordPrefix="";
 	    	}
-	    	
-	    	keywordPrefix = keywordPrefix.trim();	    		
+			else
+			{
+			   	keywordPrefix = keywordPrefix.trim();	    		
+			}
 	    	
 	    	
 		}catch(Exception e){
@@ -4829,7 +4832,7 @@ public class XPEDXWCUtils {
 		 
 		 System.out.println("\n Fmt Qty Size : " + originalQty.split("", 3) );*/
 		
-		System.out.println(trimItemDescription("<ul><li>11 x 17</li><li>21.1M</li><li>W/C/P</li><li>Smooth</li><li>Straight</li><li>3 Part</li><li>3/Set, 2505/Ctn</li></ul>"));
+//		System.out.println(trimItemDescription("<ul><li>11 x 17</li><li>21.1M</li><li>W/C/P</li><li>Smooth</li><li>Straight</li><li>3 Part</li><li>3/Set, 2505/Ctn</li></ul>"));
 		 
 		 
 	}	
