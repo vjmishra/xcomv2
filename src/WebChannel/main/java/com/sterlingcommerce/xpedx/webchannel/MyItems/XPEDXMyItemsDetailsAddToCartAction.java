@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,8 +18,10 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.DraftOrderAddOrderLinesAction;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -88,8 +92,8 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 			if (getProductInformationForEnteredProducts()) {
 				organizeProductInformationResults();
-				/*if (orderedProductIDs.size() > 0
-						&& !getProductID().equals("INVALID_ITEM")) {*/
+				if (orderedProductIDs.size() > 0
+						&& !getProductID().equals("INVALID_ITEM")) {
 					Element changeOrderOutput = null;
 					if(orderHeaderKey.equals("_CREATE_NEW_")|| "".equalsIgnoreCase(orderHeaderKey))
 					{
@@ -126,7 +130,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					// at this point there should not be any more errors
 					// how to handle them if there are?
 					//refreshCartInContext(orderHeaderKey);
-				//}
+				}
 			}
 		} catch (Exception dle) {
 			LOG.debug(dle.getStackTrace());
@@ -160,13 +164,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			LOG.error("DraftOrderAddOrderLinesAction called with a null list of product IDs");
 			return false;
 		}
-		return true;
-		
-		/* Begin - Changes made by Mitesh Parikh
-		 * Service call to getItemListForOrdering API commented to improve performance of addToCart action. 
-		 * Task of checking the entitlement of an item is accomplished by changing the value of attribute ValidateItem (of changeOrder API) to 'Y' 
-		 * */
-		/*try {
+		try {
 			// call the draftOrderGetCompleteItemList mashup once for each
 			// product ID in the list
 			Document entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(enteredProductIDs, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
@@ -192,14 +190,14 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 									+ " output XML is: "
 									+ XMLUtilities
 											.getXMLDocString(getDocFromOutput(productInfoOutput)));*/
-		/*		}
+				}
 			}
 		} catch (Exception e) {
 			LOG.error("Unable to retrieve "
 					+ "information about the entered products");
 			LOG.error(e.getStackTrace());
-		}*/
-		/* End - Changes made by Mitesh Parikh */
+		}
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -264,7 +262,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 
 			// Retrieve the associated output document.
-			/*Element itemListEl = (Element) this.verificationOutputMap
+			Element itemListEl = (Element) this.verificationOutputMap
 					.get(itemID);
 
 			ItemValidationResult result = processGetCompleteItemListResult(
@@ -272,7 +270,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			String message = result.getMessage();
 			if (message != null) {
 				quickAddErrorList.add(message);
-			}*/
+			}
 //			if(!(enteredUOMStr!=null && enteredUOMStr.trim().length()>0)){
 //				enteredUOMStr = result.getUOM();
 //			}
@@ -281,7 +279,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			// Add the product only if the qty is > 0
 			try {
 				if (Double.parseDouble(enteredQtyStr) > 0) {
-					/*orderedProductIDs.add(result.getItemID());
+					orderedProductIDs.add(result.getItemID());
 					orderedQuantities.add(enteredQtyStr);
 					orderedProductUOMs.add(result.getUOM());
 					if(enteredUOMStr!=null && enteredUOMStr.trim().length()>0)
@@ -294,11 +292,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					{
 						transactionalUOMs.add(result.getUOM());
 					}
-					orderedProductClasses.add(result.getDefaultProductClass());*/
-					orderedProductIDs.add(itemID);
-					orderedQuantities.add(enteredQtyStr);
-					orderedProductUOMs.add(enteredUOMStr);
-					transactionalUOMs.add(enteredUOMStr);
+					orderedProductClasses.add(result.getDefaultProductClass());
 					setCustomerFieldsForOrderedItems(i);
 				}
 			} catch (Exception e) {
@@ -308,7 +302,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 
 	}
 	
-	/*protected ItemValidationResult processGetCompleteItemListResult(String itemID, Element itemEl)
+	protected ItemValidationResult processGetCompleteItemListResult(String itemID, Element itemEl)
     throws XPathExpressionException {
 		
 	    ItemValidationResult result = new ItemValidationResult();
@@ -398,7 +392,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	    }
 	    result.setValid(true);
 	    return result;
-	}*/
+	}
 	
 	private void setCustomerFieldsForOrderedItems(int index) 
 	{
