@@ -2945,9 +2945,8 @@ public class XPEDXWCUtils {
 													custDisplayId = customerID;
 												}
 												if(appendBillToShipTo)// This is for Authorize locations
-													//custDisplayId = "Account:  "+custDisplayId;
-													custDisplayId = userProfileAuthorizeLocationAccount(custDisplayId);
-												//added by balkhi 27th Feb 2012 3244 reopen
+													custDisplayId = "Account: "+custDisplayId;
+													//added by balkhi 27th Feb 2012 3244 reopen
 											}
 										}
 									}		
@@ -2974,6 +2973,10 @@ public class XPEDXWCUtils {
 										
 										if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
 											custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//added by balkhi to change ' ,' to ',' jira 3244
+											if(custFullAddr.indexOf("Account:")!=-1){
+												custFullAddr = userProfileAuthorizeLocationAccount(custFullAddr);
+																						
+												}	
 										/*added for 2769*/
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 											 custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
@@ -2981,7 +2984,7 @@ public class XPEDXWCUtils {
 											
 											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
 													&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0){ 
-												custFullAddr += ", "+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244 and Local ID
+												custFullAddr += ""+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244 and Local ID
 											   
 											}
 										}
@@ -3103,9 +3106,8 @@ public class XPEDXWCUtils {
 												custDisplayId = customerID;
 											}
 											if(appendBillToShipTo)// This is for Authorize locations
-												//custDisplayId = "Account:  "+custDisplayId; //SAP removed for Jira 3244 reopen
-												custDisplayId = userProfileAuthorizeLocationAccount(custDisplayId);					
-										}
+												custDisplayId = "Account: "+custDisplayId; //SAP removed for Jira 3244 reopen
+											}
 									}
 								}		
 								//added so that the condition occurs only when format billtoship
@@ -3145,7 +3147,7 @@ public class XPEDXWCUtils {
 										
 										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
 												&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) {
-											custFullAddr += ", "+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";//3244 reopen removed Local ID
+											custFullAddr += ""+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";//3244 reopen removed Local ID
 										}
 									}
 									
@@ -5536,9 +5538,9 @@ public class XPEDXWCUtils {
 		String[] custDetails = custDisplayId.split(" ");
 		if(custDetails!=null)
 		{
-			String customerNumber = custDetails[0];
+			String customerNumber = custDetails[1];
 			customerInfo = custDisplayId.replaceFirst(customerNumber, "");
-			custDisplayId="Account:"+customerInfo +"("+ customerNumber +")";
+			custDisplayId= customerInfo +"("+ customerNumber +")";
 		}
 		return custDisplayId;
 	}
