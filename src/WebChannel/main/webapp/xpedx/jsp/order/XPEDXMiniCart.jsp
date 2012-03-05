@@ -174,8 +174,7 @@
 	       <s:set name='orderMultiple' value='%{#itemMap.get(#item.getAttribute("ItemID"))}'/>
 	       <s:hidden name='orderLineOrderMultipleMiniCart' value='%{#itemMap.get(#item.getAttribute("ItemID"))}'/>
 	       <s:hidden name="orderLineItemIDsMiniCart" id="orderLineItemIDsMiniCart_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
-	       <%-- <s:property value='%{#itemMap.get(#item.getAttribute("ItemID"))}' />  --%>
-	        <s:hidden name='orderMultipleMiniCart' value='%{#orderMultiple}'/>
+	       <s:hidden name='orderMultipleMiniCart' value='%{#orderMultiple}'/>
 	      <s:if test='%{#orderMultiple >"1" && #orderMultiple !=null}'>
 				<div  class="notice" id="errorDiv_orderLineQtys_<s:property value='%{#orderLineKey}' />" style="display:inline-block"> <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /><s:property value="%{#xpedxutil.formatQuantityForCommas(#orderMultiple)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUOMs)'></s:property><br/></div>
 			</s:if> 
@@ -185,11 +184,9 @@
 	     </tr>
 	        </s:if>
 	        <%--Code For Fetching the map for ConvFactor  Jira 3481--%>
-	       
-	        <s:set name="getitemsUOMMap" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("itemsUOMMap")' />
+	         <s:set name="getitemsUOMMap" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("itemsUOMMap")' />
 	        <s:if test='%{#getitemsUOMMap !=null}'>
 	        <s:set name="uomMap" value='%{#getitemsUOMMap.get(#item.getAttribute("ItemID"))}' />
-	        <%-- <s:property value='%{#uomMap}' />  --%>
 	        <s:set name="orderLineReqUOMs" id="orderLineReqUOMs_%{#orderLineKey}" value="%{#orderLineTran.getAttribute('TransactionalUOM')}" /> 
 	       <s:set name="convF" value='#uomMap[#orderLineReqUOMs]' />
 			<s:hidden name="UOMconversionMiniCart" id="UOMconversionMiniCart_%{#orderLineKey}" value="%{#convF}" />
