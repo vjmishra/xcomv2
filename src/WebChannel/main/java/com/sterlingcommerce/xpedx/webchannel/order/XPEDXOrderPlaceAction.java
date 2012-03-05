@@ -142,6 +142,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		try {
 			YFCDate orderDate = new YFCDate();
 			orderPlaceDate = orderDate.getString();
+			
 			//Commented this line as it is causing exception. Looks like the mashup is not defined.
 			if (isDraftOrder()) {
 //				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
@@ -152,6 +153,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					// Flush the cart in context if it is the one we've been working with.
 					CommerceContextHelper.flushCartInContextCache(getWCContext());
 					XPEDXWCUtils.removeObectFromCache("OrderHeaderInContext");
+					//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
+					XPEDXWCUtils.removeObectFromCache("itemMap");
 					XPEDXOrderUtils.refreshMiniCart(getWCContext(),null,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 				}
 			} else {//order update flow
