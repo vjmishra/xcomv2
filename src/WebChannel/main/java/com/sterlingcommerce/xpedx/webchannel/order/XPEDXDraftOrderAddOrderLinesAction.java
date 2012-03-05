@@ -360,6 +360,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 
 	private void organizeProductInformationResults()
 			throws XPathExpressionException {
+		//Getting itemMap from Session For Minicart Jira 3481
+		HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 		for (int i = 0; i < enteredProductIDs.size(); i++) {
 			String jobId = "";
 			if(enteredJobIDs != null)
@@ -400,6 +402,14 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				if(itemEl != null)
 				{
 					originalItemId = itemEl.getAttribute("ItemID");
+					//Added For Jira 3481 orderMultiple variable
+					String orderMultiple = itemEl.getAttribute("OrderMultiple");
+					//Checking condition For Jira 3481
+					if(itemMapObj !=null )
+					{
+						itemMapObj.put(originalItemId, orderMultiple);
+					}
+					//End Checking condition For Jira 3481
 				}
 			}
 			OrderItemValidationBaseAction.ItemValidationResult result = processGetCompleteItemListResult(
@@ -439,6 +449,10 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				}
 			}
 		}
+		//Set itemMap MAP again in session Jira 3481
+		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+		//set a itemsUOMMap in Session for ConvFactor
+		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getEnteredProductIDs(), wcContext.getStorefrontId()));
 
 	}
 
