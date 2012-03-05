@@ -4585,7 +4585,7 @@ function resetQuantityErrorMessageMinicart()
 	{
 		var divId='errorDiv_'+	arrQty[i].id;
 		var divVal=document.getElementById(divId);
-		divVal.style.display='inline';
+		divVal.style.display='inline-block';
 	}
 }
 function validateOrderMultipleForMinicart()
