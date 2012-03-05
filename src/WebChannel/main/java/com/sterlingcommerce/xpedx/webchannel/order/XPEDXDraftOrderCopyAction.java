@@ -15,6 +15,10 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 	private String newOrderHeaderKey;
 	public String execute(){
 		 try {
+
+				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
+				XPEDXWCUtils.removeObectFromCache("itemMap");
+				
 	            Element orderOutput = prepareAndInvokeMashup(MASHUP_GET_ORDER_NAME);
 	            String copyOrderID = orderOutput.getAttribute("OrderNo");
 	            String copyText = getText("CopyOfPrefix");
