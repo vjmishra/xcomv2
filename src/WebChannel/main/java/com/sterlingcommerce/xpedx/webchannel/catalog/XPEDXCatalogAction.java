@@ -621,6 +621,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// TODO: handle exception
 		}
 		if(itemIDList.size()>0) {
+			//get the map from the session. For Minicart Jira - 3481
+			HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
 			itemUomHashMap =	XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
@@ -743,11 +745,21 @@ public class XPEDXCatalogAction extends CatalogAction {
 						//End- Code added to fix XNGTP 2964
 						
 						itemUomHashMap.put(strItemID, displayUomMap);
-						
+						if(itemMapObj !=null )
+						{
+							itemMapObj.put(strItemID, orderMultiple);
+						}
+							
 				}
 			}
+			//Set itemMap MAP again in session
+			XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+			//set a itemsUOMMap in Session for ConvFactor
+			XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId()));
+
+			
+			
 		}
-		
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
 	}
