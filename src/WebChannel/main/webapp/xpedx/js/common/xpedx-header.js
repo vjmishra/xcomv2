@@ -4576,7 +4576,112 @@ function deleteLine(orderHeaderKey, lineKey){
 
 
 }
+//Adding validateOrderMultipleForMinicart() For Jira 3481
+function resetQuantityErrorMessageMinicart()
+{
+	var arrQty = new Array();
+	arrQty = document.getElementsByName("orderLineQtys");
+	for(var i = 0; i < arrQty.length; i++)
+	{
+		var divId='errorDiv_'+	arrQty[i].id;
+		var divVal=document.getElementById(divId);
+		divVal.style.display='inline';
+	}
+}
+function validateOrderMultipleForMinicart()
+{	resetQuantityErrorMessageMinicart();
+	var arrQty = new Array();
+	var arrUOM = new Array();
+	var arrItemID = new Array();
+	var arrOrdMul = new Array();
+	var baseUOM = new Array();
+	var arrlineKeys = new Array();
+	var orderMultiple= new Array();
+	var retVal=true;
+	arrQty = document.getElementsByName("orderLineQtys");
+	arrUOM = document.getElementsByName("UOMconversionMiniCart");
+	arrItemID = document.getElementsByName("orderLineItemIDsMiniCart");
+	arrOrdMul =  document.getElementsByName("orderLineOrderMultipleMiniCart");
+	arrlineKeys = document.getElementsByName("lineKeys");
+	baseUOM = document.getElementsByName("itemUOMsMiniCart"); 
+	orderMultiple= document.getElementsByName("orderMultipleMiniCart");
+	for(var i = 0; i < arrItemID.length; i++)
+	{	
+		var zeroError=false;
+		var divId='errorDiv_orderLineQtys_'+	arrlineKeys[i].value;
+		var divIdError=document.getElementById(divId);
+		var qtyElement =  document.getElementById(arrQty[i].id);
+		if(arrQty[i].value == '' || arrQty[i].value ==0)
+		{
+			divIdError.innerHTML='Please enter a valid quantity and try again.';
+			divIdError.setAttribute("class", "error");
+			
+			retVal=false;
+			zeroError=true;
+		}else
+		{
+			qtyElement.style.borderColor = "";
+		}
+		if(arrOrdMul[i].value == 0 || arrOrdMul[i].value == null || arrOrdMul[i].value == undefined)
+		{
+			arrOrdMul[i].value=1;
+			
+		}
+		var totalQty = arrUOM[i].value * arrQty[i].value;		
+		var ordMul = totalQty % arrOrdMul[i].value;
+		if(ordMul=="NaN"|| ordMul==NaN)
+			{
+			    ordMul= 0
+			}		
+		if(ordMul != 0 && zeroError == false)
+		{	divIdError.innerHTML ="Please order in units of " +addCommaForMiniCart(arrOrdMul[i].value) +" "+baseUOM[i].value;
+			divIdError.style.display = "inline-block"; 
+			divIdError.setAttribute("class", "error");
+			retVal=false;
+		}
+	}
+	return retVal;
+}
 
+function addCommaForMiniCart(strOriginal){	 
+	 
+	 var data = "";	 
+	 var i,j;
+	 j=0;
+	 var len = strOriginal.length;
+
+	 for (i=len; i>=0 ; i-- )
+	 { 
+	   data = data + (strOriginal.charAt(i)) ;
+	   var m = j+1;
+	   var l = m%4;
+	   
+		if( l == 0 && i>0) {					
+			data = data + ',' ;
+			j=j+1;
+		}
+		j=j+1;
+	 } 
+	return reverseStringForMinicart(data);
+	  
+}
+
+function reverseStringForMinicart(my_str){
+
+	var reverseStr = "";
+
+	var i=my_str.length;
+	i=i-1;
+
+	for (var x = i; x >=0; x--)
+	{
+	reverseStr= reverseStr + my_str.charAt(x);
+
+	}
+	return reverseStr;
+
+ }
+//Adding validateOrderMultipleForMinicart() For Jira 3481
 
 
 function updateLines() {
@@ -4604,6 +4709,16 @@ function updateLines() {
 		}
 	}
 	//End Fix For Jira 3366
+	//Ading this for Jira 3481
+	var orderLinesCount = document.miniCartData.OrderLinesCount.value;
+	if(orderLinesCount > 0)
+	{
+		if(validateOrderMultipleForMinicart() == false)
+		{
+			return;
+		}
+	}
+	
 	//added for jira 3232
 	Ext.Msg.wait("Processing...");
     if(swc_validateForm("miniCartData") == false || error)
@@ -4659,21 +4774,20 @@ function onEnter(evt){
 
 
 function miniCartCheckout() {
-
-    if(swc_validateForm("miniCartData") == false)
-
-    {
-
+	//Ading this for Jira 3481
+	var orderLinesCount = document.miniCartData.OrderLinesCount.value;
+	if(orderLinesCount > 0)
+	{
+		if(validateOrderMultipleForMinicart() == false)
+		{
+			return;
+		}
+	}
+    if(swc_validateForm("miniCartData") == false){
         return;
-
     }
-
-    
-
     document.miniCartData.action = document.miniCartData.checkoutURL.value;
-
     document.miniCartData.submit();
-
 }
 
 //End xpedx/js/swc.js
