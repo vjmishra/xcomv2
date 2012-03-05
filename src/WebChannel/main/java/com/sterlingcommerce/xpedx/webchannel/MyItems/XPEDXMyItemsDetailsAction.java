@@ -660,11 +660,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					wcContext.getStorefrontId());
 
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
+				//Get The itemMap From Session For Minicart Jira 3481
+				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
+				
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemIdsUOMsMap.keySet());
 				Iterator<String> iterator = itemIdsList.iterator();
 				while (iterator.hasNext()) {
 					String itemIdForUom = iterator.next();
+					//Added orderMultiple to get OrderMutiple Jira 3481
+					String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(itemIdForUom);
 					Map uommap = itemIdsUOMsMap.get(itemIdForUom);
 					Set<Entry<String, String>> set = uommap.entrySet();
 					Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
@@ -685,10 +690,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						}
 
 					}
-
+					if(itemMapObj !=null )
+					{
+						itemMapObj.put(itemIdForUom, orderMultiple);
+					}
 					itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 
 				}
+				//Set itemMap MAP again in session
+				XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+				//set a itemsUOMMap in Session for ConvFactor
+				XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getListOfItems(), wcContext.getStorefrontId()));
 			}
 
 			/*
