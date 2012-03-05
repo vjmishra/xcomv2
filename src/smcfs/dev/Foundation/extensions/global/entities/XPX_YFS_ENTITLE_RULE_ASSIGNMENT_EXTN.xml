@@ -6,5 +6,13 @@
       <Entity TableName="YFS_ENTITLE_RULE_ASSIGNMENT" AuditRequired="N">
 		
       </Entity>
+	  <Indices>				
+			<Index Name="YFS_ENTITLE_RULE_ASSIGNMENT_I2" Unique="False">
+               <Column Name="CUSTOMER_TYPE"/>
+			   <Column Name="CUSTOMER_ID"/>
+				<Column Name="RELATIONSHIP_TYPE"/>
+				<Column Name="VERTICAL"/>			   
+            </Index>
+			</Indices>
 </Entities>
 </DBSchema> 

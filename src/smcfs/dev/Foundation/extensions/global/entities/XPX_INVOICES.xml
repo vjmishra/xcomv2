@@ -96,6 +96,12 @@
 			<Parent ParentTableName="YFS_ORDER_HEADER" >
 				<Attribute ColumnName="ORDER_HDR_KEY" ParentColumnName="ORDER_HEADER_KEY" />
 			</Parent>
+			 <Indices>
+            <Index Name="XPX_INVOICE_HDR_I1" Unique="True">
+               <Column Name="ORDER_HDR_KEY"/>
+               
+            </Index>
+         </Indices> 
 		</Entity>
 
 		<Entity ApiNeeded="Y" AuditRequired="N" Description="Legacy Invoice Line" Prefix="XPX" HasHistory="True" TableName="XPX_INVOICE_LINE">
