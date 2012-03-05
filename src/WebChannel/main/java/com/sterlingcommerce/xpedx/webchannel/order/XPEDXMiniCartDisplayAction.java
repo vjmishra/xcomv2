@@ -1,11 +1,16 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
@@ -15,12 +20,14 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.OrderHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.order.MiniCartDisplayAction;
+import com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemBranchInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
@@ -37,19 +44,70 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
 	private static final Logger log = Logger.getLogger(MiniCartDisplayAction.class);
     private static final String ORDERDETAILS_MASHUP_ID = "XPEDXOrderDetailsForMiniCart";
     private boolean readOrderLinesFromStart = false;
+    private HashMap<String, String> itemMap = new HashMap<String, String>();
+	
     
+	public HashMap<String, String> getItemMap() {
+		return itemMap;
+	}
+
+	public void setItemMap(HashMap<String, String> itemMap) {
+		this.itemMap = itemMap;
+	}
+
 	public String execute() 
     {
         try {
             log.info("inside MiniCartDisplayAction");
             XPEDXWCUtils.checkMultiStepCheckout();
-            getOrderDetails();
+            ArrayList<String> itemIdsInMinicart = getOrderDetails();
+            //Start for Jira 3481
+            getOrderMultipleFromSession(itemIdsInMinicart);
         } catch (Exception e){ 
             e.printStackTrace();
         }
         return SUCCESS;
     
     }
+	//Added this method for Jira 3481
+	public void getOrderMultipleFromSession( ArrayList<String> itemIds)
+	{ 	Object itemMapObj = XPEDXWCUtils.getObjectFromCache("itemMap");
+		//Check if Session exist
+		if(itemMapObj == null){
+			//If not, we will call getXPXItemExtnList API
+			Document xPXItemExtnListDoc = null;
+			try {
+				xPXItemExtnListDoc = XPEDXWCUtils.getXPXItemExtnList(itemIds, wcContext);
+				List<Element> itemBranchElementList = null;
+				if(xPXItemExtnListDoc!=null) {
+					Object[] elements = itemIds.toArray();
+					for(int i=0;i<elements.length;i++){
+					itemBranchElementList = XMLUtilities.getElements(xPXItemExtnListDoc.getDocumentElement(),"XPXItemExtn[@ItemID='"+elements[i]+"']");
+					if( itemBranchElementList!=null && itemBranchElementList.size()>0){
+						Element itemBranchElement = itemBranchElementList.get(0);
+		
+						// get the field information
+						String itemNumber = SCXmlUtil.getAttribute(itemBranchElement,"ItemID");
+						String orderMultiple = SCXmlUtil.getAttribute(itemBranchElement, "OrderMultiple");
+						//Created a itemMap to store itemNumber, orderMultiple
+						itemMap.put(itemNumber,orderMultiple );
+						}
+					}
+					//set in Session
+					XPEDXWCUtils.setObectInCache("itemMap",itemMap);
+				}
+				//
+			}catch (XPathExpressionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//set a itemsUOMMap in Session for ConvFactor
+		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIds, wcContext.getStorefrontId()));
+	}
 	
 	public  List<String> getOrderTotal()
 	{
@@ -94,22 +152,33 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
 	}
 	
     
-    private void getOrderDetails(){
+    private ArrayList<String> getOrderDetails(){
         log.info("inside getOrderDetails");
         
         orderHeaderKey = (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
         String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+        ArrayList<String> itemIds = new ArrayList<String>();
+			
 		/*if(!YFCCommon.isVoid(editedOrderHeaderKey))
 		{
 			orderHeaderKey=editedOrderHeaderKey;
 		}*/
         if (orderHeaderKey==null || "".equals(orderHeaderKey)){
-            return;
+            return itemIds;
         }
         log.info("orderHeaderKey-->"+orderHeaderKey);
         try{
         	 majorLineElements=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("OrderLinesInContext");
-            /*outputDocument= prepareAndInvokeMashup(ORDERDETAILS_MASHUP_ID);
+        	 for(int i=0;i<majorLineElements.size();i++)
+     		{
+     			Element orderLine=majorLineElements.get(i);
+     			NodeList itemNodeList = orderLine.getElementsByTagName("Item");
+     			for (int k = 0; k < itemNodeList.getLength(); k++) {
+     				itemIds.add(SCXmlUtil.getAttribute((Element) itemNodeList.item(k), "ItemID"));
+     			}
+     			
+     		}
+        	 /*outputDocument= prepareAndInvokeMashup(ORDERDETAILS_MASHUP_ID);
             
             NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", outputDocument, XPathConstants.NODESET);
             int length = orderLines.getLength();
@@ -166,9 +235,10 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
             }*/
             
             log.info("getOrderDetails end");
-        } catch (Exception e) {
+            } catch (Exception e) {
             e.printStackTrace();
         }
+		return itemIds;
     }
 
 	public boolean isReadOrderLinesFromStart() {
