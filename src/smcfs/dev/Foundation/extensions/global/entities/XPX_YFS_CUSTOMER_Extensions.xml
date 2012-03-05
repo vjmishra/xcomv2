@@ -926,6 +926,12 @@
           XMLGroup="Extn" 
           />
         </Attributes>
+		<Indices>
+            <Index Name="YFS_CUSTOMER_I5" Unique="True">
+               <Column Name="CUSTOMER_ID"/>
+               
+            </Index>
+         </Indices> 
         <!-- ENDS Fix for JIRA 1886 : adsouza-->
 		
 		<!--   <Indices>
@@ -1072,6 +1078,12 @@
 		XMLGroup="Extn" 
 		XMLName="ExtnPerson"/>
 	</Attributes>
+	<Indices>
+            <Index Name="YFS_ORGANIZATION_I2" Unique="True">
+			<Column Name="CUSTOMER_MASTER_ORG_CODE"/>
+			 <Column Name="IS_ENTERPRISE"/>
+		    </Index>
+         </Indices> 
 	<ForeignKeys>
 	     <ForeignKey ParentTableName="YFS_PERSON_INFO" >
 		<Attribute ColumnName="EXTN_PERSON2" ParentColumnName="PERSON_INFO_KEY"/>
@@ -1092,6 +1104,16 @@
 				XMLGroup="Extn" 
 			/>		  
         </Attributes>		
+		<Indices>
+            <Index Name="YFS_PERSON_INFO_I2" Unique="True">
+			 <Column Name="ADDRESS_LINE1"/>
+			 <Column Name="CITY"/>
+			 <Column Name="ZIP_CODE"/>
+			 <Column Name="EMAILID"/>
+			 <Column Name="ADDRESS_ID"/>
+				
+		    </Index>
+         </Indices> 
       </Entity>
 
 
