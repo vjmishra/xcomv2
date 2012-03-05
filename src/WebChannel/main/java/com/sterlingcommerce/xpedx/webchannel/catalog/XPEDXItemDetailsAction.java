@@ -232,6 +232,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
         return returnSet;
     }
 
+	
 	protected HashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
@@ -518,6 +519,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	private void getExtnItemDetails()  throws Exception {
 		itemOrderMultipleMap = new HashMap();
+		//get the map from the session. For Minicart Jira - 3481
+		//HashMap<String,String> OrderMultipleMapFromSessionMinicart = getOrderMultipleMapFromSessionMiniCart();
+		HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
+		
 		if(itemExtnElement == null) {
 			Document itemExtnDoc = XPEDXOrderUtils.getXPEDXItemAssociation(wcContext.getCustomerId(), shipFromDivision, itemID, getWCContext());
 			if(itemExtnDoc!=null)
@@ -530,6 +535,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				orderMul="1";
 			setOrderMultiple(orderMul);
 			itemOrderMultipleMap.put(itemID, orderMul);
+			if(itemMapObj !=null )
+			{
+				itemMapObj.put(itemID, orderMul);
+			}
 		}
 		else {
 			String div = itemExtnElement.getAttribute("XPXDivision");
@@ -540,8 +549,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					orderMul="1";
 				setOrderMultiple(orderMul);
 				itemOrderMultipleMap.put(itemID, orderMul);
+				if(itemMapObj !=null )
+				{
+					itemMapObj.put(itemID, orderMul);
+				}
 			}
 		}
+		//Set itemMap MAP again in session
+		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+		//set a itemsUOMMap in Session for ConvFactor
+		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
+	
 	}
 	
 	private void getAllItemList() throws Exception {
