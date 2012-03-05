@@ -130,6 +130,8 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			}
 			else if("true".equals(deleteOrder))
 			{
+				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
+				XPEDXWCUtils.removeObectFromCache("itemMap");
 				
 				Element orderNewList = orderList.get(0);
 				String orderHeaderKey = orderNewList.getAttribute("OrderHeaderKey");
