@@ -8,6 +8,7 @@
 <s:set name='_action' value='[0]'/>
 
 <s:bean name="com.sterlingcommerce.webchannel.utilities.UtilBean" id="util" />
+<s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="xpedxWCUtils" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil'
@@ -66,7 +67,8 @@
 <s:hidden name='updateURL' value='%{#updateURL}'/>
 <s:hidden name='checkoutURL' value='%{#checkoutURL}'/>
 <s:hidden name='fullBackURL' value='%{#cartDetailURL}'/>
-
+<%--Added  OrderLinesCount for Validating Jira 3481--%>
+<s:hidden id="OrderLinesCount" name="OrderLinesCount" value='%{majorLineElements.size()}' />
 <!-- cart rows -->
 <div class="mini-cart-rows">
 
@@ -81,10 +83,8 @@
 				<tr>
 					<td class="mini-cart-header-sect1">&nbsp;</td>
 					<td class="mini-cart-header-sect2">Item #</td>
-					<td class="mini-cart-header-sect3">Qty</td>
-					<td
-						class="mini-cart-header-sect4 mini-cart-extended-price text-right">Extended
-					Price</td>
+					<td style="width:100px;"class="mini-cart-header-sect3">Qty</td>
+					<td	align="right" style="width:200px" class="mini-cart-header-sect4 mini-cart-extended-price text-right">Extended Price(USD)</td>
 				</tr>
 			</tbody>
 		</table>
@@ -101,6 +101,9 @@
 	            <s:set name='orderLineExtn' value='#util.getElement(#orderLine, "Extn")'/>
 	            <s:set name='lineTotals' value='#util.getElement(#orderLine, "LineOverallTotals")'/>
 	            <s:set name='orderLineKey' value='#orderLine.getAttribute("OrderLineKey")'/>
+	            <s:hidden name="itemUOMsMiniCart" id="itemUOMsMiniCart_%{#orderLineKey}" value='%{#item.getAttribute("UnitOfMeasure")}'/>
+	            <s:set name="itemUOMs" value='%{#item.getAttribute("UnitOfMeasure")}'/>
+	            <%-- <s:set name='itemUOM' value='#item.getAttribute("UnitOfMeasure")'/>--%>
 	            <s:if test='#isProcurementInspectMode'>
 	                <s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	                    <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
@@ -163,16 +166,37 @@
 		        	<td  class="text-right">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		        </s:else>
 	        </tr>
+	       
 	        <%-- Added errorDiv for Jira 3366 --%>
 	        <tr>
-	        <td colspan='4'>
+	        <td colspan='5'>
+	        <s:set name="itemMap" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("itemMap")' />
+	       <s:set name='orderMultiple' value='%{#itemMap.get(#item.getAttribute("ItemID"))}'/>
+	       <s:hidden name='orderLineOrderMultipleMiniCart' value='%{#itemMap.get(#item.getAttribute("ItemID"))}'/>
+	       <s:hidden name="orderLineItemIDsMiniCart" id="orderLineItemIDsMiniCart_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
+	       <%-- <s:property value='%{#itemMap.get(#item.getAttribute("ItemID"))}' />  --%>
+	        <s:hidden name='orderMultipleMiniCart' value='%{#orderMultiple}'/>
+	      <s:if test='%{#orderMultiple >"1" && #orderMultiple !=null}'>
+				<div  class="notice" id="errorDiv_orderLineQtys_<s:property value='%{#orderLineKey}' />" style="display:inline-block"> <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /><s:property value="%{#xpedxutil.formatQuantityForCommas(#orderMultiple)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUOMs)'></s:property><br/></div>
+			</s:if> 
 	       <div  class="error" id="errorDiv_orderLineQtys_<s:property value='%{#orderLineKey}' />" style="display:none"></div> 
 	      
 	      </td>
 	     </tr>
 	        </s:if>
+	        <%--Code For Fetching the map for ConvFactor  Jira 3481--%>
+	       
+	        <s:set name="getitemsUOMMap" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("itemsUOMMap")' />
+	        <s:if test='%{#getitemsUOMMap !=null}'>
+	        <s:set name="uomMap" value='%{#getitemsUOMMap.get(#item.getAttribute("ItemID"))}' />
+	        <%-- <s:property value='%{#uomMap}' />  --%>
+	        <s:set name="orderLineReqUOMs" id="orderLineReqUOMs_%{#orderLineKey}" value="%{#orderLineTran.getAttribute('TransactionalUOM')}" /> 
+	       <s:set name="convF" value='#uomMap[#orderLineReqUOMs]' />
+			<s:hidden name="UOMconversionMiniCart" id="UOMconversionMiniCart_%{#orderLineKey}" value="%{#convF}" />
+	        <%--Code For Fetching the map for ConvFactor  Jira 3481--%>
+	       	</s:if>
 	        </s:iterator>
-	        <!--
+	         <!--
 	        <s:if test='#counter > 5'>
 	            <tr>
 	                <td class="textAlignRight" colspan="4">
@@ -246,6 +270,5 @@
 </s:form>
 
 </div>
-
 </div>
 <%-- </div> --%>
