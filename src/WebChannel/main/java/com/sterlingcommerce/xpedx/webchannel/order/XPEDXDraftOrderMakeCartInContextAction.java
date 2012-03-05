@@ -11,6 +11,7 @@ import com.sterlingcommerce.webchannel.order.DraftOrderMakeCartInContextAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 public class XPEDXDraftOrderMakeCartInContextAction extends
 		DraftOrderMakeCartInContextAction {
@@ -22,6 +23,9 @@ public class XPEDXDraftOrderMakeCartInContextAction extends
 		String returnValue = super.execute();
 		if (returnValue.equals(SUCCESS)) {
 			try {
+				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
+				XPEDXWCUtils.removeObectFromCache("itemMap");
+				
 				CommerceContextHelper.overrideCartInContext(getWCContext(),
 						orderHeaderKey);
 				 Map<String, String> valueMap = new HashMap<String, String>();
