@@ -799,22 +799,38 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 				}
 			  */
-				
+				// jira 2890 - adjuggler keyword - category prepended with
+				// TEST keyword for dev and staging
+				String keywordPrefix = "";
+				try {
+					keywordPrefix = YFSSystem
+							.getProperty(XPEDXConstants.AD_JUGGLER_KEYWORD_PREFIX_PROP);
+					if (keywordPrefix == null) {
+						keywordPrefix = "";
+					}
+					else
+					{
+						keywordPrefix = keywordPrefix.trim();
+					}
+				} catch (Exception e) {
+					log.debug("AD_JUGGLER Failed to get Prefix : (Property : yfs.xpedx.adjuggler.keyword.attribute.prefix) , Message : "
+							+ e.getMessage());
+				}
 				if(custPrefcategory!=null && custPrefcategory.trim().length()>0) {
 					request.setAttribute("custPrefCategory", custPrefcategory);
 					wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY,custPrefcategory);
 					if(custPrefcategory.equalsIgnoreCase("CJ"))
 					{	
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"Facility Supplies");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Facility Supplies");
 					} else if (custPrefcategory.equals("CG"))
 					{
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"Graphics");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Graphics");
 					} else if (custPrefcategory.equals("CU")){
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"Packaging");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Packaging");
 					} else if(custPrefcategory.equals("CA")){
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"Paper");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Paper");
 					} else {
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "");
 					}
 				}
 				/*wcContext.setWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,envCode,WCAttributeScope.LOCAL_SESSION);
