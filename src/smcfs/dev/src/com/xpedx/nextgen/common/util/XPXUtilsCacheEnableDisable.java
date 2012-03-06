@@ -1,6 +1,10 @@
 package com.xpedx.nextgen.common.util;
 
 import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -58,15 +62,19 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 		try{
 
-			if(inXML != null){
-				log.info("inXML"+SCXmlUtil.getString(inXML));
-			}
+
+			log.debug("inXML"+SCXmlUtil.getString(inXML));
+			//System.out.println("inXML"+SCXmlUtil.getString(inXML));
 
 			//String feedName = inXML.getDocumentElement().getAttribute("FeedName");
-			feedName =_properties.getProperty("FeedName");
 			//	String cacheType=_properties.getProperty("CacheType");
 			String strRoot = inXML.getDocumentElement().getNodeName();
-			log.info("feedName in CacheEnableDisable is :"+feedName);
+			if(strRoot.equals("SOF")){
+				feedName =_properties.getProperty("FeedName");
+				log.debug("feedName::"+feedName);
+				//System.out.println("Feed Name is "+feedName);
+			}
+
 
 			Document modifyCacheInput = YFCDocument.createDocument(
 			"CachedGroups").getDocument();
@@ -75,11 +83,13 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 			cachedGroup.setAttribute("Name", "Database");
 			modifyCacheInput.getDocumentElement().appendChild(cachedGroup);
 
-			if((strRoot!=null && (strRoot.equals("SOF")|| strRoot.equals("EOF") ))&& (feedName!=null||feedName!="")){
+			//System.out.println("strRoot is::"+strRoot);
 
-				if (feedName.equalsIgnoreCase("Customer")) {
 
-					String customerFeedCachedObjects = _properties
+			if(strRoot!=null && (strRoot.equals("SOF")||strRoot.equals("EOFCustomer")||strRoot.equals("EOFDivision")|| strRoot.equals("EOFEntitlement")||strRoot.equals("EOFPriceBook")||strRoot.equals("EOFUom"))){	
+				if ((feedName!=null &&feedName.equalsIgnoreCase("Customer"))||strRoot.equals("EOFCustomer")) {
+					
+					String customerFeedCachedObjects = _properties   
 					.getProperty("CustomerFeedCachedObjectsList");
 					String[] cachedObjectsList = customerFeedCachedObjects
 					.split(",");
@@ -88,8 +98,10 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						.createElement("CachedObject");
 						cachedObject.setAttribute("Action", "MODIFY");
 						if(strRoot.equals("SOF")){
+							
 							cachedObject.setAttribute("Enabled", "N");
 						}else{
+							
 							cachedObject.setAttribute("Enabled", "Y");
 
 						}
@@ -100,7 +112,8 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 				}
 
-				if (feedName.equalsIgnoreCase("Division")) {
+				if ((feedName!=null &&feedName.equalsIgnoreCase("Division"))||strRoot.equals("EOFDivision") ) {
+				
 					String DivisionFeedCachedObjects = _properties
 					.getProperty("DivisionFeedCachedObjectsList");
 					String[] cachedObjectsList = DivisionFeedCachedObjects
@@ -120,7 +133,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						cachedGroup.appendChild(cachedObject);
 					}
 				}
-				else if (feedName.equalsIgnoreCase("Entitlement")) {
+				else if ((feedName!=null && feedName.equalsIgnoreCase("Entitlement"))||strRoot.equals("EOFEntitlement")) {
 					String EntitlementFeedCachedObjects = _properties
 					.getProperty("EntitlementFeedCachedObjectsList");
 					String[] cachedObjectsList = EntitlementFeedCachedObjects
@@ -142,7 +155,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					}
 				}
 
-				else if (feedName.equalsIgnoreCase("PriceBook")) {
+				else if ((feedName!=null &&feedName.equalsIgnoreCase("PriceBook"))||strRoot.equals("EOFPriceBook")) {
 					String PriceBookFeedCachedObjects = _properties
 					.getProperty("PriceBookFeedCachedObjectsList");
 					String[] cachedObjectsList = PriceBookFeedCachedObjects
@@ -162,15 +175,15 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 								.getProperty(cachedObjectProperty));
 						cachedGroup.appendChild(cachedObject);
 					}
-					if(strRoot.equals("EOF")){
+					if(strRoot.equals("EOFPriceBook")){
 
 						deletePriceListLine(env);
-					
+
 					}
 
-				}
+				}	
 
-				else if (feedName.equalsIgnoreCase("Uom")) {
+				else if ((feedName!=null &&feedName.equalsIgnoreCase("Uom"))||strRoot.equals("EOFUom") ) {
 					String PriceBookFeedCachedObjects = _properties
 					.getProperty("UomFeedCachedObjectsList");
 					String[] cachedObjectsList = PriceBookFeedCachedObjects
@@ -192,16 +205,18 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					}
 				}
 
-				log.info("The modifyCache input is: "+ SCXmlUtil.getString(modifyCacheInput));
+				//	System.out.println("The modifyCache input is: "+SCXmlUtil.getString(modifyCacheInput));
+				log.debug("The modifyCache input is: "
+						+ SCXmlUtil.getString(modifyCacheInput));
 				api.invoke(env,"modifyCache",modifyCacheInput);
 
 
+			//} commented if condition
+
+
+
 			}
-
-
-
 		}
-
 		catch(Exception e ){
 
 			log.error("Exception "+e);
@@ -228,7 +243,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 	public  void deletePriceListLine(YFSEnvironment env)throws Exception{
 
-				try{
+		try{
 
 			String sDel ="Delete from ypm_pricelist_line where modifyts <current_date-1";
 			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
@@ -236,7 +251,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 			Statement stmt =m_Conn.createStatement();
 			stmt.execute(sDel);
 			m_Conn.commit();
-			
+
 		}
 		catch(Exception e){
 			log.error("Exception: " + e.getStackTrace());
