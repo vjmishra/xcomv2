@@ -2973,10 +2973,7 @@ public class XPEDXWCUtils {
 										
 										if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
 											custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//added by balkhi to change ' ,' to ',' jira 3244
-											if(custFullAddr.indexOf("Account:")!=-1){
-												custFullAddr = userProfileAuthorizeLocationAccount(custFullAddr);
-																						
-												}	
+												
 										/*added for 2769*/
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 											 custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
@@ -3004,6 +3001,10 @@ public class XPEDXWCUtils {
 												custFullAddr += " "+addrElement.getAttribute("Country");//removed , for 3244
 											
 										}
+										if(custFullAddr.indexOf("Account:")!=-1){
+											custFullAddr = userProfileAuthorizeLocationAccount(custFullAddr);
+																					
+											}
 									}
 								customerHashMap.put(customerID, custFullAddr);
 							}
@@ -5538,6 +5539,7 @@ public class XPEDXWCUtils {
 		String[] custDetails = custDisplayId.split(" ");
 		if(custDetails!=null)
 		{
+			custDisplayId = custDisplayId.replace("-1", "");
 			String customerNumber = custDetails[1];
 			customerInfo = custDisplayId.replaceFirst(customerNumber, "");
 			custDisplayId= customerInfo +"("+ customerNumber +")";
