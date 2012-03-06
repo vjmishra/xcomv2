@@ -77,6 +77,28 @@
 				
 	</tr>
      </s:elseif>	
+     
+     
+     <s:elseif test='#_action.getTransType() == "PriceAndAvailability"'>
+	<s:set name='XMLInput' value='#_action.getMessage("XMLInput")'/>
+	<s:hidden name='hdnXMLInputMsg' value="%{#XMLInputMsg}"/>
+	<s:set name='MAPInputMsg' value='#_action.getMessage("MAPInput")'/>
+	<s:hidden name='hdnMAPInputMsg' value="%{#MAPInputMsg}"/>
+	<s:set name='XMLOutputMsg' value='#_action.getMessage("XMLOutput")'/>
+	<s:hidden name='hdnXMLOutputMsg' value="%{#XMLOutputMsg}"/>
+	 
+	<tr>
+	<td> <a href="#" onclick="javascript:showMessage('XMLInput');"> XMLInput</a>
+				</td> </tr> <tr>
+	<td> <a href="#" onclick="javascript:showMessage('MAPInput');"> MAPInput</a>
+				</td>			
+	</tr><tr>
+	<td><a href="#" onclick="javascript:showMessage('XMLOutput');"> XMLOutput</a></td></tr>
+     </s:elseif>	
+     
+     
+     
+     
 	</table>
 	</td> 
 	<td colspan=4> <textarea id="msgDiv" name="msgDiv" style="height: 581px; width: 612px; "> </textarea> </td>
