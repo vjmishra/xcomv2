@@ -53,6 +53,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
     private Text txtOrderStatus;
     private Label lblOrderDate;
     private Text txtOrderDate;
+    private Label lblOrderTime;
+    private Text txtOrderTime;
     private Label lblTotalAmount;
     private Text txtTotalAmount;
     private Label lblShippedValue;
@@ -249,6 +251,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			textBindingData.setName("txtOrderDate");
 			textBindingData.setDataType("Date");
 			txtOrderDate.setData("YRCTextBindingDefination", textBindingData);
+			
+			//Fix for 3528
+			textBindingData = new YRCTextBindingData();
+			textBindingData.setName("txtOrderTime");
+			txtOrderTime.setData("YRCTextBindingDefination", textBindingData);
 		}
 //        
 //        //  TODO txtTotalAmount currency XPath not working.
@@ -1319,15 +1326,16 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		lblOrderNo.setLayoutData(gridData6);
 		lblOrderNo.setData("name", "lblOrderNo");
 		
-		GridData gridData12 = new GridData();
+		//Commented for 3528
+		/*GridData gridData12 = new GridData();
 		gridData12.widthHint = 95;
 		gridData12.horizontalAlignment = SWT.NONE;
 		gridData12.verticalAlignment = 4;
-		gridData12.horizontalSpan = 4;
+		gridData12.horizontalSpan = 4;*/
 		//gridData12.verticalIndent = 2;
 		
 		txtOrderNo = new Text(pnlRoot, 72);
-		txtOrderNo.setLayoutData(gridData12);
+		txtOrderNo.setLayoutData(gridData2);
 		txtOrderNo.setData("name", "txtOrderNo");
 		
 		 
@@ -1345,7 +1353,50 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 
 		
 		
+		if(!isFromOrderEntryWizard()){
+			 
+			GridData gridDatax305 = new GridData();
+			gridDatax305.widthHint = 10;
+			gridDatax305.grabExcessHorizontalSpace = false;
+			gridDatax305.horizontalAlignment = SWT.BEGINNING;
+			gridDatax305.verticalAlignment = 4;
+			gridDatax305.horizontalSpan = 1;
+			
+			Text txtDummy305 = new Text(pnlRoot, 72);
+			txtDummy305.setLayoutData(gridDatax305);
+			 
+
+
+			
+		lblOrderDate = new Label(pnlRoot, SWT.LEFT);
+		lblOrderDate.setText("Order Create Date:");
+		lblOrderDate.setLayoutData(gridData4);
+		lblOrderDate.setData("name", "lblOrderDate");
+		txtOrderDate = new Text(pnlRoot, 72);
+		txtOrderDate.setLayoutData(gridData5);
+		txtOrderDate.setData("name", "txtOrderDate");
 		
+		}
+		else
+		{
+			GridData gridDatax401 = new GridData();
+			gridDatax401.widthHint = 10;
+			gridDatax401.grabExcessHorizontalSpace = false;
+			gridDatax401.horizontalAlignment = SWT.BEGINNING;
+			gridDatax401.verticalAlignment = 4;
+			gridDatax401.horizontalSpan = 1;
+			
+			Text txtDummy401 = new Text(pnlRoot, 72);
+			txtDummy401.setLayoutData(gridDatax401);
+			
+			Text txtEntryOrderDt = new Text(pnlRoot,72);
+			GridData gridDataE1 = new GridData();
+			gridDataE1.widthHint = 95;
+			gridDataE1.horizontalAlignment = SWT.NONE;
+			gridDataE1.verticalAlignment = 4;
+			gridDataE1.horizontalSpan = 2;
+			txtEntryOrderDt.setLayoutData(gridDataE1);
+		}
 		
 		
 		if(!isFromOrderEntryWizard()){
@@ -1411,10 +1462,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//txtCustPONo.setData("name", "txtCustPONo");
 		txtCustPONo.setTextLimit(22);
 		
-		
-		
-	
-      
+		//Fix for 3528
 		if(!isFromOrderEntryWizard()){
 			 
 			GridData gridDatax305 = new GridData();
@@ -1426,17 +1474,15 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy305 = new Text(pnlRoot, 72);
 			txtDummy305.setLayoutData(gridDatax305);
-			 
-
-
 			
-		lblOrderDate = new Label(pnlRoot, SWT.LEFT);
-		lblOrderDate.setText("Order Create Date:");
-		lblOrderDate.setLayoutData(gridData4);
-		lblOrderDate.setData("name", "lblOrderDate");
-		txtOrderDate = new Text(pnlRoot, 72);
-		txtOrderDate.setLayoutData(gridData5);
-		txtOrderDate.setData("name", "txtOrderDate");
+		
+		lblOrderTime = new Label(pnlRoot, SWT.LEFT);
+		lblOrderTime.setText("Order Create Time:");
+		lblOrderTime.setLayoutData(gridData4);
+		lblOrderTime.setData("name", "lblOrderTime");
+		txtOrderTime = new Text(pnlRoot, 72);
+		txtOrderTime.setLayoutData(gridData5);
+		txtOrderTime.setData("name", "txtOrderTime");
 		}
 		else
 		{
