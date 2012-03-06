@@ -112,15 +112,15 @@
 			XMLName="ExtnOrderStatus" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_ORDER_STATUS_PREFIX" DataType="Text-40" Description="Prefix for the order status" DefaultValue="' '" Nullable="true"   
 			XMLName="ExtnOrderStatusPrefix" XMLGroup="Extn" />
-        </Attributes>
-		<Indices> 
-				
-			<Index Name="YFS_ORDER_HEADER_I20" Unique="False">
-               <Column Name="EXTN_WEB_CONF_NUM"/>
-			   <Column Name="BILL_TO_ID"/>
-			   <Column Name="ENTERPRISE_KEY"/>
-            </Index>
-        </Indices>    		
+			
+			<Attribute ColumnName="EXTN_IS_REPROCESSIBLE_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Used for determining if the order needs to be reprocessed by the reprocess agent " Nullable="false" Size="" XMLName="ExtnIsReprocessibleFlag" XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_ORDER_LOCK_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Lock Flag - set to Lock whenever the Order is placed or edited in Sterling." Nullable="false" Size="" XMLName="ExtnOrderLockFlag" XMLGroup="Extn" />
+       	
+       	  <Attribute ColumnName="EXTN_BILL_TO_CUSTOMER_ID" DataType="CustomerId"
+					Description="The Bill to Customer ID" Nullable="true" XMLName="ExtnBillToCustomerID"  XMLGroup="Extn"/>
+       	
+        </Attributes>		
       </Entity>
 
       <Entity TableName="YFS_ORDER_LINE" >
@@ -183,11 +183,10 @@
           XMLName="ExtnEditOrderFlag" XMLGroup="Extn" />
           <Attribute ColumnName="EXTN_LEG_ORDLINE_ADJMNS" DataType="Money" Description="OrderLine Adjustments" DefaultValue="0" Nullable="true"   
 			XMLName="ExtnLegOrderLineAdjustments" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ADJ_UNIT_PRICE" DataType="Money" Description="OrderLine Adjustments" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnAdjUnitPrice" XMLGroup="Extn" />		
+		  
         </Attributes>		
-		
-	
-		
-         </Indices>
       </Entity>
 
 

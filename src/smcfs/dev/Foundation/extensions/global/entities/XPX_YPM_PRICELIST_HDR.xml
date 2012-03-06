@@ -18,12 +18,7 @@
             <Index Name="EXTN_PL_HDR_I1" Unique="False">
                <Column Name="MODIFYTS"/>
             </Index>
-			<Index Name="YPM_PRICELIST_I2">
-				<Column Name="PRICING_STATUS" />
-				<Column Name="CURRENCY" />
-			</Index>
       </Indices>
-	
       </Entity>
 </Entities>
 </DBSchema> 
