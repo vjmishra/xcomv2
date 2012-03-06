@@ -15,6 +15,13 @@
         <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
     </appender>
 
+   <appender name="SOCKET" class="org.apache.log4j.net.SocketAppender">
+      <param name="Port" value="1652"/>
+      <param name="RemoteHost" value="xpappd01"/>
+      <param name="ReconnectionDelay" value="60000"/>
+      <param name="Threshold" value="DEBUG"/>
+   </appender>
+
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
             <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
@@ -157,6 +164,7 @@
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
         <appender-ref ref="CONSOLE" /> 
         <appender-ref ref="ALL" />
+        <appender-ref ref="SOCKET" />
     </category>
         <category  name="com.yantra.integration.adapter" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
@@ -176,14 +184,16 @@
         <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ALL" />
+        <appender-ref ref="SOCKET" />
     </category>
 
     <category  name="com.xpedx.nextgen.common.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="DEBUG"  />
         <appender-ref ref="CENT_APPENDER" />
+        <appender-ref ref="SOCKET" />
     </category>
 	<!--     <category  name="com.xpedx.nextgen.common.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="DEBUG"  />
         <appender-ref ref="CUSTOMER_APPENDER" />
     </category>   -->
 
@@ -191,6 +201,7 @@
 <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
        <level class="com.yantra.yfc.log.YFCLogLevel" value="DEBUG"  />
                <appender-ref ref="ALL" />
+               <appender-ref ref="SOCKET" />
    </category>
 
 
