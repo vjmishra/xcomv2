@@ -27,9 +27,11 @@ public class TransactionviewerAction extends ActionSupport
 	    private String TransactionTypeDropdownName = ""; // default value
 	    private String TimeRangeDropDownName = "";
 	    private String DateTextBoxName = "";
+	    private String EnvironmentTypeDropdownName = "";
 	    private JtdsResultSet resultSet = null;
         private Statement stmt = null;
-        private Connection conn = null;	    
+        private Connection conn = null;	
+        
         private HashMap<String,XPEDXTransaction> xcomMessageIdMap ;
 	   
 	    public void setConn(Connection conn) {
@@ -62,6 +64,16 @@ public class TransactionviewerAction extends ActionSupport
 	    {
 	        return this.WebconfTextboxName;
 	    }
+	    
+	    public void setEnvironmentTypeDropdownName(String value)
+	    {System.out.println("Environment Name= " +value);
+	        this.EnvironmentTypeDropdownName = value;
+	    }
+	    public String getEnvironmentTypeDropdownName()
+	    {
+	        return this.EnvironmentTypeDropdownName;
+	    }  
+	   
 	    
 	    public void setTransactionTypeDropdownName(String value)
 	    {
@@ -109,9 +121,25 @@ public class TransactionviewerAction extends ActionSupport
             conn = DriverManager.getConnection(
                     "jdbc:jtds:sqlserver://s02asqlxstg02.na.ipaper.com:1433/xcomlogging", "xcomview", "xcomv13w");
 
-            StringBuffer query = new StringBuffer("SELECT xcomMessageId, TransactionName, BusinessIdentifier,"
+            StringBuffer query = new StringBuffer("SELECT Tier,xcomMessageId, TransactionName, BusinessIdentifier,"
                     + " Business_Transaction_Timestamp, StepInSequence, Message FROM xcomMessages WHERE ");
+            
+            String environment = getEnvironmentTypeDropdownName();
+            
+            query.append(" Tier like" + "'%" + environment + "%' AND ");
+            
+            if(!(webconfnumber == null || webconfnumber.trim().length() == 0))
+            {
+            	
             query.append(" BusinessIdentifier like" + "'%" + webconfnumber + "%'");
+            }
+            
+           /* String webconfnum = getWebconfTextboxName();
+            if((webconfnum == null || webconfnum.trim().length() == 0))
+            {
+            query.append("SUBSTRING(business_Transaction_Timestamp,01,10)like" + "'%" + getDateTextBoxName() + "%'");
+            }*/
+            
             
             String transactionDate = getDateTextBoxName();
             if(!(transactionDate == null || transactionDate.trim().length() == 0))
@@ -148,7 +176,7 @@ public class TransactionviewerAction extends ActionSupport
             while (resultSet.next())
             {
             	XPEDXTransaction objTransaction = null;
-                businessTransactionTimestamp = resultSet.getString(4);
+                businessTransactionTimestamp = resultSet.getString(5);
                 System.out.println("BT : "+ businessTransactionTimestamp);
                 if(getXcomMessageIdMap().containsKey(businessTransactionTimestamp))
                 {
@@ -161,13 +189,13 @@ public class TransactionviewerAction extends ActionSupport
                 		objTransaction = new XPEDXTransaction();
                 		System.out.println("Creating new object");
                 		objTransaction.setBusinessTimestamp(businessTransactionTimestamp);
-                		objTransaction.setWebConfNumber(resultSet.getString(3));
-                		objTransaction.setTransactionType(resultSet.getString(2));
+                		objTransaction.setWebConfNumber(resultSet.getString(4));
+                		objTransaction.setTransactionType(resultSet.getString(3));
                         getXcomMessageIdMap().put(businessTransactionTimestamp, objTransaction);
                         //transactionTypeList.add(resultSet.getString(2)); /*transactionType*/
                         //webConfirmationNumberList.add(resultSet.getString(3)); /*webConfirmationNumber*/
                 }
-                objTransaction.addMessage(resultSet.getString(5), resultSet.getString(1));
+                objTransaction.addMessage(resultSet.getString(6), resultSet.getString(2));
             }     
             
 
