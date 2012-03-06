@@ -1,11 +1,14 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
-
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html;  import=java.util.*  charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+  <%@page import="java.util.Date"%>
+
+  <%@page import="java.text.SimpleDateFormat"%>
+    <%@page import="java.text.DateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; import=java.util.*    charset=ISO-8859-1">
 
         <title>Transaction Viewer</title>
 		<script src="js/jquery-1.7.1.js"></script>
@@ -22,7 +25,10 @@
 		return false;
 	}
 	return true;
+	
 }
+            
+           
             
 			function openMessageWindow(timestamp, transType) {
 				
@@ -38,6 +44,8 @@
 			$(function() {
 				$( "#DateTextBoxId" ).datepicker();
 			});
+			
+			
 
 </script>
         
@@ -45,6 +53,15 @@
 
     </head>
     <body>
+    		
+    	
+		 
+		 <%!
+		 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		 String formattedDate = df.format(new Date());
+		%>
+		 
+    
         <s:form name="SubmitButtonName" method="post" action="submit"  >
 
 			<!-- <table style="width: 50px; ">
@@ -70,12 +87,14 @@
                 <tbody><tr>
 
                         <td>
-                            <b><font face="Verdana" size="1">Web Confirmation Number</font></b></td> 
+                            <b><font face="Verdana" size="1">Environment</font></b></td>
+                        <td>
+                            <b><font face="Verdana" size="1">Date(mm/dd/yyyy)</font></b></td> 
                         <td>
                             <b><font face="Verdana" size="1">Transaction Type</font></b></td>
 
                         <td>
-                            <b><font face="Verdana" size="1">Date(mm/dd/yyyy)</font></b></td>
+                            <b><font face="Verdana" size="1">Web Confirmation Number</font></b></td>
 
                         <td>
                             <b><font face="Verdana" size="1">Time Range (Central Time)</font></b></td>
@@ -89,21 +108,31 @@
                         </td>
                     </tr>
                     <tr>
-
-
-                        </select></td>
                         <td>
-                            <input type="text" style="font-family:Verdana;font-size:XX-Small;" id="WebconfTextboxId" maxlength="14" value="" name="WebconfTextboxName" size="30"></td>
+                        <select style="font-family:Verdana;font-size:XX-Small;" id="EnvironmentTypeDropdownId" name="EnvironmentTypeDropdownName">                               
+                                <option value="Xpdx_Test">Production</option>
+                                <option value="Xpdx_Dev">Non Production</option>
+                            </select>
+                        
+                        </td>
+                        
                         <td>
+                        <input type="text" style="font-family:Verdana;font-size:XX-Small;width:72px;" id="DateTextBoxId" maxlength="10" value=<%=formattedDate%>
+                            name="DateTextBoxName">
+                            </td>
+                         <td>
                             <select style="font-family:Verdana;font-size:XX-Small;" id="TransactionTypeDropdownId" name="TransactionTypeDropdownName">
                                 <option value="--All Transactions--">--All Transactions--</option>
                                 <option value="OrderPlacement">Order Placement</option>
                                 <option value="OrderUpdate">Order Update</option>
+                                <option value="PriceAndAvailability">Price and Availability</option>
+                                
                             </select></td>
+                        
 
 
                         <td>
-                            <input type="text" style="font-family:Verdana;font-size:XX-Small;width:72px;" id="DateTextBoxId" maxlength="10" value="" name="DateTextBoxName">
+                            <input type="text" style="font-family:Verdana;font-size:XX-Small;" id="WebconfTextboxId" maxlength="14" value="" name="WebconfTextboxName" size="30">
                         </td>
 
                         <td>
