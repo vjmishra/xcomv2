@@ -69,11 +69,7 @@
 			<Parent ParentTableName="YFS_CUSTOMER_CONTACT" >
 				<Attribute ColumnName="CUSTOMER_CONTACT_KEY" ParentColumnName="CUSTOMER_CONTACT_KEY" />
 			</Parent>
-			<Indices>
-            <Index Name="XPX_QUICK_LINK_I1" Unique="True">
-				<Column Name="CUSTOMER_CONTACT_KEY"/>				
-		    </Index>
-         </Indices> 
+
         </Entity>
     </Entities>
 </DBSchema>

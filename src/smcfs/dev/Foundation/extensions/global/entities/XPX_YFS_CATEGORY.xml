@@ -28,9 +28,6 @@
             <Index Name="EXTN_CATG_ITEM_I1" Unique="False">
             	<Column Name="CATEGORY_KEY"/>
             </Index>
-			<Index Name="YFS_CATEGORY_ITEM_I2" Unique="False">
-            	<Column Name="ITEM_KEY"/>
-            </Index>
             
       </Indices>
       	
