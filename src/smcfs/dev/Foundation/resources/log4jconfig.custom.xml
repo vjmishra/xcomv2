@@ -15,6 +15,13 @@
         <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
     </appender>
 
+    <appender name="SOCKET" class="org.apache.log4j.net.SocketAppender">
+       <param name="Port" value="1652"/>
+       <param name="RemoteHost" value="xpappd01"/>
+       <param name="ReconnectionDelay" value="60000"/>
+       <param name="Threshold" value="ERROR"/>
+    </appender> 
+
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
             <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
@@ -172,11 +179,13 @@
     <category  name="com.xpedx.nextgen.common.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
         <appender-ref ref="CENT_APPENDER" />
+        <appender-ref ref="SOCKET" />
     </category>
 	
 	<category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
 	   <appender-ref ref="CONSOLE" />
+           <appender-ref ref="SOCKET" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
 
