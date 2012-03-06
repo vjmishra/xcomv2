@@ -89,11 +89,22 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         //setModel("selectedCustomer",page.getOrderLinesPanel().getPageBehavior().getCustomerDetails());
         setDirty(false);
         createShipComplete();
+        setOrderTime();
 
         
     }
 	public Element getInputElement(){
 		return this.inputElement;
+	}
+	
+	//Fix for 3528
+	public void setOrderTime(){
+		Element referenceElement = getModel("OrderDetails");
+		String orderTime = YRCXmlUtils.getAttributeValue(referenceElement,"/Order/@OrderDate");
+		String tempTime = "T";
+		int i = orderTime.indexOf(tempTime);
+		orderTime = orderTime.substring(i+1, i+9);
+		setFieldValue("txtOrderTime", orderTime);
 	}
 	
 	private void getCustomerContactDetails() {
