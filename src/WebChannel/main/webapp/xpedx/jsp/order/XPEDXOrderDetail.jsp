@@ -267,11 +267,14 @@ function showSplitDiv(divId)
 <s:set name='soldTo' value='#xutil.getChildElement(#orderDetail, "PersonInfoSoldTo")'/>
 <s:set name='shipTo' value='#xutil.getChildElement(#orderDetail, "PersonInfoShipTo")'/>
 <s:set name='billTo' value='#xutil.getChildElement(#orderDetail, "PersonInfoBillTo")'/>
-
-<s:set name='shipFromDoc'
-	value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getShipFromAddress()' />
-<s:set name='shipFrom'
-	value='#util.getElement(#shipFromDoc, "OrganizationList/Organization/ContactPersonInfo ")' />
+<!-- Begin - Changes made by Mitesh Parikh for JIRA 3581 -->
+<s:if test="#_action.isWillCall() == true">
+<!-- End - Changes made by Mitesh Parikh for JIRA 3581 -->
+	<s:set name='shipFromDoc'
+		value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getShipFromAddress()' />
+	<s:set name='shipFrom'
+		value='#util.getElement(#shipFromDoc, "OrganizationList/Organization/ContactPersonInfo ")' />
+</s:if>
 	
 <s:set name='dorderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
 <s:set name='dorderNo' value='#xutil.getAttribute(#orderDetail,"OrderNo")'/>
@@ -641,15 +644,15 @@ function showSplitDiv(divId)
                         		<tr>
 									<td colspan="2">-Rush Order: <s:if test='#xpedxExtnRushOrderDelDate!=null &&  #xpedxExtnRushOrderDelDate!="" '><s:property value='%{#util.formatDate(#xpedxExtnRushOrderDelDate, #wcContext,"yyyy-MM-dd")}'/></s:if> Charges may apply </td>
                         		</tr>
-                        		</s:if>
-                        		
-                        		<s:set name='renderPersonInfo' value='#shipFrom' />
-                        		
-                        		<s:if test='#_action.isWillCall() == true '>
-                        		<tr>
-                        			<td>-Will Call - Pick up location: </td>
-                        			<td class="text-left"> <div class="pick-up-location"><s:include value="/xpedx/jsp/order/XpedxReadOnlyAddress.jsp" /></div></td>
-                        		</tr>
+                        		</s:if>             		
+                        		<!-- Begin - Changes made by Mitesh Parikh for JIRA 3581 -->
+                        		<s:if test='#_action.isWillCall() == true'>
+                        		<!-- End - Changes made by Mitesh Parikh for JIRA 3581 -->
+	                        		<s:set name='renderPersonInfo' value='#shipFrom' />
+	                        		<tr>
+	                        			<td>-Will Call - Pick up location: </td>
+	                        			<td class="text-left"> <div class="pick-up-location"><s:include value="/xpedx/jsp/order/XpedxReadOnlyAddress.jsp" /></div></td>
+	                        		</tr>
                         		</s:if>
                         </table>
 
@@ -771,8 +774,10 @@ function showSplitDiv(divId)
 					    	<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>	
-					    </p>					    
+					    </p>
+					    sku map size is : <s:property value="%{skuMap.size()>0}"/>					    
 					    <s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
+			    			 
 			    			<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/>
 			    			<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
 			    			
