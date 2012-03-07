@@ -9,11 +9,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
-import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.order.AuthorizedClientMismatchException;
 import com.sterlingcommerce.webchannel.order.DraftOrderFlagMismatchException;
@@ -132,26 +130,36 @@ public class XPEDXExtendedOrderDetailAction extends
 			if (outputDoc != null) {
 				Element outputDocElement = outputDoc.getDocumentElement();
 				
-				String loginId = outputDocElement.getAttribute("Createuserid");
+				String userIdForOrder = outputDocElement.getAttribute("Createuserid");
 				Map<String, String> valueMap = new HashMap<String, String>();
-				valueMap.put("/User/@Loginid", loginId);
+				valueMap.put("/User/@Loginid", userIdForOrder);
 				
 				if(!"Customer".equals(outputDocElement.getAttribute("OrderType"))){
 					parentOHK = getParentOrderHeaderKey((Element)outputDocElement.getElementsByTagName("OrderLines").item(0));
 				}
-				
-				Element inputEle;
-				try {
-					inputEle = WCMashupHelper.getMashupInput("XPEDXUserListMashup",
-							valueMap, wcContext.getSCUIContext());
-
-					Element userEle = (Element)WCMashupHelper.invokeMashup("XPEDXUserListMashup",
-							inputEle, wcContext.getSCUIContext());
-					userKey = SCXmlUtil.getXpathAttribute(userEle, "//UserList/User/@UserKey");
-				} catch (CannotBuildInputException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+				if(XPEDXWCUtils.getInvoiceFlagForLoggedInUser(getWCContext()))
+				{
+					if(getWCContext().getLoggedInUserId().equals(userIdForOrder)){
+						userKey = getWCContext().getSCUIContext().getSession().getAttribute("ENC_USER_KEY").toString();
+					
+					} else {
+						Element inputEle;
+						try {
+							inputEle = WCMashupHelper.getMashupInput("XPEDXUserListMashup",
+									valueMap, wcContext.getSCUIContext());
+		
+							Element userEle = (Element)WCMashupHelper.invokeMashup("XPEDXUserListMashup",
+									inputEle, wcContext.getSCUIContext());
+							userKey = SCXmlUtil.getXpathAttribute(userEle, "//UserList/User/@UserKey");
+						} catch (CannotBuildInputException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
 				}
+				/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 				
 				String actualDraftOrderFlag = outputDocElement
 						.getAttribute("DraftOrderFlag");

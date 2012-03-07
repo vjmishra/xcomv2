@@ -143,6 +143,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			return;
 		
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		
+		ArrayList<String> itemIdList = new ArrayList<String>();		
+		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
+		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
 			Element orderLineElement = (Element)orderLineElemList.get(i);
@@ -152,10 +156,33 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			
 			if(skuMap.containsKey(itemId))
 				continue;
+			/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+			Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
+			Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
+			if(primeInfoElem!=null)
+			{
+				String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+				if(manufactureItem!=null && manufactureItem.length()>0)
+					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+			}
+			Element extnElem = XMLUtilities.getElement(itemDetailsElement, "Extn");
+			if(extnElem!=null)
+			{
+				String mpcCode = extnElem.getAttribute("ExtnMpc");
+				if(mpcCode!=null && mpcCode.length()>0)
+					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
+			}
+			itemIdList.add(itemId);
+			itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
 			
-			HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-			skuMap.put(itemId, itemSkuMap);
+			//HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
+			//skuMap.put(itemId, itemSkuMap);
 		}
+		
+		if(orderLineElemList.size()>0){
+			skuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemIdList, itemsSkuMap);
+		}
+		/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 	}
 	
 	/**
