@@ -1243,7 +1243,10 @@ public class XPEDXOrderUtils {
 			for(int i=0; orderElementList!=null && i<orderElementList.getLength(); ){
 				Element orderElement = (Element)orderElementList.item(i);
 				String shipToID = orderElement.getAttribute("ShipToID");
-				billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillToFromShipTo(shipToID, wcContext));
+				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+				//billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillToFromShipTo(shipToID, wcContext));
+				billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillTofromOrderElement(orderElement));
+				/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 				billToShipToMap.put("OrderShipToID", YFCUtils.isVoid(shipToID)?"":XPEDXWCUtils.formatBillToShipToCustomer(shipToID));
 				break;
 			}
@@ -1290,8 +1293,11 @@ public class XPEDXOrderUtils {
 					billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":XPEDXWCUtils.formatBillToShipToCustomer(billToCustomer.getCustomerID()));
 				}
 				else
-				{
-					billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillToFromShipTo(shipToID, wcContext));
+				{	
+					/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+					//billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillToFromShipTo(shipToID, wcContext));
+					billToShipToMap.put("OrderBillToID", YFCUtils.isVoid(shipToID)?"":getBillTofromOrderElement(orderElement));
+					/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 				}
 			}
 			return billToShipToMap;
@@ -1844,6 +1850,28 @@ public class XPEDXOrderUtils {
             e.printStackTrace();
         }
 	}
-	
+	/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+	public String getBillTofromOrderElement(Element orderElement)
+	{
+		String billToId=null;	
+		
+		Element orderExtn=SCXmlUtil.getChildElement(orderElement, "Extn");
+		if(orderExtn != null)
+		{
+			String customerDivision=orderExtn.getAttribute("ExtnCustomerDivision");		
+			customerDivision= customerDivision.split("_")[0];
+			String legacyCustomerNumber=orderExtn.getAttribute("ExtnCustomerNo");
+			String billToSuffix=orderExtn.getAttribute("ExtnBillToSuffix");
+			String envtId=orderExtn.getAttribute("ExtnEnvtId");
+			String companyCode=orderExtn.getAttribute("ExtnCompanyId");
+			
+			billToId=customerDivision+"-"+legacyCustomerNumber+"-"+billToSuffix;
+		}
+		
+		return billToId;
+		
+	}
+	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
+		
 	private static final Logger LOG = Logger.getLogger(XPEDXOrderUtils.class);
 }
