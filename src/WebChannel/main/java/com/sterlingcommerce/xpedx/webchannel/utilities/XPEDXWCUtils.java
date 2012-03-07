@@ -5546,4 +5546,53 @@ public class XPEDXWCUtils {
 		}
 		return custDisplayId;
 	}
+	
+	/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+   /**
+	 * This method fetches all the SKUs(Customer Part #, Manufacturer #, MPC #) for a particular xpedx itemId
+	 * @param wcContext
+	 * @param itemIdList
+	 * @param tmpItemSkuMap
+	 * @return
+	 * @throws CannotBuildInputException
+	 * @throws XPathExpressionException
+	 */
+	public static HashMap<String, HashMap<String, String>> getAllSkusForItem(IWCContext wcContext, ArrayList<String> itemIdList, HashMap<String, HashMap<String,String>> tmpItemSkuMap) throws CannotBuildInputException, XPathExpressionException
+	{
+		HashMap<String, String> skuMap = new LinkedHashMap<String, String>();
+		HashMap<String, HashMap<String,String>> itemSkuMap = new HashMap<String, HashMap<String,String>>();
+		Document xpxItemXRefDoc = getXpxItemCustXRefDoc(itemIdList, wcContext);
+		Iterator<String> itemIdIterator = itemIdList.iterator();
+		while(itemIdIterator.hasNext()) {
+			String itemId = itemIdIterator.next();
+			System.out.println("xpxItemXrefDoc xml is : "+SCXmlUtil.getString(xpxItemXRefDoc));
+			if(xpxItemXRefDoc!=null) {
+				Element itemXref = SCXmlUtil.getElementByAttribute(xpxItemXRefDoc.getDocumentElement(), "XPXItemcustXref", "LegacyItemNumber", itemId);
+				if (itemXref != null){
+					if(itemId.equals(itemXref.getAttribute("LegacyItemNumber")))
+					{
+						String customerPartNumber = itemXref.getAttribute("CustomerItemNumber");
+						if(customerPartNumber!=null && customerPartNumber.length()>0)
+						{
+							HashMap<String, String> tmpSkuMap = tmpItemSkuMap.get(itemId);
+							if(SCUtil.isVoid(tmpSkuMap))
+								skuMap = new HashMap<String, String>();
+							else
+								skuMap = tmpSkuMap;
+							skuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM, customerPartNumber);
+						}
+					}
+					itemSkuMap.put(itemId, (HashMap<String, String>)skuMap.clone());
+					skuMap.clear();//clearing the sku map for the other Item ids
+				
+				} else {
+					itemSkuMap=tmpItemSkuMap;
+					
+				}
+			}
+			
+		}
+		return itemSkuMap;
+	}
+	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 }
