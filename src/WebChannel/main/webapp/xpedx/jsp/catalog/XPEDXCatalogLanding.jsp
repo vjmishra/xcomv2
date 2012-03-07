@@ -24,7 +24,7 @@
 
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/catalog.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/CATALOG.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
