@@ -1417,7 +1417,7 @@
 									ResolverUserId="" HoldType="" Status="1100">
 									<ComplexQuery>
 										<Or>
-											<Exp Name="" Value="" />
+											<Exp Name="" Value="" QryType="LIKE"/>
 										</Or>
 									</ComplexQuery>
 								</OrderHoldType>
