@@ -190,13 +190,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String execute() {		
-		setCustomerNumber();
-		String retVal=super.execute();
-		getSortFieldDocument();
-		setItemsUomsMap();
-		init();
-		return retVal;
-		
+		try {
+			setCustomerNumber();
+			String retVal=super.execute();
+			getSortFieldDocument();
+			setItemsUomsMap();
+			init();
+			return retVal;
+		} catch (Exception e) {			
+			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	private void init() {

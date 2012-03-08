@@ -136,6 +136,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				orderHeaderKey1 = XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 			 */
 		} catch (Exception e) {
+			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 			return "error";
 		}
 		if (!getWCContext().isGuestUser()){
@@ -152,6 +153,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			setAdJuglerServerURL(XPEDXConstants.AJ_SERVER_URL );
 			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXConstants.AJ_SERVER_URL_KEY, getAdJuglerServerURL() );
 		}
+		
 		/*String contextOrderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 		if(contextOrderHeaderKey == null && XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext) != null )
 		{

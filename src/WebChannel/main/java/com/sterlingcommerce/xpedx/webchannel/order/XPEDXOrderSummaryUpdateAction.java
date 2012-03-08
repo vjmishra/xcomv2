@@ -54,7 +54,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			setShipCompleteOption();
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception e) {
-			
+			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 			LOG.error(e.getMessage(), e);
 			return "error";
 		}
