@@ -84,10 +84,20 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		if(isApprovalReq) {
 			if(approverUserId!=null || approverProxyUserId!=null) {//if at least there is one approver put the order on Hold
 				String approverOnHold = null;
-				if(approverUserId!=null && approverUserId.trim().length()>0)
-					approverOnHold = approverUserId;
-				else
-					approverOnHold = approverProxyUserId;
+//			if(approverUserId!=null && approverUserId.trim().length()>0)
+//				approverOnHold = approverUserId; //approverProxyUserId;//
+//			else
+//				approverOnHold = approverProxyUserId;
+				//for jira 3484
+				if(approverUserId!=null && approverUserId.trim().length()>0){
+		               approverOnHold = approverUserId;
+		               if(approverProxyUserId != null && approverProxyUserId.trim().length()>0){
+		                     approverOnHold = approverOnHold + ","+ approverProxyUserId;
+		               }
+				}else{
+		              approverOnHold = approverProxyUserId;
+				}
+				//end of jira 3484
 				if(approverOnHold!=null && approverOnHold.trim().length()>0) {
 					applyHoldTypeOnOrder(env,orderElem,approverOnHold);					
 				}
