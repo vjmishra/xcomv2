@@ -142,12 +142,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 					} catch (Exception e) {
 						sb.append(TextUtils.htmlEncode(tierPriceUOM)).append("-");
 					} 
-					sb.append(formattedTierUnitprice).append("/");
-					try {
-						sb.append(TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getFormattedUOMCode(PriceUOM)));
-					} catch (Exception e) {
-						sb.append(TextUtils.htmlEncode(PriceUOM));
-					} 
+					sb.append(formattedTierUnitprice);
+					  
 					sb.append("<br/>");
 				}
 			}
