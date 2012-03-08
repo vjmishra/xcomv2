@@ -180,6 +180,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				} catch (Exception e) {
 					generatedErrorMessage = "Error getting the order details from database.Please contact system admin.";
 					log.error("Exception getting order detail xml for order update..\n",e);
+					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 					return FAILURE;
 					
 				}
@@ -219,6 +220,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 									catch(Exception e)
 									{
 										generatedErrorMessage = transactionMessage;
+										XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 										return FAILURE;
 									}
 							}
@@ -229,6 +231,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				} catch (Exception e) {
 					generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
 					log.error("Exception posting the order update to Legacy system..\n",e);
+					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 					return FAILURE;
 				}
 				
@@ -252,6 +255,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		} catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
 			generatedErrorMessage = "Unexpected error while placing the order.Please contact system admin.";
+			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
 			return FAILURE;
 		}
 	}
