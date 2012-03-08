@@ -509,7 +509,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		for(int i=0;i<extnWebConfList.size();i++){
 			Document expDoc = YFCDocument.createDocument("Exp").getDocument();
 			Element expElement = expDoc.getDocumentElement();
-			expElement.setAttribute("Name", "Extn_ExtnWebConfNum");
+			expElement.setAttribute("Name", "ExtnWebConfNum");
 			expElement.setAttribute("Value", (String) extnWebConfList.get(i));
 			
 			inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
