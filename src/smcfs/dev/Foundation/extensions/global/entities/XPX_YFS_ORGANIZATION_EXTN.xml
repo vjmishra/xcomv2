@@ -236,7 +236,7 @@
 
           <Attribute ColumnName="EXTN_WILL_CALL_INFO" 
 
-          DataType="varchar2-255"
+          DataType="varchar2-1000"
 
 		  DefaultValue=" " 
 
@@ -400,7 +400,7 @@
 
           XMLGroup="Extn" />
 
-          <Attribute ColumnName="EXTN_DELIVERY_INFO" DataType="varchar2-255" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDeliveryInfo" 
+          <Attribute ColumnName="EXTN_DELIVERY_INFO" DataType="varchar2-1000" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDeliveryInfo" 
 
           XMLGroup="Extn" />
 
