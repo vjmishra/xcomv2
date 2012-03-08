@@ -1,21 +1,33 @@
 package com.sterlingcommerce.xpedx.webchannel.order.approval;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.approval.OrderApprovalAction;
+import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -29,9 +41,49 @@ import com.yantra.yfc.util.YFCDate;
  * @author RUgrani
  * 
  */
-public class XPEDXOrderApprovalAction extends OrderApprovalAction {
+public class XPEDXOrderApprovalAction extends WCMashupAction{
 	
-	
+	private Boolean isFirstPage = Boolean.FALSE;
+	private Boolean isLastPage = Boolean.FALSE;
+	private Boolean isValidPage = Boolean.FALSE;
+	private String orderByAttribute = "Modifyts";
+	private String orderDesc = "Y";
+	private String createTS="";
+	private String modifyTS="";
+	private String searchFieldName="";
+    private String searchFieldValue="";
+    private static String qryTypeFlike="FLIKE";
+    private static String qryTypeLike="LIKE";
+    private static String qryTypeEq="EQ";
+	private Integer pageNumber = 1;
+	private static Map searchList=new LinkedHashMap();
+	private Map paraValueMap = new HashMap();
+	private Integer totalNumberOfPages = new Integer(1);
+	protected Document outputDoc = null;
+	public String resourceId = "";
+	public List<String> oUserList=new ArrayList<String>();
+	public List<String> nameExp=new ArrayList<String>();
+	public List<String> oOrderOwnerList=new ArrayList<String>();
+    public List<String> oOrderOwnerNameExp=new ArrayList<String>();
+    public List<String> userList=new ArrayList<String>();
+    public List<String> userNameExp=new ArrayList<String>();
+	public String sfId;
+    private boolean isApprover = false;
+    private boolean userAlwdForSrch = false;
+    private String approvalHoldType = "";
+    private String orderListReturnUrl = "";
+
+
+    private static final String XPATH_RESOLVER_USER_ID ="/Page/API/Input/Order/OrderHoldType/@ResolverUserId";
+    private static final String XPATH_RESOLVER_USER_ID_QRY_TYPE ="/Page/API/Input/Order/OrderHoldType/@ResolverUserIdQryType";
+    private static final String XPATH_ORDER_NO ="/Page/API/Input/Order/@OrderNo";
+    private static final String XPATH_ORDER_NO_QRY_TYPE ="/Page/API/Input/Order/@OrderNoQryType";
+    private static final String XPATH_CUSTOMER_CONTACT_ID="/Page/API/Input/Order/@CustomerContactID";
+    private static final String XPATH_CUSTOMER_CONTACT_ID_QRY_TYPE="/Page/API/Input/Order/@CustomerContactIDQryType";
+    
+	private static final String APPROVAL_LIST_MASHUP_ID = "orderApprovalList";
+	private static final String APPROVAL_LIST_WIDGET_MASHUP_ID = "orderApprovalListWidget";
+	private static final String YES = "Y";
 	public XPEDXOrderApprovalAction() {
 		super();
 		orderApprovalSearchDateRangeField = "";
@@ -39,7 +91,6 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		shipToSearchList = new LinkedHashMap();
 		
 	}
-	
 	
 
 /*	public Map getSearchListNew() {
@@ -60,11 +111,11 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		return searchListNew;
 	}
 
-	@Override
+	
 	public String execute() {
 		//getAssignedCustomerListForLoggedInUser();
 		setInitialDates();
-		String returnVal = super.execute();
+		String returnVal = superExecute();
 		if(!ERROR.equalsIgnoreCase(returnVal))
 			//call create only if the approval change is success
 			if("1300".equals(getApprovalAction())){
@@ -75,6 +126,246 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		return  returnVal;
 	}
 	
+	public String superExecute(){
+		setApprovalHoldType(BusinessRuleUtil.getBusinessRule("HOLD_TO_BE_APPLIED_FOR_ORDER_APPROVAL" , wcContext));
+		Document outDoc = null;
+			oUserList.add(wcContext.getCustomerContactId());
+	        nameExp.add(OrderConstants.RESOLVER_USER_ID);
+			if(mashupIds.contains("orderApprovalList")){
+			    outDoc = null;
+			    try {
+			        outDoc = prepareandCallMashupforApprovalList();
+                } catch (CannotBuildInputException e) {
+                    // TODO Auto-generated catch block
+                    log.debug(e);
+                }
+    		}
+			else if(mashupIds.contains(APPROVAL_LIST_WIDGET_MASHUP_ID)){
+			        setIsApprover(true);
+			        outDoc = null;
+                    outDoc = callmashup(APPROVAL_LIST_WIDGET_MASHUP_ID);
+            }
+		if(outDoc!=null){
+			try{
+			if(mashupIds.contains(APPROVAL_LIST_MASHUP_ID)){
+				parsePageInfo(outDoc, true);
+			}
+			setOutputDocument(outDoc);
+			} catch (Exception e){
+		          log.debug("XPathExpressionException", e);
+			}
+			return SUCCESS;
+		}
+		return ERROR;
+	}
+	
+	/**
+     * Method to set the pagination attirbutes.
+     *
+     * @param outDoc of type Document which is the ouput of the getCustomerList API call.
+     * @param paginated of type boolean to know whether the pagination is to be invoked or not.
+     * @return
+     */
+	private void parsePageInfo(Document outDoc, boolean paginated)
+	throws XPathExpressionException {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        Element page = (Element) xpath.evaluate("//Page", outDoc, XPathConstants.NODE);
+
+        setIsLastPage(Boolean.FALSE);
+        if ((paginated) && (page != null)) {
+        	setIsLastPage(getBooleanAttribute(page, "IsLastPage", getIsLastPage()));
+        }
+
+        setIsFirstPage( Boolean.FALSE);
+        if ((paginated) && (page != null)) {
+        	setIsFirstPage(getBooleanAttribute(page, "IsFirstPage", getIsFirstPage()));
+         }
+
+         setIsValidPage(Boolean.FALSE);
+         if ((paginated) && (page != null)) {
+        	 setIsValidPage(getBooleanAttribute(page, "IsValidPage", getIsValidPage()));
+         }
+
+         if ((paginated) && (page != null)) {
+	         setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
+         }
+
+         setTotalNumberOfPages(new Integer(0));
+         if ((paginated) && (page != null)) {
+	         setTotalNumberOfPages(getIntegerAttribute(page, "TotalNumberOfPages", getTotalNumberOfPages()));
+         }
+	}
+	
+	
+	//Method to be removed once the SCXmlUtils class provides this method.
+	private static Boolean getBooleanAttribute(Element page, String name, Boolean defaultValue)
+	{
+		Boolean value = defaultValue;
+		String str = page.getAttribute(name);
+		if (str != null) {
+			if (YES.equals(str)) {
+				value = Boolean.TRUE;
+			} else {
+				value = Boolean.TRUE;
+			}
+		}
+
+		return value;
+	}
+	
+	//Method to be removed once the SCXmlUtils class provides this method.
+	private Integer getIntegerAttribute(Element page, String name, Integer defaultValue)
+	{
+		Integer value = defaultValue;
+		String str = page.getAttribute(name);
+		try {
+			value = Integer.valueOf(str);
+		} catch (NumberFormatException e) {
+			value = defaultValue;
+		}
+
+		return value;
+	}
+
+	/**
+     * Common method for this action class to call any mashup by passing the mashuId.
+     *
+     * @param mashupCallId of the type String
+     * @return outDoc of type Document which is the ouput of the mashup call.
+     */
+
+
+    private Document callmashup(String mashupCallId) {
+        Set<String> mashupIdset = new HashSet<String> ();
+        mashupIdset.add(mashupCallId);
+        Map<String, Element> mashupOutput = null;
+      try {
+          mashupOutput = prepareAndInvokeMashups(mashupIdset);
+      } catch (XMLExceptionWrapper e) {
+          // TODO Auto-generated catch block
+          log.debug(e);
+      } catch (CannotBuildInputException e) {
+          // TODO Auto-generated catch block
+          log.debug(e);
+      }
+      if(mashupOutput!=null){
+          return (mashupOutput.get(mashupCallId)).getOwnerDocument();
+      }
+      else{
+          return null;
+      }
+    }
+/**
+ * Method to dynamically override the binding values for action approvalList.
+ *
+ * @param
+ * @param outDoc of type Document which is the ouput of the getOrderList API call.
+ * @return
+ */
+
+private Document prepareandCallMashupforApprovalList() throws CannotBuildInputException {
+    Element input = WCMashupHelper.getMashupInput(APPROVAL_LIST_MASHUP_ID, wcContext);
+    if ("ShowAll".equals(getSearchFieldName())){
+        setSearchFieldName("");
+        setSearchFieldName("");
+        setPageNumber(1);
+    }
+    if ("Approver".equals(getSearchFieldName())){
+        userAlwdForSrch  = checkUserAllowedForSearch(oUserList);
+        if(!(YFCCommon.isVoid(getSearchFieldName()))){
+            this.oUserList = new ArrayList<String>();
+        }
+    }
+    Map<String, String> valueMapinput = evaluateBindingsForMashup(APPROVAL_LIST_MASHUP_ID, input);
+    if ("Approver".equals(getSearchFieldName())){
+        if(userAlwdForSrch){
+            if(getSearchFieldName().startsWith("*")){
+                valueMapinput.put(XPATH_RESOLVER_USER_ID_QRY_TYPE, qryTypeLike);
+                if (getSearchFieldName().endsWith("*")){
+                    valueMapinput.put(XPATH_RESOLVER_USER_ID, getSearchFieldName().substring(1, getSearchFieldName().length()-1));
+                }
+                else{
+                    valueMapinput.put(XPATH_RESOLVER_USER_ID, getSearchFieldName().substring(1, getSearchFieldName().length()));
+                }
+            }else if (getSearchFieldName().endsWith("*")){
+                valueMapinput.put(XPATH_RESOLVER_USER_ID_QRY_TYPE, qryTypeFlike);
+                valueMapinput.put(XPATH_RESOLVER_USER_ID, getSearchFieldName().substring(0, getSearchFieldName().length()-1));
+            } else {
+                valueMapinput.put(XPATH_RESOLVER_USER_ID_QRY_TYPE, qryTypeEq);
+                valueMapinput.put(XPATH_RESOLVER_USER_ID, getSearchFieldName());
+            }
+        }
+        else if(!(YFCCommon.isVoid(getSearchFieldName()))){
+            valueMapinput.put(XPATH_RESOLVER_USER_ID, "junk");
+        }
+    }
+    else if ("OrderNo".equals(getSearchFieldName())){
+        if(getSearchFieldName().startsWith("*")){
+            valueMapinput.put(XPATH_ORDER_NO_QRY_TYPE, this.qryTypeLike);
+            if (getSearchFieldName().endsWith("*")){
+                valueMapinput.put(XPATH_ORDER_NO, getSearchFieldName().substring(1, getSearchFieldName().length()-1));
+            }
+            else{
+                valueMapinput.put(XPATH_ORDER_NO, getSearchFieldName().substring(1, getSearchFieldName().length()));
+            }
+        }
+        else if (getSearchFieldName().endsWith("*")){
+            valueMapinput.put(XPATH_ORDER_NO_QRY_TYPE, this.qryTypeFlike);
+            valueMapinput.put(XPATH_ORDER_NO, getSearchFieldName().substring(0, getSearchFieldName().length()-1));
+        } else {
+            valueMapinput.put(XPATH_ORDER_NO_QRY_TYPE, this.qryTypeEq);
+            valueMapinput.put(XPATH_ORDER_NO, getSearchFieldName());
+        }
+    }else if ("OrderOwner".equals(getSearchFieldName())){
+        if(getSearchFieldName().startsWith("*")){
+            valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID_QRY_TYPE, this.qryTypeLike);
+            if (getSearchFieldName().endsWith("*")){
+                valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID, getSearchFieldName().substring(1, getSearchFieldName().length()-1));
+            }
+            else{
+                valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID, getSearchFieldName().substring(1, getSearchFieldName().length()));
+            }
+        }
+        else if (getSearchFieldName().endsWith("*")){
+            valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID_QRY_TYPE, this.qryTypeFlike);
+            valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID, getSearchFieldName().substring(0, getSearchFieldName().length()-1));
+        } else {
+            valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID_QRY_TYPE, this.qryTypeEq);
+            valueMapinput.put(XPATH_CUSTOMER_CONTACT_ID, getSearchFieldName());
+        }
+    }
+    populateMashupInput(APPROVAL_LIST_MASHUP_ID, valueMapinput, input);
+    Document approvalListOutdoc = (invokeMashup(APPROVAL_LIST_MASHUP_ID, input)).getOwnerDocument();
+    return approvalListOutdoc;
+}
+
+private boolean checkUserAllowedForSearch(List<String> list) {
+    for(String s : list){
+        if(getSearchFieldName().equals(s)){
+            return true;
+        }
+        else if(getSearchFieldName().startsWith("*")&& getSearchFieldName().endsWith("*")){
+            String substring =getSearchFieldName().substring(1, getSearchFieldName().length()-1);
+            if(s.indexOf(substring)!=-1){
+                return true;
+            }
+        }
+        else if(getSearchFieldName().startsWith("*")){
+            String substring =getSearchFieldName().substring(1, getSearchFieldName().length());
+            if(s.indexOf(substring)!=-1){
+                return true;
+            }
+        }
+        else if(getSearchFieldName().endsWith("*")){
+            String substring =getSearchFieldName().substring(0, getSearchFieldName().length()-1);
+            if(s.indexOf(substring)!=-1){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 	/**
 	 * This triggers a creation of fulfillment order on Approval.
 	 */
@@ -112,7 +403,7 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 	/* (non-Javadoc)
 	 * @see com.sterlingcommerce.webchannel.core.WCMashupAction#invokeMashup(java.lang.String, org.w3c.dom.Element)
 	 */
-	@Override
+	
 	protected Element invokeMashup(String mashupId, Element populatedMashupInput) throws CannotBuildInputException, XMLExceptionWrapper {
 		if(null!=mashupId && mashupId.equals("orderApprovalList")){
 			setDateRangeFieldSearch(populatedMashupInput);
@@ -193,7 +484,7 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		populateShipToList(allMap);
 	}
 	
-	@Override
+	
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
 		Element orderApprovalElem = mashupInputs.get("orderApproval");
@@ -203,7 +494,7 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 			holdType.setAttribute("HoldType", XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL);
 		}
 		// TODO Auto-generated method stub
-		super.manipulateMashupInputs(mashupInputs);
+		manipulateMashupInputs(mashupInputs);
 	}
 	
 	
@@ -374,6 +665,180 @@ public class XPEDXOrderApprovalAction extends OrderApprovalAction {
 		this.approvalActionRequestUrl = approvalActionRequestUrl;
 	}
 	
-	
+	public Document getOutputDocument()
+	{
+    	return this.outputDoc;
+	}
+
+	public void setOutputDocument(Document outputDocument)
+	{
+		this.outputDoc = outputDocument;
+	}
+
+	public void setRequestMap(Map map)
+	{
+			this.paraValueMap = map;
+	}
+
+	public Map getRequestMap()
+	{
+			return this.paraValueMap;
+	}
+
+	public String getOrderByAttribute()
+	{
+        return orderByAttribute;
+	}
+
+	public void setOrderByAttribute(String orderByAttribute)
+	{
+        this.orderByAttribute = orderByAttribute;
+	}
+
+	public Boolean getIsLastPage() {
+		return isLastPage;
+	}
+
+	public void setIsLastPage(Boolean isLastPage) {
+		this.isLastPage = isLastPage;
+	}
+
+	public Integer getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(Integer pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+	public Boolean getIsFirstPage() {
+		return isFirstPage;
+	}
+
+	public void setIsFirstPage(Boolean isFirstPage) {
+		this.isFirstPage = isFirstPage;
+	}
+
+	public Boolean getIsValidPage() {
+		return isValidPage;
+	}
+
+	public void setIsValidPage(Boolean isValidPage) {
+		this.isValidPage = isValidPage;
+	}
+
+	public Integer getTotalNumberOfPages() {
+		return totalNumberOfPages;
+	}
+
+	public void setTotalNumberOfPages(Integer totalNumberOfPages) {
+		this.totalNumberOfPages = totalNumberOfPages;
+	}
+	public String getOrderDesc() {
+		return orderDesc;
+	}
+
+	public void setOrderDesc(String orderDesc) {
+		this.orderDesc = orderDesc;
+	}
+
+	public String getCreateTS(){
+		return createTS;
+	}
+	public void setCreateTS(String createTS) {
+		this.createTS=createTS;
+	}
+	public String getModifyTS(){
+		return modifyTS;
+	}
+	public void setModifyTS(String modifyTS) {
+		this.modifyTS=modifyTS;
+	}
+
+	public Date getDate(String dateStr){
+    	return new Date(dateStr);
+    }
+	public void setSfId(String sfId) {
+		this.sfId = sfId;
+	}
+
+	public String getSfId() {
+		return sfId;
+	}
+
+	public String getSearchFieldName()
+    {
+        return this.searchFieldName;
+    }
+    public void setSearchFieldName(String searchFieldName)
+    {
+        this.searchFieldName=searchFieldName;
+    }
+
+    public String getSearchFieldValue(){
+        return this.searchFieldValue;
+    }
+    public void setSearchFieldValue(String searchFieldValue)
+    {
+        this.searchFieldValue=searchFieldValue;
+    }
+	public Map getSearchList()
+    {
+        searchList.put("OrderNo", getText("approval.OrderNo"));
+        searchList.put("OrderOwner", getText("order.Owner"));
+        searchList.put("Approver", getText("approver"));
+        return this.searchList;
+    }
+
+    public List<String> getOUserList() {
+        return oUserList;
+    }
+
+    public List<String> getNameExp() {
+        return nameExp;
+    }
+
+    public List<String> getOOrderOwnerList() {
+        return oOrderOwnerList;
+    }
+
+    public List<String> getOOrderOwnerNameExp() {
+        return oOrderOwnerNameExp;
+    }
+
+    public boolean getIsApprover() {
+        return isApprover;
+    }
+
+
+
+    public void setIsApprover(boolean isApprover) {
+        this.isApprover = isApprover;
+    }
+
+    public String getApprovalHoldType() {
+        return approvalHoldType;
+    }
+
+    public void setApprovalHoldType(String approvalHoldType) {
+        this.approvalHoldType = approvalHoldType;
+    }
+
+    public List<String> getUserList() {
+        this.userList.add(wcContext.getCustomerContactId());
+        return userList;
+    }
+    public List<String> getUserNameExp() {
+        this.userNameExp.add("ApproverProxyUserId");
+        return userNameExp;
+    }
+
+    public String getOrderListReturnUrl() {
+        return orderListReturnUrl;
+    }
+
+    public void setOrderListReturnUrl(String orderListReturnUrl) {
+        this.orderListReturnUrl = orderListReturnUrl;
+    }
 	
 }
