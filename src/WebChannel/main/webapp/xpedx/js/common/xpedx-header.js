@@ -4603,7 +4603,7 @@ function validateOrderMultipleForMinicart()
 	arrItemID = document.getElementsByName("orderLineItemIDsMiniCart");
 	arrOrdMul =  document.getElementsByName("orderLineOrderMultipleMiniCart");
 	arrlineKeys = document.getElementsByName("lineKeys");
-	baseUOM = document.getElementsByName("itemUOMsMiniCart"); 
+	baseUOM = document.getElementsByName("BaseUOMs"); 
 	orderMultiple= document.getElementsByName("orderMultipleMiniCart");
 	for(var i = 0; i < arrItemID.length; i++)
 	{	
@@ -4634,7 +4634,8 @@ function validateOrderMultipleForMinicart()
 			    ordMul= 0
 			}		
 		if(ordMul != 0 && zeroError == false)
-		{	divIdError.innerHTML ="Please order in units of " +addCommaForMiniCart(arrOrdMul[i].value) +" "+baseUOM[i].value;
+		{	
+			divIdError.innerHTML ="Please order in units of " +addCommaForMiniCart(arrOrdMul[i].value) +" "+baseUOM[i].value;
 			divIdError.style.display = "inline-block"; 
 			divIdError.setAttribute("class", "error");
 			retVal=false;
