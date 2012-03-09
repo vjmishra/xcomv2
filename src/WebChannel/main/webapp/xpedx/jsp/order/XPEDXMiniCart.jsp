@@ -101,9 +101,9 @@
 	            <s:set name='orderLineExtn' value='#util.getElement(#orderLine, "Extn")'/>
 	            <s:set name='lineTotals' value='#util.getElement(#orderLine, "LineOverallTotals")'/>
 	            <s:set name='orderLineKey' value='#orderLine.getAttribute("OrderLineKey")'/>
-	            <s:hidden name="itemUOMsMiniCart" id="itemUOMsMiniCart_%{#orderLineKey}" value='%{#item.getAttribute("UnitOfMeasure")}'/>
 	            <s:set name="itemUOMs" value='%{#item.getAttribute("UnitOfMeasure")}'/>
-	            <%-- <s:set name='itemUOM' value='#item.getAttribute("UnitOfMeasure")'/>--%>
+	            <s:set name="BaseUOMs" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUOMs)' />
+				<s:hidden name="BaseUOMs" id="BaseUOMs_%{#orderLineKey}" value='%{#BaseUOMs}' /> 
 	            <s:if test='#isProcurementInspectMode'>
 	                <s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	                    <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
