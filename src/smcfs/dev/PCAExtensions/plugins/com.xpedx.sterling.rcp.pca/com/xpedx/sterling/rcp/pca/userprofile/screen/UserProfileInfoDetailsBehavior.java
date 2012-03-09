@@ -70,7 +70,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		setModel("GetCurrencyType",elemModel);
 	}
 	
-	public void getApprover(){
+	//Spending limit and currency type fields are made editable for all user irrespective of their role, according to the comment of Andrea. #JIRA 3409.
+	/*public void getApprover(){
 		
 		Element eleApprover = getModel("XPXCustomerContactIn");
 		Element eleBuyerApprover = YRCXmlUtils.getXPathElement(eleApprover, "/CustomerContact/User/UserGroupLists");
@@ -83,7 +84,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			getControl("comboCurrencyType").setEnabled(false);
 			getControl("txtSpendingLimit").setEnabled(false);
 		}
-	}
+	}*/
 	/*End- For Jira 3264 */
 	public void getUserGroupInfo(){
 		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
@@ -109,7 +110,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
-		this.getApprover();
+		//Commented for 3409		
+		//this.getApprover();
 	}
 
 	private void getDefaultShipToAddress() {
