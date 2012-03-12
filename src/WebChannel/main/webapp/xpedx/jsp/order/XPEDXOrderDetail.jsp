@@ -775,7 +775,6 @@ function showSplitDiv(divId)
 							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>	
 					    </p>
-					    sku map size is : <s:property value="%{skuMap.size()>0}"/>					    
 					    <s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
 			    			 
 			    			<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/>
