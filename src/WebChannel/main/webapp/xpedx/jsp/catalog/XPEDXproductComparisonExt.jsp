@@ -485,14 +485,14 @@ Ext.onReady(function(){
     var reader = new Ext.data.ArrayReader({},compSetDef);
 	var tmpl = new Ext.XTemplate(
 	'<table class="comparisonTable"><tbody>',
-		'<tr><td>',
+	/*'<tr><td>',
 			'<table class="buttonComp"><tr><td>',
-				'{[values.info[5]]}{[values.info[6]]}</td><td>',/*
+				'{[values.info[5]]}{[values.info[6]]}</td><td>',
 				'</td>',			
 			'</tr><tr><td>{[values.info[14]]}</td><td>&nbsp;</td></tr>',
-			'</tr><tr><td>{[values.info[7]]}</td><td>&nbsp;*/'</td></tr></table>',
+			'</tr><tr><td>{[values.info[7]]}</td><td>&nbsp;'</td></tr></table>',
 		'</td></tr>',
-		/* '<tr><td></td></tr>',			
+		 '<tr><td></td></tr>',			
 		'<tr class="bottomDottedLineComp">',
 			'<td><b>{[values.info[2]]}</b></td>',
 		'</tr>', 

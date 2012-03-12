@@ -9,7 +9,7 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />    
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
@@ -31,11 +31,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<!-- Lightbox/Modal Window -->
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />    
+
 <script type="text/javascript">
 $(document).ready(function() {
 	$(document).pngFix();
@@ -82,107 +78,7 @@ $(document).ready(function() {
 						</div>
 
 					</div>
-<%-- 					<table class="full-widths">
-						<tbody>
-							<tr>
-								<td colspan="2" class="no-border-right-user"></td>
-							</tr>
-							<tr>
-								<td colspan="2" valign="top"
-									class=" no-border-right-user access"><strong>Privacy Policy page. </strong><br /> 
-									All access policy subjected to change.these terms.  <br /> <br />
-								<br />
-								</td>
-							</tr>
-
-
-							<tr>
-								<td colspan="2" valign="top" class=" no-border-right-user">&nbsp;</td>
-							</tr>
-						</tbody>
-					</table> 
---%>
-					<br> &nbsp;</br>
-		<%-- 			<div class=WordSection1>
-					
-					<p class=MsoListParagraphCxSpFirst align=center style='margin-left:0in;
-					text-align:center'><b><span style='font-size:10.0pt;line-height:115%'>Legal
-					Recommendations for Links and Updates to Terms of Access/Privacy Policy/Sales
-					Terms </span></b></p>
-					
-					<p class=MsoListParagraphCxSpMiddle align=center style='margin-left:0in;
-					text-align:center'><b><span style='font-size:10.0pt;line-height:115%'>on
-					xpedx.com Website (NextGen)</span></b></p>
-					
-					<p class=MsoListParagraphCxSpLast align=center style='margin-left:0in;
-					text-align:center'><b><span style='font-size:10.0pt;line-height:115%'>5-13-11</span></b></p>
-					
-					<p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>1.            xpedx.com
-					(General Website access, prior to log-in to B2B site)</span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>a.     Links need to be available at the bottom of each page for
-					the Terms of Access and the Privacy Policy for anyone accessing the xpedx.com
-					site.  This functionality is currently available on xpedx.com.  No
-					functionality requiring acknowledgment/acceptance of these documents is
-					required at this “browser” (pre-login) level except as provided in the 1.c.
-					below.</span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>b.    In the event of an update to the Terms of Access or the
-					Privacy Policy under the direction and with the approval of the Legal
-					Department, it would be helpful to have the functionality to enable the links to
-					the documents to be notated for a six-month period with a “revised __/__/__” to
-					provide notice to the user that these documents have been updated.  This
-					notation would be removed after six months following each update.  A new
-					notation would be inserted, as appropriate, for subsequent updates.  </span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>c.     For any location in the pre-login portion of the site in
-					which personally identifiable information (name, address, email, etc.) is provided,
-					such as on a “Contact Us” page, we’d recommend that there be a statement prior
-					to the “submit” button as follows:</span></p>
-					
-					<p class=MsoListParagraph style='margin-top:0in;margin-right:.5in;margin-bottom:
-					10.0pt;margin-left:1.5in'><span style='font-size:10.0pt;line-height:115%'>“By
-					clicking the <b>submit</b> button below, the user accepts the terms of the
-					xpedx Privacy Policy available at [insert link to Privacy Policy] and agrees
-					that information submitted is subject to the Privacy Policy.” </span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>We’d need the ability to electronically retain “acceptance”
-					data (date, time, person accepting) for future reference.</span></p>
-					
-					<p class=MsoNormal><span style='font-size:10.0pt;line-height:115%'>2.            xpedx.com
-					B2B site (User login required) </span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>a.     On the first time a user logs in to the new B2B site,
-					the user should be automatically directed to the page containing the Terms of
-					Access, the Privacy Policy and the Conditions of Sale.   We understand that an
-					“accept” button will appear at the bottom of this document.   The user should not
-					be able to access the site without clicking the “accept” button.   The
-					“acceptance” data (date, time, person accepting) needs to be retained for
-					future reference.</span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>b.    In the event of a material change in the Terms of
-					Access, the Privacy Policy or the Conditions of Sale, functionality should be
-					available to trigger a “new” acceptance in accordance with 2.a.  The Legal
-					Department would be approving any such changes and will notify the NextGen
-					managers of the need to activate a “new” acceptance.</span></p>
-					
-					<p class=MsoNormal style='margin-left:.75in'><span style='font-size:10.0pt;
-					line-height:115%'>c.     On the order submission page, we’d recommend that
-					functionality be available to enable a link to the Sales Terms above the order
-					submission button.  Language above the submission button would read as follows:</span></p>
-					
-					<p class=MsoListParagraph style='margin-top:0in;margin-right:.5in;margin-bottom:
-					10.0pt;margin-left:1.5in'><span style='font-size:10.0pt;line-height:115%'>“The
-					order being submitting is subject to the Sales Terms set forth at [insert
-					link].”</span> </p>
-					
-					</div> --%>
+					<%-- Old Privacy Policy deleted per xpedx's request --%>
 					<div>
 						<span class="bold">PLEASE NOTE</span>: Our Privacy Policy has changed effective November 22, 2011. If you submitted personally identifiable information to us prior to the above effective date, and desire to opt out of having that previously submitted personally identifiable information from being treated under the new policy, please contact us at <a href="mailto:distribution.webmaster@ipaper.com">distribution.webmaster@ipaper.com</a>.<br/><br/>
 
@@ -204,10 +100,10 @@ $(document).ready(function() {
 						In some instances we may share your personally identifiable information with our co-promotional partners and others with whom we have marketing relationships. Except as provided in this Privacy Policy, our Terms of Access, or as disclosed when you submit the information, your personally identifiable information will not be shared or sold to any third parties without your prior approval. Further, you may opt-out from receiving future promotional information from us as set forth below.  <br/><br/>
 						<span class="bold">(2)  Non-Personally Identifiable Information</span>: We use non-personally identifiable information in a variety of ways, including to help analyze site traffic, understand customer needs and trends, carry out targeted promotional activities, and to improve our services. We may use your non-personally identifiable information by itself or aggregate it with information we have obtained from others. We may share your non-personally identifiable information with our affiliated companies and third parties to achieve these objectives and others, but remember that aggregate information is anonymous information that does not personally identify you.<br/><br/> 
 						<span class="bold">C.	COOKIES AND PREFERENCE BASED ADVERTISING </span><br/><br/>
-						<span class="bold">(a) Cookies and Web Beacons </span>: We automatically receive and store certain types of non-personally identifiable information whenever you interact with us. For example, like many websites, we use "cookies" and "web beacons" (also called “clear gifs” or “pixel tags”) to obtain certain types of information when your web browser accesses our Website.  "Cookies" are small files that we transfer to your computer's hard drive or your Web browser memory to enable our systems to recognize your browser and to provide convenience and other features to you, such as recognizing you as a frequent user of our Website. "Web beacons" are tiny graphics with a unique identifier, similar in function to cookies, and may be used to track the online movements of users, when an email has been opened, and to provide other information.<br/><br/> 
+						<span class="bold">(1) Cookies and Web Beacons </span>: We automatically receive and store certain types of non-personally identifiable information whenever you interact with us. For example, like many websites, we use "cookies" and "web beacons" (also called “clear gifs” or “pixel tags”) to obtain certain types of information when your web browser accesses our Website.  "Cookies" are small files that we transfer to your computer's hard drive or your Web browser memory to enable our systems to recognize your browser and to provide convenience and other features to you, such as recognizing you as a frequent user of our Website. "Web beacons" are tiny graphics with a unique identifier, similar in function to cookies, and may be used to track the online movements of users, when an email has been opened, and to provide other information.<br/><br/> 
 						Examples of the information we collect and analyze in this manner include the Internet protocol (IP) address used to connect your computer to the Internet; computer and connection information such as browser type and version, operating system, and platform; your behavior on our Website, including the URL you come from and go to next (whether this URL is on our site or not); and cookie number.  It is important to note that the cookies and Web beacons that we use do not contain and are not tied to personally identifiable information.<br/><br/> 
 						If you are concerned about the storage and use of cookies, you may be able to direct your internet browser to notify you and seek approval whenever a cookie is being sent to your Web browser or hard drive. You may also delete a cookie manually from your hard drive through your internet browser or other programs. Please note, however, that some parts of our Website will not function properly or be available to you if you refuse to accept a cookie or choose to disable the acceptance of cookies. <br/><br/>
-						<span class="bold">(b)  Preference Based Advertising </span>: We may now or in the future work with third parties, including third party advertising networks and website analysis firms, who use cookies and web beacons (also called “clear gifs” and “pixel tags”) to collect non-personally identifiable information when you visit our Website and third party sites. This non-personally identifiable information, collected through cookies and web beacons, is often used by these advertising networks to serve you with advertisements, while on third party sites, tailored to meet your preferences and needs.  For more information on how this type of advertising works, go to <a href="http://www.aboutads.info/consumers" class="underlink">www.aboutads.info/consumers</a>.<br/><br/>  
+						<span class="bold">(2)  Preference Based Advertising </span>: We may now or in the future work with third parties, including third party advertising networks and website analysis firms, who use cookies and web beacons (also called “clear gifs” and “pixel tags”) to collect non-personally identifiable information when you visit our Website and third party sites. This non-personally identifiable information, collected through cookies and web beacons, is often used by these advertising networks to serve you with advertisements, while on third party sites, tailored to meet your preferences and needs.  For more information on how this type of advertising works, go to <a href="http://www.aboutads.info/consumers" class="underlink">www.aboutads.info/consumers</a>.<br/><br/>  
 						If you do not wish to be served third party advertising via these third party advertising networks, please to <a href="http://www.aboutads.info/choices" class="underlink">www.aboutads.info/choices</a> and follow the simple opt-out process. A couple of important notes about this opt-out tool: (1) it includes all the advertising networks that we may work with, but also many that we do not work with; and (2) it may rely on cookies to ensure that a given advertising network does not collect information about you (“Opt-out Cookies”).  Therefore, if you buy a new computer, change web browsers or delete these Opt-out Cookies from your computer, you will need to perform the opt-out task again.<br/><br/>
 						<span class="bold">D.	OTHER USES & INFORMATION  </span><br/><br/>
 						<span class="bold">(1)  IP Addresses </span>: An IP address is a number that is automatically assigned to your computer whenever you are surfing the Internet. Web servers (computers that "serve up" web pages) automatically identify your computer by its IP address. When visitors request pages from our Website, our servers typically log their IP addresses. We collect IP addresses for purposes of system administration, to report non-personal aggregate information to others, and to track the use of our Website.  IP addresses are considered non-personally identifiable information and may also be shared as provided above.  It is not our practice to link IP addresses to anything personally identifiable; that is, the visitor's session will be logged, but the visitor remains anonymous to us. However, we reserve the right to use IP addresses to identify a visitor when we feel it is necessary to enforce compliance with our Website rules or to: (a) fulfill a government request; (b) conform with the requirements of the law or legal process; (c) protect or defend our legal rights or property, our Website, or other users; or (d) in an emergency to protect the health and safety of our Website’s users or the general public. <br/><br/>

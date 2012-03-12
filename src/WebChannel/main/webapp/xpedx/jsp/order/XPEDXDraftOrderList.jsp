@@ -189,7 +189,7 @@ function maxNewLength(field,maxlimit)
 	}
 	</script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="draftorderlist.title"/></title>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/draft-order-list.css'/>" />
+<%-- <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/draft-order-list.css'/>" /> --%>
 
 
 

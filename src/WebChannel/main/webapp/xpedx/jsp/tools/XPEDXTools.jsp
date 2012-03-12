@@ -8,6 +8,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
+<% request.setAttribute("isMergedCSSJS","true");  %>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
@@ -15,22 +16,7 @@
 
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-dan.css"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" /> commented for jira 1833-->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-dan.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/nav.css" />	
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
