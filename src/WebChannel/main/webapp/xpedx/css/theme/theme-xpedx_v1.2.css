@@ -5204,13 +5204,6 @@ tr:hover { /*background-color:#fcffd6;*/
 	margin-top: 10px;
 }
 
-.tool-bar-bottom-right#tool-bar {
-width:auto;
-float:right; 
-padding-top:10px; 
-margin-left:9px;
-}
-
 #table-avail-col {
 	text-align: left;
 	font-size: 11px;
@@ -5596,18 +5589,6 @@ table.catalog-row-five td img {
 .bold {
 	font-weight: bold;
 }
-
-.xpedx-light-box span.bold span{
-	font-weight: bold;
-	font-size: 12px;
-}
-
-.xpedx-light-box span.bold a{
-	font-weight: bold;
-	font-size: 11px;
-
-}
-
 
 .italic {
 	font-style: italic;
