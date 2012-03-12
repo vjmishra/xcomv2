@@ -100,7 +100,7 @@ body,a,form {
 /******************************************************************** BASE Styles */
 /******************************************************************** BASE Styles */
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 a.underlink:hover {
@@ -4060,9 +4060,9 @@ td .inner {
 	background-color: transparent;
 }
 
-#ext-gen5:hover {
+/* #ext-gen5:hover {
 background: #fff url(../../images/theme/theme-1/1x700_background.png)repeat-x scroll center top;
-}
+} */
 
 #ext-gen7:hover {
 	/* background-image: url(../../images/shape.svg_png?cssClass=submitBtnBg1BG&width=110&height=22&fillColor=%23bbbbbb&fillGradientType=t2b&outsideColor=%23ffffff&outsideOpacityPct=0&shadingStyle=sine&shadingLevelPct=98&borderWidth=1&borderColor=%23bbbbbb&curve=5);
@@ -4087,10 +4087,10 @@ background: #fff url(../../images/theme/theme-1/1x700_background.png)repeat-x sc
 	background-color: transparent;
 }
 
-#ext-gen5 {
+/* #ext-gen5 {
 	background: #fff url(../../images/theme/theme-1/1x700_background.png)repeat-x scroll center top;
 }
-
+ */
 #ext-gen7 {
 	/* adding dark bg for modal layour IW -  background-image: url(../../images/shape.svg_png?cssClass=submitBtnBg1BG&width=110&height=22&fillColor=%23bbbbbb&fillGradientType=b2t&outsideColor=%23ffffff&outsideOpacityPct=0&shadingStyle=sine&shadingLevelPct=98&borderWidth=1&borderColor=%23bbbbbb&curve=5);*/
 	background-color: transparent;
@@ -5520,9 +5520,8 @@ ul#prodlist,ul.prodlist {
 }
 
 .pagination span {
-	color: #000000;
+	color: #333;
 	font-size: 12px;
-	font-weight: bold;
 }
 span.pageresults a {
     font-size: 11px;
@@ -5908,7 +5907,6 @@ table.catalog-row-five td img {
 }
 
 #signon-table td.form-cell {
-	min-width: 200px;
 	padding: 0px 0px 0px 0px;
 	text-align: left;
 }
@@ -6944,7 +6942,7 @@ ul li a.grey-ui-btn span {
 /*end standard widths */
 
 .search-pagination-top {
-	color: #000000;
+	color: #333;
 	font-size: 11px;
 	text-align: right;
 	font-weight: bold;
@@ -6952,7 +6950,7 @@ ul li a.grey-ui-btn span {
 }
 
 .search-pagination-bottom {
-	color: #00000;
+	color: #333;
 	font-size: 11px;
 	text-align: right;
 	font-weight: bold;
@@ -7148,3 +7146,10 @@ table#mil-carts-list td.width-100 {
 	text-align: center;	
 }
 /* END bbridge updates */
+
+.return-request div.middle-section table td {
+	vertical-align: text-top;
+}
+.return-request div.middle-section div {
+	padding-top: 5px;
+}
