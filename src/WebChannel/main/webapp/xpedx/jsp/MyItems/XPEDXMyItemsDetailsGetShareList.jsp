@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 <div style="padding-left: 15; position: relative; display: block;"  id='divShareList_<s:property value="#randomId"/>_base' >
 	<s:set id="paginateDivID" name="paginateDivID" value="%{'divShareList_'+#randomId+'_base'}"/>
-	<input type="button" class="icon-minus"	style="vertical-align:middle;" value="" onclick="collapseTheDiv('<s:property value="#customerId"/>', 'divShareList_<s:property value="#randomId"/>_base', false, '<s:property value="#controlId"/>', '<s:property value="#customerPath"/>', '<s:property value="#name"/>', '<s:property value="#div"/>') " />
+	<input type="button" class="icon-minus"	style="vertical-align:middle;" value="" onclick="collapseTheDiv('<s:property value="#customerId"/>','<s:property value="#suffixType"/>','divShareList_<s:property value="#randomId"/>_base', false, '<s:property value="#controlId"/>', '<s:property value="#customerPath"/>', '<s:property value="#name"/>', '<s:property value="#div"/>') " />
 	<input type="checkbox" 	id="customerPaths_<s:property value="#controlId"/>" onclick="selectNode('<s:property value="#controlId"/>', this.checked);" name="customerPaths" value="<s:property value="#customerPath"/>" /> <s:property value="#name"/>
 	<div style="display: none;" >
 		<input type="checkbox" id="customerIds_<s:property value="#controlId"/>" name="customerIds" 	value="<s:property value="#customerId"/>">
@@ -81,6 +81,8 @@ $(document).ready(function() {
 
 	<s:iterator id="item" value='XMLUtils.getElements(#outDoc2, "Customer")'>
 		 <s:set name='id' 		value='#item.getAttribute("CustomerID")'/>
+		 <s:set name="extn" value='XMLUtils.getChildElement(#item, "Extn")'/>
+		 <s:set name='suffixType' value='#extn.getAttribute("ExtnSuffixType")'/>
 		 <!-- <s:set name='name' 	value='#item.getAttribute("name")'/> -->
 		 <s:set name='name' 	value='#item.getAttribute("CustomerID")'/>
 			<s:set name="suffixType" value="%{#customerSuffixTypeMap.get(#item.getAttribute('CustomerID'))}"/>
@@ -101,7 +103,7 @@ $(document).ready(function() {
 
 <s:if test="showRoot == 'true' ">
 		<div style="padding-left: 15px; position: relative; display: block;"  id='divShareList_<s:property value="#randomId"/>_base' >
-			<input type="button" class="icon-minus"  style="vertical-align:middle;" value="" onclick="collapseTheDiv('<s:property value="#customerId"/>', 'divShareList_<s:property value="#randomId"/>_base', false, '<s:property value="#controlId"/>', '<s:property value="#customerPath"/>', '<s:property value="#name"/>', '<s:property value="#div"/>') "/>
+			<input type="button" class="icon-minus"  style="vertical-align:middle;" value="" onclick="collapseTheDiv('<s:property value="#customerId"/>','<s:property value="#suffixType"/>', 'divShareList_<s:property value="#randomId"/>_base', false, '<s:property value="#controlId"/>', '<s:property value="#customerPath"/>', '<s:property value="#name"/>', '<s:property value="#div"/>') "/>
 			<input type="checkbox" 	id="customerPaths_<s:property value="#controlId"/>" onclick="selectNode('<s:property value="#controlId"/>', this.checked);" name="customerPaths" value="<s:property value="#customerPath"/>" /> 
 			<s:property value="#name"/>
 			<div style="display: none;" >
@@ -121,7 +123,7 @@ $(document).ready(function() {
 				<s:iterator id="item2" value='XMLUtils.getElements(#item, "CustomerList/Customer")' status="iterStatus">
 					<s:set name='id2' 		value='#item2.getAttribute("CustomerID")'/>
 					<s:set name='name2' 	value='#item2.getAttribute("CustomerID")'/>
-
+					<s:set name="extn2" value='XMLUtils.getChildElement(#item2, "Extn")'/>
 					<s:set name='name2' value="%{#displayCustomerMap.get(#id2)}" />	
 					<s:set name="suffixType" value="%{#customerSuffixTypeMap.get(#item2.getAttribute('CustomerID'))}"/>
 					<s:set name='type2' 	value='#item2.getAttribute("type")'/>
@@ -144,7 +146,7 @@ $(document).ready(function() {
 					
 					<div style="padding-left: <s:property value="#shipToDivPadding" />px; margin-bottom:5px; position: relative; display: block;"  id='divShareList_<s:property value="#randomId2"/>_base'>
 						<s:if test='%{#suffixType != #shipToCustomer}' >
-							<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getShareList('<s:property value="#customerId2"/>', 'divShareList_<s:property value="#randomId2"/>_base', false) " />
+							<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getShareList('<s:property value="#customerId2"/>','<s:property value="#suffixType"/>', 'divShareList_<s:property value="#randomId2"/>_base', false) " />
 						</s:if>
 						<input type="checkbox" 	id="customerPaths_<s:property value="#controlId2"/>"  onclick="selectNode('<s:property value="#controlId2"/>', this.checked);" name="customerPaths" value="<s:property value="customerPath2"/>" /> <s:property value="#name2"/>
 						<div style="display: none;" >
