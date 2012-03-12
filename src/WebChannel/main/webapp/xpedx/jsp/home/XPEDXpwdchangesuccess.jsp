@@ -143,8 +143,10 @@
 					    </s:elseif>
           			</tr>
           			<tr>
-              			<td colspan="3" class="grey no-border-right-user"width= "75%" style="float:left; margin-right: 10px;">
-              			<a href="<s:url action="login" namespace="/common"/>">Click Here to Login</a> 
+          			<% if(null != request.getParameter("requestId")){%>
+						<td colspan="3" class="grey no-border-right-user"width= "75%" style="float:left; margin-right: 10px;">
+              			<a href="<s:url action="login" namespace="/common"/>">Click Here to Login</a></td> <%}%>
+              			
                		</tr>
 					<tr>
               			<td colspan="3" class="grey no-border-right-user"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
