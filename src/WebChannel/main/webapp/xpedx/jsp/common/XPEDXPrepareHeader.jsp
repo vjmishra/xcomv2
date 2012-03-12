@@ -171,7 +171,7 @@ var selectedShipCustomer = null;
 		}		
 		//Load the list if it has not been loaded before.
 		//if (!isShareListLoaded){
-			getShareList(customerId, divMainId, showRoot);
+			getShareList(customerId,"", divMainId, showRoot);
 			isShareListLoaded = true;
 		//}		
 		if (clFromListId != undefined || clFromListId != null){
@@ -181,8 +181,7 @@ var selectedShipCustomer = null;
 			try{ console.log("From list id: " + clFromListId); }catch(ee){} ;
 		}
 	}
-	function collapseTheDiv(customerId, divId, showRoot, controlId, customerPath, name, div){
-
+	function collapseTheDiv(customerId, suffixtype,divId, showRoot, controlId, customerPath, name, div){
 		var isInputChecked = "";
 		var inputElem = $("div[id="+divId + "] input[id=customerPaths_"+controlId + "] ");
 		if(inputElem!=null)
@@ -191,7 +190,7 @@ var selectedShipCustomer = null;
 			isInputChecked = "checked";
 		
 		document.getElementById(divId).innerHTML = "";	
-		var newHTML = '<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getShareList(\'' + customerId + '\',\'' + divId + '\', false) " />';
+		var newHTML = '<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getShareList(\'' + customerId + '\',\'' + suffixtype + '\',\'' + divId + '\', false) " />';
 	    newHTML += '<input type="checkbox" 	id="customerPaths_' + controlId + '"  onclick="selectNode(\'' + controlId + '\', this.checked);" name="customerPaths" value="' + customerPath + '" '+isInputChecked+' /> ';
 		newHTML += name;
 		newHTML += '<div style="display: none;" >';
@@ -202,7 +201,7 @@ var selectedShipCustomer = null;
 		document.getElementById(divId).innerHTML = newHTML;
 	}
 	var selectSavedCustomers = false;
-	function getShareList(customerId, divId, showRoot){
+	function getShareList(customerId,suffixtype, divId, showRoot){
            //Init vars
 		   //showRoot will be set to true only from MIL details page on fancybox onStart getShareList
 		   //This is because we need to determine as we must show the saved customer selection only on first getShareList call
@@ -211,7 +210,7 @@ var selectedShipCustomer = null;
         	   selectSavedCustomers = true;
            }
     	   showRoot = null;   	   
-           <s:url id='getShareList' includeParams='none' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsGetShareList'/>
+           <s:url id='getShareList' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsGetShareList'></s:url> 
            if (showRoot == null){ showRoot = false; }           
            var isCustomerSelected = false;
            //Replace all '-' with '_'
@@ -222,6 +221,8 @@ var selectedShipCustomer = null;
 		   }		   
            var url = "<s:property value='#getShareList'/>";
            url = ReplaceAll(url,"&amp;",'&');
+           url=url+"&suffixtype="+suffixtype;
+           //alert(url);
            //Show the waiting box
            var x = document.getElementById(divId);
            x.innerHTML = "Loading data... please wait!";          
@@ -232,6 +233,7 @@ var selectedShipCustomer = null;
                    url: url,
                    params: {
                              customerId: customerId,
+                             suffixtype: suffixtype,
                              showRoot: showRoot
                    },
                    method: 'POST',
