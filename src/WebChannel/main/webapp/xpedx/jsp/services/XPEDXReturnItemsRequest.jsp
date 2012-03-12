@@ -3,31 +3,19 @@
 <%@ taglib prefix="swc" uri="swc"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<swc:html>
+<%-- <swc:html> --%>
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <!-- BEGIN head-calls -->
 <!-- Version 1.1 Updated 8-18-10 -->
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="../css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../css/global/swc.css" />
 
-
-<link type="text/css" href="../js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<link media="all" type="text/css" rel="stylesheet" href="../css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../css/theme/banner.css"/>
-
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie7.css" />
+<!-- BEGIN styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
-
-<!--[if gt IE 7]>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css" />
-<![endif]-->
+<!-- END styles -->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
@@ -36,18 +24,14 @@
 	src="<s:url value='../js/xpedx-returns-ui.js'/>"></script>
 <script type="text/javascript" src="../js/global/ext-all.js"></script>
 <script type="text/javascript" src="../js/global/validation.js"></script>
-<script type="text/javascript" src="../js/global/dojo.js"></script>
-<script type="text/javascript" src="../js/global/dojoRequire.js"></script>
+<%-- <script type="text/javascript" src="../js/global/dojo.js"></script>
+<script type="text/javascript" src="../js/global/dojoRequire.js"></script> --%>
 <script type="text/javascript" src="../js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="../js/catalog/catalogExt.js"></script> 
 <script type="text/javascript" src="../js/swc.js"></script>
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
-
-<!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="../js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../js/jcarousel/skins/xpedx/skin.css" />
 <script type="text/javascript" src="../js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
@@ -57,13 +41,10 @@
 <script type="text/javascript" src="../js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/demo.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../modals/checkboxtree/jquery.checkboxtree.css"/>
 <script type="text/javascript" src="../js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="../modals/checkboxtree/jquery.checkboxtree.js"></script>
+<%-- <script type="text/javascript" src="../modals/checkboxtree/jquery.checkboxtree.js"></script> --%>
 <script type="text/javascript" src="../js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="../js/quick-add/jquery-ui.min.js"></script>
-
+<%-- <script type="text/javascript" src="../js/quick-add/jquery-ui.min.js"></script> --%>
 <script type="text/javascript" src="../js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="../js/pseudofocus.js"></script>
 <script type="text/javascript" src="../js/global-xpedx-functions.js"></script>
@@ -72,10 +53,8 @@
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="../js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../js/fancybox/jquery.fancybox-1.3.1.js"></script>
-<link rel="stylesheet" type="text/css" href="../js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <!-- Page Calls -->
 <!-- END head-calls -->
-<link media="all" type="text/css" rel="stylesheet" href="../css/order/om2.css" />
 <!-- <title>Return Request Confirmation</title> -->
 <title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.RETN.GENERIC.TABTITLE"/> </title>
 
@@ -84,8 +63,10 @@ function reasonChange(me)
 {
 	var v = $(me).val();
 	var el = $(me).parents('table').find('textarea');
-	if (v == 'Other Reason')
+	if (v == 'Other Reason') {
 		el.show();
+		el.focus();
+	}
 	else
 		el.hide();
 }
@@ -158,7 +139,7 @@ function toggleFields (str, el)
 <s:set name="shipToCustomerDisplayStr" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#customerId)" />
 <%-- <s:set name="shipToCustomerDisplayStr" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#customerId)" /> --%>
 
-            <div class="container"> 
+            <div class="container return-request"> 
                <!-- breadcrumb -->
                <div id="breadcumbs-list-name">
                	<%-- <p><span class="page-title"> Return Request </span></p> --%>
@@ -185,11 +166,11 @@ function toggleFields (str, el)
 							<td>&nbsp; <!-- this row intentionally left blank --></td>
 					    </tr>
 
-					    <tr>
+					    <tr class="shipto-row">
 							<td>Ship-To: </td>
 							<td><s:property value='#shipToCustomerDisplayStr'/></td>
 						</tr>
-						<tr>
+						<tr class="shipto-row">
 							<td></td>
 							<td><s:if test="%{currentShipTo.firstName!='' || currentShipTo.middleName!='' || currentShipTo.lastName!=''}">
 								<s:if test="%{#currentShipTo.firstName!='' && #currentShipTo.firstName!= null}">
@@ -204,14 +185,14 @@ function toggleFields (str, el)
 								</s:if>
 							</td>
 						</tr>
-						<tr>
+						<tr class="shipto-row">
 							<td></td>
 							<td><s:if test="%{#currentShipTo.getOrganizationName()!='' && #currentShipTo.getOrganizationName()!= null}">
 									<s:property value='%{#currentShipTo.getOrganizationName()}' />
 								</s:if>
 								</td>
 						</tr>
-						<tr>
+						<tr class="shipto-row">
 							<td></td>
 							<td><s:if test="%{#currentShipTo.LocationID!='' && #currentShipTo.LocationID!= null}">
 									Local ID: <s:property value='%{#currentShipTo.locationID}' />
@@ -219,13 +200,13 @@ function toggleFields (str, el)
 							</td>
 						</tr>
 							<s:iterator value='%{#currentShipTo.addressList}' id='adressLine'>
-								<tr>
+								<tr class="shipto-row">
 									<td></td>
 									<td><s:property value='adressLine' />
 									</td>
 								</tr>
 							</s:iterator>
-						<tr>
+						<tr class="shipto-row">
 							<td></td>
 							<td><s:if test="%{#currentShipTo.city!=''}">
 									<s:property value='%{#currentShipTo.city}' />,<%-- &nbsp;--%>
@@ -306,14 +287,14 @@ function toggleFields (str, el)
 			<div id="" class="middle-section rounded-border rr-border" >
 			</s:else>
 		    <div style="">
-		    	<table class="full-width top-bottom-margin">
+		    	<table class="full-width">
 		    		<tr> 
-		    			<td rowspan="9" valign="top"> 
+		    			<td rowspan="9" valign="top" class="ie-fix-td"> 
 			    			<!--  begin short desc -->
 							<s:checkbox id="selectedItems[%{#orderLineStatIndex.index}]"
 						name="selectedItems[%{#orderLineStatIndex.index}]" fieldValue="%{#orderLineKey}"  onclick="return toggleFields('.disappear%{#orderLineStatIndex.index}', this);" />
 							</td>
-			    			<td rowspan="4" width="305" valign="top"> 
+			    			<td rowspan="4" width="305" valign="top" class="ie-fix-td"> 
 						<span class="short-description"><s:property	value='#showDesc' /></span>
 						<!-- end short desc -->
 						
@@ -504,4 +485,4 @@ function toggleFields (str, el)
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 
-</swc:html>
+<%-- </swc:html> --%>

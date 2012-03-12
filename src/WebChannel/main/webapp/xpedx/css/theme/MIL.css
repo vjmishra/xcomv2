@@ -5591,7 +5591,7 @@ input:focus, textarea:focus {
     width: 500px !important;
 }
 .form ul li {
-    margin-right: 6px;
+    margin-right: 5px;
 }
 .quick-add-form th.type-col {
     width: 69px;
@@ -6021,12 +6021,8 @@ tr:hover {
 	margin-top: 10px;
 }
 
-.tool-bar-bottom-right#tool-bar {
-width:auto;
-float:right; 
-padding-top:10px; 
-margin-left:9px;
-}
+
+
 
 #table-avail-col {
 	text-align:left;
