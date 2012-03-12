@@ -29,6 +29,7 @@
   		<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
 		<script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
 		<script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
+		<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 		<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
 		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 		<!-- END JS -->
