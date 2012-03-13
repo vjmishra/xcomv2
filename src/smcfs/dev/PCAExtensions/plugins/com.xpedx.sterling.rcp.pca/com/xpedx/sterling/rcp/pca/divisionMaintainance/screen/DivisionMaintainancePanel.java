@@ -728,7 +728,7 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 		lblWillCallInformation.setText("Will Call Information");
 		txtWillCallInformation = new Text(DataPnl,2048 | SWT.WRAP);
 		txtWillCallInformation.setData("name","txtWillCallInformation");
-		txtWillCallInformation.setTextLimit(255);
+		txtWillCallInformation.setTextLimit(1000);
 		this.setLayoutDateForControl(txtWillCallInformation, 270, 100);
 		
 		lblDeliveryInformation = new Label(DataPnl,SWT.None);
@@ -736,7 +736,7 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 		lblDeliveryInformation.setText("Delivery_Information");
 		txtDeliveryInformation = new Text(DataPnl,2048 | SWT.WRAP);
 		txtDeliveryInformation.setData("name","txtDeliveryInformation");
-		txtDeliveryInformation.setTextLimit(255);
+		txtDeliveryInformation.setTextLimit(1000);
 		this.setLayoutDateForControl(txtDeliveryInformation, 270, 100);
 		
 		lblDeliveryCutoffTime = new Label(DataPnl,SWT.None);
