@@ -6,6 +6,7 @@
 
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%><s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <s:set name='_action' value='[0]'/>
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />
 <s:set name='sdoc' value="outputDoc" />
@@ -17,24 +18,10 @@
 
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil-new.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/prod-details.css"/>
- 
+<!-- begin styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- end styles -->
 
 <!-- javascript -->
 
@@ -50,11 +37,6 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/quicklinks/xpedxCustomerQuickLinks.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
 
-<!-- carousel scripts css  -->
-
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<link rel="stylesheet" type="text/css" href="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/> 
 <!-- carousel scripts js   -->
 
 <script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
@@ -78,8 +60,6 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css'/>" media="screen" />
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
 <script type="text/javascript" src="../../xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../../xpedx/js/global-xpedx-functions.js"></script>
 <script src="<s:url value='/xpedx/js/SpryTabbedPanels.js'/>" type="text/javascript"></script> <!-- modified the path for jira 1833 -->

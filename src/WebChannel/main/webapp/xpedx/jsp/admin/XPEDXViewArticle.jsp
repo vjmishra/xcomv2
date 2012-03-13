@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld" %>
+<% request.setAttribute("isMergedCSSJS","true"); %>
 
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 
@@ -13,23 +14,11 @@
 <meta name="DCSext.w_x_news_fa" content="1" />
 <meta name="WT.ti" content="View Article">
 <!--Web trends tag end  -->
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.css" />
-
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/>
  
+<!-- begin styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- end styles -->
 
 <!-- javascript -->
 
@@ -40,11 +29,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
-
-<!-- carousel scripts css  -->
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
 
 <!-- carousel scripts js   -->
 
@@ -58,7 +42,6 @@
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-<script src="/swc/xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF --><script type="text/javascript" src="/swc/xpedx/js/xpedx-new-ui.js" language="javascript">
@@ -71,9 +54,6 @@
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
-
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 
 <script src="/swc/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
 <script type="text/javascript">

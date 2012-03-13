@@ -17,22 +17,12 @@
 	<%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
+ 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+ 	<!--[if IE]>
+		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/IE.css"/>
+	<![endif]-->
 	<s:if test="#isGuestUser != true">
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-	
-	   <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />  
-		<!--     <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> -->
-	    <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" /> --%>
-	<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-	    <%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" /> --%>
-	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
-	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />  --%>
 	    
-	 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/common/notes-list.css" />
-	    
-		<s:include value="../common/XPEDXStaticInclude.jsp"/>
 	
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 		
@@ -42,30 +32,18 @@
 		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 			<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
 		<!--<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>-->
-		<!-- carousel scripts css  -->
-		<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
-		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 		
 	    <!-- jQuery -->
 	    <!-- Page Calls -->
 		<!-- END head-calls.php -->
-	    <%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" /> --%>
 	</s:if>
 	<s:else>
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-		<s:include value="../common/XPEDXStaticInclude.jsp"/>
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
 	</s:else>
 	
-<!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css"/>
-<![endif]-->
- <!-- Lightbox/Modal Window -->
-	    <%--<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" /> --%> 
+
 	
     <s:set name="storefront"  value='wCContext.storefrontId'/>
     <s:if test="#isGuestUser == true">

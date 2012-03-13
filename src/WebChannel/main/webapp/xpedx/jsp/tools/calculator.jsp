@@ -122,8 +122,8 @@
                       <tr>
                         <td>&nbsp;</td>
                         <td><ul id="cart-actions">
-                          <li><a href="#" onclick="javascript:calc();" class="green-ui-btn"><span>Calculate</span></a></li>
                           <li><a class="grey-ui-btn" href="#" onClick="javascript:document.calculator.reset()"><span>Clear</span></a></li>
+                          <li><a href="#" onclick="javascript:calc();" class="green-ui-btn"><span>Calculate</span></a></li>
                         </ul></td>
                       </tr>
                       <tr >

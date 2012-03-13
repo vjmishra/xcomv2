@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en"
@@ -12,24 +13,9 @@
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 
-<s:include value="../../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil-new.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/prod-details.css"/>
- 
-<!-- jQuery -->
-<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MISC.css" />
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>

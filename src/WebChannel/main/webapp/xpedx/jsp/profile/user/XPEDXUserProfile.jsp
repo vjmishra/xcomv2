@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 <s:set name='ctxt' value="getWCContext()" />
@@ -21,40 +22,11 @@
 
 
 <!-- styles -->
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/global/global-1.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.min.css" />  commented for jira 1833 -->
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/global/ext-all.css" />
 
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/theme/xpedx-dan.css" />
-<link type="text/css"
-	href="../../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css"
-	rel="stylesheet" />
-	
-<s:include value="../../common/XPEDXStaticInclude.jsp"/>
-	
-<!-- 	sets up the min-height property in page -->
-	
-<link media="all" type="text/css" rel="stylesheet"
-	href="../../xpedx/css/theme/prod-details.css" />
-<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil.css" />
-<link media="all" rel="stylesheet" type="text/css"
-	href="../../xpedx/css/theme/xpedx-mil-new.css" />
+<!-- begin styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- end styles -->
 
 <!-- javascript -->
 <script type="text/javascript"
@@ -83,10 +55,6 @@
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript"
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<link media="all" type="text/css" rel="stylesheet"
-	href="<s:url value='../../xpedx/css/user/my-account.css'/>" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="<s:url value='../../xpedx/css/order/draft-order-list.css'/>" />
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/profile/profile.js'/>"></script>
 <script type="text/javascript"
@@ -107,13 +75,6 @@
 	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
-<link rel="stylesheet" type="text/css"
-	href="<s:url value='/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css'/>"
-	media="screen" />
-<link rel="stylesheet" type="text/css"
-	href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>"
-	media="screen" />
-
 <script type="text/javascript" 
 	src="../../xpedx/js/jquery.numeric.js"></script>
 <script type="text/javascript" 
@@ -131,18 +92,8 @@
 	namespace="/profile/user" />
 
 <s:set name="selectedTab" value="#request.selectedTab" />
-<link rel="stylesheet" type="text/css"
-	href="../../xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css"
-	media="screen" />
-<link rel="stylesheet" type="text/css"
-	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript"
 	src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="../../xpedx/css/modals/checkboxtree/demo.css" />
-<!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ie.css" />
-<![endif]-->
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
 <script src="../../xpedx/js/SpryTabbedPanels.js"
 	type="text/javascript"></script>
@@ -1146,8 +1097,6 @@ a.underlink:hover { text-decoration: underline !important; }
 
 </style>
 
-
-<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript"	src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 </head>
 <!-- END swc:head -->
@@ -1640,7 +1589,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			</div>
 
 			<div class="txt-small clearview"></div>
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb1" class="standard-table">
 			<tbody>
 				<tr class="table-header-bar">
 					<td width="35%" class="no-border-left table-header-bar-left"><span
@@ -1655,11 +1604,6 @@ a.underlink:hover { text-decoration: underline !important; }
 				</tr>
 				</tbody>			
 			</table>
-
-			<div id="table-bottom-bar" style="width: 100%;">
-			<div id="table-bottom-bar-L"></div>
-			<div id="table-bottom-bar-R"></div>
-			</div>
 			</td>
 		</tr>
 		<s:set name='custContactAddtnlAddress'
@@ -1845,13 +1789,13 @@ a.underlink:hover { text-decoration: underline !important; }
 				<label
 				title="Permitted to view invoices online."> 
 				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
-				value="true" disabled='%{#checkBoxDisable || #isDisabled}'/> View Invoices</label> 
+				value="true" disabled='%{#checkBoxDisable || #isDisabled}'/> <p class="float-right">View Invoices</p></label> 
 			</s:if>
 			<s:else>
 			 	<label
 				title="Permitted to view invoices online."> 
 				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
-				value="false" disabled='%{#checkBoxDisable || #isDisabled}'/> View Invoices</label> 
+				value="false" disabled='%{#checkBoxDisable || #isDisabled}'/> <p class="float-right">View Invoices</p></label> 
 			</s:else>
 			 	<label	title="Permitted to view prices."> 
 				<s:checkbox fieldValue="true" 
@@ -1860,7 +1804,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<label
 				title="Permitted to view reports."> <s:checkbox
 				name="viewReports" id="viewReports" fieldValue="true" 
-				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/> View Reports</label></td>
+				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/><p class="float-right"> View Reports</p></label></td>
 		</s:if>
 		<s:else><td colspan="3" class="no-border-right-user">			
 			<s:if test='%{isInUserGroup("BUYER-USER")}'>Buyer </s:if>
@@ -2058,7 +2002,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td class="no-border-right-user" colspan="3"><s:textfield
 				name='addressLine1_new' id='addressLine1_new'
 				value='%{#personInfo.getAttribute("AddressLine1")}'
-				id='addressLine1_new' cssClass="x-input" cssStyle="width:283px;"
+				id='addressLine1_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
 		</tr>
 		<tr>
@@ -2066,7 +2010,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td class="no-border-right-user" colspan="3"><s:textfield
 				name='addressLine2_new' id='addressLine2_new'
 				value='%{#personInfo.getAttribute("AddressLine2")}'
-				id='addressLine2_new' cssClass="x-input" cssStyle="width:284px;"
+				id='addressLine2_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
 		</tr>
 		<tr>
@@ -2074,7 +2018,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td colspan="3" class="no-border-right-user"><s:textfield
 				name='addressLine3_new' id='addressLine3_new'
 				value='%{#personInfo.getAttribute("AddressLine3")}'
-				id='addressLine3_new' cssClass="x-input" cssStyle="width:284px;"
+				id='addressLine3_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
 		</tr>
 		<tr>
@@ -2480,7 +2424,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			</div>
 
 			<div class="txt-small clearview"></div>
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb1" class="standard-table">
 			<tbody>
 				<tr class="table-header-bar">
 					<td width="35%" class="no-border-left table-header-bar-left"><span
@@ -2495,11 +2439,6 @@ a.underlink:hover { text-decoration: underline !important; }
 				</tr>
 				</tbody>			
 			</table>
-
-			<div id="table-bottom-bar" style="width: 100%;">
-			<div id="table-bottom-bar-L"></div>
-			<div id="table-bottom-bar-R"></div>
-			</div>
 			</td>
 		</tr>
 	</table>

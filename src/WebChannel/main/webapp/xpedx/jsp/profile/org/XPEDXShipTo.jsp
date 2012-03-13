@@ -5,7 +5,9 @@
 <%@ taglib prefix="s" uri="/struts-tags" %> 
 
 <%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%><s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
+<%@page import="java.util.HashMap"%>
+<% request.setAttribute("isMergedCSSJS","true"); %>
+<s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 <s:set name='_action' value='[0]'/>
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />
 <s:set name='sdoc' value="getOutputDoc().getDocumentElement()" />
@@ -23,28 +25,10 @@
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
-
-
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/global-1.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/swc.min.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/home/home.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/home/portalhome.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/catalog/narrowBy.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/catalog/catalogExt.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/styles.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/ext-all.css'/>" />
-<s:include value="../../common/XPEDXStaticInclude.jsp"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-mil.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-mil-new.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/ster/css/theme/xpedx-mil-new.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-forms.css'/>"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-quick-add.css'/>"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/prod-details.css'/>"/>
-
-
- 
+<!-- begin styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- end styles -->
 
 <!-- javascript -->
 
@@ -56,11 +40,6 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/theme/theme-1/theme.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/catalog/catalogExt.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
-
-<!-- carousel scripts css  -->
-
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/js/jcarousel/skins/xpedx/theme.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/js/jcarousel/skins/xpedx/skin.css'/>" />
 
 <!-- carousel scripts js   -->
 
@@ -75,7 +54,6 @@
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js'/>" type="text/javascript" charset="utf-8"></script>
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js'/>" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="<s:url value='/xpedx/other_libs/excanvas_r3/excanvas.js'/>" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.bt.min.js'/>" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF --><script type="text/javascript" src="<s:url value='/xpedx/js/xpedx-new-ui.js'/>" language="javascript">
@@ -89,12 +67,8 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css'/>" media="screen" />
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
-
 <script type="text/javascript" src="/swc/xpedx/js/jquery.numeric.js"></script> 
 
-<script src="<s:url value='/xpedxjs/SpryTabbedPanels.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(document).pngFix();
@@ -185,7 +159,7 @@ ul.checkboxTree li
 <div id="main-container">
   <div id="main">
   	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-  	<div class="container">
+  	<div class="container ship-to">
       <!-- breadcrumb -->
       <div id="mid-col-mil">
     <%--   <div id="searchBreadcrumb"><a href="%{#adminProfile}"><s:text name="admin.title" /></a> / <a href="#"><s:text name="admin.customerprofile.title" /></a> / <span class="breadcrumb-inactive"><s:text name="admin.shipto.title" /></span> 
@@ -207,7 +181,7 @@ ul.checkboxTree li
         	 <table class="form" width="100%" border="0" cellspacing="0" cellpadding="0">
    	 			 <tr>
 				    <td width="10%" class="no-border-right">Attention:&nbsp;
-				    	<span class="float-right" style="margin-right:90px"><a href="#">
+				    	<span class="float-right help"><a href="#">
 			   	 			<img src="../../xpedx/images/icons/12x12_grey_help.png" border="0" title="Approved Ship-To locations which cannot be edited online. If data is incorrect or a new Ship-To needs to be setup, please call your CSR." style="display:inline;"></a>
 			   	 		</span>
 				    </td>

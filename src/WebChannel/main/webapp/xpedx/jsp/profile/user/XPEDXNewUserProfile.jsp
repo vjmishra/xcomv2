@@ -12,65 +12,16 @@
 <s:set name='manageOrgResId'
 	value='"/swc/profile/ManageOrganizationProfile"' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<%@ taglib prefix="s" uri="/struts-tags"%>
 	<head>
-	<!-- styles -->
-	<!-- styles -->
-<%-- 	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/global-1.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/swc.min.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/home/home.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/home/portalhome.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/catalog/narrowBy.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/catalog/catalogExt.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/styles.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/ext-all.css" />
+	<!-- begin styles. -->
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+	<!-- end styles -->
 	
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/global/swc.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-dan.css"/>
-	<link type="text/css" href="../../xpedx/ster/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/theme-xpedx_v1.2.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/ster/css/theme/prod-details.css" />
-	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil.css" />
-	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/ster/css/theme/xpedx-mil-new.css" /> --%>
-	
-	<!-- javascript -->
-<%-- 	<script type="text/javascript" src="../../xpedx/ster/js/global/ext-base.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/global/ext-all.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/global/validation.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/common/ajaxValidation.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/global/dojo.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/global/dojoRequire.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/theme/theme-1/theme.js"></script> --%>
-	
-<%-- 	<script type="text/javascript" src="../../xpedx/ster/js/catalog/catalogExt.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/swc.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/pngFix/jquery.pngFix.pack.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../xpedx/ster/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript"></script> --%>
-	
-		<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/global-1.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.min.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/home.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/portalhome.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/narrowBy.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/catalogExt.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/styles.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/ext-all.css" />
-	
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/swc.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-dan.css"/>
-	<link type="text/css" href="../../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/theme-xpedx_v1.2.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/prod-details.css" />
-	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil.css" />
-	<link media="all" rel="stylesheet" type="text/css" href="../../xpedx/css/theme/xpedx-mil-new.css" />
 	
 	<!-- javascript -->
 	<script type="text/javascript" src="../../xpedx/js/global/ext-base.js"></script>
@@ -91,11 +42,6 @@
 	<script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript"></script>
 	
 	
-	<!-- carousel scripts css  -->
-	
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-	
 	<!-- carousel scripts js   -->
 	
 	<script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
@@ -108,7 +54,6 @@
 	
 	<!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 	<script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../../xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 	<!--[if IE]><script src="../../xpedx/js/jquery-tool-tip/other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 	<script src="../../xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 	<!-- /STUFF -->
@@ -116,18 +61,11 @@
 	<!-- Facy Box (Lightbox/Modal Window -->
 	<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 	<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
-	<link rel="stylesheet" type="text/css" href="../../xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="../../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 	<script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../xpedx/css/modals/checkboxtree/demo.css"/>
 	<script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
-	<script src="../../xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
     <script src="../../xpedx/js/sorting.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="checkboxtree/demo.css"/>
-	<link rel="stylesheet" type="text/css" href="checkboxtree/jquery.checkboxtree.css"/>
-	<script type="text/javascript" src="checkboxtree/jquery.checkboxtree.js"></script>
 	
 	<script type="text/javascript">
 	
@@ -238,12 +176,7 @@
 	});		
 </script>
 	
-	<style type="text/css"> 
-	.checkboxTree input[type=checkbox]{visibility:hidden;display:none; }
-	</style>
-	
 	<!-- Facy Box (expand and collpse Modal Window -->
-	<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 	<title><s:property value="wCContext.storefrontId" /> / Add New User Profile</title>
 	</head>
 	
@@ -299,7 +232,7 @@
 			                    				<div  class="question">
 				                      				<ul>
 				                        				<li> User Type:</li>
-				                        				<li> <a href="#" id="purposeofmails-u1"><img src="../../xpedx/images/icons/12x12_grey_help.png" width="16" height="16" alt="One or more roles may be assigned to each user. Hover over each role to see more details." title="One or more roles may be assigned to each user. Hover over each role to see more details." border="0" /></a></li>
+				                        				<li> <a href="#" id="purposeofmails-u1"><img src="../../xpedx/images/icons/12x12_grey_help.png" width="12" height="12" alt="One or more roles may be assigned to each user. Hover over each role to see more details." title="One or more roles may be assigned to each user. Hover over each role to see more details." border="0" /></a></li>
 				                      				</ul>
 			                    				</div>
 			                    			</td>
@@ -322,7 +255,7 @@
 							                    </label>
 							                    <label id="purposeofmails-u7" title="Permitted to view invoices online.">
 							                    	<s:checkbox name="viewInvoices" id="viewInvoices"/>
-							                      	View Invoices
+							                      	<p class="float-right">View Invoices</p>
 							                    </label> 
 							                    <label id="purposeofmails-u8" title="Permitted to view prices.">
 							                    	<s:checkbox name="viewPrices" id="viewPrices"/>
@@ -330,7 +263,7 @@
 							                    </label> 
 							                    <label id="purposeofmails-u9" title="Permitted to view reports.">
 							                    	<s:checkbox name="viewReports" id="viewReports"/>
-							                      	View Reports
+							                      	<p class="float-right">View Reports</p>
 							                    </label>
 											</td>
 			                  			</tr>
@@ -398,7 +331,7 @@
 						                    	<s:select
 												tabindex="20" name="country_new" id="country_new"
 												emptyOption="true"
-												list='#wcUtil.getCountryCodeList()' cssClass="x-input" cssStyle="width: 190px;"/></td>
+												list='#wcUtil.getCountryCodeList()' cssClass="x-input" cssStyle="width: 198px;"/></td>
 										</tr>
 						                <tr >
 						                    <td class="no-border-right-user">Phone:</td>

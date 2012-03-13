@@ -859,7 +859,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	<s:set name="myPriceValue" value="%{'false'}" />
 	
     <table class="mil-top-border" border="0px solid red" class="float-right">
-	   <tr>
+	   <tr  class="table-header-bar">
 		<td class="text-right white table-header-bar-left" > My Price (<s:property value='#currencyCode'/>) </td>
 		<td class="text-right white pricing-border mill-container-extended-pricing table-header-bar-right" > Extended Price (<s:property value='#currencyCode'/>) &nbsp;</td>
 	   </tr>
