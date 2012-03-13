@@ -242,6 +242,16 @@ function setTotalPrice(val){
 			}, {
 				paging: { pageSize: 10 }
 });
+	$("#adjustmentsLightBox").fancybox({
+		'titleShow'			: false,
+		'transitionIn'		: 'fade',
+		'transitionOut'		: 'fade',
+		'titlePosition' : 'inside',
+		'transitionIn' : 'none',
+		'transitionOut' : 'none',
+		//added for clearing the copycart name and copycartdescription fields							
+	});
+
 $('#po_combo_input').attr("maxlength","22");
 $('#po_combo_input').attr("name","po_combo_input");
 $('#po_combo_input').attr("value","<s:property value='custmerPONumber'/>");
@@ -1297,7 +1307,7 @@ from session . We have customer Contact Object in session .
 						value='%{true}' /> <s:url id='deleteUrlId' action="deleteCoupon" />
 					<s:url id='addCouponUrlId' action="xpedxaddCoupon" />
 					<%-- <b><font color="red"><s:property value="couponOperationError" /></font></b> --%>
-					 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
+					 <div id="msgForCouponCode" style="display: none;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
 			
 					</div>
 				</s:if>
@@ -1483,10 +1493,12 @@ from session . We have customer Contact Object in session .
 <s:url id='updateNotesURLid' namespace='/order'
 	action='xpedxOrderSummaryModifyLineNotes' />
 <s:a id='updateNotesURL' href='%{#updateNotesURLid}' />
-
-<swc:dialogPanel title='' isModal="true" id="adjustmentsLightBox">
-	<div class="adjustment-body"></div>
-</swc:dialogPanel>
+<div style="display: none;">
+<div id="adjustmentsLightBox1"  style="width:600px;height:200px;overflow:auto;">
+	<div class="adjustment-body" id='adjustment-body'></div>
+</div>
+</div>
+<a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 
 <div class="hidden-data"><s:url id='submitOrderURLid'
 	namespace='/order' action='saveOrderSummary' /> <s:a

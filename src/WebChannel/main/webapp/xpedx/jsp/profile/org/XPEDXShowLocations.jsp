@@ -18,7 +18,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.css" />
 
 <script type="text/javascript">
 //<!--

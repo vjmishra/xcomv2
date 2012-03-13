@@ -574,3 +574,20 @@ div#table-bottom-bar {
 	text-align:center
 }
 
+table.sheet-density ul#cart-actions {
+	margin-left: 52px;
+}
+
+table.roll-weight ul#cart-actions  {
+ 	margin-left: 219px;
+}
+table.paper-calc ul#cart-actions  {
+ 	margin-left: 165px;
+}
+.form ul li {
+    margin-right: 10px;
+}
+
+table.pages-inch #cart-actions li {
+	margin-left: 3px;
+}

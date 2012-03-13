@@ -76,7 +76,7 @@ To find the approximate weight of a roll multiply roll diameter squared minus co
             
            <form name="eform" method="post" action="sc_papcalcrollwt.aspx" id="eform" class="formborder">
             
-               <table style="width:600px;" class="form">
+               <table style="width:600px;" class="form roll-weight">
                     <tbody>
                       
                         <tr>
@@ -97,7 +97,7 @@ To find the approximate weight of a roll multiply roll diameter squared minus co
                         </tr>
                         <tr>
                           <td>Factor:&nbsp;</td>
-                          <td class="padding8"><select name="factor" style="width:100px;"  size="1" id="factor" class="TextField"> <option selected="selected" value="">Select factor :</option> <option value=".018">Antique - 
+                          <td class="padding8"><select name="factor" size="1" id="factor" class="TextField"> <option selected="selected" value="">Select factor :</option> <option value=".018">Antique - 
                           .018</option> <option value=".020">Vellum Offset - .020</option> 
                           <option value=".021">Bond - 
                           .021</option> <option value=".022">Smooth Offset - .022</option> 
@@ -110,8 +110,7 @@ To find the approximate weight of a roll multiply roll diameter squared minus co
                           .032</option></select></td>
                         </tr>
                         <tr>
-                          <td>&nbsp;</td>
-                          <td> 
+                          <td colspan="2">
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li> Changes done for jira 1538-->
                            <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>    
                             </ul>

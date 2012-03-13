@@ -1612,7 +1612,7 @@ function showSharedListForm(){
                                 <ul class="hvv">
                                     <li>
                                         <label>Item Type</label>
-										<s:select name="itemType" cssStyle="width:75px;" headerKey="1" list="skuTypeList" listKey="key" listValue="value"/>
+										<s:select name="itemType" cssStyle="width:100px; margin-left: 0px;" headerKey="1" list="skuTypeList" listKey="key" listValue="value"/>
                                     </li>
                                     <li>
                                         <label>Item #</label>
@@ -1636,7 +1636,7 @@ function showSharedListForm(){
 											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=" "></s:textfield>
 										</li>
 									</s:if>
-									<li>
+									<li class="nomarginright">
 										<label>&nbsp;</label>
 										<input type="image"
 											src="/swc/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"

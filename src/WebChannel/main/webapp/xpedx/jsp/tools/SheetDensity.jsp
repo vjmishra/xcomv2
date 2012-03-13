@@ -37,7 +37,6 @@
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF -->
@@ -82,7 +81,7 @@
             
             	<form name="eform" method="post" action="sc_papcalcoddnumshee.aspx" id="eform" >
             
-               <table style="width:600px;" class="form">
+               <table style="width:600px;" class="form sheet-density">
                     <tbody>
                       
                         <tr>
@@ -96,10 +95,10 @@
                           <td><input name="caliper" type="text" style="width:80px;" onkeyup="calcPhone('Value',eform.caliper);" class="x-input" id="caliper" /></td>
                         </tr>
                         <tr>
-                          <td>&nbsp;</td>
-                          <td> 
-                            <ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
-                                
+                          <td colspan="2">
+                            <ul id="cart-actions">
+                            	<li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
+                            	<li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>
                             </ul>
                          </td>
                         </tr>

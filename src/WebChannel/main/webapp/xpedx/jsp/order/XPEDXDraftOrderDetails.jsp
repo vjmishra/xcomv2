@@ -102,6 +102,15 @@ $(document).ready(function () {
     	'onClosed'	: function(){$("#copyCartName").val('');$("#copyCartDescription").val(''); $("#otherCartActions").val('None'); }
     						
     });
+    $("#adjustmentsLightBox").fancybox({
+		'titleShow'			: false,
+		'transitionIn'		: 'fade',
+		'transitionOut'		: 'fade',
+		'titlePosition' : 'inside',
+		'transitionIn' : 'none',
+		'transitionOut' : 'none',
+		//added for clearing the copycart name and copycartdescription fields							
+	});
 });
 
 
@@ -2304,9 +2313,12 @@ var currentAadd2ItemList = new Object();
 	</div> --%>
 <s:include value="modals/XPEDXCopyCartModal.jsp" />
 
-<swc:dialogPanel title='' isModal="true" id="adjustmentsLightBox">
-	<div class="adjustment-body"></div>
-</swc:dialogPanel>
+<div style="display: none;">
+<div id="adjustmentsLightBox1"  style="width:600px;height:200px;overflow:auto;">
+	<div class="adjustment-body" id='adjustment-body'></div>
+</div>
+</div>
+<a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a> 
 
 <div class="hidden-data"><s:if test='!#isProcurementUser'>
 	<s:a id='checkoutURL' href='%{#checkoutURLid}' />

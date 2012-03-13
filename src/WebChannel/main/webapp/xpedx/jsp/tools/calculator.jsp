@@ -34,7 +34,6 @@
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF --><script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript">
@@ -75,37 +74,37 @@
                 <div class="clearview">&nbsp;</div>
                 
                 <form name="calculator">
-                  <table style="width:600px;" class="form">
+                  <table style="width:600px;" class="form paper-calc">
                     <tbody>
                       <tr>
                         <td>Page width: </td>
-                        <td><input name="pagew" type="text" style="width:80px;" onkeyup="calcPhone('Value',calculator.pagew);" class="x-input align-right" id="pagew" /></td>
+                        <td><input name="pagew" type="text" onkeyup="calcPhone('Value',calculator.pagew);" class="x-input width-80" id="pagew" /></td>
                       </tr>
                       <tr>
                         <td>Page height: </td>
-                        <td><input name="pageh" type="text" style="width:80px;" class="x-input align-right" id="pageh" onkeyup="calcPhone('Value',calculator.pageh);"/></td>
+                        <td><input name="pageh" type="text" class="x-input width-80" id="pageh" onkeyup="calcPhone('Value',calculator.pageh);"/></td>
                       </tr>
                       <tr>
                         <td>Number of pages: </td>
-                        <td><input name="pages" type="text" style="width:80px;" class="x-input align-right" id="pages" onkeyup="calcPhone('Value',calculator.pages);"/></td>
+                        <td><input name="pages" type="text" class="x-input width-80" id="pages" onkeyup="calcPhone('Value',calculator.pages);"/></td>
                       </tr>
                       <tr>
                         <td>Number of pieces: </td>
-                        <td><input name="pieces" type="text" style="width:80px;" class="x-input align-right" id="pieces" onkeyup="calcPhone('Value',calculator.pieces);"/></td>
+                        <td><input name="pieces" type="text" class="x-input width-80" id="pieces" onkeyup="calcPhone('Value',calculator.pieces);"/></td>
                       </tr>
                       <tr>
                         <td>Waste: </td>
-                        <td><input name="waste" type="text" style="width:80px; text-align:right" class="x-input align-right" onkeyup="calcPhone('Value',calculator.waste);" id="waste" />
+                        <td><input name="waste" type="text" class="x-input width-80" onkeyup="calcPhone('Value',calculator.waste);" id="waste" />
                           <strong>% </strong></td>
                       </tr>
                       <tr>
                         <td>Basis weight: </td>
-                        <td><input name="weight" type="text" style="width:80px;" class="x-input align-right" id="weight" onkeyup="calcPhone('Value',calculator.weight);" /></td>
+                        <td><input name="weight" type="text" class="x-input width-80" id="weight" onkeyup="calcPhone('Value',calculator.weight);" /></td>
                       </tr>
                       <tr>
                         <td>Basis size: </td>
                         <td><span class="no-border-left">
-                          <select style="width:80px;" 
+                          <select>
 																																	name="size" id="size">
                             <option  selected="selected" value="">Select size</option>
                             <option value="374">17x22</option>
@@ -120,8 +119,7 @@
                         </span></td>
                       </tr>
                       <tr>
-                        <td>&nbsp;</td>
-                        <td><ul id="cart-actions">
+                        <td colspan="2"><ul id="cart-actions">
                           <li><a class="grey-ui-btn" href="#" onClick="javascript:document.calculator.reset()"><span>Clear</span></a></li>
                           <li><a href="#" onclick="javascript:calc();" class="green-ui-btn"><span>Calculate</span></a></li>
                         </ul></td>
