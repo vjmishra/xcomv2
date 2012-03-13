@@ -823,7 +823,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY,custPrefcategory);
 					if(custPrefcategory.equalsIgnoreCase("CJ"))
 					{	
-						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Facility Supplies");
+						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "FacilitySupplies");
 					} else if (custPrefcategory.equals("CG"))
 					{
 						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "Graphics");
