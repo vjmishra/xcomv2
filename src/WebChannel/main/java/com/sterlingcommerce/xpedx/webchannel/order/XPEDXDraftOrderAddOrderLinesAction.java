@@ -46,6 +46,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		orderedProductDescs = new ArrayList();
 		orderedProductUOMs = new ArrayList();
 		orderedProductDefaultUOMs = new ArrayList();
+		quickAddOrderMultiple =  new ArrayList();
 		orderedProductClasses = new ArrayList();
 		isEditNewline=new ArrayList();
 		changeOrderOutputDoc = null;
@@ -403,7 +404,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				{
 					originalItemId = itemEl.getAttribute("ItemID");
 					//Added For Jira 3481 orderMultiple variable
-					String orderMultiple = itemEl.getAttribute("OrderMultiple");
+					String orderMultiple = (String)getQuickAddOrderMultiple().get(i);
 					//Checking condition For Jira 3481
 					if(itemMapObj !=null )
 					{
@@ -804,6 +805,19 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	protected ArrayList errorList;
 	protected String isEditOrder="false";
 	protected ArrayList isEditNewline;
+	//Adding ArrayList quickAddOrderMultiple FOr Jira 3481
+	protected ArrayList quickAddOrderMultiple;
+	
+
+
+	public ArrayList getQuickAddOrderMultiple() {
+		return quickAddOrderMultiple;
+	}
+
+	public void setQuickAddOrderMultiple(ArrayList quickAddOrderMultiple) {
+		this.quickAddOrderMultiple = quickAddOrderMultiple;
+	}
+
 	/**
 	 * @return the errorList
 	 */
