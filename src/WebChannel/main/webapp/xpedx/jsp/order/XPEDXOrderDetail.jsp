@@ -10,36 +10,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
-<%
-  		request.setAttribute("isMergedCSSJS","true");
-  	  %>
+<%request.setAttribute("isMergedCSSJS","true");%>
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />  
-<!--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> jira 2128 -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/prod-details.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />--%>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-<%--  Moved narrowBy.css to catalogExt.css
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" /> --%>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css"/>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />--%>
-<%-- <link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" /> --%>
-<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/demos/demos.css" rel="stylesheet" />
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />--%>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/checkout.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order.css" />
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" />  --%>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 
 <!-- javascript -->
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -54,23 +30,7 @@
 <script type="text/javascript" src="../xpedx/js/swc.js"></script>
 <script type="text/javascript" src="../xpedx/js/common/ajaxValidation.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-
---><!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/shipping-option.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/draft-order-list.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/shopping-cart-detail.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/order/order-adjustment.css" />
-<link media="all" type="text/css" rel="stylesheet"
-	href="../xpedx/css/common/email/email.css" />
-
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-
-
-<!--<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script>
@@ -80,24 +40,15 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
---><%-- <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> --%>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
---><link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
-<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-
---><!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.datepicker.js"></script>
--->  
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.datepicker.js"></script>
 <!-- Facy Box (Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>-->
-<%-- <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" /> --%>
-
-<!-- carousel scripts css  -->
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" /> --%>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/hp-carousel.css" />
 
 <!-- Page Calls -->
 <!-- END head-calls.php -->
@@ -684,7 +635,7 @@ function showSplitDiv(divId)
 						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
 					</s:if>
 					<s:else>
-						<td class="text-right" width="125">&nbsp;</td>
+						<td class="text-right white" width="125">&nbsp;</td>
 					</s:else>
 	    			<td class="text-right white table-header-bar-right" width="120">Extended Price (<s:property value='%{currencyCode}'/>)</td>
 	    		</tr>
@@ -1167,7 +1118,7 @@ function showSplitDiv(divId)
 								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                       	</s:if>
 	                       	<s:else>
-	                		   		 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
+	                		   		 &nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
 	                		</s:else>											
 						</td>
 					</tr>
@@ -1178,7 +1129,7 @@ function showSplitDiv(divId)
 								href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
 								tabindex="<s:property value='%{#tabIndex}'/>"> <span
 								class="nowrap underlink">
-		             		    <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span></a>
+		             		    &nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span></a>
 						</td>
 					</tr>
 					<tr>
@@ -1188,7 +1139,7 @@ function showSplitDiv(divId)
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                       		</s:if>
 	                      		<s:else>
-	                		    		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+	                		    		&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 	                			</s:else>					
 							
 						</td>

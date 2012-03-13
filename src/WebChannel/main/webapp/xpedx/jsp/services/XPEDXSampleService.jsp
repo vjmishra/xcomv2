@@ -6,7 +6,7 @@
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 
-
+<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html>
 <head>
@@ -15,26 +15,9 @@
 <script type="text/javascript" src="/swc/xpedx/js/ext-all.js"></script>
 
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/>
-
-
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/js/jcarousel/skins/xpedx/theme.css'/>"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/js/jcarousel/skins/xpedx/skin.css'/>" />
+<!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
 
 
@@ -617,11 +600,7 @@
 			}
         	
 </script>
-<style>
-.only-left-border {
-	border-right:none;
-}
-</style>
+
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
     		    This is to avoid a defect in Struts that?s creating contention under load. 
     		    The explicit call style will also help the performance in evaluating Struts? OGNL statements. --%>
@@ -656,14 +635,13 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
+<script type="text/javascript" src="/swc/xpedx//js/fancybox/jquery.fancybox-1.3.1.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window -->
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript"	src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript"	src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css"	href="/swc/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css"	media="screen" />
-<link rel="stylesheet" type="text/css"	href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script src="/swc/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
 <script type="text/javascript" 
 	src='/swc/xpedx/js/jquery.numeric.js'> </script>
@@ -708,7 +686,6 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 	
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Services' /></title>
-<link href="/swc/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet"	type="text/css" />
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">

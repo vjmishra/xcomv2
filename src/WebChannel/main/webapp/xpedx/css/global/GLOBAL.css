@@ -4247,7 +4247,7 @@ table.catalog-row-five td img {
     min-height: 194px;
 }
 #signon-table td.form-cell {
-    min-width: 200px;
+    min-width: 250px;
     padding: 0;
     text-align: left;
 }
@@ -4839,7 +4839,7 @@ div.mini-cart-header tr {
 	/* border-collapse: separate !important;	 */
 }
 /* Create the left rounded corner. */
-.standard-table tr.last td.left-cell, .standard-table tr:last-of-type td:first-child {
+.standard-table tr.last td.left-cell, .standard-table tbody tr:last-of-type td:first-child {
     border-radius: 0 0 0 5px;
 }
 /* Create the right rounded corner */

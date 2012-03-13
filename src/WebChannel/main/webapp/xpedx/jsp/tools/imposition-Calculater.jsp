@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
+<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -10,22 +11,8 @@
 
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/global/ext-all.css" />
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-mil-new.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/xpedx-quick-add.css"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/css/theme/prod-details.css"/>
- 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
 <!-- javascript -->
 
@@ -36,11 +23,6 @@
 <script type="text/javascript" src="../../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="../../xpedx/js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="../../xpedx/js/catalog/catalogExt.js"></script>
-
-<!-- carousel scripts css  -->
-
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../../xpedx/js/jcarousel/skins/xpedx/skin.css" />
 
 <!-- carousel scripts js   -->
 

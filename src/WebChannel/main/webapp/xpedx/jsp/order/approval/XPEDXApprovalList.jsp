@@ -2,30 +2,17 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <swc:html>
 <head>
 
 
 <!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
-
-<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/>
-
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7.css" />
-<![endif]-->
-
-<!--[if gt IE 7]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -42,7 +29,6 @@
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
 <script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
@@ -53,9 +39,6 @@
 <script type="text/javascript" src="../xpedx/js/common/ajaxValidation.js"></script>
 
 
-<!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -65,8 +48,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
@@ -77,18 +58,14 @@
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" />
 
 
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.APPROVALS.GENERIC.TABTITLE"/></title>
 
-<script type="text/javascript" src="../swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
 <script type="text/javascript">
@@ -232,11 +209,6 @@
 		}
 
 </SCRIPT>
-<style>
-div.demo {
-	padding:4px;
-}
-</style>
 
 <s:set name='_action' value='[0]'/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -257,7 +229,6 @@ div.demo {
 	    <s:param name="searchFieldName" value="%{searchFieldName}"/>
 	    <s:param name="searchFieldValue" value="%{searchFieldValue}"/>
 	 </s:url>
-	<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/approval.css'/>" />
 	<script type="text/javascript">
 	function openNotePanel(id, actionValue,orderHeaderKey){
 		document.forms["approval"].elements["ReasonText"].value = "";

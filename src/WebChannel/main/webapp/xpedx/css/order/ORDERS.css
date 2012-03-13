@@ -652,7 +652,7 @@ padding:0px;
 
 td input.x-input
 {
- margin:3px;	
+ margin-right:8px;	
 }
 
 a.grey-ui-btn 
@@ -1420,7 +1420,7 @@ table#checkout-po-tbl td.first-cell-second-row span { margin-bottom: 3px; }
 div.checkout div.short-description { margin-left: 15px; }
 table#checkout-table-header { width:100%; }
 div.checkout #checkout-table-header td { width: auto; padding-top: 10px 0px;}
-div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:30px; float: left;}
+div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:30px; float: left; margin-top: -25px;}
 div.checkout .cart-summary { padding-right:0px; }
 div.checkout #po_combo_ctr { margin-left: 38px; }
 div.checkout #po_combo_ctr div {margin:0px; border-color:#cccccc;}
@@ -1435,7 +1435,7 @@ font-size:12px;
 }
 .email-textarea{width:370px;}
 p.email-list-prop { padding-left:5px; width: 224px; word-wrap:break-word; float:left;margin-top: -2px;}
-input#input-prop { float: left; }
+input#input-prop { float: left; margin: 0px; }
 textarea#newEmailAddr { height:30px;  width: 360px; }
 .-padding-right-0 { padding-right: 0px; }
 table#textboxes td.second-cell { padding-left: 15px; }
@@ -1468,3 +1468,22 @@ table#QuickAddTable tr.error-row td{
 form#productDetailForm {
 	float: left;
 	}
+div.orders-page a.grey-ui-btn {
+    margin-right: 4px;
+}
+div.orders-page table#top-section {
+	margin-top: 0px;	
+	padding-top: 0px;	
+}
+.mil-col-mil-div {
+    padding: 10px;
+}
+div.demo {
+	padding:4px;
+}
+div.wc-table-header { color: white;  width:978px;  margin: 0 0 -17px 11px; }
+div.wc-btn-bar {margin-left: 20px; width: 96.7%;}
+div.wc-btn-bar a.grey-ui-btn { float:right; }
+div.wc-btn-bar a.float-left { float:left; }
+div.wc-table-header td { border: 0px; padding: 10px 5px; background-color:#039;}
+#QuickAddTable td input { width: 92%; }
