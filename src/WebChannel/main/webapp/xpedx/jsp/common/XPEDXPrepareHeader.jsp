@@ -36,7 +36,6 @@
 	</s:if>
 	<s:else>
 		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
@@ -2093,6 +2092,14 @@ function callAjaxForSorting(url,divId)
 		        </li>
 				<!-- Close Welcome Message Block -->
 			</s:if>
+			<s:else>
+				<li style="border-right: none;">&nbsp;</li>
+				<li> &nbsp; </li>
+				<li><a
+					href="<s:url action="login" namespace="/common" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
+					tabindex="2006">Sign In</a>
+				</li>	
+			</s:else>
 	   	</s:if>
 	   	<s:else>
 	   		<li><a href="<s:url action="getUserInfo" namespace="/profile/user" includeParams='none'/>"

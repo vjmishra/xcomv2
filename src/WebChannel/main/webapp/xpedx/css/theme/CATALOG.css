@@ -902,6 +902,8 @@ ul
 .normal-view #item-ct dd .ddesc, .mini-view #item-ct dd .ddesc
 {
 	font-weight: bold;
+	width: 165px;
+    word-wrap: break-word;
 }
 .normal-view #item-ct dd { min-height: 230px; }
 /* .normal-view #item-ct dd .descriptions { height: 11.2em; }

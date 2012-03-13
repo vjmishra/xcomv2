@@ -17353,6 +17353,24 @@ Ext.onReady(function() {
 	//$("div.mil-wrap-condensed-container:odd").css("background-color", "#fafafa");
 	//$("div.mil-wrap-condensed-container:even").css("background-color", "#fff");
 	
+	/*
+	 * BEGIN Alternate shorten function for long descriptions
+	 */
+	
+	$('.prodlist ul li, #prodlist ul li ').each(function() {
+		var html = $(this).html();
+		var shortHTML = html.substring(0, 25);
+		if( html.length > shortHTML.length )
+		{
+			$(this).html(shortHTML);
+			$(this).append('...');	
+			$(this).attr('title', html );
+		}
+	});
+	
+	/*
+	 * END Alternate shorten function for long descriptions
+	 */
 	
 	$("#OrderSummaryForm_rushOrdrFlag").click( function() {
 		$("#OrderSummaryForm_SpecialInstructions").focus();

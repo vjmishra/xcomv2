@@ -569,3 +569,8 @@ div#table-bottom-bar {
 	padding-left: 5px;
 }
 
+.equivalent #mil-list-new td {
+	padding: 5px;
+	text-align:center
+}
+

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld" %>
-
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <s:set name='_action' value='[0]' />
 <s:set name="xutil" value="XMLUtils" />
 
@@ -13,34 +13,6 @@
 <!-- Webtrends Tag starts -->
 <Meta name="WT.ti" Content='<s:text name="tools.newsmaintenance.title" />'>
 <!-- Webtrends Tag stops --> 
-<style type="text/css">
-
-.feildsets {
-	-moz-border-radius:4px 4px 4px 4px;
-	border:1px solid #D3D3D3;
-	padding-left:5px;
-}
-.feildsets legend {
-	color:#999999;
-	font-size:11px;
-	font-style:italic;
-	margin-left:7px;
-	padding:0 3px;
-}
-.feild-service {
-	-moz-border-radius:4px 4px 4px 4px;
-	border:1px solid #D3D3D3;
-	margin-right:15px;
-	padding-left:5px;
-}
-.feild-service legend {
-	color:#003366;
-	font-size:14px;
-	font-weight:bold;
-	margin-left:7px;
-	padding:0 3px;
-}
-</style>
 
 <%-- <title><s:text name="tools.newsmaintenance.title" /></title> --%>
 <title><s:property value="wCContext.storefrontId" /> -  <s:text name='MSG.SWC.NEWSARTL.LISTALL.GENERIC.TABTITLE' /> </title>
@@ -49,26 +21,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 
-<!--  style for sorting is in this css -->
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-
-<!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/prod-details.css"/>
-
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/prod-details.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" />
+<!-- begin styles. -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- end styles -->
 
 <!-- jQuery Base & jQuery UI -->
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
@@ -81,25 +37,22 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 
-<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-<script src="/swc/xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF -->
 <!-- Lightbox/Modal Window -->
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!-- Added for sorting Arun 3-31 -->
 
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
 
 <s:url id="delArticleURL" namespace="/profile/user" action="xpedxDeleteArticle"  />
 </head>
-<swc:extDateFieldComponentSetup/>
-
+<%-- <swc:extDateFieldComponentSetup/>
+ --%>
 <script type="text/javascript">
 	
     function swc_validateForm_addArticle() {

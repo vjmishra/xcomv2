@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%request.setAttribute("isMergedCSSJS","true");%>
 
 <s:set name="wcCtx" value="WCContext" />
 <s:set name="RememberMeRule"
 	value="#wcCtx.getWCAttribute('RememberMeRule')" />
 <s:set name='sfid' value='wCContext.storefrontId'/>
-		
+<head>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+</head>
 <table id="signon-table">
 		<tr>
 			<td class="promo-cell" rowspan="2"  colspan="3">
