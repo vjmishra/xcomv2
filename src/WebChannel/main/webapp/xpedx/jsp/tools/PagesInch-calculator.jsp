@@ -38,7 +38,6 @@
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- /STUFF -->
@@ -76,18 +75,19 @@
             
           <form name="eform" method="post" action="sc_PapCalcppinch.aspx" id="eform" class="formborder">
             
-               <table style="width:600px;" class="form">
+               <table style="width:600px;" class="form pages-inch">
                     <tbody>
                       
                         <tr>
-                          <td>&nbsp;Caliper:</td>
-                          <td width="385"> 
-                          
-                          <input name="caliper" type="text" style="width:120px;" onkeyup="calcPhone('Value',eform.caliper);" class="x-input" id="caliper" /></td>
+                          <td>&nbsp;Caliper:
+                         	 <input name="caliper" type="text" onkeyup="calcPhone('Value',eform.caliper);" class="x-input nofloat width-120" id="caliper" /> 
+                          </td>
+                          <td>
+                         	 <p class="caliper-text">(Must be entered as a decimal. Example: 0.010.)</p>
+                          </td>
                         </tr>
                         <tr>
-                          <td>&nbsp;</td>
-                          <td > 
+                          <td colspan="2">
 			<!-- Changes done for jira 1538 -->
 			 <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>
                             <!--<ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li> -->

@@ -120,6 +120,20 @@ input#newSearch_searchTerm {
     margin-left: 3px;
 }
 
+div div.searchbox-1 input {
+	height: 15px !important;	
+	margin-top: -3px !important;
+	margin-right: 2px;
+}
+
+div div.searchbox-1.auth input {	
+	margin-top: 1px !important;
+	margin-right: 2px;
+} 
+
 .return-request div.middle-section table td.ie-fix-td {
 	padding-top: 7px !important; 
+}
+#tips-container {
+	margin-top: 4px;	
 }

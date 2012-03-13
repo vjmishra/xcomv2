@@ -578,6 +578,7 @@ var selectedShipCustomer = null;
 				closeText:		'<img src="/swc/xpedx/images/icons/12x12_charcoal_x.png" title="Close" />',
 				delayedClose:	false /* 5000 */
 		});
+		$('a#inline').fancybox();
 		$('.mini-cart-trigger').click(function() {
 			var a = 'display: block; position: absolute; width: 435px; top: 55px; right:' + ($(window).width()-1000)/2 +'px;';
 			$('#cluetip').attr("style",a);
@@ -1893,13 +1894,16 @@ function callAjaxForSorting(url,divId)
     <!-- Close Customer Block -->   
 	  <s:url id='newCatSearch' action='newSearch' namespace='/catalog' >
 	  </s:url>
-	  <div  class="searchbox-1">
+	  <div  class="searchbox-1 auth">
 	   <s:form name='newSearch' action='newSearch' namespace='/catalog'>
 	   		<s:hidden name='path' id='path' value="/" />
 			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
 	        	type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
 	                            onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+		    <div id="tips-container">
+		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
+		    </div>
 	    </s:form>
 	    <!-- END wctheme.form-close.ftl --> 
 	  </div>
@@ -2094,7 +2098,7 @@ function callAjaxForSorting(url,divId)
 			</s:if>
 			<s:else>
 				<li style="border-right: none;">&nbsp;</li>
-				<li> &nbsp; </li>
+				<li> &nbsp;&nbsp;&nbsp;&nbsp; </li>
 				<li><a
 					href="<s:url action="login" namespace="/common" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006">Sign In</a>
@@ -2485,10 +2489,10 @@ function callAjaxForSorting(url,divId)
 		     <p>		     
 		       <span class="bold">
 		         <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	         		Shopping for : 
+	         		Shopping for: 
 	       		</s:if>
 	      		 <s:else>
-	        		 Orders for :
+	        		 Orders for:
 	       		</s:else>	     
 		       </span>
 		       <s:property   value='LoggerInUserCustomerName' />, 
@@ -2508,3 +2512,21 @@ function callAjaxForSorting(url,divId)
     </s:if>
 </s:if>
 <!-- end ship to banner -->
+
+<!-- begin search tips -->
+<div style="display: none;">
+	<div id="searchTips">
+		<h2>Search Tips</h2>
+		<p>You can use special characters such as the asterisk (*) and ? when performing an advanced search.</p>
+		<ul>
+			<li>
+				<p>The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters. For example, "Comput*" can be used to search for products containing words such as "computing systems", "computing power", "computational device", and so on.</p>
+				<p>Note: Using the asterisk (*) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABC123 as the Product ID, you cannot provide *C123 as the search term. However, you can search for the product using AB* as the search term.</p>
+			</li>
+			<li>
+				<p>The question mark (?) can be used in search terms as a substitute for exactly one unknown alphanumeric character. Note: Using the question mark (?) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. However, you can search for the product using AB?D as the search term.</p>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- end search tips -->

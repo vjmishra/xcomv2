@@ -241,10 +241,9 @@ function sendEmail(emailAction) {
 	function displayLightbox(sourceClassName) {
 			var d = Ext.DomQuery.selectNode("."+sourceClassName);
 			var e = Ext.DomQuery.selectNode(".adjustment-body");
-
+			document.getElementById("adjustment-body").value=d.innerHTML;
 			e.innerHTML = d.innerHTML;
-			svg_classhandlers_decoratePage();
-			DialogPanel.show("adjustmentsLightBox");
+			$('#adjustmentsLightBox').trigger('click');
 	}
 //End of orderAdjustment.js
 	
