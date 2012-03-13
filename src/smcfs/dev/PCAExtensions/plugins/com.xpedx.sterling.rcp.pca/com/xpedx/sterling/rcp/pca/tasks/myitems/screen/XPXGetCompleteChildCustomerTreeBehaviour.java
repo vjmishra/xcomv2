@@ -34,8 +34,8 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		super(ownerComposite, formId);
 		this.formId = formId;
 		this.page = (XPXGetCompleteChildCustomerTree) ownerComposite;
-		String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
-		setFieldValue("txtCustName", custName);
+		//String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
+		//setFieldValue("txtCustName", custName);
 		searchCustomers();
 	}
 
