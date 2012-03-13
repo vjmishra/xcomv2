@@ -102,6 +102,16 @@ function addProductsToOrder()
 			}
 		 }
 		 if(!isError){	// no error, then submit to add the products to the cart
+			 for(var i=0 ; i < QuickAddElems.length ; i++)
+			 {
+				var orderMultiple1 = encodeForHTML(QuickAddElems[i].orderMultiple);
+				if(orderMultiple1 == undefined || orderMultiple1.replace(/^\s*|\s*$/g,"") =='' || orderMultiple1 == null || orderMultiple1 ==0)
+				{
+					orderMultiple1=1;
+				}//Added createHiddenField method on the fly for ordermultiple for Jira 3481
+				
+				createHiddenField("QuickAddForm","quickAddOrderMultiple",orderMultiple1);
+			 }
 			 document.QuickAddForm.action = document.getElementById('addProductsToOrderURL');
 			 var form= Ext.get("QuickAddForm");
 			 addCSRFToken(form.dom, 'form');
@@ -112,6 +122,19 @@ function addProductsToOrder()
 		 }
     }
 }
+//Added createHiddenField method on the fly for ordermultiple for Jira 3481
+function createHiddenField(formName,hidName,value)
+{
+var doc = document;
+var f = doc.getElementById(formName);
+// create/insert new
+var el = doc.createElement("input");
+el = f.appendChild(el);
+el.name = hidName;
+el.type = "hidden";
+el.value = value;
+}
+
 function resetQuantityErrorForQuckAdd()
 {
 	for(var i=0 ; i < QuickAddElems.length ; i++)
@@ -171,7 +194,7 @@ function update()
 
 function validateOrderMultiple()
 {
-	 //resetQuantityErrorMessage();
+	 resetQuantityErrorMessage();
 	var arrQty = new Array();
 	var arrUOM = new Array();
 	var arrItemID = new Array();
@@ -201,7 +224,6 @@ function validateOrderMultiple()
 		{
 			qtyElement.style.borderColor = "";
 		}
-		
 		if(arrOrdMul[i].value == 0 || arrOrdMul[i].value == null || arrOrdMul[i].value == undefined)
 		{
 			arrOrdMul[i].value=1;
@@ -214,8 +236,7 @@ function validateOrderMultiple()
 			    ordMul= 0
 			}		
 		if(ordMul != 0 && zeroError == false)
-		{
-			divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+		{	divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
 			divIdError.style.display = "inline-block"; 
 			divIdError.setAttribute("class", "error");
 			retVal=false;
