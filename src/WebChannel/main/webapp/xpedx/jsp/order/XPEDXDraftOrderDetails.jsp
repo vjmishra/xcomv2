@@ -1815,7 +1815,7 @@ var currentAadd2ItemList = new Object();
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 			  		</s:if>						  
 				  	<s:else>
-				    	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
+				    	&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
 				  	</s:else>					
 						  
 				<%--</s:else>
@@ -1831,7 +1831,7 @@ var currentAadd2ItemList = new Object();
 				</s:if>
 				<s:else>
 					--%>
-				
+				&nbsp;
 			  	    <a
 						href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
 						tabindex="<s:property value='%{#tabIndex}'/>"> <span
@@ -1854,7 +1854,7 @@ var currentAadd2ItemList = new Object();
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 				  </s:if>					
 					<s:else>
-							<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />																			
+							&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />																			
 					</s:else>					
 			<%-- </s:else>
 				

@@ -2,49 +2,17 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%
-  		request.setAttribute("isMergedCSSJS","true");
-  	  %>
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <swc:html>
 <head>
 <!-- styles -->
-
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-order-list.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-ext.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/common/xpedx-jquery-header.css" />
-
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
-<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
-<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<%--<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/><%-- 12 occur --%>
-
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/ORDERS.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/ie.css" />
 <![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<%--
-<!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/theme.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
-<!-- carousel scripts js   -->
-<%-- <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> --%>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/demo.css"/><%-- 10 occur --%>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/><%-- 12 occur --%>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" /><%-- 13 occur --%>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/om2.css" /><%-- 6 occur --%>
-<%-- <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" /><%-- 25 occur --%>
-
-<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRLIST.GENERIC.TABTITLE"/></title>
 <%--
 <script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 
@@ -52,11 +20,13 @@
  --%>
  <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
  <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
- 
  <%--
  <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
  --%>
+ 
+<title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRLIST.GENERIC.TABTITLE"/></title>
+ 
 <script type="text/javascript">
 $(function() {
 		$(".datepicker").datepicker({
@@ -385,21 +355,42 @@ function printPOs(customerPos) {
 						  sortDirection="%{orderDesc}" down="Y" up="N"
 						  urlSpec="%{#orderListSortURL}">
 	    	<table class="search-table standard-table">
-	    		<thead>
-	    			<tr id="top-bar">
-	    				<th class="table-header-bar-left " style="min-width: 10em;">
+	    			<tbody>
+							<tr class="table-header-bar">
+								<td class="table-header-bar-left " style="min-width: 10em;">
 						<swc:sortable fieldname="%{'ExtnWebConfNum'}">
-						<span style="color:white" class="underlink">Web&nbsp;Confirmation </span></swc:sortable>
-						</th>
-	    				<th style="min-width: 5.5em;" ><span style="color:white">Order&nbsp;#</span></th>
-	    				<th style="min-width: 9.5em;"><swc:sortable fieldname="%{'CustomerPoNo'}"><span style="color:white" class="underlink"> PO # </span></swc:sortable></th>
-	    				<th style="min-width: 6em;"><swc:sortable fieldname="%{'OrderDate'}"><span class="underlink" style="color:white">Ordered</span></swc:sortable> </th>
-	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
-	    				<th style="min-width: 9.3em;" ><swc:sortable fieldname="%{'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
-	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
-	    				<th style="min-width: 10.7em;" class="table-header-bar-right"><span style="color:white">Status</span></th>
+										<span style="color: white" class="underlink">Web&nbsp;Confirmation
+										</span>
+									</swc:sortable></td>
+								<td style="min-width: 5.5em;">
+									<span style="color: white">Order&nbsp;#</span>
+								</td>
+								<td style="min-width: 9.5em;"><swc:sortable
+										fieldname="%{'CustomerPoNo'}">
+										<span style="color: white;" class="underlink"> PO # </span>
+									</swc:sortable></td>
+								<td style="min-width: 6em;"><swc:sortable
+										fieldname="%{'OrderDate'}">
+										<span class="underlink" style="color: white;">Ordered</span>
+									</swc:sortable></td>
+								<td style="min-width: 7em;"><swc:sortable
+										fieldname="%{'ExtnOrderedByName'}">
+										<span class="underlink" style="color: white;">Ordered&nbsp;By
+										</span>
+									</swc:sortable></td>
+								<td style="min-width: 9.3em;"><swc:sortable
+										fieldname="%{'ExtnShipToName'}">
+										<span class="underlink" style="color: white;">Ship-To</span>
+									</swc:sortable></td>
+								<td style="min-width: 8em;"><swc:sortable
+										fieldname="%{'ExtnTotalOrderValue'}">
+										<span class="underlink" style="color: white;">Amount
+										</span>
+									</swc:sortable></td>
+								<td style="min-width: 10.7em;" class="table-header-bar-right"><span
+									style="color: white">Status</span>
+								</td>
 	    			</tr>
-	    		</thead>
 	    		<%-- 
 	            <s:set name="parentOrderList" value="#util.getElements(#sdoc, '//Page/Output/OrderList/Order')"/>
 	            --%>

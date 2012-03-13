@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-
+<%request.setAttribute("isMergedCSSJS","true");%>
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <s:set name='_action' value='[0]'/>
@@ -22,18 +22,10 @@
 <meta name="WT.ti" content='<s:text name="draftorderlist.title"/>'/>
 <!-- Webtrends tag stops -->
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
-<!-- <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.min.css" /> commented for jira 2128-->
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/narrowBy.css" />
 
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/ext-all.css" />
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-mil.css" />
+<!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 
 <!-- jQuery Base & jQuery UI -->
 <script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
@@ -50,7 +42,6 @@
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 
-<link type="text/css" href="../xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
 <script src="../xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script><!-- jira 2128 path modified -->
@@ -60,15 +51,6 @@
 <!-- Lightbox/Modal Window -->
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/banner.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/mil-quick-add-large.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/theme/xpedx-mil.css" />
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/shopping-cart.css" />
 
 <script type="text/javascript">
 
@@ -189,9 +171,6 @@ function maxNewLength(field,maxlimit)
 	}
 	</script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="draftorderlist.title"/></title>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/order/draft-order-list.css'/>" /> --%>
-
-
 
 <s:url id="draftOrderListSortURL" action="draftOrderList" >
     <s:param name="orderByAttribute" value="'{0}'"/>

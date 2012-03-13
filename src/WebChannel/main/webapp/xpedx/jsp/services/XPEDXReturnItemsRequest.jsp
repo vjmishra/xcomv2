@@ -2,11 +2,11 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<%-- <swc:html> --%>
+<% request.setAttribute("isMergedCSSJS","true"); %>
+<swc:html> 
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
-<% request.setAttribute("isMergedCSSJS","true"); %>
+
 <!-- BEGIN head-calls -->
 <!-- Version 1.1 Updated 8-18-10 -->
 
@@ -485,4 +485,4 @@ function toggleFields (str, el)
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 
-<%-- </swc:html> --%>
+</swc:html>
