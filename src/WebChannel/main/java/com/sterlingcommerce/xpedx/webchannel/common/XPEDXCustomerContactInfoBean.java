@@ -29,6 +29,14 @@ public class XPEDXCustomerContactInfoBean {
     private String personInfoEmailID;
     private String addEmailID;  //JIRA 3382
   
+  // Added for JIRA 3589 - Performance : XPEDXMyItemsGetShareListAction
+    private String extnSuffixType = "";
+    public String getExtnSuffixType() {
+		return extnSuffixType;
+	}
+	public void setExtnSuffixType(String extnSuffixType) {
+		this.extnSuffixType = extnSuffixType;
+	}
 	//Start- Code added to fix XNGTP 2964	
     private String msapExtnUseOrderMulUOMFlag;    
 		public XPEDXCustomerContactInfoBean() {
