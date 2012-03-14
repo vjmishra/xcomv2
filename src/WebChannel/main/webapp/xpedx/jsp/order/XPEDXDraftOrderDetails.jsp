@@ -2072,7 +2072,21 @@ var currentAadd2ItemList = new Object();
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
 	         <!-- Light Box --><div style=" height:202px; width:995px; overflow:auto;  border:1px solid #CCCCCC;">
+		<script type="text/javascript">
+		Ext.onReady(function(){		
 
+			/* Begin long desc. shortener */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+		</script>
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
 		<!--  hide in case of one item  -->

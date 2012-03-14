@@ -8,6 +8,10 @@
 	value="#wcCtx.getWCAttribute('RememberMeRule')" />
 <s:set name='sfid' value='wCContext.storefrontId'/>
 <head>
+<!-- This needs to be at the top to ensure the 'Sign In' link is never seen. -->
+<script type="text/javascript">
+$('#signIn').hide();
+</script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 </head>
 <table id="signon-table">
@@ -143,6 +147,8 @@
 </s:form>
 <script>
 $(document).ready(function() {
+
+	
 var RememberMeUser="<s:property value='#wcCtx.getRememberedUserId()'/>";
 if(RememberMeUser==null || RememberMeUser=="")
 	{

@@ -370,7 +370,7 @@ function loadViewJS(p_url)
 	//updateView();
 	//shortenItemDescriptions();
 	//var url = '/swc/catalog/setSelectedView.action?sfId=xpedx&amp;scFlag=Y';
-	 initializeView(); updateView(); //shortenItemDescriptions(); 
+	 initializeView(); updateView(); // 
 	 var url = p_url;
 	 url = ReplaceAll(url,"&amp;",'&');
 	Ext.Ajax.request({
@@ -396,11 +396,21 @@ function updateView() {
 	if (selectedClass == selectedExtTemplate)
 	   return; // only change html layout when necessary
   
+
+  
 	var tpl = null;
-	if(selectedClass == "normal-view") {tpl = getNormalView();tpl.compile();}
-	if(selectedClass == "condensed-view") {tpl = getCondensedView();tpl.compile();}
-	if(selectedClass == "mini-view") {tpl = getMiniView();tpl.compile();}
-	if(selectedClass == "papergrid-view") {tpl = getGridView();tpl.compile();}
+	if(selectedClass == "normal-view") {
+		tpl = getNormalView();tpl.compile();
+	}
+	if(selectedClass == "condensed-view") {
+		tpl = getCondensedView();tpl.compile();
+	}
+	if(selectedClass == "mini-view") {
+		tpl = getMiniView();tpl.compile();
+	}
+	if(selectedClass == "papergrid-view") {
+		tpl = getGridView();tpl.compile();
+	}
    
    selectedExtTemplate = selectedClass;
   
@@ -439,28 +449,114 @@ function updateView() {
 		  }
 		});
 	}	
+	shortenItemDescriptions();
 }
 function shortenItemDescriptions()
 {
-	return;
-	/*var selectedView = Ext.getDom('items').className;
+	var selectedClass = document.getElementById("selectedView").value;
 
-	ddescWidth = 0;
+	if(selectedClass == "normal-view") {
 
-	$('#item-box-inner dd .ddesc').each(function(){
-			// Optimization: call width() only once, because each .ddesc is the same width
-			if (ddescWidth == 0)
-				ddescWidth = ($(this).width() * (selectedView == 'normal-view' ? 2.85 : 1.6));
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. 
+		 */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+		/* End Jira 3318 changes */
+		
+	}
+	else if(selectedClass == "condensed-view") {
+		
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. 
+		 */
+			/* Begin long desc. shortener */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+			/* End long desc. shortener */
+			
+			/* Begin short desc. shortener */
+			$('a#item-detail-lnk p.ddesc').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 50);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+			/* end short desc. shortener */
+		/* End Jira 3318 changes */
+	}
+	else if(selectedClass == "mini-view") {
+		
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. 
+		 */
+			/* Begin long desc. shortener */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+			/* End long desc. shortener */
 
-			$(this).shorten({width: ddescWidth});
+			/* Begin short desc. shortener */
+			$('a#item-detail-lnk p.ddesc').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 40);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
 	});
+			/* end short desc. shortener */
+		/* End Jira 3318 changes */
+	}
+	else if(selectedClass == "papergrid-view") {
 
-	if (selectedView == 'normal-view' || selectedView == 'condensed-view')
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. 
+		 */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
 	{
-		$('#item-box-inner li').each(function(){
-				$(this).shorten({noblock: true, width: ($(this).width() - 20)});
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
 		});
-	} */
+		/* End Jira 3318 changes */
+	}
+	else {
+		return;
+	}
 }
 
 function setItemDragZone(v) {
