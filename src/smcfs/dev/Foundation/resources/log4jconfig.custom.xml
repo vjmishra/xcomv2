@@ -84,7 +84,7 @@
 
     <appender name="CENT_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
             <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-            <param name="File" value="${LOG_DIR}/centLog.log" />
+            <param name="File" value="${CENT_LOG_DIR}/centLog.log" />
             <layout class="org.apache.log4j.PatternLayout">
              	 <param name="ConversionPattern" value="%X{AppUserId}|%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n" />
             </layout>
