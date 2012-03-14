@@ -1456,7 +1456,7 @@ private String getItemListAPIQuery(){
 	PlacedOrderHeaderErrorTable.put("M_M0004",	"Order status not valid in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0005",	"Order not found for delete in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0006",	"Customer # does not exist in customer master file");
-	PlacedOrderHeaderErrorTable.put("M_M0007",	"This customer has been suspended");
+	PlacedOrderHeaderErrorTable.put("M_M0007",	"This Customer/Ship-To has been Suspended");
 	PlacedOrderHeaderErrorTable.put("M_M0008",	"This ship-to number is not on file");
 	PlacedOrderHeaderErrorTable.put("M_M0009",	"Order status not valid for delete");
 	PlacedOrderHeaderErrorTable.put("M_M0010",	"Order in use, delete not allowed");
