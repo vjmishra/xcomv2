@@ -166,7 +166,7 @@ $(document).ready(function() {
 				<s:url id="paginatedShipTo" action="XPEDXMyItemsDetailsGetShareList" namespace="/xpedx/myItems">
 					<s:param name="pageNumber" value="'{0}'"/>
 					<s:param name="customerId" value="customerId"/>
-					
+					<s:param name="suffixtype" value="B"/>					
 				</s:url>
  				<xpedx:pagectl currentPage="%{pageNumber}"  divId="%{#paginateDivID}" lastPage="%{totalNumberOfPages}" urlSpec="%{#paginatedShipTo}" isAjax="true" />
 			</div>
