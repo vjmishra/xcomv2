@@ -882,6 +882,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			lblCSRReviewError.setData("yrc:customType", "RedText10");
 			
 			}
+
 		
 		String status = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/@Status");
 		orderPlaceError=getErrorValues();
@@ -889,11 +890,14 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			int count=orderPlaceError.size();
 				for(int i=0;i<count;i++){
 				 Label lblerrOrder=new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-				 lblerrOrder.setText((String) orderPlaceError.get(i));
+				 String orderPlaceErrorText = (String) orderPlaceError.get(i);
+				 int delimiter = orderPlaceErrorText.indexOf("-");
+				 orderPlaceErrorText = orderPlaceErrorText.substring(delimiter+1,orderPlaceErrorText.length());
+				 lblerrOrder.setText(orderPlaceErrorText);
 				 lblerrOrder.setLayoutData(gridDataErrLbl1);
 				 lblerrOrder.setData("yrc:customType", "RedText10");
 				}
-			}
+			} 
 	}
 	
 	public void createPnlNeedsAttention(){
