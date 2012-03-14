@@ -1751,6 +1751,7 @@ function showSharedListForm(){
                 <br />
                 
 				<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>	
+					
 					<fieldset class="mil-edit-field">
 	                    <legend>For Selected Items:</legend>
 	
@@ -2426,7 +2427,21 @@ function showSharedListForm(){
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box">
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2>
          <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
+   		<script type="text/javascript">
+			Ext.onReady(function(){		
 	       
+			/* Begin long desc. shortener */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+		</script>  
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<s:if test="!#iStatus.last" >
 			<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >

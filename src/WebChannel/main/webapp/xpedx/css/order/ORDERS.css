@@ -497,6 +497,12 @@ float:left;
 padding-top:5px; 
 margin-left:9px;	
 }
+div.ship-to-body .tool-bar-bottom#tool-bar
+{
+float: none; 
+padding-top: 0px; 
+margin-left: 0px;	
+}
 .tool-bar-bottom-right#tool-bar
 {
 width:auto;
@@ -856,11 +862,7 @@ margin-left:5px;
 {
  color:black;	
 }
-.ship-to-top
-{
-width: auto; 
-height: 125px;	
-}
+/* 
 .ship-to-top-left
 {
 float:left; 
@@ -874,8 +876,6 @@ width: 740px;
 .ship-to-address-list
 {
 border: 1px solid #CCC; 
-height: 108px;
-overflow: auto;
 }
 .apply-ship-to-btn
 {
@@ -891,7 +891,7 @@ height:auto;
 {
 margin-right:3px;
 margin-top:9px;
-}
+} */
 .cancel-order-box
 {
 width:250px;

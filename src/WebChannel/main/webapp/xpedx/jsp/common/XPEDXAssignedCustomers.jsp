@@ -219,11 +219,10 @@
         
     <!-- START main body (with scroll bar) -->
     <div class="paginationContainer" style="float: right;"><!-- pagination control -->
-    <span class="bold">
      	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
 		<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
 		urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="ajax-assignedShipToCustomers" 
-		showFirstAndLast="False" showMyUserFormat="true"/></span>
+		showFirstAndLast="False" showMyUserFormat="false"/>
     </div>
     
 			
@@ -329,20 +328,20 @@
 </div>
 
 <div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-top:2px;margin-right:20px">
+<ul id="tool-bar" class="tool-bar-bottom" >
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
+	<li>
+<%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
+			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
 
+	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
 		</li>
 	</s:if>
-	<li>
-<%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
 	
-	</li>
 </ul>
 
 <!--Added to fix 3098  -->
@@ -351,7 +350,8 @@
 	<h5 align="right">Please select a Ship-To.</h5>
 	</s:if>
 </div>
-<div class="class=" style="float:right;margin-top:1px;width:100%;">
+
+
 <s:if test="%{#NoShipTo}" >
 <div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
 </s:if>
@@ -359,7 +359,6 @@
 <div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
 </s:elseif>
 <div id="errorText" class="float-right"></div>
-</div>
 </div>
 </div>
 

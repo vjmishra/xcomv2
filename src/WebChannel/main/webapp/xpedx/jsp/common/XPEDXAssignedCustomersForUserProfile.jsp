@@ -314,19 +314,19 @@
 
 
 
-<div class="float-right" style="margin-top:30px;" >
+<div class="float-right" >
 <ul id="tool-bar" class="tool-bar-bottom" >
+		<li>
+<%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
+			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
 	
+	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
 		</li>
 	</s:if>
-	<li>
-<%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
 	
-	</li>
 </ul>
 	
 </div>

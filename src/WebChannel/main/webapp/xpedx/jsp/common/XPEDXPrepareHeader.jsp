@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
  <%-- 
   <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
   --%>	
@@ -120,6 +121,20 @@ var selectedShipCustomer = null;
 			}		
 		}		
 		Ext.onReady(function(){		
+		
+			/* Begin long desc. shortener */
+			$('.prodlist ul li, #prodlist ul li ').each(function() {
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 25);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
+			});
+			/* End long desc. shortener */
+			
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
 				if (isUserAdmin){
@@ -1387,8 +1402,8 @@ var toaWin = new Ext.Window({
 			 		'showCloseButton'	: false,
 			 		'enableEscapeButton': false,
 			 		'autoDimensions'	: false,
-			 		'width' 			: 780,
-			 		'height' 			: 485  
+			 		'width' 			: 750,
+			 		'height' 			: 490  
 				}).trigger('click');
 			}
 		}		
@@ -1414,8 +1429,8 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: false,
- 			'width' 			: 755,
- 			'height' 			: 495  
+ 			'width' 			: 750,
+ 			'height' 			: 490
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
@@ -1444,8 +1459,8 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: true,
- 			'width' 			: 780,
- 			'height' 			: 485  
+ 			'width' 			: 750,
+ 			'height' 			: 490 
  			});
         
         $("#dlgSelectAccount").fancybox({
@@ -2101,7 +2116,7 @@ function callAjaxForSorting(url,divId)
 				<li> &nbsp;&nbsp;&nbsp;&nbsp; </li>
 				<li><a
 					href="<s:url action="login" namespace="/common" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
-					tabindex="2006">Sign In</a>
+					tabindex="2006" id="signIn">Sign In</a>
 				</li>	
 			</s:else>
 	   	</s:if>

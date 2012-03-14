@@ -179,15 +179,15 @@
 
 <div class="float-right">
 <ul id="tool-bar" class="tool-bar-bottom">
-	
+		<li>
+		   <a class="green-ui-btn"  href="#" onclick = "setVariable('<s:property value="#defaultShipTo"/>' , '<s:property value="#assgnCustomers.size()"/>');$.fancybox.close();"><span>Select</span></a> 		
+	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="clearShipToField();$.fancybox.close();"><span>Cancel</span></a>
 		</li>
 	</s:if>
-	<li>
-		   <a class="green-ui-btn"  href="#" onclick = "setVariable('<s:property value="#defaultShipTo"/>' , '<s:property value="#assgnCustomers.size()"/>');$.fancybox.close();"><span>Select</span></a> 		
-	</li>
+
 </ul>
 	
 </div>
