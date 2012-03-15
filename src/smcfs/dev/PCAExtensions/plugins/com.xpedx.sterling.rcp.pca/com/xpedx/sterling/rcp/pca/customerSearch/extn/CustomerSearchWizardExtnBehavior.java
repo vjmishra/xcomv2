@@ -1,8 +1,13 @@
 package com.xpedx.sterling.rcp.pca.customerSearch.extn;
 
+
 import java.util.ArrayList;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.swt.SWT;
 import org.w3c.dom.Document;
@@ -10,9 +15,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
 import com.yantra.yfc.rcp.YRCApiContext;
+
 import com.yantra.yfc.rcp.YRCComboBindingData;
 import com.yantra.yfc.rcp.YRCConstants;
 import com.yantra.yfc.rcp.YRCEvent;
@@ -59,7 +66,12 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 			if(!YRCPlatformUI.isVoid(getFieldValue("cmbOrganizationCode"))){
 
 				enterpriseCode=getFieldValue("cmbOrganizationCode");
-				this.invokeGetOrgListAPI( this.getBrandCode());
+				//JIRA 3582 - Condition added for reading data from Application Init.
+				if (enterpriseCode.startsWith("xped")) {
+					prepareDivisionTypeDropdownModel();
+				} else {
+					this.invokeGetOrgListAPI(this.getBrandCode());
+				}
 			} else {
 				selectedBrandCode = "";
 			}
@@ -134,6 +146,7 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 		if(YRCPlatformUI.equals("com.yantra.pca.ycd.rcp.tasks.customerSearch.wizardpages.YCDCustomerSearchWizardPage", pageBeingShown))
 		{	
 			prepareCustomerTypeDropdownModel();
+			prepareDivisionTypeDropdownModel();
 			enterpriseCode = getModel("UserNameSpace").getAttribute("EnterpriseCode");
 			invokeBrandCodeListAPI();
 			addEventHandler("cmbOrganizationCode", SWT.Selection);//#Fixed XNGTP-1021
@@ -294,6 +307,31 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 		 }
 		 super.postSetModel(model);
 	 }
+	
+//JIRA 3582 - Condition added for reading data from Application Init. Method added to create XML binding for  xpedx
+   public void prepareDivisionTypeDropdownModel(){
+	  
+		Element Extn_DivisionList = YRCXmlUtils.createDocument(
+				"OrganizationList").getDocumentElement();
 
+		Element attrElemComplex2 = null;
+		HashMap<String, String> divisionMap = new HashMap<String, String>();
+		divisionMap = XPXUtils.divisionMap;
+	    SortedSet<String> sortedset= new TreeSet<String>(divisionMap.keySet());
+	   
+	    Iterator<String> it = sortedset.iterator();
+
+	    while (it.hasNext()) {
+	    	String key  = it.next();
+	    	if ((key != null && !"_".equalsIgnoreCase(key)) &&  (divisionMap.get(key) != null)) {
+	    	attrElemComplex2 = YRCXmlUtils.createChild(Extn_DivisionList,
+			"Organization");
+			attrElemComplex2.setAttribute("OrganizationCode", key);
+			attrElemComplex2.setAttribute("OrganizationName", divisionMap.get(key));
+	    	}
+	    }
+		setExtentionModel("Extn_DivisionList", Extn_DivisionList);
+		
+   }
 }
 
