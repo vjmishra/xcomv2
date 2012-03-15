@@ -82,6 +82,7 @@ public class XPEDXOrderApprovalAction extends WCMashupAction{
     private static final String XPATH_CUSTOMER_CONTACT_ID_QRY_TYPE="/Page/API/Input/Order/@CustomerContactIDQryType";
     
 	private static final String APPROVAL_LIST_MASHUP_ID = "orderApprovalList";
+	private static final String APPROVAL_ACTION_MASHUP_ID = "orderApproval";
 	private static final String APPROVAL_LIST_WIDGET_MASHUP_ID = "orderApprovalListWidget";
 	private static final String YES = "Y";
 	public XPEDXOrderApprovalAction() {
@@ -129,22 +130,29 @@ public class XPEDXOrderApprovalAction extends WCMashupAction{
 	public String superExecute(){
 		setApprovalHoldType(BusinessRuleUtil.getBusinessRule("HOLD_TO_BE_APPLIED_FOR_ORDER_APPROVAL" , wcContext));
 		Document outDoc = null;
+		//
+		if(mashupIds.contains(APPROVAL_LIST_MASHUP_ID)||mashupIds.contains(APPROVAL_LIST_WIDGET_MASHUP_ID)){
 			oUserList.add(wcContext.getCustomerContactId());
-	        nameExp.add(OrderConstants.RESOLVER_USER_ID);
+			nameExp.add(OrderConstants.RESOLVER_USER_ID);
 			if(mashupIds.contains("orderApprovalList")){
-			    outDoc = null;
-			    try {
-			        outDoc = prepareandCallMashupforApprovalList();
-                } catch (CannotBuildInputException e) {
-                    // TODO Auto-generated catch block
-                    log.debug(e);
-                }
-    		}
+			outDoc = null;
+			try {
+				outDoc = prepareandCallMashupforApprovalList();
+			} catch (CannotBuildInputException e) {
+				// TODO Auto-generated catch block
+				log.debug(e);
+			}
+			}
 			else if(mashupIds.contains(APPROVAL_LIST_WIDGET_MASHUP_ID)){
-			        setIsApprover(true);
-			        outDoc = null;
-                    outDoc = callmashup(APPROVAL_LIST_WIDGET_MASHUP_ID);
-            }
+				setIsApprover(true);
+				outDoc = null;
+				outDoc = callmashup(APPROVAL_LIST_WIDGET_MASHUP_ID);
+				}
+			}
+			else if(mashupIds.contains(APPROVAL_ACTION_MASHUP_ID)){
+			outDoc = null;
+			outDoc = callmashup(APPROVAL_ACTION_MASHUP_ID);
+			}
 		if(outDoc!=null){
 			try{
 			if(mashupIds.contains(APPROVAL_LIST_MASHUP_ID)){
@@ -494,7 +502,7 @@ private boolean checkUserAllowedForSearch(List<String> list) {
 			holdType.setAttribute("HoldType", XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL);
 		}
 		// TODO Auto-generated method stub
-		manipulateMashupInputs(mashupInputs);
+		super.manipulateMashupInputs(mashupInputs);
 	}
 	
 	
