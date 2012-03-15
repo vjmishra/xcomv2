@@ -635,6 +635,7 @@
                     <API Name="getCustomerContactList">
                         <Input>
                             <CustomerContact>
+                            <Extn ExtnIsSalesRep="Y" ExtnIsSalesRepQryType="NE"/>
                                 <OrderBy>
                                     <Attribute Desc="" Name="" />
                                 </OrderBy>
