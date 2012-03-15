@@ -268,7 +268,7 @@
 			
 			//Load the list if it has not been loaded before.
 			//if (!isShareListLoaded){
-				getShareList(customerId, divMainId, showRoot);
+				getShareList(customerId,"", divMainId, showRoot);
 				isShareListLoaded = true;
 			//}
 			
