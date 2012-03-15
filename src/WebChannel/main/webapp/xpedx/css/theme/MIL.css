@@ -5745,6 +5745,9 @@ select.xpedx_select_sm {
     border-left: 1px solid #CCCCCC;
     border-right: 1px solid #CCCCCC;
 }
+.show-hide-wrap div:first-child {
+    border-bottom: 1px solid #CCCCCC;	
+}
 .catalog-my-price-availability {
     font-size: 10px;
     margin: 0 auto;
