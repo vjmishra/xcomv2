@@ -336,7 +336,7 @@
                 id="Create Internal Users"
                 isExtension="false"
                 name="Create Internal Users"
-                permissionId="ycdRCP0302">
+                permissionId="ycdRCPXPX002">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_MODIFY_USER"/>
                 </categories>
@@ -348,7 +348,7 @@
                 id="Modify Internal Users"
                 isExtension="false"
                 name="Modify Internal Users"
-                permissionId="ycdRCP0302">
+                permissionId="ycdRCPXPX002">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                     <category id="XPX_CREATE_USER"/>
                 </categories>
