@@ -116,6 +116,45 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String orderPlaceDate;
 
 	private String resolverUserID;
+	//added for jira 3484
+	private String primaryApproverID;
+	private String proxyApproverID;
+	private String primaryApprovalEmailId;
+	private String proxyApprovalEmailId;
+
+	
+	public String getPrimaryApprovalEmailId() {
+		return primaryApprovalEmailId;
+	}
+
+	public void setPrimaryApprovalEmailId(String primaryApprovalEmailId) {
+		this.primaryApprovalEmailId = primaryApprovalEmailId;
+	}
+
+	public String getProxyApprovalEmailId() {
+		return proxyApprovalEmailId;
+	}
+
+	public void setProxyApprovalEmailId(String proxyApprovalEmailId) {
+		this.proxyApprovalEmailId = proxyApprovalEmailId;
+	}
+	
+	public String getPrimaryApproverID() {
+		return primaryApproverID;
+	}
+
+	public void setPrimaryApproverID(String primaryApproverID) {
+		this.primaryApproverID = primaryApproverID;
+	}
+
+	public String getProxyApproverID() {
+		return proxyApproverID;
+	}
+
+	public void setProxyApproverID(String proxyApproverID) {
+		this.proxyApproverID = proxyApproverID;
+	}
+	//end of jira 3484
 	
 	private boolean  isOrderOnApprovalHoldStatus;
 	
@@ -247,6 +286,20 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey"); 
 			}
 			isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
+			//added for jira 3484 for display of approvers EMailID
+			if(isOrderOnApprovalHoldStatus)
+			{
+				
+				Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(primaryApproverID+","+proxyApproverID, wcContext.getStorefrontId());
+				//Map<String,Element> usersInfoMap1=XPEDXWCUtils.getUsersInfoMap(proxyApproverID, wcContext.getStorefrontId());
+				ArrayList<Element> personInfo=SCXmlUtil.getElements(usersInfoMap.get(primaryApproverID), "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
+				if(personInfo != null && personInfo.size()>0)
+					primaryApprovalEmailId=personInfo.get(0).getAttribute("EMailID");
+				ArrayList<Element> personInfo1=SCXmlUtil.getElements(usersInfoMap.get(proxyApproverID), "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
+				if(personInfo1 != null && personInfo1.size()>0)
+					proxyApprovalEmailId=personInfo1.get(0).getAttribute("EMailID");				
+				
+			}
 			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
 			chainedOrderFromKeylist.add(orderHeaderKey);
 			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
@@ -468,6 +521,11 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					this.approvalHoldStatus = holdstatus;
 					this.resolverUserID = orderholdtypeelem
 							.getAttribute(OrderConstants.RESOLVER_USER_ID);
+				    //for jira 3484
+					String approverUserIDs [] = this.resolverUserID.split(",");
+					primaryApproverID = approverUserIDs[0];
+					proxyApproverID = approverUserIDs[1];
+					
 					return true;
 				}
 			}
