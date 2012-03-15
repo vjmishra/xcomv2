@@ -1015,7 +1015,61 @@ public class XPEDXWCUtils {
 		}
 		return null;
 	}
+//added for jira 3484
+	public static Map<String,Element> getUsersInfoMap(String conactIds, String organizationCode) {
+		Document outputDoc = null;
+		Map<String,Element> customerContactMap=new HashMap<String,Element>();
+		String []custConactIds=conactIds.split(",");
+		if(!SCUIUtils.isVoid(conactIds) && !YFCUtils.isVoid(organizationCode)){
+			try {
+				IWCContext wcContext = WCContextHelper
+				.getWCContext(ServletActionContext.getRequest());
+				Element input = WCMashupHelper.getMashupInput("getXpedxCustomerContactDetailsList", wcContext);
+				Element customerContactElem=(Element)input.getElementsByTagName("Customer").item(0);
+				customerContactElem.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+				Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
+				Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
+				for(String contactId : custConactIds) {
+					Element exp = input.getOwnerDocument().createElement("Exp");
+					exp.setAttribute("Name", "CustomerContactID");
+					exp.setAttribute("Value", contactId);
+					SCXmlUtil.importElement(OrElem, exp);
+				}
+				Element output =(Element) WCMashupHelper.invokeMashup("getXpedxCustomerContactDetailsList", input, wcContext.getSCUIContext());
+				NodeList customerContactList=output.getElementsByTagName("CustomerContact");
+				addCustomerContactInToMap(output,customerContactMap);
+				return customerContactMap;
+			} catch (Exception ex) {
+				log.info(ex.getMessage());
+			}
+		}
+		return null;
+	}
 
+	private static void addCustomerContactInToMap(Element output,Map<String,Element> customerContactMap)
+	{
+		NodeList customerContactList=output.getElementsByTagName("CustomerContact");
+		for(int i=0;i<customerContactList.getLength();i++)
+		{
+			Element _customerContactElem=(Element)customerContactList.item(i);
+			String customerContactId=_customerContactElem.getAttribute("CustomerContactID");	
+			Element _customerContactElemTemp=customerContactMap.get(customerContactId);
+			if(_customerContactElemTemp==null)
+				customerContactMap.put(customerContactId, _customerContactElem);
+			else
+			{
+				ArrayList<Element> customerAdditionalAddressTemp=SCXmlUtil.getElements(_customerContactElemTemp, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress");
+				ArrayList<Element> customerAdditionalAddress=SCXmlUtil.getElements(_customerContactElem, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress");
+				if((customerAdditionalAddressTemp == null || customerAdditionalAddressTemp.size()==0) && 
+						(customerAdditionalAddress !=null && customerAdditionalAddress.size()>0) )
+					customerContactMap.put(customerContactId, _customerContactElem);
+			}
+			
+			
+			
+		}
+	}
+	//end of jira 3484
 	/*
 	 * Takes a Customer ID as input Returns a Map which has two Keys "BILL_TO"
 	 * and "SHIP_TO". Query the Map using
