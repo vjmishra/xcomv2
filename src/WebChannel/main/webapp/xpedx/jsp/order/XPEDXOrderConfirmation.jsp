@@ -159,13 +159,21 @@
 	<s:set name='isOrderOnNeedsAttentionHold' value='%{#_action.isOrderOnNeedsAttentionHold()}'/>
 	<s:set name='resolverUserID' value='%{#_action.getResolverUserID()}'/>
 	<s:if test="#isOrderOnApprovalHoldStatus">
-		 	<s:set name='userInfo1' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUserInfo(#resolverUserID, #storeFrontId)'/>	
-			<s:set name='CustomerContact1' value='#xutil.getChildElement(#userInfo1,"CustomerContact")'/>
+		 	<%-- <s:set name='usersInfoMap' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUsersInfoMap(#resolverUserID, #storeFrontId)'/>
+		 	<s:set name='userInfo' value='#usersInfoMap.get(#_action.getPrimaryApproverID())'/>	
+			<s:set name='CustomerContact' value='#xutil.getChildElement(#userInfo,"CustomerContact")'/>
+			<s:set name='CustomerContact' value='#usersInfoMap.get(#_action.getPrimaryApproverID())'/>
+			<s:set name='Customer' value='#xutil.getChildElement(#CustomerContact,"Customer")'/>
+			<s:set name='CustomerAdditionalAddressList' value='#xutil.getChildElement(#CustomerContact,"CustomerAdditionalAddressList")'/>
+			<s:set name='CustomerAdditionalAddress' value='#xutil.getChildElement(#CustomerAdditionalAddressList,"CustomerAdditionalAddress")'/>
+			<s:set name='PersonInfo' value='#xutil.getChildElement(#CustomerAdditionalAddress,"PersonInfo")'/>
+			
+		 	<s:set name='CustomerContact1' value='#usersInfoMap.get(#_action.getProxyApproverID())'/>
 			<s:set name='Customer1' value='#xutil.getChildElement(#CustomerContact1,"Customer")'/>
 			<s:set name='CustomerAdditionalAddressList1' value='#xutil.getChildElement(#CustomerContact1,"CustomerAdditionalAddressList")'/>
 			<s:set name='CustomerAdditionalAddress1' value='#xutil.getChildElement(#CustomerAdditionalAddressList1,"CustomerAdditionalAddress")'/>
-			<s:set name='PersonInfo1' value='#xutil.getChildElement(#CustomerAdditionalAddress1,"PersonInfo")'/>
-			<s:set name='userInfo1' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUserInfo(#resolverUserID, #storeFrontId)'/>			
+			<s:set name='PersonInfo1' value='#xutil.getChildElement(#CustomerAdditionalAddress1,"PersonInfo")'/> --%>
+			<%-- <s:set name='userInfo1' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUserInfo(#resolverUserID, #storeFrontId)'/> --%>			
     </s:if>
 	<s:else>
 			
@@ -244,7 +252,13 @@
                         </legend>
                         <br>
                         <s:if test='#isOrderOnApprovalHoldStatus'>
-							<p>Your order <span class="attention">requires approval</span> and has been sent to:&nbsp; <s:property value='#xutil.getAttribute(#PersonInfo1,"EMailID")'/> </p>
+							<p>Your order <span class="attention">requires approval</span> and has been sent to:&nbsp; 
+							<s:if test='%{#_action.getPrimaryApprovalEmailId() != "" }'>
+								<s:property value='%{#_action.getPrimaryApprovalEmailId()}'/>
+							</s:if>
+							<s:if test='%{#_action.getProxyApprovalEmailId() != "" }'>
+							, <s:property value='%{#_action.getProxyApprovalEmailId()}'/> </s:if> </p>
+							
 							<br>
 							<s:if test='%{#orderConfirmationFalg =="Y"}'>
 							    <p>Status updates have been sent to your email address:&nbsp; <s:property value='#xpedxCustomerContactInfoBean.getEmailID()'/></p>
