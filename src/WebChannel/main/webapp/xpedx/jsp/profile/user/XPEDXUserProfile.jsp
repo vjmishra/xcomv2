@@ -20,12 +20,17 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
-
+<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <!-- styles -->
 
 <!-- begin styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 <!-- end styles -->
 
 <!-- javascript -->
@@ -92,6 +97,8 @@
 	namespace="/profile/user" />
 
 <s:set name="selectedTab" value="#request.selectedTab" />
+<link rel="stylesheet" type="text/css"
+	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript"
 	src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
@@ -1096,7 +1103,7 @@ a.underlink:hover { text-decoration: underline !important; }
 
 
 </style>
-
+<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript"	src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 </head>
 <!-- END swc:head -->
@@ -2448,7 +2455,6 @@ a.underlink:hover { text-decoration: underline !important; }
 												<!-- Spending limit Div --> 
 	<!-- ------------------------------------------------------------------------------------------------------------- -->
 	<div class="TabbedPanelsContent" id="SpendingLimitApprovers">
-	<form id="form1" name="form1" method="post" action="">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
 		style="padding: 0px;">
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approvers" style="display : none"/>Please select an approver.</div></td></tr>
@@ -2581,8 +2587,6 @@ a.underlink:hover { text-decoration: underline !important; }
 
 
 	</table>
-
-	</form>
 	</div>
 	</div>
 	</s:else>
