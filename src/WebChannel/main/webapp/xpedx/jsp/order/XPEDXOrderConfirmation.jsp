@@ -256,8 +256,10 @@
 							<s:if test='%{#_action.getPrimaryApprovalEmailId() != "" }'>
 								<s:property value='%{#_action.getPrimaryApprovalEmailId()}'/>
 							</s:if>
+							<s:if test='%{#_action.getPrimaryApprovalEmailId() != "" && #_action.getProxyApprovalEmailId() != ""}'>, 
+							</s:if>
 							<s:if test='%{#_action.getProxyApprovalEmailId() != "" }'>
-							, <s:property value='%{#_action.getProxyApprovalEmailId()}'/> </s:if> </p>
+							<s:property value='%{#_action.getProxyApprovalEmailId()}'/> </s:if></p>
 							
 							<br>
 							<s:if test='%{#orderConfirmationFalg =="Y"}'>
