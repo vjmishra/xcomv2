@@ -641,6 +641,19 @@
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript"	src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+
+<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+
+<!--[if IE]> -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+
+<!-- [endif] -->
+
+<%-- <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+ --%>
 <script type="text/javascript"	src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script src="/swc/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
 <script type="text/javascript" 
@@ -686,6 +699,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
 	
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Services' /></title>
+<link href="/swc/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet"	type="text/css" />
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
@@ -837,7 +851,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
             <li class="TabbedPanelsTab" tabindex="0">Paper</li>
           </ul>
           <div class="TabbedPanelsContentGroup">
-            <div class="TabbedPanelsContent"> <table border="0" align="left" cellpadding="0" cellspacing="0" id="mil-list-new" style="background: none repeat scroll 0% 0% transparent; width:99%">
+            <div class="TabbedPanelsContent"> <table width="100%" border="0" cellspacing="0" cellpadding="0" class="standard-table">
                        <tbody>
                               <tr class="table-header-bar" id="none">
                                 <td  width="16%" class=" table-header-bar-left padding8"><span class="red">*&nbsp;</span><span class="white">Mfg. Item # </span></td>
@@ -869,10 +883,10 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                             </tbody>
                            
                           </table>
-                          <div id="table-bottom-bar" style="width:99%; clear:both;">
+                          <%-- <div id="table-bottom-bar" style="width:99%; clear:both;">
                             <div id="table-bottom-bar-L"></div>
                             <div id="table-bottom-bar-R"></div>
-             			 </div>
+             			 </div> --%>
                            <br></br>
                            <div id="facility-results-table" style="display:none;"><!-- begin facility-results-table -->
                         <table width="99%" cellspacing="0" cellpadding="0" border="0" align="center" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_facilitySupplies">
@@ -898,7 +912,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
         </div> <!-- end facility-results-table -->
                
            			 </div>
-            <div class="TabbedPanelsContent"> <table id="mil-list-new" border="0" align="left" cellpadding="0" cellspacing="0" style="background: none repeat scroll 0% 0% transparent;width:100%">
+            <div class="TabbedPanelsContent"> <table width="100%" border="0" cellspacing="0" cellpadding="0" class="standard-table">
                                     <tbody>
                               <tr class="table-header-bar" id="none">
                                 <td width="16%" class=" table-header-bar-left padding8"><span class="white">Mfg. Item # </span></td>
@@ -927,10 +941,10 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                               </tr>
                             </tbody>
                           </table>
-                          <div id="table-bottom-bar" style="width:100%; clear:both;">
+                          <%-- <div id="table-bottom-bar" style="width:100%; clear:both;">
                             <div id="table-bottom-bar-L"></div>
                             <div id="table-bottom-bar-R"></div>
-             			 </div>
+             			 </div> --%>
                <br></br>                          
                 <div id="paper-results-table" style="display:none;"><!-- begin paper-results-table -->
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_paperSupplies">
