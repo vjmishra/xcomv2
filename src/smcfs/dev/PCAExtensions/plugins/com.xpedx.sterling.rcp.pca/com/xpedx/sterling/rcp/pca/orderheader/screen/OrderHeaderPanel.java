@@ -870,7 +870,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		{ 
 			//Order_Lock_Lbl_Error
 		lblOrderLockFlag = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-		lblOrderLockFlag.setText(YRCPlatformUI.getString("Order_Lock_Lbl_Error"));
+		if((YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Extn/@ExtnHeaderStatusCode")).equalsIgnoreCase("M0007")){
+			lblOrderLockFlag.setText(YRCPlatformUI.getString(""));
+		} else{
+			lblOrderLockFlag.setText(YRCPlatformUI.getString("Order_Lock_Lbl_Error"));
+		}
 		lblOrderLockFlag.setLayoutData(gridDataErrLbl);
 		lblOrderLockFlag.setData("yrc:customType", "RedText10");
 		}
