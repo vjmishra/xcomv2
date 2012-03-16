@@ -20,7 +20,7 @@
 	        	<div class="txt-small clearview padding-bottom2"><s:a id="addNewQL" name="addNewQL" href="#newQL" cssClass="underlines">[Add New]</s:a></div>          	                                      
 			</s:if>
 		</div> 
-      	<table width="100%" cellspacing="0" cellpadding="0" border="0" id="tbl">
+      	<table width="100%" cellspacing="0" cellpadding="0" border="0" id="tbl" class="standard-table">
   			<tbody>
   				<tr class="table-header-bar">
     				<td width="35%" class="no-border table-header-bar-left"><span class="white txt-small"> Name</span></td>
@@ -30,10 +30,10 @@
 				</tr>				
 			</tbody>
 		</table> 
-      	<div id="table-bottom-bar" style="width:100%;">
+      <%-- 	<div id="table-bottom-bar" style="width:100%;">
         	<div id="table-bottom-bar-L"></div>
         	<div id="table-bottom-bar-R"></div>
-        </div>  
+        </div> --%>  
 
 	</td>   
     <s:hidden id="bodyData" name="bodyData"/>
