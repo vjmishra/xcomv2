@@ -1,5 +1,9 @@
 package com.xpedx.nextgen.common.cent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.util.ToStringUtils;
 import org.w3c.dom.Document;
@@ -130,8 +134,9 @@ public class ErrorLogger {
 						logString.append(xpxErrorElem.getAttribute("SourceSystem"));
 						logString.append("|");
 						logString.append(xpxErrorElem.getAttribute("TransType"));
-						logString.append("|");
-						logString.append(xpxErrorElem.getAttribute("CommMethod"));
+						logString.append("|");						
+						//logString.append(xpxErrorElem.getAttribute("CommMethod"));
+						logString.append(checkDateTimeCommMethod(xpxErrorElem.getAttribute("CommMethod")));
 						logString.append("|");
 						logString.append(xpxErrorElem.getAttribute("QueueName"));
 						logString.append("|");
@@ -181,7 +186,37 @@ public class ErrorLogger {
 			yfcLogCatlog.error(e.getMessage());
 		}
 	}
-
+    
+	//Product Support Readiness, Fix for Jira 2691.
+	private static String checkDateTimeCommMethod(String theCommMethodVal)
+	{
+		String commMethod = theCommMethodVal;
+		try
+		{
+			Calendar calendar = Calendar.getInstance();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String dateNow = dateFormat.format(calendar.getTime());
+			
+			int theHour = calendar.get(calendar.HOUR_OF_DAY) ;
+			
+			if(commMethod != null && commMethod.equalsIgnoreCase("P1"))
+			{
+				if(calendar.get(calendar.DAY_OF_WEEK) == 7)
+				{
+					if(theHour >= 18 && theHour <= 23)
+					{
+						commMethod = "P3";
+					}
+				}				
+			}
+		}
+		catch (Exception e){
+			log4jLogger.error(e.getMessage());
+			yfcLogCatlog.error(e.getMessage());			
+		}
+		return commMethod;		
+	}
+	
 	public static void populateNotificationTable(Error errorObj,
 			YFSEnvironment yfsEnv) {
 		try {
