@@ -24,7 +24,7 @@
 		<s:else>
 		    <img src="<s:url value='/xpedx/images/theme/theme-1/20x20_shared_list.png'/>" alt="List Img" />
 		</s:else>
-		</td><td>&nbsp;</td><td><s:property value="#listDetail.getAttribute('Name')"/></td>
+		</td><td>&nbsp;</td><td><s:property value="#listDetail.getAttribute('ListName')"/></td>
 		</tr>
 	</s:iterator>
 	</table>	
