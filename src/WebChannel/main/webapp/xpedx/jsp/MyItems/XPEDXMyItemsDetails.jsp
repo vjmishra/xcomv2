@@ -878,7 +878,7 @@ function showSharedListForm(){
 				quantity = ReplaceAll(quantity,",","");
 				divVal.setAttribute("class", "error");
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
-				if((quantity == '0' || quantity== '' ) || isOnlyOneItem == true)
+				if((quantity == '0' || quantity== '' ) )
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
