@@ -21,6 +21,9 @@
 <!-- begin styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 <!-- end styles -->
 
 <!-- javascript -->
@@ -59,6 +62,8 @@
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+
+<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
 
 <script type="text/javascript" src="../../xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../../xpedx/js/global-xpedx-functions.js"></script>
@@ -379,10 +384,10 @@ ul.checkboxTree li
             </s:else>
           </tbody>
         </table>
-      <div id="table-bottom-bar">
+      <%-- <div id="table-bottom-bar">
         <div id="table-bottom-bar-L"></div>
         <div id="table-bottom-bar-R"></div>
-        </div>
+        </div> --%>
       </td>
 	</tr>
 	<tr>
@@ -422,11 +427,10 @@ ul.checkboxTree li
     </div>
     </div>
     <!-- End Pricing -->
-    <br />
-  </div>
+   
   <!-- Footer Start --> <s:action name="xpedxFooter" executeResult="true"
 	namespace="/common" /> <!-- Footer End -->
-</div>
+
 
 <div style="display: none;">
 <div title="Add New Quick Link" id="newQL"
