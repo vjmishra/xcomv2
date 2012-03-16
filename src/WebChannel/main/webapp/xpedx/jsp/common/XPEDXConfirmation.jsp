@@ -23,6 +23,13 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
 
+<!--[if IE]> -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+
+<!-- [endif] -->
+
+
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
