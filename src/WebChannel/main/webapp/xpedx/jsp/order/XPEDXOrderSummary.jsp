@@ -184,12 +184,14 @@ function setTotalPrice(val){
 <!-- BEGIN head-calls.php -->
 
 <!-- begin styles. These should be the only three styles. -->
+
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
 <!--  End Styles -->
+<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
