@@ -43,6 +43,7 @@
 		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
 	</s:else>
 	
+	<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
 
 	
     <s:set name="storefront"  value='wCContext.storefrontId'/>
