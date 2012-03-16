@@ -81,7 +81,8 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 	}
 
 	private void invokeGetOrgListAPI(String brandcode) {
-		if(!YRCPlatformUI.isVoid(brandcode)){
+		//JIRA 3582 - Condition added for reading data from Application Init. Method added to create XML binding for  xpedx
+		if(!YRCPlatformUI.isVoid(brandcode) && !"XPED".equalsIgnoreCase(brandcode)){
 			YRCApiContext apiConterxt = new YRCApiContext();
 			apiConterxt.setApiName("XPXGetDivisionList");
 			apiConterxt.setInputXml(YRCXmlUtils.createFromString("<Organization IsNode='Y'><Extn ExtnBrandCode='"+brandcode+"' ExtnBrandCodeQryType='LIKE'/></Organization>"));
@@ -314,7 +315,7 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 		Element Extn_DivisionList = YRCXmlUtils.createDocument(
 				"OrganizationList").getDocumentElement();
 
-		Element attrElemComplex2 = null;
+		Element attrElemOrg = null;
 		HashMap<String, String> divisionMap = new HashMap<String, String>();
 		divisionMap = XPXUtils.divisionMap;
 	    SortedSet<String> sortedset= new TreeSet<String>(divisionMap.keySet());
@@ -324,10 +325,10 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 	    while (it.hasNext()) {
 	    	String key  = it.next();
 	    	if ((key != null && !"_".equalsIgnoreCase(key)) &&  (divisionMap.get(key) != null)) {
-	    	attrElemComplex2 = YRCXmlUtils.createChild(Extn_DivisionList,
+	    		attrElemOrg = YRCXmlUtils.createChild(Extn_DivisionList,
 			"Organization");
-			attrElemComplex2.setAttribute("OrganizationCode", key);
-			attrElemComplex2.setAttribute("OrganizationName", divisionMap.get(key));
+	    		attrElemOrg.setAttribute("OrganizationCode", key);
+	    		attrElemOrg.setAttribute("OrganizationName", divisionMap.get(key));
 	    	}
 	    }
 		setExtentionModel("Extn_DivisionList", Extn_DivisionList);
