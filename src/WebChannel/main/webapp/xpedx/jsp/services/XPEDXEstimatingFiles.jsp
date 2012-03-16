@@ -11,6 +11,13 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
+<!--[if IE]> --> <!-- UI changes done  -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+
+<!-- [endif] -->
+
+
 <!-- javascript -->
 
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
