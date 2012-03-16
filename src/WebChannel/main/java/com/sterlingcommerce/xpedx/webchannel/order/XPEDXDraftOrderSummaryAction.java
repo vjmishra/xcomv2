@@ -740,10 +740,12 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		}*/
 		addnlPOList = (String) wcContext.getWCAttribute("addnlPOList");;
 		
-		if(YFCCommon.isVoid(addnlEmailAddrs))
+/* JIRA 3382 removed userprofile email address from addition email address list*/
+	/*	if(YFCCommon.isVoid(addnlEmailAddrs))
 			addnlEmailAddrs = userEmailId;
 		else
 			addnlEmailAddrs = addnlEmailAddrs.concat(userEmailId);// Concatenating the users email address too as a requirement for OP Task #68
+END of JIRA 3382*/
 		
 		if (!YFCCommon.isVoid(addnlEmailAddrs)){
 			String[] emailListSplit = addnlEmailAddrs.replace(" ","").split(",");
