@@ -6,6 +6,7 @@ package com.xpedx.sterling.rcp.pca.util;
 import java.util.HashMap;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -23,6 +24,8 @@ public class XPXCacheManager {
 	
 	private HashMap xpxCache = new HashMap();
 	private static final String UOM_LIST_PREFIX = "UOM_LIST_";
+	private static final String DIV_LIST_PREFIX = "DIV_LIST_"; // JIRA 3622 - Performance Fix - Division Cache
+	
 	private static final String LINE_TYPE_LIST_PREFIX = "LINE_TYPE_LIST_";
 	private static final String ORDER_CHARGES_LIST_PREFIX = "ORDER_CHARGES_LIST_";
 	private static XPXCacheManager cacheManager;
@@ -75,7 +78,46 @@ public class XPXCacheManager {
 		}
 		inBehavior.handleApiCompletion(ctx);
 	}
-	
+// JIRA 3622 - Performance Fix - Division Cache Starts
+	public void getDivisionList(String dataSecurityGroupID, YRCBehavior inBehavior)
+	{
+		String key = DIV_LIST_PREFIX+dataSecurityGroupID;
+		Element eleInput = YRCXmlUtils.createDocument("Team").getDocumentElement();
+		eleInput.setAttribute("RequestedByUsersTeamId", dataSecurityGroupID);
+		String[] apinames = {"XPXGetDivisionsManagedByTeam"};
+		Document[] docInput = {(eleInput.getOwnerDocument())};				
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setApiNames(apinames);
+		ctx.setInputXmls(docInput);
+        ctx.setFormId(CACHE_FORM_ID);
+		if(isObjectInCache(key))
+		{
+				ctx.setInvokeAPIStatus(1);
+	            try
+	            {
+	                ctx.setOutputXml((Document)getObjectFromCache(key));
+	            }
+	            catch(ClassCastException e)
+	            {
+	                Object obj = (Document)getObjectFromCache(key);
+	                StringBuffer strBuff = new StringBuffer("The Cached Object is a: ");
+	                strBuff.append(obj.getClass().getName());
+	                strBuff.append(".  With a value of: ");
+	                strBuff.append(obj.toString());
+	                YRCPlatformUI.trace(strBuff.toString());
+	                throw e;
+	            }
+		}
+		else {
+			YRCApiCaller syncapiCaller= new YRCApiCaller(ctx,true);
+			syncapiCaller.invokeApi();
+			//get the customer details
+			Document outputXml = ctx.getOutputXml();
+			addDivList(outputXml, dataSecurityGroupID);
+		}
+		inBehavior.handleApiCompletion(ctx);
+	}
+// JIRA 3622 - Performance Fix - Division Cache Ends
 	public void getLineTypeList(String organizationCode, YRCBehavior inBehavior)
 	{
 		String key = LINE_TYPE_LIST_PREFIX+organizationCode;
@@ -179,7 +221,14 @@ public class XPXCacheManager {
 		setObjectInCache(key, doc);
 		
 	}
-	
+	// JIRA 3622 - Performance Fix - Division Cache Starts
+	public void addDivList(Document doc, String dataSecurityGroupID)
+	{
+		String key = DIV_LIST_PREFIX+dataSecurityGroupID;
+		setObjectInCache(key, doc);
+		
+	}
+	// JIRA 3622 - Performance Fix - Division Cache Ends
 	public void addLineTypeList(Document doc, String orgCode)
 	{
 		String key = LINE_TYPE_LIST_PREFIX+orgCode;
@@ -193,5 +242,6 @@ public class XPXCacheManager {
 		setObjectInCache(key, doc);
 		
 	}
+	
 
 }
