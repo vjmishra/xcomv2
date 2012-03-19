@@ -223,6 +223,7 @@
 	    <s:param name="pageNumber" value="'{0}'"/>
 	    <s:param name="searchFieldName" value="%{searchFieldName}"/>
 	    <s:param name="searchFieldValue" value="%{searchFieldValue}"/>
+	    <s:param name="pageSetToken" value="%{pageSetToken}"/>
 	 </s:url>
   	<s:url id="returnUrl" action="approvalList">
 	    <s:param name="orderByAttribute" value="orderByAttribute"/>
