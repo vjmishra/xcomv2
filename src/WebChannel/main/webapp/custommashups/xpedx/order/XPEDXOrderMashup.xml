@@ -27,8 +27,8 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getPage">
 			<Input>
-				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
-					Refresh="Y">
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
 					<PreviousPage PageNumber="" />
 					<API Name="XPXOrderListDetails" IsFlow="Y">
 						<Input>
@@ -663,8 +663,8 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getPage">
 			<Input>
-				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC"
-					Refresh="Y">
+				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
 					<PreviousPage PageNumber="" />
 					<API Name="XPXGetOrderSearchListViewService" IsFlow="Y">
 						<Input>
@@ -702,8 +702,8 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getPage">
 			<Input>
-				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC"
-					Refresh="Y">
+				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
 					<PreviousPage PageNumber="" />
 					<API Name="XPXGetOrderSearchLineListViewService" IsFlow="Y">
 						<Input>
@@ -1404,8 +1404,8 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getPage">
 			<Input>
-				<Page PageNumber="" PageSize="25" PaginationStrategy="GENERIC"
-					Refresh="Y">
+				<Page PageNumber="" PageSize="25" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
 					<PreviousPage PageNumber="" />
 					<API Name="getOrderList">
 						<Input>
