@@ -4227,7 +4227,7 @@ public class XPEDXWCUtils {
 		return outputDoc;
 	}
 	
-	public static Document getPaginatedShipTosForMIL(String CustomerID, String customerSuffixType, String pageNumber, String pageSize, IWCContext wcContext) {
+	public static Document getPaginatedShipTosForMIL(String CustomerID, String customerSuffixType, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext) {
 		Document outDoc = null;
 		//if page number and page size are not passed we take the default, pagenumber=1 and pageSize =25
 		Integer pageNumberToCheck,pageSizeToCheck;
@@ -4267,6 +4267,7 @@ public class XPEDXWCUtils {
 		HashMap<String,String> valueMap = new HashMap<String, String>();
 		valueMap.put("/Page/@PageNumber", pageNumber);
 		valueMap.put("/Page/@PageSize", pageSize);
+		valueMap.put("/Page/@PageSetToken", pageSetToken);
 		valueMap.put("/Page/API/Input/XPXCustHierarchyView/@"+AttributeToQry, CustomerID);
 		valueMap.put("/Page/API/Input/XPXCustHierarchyView/OrderBy/Attribute/@Name", "ShipToCustomerID");
 		try {
