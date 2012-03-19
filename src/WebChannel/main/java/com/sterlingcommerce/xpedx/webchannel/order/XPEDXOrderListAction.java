@@ -66,7 +66,16 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private Integer assignedShipToSize;
 	private String MASHUP_NAME="XPEDXOrderList";
 	private String rootElementName="XPEDXOrderSearchListView";
+	private String pageSetToken;	
 	
+	public String getPageSetToken() {
+		return pageSetToken;
+	}
+
+	public void setPageSetToken(String pageSetToken) {
+		this.pageSetToken = pageSetToken;
+	}
+
 	public Integer getAssignedShipToSize() {
 		return assignedShipToSize;
 	}
@@ -149,7 +158,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         	//As per discussion with Pawan, Include all the ship to's if the ship to count is less than 30.
         	XPEDXCustomerContactInfoBean custContBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
         	Integer numberOfAssignedShipTo=custContBean.getNumberOfAssignedShioTos();
-        	if(numberOfAssignedShipTo == null || numberOfAssignedShipTo <=20)
+        	if(numberOfAssignedShipTo == null )
         	{
 	        	Document assignedCustomersDoc = XPEDXWCUtils.getPaginatedAssignedCustomersDocument(getWCContext());
 	        	if(assignedCustomersDoc!=null) {
@@ -169,6 +178,11 @@ public class XPEDXOrderListAction extends OrderListAction {
         	else
         	{
         		assignedShipToSize=numberOfAssignedShipTo;
+        		if(numberOfAssignedShipTo <=20)
+        		{        			
+	        		List<String> assignedShipToList = (List<String>)XPEDXWCUtils.getObjectFromCache("XPEDX_20_ASSIFNED_SHIPTOS");
+	        		setShipToList(XPEDXWCUtils.getHashMapFromListWithLabel(assignedShipToList));
+        		}
         	}
         	/*Map statusSearchListVal=(Map)wcContext.getSCUIContext().getAttribute("statusSearchListVal");
         	if(!(statusSearchListVal != null && statusSearchListVal.size()>0))
@@ -907,6 +921,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	    manipulateInputs(mashupInputs);
 	    Map mashupOutputs = invokeMashups(mashupInputs);
 	    outputDoc = (Element)mashupOutputs.get(MASHUP_NAME);
+	    pageSetToken=outputDoc.getAttribute("PageSetToken");
 	}
 	
 	private Document populateCustomerOrderList(LinkedList chainedOrderFromKeylist) throws Exception {

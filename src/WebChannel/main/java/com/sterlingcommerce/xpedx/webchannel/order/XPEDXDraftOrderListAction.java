@@ -484,6 +484,9 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			setIsValidPage(getBooleanAttribute(page, "IsValidPage", isValidPage));
 		if (paginated && page != null)
 			setPageNumber(getIntegerAttribute(page, "PageNumber", pageNumber));
+		if (paginated && page != null)
+			setPageSetToken(page.getAttribute("PageSetToken"));
+		
 		totalNumberOfPages = new Integer(0);
 		if (paginated && page != null)
 			setTotalNumberOfPages(getIntegerAttribute(page,
@@ -638,7 +641,13 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 		this.deleteOrder = deleteOrder;
 	}
 
+	public String getPageSetToken() {
+		return pageSetToken;
+	}
 
+	public void setPageSetToken(String pageSetToken) {
+		this.pageSetToken = pageSetToken;
+	}
 
 	private static final Logger log = Logger.getLogger(XPEDXDraftOrderListAction.class);
 	protected String productIdValue;
@@ -690,6 +699,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
     private static Integer CART_LIST_RECORD_PER_PAGE = Integer.valueOf(25);
  
     private static final Integer CART_WIDGET_PAGE_NUMBER = Integer.valueOf(1);
+    private String pageSetToken;	
 
 }
 
