@@ -333,6 +333,10 @@ public class XPEDXUserList extends UserList{
 	        if ((paginated) && (page != null)) {
 	            setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
 	        }
+	        
+	        if ((paginated) && (page != null)) {
+				setPageSetToken(page.getAttribute("PageSetToken"));
+	        }
 
 	        setTotalNumberOfPages(new Integer(0));
 	        if ((paginated) && (page != null)) {
@@ -403,9 +407,17 @@ public class XPEDXUserList extends UserList{
 		public void setIsAdminMap(Map<String, Boolean> isAdminMap) {
 			this.isAdminMap = isAdminMap;
 		}
+		
+		public String getPageSetToken() {
+			return pageSetToken;
+		}
+
+		public void setPageSetToken(String pageSetToken) {
+			this.pageSetToken = pageSetToken;
+		}
 
 
-
-	Map<String ,Boolean> isAdminMap=new HashMap<String ,Boolean>();
+	 Map<String ,Boolean> isAdminMap=new HashMap<String ,Boolean>();
+	 private String pageSetToken;	
 
 }
