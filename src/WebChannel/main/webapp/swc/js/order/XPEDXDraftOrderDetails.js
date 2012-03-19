@@ -1,5 +1,6 @@
 function checkOut()
 {
+	document.OrderDetailsForm.modifyOrderLines.value = "false";
 	if(validateOrderMultiple() == false)
 	{
 		return;
@@ -148,6 +149,7 @@ function resetQuantityErrorForQuckAdd()
 
 function update()
 {
+	document.OrderDetailsForm.isComingFromCheckout.value = "false";
 	if(document.getElementById('cartName_new').value.trim() == "")
 	{
 		//commented for 3098
@@ -179,6 +181,7 @@ function update()
 	    }
 	    document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
 	    document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value;
+	    document.OrderDetailsForm.modifyOrderLines.value = "true";
 	    document.OrderDetailsForm.action = document.getElementById('updateURL');
 	    document.OrderDetailsForm.submit();
 	}
