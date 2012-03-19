@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -25,17 +25,14 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
-import com.sterlingcommerce.webchannel.order.AuthorizedClientMismatchException;
-import com.sterlingcommerce.webchannel.order.DraftOrderFlagMismatchException;
 import com.sterlingcommerce.webchannel.order.DraftOrderSummaryAction;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.utilities.CreditCardCVVStorageHelper;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.WCUtils;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXPaymentMethodHelper;
@@ -53,7 +50,7 @@ import com.yantra.yfc.util.YFCException;
 
 public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 
-
+	private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
 	private static final long serialVersionUID = -2966568751589581889L;
 	private XPEDXPaymentMethodHelper xPEDXPaymentMethodHelper = null;
     public static final String MASHUP_DOD_VALIDATE_ITEM_FOR_ORDERING = "me_dod_validateItemForOrdering";
@@ -122,6 +119,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	}
 	
 	public String execute() {
+		long startTime=System.currentTimeMillis();
 		XPEDXWCUtils xpedxwcUtils = new XPEDXWCUtils();
 		XPEDXOrderUtils orderUtils = new XPEDXOrderUtils();
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
@@ -161,7 +159,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			{			
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			}
-			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
+			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey))
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			
 			
@@ -198,14 +196,18 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			getCustomerDisplayFields();
 			processOrderLines();
 			// If edit order then sort the order line as per JIRA # 2851
-			if(!YFCCommon.isVoid(editedOrderHeaderKey)){
+			//if(!YFCCommon.isVoid(editedOrderHeaderKey)){
 				ArrayList<Element> tempMajorLines1 = getMajorLineElements();
 				Collections.sort(tempMajorLines1, new XpedxLineSeqNoComparator());
-			}
+			//}
 			//Added for PNA call
-			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc();
+			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc(orderOutDoc);
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+			ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+			Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
+			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil
-					.getPriceAndAvailability(wcContext,orderHeaderKey);	
+					.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);	
 			
 			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 			ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
@@ -220,7 +222,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 			}
-			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
+			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext, true, lineTpeMDoc.getDocumentElement(), true, orderOutputDoc));
 			// Code for displaying Last Modified by in cart page
 			String createUserIDStr = "";
 			String modifyUserIdStr = "";
@@ -276,6 +278,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		long endTime=System.currentTimeMillis();
+		System.out.println("Time taken in milliseconds in XPEDXDraftOrderSummaryAction class : "+(endTime-startTime));
 		return "success";
 	
 	}
@@ -400,6 +404,10 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			return;
 		
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		
+		ArrayList<String> itemIdList = new ArrayList<String>();		
+		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
+		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
 			Element orderLineElement = (Element)orderLineElemList.get(i);
@@ -410,9 +418,32 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			if(skuMap.containsKey(itemId))
 				continue;
 			
-			HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-			skuMap.put(itemId, itemSkuMap);
+			/*Begin - Changes made by Mitesh Parikh for JIRA 3595*/
+			Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
+			Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
+			if(primeInfoElem!=null)
+			{
+				String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+				if(manufactureItem!=null && manufactureItem.length()>0)
+					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+			}
+			Element extnElem = XMLUtilities.getElement(itemDetailsElement, "Extn");
+			if(extnElem!=null)
+			{
+				String mpcCode = extnElem.getAttribute("ExtnMpc");
+				if(mpcCode!=null && mpcCode.length()>0)
+					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
+			}
+			itemIdList.add(itemId);
+			itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
+			//HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
+			//skuMap.put(itemId, itemSkuMap);
 		}
+		
+		if(orderLineElemList.size()>0){
+			skuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemIdList, itemsSkuMap);
+		}
+		/*End - Changes made by Mitesh Parikh for JIRA 3595*/
 	}
 	protected void setOrderCutOffDate(){
 		String customerID = wcContext.getCustomerId();
@@ -1441,5 +1472,18 @@ END of JIRA 3382*/
 		}
 		return qty;
 	}
-
+	
+	/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+	protected void getCompleteOrderDetailsDoc()
+	{
+		Document orderOutputDocument=null;
+		if(getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ)!=null)
+		{
+			orderOutputDocument=(Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
+			setOutputDocument(orderOutputDocument);
+		}
+		getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
+	}
+	/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+	
 }

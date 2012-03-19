@@ -69,6 +69,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					
 					Element changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 					changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
+					getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutputDoc);
 					refreshCartInContext(orderHeaderKey);
 				}
 			}
@@ -805,6 +806,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	protected ArrayList errorList;
 	protected String isEditOrder="false";
 	protected ArrayList isEditNewline;
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
+	
 	//Adding ArrayList quickAddOrderMultiple FOr Jira 3481
 	protected ArrayList quickAddOrderMultiple;
 	
