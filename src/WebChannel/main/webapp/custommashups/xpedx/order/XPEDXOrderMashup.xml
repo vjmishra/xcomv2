@@ -967,7 +967,7 @@
 					</OrderLines>
 				</Order>
 			</Input>
-			<Template>
+			<!-- <Template>
 				<Order OrderHeaderKey="">
 					<Extn ExtnTotalOrderValue=""/>
 					<OrderLines TotalNumberOfRecords="">
@@ -977,6 +977,82 @@
 							<Extn />
 						</OrderLine>
 					</OrderLines>
+				</Order>
+			</Template> -->
+			<Template>
+				<Order OrderHeaderKey="" OrderNo="" OrderName="" OrderType="" EntryType="" EnterpriseCode=""
+					DraftOrderFlag="" Modifyts="" Modifyprogid="" Modifyuserid="" Createts="" Createuserid="" CustomerContactID=""
+					BillToID="" BuyerOrganizationCode="" HasPendingChanges=""
+					AuthorizedClient="">
+					<Modifications>
+						<Modification />
+					</Modifications>			
+					<PriceInfo Currency="" />
+					<OrderLines TotalNumberOfRecords="">
+						<OrderLine OrderedQty="" ItemGroupCode=""
+							ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
+							MinLineStatus="" MaxLineStatus="" OpenQty="" Status=""
+							IsBundleParent="" PrimeLineNo="" SubLineNo="" CustomerPONo=""
+							CustomerLinePONo="" LineType="">
+							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" ProductClass="" />
+							<OrderLineTranQuantity TransactionalUOM=""	OrderedQty="" />
+							<ItemDetails ItemID="">
+								<PrimaryInformation />
+								<Extn>
+									<XPXItemExtnList>
+										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
+									</XPXItemExtn>
+									</XPXItemExtnList>
+								</Extn>
+							</ItemDetails>
+							<KitLines NumberOfKitLines="">
+								<KitLine />
+							</KitLines>
+							<!-- BundleOrderLineChargesAndAwards>
+								<Awards>
+									<Award AwardAmount="" AwardApplied="" AwardId=""
+										AwardKey="" AwardType="" ChargeCategory="" ChargeName=""
+										DenialReason="" Description="" IsPromotionOnOrder="Y"
+										PosReasonCode="" PromotionId="" PromotionKey="" />
+								</Awards>
+								<LineCharges>
+									<LineCharge ChargeAmount="" ChargeCategory=""
+										ChargeName="" ChargeNameKey="" ChargePerLine="" ChargePerUnit=""
+										InvoicedChargeAmount="" InvoicedChargePerLine=""
+										InvoicedChargePerUnit="" IsBillable="" IsDiscount="" IsManual=""
+										IsShippingCharge="" Reference="" RemainingChargeAmount=""
+										RemainingChargePerLine="" RemainingChargePerUnit="" />
+								</LineCharges>
+							</BundleOrderLineChargesAndAwards-->
+							<Awards>
+								<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+									AwardType="" DenialReason="" Description="" PosReasonCode=""
+									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+									IsPromotionOnOrder="" />
+							</Awards>
+							<Modifications>
+								<Modification />
+							</Modifications>
+							<Extn/>
+							<Instructions>
+								<Instruction InstructionText=""
+									InstructionDetailKey="" />
+							</Instructions>
+							<OrderLineTranQuantity TransactionalUOM=""
+								OrderedQty="" />
+						</OrderLine>
+					</OrderLines>
+					<Awards>
+						<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+							AwardType="" DenialReason="" Description="" PosReasonCode=""
+							PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+							IsPromotionOnOrder="" />
+					</Awards>
+					<Extn >
+						<XPXUeAdditionalAttrXmlList>
+								<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>
 				</Order>
 			</Template>
 		</API>
@@ -1135,7 +1211,148 @@
 				</Order>
 			</Input>
 			<Template>
-				<Order OrderHeaderKey="" />
+				<Order OrderHeaderKey="" OrderNo="" OrderName="" CustomerPONo="" EntryType="" EnterpriseCode=""
+					OptimizationType="" CarrierServiceCode="" Modifyts="" Createts=""
+					DraftOrderFlag="" HasPendingChanges="" AuthorizedClient=""
+					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="">
+					<PersonInfoSoldTo />
+					<PersonInfoShipTo />
+					<PersonInfoBillTo />
+					<OverallTotals SubtotalWithoutTaxes=""
+						HeaderAdjustmentWithoutShipping="" HdrShippingTotal=""
+						HdrShippingBaseCharge="" AdjustedSubtotalWithoutTaxes="" GrandTax=""
+						GrandTotal="" HdrShippingCharges="" />
+					<HeaderCharges>
+						<HeaderCharge ChargeName="" IsShippingCharge=""
+							IsDiscount="" ChargeAmount="" IsManual="">
+							<PricingRule Description="" />
+						</HeaderCharge>
+					</HeaderCharges>
+					<PriceInfo Currency="" />
+					<Shipping HeaderShippingCharges="" />
+					<Modifications>
+						<Modification />
+					</Modifications>
+					<OrderLines TotalNumberOfRecords="">
+						<OrderLine OrderedQty="" ItemGroupCode=""
+							ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
+							MaxLineStatus="" CarrierServiceCode="" ReqShipDate=""
+							IsBundleParent="" OpenQty="" Status="" PrimeLineNo="" SubLineNo=""
+							CustomerPONo="" CustomerLinePONo="" LineType="" ValidateItem="">
+
+							<Modifications>
+								<Modification />
+							</Modifications>
+							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
+							<LineOverallTotals UnitPrice=""
+								DisplayUnitPrice="" KitUnitPrice="" LineAdjustments=""
+								DisplayLineAdjustments="" LineTotalWithoutTaxes=""
+								DisplayLineTotalWithoutTaxes="" />
+							<LinePriceInfo IsLinePriceForInformationOnly="" />
+							<LineCharges>
+								<LineCharge ChargeName="" IsShippingCharge=""
+									IsDiscount="" ChargeAmount="" IsManual="">
+									<PricingRule Description="" />
+								</LineCharge>
+							</LineCharges>
+							<ItemDetails ItemID="">
+								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
+								<Extn>
+									<XPXItemExtnList>
+										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
+									</XPXItemExtnList>
+								</Extn>
+							</ItemDetails>
+							<KitLines NumberOfKitLines="">
+								<KitLine />
+							</KitLines>
+							<BundleParentLine OrderLineKey="" />
+							<PersonInfoShipTo />
+							<OrderDates>
+								<OrderDate DateTypeId="" CommittedDate="" />
+							</OrderDates>
+							<Shipnode Description="">
+								<ShipNodePersonInfo />
+							</Shipnode>
+							<Awards>
+								<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+									AwardType="" DenialReason="" Description="" PosReasonCode=""
+									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+									IsPromotionOnOrder="" />
+							</Awards>
+							<BundleOrderLineChargesAndAwards>
+								<Awards>
+									<Award AwardAmount="" AwardApplied="" AwardId=""
+										AwardKey="" AwardType="" ChargeCategory="" ChargeName=""
+										DenialReason="" Description="" IsPromotionOnOrder="Y"
+										PosReasonCode="" PromotionId="" PromotionKey="" />
+								</Awards>
+								<LineCharges>
+									<LineCharge ChargeAmount="" ChargeCategory=""
+										ChargeName="" ChargeNameKey="" ChargePerLine="" ChargePerUnit=""
+										InvoicedChargeAmount="" InvoicedChargePerLine=""
+										InvoicedChargePerUnit="" IsBillable="" IsDiscount="" IsManual=""
+										IsShippingCharge="" Reference="" RemainingChargeAmount=""
+										RemainingChargePerLine="" RemainingChargePerUnit="" />
+								</LineCharges>
+							</BundleOrderLineChargesAndAwards>
+							<Extn />
+							<Instructions>
+								<Instruction InstructionText=""
+									InstructionDetailKey="" />
+							</Instructions>
+							<OrderLineTranQuantity TransactionalUOM=""
+								OrderedQty="" />
+						</OrderLine>
+					</OrderLines>
+					<PaymentMethods>
+						<PaymentMethod Action="" PaymentType=""
+							MaxChargeLimit="" ChargeSequence="" CreditCardType=""
+							DisplayCreditCardNo="" DisplayCustomerAccountNo=""
+							DisplayPaymentReference1="" DisplaySvcNo="" PaymentKey=""
+							FundsAvailable="" SuspendAnyMoreCharges="" TotalCharged=""
+							TotalAuthorized="" />
+					</PaymentMethods>
+					<ChargeTransactionDetails
+						RemainingAmountToAuth="" />
+					<Promotions>
+						<Promotion Action="" DenialReason="" Description=""
+							PromotionApplied="" PromotionId="" PromotionKey="" PromotionType="">
+							<Awards>
+								<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+									AwardType="" DenialReason="" Description="" PosReasonCode=""
+									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+									IsPromotionOnOrder="" />
+							</Awards>
+						</Promotion>
+					</Promotions>
+					<Awards>
+						<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+							AwardType="" DenialReason="" Description="" PosReasonCode=""
+							PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+							IsPromotionOnOrder="" />
+					</Awards>
+					<Extn ExtnDeliveryHoldTime="" ExtnDeliveryHoldDate="" ExtnOrderDivision="" ExtnGenerationNo=""
+						ExtnDeliveryHoldFlag="" ExtnRushOrderComments="" ExtnShipComplete=""
+						ExtnWillCall="" ExtnAttentionName="" ExtnHeaderComments=""
+						ExtnAddnlEmailAddr="" ExtnCustomerDivision="" ExtnOrderedByName="" 
+						ExtnSourceType="" ExtnWebConfNum="" ExtnLegacyOrderNo=""
+						ExtnRushOrderFlag="" ExtnWebHoldFlag="" ExtnOrderSubTotal="" ExtnOrderCouponDiscount=""
+						ExtnOrderDiscount="" ExtnTotOrderAdjustments="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnLegTotOrderAdjustments="" 
+						ExtnOrderDesc="">
+						
+						<XPXUeAdditionalAttrXmlList>
+								<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>						
+					</Extn>
+					<Instructions>
+						<Instruction InstructionText=""
+							InstructionDetailKey="" />
+					</Instructions>
+				</Order>
 			</Template>
 		</API>
 	</mashup>
@@ -2279,7 +2496,78 @@
 				</Order>
 			</Input>
 			<Template>
-				<Order OrderHeaderKey="" >
+				<Order OrderHeaderKey="" OrderNo="" OrderName="" OrderType="" EntryType="" EnterpriseCode=""
+					DraftOrderFlag="" Modifyts="" Modifyprogid="" Modifyuserid="" Createts="" Createuserid="" CustomerContactID=""
+					BillToID="" BuyerOrganizationCode="" HasPendingChanges=""
+					AuthorizedClient="">
+					<Modifications>
+						<Modification />
+					</Modifications>			
+					<PriceInfo Currency="" />
+					<OrderLines TotalNumberOfRecords="">
+						<OrderLine OrderedQty="" ItemGroupCode=""
+							ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
+							MinLineStatus="" MaxLineStatus="" OpenQty="" Status=""
+							IsBundleParent="" PrimeLineNo="" SubLineNo="" CustomerPONo=""
+							CustomerLinePONo="" LineType="">
+							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
+							<ItemDetails ItemID="">
+								<PrimaryInformation />
+								<Extn>
+									<XPXItemExtnList>
+										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
+									</XPXItemExtn>
+									</XPXItemExtnList>
+								</Extn>
+							</ItemDetails>
+							<KitLines NumberOfKitLines="">
+								<KitLine />
+							</KitLines>
+							<!-- BundleOrderLineChargesAndAwards>
+								<Awards>
+									<Award AwardAmount="" AwardApplied="" AwardId=""
+										AwardKey="" AwardType="" ChargeCategory="" ChargeName=""
+										DenialReason="" Description="" IsPromotionOnOrder="Y"
+										PosReasonCode="" PromotionId="" PromotionKey="" />
+								</Awards>
+								<LineCharges>
+									<LineCharge ChargeAmount="" ChargeCategory=""
+										ChargeName="" ChargeNameKey="" ChargePerLine="" ChargePerUnit=""
+										InvoicedChargeAmount="" InvoicedChargePerLine=""
+										InvoicedChargePerUnit="" IsBillable="" IsDiscount="" IsManual=""
+										IsShippingCharge="" Reference="" RemainingChargeAmount=""
+										RemainingChargePerLine="" RemainingChargePerUnit="" />
+								</LineCharges>
+							</BundleOrderLineChargesAndAwards-->
+							<Awards>
+								<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+									AwardType="" DenialReason="" Description="" PosReasonCode=""
+									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+									IsPromotionOnOrder="" />
+							</Awards>
+							<Modifications>
+								<Modification />
+							</Modifications>
+							<Extn/>
+							<Instructions>
+								<Instruction InstructionText=""
+									InstructionDetailKey="" />
+							</Instructions>
+							<OrderLineTranQuantity TransactionalUOM=""
+								OrderedQty="" />
+						</OrderLine>
+					</OrderLines>
+					<Awards>
+						<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+							AwardType="" DenialReason="" Description="" PosReasonCode=""
+							PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+							IsPromotionOnOrder="" />
+					</Awards>
+					<Extn >
+						<XPXUeAdditionalAttrXmlList>
+								<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>
 				</Order>
 			</Template>
 		</API>
