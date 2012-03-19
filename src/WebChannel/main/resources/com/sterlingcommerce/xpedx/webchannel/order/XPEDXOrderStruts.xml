@@ -237,6 +237,7 @@
 				<param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
 				<param name="draft">${draft}</param>
 				<param name="validateCustomerFields">${validateCustomerFields}</param>
+				<param name="modifyOrderLines">true</param>
 			</result>
 		</action>
 
@@ -570,6 +571,7 @@
                 <param name="canCheckout">${#parameters.canCheckout}</param>
                 <param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
                 <param name="isEditOrder">${#parameters.isEditOrder}</param>
+                <param name="isDeleteOrder">true</param>
                 <param name="draft">${draft}</param>
             </result>
             <result name="pendingChangeConflict" type="redirectAction">
