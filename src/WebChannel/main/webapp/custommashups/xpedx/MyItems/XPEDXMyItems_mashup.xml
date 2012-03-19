@@ -63,8 +63,8 @@
 		<API Name="getPage">
 			<Input>
 
-				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
-					Refresh="Y">
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
 					<PreviousPage PageNumber="" />
 					<API Name="getXPEDXLandingMilList" IsFlow="Y">
 						<Input>
@@ -637,7 +637,7 @@
 		 <API Name="getPage">
             <Input>
                 <Page PageNumber="" PageSize=""
-                    PaginationStrategy="GENERIC" Refresh="Y">
+                    PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
                     <PreviousPage PageNumber="" />
 					<API Name="XPXCustomerHierarchyViewService" IsFlow="Y">
 						<Input>
