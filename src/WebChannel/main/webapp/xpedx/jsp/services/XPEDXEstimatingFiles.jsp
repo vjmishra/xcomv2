@@ -98,8 +98,7 @@ $("#various4").fancybox();
 			                     
 			                      <li>
 			                          <span><a href="<s:property value='#CatalogExp.key'/>">
-			                          <img height="12" width="12" border="0" alt="Download" title="Download" src="/swc/xpedx/images/download_12x12_grey.png"></a></span>
-			                          <span><s:property value='#CatalogExp.value'/></span>			                     
+			                          <span><s:property value='#CatalogExp.value'/></span></a>			                     
 			                     </li>
 			                   
 		                     </ul>				
