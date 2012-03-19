@@ -28,6 +28,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
@@ -158,12 +159,11 @@ public class XPEDXPriceandAvailabilityUtil {
 	}
 	
 	
-	public static XPEDXPriceAndAvailability getPriceAndAvailability(IWCContext wcContext,String orderHeaderKey) {
+	public static XPEDXPriceAndAvailability getPriceAndAvailability(IWCContext wcContext, Element ueAdditionalAttrElem) {
 		XPEDXPriceAndAvailability pnaOutput = new XPEDXPriceAndAvailability();
 		
-		
-		
-		HashMap<String, String> valueMap = new HashMap<String, String>();
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/		
+		/*HashMap<String, String> valueMap = new HashMap<String, String>();
 		
 		valueMap.put("/XPXUeAdditionalAttribsXml/@OrderHeaderKey", orderHeaderKey);
 		valueMap.put("/XPXUeAdditionalAttribsXml/@XMLType", "PNA");
@@ -179,14 +179,16 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		Object obj = WCMashupHelper.invokeMashup(
 				"xpedx_get_pna_responsexml", input, wcContext
-						.getSCUIContext());
+						.getSCUIContext());*/
+		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 		Document outputDoc = null;
 		String displayErrorMsgToUser = "";
-		if(obj != null)
+		String pnaXML="";
+		if(ueAdditionalAttrElem != null)
 		{
-			Element allChildDoc = ((Element) obj);
+			//Element allChildDoc = ((Element) obj);
 			
-			String pnaXML=allChildDoc.getAttribute("ResponseXML");
+			pnaXML=ueAdditionalAttrElem.getAttribute("ResponseXML");
 			
 			if(pnaXML != null)
 			{
@@ -205,8 +207,8 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 			//Return Response valid and proceed further processing 			
 			pnaOutput = new XPEDXPriceAndAvailability();
-			String responseXML = SCXmlUtil.getString(outputDoc);
-			log.info("getPriceAndAvailability: response for P&A Webservice: " + responseXML);
+			//String responseXML = SCXmlUtil.getString(outputDoc);
+			log.info("getPriceAndAvailability: response for P&A Webservice: " + pnaXML);
 			
 			//Use this for testing different scenarios
 			//outputDoc  = manipulateXML ( responseXML );
@@ -791,15 +793,16 @@ public class XPEDXPriceandAvailabilityUtil {
 	
 	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext) throws Exception
 	{
-		return getPricingInfoFromItemDetails(items,wcContext,false,null);
+		return getPricingInfoFromItemDetails(items,wcContext,false,null,false,null);
 	}
 	
 	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired) throws Exception
 	{
-		return getPricingInfoFromItemDetails(items,wcContext,isLineNuberRequired,null);
+		return getPricingInfoFromItemDetails(items,wcContext,isLineNuberRequired,null,false,null);
 	}
 	
-	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired,Element lineTypeMEle) throws Exception
+	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired,
+																					 Element lineTypeMEle, boolean isComingFromCheckoutOrDraftOrderDetails, Document orderOutputDocument) throws Exception
 	{
 		HashMap<String, XPEDXItemPricingInfo> priceUomDisplayMap = new HashMap<String, XPEDXItemPricingInfo>();
 		
@@ -809,12 +812,35 @@ public class XPEDXPriceandAvailabilityUtil {
 			String itemId = item.getLegacyProductCode();
 			itemIDList.add(itemId);
 		}
-		Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext
-				.getCustomerId(), wcContext.getStorefrontId(), wcContext);
-		 Map<String,List<String>> itemsUOMMap= createItemUOMMap(pricingInfoDoc);
+		
+		Document pricingInfoDoc=null;
+		Map<String,List<String>> itemsUOMMap=null;
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+		if(isComingFromCheckoutOrDraftOrderDetails)
+		{
+			pricingInfoDoc=orderOutputDocument;
+			itemsUOMMap = createItemUOMMap(pricingInfoDoc.getDocumentElement());		
+		
+		} else {
+			pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext
+					.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			itemsUOMMap= createItemUOMMap(pricingInfoDoc);
+			
+		}
+		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+		
 		if(pricingInfoDoc!=null)
 		{
-			ArrayList<Element> allItemElems = SCXmlUtil.getElements(pricingInfoDoc.getDocumentElement(), "Item");
+			ArrayList<Element> allItemElems=null;
+			if(isComingFromCheckoutOrDraftOrderDetails)
+			{
+				allItemElems = getOrderItemDetailsElement(pricingInfoDoc.getDocumentElement());
+			
+			}else {				
+				allItemElems = SCXmlUtil.getElements(pricingInfoDoc.getDocumentElement(), "Item");
+				
+			}
+			
 			if(lineTypeMEle != null)
 			{
 				allItemElems.addAll(SCXmlUtil.getElements(lineTypeMEle, "Item"));
@@ -1025,6 +1051,31 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return itemUOMMap;
 	}
+	
+	private static Map<String,List<String>> createItemUOMMap(Element pricingInfoDocElement)
+	{
+		Map<String,List<String>> itemUOMMap=new HashMap<String,List<String>>();
+		if(pricingInfoDocElement !=null)
+		{
+			NodeList items=pricingInfoDocElement.getElementsByTagName("ItemDetails");
+			for(int i=0;i<items.getLength();i++)
+			{
+				List<String> uoms=new ArrayList<String>();
+				Element itemElem=(Element)items.item(i);
+				uoms.add(itemElem.getAttribute("UnitOfMeasure"));
+				ArrayList<Element> itemUomList=SCXmlUtil.getElements(itemElem, "AlternateUOMList/AlternateUOM");
+				if(itemUomList != null)
+				{
+					for(Element alternateUOM :itemUomList)
+					{
+						uoms.add(alternateUOM.getAttribute("UnitOfMeasure"));
+					}
+					itemUOMMap.put(itemElem.getAttribute("ItemID"),uoms);
+				}
+			}
+		}
+		return itemUOMMap;
+	}
 	/*
 	 * This takes care of displaying message to Users based on 
 	 * 		1] ServiceDown 2] Transmission Error 3] HeaderLevelError, 4] LineItemError  
@@ -1180,6 +1231,23 @@ public class XPEDXPriceandAvailabilityUtil {
 			XPEDXPriceandAvailabilityUtil.handlePandAWebServiceResponseSatuseses(newDoc, pna, actuialErrorMsgToUser );
 			actuialErrorMsgToUser = pna.getStatusVerboseMsg();
 			System.out.println(" actuialErrorMsgToUser " + actuialErrorMsgToUser );		
+	}
+	  
+	public static ArrayList<Element> getOrderItemDetailsElement(Element orderEl) {
+		ArrayList<Element> orderLineElements = SCXmlUtil.getElements(orderEl, "OrderLines/OrderLine");
+		ArrayList<Element> itemDetailsElements = new ArrayList<Element>();
+	    if (orderLineElements.size() > 0)
+	    {
+	      for (int i = 0; i < orderLineElements.size(); i++)
+	      {
+	        Element orderLineEl = (Element)orderLineElements.get(i);
+	        itemDetailsElements.add(SCXmlUtil.getChildElement(orderLineEl, "ItemDetails"));
+
+	      }
+	    }
+	    
+	    return itemDetailsElements;
+	    
 	}
 
 }
