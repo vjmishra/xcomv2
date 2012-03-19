@@ -83,6 +83,14 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 			{
 				callChangeOrder();
+				
+			} else {
+				if(isDeleteOrder.equals("false"))
+				{
+					changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+					setOutputDocument(changeOrderOutputDoc);
+					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				}
 			}
 			
 			super.execute();
@@ -102,10 +110,13 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			//BEGIN: sort the orderlines based on legacy line number - RUgrani
-			if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
+			//if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
+			if(getIsDeleteOrder().equals("false"))
+			{
 				ArrayList<Element> tempMajorLines = getMajorLineElements();
 				Collections.sort(tempMajorLines, new XpedxLineSeqNoComparator());
 			}
+			//}
 			//END: sort the orderlines based on legacy line number - RUgrani
 			
 			//Get the field validateCustomerFields. It will be set to Y when cart is updated
@@ -161,7 +172,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			// BEGIN P&A Call: RUgrani
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc();
 			if(getMajorLineElements().size()>0){
-				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
+				ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+				Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
+				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);			
 		
 				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 				Document lineTpeMDoc=SCXmlUtil.createDocument("Items");
@@ -193,7 +206,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				}
-				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
+				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
 				getCustomerDetails();
@@ -507,6 +520,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					valueMap1, wcContext.getSCUIContext());
 			Object obj1 = WCMashupHelper.invokeMashup("XPEDXCallChangeOrder",
 						input1, wcContext.getSCUIContext());
+			
+			setOutputDocument(((Element)obj1).getOwnerDocument());
 
 			//orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			
@@ -907,7 +922,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setCustomerSku(String customerSku) {
 		this.customerSku = customerSku;
 	}
-
+@Override
 	protected void getAndProcessItemDetails() throws Exception {
 
 		//getRelatedItemsForDraftOrder();
@@ -915,7 +930,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		//super.getAndProcessItemDetails();
 
 	}
+@Override
+	protected void deriveAssocToCountMaps() throws Exception
+    {
 	
+    }
+@Override
+	 protected void getAndProcessOrderValidationDoc() throws Exception
+	 {
+
+	 }
 	protected void setXPEDXItemAssociation() throws XPathExpressionException, CannotBuildInputException{
 		Set itemIDUOMs = itemIDUOMToOrderLineKeyListMap.keySet();
 		Iterator itemIDUOMiter = itemIDUOMs.iterator();
@@ -1539,8 +1563,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected void getCompleteOrderDetailsDoc() throws Exception {
 		//XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-		super.getCompleteOrderDetailsDoc();
-		//XPEDXWCUtils.releaseEnv(wcContext);
+		if(getIsDeleteOrder().equals("true"))
+		{
+			super.getCompleteOrderDetailsDoc();
+			//XPEDXWCUtils.releaseEnv(wcContext);
+		}else {
+			validateRestoredOrder();
+		}
 	}
 
 	private void processPandA(Vector items) {
@@ -1949,7 +1978,18 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
+	protected Document changeOrderOutputDoc=null;
+	protected String isDeleteOrder="false";
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
+	public Document getChangeOrderOutputDoc() {
+		return changeOrderOutputDoc;
+	}
+
+	public void setChangeOrderOutputDoc(Document changeOrderOutputDoc) {
+		this.changeOrderOutputDoc = changeOrderOutputDoc;
+	}
+
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}
@@ -2138,6 +2178,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
 		this.pnALineErrorMessage = pnALineErrorMessage;
-	}	
+	}
+	
+	public String getIsDeleteOrder() {
+		return isDeleteOrder;
+	}
+	public void setIsDeleteOrder(String isDeleteOrder) {
+		this.isDeleteOrder = isDeleteOrder;
+	}
 	
 }

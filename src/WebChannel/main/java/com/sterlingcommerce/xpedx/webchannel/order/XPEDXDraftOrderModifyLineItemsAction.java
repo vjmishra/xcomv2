@@ -31,6 +31,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends
 DraftOrderModifyLineItemsAction
 {
 	public static final String CHANGE_ORDER_LINE_DETAILS_MASHUP = "xpedx_me_changeOrderLineDetails";
+	public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
 	public String mashUpId = null; 
 	
@@ -43,6 +45,15 @@ DraftOrderModifyLineItemsAction
 	private String modifiedOrderHeaderKey="";
 	private double totalAmount;
 	private Element modifiedOrderExtnForSpecailCharge;
+	private String modifyOrderLines="false";
+	public String getModifyOrderLines() {
+		return modifyOrderLines;
+	}
+
+	public void setModifyOrderLines(String modifyOrderLines) {
+		this.modifyOrderLines = modifyOrderLines;
+	}
+
 	public boolean isUpdateCartMetaTag() {
 		return updateCartMetaTag;
 	}
@@ -75,6 +86,8 @@ DraftOrderModifyLineItemsAction
 	 
 	public String execute()
     {
+		long startTime=System.currentTimeMillis();
+		
 		if(zeroOrderLines.equals("true")){
 			mashUpId = "xpedx_me_changeOrderDetails";
 		}
@@ -95,9 +108,14 @@ DraftOrderModifyLineItemsAction
         String retVal="";
 		localSession.setAttribute("isUpdateCartMetaTag", "true");		
 		// Webtrends meta tag end here
-		 try
-	     {
-			prepareAndInvokeMashups();            
+		Document outputDocument=null;
+		try
+	    {
+			Map<String, Element> out = prepareAndInvokeMashups();
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+			outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+			
             retVal= SUCCESS;
 	     }
 	     catch(Exception e)
@@ -114,14 +132,35 @@ DraftOrderModifyLineItemsAction
 		}		
 		
 		XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(),new HashMap());
+		boolean chngOrderOutputAvailable=false;
+		if("true".equals(modifyOrderLines) || "true".equals(isComingFromCheckout))
+			chngOrderOutputAvailable=true;
+		
 		if(isEditOrder.contains("true"))
-			processSpecialCharge();
+			processSpecialCharge(outputDocument, chngOrderOutputAvailable);
+		
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+		if(outputDocument!=null && retVal.equals(SUCCESS))
+		{
+			if("true".equals(isComingFromCheckout)) {
+				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ, outputDocument);
+			
+			}else if ("true".equals(modifyOrderLines)) {
+				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, outputDocument);
+			}
+		}
+		else
+			retVal= ERROR;
+		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 		XPEDXWCUtils.releaseEnv(wcContext);
+		
+		long endTime=System.currentTimeMillis();
+		System.out.println("Time taken in milliseconds in XPEDXDraftOrderModifyLineItemsAction class : "+(endTime-startTime));
 		return retVal;
     }
 	
 	
-	private void processSpecialCharge()
+	private void processSpecialCharge(Document outputDoc, boolean chngOrderOutputAvailable)
 	{
 		try
 		{
@@ -129,15 +168,25 @@ DraftOrderModifyLineItemsAction
 			UtilBean util=new UtilBean();
 			
 			Map<String, String> valueMap1 = new HashMap<String, String>();
-			valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);
-			Element input1;
 			Element orderElem = null;
-			input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
-						valueMap1, wcContext.getSCUIContext());
-			Object obj1 = WCMashupHelper.invokeMashup("xpedx_get_completeorderList",
-							input1, wcContext.getSCUIContext());		
+			Element input1=null;
+			Object obj1=null;
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+			if(chngOrderOutputAvailable)
+			{
+				valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);				
+				input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
+							valueMap1, wcContext.getSCUIContext());
+				obj1 = WCMashupHelper.invokeMashup("xpedx_get_completeorderList",
+								input1, wcContext.getSCUIContext());		
+				
+				orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			
-			orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
+			} else {
+				orderElem = outputDoc.getDocumentElement();
+			
+			}
+			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 			Element orderExtn=util.getElement(orderElem, "Extn");
 			String extnWebConfNum=orderExtn.getAttribute("ExtnWebConfNum");
 			validateSpecialLine(orderElem, util) ;
