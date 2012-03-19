@@ -165,6 +165,7 @@ $(document).ready(function() {
 				
 				<s:url id="paginatedShipTo" action="XPEDXMyItemsDetailsGetShareList" namespace="/xpedx/myItems">
 					<s:param name="pageNumber" value="'{0}'"/>
+					<s:param name="pageSetToken" value="%{pageSetToken}"/>
 					<s:param name="customerId" value="customerId"/>
 					<s:param name="suffixtype" value="B"/>					
 				</s:url>
