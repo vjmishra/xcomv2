@@ -203,7 +203,8 @@ function maxNewLength(field,maxlimit)
     <s:param name="createTSFrom" value="CreateTSFrom"/>
     <s:param name="modifyTSFrom" value="ModifyTSFrom"/>
     <s:param name="createTSTo" value="CreateTSTo"/>
-    <s:param name="modifyTSTo" value="ModifyTSTo"/>
+    <s:param name="modifyTSTo" value="ModifyTSTo"/>    
+    <s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
 </s:url>
 <s:url id="draftOrderListAdvancedSearchURL" escapeAmp="false" action="draftOrderAdvancedSearch">
     <s:param name="searchFieldName" value="SearchFieldName"/>

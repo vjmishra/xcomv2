@@ -120,6 +120,8 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
+    <s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
+    
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
