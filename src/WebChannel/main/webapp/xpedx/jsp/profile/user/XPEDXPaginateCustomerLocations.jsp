@@ -19,6 +19,7 @@
 	                      </div>
               			<s:url id="paginateLocations" action="paginatedCustomerLocations" namespace="/profile/user">
 							<s:param name="pageNumber" value="'{0}'"/>
+							<s:param name="pageSetToken" value="%{pageSetToken}"/>
 						</s:url>
 						<p align="center">
  						<xpedx:pagectl currentPage="%{pageNumber}"  divId="customers1_div" lastPage="%{totalNumberOfPages}" urlSpec="%{#paginateLocations}" isAjax="true" /></p>
