@@ -685,7 +685,7 @@
         <API Name="getPage">
             <Input>
                 <Page PageNumber="" PageSize=""
-                    PaginationStrategy="GENERIC" Refresh="Y">
+                    PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
                     <PreviousPage PageNumber="" />
                     <API Name="getCustomerContactList">
                         <Input>
