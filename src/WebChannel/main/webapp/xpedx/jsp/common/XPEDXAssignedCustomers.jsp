@@ -36,6 +36,7 @@
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
 		<s:param name="searchTerm" value="%{searchTerm}" />
+		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 	</s:url>
 </s:if>
 <s:else>
@@ -43,6 +44,7 @@
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
+		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 	</s:url>
 </s:else>
 <style>
