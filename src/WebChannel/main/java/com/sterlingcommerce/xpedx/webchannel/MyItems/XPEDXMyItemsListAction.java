@@ -952,6 +952,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	
 		input.setAttribute("PageNumber", getPageNumber().toString());
 		input.setAttribute("PageSize", getPageSize().toString());
+		input.setAttribute("PageSetToken", getPageSetToken());
 		/* HashMap<String,String> valueMap = new HashMap<String, String>();
 		valueMap.put("/Page/@PageNumber", "1");
 		valueMap.put("/Page/@PageSize", "15");
@@ -986,6 +987,10 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 
         if ((paginated) && (page != null)) {
             setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
+        }
+        
+        if ((paginated) && (page != null)) {
+        	setPageSetToken(page.getAttribute("PageSetToken"));
         }
 
         setTotalNumberOfPages(new Integer(0));
@@ -1127,5 +1132,17 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	public void setListModifiedByMap(HashMap<String, String> listModifiedByMap) {
 		this.listModifiedByMap = listModifiedByMap;
 	}
+	
+	private String pageSetToken;	
+	
+	public String getPageSetToken() {
+		return pageSetToken;
+	}
+
+	public void setPageSetToken(String pageSetToken) {
+		System.out.println("page set token is : "+pageSetToken);
+		this.pageSetToken = pageSetToken;
+	}
+	
 
 }

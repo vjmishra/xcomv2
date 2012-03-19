@@ -95,6 +95,15 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 	Set<String> customerIdSet = new HashSet<String>();
 	Set<String> childCustomerIdSet = new HashSet<String>();
 	private String totalNumOfRecords;
+	private String pageSetToken;
+	public String getPageSetToken() {
+		return pageSetToken;
+	}
+
+	public void setPageSetToken(String pageSetToken) {
+		this.pageSetToken = pageSetToken;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public String execute() {
@@ -267,6 +276,10 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 
         if ((paginated) && (page != null)) {
             setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
+        }
+        
+        if ((paginated) && (page != null)) {
+        	setPageSetToken(page.getAttribute("PageSetToken"));
         }
 
         setTotalNumberOfPages(new Integer(0));
