@@ -3,6 +3,7 @@
 <properties>
   <comment>Binding entries for order list action.</comment>
   <entry key="pageNumber.toString()">XPEDXOrderList:/Page/@PageNumber,XPEDXOrderLineList:/Page/@PageNumber</entry>
+  <entry key="pageSetToken">XPEDXOrderList:/Page/@PageSetToken,XPEDXOrderLineList:/Page/@PageSetToken</entry>
   <entry key="WCContext.storefrontId">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@EnterpriseCode, XPEDXCustomerOrderList:/Order/@EnterpriseCode,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@EnterpriseCode</entry>
   <entry key="orderByAttribute">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/OrderBy/Attribute/@Name,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/OrderBy/Attribute/@Name</entry>
   <entry key="orderDesc">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/OrderBy/Attribute/@Desc,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/OrderBy/Attribute/@Desc</entry>
