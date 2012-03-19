@@ -154,10 +154,10 @@
 
 </head>
 <!-- END swc:head -->
- <s:url id="orderListPaginationURL" action="XPEDXMyItemsList">
-    	 <s:param name="pageNumber" value="'{0}'"/>
-    
-    	</s:url>
+ <s:url id="orderListPaginationURL" action="XPEDXMyItemsList"> 	
+    <s:param name="pageNumber" value="'{0}'"/>
+    <s:param name="pageSetToken" value="%{pageSetToken}"/>
+ </s:url>
    
 <!-- CODE_START - Global Vars -PN -->
 <s:set name='wcContext' value="wCContext" />
