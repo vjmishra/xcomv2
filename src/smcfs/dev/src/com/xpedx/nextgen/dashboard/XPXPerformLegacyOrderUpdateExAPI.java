@@ -4870,21 +4870,37 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			clientVersionSupport.setClientProperties(envVariablesmap);
 		}
 	}
+	
+	private Document setItemUOMListTemplate(YFSEnvironment env)
+	{
+		Document orderTemplateDoc = SCXmlUtil.createFromString(new StringBuffer()
+		.append("<ItemUOMList>")
+		.append(" <ItemUOM Quantity='' UnitOfMeasure='' >")
+		.append("<Item ItemID='' OrganizationCode='' UnitOfMeasure=''/>")
+		.append("</ItemUOM>")
+		.append("</ItemUOMList>").toString());
+		return orderTemplateDoc;
+	}
+
+
+   
 
 	public void setReqUOMPrice(YFSEnvironment env, YFCElement rootEle) throws Exception {
 		YFCElement itemUOMListEle = null;
-
+	
 		Set<String> itemIds = this.getItemIds(rootEle);
 		if (itemIds.size() > 0) {
 			YFCElement itemEle = this.getItemUOMListInXML(itemIds);
-
 			if(log.isDebugEnabled()){
 				log.debug("getItemUOMList-InXML:" + itemEle.getString());
 			}
+			Document getItemUOMListDoc = setItemUOMListTemplate(env);
+			env.setApiTemplate("getItemUOMList", getItemUOMListDoc);
 			Document temp = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "getItemUOMList", itemEle.getOwnerDocument().getDocument());
+			env.clearApiTemplate("getItemUOMList");
 			if (temp != null) {
 				itemUOMListEle = YFCDocument.getDocumentFor(temp).getDocumentElement();
-
+				
 				if(log.isDebugEnabled()){
 					log.debug("getItemUOMList-OutXML:" + itemUOMListEle.getString());
 				}
