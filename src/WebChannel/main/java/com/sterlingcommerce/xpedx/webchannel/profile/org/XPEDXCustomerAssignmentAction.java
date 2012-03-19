@@ -73,6 +73,15 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private List<String> alreadySelectedCustomers;
     
     public boolean shipToResult=true;
+    private String pageSetToken;	
+	
+	public String getPageSetToken() {
+		return pageSetToken;
+	}
+
+	public void setPageSetToken(String pageSetToken) {
+		this.pageSetToken = pageSetToken;
+	}
 	
 	public boolean isShipToResult() {
 		return shipToResult;
@@ -238,7 +247,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		} else {
 			msapCustomerId = getWCContext().getCustomerId();
 		}
-		document = XPEDXWCUtils.getPaginatedShipTosForMIL(msapCustomerId, XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE, pageNumber.toString(), pageSize.toString(), getWCContext());
+		document = XPEDXWCUtils.getPaginatedShipTosForMIL(msapCustomerId, XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE, pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
 		if(document!=null) {		
 			Element customerHierarchyElem = SCXmlUtil.getChildElement(document.getDocumentElement(), "Output");
 			try {
@@ -896,6 +905,10 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
             setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
         }
 
+        if ((paginated) && (page != null)) {
+			setPageSetToken(page.getAttribute("PageSetToken"));
+        }
+        
         setTotalNumberOfPages(new Integer(0));
         if ((paginated) && (page != null)) {
         	setTotalNumberOfPages(getIntegerAttribute(page,
