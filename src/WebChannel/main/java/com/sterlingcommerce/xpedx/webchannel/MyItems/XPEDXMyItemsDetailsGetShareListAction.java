@@ -154,7 +154,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 		if(custSuffixType!=null && custSuffixType.trim().length()>0 && custSuffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)) {
 				String pageNo = pageNumber.toString();
 				String size = pageSize.toString();
-				Document document = XPEDXWCUtils.getPaginatedShipTosForMIL(customerId, custSuffixType, pageNo, size, getWCContext());
+				Document document = XPEDXWCUtils.getPaginatedShipTosForMIL(customerId, custSuffixType, pageNo, size, pageSetToken, getWCContext());
 				parsePageInfo(document.getDocumentElement(), true);
 				List<String> shipTos = parseForShiptoIds(document);
 				shipTosSize = shipTos.size();
