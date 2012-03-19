@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCPlatformUI;
@@ -64,7 +65,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 	public void initialize() {
 		if (YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(page.getPageInput(), "ArticleKey"))){
 			// prepare input XML for getting Article Details
-			Element eleInput = YRCXmlUtils.createDocument("Team").getDocumentElement();
+		/*Element eleInput = YRCXmlUtils.createDocument("Team").getDocumentElement();
 			eleInput.setAttribute("RequestedByUsersTeamId", getModel("UserNameSpace").getAttribute("DataSecurityGroupId"));
 			String[] apinames = {"XPXGetDivisionsManagedByTeam","getOrganizationList"};
 			Document[] docInput = {(eleInput.getOwnerDocument()),
@@ -75,7 +76,9 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 			context.setInputXmls(docInput);
 			context.setFormId("com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel");
 
-			callApi(context);
+			callApi(context);*/
+			// JIRA 3622 - Performance Fix - Division Cache 
+			XPXCacheManager.getInstance().getDivisionList(getModel("UserNameSpace").getAttribute("DataSecurityGroupId"), this);
 		}
 	}
 
