@@ -3,6 +3,7 @@
 <properties>
   <comment>Binding entries for draft order list action.</comment>
   <entry key="pageNumber.toString()">xpedxDraftOrderList:/Page/@PageNumber</entry>
+  <entry key="pageSetToken">xpedxDraftOrderList:/Page/@PageSetToken</entry>
   <entry key="orderByAttribute">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/OrderBy/Attribute/@Name</entry>
   <entry key="orderDesc">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/OrderBy/Attribute/@Desc</entry>
   <entry key="WCContext.storefrontId">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/@EnterpriseCode</entry>

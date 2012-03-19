@@ -8,6 +8,7 @@
 	<entry key="#parameters.ReasonText">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ReasonText</entry>
 	<entry key="#parameters.ApprovalAction">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@Status</entry>
 	<entry key="pageNumber.toString()">orderApprovalList:/Page/@PageNumber</entry>
+	<entry key="pageSetToken">orderApprovalList:/Page/@PageSetToken</entry>
 	<entry key="orderByAttribute">orderApprovalList:/Page/API/Input/Order/OrderBy/Attribute/@Name</entry>
 	<entry key="orderDesc">orderApprovalList:/Page/API/Input/Order/OrderBy/Attribute/@Desc</entry>
 	<entry key="userNameExp">userListForApproval:/CustomerContact/ComplexQuery/Or/Exp[]/@Name</entry>
