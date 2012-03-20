@@ -656,26 +656,7 @@ ul.checkboxTree li
 				      <td valign="top" class="no-border-right padding0">&nbsp;</td>
 				    </tr>
 				</table> --%>
-				<table width="100%" cellspacing="0" cellpadding="0" border="0"> 
-					<tbody>
-						<tr>
-					      <td width="100%" valign="top" class="no-border-right padding0"> 
-							<div class="question clearview">
-	                           <ul>
-	                             <li>Email address(es) to receive invoices:</li>
-	                             <li><a href="#"><img width="12" height="12" border="0" title="Enter comma separated email addresses of individuals who will receive invoices." alt="Enter comma separated email addresses of individuals who will receive invoices." src="../../xpedx/images/icons/12x12_grey_help.png" /></a></li>
-	                           </ul>
-							</div>
-						<br />
-						<s:textarea cols="60" rows="5" onkeyup="javascript:maxLength(this,'200');" cssClass="x-input" cssStyle="width: 400px;" name="invoiceEmailIdText" value="%{#extnElem.getAttribute('ExtnInvoiceEMailID')}" theme="simple"> </s:textarea>
-					      </td>
-					    </tr>
-					    <tr>
-					      <td valign="top" class="no-border-right padding0">&nbsp;</td>
-					    </tr>
-					</tbody>
-				</table>
-            	<div class="clearview">&nbsp;</div>
+				<div class="clearview">&nbsp;</div>
             	<div class="clearview">&nbsp;</div>
             	<div id="cart-actions" class="float-right">    
                     <ul id="cart-actions">
