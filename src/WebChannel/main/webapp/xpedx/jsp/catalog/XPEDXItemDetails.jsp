@@ -635,12 +635,19 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
     //Ext.Msg.wait("Adding item to cart...Please wait!");
     xpedx_working_start();
     setTimeout(xpedx_working_stop, 3000);
+    var baseUOM;
+    if(document.getElementById("baseUnitOfMeasure")!=null
+			&&  document.getElementById("baseUnitOfMeasure")!=undefined){
+    	baseUOM=document.getElementById("baseUnitOfMeasure").value; 
+	} 
+	
    	Ext.Ajax.request({
     	// for testing only
         url: url,
         params: {
 			productID: productID,
 	    	productUOM: UOM,
+	    	baseUnitOfMeasure:baseUOM,
 	    	quantity: quantity,
 	    	reqJobId: Job,
 	    	customerPONo:customerPO,
@@ -1058,7 +1065,8 @@ function SubmitActionWithValidation()
 		<s:hidden id="pritemType" name="pritemType" value="%{prItemtype}" />
 		<!-- Webtrend tag ends -->
 		
-                
+        <s:hidden name='baseUnitOfMeasure' id='baseUnitOfMeasure'
+				value='%{#unitOfMeasure}' />        
 	<div class="prod_detail">
 			<!-- -FXD1-4  change for change location of error and location --> <h5><b><font color="red"><s:property
 			value="ajaxLineStatusCodeMsg" /></font></b></h5> 
