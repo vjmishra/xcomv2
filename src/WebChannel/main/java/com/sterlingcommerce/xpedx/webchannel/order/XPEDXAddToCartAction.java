@@ -1,10 +1,12 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
@@ -72,6 +74,11 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	         	    }
 		         }
 		         	organizeProductInformationResults();
+		         	// Added for addtocart base UOM issue, due to performance fixes
+		         	HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
+		         	productUOM = httpRequest.getParameter("baseUnitOfMeasure");
+		         	
+		         	
 		         if(YFCCommon.isVoid(errorText) && !YFCCommon.isVoid(productID))
 		         	{
 		
