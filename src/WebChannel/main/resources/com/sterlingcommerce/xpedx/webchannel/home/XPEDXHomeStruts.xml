@@ -9,7 +9,8 @@
 		</action>
 		
 		<action name="logout" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXLogoutAction">			
-			<result>/swc/jsp/home/homeRedirector.jsp</result>
+			<result name="WebUser">/swc/jsp/home/homeRedirector.jsp</result>
+			 <result name="SalesRepUser">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
 		</action>
 		
 		<!--RUgrani:Adding cart widget  -->
