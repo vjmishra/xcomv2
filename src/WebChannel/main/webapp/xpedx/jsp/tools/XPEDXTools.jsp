@@ -30,10 +30,25 @@
 
     <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
     <!-- Lightbox/Modal Window -->
-    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
+    <%-- <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
     <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
     <link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-    
+     --%>
+     
+      <script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
+ 
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+<link rel="stylesheet" type="text/css"
+	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+     
+     <!--[if IE]> -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+
+<!-- [endif]-->
+     
 <!--   This is Line Separator  -->
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
