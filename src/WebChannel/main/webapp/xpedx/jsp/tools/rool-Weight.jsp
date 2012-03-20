@@ -35,6 +35,21 @@
 <script type="text/javascript" src="../../xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
 
+ <script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
+ 
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+<link rel="stylesheet" type="text/css"
+	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+     
+     <!--[if IE]> -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+
+<!-- [endif]-->
+
+
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
 <%-- <script src="../../xpedx/js/jquery-tool-tip/bgiframe_2.1.1/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script> --%>
