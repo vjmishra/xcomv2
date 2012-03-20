@@ -390,19 +390,7 @@ ul.checkboxTree li
         </div> --%>
       </td>
 	</tr>
-	<tr>
-      <td valign="top" class="no-border-right padding0">
-		<div class="question clearview">
-           <ul class="padding-bottom2 ">
-	          <li><strong>Email address(es) to receive invoices:</strong></li>
-              <li><a href="#"><img width="12" height="12" border="0" title="Enter comma separated email addresses of individuals who will receive invoices." alt="Enter comma separated email addresses of individuals who will receive invoices." src="../../xpedx/images/icons/12x12_grey_help.png"/></a></li>
-           </ul>
-		</div>
-		<br />
-		<s:textarea cols="60" rows="5" cssClass="x-input" cssStyle="width: 400px;" name="emailIDForInvoice" value="%{#extnElem.getAttribute('ExtnInvoiceEMailID')}" theme="simple" onkeyup="restrictTextareaMaxLength(this, '200');" title="Email address(es) to receive invoices" > </s:textarea>
-       </td>
-   </tr>
-</table>
+	</table>
 
         
      <div class="clearview">&nbsp;</div>
