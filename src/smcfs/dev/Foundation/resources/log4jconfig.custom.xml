@@ -16,8 +16,8 @@
     </appender>
 
     <appender name="SOCKET" class="org.apache.log4j.net.SocketAppender">
-       <param name="Port" value="localhost"/>
-       <param name="RemoteHost" value="1652"/>
+       <param name="Port" value="1652"/>
+       <param name="RemoteHost" value="127.0.0.1"/>
        <param name="ReconnectionDelay" value="60000"/>
        <param name="Threshold" value="ERROR"/>
     </appender> 
