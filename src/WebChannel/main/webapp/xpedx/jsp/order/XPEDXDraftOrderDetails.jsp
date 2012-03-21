@@ -855,8 +855,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	<s:hidden id="zeroOrderLines" name="zeroOrderLines" value='false' />
 	<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />
 	<%-- Removing changeOrder call for Performance improvement, while checkout --%>
-	<s:hidden id="isComingFromCheckout" name="isComingFromCheckout" value='false' />
-	<s:hidden id="modifyOrderLines" name="modifyOrderLines" value='false' />
+	<s:hidden id="isComingFromCheckout" name="isComingFromCheckout" value='false' />	
 	<input type="hidden" value='<s:property value="%{chargeAmount}" />' name="chargeAmount" />
 	<input type="hidden" value='<s:property value="%{minOrderAmount}" />' name="minOrderAmount" />
 	<%-- 
