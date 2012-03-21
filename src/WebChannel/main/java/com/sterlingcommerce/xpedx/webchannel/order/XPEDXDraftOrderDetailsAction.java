@@ -38,6 +38,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
@@ -731,98 +732,117 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}//if customerList is not null
 */
-				if(shipToCustomer== null){
-					LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
-					
-					XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
-							.getCustomerDetails(getWCContext().getCustomerId(),
-									getWCContext().getStorefrontId())
-							.getDocumentElement());
-					shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-				}
-				String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
-				String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
-				if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
-						(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
-				{
-					minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-					if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+				 //Start- Code added to fix XNGTP 3469
+				
+				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean =(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				
+					String minOrderAmountStr=xpedxCustomerContactInfoBean.getExtnMinOrderAmount();
+					String chargeAmountStr=xpedxCustomerContactInfoBean.getExtnMinChargeAmount();
+					if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
+							(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 					{
-						chargeAmount = Float.parseFloat(chargeAmountStr);
-					}
-				}
-				else
-				{
-					if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+						minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+						if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+						{
+							chargeAmount = Float.parseFloat(chargeAmountStr);
+						}
+					} //End fix XNGTP 3469
+					else
 					{
-						chargeAmount = Float.parseFloat(chargeAmountStr);
-					}
-					XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
-					if(parentElement != null )
-					{
-						minOrderAmountStr=parentElement.getExtnMinOrderAmount();
-						chargeAmountStr=parentElement.getExtnMinChargeAmount();
-						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
+
+						if(shipToCustomer== null){
+							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
+							
+							XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
+									.getCustomerDetails(getWCContext().getCustomerId(),
+											getWCContext().getStorefrontId())
+									.getDocumentElement());
+							shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+						}
+						 minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
+						 chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();
+						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
 								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 						{
 							minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-							if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
-									chargeAmount = Float.parseFloat(chargeAmountStr);
+								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
 						}
 						else
 						{
-							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
 								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
-							//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
-							//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-							if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
-									shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null){
-								shipFromDivision = shipToCustomer.getExtnShipFromBranch();
-								String envCode =shipToCustomer.getExtnEnvironmentCode();
-								Map<String, String> valueMap = new HashMap<String, String>();
-								if(envCode!=null && envCode.trim().length()>0){
-									valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
-								}else{
-									LOG.error("EnvCode is NULL. Returning back to the caller.");
-									return;
-								}
-								try {
-									Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
-									Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
-									Document outputDoc = ((Element) obj).getOwnerDocument();
-									
-									if(YFCCommon.isVoid(outputDoc)){
-										LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
-										return;
-									}
-									shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
-									shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
-									shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
-									shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
-									shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
-									XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
-								} catch (CannotBuildInputException e) {
-									LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
-									return;
-								}
-							}
-							minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
-							chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
-							if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
-									(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+							XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
+							if(parentElement != null )
 							{
-								minOrderAmount = Float.parseFloat(minOrderAmountStr);				
-								if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+								minOrderAmountStr=parentElement.getExtnMinOrderAmount();
+								chargeAmountStr=parentElement.getExtnMinChargeAmount();
+								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
+										(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 								{
+									minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+									if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+									{
+											chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
+								}
+								else
+								{
+									if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
+									{
 										chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
+									//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
+									//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
+									if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
+											shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null){
+										shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+										String envCode =shipToCustomer.getExtnEnvironmentCode();
+										Map<String, String> valueMap = new HashMap<String, String>();
+										if(envCode!=null && envCode.trim().length()>0){
+											valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
+										}else{
+											LOG.error("EnvCode is NULL. Returning back to the caller.");
+											return;
+										}
+										try {
+											Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
+											Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
+											Document outputDoc = ((Element) obj).getOwnerDocument();
+											
+											if(YFCCommon.isVoid(outputDoc)){
+												LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
+												return;
+											}
+											shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
+											shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
+											shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
+											shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
+											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
+										} catch (CannotBuildInputException e) {
+											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
+											return;
+										}
+									}
+									minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
+									chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
+									if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
+											(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+									{
+										minOrderAmount = Float.parseFloat(minOrderAmountStr);				
+										if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+										{
+												chargeAmount = Float.parseFloat(chargeAmountStr);
+										}
+									}
 								}
 							}
 						}
-					}
 				}
 			}// if customerId is not null
 	} catch (Exception ex) {
