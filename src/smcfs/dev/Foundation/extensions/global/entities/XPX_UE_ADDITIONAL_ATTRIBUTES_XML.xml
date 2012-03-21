@@ -4,7 +4,7 @@
 	<Entities>
 		<!--  <Entity TableName="XPX_PNA_RESP_XML" > -->
 		<Entity ApiNeeded="Y" AuditRequired="N" Description="Extn Fields for Customer Contact"
-			HasHistory="False" Prefix="XPX" TableName="XPX_UE_ADDITIONAL_ATTR_XML">
+			HasHistory="False" Prefix="XPX" TableName="XPX_UE_ADDITIONAL_ATTRBTS_XML">
 			<Attributes>
 			
 				<Attribute ColumnName="UE_ADDITIONAL_ATTRBTS_KEY" DataType="Key"
@@ -53,11 +53,7 @@
                 <Attribute ColumnName="UE_ADDITIONAL_ATTRBTS_KEY" Name="UEAdditionalAttribsKey" XmlName="UEAdditionalAttribsKey"/>
             </PrimaryKey>
             
-            <Parent ParentTableName="YFS_ORDER_HEADER" >
-				<Attribute ColumnName="ORDER_HEADER_KEY" ParentColumnName="ORDER_HEADER_KEY" />
-	 		</Parent>
-			
-			<Indices>
+            <Indices>
 				<Index Name="XPX_UE_ATTRIB_I" Unique="True">
 					<Column Name="ORDER_HEADER_KEY" />
 					<Column Name="XML_TYPE" />
