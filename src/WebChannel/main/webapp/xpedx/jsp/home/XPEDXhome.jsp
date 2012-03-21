@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 <s:set name='_action' value='[0]' />
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -17,33 +18,27 @@
 	<%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
- 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
- 	<!--[if IE]>
-		<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/IE.css"/>
-	<![endif]-->
+ 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 	<s:if test="#isGuestUser != true">
 	    
 	
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
-		
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
-	 	<!--<script type="text/javascript" src="../xpedx/ster/js/global/ext-base.js"></script>
-		<script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script> -->
-		<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-			<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
-		<!--<script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>-->
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 		
 	    <!-- jQuery -->
 	    <!-- Page Calls -->
 		<!-- END head-calls.php -->
 	</s:if>
 	<s:else>
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
-		<script type="text/javascript" src="../xpedx/js/common/xpedx-header.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 	</s:else>
 	
-	<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
+	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
 
 	
     <s:set name="storefront"  value='wCContext.storefrontId'/>
@@ -147,9 +142,8 @@
 		</div>
 		
 		<div id="homepage-ad-area">
-			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="../xpedx/images/mil/ad-arrow.gif" alt="" class="float-left" /> advertisement</div>
+			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" alt="" class="float-left" /> advertisement</div>
 			<!-- Ad Juggler Tag Starts -->
-<!--			<a href="#"><img src="../xpedx/images/ad_placeholders/300x250_ad.png" alt="advertisement" /></a>   -->
 			
 			<s:set name='storefrontId' value="wCContext.storefrontId" />
 
@@ -297,41 +291,31 @@
 		$("#primary-category td ul li a").shorten();});
 		</script>
 
-<script type="text/javascript" src="../xpedx/js/common/xpedx-home-common.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-home-common.js"></script>
 
-<!--<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery.cycle.min.js"></script> -->
 
 <!-- End of files in xpedx-home-common.js -->
 
 <!-- Added the below commented scripts in xpedx-header.js -->
 
 
- <!-- <script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script> -->
 
 
 <!-- End of files in xpedx-header.js -->
 
 <!--  Added the below commented scripts in xpedx-ext-header.js -->
 
-<!--<script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
 <!-- End of files in xpedx-ext-header.js -->
 
 
 
 <!-- Added the below commented scripts in xpedx-jquery-header.js -->
 
-<!--<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 
 
 <!-- End of files in xpedx-jquery-header.js -->
-<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 
 <script type="text/javascript">
 
