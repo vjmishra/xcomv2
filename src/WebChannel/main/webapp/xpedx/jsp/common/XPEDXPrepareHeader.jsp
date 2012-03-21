@@ -2,10 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <meta http-equiv="X-UA-Compatible" content="IE=8" /> 
- <%-- 
-  <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-  --%>	
 	<s:set name="isMergedCSSJS" value="(#request.isMergedCSSJS )"/>
   
     <%
@@ -14,29 +13,29 @@
   	  
   	<s:if test="(#isMergedCSSJS == null && #isMergedCSSJS != 'true')"> 
 		<!-- BEGIN Styles -->
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
- 		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
-		<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/change-ship-to.css" />
+ 		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
+		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/mini-cart.css" media="screen" />
 		<!-- END Styles -->
 		
 		<!-- BEGIN JS -->
 		<!-- Web Trends tag start -->
-		<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 		<!-- Web Trends tag end  -->
 		
-		<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-  		<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
-  		<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
-		<script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
-		<script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
-		<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-		<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
-		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+  		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
+  		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/ajaxValidation.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 		<!-- END JS -->
 	</s:if>
 	<s:else>
-		<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
@@ -566,15 +565,15 @@ var selectedShipCustomer = null;
 		var headID = document.getElementsByTagName("head")[0];         
 		var newScript = document.createElement('script');
 		newScript.type = 'text/javascript';
-		newScript.src = '/swc/xpedx/js/jquery-1.4.2.min.js';
+		newScript.src = '<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js';
 		headID.appendChild(newScript);
 	}
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
 </script>	
-<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip.js"></script>
 <!-- Web Trends tag start -->
 <%--
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
  --%>
 <!-- Web Trends tag end  -->
 	<script type="text/javascript">
@@ -590,7 +589,7 @@ var selectedShipCustomer = null;
 				cluetipClass:	'mcqt',
 				dropShadow:		false,
 				sticky:				true,
-				closeText:		'<img src="/swc/xpedx/images/icons/12x12_charcoal_x.png" title="Close" />',
+				closeText:		'<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" title="Close" />',
 				delayedClose:	false /* 5000 */
 		});
 		$('a#inline').fancybox();
@@ -616,7 +615,6 @@ var selectedShipCustomer = null;
     The explicit call style will also help the performance in evaluating Struts'
     OGNL statements. --%>
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='xpedxutil' />    
-<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 <s:set name='_action' value='[0]' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
@@ -643,16 +641,9 @@ var selectedShipCustomer = null;
 	action='xpedxManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
-<%--	
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
 
-<script type="text/javascript" src="<s:url value='/xpedx/js/common/ajaxValidation.js'/>"></script>
- --%>
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
-<%--
-<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
- --%>
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
 	<div id="ajax-assignedShipToCustomers"></div>
 </div>
@@ -1864,7 +1855,7 @@ function callAjaxForSorting(url,divId)
 	}
 	#panel {
 	       height: 200px; width:200px; left:-23px; top:-47px; 
-	       display: none; z-index:10000; position:relative; background-image:url(/swc/xpedx/images/common/customer-block-hover.png); background-repeat:no-repeat;
+	       display: none; z-index:10000; position:relative; background-image:url(<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/customer-block-hover.png); background-repeat:no-repeat;
 	}
 	.slide {
 	       margin: 0;
@@ -1948,7 +1939,7 @@ function callAjaxForSorting(url,divId)
 				</s:url>
 				
 			<a  class="underlink mini-cart-trigger" href=""  id="miniCartMouseoverArea2" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
-				<img id="whitecart" src="/swc/xpedx/images/icons/16x16_white_cart.png" alt="" style="display:block;float:left;" />
+				<img id="whitecart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/16x16_white_cart.png" alt="" style="display:block;float:left;" />
 			</a> 			
 		<s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
     	<s:set name='sessionOrderHeaderKey' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
@@ -2055,7 +2046,7 @@ function callAjaxForSorting(url,divId)
 					<s:if test="%{#isSalesRep}">
 						<s:if test='%{#session.loggedInUserName != null}'>		
 							Welcome <s:property value='%{#session.loggedInUserName}'/> 
-							<img  src="/swc/xpedx/images/icons/12x12_white_down.png" alt="" />
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />
 							<s:if test='{#welcomeUserShipToName != null}'>
 							, <s:property value='welcomeUserShipToName'/>
 							</s:if>							
@@ -2066,7 +2057,7 @@ function callAjaxForSorting(url,divId)
 							<s:if test='{#welcomeUserShipToName != null}'>
 							, <s:property value='welcomeUserShipToName'/>
 							</s:if>
-						<img src="/swc/xpedx/images/icons/12x12_white_down.png" alt="" />
+						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />
 					</s:else>										
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
@@ -2076,7 +2067,7 @@ function callAjaxForSorting(url,divId)
 	       				<s:else>
 	         				Orders for :
 	      				 </s:else>	        
-						<a href="#" id="welcome-address-popup-close"><img title="Close" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
+						<a href="#" id="welcome-address-popup-close"><img title="Close" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
 						<s:if test="#isEditOrderHeaderKey == null ">
 							<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
 						</s:if>						
