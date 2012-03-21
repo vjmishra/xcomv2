@@ -1,20 +1,26 @@
 package com.sterlingcommerce.xpedx.webchannel.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -46,7 +52,70 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private String country;
 	private String email;
 	private String imageUrl;
+	private String billtoFullName = "";
+	private String billtoCustid = "";
+	private String divisionName = "";
+	private String serviceProviderNone = "";
+	private String attention = "";
+	private String storefrontId = "";
+	private String salesProfessional = "";
 	
+	
+	public String getSalesProfessional() {
+		return salesProfessional;
+	}
+
+	public void setSalesProfessional(String salesProfessional) {
+		this.salesProfessional = salesProfessional;
+	}
+
+	public String getStorefrontId() {
+		return storefrontId;
+	}
+
+	public void setStorefrontId(String storefrontId) {
+		this.storefrontId = storefrontId;
+	}
+
+	public String getAttention() {
+		return attention;
+	}
+
+	public void setAttention(String attention) {
+		this.attention = attention;
+	}
+
+	public String getServiceProviderNone() {
+		return serviceProviderNone;
+	}
+
+	public void setServiceProviderNone(String serviceProviderNone) {
+		this.serviceProviderNone = serviceProviderNone;
+	}
+
+	public String getBilltoFullName() {
+		return billtoFullName;
+	}
+
+	public void setBilltoFullName(String billtoFullName) {
+		this.billtoFullName = billtoFullName;
+	}
+
+	public String getBilltoCustid() {
+		return billtoCustid;
+	}
+
+	public void setBilltoCustid(String billtoCustid) {
+		this.billtoCustid = billtoCustid;
+	}
+
+	public String getDivisionName() {
+		return divisionName;
+	}
+
+	public void setDivisionName(String divisionName) {
+		this.divisionName = divisionName;
+	}
 	private static final String SUCCESS = "success";
 	private String messageType="sampleRequest";
 
@@ -211,7 +280,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			List<String> customerAddressList = null;
 			Document customerDetailsDoc = null;
 			String customerId = getWCContext().getCustomerId();
-			String storefrontId = getWCContext().getStorefrontId();
+			storefrontId = getWCContext().getStorefrontId();
 			StringBuffer sb = new StringBuffer();
 			System.out.println("XPEDXSaveServicesAction():execute()");
 			
@@ -250,8 +319,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			// Sending customer details to get the email id of customer
 			/*if (null != customerDetailsDoc) {
 				customerEmail = getCustomerEmail(customerDetailsDoc);
-				customerEmail = "apurva.vyas@mphasis.com";  //From Mail
-			}*/
+					}*/
 			/**
 			 JIRA 3160 -End
 			 */
@@ -314,6 +382,22 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String extnECsr1EmailID = shipToCustomerObject.getBillTo().getExtnECsr1EMailID();
 			String extnECsr2EmailID = shipToCustomerObject.getBillTo().getExtnECsr2EMailID();
 			String sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
+			String firstName = shipToCustomerObject.getBillTo().getFirstName();
+			String lastName = shipToCustomerObject.getBillTo().getLastName();
+			salesProfessional = getSalesRepInfo(sapCustomerKey,wcContext);
+			if((firstName!=null && firstName.trim().length() > 0) && (lastName!=null && lastName.trim().length() > 0)){
+			billtoFullName = firstName+lastName;
+			}else if(firstName!=null && firstName.trim().length() > 0){
+				billtoFullName = firstName;
+				
+			}else if(lastName!=null && lastName.trim().length() > 0){
+				billtoFullName = lastName;
+				
+			}else{
+				billtoFullName = "";
+			}
+			
+			billtoCustid = shipToCustomerObject.getBillTo().getCustomerID();
 			
 			String csrEmailID = XPEDXWCUtils.setCSREmails(extnECsr1EmailID,extnECsr2EmailID);
 			
@@ -333,10 +417,44 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			}
 			String paperFSObj = "";
 			String paperPSObj = "";
+			String checkbothToken = "";
+			boolean bothFlag = false;
+			List<String> generalList = new ArrayList<String>();
+			List<String> paperList = new ArrayList<String>();
+			boolean checkbothFlag = false;
+			
 			if(getBodyData()!=null && getBodyData().trim().length() > 0){
 				Pattern p = Pattern.compile("[+\\s][=\\s][_\\s]");
 				String[] getPaperNonPaper = 
 		                 p.split(getBodyData());
+				for(int k=0;k<getPaperNonPaper.length;k++){
+					checkbothToken =  getPaperNonPaper[k];
+					if(checkbothToken.equalsIgnoreCase("true")){
+						bothFlag = true;
+					}
+				}
+				if(bothFlag){
+					Pattern p1 = Pattern.compile("[+\\s][=\\s][_\\s]");
+					String[] getBothPaperNonPaper = 
+			                 p1.split(getBodyData());
+					for(int b=0;b<getBothPaperNonPaper.length;b++){
+						if(!getBothPaperNonPaper[b].equalsIgnoreCase("true") && !checkbothFlag){
+							generalList.add(getBothPaperNonPaper[b]);
+							paperFSObj = "facilitySupplies";
+							
+						}
+						else{
+							checkbothFlag = true;
+							if(checkbothFlag){
+								paperList.add(getBothPaperNonPaper[b]);
+								paperPSObj = "PaperSupplies";
+							}
+						}
+					}
+					
+					
+				}else{				
+				
 		        int i = 1;
 		        for (int j=0; j<getPaperNonPaper.length; j++){
 					String token = getPaperNonPaper[j];//st.nextToken();
@@ -346,48 +464,84 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 					paperPSObj = token;
 
 				}
-		        }
+		        }}
 		        
 			}
 			String toEmailGen = getPaperorGeneralPaperEmail(paperFSObj);
 			String toEmailPaper = getPaperorGeneralPaperEmail(paperPSObj);
+			String sampleServiceRequest = "";
 			
 			/**
 			 JIRA 3160 -End
 			 */
-			
-		if(	toEmailGen != null && toEmailGen.trim().length() > 0){
-			System.out.println("toEmailGen"+toEmailGen);
+			/*
+			 * Below code which make the xml for paper and non paper
+			 * */
+			if(bothFlag){
+				
+				if(	toEmailGen != null && toEmailGen.trim().length() > 0){
+					// Creating input xml to send an email
+					Document outputDoc = null;
+					sampleServiceRequest = "SampleServiceRequest";
+					Element input = createInputXMLForGeneral(customerEmail, toEmailGen,ccEMail,generalList,sampleServiceRequest);
+					String inputXml = SCXmlUtil.getString(input);
+					LOG.debug("XPEDXSaveServicesAction() Input XML: " + inputXml);
+					Object obj = WCMashupHelper.invokeMashup(
+							"SendSampleServiceRequest", input, wcContext
+									.getSCUIContext());
+					outputDoc = ((Element) obj).getOwnerDocument();
+					if (null != outputDoc) {
+						System.out.println("bothFlag---gen"+SCXmlUtil.getString((Element) obj));
+						LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+					}
+				}
+				if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
+					
+				// Creating input xml to send an email
+				Document outputDoc1 = null;
+				sampleServiceRequest = "SampleServiceRequestPaper";				
+				Element input = createInputXMLForGeneral(customerEmail, toEmailPaper,ccEMail,paperList,sampleServiceRequest);
+				String inputXml = SCXmlUtil.getString(input);
+				System.out.println("input xml----"+SCXmlUtil.getString(input));
+				LOG.debug("XPEDXSaveServicesAction() Input XML : " + inputXml);
+				Object obj = WCMashupHelper.invokeMashup(
+						"SendSampleServiceRequest", input, wcContext
+								.getSCUIContext());
+				outputDoc1 = ((Element) obj).getOwnerDocument();
+				if (null != outputDoc1) {
+					System.out.println("bothFlag---pep"+SCXmlUtil.getString((Element) obj));
+					LOG.debug("Output1 XML: " + SCXmlUtil.getString((Element) obj));
+				}
+			}	
+			}else{
+		if(	toEmailGen != null && toEmailGen.trim().length() > 0 || toEmailPaper != null && toEmailPaper.trim().length() > 0){
+			String toMailaddres = "";
+			if(toEmailGen != null && toEmailGen.trim().length() > 0){
+				toMailaddres = toEmailGen;
+				sampleServiceRequest = "SampleServiceRequest";
+				
+				
+			}else if(toEmailPaper != null && toEmailPaper.trim().length() > 0){
+				toMailaddres = toEmailPaper;
+				sampleServiceRequest = "SampleServiceRequestPaper";				
+				
+				
+			}
 			// Creating input xml to send an email
 			Document outputDoc = null;
-			
-			Element input = createInputXML(customerEmail, toEmailGen,ccEMail);
+			Element input = createInputXML(customerEmail, toMailaddres,ccEMail,sampleServiceRequest);
 			String inputXml = SCXmlUtil.getString(input);
+			System.out.println("input xml----"+SCXmlUtil.getString(input));
 			LOG.debug("XPEDXSaveServicesAction() Input XML: " + inputXml);
 			Object obj = WCMashupHelper.invokeMashup(
 					"SendSampleServiceRequest", input, wcContext
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
 			if (null != outputDoc) {
+				System.out.println("else---"+SCXmlUtil.getString((Element) obj));
 				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 			}
 		}
-			if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
-				System.out.println("toEmailPaper"+toEmailPaper);
-				
-			// Creating input xml to send an email
-			Document outputDoc1 = null;
-			
-			Element input = createInputXML(customerEmail, toEmailPaper,ccEMail);
-			String inputXml = SCXmlUtil.getString(input);
-			LOG.debug("XPEDXSaveServicesAction() Input XML : " + inputXml);
-			Object obj = WCMashupHelper.invokeMashup(
-					"SendSampleServiceRequest", input, wcContext
-							.getSCUIContext());
-			outputDoc1 = ((Element) obj).getOwnerDocument();
-			if (null != outputDoc1) {
-				LOG.debug("Output1 XML: " + SCXmlUtil.getString((Element) obj));
-			}
 		}
 		
 		} catch (Exception ex) {
@@ -432,11 +586,17 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			}
 			Element organizationElement = null;
 			organizationElement = outputDoc.getDocumentElement();
-			
-			Element eleobj = (Element)organizationElement.getFirstChild().getFirstChild();
-			extnDivEmailNonPaper = eleobj.getAttribute("ExtnDivEmailNonPaper"); //ExtnDivEmailPaper
-			extnDivEmailPaper = eleobj.getAttribute("ExtnDivEmailPaper"); //ExtnDivEmailPaper
-			
+				if (organizationElement != null) {
+					Element eleobjdivi = (Element) organizationElement
+							.getFirstChild();
+					divisionName = eleobjdivi.getAttribute("OrganizationName");
+					Element eleobj = (Element) organizationElement
+							.getFirstChild().getFirstChild();
+					extnDivEmailNonPaper = eleobj
+							.getAttribute("ExtnDivEmailNonPaper"); // ExtnDivEmailPaper
+					extnDivEmailPaper = eleobj
+							.getAttribute("ExtnDivEmailPaper"); // ExtnDivEmailPaper
+				}
 			
 		}
 		
@@ -470,8 +630,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		return emailId;
 	}
 
-	private Element createInputXML(String customerEmail, String sampleRoomEmail ,String ccEMail) {
-
+	private Element createInputXML(String customerEmail, String sampleRoomEmail ,String ccEMail,String sampleServiceRequest) {
+ 
+		String subjectEmail = "";
 		Document templateEmailDoc = YFCDocument.createDocument("Emails")
 				.getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
@@ -480,8 +641,15 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("Phone", getPhone());
 		emailElement.setAttribute("Notes", getNotes());
 		emailElement.setAttribute("ServiceProvider", getServiceProvider());
+		String serviceProviderNumbersplit =  getServiceProviderNumber().replaceAll(",", "");
 		emailElement.setAttribute("ServiceProviderNumber",
-				getServiceProviderNumber());
+				serviceProviderNumbersplit);
+		if(salesProfessional!=null && salesProfessional.trim().length() > 0){
+			emailElement.setAttribute("salesProfessional", getSalesProfessional());			
+		}
+		if(attention!=null && attention.trim().length() > 0){
+			emailElement.setAttribute("Attention", getAttention());
+		}
 		if (address1 != null && address1.trim().length() > 0) {
 			emailElement.setAttribute("address1", getAddress1());
 		}
@@ -510,10 +678,34 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		if(getImageUrl()!=null && getImageUrl().trim().length() > 0){
 			emailElement.setAttribute("ImageUrl",getImageUrl());
 		}
+		if(getBilltoCustid()!=null && getBilltoCustid().trim().length()>0){
+			emailElement.setAttribute("BillToCustid",getBilltoCustid());
+		}
+		if(getDivisionName()!=null && getDivisionName().trim().length()>0){
+			emailElement.setAttribute("DivisionName",getDivisionName());
+			
+		}
+		if(getBilltoFullName()!=null && getBilltoFullName().trim().length() > 0){
+			emailElement.setAttribute("BilltoFullName", getBilltoFullName());
+		}
+		if(getEmail()!=null && getEmail().trim().length() > 0){
+			emailElement.setAttribute("ExternalEmail", getEmail());
+		}
 		emailElement.setAttribute("FromEmail", customerEmail);
 		emailElement.setAttribute("ToEmail", sampleRoomEmail);
 		emailElement.setAttribute("CCEmail",ccEMail);
-		emailElement.setAttribute("RequestType", "SampleServiceRequest");
+		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
+			subjectEmail = getStorefrontId() + ".com "+ "" + "Paper Sample Request Notification";
+		}
+		else{
+			subjectEmail = getStorefrontId() + ".com" + "" + "General Sample Request Notification";
+			
+		}
+		emailElement.setAttribute("subjectEmail",subjectEmail);
+		
+		//emailElement.setAttribute("RequestType", "SampleServiceRequest");
+		emailElement.setAttribute("RequestType", sampleServiceRequest);
+
 
 		List<String> cutomerAddressList = getAddressList();
 		Iterator<String> addressListIterator = cutomerAddressList.iterator();
@@ -546,8 +738,8 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	                 p.split(getBodyData());
 	        int i = 1;
 //			while (st.hasMoreTokens())
-			for (int j=0; j<result.length; j++){
-				String token = result[i];//st.nextToken();
+			for (int j=1; j<result.length; j++){
+				String token = result[j];//st.nextToken();
 				if (token.equals("*#?")) {
 					token = "";
 				}
@@ -585,5 +777,227 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 
 		return templateElement;
 	}
+	private Element createInputXMLForGeneral(String customerEmail, String sampleRoomEmail ,String ccEMail,List generalPaper,String sampleServiceRequest) {
+		
+		String subjectEmail = "";
+		Document templateEmailDoc = YFCDocument.createDocument("Emails")
+				.getDocument();
+		Element templateElement = templateEmailDoc.getDocumentElement();
+		Element emailElement = templateEmailDoc.createElement("Email");
+		emailElement.setAttribute("Contact", getContact());
+		emailElement.setAttribute("Phone", getPhone());
+		emailElement.setAttribute("Notes", getNotes());
+		emailElement.setAttribute("ServiceProvider", getServiceProvider());
+		String serviceProviderNumbersplit =  getServiceProviderNumber().replaceAll(",", "");		
+		emailElement.setAttribute("ServiceProviderNumber",
+				serviceProviderNumbersplit);
+		if(salesProfessional!=null && salesProfessional.trim().length() > 0){
+			emailElement.setAttribute("salesProfessional", getSalesProfessional());			
+		}
+		if(attention!=null && attention.trim().length() > 0){
+			emailElement.setAttribute("Attention", getAttention());
+		}
+		if (address1 != null && address1.trim().length() > 0) {
+			emailElement.setAttribute("address1", getAddress1());
+		}
+		if (address2 != null && address2.trim().length() > 0) {
+			emailElement.setAttribute("address2", getAddress2());
+		}
+		if (address3 != null && address3.trim().length() > 0) {
+			emailElement.setAttribute("address3", getAddress3());
+		}
+		if (city != null && city.trim().length() > 0) {
+			emailElement.setAttribute("city", getCity());
+		}
+		if (state != null && state.trim().length() > 0) {
+			emailElement.setAttribute("state", getState());
+		}
+		if (zipCode != null && zipCode.trim().length() > 0) {
+			emailElement.setAttribute("zipCode", getZipCode());
+		}
+		if (country != null && country.trim().length() > 0) {
+			emailElement.setAttribute("country", getCountry());
+		}
+		if ((customerEmail != null && customerEmail.trim().length() == 0)
+				|| (sampleRoomEmail != null && sampleRoomEmail.trim().length() == 0)){
+			setErrorMesage("Your 'From Email'/'To Email' addresses can not be empty in the profile");
+		}
+		if(getImageUrl()!=null && getImageUrl().trim().length() > 0){
+			emailElement.setAttribute("ImageUrl",getImageUrl());
+		}
+		if(getBilltoCustid()!=null && getBilltoCustid().trim().length()>0){
+			emailElement.setAttribute("BillToCustid",getBilltoCustid());
+		}
+		if(getDivisionName()!=null && getDivisionName().trim().length()>0){
+			emailElement.setAttribute("DivisionName",getDivisionName());
+			
+		}
+		if(getBilltoFullName()!=null && getBilltoFullName().trim().length() > 0){
+			emailElement.setAttribute("BilltoFullName", getBilltoFullName());
+		}
+		if(getEmail()!=null && getEmail().trim().length() > 0){
+			emailElement.setAttribute("ExternalEmail", getEmail());
+		}
+		emailElement.setAttribute("FromEmail", customerEmail);
+		emailElement.setAttribute("ToEmail", sampleRoomEmail);
+		emailElement.setAttribute("CCEmail",ccEMail);
+		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
+			subjectEmail = getStorefrontId() + ".com " + "" + "Paper Sample Request Notification";
+		}
+		else{
+			subjectEmail = getStorefrontId() + ".com " + "" + "General Sample Request Notification";
+			
+		}
+		emailElement.setAttribute("subjectEmail",subjectEmail);
+		
+		//emailElement.setAttribute("RequestType", "SampleServiceRequest");
+		emailElement.setAttribute("RequestType", sampleServiceRequest);
+		List<String> cutomerAddressList = getAddressList();
+		
+		Iterator<String> addressListIterator = cutomerAddressList.iterator();
+
+		Element shippingAddressElement = null;
+		Element sampleRequestElement = null;
+
+		while (addressListIterator.hasNext()) {
+			shippingAddressElement = templateEmailDoc
+					.createElement("ShippingAddress");
+			shippingAddressElement.setAttribute("address", addressListIterator
+					.next());
+			emailElement.appendChild(shippingAddressElement);
+		}
+
+		if (null == getBodyData() || getBodyData().equals("")) {
+			sampleRequestElement = templateEmailDoc
+					.createElement("SampleRequest");
+			sampleRequestElement.setAttribute("MfgSku", "");
+			sampleRequestElement.setAttribute("Mfg", "");
+			sampleRequestElement.setAttribute("ItemNumber", "");
+			sampleRequestElement.setAttribute("Description", "");
+			sampleRequestElement.setAttribute("Qty", "");
+			emailElement.appendChild(sampleRequestElement);
+		} else if(generalPaper.size()>0){
+			System.out.println(generalPaper);
+			
+			//Iterator<String> bothList = generalPaper.iterator();
+			
+			int i = 1;
+			for(int j=1;j<generalPaper.size()-1;j++){
+				
+				if (i == 1) {
+					sampleRequestElement = templateEmailDoc
+							.createElement("SampleRequest");
+					
+					sampleRequestElement.setAttribute("MfgSku", generalPaper.get(j).toString());
+					}
+				if (i == 2) {
+					sampleRequestElement.setAttribute("Mfg", generalPaper.get(j).toString());
+					
+					//System.out.println("Mfg"+bothList.next());
+				}
+				if (i == 3) {
+					sampleRequestElement.setAttribute("ItemNumber", generalPaper.get(j).toString());
+					
+					//System.out.println("ItemNumber"+bothList.next());
+				}
+				if (i == 4) {
+					sampleRequestElement.setAttribute("Description", generalPaper.get(j).toString());
+					
+					//System.out.println("Description"+bothList.next());
+				}
+				if (i == 5) {
+					sampleRequestElement.setAttribute("Qty", generalPaper.get(j).toString());
+					emailElement.appendChild(sampleRequestElement);
+				}
+				i++;
+				if (i == 6) {
+					i = 1;
+				}
+			}
+			}
+			
+		templateElement.appendChild(emailElement);
+		
+		log.info("*************************EMAIL INFO START**************************************");
+		log.info(SCXmlUtil.getString(emailElement));
+		log.info("*************************EMAIL INFO END**************************************");
+
+		return templateElement;
+	}
+/*
+ * getSalesRepInfo method which get saler professional first name and last name .
+ * */
+	public static String getSalesRepInfo(String sapCustomerKey,IWCContext wcContext) {
+ 		
+		 String SalesRepInfo = "";
+		 
+	 	 if (sapCustomerKey != null && !sapCustomerKey.equalsIgnoreCase("")) {
+	 		 
+	 		Element xpedxSalesRep = SCXmlUtil.createDocument("XPEDXSalesRep").getDocumentElement();
+	 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);  
+	 		
+	 		Document outputDoc;
+			
+	 		Object obj = WCMashupHelper.invokeMashup("getXpedxSalesRepList", xpedxSalesRep, wcContext.getSCUIContext());
+			outputDoc = ((Element) obj).getOwnerDocument();
+	        
+	 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");  
+			int salesRepLength = nodeList.getLength();
+			List<String> salesRepUserKeysList = new ArrayList<String>();
+			
+			for (int counter = 0; counter < salesRepLength ; counter++) {
+				Element salesRepElem = (Element) nodeList.item(counter);
+				
+				String salesUserKey = "";
+				if (salesRepElem.hasAttribute("SalesUserKey")) {
+					salesUserKey = salesRepElem.getAttribute("SalesUserKey");
+				}
+				if(salesUserKey !=null && salesUserKey.trim().length() > 0)
+					salesRepUserKeysList.add(salesUserKey);
+			}
+			
+			if(salesRepUserKeysList.size() > 0){
+				try {
+				Element inputElem = WCMashupHelper.getMashupInput("getUserListWithContactPersonInfo", wcContext);
+				Element complexQueryElem = SCXmlUtil.getChildElement(inputElem, "ComplexQuery");
+				Element OrElem = SCXmlUtil.getChildElement(complexQueryElem, "Or");
+				Iterator<String> itr = salesRepUserKeysList.iterator();
+				while(itr.hasNext()) {
+					String userKey = (String)itr.next();
+					if(userKey!=null && !userKey.equals("")){
+						Element exp = inputElem.getOwnerDocument().createElement("Exp");
+						exp.setAttribute("Name", "UserKey");
+						exp.setAttribute("Value", userKey);
+						SCXmlUtil.importElement(OrElem, exp);
+					}
+				}
+				 
+				outputDoc =((Element) WCMashupHelper.invokeMashup("getUserListWithContactPersonInfo", inputElem, wcContext.getSCUIContext())).getOwnerDocument();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				 
+				NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
+		 		int contactPersonInfoLength = personInfoList.getLength();
+	 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
+	 				Element personInfoElem = (Element) personInfoList.item(counter);
+	 				if (personInfoElem != null && personInfoElem.hasAttribute("FirstName") && personInfoElem.hasAttribute("LastName")) {
+	 					SalesRepInfo = personInfoElem.getAttribute("FirstName") + personInfoElem.getAttribute("LastName");
+	 					
+	 				}else if(personInfoElem != null && personInfoElem.hasAttribute("FirstName")){
+	 					SalesRepInfo = personInfoElem.getAttribute("FirstName");
+	 				}else if(personInfoElem != null && personInfoElem.hasAttribute("LastName")){
+	 					SalesRepInfo = personInfoElem.getAttribute("LastName");
+	 				} else {
+	 					SalesRepInfo = "";
+	 				}
+	 			}
+		 		
+		    }	
+	 	}
+	 	return SalesRepInfo;
+	 	}
+	
 
 }
