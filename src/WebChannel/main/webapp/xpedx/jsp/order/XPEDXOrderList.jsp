@@ -627,7 +627,9 @@ function printPOs(customerPos) {
 												<br/>
 												<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 											 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
-											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && #resolverId == #loggedInUser}'>
+											 	<s:set name='primaryApprover' value="%{#_action.getPrimaryApproverID()}"/>
+											 	<s:set name='proxyApprover' value="%{#_action.getProxyApproverID()}"/>
+											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser)}'>
 													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 												</s:if><br/>
 											</s:if>
