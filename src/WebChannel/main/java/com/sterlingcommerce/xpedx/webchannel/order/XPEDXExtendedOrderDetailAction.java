@@ -542,13 +542,18 @@ public class XPEDXExtendedOrderDetailAction extends
 	public boolean approvalAllowed() throws CannotBuildInputException {
 		if (isSupportedFunction(true)) {
 			if (this.approvalHoldStatus.equals(OrderConstants.OPEN_HOLD_STATUS)) {
-				if (this.resolverUserID
-						.equals(wcContext.getCustomerContactId())) {
-					return true;
-				} else if (UserProfileHelper.isContactProxyForResolver(
+				//modified for jira 3484
+				if(this.resolverUserID != null){
+					String approverUserIDs [] = this.resolverUserID.split(",");
+					String primaryApproverID = approverUserIDs[0];
+					String proxyApproverID = approverUserIDs[1];
+					if ((primaryApproverID != null && primaryApproverID.equals(wcContext.getCustomerContactId())) || (proxyApproverID != null && proxyApproverID.equals(wcContext.getCustomerContactId())) ) {
+						return true;
+					} else if (UserProfileHelper.isContactProxyForResolver(
 						wcContext.getCustomerContactId(), this.resolverUserID,
 						wcContext)) {
-					return true;
+						return true;
+					}
 				}
 			}
 		}
