@@ -441,6 +441,7 @@
         		var rowCountTableRefOne = tbodyOne.rows.length;
         		
         		var completeData = "";
+        		var completeDataPaper = "";
         		var finalCompleteData = "";
         		var FacilitySupplies = "";
         		var PaperSupplies = "";
@@ -479,12 +480,14 @@
                 			if(temp == "") {
                     			temp = "*#?";
                 			}
-                			completeData = completeData + "+=_" + temp;                			                			
+                			//alert("completeData-----------"+completeData);
+                			completeDataPaper = completeDataPaper + "+=_" + temp;    
+                			
             			}
+            			//alert("completeDataPaper"+completeDataPaper);
         			}
-        			PaperSupplies = completeData + "+=_PaperSupplies";
-            		            		
-        		} 
+        			PaperSupplies = completeDataPaper + "+=_PaperSupplies";
+        			} 
         		if(FacilitySupplies!='' && PaperSupplies == '' ){
         			finalCompleteData = FacilitySupplies;
         		}else if(PaperSupplies!='' && FacilitySupplies == ''){
@@ -492,8 +495,7 @@
         			finalCompleteData = PaperSupplies;
         		}else if(FacilitySupplies!='' && PaperSupplies!=''){
         			
-        			finalCompleteData = FacilitySupplies+PaperSupplies;
-        			
+        			finalCompleteData = FacilitySupplies + "+=_true" + PaperSupplies;
         		}
         		if(finalCompleteData!='' || rowCountTableRefOne > 1 || rowCountTableRefTwo > 1)
              	{
@@ -769,7 +771,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                       <tr>
                         <td width="13%"  style="padding-left:3px;"><span class="red">*</span>&nbsp;Attention:</td>
                         
-                        <td width="33%"><s:textfield tabindex="50" id="serviceRequestForm_contact" name="contact" cssClass="x-input width-250px" maxlength="30"  value="%{#currentShipTo.firstName} %{#currentShipTo.lastName}" /></td>
+                        <td width="33%"><s:textfield tabindex="50" id="serviceRequestForm_contact" name="attention" cssClass="x-input width-250px" maxlength="30"  value="%{#currentShipTo.firstName} %{#currentShipTo.lastName}" /></td>
                        </td>
                         <td colspan="2" valign="top">
                                
