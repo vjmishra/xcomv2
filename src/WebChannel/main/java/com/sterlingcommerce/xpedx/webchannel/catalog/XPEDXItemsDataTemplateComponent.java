@@ -72,10 +72,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		
 		
-		
-		HashMap<String, String> skuMap = tag.getItemMap().get("ItemID");
+		//ItemID value is required not string - JIRA 3538
+		HashMap<String, String> skuMap = tag.getItemMap().get(itemID);
 		skuMap = skuMap == null ? new HashMap<String, String>() : skuMap;
-		XPEDXItemBranchInfoBean itemBranchBean = tag.getItemToItemBranchBeanMap().get("ItemID");
+		XPEDXItemBranchInfoBean itemBranchBean = tag.getItemToItemBranchBeanMap().get(itemID);
 		itemBranchBean = itemBranchBean == null ? new XPEDXItemBranchInfoBean("","","","","","","","") : itemBranchBean;
 		String orderMultiple = validate(tag.getOrderMultipleMap().get(itemID));		
 		Element b2cItemExtn = xmlUtils.getChildElement(item, "Extn");
