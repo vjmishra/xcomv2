@@ -588,7 +588,7 @@
             <param name="mashups">updateOrderForMiniCart</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success" type="redirectAction">
-                <param name="actionName">miniCartDisplay</param>
+                <param name="actionName">XPEDXMiniCartDisplay</param>
             </result>
         </action>
         
