@@ -1247,6 +1247,25 @@ public class XPEDXOrderListAction extends OrderListAction {
 	//public String sourceTab;	
 	protected String sourceTab;
 	protected String xpedxSelectedHeaderTab;
+	//added for jira 3484
+	protected String primaryApproverID;
+	protected String proxyApproverID;
+	public String getPrimaryApproverID() {
+		return primaryApproverID;
+	}
+
+	public void setPrimaryApproverID(String primaryApproverID) {
+		this.primaryApproverID = primaryApproverID;
+	}
+
+	public String getProxyApproverID() {
+		return proxyApproverID;
+	}
+
+	public void setProxyApproverID(String proxyApproverID) {
+		this.proxyApproverID = proxyApproverID;
+	}
+	
 	
 	protected Map shipToSearchList;
 
@@ -1399,9 +1418,15 @@ public String getRootElementName() {
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {		
 					String holdType = OrderElement.getAttribute("HoldType");
 					String holdTypeStatus = OrderElement.getAttribute("HoldStatus");
-					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100")){
 						resolverUserId = OrderElement.getAttribute("ResolverUserId");
-			
+						//modified for jira 3484
+						if(resolverUserId != null){
+							String approverUserIDs [] = resolverUserId.split(",");
+							primaryApproverID = approverUserIDs[0];
+							proxyApproverID = approverUserIDs[1];
+						}
+					}
 		}
 		return resolverUserId;
 	}
