@@ -15,15 +15,12 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
-import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderModifyLineItemsAction;
-import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.api.inv.getPendingAdjustments;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -31,8 +28,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends
 DraftOrderModifyLineItemsAction
 {
 	public static final String CHANGE_ORDER_LINE_DETAILS_MASHUP = "xpedx_me_changeOrderLineDetails";
-	public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
-	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
+	//public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
+	//public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
 	public String mashUpId = null; 
 	
@@ -45,14 +42,14 @@ DraftOrderModifyLineItemsAction
 	private String modifiedOrderHeaderKey="";
 	private double totalAmount;
 	private Element modifiedOrderExtnForSpecailCharge;
-	private String modifyOrderLines="false";
+	/*private String modifyOrderLines="false";
 	public String getModifyOrderLines() {
 		return modifyOrderLines;
 	}
 
 	public void setModifyOrderLines(String modifyOrderLines) {
 		this.modifyOrderLines = modifyOrderLines;
-	}
+	}*/
 
 	public boolean isUpdateCartMetaTag() {
 		return updateCartMetaTag;
@@ -111,9 +108,10 @@ DraftOrderModifyLineItemsAction
 		Document outputDocument=null;
 		try
 	    {
-			Map<String, Element> out = prepareAndInvokeMashups();
+			prepareAndInvokeMashups();
+			//Map<String, Element> out = prepareAndInvokeMashups();
 			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-			outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+			//outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
 			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 			
             retVal= SUCCESS;
@@ -132,14 +130,14 @@ DraftOrderModifyLineItemsAction
 		}		
 		
 		XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(),new HashMap());
-		boolean chngOrderOutputAvailable=false;
+		/*boolean chngOrderOutputAvailable=false;
 		if("true".equals(modifyOrderLines) || "true".equals(isComingFromCheckout))
-			chngOrderOutputAvailable=true;
+			chngOrderOutputAvailable=true;*/
 		
 		if(isEditOrder.contains("true"))
-			processSpecialCharge(outputDocument, chngOrderOutputAvailable);
+			processSpecialCharge(); //(outputDocument, chngOrderOutputAvailable);
 		
-		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595
 		if(outputDocument!=null && retVal.equals(SUCCESS))
 		{
 			if("true".equals(isComingFromCheckout)) {
@@ -151,7 +149,7 @@ DraftOrderModifyLineItemsAction
 		}
 		else
 			retVal= ERROR;
-		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+		End - Changes made by Mitesh Parikh for JIRA#3595*/
 		XPEDXWCUtils.releaseEnv(wcContext);
 		
 		long endTime=System.currentTimeMillis();
@@ -160,7 +158,7 @@ DraftOrderModifyLineItemsAction
     }
 	
 	
-	private void processSpecialCharge(Document outputDoc, boolean chngOrderOutputAvailable)
+	private void processSpecialCharge() //Document outputDoc,  boolean chngOrderOutputAvailable)
 	{
 		try
 		{
@@ -171,9 +169,9 @@ DraftOrderModifyLineItemsAction
 			Element orderElem = null;
 			Element input1=null;
 			Object obj1=null;
-			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595
 			if(chngOrderOutputAvailable)
-			{
+			{*/
 				valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);				
 				input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
 							valueMap1, wcContext.getSCUIContext());
@@ -182,11 +180,11 @@ DraftOrderModifyLineItemsAction
 				
 				orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			
-			} else {
+			/*} else {
 				orderElem = outputDoc.getDocumentElement();
 			
 			}
-			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+			End - Changes made by Mitesh Parikh for JIRA#3595*/
 			Element orderExtn=util.getElement(orderElem, "Extn");
 			String extnWebConfNum=orderExtn.getAttribute("ExtnWebConfNum");
 			validateSpecialLine(orderElem, util) ;
