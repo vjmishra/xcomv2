@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <div class="t1-footer commonFooter" id="t1-footer">
 		<table>
@@ -55,9 +56,9 @@
 
 					<td id="social-networking-footer" class="footer-right" style="border-style: none">
 						 <s:if test="%{#theStoreFront=='xpedx'}">
-							<a target="_blank" href="http://youtube.com/xpedxdistribution "><img id="youtube" src="/swc/xpedx/images/icons/you_tube_36x36.png" alt="" /></a>
-							<a target="_blank" href="http://twitter.com/xpedx"><img src="/swc/xpedx/images/icons/twitter_36x36.png" alt="" /></a>
-							<a target="_blank" href="http://facebook.com/xpedx"><img src="/swc/xpedx/images/icons/facebook_36x36.png" alt="" /></a>
+							<a target="_blank" href="http://youtube.com/xpedxdistribution "><img id="youtube" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/you_tube_36x36.png" alt="" /></a>
+							<a target="_blank" href="http://twitter.com/xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/twitter_36x36.png" alt="" /></a>
+							<a target="_blank" href="http://facebook.com/xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/facebook_36x36.png" alt="" /></a>
 						</s:if>
 						<s:else>
 						&nbsp;
