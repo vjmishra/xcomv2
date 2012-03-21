@@ -377,7 +377,7 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 	// Storing PNA response xml into the table 
 	private void storeResponseString(YFSEnvironment env,String responseXML,String orderHeaderKey)
 	{
-		Document inputDocument = SCXmlUtil.createDocument("XPXUeAdditionalAttrXml");
+		Document inputDocument = SCXmlUtil.createDocument("XPXUeAdditionalAttribsXml");
 		try
 		{
 			
@@ -418,7 +418,7 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 	
 	// Storing PNA response xml into the table 
 	private void deleteResponseFromUEAttrTable(YFSEnvironment env,String orderHeaderKey){
-		Document inputDocument = SCXmlUtil.createDocument("XPXUeAdditionalAttrXml");
+		Document inputDocument = SCXmlUtil.createDocument("XPXUeAdditionalAttribsXml");
 		try
 		{
 			
