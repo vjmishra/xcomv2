@@ -120,8 +120,14 @@ public class XPEDXWCUtils {
 	private static byte[] sharedkey = skString.getBytes();	
 	private static SecretKey sk = getSecretKey(sharedkey);	
 	private static byte[] sharedkeyfinal = sk.getEncoded();
+	private static String staticFileLocation = null;
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
+
+	static {
+		staticFileLocation = YFSSystem.getProperty("remote.static.location");
+		staticFileLocation = staticFileLocation != null ? staticFileLocation.trim() : "/swc";
+	}
 
 	public static String getImage(String DaysType) {
 		if (DaysType.equals("Immediate")) {
@@ -5655,4 +5661,8 @@ public class XPEDXWCUtils {
 		return itemSkuMap;
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
+
+	public static String getStaticFileLocation() {		
+		return staticFileLocation;
+	}
 }
