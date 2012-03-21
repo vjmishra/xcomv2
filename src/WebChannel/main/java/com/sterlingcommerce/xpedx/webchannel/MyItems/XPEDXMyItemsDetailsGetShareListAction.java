@@ -72,6 +72,18 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
     private Integer totalNumberOfPages = new Integer(1);
     private String custSuffixType = null;
     private int shipTosSize = 0;
+	
+	//Added for JIRA 3589 : For paginating shipsTos
+    private String billtosuffixtype;
+	public String getBilltosuffixtype() {
+		return billtosuffixtype;
+	}
+
+	public void setBilltosuffixtype(String billtosuffixtype) {
+		this.billtosuffixtype = billtosuffixtype;
+	}
+	////end for JIRA 3589
+	
 	public int getShipTosSize() {
 		return shipTosSize;
 	}
@@ -146,6 +158,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 			}*/		
 			
         //Added for JIRA 3589
+			billtosuffixtype = "B";
 		custSuffixType = getWCContext().getSCUIContext().getRequest().getParameter("suffixtype");
 		if(custSuffixType != null && custSuffixType.equals("")){
 				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
