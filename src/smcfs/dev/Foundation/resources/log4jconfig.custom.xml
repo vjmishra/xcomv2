@@ -121,6 +121,15 @@
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
+    <category  name="com.yantra.ycm.business.search.YCMSearchIndexCacheTimerTask" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
+        <appender-ref ref="CONSOLE" />
+    </category>
+	<category  name="com.yantra.ycp.core.YCPSystem" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
+        <appender-ref ref="CONSOLE" />
+    </category>
+
     <category  name="com.sterlingcommerce" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
         <appender-ref ref="CONSOLE" />
