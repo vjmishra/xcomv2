@@ -113,34 +113,7 @@
 		</script>
 <script type="text/javascript">
 		browserSupport();
-		</script>
-	<script type="text/javascript">
-	$(document).ready(function() {
-        $(document).pngFix();
-        $("#video-tour").fancybox({
-            'titleShow'			: false,
-            'transitionIn'		: 'fade',
-            'transitionOut'		: 'fade'
-        });
-		$("#video-tour2").fancybox({
-            'titleShow'			: false,
-            'transitionIn'		: 'fade',
-            'transitionOut'		: 'fade'
-        });
-    });
-	
-	$(document).ready(function() {
-	    $('.slideshow').cycle({
-	    		fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
-	    		pager: '#home-image-rotation-nav-inner',
-	    		timeout: 5000,
-	    		prev:   '#home-image-rotation-nav .img-navi-left', 
-	    		next:   '#home-image-rotation-nav .img-navi-right'
-		});
-	});
-	$(document).ready(function() { 
-		$("#primary-category td ul li a").shorten();});
-		</script>
+		</script>	
 </s:if>
 <!-- RUgrani BEGIN: Logged in User Home page -->
 <s:else>
@@ -295,6 +268,34 @@
 		
  		
 </s:else>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+        $(document).pngFix();
+        $("#video-tour").fancybox({
+            'titleShow'			: false,
+            'transitionIn'		: 'fade',
+            'transitionOut'		: 'fade'
+        });
+		$("#video-tour2").fancybox({
+            'titleShow'			: false,
+            'transitionIn'		: 'fade',
+            'transitionOut'		: 'fade'
+        });
+    });
+	
+	$(document).ready(function() {
+	    $('.slideshow').cycle({
+	    		fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+	    		pager: '#home-image-rotation-nav-inner',
+	    		timeout: 5000,
+	    		prev:   '#home-image-rotation-nav .img-navi-left', 
+	    		next:   '#home-image-rotation-nav .img-navi-right'
+		});
+	});
+	$(document).ready(function() { 
+		$("#primary-category td ul li a").shorten();});
+		</script>
 
 <script type="text/javascript" src="../xpedx/js/common/xpedx-home-common.js"></script>
 
