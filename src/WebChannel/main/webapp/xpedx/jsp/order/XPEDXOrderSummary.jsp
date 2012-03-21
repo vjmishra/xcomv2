@@ -580,8 +580,16 @@ from session . We have customer Contact Object in session .
 					value='#extnElem.getAttribute("ExtnDeliveryHoldDate")' />
 				<tr><td><s:checkbox cssClass="checkbox"
 						name='DeliveryHoldFlag' fieldValue="true"
-						value="%{#_action.isDeliveryHold()}" /> Place Order on Hold, CSR will release at
+						value="%{#_action.isDeliveryHold()}" /> 
+						<%--Changes for JIRA 3413 --%>
+						<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
+						Place Order on Hold, CSR will release at
 					&nbsp;<s:property value="deliveryCutOffTime"/>
+					</s:if>
+					<s:else>
+					Place Order on Hold, will not deliver until released.
+					</s:else>
+					<%--End of Changes for JIRA 3413 --%>
 					<s:hidden name='DeliveryHoldTime'
 						value="%{#extnElem.getAttribute('ExtnDeliveryHoldTime')}" />
 				</td></tr>	   
