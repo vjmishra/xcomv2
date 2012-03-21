@@ -188,11 +188,15 @@ function showSplitDiv(divId)
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";*/
 		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 		}
-	    function openNotePanelSetAction(actionValue){
-		 if(actionValue == "Accept")
+		//modified for jira 3484
+	    function openNotePanelSetAction(actionValue,orderHeaderKey){
+		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
-		 if(actionValue == "Reject")
-		     document.forms["approval"].elements["ApprovalAction"].value = "1200";	
+		 }
+		 if(actionValue == "Reject"){
+		     document.forms["approval"].elements["ApprovalAction"].value = "1200";
+		 }
+		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 			//submit it
 		 document.forms["approval"].submit();	
 		}
@@ -1516,8 +1520,8 @@ function showSplitDiv(divId)
 				<s:hidden id="actionName" name="#action.name" value="approval"/>
 				<ul id="tool-bar" class="tool-bar-bottom">
 					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
-					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
-					<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>									
+					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
+					<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept','<s:property value="%{dorderHeaderKey}" />');"><span>Approve</span></a></li>									
 				</ul>
 			</s:form>
 		</div>
