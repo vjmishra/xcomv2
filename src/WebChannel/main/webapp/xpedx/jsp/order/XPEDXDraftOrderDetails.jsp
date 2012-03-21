@@ -502,6 +502,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 					<s:set name="chargeAmount" value='%{chargeAmount}'></s:set>
 					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
+					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)'/>
+					<s:set name="fmtdChargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)'/>
 					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
@@ -2371,7 +2373,9 @@ function validateMinOrder()
 {
 	var minAmount='<s:property value="#minOrderAmount"/>';
 	var chargeAmount='<s:property value="#chargeAmount"/>';
-	var totalAmount='<s:property value='#nettotalAmount' />';
+	var totalAmount='<s:property value="#nettotalAmount" />';
+	var fmtdMinOrderAmount='<s:property value="#fmtdMinOrderAmount" />';
+	var fmtdChargeAmount='<s:property value="#fmtdChargeAmount" />';
 	var totalAmountNum=Number(totalAmount);
 	if(minAmount >totalAmountNum)
 	{
@@ -2380,11 +2384,11 @@ function validateMinOrder()
 		if(divId != null)
 		{		
 			//Start fix for 3098
-			divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			divId.innerHTML="Order minimum is "+fmtdMinOrderAmount+". A Penalty of "+fmtdChargeAmount+" will be charged.";
 		}
 		if(divId1 != null)
 		{
-			divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			divId1.innerHTML="Order minimum is "+fmtdMinOrderAmount+". A Penalty of "+fmtdChargeAmount+" will be charged.";
 			//End fix for 3098
 		}
 	}
