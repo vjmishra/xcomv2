@@ -452,6 +452,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		String storeFrontID = wcContext.getStorefrontId();
 		String shipFromDivision = null;
 		deliveryCutOffTime=shipToCustomer.getShipToDivDeliveryCutOffTime();
+		//Added For Jira 3465
+		deliveryInfo=shipToCustomer.getShipToDivdeliveryInfo();
+		
 		if(deliveryCutOffTime==null)
 		{
 			try {
@@ -486,7 +489,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				}
 				/*  TODO -FXD1-3 This value coming in staging.. */
 				deliveryCutOffTime = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime");
+				//Added For Jira 3465
+				deliveryInfo = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo");
 				shipToCustomer.setShipToDivDeliveryCutOffTime(deliveryCutOffTime);
+				//Added For Jira 3465
+				shipToCustomer.setShipToDivdeliveryInfo(deliveryInfo);
 				XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 			} catch (CannotBuildInputException e) {
 				LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
@@ -1226,12 +1233,21 @@ END of JIRA 3382*/
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXDraftOrderSummaryAction.class);
 	protected String deliveryCutOffTime = "";
+	//Added For Jira 3465
+	protected String deliveryInfo = "";
 	
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
 	private String itemDtlBackPageURL="";
 	
+	public String getDeliveryInfo() {
+		return deliveryInfo;
+	}
+
+	public void setDeliveryInfo(String deliveryInfo) {
+		this.deliveryInfo = deliveryInfo;
+	}
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}
