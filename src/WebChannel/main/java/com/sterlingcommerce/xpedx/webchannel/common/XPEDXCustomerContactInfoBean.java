@@ -31,22 +31,6 @@ public class XPEDXCustomerContactInfoBean {
   
   // Added for JIRA 3589 - Performance : XPEDXMyItemsGetShareListAction
     private String extnSuffixType = "";
-  //Start- Code added to fix XNGTP 3469
-    private String extnMinOrderAmount;
-    private String extnMinChargeAmount;
-  	public String getExtnMinOrderAmount() {
-		return extnMinOrderAmount;
-	}
-	public void setExtnMinOrderAmount(String extnMinOrderAmount) {
-		this.extnMinOrderAmount = extnMinOrderAmount;
-	}
-	public String getExtnMinChargeAmount() {
-		return extnMinChargeAmount;
-	}
-	public void setExtnMinChargeAmount(String extnMinChargeAmount) {
-		this.extnMinChargeAmount = extnMinChargeAmount;
-	}
-	//End- Code fix XNGTP 3469
     public String getExtnSuffixType() {
 		return extnSuffixType;
 	}
@@ -71,7 +55,7 @@ public class XPEDXCustomerContactInfoBean {
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID, String minOrderAmt, String minChargeAmt) {
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -94,8 +78,6 @@ public class XPEDXCustomerContactInfoBean {
 		this.emailID=emailID;
 		this.personInfoEmailID=personInfoEmailID;
 		this.msapExtnUseOrderMulUOMFlag=extnUseOrderMulUOMFlag;
-		this.extnMinOrderAmount=minOrderAmt;
-		this.extnMinChargeAmount=minChargeAmt;
 	}
 
 	public String getFirstName() {
