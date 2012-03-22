@@ -4291,6 +4291,39 @@ public class XPEDXWCUtils {
 		
 	}
 	
+//New function - to be used
+	
+	public static Document getPaginatedCustomers(String rootCustomerKey,String userID, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext) {
+		Document outDoc = null;
+		//if page number and page size are not passed we take the default, pagenumber=1 and pageSize =25
+	
+		HashMap<String,String> valueMap = new HashMap<String, String>();
+		valueMap.put("/Page/@PageNumber", pageNumber);
+		valueMap.put("/Page/@PageSize", pageSize);
+		valueMap.put("/Page/@PageSetToken", pageSetToken);
+		//valueMap.put("/Page/API/Input/XPXCustView/@"+AttributeToQry, CustomerID);
+		valueMap.put("/Page/API/Input/XPXCustView/@RootCustomerKey", rootCustomerKey);
+		valueMap.put("/Page/API/Input/XPXCustView/@UserID", userID);
+		valueMap.put("/Page/API/Input/XPXCustView/OrderBy/Attribute/@Name", "CustomerID");
+		try {
+//			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAssignedShipTosView-MIL", valueMap, wcContext);
+//			Object obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAssignedShipTosView-MIL", input, wcContext.getSCUIContext());
+			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAvailableLocations", valueMap, wcContext);
+			Object obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAvailableLocations", input, wcContext.getSCUIContext());
+			if(obj!= null)
+				outDoc = ((Element)obj).getOwnerDocument();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			log.error("Error getting the Ship to");
+			return outDoc;
+		}
+		return outDoc;
+		
+	}
+	
+	
+	
 	public static Element getXPXCustomerContactExtn(IWCContext wcContext, String customerContactId)
 	{
 		String msapCustomerKey = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);

@@ -2,6 +2,7 @@ package com.sterlingcommerce.xpedx.webchannel.profile.org;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -240,14 +241,40 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		//Element outElem = null;
 		Document document = null;
 		String msapCustomerId = null;
+		Element customerEle=null;
+		Element customerListEle=null;
 		Set<String> custIds = new HashSet<String>();
-		//Set<String> sapIds = new HashSet<String>();
+		Document contactListDoc=null;
+		 Element contactEle =null;
 		if (XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
 			msapCustomerId = XPEDXWCUtils.getLoggedInCustomerFromSession(getWCContext());
 		} else {
 			msapCustomerId = getWCContext().getCustomerId();
 		}
-		document = XPEDXWCUtils.getPaginatedShipTosForMIL(msapCustomerId, XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE, pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
+		List<String> custIdList = new ArrayList<String>(Collections.singletonList(msapCustomerId));
+		try {
+			 customerListEle=XPEDXWCUtils.getCustomerListDetalis(custIdList ,getWCContext());
+			 customerEle=SCXmlUtil.getChildElement(customerListEle, "Customer");
+			  if(!SCUtil.isVoid(getWCContext().getSCUIContext().getRequest()
+						.getParameter("userId"))){
+				  setSelectedCurrentCustomer(getWCContext().getSCUIContext().getRequest()
+					.getParameter("userId"));
+			  }
+			  else if(!SCUtil.isVoid(getWCContext().getSCUIContext().getRequest()
+							.getParameter("customerContactId"))){
+				  setSelectedCurrentCustomer(getWCContext().getSCUIContext().getRequest()
+						.getParameter("customerContactId"));
+				  }
+				  else{
+					  contactListDoc=XPEDXWCUtils.getCustomerContactDetails(customerEle.getAttribute("CustomerID"));
+					   contactEle = SCXmlUtil.getChildElement(contactListDoc.getDocumentElement(), "CustomerContact");
+					   setSelectedCurrentCustomer(contactEle.getAttribute("CustomerContactID"));
+				  }
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		document = XPEDXWCUtils.getPaginatedCustomers(customerEle.getAttribute("RootCustomerKey"),getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
 		if(document!=null) {		
 			Element customerHierarchyElem = SCXmlUtil.getChildElement(document.getDocumentElement(), "Output");
 			try {
@@ -257,17 +284,13 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				log.error("Error parsing the Page Element in getCustomersInHierarchyUsingView()");
 				e.printStackTrace();
 			}
-			Element viewListElem = SCXmlUtil.getChildElement(customerHierarchyElem, "XPXCustHierarchyViewList");
-			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(viewListElem, "XPXCustHierarchyView");
+			
+			Element viewListElem = SCXmlUtil.getChildElement(customerHierarchyElem, "XPXCustViewList");
+			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(viewListElem, "XPXCustView");
 			for(int i=0; i<assignedCustElems.size(); i++) {
 				Element custElem = assignedCustElems.get(i);
-				String shipToId = SCXmlUtil.getAttribute(custElem, "ShipToCustomerID");
-				String billToId = SCXmlUtil.getAttribute(custElem, "BillToCustomerID");
-				String sapId = SCXmlUtil.getAttribute(custElem, "SAPCustomerID");
-				custIds.add(shipToId);custIds.add(billToId);custIds.add(sapId);
-				//customers1.addAll(custIds);
-				//billToIds.add(billToId);
-				//sapIds.add(sapId);
+				String custId = SCXmlUtil.getAttribute(custElem, "CustomerID");
+				custIds.add(custId);
 			}
 			customers1.addAll(custIds);
 		}
@@ -281,17 +304,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				customers2.add(customer);
 			}
 		}
-		if(alreadySelectedCustomers!=null && alreadySelectedCustomers.size()>0) {
-			Iterator<String> iterator = alreadySelectedCustomers.iterator();
-			while(iterator.hasNext()) {
-				String customerID = iterator.next();
-				if(customers1.contains(customerID))
-					customers1.remove(customerID);
-			}			
-		}
-		else {
-			minusFromAvaialbleCustomers();			
-		}		
 		listSize = customers1.size() + customers2.size() + 2;
 		return SUCCESS;
 	}
