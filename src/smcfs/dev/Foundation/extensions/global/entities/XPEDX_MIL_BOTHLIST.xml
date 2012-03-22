@@ -22,7 +22,7 @@
 				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="false" XMLName="ExtnCustomerDivision" XMLGroup="Extn" />
 				<Attribute ColumnName="EXTN_SUFFIX_TYPE" DataType="Text-2" DefaultValue="' '" Description="ShipTo or BillTo"  Nullable="false" XMLName="ExtnSuffixType" XMLGroup="Extn"/>			  
         </Attributes>
-		<PrimaryKey Name="XPEDX_MIL_BOTHLIST_PK">
+		<PrimaryKey Name="XPEDX_MIL_LST_PK">
 			<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
 		</PrimaryKey>
 	<Indices>
