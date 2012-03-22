@@ -93,7 +93,7 @@
                     <td valign="top" class="no-border-right-user padding0"><div class="question">
                         <ul>
                           <li>Available Locations:</li>
-                          <li><span class="float-right   padding-right4 margin-right"><a href="#" id="purposeofmails-al3"><img src="../../xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;" width="12" height="12" border="0" alt="A list of all ship-to locations active for this account." title="A list of all ship-to locations active for this account."/></a></span></li>
+                          <li><span class="float-right   padding-right4 margin-right"><a href="#" id="purposeofmails-al3"><img src="../../xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;" width="12" height="12" border="0" alt="A list of available locations for this account." title="A list of available locations for this account."/></a></span></li>
                         </ul>
                     </div></td>
                     <td valign="top" class="no-border-right-user padding0">
@@ -111,7 +111,8 @@
 								</s:iterator>
 							</select>
 	                      </div>
-                      	<s:url id="paginateLocations" action="paginatedCustomerLocations" namespace="/profile/user">
+                      	<s:url id="paginateLocations" action="paginatedCustomerLocations" namespace="/profile/user" >
+							<s:param name="userId" value="#displayUserID"/>
 							<s:param name="pageNumber" value="'{0}'"/>
 						</s:url>
 						<p align="center">
