@@ -771,5 +771,6 @@ public class XPXLiterals {
 	public static final String A_SELLER_ORGANIZATION_CODE="SellerOrganizationCode";
 	/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 	public static final String SWC_ORDER_TRANS_TYPE = "Order";
+	public static final String MSAP_SUFFIX_TYPE = "MC";
 	
 }
