@@ -503,8 +503,6 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 					<s:set name="chargeAmount" value='%{chargeAmount}'></s:set>
 					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
-					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)'/>
-					<s:set name="fmtdChargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)'/>
 					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
@@ -1795,8 +1793,8 @@ var currentAadd2ItemList = new Object();
 
 <s:set name='headerAdjustmentWithoutShipping'
 	value='%{#hdrAdjustmentWithoutShipping - #hdrShippingTotal + #hdrShippingBaseCharge}' />
-<%--s:set name='adjustedSubtotalWithoutTaxes'
-	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,(#overallTotals.getAttribute("AdjustedSubtotalWithoutTaxes") - #hdrShippingTotal + #hdrShippingBaseCharge))' /--%>
+<s:set name='adjustedSubtotalWithoutTaxes'
+	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,(#overallTotals.getAttribute("AdjustedSubtotalWithoutTaxes") - #hdrShippingTotal + #hdrShippingBaseCharge))' />
 <s:set name='grandTax'
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("GrandTax"))' />
 
@@ -1806,9 +1804,6 @@ var currentAadd2ItemList = new Object();
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("HdrShippingTotal"))' />
 <s:set name="shippingAdjCounter" value="false" /> <s:set
 	name="allAdjCounter" value="false" />
-	<%--Fix for JIRA 3469 --%>
-	<s:set name='nettotalAmount'  value='#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes")'/>
-	<%--End of Fix for JIRA 3469 --%>
 <!-- Pricing -->
 <%--	Using CustomerContactBean object from session
 <s:if test='%{#session.viewPricesFlag == "Y"}'>
@@ -1898,7 +1893,7 @@ var currentAadd2ItemList = new Object();
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 					  		</s:if>						  
 						  <s:else>
-							<%--	<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />--%>
+							<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
 								<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 					     </s:else>					
 					
@@ -2373,9 +2368,7 @@ function validateMinOrder()
 {
 	var minAmount='<s:property value="#minOrderAmount"/>';
 	var chargeAmount='<s:property value="#chargeAmount"/>';
-	var totalAmount='<s:property value="#nettotalAmount" />';
-	var fmtdMinOrderAmount='<s:property value="#fmtdMinOrderAmount" />';
-	var fmtdChargeAmount='<s:property value="#fmtdChargeAmount" />';
+	var totalAmount='<s:property value='#adjustedSubtotalWithoutTaxes' />';
 	var totalAmountNum=Number(totalAmount);
 	if(minAmount >totalAmountNum)
 	{
@@ -2384,11 +2377,11 @@ function validateMinOrder()
 		if(divId != null)
 		{		
 			//Start fix for 3098
-			divId.innerHTML="Order minimum is "+fmtdMinOrderAmount+". A Penalty of "+fmtdChargeAmount+" will be charged.";
+			divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
 		}
 		if(divId1 != null)
 		{
-			divId1.innerHTML="Order minimum is "+fmtdMinOrderAmount+". A Penalty of "+fmtdChargeAmount+" will be charged.";
+			divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
 			//End fix for 3098
 		}
 	}
