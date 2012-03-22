@@ -1306,7 +1306,7 @@ from session . We have customer Contact Object in session .
 		value="XPEDXAllAdjustments.jsp" />
 		
 	<div class="cart-summary">
-			<div class="cart-sum-left">
+			<div class="cart-sum-left" style="width:300px">
 				<fieldset id="coupon-field" style="width:18.9em;"	><legend>Coupon Code</legend>
 				<s:if test='isCouponEntryAllowed && draftOrder'>
 					<s:set name='addCouponStartTabIndex' value='800' />
@@ -1325,6 +1325,19 @@ from session . We have customer Contact Object in session .
 			
 				</fieldset>
 			</div>
+			<!--  Added div for Jira 3465 - Delivery Information on Checkout Screen -->
+			<s:if test="%{#deliveryInfo != null && #deliveryInfo!='' }">
+			<div align="center" >
+			<table align="left">
+  				<tr>
+    			<td class="second-cell" width="250px" style="text-align:left;display:block">
+    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
+				<s:property value="deliveryInfo"/></td>
+   				</tr>
+			</table> 
+			</div>
+			</s:if>
+			<!--  Fix end for Jira 3465 - Delivery Information on Checkout Screen -->
 			<%-- 
 			 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
 			 --%>
