@@ -261,6 +261,8 @@ public void resetOrganizationValuesForShipToCustomer(){
 		shipToCustomer.setShipToOrgOrganizationName(null);
 		shipToCustomer.setShipToOrgCorporatePersonInfoState(null);
 		shipToCustomer.setShipToDivDeliveryCutOffTime(null);
+		//Added For Jira 3465
+		shipToCustomer.setShipToDivdeliveryInfo(null);
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 }
 
@@ -384,6 +386,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
 					shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
 					shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+					//Added For Jira 3465
+					shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 				}
 			}
@@ -826,6 +830,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
 											shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+											//Added For Jira 3465
+											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
 											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 										} catch (CannotBuildInputException e) {
 											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
