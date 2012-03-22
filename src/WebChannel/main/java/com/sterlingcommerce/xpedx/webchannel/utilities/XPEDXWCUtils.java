@@ -5142,10 +5142,7 @@ public class XPEDXWCUtils {
 				String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
 				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
 				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");				
-				  //Start- Code added to fix XNGTP 3469
-				String minOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMinOrderAmount");
-				String minChargeAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMinChargeAmount");
-				//End- Code fix XNGTP 3469
+				
 				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
 					b2bViewFromDB = b2bViewFromDB.trim();
 					int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
@@ -5223,7 +5220,7 @@ public class XPEDXWCUtils {
 							viewReportFlag, viewPricesFlag,
 							newusergroupkey, defaultShipTo,
 							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement,minOrderAmt,minChargeAmt);
+							emailID,extnUseOrderMulUOMFlag,personInfoElement);
 			}
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;
