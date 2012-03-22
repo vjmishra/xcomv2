@@ -145,7 +145,6 @@
     	<s:param name="pageNumber" value="%{pageNumber}"/>
     	<s:param name="searchCriteria" value="%{searchCriteria}"/>
     	<s:param name="searchValue" value="%{searchValue}"/>
-    	<s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
     </s:url>
  <div id="inline1" class="xpedx-light-box" style="overflow: auto;">
  
