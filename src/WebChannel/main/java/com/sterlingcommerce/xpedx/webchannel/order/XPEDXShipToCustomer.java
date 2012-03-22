@@ -321,6 +321,13 @@ public class XPEDXShipToCustomer {
 	public void setParentCustomerKey(String parentCustomerKey) {
 		this.parentCustomerKey = parentCustomerKey;
 	}
+	public String getShipToDivdeliveryInfo() {
+		return shipToDivdeliveryInfo;
+	}
+	public void setShipToDivdeliveryInfo(String shipToDivdeliveryInfo) {
+		this.shipToDivdeliveryInfo = shipToDivdeliveryInfo;
+	}
+
 
 	private String FirstName;
 	private String MiddleName;
@@ -365,6 +372,8 @@ public class XPEDXShipToCustomer {
 	private String shipToOrgOrganizationName;
 	private String shipToOrgCorporatePersonInfoState;
 	private String shipToDivDeliveryCutOffTime;
+	private String shipToDivdeliveryInfo;
+	
 	private XPEDXShipToCustomer billTo;
 	private XPEDXOrgNodeDetailsBean organization;
 }
