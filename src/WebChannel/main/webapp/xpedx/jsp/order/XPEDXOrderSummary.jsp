@@ -1326,7 +1326,8 @@ from session . We have customer Contact Object in session .
 				</fieldset>
 			</div>
 			<!--  Added div for Jira 3465 - Delivery Information on Checkout Screen -->
-			<s:if test="%{#deliveryInfo != null && #deliveryInfo!='' }">
+			<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
+			<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
 			<div align="center" >
 			<table align="left">
   				<tr>
