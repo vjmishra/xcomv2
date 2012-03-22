@@ -38,7 +38,6 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
@@ -739,24 +738,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}//if customerList is not null
 */
-				 //Start- Code added to fix XNGTP 3469
-				
-				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean =(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-				
-					String minOrderAmountStr=xpedxCustomerContactInfoBean.getExtnMinOrderAmount();
-					String chargeAmountStr=xpedxCustomerContactInfoBean.getExtnMinChargeAmount();
-					if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
-							(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
-					{
-						minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-						if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
-						{
-							chargeAmount = Float.parseFloat(chargeAmountStr);
-						}
-					} //End fix XNGTP 3469
-					else
-					{
-
 						if(shipToCustomer== null){
 							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
 							
@@ -766,8 +747,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 									.getDocumentElement());
 							shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 						}
-						 minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
-						 chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();
+				String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
+				String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
 						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
 								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 						{
@@ -847,7 +828,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 										if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 										{
 												chargeAmount = Float.parseFloat(chargeAmountStr);
-										}
 									}
 								}
 							}
