@@ -1,0 +1,42 @@
+<DBSchema>
+   <Entities>  
+    <Entity EntityType="VIEW" View="true" Extensible="N" TableType="TRANSACTION" TableName="XPEDX_MIL_BOTHLIST" ApiNeeded="Y"
+    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XpedxMilBothLst">
+        <Attributes>
+				<Attribute ColumnName="MODIFYTS" 	 		DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp" XMLName="Modifyts"/>
+				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="CreateUserId"/>
+				<Attribute ColumnName="CREATEUSERNAME" 		DataType="Text-60" 		DefaultValue="' '" Description="Creating User Name" XMLName="CreateUserName"/>
+				<Attribute ColumnName="MODIFYUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID" XMLName="ModifyUserId"/>
+				<Attribute ColumnName="CREATEPROGID" 		DataType="ProgramID" 	DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" 		DataType="ProgramID" 	DefaultValue="' '" Description="Modifying Program ID"/>
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	DataType="Key" 	Description="" Nullable="False" XMLName="MyItemsListKey"/>
+				<Attribute ColumnName="LIST_NAME"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
+				<Attribute ColumnName="LIST_DESC"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
+				<Attribute ColumnName="CUSTOMER_ID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="CustomerID"/>		
+				<Attribute ColumnName="LIST_ORDER"  		DataType="Integer"  	DefaultValue="0" Description="" Nullable="False" XMLName="ListOrder"/>
+				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
+				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="SharePrivate"/>
+				<Attribute ColumnName="CUSTOMER_KEY"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="CustomerKey"/>
+				<Attribute ColumnName="PARENT_CUSTOMER_KEY"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="ParentCustomerKey"/>
+				<Attribute ColumnName="ROOT_CUSTOMER_KEY"  	DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="RootCustomerKey"/>
+				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="false" XMLName="ExtnCustomerDivision" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_SUFFIX_TYPE" DataType="Text-2" DefaultValue="' '" Description="ShipTo or BillTo"  Nullable="false" XMLName="ExtnSuffixType" XMLGroup="Extn"/>			  
+        </Attributes>
+		<PrimaryKey Name="XPEDX_MIL_BOTHLIST_PK">
+			<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
+		</PrimaryKey>
+	<Indices>
+            <Index Name="CUST_KEY" Unique="False">
+            	<Column Name="CUSTOMER_KEY"/>
+             </Index>
+            
+            <Index Name="PARENT_CUST_KEY" Unique="False">           	
+                <Column Name="PARENT_CUSTOMER_KEY"/>
+            </Index>
+			<Index Name="ROOT_CUST_KEY" Unique="False">           	
+                <Column Name="ROOT_CUSTOMER_KEY"/>
+            </Index>
+      </Indices>
+    </Entity>
+</Entities>
+</DBSchema>
