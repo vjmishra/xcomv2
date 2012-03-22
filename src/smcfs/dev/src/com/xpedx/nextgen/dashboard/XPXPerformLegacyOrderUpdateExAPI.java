@@ -27,6 +27,7 @@ import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -372,7 +373,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 				this.handleHeaderProcessCodeD(rootEle, fOrderEle);
 				if (rootEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(rootEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(rootEle.getAttribute("OrderHeaderKey"))) {
+					// To Set Instruction Detail Key To Update / Remove The Instruction Text For The Order.
 					setInstructionKeys(rootEle, fOrderEle);
+					// To Calculate the Price Information For The FO.
 					setExtendedPriceInfo(env, rootEle, false);
 					filterAttributes(rootEle, false);					
 					
@@ -435,11 +438,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:" + chngcOrderEle0.getString());
 					}
 					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle0.getOwnerDocument().getDocument());
-					if (tempDoc != null) {
-						returnToLegacyDoc = YFCDocument.getDocumentFor(tempDoc);
-					} else {
-						throw new Exception("Service XPXChangeOrder Failed!");
-					}
+					if (tempDoc == null) {
+						throw new Exception("Service XPXChangeOrder Failed to Update Customer Order!");
+					} 
 				}
 				if (returnToLegacyDoc == null) {
 					throw new Exception("Could Not Perform Fulfillment Order Cancel!");
@@ -842,128 +843,78 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 				compId = _compId;
 			}
-
-			YFCElement custInfoEle = null;
+			
+			// To get ShipTo Customer Information.
+			YFCElement shipToCustElem = getShipToCustomerInformation(env, rootEle);
+			
+			// To get MSAP Customer Key.
+			String rootCustKey = null;
+			if (shipToCustElem.hasAttribute("RootCustomerKey")) {
+				rootCustKey = shipToCustElem.getAttribute("RootCustomerKey");
+				if (YFCObject.isNull(rootCustKey) || YFCObject.isVoid(rootCustKey)) {
+					throw new Exception("Attribute RootCustomerKey Cannot be NULL or Void!");
+				}
+			} else {
+				throw new Exception("Attribute RootCustomerKey Not Available in getCustomerList Template!");
+			}
+			
+			// To get MSAP Customer Details.
+			YFCElement msapCustElem = getMSAPCustomerInformation(env, rootCustKey);		
+						
+			// To Set MSAP Customer Information.
 			if (rootExtnEle.hasAttribute("ExtnBillToName")) {
 				String extnBillToName = rootExtnEle.getAttribute("ExtnBillToName");
 				if (YFCObject.isNull(extnBillToName) || YFCObject.isVoid(extnBillToName)) {
-					// Suffix type "MC" stands for Bill To.
-					custInfoEle = getCustomerInformation(env, rootEle, "MC");
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootExtnEle.setAttribute("ExtnBillToName", getBillToName(custInfoEle));
+					rootExtnEle.setAttribute("ExtnBillToName", getBillToName(msapCustElem));
 				}
 			} else {
-				custInfoEle = getCustomerInformation(env, rootEle, "MC");
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootExtnEle.setAttribute("ExtnBillToName", getBillToName(custInfoEle));
+				rootExtnEle.setAttribute("ExtnBillToName", getBillToName(msapCustElem));
 			}
 
 			if (rootEle.hasAttribute("BillToID")) {
 				String billToID = rootEle.getAttribute("BillToID");
-				if (YFCObject.isNull(billToID) || YFCObject.isVoid(billToID)) {
-					if (custInfoEle == null) {
-						custInfoEle = getCustomerInformation(env, rootEle, "MC");
-					}
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootEle.setAttribute("BillToID", getBillToID(custInfoEle));
+				if (YFCObject.isNull(billToID) || YFCObject.isVoid(billToID)) {	
+					rootEle.setAttribute("BillToID", getBillToID(msapCustElem));
 				}
 			} else {
-				if (custInfoEle == null) {
-					custInfoEle = getCustomerInformation(env, rootEle, "MC");
-				}
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootEle.setAttribute("BillToID", getBillToID(custInfoEle));
+				rootEle.setAttribute("BillToID", getBillToID(msapCustElem));
 			}
 
-			// Customer information element has been made null to fetch the Ship To customer details.
-			custInfoEle = null;
+			// To Set ShipTo Customer Information.
 			if (rootExtnEle.hasAttribute("ExtnSAPParentName")) {
 				String sapParentName = rootExtnEle.getAttribute("ExtnSAPParentName");
 				if (YFCObject.isNull(sapParentName) || YFCObject.isVoid(sapParentName)) {
-					// Suffix type "S" stands for Ship To.
-					custInfoEle = getCustomerInformation(env, rootEle, "S");
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootExtnEle.setAttribute("ExtnSAPParentName", getSAPParentName(custInfoEle));
+					rootExtnEle.setAttribute("ExtnSAPParentName", getSAPParentName(shipToCustElem));
 				}
 			} else {
-				custInfoEle = getCustomerInformation(env, rootEle, "S");
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootExtnEle.setAttribute("ExtnSAPParentName", getSAPParentName(custInfoEle));
+				rootExtnEle.setAttribute("ExtnSAPParentName", getSAPParentName(shipToCustElem));
 			}
 
 			if (rootExtnEle.hasAttribute("ExtnOrigEnvironmentCode")) {
 				String orgEnvCode = rootExtnEle.getAttribute("ExtnOrigEnvironmentCode");
 				if (YFCObject.isNull(orgEnvCode) || YFCObject.isVoid(orgEnvCode)) {
-					if (custInfoEle == null) {
-						custInfoEle = getCustomerInformation(env, rootEle, "S");
-					}
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootExtnEle.setAttribute("ExtnOrigEnvironmentCode", getOrigEnvCode(custInfoEle));
+					rootExtnEle.setAttribute("ExtnOrigEnvironmentCode", getOrigEnvCode(shipToCustElem));
 				}
 			} else {
-				if (custInfoEle == null) {
-					custInfoEle = getCustomerInformation(env, rootEle, "S");
-				}
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootExtnEle.setAttribute("ExtnOrigEnvironmentCode", getOrigEnvCode(custInfoEle));
+				rootExtnEle.setAttribute("ExtnOrigEnvironmentCode", getOrigEnvCode(shipToCustElem));
 			}
 
 			if (rootEle.hasAttribute("BuyerOrganizationCode")) {
 				String buyerOrgCode = rootEle.getAttribute("BuyerOrganizationCode");
 				if (YFCObject.isNull(buyerOrgCode) || YFCObject.isVoid(buyerOrgCode)) {
-					if (custInfoEle != null) {
-						custInfoEle = getCustomerInformation(env, rootEle, "S");
-					}
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootEle.setAttribute("BuyerOrganizationCode", this.getBuyerOrgCode(custInfoEle));
+					rootEle.setAttribute("BuyerOrganizationCode", this.getBuyerOrgCode(shipToCustElem));
 				}
 			} else {
-				if (custInfoEle == null) {
-					custInfoEle = getCustomerInformation(env, rootEle, "S");
-				}
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootEle.setAttribute("BuyerOrganizationCode", this.getBuyerOrgCode(custInfoEle));
+				rootEle.setAttribute("BuyerOrganizationCode", this.getBuyerOrgCode(shipToCustElem));
 			}
 
 			if (rootEle.hasAttribute("ShipToID")) {
 				String shipToID = rootEle.getAttribute("ShipToID");
 				if (YFCObject.isNull(shipToID) || YFCObject.isVoid(shipToID)) {
-					if (custInfoEle == null) {
-						custInfoEle = getCustomerInformation(env, rootEle, "S");
-					}
-					if (custInfoEle == null) {
-						throw new Exception("No Customer Information Found in Sterling!");
-					}
-					rootEle.setAttribute("ShipToID", this.getShipToID(custInfoEle));
+					rootEle.setAttribute("ShipToID", this.getShipToID(shipToCustElem));
 				}
 			} else {
-				if (custInfoEle == null) {
-					custInfoEle = getCustomerInformation(env, rootEle, "S");
-				}
-				if (custInfoEle == null) {
-					throw new Exception("No Customer Information Found in Sterling!");
-				}
-				rootEle.setAttribute("ShipToID", this.getShipToID(custInfoEle));
+				rootEle.setAttribute("ShipToID", this.getShipToID(shipToCustElem));
 			}
 
 			if (!rootEle.hasAttribute("EntryType")) {
@@ -976,6 +927,35 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		} else {
 			throw new Exception("OrderLine/Extn Element Not Available in Incoming Legacy Message!");
 		}
+		
+		// To Get The List Of Customer Part Numbers From Every Order Line.
+		Set<String> custPartNoSet = new HashSet<String>();
+		HashMap<String,String> legacyItemNoMap = new HashMap<String,String>();
+		HashMap<String,YFCDocument> itemDetailsMap = new HashMap<String,YFCDocument>();
+		YFCElement rootOrdLinesEle_ = rootEle.getChildElement("OrderLines");
+		if (rootOrdLinesEle_ != null) {
+			YFCIterable<YFCElement> yfcItr_ = rootOrdLinesEle_.getChildren("OrderLine");
+			while (yfcItr_.hasNext()) {	
+				YFCElement rootOrdLineEle_ = (YFCElement) yfcItr_.next();
+				YFCElement rootOrdLineItemEle = rootOrdLineEle_.getChildElement("Item");
+				if (rootOrdLineItemEle != null) {
+					if (rootOrdLineItemEle.hasAttribute("CustomerItem")) {
+						String custPartNo = rootOrdLineItemEle.getAttribute("CustomerItem");
+						if (!YFCObject.isNull(custPartNo) && !YFCObject.isVoid(custPartNo)) {
+							custPartNoSet.add(custPartNo);
+						}
+					}
+				}
+			}
+		}
+		
+		// To Get The Legacy Item Number Map For The Customer Part Number.
+		if ( custPartNoSet != null && !custPartNoSet.isEmpty()) {
+			legacyItemNoMap = getLegacyItemNoFromXRef(env, compId, envId, custNo, custPartNoSet);
+		}
+		
+		// To Get Line Type Of An Item From Inventory Indicator.
+		itemDetailsMap = getItemDetails(env, rootEle, envId);
 
 		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
 		if (rootOrdLinesEle != null) {
@@ -992,7 +972,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					isNewLine = "Y";
 				}
 				if (isNewLine.equalsIgnoreCase("Y")) {
-					setOrderLineAttributes(env, rootOrdLineEle, compId, envId, custNo);
+					setOrderLineAttributes(env, rootOrdLineEle, compId, envId, custNo, legacyItemNoMap, itemDetailsMap);
 				}
 			}
 		} else {
@@ -1000,6 +980,61 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 	}
 
+	private void setOrderLineAttributes(YFSEnvironment env, YFCElement rootOrdLineEle, String compId, String envId, 
+			String custNo, HashMap<String,String> legacyItemNoMap, HashMap<String,YFCDocument> itemDetailsMap ) throws Exception {
+
+		String lineType = null;
+		String legacyItemNo = null;
+		String itemId = null;
+		String shipNode = null;
+
+		if (rootOrdLineEle.hasAttribute("LineType")) {
+			lineType = rootOrdLineEle.getAttribute("LineType");
+			if (YFCObject.isNull(lineType) || YFCObject.isVoid(lineType)) {
+				throw new Exception("Attribute OrderLine/@LineType Cannot be NULL or Void!");
+			}
+			if (lineType.equalsIgnoreCase("C") || lineType.equalsIgnoreCase("M")) {
+				rootOrdLineEle.setAttribute("ValidateItem", "N");
+			} else {
+				rootOrdLineEle.setAttribute("ValidateItem", "N");
+			}
+			if (lineType.equalsIgnoreCase("S")) {
+				String custPartNo = null;
+				YFCElement rootOrdLineItemEle = rootOrdLineEle.getChildElement("Item");
+				if (rootOrdLineItemEle != null) {
+					if (rootOrdLineItemEle.hasAttribute("CustomerItem")) {
+						custPartNo = rootOrdLineItemEle.getAttribute("CustomerItem");
+						if (!YFCObject.isNull(custPartNo) && !YFCObject.isVoid(custPartNo) && legacyItemNoMap != null) {
+							legacyItemNo = legacyItemNoMap.get(custPartNo);							
+							if (!YFCObject.isNull(legacyItemNo) && !YFCObject.isVoid(legacyItemNo)) {
+								rootOrdLineItemEle.setAttribute("ItemID", legacyItemNo);
+							}
+						}
+					}
+				} else {
+					throw new Exception("Element OrderLine/Item Not Available in Incoming Legacy Message!");
+				}
+			}
+		} else {
+			throw new Exception("Attribute OrderLine/@LineType Not Available in Incoming Legacy Message!");
+		}
+		
+		itemId = getItemID(rootOrdLineEle);
+		shipNode = getShipNode(rootOrdLineEle);
+		
+		YFCElement rootOrdLineExtnEle = rootOrdLineEle.getChildElement("Extn");
+		if (rootOrdLineExtnEle != null) {
+				String extnLineType = getStockType(env, itemId, shipNode, lineType, itemDetailsMap);
+				if (!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
+					rootOrdLineExtnEle.setAttribute("ExtnLineType", extnLineType);
+				} else {
+					throw new Exception("ExtnLineType Cannot be NULL or Void!");
+				}
+		} else {
+			throw new Exception("OrderLine/Extn Element Not Available in Incoming Legacy Message!");
+		}
+	}
+	
 	private void setOrderLineAttributes(YFSEnvironment env, YFCElement rootOrdLineEle, String compId, String envId, String custNo) throws Exception {
 
 		String lineType = null;
@@ -2225,9 +2260,35 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			chngcOrdStatusLineTranQtyEle.removeAttribute("Quantity");
 		}	
 	}
+	
+	
+	
+	private YFCElement getMSAPCustomerInformation(YFSEnvironment env, String rootCustKey) throws Exception {
+		
+		YFCDocument getRootCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
+		YFCElement rootCustInXMLEle = getRootCustListInXML.getDocumentElement();
+		rootCustInXMLEle.setAttribute("CustomerKey", rootCustKey);
+		YFCElement extnCustInXmlEle = rootCustInXMLEle.createChild("Extn");
+		extnCustInXmlEle.setAttribute("ExtnSuffixType", XPXLiterals.MSAP_SUFFIX_TYPE);
 
-	private YFCElement getCustomerInformation(YFSEnvironment env, YFCElement rootEle, String suffixType) throws Exception {
+		if(log.isDebugEnabled()){
+			log.debug("XPXGetCustomerList-InXML:" + getRootCustListInXML.getString());
+		}
+		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXGetCustomerList", getRootCustListInXML.getDocument());
+		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
+			throw new Exception("XPXGetCustomerList - MSAP Customer Not Found!");
+		}
 
+		if(log.isDebugEnabled()){
+			log.debug("XPXGetCustomerList-OutXML:" + YFCDocument.getDocumentFor(tempDoc).getString());
+		}
+		
+		YFCDocument msapCustDoc = YFCDocument.getDocumentFor(tempDoc);
+		return msapCustDoc.getDocumentElement().getChildElement("Customer");
+	}
+	
+	private YFCElement getShipToCustomerInformation(YFSEnvironment env, YFCElement rootEle) throws Exception {
+		
 		YFCElement extnRootEle = rootEle.getChildElement("Extn");
 
 		YFCDocument getCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
@@ -2254,102 +2315,34 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		} else {
 			throw new Exception("Attribute ExtnLegacyCustNumber Not Available in Incoming Legacy Message!");
 		}
-
-		if (YFCObject.isNull(suffixType) || YFCObject.isVoid(suffixType)) {
-			throw new Exception("Customer SuffixType Cannot be NULL or Void!");
-		}
-
-		// To set the attribute based on suffix type.
-		if (suffixType.equalsIgnoreCase("MC")) {
-			if (extnRootEle.hasAttribute("ExtnBillToSuffix")) {
-				String buillToSuffix = extnRootEle.getAttribute("ExtnBillToSuffix");
-				if (YFCObject.isNull(buillToSuffix) || YFCObject.isVoid(buillToSuffix)) {
-					throw new Exception("Attribute ExtnBillToSuffix Cannot be NULL or Void!");
-				}
-				extnCustInXMLEle.setAttribute("ExtnBillToSuffix", buillToSuffix);
-			} else {
-				throw new Exception("Attribute ExtnBillToSuffix Not Available in Incoming Legacy Message!");
+ 
+		if (extnRootEle.hasAttribute("ExtnShipToSuffix")) {
+			String shipToSuffix = extnRootEle.getAttribute("ExtnShipToSuffix");
+			if (YFCObject.isNull(shipToSuffix) || YFCObject.isVoid(shipToSuffix)) {
+				throw new Exception("Attribute ExtnShipToSuffix Cannot be NULL or Void!");
 			}
-		} else if (suffixType.equalsIgnoreCase("S")) {
-			if (extnRootEle.hasAttribute("ExtnShipToSuffix")) {
-				String shipToSuffix = extnRootEle.getAttribute("ExtnShipToSuffix");
-				if (YFCObject.isNull(shipToSuffix) || YFCObject.isVoid(shipToSuffix)) {
-					throw new Exception("Attribute ExtnShipToSuffix Cannot be NULL or Void!");
-				}
-				extnCustInXMLEle.setAttribute("ExtnShipToSuffix", shipToSuffix);
-			} else {
-				throw new Exception("Attribute ExtnBillToSuffix Not Available in Incoming Legacy Message!");
-			}
+			extnCustInXMLEle.setAttribute("ExtnShipToSuffix", shipToSuffix);
 		} else {
-			throw new Exception("Customer SuffixType is invalid in incoming legacy message.");
+			throw new Exception("Attribute ExtnBillToSuffix Not Available in Incoming Legacy Message!");
 		}
-		if (suffixType.trim().equalsIgnoreCase("MC")) {
-			extnCustInXMLEle.setAttribute("ExtnSuffixType", "B");
-		} else {
-			extnCustInXMLEle.setAttribute("ExtnSuffixType", suffixType.trim());
-		}
-
+		
+		extnCustInXMLEle.setAttribute("ExtnSuffixType", XPXLiterals.CHAR_S);
+		
 		if(log.isDebugEnabled()){
 			log.debug("XPXGetCustomerList-InXML:" + getCustListInXML.getString());
 		}
+		
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
-		if (tempDoc == null) {
-			throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers!");
+		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
+			throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers - ShipTo Customer Isn't Available.");
 		}
 
 		if(log.isDebugEnabled()){
 			log.debug("XPXGetCustomerList-OutXML:" + YFCDocument.getDocumentFor(tempDoc).getString());
 		}
-		YFCElement custEle = null;
-		YFCDocument getCustListOutXML = YFCDocument.getDocumentFor(tempDoc);
-		YFCElement custListOutXMLEle = getCustListOutXML.getDocumentElement();
-		YFCIterable<YFCElement> yfcItr = custListOutXMLEle.getChildren("Customer");
-		if (!yfcItr.hasNext()) {
-			throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers!");
-		} else {
-			if (suffixType.equalsIgnoreCase("MC")) {
-				String rootCustKey = null;
-				YFCElement billToCustEle = (YFCElement) yfcItr.next();
-				if (billToCustEle.hasAttribute("RootCustomerKey")) {
-					rootCustKey = billToCustEle.getAttribute("RootCustomerKey");
-					if (YFCObject.isNull(rootCustKey) || YFCObject.isVoid(rootCustKey)) {
-						throw new Exception("Attribute RootCustomerKey Cannot be NULL or Void!");
-					}
-				} else {
-					throw new Exception("Attribute RootCustomerKey Not Available in getCustomerList Template!");
-				}
-
-				YFCDocument getRootCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
-				YFCElement rootCustInXMLEle = getRootCustListInXML.getDocumentElement();
-				rootCustInXMLEle.setAttribute("CustomerKey", rootCustKey);
-				rootCustInXMLEle.setAttribute("ExtnSuffixType", suffixType.trim());
-
-				if(log.isDebugEnabled()){
-					log.debug("XPXGetCustomerList-InXML:" + getRootCustListInXML.getString());
-				}
-				tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXGetCustomerList", getRootCustListInXML.getDocument());
-				if (tempDoc == null) {
-					throw new Exception("XPXGetCustomerList - MSAP Customer Not Found!");
-				}
-
-				if(log.isDebugEnabled()){
-					log.debug("XPXGetCustomerList-OutXML:" + YFCDocument.getDocumentFor(tempDoc).getString());
-				}
-				getCustListOutXML = YFCDocument.getDocumentFor(tempDoc);
-				custListOutXMLEle = getCustListOutXML.getDocumentElement();
-				yfcItr = custListOutXMLEle.getChildren("Customer");
-				if (!yfcItr.hasNext()) {
-					throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers!");
-				} else {
-					custEle = (YFCElement) yfcItr.next();
-				}
-
-			} else {
-				custEle = (YFCElement) yfcItr.next();
-			}
-		}
-
-		return custEle;
+		
+		YFCDocument shipToCustDoc = YFCDocument.getDocumentFor(tempDoc);
+		return shipToCustDoc.getDocumentElement().getChildElement("Customer");
 	}
 
 	/**
@@ -3104,6 +3097,268 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 
 	}
+	
+	private String getLineType(YFCElement rootOrdLineEle) throws Exception {
+		
+		String lineType = null;
+		if (rootOrdLineEle.hasAttribute("LineType")) {
+			lineType = rootOrdLineEle.getAttribute("LineType");
+			if (YFCObject.isNull(lineType) || YFCObject.isVoid(lineType)) {
+				throw new Exception("Attribute OrderLine/@LineType Cannot be NULL or Void!");
+			}	
+		} else {
+			throw new Exception("Attribute OrderLine/@LineType Not Available in Incoming Legacy Message!");
+		}
+		return lineType;
+	}
+	
+	private String getShipNode(YFCElement rootOrdLineEle) throws Exception {
+		
+		String shipNode = null;
+		if (rootOrdLineEle.hasAttribute("ShipNode")) {
+			shipNode = rootOrdLineEle.getAttribute("ShipNode");
+			if (YFCObject.isNull(shipNode) || YFCObject.isVoid(shipNode)) {
+				throw new Exception("Attribute OrderLine/@ShipNode Cannot be NULL or Void!");
+			}
+			
+			if (shipNode.contains("_")) {
+				// Need to remove the environment id from ship node.
+				String[] splitArrayOnUom = shipNode.split("_");
+				if (splitArrayOnUom.length > 0) {
+					shipNode = splitArrayOnUom[0];
+				}
+			}
+		} else {
+			throw new Exception("Attribute OrderLine/@ShipNode Not Available in Incoming Legacy Message!");
+		}
+		return shipNode;
+	}
+	
+	private String getItemID(YFCElement rootOrdLineEle) throws Exception {
+		
+		String itemID = null;
+		YFCElement rootOrdLineItemEle = rootOrdLineEle.getChildElement("Item");
+		if (rootOrdLineItemEle != null) {
+			if (rootOrdLineItemEle.hasAttribute("ItemID")) {
+				itemID = rootOrdLineItemEle.getAttribute("ItemID");
+				if (YFCObject.isNull(itemID) || YFCObject.isVoid(itemID)) {
+					throw new Exception("Attribute ItemID Cannot be NULL or Void!");
+				}
+			} else {
+				throw new Exception("Attribute ItemID Not Available in Incoming Legacy Message!");
+			}
+		} else {
+			throw new Exception("Element OrderLine/Item Not Available in Incoming Legacy Message!");
+		}	
+		return itemID;
+	}
+	
+	private HashMap<String,YFCDocument> getItemDetails(YFSEnvironment env, YFCElement rootEle, String envID) throws Exception {
+		
+		YFCDocument getItemExtnListOutXML = null;
+		YFCDocument getItemListOutXML = null;
+		HashMap<String,YFCDocument> itemDetailsMap = new HashMap<String,YFCDocument>();
+		YFCDocument getItemExtnListInXML = YFCDocument.getDocumentFor("<XPXItemExtn/>");
+		YFCElement getItemExtnListEle = getItemExtnListInXML.getDocumentElement();
+		
+		YFCDocument getItemListInXML = YFCDocument.getDocumentFor("<Item/>");
+		YFCElement itemListEle = getItemListInXML.getDocumentElement();
+		
+		// To Form Input Document With Complex Query.
+		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
+		if (rootOrdLinesEle != null) {
+			
+			getItemExtnListEle.setAttribute("EnvironmentID", envID);
+			YFCElement complexQryElem = getItemExtnListEle.createChild("ComplexQuery");
+			YFCElement orElement = complexQryElem.createChild("Or");
+			
+			YFCElement complexQryElem_ = itemListEle.createChild("ComplexQuery");
+			YFCElement orElement_ = complexQryElem_.createChild("Or"); 
+			
+			YFCIterable<YFCElement> yfcItr = rootOrdLinesEle.getChildren("OrderLine");
+			while (yfcItr.hasNext()) {
+				
+				YFCElement rootOrdLineEle = (YFCElement) yfcItr.next();
+				String lineType = getLineType(rootOrdLineEle);
+				String shipNode = getShipNode(rootOrdLineEle);
+				String itemID = getItemID(rootOrdLineEle);
+				
+				if(log.isDebugEnabled()){
+					log.debug("************************************** GetStockType *******************************************");
+					log.debug("ItemID:" + itemID);
+					log.debug("ShipNode:" + shipNode);
+					log.debug("EnvtId:" + envID);
+					log.debug("lineType:" + lineType);
+				}
+				
+				YFCElement andElement = orElement.createChild("And");
+				// To Build Complex Query.
+				YFCElement expEle = andElement.createChild("Exp");		
+				expEle.setAttribute("Name", "XPXDivision");
+				expEle.setAttribute("Value", shipNode);
+				expEle.setAttribute("QryType", "EQ");
+				
+				YFCElement expEle_ = andElement.createChild("Exp");		
+				expEle_.setAttribute("Name", "ItemID");
+				expEle_.setAttribute("Value", itemID);
+				expEle_.setAttribute("QryType", "EQ");
+				
+				YFCElement expEle0 = orElement_.createChild("Exp");		
+				expEle0.setAttribute("Name", "ItemID");
+				expEle0.setAttribute("Value", itemID);
+				expEle0.setAttribute("QryType", "EQ");
+			}
+		} else {
+			throw new Exception("Element OrderLines Not Available in Incoming Legacy Message!");
+		}
+		
+		if(log.isDebugEnabled()){
+			log.debug("getXPXItemBranchListService-InXML:" + getItemExtnListInXML.getString());
+			log.debug("XPXGetItemList-InXML:" + getItemListInXML.getString());
+		}
+		
+		// 1. API Call - getXPXItemBranchList
+		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXItemBranchListService", getItemExtnListInXML.getDocument());
+		if (tempDoc != null) {
+			getItemExtnListOutXML = YFCDocument.getDocumentFor(tempDoc);
+			if(log.isDebugEnabled()){
+				log.debug("getXPXItemBranchListService-OutXML:" + getItemExtnListOutXML.getString());
+			}
+			itemDetailsMap.put("XPXItemExtn", getItemExtnListOutXML);
+		}
+		
+		// 2. API Call - getItemList
+		Document tempDocItem = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXGetItemList", getItemListInXML.getDocument());
+		if (tempDocItem != null) {
+			getItemListOutXML = YFCDocument.getDocumentFor(tempDocItem);
+			if(log.isDebugEnabled()){
+				log.debug("XPXGetItemList-OutXML:" + getItemListOutXML.getString());
+			}
+			itemDetailsMap.put("Item", getItemListOutXML);
+		}
+		return itemDetailsMap;
+	}
+	
+	private String getStockType(YFSEnvironment env, String itemID, String shipNode, String lineType, HashMap<String,YFCDocument> itemDetailsMap) throws Exception {
+		if(log.isDebugEnabled()){
+			log.debug("**************************************GetInventoryIndicator*******************************************");
+			log.debug("ItemID:" + itemID);
+			log.debug("ShipNode:" + shipNode);
+			log.debug("LineType:" + lineType);
+		}
+
+		boolean callItemList = false;
+		String invIndicator = null;
+		String stockType = null;
+		
+		if (itemDetailsMap != null) {
+			YFCDocument getItemExtnListOutXML = itemDetailsMap.get("XPXItemExtn");
+			if (getItemExtnListOutXML != null) {
+				if(log.isDebugEnabled()){
+					log.debug("getItemExtnList-OutXML:" + getItemExtnListOutXML.getString());
+				}
+				YFCElement getItemExtnListOutEle = getItemExtnListOutXML.getDocumentElement();
+				YFCIterable<YFCElement> yfcItr = getItemExtnListOutEle.getChildren("XPXItemExtn");
+				if (!yfcItr.hasNext()) {
+					callItemList = true;
+				}
+				while (yfcItr.hasNext()) {
+					
+					String shipNode_ = null;
+					String itemID_ = null;
+					YFCElement itemExtnEle = yfcItr.next();
+					if (itemExtnEle != null) {
+						
+						if (itemExtnEle.hasAttribute("XPXDivision")) {
+							shipNode_ = itemExtnEle.getAttribute("XPXDivision");
+							if (YFCObject.isNull(shipNode_) || YFCObject.isVoid(shipNode_)) {
+								throw new Exception("Attribute XPXDivision Cannot Be Null or Void.");
+							}
+						} else {
+							throw new Exception("Attribute XPXDivision Not Available In XPXItemExtn Output Template.");
+						}
+						
+						if (itemExtnEle.hasAttribute("ItemID")) {
+							itemID_ = itemExtnEle.getAttribute("ItemID");
+							if (YFCObject.isNull(itemID_) || YFCObject.isVoid(itemID_)) {
+								throw new Exception("Attribute ItemID Cannot Be Null or Void.");
+							}
+						} else {
+							throw new Exception("Attribute ItemID Not Available In XPXItemExtn Output Template.");
+						}
+						
+						if (shipNode_.equalsIgnoreCase(shipNode) && itemID_.equalsIgnoreCase(itemID)) {
+							callItemList = false;
+							if (itemExtnEle.hasAttribute("InventoryIndicator")) {
+								invIndicator = itemExtnEle.getAttribute("InventoryIndicator");
+								if (!YFCObject.isNull(invIndicator) && !YFCObject.isVoid(invIndicator)) {
+									if ("W".equalsIgnoreCase(invIndicator) || "I".equalsIgnoreCase(invIndicator)) {
+										stockType = "STOCK";
+									} else if ("M".equalsIgnoreCase(invIndicator)) {
+										stockType = "DIRECT";
+									} else {
+										// Do Nothing.
+									}
+									break;
+								} else {
+									callItemList = true;
+								}
+							} else {
+								throw new Exception("Attribute InventoryIndicator Not Available In XPXItemExtn Output Template.");
+							}
+						} else {
+							callItemList = true;
+						}
+					}  else {
+						callItemList = true;
+					}
+				} 
+			} else {
+				callItemList = true;
+			}
+			
+			if (callItemList) {
+				
+				YFCDocument getItemListOutXML = itemDetailsMap.get("Item");
+				if(log.isDebugEnabled()){
+					log.debug("getItemList-OutXML:" + getItemListOutXML.getString());
+				}
+				
+				if (getItemListOutXML != null) {
+					YFCElement _itemListEle = getItemListOutXML.getDocumentElement();
+					YFCIterable<YFCElement> yfcItr_ = _itemListEle.getChildren("Item");
+					while (yfcItr_.hasNext()) {	
+						
+						String itemID_ = null;
+						YFCElement itemElem = (YFCElement) yfcItr_.next();
+						if (itemElem.hasAttribute("ItemID")) {
+							itemID_ = itemElem.getAttribute("ItemID");
+							if (YFCObject.isNull(itemID_) || YFCObject.isVoid(itemID_)) {
+								throw new Exception("Attribute ItemID Cannot be NULL or Void!");
+							}
+						} else {
+							throw new Exception("Attribute ItemID Not Available In Output Template!");
+						}
+						
+						if (itemID_.equalsIgnoreCase(itemID)) {
+							stockType = "DIRECT";
+							break;
+						} else {
+							if (lineType.equalsIgnoreCase("M") || lineType.equalsIgnoreCase("C")) {
+								stockType = "STOCK";
+							}
+						}
+					}
+				}
+			}
+		}
+		if(log.isDebugEnabled()){
+			log.debug("ExtnLineType:" + stockType);
+			log.debug("*****************************************************************************************************");
+		}
+		
+		return stockType;
+	}
 
 	private String getInventoryIndicator(YFSEnvironment env, String itemId, String shipNode, String envtId, String lineType) throws Exception {
 		if(log.isDebugEnabled()){
@@ -3136,10 +3391,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		/* End - changes made to fix Issue 1501 */
 
 		if(log.isDebugEnabled()){
-			log.debug("getXPXItemBranchListService-InXML:" + getItemExtnListInXML.getString());
+			log.debug("XPXItemBranchListService-InXML:" + getItemExtnListInXML.getString());
 		}
 		YFCDocument getItemExtnListOutXML = null;
-		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "getXPXItemBranchListService", getItemExtnListInXML.getDocument());
+		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXItemBranchListService", getItemExtnListInXML.getDocument());
 		if (tempDoc != null) {
 			getItemExtnListOutXML = YFCDocument.getDocumentFor(tempDoc);
 			YFCElement getItemExtnListOutEle = getItemExtnListOutXML.getDocumentElement();
@@ -3202,6 +3457,71 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		return stockType;
 	}
 
+	private HashMap<String,String> getLegacyItemNoFromXRef(YFSEnvironment env, String companyCode, String envtId, String custNo, Set<String> custPartNoSet) throws Exception {
+
+		HashMap<String,String> legacyItemNoMap = new HashMap<String,String>();
+		
+		YFCDocument getItemXRefListInXML = YFCDocument.getDocumentFor("<XPXItemcustXref/>");
+		YFCElement getItemXRefListEle = getItemXRefListInXML.getDocumentElement();
+		getItemXRefListEle.setAttribute("CompanyCode", companyCode);
+		getItemXRefListEle.setAttribute("EnvironmentCode", envtId);
+		getItemXRefListEle.setAttribute("CustomerNumber", custNo);
+		// To Build Complex Query.
+		YFCElement complexQueryElem = getItemXRefListEle.createChild("ComplexQuery"); 
+		YFCElement orElement = complexQueryElem.createChild("Or");
+		Iterator<String> itr = custPartNoSet.iterator();
+		while (itr.hasNext()) {
+			String custPartNo = (String) itr.next();
+			YFCElement expEle = orElement.createChild("Exp");		
+			expEle.setAttribute("Name", "CustomerItemNumber");
+			expEle.setAttribute("Value", custPartNo);
+			expEle.setAttribute("QryType", "EQ");
+		}
+		
+		if (log.isDebugEnabled()) {
+			log.debug("getItemXRefListInXML:" + getItemXRefListInXML.getString());
+		}
+
+		YFCDocument getItemXRefListOutXML = null;
+		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "getXrefList", getItemXRefListInXML.getDocument());
+		if (tempDoc != null) {
+			getItemXRefListOutXML = YFCDocument.getDocumentFor(tempDoc);
+		} else {
+			throw new Exception("getXrefList Service Returned NULL!");
+		}
+		
+		if (log.isDebugEnabled()) {
+			log.debug("getItemXRefListOutXML:" + getItemXRefListOutXML.getString());
+		}
+
+		YFCElement getItemXRefListOutEle = getItemXRefListOutXML.getDocumentElement();
+		YFCIterable<YFCElement> yfcItr = getItemXRefListOutEle.getChildren("XPXItemcustXref");
+		while (yfcItr.hasNext()) {	
+			YFCElement itemCustXrefElem = (YFCElement) yfcItr.next();
+			if (itemCustXrefElem != null) {
+				String custItemNum = null;
+				String legacyItemNum = null;
+				if (itemCustXrefElem.hasAttribute("CustomerItemNumber")) {
+					custItemNum = itemCustXrefElem.getAttribute("CustomerItemNumber");
+				} else {
+					throw new Exception("Attribute CustomerItemNumber Not Available in getXrefList Template!");
+				}
+				
+				if (itemCustXrefElem.hasAttribute("LegacyItemNumber")) {
+					legacyItemNum = itemCustXrefElem.getAttribute("LegacyItemNumber");
+					if (YFCObject.isNull(legacyItemNum) || YFCObject.isVoid(legacyItemNum)) {
+						throw new Exception("Attribute XPXItemcustXref/@LegacyItemNumber Cannot be NULL or Void!");
+					}
+				} else {
+					throw new Exception("Attribute LegacyItemNumber Not Available in getXrefList Template!");
+				}
+				legacyItemNoMap.put(custItemNum, legacyItemNum);
+			}
+		}
+		
+		return legacyItemNoMap;
+	}
+	
 	private String getLegacyItemNoFromXRef(YFSEnvironment env, String companyCode, String envtId, String custNo, String custPartNo) throws Exception {
 
 		String legacyCustNo = null;
@@ -4882,15 +5202,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		return orderTemplateDoc;
 	}
 
-
-   
-
 	public void setReqUOMPrice(YFSEnvironment env, YFCElement rootEle) throws Exception {
 		YFCElement itemUOMListEle = null;
-	
+
 		Set<String> itemIds = this.getItemIds(rootEle);
 		if (itemIds.size() > 0) {
 			YFCElement itemEle = this.getItemUOMListInXML(itemIds);
+
 			if(log.isDebugEnabled()){
 				log.debug("getItemUOMList-InXML:" + itemEle.getString());
 			}
@@ -4900,7 +5218,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			env.clearApiTemplate("getItemUOMList");
 			if (temp != null) {
 				itemUOMListEle = YFCDocument.getDocumentFor(temp).getDocumentElement();
-				
+
 				if(log.isDebugEnabled()){
 					log.debug("getItemUOMList-OutXML:" + itemUOMListEle.getString());
 				}
@@ -5072,6 +5390,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		return null;
 	}
 
+
 	private void filterAttributes(YFCElement chngOrdEle, boolean isCustOrder) throws Exception {
 		boolean isOrderDelete = false;
 		boolean hasOtherLines = false;
@@ -5103,7 +5422,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				
 			}
 		}
-
+		
 		YFCElement chngOrdLinesEle = chngOrdEle.getChildElement("OrderLines");
 		YFCIterable<YFCElement> yfcItr = chngOrdLinesEle.getChildren("OrderLine");
 		while (yfcItr.hasNext()) {
@@ -5114,11 +5433,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (chngOrdLineEle.hasAttribute("SubLineNo")) {
 				chngOrdLineEle.removeAttribute("SubLineNo");
 			}
-
+			
 			if (chngOrdLineEle.hasAttribute("OrderedQty")) {
 				chngOrdLineEle.removeAttribute("OrderedQty");
 			}
-
+			
 			if (chngOrdLineEle.hasAttribute("Action")) {
 				String action = chngOrdLineEle.getAttribute("Action");
 				if (!YFCObject.isNull(action) && !YFCObject.isVoid(action)) {
@@ -5136,7 +5455,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (chngOrdLineEle.hasAttribute("LineProcessCode")) {
 				lpc = chngOrdLineEle.getAttribute("LineProcessCode");
 			}
-
+			
 			if (!YFCObject.isNull(lpc) && !YFCObject.isVoid(lpc)) {
 				if (!lpc.equalsIgnoreCase("D")) {
 					// Do Nothing
@@ -5148,7 +5467,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.debug("hasOtherLines:" + hasOtherLines);
 			log.debug("isOrderDelete:" + isOrderDelete);
 		}
-
+		
 		if (!hasOtherLines || isOrderDelete) {
 			if (chngOrdEle.hasAttribute("ReqDeliveryDate")) {
 				chngOrdEle.removeAttribute("ReqDeliveryDate");
@@ -5172,7 +5491,6 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		}
 	}
-
 	private void setOrdLineScheduleQty(YFCElement chngOrdLineEle) throws Exception {
 		YFCElement chngOrdLineTranQtyEle = chngOrdLineEle.getChildElement("OrderLineTranQuantity");
 		if (chngOrdLineTranQtyEle != null) {
