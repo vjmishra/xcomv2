@@ -149,6 +149,9 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 									shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/@OrganizationName"));
 									shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/CorporatePersonInfo/@State"));
 									shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+									//Added For Jira 3465
+									shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+									
 									XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER,shipToCustomer);
 								} catch (CannotBuildInputException e) {
 									LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision + "_"+ envCode + ". ", e);
