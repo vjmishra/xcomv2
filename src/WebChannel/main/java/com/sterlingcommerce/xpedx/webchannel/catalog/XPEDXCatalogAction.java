@@ -44,9 +44,11 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXWarehouseLocation;
+import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
 
 @SuppressWarnings("deprecation")
@@ -71,6 +73,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private Map <String, List<Element>> PLLineMap;	
 	private String firstItem = "";
 	
+	private String categoryPath = "";
+	
+	public String getCategoryPath() {
+		return categoryPath;
+	}
+
+	public void setCategoryPath(String categoryPath) {
+		this.categoryPath = categoryPath;
+	}
+
 	//Start 2964
 	private Map <String,String>defaultShowUOMMap;
 	private Map<String,String>orderMultipleMap;
@@ -298,8 +310,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 	   		/****Start of Code Changed for Promotions JIra 2599 *******/
 			if((path==null||path.equals("/")) && getFirstItem().trim()!=""){
-				
-				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				/* start of performance code */
+				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
+				.getDocumentElement().getChildElement("ItemList")
+				.getFirstChild();
+				YFCIterable<? extends YFCNode> YFCIterables = yfcNode.getChildren();
+				while(YFCIterables.hasNext()){
+					YFCNode node = YFCIterables.next();
+					if(node!=null && node.getNodeName().equalsIgnoreCase("CategoryList")){
+						path = node.getFirstChild().getAttributes().get("CategoryPath");
+						categoryPath = path;
+					}
+				}
+				/*end of performance code*/
+				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
 			}
 			/****End of Code Changed for Promotions JIra 2599 *******/
 		
@@ -486,13 +510,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setColumnListForUI();
 	
 	/****Start of Code Changed for Promotions JIra 2599 *******/			
-			
+			//code changed for performance
 			if(path.equals("/") && getFirstItem().trim()!=""){
-			
-				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
+				.getDocumentElement().getChildElement("ItemList")
+				.getFirstChild();
+				YFCIterable<? extends YFCNode> YFCIterables = yfcNode.getChildren();
+				while(YFCIterables.hasNext()){
+					YFCNode node = YFCIterables.next();
+					if(node!=null && node.getNodeName().equalsIgnoreCase("CategoryList")){
+						path = node.getFirstChild().getAttributes().get("CategoryPath");
+						categoryPath = path;
+					}
+				}
+				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
 			}
 			
-			/****End of Code Changed for Promotions JIra 2599 *******/
+	/****End of Code Changed for Promotions JIra 2599 *******/
 		
 
 	}		
@@ -918,7 +952,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 			/**start of code for JIra 2599****/
 			if((path==null||path.equals("/")) && getFirstItem().trim()!=""){
 				
-				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
+				.getDocumentElement().getChildElement("ItemList")
+				.getFirstChild();
+				path = yfcNode.getAttributes().get("CategoryPath");
+			//	path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				
+				
 			}
 			
 			/**End of code for JIra 2599****/
