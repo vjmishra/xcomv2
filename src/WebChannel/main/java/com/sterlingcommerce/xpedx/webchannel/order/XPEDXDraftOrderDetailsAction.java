@@ -61,13 +61,22 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	public String execute() {
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		/* Begin - Log added for jira 2422 - back button issue */
-		LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
-		LOG.debug("jira2422 HTTPServletRequest.getScheme() is " + wcContext.getSCUIContext().getRequest().getScheme());
-		LOG.debug("jira2422 HTTPServletRequest.isSecure() is " + wcContext.getSCUIContext().getRequest().isSecure());
-		LOG.debug("jira2422 HTTPServletRequest.header(user-agent) is " + wcContext.getSCUIContext().getRequest().getHeader("user-agent"));
-		LOG.debug("jira2422 HTTPServletRequest.header(CERT_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("CERT_KEYSIZE"));
-		LOG.debug("jira2422 HTTPServletRequest.header(HTTPS_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("HTTPS_KEYSIZE"));
-		LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
+		try
+		{
+			LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
+			LOG.debug("jira2422 HTTPServletRequest.getScheme() is " + wcContext.getSCUIContext().getRequest().getScheme());
+			LOG.debug("jira2422 HTTPServletRequest.isSecure() is " + wcContext.getSCUIContext().getRequest().isSecure());
+			LOG.debug("jira2422 HTTPServletRequest.header(user-agent) is " + wcContext.getSCUIContext().getRequest().getHeader("user-agent"));
+			LOG.debug("jira2422 HTTPServletRequest.header(CERT_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("CERT_KEYSIZE"));
+			LOG.debug("jira2422 HTTPServletRequest.header(HTTPS_KEYSIZE) is " + wcContext.getSCUIContext().getRequest().getHeader("HTTPS_KEYSIZE"));
+			System.out.println("jira2422 " + wcContext.getSCUIContext().getRequest().getScheme() + " " + wcContext.getSCUIContext().getRequest().isSecure());
+			System.out.println("jira2422 " + wcContext.getSCUIContext().getRequest().getHeader("CERT_KEYSIZE") + " " + wcContext.getSCUIContext().getRequest().getHeader("HTTPS_KEYSIZE"));
+			LOG.debug("-----------------------------------------------------------------------------------------------------------------------");
+		}
+		catch(Exception ex)
+		{
+			LOG.debug(ex.getMessage());
+		}
 		/* End - Log added for jira 2422 - back button issue */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
