@@ -1928,7 +1928,9 @@ var currentAadd2ItemList = new Object();
 	--%>
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
+	    <s:if test="%{#_action.getCustStatus() != '30'}">
 	    <a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
+		</s:if>
 	     <s:if test='#hasPendingChanges == "Y"'>
                    <a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
           </s:if>
