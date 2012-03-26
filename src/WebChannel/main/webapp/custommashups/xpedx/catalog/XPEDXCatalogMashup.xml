@@ -451,6 +451,16 @@
 									</QuantityRangePrice>
 								</QuantityRangePriceList>
 							</ComputedPrice>
+							<CategoryList>
+						<Category CategoryPath="" Count="" Description=""
+							SequenceNo="" ShortDescription="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" Description=""
+									SequenceNo="" ShortDescription="">
+								</Category>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
 						</Item>
 					</ItemList>
 				</CatalogSearch>
