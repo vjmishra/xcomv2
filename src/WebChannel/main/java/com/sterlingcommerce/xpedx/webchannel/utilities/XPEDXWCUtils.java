@@ -5195,7 +5195,7 @@ public class XPEDXWCUtils {
 				Element parentElem = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "ParentCustomer");
 				XPEDXWCUtils.getShipToAddressOfCustomer(customerOrganizationEle,shipToCustomer);
-				
+				shipToCustomer.setCustomerStatus(customerOrganizationEle.getAttribute("Status"));
 				shipToCustomer.setExtnCustomerClass(extnElement.getAttribute("ExtnCustomerClass"));
 				shipToCustomer.setExtnShipFromBranch(extnElement.getAttribute("ExtnShipFromBranch"));
 				shipToCustomer.setExtnUseCustSKU(extnElement.getAttribute("ExtnUseCustSKU"));
