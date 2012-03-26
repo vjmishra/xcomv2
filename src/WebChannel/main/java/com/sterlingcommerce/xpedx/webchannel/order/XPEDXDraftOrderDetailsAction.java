@@ -220,6 +220,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			 */
 			//String shipFromBranch = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
 			//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
+			custStatus = shipToCustomer.getCustomerStatus();
 			String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
 			String envCode =shipToCustomer.getExtnEnvironmentCode();
 			setDivsionAndState(shipFromBranch,envCode);
@@ -1988,6 +1989,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
+	
+	public String custStatus;
+	public String getCustStatus() {
+		return custStatus;
+	}
+
+	public void setCustStatus(String custStatus) {
+		this.custStatus = custStatus;
+	}
 	/*protected Document changeOrderOutputDoc=null;
 	protected String isDeleteOrder="false";
 	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
