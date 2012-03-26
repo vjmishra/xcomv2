@@ -28,6 +28,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.order.MiniCartDisplayAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemBranchInfoBean;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
@@ -39,14 +40,23 @@ import com.yantra.yfc.util.YFCCommon;
  */
 
 public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
+	XPEDXShipToCustomer shipToCustomer;
 	
 	private static final long serialVersionUID = -367265029311230324L;
 	private static final Logger log = Logger.getLogger(MiniCartDisplayAction.class);
     private static final String ORDERDETAILS_MASHUP_ID = "XPEDXOrderDetailsForMiniCart";
     private boolean readOrderLinesFromStart = false;
     private HashMap<String, String> itemMap = new HashMap<String, String>();
-	
+	public String customerStatus;
     
+	public String getCustomerStatus() {
+		return customerStatus;
+	}
+
+	public void setCustomerStatus(String customerStatus) {
+		this.customerStatus = customerStatus;
+	}
+
 	public HashMap<String, String> getItemMap() {
 		return itemMap;
 	}
@@ -58,6 +68,8 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
 	public String execute() 
     {
         try {
+        	shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+        	customerStatus = shipToCustomer.getCustomerStatus();
             log.info("inside MiniCartDisplayAction");
             XPEDXWCUtils.checkMultiStepCheckout();
             ArrayList<String> itemIdsInMinicart = getOrderDetails();
