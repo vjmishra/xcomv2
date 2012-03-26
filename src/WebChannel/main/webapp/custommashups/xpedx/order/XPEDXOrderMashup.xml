@@ -1484,7 +1484,42 @@
 				
 			</Input>
 			<Template>
-				<Order OrderHeaderKey="" />
+				<Order OrderHeaderKey="" CustomerContactID="" OrderType="" ShipToID=""
+					OrderNo="" EnterpriseCode="" OrderName="" DraftOrderFlag="" Status=""
+					OrderDate="" MaxOrderStatus="" CustomerPONo="" HasPendingChanges="" 
+					PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="">
+					<Extn />
+					<PriceInfo Currency=""/>
+					<Instructions>
+						<Instruction />
+					</Instructions><!-- This is for the header comments: RUgrani -->
+					<PersonInfoShipTo />
+					<PersonInfoBillTo />
+					<OrderLines>
+						<OrderLine OrderLineKey="" SubLineNo="" PrimeLineNo="" OrderedQty="" LineType="" ShipNode="" StatusQuantity=""
+						CustomerPONo=""> 
+							<Item ItemID="" UnitOfMeasure="" ItemShortDesc="" ItemDesc=""/>
+							<LinePriceInfo UnitPrice="" LineTotal="" />
+							<Extn />
+							<Instructions>
+								<Instruction />
+							</Instructions>
+							<!--
+								This is for the order line special instructions: RUgrani
+							-->
+							<OrderLineTranQuantity TransactionalUOM="" OrderedQty="" />
+							<Notes>
+								<Note />
+							</Notes>
+							<LineCharges>
+								<LineCharge ChargeAmount=""/>
+							</LineCharges>
+							<Awards>
+								<Award AwardId=""/>
+							</Awards>
+						</OrderLine>
+					</OrderLines>
+				</Order>
 			</Template>
 		</API>
 	</mashup>
