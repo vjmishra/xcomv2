@@ -4776,7 +4776,7 @@ public class XPEDXWCUtils {
 	 * @param ajkeyword
 	 * @return
 	 */
-	private static String sanitizeAJKeywords(String ajkeyword) {
+	public static String sanitizeAJKeywords(String ajkeyword) {
 		
 		log.debug("Ad_Jugler Keword Before sanitize: " + ajkeyword  );
 		
