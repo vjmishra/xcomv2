@@ -247,7 +247,9 @@
 --%>
 	<s:if test="!#isEstimator">
 		<s:if test="(majorLineElements.size() > 0) && !#isReadOnly">
+		<s:if test="%{#_action.getCustomerStatus() != '30'}">
 			<a class="orange-ui-btn" style="float:right;margin-right: -5px;"  href="javascript:miniCartCheckout();"><span>Checkout</span></a>
+			</s:if>
 		</s:if>
 	</s:if>	
 
