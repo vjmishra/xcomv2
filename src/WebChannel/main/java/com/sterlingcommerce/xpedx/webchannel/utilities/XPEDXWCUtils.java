@@ -4645,6 +4645,129 @@ public class XPEDXWCUtils {
 			return result;
 	}
 
+	/*Added for performance issue for JIRA 3593 - newSearch action*/
+	public static String getCatTwoDescFromItemIdForpath(String itemId, String org,String path) {
+		String categoryValue = null;
+		String result = null;
+		String cat = null;
+		String categoryId = null;
+		String adjugglerKeywordPrefix = "";
+		ISCUITransactionContext scuiTransactionContext = null;
+		IWCContext context = null;
+		SCUIContext wSCUIContext = null;
+		
+		log.debug(" getCatTwoDescFromItemId  - Item Id " + itemId  + " org " + org );
+		try 
+		{
+			adjugglerKeywordPrefix = getAdJugglerKeywordPrefix();
+			
+				context = WCContextHelper.getWCContext(ServletActionContext
+					.getRequest());
+			wSCUIContext = context.getSCUIContext();
+	   if(path==null || (path!=null && path.trim().equalsIgnoreCase(""))) {
+			 
+		   YFCDocument getItemListInXML = YFCDocument
+		   .createDocument("Item");
+		
+		   YFCElement itemListEle = getItemListInXML.getDocumentElement();
+		   itemListEle.setAttribute("ItemID", itemId);
+		   itemListEle.setAttribute("OrganizationCode", org);
+		/*
+		 * getItemList(); Input --> <Item ItemID="5160134"
+		 * OrganizationCode="xpedx"> </Item> out put --> <ItemList> <Item>
+		 * <CategoryList> <Category/> </CategoryList> </Item> </ItemList> //
+		 */
+
+		   YFCDocument template = YFCDocument
+				.getDocumentFor("<ItemList>" + "<Item>" + "<CategoryList>"
+						+"<Category/>"
+						+ "</CategoryList>" + "</Item>" + "</ItemList>");
+
+		   scuiTransactionContext = wSCUIContext
+		   .getTransactionContext(true);
+		   //itemDoc = api.executeFlow(env, "XPXGetItemList", getItemListInXML.getDocument());
+		
+		   YFCElement yfcElement = SCUIPlatformUtils.invokeXAPI("getItemList",
+				getItemListInXML.getDocumentElement(),
+				template.getDocumentElement(), wSCUIContext);
+
+		   YFCElement itemEle = yfcElement.getFirstChildElement();
+		   YFCElement categoryListEle = itemEle.getFirstChildElement();
+		   YFCElement categoryEle = categoryListEle.getFirstChildElement();
+		   categoryId = categoryEle.getAttribute("CategoryPath");
+	   }
+	   else	
+		   categoryId = path;
+	}// end of try
+	finally {
+			if (scuiTransactionContext != null) {
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+			}
+	}
+			
+	try{
+			context = WCContextHelper.getWCContext(ServletActionContext
+					.getRequest());
+			wSCUIContext = context.getSCUIContext();
+			scuiTransactionContext = wSCUIContext
+			.getTransactionContext(true);
+			StringTokenizer st = new StringTokenizer(categoryId, "/");
+			if(st.hasMoreTokens())
+			{
+				st.nextToken();
+				if(st.hasMoreTokens())
+				{
+					st.nextToken();
+					if(st.hasMoreTokens())
+						cat = st.nextToken();
+				}
+			}
+			System.out.println("***************&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&***************************" + cat);
+			if(null != cat)
+			{
+				YFCDocument getCategoryListInXML = YFCDocument
+				.createDocument("Category");
+				
+				YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
+				categoryLstEle.setAttribute("CategoryID", cat);
+				categoryLstEle.setAttribute("OrganizationCode", org);
+	
+				
+				/*Input : <Category CategoryID="300131"  OrganizationCode="xpedx"></Category>
+				 * 
+				 * Output : <CategoryList ><Category CategoryID="" CategoryKey="" CategoryPath="" Description="" ShortDescription="" ></Category></CategoryList>
+				 */
+				YFCDocument template2 = YFCDocument
+				.getDocumentFor("<CategoryList ><Category /></CategoryList>");
+	
+				YFCElement yfcElement2 = SCUIPlatformUtils.invokeXAPI("getCategoryList",
+						categoryLstEle, template2.getDocumentElement(), wSCUIContext);
+	
+				YFCElement catEle = yfcElement2.getFirstChildElement();
+				result = catEle.getAttribute("ShortDescription");
+				
+				//JIRA-2890 
+				result = adjugglerKeywordPrefix + result;
+			}
+			
+			log.debug(" getCatTwoDescFromItemId  - result " + result);
+		}catch (Exception ex) {
+			log.error(ex.getMessage());
+			scuiTransactionContext.rollback();
+		} finally {
+			if (scuiTransactionContext != null) {
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+			}
+		}	
+		
+			result = sanitizeAJKeywords(result);
+			
+			return result;
+	}
+
+	
 	/**
 	 * preddy: This methods sanitized ad_Jugler keywords before sending.
 	 * It replaces space, comma, / , & 
