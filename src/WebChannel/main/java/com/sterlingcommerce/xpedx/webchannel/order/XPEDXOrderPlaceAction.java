@@ -121,7 +121,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String proxyApproverID;
 	private String primaryApprovalEmailId;
 	private String proxyApprovalEmailId;
-
+	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	
 	public String getPrimaryApprovalEmailId() {
 		return primaryApprovalEmailId;
@@ -197,15 +197,22 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					XPEDXOrderUtils.refreshMiniCart(getWCContext(),null,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 				}
 			} else {//order update flow
-				
+				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
+				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
+				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 				if(YFCCommon.isVoid(orderHeaderKey)){
 					generatedErrorMessage = "Could not process the order with no header key.Please contact system admin.";
 					log.error("OrderHeaderKey is empty. Cannot process OrderChange.");
 					return FAILURE;
 				}
+				
 				prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+				
+				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				//get the order details
-				Map<String, String> valueMap = new HashMap<String, String>();
+				/*Map<String, String> valueMap = new HashMap<String, String>();
 				valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
 				Element input = WCMashupHelper.getMashupInput("XPEDXOrderDetailForOrderUpdate", valueMap, wcContext.getSCUIContext());
 				Object obj;
@@ -222,8 +229,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 					return FAILURE;
 					
-				}
-				
+				}*/
+				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 				if(orderDetailDocument != null)
 				{
 					changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
