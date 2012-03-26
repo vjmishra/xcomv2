@@ -35,6 +35,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 
 	private static final long serialVersionUID = -6062859669898581376L;
 	private static final String EXTN_SOURCE_TYPE_WEB="3";
+	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	@Override
 	public String execute() {
 		try {
@@ -48,7 +49,11 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			}
 			updateUserProfile();
 			setYFSEnvironmentVariables();
-			prepareAndInvokeMashups();
+			Map<String, Element> outMap = prepareAndInvokeMashups();
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
+			Document orderOutDoc = (Document)outMap.get("XPEDXDraftOrderSummaryUpdateOnOrderPlace").getOwnerDocument();
+			getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);
+			/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 			//callChangeOrder();
 			updateCVVNumbers();
 			setShipCompleteOption();
