@@ -237,6 +237,7 @@
 				<param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
 				<param name="draft">${draft}</param>
 				<param name="validateCustomerFields">${validateCustomerFields}</param>
+				<param name="modifyOrderLines">true</param>
 			</result>
 		</action>
 
@@ -530,7 +531,7 @@
 		 -->
         <action name="xpedxsaveCartDetails" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
-            <param name="mashups">xpedx_me_changeOrderLineDetails</param>
+            <param name="mashups">xpedx_checkout_changeOrderLineDetails</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
             <result name="success" type="redirectAction">
@@ -558,8 +559,7 @@
 
 		<!-- action for draft order delete line item -->
         <action name="draftOrderDeleteLineItems" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDeleteLineItemAction">
-            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/DraftOrderDeleteLineItem_binding.xml</param>
-            <param name="mashups">me_draftOrderDeleteLineItems</param>
+            <param name="mashups">xpedx_me_draftOrderDeleteLineItems</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
             <result name="success" type="redirectAction">
@@ -592,7 +592,7 @@
         
         <action name="miniCartCheckout" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
             <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
-            <param name="mashups">updateOrderForMiniCart</param>
+            <param name="mashups">checkoutOrderForMiniCart</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success" type="redirectAction">
                 <param name="actionName">LineLevelISPU</param>
