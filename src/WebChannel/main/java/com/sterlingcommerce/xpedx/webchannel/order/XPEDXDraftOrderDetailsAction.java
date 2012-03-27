@@ -38,6 +38,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
@@ -93,14 +94,12 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				callChangeOrder();
 				
-			} /*else {
-				if(isDeleteOrder.equals("false"))
-				{
-					changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-					setOutputDocument(changeOrderOutputDoc);
-					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-				}
-			}*/
+			} else {				
+				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				setOutputDocument(changeOrderOutputDoc);
+				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				
+			}
 			
 			super.execute();
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
@@ -119,12 +118,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			//BEGIN: sort the orderlines based on legacy line number - RUgrani
-			if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
-			//if(getIsDeleteOrder().equals("false"))
-			//{
+			//if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){			
 				ArrayList<Element> tempMajorLines = getMajorLineElements();
 				Collections.sort(tempMajorLines, new XpedxLineSeqNoComparator());
-			}
+				
 			//}
 			//END: sort the orderlines based on legacy line number - RUgrani
 			
@@ -181,11 +178,11 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			// BEGIN P&A Call: RUgrani
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc();
 			if(getMajorLineElements().size()>0){
-				/*ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+				ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
 				Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
-				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);*/		
+				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);			
 				
-				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
+				//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
 				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 				Document lineTpeMDoc=SCXmlUtil.createDocument("Items");
 				
@@ -217,8 +214,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				}
 				
-				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
-				//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
+				//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
+					setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
 				getCustomerDetails();
@@ -538,7 +535,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Object obj1 = WCMashupHelper.invokeMashup("XPEDXCallChangeOrder",
 						input1, wcContext.getSCUIContext());
 			
-			//setOutputDocument(((Element)obj1).getOwnerDocument());
+			setOutputDocument(((Element)obj1).getOwnerDocument());
 
 			//orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			
@@ -941,7 +938,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setCustomerSku(String customerSku) {
 		this.customerSku = customerSku;
 	}
-//@Override
+@Override
 	protected void getAndProcessItemDetails() throws Exception {
 
 		//getRelatedItemsForDraftOrder();
@@ -949,7 +946,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		//super.getAndProcessItemDetails();
 
 	}
-/*@Override
+@Override
 	protected void deriveAssocToCountMaps() throws Exception
     {
 	
@@ -958,7 +955,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 protected void getAndProcessOrderValidationDoc() throws Exception
 	 {
 
-	 }*/
+	 }
 	protected void setXPEDXItemAssociation() throws XPathExpressionException, CannotBuildInputException{
 		Set itemIDUOMs = itemIDUOMToOrderLineKeyListMap.keySet();
 		Iterator itemIDUOMiter = itemIDUOMs.iterator();
@@ -1517,7 +1514,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			LOG.debug(ex.getMessage());
 		}
 		
-		/*//Fetch all the items in Cart and get their respective SKUs
+		//Fetch all the items in Cart and get their respective SKUs
 		Document orderDoc = getOutputDocument();
 		Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
 				.getDocumentElement(), "OrderLines");
@@ -1539,7 +1536,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
 				skuMap.put(itemId, itemSkuMap);
 			}
-		}*/
+		}
 	}
 	
 	protected HashMap getCustomerFieldsMapfromSession(){
@@ -1582,14 +1579,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected void getCompleteOrderDetailsDoc() throws Exception {
 		//XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-		/*if(getIsDeleteOrder().equals("true"))
-		{
-			super.getCompleteOrderDetailsDoc();
-			//XPEDXWCUtils.releaseEnv(wcContext);
-		}else {
-			validateRestoredOrder();
-		}*/
-		super.getCompleteOrderDetailsDoc();
+		validateRestoredOrder();
 	}
 
 	private void processPandA(Vector items) {
@@ -2007,7 +1997,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setCustStatus(String custStatus) {
 		this.custStatus = custStatus;
 	}
-	/*protected Document changeOrderOutputDoc=null;
+	protected Document changeOrderOutputDoc=null;
 	protected String isDeleteOrder="false";
 	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
@@ -2017,7 +2007,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setChangeOrderOutputDoc(Document changeOrderOutputDoc) {
 		this.changeOrderOutputDoc = changeOrderOutputDoc;
-	}*/
+	}
 
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
@@ -2084,9 +2074,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 */
 	public void setCustomerFieldsValidated(String customerFieldsValidated) {
 		this.customerFieldsValidated = customerFieldsValidated;
-	}
-
-	
+	}	
 
 	/**
 	 * @return the validateCustomerFields
@@ -2101,8 +2089,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setValidateCustomerFields(String validateCustomerFields) {
 		this.validateCustomerFields = validateCustomerFields;
 	}
-
-
 
 	protected HashMap<String, String> inventoryMap = new HashMap<String, String>();
 	/**
@@ -2209,11 +2195,5 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
 	
-	/*public String getIsDeleteOrder() {
-		return isDeleteOrder;
-	}
-	public void setIsDeleteOrder(String isDeleteOrder) {
-		this.isDeleteOrder = isDeleteOrder;
-	}*/
 	
 }
