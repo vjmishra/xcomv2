@@ -1,8 +1,5 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,11 +22,7 @@ import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.OrderItemValidationBaseAction;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.interop.japi.YIFClientCreationException;
-import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
-import com.yantra.yfs.japi.YFSException;
 
 public class XPEDXDraftOrderAddOrderLinesAction extends
 		OrderItemValidationBaseAction {
@@ -69,7 +62,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					
 					Element changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 					changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
-					//getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutputDoc);
+					getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutputDoc);
 					refreshCartInContext(orderHeaderKey);
 				}
 			}
@@ -806,7 +799,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	protected ArrayList errorList;
 	protected String isEditOrder="false";
 	protected ArrayList isEditNewline;
-	//public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
 	//Adding ArrayList quickAddOrderMultiple FOr Jira 3481
 	protected ArrayList quickAddOrderMultiple;
