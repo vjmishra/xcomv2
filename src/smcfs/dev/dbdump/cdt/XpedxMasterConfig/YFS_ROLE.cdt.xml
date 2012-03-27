@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_ROLEList TableName="YFS_ROLE">
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Buyer" RoleId="BUYER" RoleKey="BUYER" RoleName="Buyer"/>
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Carrier" RoleId="CARRIER" RoleKey="CARRIER" RoleName="Carrier"/>
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Enterprise" RoleId="ENTERPRISE"
+    RoleKey="ENTERPRISE" RoleName="Enterprise"/>
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Hub" RoleId="HUB" RoleKey="HUB" RoleName="Hub"/>
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Node" RoleId="NODE" RoleKey="NODE" RoleName="Node"/>
+<Role Createprogid="SYSTEM" Createts="2011-07-14T14:37:29-04:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
+    RoleDescription="Seller" RoleId="SELLER" RoleKey="SELLER" RoleName="Seller"/>
+</YFS_ROLEList>

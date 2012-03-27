@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_CONDITION_PROPSList TableName="YFS_CONDITION_PROPS">
+<ConditionProps ConditionKey="20050512130818150649"
+    ConditionPropsKey="2005052315545041784" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="/Order/@CustomerEMailID"/>
+<ConditionProps ConditionKey="2005052516031857001"
+    ConditionPropsKey="2005052516041257002" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="/MonitorConsolidation/Order/@CustomerEMailID"/>
+<ConditionProps ConditionKey="2005061408080521543"
+    ConditionPropsKey="2005061408082321544" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="//ModificationType/@Name[.='SHIPTO' or .='BILLTO']"/>
+<ConditionProps ConditionKey="200506231000364514"
+    ConditionPropsKey="200506231002244563" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="//Order/@Transactionid[.='YCD_DUPLICATE_ORDER.0001']"/>
+<ConditionProps ConditionKey="200506231016004577"
+    ConditionPropsKey="200506231017344578" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="//Order/@Transactionid[.='YCD_FRAUD_CHECK.0001']"/>
+<ConditionProps ConditionKey="2005070517550618890"
+    ConditionPropsKey="2005070517551318891" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="//OrderAuditDetail/Attributes/Attribute/@ModificationType[.='SHIPTO']"/>
+<ConditionProps ConditionKey="2009010515582020955"
+    ConditionPropsKey="2009010709583929011" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="/Order/CustomerContact/@EmailID"/>
+<ConditionProps ConditionKey="2009011515230874065"
+    ConditionPropsKey="2009011515251774068" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="/Order/@To"/>
+<ConditionProps ConditionKey="2009031714444930988"
+    ConditionPropsKey="2009031714452030991" Createprogid="XMLMigrator"
+    Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T15:08:47-04:00" Modifyuserid="SYSTEM"
+    Name="AttributeToValidate" Value="/User/ContactPersonInfo/@EMailID"/>
+<ConditionProps ConditionKey="2007090717240881050"
+    ConditionPropsKey="201004210000597975" Createprogid="XMLMigrator"
+    Createts="2010-04-21T00:00:59-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-21T00:00:59-04:00" Modifyuserid="ng"
+    Name="conditionType" Value="INDEFINITE_CONDITION"/>
+<ConditionProps ConditionKey="20070802084847341073"
+    ConditionPropsKey="201004210000597976" Createprogid="XMLMigrator"
+    Createts="2010-04-21T00:00:59-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-21T00:00:59-04:00" Modifyuserid="ng"
+    Name="conditionType" Value="NEXT_CONDITION"/>
+<ConditionProps ConditionKey="20070802084301341068"
+    ConditionPropsKey="201004210000597977" Createprogid="XMLMigrator"
+    Createts="2010-04-21T00:00:59-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-21T00:00:59-04:00" Modifyuserid="ng"
+    Name="conditionType" Value="FIRST_CONDITION"/>
+<ConditionProps ConditionKey="2010081821492942667"
+    ConditionPropsKey="2010081821495042670"
+    Createprogid=".YEntityServlet" Createts="2010-08-18T21:49:49-04:00"
+    Createuserid="admin" Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-08-18T21:49:49-04:00" Modifyuserid="ng"
+    Name="ElementNames" Value="SOF,EOF"/>
+<ConditionProps ConditionKey="2011020116050489300"
+    ConditionPropsKey="2011020116053389303"
+    Createprogid=".YEntityServlet" Createts="2011-02-01T16:05:32-05:00"
+    Createuserid="admin" Lockid="2" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-07-15T10:44:10-04:00" Modifyuserid="ng"
+    Name="ElementNames" Value="SOF,EOF"/>
+<ConditionProps ConditionKey="2010081821492942667"
+    ConditionPropsKey="20110307220453111505"
+    Createprogid=".YEntityServlet" Createts="2011-03-07T22:04:52-05:00"
+    Createuserid="admin" Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-03-07T22:04:52-05:00" Modifyuserid="ng"
+    Name="EnvironmentID" Value="Acc"/>
+<ConditionProps ConditionKey="2011020116050489300"
+    ConditionPropsKey="20110307220516111508"
+    Createprogid=".YEntityServlet" Createts="2011-03-07T22:05:16-05:00"
+    Createuserid="admin" Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-03-07T22:05:16-05:00" Modifyuserid="ng"
+    Name="EnvironmentID" Value="Max"/>
+<ConditionProps ConditionKey="20110726172726165375"
+    ConditionPropsKey="20110726172804165378"
+    Createprogid=".YEntityServlet" Createts="2011-07-26T17:28:03-04:00"
+    Createuserid="admin" Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-07-26T17:28:03-04:00" Modifyuserid="ngmc"
+    Name="PendingApprovalHoldType" Value="ORDER_LIMIT_APPROVAL"/>
+<ConditionProps ConditionKey="20110802145044167494"
+    ConditionPropsKey="20110802145106167545"
+    Createprogid=".YEntityServlet" Createts="2011-08-02T14:51:05-04:00"
+    Createuserid="admin" Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-08-02T14:51:05-04:00" Modifyuserid="ngmc"
+    Name="AttributeToValidate" Value="/Order/@CustomerContactID"/>
+<ConditionProps ConditionKey="20110802145217167548"
+    ConditionPropsKey="20110802145254167551"
+    Createprogid=".YEntityServlet" Createts="2011-08-02T14:52:53-04:00"
+    Createuserid="admin" Lockid="1" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-10-07T13:54:29-04:00" Modifyuserid="ngmc"
+    Name="AttributeToValidate" Value="/Order/CustomerContactList/CustomerContact/@EmailID"/>
+</YFS_CONDITION_PROPSList>
