@@ -50,7 +50,7 @@ import com.yantra.yfc.util.YFCException;
 
 public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 
-	//private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
+	private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
 	private static final long serialVersionUID = -2966568751589581889L;
 	private XPEDXPaymentMethodHelper xPEDXPaymentMethodHelper = null;
     public static final String MASHUP_DOD_VALIDATE_ITEM_FOR_ORDERING = "me_dod_validateItemForOrdering";
@@ -169,8 +169,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			}
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey))
-				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
-			
+				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);		
 			
 			
 			custmerPONumber = orderOutputDoc.getDocumentElement().getAttribute("CustomerPONo");
@@ -205,19 +204,18 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			getCustomerDisplayFields();
 			processOrderLines();
 			// If edit order then sort the order line as per JIRA # 2851
-			if(!YFCCommon.isVoid(editedOrderHeaderKey)){
+			//if(!YFCCommon.isVoid(editedOrderHeaderKey)){
 				ArrayList<Element> tempMajorLines1 = getMajorLineElements();
 				Collections.sort(tempMajorLines1, new XpedxLineSeqNoComparator());
-			}
+			//}
 			//Added for PNA call
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc(orderOutDoc);
-			/*Begin - Changes made by Mitesh Parikh for JIRA#3595
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 			ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
 			Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
-			End - Changes made by Mitesh Parikh for JIRA#3595
-			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil
-					.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);*/	
-			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);	
+			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);
+			//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);	
 			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 			ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 			
@@ -232,8 +230,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 			}
 			
-			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
-			//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext, true, lineTpeMDoc.getDocumentElement(), true, orderOutputDoc));
+			//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
+			setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext, true, lineTpeMDoc.getDocumentElement(), true, orderOutputDoc));
 			// Code for displaying Last Modified by in cart page
 			String createUserIDStr = "";
 			String modifyUserIdStr = "";
@@ -429,7 +427,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			if(skuMap.containsKey(itemId))
 				continue;
 			
-			/*Begin - Changes made by Mitesh Parikh for JIRA 3595
+			/*Begin - Changes made by Mitesh Parikh for JIRA 3595*/
 			Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
 			Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
 			if(primeInfoElem!=null)
@@ -446,14 +444,14 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
 			}
 			itemIdList.add(itemId);
-			itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);*/
-			HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-			skuMap.put(itemId, itemSkuMap);
+			itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
+			//HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
+			//skuMap.put(itemId, itemSkuMap);
 		}
 		
-		/*if(orderLineElemList.size()>0){
+		if(orderLineElemList.size()>0){
 			skuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemIdList, itemsSkuMap);
-		}*/
+		}
 		/*End - Changes made by Mitesh Parikh for JIRA 3595*/
 	}
 	protected void setOrderCutOffDate(){
@@ -1500,7 +1498,7 @@ END of JIRA 3382*/
 		return qty;
 	}
 	
-	/*Begin - Changes made by Mitesh Parikh for JIRA#3595
+	/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 	protected void getCompleteOrderDetailsDoc()
 	{
 		Document orderOutputDocument=null;
@@ -1511,6 +1509,6 @@ END of JIRA 3382*/
 		}
 		getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
 	}
-	End - Changes made by Mitesh Parikh for JIRA#3595*/
+	/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 	
 }
