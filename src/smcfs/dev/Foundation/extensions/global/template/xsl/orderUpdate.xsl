@@ -49,10 +49,12 @@
          <xsl:attribute name="ReqDeliveryDate">
             <xsl:value-of select="normalize-space(//ShipDate)" />
          </xsl:attribute>
-
-         <xsl:attribute name="OrderDate">
-            <xsl:value-of select="normalize-space(//OrderCreateDate)" />
-         </xsl:attribute>
+		
+	 <xsl:if test="(normalize-space(//HeaderProcessCode)='A')" >
+	    <xsl:attribute name="OrderDate">
+                <xsl:value-of select="normalize-space(//OrderCreateDate)" />
+            </xsl:attribute>
+         </xsl:if>
 
          <xsl:attribute name="HeaderProcessCode">
             <xsl:value-of select="normalize-space(//HeaderProcessCode)" />
