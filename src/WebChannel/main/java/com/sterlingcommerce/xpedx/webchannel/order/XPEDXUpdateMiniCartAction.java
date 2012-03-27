@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.opensaml.common.transport.http.GetRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -26,16 +27,34 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	 protected String cicRefreshingMashupOrderHeaderKey = "";
 	 private static final String UPDATE_MINI_CART_MASHUP="updateOrderForMiniCart";
 	 private static final String DELETE_MINI_CART_MASHUP="deleteLineForMiniCart";
+	 private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
 	 public static final String CART_ERROR = "CartError";
-	public String execute()
-	{
+	 private static final String CHECKOUT_MINI_CART_MASHUP="checkoutOrderForMiniCart";
+	 
+	 public String execute()
+	 {
 		XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
 		 String returnValue = ERROR;
 		 Element orderLelement=null;
 	        try
 	        {
 	        	Map<String, Element> outputMap=prepareAndInvokeMashups();
-	        	if(getMashupIds().contains(UPDATE_MINI_CART_MASHUP))
+	        	if(getMashupIds().contains(CHECKOUT_MINI_CART_MASHUP))
+	        	{
+	        		orderLelement=outputMap.get(CHECKOUT_MINI_CART_MASHUP);
+	        		
+	        		//check for cart errors to redirect it to cart page instead of checkout
+	        		boolean minOrderError = checkMinOrderFee(orderLelement);
+	        		if(minOrderError){
+	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+	        			XPEDXWCUtils.releaseEnv(wcContext);
+	        			return CART_ERROR;
+	        		}
+	        		
+	        		getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ, orderLelement.getOwnerDocument());
+	        		
+	        	}
+	        	else if(getMashupIds().contains(UPDATE_MINI_CART_MASHUP))	        		
 	        	{
 	        		orderLelement=outputMap.get(UPDATE_MINI_CART_MASHUP);
 	        		
@@ -45,12 +64,14 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	        			XPEDXWCUtils.releaseEnv(wcContext);
 	        			return CART_ERROR;
-	        		}
+	        		}	        		
+	        		
 	        	}
 	        	else if(getMashupIds().contains(DELETE_MINI_CART_MASHUP))
 	        	{
 	        		orderLelement=outputMap.get(DELETE_MINI_CART_MASHUP);
 	        	}
+	        	
 	        	XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	            returnValue=SUCCESS;
 	        }
