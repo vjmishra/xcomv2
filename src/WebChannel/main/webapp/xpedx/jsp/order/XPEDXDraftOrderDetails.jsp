@@ -359,6 +359,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
 <s:set name='numberOfInitialComplementaryItemsToDisplay' value='3' />
+<%-- commented for performance jira# 3594
 <s:set name='canChangeOrderName'
 	value='#_action.isOrderModificationAllowed("ORDER_NAME")' />
 <s:set name='canChangeCurrency'
@@ -367,6 +368,16 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	value='#_action.isOrderModificationAllowed("ADD_LINE")' />
 <s:set name='canChangeOrderDate'
 	value='#_action.isOrderModificationAllowed("CHANGE_ORDER_DATE")' />
+ --%>
+<s:set name='canChangeOrderName'
+	value='true' />
+<s:set name='canChangeCurrency'
+	value='true' />
+<s:set name='canAddLine'
+	value='true' />
+<s:set name='canChangeOrderDate'
+	value='true' />	
+
 <s:set name="emailDialogTitle" scope="page"
 	value="#_action.getText('Email_Title')" />
 	<%--jira 2885 --%>
@@ -748,7 +759,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
 			</s:if>
 			<s:else>
-				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
+				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
 			</s:else>
 								
 	</s:if> 
@@ -757,7 +768,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
 		</s:if>
 		<s:else>
-			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"> <s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /> </textarea>
+			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
 		</s:else>
 	</s:else>
 </s:if>
@@ -854,7 +865,8 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	<s:hidden id="zeroOrderLines" name="zeroOrderLines" value='false' />
 	<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />
 	<%-- Removing changeOrder call for Performance improvement, while checkout --%>
-	<s:hidden id="isComingFromCheckout" name="isComingFromCheckout" value='false' />	
+	<s:hidden id="isComingFromCheckout" name="isComingFromCheckout" value='false' />
+	<s:hidden id="modifyOrderLines" name="modifyOrderLines" value='false' />
 	<input type="hidden" value='<s:property value="%{chargeAmount}" />' name="chargeAmount" />
 	<input type="hidden" value='<s:property value="%{minOrderAmount}" />' name="minOrderAmount" />
 	<%-- 
@@ -983,28 +995,28 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                         
                 <!-- begin description  -->
                 <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
-                <div class="mil-desc-wrap">
-                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
-
-						<span class="short-description">
-						<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
-							<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
-						</s:if>
-						<s:else>
-							<s:property escape='false'	value='%{#item.getAttribute("ItemShortDesc")}' />
-						</s:else></span>
-					</div>
-	                <div class="mil-attr-wrap">
-	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-							<s:if test='#item.getAttribute("ItemDesc") != ""'>
-								<ul class="mil-desc-attribute-list">
-									<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
-								</ul>
+	                <div class="mil-desc-wrap">
+	                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
+	
+							<span class="short-description">
+							<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
+								<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 							</s:if>
-						</s:if>
-	                </div>
-				</div>
-				</s:a>
+							<s:else>
+								<s:property escape='false'	value='%{#item.getAttribute("ItemShortDesc")}' />
+							</s:else></span>
+						</div>
+		                <div class="mil-attr-wrap">
+		                    <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+								<s:if test='#item.getAttribute("ItemDesc") != ""'>
+									<ul class="mil-desc-attribute-list">
+										<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
+									</ul>
+								</s:if>
+							</s:if>
+		                </div>
+					</div>
+				 </s:a>
 				
 				<!-- Disable the fields for line type C -->
 				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
