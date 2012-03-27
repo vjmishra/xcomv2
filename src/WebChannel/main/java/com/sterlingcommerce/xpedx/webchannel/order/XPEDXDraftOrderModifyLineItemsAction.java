@@ -24,12 +24,12 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
-public class XPEDXDraftOrderModifyLineItemsAction extends 
-DraftOrderModifyLineItemsAction
+public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineItemsAction
 {
 	public static final String CHANGE_ORDER_LINE_DETAILS_MASHUP = "xpedx_me_changeOrderLineDetails";
-	//public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
-	//public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
+	public static final String CHECKOUT_ORDER_MASHUP="xpedx_checkout_changeOrderLineDetails";
+	public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	
 	public String mashUpId = null; 
 	
@@ -42,14 +42,14 @@ DraftOrderModifyLineItemsAction
 	private String modifiedOrderHeaderKey="";
 	private double totalAmount;
 	private Element modifiedOrderExtnForSpecailCharge;
-	/*private String modifyOrderLines="false";
+	private String modifyOrderLines="false";
 	public String getModifyOrderLines() {
 		return modifyOrderLines;
 	}
 
 	public void setModifyOrderLines(String modifyOrderLines) {
 		this.modifyOrderLines = modifyOrderLines;
-	}*/
+	}
 
 	public boolean isUpdateCartMetaTag() {
 		return updateCartMetaTag;
@@ -57,9 +57,7 @@ DraftOrderModifyLineItemsAction
 
 	public void setUpdateCartMetaTag(boolean updateCartMetaTag) {
 		this.updateCartMetaTag = updateCartMetaTag;
-	}
-	
-	
+	}	
 
 	/**
 	 * @return the validateCustomerFields
@@ -88,8 +86,12 @@ DraftOrderModifyLineItemsAction
 		if(zeroOrderLines.equals("true")){
 			mashUpId = "xpedx_me_changeOrderDetails";
 		}
-		else /*if (!"true".equals(isComingFromCheckout)) */{	//Removing changeOrder call for Performance improvement, while checkout
+		else if ("true".equals(isComingFromCheckout)) {	//Removing changeOrder call for Performance improvement, while checkout
+			mashUpId = CHECKOUT_ORDER_MASHUP;
+		}
+		else{
 			mashUpId = CHANGE_ORDER_LINE_DETAILS_MASHUP;
+			
 		}
 		
 		/*  String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
@@ -108,20 +110,19 @@ DraftOrderModifyLineItemsAction
 		Document outputDocument=null;
 		try
 	    {
-			prepareAndInvokeMashups();
-			//Map<String, Element> out = prepareAndInvokeMashups();
+			Map<String, Element> out = prepareAndInvokeMashups();
 			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-			//outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+			outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
 			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 			
             retVal= SUCCESS;
 	     }
 	     catch(Exception e)
 	     {
-	            LOG.error(e.getMessage(), e);
-	            WCUtils.setErrorInContext(getWCContext(), e);
-	            
-	            retVal= ERROR;
+            LOG.error(e.getMessage(), e);
+            WCUtils.setErrorInContext(getWCContext(), e);
+            
+            retVal= ERROR;
 	     }
 		if(!zeroOrderLines.equals("true"))
 		{
@@ -130,14 +131,14 @@ DraftOrderModifyLineItemsAction
 		}		
 		
 		XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(),new HashMap());
-		/*boolean chngOrderOutputAvailable=false;
-		if("true".equals(modifyOrderLines) || "true".equals(isComingFromCheckout))
-			chngOrderOutputAvailable=true;*/
-		
+		boolean chngOrderOutputAvailable=false;
+		if("true".equals(isComingFromCheckout) || "true".equals(modifyOrderLines)){
+			chngOrderOutputAvailable=true;
+		}
 		if(isEditOrder.contains("true"))
-			processSpecialCharge(); //(outputDocument, chngOrderOutputAvailable);
+			processSpecialCharge(outputDocument, chngOrderOutputAvailable);
 		
-		/*Begin - Changes made by Mitesh Parikh for JIRA#3595
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 		if(outputDocument!=null && retVal.equals(SUCCESS))
 		{
 			if("true".equals(isComingFromCheckout)) {
@@ -149,16 +150,16 @@ DraftOrderModifyLineItemsAction
 		}
 		else
 			retVal= ERROR;
-		End - Changes made by Mitesh Parikh for JIRA#3595*/
+		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 		XPEDXWCUtils.releaseEnv(wcContext);
 		
 		long endTime=System.currentTimeMillis();
 		System.out.println("Time taken in milliseconds in XPEDXDraftOrderModifyLineItemsAction class : "+(endTime-startTime));
 		return retVal;
-    }
+   
+    }	
 	
-	
-	private void processSpecialCharge() //Document outputDoc,  boolean chngOrderOutputAvailable)
+	private void processSpecialCharge(Document outputDoc,  boolean chngOrderOutputAvailable)
 	{
 		try
 		{
@@ -169,9 +170,9 @@ DraftOrderModifyLineItemsAction
 			Element orderElem = null;
 			Element input1=null;
 			Object obj1=null;
-			/*Begin - Changes made by Mitesh Parikh for JIRA#3595
+			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 			if(chngOrderOutputAvailable)
-			{*/
+			{
 				valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);				
 				input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
 							valueMap1, wcContext.getSCUIContext());
@@ -180,11 +181,11 @@ DraftOrderModifyLineItemsAction
 				
 				orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			
-			/*} else {
+			} else {
 				orderElem = outputDoc.getDocumentElement();
 			
 			}
-			End - Changes made by Mitesh Parikh for JIRA#3595*/
+			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 			Element orderExtn=util.getElement(orderElem, "Extn");
 			String extnWebConfNum=orderExtn.getAttribute("ExtnWebConfNum");
 			validateSpecialLine(orderElem, util) ;
