@@ -6,7 +6,7 @@
 			<Input>
 				<Emails>
 					<Email Contact="" Phone="" Notes="" ServiceProvider="" Attention= "" ServiceProviderNumber="" FromEmail="" ToEmail="" CCEmail="" ImageUrl="" BillToCustid="" 
-					DivisionName="" BilltoFullName="" ExternalEmail="" subjectEmail="" salesProfessional="" RequestType="SampleServiceRequest">
+					DivisionName="" BilltoFullName="" ExternalEmail="" subjectEmail="" salesProfessional="" headerEmail = "" RequestType="SampleServiceRequest">
 						<ShippingAddress address=""/>
 						<SampleRequest ItemNumber="" ProductType="" MfgSku="" Mfg="" Description="" Qty=""/>					
 					</Email>
