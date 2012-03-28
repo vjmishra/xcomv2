@@ -779,12 +779,14 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                       <label class="margin-left7"><input type="radio"class="margin-right"  id="serviceRequestForm_serviceProviderUPS" name="serviceProviderNone" onclick="Toggle('div2');" />UPS </label>
 					  <label class="margin-left7">					  
 					  <input type="radio" class="margin-right" name="serviceProviderNone" id="serviceRequestForm_serviceProviderNone" onclick="Toggle('div3');" checked="checked" />None</label>
-
+                         
 									<div id="div1"  class=" float-right  textAlignLeft" style="width:278px; text-align:left;"> 													 
-														<s:textfield cssClass="x-input width-160px margin-left7" tabindex="50"  id="serviceRequestForm_serviceProviderNumber_FedEx" name="serviceProviderNumber"  value="" maxlength="15" /></div>
+														<s:textfield cssClass="x-input width-160px margin-left7" tabindex="50"  id="serviceRequestForm_serviceProviderNumber_FedEx" name="serviceProviderNumberFEDEX"  value="" maxlength="15" />
+														</div>
 									<div id="div2"  class=" float-right textAlignLeft" style="width:278px; text-align:left;"> 
-									<s:textfield cssClass="x-input width-160px margin-left7" tabindex="50" id="serviceRequestForm_serviceProviderNumber_UPS" name="serviceProviderNumber"  value="" maxlength="15" /></div>
-													
+									<s:textfield cssClass="x-input width-160px margin-left7" tabindex="50" id="serviceRequestForm_serviceProviderNumber_UPS" name="serviceProviderNumberUPS"  value="" maxlength="15" />
+									</div>
+									
 									<div id="div3"  class="float-right"> </div> 
 				</td>
                       </tr>
