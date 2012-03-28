@@ -59,6 +59,42 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private String attention = "";
 	private String storefrontId = "";
 	private String salesProfessional = "";
+	private String serviceProviderNoneUPS = "";
+	private String serviceProviderNumberFEDEX="";
+	public String getServiceProviderNumberFEDEX() {
+		return serviceProviderNumberFEDEX;
+	}
+
+	public void setServiceProviderNumberFEDEX(String serviceProviderNumberFEDEX) {
+		this.serviceProviderNumberFEDEX = serviceProviderNumberFEDEX;
+	}
+
+	public String getServiceProviderNumberUPS() {
+		return serviceProviderNumberUPS;
+	}
+
+	public void setServiceProviderNumberUPS(String serviceProviderNumberUPS) {
+		this.serviceProviderNumberUPS = serviceProviderNumberUPS;
+	}
+	private String serviceProviderNumberUPS="";
+	
+	public String getServiceProviderNoneUPS() {
+		return serviceProviderNoneUPS;
+	}
+
+	public void setServiceProviderNoneUPS(String serviceProviderNoneUPS) {
+		this.serviceProviderNoneUPS = serviceProviderNoneUPS;
+	}
+
+	public String getServiceProviderNoneFX() {
+		return serviceProviderNoneFX;
+	}
+
+	public void setServiceProviderNoneFX(String serviceProviderNoneFX) {
+		this.serviceProviderNoneFX = serviceProviderNoneFX;
+	}
+	private String serviceProviderNoneFX = "";
+	
 	
 	
 	public String getSalesProfessional() {
@@ -223,14 +259,14 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		this.notes = notes;
 	}
 
-	public String getServiceProvider() {
+	/*public String getServiceProvider() {
 		return serviceProvider;
 	}
 
 	public void setServiceProvider(String serviceProvider) {
 		this.serviceProvider = serviceProvider;
 	}
-
+*/
 	public String getServiceProviderNumber() {
 		return serviceProviderNumber;
 	}
@@ -633,6 +669,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private Element createInputXML(String customerEmail, String sampleRoomEmail ,String ccEMail,String sampleServiceRequest) {
  
 		String subjectEmail = "";
+		String headerEmail = "";
+		String serviceProviderNumbersplit = "";
+		String ServiceProvider = "";
 		Document templateEmailDoc = YFCDocument.createDocument("Emails")
 				.getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
@@ -640,10 +679,20 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("Contact", getContact());
 		emailElement.setAttribute("Phone", getPhone());
 		emailElement.setAttribute("Notes", getNotes());
-		emailElement.setAttribute("ServiceProvider", getServiceProvider());
-		String serviceProviderNumbersplit =  getServiceProviderNumber().replaceAll(",", "");
+		if((getServiceProviderNumberFEDEX()!=null && getServiceProviderNumberFEDEX().trim().length()  > 0) && (getServiceProviderNumberFEDEX().trim().equalsIgnoreCase("on"))){
+			emailElement.setAttribute("ServiceProvider", "FedEx");
+			serviceProviderNumbersplit =  getServiceProviderNumberFEDEX().replaceAll(",", "");
+			
+			
+		}else if((getServiceProviderNumberUPS()!=null && getServiceProviderNumberUPS().trim().length()  > 0) && (getServiceProviderNumberUPS().trim().equalsIgnoreCase("on"))){
+			emailElement.setAttribute("ServiceProvider", "UPS");
+			serviceProviderNumbersplit =  getServiceProviderNumberUPS().replaceAll(",", "");
+			
+			
+		}
 		emailElement.setAttribute("ServiceProviderNumber",
 				serviceProviderNumbersplit);
+		
 		if(salesProfessional!=null && salesProfessional.trim().length() > 0){
 			emailElement.setAttribute("salesProfessional", getSalesProfessional());			
 		}
@@ -696,12 +745,16 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("CCEmail",ccEMail);
 		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
 			subjectEmail = getStorefrontId() + ".com "+ "" + "Paper Sample Request Notification";
+			headerEmail = "Paper";
 		}
 		else{
 			subjectEmail = getStorefrontId() + ".com" + "" + "General Sample Request Notification";
-			
+			headerEmail = "General";
 		}
+		
 		emailElement.setAttribute("subjectEmail",subjectEmail);
+		emailElement.setAttribute("headerEmail",headerEmail);
+		
 		
 		//emailElement.setAttribute("RequestType", "SampleServiceRequest");
 		emailElement.setAttribute("RequestType", sampleServiceRequest);
@@ -780,6 +833,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private Element createInputXMLForGeneral(String customerEmail, String sampleRoomEmail ,String ccEMail,List generalPaper,String sampleServiceRequest) {
 		
 		String subjectEmail = "";
+		String headerEmail = "";
+		String serviceProviderNumbersplit = "";
+		String ServiceProvider = "";
 		Document templateEmailDoc = YFCDocument.createDocument("Emails")
 				.getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
@@ -787,8 +843,18 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("Contact", getContact());
 		emailElement.setAttribute("Phone", getPhone());
 		emailElement.setAttribute("Notes", getNotes());
-		emailElement.setAttribute("ServiceProvider", getServiceProvider());
-		String serviceProviderNumbersplit =  getServiceProviderNumber().replaceAll(",", "");		
+		
+		if((getServiceProviderNumberFEDEX()!=null && getServiceProviderNumberFEDEX().trim().length()  > 0)){
+			emailElement.setAttribute("ServiceProvider", "FedEx");
+			serviceProviderNumbersplit =  getServiceProviderNumberFEDEX().replaceAll(",", "");
+			
+			
+		}else if((getServiceProviderNumberUPS()!=null && getServiceProviderNumberUPS().trim().length()  > 0)){
+			emailElement.setAttribute("ServiceProvider", "UPS");
+			serviceProviderNumbersplit =  getServiceProviderNumberUPS().replaceAll(",", "");
+			
+			
+		}
 		emailElement.setAttribute("ServiceProviderNumber",
 				serviceProviderNumbersplit);
 		if(salesProfessional!=null && salesProfessional.trim().length() > 0){
@@ -843,12 +909,15 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("CCEmail",ccEMail);
 		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
 			subjectEmail = getStorefrontId() + ".com " + "" + "Paper Sample Request Notification";
+			headerEmail = "Paper";
 		}
 		else{
 			subjectEmail = getStorefrontId() + ".com " + "" + "General Sample Request Notification";
+			headerEmail = "General";
 			
 		}
 		emailElement.setAttribute("subjectEmail",subjectEmail);
+		emailElement.setAttribute("headerEmail",headerEmail);
 		
 		//emailElement.setAttribute("RequestType", "SampleServiceRequest");
 		emailElement.setAttribute("RequestType", sampleServiceRequest);
