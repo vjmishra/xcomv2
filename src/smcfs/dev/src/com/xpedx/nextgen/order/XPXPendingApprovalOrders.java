@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.order;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -186,6 +187,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	public Document invoekApprovalOrderEmailForContact(YFSEnvironment env,Document inXML) throws Exception {
 
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+		String resolverUserIds[] = null;
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e) {
@@ -195,11 +197,30 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			appendDummyContactList(inXML);
 			return inXML;
 		}
+		
 		if(inXML!=null) {
+			
 			Element order = inXML.getDocumentElement();
 			XPXUtils utilObj = new XPXUtils();
 			inXML = utilObj.stampBrandLogo(env, inXML);
-			String cusotmerContactOnOrder = SCXmlUtil.getAttribute(order, "CustomerContactID");
+			String customerContactOnOrder = SCXmlUtil.getAttribute(order, "CustomerContactID");
+			Element inputElem = SCXmlUtil.getChildElement(order, "Input");
+			if (inputElem != null) {
+				Element orderHoldTypeElem = SCXmlUtil.getChildElement(inputElem, "OrderHoldType");
+				if (orderHoldTypeElem != null) {
+					String resolverUserId = null;
+					String delimiter = ",";
+					if (orderHoldTypeElem.hasAttribute("ResolverUserId")) {
+						resolverUserId = orderHoldTypeElem.getAttribute("ResolverUserId");
+					}
+					if (resolverUserId != null && !resolverUserId.equalsIgnoreCase("")) {
+						resolverUserId = resolverUserId + "," + customerContactOnOrder;
+						resolverUserIds = resolverUserId.split(delimiter);
+					} else {
+						resolverUserIds[0] = customerContactOnOrder;
+					}
+				}
+			}
 			String organizationCode = SCXmlUtil.getAttribute(order, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 
@@ -220,15 +241,24 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			/* if same contact exists for different customers (multiple contacts), taking the customer contact based on the BillToID on the order,
 			 * which will be the MSAP of the contact who placed the order.
 			 */
-			String MSAPCustomerID = SCXmlUtil.getAttribute(order, "BillToID");
-			if(!SCUtil.isVoid(organizationCode) && !SCUtil.isVoid(cusotmerContactOnOrder)) // Order will not have customer contact id stamped in case of B2B
+			if(!SCUtil.isVoid(organizationCode) && !SCUtil.isVoid(customerContactOnOrder)) // Order will not have customer contact id stamped in case of B2B
 			{
 				Document custContInputDoc = YFCDocument.createDocument("CustomerContact").getDocument();
 				Element inputElement = custContInputDoc.getDocumentElement();
-				inputElement.setAttribute("CustomerContactID", cusotmerContactOnOrder);
-				inputElement.setAttribute("OrganizationCode", organizationCode);
 				Element custElement = custContInputDoc.createElement("Customer");
-				custElement.setAttribute("CustomerID", MSAPCustomerID );
+				custElement.setAttribute("OrganizationCode", organizationCode );
+				Element complexQuery = custContInputDoc.createElement("ComplexQuery");
+				
+				Element OrElem = custContInputDoc.createElement("Or"); 
+				
+				for(String contactId : resolverUserIds) {
+					Element exp = custContInputDoc.createElement("Exp");
+					exp.setAttribute("Name", "CustomerContactID");
+					exp.setAttribute("Value", contactId);
+					SCXmlUtil.importElement(OrElem, exp);
+				}
+				complexQuery.appendChild(OrElem);
+				inputElement.appendChild(complexQuery);
 				inputElement.appendChild(custElement);// appending the customer element
 				// setting the Api template
 				Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact/></CustomerContactList>");
@@ -244,7 +274,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					env.clearApiTemplate("getCustomerContactList");
 				}				
 				if(outputDoc!=null) {
+					
 					SCXmlUtil.importElement(order, outputDoc.getDocumentElement());//(inXML, outputDoc.getDocumentElement());
+					addEmailIDToElement(order);
 					//order.appendChild(outputDoc.getDocumentElement());// Appends the CustomerContacList Element to the Order and returns the order Document
 				}
 				else {
@@ -256,6 +288,38 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			}
 		}
 		return inXML;		
+	}
+	
+	private void addEmailIDToElement(Element orderElement)
+	{
+		String orderCustomerContactId=orderElement.getAttribute("CustomerContactID");
+		ArrayList<Element> customerContactsList=SCXmlUtil.getElements(orderElement, "CustomerContactList/CustomerContact");
+		String toEmailID="";
+		String ccEmailId="";
+		for(int i=0;i<customerContactsList.size();i++)
+		{
+			Element customerContact=customerContactsList.get(i);
+			String custometContactId=customerContact.getAttribute("CustomerContactID");
+			if(custometContactId !=null && custometContactId.equals(orderCustomerContactId))
+			{
+				String tempccEmailId=customerContact.getAttribute("EmailID");
+				if(tempccEmailId != null && tempccEmailId.length()>0)
+					ccEmailId=tempccEmailId;
+			}
+			else
+			{
+				if(toEmailID != null && toEmailID.length()>0)
+					toEmailID=toEmailID+","+customerContact.getAttribute("EmailID");
+				else
+					toEmailID=customerContact.getAttribute("EmailID");
+			}
+		}
+		if(customerContactsList.size() >1)
+		{
+			Element customerContact=customerContactsList.get(0);
+			customerContact.setAttribute("ToEmailID", toEmailID);
+			customerContact.setAttribute("CCEmailID", ccEmailId);
+		}
 	}
 	
 	private void appendDummyContactList(Document inXML) {
