@@ -42,6 +42,9 @@
                                         Title="" ZipCode="" EMailID="" /> 
 		                  </CustomerAdditionalAddress>
         		      </CustomerAdditionalAddressList>
+        		       <CustomerPaymentMethodList TotalNumberOfRecords="">
+       						 <CustomerPaymentMethod DisplayCustomerAccountNo="" />
+    					</CustomerPaymentMethodList>
         		      <CustomerCurrencyList>
   						<CustomerCurrency Currency="" CustomerCurrencyKey="" IsDefaultCurrency="" /> 
   					  </CustomerCurrencyList>
@@ -51,7 +54,7 @@
 									ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
 									ExtnCustLineField2Label="" ExtnCustLineField3Label="" ExtnMinOrderAmount="" ExtnMinChargeAmount=""
 									ExtnCurrencyCode="" ExtnUseCustSKU="" ExtnEnvironmentCode="" ExtnCompanyCode="" ExtnLegacyCustNumber="" ExtnCustomerStoreNumber="" ExtnShipComplete="" ExtnOrigEnvironmentCode="" ExtnCustOrderBranch="" ExtnCustomerName=""
-									ExtnCustomerDivision="" >
+									ExtnCustomerDivision="" ExtnPrimarySalesRep="" >
 					  </Extn>
 				</Customer>
 			 </Template>
