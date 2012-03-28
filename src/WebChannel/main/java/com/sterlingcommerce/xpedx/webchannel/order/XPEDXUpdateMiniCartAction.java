@@ -2,18 +2,15 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.opensaml.common.transport.http.GetRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
-import com.sterlingcommerce.webchannel.order.CartInContextRefreshingWCMashupAction;
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
