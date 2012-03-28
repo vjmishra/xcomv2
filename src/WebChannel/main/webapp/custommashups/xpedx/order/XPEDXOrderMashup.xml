@@ -2800,11 +2800,19 @@
                             </Order>
                         </Input>
                         <Template>
-                            <OrderList>
-                                <Order OrderNo="" OrderName="" Modifyts="" OrderHeaderKey="">
-                                    <PriceInfo Currency=""/>
-                                </Order>
-                            </OrderList>
+                          <OrderList>
+                             <Order OrderHeaderKey="" OrderNo="" OrderName="" Modifyts="">
+                    			<PriceInfo Currency=""/>
+                    			<OrderLines TotalNumberOfRecords="">
+                        			<OrderLine OrderLineKey="" MaxLineStatus="">
+                            			<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure=""/>
+                            			<Extn/>
+                            			<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+                       				 </OrderLine>
+                   				 </OrderLines>
+                    
+               				 </Order>
+               			  </OrderList>
                         </Template>
                     </API>
     </mashup>
