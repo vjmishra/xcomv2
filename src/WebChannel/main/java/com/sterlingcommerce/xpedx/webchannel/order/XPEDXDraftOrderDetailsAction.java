@@ -113,6 +113,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
 			{			
+				if(getDraftOrderList() !=null && getDraftOrderList().equals("Y"))
+						XPEDXCommerceContextHelper.createNewCartInContext(getWCContext(),getOrderElementFromOutputDocument(),orderHeaderKey);
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			}
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
@@ -1985,6 +1987,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected HashMap xpedxItemIDToItemExtnMap;
 	//added for jira 2885
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
+	private String draftOrderList;
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
@@ -2194,6 +2197,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
 		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
+
+
+	public String getDraftOrderList() {
+		return draftOrderList;
+	}
+
+
+	public void setDraftOrderList(String draftOrderList) {
+		this.draftOrderList = draftOrderList;
+	}	
 	
 	
 }

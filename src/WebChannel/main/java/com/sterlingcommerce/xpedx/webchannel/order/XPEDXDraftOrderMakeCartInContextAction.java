@@ -12,6 +12,7 @@ import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 
 public class XPEDXDraftOrderMakeCartInContextAction extends
 		DraftOrderMakeCartInContextAction {
@@ -19,21 +20,31 @@ public class XPEDXDraftOrderMakeCartInContextAction extends
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXDraftOrderMakeCartInContextAction.class);
 
+	private String redirectToDraftOrderDetails;
+	
+	public String getRedirectToDraftOrderDetails() {
+		return redirectToDraftOrderDetails;
+	}
+
+	public void setRedirectToDraftOrderDetails(String redirectToDraftOrderDetails) {
+		this.redirectToDraftOrderDetails = redirectToDraftOrderDetails;
+	}
+
 	public String execute() {
 		String returnValue = super.execute();
-		if (returnValue.equals(SUCCESS)) {
+		if (returnValue.equals(SUCCESS) && !(redirectToDraftOrderDetails != null && redirectToDraftOrderDetails.equals("true"))) {
 			try {
-				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
-				XPEDXWCUtils.removeObectFromCache("itemMap");
-				
-				CommerceContextHelper.overrideCartInContext(getWCContext(),
-						orderHeaderKey);
-				 Map<String, String> valueMap = new HashMap<String, String>();
+				//buildNewCommerceContext
+				XPEDXCommerceContextHelper.createNewCartInContext(getWCContext(),null,orderHeaderKey);
+				//Commented for performance issue
+				/*CommerceContextHelper.overrideCartInContext(getWCContext(),
+						orderHeaderKey);*/
+				/* Map<String, String> valueMap = new HashMap<String, String>();
 			     valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
 			     //List<String> itemAndTotalList=new ArrayList<String>();
 			     Element input = WCMashupHelper.getMashupInput("XPEDXgetOrderList", valueMap, getWCContext());
 			     Element output = (Element)WCMashupHelper.invokeMashup("XPEDXgetOrderList", input, getWCContext().getSCUIContext());
-			     XPEDXOrderUtils.refreshMiniCart(getWCContext(),output,false,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+			     XPEDXOrderUtils.refreshMiniCart(getWCContext(),output,false,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);*/
 			} catch (Exception ex) {
 				LOG.debug(ex);
 			}

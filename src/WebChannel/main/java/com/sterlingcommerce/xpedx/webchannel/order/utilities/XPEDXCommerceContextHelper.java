@@ -1,6 +1,7 @@
 package com.sterlingcommerce.xpedx.webchannel.order.utilities;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.*;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContext;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
@@ -8,6 +9,7 @@ import com.sterlingcommerce.webchannel.order.utilities.DraftOrderCreationHelper;
 import com.sterlingcommerce.webchannel.utilities.*;
 import java.util.*;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -150,6 +152,17 @@ public class XPEDXCommerceContextHelper
 	     }
 	     return commerceContext;
 	 }
+	 
+	 public static CommerceContext createNewCartInContext(IWCContext webContext,Element orderElement,String orderHeaderKey)
+	 {
+	    /* CommerceContext commerceContext = (CommerceContext)webContext.getWCAttribute("CommerceContextObject");
+	     if(commerceContext == null)
+	     {*/
+	    	 CommerceContext commerceContext = buildNewCommerceContext(webContext,orderElement,orderHeaderKey);
+	         webContext.setWCAttribute("CommerceContextObject", commerceContext, WCAttributeScope.SESSION);
+	    // }
+	     return commerceContext;
+	 }
 	
 	 private static CommerceContext buildNewCommerceContext(IWCContext webContext)
 	 {
@@ -170,20 +183,107 @@ public class XPEDXCommerceContextHelper
 	     }
 	     return commerceContext;
 	 }
+	 
+	 private static CommerceContext buildNewCommerceContext(IWCContext webContext,Element orderElement,String orderHeaderKey)
+	 {
+	     CommerceContext commerceContext = null;
+	     //Element orderElement = null;
+	     try
+	     {
+	         if(!webContext.isProcurementUser())
+	         {
+	        	 OrderHelper.setAppSecCtxForOrder(webContext, orderHeaderKey);
+	        	 if(orderElement == null)
+	        		 orderElement = getDetailForOrderHeaderKey(webContext, orderHeaderKey);
+	        	 else
+	        		 addModificationRuleToOrderListElement(orderElement);
+	         }
+	         if(orderElement != null)
+	             commerceContext = new CommerceContext(webContext, orderElement, "dbSearch");
+	         else
+	             commerceContext = new CommerceContext(webContext, "_NONE_", "dbSearch");
+	     }
+	     catch(Exception e)
+	     {
+	         LOG.error((new StringBuilder()).append("Error building CommerceContext from Cart In Context: ").append(e.getMessage()).toString(), e);
+	     }
+	     return commerceContext;
+	 }
 	
 	 private static Element getCartInContextFromDB(IWCContext webContext)
 	     throws Exception
 	 {
-	     Element orderElement = null;
-	     String orderHeaderKey = getCartInContextOrderHeaderKeyFromDB(webContext);
-	     if(orderHeaderKey != null)
+	     Element orderElement = null;	     
+	     orderElement = getCartInContextOrderHeaderKeyFromDB(webContext);
+	     if(orderElement != null )
 	     {
+	     Document orderDoc=SCXmlUtil.createFromString(SCXmlUtil.getString(orderElement));
+	     orderElement=orderDoc.getDocumentElement();
+	     
+	    	 String orderHeaderKey = orderElement.getAttribute("OrderHeaderKey");
 	         OrderHelper.setAppSecCtxForOrder(webContext, orderHeaderKey);
-	         orderElement = getDetailForOrderHeaderKey(webContext, orderHeaderKey);
+	         //orderElement = getDetailForOrderHeaderKey(webContext, orderHeaderKey);
 	     }
 	     return orderElement;
 	 }
 	
+	 private static Element getCartInContextOrderHeaderKeyFromDB(IWCContext webContext)
+     throws Exception
+ {
+     String orderHeaderKey = null;
+     Map<String, String> valueMap = new HashMap<String, String>();
+     String storefrontId = webContext.getStorefrontId();
+     valueMap.put("/Order/@EnterpriseCode", storefrontId);
+     String billToID = XPEDXWCUtils.getLoggedInCustomerFromSession(webContext);
+     if(billToID==null || billToID.trim().length()<=0)// will be null if there is no ship to selected
+    	 billToID = webContext.getCustomerId();
+     valueMap.put("/Order/@BillToID", billToID);
+     String customerId = "";
+     if(XPEDXWCUtils.isCustomerSelectedIntoConext(webContext))
+    	 customerId = webContext.getCustomerId();
+     valueMap.put("/Order/@BuyerOrganizationCode", customerId);
+     String customerContactId = webContext.getCustomerContactId();
+     valueMap.put("/Order/@CustomerContactID", customerContactId);
+     if(storefrontId == null || customerId == null || customerContactId == null)
+         return null;
+     Element input = WCMashupHelper.getMashupInput("xpedxlistForCartInContext", valueMap, webContext);
+     Element output = (Element)WCMashupHelper.invokeMashup("xpedxlistForCartInContext", input, webContext.getSCUIContext());
+     Element orderListElement = XMLUtilities.getElement(output, "//OrderList");
+     Element listOrderElement=null;
+     if(orderListElement != null)
+     {
+         List<Element> orderList = XMLUtilities.getChildElements(orderListElement, "Order");
+         if(orderList != null && orderList.size() > 0)
+         {
+             listOrderElement = (Element)orderList.get(0);
+             if(listOrderElement != null)
+             {
+                 orderHeaderKey = listOrderElement.getAttribute("OrderHeaderKey");
+                 addModificationRuleToOrderListElement(listOrderElement);
+                 XPEDXOrderUtils.refreshMiniCart(webContext, listOrderElement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+             }
+         }
+         else
+         {
+        	 XPEDXOrderUtils.refreshMiniCart(webContext, null, false, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+        	 XPEDXWCUtils.setObectInCache("OrderHeaderInContext","_CREATE_NEW_");
+         }
+     }
+     return listOrderElement;
+ }
+	 private static void addModificationRuleToOrderListElement(Element orderElement)
+	 {
+		 Element overAllTotalElem=SCXmlUtil.createChild(orderElement, "OverallTotals");
+		 Element modificationsElem=SCXmlUtil.createChild(orderElement, "Modifications");
+		 Element changeCurrencyModificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+		 changeCurrencyModificationElem.setAttribute("ModificationType", "CHANGE_CURRENCY");
+		 changeCurrencyModificationElem.setAttribute("ModificationAllowed", "N");
+		 List<Element> orderExtn = XMLUtilities.getChildElements(orderElement, "Extn");
+		 if(orderExtn != null && orderExtn.size()>0)
+			 overAllTotalElem.setAttribute("AdjustedSubtotalWithoutTaxes", orderExtn.get(0).getAttribute("ExtnTotOrdValWithoutTaxes"));
+			 
+	 }
+/*
 	 private static String getCartInContextOrderHeaderKeyFromDB(IWCContext webContext)
 	     throws Exception
 	 {
@@ -222,7 +322,7 @@ public class XPEDXCommerceContextHelper
 	         }
 	     }
 	     return orderHeaderKey;
-	 }
+	 }*/
 	
 	 static Element getDetailForOrderHeaderKey(IWCContext webContext, String orderHeaderKey)
 	     throws Exception
