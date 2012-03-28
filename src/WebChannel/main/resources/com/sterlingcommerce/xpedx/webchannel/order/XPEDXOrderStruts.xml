@@ -486,10 +486,12 @@
 		<action name="draftOrderMakeCartInContextDetails"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="redirectToDraftOrderDetails">true</param>
 			<result name="success" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
 				<param name="OrderHeaderKey">${OrderHeaderKey}</param>
 				<param name="draft">Y</param>
+				<param name="draftOrderList">Y</param>
 			</result>
 		</action>		
 		<action name="draftOrderAddReplacementOrderLines"
