@@ -384,5 +384,45 @@ public String getShipToDivdeliveryInfo() {
 	private XPEDXShipToCustomer billTo;
 	private XPEDXOrgNodeDetailsBean organization;
 	private String customerStatus;
+//for performance issue for itemDetail.action
+	private String ExtnUseOrderMulUOMFlag;
+	private String ExtnPrimarySalesRep;
+	private String ExtnSampleRoomEmailAddress;
+	private String AccountNumber;
+	private String ExtnShipToSuffix;
+	
+	
+	public String getExtnShipToSuffix() {
+		return ExtnShipToSuffix;
+	}
+	public void setExtnShipToSuffix(String extnShipToSuffix) {
+		ExtnShipToSuffix = extnShipToSuffix;
+	}
+	public String getAccountNumber() {
+		return AccountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		AccountNumber = accountNumber;
+	}
+	public String getExtnSampleRoomEmailAddress() {
+		return ExtnSampleRoomEmailAddress;
+	}
+	public void setExtnSampleRoomEmailAddress(String extnSampleRoomEmailAddress) {
+		ExtnSampleRoomEmailAddress = extnSampleRoomEmailAddress;
+	}
+	public String getExtnUseOrderMulUOMFlag() {
+		return ExtnUseOrderMulUOMFlag;
+	}
+	public void setExtnUseOrderMulUOMFlag(String extnUseOrderMulUOMFlag) {
+		ExtnUseOrderMulUOMFlag = extnUseOrderMulUOMFlag;
+	}
+	public String getExtnPrimarySalesRep() {
+		return ExtnPrimarySalesRep;
+	}
+	public void setExtnPrimarySalesRep(String extnPrimarySalesRep) {
+		ExtnPrimarySalesRep = extnPrimarySalesRep;
+	}
+//end of Performance issue
+
 	
 }

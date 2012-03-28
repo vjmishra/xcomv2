@@ -2293,14 +2293,29 @@ public class XPEDXWCUtils {
 
 	public static String getDivisionName() throws CannotBuildInputException {
 		String OrganizationName = null;
+		// Added for performance issue - itemdetail.action - removing extra call to getCustomerDetails
+		String envCode;
+		String ShipFromBranch ;
 		try {
 			IWCContext context = WCContextHelper
 					.getWCContext(ServletActionContext.getRequest());
 			String customerID = context.getCustomerId();
-			String envCode = getEnvironmentCode(customerID);
+			//Commented for performance issue - itemdetail.action - removing extra call to getCustomerDetails
+			//String envCode = getEnvironmentCode(customerID);
 			String storeFrontId = context.getStorefrontId();
-			String ShipFromBranch = getCustomerShipFromDivision(customerID,
+			
+			 XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("shipToCustomer");
+			 if(shipToCustomer!=null && shipToCustomer.getExtnEnvironmentCode()!=null && shipToCustomer.getExtnEnvironmentCode().length()>0){
+				  envCode = shipToCustomer.getExtnEnvironmentCode();
+			 }else{			
+				  envCode = getEnvironmentCode(customerID);
+			 }
+			 if(shipToCustomer!=null && shipToCustomer.getExtnShipFromBranch()!=null && shipToCustomer.getExtnShipFromBranch().length()>0){
+				  ShipFromBranch = shipToCustomer.getExtnShipFromBranch();
+			 }else{			
+				  ShipFromBranch = getCustomerShipFromDivision(customerID,
 					storeFrontId);
+			 }
 			Document organizationDetails = null;
 			if (envCode != null && envCode.trim().length() > 0) {
 				organizationDetails = getOrganizationDetails(ShipFromBranch
@@ -5192,6 +5207,11 @@ public class XPEDXWCUtils {
 						.getAttribute("OrganizationName"));
 				Element extnElement = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "Extn");
+			
+				Element personInfoElement = SCXmlUtil.getXpathElement(
+						customerOrganizationEle, "//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
+				Element customerPaymentInfoElement = SCXmlUtil.getXpathElement(
+						customerOrganizationEle, "//Customer/CustomerPaymentMethodList"); //CustomerPaymentMethod
 				Element parentElem = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "ParentCustomer");
 				XPEDXWCUtils.getShipToAddressOfCustomer(customerOrganizationEle,shipToCustomer);
@@ -5212,6 +5232,41 @@ public class XPEDXWCUtils {
 				shipToCustomer.setExtnCurrencyCode(extnElement.getAttribute("ExtnCurrencyCode"));
 				shipToCustomer.setExtnCustomerName(extnElement.getAttribute("ExtnCustomerName"));
 				shipToCustomer.setExtnSampleRequestFlag(extnElement.getAttribute("ExtnSampleRequestFlag"));
+				
+				//For performance issue itemdetail.action
+				shipToCustomer.setExtnUseOrderMulUOMFlag(extnElement.getAttribute("ExtnUseOrderMulUOMFlag"));
+				shipToCustomer.setExtnPrimarySalesRep(extnElement.getAttribute("ExtnPrimarySalesRep"));
+				shipToCustomer.setExtnShipToSuffix("ExtnShipToSuffix");
+				shipToCustomer.setFirstName(personInfoElement.getAttribute("FirstName"));
+				shipToCustomer.setMiddleName(personInfoElement.getAttribute("MiddleName"));
+				shipToCustomer.setLastName(personInfoElement.getAttribute("LastName"));
+				shipToCustomer.setEMailID(personInfoElement.getAttribute("EMailID"));
+				shipToCustomer.setExtnSampleRoomEmailAddress(personInfoElement.getAttribute("ExtnSampleRoomEmailAddress"));
+				shipToCustomer.setDayPhone(personInfoElement.getAttribute("DayPhone"));
+				shipToCustomer.setCity(personInfoElement.getAttribute("City"));
+				shipToCustomer.setState(personInfoElement.getAttribute("State"));
+				
+				List<String> arrAddress = new ArrayList<String>();
+				String sAddr = "AddressLine";
+				
+					for (int i = 1; i <= 6; i++) {
+						if(personInfoElement.getAttribute(sAddr + i).equalsIgnoreCase(""))
+							arrAddress.add(" ");
+						else
+							arrAddress.add(personInfoElement.getAttribute(sAddr + i));								
+					}
+				shipToCustomer.setAddressList(arrAddress);				
+				shipToCustomer.setZipCode(personInfoElement.getAttribute("ZipCode"));
+				
+				if(Integer.parseInt(customerPaymentInfoElement.getAttribute("TotalNumberOfRecords")) > 0) {
+					NodeList payNodes = customerPaymentInfoElement.getElementsByTagName("CustomerPaymentMethod");				
+					if (payNodes != null && payNodes.getLength() > 0) {
+						Element payMethod = (Element) payNodes.item(0);					
+						shipToCustomer.setAccountNumber(payMethod.getAttribute("DisplayCustomerAccountNo"));
+					}	
+				}
+				
+				// end of performance for itemdetail.action
 				if(!YFCCommon.isVoid(parentElem))
 				{
 					billToCustomer.setParentCustomerKey(parentElem.getAttribute("ParentCustomerKey")); //Jira 3162 done Changes
