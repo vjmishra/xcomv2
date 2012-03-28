@@ -600,11 +600,49 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		-------- End of the unnecessary database call ---------
 		----------- Email1 is set at Line 417 , XNGTP-1032------------ jkotha
 				 */
-		String custDetailsMashupId = "xpedx-itemdetails-customerInfo";
+	//Commented for performance issue - Itemdetail.action			 
+	/*	String custDetailsMashupId = "xpedx-itemdetails-customerInfo";
 		outputDoc = XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext().getStorefrontId(),custDetailsMashupId); // trim of the template is Required
 		Element outputEl = outputDoc.getDocumentElement();
-
-		Element customerOrganizationExtnEle = XMLUtilities.getElement(outputEl,"Extn");
+		*/
+		// For performance issue - Itemdetail.action
+		XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("shipToCustomer");
+		shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+		//Fetching and setting the other customer profile settings here to use in getCustomerPartNumber
+		envCode = shipToCustomer.getExtnEnvironmentCode();
+		customerCode = shipToCustomer.getExtnCompanyCode();
+		customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
+		useOrderMulUOMFlag = shipToCustomer.getExtnUseOrderMulUOMFlag();
+		customerBranch = shipFromDivision;
+		//Getting the customer Sku flag from MSAP Customer
+		custSKU = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
+		DivisionNumber = shipToCustomer.getExtnCustomerDivision();
+		SalesRepresentative1 = shipToCustomer.getExtnPrimarySalesRep();
+		setSampleRequestFlagInSession();// This can be edited
+		Email2 = shipToCustomer.getEMailID();
+		Email1 = shipToCustomer.getExtnSampleRoomEmailAddress();
+		CustomerName = shipToCustomer.getFirstName()
+				+ ""
+				+ shipToCustomer.getMiddleName()
+				+ ""
+				+ shipToCustomer.getLastName();
+		//CustomerContactName = SCXmlUtil.getAttribute(
+			//	customerOrganizationExtnEle1, "AddressID");
+		ContactPhoneNumber = shipToCustomer.getDayPhone();
+		List arrAddress = shipToCustomer.getAddressList();
+		if(arrAddress!=null ) {
+			if(arrAddress.size()>0 && arrAddress.get(0)!=null)ShippingAddress1 = (String) arrAddress.get(0);
+			if(arrAddress.size()>1 && arrAddress.get(1)!=null)ShippingAddress2 = (String) arrAddress.get(1);
+			if(arrAddress.size()>2 && arrAddress.get(2)!=null)ShippingAddress3 = (String) arrAddress.get(2);
+		}		
+		CityRequest = shipToCustomer.getCity();
+		StateRequest = shipToCustomer.getState();
+		ZipRequest = shipToCustomer.getZipCode();
+		AccountNumber = shipToCustomer.getAccountNumber();
+		// End of performance issue - itemdetail.action
+		
+		
+		/*Element customerOrganizationExtnEle = XMLUtilities.getElement(outputEl,"Extn");
 		shipFromDivision = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnShipFromBranch");
 		//Fetching and setting the other customer profile settings here to use in getCustomerPartNumber
 		envCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnEnvironmentCode");
@@ -615,7 +653,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		/*customerBranch =  SCXmlUtil.getAttribute(customerOrganizationExtnEle,
 				"ExtnCustomerDivision");*/
 		//Getting the customer Sku flag from MSAP Customer
-		custSKU = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
+		/*custSKU = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
 		DivisionNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnCustomerDivision");
 		SalesRepresentative1 = SCXmlUtil.getAttribute(customerOrganizationExtnEle, "ExtnPrimarySalesRep");
 		setSampleRequestFlagInSession();// This can be edited
@@ -652,11 +690,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		ZipRequest = SCXmlUtil.getAttribute(customerOrganizationExtnEle1,
 				"ZipCode");
 		CustomerList = outputDoc.getElementsByTagName("CustomerPaymentMethod");
+		//SCXmlUtil.getString(CustomerList);
 		for (int customerNo1 = 0; customerNo1 < CustomerList.getLength(); customerNo1++) {
 			customerOrganizationExtnEle1 = (Element) CustomerList.item(0);
 		}
 		AccountNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle1,
 				"CustomerAccountNo");
+		*/
 	}
 
 	protected void getItemUOMs() throws Exception {
