@@ -19,6 +19,9 @@
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
  	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+ 	<!--[if IE]>
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+	<![endif]-->
 	<s:if test="#isGuestUser != true">
 	    
 	
