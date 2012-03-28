@@ -33,7 +33,7 @@
 											
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;">Action Required-Customer Sample Request 
+													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;">Action Required-&#160;<xsl:value-of select="//@headerEmail"/> Sample Request 
 													</span>
 												</td>
 											</tr>
@@ -77,10 +77,12 @@
 													<td width="44%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Account#:&#160;<b><xsl:value-of select="//@BillToCustid"/></b>									
 													</td>													
 													</tr>
+													<xsl:if test = 'Emails/Email/@ServiceProvider!=""'>	    
 													<tr>
-													<td width="14%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">FedEx or UPS:&#160;<xsl:value-of select="//@ServiceProviderNumber"/>										
+													<td width="14%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><xsl:value-of select="//@ServiceProvider"/>:&#160;<xsl:value-of select="//@ServiceProviderNumber"/>										
 													</td>													
-															</tr>
+													</tr>
+													</xsl:if>
 											
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
@@ -100,42 +102,39 @@
 																Attention:&#160;<xsl:value-of select="Emails/Email/@Attention"/>
 															</td>
 															</tr>
-														
+													<xsl:if test = 'Emails/Email/@address1!=""' >
 													<tr>
 													<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@address1"/>,				
+																<xsl:value-of select="Emails/Email/@address1"/>	
+																 <xsl:if test = 'Emails/Email/@address2!=""' >
+																 ,
+																 </xsl:if>			
 													</td>
-																<!-- <td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><xsl:for-each select="Emails/Email/ShippingAddress">										
-														<xsl:value-of select="@address"/>										
-										    			</xsl:for-each>
-													</td>
-													 -->
 													 </tr>
+													 </xsl:if>
+													 <xsl:if test = 'Emails/Email/@address2!=""' >	    
+													
 													 <tr>
 													<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@address2"/>					
+																<xsl:value-of select="Emails/Email/@address2"/>
+																<xsl:if test = 'Emails/Email/@address3!=""' >
+																 ,
+																 </xsl:if>			
+																	
 													</td>
 													</tr>
+													</xsl:if>
+													<xsl:if test = 'Emails/Email/@address3!=""' >
 													<tr>
 													<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="Emails/Email/@address3"/>					
 													</td>
 													</tr>
-													
+													</xsl:if>
 													<tr>
 															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@city"/>,<xsl:value-of select="Emails/Email/@state"/><xsl:value-of select="Emails/Email/@zipCode"/><xsl:value-of select="Emails/Email/@country"/>
+																<xsl:value-of select="Emails/Email/@city"/>,&#160;<xsl:value-of select="Emails/Email/@state"/>&#160;<xsl:value-of select="Emails/Email/@zipCode"/>&#160;<xsl:value-of select="Emails/Email/@country"/>
 															</td>
-															<!-- <td width="" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@state"/>
-															</td>
-															<td width="" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@zipCode"/>
-															</td>
-															<td width="" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="Emails/Email/@country"/>
-															</td>
-															 -->
 															</tr>														
 															
 									
