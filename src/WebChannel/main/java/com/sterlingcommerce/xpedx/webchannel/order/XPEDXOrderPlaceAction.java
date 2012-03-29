@@ -296,16 +296,23 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			//added for jira 3484 for display of approvers EMailID
 			if(isOrderOnApprovalHoldStatus)
 			{
-				
-				Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(primaryApproverID+","+proxyApproverID, wcContext.getStorefrontId());
-				//Map<String,Element> usersInfoMap1=XPEDXWCUtils.getUsersInfoMap(proxyApproverID, wcContext.getStorefrontId());
-				ArrayList<Element> personInfo=SCXmlUtil.getElements(usersInfoMap.get(primaryApproverID), "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
-				if(personInfo != null && personInfo.size()>0)
-					primaryApprovalEmailId=personInfo.get(0).getAttribute("EMailID");
-				ArrayList<Element> personInfo1=SCXmlUtil.getElements(usersInfoMap.get(proxyApproverID), "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
-				if(personInfo1 != null && personInfo1.size()>0)
-					proxyApprovalEmailId=personInfo1.get(0).getAttribute("EMailID");				
-				
+				if(primaryApproverID != null){
+					resolverUserID = primaryApproverID;
+					if(primaryApproverID != null && proxyApproverID != null){
+						resolverUserID = primaryApproverID+","+proxyApproverID;
+					}
+				}
+				else{
+					resolverUserID = proxyApproverID;
+				}
+				if(resolverUserID != null){
+					Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(resolverUserID, wcContext.getStorefrontId());
+					if(usersInfoMap.get(primaryApproverID) != null)
+						primaryApprovalEmailId=usersInfoMap.get(primaryApproverID).getAttribute("EmailID");
+					if(usersInfoMap.get(proxyApproverID) != null)
+						proxyApprovalEmailId=usersInfoMap.get(proxyApproverID).getAttribute("EmailID");
+				}
+//end of jira 3484
 			}
 			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
 			chainedOrderFromKeylist.add(orderHeaderKey);
@@ -528,11 +535,17 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					this.approvalHoldStatus = holdstatus;
 					this.resolverUserID = orderholdtypeelem
 							.getAttribute(OrderConstants.RESOLVER_USER_ID);
-				    //for jira 3484
-					String approverUserIDs [] = this.resolverUserID.split(",");
-					primaryApproverID = approverUserIDs[0];
-					proxyApproverID = approverUserIDs[1];
-					
+				    //modified for jira 3484
+					if(this.resolverUserID != null ){
+						String approverUserIDs [] = this.resolverUserID.split(",");
+						if(approverUserIDs[0] != null)
+							primaryApproverID = approverUserIDs[0];
+						if(approverUserIDs.length > 1){
+							if(approverUserIDs[1] != null)
+								proxyApproverID = approverUserIDs[1];	
+						}
+					}
+//end of jira 3484
 					return true;
 				}
 			}
