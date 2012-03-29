@@ -427,7 +427,7 @@
 		<action name="saveOrderSummary"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderSummaryUpdateAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderSummaryUpdateActionBinding.xml</param>
-			<param name="mashups">XPEDXDraftOrderSummaryUpdateOnOrderPlace</param>
+			<param name="mashups">XPEDXDraftOrderSummaryOnOrderPlace, XPEDXDraftOrderSummaryUpdateOnOrderPlace</param>
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
 			<param name="messageType">OrderPlace</param>
 			<result name="success" type="redirectAction">
