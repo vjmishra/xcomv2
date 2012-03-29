@@ -186,9 +186,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			// BEGIN P&A Call: RUgrani
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc();
 			if(getMajorLineElements().size()>0){
-				ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
-				Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
-				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);			
+				ArrayList<Element> ueAdditionalAttrElem = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+				XPEDXPriceAndAvailability pna=new XPEDXPriceAndAvailability();
+				if(ueAdditionalAttrElem!=null && ueAdditionalAttrElem.size()>0)
+					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem.get(0));			
 				
 				//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
 				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
@@ -252,7 +253,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				this.execute();
 			}
 			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
-			LOG.debug(ex.getMessage());
+			LOG.error(ex.getMessage());
 		}
 		return SUCCESS;
 	}
