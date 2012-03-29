@@ -292,7 +292,22 @@ function showSplitDiv(divId)
 </s:elseif>
 
 <s:set name='xpedxOrderDate' value='#xutil.getAttribute(#orderDetail,"OrderDate")' />
-<s:set name='xpedxOrderDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null,'MM/dd/yyyy')" />
+
+<%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - begin --%>
+<s:set name='xpedxOrderDateTimezone' value=''/>
+<s:if test='#xpedxOrderDate.contains("-05")'>
+	<s:set name='xpedxOrderDateTimezone' value="%{'CT'}"/>
+</s:if>
+<s:if test='#xpedxOrderDate.contains("-04")'>
+	<s:set name='xpedxOrderDateTimezone' value="%{'ET'}"/>
+</s:if>
+<s:if test='%{#xpedxOrderSource == "Web"}'>
+	<s:set name='xpedxOrderDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null, 'MM/dd/yyyy hh:MM:ss')" />
+</s:if>
+<s:else>
+	<s:set name='xpedxOrderDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null,'MM/dd/yyyy')" />
+</s:else>
+<%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - end --%>
 
 <s:set name='optimizationType' value='#xutil.getAttribute(#orderDetail,"OptimizationType")'/>
 <s:set name='locale' value="locale" />
@@ -629,6 +644,9 @@ function showSplitDiv(divId)
 	                        </s:if>
                         Order placed<s:if test='#xpedxOrderedByName!=""' > by <s:property value='#xpedxOrderedByName' /></s:if> 
 		                    <s:if test='#xpedxOrderDate!=""' > on  <s:property value='#xpedxOrderDate' /></s:if> 
+<%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - begin --%>
+		                     <s:if test='#xpedxOrderSource=="Web"'> &lt;<s:property value='#xpedxOrderDateTimezone'/>&gt; </s:if>
+<%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders --%>
 		                     <s:if test='#xpedxOrderSource=="B2B" || #xpedxOrderSource=="Web" ||#xpedxOrderSource=="Call Center"' > via  <s:property value='#xpedxOrderSource' /></s:if>. <s:if test='#xpedxEmail!=""' >Order Confirmation emailed to 
 		                    <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@replaceSemiWithcomma(#xpedxEmail)' /></s:if> 
 						</div>
