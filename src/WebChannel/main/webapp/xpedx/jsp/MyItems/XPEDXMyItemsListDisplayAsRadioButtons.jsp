@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
-<s:url id="MIListPaginationURL" action="XPEDXMyItemsList">
-    	 <s:param name="pageNumber" value="'{0}'"/>
-    
-  </s:url>
+
 <script type="text/javascript">
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	</script>	
@@ -36,11 +34,17 @@
 		<s:set name="itemCount" value="%{listSizeMap.get(#listSizeId)}" />
 		<s:hidden name="itemCount_%{#listSizeId}" id="itemCount_%{#listSizeId}" value="%{#itemCount}" />
 	</s:iterator>
+	<s:url id="MIListPaginationURL" action="XPEDXMyItemsList">
+    	 <s:param name="pageNumber" value="'{0}'"/>
+    	 <s:param name="displayAsRadioButton" value="true"/>
+ 	</s:url>
 	<div id="tool-bar-bottom" class="float-bottom">
   
  <div class="search-pagination-bottom">
                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
-                  	<swc:pagectl currentPage="%{getPageNumber()}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#MIListPaginationURL}"/>
-			</div>
-		</div>
+                  	<xpedx:pagectl currentPage="%{getPageNumber()}" divId="divAdd2ListRadio" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#MIListPaginationURL}" isAjax="true"/>
+                  	
+ 	</div>
+</div>
+	
 </div>
