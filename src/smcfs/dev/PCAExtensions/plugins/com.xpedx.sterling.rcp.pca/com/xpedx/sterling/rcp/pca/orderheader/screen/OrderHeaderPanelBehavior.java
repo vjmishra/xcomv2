@@ -368,7 +368,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
             
             if(invoiceNo !=null && invoiceNo != "") {                
                 encryptedInvoiceNo = tripleDes.encrypt(invoiceNo);
-                URLEncodedInvoiceNo = URLEncoder.encode(encryptedShipToId);
+                URLEncodedInvoiceNo = URLEncoder.encode(encryptedInvoiceNo);
             }else{
                 YRCPlatformUI.showError("Invoice_invoiceno",YRCPlatformUI.getString("Invoice_invoiceno"));
                 return;
@@ -381,7 +381,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
                 YRCPlatformUI.showError("Invoice_invoicedate",YRCPlatformUI.getString("Invoice_invoicedate"));
                 return;
             }
-            String finalQueryString = "UserID="+URLEncodedContactId + "&InvoiceNo="+URLEncodedInvoiceNo+ "&shipTo="+URLEncodedShipToId+"&InvoiceDate="+URLEncodedInvoiceDate;
+            String finalQueryString = "UserID="+URLEncodedContactId + "&InvoiceNumber="+URLEncodedInvoiceNo+ "&shipTo="+URLEncodedShipToId+"&InvoiceDate="+URLEncodedInvoiceDate;
             XPXUtils.accessURL(url, finalQueryString);
 
         } catch (Exception e) {
