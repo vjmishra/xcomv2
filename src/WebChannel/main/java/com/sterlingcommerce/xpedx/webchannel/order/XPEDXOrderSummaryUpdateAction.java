@@ -36,6 +36,9 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private static final long serialVersionUID = -6062859669898581376L;
 	private static final String EXTN_SOURCE_TYPE_WEB="3";
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
+	private static final String SAVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryOnOrderPlace";
+	private static final String EDIT_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnOrderPlace";
+	private boolean isDraftOrder=false;
 	@Override
 	public String execute() {
 		try {
@@ -49,11 +52,17 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			}
 			updateUserProfile();
 			setYFSEnvironmentVariables();
+			if (isDraftOrder())
+				isDraftOrder=true;
+			
 			Map<String, Element> outMap = prepareAndInvokeMashups();
-			/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
-			Document orderOutDoc = (Document)outMap.get("XPEDXDraftOrderSummaryUpdateOnOrderPlace").getOwnerDocument();
-			getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);
-			/*End - Changes made by Mitesh Parikh for JIRA#3594*/
+			
+			if (!isDraftOrder) {
+				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
+				Document orderOutDoc = (Document)outMap.get(EDIT_ORDER_SUMMARY_MASHUP).getOwnerDocument();
+				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);
+				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
+			}
 			//callChangeOrder();
 			updateCVVNumbers();
 			setShipCompleteOption();
@@ -175,7 +184,16 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
-		Element input = mashupInputs.get("XPEDXDraftOrderSummaryUpdateOnOrderPlace");
+		
+		Element input=null;
+		if (isDraftOrder) {
+			input=mashupInputs.get(SAVE_ORDER_SUMMARY_MASHUP);
+		
+		} else  
+		{
+			input=mashupInputs.get(EDIT_ORDER_SUMMARY_MASHUP);
+		}
+		
 		if(input !=null) {
 			if(SpecialInstructions!=null && SpecialInstructions.trim().length()>0) {
 				Document inputDocument = input.getOwnerDocument();
