@@ -4436,6 +4436,9 @@ public class XPEDXWCUtils {
 					input, context.getSCUIContext());
 			Element customerAssignment = SCXmlUtil.getChildElement(outputElem, "Output");
 //			assignedShipToList = parseForShipToCustomers(customerAssignment);
+			List<String> assignedShipToList = XPEDXWCUtils.parseForShipToCustomers(customerAssignment);
+			if(assignedShipToList.size()<=20)
+				setObectInCache("XPEDX_20_ASSIFNED_SHIPTOS", assignedShipToList);
 		} catch (XMLExceptionWrapper e) {
 			log.error("Error getting the Customer Assignments");
 			e.printStackTrace();
