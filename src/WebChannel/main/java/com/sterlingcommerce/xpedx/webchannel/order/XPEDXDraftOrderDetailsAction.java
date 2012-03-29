@@ -96,8 +96,14 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				
 			} else {				
 				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-				setOutputDocument(changeOrderOutputDoc);
-				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				if(changeOrderOutputDoc!=null)
+				{
+					setOutputDocument(changeOrderOutputDoc);
+					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				
+				}else {
+					callChangeOrder();
+				}
 				
 			}
 			
