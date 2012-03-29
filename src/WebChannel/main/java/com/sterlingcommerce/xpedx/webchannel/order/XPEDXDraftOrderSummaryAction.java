@@ -1499,15 +1499,20 @@ END of JIRA 3382*/
 	}
 	
 	/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-	protected void getCompleteOrderDetailsDoc()
+	protected void getCompleteOrderDetailsDoc() throws Exception
 	{
 		Document orderOutputDocument=null;
 		if(getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ)!=null)
 		{
 			orderOutputDocument=(Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
 			setOutputDocument(orderOutputDocument);
+			getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
+		
+		} else {
+			super.getCompleteOrderDetailsDoc();
+			
 		}
-		getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
+		
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 	
