@@ -1063,16 +1063,11 @@ public class XPEDXWCUtils {
 			if(_customerContactElemTemp==null)
 				customerContactMap.put(customerContactId, _customerContactElem);
 			else
-			{
-				ArrayList<Element> customerAdditionalAddressTemp=SCXmlUtil.getElements(_customerContactElemTemp, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress");
-				ArrayList<Element> customerAdditionalAddress=SCXmlUtil.getElements(_customerContactElem, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress");
-				if((customerAdditionalAddressTemp == null || customerAdditionalAddressTemp.size()==0) && 
-						(customerAdditionalAddress !=null && customerAdditionalAddress.size()>0) )
+			{	
+				if(_customerContactElem != null && (_customerContactElem.getAttribute("EmailID") !=null && !_customerContactElem.getAttribute("EmailID").equals(""))
+						&& (_customerContactElemTemp.getAttribute("EmailID"))==null ||  _customerContactElemTemp.getAttribute("EmailID").equals(""))
 					customerContactMap.put(customerContactId, _customerContactElem);
-			}
-			
-			
-			
+			}	
 		}
 	}
 	//end of jira 3484
