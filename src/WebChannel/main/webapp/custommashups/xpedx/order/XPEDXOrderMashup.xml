@@ -192,6 +192,9 @@
 							</LineCharges>
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
@@ -580,6 +583,9 @@
 							</OrderHoldTypes>
 							<ItemDetails>
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -866,6 +872,9 @@
 							</LineCharges>
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -994,6 +1003,9 @@
 							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" ProductClass=""/>
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -1202,6 +1214,9 @@
 							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -2214,10 +2229,10 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API FlowName="XPXGetUEAdditionalAttributesXML">
 			<Input>
-				<XPXUeAdditionalAttribsXml OrderHeaderKey="" IsPnAResp=""/>		
+				<XPXUeAdditionalAttrXml OrderHeaderKey="" IsPnAResp=""/>		
 			</Input>
 			<Template>
-				<XPXUeAdditionalAttribsXml />
+				<XPXUeAdditionalAttrXml />
 			</Template>
 		</API>
 	</mashup>
@@ -2354,6 +2369,9 @@
 							</LineCharges>
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
@@ -2612,6 +2630,9 @@
 							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -2780,6 +2801,9 @@
 							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
@@ -2889,6 +2913,9 @@
 							</LineCharges>
 							<ItemDetails ItemID="">
 								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
 								<Extn>
 									<XPXItemExtnList>
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
@@ -2982,7 +3009,6 @@
 				</Order>
         	</Template>
     	</API>    
-    </mashup>
-    
+    </mashup> 
     
 </mashups>       
