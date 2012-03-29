@@ -158,7 +158,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         	//As per discussion with Pawan, Include all the ship to's if the ship to count is less than 30.
         	XPEDXCustomerContactInfoBean custContBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
         	Integer numberOfAssignedShipTo=custContBean.getNumberOfAssignedShioTos();
-        	if(numberOfAssignedShipTo == null )
+        	if(numberOfAssignedShipTo == null || numberOfAssignedShipTo == 0)
         	{
 	        	Document assignedCustomersDoc = XPEDXWCUtils.getPaginatedAssignedCustomersDocument(getWCContext());
 	        	if(assignedCustomersDoc!=null) {
