@@ -5649,7 +5649,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					}
 
 					if (!YFCObject.isNull(lpc) && !YFCObject.isVoid(lpc)) {
-						if (lpc.equalsIgnoreCase("D")) {
+						if (lpc.equalsIgnoreCase("D") && !isOrdPlace.equalsIgnoreCase("Y")) {
 							rootOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
 						}
 					}
