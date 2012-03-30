@@ -679,12 +679,12 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("Contact", getContact());
 		emailElement.setAttribute("Phone", getPhone());
 		emailElement.setAttribute("Notes", getNotes());
-		if((getServiceProviderNumberFEDEX()!=null && getServiceProviderNumberFEDEX().trim().length()  > 0) && (getServiceProviderNumberFEDEX().trim().equalsIgnoreCase("on"))){
+		if((getServiceProviderNumberFEDEX()!=null && getServiceProviderNumberFEDEX().trim().length()  > 0)){
 			emailElement.setAttribute("ServiceProvider", "FedEx");
 			serviceProviderNumbersplit =  getServiceProviderNumberFEDEX().replaceAll(",", "");
 			
 			
-		}else if((getServiceProviderNumberUPS()!=null && getServiceProviderNumberUPS().trim().length()  > 0) && (getServiceProviderNumberUPS().trim().equalsIgnoreCase("on"))){
+		}else if((getServiceProviderNumberUPS()!=null && getServiceProviderNumberUPS().trim().length()  > 0)){
 			emailElement.setAttribute("ServiceProvider", "UPS");
 			serviceProviderNumbersplit =  getServiceProviderNumberUPS().replaceAll(",", "");
 			
@@ -1049,6 +1049,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				 
 				NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
 		 		int contactPersonInfoLength = personInfoList.getLength();
+		 		System.out.println("contactPersonInfoLength-"+contactPersonInfoLength);
 	 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
 	 				Element personInfoElem = (Element) personInfoList.item(counter);
 	 				if (personInfoElem != null && personInfoElem.hasAttribute("FirstName") && personInfoElem.hasAttribute("LastName")) {
@@ -1061,6 +1062,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	 				} else {
 	 					SalesRepInfo = "";
 	 				}
+	 				System.out.println("SCXmlUtil.getString(personInfoElem)"+SCXmlUtil.getString(personInfoElem));
 	 			}
 		 		
 		    }	
