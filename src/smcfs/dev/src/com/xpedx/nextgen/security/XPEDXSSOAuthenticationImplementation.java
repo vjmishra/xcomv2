@@ -42,6 +42,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 	public static final String LDAP_AUTH_ATTR_SUFFIX = "xpedx.ldap.authentication.attribute.suffix";
 	public static final String LDAP_AUTH_ATTR_DOMAIN = "xpedx.ldap.authentication.attribute.domain";
 	private static final String LDAP_AUTH_IS_ACTIVE_DIR = "xpedx.ldap.authentication.isActiveDirectory";
+	//added for jira 3393 - inactivate Ldap authentication
+	private static final String LDAP_AUTH_IS_REQUIRED = "xpedx.ldap.authentication.IsRequired";
 	
 	private static final String USER_TYPE_INTERNAL = "INTERNAL";	
 	
@@ -87,6 +89,9 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 
 		String ldapAuthAttrDomain = YFSSystem.getProperty(LDAP_AUTH_ATTR_DOMAIN);
 		String ldapAuthIsActiveDir = YFSSystem.getProperty(LDAP_AUTH_IS_ACTIVE_DIR);
+		String ldapAuthIsRequired = YFSSystem.getProperty(LDAP_AUTH_IS_REQUIRED);
+		//start of jira 3393 condition
+		if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
 		if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 			if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
 				if (!userId.startsWith(ldapAuthAttrDomain)){
@@ -130,7 +135,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         DirContext ctx = new InitialDirContext(env);
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-		
+		}
+//end of jira 3393 condition
 		// need this attribute set in request to avoid customer contact lookup by post authentication
 		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		String userName = (String)request.getAttribute("loggedInUserName");
