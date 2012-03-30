@@ -101,13 +101,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					setOutputDocument(changeOrderOutputDoc);
 					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
 				
-				}else {
-					callChangeOrder();
-				}
-				
-			}
-			
+				}				
+			}			
 			super.execute();
+			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument()); 
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
 			{
@@ -1588,7 +1585,11 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected void getCompleteOrderDetailsDoc() throws Exception {
 		//XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-		validateRestoredOrder();
+		if(getOutputDocument()==null)
+			super.getCompleteOrderDetailsDoc();
+		else
+			validateRestoredOrder();
+			
 	}
 
 	private void processPandA(Vector items) {
@@ -2215,5 +2216,50 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.draftOrderList = draftOrderList;
 	}	
 	
+	private void addModificationRuleToOrderListElement(Element orderElement)
+	{
+		ArrayList<Element> orderLineList=SCXmlUtil.getElements(orderElement, "/OrderLines/OrderLine");
+		if(orderLineList!= null && orderLineList.size()>0) {
+			for(int i=0;i<orderLineList.size();i++)
+			{
+				Element orderLineElement=orderLineList.get(i);		
+				Element modificationsElem=SCXmlUtil.createChild(orderLineElement, "Modifications");
+				Element modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "DELIVERY_CODE");
+				modificationElem.setAttribute("ModificationAllowed", "N");
+				modificationsElem.appendChild(modificationElem);
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "SHIP_NODE");
+				modificationElem.setAttribute("ModificationAllowed", "Y");
+				modificationsElem.appendChild(modificationElem);				
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "CHANGE_ORDER_DATE");
+				modificationElem.setAttribute("ModificationAllowed", "N");
+				modificationsElem.appendChild(modificationElem);
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "REQ_SHIP_DATE");
+				modificationElem.setAttribute("ModificationAllowed", "Y");
+				modificationsElem.appendChild(modificationElem);
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "ADD_QUANTITY");
+				modificationElem.setAttribute("ModificationAllowed", "Y");
+				modificationsElem.appendChild(modificationElem);
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "CANCEL");
+				modificationElem.setAttribute("ModificationAllowed", "Y");
+				modificationsElem.appendChild(modificationElem);
+				
+				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
+				modificationElem.setAttribute("ModificationType", "CHANGE_BUNDLE_DEFINITION");
+				modificationElem.setAttribute("ModificationAllowed", "N");
+				modificationsElem.appendChild(modificationElem);
+			}
+		}
+	}	
 	
 }
