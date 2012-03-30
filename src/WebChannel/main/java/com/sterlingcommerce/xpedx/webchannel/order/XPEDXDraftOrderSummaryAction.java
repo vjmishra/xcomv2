@@ -211,10 +211,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			//Added for PNA call
 			//ArrayList<XPEDXItem> inputItems = getPnAInputDoc(orderOutDoc);
 			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-			ArrayList<Element> ueAdditionaAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
-			Element ueAdditionalAttrElem = ueAdditionaAttrElemList.get(0);
+			ArrayList<Element> ueAdditionalAttrElemList = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+			XPEDXPriceAndAvailability pna=new XPEDXPriceAndAvailability();
+			if(ueAdditionalAttrElemList!=null && ueAdditionalAttrElemList.size()>0)
+				pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElemList.get(0));
 			/*End - Changes made by Mitesh Parikh for JIRA#3595*/
-			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem);
 			//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);	
 			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 			ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
