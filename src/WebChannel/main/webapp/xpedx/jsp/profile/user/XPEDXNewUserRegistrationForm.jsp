@@ -231,7 +231,7 @@
 		</tr>
 		
 		<tr>
-  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left" style="position:relative;left:10px"><input readonly type="text" name="remLen2" size="2" maxlength="2" value="2000"></input></div>&nbsp;&nbsp;&nbsp;&nbsp;characters remanining</td>
+  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left" style="position:relative;left:10px"><input readonly type="text" name="remLen2" size="2" maxlength="2" value="2000" style="border: none"></input></div>&nbsp;&nbsp;&nbsp;&nbsp;characters remaining</td>
 		</tr>
   		  		
   		<tr>
