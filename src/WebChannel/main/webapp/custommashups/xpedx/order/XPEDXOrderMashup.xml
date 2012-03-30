@@ -929,7 +929,11 @@
 						<Note ContactReference="" ContactTime="" ContactType=""
 							ContactUser="" NoteText="" Priority="" ReasonCode="" />
 					</Notes>
-					<Extn />
+					<Extn>
+						<XPXUeAdditionalAttrXmlList>
+							<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>
 				</Order>
 			</Template>
 		</API>
