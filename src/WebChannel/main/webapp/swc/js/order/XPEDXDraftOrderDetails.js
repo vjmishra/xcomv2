@@ -39,7 +39,7 @@ function addProductsToOrder()
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
 		 var selectedUOM = new Array();
-		 selectedUOM= document.getElementsByName("enteredUOMForAddToCart");
+		 selectedUOM= document.getElementsByName("enteredUOMs");
 		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
@@ -646,6 +646,7 @@ function redrawQuickAddList()
 				    	} 
 				    	 
 				    }
+				    
 			        	
 					    }			  
 					  				  
@@ -654,7 +655,6 @@ function redrawQuickAddList()
 				        	var _uomCodes = QuickAddElems[i].uomCodes;
 				        	code += '<td class="col-item">'; 
 						    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
-					        
 						    for(var uomidx =0; uomidx < uomValues.length; uomidx++)
 						    {
 						    	var _uomCode=encodeForHTML(uomValues[uomidx]);
@@ -686,10 +686,17 @@ function redrawQuickAddList()
 						    }
 						
 					  }
+		        	var selectedUOMQty = defaultSelUOM.split(" ");
+		        	var selectedUOMs;
+					if(selectedUOMQty.length == 2){
+						selectedUOMs =selectedUOMQty[0];
+					}
+					else{
+						selectedUOMs = selectedUOMQty;
+					}
+					
 				    	 code += '</select>';
-				    	 	code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
-				    	 																							
-						    code += '<input type="hidden" name="enteredUOMForAddToCart" id="enteredUOMForAddToCart' + i + '" value="' + _uomCode + '" />';
+				    	 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
 						    code += '</td>';
 
 				    	
