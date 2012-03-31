@@ -128,12 +128,13 @@ function createHiddenField(formName,hidName,value)
 {
 var doc = document;
 var f = doc.getElementById(formName);
-// create/insert new
-var el = doc.createElement("input");
-el = f.appendChild(el);
-el.name = hidName;
-el.type = "hidden";
-el.value = value;
+//modified the method defination for jira 3677 - quick add - add to cart IE8
+var input = doc.createElement("input");
+input.setAttribute("type", "hidden");
+input.setAttribute("name",hidName);
+input.setAttribute("value",value);
+f.appendChild(input);
+//end of jira 3677
 }
 
 function resetQuantityErrorForQuckAdd()
