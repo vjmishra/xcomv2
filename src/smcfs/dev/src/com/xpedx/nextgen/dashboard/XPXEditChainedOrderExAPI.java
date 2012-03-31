@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant;
 import com.yantra.interop.japi.YIFApi;
@@ -693,6 +694,25 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 		} else {
 			editOrdEle.setAttribute("ShipNode", shipNode);
 		}
+		
+		// To Stamp Web Hold Flag.
+		if (editOrdEle.hasAttribute("MaxOrderStatus")) {
+			String status = editOrdEle.getAttribute("MaxOrderStatus");
+			if (!YFCObject.isNull(status) && !YFCObject.isVoid(status) && status.equalsIgnoreCase("1100.5450")) {
+				editOrdExtnEle.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_FLAG, "Y");
+				if (editOrdExtnEle.hasAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON)) {
+					String webHoldReason = editOrdExtnEle.getAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON);
+					if (YFCObject.isNull(webHoldReason) || YFCObject.isVoid(webHoldReason)) {
+						editOrdExtnEle.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON, "Order Is On Status Web Hold.");
+					}
+				} else {
+					editOrdExtnEle.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON, "Order Is On Status Web Hold.");
+				}
+			}
+		}
+		
+		log.debug("");
+		log.debug("After Stamping Mandatory Attributes:" + editOrdEle.getString());
 	}
 	
 	private void validateWebHoldFlag(YFCElement chngfOrdEle, YFCElement buyerOrgCustEle) {
