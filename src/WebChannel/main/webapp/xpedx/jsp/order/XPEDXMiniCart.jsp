@@ -15,7 +15,7 @@
 	id='priceUtil' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' /> <!-- added for 2769jira -->
 
-<div class="xpedx-light-box" id="mini-cart">
+<div class="xpedx-light-box" id="mini-cart" style="display:block;">
 <%-- <h2>Mini Cart<span style="font-size:10px;font-family:Arial;"> (Last five items)</span></h2> --%>
 <h2><s:text name='MSG.SWC.CART.MINICART.GENERIC.DLGTITLE' /> <span style="font-size:10px;font-family:Arial;"> <s:text name='MSG.SWC.CART.MINICART.INFO.LAST5ITEMS' /> </span></h2>
 <div class="clearall">&nbsp;</div>
