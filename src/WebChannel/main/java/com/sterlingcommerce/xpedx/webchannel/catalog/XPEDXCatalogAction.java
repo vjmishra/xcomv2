@@ -410,27 +410,30 @@ public class XPEDXCatalogAction extends CatalogAction {
 			Map<String, String> valueMap, Element mashupInput)
 			throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
-		boolean isCustomerNumberAvaialable = false;
-		if (customerNumber != null && customerNumber.trim().length() > 0) {
-			isCustomerNumberAvaialable = true;
-			Set<String> keySet = valueMap.keySet();
-			Iterator<String> iterator = keySet.iterator();
-			while (iterator.hasNext()) {
-				String key = iterator.next();
-				if (key.contains("Condition")) {
-					String condition = valueMap.get(key);
-					if (condition != null && condition.length() > 0) {
-						valueMap.put(key, "MUST");
-					}
-				}
+		
+		Set<String> keySet = valueMap.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		String searchStringValue = "";
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			if (key.contains("Value"))
+				searchStringValue = valueMap.get(key);
+		}		
+		if (!"".equals(searchStringValue.trim())) {
+			String searchStringTokenList[] = searchStringValue.split(" ");
+			int i = 1;
+			for (String searchStringToken : searchStringTokenList) {
+				valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken);
+				valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
+				i++;
 			}
-		}
+		}					
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
 				"Terms");
 		if (elements != null && elements.size() > 0
-				&& isCustomerNumberAvaialable) {
-			Element terms = elements.get(TERMS_NODE);
+				&& customerNumber != null && customerNumber.trim().length() > 0) {
+			Element terms = elements.get(TERMS_NODE);			
 			Element term = SCXmlUtil.createChild(terms, "Term");
 			term.setAttribute("Condition", "SHOULD");
 			term.setAttribute("IndexFieldName", "customerNumberPlusPartNumber");
