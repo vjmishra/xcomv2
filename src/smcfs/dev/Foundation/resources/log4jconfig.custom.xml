@@ -131,7 +131,7 @@
     </category>
 
     <category  name="com.sterlingcommerce" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
