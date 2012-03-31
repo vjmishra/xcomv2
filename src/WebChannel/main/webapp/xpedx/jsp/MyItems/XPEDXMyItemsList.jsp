@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -44,7 +46,7 @@
 				$("#various5").fancybox({
 					'onStart' 	: function(){
 						showSelectedList('<s:property value="#CurrentCustomerId"/>');
-						Ext.get("smilTitle_2").dom.innerHTML = "Manage My Items List for Selected Locations";//Changes made for JIRA 2774
+						Ext.get("smilTitle_2").dom.innerHTML = "Manage My Items Lists for Selected Locations";//Changes made for JIRA 2774
 					
 					},
 					'onClosed' : function(){
@@ -53,8 +55,8 @@
 						shareSelectAll(false);
 					},
 					'autoDimensions'	: false,
-					'width' 			: 750,
-					'height' 			: 235  
+					'width' 			: 820,
+					'height' 			: 250  
 				});
 
 				$("#dlgImportItemsLink").fancybox({
@@ -154,10 +156,14 @@
 
 </head>
 <!-- END swc:head -->
- <s:url id="orderListPaginationURL" action="XPEDXMyItemsList"> 	
-    <s:param name="pageNumber" value="'{0}'"/>
-    <s:param name="pageSetToken" value="%{pageSetToken}"/>
- </s:url>
+ <s:url id="orderListPaginationURL" action="XPEDXMyItemsList">
+    	 <s:param name="pageNumber" value="'{0}'"/>
+         <s:param name="pageSetToken" value="%{pageSetToken}"/>
+    	  <s:param name="orderByAttribute" value="orderByAttribute"/>
+           <s:param name="orderDesc" value="orderDesc"/>
+    
+    
+    	</s:url>
    
 <!-- CODE_START - Global Vars -PN -->
 <s:set name='wcContext' value="wCContext" />
@@ -674,14 +680,39 @@
 <img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/mil/20x20_personal_list.png"/>
 <label>Personal</label>
 </td>
-<td>&nbsp;</td>
+<td>&nbsp;&nbsp;</td>
 <td>
 <img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/mil/20x20_shared_list.png"/>	
 <label>Shared</label>						
 </td>
 </tr>
 </table>
+<br></br>
+<table>
+<tr>
+<td>
+<s:if test="#isUserAdmin">				
+<tr>
+<td height="5px" width="5px">
+  <a class="underlink"   id="" name="" href="javascript:showListForSelectedOption();">  
+  <div id="Layer2" style="FONT-WEIGHT: bold; WIDTH:300px; HEIGHT: 10px">Manage My Items Lists for Other Locations</div></a>
+ 
+</td>
+<td valign="right">
+<div class="search-pagination-bottom" style="WIDTH:630px; HEIGHT: 10px">
+                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
+			</div>
+</td>
+</tr>
+</s:if>
 
+</td>
+</tr>
+</table>
+<!-- <div id="tool-bar-bottom" class="float-left">
+ </div>
+ -->
 <!-- <img id="whitecart" style="display:block;float:left;" alt="" src="/swc/xpedx/images/icons/20x20_personal_list.png">
 
            <input 
@@ -830,40 +861,53 @@
 </table>
  --> <div id="tool-bar-bottom" class="float-right">
   <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
-  <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a>
+  <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a><br>
  
- </div> <!-- 2774 CR Start -->
- <s:if test="#isUserAdmin">				
-  <div id="tool-bar-bottom" class="float-right">
-  <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
-  <a class=""   id="" name="" href="javascript:showListForSelectedOption();">  
-  <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px">Manage My Items List for Other Locations</div></a></div>
- </s:if>
+		</div>
+ <div id="tool-bar-bottom" class="float-bottom">
+  
+ 		</div>
+ 
+  <!-- 2774 CR Start -->
  <s:else>
    <div id="tool-bar-bottom" class="float-right">
   <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
   <a class=""   id="" name="" href="">  
   <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px"></div></a></div>
  </s:else><!-- 2774 CR End -->
- <div id="tool-bar-bottom" class="float-bottom">
-  
- <div class="search-pagination-bottom">
-                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#orderListPaginationURL}"/>
-			</div>
-		</div>
-		
+ 
+ <s:url id="milListSortURL" action="XPEDXMyItemsList" >
+  <s:param name="orderByAttribute" value="'{0}'"/>   
+  <s:param name="pageNumber" value="%{pageNumber}"/>
+   <s:param name="orderDesc" value="'{1}'"/>
+</s:url>	
 <div class="clearview">&nbsp;</div>
+
 <div id="divMyItemLists">
-<table id="mil-list" class="sortable standard-table">
+					
+<table id="mil-list" class="standard-table">
+<swc:sortctl sortField='%{orderByAttribute}'  sortDirection='%{orderDesc}' down="Y" up="N"   urlSpec='%{#milListSortURL}'>
 	<tbody>
 		<tr id="none" class="table-header-bar ">
-			<td class=" sortable table-header-bar-left" ><span class="white"> Name</span>
+			<td class=" table-header-bar-left" >
+			
+			<swc:sortable fieldname="%{'ListName'}">
+										<span class="white"> Name</span>
+			</swc:sortable>
+			
 			</td>
 			<%-- <td class=" sortable" align="center" width="105"><span class="white">Last Modified By</span></td>--%>			
-			<td class="sortable" align="center" style="width:250px;"><span class="white">Last Modified By</span></td>
-			<td class="sortable" align="center" style="width:150px;"><span class="white">Last Modified</span></td>
-		
+			<td class="" align="center" style="width:250px;">
+			<swc:sortable fieldname="%{'UserName'}">
+				<span class="white">Last Modified By</span>
+				</swc:sortable>
+				</td>
+			<td class="" align="center" style="width:150px;">
+			<swc:sortable fieldname="%{'Modifyts'}">			
+			<span class="white">Last Modified</span>
+			</swc:sortable>
+			</td>
+		    
 			<td class=" table-header-bar-right sorttable_nosort"  align="center" colspan="2"><span class="white"></span></td>
 		</tr>
 		<!-- CODE_START  Table - PN-->
@@ -985,6 +1029,7 @@
 		<!-- CODE_END  Table - PN-->
 
 	</tbody>
+	</swc:sortctl>	
 </table>
 </div>
 
@@ -996,8 +1041,20 @@
 <div style="display:none;">
 <a class=" modal"   id="various3" name="dlgShareListLinkHL" href="#dlgShareListHL">&nbsp;</a>
  </div>
+ <br/>
+ <div class="search-pagination-bottom">
+                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
+			</div>
+ 
 <div id="tool-bar-bottom" class="float-right"> 
+ 
 <a class="orange-ui-btn modal"   id="dlgShareListLinkHL3" name="dlgShareListLinkHL" href="#dlgShareListHL"><span>Create New List</span></a>
+<%-- <div class="search-pagination-bottom">
+                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
+			</div>
+ --%>
  </div>
 <%-- 
 <!-- Light Box -->
