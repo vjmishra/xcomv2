@@ -1837,6 +1837,22 @@ function callAjaxForSorting(url,divId)
     			}
 			});
 	}	
+	
+	//Added hideMiniCart() for Jira 3727
+	function hideMiniCart()
+	{
+		var miniCartDiv=document.getElementById("mini-cart");
+		if(miniCartDiv != null && miniCartDiv != undefined)
+		{
+			if(miniCartDiv.style.display =='none')
+				miniCartDiv.style.display='block';
+			else
+			{
+				miniCartDiv.style.display='none';			
+				var miniCartDiv1=document.getElementById("cluetip-close").style.display='none';
+			}
+		}
+	}
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
@@ -1940,8 +1956,8 @@ function callAjaxForSorting(url,divId)
 				<s:url id='miniCartDisplayURL' namespace='/order'  action='XPEDXMiniCartDisplay'>
 					<s:param name='miniCartListMaxElements'  value='%{#miniCartListMaxElements}' />
 				</s:url>
-				
-			<a  class="underlink mini-cart-trigger" href=""  id="miniCartMouseoverArea2" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
+			<%-- Added hideMiniCart() for Jira 3727	 --%> 
+			<a  class="underlink mini-cart-trigger" href=""  id="miniCartMouseoverArea2" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015" onclick="javascript:hideMiniCart();">
 				<img id="whitecart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/16x16_white_cart.png" alt="" style="display:block;float:left;" />
 			</a> 			
 		<s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
@@ -1950,7 +1966,7 @@ function callAjaxForSorting(url,divId)
     		
     		<s:if test='#sessionOrderHeaderKey == null'>
     		<div id="progressDiv"> Processing ...</div>
-    	   <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
+    	   <a  class="underlink mini-cart-trigger" href="" onclick="javascript:hideMiniCart();" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
    			
 		    		<div id ="XPEDXMiniCartLinkDisplayDiv">	
 					</div>
@@ -1975,7 +1991,8 @@ function callAjaxForSorting(url,divId)
 					</a>
 	    		</s:if>
 	    		<s:else>
-		    		 <a  class="underlink mini-cart-trigger" href="" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">	    			
+	    			<%-- Added hideMiniCart() for Jira 3727	 --%>
+		    		 <a  class="underlink mini-cart-trigger" href="" onclick="javascript:hideMiniCart();"  <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">	    			
 		    			<div id ="XPEDXMiniCartLinkDisplayDiv">
 		    				<s:include value="/xpedx/jsp/order/XPEDXMiniCartLink.jsp"/>
 						</div>
