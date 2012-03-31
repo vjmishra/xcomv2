@@ -130,26 +130,26 @@ WHERE
 VW.BILL_TO_CUSTOMER_KEY = BILL.CUSTOMER_KEY and
 VW.MSAP_CUSTOMER_KEY = MSAP.CUSTOMER_KEY);
 
-CREATE OR REPLACE VIEW XPEDX_LANDING_MIL AS
-SELECT
-distinct(list.my_items_list_key)  AS MY_ITEMS_LIST_KEY,
-count(litem.my_items_key) as number_of_items,
+CREATE OR REPLACE FORCE VIEW XPEDX_LANDING_MIL ("MY_ITEMS_LIST_KEY", "NUMBER_OF_ITEMS", "USERNAME", "CUSTOMER_ID", "LIST_DESC", "LIST_NAME", "CREATEUSERNAME", "SHARE_ADMIN_ONLY", "SHARE_PRIVATE", "MODIFYTS")
+AS
+SELECT DISTINCT(list.my_items_list_key) AS MY_ITEMS_LIST_KEY,
+COUNT(litem.my_items_key) AS number_of_items,
 yu.username AS USERNAME,
 ls.customer_id AS CUSTOMER_ID,
 LIST.LIST_DESC,
 LIST.LIST_NAME,
 LIST.CREATEUSERNAME AS CREATEUSERNAME,
-LIST.SHARE_ADMIN_ONLY 
-AS SHARE_ADMIN_ONLY,
+LIST.SHARE_ADMIN_ONLY AS SHARE_ADMIN_ONLY,
 LIST.SHARE_PRIVATE AS SHARE_PRIVATE,
-NVL(max(litem.modifyts),list.modifyts) as modifyts
-FROM
-XPEDX_MY_ITEMS_LIST list
-LEFT JOIN XPEDX_MY_ITEMS_ITEMS litem  ON  litem.my_items_list_key=list.my_items_list_key
-LEFT JOIN XPEDX_MY_ITEMS_LIST_SHARE 
-ls ON ls.my_items_list_key = list.my_items_list_key
-LEFT JOIN yfs_user yu ON trim(yu.loginid)=list.modifyuserid
-GROUP BY list.my_items_list_key, yu.username, ls.customer_id, LIST.LIST_DESC, LIST.LIST_NAME, LIST.CREATEUSERNAME, LIST.SHARE_ADMIN_ONLY, LIST.SHARE_PRIVATE,litem.modifyts,list.modifyts;
+list.modifyts AS modifyts
+FROM XPEDX_MY_ITEMS_LIST list
+LEFT JOIN XPEDX_MY_ITEMS_ITEMS litem
+ON litem.my_items_list_key=list.my_items_list_key
+LEFT JOIN XPEDX_MY_ITEMS_LIST_SHARE ls
+ON ls.my_items_list_key = list.my_items_list_key
+LEFT JOIN yfs_user yu
+ON trim(yu.loginid)=list.modifyuserid
+group by list.my_items_list_key, yu.username, ls.customer_id, LIST.LIST_DESC, LIST.LIST_NAME, LIST.CREATEUSERNAME, LIST.SHARE_ADMIN_ONLY, LIST.SHARE_PRIVATE, list.modifyts ;
 
 
 CREATE OR REPLACE VIEW XPX_ORDER_LINE_SEARCH_VIEW AS
