@@ -35,7 +35,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	private ArrayList<String> sharedListOrValues;
 	private ArrayList<String> sharedListOrNames;
 	private String sharePrivate     = "";
-	private ArrayList<Element> listOfItems;
+	private List<Element> listOfItems;
 	private String customerId = "";
 	private String[] customerPaths;
 	private String[] customerIds;
@@ -48,8 +48,31 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
     private Boolean isValidPage = Boolean.FALSE;
     private Integer totalNumberOfPages = new Integer(1);
     protected Integer pageSize = 25;
+    protected String orderByAttribute ="Modifyts";
+    protected String orderDesc="N";
+    
     
 	
+	public String getOrderDesc() {
+		return orderDesc;
+	}
+
+
+	public void setOrderDesc(String orderDesc) {
+		this.orderDesc = orderDesc;
+	}
+
+
+	public String getOrderByAttribute() {
+		return orderByAttribute;
+	}
+
+
+	public void setOrderByAttribute(String orderByAttribute) {
+		this.orderByAttribute = orderByAttribute;
+	}
+
+
 	public Integer getPageNumber() {
 		return pageNumber;
 	}
@@ -563,16 +586,16 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				Object obj = WCMashupHelper.invokeMashup(
 						"XPEDXLandingMyItemsList", inXML, getWCContext()
 								.getSCUIContext());
-				outDoc = ((Element) obj).getOwnerDocument();			
-				setListOfItems(SCXmlUtil.getElements(outDoc.getDocumentElement(), "/Output/XPEDXLandingMILList/XPEDXLandingMIL"));
+				outDoc = ((Element) obj).getOwnerDocument();
 				parsePageInfo(outDoc.getDocumentElement(), true);
 				
 				List<Element> itemLists = SCXmlUtil.getElements(outDoc.getDocumentElement(), "/Output/XPEDXLandingMILList/XPEDXLandingMIL");
+				setListOfItems(itemLists);
 				for(Element elem : itemLists){
 					//List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
 					String modifyUserId = elem.getAttribute("UserName");
-					String listKey = elem.getAttribute("MyItemsListKey");
+					String listKey = elem.getAttribute("MyItemsListKey");					
 					//Element itemElem=items.get(0);
 					itemCount=elem.getAttribute("NumberOFItems");
 					if(itemCount.trim().equals("0.00")){
@@ -613,8 +636,8 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			
 			//Sorting
 			boolean asc = true;
-			if (getOrderByLastModified().equals("desc")){ asc = false; }
-			Collections.sort(listOfItems, new XPEDXMILSortByLastModified(asc));
+			/*if (getOrderByLastModified().equals("desc")){ asc = false; }
+			Collections.sort(listOfItems, new XPEDXMILSortByLastModified(asc));*/
 			
 			//setModifyMap();
 			
@@ -757,12 +780,12 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	}
 
 
-	public ArrayList<Element> getListOfItems() {
+	public List<Element> getListOfItems() {
 		return listOfItems;
 	}
 
 
-	public void setListOfItems(ArrayList<Element> listOfItems) {
+	public void setListOfItems(List<Element> listOfItems) {
 		
 		try {
 			if (displayAsDropdownList){
@@ -943,7 +966,10 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					.importNode(expElement, true));
 		}
 		Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
-		
+		Element orderByElem=SCXmlUtil.createChild((Element)input.getElementsByTagName("XPEDXLandingMil").item(0), "OrderBy");
+		Element attribElem=SCXmlUtil.createChild(orderByElem, "Attribute");
+		attribElem.setAttribute("Desc",orderDesc);
+		attribElem.setAttribute("Name",orderByAttribute);
 		Element expElement1 = expDoc1.getDocumentElement();
 		expElement1.setAttribute("Name","SharePrivate");
 		expElement1.setAttribute("Value",getSharePrivate());
