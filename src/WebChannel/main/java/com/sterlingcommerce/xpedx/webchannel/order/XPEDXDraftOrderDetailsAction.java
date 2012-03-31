@@ -104,7 +104,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				}				
 			}			
 			super.execute();
-			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument()); 
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
 			{
@@ -1586,10 +1585,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected void getCompleteOrderDetailsDoc() throws Exception {
 		//XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 		if(getOutputDocument()==null)
+		{
 			super.getCompleteOrderDetailsDoc();
-		else
+		
+		} else {
 			validateRestoredOrder();
+			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument()); 
 			
+		}			
 	}
 
 	private void processPandA(Vector items) {

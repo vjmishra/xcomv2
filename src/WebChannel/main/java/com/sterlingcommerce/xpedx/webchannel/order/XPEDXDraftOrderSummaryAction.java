@@ -1508,6 +1508,7 @@ END of JIRA 3382*/
 			orderOutputDocument=(Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
 			setOutputDocument(orderOutputDocument);
 			getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ);
+			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument());
 		
 		} else {
 			super.getCompleteOrderDetailsDoc();
@@ -1516,5 +1517,105 @@ END of JIRA 3382*/
 		
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA#3595*/
+	
+	private void addModificationRuleToOrderListElement(Element orderElement)
+	{
+		Element modificationsOrderElem=SCXmlUtil.createChild(orderElement, "Modifications");
+		
+		Element modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "PRICE");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "SHIPTO");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "CARRIER_SERVICE_CODE");
+		modificationOrderElem.setAttribute("ModificationAllowed", "N");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "REQ_SHIP_DATE");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+		
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "SOLDTO");
+		modificationOrderElem.setAttribute("ModificationAllowed", "N");
+		modificationsOrderElem.appendChild(modificationOrderElem);		
+
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "CHANGE_ORDER_DATE");
+		modificationOrderElem.setAttribute("ModificationAllowed", "N");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+		
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "BILLTO");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+		
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "ADD_LINE");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "OTHERS");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+		
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "PAYMENT_METHOD");
+		modificationOrderElem.setAttribute("ModificationAllowed", "N");
+		modificationsOrderElem.appendChild(modificationOrderElem);
+		
+		modificationOrderElem=SCXmlUtil.createChild(modificationsOrderElem, "Modification");
+		modificationOrderElem.setAttribute("ModificationType", "CHANGE_PROMOTION");
+		modificationOrderElem.setAttribute("ModificationAllowed", "Y");
+		modificationsOrderElem.appendChild(modificationOrderElem);	
+		
+		ArrayList<Element> orderLineList=SCXmlUtil.getElements(orderElement, "/OrderLines/OrderLine");
+		if(orderLineList!= null && orderLineList.size()>0) {
+			for(int i=0;i<orderLineList.size();i++)
+			{
+				Element orderLineElement=orderLineList.get(i);		
+				Element modificationsOrderLineElem=SCXmlUtil.createChild(orderLineElement, "Modifications");
+				
+				Element modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "PRICE");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "Y");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);
+				
+				modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "SHIPTO");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "Y");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);
+				
+				modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "CARRIER_SERVICE_CODE");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "N");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);
+				
+				modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "REQ_SHIP_DATE");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "Y");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);
+				
+				modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "OTHERS");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "Y");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);
+				
+				modificationOrderLineElem=SCXmlUtil.createChild(modificationsOrderLineElem, "Modification");
+				modificationOrderLineElem.setAttribute("ModificationType", "CHANGE_ORDER_DATE");
+				modificationOrderLineElem.setAttribute("ModificationAllowed", "N");
+				modificationsOrderLineElem.appendChild(modificationOrderLineElem);				
+				
+			}
+		}
+	}
 	
 }
