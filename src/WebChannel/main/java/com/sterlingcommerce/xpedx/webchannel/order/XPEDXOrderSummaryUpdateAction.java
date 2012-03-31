@@ -55,11 +55,15 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			if (isDraftOrder())
 				isDraftOrder=true;
 			
-			Map<String, Element> outMap = prepareAndInvokeMashups();
+			Element outElement = null;
 			
-			if (!isDraftOrder) {
+			if(isDraftOrder){
+				outElement = prepareAndInvokeMashup(SAVE_ORDER_SUMMARY_MASHUP);
+				
+			}	else {
+				outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
-				Document orderOutDoc = (Document)outMap.get(EDIT_ORDER_SUMMARY_MASHUP).getOwnerDocument();
+				Document orderOutDoc = outElement.getOwnerDocument();
 				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 			}
@@ -183,7 +187,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	
 	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
-			throws CannotBuildInputException {
+			throws CannotBuildInputException{
 		
 		Element input=null;
 		if (isDraftOrder) {
