@@ -1922,6 +1922,9 @@ function callAjaxForSorting(url,divId)
 	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
 	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+	     <div id="tips-container">
+		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
+		</div> 
 	   </s:form>
 	 </div>
  </s:if>   
