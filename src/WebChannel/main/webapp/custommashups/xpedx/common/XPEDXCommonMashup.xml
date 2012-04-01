@@ -286,6 +286,78 @@
 				</Template>
 			</API>
 	</mashup>	
+	
+	<!-- custom sales rep view jira 3442-->
+	<mashup id='XPXGetSalesRepCustomerSearchList' transactional='true'
+		mashuptype='XAPI' endpoint=''>
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
+					Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXGetSRCustomersListService" IsFlow="Y">
+					<Input>
+					 	<XPXSalesRepCustomers SalesRepCustomerSearchString=" " SalesRepCustomerSearchStringQryType=" ">
+					 	<ComplexQuery>
+							<Or>
+							</Or>
+						</ComplexQuery>
+						</XPXSalesRepCustomers>
+					</Input>
+					<Template>
+						<XPXSalesRepCustomersList TotalNumberOfrecords="">
+							<XPXSalesRepCustomers 
+						    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
+						    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
+						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" " SalesRepCustomerSearchString=" "/>
+						</XPXSalesRepCustomersList>
+					</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>	
+	
+	<mashup id='XPXGetPaginatedSalesRepCustomersList' transactional='true'
+		mashuptype='XAPI' endpoint=''>
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC"
+					Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXGetSRCustomersListService" IsFlow="Y">
+					<Input>
+					 	<XPXSalesRepCustomers USERID=""/>
+					</Input>
+					<Template>
+						<XPXSalesRepCustomersList TotalNumberOfrecords="">
+							<XPXSalesRepCustomers 
+						    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
+						    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
+						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" "/>
+						</XPXSalesRepCustomersList>
+					</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>	
+	<!-- end of the custom sales rep  view -->
+	
 	<mashup id='xpedxLeadTimeOfDivision' transactional='true'
 		mashuptype='XAPI' endpoint=''>
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
