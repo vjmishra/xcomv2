@@ -2257,7 +2257,7 @@ Ext.onReady(function(){
 </s:if>
 
 <script type="text/javascript">
-	Ext.onReady(function(){
+	$(document).ready(function() {
 		//added for jira 3253
 		updateUOMFields();
 		var requestedUom = document.getElementById("selectedUOM").value;
