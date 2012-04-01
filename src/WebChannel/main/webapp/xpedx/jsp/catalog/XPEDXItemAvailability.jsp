@@ -4,9 +4,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
-    This is to avoid a defect in Struts that�s creating contention under load. 
-    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
+<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
+    This is to avoid a defect in Struts that's creating contention under load. 
+    The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <s:set name='_action' value='[0]' />
 <s:set name='pnaHoverMap' value='pnaJson'/>
 <s:set name='itemId' value='pnaItemId' />
@@ -29,8 +29,12 @@
 	<tbody>
 		<tr class="my-headings">
 			<td colspan="3" class="leftmost my-availability"><span><i>Availability</i></span></td>
+			<s:if test="%{#_action.getValidateOM() == 'true'}">
+			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<td colspan="3" class="left"><span><i>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			</s:if>
 			<td colspan="3" class="my-pricing"><span><i>Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			</s:if>
 		</tr>
 		<tr>
 			<td colspan="3">
@@ -112,6 +116,8 @@
 				</s:if>
 
 			</td>
+			<s:if test="%{#_action.getValidateOM() == 'true'}">
+			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<td colspan="3">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>		
@@ -151,6 +157,7 @@
 				</s:if>
 				</s:if>
 			</td>
+			</s:if>			
 			<td colspan="3">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -203,6 +210,7 @@
 				</s:if>
 				</s:if>
 			</td>
+			</s:if>
 		</tr>	
 		
 
