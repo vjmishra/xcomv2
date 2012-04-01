@@ -62,6 +62,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
     			LOG.debug("XPEDXSSOAuthenticationImplementation::::::::IS Sales Rep:::: " + session.getAttribute("IS_SALES_REP"));
     			sessionMap.put("IS_SALES_REP", session.getAttribute("IS_SALES_REP"));
     			sessionMap.put("loggedInUserName", session.getAttribute("loggedInUserName"));
+    			//SRSalesRepEmailID added for jira 3438
+    			sessionMap.put("SRSalesRepEmailID", session.getAttribute("SRSalesRepEmailID"));
        		 	changedData.setSessionMap(sessionMap);
     		}
     		return changedData;
@@ -140,13 +142,18 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		// need this attribute set in request to avoid customer contact lookup by post authentication
 		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		String userName = (String)request.getAttribute("loggedInUserName");
+		//SRSalesRepEmailID added for jira 3438
+		String SRemailID = (String)request.getAttribute("SRSalesRepEmailID");
 		if (request.getSession(false) != null){
 			request.getSession(false).setAttribute("IS_SALES_REP","true");
 			request.getSession(false).setAttribute("loggedInUserName",userName);
 			request.getSession(false).setAttribute("loggedInUserId",actualUserId);
+			request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
+			
 			request.setAttribute("IS_SALES_REP", "true");
 			request.setAttribute("loggedInUserName", userName);
 			request.setAttribute("loggedInUserId", actualUserId);
+			request.setAttribute("SRSalesRepEmailID", SRemailID);
 		}
     
 		return actualUserId;
@@ -227,6 +234,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String userType = null;
 		//Added to fetch User name for Jira 2367
 		String userName = null;
+		String SRemailID = null;
 		
 		
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
@@ -252,10 +260,16 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
             	}
             
             userName = (String)request.getSession().getAttribute("loggedInUserName");
+			//SRSalesRepEmailID added for jira 3438
+            SRemailID = (String)request.getSession().getAttribute("SRSalesRepEmailID");
             if(userName !=null && !userName.isEmpty()){
             request.getSession(false).setAttribute("loggedInUserName",userName);
 			request.setAttribute("loggedInUserName", userName);
             }
+            if(SRemailID !=null && !SRemailID.isEmpty()){
+                request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
+    			request.setAttribute("SRSalesRepEmailID", SRemailID);
+                }
 		}catch( Exception e ) {
 		   LOG.error(" Error while fetching the USERTYPE for User: " + loggedInUser + e.getMessage(), e);    
 		}
@@ -281,9 +295,13 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				request.getSession(false).setAttribute("IS_SALES_REP","true");
 				request.getSession(false).setAttribute("loggedInUserName",userName);
 				request.getSession(false).setAttribute("loggedInUserId",loggedInUser);
+    			//SRSalesRepEmailID added for jira 3438
+				request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
+
 				request.setAttribute("IS_SALES_REP", "true");
 				request.setAttribute("loggedInUserName", userName);
 				request.setAttribute("loggedInUserId", loggedInUser);
+				request.setAttribute("SRSalesRepEmailID", SRemailID);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
 				}
 			isInternal = true;
