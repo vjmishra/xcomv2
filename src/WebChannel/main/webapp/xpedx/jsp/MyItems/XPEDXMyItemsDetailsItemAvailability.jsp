@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
-    This is to avoid a defect in Struts that�s creating contention under load. 
-    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
+<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
+    This is to avoid a defect in Struts that's creating contention under load. 
+    The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
@@ -71,8 +71,15 @@
 		<tr style="border-top: 0px none; background:url('../images/global/dot-gray.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<td colspan="3"><i><span>Availability</i></span></td>
+			<s:if test="%{#_action.getValidateOM() == 'true'}">
+			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<td class="left" colspan="3"><i><s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></i></td>
+			</s:if>
+			<s:else>
+			<td class="left" colspan="3"><span>&nbsp;</span></td>
+			</s:else>
 			<td colspan="3"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			</s:if>
 
 		</tr>
 		
@@ -176,7 +183,8 @@
 
 			</td>
 			
-			
+			<s:if test="%{#_action.getValidateOM() == 'true'}">
+			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<td colspan="3" width="33%" valign="top">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -217,7 +225,10 @@
 				</s:if>
 				</s:if>
 			</td>
-
+			</s:if>
+			<s:else>
+			<td colspan="3" width="28%" valign="top"><span>&nbsp;</span></td>
+			</s:else>
 			<td colspan="3" width="28%" valign="top">
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -275,7 +286,7 @@
 				</s:if>
 				</s:if>
 			</td>
-			
+			</s:if>
 		</tr>		
 		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 			<td colspan="10"></td>
