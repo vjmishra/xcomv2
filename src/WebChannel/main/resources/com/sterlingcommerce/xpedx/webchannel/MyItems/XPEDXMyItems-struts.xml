@@ -277,6 +277,15 @@
 		</result>
 	</action>
 	
+	<action name="getItemAvailabiltyForSelected" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction" method="pricecheck">
+	<param name="mashups">XPEDXMyItemsDetails</param>
+		<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXPriceDisplayForMultipleItems.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXPriceDisplayForMultipleItems.jsp
+		</result>
+	</action>
+	
 	<action name="addMyItemToCart" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAddToCartAction" method="addMyItemToCart">		
         <param name="resourceId">/swc/order/guestShopping</param>
         <param name="mashups">XPEDXMyItemsDetailsAddToCart</param>
