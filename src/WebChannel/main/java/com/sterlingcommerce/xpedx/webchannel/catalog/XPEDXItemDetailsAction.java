@@ -203,19 +203,23 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			localSession.setAttribute("customerFieldsSessionMap", customerFieldsMap);*/
         	XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
 	    }
-		for (String field : customerFieldsSessionMap.keySet())
-    	{
-    		if("CustomerPONo".equals(field))
-    		{
-    			isCustomerPO="Y";
-    			customerPOLabel=customerFieldsSessionMap.get(field);
-    		}
-    		if("CustLineAccNo".equals(field))
-    		{
-    			isCustomerLinAcc="Y";
-    			custLineAccNoLabel=customerFieldsSessionMap.get(field);
-    		}
-    	}
+        
+        if(customerFieldsSessionMap!=null)
+        {
+			for (String field : customerFieldsSessionMap.keySet())
+	    	{
+	    		if("CustomerPONo".equals(field))
+	    		{
+	    			isCustomerPO="Y";
+	    			customerPOLabel=customerFieldsSessionMap.get(field);
+	    		}
+	    		if("CustLineAccNo".equals(field))
+	    		{
+	    			isCustomerLinAcc="Y";
+	    			custLineAccNoLabel=customerFieldsSessionMap.get(field);
+	    		}
+	    	}
+        }
     	
 	}
 	
