@@ -25,6 +25,9 @@
 <s:set name="shipComplC" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_C"/>
 <s:set name="shipComplN" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_N"/>
 <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
+<%--for jira 3438 - sales rep emailID display --%>
+<s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
+
 	<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
 
 <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
@@ -750,14 +753,24 @@ from session . We have customer Contact Object in session .
 			
 			<td width="260px" valign="top" class="second-cell">
 						<label class="block-label bold " for="comments " >Email Confirmation</label>
+						<%--for jira 3438 - sales rep emailID display --%>
+						<s:if test="%{#isSalesRep}">
+								<s:set name="emailAddrs" value="%{#session.SRSalesRepEmailID}" />
+								<div class="float-left margin-top-five">
+									<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
+									<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
+								</div>
+						</s:if>
+						<%--end of jira 3438 changes - sales rep emailID display --%>
+						<s:else>
 							<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
 								<s:set name="emailAddrs" value="key" />
 								<div class="float-left margin-top-five">
 									<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
 									<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
-								</div>
-																	
+								</div>								
 							</s:iterator>
+						</s:else>
 			</td>
 			<td valign="top">
 							<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>
