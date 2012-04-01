@@ -49,9 +49,12 @@
 <!-- For the number formatting -->
 
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
 <script type="text/javascript" src="../js/jquery.numeric.js"></script>
 <script type="text/javascript">
 function maxLength(field,maxlimit) {
