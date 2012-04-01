@@ -87,6 +87,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected List displayUOMs = new ArrayList();
 	private ArrayList listOfItems;
 
+	private ArrayList listOfItemsFromsession;
+	public ArrayList getListOfItemsFromsession() {
+		return listOfItemsFromsession;
+	}
+
+	public void setListOfItemsFromsession(ArrayList listOfItemsFromsession) {
+		this.listOfItemsFromsession = listOfItemsFromsession;
+	}
 	private HashMap customerFieldsMap;
 	private HashMap customerFieldsDBMap;
 	protected Map displayItemUOMsMap;
@@ -137,6 +145,87 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected String isPnAAvailable;
 	private String myItemsKey;
 	private String priceCurrencyCode;
+	public String validateOM;
+	public String catagory;
+	public boolean validateOrderMul = false;
+	public boolean pnaCall;
+	public ArrayList<String> itemOrder;
+	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
+	private Map<String,String> catMap=new HashMap<String,String>();
+	public Map<String, String> getCatMap() {
+		return catMap;
+	}
+
+	public void setCatMap(Map<String, String> catMap) {
+		this.catMap = catMap;
+	}
+	private Map<String,Boolean> validateCheck =new HashMap<String,Boolean>();
+	
+	public Map<String, Boolean> getValidateCheck() {
+		return validateCheck;
+	}
+
+	public void setValidateCheck(Map<String, Boolean> validateCheck) {
+		this.validateCheck = validateCheck;
+	}
+	public String validateOMForMultipleItems;
+	
+	public String getValidateOMForMultipleItems() {
+		return validateOMForMultipleItems;
+	}
+
+	public void setValidateOMForMultipleItems(String validateOMForMultipleItems) {
+		this.validateOMForMultipleItems = validateOMForMultipleItems;
+	}
+	
+	public Map<String, String> getItemOrderMap() {
+		return itemOrderMap;
+	}
+
+	public void setItemOrderMap(Map<String, String> itemOrderMap) {
+		this.itemOrderMap = itemOrderMap;
+	}
+
+	public ArrayList<String> getItemOrder() {
+		return itemOrder;
+	}
+
+	public void setItemOrder(ArrayList<String> itemOrder) {
+		this.itemOrder = itemOrder;
+	}
+	
+
+	public boolean isPnaCall() {
+		return pnaCall;
+	}
+
+	public void setPnaCall(boolean pnaCall) {
+		this.pnaCall = pnaCall;
+	}
+
+	public boolean isValidateOrderMul() {
+		return validateOrderMul;
+	}
+
+	public void setValidateOrderMul(boolean validateOrderMul) {
+		this.validateOrderMul = validateOrderMul;
+	}
+
+	public String getCatagory() {
+		return catagory;
+	}
+
+	public void setCatagory(String catagory) {
+		this.catagory = catagory;
+	}
+
+	public String getValidateOM() {
+		return validateOM;
+	}
+
+	public void setValidateOM(String validateOM) {
+		this.validateOM = validateOM;
+	}
 	//added for jira 2885
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	
@@ -599,11 +688,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			
 
 			// Process the stock check, PnA calls
-			if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
+			/*if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
 				processStockCheck(true);
 			} else if (getCommand().equals(COMMAND_STOCK_CHECK_SEL)) {
 				processStockCheck(false);
-			}
+			}*/
 			
 			// Get the customer fields
 			getCustomerDisplayFields();
@@ -733,7 +822,26 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// System.out.print("Stop here");
 			// canEditItem = false;
 
+			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
+			XPEDXWCUtils.setObectInCache("orderMultipleFromSession", getItemOrderMultipleMap());
+			XPEDXWCUtils.setObectInCache("itemConUOM", getItemIdConVUOMMap());
 		} catch (Exception e) {
+			LOG.error(e.getStackTrace());
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String pricecheck(){
+		try{
+		if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
+			processStockCheck(true);
+		} else if (getCommand().equals(COMMAND_STOCK_CHECK_SEL)) {
+			processStockCheck(false);
+		}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 			LOG.error(e.getStackTrace());
 			return ERROR;
 		}
@@ -886,23 +994,39 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 
-	private void processStockCheck(boolean checkAllItems) {
-		try {
+	private void processStockCheck(boolean checkAllItems) throws Exception {
+
+			pnaCall = true;
+			String customerId = wcContext.getCustomerId();
+			String organizationCode = wcContext.getStorefrontId();
+			Map<String , String> uoms = null;
+			String uomCode = null;
+			String convFact = null;
+			String conversion;
+			int totalQty;
+			int OM;
 			// Init some vars
 			ArrayList<XPEDXItem> inputItems = new ArrayList<XPEDXItem>();
 			
 			//Added For Webtrends
 			int cntSel =0;
-			
+			Map orderMulMap=(Map) XPEDXWCUtils.getObjectFromCache("orderMultipleFromSession");
+			Map itemCon = (Map) XPEDXWCUtils.getObjectFromCache("itemConUOM");
 			// 1 - Construct the input array for the call
-			for (int i = 0; i < getListOfItems().size(); i++) {
-				Element item = (Element) getListOfItems().get(i);
+			listOfItemsFromsession = (ArrayList) XPEDXWCUtils.getObjectFromCache("listOfItemsMap");
+			ArrayList<String> itemIDList=new ArrayList<String>();
+			for (int i = 0; i < listOfItemsFromsession.size(); i++) {
+				Element item = (Element) listOfItemsFromsession.get(i);
 
 				// Get some vars
 				String id = item.getAttribute("MyItemsKey");
 				String itemId = item.getAttribute("ItemId");
-				//String itemUom = item.getAttribute("UomId");
+				itemIDList.add(itemId);
+				itemOrderMap.put(itemId, itemOrder.get(i));
 				String itemUom = enteredUOMs.get(i);
+				String orderMultiple = (String)orderMulMap.get(itemId);
+				uoms = (Map) itemCon.get(itemId);
+				convFact = (String) uoms.get(itemUom);
 				if(itemUom==null || itemUom.equals(""))
 					itemUom = item.getAttribute("UomId");
 				//String itemSeqNum = item.getAttribute("ItemSeqNumber");
@@ -912,6 +1036,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemQty==null || itemQty.trim().equals(""))
 					itemQty = "1";
 
+				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
+				OM = totalQty % (Integer.parseInt(orderMultiple));
+				
+				if(OM!= 0){
+					validateOrderMul = true;
+					validateCheck.put(itemId,validateOrderMul);
+				}
+				
 				boolean addThisItem = checkAllItems;
 				if (!checkAllItems) {
 					if (ArrayUtils.contains(getCheckItemKeys(), id)) {
@@ -976,14 +1108,23 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Vector<XPEDXItem> items = pna.getItems();
 					// prepare the information for JSP
 					pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(items,true);
-					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true);
+					Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+					NodeList itemsNode=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
+					for (int i = 0; i < itemsNode.getLength(); i++) {
+					
+						Element itemElem=(Element)itemsNode.item(i);
+						String itemID = itemElem.getAttribute("ItemID");
+						ArrayList<Element> catPath = SCXmlUtil.getElements(itemElem, "CategoryList/Category");
+						String Description = catPath.get(0).getAttribute("Description");
+						String[] desc = Description.split("/");
+						catagory = desc[0];
+						catMap.put(itemID,catagory);
+					}
+					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true,null,false,null);
 				}
 			} else {
 				LOG.warn("No items selected for PNA... bypassing the call.");
-			}
-		} catch (Exception e) {
-			LOG.error(e.getStackTrace());
-		}
+			}		
 	}
 
 	private void processSharedList() {
@@ -1820,6 +1961,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					.getDocumentElement(), "Item");
 			if(!(requestedUOM!= null && requestedUOM.trim().length()>0))
 				requestedUOM = SCXmlUtil.getAttribute(itemEle, "UnitOfMeasure");
+			ArrayList<Element> catPath = SCXmlUtil.getElements(itemEle, "CategoryList/Category");
+			String Description = catPath.get(0).getAttribute("Description");
+			String[] desc = Description.split("/");
+			catagory = desc[0];	
 			LOG.debug("Requested UOM: " + requestedUOM);
 			//modified for jira 3392
 			ArrayList<XPEDXItem> inputItems = getPnAInputDoc(getPnaItemId(),requestedUOM,"1");
