@@ -309,10 +309,19 @@ function showSharedListForm(){
      */
      %>
      //-->
-     
+     var priceCheck;
      	function checkAvailability(itemId,myItemsKey) {
-     		
+     		priceCheck = true;
      		clearPreviousDisplayMsg()
+     		
+     		var validateOM ; 
+     			if(validateOrderMultiple(true,myItemsKey) == false)
+   			 {
+     				validateOM = false;
+   			 }
+     			else{
+     				validateOM = true;
+     			}
      		
      		if(itemId == null || itemId =="") {
     			alert("Item ID cannot be null to make a PnA call");
@@ -321,7 +330,7 @@ function showSharedListForm(){
     		if(url != null) {
         		var qty = document.getElementById('QTY_'+myItemsKey).value;
         		var uom = document.getElementById('UOM_'+myItemsKey).value;
-    			displayAvailability(itemId,qty,uom,myItemsKey,url.value);
+    			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
      	}
 		
@@ -876,7 +885,7 @@ function showSharedListForm(){
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
-				divVal.setAttribute("class", "error");
+				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
 				if((quantity == '0' || quantity== '' ) )
 				{
@@ -892,6 +901,7 @@ function showSharedListForm(){
 						displayMsgHdrLevelForLineLevelError ();
 						/* divVal.innerHTML='Qty Should be greater than 0'; */
 						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
+						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						
 						errorflag= false;
@@ -909,8 +919,16 @@ function showSharedListForm(){
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
 						//added for jira 3253
+						if (priceCheck == true){
+							divVal.setAttribute("class", "error");
+							divVal.style.display = 'block';
+							}
+						else {
 						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
+						
+						}
 						errorflag= false;
 					}
 				}
@@ -1123,9 +1141,8 @@ function showSharedListForm(){
 		}
 		
 		
-		function updateSelectedPAA() {
-			 //alert("updateSelectedPAA" );
-
+		function updateSelectedPAA(){
+			priceCheck = true;
 			var checkboxes = Ext.query('input[id*=checkItemKeys]');
 			var nLineSelected = 0;
 			
@@ -1137,6 +1154,17 @@ function showSharedListForm(){
 					cnt++;
 				}
 			});
+			var formItemIds ;
+			var validateOMForMultipleItems ; 
+			 if(validateOrderMultiple(false,null) == false)
+			 {
+				 validateOMForMultipleItems = false;
+			 }
+			 else{
+					
+				 validateOMForMultipleItems = true;
+			 }
+
 
 			if(cnt == 1){
 				var itemId = document.getElementById("enteredProductIDs_"+singleSelectedKey).value;
@@ -1144,15 +1172,44 @@ function showSharedListForm(){
 			}
 			else if(cnt>0)
 			{
-				if(cnt == checkboxes.length)
-					document.getElementById('formItemIds').command.value = 'stock_check_all'; 
-				else {
-					document.getElementById('formItemIds').command.value = 'stock_check_sel';
+				if(cnt == checkboxes.length){
+					formItemIds = document.getElementById('formItemIds').command.value = 'stock_check_all'; 
+				}
+				else{
+					formItemIds = document.getElementById('formItemIds').command.value = 'stock_check_sel';
 				} 
-				document.getElementById('formItemIds').submit();
+				formItemIds = document.getElementById('formItemIds');
 			}
 
-			if(cnt <=0 ){
+		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
+		    </s:url>
+			if (formItemIds){
+				
+				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
+	                 Ext.Ajax.request({
+	                   url: '<s:property value='%{testData}' escape='false'/>',
+	                   params: {
+	                	   validateOMForMultipleItems : validateOMForMultipleItems
+		                   },
+	                   form: 'formItemIds',
+	                  method: 'POST',
+	                   success: function (response, request){
+		                   var responseText = response.responseText;
+		                   
+		                   var availabilityRow = document.getElementById('priceDiv');		                   
+		            		availabilityRow.innerHTML=responseText;
+		            		assignAvailablity();
+		            		availabilityRow.innerHTML='';
+		            		availabilityRow.style.display = '';
+		              
+	                      Ext.MessageBox.hide();
+	                   },
+	                   failure: function (response, request){
+						  Ext.MessageBox.hide();
+						  alert("Your request could not be completed at this time, please try again.");	                   }
+	               });     
+				
+			} if(cnt <=0 ){
 				
 				//alert("Please select at least one item for Price Check : " + cnt );
 				//var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
@@ -1182,6 +1239,26 @@ function showSharedListForm(){
 				
 				//Ext.MessageBox.alert('Alert','Please select at least one item for Price Check.');
 			}*/
+		}
+
+		function assignAvailablity()
+		{
+			var availabilityRows = document.getElementById('priceDiv').getElementsByTagName("div");
+			var avilalablityDivs=document.getElementsByName('availabilityRowsHide');
+			for(var j=0;j<avilalablityDivs.length;j++)
+			{
+				var avaliable = avilalablityDivs[j].id;
+				for(var i=0;i<availabilityRows.length;i++)
+				{
+					var availableId = ReplaceAll(avaliable,"hidden_","");
+					var availableIdDiv=document.getElementById(availableId);
+					if(availabilityRows[i].id == availableId)
+					{
+						availableIdDiv.innerHTML=availabilityRows[i].innerHTML;
+						availableIdDiv.style.display="block";
+					}
+				}
+			}
 		}
 
 		function deSelectAll(){
@@ -1878,7 +1955,7 @@ function showSharedListForm(){
 					<s:set name='itemId1' value='#item.getAttribute("ItemId")' />
 
 					<s:set name='itemOrder' value='#item.getAttribute("ItemOrder")' />
-					
+					<s:hidden name='itemOrder' value='%{#item.getAttribute("ItemOrder")}' />
 					<s:set name='itemOrder2' value='%{#itemOrder2 + 1}' />
 					<s:hidden name="entereditemTypeList" id="entereditemTypeList_%{#id}" value="%{#itemType}"></s:hidden>
 					<s:if test="%{#itemType == 2}">
@@ -2160,7 +2237,7 @@ function showSharedListForm(){
                                <br/> 
 		
 		                     </ul>
-                            <div class="clearall"> &nbsp;</div><br></br>
+                            <div class="clearall"> &nbsp;</div>
 
                             
 							</s:if>
@@ -2179,21 +2256,21 @@ function showSharedListForm(){
 							<s:else>
 								<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 							</s:else>
-						 <div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:none; background-color:#fafafa;"</s:else> >   
+						 <div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:block; background-color:#fafafa;"</s:else> >   
                             <!-- end prefs  -->
                              <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 	                        	<s:include value="../MyItems/XPEDXMyItemsDetailsItemAvailability.jsp"></s:include>
                         	</s:if>
-                       
                         </div>
-                       
+                       <input type="hidden" name="availabilityRowsHide" id="hidden_availabilityRow_<s:property value='#id'/>" />
                     </div>
 
 
 				
                 </div>
                 </s:iterator>
-                
+						<div id="priceDiv" style="display: none;">
+                    </div>                
              		</s:form>
 			<!-- CODE_END List of Items - PN -->
              <!-- prod 1  -->
