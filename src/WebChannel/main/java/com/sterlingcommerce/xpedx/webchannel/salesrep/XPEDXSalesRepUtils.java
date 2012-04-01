@@ -1,6 +1,8 @@
 package com.sterlingcommerce.xpedx.webchannel.salesrep;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +15,12 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 
@@ -28,6 +34,9 @@ public class XPEDXSalesRepUtils {
 	
 	private static String SR_CUSTOMER_ID_MAP = "SRCustomerIDMap";
 	private static String SR_STOREFRONT_ID_MAP = "SRStorefrontIDMap";
+	//added for jira 3442 and 3438
+	private static String SR_SALESREP_ID = "SRSalesRepID";
+	private static String SR_SALESREP_EMAIL_ID = "SRSalesRepEmailID";
 	
 	public void XPEDXSalesRepCustomer(){}
 	
@@ -37,22 +46,19 @@ public class XPEDXSalesRepUtils {
 	 * @param wcContext
 	 * @throws Exception
 	 */
-	public void fetchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext) throws Exception{
+	 //added an extra parameter doc in the method  for jira 3442
+	public void fetchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
 		LOG.info(":: Entering fetchCustomerForSalesRep of XPEDXSalesRepUtils :: ");
-		
 		String networkId = request.getParameter("DisplayUserID");
 		if (YFCCommon.isVoid(networkId)){
 			return;
 		}
-		
     	Map<String, String> customersMap = new HashMap<String, String>();
-
     	// fetch the customers of sales rep
-		customersMap.putAll(getCustomersForSalesRep(networkId, wcContext));
-		
+		//added an extra parameter doc for jira 3442
+		customersMap.putAll(getCustomersForSalesRep(networkId, wcContext,doc));		
 		// set attributes into seession
 		setAttributesInSession(wcContext, request);
-		
 		// set the Customer collection in the request
 		wcContext.getSCUIContext().getSession().setAttribute("ASSIGNED_CUSTOMERS",  customersMap);
 	}
@@ -80,7 +86,6 @@ public class XPEDXSalesRepUtils {
 	    	isSalesRepIdSetInContxt = false;
 		}
 	}
-	
 	/**
 	 * 
 	 * @param networkId
@@ -88,27 +93,68 @@ public class XPEDXSalesRepUtils {
 	 * @return
 	 */
 	private Map<String, String> getCustomersForSalesRep(
-			String networkId, IWCContext wcContext) {
+		String networkId, IWCContext wcContext,Document doc) {
 		Document outputDoc = null;
+		//Modified for jira 3442
+		Element outputElem = null;
+		if(doc == null)
+		{
+			// input doc for the mashup
+			Element input = SCXmlUtil.createDocument("XPXSalesRepCustomers").getDocumentElement();
+			input.setAttribute("UserID", networkId);// customers for the logged in sales rep
+			input.setAttribute("UserIDQryType", "LIKE");
+			String inputXml = SCXmlUtil.getString(input);
+			if(LOG.isDebugEnabled())LOG.debug("Input XML: " + inputXml);
+			Map<String,String> valueMap = new HashMap<String,String>();
+			String customerContactId = wcContext.getLoggedInUserId();
+			valueMap.put("/Page/API/Input/XPXSalesRepCustomers/@UserID", customerContactId);
+			valueMap.put("/Page/@PageNumber", "1");
+			valueMap.put("/Page/@PageSize", "25");
+			Element inputElem;
 		
-		// input doc for the mashup
-		Element input = SCXmlUtil.createDocument("XPEDXSalesRepCustomers").getDocumentElement();
-		input.setAttribute("UserID", networkId);// customers for the logged in sales rep
-		input.setAttribute("UserIDQryType", "LIKE");
-		
-		String inputXml = SCXmlUtil.getString(input);
-		if(LOG.isDebugEnabled())LOG.debug("Input XML: " + inputXml);
-		
-		// invoke Mashup
-		Object obj = WCMashupHelper.invokeMashup("XPEDXGetSalesRepCustomersList", input, wcContext.getSCUIContext());
-		outputDoc = ((Element) obj).getOwnerDocument();
-		//System.out.println("Input:" + inputXml);
-		//System.out.println("Output:" + SCXmlUtil.getString(outputDoc));
-		if (null != outputDoc) {
-			if(LOG.isDebugEnabled())LOG.debug("SalesRep Output XML: " + SCXmlUtil.getString(outputDoc));
+			Document outputElemDoc = null;
+			try {
+				inputElem = WCMashupHelper.getMashupInput("XPXGetPaginatedSalesRepCustomersList",valueMap, wcContext.getSCUIContext());
+				outputElem = (Element) WCMashupHelper.invokeMashup("XPXGetPaginatedSalesRepCustomersList",inputElem, wcContext.getSCUIContext());
+				outputElemDoc = outputElem.getOwnerDocument();
+				} catch (Exception e) {
+					LOG.error("Error getting the Customers Assigned to sales rep : "+e.getMessage());
+					return null;
+				}
 		}
-		return getCustomersSetFromDoc(outputDoc, networkId, wcContext);
+		else{
+				outputElem=doc.getDocumentElement();
+			}
+			Element srCustomerElem = SCXmlUtil.getChildElement(outputElem, "Output");
+			Element  viewListElem=(Element)srCustomerElem.getElementsByTagName("XPXSalesRepCustomersList").item(0);
+			if(viewListElem != null)
+				outputDoc=viewListElem.getOwnerDocument();
+				
+			if (null != outputDoc) {
+				if(LOG.isDebugEnabled())LOG.debug("SalesRep Output XML: " + SCXmlUtil.getString(outputDoc));
+			}
+			return getCustomersSetFromDoc(outputDoc, networkId, wcContext);
 	}
+
+	//search the customers for sales rep - jira 3442
+	public Map<String, String> searchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
+		LOG.info(":: searching Customer For SalesRep in XPEDXSalesRepUtils.searchCustomerForSalesRep :: ");
+		String networkId = request.getParameter("DisplayUserID");
+		if (YFCCommon.isVoid(networkId)){
+			return null;
+		}
+    	Map<String, String> customersMapForSearch = new HashMap<String, String>();
+		// set attributes into seession
+		setAttributesInSession(wcContext, request);
+		Element outputElem= doc.getDocumentElement();
+		Element srCustomerElem = SCXmlUtil.getChildElement(outputElem, "Output");
+		Element  viewListElem=(Element)srCustomerElem.getElementsByTagName("XPXSalesRepCustomersList").item(0);
+		Document outputDoc1 = null;
+		if(viewListElem != null)
+			outputDoc1=viewListElem.getOwnerDocument();
+		return getCustomersSetFromDoc(outputDoc1, networkId, wcContext);
+		}
+	//end of jira 3442
 
 	/**
 	 * 
@@ -122,8 +168,9 @@ public class XPEDXSalesRepUtils {
 		Map<String, String> customersMap = new HashMap<String, String>();
 		Map<String, String> customerIDsMap = new HashMap<String, String>();
 		Map<String, String> storefrontIDsMap = new HashMap<String, String>();
+		Map<String, String> salesRepIDsMap = new HashMap<String, String>();		
 		    	
-		NodeList customersElemsList = outputDoc.getElementsByTagName("XPEDXSalesRepCustomers");
+		NodeList customersElemsList = outputDoc.getElementsByTagName("XPXSalesRepCustomers");
 		Element customerElem;
 		String customerID;
 		String storefrontID;
@@ -132,20 +179,36 @@ public class XPEDXSalesRepUtils {
 		String firstName;
 		String lastName;
 		String UserName=null;
+		String SalesRepID;
+		String CustomerNo;
+		
 		for(int i=0; customersElemsList!=null && i<customersElemsList.getLength(); i++){
 			customerElem = (Element)customersElemsList.item(i);
 			if(networkId.equalsIgnoreCase(customerElem.getAttribute("UserID"))){// for the logged in user ID
 				firstName = customerElem.getAttribute("FirstName");
 				lastName = customerElem.getAttribute("LastName");
-				customerName = customerElem.getAttribute("ExtnMSAPOrganizationName");
+				//added for jira 3442
+				CustomerNo = customerElem.getAttribute("ExtnCustomerNo");
+				customerName = customerElem.getAttribute("ExtnCustomerName");
+
+				System.out.println("CustomerNo :: "+CustomerNo+"customerName : "+customerName);
+				//customerName = customerElem.getAttribute("ExtnMSAPOrganizationName");
 				customerID = customerElem.getAttribute("CustomerID");
 				storefrontID = customerElem.getAttribute("ExtnMSAPOrganizationCode");
-				legacyCustomerNo = customerID.split("-")[1];
-				customersMap.put(legacyCustomerNo, customerName);
-				customerIDsMap.put(legacyCustomerNo, customerID);
-				storefrontIDsMap.put(legacyCustomerNo,storefrontID);
+				//added for jira 3442
+				SalesRepID = customerElem.getAttribute("SalesRepID");
+				String salesRepEmailID = customerElem.getAttribute("EmailID");
+				System.out.println("salesRepEmailID : "+ salesRepEmailID);
+				//legacyCustomerNo = customerID.split("-")[1];
+				customersMap.put(CustomerNo, customerName);
+				customerIDsMap.put(CustomerNo, customerID);
+				storefrontIDsMap.put(CustomerNo,storefrontID);
+				salesRepIDsMap.put(networkId, SalesRepID);
 				wcContext.setWCAttribute(SR_CUSTOMER_ID_MAP, customerIDsMap, WCAttributeScope.SESSION);
 				wcContext.setWCAttribute(SR_STOREFRONT_ID_MAP, storefrontIDsMap, WCAttributeScope.SESSION);
+				wcContext.setWCAttribute(SR_SALESREP_ID, SalesRepID, WCAttributeScope.SESSION);
+    			//SRSalesRepEmailID added for jira 3438
+				wcContext.setWCAttribute(SR_SALESREP_EMAIL_ID, salesRepEmailID, WCAttributeScope.SESSION);
 				if((firstName!=null && !firstName.isEmpty()) && (lastName!=null && !lastName.isEmpty())){
 					UserName = firstName+" "+lastName;
 				}
@@ -173,7 +236,10 @@ public class XPEDXSalesRepUtils {
 		String networkId = (String)wcContext.getSCUIContext().getRequest().getSession().getAttribute("DisplayUserID");
 		
 		// fetch the employee id for the logged in user to construct the dummyuser id
-		String employeeId = getEmployeeId(networkId, wcContext);
+		//String employeeId = getEmployeeId(networkId, wcContext);
+		String employeeId = (String)wcContext.getWCAttribute(SR_SALESREP_ID, WCAttributeScope.SESSION);
+		//SRSalesRepEmailID added for jira 3438
+		String SREmailID  = (String)wcContext.getWCAttribute(SR_SALESREP_EMAIL_ID, WCAttributeScope.SESSION);
 		String customerId = null;
 		String storefrontId = null;
 		if(!YFCUtils.isVoid(selectedCustomer)){
@@ -194,7 +260,10 @@ public class XPEDXSalesRepUtils {
 			request.setAttribute("dum_username", loginId.trim());
 			request.setAttribute("dum_password", loginId.trim());// the password remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
+			//SRSalesRepEmailID added for jira 3438
+			request.setAttribute("SRSalesRepEmailID",SREmailID);
 			request.getSession(false).setAttribute("IS_SALES_REP", new Boolean(true));
+			request.getSession(false).setAttribute("SRSalesRepEmailID", SREmailID);
 		}
 	}
 	
