@@ -196,10 +196,7 @@
 		 return; 
 	}
 
-	function submit_approveOrderListForm()
-	{
-		document.approvalList.submit();
-	}
+	
 	
 	function setDateFields(){
 		if(Ext.fly('initialFromDateString').dom.value != '' && Ext.fly('initialFromDateString').dom.value != '')
@@ -352,12 +349,11 @@
 	                            		<s:hidden id="initialFromDateString" value="%{getInitialFromDateString()}" />
 	                            		
 	                                    <s:if test="#parameters.submittedTSFrom == null || #parameters.submittedTSFrom.length() == 0 " >
-	                                    <s:textfield name='submittedTSFrom' theme="simple" size="15" cssClass='calendar-input-fields datepicker' 
-	                                    	  onchange="javascript:searchTerm_onclick()" id="FromDate"/>
+	                                    <s:textfield name='submittedTSFrom' theme="simple" size="15" cssClass='calendar-input-fields datepicker' id="FromDate"/>
 	                                    </s:if>	
 	                                     <s:else>
 	                                    <s:textfield name='submittedTSFrom' theme="simple" size="15" cssClass='calendar-input-fields  datepicker' 
-	                                    	value="%{#parameters.submittedTSFrom}"  onchange="javascript:searchTerm_onclick()" id="FromDate"/>
+	                                    	value="%{#parameters.submittedTSFrom}" id="FromDate"/>
 	                                    </s:else>	
 	                                    	<span style="padding-left: 1.5em;"></span>
 											&nbsp;To&nbsp;&nbsp;
@@ -368,6 +364,7 @@
 													 <!-- <td> Amount: </td>
 													 <td> <input class=" x-input"/> to <input class=" x-input"/> </td> -->
 								</tr>
+								<tr><td style="width:85" colspan="2"><div id="errorDateDiv" style="color:red;"></div></td></tr>
                         <!-- <tr>
                         	    <td >Account:</td>
                         	    <td> <select class="account-input-field x-input"> <option value="choose" selected="selected">-Select Account Criteria-</option> <option value="Criteria1">- Account Criteria 1-</option><option value="Criteria2">- Account  Criteria 2-</option> <option value="Criteria3">-  Account Criteria 3-</option> </select> </td>
@@ -614,6 +611,82 @@
 		</swc:dialogPanel> 
 	
     </div><!-- end container  -->
+    
+    <script type="text/javascript">
+  //added for jira 3542 - Order Date validation	
+	function isValidDate(dtStr)
+	{
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strMonth=dtStr.substring(0,pos1)
+		var strDay=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			return false
+		}
+	return true
+	}
+	function submit_approveOrderListForm()
+	{
+		var str1  = document.getElementById("FromDate").value; 
+		var str2  = document.getElementById("ToDate").value;
+		if(str1!=null && str1.length>0 && str2!=null && str2.length>0)
+		{ 
+			var mon1   = parseInt(str1.substring(0,2),10);  
+			var dt1  = parseInt(str1.substring(3,5),10); 
+			var yr1   = parseInt(str1.substring(6,10),10);  
+			var mon2   = parseInt(str2.substring(0,2),10);  
+			var dt2  = parseInt(str2.substring(3,5),10);  
+			var yr2   = parseInt(str2.substring(6,10),10);  
+			var date1 = new Date(yr1, mon1, dt1);  
+			var date2 = new Date(yr2, mon2, dt2);   
+			if(date2 < date1) {    
+				document.getElementById("errorDateDiv").innerHTML = "From date cannot be greater than To date";
+				return; 
+			}
+			if (isValidDate(str1)==false){
+				if (isValidDate(str2)==false){
+					document.getElementById("errorDateDiv").innerHTML = "Please enter a valid From and To date";
+					return;
+			}
+				document.getElementById("errorDateDiv").innerHTML = "Please enter a valid From date";
+				return;
+			}
+			if (isValidDate(str2)==false){
+				document.getElementById("errorDateDiv").innerHTML = "Please enter a valid To date";
+				return;
+			}
+				
+		} 
+		document.getElementById("errorDateDiv").innerHTML = '';
+		//end of jira 3542 changes
+		document.approvalList.submit();
+	}
+	
+    </script>
+    
 </body>
 
 
