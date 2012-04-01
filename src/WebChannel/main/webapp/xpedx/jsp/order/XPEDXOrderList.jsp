@@ -296,7 +296,6 @@ function printPOs(customerPos) {
 													 <!-- <td> Amount: </td>
 													 <td> <input class=" x-input"/> to <input class=" x-input"/> </td> -->
                         </tr>
-
                         <!-- <tr>
                         	    <td >Account:</td>
                         	    <td> <select class="account-input-field x-input"> <option value="choose" selected="selected">-Select Account Criteria-</option> <option value="Criteria1">- Account Criteria 1-</option><option value="Criteria2">- Account  Criteria 2-</option> <option value="Criteria3">-  Account Criteria 3-</option> </select> </td>
@@ -943,6 +942,42 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value}
 		return;
 		}
+	
+//added for jira 3542 - Order Date validation	
+	function isValidDate(dtStr)
+	{
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strMonth=dtStr.substring(0,pos1)
+		var strDay=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			return false
+		}
+	return true
+	}
 	function submit_orderListForm()
 	{
 		var str1  = document.getElementById("FromDate").value; 
@@ -959,8 +994,21 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 			var date2 = new Date(yr2, mon2, dt2);    
 			if(date2 < date1) {    
 				document.getElementById("errorDateDiv").innerHTML = "From date cannot be greater than To date";
+				return; 
+			}
+			if (isValidDate(str1)==false){
+				if (isValidDate(str2)==false){
+					document.getElementById("errorDateDiv").innerHTML = "Please enter a valid From and To date";
+					return;
+			}
+				document.getElementById("errorDateDiv").innerHTML = "Please enter a valid From date";
 				return;
-				} 
+			}
+			if (isValidDate(str2)==false){
+				document.getElementById("errorDateDiv").innerHTML = "Please enter a valid To date";
+				return;
+			}
+			//end of jira 3542 changes
 		} 
 		document.getElementById("errorDateDiv").innerHTML = '';
 		document.orderListForm.submit();
