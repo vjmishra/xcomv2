@@ -177,6 +177,7 @@ function logoutMessage(){
  <s:hidden name="EnterpriseCode" value="xpedx"/>
  <s:hidden name="organizationCode" value="xpedx"/>
  <s:hidden name="sfId" value="xpedx"/>
+ <s:hidden name="SRSalesRepEmailID" value='%{#_action.getWCContext().getSCUIContext().getSession().getAttribute("SRSalesRepEmailID")}' id="SRSalesRepEmailID"/>
  </s:form>                
  </table>
 <div id="table-bottom-bar"  style="width:97%; margin:auto;">
