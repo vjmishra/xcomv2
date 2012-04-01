@@ -7,6 +7,7 @@
 <%@ page import="java.util.Comparator" %>
 <%@page import="java.util.HashMap"%>
 <%@ taglib prefix="swc" uri="swc" %>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -54,7 +55,21 @@ function logoutMessage(){
 </head>
 <body>
 <div id="container">
+<%-- added for jira 3442 pagination--%>
+  <s:set name='_action' value='[0]'/>
+  <s:set name='wcContext' value="#_action.getWCContext()"/>
+
+  <s:url id="salesRepCustomersPaginated" action="salesRepLogin" namespace="/common">
+  <s:param name="pageNumber" value="'{0}'"/>
+  <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
+  </s:url>
  <div id="search"> 
+ <div class="search-pagination-bottom">
+         <span>
+         <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
+         <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="False"/></span>
+ </div>
+ <%-- end of jira 3442 pagination--%>
   <div class="searchbg">
   <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>					
 					  
@@ -128,7 +143,14 @@ function logoutMessage(){
 					{
 						public int compare(Object o1, Object o2)
 						{
-							return assignedCustomerMap.get(o1).compareTo(assignedCustomerMap.get(o2));
+							int compareInts = assignedCustomerMap.get(o1).compareTo(assignedCustomerMap.get(o2));
+					        if (compareInts == 0) {
+					            return o1.toString().compareTo(o2.toString());
+					        } else {
+					            return compareInts;
+					        }
+
+							//return compareInts;
 						}
 
 					});
