@@ -34,6 +34,9 @@
 							UnitWeightUOM="" UnitWidth="" UnitWidthUOM="" ConfigurationKey=""
 							ConfigurationModelName="" IsValid="" ManufacturerItem="" ManufacturerName="" 
 							PricingUOM="" PricingQuantityConvFactor="" />
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
 						<Availability AlertLevel="" AlertPeriodEnd=""
 							AlertPeriodStart="" AlertQuantity="" AlertRaisedOn="" AlertType=""
 							CurrentAvailableQty="" FirstFutureAvailableDate=""
@@ -672,6 +675,9 @@
 				<ItemList Currency="" >
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ManufacturerItem=""/>
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
 						<ComputedPrice UnitPrice=""/>
 						<Extn ExtnMpc ="" ExtnCert=""/>
 					</Item>
@@ -863,6 +869,9 @@
 				<ItemList>
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" MinOrderQuantity="" PricingUOM="" PricingQuantityConvFactor=""/>
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
 						<AlternateUOMList>
 							<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""
 											UnitOfMeasure="" />
