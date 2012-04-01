@@ -155,6 +155,9 @@
 	<s:set name='CustomerAdditionalAddress' value='#xutil.getChildElement(#CustomerAdditionalAddressList,"CustomerAdditionalAddress")'/>
 	<s:set name='PersonInfo' value='#xutil.getChildElement(#CustomerAdditionalAddress,"PersonInfo")'/>
 	 --%>
+	 <%--for jira 3438 - sales rep emailID display --%>
+	 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
+	 <%--end of jira 3438 changes - sales rep emailID display --%>
 	<s:set name='isOrderOnApprovalHoldStatus' value='%{#_action.isOrderOnApprovalHoldStatus()}'/>
 	<s:set name='isOrderOnNeedsAttentionHold' value='%{#_action.isOrderOnNeedsAttentionHold()}'/>
 	<s:set name='resolverUserID' value='%{#_action.getResolverUserID()}'/>
@@ -371,6 +374,11 @@
                                     	<s:if test='#xpedxCustomerContactInfoBean.getPersonInfoEmailID() !=null && #xpedxCustomerContactInfoBean.getPersonInfoEmailID().trim() !="" ' >
                                     	,<s:property value='#xpedxCustomerContactInfoBean.getPersonInfoEmailID()' />
                                     	</s:if>
+                                    	<%--for jira 3438 - sales rep emailID display --%>
+                                    	<s:if test="%{#isSalesRep && #session.SRSalesRepEmailID != ''}">
+                                    	,<s:property value='%{#session.SRSalesRepEmailID}'/>
+                                    	</s:if>
+                                    	<%--end of jira 3438 changes- sales rep emailID display --%>
                                     </td>
                                 </tr>
                                 <tr>
