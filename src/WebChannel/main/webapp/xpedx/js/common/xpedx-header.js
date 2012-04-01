@@ -4389,7 +4389,8 @@ function setCartEventHandlers(initTriggerVal) {
     }
 
 }
-
+var hideMiniCart = 'miniCartMouseoverArea1';
+var stIsIE = /*@cc_on!@*/false;
 function refreshMiniCartLink(forceRefresh)
 
 {
@@ -4422,10 +4423,18 @@ function refreshMiniCartLink(forceRefresh)
         	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
         	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
            //   $('.mini-cart-trigger').trigger("mouseenter.cluetip");
-        	//$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
+        //	$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
         	//$('.mini-cart-trigger').trigger('mouseover');
+        	//Added  if..else condn For Jira 3481 - Minicart Closes On Update Issue
+        	if(!stIsIE)
         	$('.mini-cart-trigger').trigger('click');
-        	//document.getElementById("miniCartMouseoverArea1").click();
+        	else
+        	{
+        	//if(hideMiniCart =='miniCartMouseoverArea2')
+        		document.getElementById("miniCartMouseoverArea2").click();
+        		document.getElementById("miniCartMouseoverArea1").click();
+        	}
+        	//fireEvent(document.getElementById("miniCartMouseoverArea1"),'click');
 // Have to include jqquery implementation to refresh cart
 // if(qvw !== null)
 // {
