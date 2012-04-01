@@ -86,7 +86,7 @@ function setPandAData() {
 		errorMsgDiv.innerHTML= "";
 	}
 	
-	document.getElementById("lineStatusCodeMsg").innerHTML = "";
+	document.getElementById("lineStatusCodeMsg").value = "";
 }
 
 function addItemToList() {
