@@ -61,6 +61,7 @@ function setPandAData() {
 	var itemAvailDiv = document.getElementById("tabs-1");
 	var displayPricesDiv = document.getElementById("displayPricesDiv");
 	var pricedDiv = document.getElementById("pricesDiv");
+	var OrdMultiple = document.getElementById("OrderMultiple");
 	
 	var errorMsgDiv = document.getElementById("errorMessageDiv"); //Added for Fix of Jira 2885
 
