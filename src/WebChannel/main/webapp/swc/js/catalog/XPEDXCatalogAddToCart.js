@@ -116,8 +116,19 @@ function addItemToCart(itemId) {
 			 }
 		}
 	}
-
+var priceCheck;
 	function displayAvailability(itemId) {
+		priceCheck = true;
+		var validateOM;
+		if(validateOrderMultiple(itemId) == false)
+		{
+			validateOM =  false;
+		}
+		else{
+			validateOM =  true;
+		}
+
+		//alert("priceCheck = "+priceCheck);
 		if(itemId == null || itemId =="") {
 			alert("Item ID cannot be null to make a PnA call");
 		}
@@ -139,6 +150,7 @@ function addItemToCart(itemId) {
 					pnaItemId: itemId,
 					pnaRequestedQty: qty,
 					pnaRequestedUOM: selectedUom,
+					validateOM : validateOM,
 	            },
 	            method: 'GET',
 	            success: function (response, request){
@@ -179,9 +191,15 @@ function addItemToCart(itemId) {
 		}
 		//document.getElementById('addtocart_'+itemId).focus();
 	}
+	function resetQuantityErrorMessage(itemId)
+	{
+			var divId='errorMsgForQty_'+itemId;
+			var divVal=document.getElementById(divId);
+			divVal.innerHTML='';
 	
+	}
 	function validateOrderMultiple(itemId) {
-		
+		resetQuantityErrorMessage(itemId);
 		//var orderMultiple = getOrderMultiple(itemId);
 		var orderMultiple = document.getElementById('orderMultiple_'+itemId).value;
 		
@@ -204,14 +222,26 @@ function addItemToCart(itemId) {
 				}
 			}
 		}
+		if(qty =="")
+		{
+			qty=1;
+		}
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
 		if(ordMul != 0 || totalQty==0)
 		{		
+			if(priceCheck == true){
+				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
+				document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
+				document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+				document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+			}
+			else{
 			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please order in units of " + addComma(orderMultiple) + " " + baseUOM;
 			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+			}
 			return false;
 		}
 		return true;
