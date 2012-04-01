@@ -14,6 +14,8 @@
 <s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" /> 
 <s:set name="jsonAvailability" value="#json.get('Availability')" /> 
 <s:set name="jsonTotalQty" value="#json.get('Total')" />
+<s:set name="orderMul" value="#_action.getValidateOrderMul()" />
+<s:hidden name="orderMul" value="#_action.getValidateOrderMul()" />
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
@@ -25,7 +27,9 @@
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
 			<tr>
-			   <!-- Fix for Jira 2885 -->
+			   <!-- Fix for Jira 2885 -->			 
+			   <s:set name="orderMultiple" value="#_action.getValidateOrderMul()" />
+				<s:hidden name="orderMultiple" value="%{#_action.getValidateOrderMul()}" />
 			    <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 			    <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)" />
 			    <s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
@@ -89,6 +93,7 @@
 			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
 	</div>
 	<div id="pricesDiv">
+	<s:if test="%{#orderMultiple}">
 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
@@ -173,7 +178,9 @@
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 					<s:if test="isBracketPricing == 'true'">
 						<tr>
+						<s:if test="%{#_action.getCategory() == 'Paper'}">
 							<td colspan="1" class="bold" colspan="2">My Bracket Pricing (<s:property value='priceCurrencyCode'/>):</td>
+							</s:if>
 							<s:set name="isMyPriceZero" value="%{'false'}" />
 						<s:if test="displayPriceForUoms.size()>0" >					
 							<s:iterator value='displayUOMs'	id='disUOM' status='disUOMStatus'>
@@ -191,6 +198,7 @@
 													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
 											<s:if test="#bracketStatus.first">
 												<s:set name="isMyPriceZero" value="%{'true'}" />
+												<s:if test="%{#_action.getCategory() == 'Paper'}">
 												<td>
 														<s:property value="bracketQTY" /> 
 														<s:property value="%{#formattedbracketUOM}" /> 
@@ -199,11 +207,13 @@
 														/
 														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
 													</td>
+													</s:if>
 												</tr>											
 											</s:if>
 											<s:else>
 												<tr>
 													<td>&nbsp;</td>						
+													<s:if test="%{#_action.getCategory() == 'Paper'}">				
 													<td>
 														<s:property value="bracketQTY" /> 
 														<s:property value="%{#formattedbracketUOM}" /> 
@@ -212,6 +222,7 @@
 														/
 														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
 													</td>
+													</s:if>
 												</tr>
 											</s:else>											
 										</s:iterator>
@@ -226,4 +237,5 @@
 				</s:if>
 				</tbody>
 			</table>
+			</s:if>
 	</div>
