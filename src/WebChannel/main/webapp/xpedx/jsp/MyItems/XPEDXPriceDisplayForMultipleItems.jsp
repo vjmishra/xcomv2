@@ -1,4 +1,3 @@
-<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -86,6 +85,9 @@
 			<s:if test="%{#_action.getCatMap().get(#itemId) == 'Paper'}" >
 			<td class="left" colspan="3"><i><s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></i></td>
 			</s:if>
+			<s:else>
+			<td class="left" colspan="3"><span>&nbsp;</span></td>
+			</s:else>
 			<td colspan="3"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
 
@@ -233,6 +235,9 @@
 				</s:if>
 			</td>
 			</s:if>
+			<s:else>
+			<td colspan="3" width="33%" valign="top"><span></span></td>
+			</s:else>
 </s:if>
 <s:if test="%{#_action.getValidateCheck().get(#itemId) != true}">
 			<td colspan="3" width="28%" valign="top">
