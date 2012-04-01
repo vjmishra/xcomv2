@@ -192,7 +192,7 @@
 		
 	}
 	//-- Web Trends tag end --
-	function displayAvailability(itemId,qty,uom,myItemsKey,url) {
+	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM) {
 		if(itemId == null || itemId =="") {
 			alert("Item ID cannot be null to make a PnA call");
 		}
@@ -205,7 +205,8 @@
 					pnaItemId: itemId,
 					pnaRequestedQty: qty,
 					pnaRequestedUOM: uom,
-					myItemsKey:myItemsKey
+					myItemsKey:myItemsKey,
+					validateOM:validateOM
 	            },
 	            method: 'POST',
 	            success: function (response, request){
@@ -220,6 +221,7 @@
 	            	else
 	            	{
 	            		document.body.style.cursor = 'default';
+	            		//alert(responseText);
 	            		var availabilityRow = document.getElementById('availabilityRow_'+myItemsKey);
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
