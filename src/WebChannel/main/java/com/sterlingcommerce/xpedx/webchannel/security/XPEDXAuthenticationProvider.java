@@ -38,23 +38,27 @@ public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
 		String sessionUserName = (String)request.getSession(false).getAttribute("loggedInUserName");
 		
 		String sessionUserId = (String)request.getSession(false).getAttribute("loggedInUserId");
+		String sessionSREmailID = (String)request.getSession(false).getAttribute("SRSalesRepEmailID");
 		String requestUserName = (String)request.getAttribute("loggedInUserName");
 		String requestUserId = (String)request.getAttribute("loggedInUserId");
-		
+		String requestSREmailID = (String)request.getAttribute("SRSalesRepEmailID");
 		if (requestUserId == null){
 			requestUserName = (String)request.getParameter("loggedInUserName");
 			//request.setAttribute("DisplayUserID",(String)request.getParameter("DisplayUserID"));
-			 requestUserId = (String)request.getParameter("loggedInUserId");		
+			 requestUserId = (String)request.getParameter("loggedInUserId");
+			 requestSREmailID = (String)request.getParameter("SRSalesRepEmailID");
 		}		
 		if (requestUserId != null){
 			request.getSession(false).setAttribute("IS_SALES_REP", "true");
 			request.getSession(false).setAttribute("loggedInUserId",requestUserId);
-			request.getSession(false).setAttribute("loggedInUserName",requestUserName);			
+			request.getSession(false).setAttribute("loggedInUserName",requestUserName);
+			request.getSession(false).setAttribute("SRSalesRepEmailID",requestSREmailID);
 		}
 		else if (sessionUserId != null){
 			request.setAttribute("IS_SALES_REP", "true");
 			request.setAttribute("loggedInUserId",sessionUserId);
-			request.setAttribute("loggedInUserName",sessionUserName);				
+			request.setAttribute("loggedInUserName",sessionUserName);
+			request.setAttribute("SRSalesRepEmailID",sessionSREmailID);
 		}
 	}
 }
