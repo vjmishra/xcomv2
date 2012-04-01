@@ -503,9 +503,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	
 	private void getItemDetails() throws Exception {
 		Element itemEle = XMLUtilities.getElement(m_itemListElem, "Item");
+		ArrayList<Element> catPath = SCXmlUtil.getElements(itemEle, "CategoryList/Category");
+		Description = catPath.get(0).getAttribute("Description");
 		Element primaryInfoEle = XMLUtilities.getElement(itemEle,"PrimaryInformation");
 		Element itemExtnEle = XMLUtilities.getElement(itemEle, "Extn");
-		
+		String[] desc = Description.split("/");
+		catagory = desc[0];
 		minOrderQty = SCXmlUtil.getAttribute(primaryInfoEle,"MinOrderQuantity");
 		pricingUOM = SCXmlUtil.getAttribute(primaryInfoEle, "PricingUOM");
 		pricingUOMConvFactor = SCXmlUtil.getAttribute(primaryInfoEle,"PricingQuantityConvFactor");
@@ -1824,6 +1827,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		this.requestedDefaultUOM = requestedDefaultUOM;
 	}
 
+	public String Description;
+	
+
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
+	}
+
 	String custSKU = null;
 	String MPC = null;
 	String requestedQty = null;
@@ -1915,6 +1929,37 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String pnaRequestedQty;
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXItemDetailsAction.class);
+	
+	public String Category;
+
+	public String catagory;
+
+	public String getCatagory() {
+		return catagory;
+	}
+
+	public void setCatagory(String catagory) {
+		this.catagory = catagory;
+	}
+	
+	public String getCategory() {
+		return Category;
+	}
+
+	public void setCategory(String category) {
+		Category = category;
+	}
+
+	public String validateOrderMul;
+	
+	
+	public String getValidateOrderMul() {
+		return validateOrderMul;
+	}
+
+	public void setValidateOrderMul(String validateOrderMul) {
+		this.validateOrderMul = validateOrderMul;
+	}
 
 	//added for jira 2885
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
