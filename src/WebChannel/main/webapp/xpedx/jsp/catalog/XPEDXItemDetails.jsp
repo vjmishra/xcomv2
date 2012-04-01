@@ -5,9 +5,9 @@
 <%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
-<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
-    This is to avoid a defect in Struts that�s creating contention under load. 
-    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
+<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
+    This is to avoid a defect in Struts that's creating contention under load. 
+    The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <s:set name='_action' value='[0]' />
 <s:bean
 	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils'
@@ -88,6 +88,7 @@
 <s:set name='isProcurementInspectMode'
 	value='#util.isProcurementInspectMode(wCContext)' />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
+<s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 </head>
 <!-- END swc:head -->
@@ -97,6 +98,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <script>
+var priceCheck;
 function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor) {
 	if(itemId == null || itemId == "null" || itemId == "") {
 		return;
@@ -107,7 +109,10 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	if(Qty == null || Qty == "null" || Qty == "") {
 		Qty = "1";
 	}
+	priceCheck = true;
+	var Category = document.getElementById("catagory").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
+	var validationSuccess = validateOrderMultiple();
 	Ext.Ajax.request({
        	url:url,
         params: {
@@ -116,7 +121,9 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	       	pnaRequestedQty	: Qty,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
-	       	pricingUOMConvFactor : pricingUOMConvFactor
+	       	pricingUOMConvFactor : pricingUOMConvFactor,
+	       	validateOrderMul : validationSuccess,
+	       	Category : Category
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
@@ -579,8 +586,15 @@ function addItemToCart(data)
 	}
 	
 }
+function resetQuantityErrorMessage()
+{
+		var divId='errorMsgForQty';
+		var divVal=document.getElementById(divId);
+		divVal.innerHTML='';
 
+}
 function validateOrderMultiple() {
+	resetQuantityErrorMessage();
 	var Qty = document.getElementById("qtyBox");
 	if(Qty.value == "" || Qty.value == null){
 		Qty.value = 1;
@@ -623,12 +637,17 @@ function validateOrderMultiple() {
 		var ordMul = totalQty % OrdMultiple.value;
 		if (ordMul != 0) {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
-					   
-		    var myMessageDiv = document.getElementById("errorMsgForQty");	            
+			 var myMessageDiv = document.getElementById("errorMsgForQty");
+			if (priceCheck == true){
+				      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+	           		      myMessageDiv.style.display = "inline-block"; 
+	            		      myMessageDiv.setAttribute("class", "error");
+			}
+			else{	   
             myMessageDiv.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
-            
+			}
 			return false;
 		}
 	}
@@ -2267,7 +2286,7 @@ Ext.onReady(function(){
 function callPnA(requestedUom)
 {
 	var itemId = '<s:property value="#itemID" />';
-	var Quantity = '<s:property value="#requestedQty" />';
+	var Quantity = document.getElementById("qtyBox").value;
 	var baseUom = '<s:property value="#unitOfMeasure" />';
 	var prodMweight = '<s:property value="#prodMweight" />';
 	var pricingUOMConvFactor = '<s:property value="#pricingUOMConvFactor" />';
