@@ -1072,7 +1072,7 @@ function SubmitActionWithValidation()
 			} 
 						
 			%>	
-			<s:hidden id='backPageUrl' name='backPageUrl' value="%{#session.itemDtlBackPageURL}" />
+			<s:hidden id='backPageUrl' name='backPageUrl' value="%{#session.itemDtlBackPageURL.substring(#session.itemDtlBackPageURL.indexOf('/swc'))}" />
 			
 			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
 			
