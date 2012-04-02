@@ -33,6 +33,9 @@
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<td colspan="3" class="left"><span><i>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
+			<s:else>
+			<td colspan="3" class="left"><span>&nbsp;</span></td>
+			</s:else>
 			<td colspan="3" class="my-pricing"><span><i>Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
 		</tr>
@@ -57,7 +60,7 @@
 								value="#json.get('ExtendedPrice')" />
 							<s:set name="currencyCode" value="#json.get('currencyCode')" />
 
-				<TABLE width="100%">
+				<TABLE>
 				<TR>
 					<td class="leftmost my-available"><strong>Total Available:</strong></td>
 					<td class="my-number"><strong>
@@ -157,7 +160,10 @@
 				</s:if>
 				</s:if>
 			</td>
-			</s:if>			
+			</s:if>	
+			<s:else>
+			<td colspan="3"><span>&nbsp;</span></td>
+			</s:else>		
 			<td colspan="3">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>	
