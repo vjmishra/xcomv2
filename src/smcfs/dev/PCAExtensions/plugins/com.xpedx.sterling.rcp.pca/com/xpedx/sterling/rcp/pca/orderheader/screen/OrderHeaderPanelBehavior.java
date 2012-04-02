@@ -42,6 +42,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 //	private String INTERNAL="INTERNAL";
 //	private static final String COMMAND_GET_USER_LIST = "XPXGetUserList";
 	private Element outXml ;
+	private String invoiced;
 	
 	public OrderHeaderPanelBehavior(Composite ownerComposite, String formId, Object inputObject, Element eleOrderDetails) {
         super(ownerComposite, formId, inputObject);
@@ -55,19 +56,29 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
         setLegacyOrderNo(eleOrderDetails);
         shipToId = eleOrderDetails.getAttribute("BuyerOrganizationCode");
 		Element eleExtn = YRCXmlUtils.getChildElement((Element)eleOrderDetails, "Extn");
-		//Added For Jira 3006: To change the Date fromat from YYYY-MM-DD to YYYYMMDD:
+		invoiced = eleExtn.getAttribute("ExtnInvoiceNo");
+       	//Added to get the invoiceNo and invoiceDate splitted For Jira 2561
+    	String[] invoice;
+    	//String delimiter = "M";
+    	invoice = invoiced.split("M"); 	
+    	invoiceNo = invoice[1];
+    	invoiceDate = invoice[0];
+    	
+		//Comenting for jira 2561
+/*		//Added For Jira 3006: To change the Date fromat from YYYY-MM-DD to YYYYMMDD:
 		String dateTmp=eleExtn.getAttribute("ExtnInvoicedDate");
 		SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd");
 	    Date date=new Date();
 		try {
-			date = sdfSource.parse(dateTmp);
+			date = sdfSource.parse("dateTmp");
+			System.out.println(date);
 			} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyyMMdd");
-	    invoiceDate = sdfDestination.format(date);
-		invoiceNo = eleExtn.getAttribute("ExtnInvoiceNo");
+	    invoiceDate = sdfDestination.format(date);	    
+*/		
 //		userKey=YRCXmlUtils.getAttributeValue(getModel("UserList"), "/User/Customer/Extn/@userKey");	
 		this.pnaErrorValue= page.getOrderLinesPanel().getPageBehavior().getPnAErrorValue();
 		setFieldValue("lblHeaderErr", pnaErrorValue);
