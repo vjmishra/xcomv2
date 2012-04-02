@@ -16,6 +16,9 @@
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MISC.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -232,7 +235,7 @@
 		</tr>
 		
 		<tr>
-  			<td width="160" class="underlines no-border-right-user"><div class="mandatory float-left" style="position:relative;left:10px"><input readonly type="text" name="remLen2" size="2" maxlength="2" value="2000" style="border: none"></input></div>&nbsp;&nbsp;&nbsp;&nbsp;characters remaining</td>
+  			<td width="160" class="underlines no-border-right-user"><input readonly type="text" name="remLen2" size="1" maxlength="2" class="float-left" style="position:relative;left:10px;border:none" value="2000"/>&nbsp;&nbsp;&nbsp;characters remaining</td>
 		</tr>
   		  		
   		<tr>
