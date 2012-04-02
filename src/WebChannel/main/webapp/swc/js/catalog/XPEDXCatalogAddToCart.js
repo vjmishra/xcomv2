@@ -244,6 +244,17 @@ var priceCheck;
 			}
 			return false;
 		}
+		else if(orderMultiple > 1){
+			if(priceCheck == true){
+				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
+				document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
+				document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "notice");
+				document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+			}
+			else{
+				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "";
+			}
+		}
 		return true;
 	}
 	
