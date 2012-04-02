@@ -102,6 +102,22 @@
             <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
     </appender>  -->
 
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	
+	<!-- 
+		3/29/2012 Vignesh Govindan - FOR PRODUCTION ENVIRONMENT
+		DO NOT CHANGE LOGGING LEVELS. High performance risk. If required test it thoroughly. 
+		Very specifically don't change the logging levels for com.yantra and it's child packages.
+		If new packages are created in application add a category for it and set the level
+		to VERBOSE here. In the code use debug(), and avoid using levels like info() and warn().
+		Avoid creating com.yantra packages in application.
+	-->
+
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
 
     <category  name="requestlogger" class="com.yantra.yfc.log.YFCLogCategory" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
@@ -126,7 +142,7 @@
         <appender-ref ref="CONSOLE" />
     </category>
 	<category  name="com.yantra.ycp.core.YCPSystem" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
         <appender-ref ref="CONSOLE" />
     </category>
 
@@ -143,7 +159,7 @@
     </category>
 	
     <category  name="net.sf.ehcache" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+         <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
          <appender-ref ref="CONSOLE" />
          <!-- <appender-ref ref="ALL" /> -->
      </category>
@@ -166,7 +182,7 @@
     </category>
 
     <category  name="com.yantra.integration.adapter" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <priority class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
         <appender-ref ref="CONSOLE" /> 
         <appender-ref ref="AGENT_LOG_APPENDER" />
     </category>
@@ -185,16 +201,11 @@
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
-    <category  name="com.xpedx.nextgen.common.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="CENT_APPENDER" />
-        <appender-ref ref="SOCKET" />
-    </category>
-	
-	<category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+   <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
 	   <appender-ref ref="CONSOLE" />
-           <appender-ref ref="SOCKET" />
+	   <appender-ref ref="CENT_APPENDER" />
+	   <appender-ref ref="SOCKET" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
 
