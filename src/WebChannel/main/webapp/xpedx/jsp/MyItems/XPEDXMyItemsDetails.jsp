@@ -727,7 +727,9 @@ function showSharedListForm(){
 			
 			resetQuantityError();
 			 if(validateOrderMultiple(false,null) == false)
-			 {
+			 {	
+				 //Added displayMsgHdrLevelForLineLevelError() here for displaying error msg when Add Item with Qty To cart
+				 displayMsgHdrLevelForLineLevelError ();
 					return;
 			 }
 			var formItemIds 	= document.getElementById("formItemIds");
@@ -789,12 +791,15 @@ function showSharedListForm(){
 			arrQty = document.getElementsByName("qtys");
 			for(var i = 0; i < arrQty.length; i++)
 			{
+				document.getElementById(arrQty[i].id).style.borderColor="";
+				
 				var divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
 				divVal.innerHTML='';
 				divVal.style.display = 'none';
 			}
 		}
+		
 		
 		/*function validateOrderMultiple(isOnlyOneItem,listId)
 		{
@@ -901,11 +906,13 @@ function showSharedListForm(){
 					}
 					if(quantity == '0' || quantity== '' ){
 						//Display Generic Message at Header level first then Update Line Level message.
-						displayMsgHdrLevelForLineLevelError ();
-						/* divVal.innerHTML='Qty Should be greater than 0'; */
+					
+					/* divVal.innerHTML='Qty Should be greater than 0'; */
 						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
+						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						//Ctrl.focus();
 						
 						errorflag= false;
 					}
@@ -930,7 +937,7 @@ function showSharedListForm(){
 						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
-						
+						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
 						}
 						errorflag= false;
 					}
@@ -2232,6 +2239,11 @@ function showSharedListForm(){
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
 	                               	</div>
+	                               	<%--Added below hiddens for Jira 3197- MIL Messaging --%>
+	                               	<s:hidden name="hiddenUOMOrdMul_%{#id}"  id="hiddenUOMOrdMul_%{#id}" value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
+	                              	<s:hidden name="hiddenQuantityOrdMul_%{#id}" id="hiddenQuantityOrdMul_%{#id}" value='%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}'></s:hidden>
+	                              	<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
+	                              	
 	                               </li>
                                 </s:if>
                                 <li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
@@ -2395,6 +2407,8 @@ function showSharedListForm(){
             <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
 						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
 						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
+						<%-- set rowNums for Jira 3197 - MIL Messaging, Added space in message--%>
+						<s:set name='rowNums' value='%{#rowNums.replace(",",", ")}' />
 						<br />
 					
 						<script type="text/javascript">
