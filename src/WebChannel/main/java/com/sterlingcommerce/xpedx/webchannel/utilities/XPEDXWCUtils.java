@@ -5837,7 +5837,6 @@ public class XPEDXWCUtils {
 		Iterator<String> itemIdIterator = itemIdList.iterator();
 		while(itemIdIterator.hasNext()) {
 			String itemId = itemIdIterator.next();
-			System.out.println("xpxItemXrefDoc xml is : "+SCXmlUtil.getString(xpxItemXRefDoc));
 			if(xpxItemXRefDoc!=null) {
 				Element itemXref = SCXmlUtil.getElementByAttribute(xpxItemXRefDoc.getDocumentElement(), "XPXItemcustXref", "LegacyItemNumber", itemId);
 				if (itemXref != null){
