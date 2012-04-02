@@ -119,7 +119,7 @@
 								value="#json.get('ExtendedPrice')" />
 							<s:set name="currencyCode" value="#json.get('currencyCode')" />
 
-				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<table cellpadding="0" cellspacing="0" border="0">
 					<tr>
 						<td width="28%"><strong>Total Available:</strong></td>
 						<td width="19%" class="right"><strong>
