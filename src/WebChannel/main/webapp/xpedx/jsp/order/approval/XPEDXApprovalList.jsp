@@ -662,10 +662,6 @@
 			var yr2   = parseInt(str2.substring(6,10),10);  
 			var date1 = new Date(yr1, mon1, dt1);  
 			var date2 = new Date(yr2, mon2, dt2);   
-			if(date2 < date1) {    
-				document.getElementById("errorDateDiv").innerHTML = "From date cannot be greater than To date";
-				return; 
-			}
 			if (isValidDate(str1)==false){
 				if (isValidDate(str2)==false){
 					document.getElementById("errorDateDiv").innerHTML = "Please enter a valid From and To date";
@@ -678,7 +674,10 @@
 				document.getElementById("errorDateDiv").innerHTML = "Please enter a valid To date";
 				return;
 			}
-				
+			if(date2 < date1) {    
+				document.getElementById("errorDateDiv").innerHTML = "From date cannot be greater than To date";
+				return; 
+			}	
 		} 
 		document.getElementById("errorDateDiv").innerHTML = '';
 		//end of jira 3542 changes
