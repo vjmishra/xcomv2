@@ -310,7 +310,7 @@
 							<XPXSalesRepCustomers 
 						    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
 						    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
-						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" " SalesRepCustomerSearchString=" "/>
+						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" "/>
 						</XPXSalesRepCustomersList>
 					</Template>
 					</API>
