@@ -24,10 +24,12 @@ public class ErrorLogger {
 	 */
 	private static YIFApi api = null;
 	private static YFCLogCategory yfcLogCatlog;
-	private static Logger log4jLogger;
+	//Commenting this line as one logger is enough and appenders can be controlled in config file.
+	//private static Logger log4jLogger;
 	static {
 		yfcLogCatlog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-		log4jLogger = YFCLogCategory.getLogger("cent");
+		//Commenting this line as one logger is enough and appenders can be controlled in config file.
+		//log4jLogger = YFCLogCategory.getLogger("cent");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (Exception e) {
@@ -182,7 +184,8 @@ public class ErrorLogger {
 
 		}
 		}catch(Exception e){
-			log4jLogger.error(e.getMessage());
+			//Commenting this line as one logger is enough and appenders can be controlled in config file.
+			//log4jLogger.error(e.getMessage());
 			yfcLogCatlog.error(e.getMessage());
 		}
 	}
@@ -211,7 +214,8 @@ public class ErrorLogger {
 			}
 		}
 		catch (Exception e){
-			log4jLogger.error(e.getMessage());
+			//Commenting this line as one logger is enough and appenders can be controlled in config file.
+			//log4jLogger.error(e.getMessage());
 			yfcLogCatlog.error(e.getMessage());			
 		}
 		return commMethod;		
@@ -267,7 +271,8 @@ public class ErrorLogger {
 			}
 		} catch (Exception e) {
 			yfcLogCatlog.error(e.getMessage());
-			log4jLogger.error(e.getMessage());
+			//Commenting this line as one logger is enough and appenders can be controlled in config file.
+			//log4jLogger.error(e.getMessage());
 		}
 	}
 
