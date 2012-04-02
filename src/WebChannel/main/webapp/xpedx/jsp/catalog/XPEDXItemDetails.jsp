@@ -635,9 +635,9 @@ function validateOrderMultiple() {
 	//alert("Qty.value:"+Qty.value+" UOM:"+UOM.value+ " selectedUOM:"+selectedUOM.value+" uomConvFactor:"+uomConvFactor.value+" OrdMultiple:"+OrdMultiple.value +" uomCF:"+uomCF+ " totalQty:"+totalQty);
 	if(OrdMultiple!=null && OrdMultiple!=undefined && OrdMultiple.value!=0){
 		var ordMul = totalQty % OrdMultiple.value;
+		var myMessageDiv = document.getElementById("errorMsgForQty");
 		if (ordMul != 0) {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
-			 var myMessageDiv = document.getElementById("errorMsgForQty");
 			if (priceCheck == true){
 				      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
 	           		      myMessageDiv.style.display = "inline-block"; 
@@ -649,6 +649,16 @@ function validateOrderMultiple() {
             myMessageDiv.setAttribute("class", "error");
 			}
 			return false;
+		}
+		else if (OrdMultiple.value > 1){
+			if (priceCheck == true){
+			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+         		      myMessageDiv.style.display ="inline-block";
+          		      myMessageDiv.setAttribute("class", "notice");
+			}
+			else{
+				myMessageDiv.innerHTML = "";
+			}
 		}
 	}
 	return true;
