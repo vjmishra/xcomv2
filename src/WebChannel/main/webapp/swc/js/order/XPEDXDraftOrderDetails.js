@@ -687,6 +687,11 @@ function redrawQuickAddList()
 						    }
 						
 					  }
+		        	if(defaultSelUOM == undefined){
+		        		code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
+
+		        	}
+		        	else{
 		        	var selectedUOMQty = defaultSelUOM.split(" ");
 		        	var selectedUOMs;
 					if(selectedUOMQty.length == 2){
@@ -695,6 +700,7 @@ function redrawQuickAddList()
 					else{
 						selectedUOMs = selectedUOMQty;
 					}
+		        	}
 					
 				    	 code += '</select>';
 				    	 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
