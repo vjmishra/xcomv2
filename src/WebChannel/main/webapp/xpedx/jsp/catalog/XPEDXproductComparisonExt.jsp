@@ -152,7 +152,7 @@
 				referer = (String)session.getAttribute("lastPageUrl");
 			}
 		--%>
-			<s:hidden id='backUrl' name='backUrl' value="%{#session.productCompareBackPageURL}" />
+			<s:hidden id='backUrl' name='backUrl' value="%{#session.productCompareBackPageURL.substring(#session.productCompareBackPageURL.indexOf('/swc'))}" />
 			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
 		</div>
 		<!--- clearall puts stuff below 'floating' items. nonbreaking space is for IE--->				
