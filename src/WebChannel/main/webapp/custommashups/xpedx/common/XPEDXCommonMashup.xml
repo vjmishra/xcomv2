@@ -298,7 +298,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXGetSRCustomersListService" IsFlow="Y">
 					<Input>
-					 	<XPXSalesRepCustomers SalesRepCustomerSearchString=" " SalesRepCustomerSearchStringQryType=" ">
+					 	<XPXSalesRepCustomers>
 					 	<ComplexQuery>
 							<Or>
 							</Or>
@@ -335,7 +335,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXGetSRCustomersListService" IsFlow="Y">
 					<Input>
-					 	<XPXSalesRepCustomers USERID=""/>
+					 	<XPXSalesRepCustomers />
 					</Input>
 					<Template>
 						<XPXSalesRepCustomersList TotalNumberOfrecords="">
