@@ -203,7 +203,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("cert: \"");
 		if("Y".equals(b2cCert)) {
-			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='<s:url value='/xpedx/images/catalog/green-e-logo_small.png'/>'</span>");
+			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='/swc/xpedx/images/catalog/green-e-logo_small.png'></span>");
 		}
 		sb.append("\",");
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
