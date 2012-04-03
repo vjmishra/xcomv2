@@ -190,15 +190,12 @@ public class XPEDXSalesRepUtils {
 				//added for jira 3442
 				CustomerNo = customerElem.getAttribute("ExtnCustomerNo");
 				customerName = customerElem.getAttribute("ExtnCustomerName");
-
-				System.out.println("CustomerNo :: "+CustomerNo+"customerName : "+customerName);
 				//customerName = customerElem.getAttribute("ExtnMSAPOrganizationName");
 				customerID = customerElem.getAttribute("CustomerID");
 				storefrontID = customerElem.getAttribute("ExtnMSAPOrganizationCode");
 				//added for jira 3442
 				SalesRepID = customerElem.getAttribute("SalesRepID");
 				String salesRepEmailID = customerElem.getAttribute("EmailID");
-				System.out.println("salesRepEmailID : "+ salesRepEmailID);
 				//legacyCustomerNo = customerID.split("-")[1];
 				customersMap.put(CustomerNo, customerName);
 				customerIDsMap.put(CustomerNo, customerID);
