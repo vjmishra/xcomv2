@@ -3,6 +3,13 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
+   <appender name="SOCKET" class="org.apache.log4j.net.SocketHubAppender">
+       <param name="Port" value="1652"/>
+       <param name="RemoteHost" value="127.0.0.1"/>
+       <param name="ReconnectionDelay" value="60000"/>
+       <param name="Threshold" value="ERROR"/>
+    </appender> 
+    
     <appender name="ALL" class="com.sterlingcommerce.woodstock.util.frame.logex.SCIAppender">
         <param name="rotateLogs" value="true" />
         <param name="maxLogSize" value="100000" />
@@ -15,12 +22,6 @@
         <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
     </appender>
 
-    <appender name="SOCKET" class="org.apache.log4j.net.SocketAppender">
-       <param name="Port" value="1652"/>
-       <param name="RemoteHost" value="127.0.0.1"/>
-       <param name="ReconnectionDelay" value="60000"/>
-       <param name="Threshold" value="ERROR"/>
-    </appender> 
 
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
@@ -121,11 +122,13 @@
 
     <category  name="requestlogger" class="com.yantra.yfc.log.YFCLogCategory" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="REQUEST_LOG_APPENDER" />
     </category>
 
     <category  name="com.yantra.tools.property" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="PROPERTY_MANAGER" /> 	 
         <appender-ref ref="CONSOLE" /> 	 
     </category>
@@ -133,56 +136,66 @@
 
     <category  name="com.yantra" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="com.yantra.ycm.business.search.YCMSearchIndexCacheTimerTask" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
     </category>
 	<category  name="com.yantra.ycp.core.YCPSystem" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
     </category>
 
     <category  name="com.sterlingcommerce" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="org.apache.struts2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 	
     <category  name="net.sf.ehcache" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
          <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
+         <appender-ref ref="SOCKET" />
          <appender-ref ref="CONSOLE" />
          <!-- <appender-ref ref="ALL" /> -->
      </category>
 
      <category  name="com.opensymphony.xwork2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
    <category  name="com.stercomm.SecurityLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  /> 
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="SECURITY_LOG_APPENDER" />
     </category>
 
     <category  name="api.security" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" /> 
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="com.yantra.integration.adapter" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" /> 
         <appender-ref ref="AGENT_LOG_APPENDER" />
     </category>
@@ -190,6 +203,7 @@
 
    <category  name="com.yantra.yfs.ui.backend.YFSLoginIPLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
        <priority class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  /> 
+       <appender-ref ref="SOCKET" />
        <appender-ref ref="CONSOLE" />
        <!-- <appender-ref ref="ALL" /> -->
        <appender-ref ref="LOGIN_CLIENT_IP_DETAILS" />
@@ -197,15 +211,16 @@
 
    <category  name="DataValidationLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        <appender-ref ref="SOCKET" />
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
    <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+       <appender-ref ref="SOCKET" />
 	   <appender-ref ref="CONSOLE" />
 	   <appender-ref ref="CENT_APPENDER" />
-	   <appender-ref ref="SOCKET" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
 
