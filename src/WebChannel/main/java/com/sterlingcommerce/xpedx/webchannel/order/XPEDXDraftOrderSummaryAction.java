@@ -405,6 +405,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
 			Element orderLineElement = (Element)orderLineElemList.get(i);
+			String lineType=orderLineElement.getAttribute("LineType");
+			if("C".equalsIgnoreCase(lineType) && "M".equalsIgnoreCase(lineType)) {
+				continue;
+			}
+			
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
 					"Item");
 			String itemId = itemElement.getAttribute("ItemID");// orderline/item
@@ -414,27 +419,32 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			
 			/*Begin - Changes made by Mitesh Parikh for JIRA 3595*/
 			Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
-			Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
-			if(primeInfoElem!=null)
+			if(itemDetailsElement!=null)
 			{
-				String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
-				if(manufactureItem!=null && manufactureItem.length()>0)
-					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+				Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
+				if(primeInfoElem!=null)
+				{
+					String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+					if(manufactureItem!=null && manufactureItem.length()>0)
+						primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+				}
+				Element extnElem = XMLUtilities.getElement(itemDetailsElement, "Extn");
+				if(extnElem!=null)
+				{
+					String mpcCode = extnElem.getAttribute("ExtnMpc");
+					if(mpcCode!=null && mpcCode.length()>0)
+						primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
+				}
+				itemIdList.add(itemId);
+				itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
+				
 			}
-			Element extnElem = XMLUtilities.getElement(itemDetailsElement, "Extn");
-			if(extnElem!=null)
-			{
-				String mpcCode = extnElem.getAttribute("ExtnMpc");
-				if(mpcCode!=null && mpcCode.length()>0)
-					primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
-			}
-			itemIdList.add(itemId);
-			itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
+			
 			//HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
 			//skuMap.put(itemId, itemSkuMap);
 		}
 		
-		if(orderLineElemList.size()>0){
+		if(itemIdList.size()>0){
 			skuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemIdList, itemsSkuMap);
 		}
 		/*End - Changes made by Mitesh Parikh for JIRA 3595*/
