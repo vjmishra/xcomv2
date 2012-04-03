@@ -49,7 +49,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
     private Integer totalNumberOfPages = new Integer(1);
     protected Integer pageSize = 25;
     protected String orderByAttribute ="Modifyts";
-    protected String orderDesc="N";
+    protected String orderDesc="Y";
     
     
 	
