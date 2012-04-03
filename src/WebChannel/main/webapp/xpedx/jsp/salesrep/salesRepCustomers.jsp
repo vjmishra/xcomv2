@@ -64,11 +64,13 @@ function logoutMessage(){
   <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
   </s:url>
  <div id="search"> 
- <div class="search-pagination-bottom">
-         <span>
-         <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-         <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="False"/></span>
- </div>
+<div id="listOfCustomers" class="search-pagination-bottom">
+  <span>
+      <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
+      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="false" />
+  </span>
+</div>
+<div> </div>
  <%-- end of jira 3442 pagination--%>
   <div class="searchbg">
   <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>					
@@ -113,11 +115,16 @@ function logoutMessage(){
 				if(treeSortedByValues.size()!=0 && null!=treeSortedByValues){
 					
 					for(String customerId : treeSortedByValues.keySet()){
+						String custID [] = customerId.split("_");
+						String customerID="";
+						if(custID != null){
+						   customerID = custID[0];
+						}
 						String customerName = treeSortedByValues.get(customerId);
 				%>
                     <tr>
                       <td><%=customerName%></td>
-                      <td valign="top"><%=customerId%></td>
+                      <td valign="top"><%=customerID%></td>
                       <td valign="top">
                       <s:url id='selectedCustURL' namespace='/common' action='salesRepCustomerLogin'>
 						<s:param name='selectedCustomer'>
@@ -158,12 +165,17 @@ function logoutMessage(){
 					
 			if(null!=treeSorted){
 				for(String customerId : treeSorted.keySet()){
+					String custID [] = customerId.split("_");
+					String customerID="";
+					if(custID != null){
+					   customerID = custID[0];
+					}
 					String customerName = treeSorted.get(customerId);
 		%>
 		
                     <tr>
                        <td><%=customerName%></td>
-                      <td valign="top"><%=customerId%></td>
+                      <td valign="top"><%=customerID%></td>
                       <td valign="top">
                       <s:url id='selectedCustURL' namespace='/common' action='salesRepCustomerLogin'>
 						<s:param name='selectedCustomer'>
@@ -185,11 +197,18 @@ function logoutMessage(){
 <div id="table-bottom-bar-R"></div>
 <div>
 	<!-- <input type="button" id="logoutButton" value="Logout" onclick="history.go(-1);">  -->
+	<br/>
 	<div id="errorMsgForCustomerData" align="center"><font color="red">No customer records found with the above criteria</font></div>
 </div>
 </div></div> <div id="strdiv2"></div>
   </div>   
   <div> </div>
+<div id="listOfCustomers" class="search-pagination-bottom">
+  <span>
+      <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
+      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="false" />
+  </span>
+</div>
 </div>
 </div>
  <script type="text/javascript">
