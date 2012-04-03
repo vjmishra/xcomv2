@@ -1195,23 +1195,25 @@ from session . We have customer Contact Object in session .
 							 </s:if>
 			    		</p>			    		
 			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-							<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
-							<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-							
-							<p>
-								<s:if test='%{customerSku == "1"}' >
-									<s:property value="#customerItemLabel" />:
-								</s:if>
-								<s:elseif test='%{customerSku == "2"}'>
-									<s:property value="#manufacturerItemLabel" />:
-								</s:elseif>
-								<s:else>
-									<s:property value="#mpcItemLabel" />:
-								</s:else>
-								<s:property value='#itemSkuVal' />
-							</p>
-							
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M"'>	
+				    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
+								<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
+								<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
+								
+								<p>
+									<s:if test='%{customerSku == "1"}' >
+										<s:property value="#customerItemLabel" />:
+									</s:if>
+									<s:elseif test='%{customerSku == "2"}'>
+										<s:property value="#manufacturerItemLabel" />:
+									</s:elseif>
+									<s:else>
+										<s:property value="#mpcItemLabel" />:
+									</s:else>
+									<s:property value='#itemSkuVal' />
+								</p>
+								
+							</s:if>
 						</s:if>
 			    	</div>
 			    	<div class="special-instructions-div" id="checkout-special-instructions">
