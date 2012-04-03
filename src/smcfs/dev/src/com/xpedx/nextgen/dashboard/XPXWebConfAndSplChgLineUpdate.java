@@ -228,6 +228,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 				extnElement.setAttribute("ExtnExtendedPrice", new Float(chargeAmount).toString());
 				extnElement.setAttribute("ExtnAdjUOMUnitPrice", new Float(chargeAmount).toString());
 				extnElement.setAttribute("ExtnAdjUnitPrice", new Float(chargeAmount).toString());		
+				extnElement.setAttribute("ExtnPriceOverrideFlag", "Y"); 
 				
 				long uniqueSequenceNo = CallDBSequence.getNextDBSequenceNo(env, XPXLiterals.WEB_LINE_SEQUENCE);
 				webLineNumber = XPXAddParametersAPI.generateWebLineNumber(entryType, uniqueSequenceNo,envtCode);
