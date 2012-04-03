@@ -941,17 +941,19 @@ function showSharedListForm(){
 						}
 						errorflag= false;
 					}
-					else if (arrOrdMul[i].value > 1){
+					else if (arrOrdMul[i].value > 1 && priceCheck == true){
 						if (priceCheck == true){
+							
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
-							}
+						}
 						else {
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
-							divVal.setAttribute("class", "error");
+							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
 							
 							}
+						
 						
 					}
 				}
