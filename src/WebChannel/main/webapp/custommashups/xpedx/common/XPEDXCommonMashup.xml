@@ -310,7 +310,7 @@
 							<XPXSalesRepCustomers 
 						    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
 						    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
-						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" "/>
+						    UserID=" " FirstName=" " LastName=" "/>
 						</XPXSalesRepCustomersList>
 					</Template>
 					</API>
@@ -342,7 +342,7 @@
 							<XPXSalesRepCustomers 
 						    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
 						    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
-						    SalesRPCustKey=" " UserID=" " FirstName=" " LastName=" "/>
+						    UserID=" " FirstName=" " LastName=" "/>
 						</XPXSalesRepCustomersList>
 					</Template>
 					</API>
