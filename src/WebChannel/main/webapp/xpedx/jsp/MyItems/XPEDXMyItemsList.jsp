@@ -667,6 +667,15 @@
 
 <!-- CODE_END Header - PN -->
 
+<%--JIRA 3711 START --%>
+
+<s:if test='!#guestUser'>  	
+
+		<s:action name="xpedxShiptoHeader" executeResult="true"
+		namespace="/common" />
+	</s:if>	
+	
+<%--JIRA 3711 End --%>
 
 <div class="container mil-list"><!-- breadcrumb -->
 <div id="breadcumbs-list-name" class="page-title"><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></div>
