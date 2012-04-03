@@ -663,18 +663,19 @@
 <div id="main">
 
 <!-- CODE_START Header - PN --> 
-<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-
+<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+   <s:param name='shipToBanner' value="%{'true'}" />
+</s:action>
 <!-- CODE_END Header - PN -->
 
 <%--JIRA 3711 START --%>
 
-<s:if test='!#guestUser'>  	
+<%-- <s:if test='!#guestUser'>  	
 
 		<s:action name="xpedxShiptoHeader" executeResult="true"
 		namespace="/common" />
 	</s:if>	
-	
+ --%>	
 <%--JIRA 3711 End --%>
 
 <div class="container mil-list"><!-- breadcrumb -->
