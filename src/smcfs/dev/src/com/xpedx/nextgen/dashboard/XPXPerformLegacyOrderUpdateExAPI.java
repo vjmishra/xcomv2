@@ -103,18 +103,23 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (YFCObject.isNull(headerProcessCode) || YFCObject.isVoid(headerProcessCode)) {
 					throw new Exception("Attribute HeaderProcessCode Cannot be NULL or Void!");
 				} else {
-					// Header process code is changed to 'S' as Legacy can send order update details along with status change.
+					// Header process code "S" is changed to "C" when the order has Order Lines 
 					if (headerProcessCode.equalsIgnoreCase("S")) {
-						headerProcessCode = "C";
-						rootEle.setAttribute("HeaderProcessCode", "C");
+						YFCElement orderLinesEle = rootEle.getChildElement("OrderLines");
+						if (orderLinesEle != null) {
+							YFCElement orderLineEle = orderLinesEle.getChildElement("OrderLine");
+							if (orderLineEle != null) {
+								rootEle.setAttribute("HeaderProcessCode", "C");
+							} 
+						}
 					}
 				}
-			} else {
+			}else {
 				throw new Exception("Attribute HeaderProcessCode Not Available in Incoming Legace Message!");
 			}
 
 			validateInXML(rootEle);
-
+			
 			if(log.isDebugEnabled()){
 				log.debug("InXML After Validation:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
