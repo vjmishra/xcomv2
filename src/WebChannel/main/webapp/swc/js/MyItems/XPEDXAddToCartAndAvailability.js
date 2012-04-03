@@ -50,6 +50,8 @@
 	function addItemToCart(itemId,uid) {
 
 		 //commented for jira 3253 resetQuantityError(uid);
+		//reset the Qty box- Jira 3197- MIL Messaging
+		document.getElementById('qtys_'+uid).style.borderColor="";
 		 if(validateOrderMultiple(true,uid) == false)
 		 {
 					return;
