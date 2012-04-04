@@ -2539,16 +2539,17 @@ function showSharedListForm(){
    		<script type="text/javascript">
 			Ext.onReady(function(){		
 	       
-			/* Begin long desc. shortener */
-			$('.prodlist ul li, #prodlist ul li ').each(function() {
-				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
-				if( html.length > shortHTML.length )
-				{
-					$(this).html(shortHTML);
-					$(this).append('...');	
-					$(this).attr('title', html );
-				}
+				/* Begin long desc. shortener */
+				$('.prodlist ul li, #prodlist ul li ').each(function() {
+					var html = $(this).html();
+					var shortHTML = html.substring(0, 25);
+					if( html.length > shortHTML.length )
+					{
+						$(this).html(shortHTML);
+						$(this).append('...');	
+						$(this).attr('title', html );
+					}
+				});
 			});
 		</script>  
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
