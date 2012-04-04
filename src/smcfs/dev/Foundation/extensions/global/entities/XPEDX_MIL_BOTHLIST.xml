@@ -1,12 +1,12 @@
 <DBSchema>
    <Entities>  
     <Entity EntityType="VIEW" View="true" Extensible="N" TableType="TRANSACTION" TableName="XPEDX_MIL_BOTHLIST" ApiNeeded="Y"
-    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XpedxMilBothLst">
+    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XPEDXMyItemsList">
         <Attributes>
 				<Attribute ColumnName="MODIFYTS" 	 		DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp" XMLName="Modifyts"/>
-				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="CreateUserId"/>
-				<Attribute ColumnName="CREATEUSERNAME" 		DataType="Text-60" 		DefaultValue="' '" Description="Creating User Name" XMLName="CreateUserName"/>
-				<Attribute ColumnName="MODIFYUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID" XMLName="ModifyUserId"/>
+				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="Createuserid"/>
+				<Attribute ColumnName="CREATEUSERNAME" 		DataType="Text-60" 		DefaultValue="' '" Description="Creating User Name" XMLName="Createusername"/>
+				<Attribute ColumnName="MODIFYUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID" XMLName="Modifyuserid"/>
 				<Attribute ColumnName="CREATEPROGID" 		DataType="ProgramID" 	DefaultValue="' '" Description="Creating Program ID"/>
 				<Attribute ColumnName="MODIFYPROGID" 		DataType="ProgramID" 	DefaultValue="' '" Description="Modifying Program ID"/>
 				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	DataType="Key" 	Description="" Nullable="False" XMLName="MyItemsListKey"/>
