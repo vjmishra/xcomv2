@@ -5280,6 +5280,7 @@ public class XPEDXWCUtils {
 					billToCustomer.setOrganizationName(SCXmlUtil.getChildElement(parentElem, "BuyerOrganization").getAttribute("OrganizationName"));
 					billToCustomer.setExtnECsr1EMailID(parentExtnElem.getAttribute("ExtnECsr1EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
+					billToCustomer.setExtnMaxOrderAmount(parentExtnElem.getAttribute("ExtnMaxOrderAmount"));//JIRA 3488
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
@@ -5351,6 +5352,7 @@ public class XPEDXWCUtils {
 				String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
 				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
 				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");				
+				String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
 				
 				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
 					b2bViewFromDB = b2bViewFromDB.trim();
@@ -5429,7 +5431,7 @@ public class XPEDXWCUtils {
 							viewReportFlag, viewPricesFlag,
 							newusergroupkey, defaultShipTo,
 							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement);
+							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt);//added maxOrderAmt for JIRA 3488 
 			}
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;

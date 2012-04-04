@@ -1,6 +1,12 @@
 function checkOut()
 {
 	document.OrderDetailsForm.modifyOrderLines.value = "false";
+	//JIRA 3488 Start
+	var maxOrderAmtMsg=document.getElementById("maxOrderErrorMessage").innerHTML;
+	if(maxOrderAmtMsg !=null && maxOrderAmtMsg.trim().length>0){
+		return;
+	}
+	//JIRA 3488 End
 	if(validateOrderMultiple() == false)
 	{
 		return;

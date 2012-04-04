@@ -423,6 +423,13 @@ public String getShipToDivdeliveryInfo() {
 		ExtnPrimarySalesRep = extnPrimarySalesRep;
 	}
 //end of Performance issue
-
-	
+	//JIRA 3488 start
+	private String extnMaxOrderAmount;
+	public String getExtnMaxOrderAmount() {
+		return extnMaxOrderAmount;
+	}
+	public void setExtnMaxOrderAmount(String extnMaxOrderAmount) {
+		this.extnMaxOrderAmount = extnMaxOrderAmount;
+	}
+	//JIRA 3488 end
 }

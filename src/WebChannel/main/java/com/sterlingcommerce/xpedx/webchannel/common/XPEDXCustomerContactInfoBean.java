@@ -29,6 +29,16 @@ public class XPEDXCustomerContactInfoBean {
     private String personInfoEmailID;
     private String addEmailID;  //JIRA 3382
   
+  //JIRA 3488 Start
+	 private String extnmaxOrderAmount;
+	 public void setExtnmaxOrderAmount(String extnmaxOrderAmount) {
+		this.extnmaxOrderAmount = extnmaxOrderAmount;
+	}
+	public String getExtnmaxOrderAmount() {
+		return extnmaxOrderAmount;
+	}
+ //JIRA 3488 End
+  
   // Added for JIRA 3589 - Performance : XPEDXMyItemsGetShareListAction
     private String extnSuffixType = "";
     public String getExtnSuffixType() {
@@ -55,7 +65,7 @@ public class XPEDXCustomerContactInfoBean {
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID) {
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt) {//added maxOrderAmt for JIRA 3488
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -78,6 +88,7 @@ public class XPEDXCustomerContactInfoBean {
 		this.emailID=emailID;
 		this.personInfoEmailID=personInfoEmailID;
 		this.msapExtnUseOrderMulUOMFlag=extnUseOrderMulUOMFlag;
+		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488 
 	}
 
 	public String getFirstName() {
