@@ -59,12 +59,14 @@ import com.yantra.yfs.japi.YFSException;
 @SuppressWarnings("all")
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
+	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	public String execute() {
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		XPEDXWCUtils.checkMultiStepCheckout();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 		String ajaxDisplayStatusCodeMsg = "";
 		boolean isChangeOrderCalled=false;
 		try {
@@ -732,6 +734,28 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}//if customerList is not null
 */
+				
+				//JIRA 3488 start
+				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
+				if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
+						Float.parseFloat(maxOrderAmountStr)>0)
+				{
+					setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));	
+				
+				}
+				else {
+					XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
+					if(billToElement != null )
+					{
+						maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
+						if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
+								Float.parseFloat(maxOrderAmountStr)>0)
+						{
+							setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));	
+				}
+					}
+				}
+				//JIRA 3488 end
 						if(shipToCustomer== null){
 							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
 							
@@ -1960,8 +1984,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Map<String, Map<String, String>> itemIdConVUOMMap) {
 		this.itemIdConVUOMMap = itemIdConVUOMMap;
 	}
+//JIRA 3488 start
+	private float maxOrderAmount;
+	public void setMaxOrderAmount(float maxOrderAmount) {
+		this.maxOrderAmount = maxOrderAmount;
+	}
 
-
+	public float getMaxOrderAmount() {
+		return maxOrderAmount;
+	}
+	//JIRA 3488 end
 
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	

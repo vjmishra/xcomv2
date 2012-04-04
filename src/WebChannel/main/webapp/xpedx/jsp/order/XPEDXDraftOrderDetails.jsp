@@ -514,6 +514,10 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 					<s:set name="chargeAmount" value='%{chargeAmount}'></s:set>
 					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
+					<%--JIRA 3488 start--%>
+					<s:set name="maxOrderAmount" value='%{maxOrderAmount}'></s:set>
+					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
+					<%--JIRA 3488 end--%>
 					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
@@ -589,6 +593,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
 	</div>
 	<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5>
+	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5>
 </s:if>
 
 <!-- breadcrumb / 'print page' button -->
@@ -2378,12 +2383,25 @@ var currentAadd2ItemList = new Object();
 </div>
 
 <script type="text/javascript">
-function validateMinOrder()
+function validateOrder()
 {
 	var minAmount='<s:property value="#minOrderAmount"/>';
 	var chargeAmount='<s:property value="#chargeAmount"/>';
 	var totalAmount='<s:property value='#adjustedSubtotalWithoutTaxes' />';
 	var totalAmountNum=Number(totalAmount);
+	var maxAmount='<s:property value="#maxOrderAmount"/>';//JIRA 3488
+	var fmtdMaxOrderAmount='<s:property value='#fmtdMaxOrderAmount' />';//JIRA 3488
+	//JIRA 3488 start
+	if(totalAmountNum>maxAmount)
+	{
+		var divId=document.getElementById("maxOrderErrorMessage");
+		if(divId != null)
+		{		
+			
+			divId.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
+		}
+	}
+	//JIRA 3488 end
 	if(minAmount >totalAmountNum)
 	{
 		var divId=document.getElementById("minOrderErrorMessage");
@@ -2406,7 +2424,7 @@ function validateMinOrder()
 	updateValidation();
 	var isProcurementUser = <s:property value="#wcContext.isProcurementUser()"/>;
 	if(!isProcurementUser) {
-		validateMinOrder();
+		validateOrder();
 	}
 
 	function actionOnList(oKey){
