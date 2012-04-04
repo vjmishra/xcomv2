@@ -8,20 +8,21 @@
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/order/ORDERS.css" />
-<link rel="stylesheet" type="text/css"
-               href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
-
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <%--
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 <script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
  --%>
- <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
  <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+ <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+ <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
  <%--
  <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
@@ -775,7 +776,7 @@ function printPOs(customerPos) {
 
 <!-- Added the below commented scripts in xpedx-header.js -->
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
 <!--<script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="../xpedx/js/theme/theme-1/theme.js"></script>
 <script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>-->
