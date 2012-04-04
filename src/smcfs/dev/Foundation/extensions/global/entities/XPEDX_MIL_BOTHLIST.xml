@@ -1,7 +1,7 @@
 <DBSchema>
    <Entities>  
     <Entity EntityType="VIEW" View="true" Extensible="N" TableType="TRANSACTION" TableName="XPEDX_MIL_BOTHLIST" ApiNeeded="Y"
-    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XPEDXMyItemsList">
+    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XpedxMilBothLst">
         <Attributes>
 				<Attribute ColumnName="MODIFYTS" 	 		DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp" XMLName="Modifyts"/>
 				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="Createuserid"/>
