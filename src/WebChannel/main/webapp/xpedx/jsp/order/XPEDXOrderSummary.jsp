@@ -28,9 +28,22 @@
 <%--for jira 3438 - sales rep emailID display --%>
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 
-	<script type="text/javascript" src="../xpedx/js/common/xpedx-jquery-headder.js"></script>
+<!-- begin styles. These should be the only three styles. -->
 
-<script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
+<!--  End Styles -->
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
+
 <script type="text/javascript">
 
 function processDetail(itemid, uom) {
@@ -186,20 +199,10 @@ function setTotalPrice(val){
 
 <!-- BEGIN head-calls.php -->
 
-<!-- begin styles. These should be the only three styles. -->
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
-<!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
-<![endif]-->
-<!--  End Styles -->
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 --><!-- carousel scripts js   -->
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/FlexBox/js/jquery.flexbox.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
@@ -1549,7 +1552,6 @@ from session . We have customer Contact Object in session .
 <!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>-->
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
