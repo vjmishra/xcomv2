@@ -420,6 +420,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchStringValue = valueMap.get(key);
 		}		
 		if (!"".equals(searchStringValue.trim())) {
+			searchStringValue = searchStringValue.trim();
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			for (String searchStringToken : searchStringTokenList) {
