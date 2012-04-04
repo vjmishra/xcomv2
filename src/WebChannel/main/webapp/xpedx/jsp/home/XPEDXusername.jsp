@@ -163,7 +163,11 @@ function usernameSubmit(){
               			 <% if(null != request.getParameter("requestId")){%>
 		    				<td colspan="2" class="underlines no-border-right-user"><span class="noBorder-left">
 <%--                 			<s:textfield id="UserId" name="UserId" value='<%=request.getParameter("UserId")%>' cssClass="x-input width-250px" maxlength="255" title="Username"/> --%>
-                			<input type="text" class="x-input width-250px" maxlength="255" title="Username" id="UserId" name="UserId" value='<%=request.getParameter("userID")%>'/>
+								<% if(null != request.getParameter("userID")){%>
+                					<input type="text" class="x-input width-250px" maxlength="255" title="Username" id="UserId" name="UserId" value='<%=request.getParameter("userID")%>'/>
+                				<%} else{ %>
+                					<input type="text" class="x-input width-250px" maxlength="255" title="Username" id="UserId" name="UserId" value=""/>
+                				<%}%>
 						</span></td>
 		   				 <%} else{ %>
 						<td colspan="2" class="underlines no-border-right-user"><span class="noBorder-left">
@@ -195,12 +199,31 @@ function usernameSubmit(){
             		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsgForUsername" ></div>
             		</td></tr>
             		
+          		</tbody>
+        	</table>
+        	</s:form>
+        	<table class="full-width">
+				<tbody>
+					<tr>
+						<s:set name="errormessage" value='%{#_action.getErrorMessageType()}'/>
+					    <s:if test="%{#errormessage == 'ResetPasswordNotAllowed'}">
+					       <td class="error" style="border:0px; padding-left:0px;display:inline;"><s:text name="username.error"/></td>
+					    </s:if>
+					    <s:elseif test="%{#errormessage == 'ResetPasswordRequestError'}">
+					       <td class="error" style="border:0px; padding-left:0px;display:inline;"><s:text name="pwdresetrequest.error"/></td>
+					    </s:elseif>
+					    <s:elseif test="%{#errormessage == 'ResetIdInvalid'}">
+					        <td class="error" style="border:0px; padding-left:0px;display:inline;"><s:text name="requestid.error"/></td>
+					    </s:elseif>
+					    <s:elseif test="%{#errormessage == 'MaximumAttemptsError'}">
+					        <td class="error" style="border:0px; padding-left:0px;display:inline;"><s:text name="maxattempts.error"/></td>
+					    </s:elseif>
+          			</tr>
             		<tr>
               			<td colspan="3" class="grey  no-border-right-user" ><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
             		</tr>
           		</tbody>
         	</table>
-        	</s:form>
         	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
   

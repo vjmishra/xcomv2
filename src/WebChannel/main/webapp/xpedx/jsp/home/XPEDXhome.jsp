@@ -76,33 +76,33 @@
 		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
 		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
 			 if (ieversion < 7)
-			  alert("The application does not support this browser"); 	
+			  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 	
 			}
 
 		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
 		    var NavigatorVersion=new Number(RegExp.$1)
-		         alert("The application does not support this browser"); 
+		         alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		}
 
 		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
 		    var ffversion=new Number(RegExp.$1)
 			 if(ffversion < 3.4)
-		 	    alert("The application does not support this browser"); 
+		 	    alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		 }
 
 		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
 		    var str= navigator.appVersion;
 			var str1= str.substring(89,90);
 			if(str1 < 4)
-		  	  alert("The application does not support this browser"); 
+		  	  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		 }
 		
 		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		      alert("The application does not support this browser"); 
+		      alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		}
 		
 		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		     alert("The application does not support this browser"); 
+		     alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		}
 
 		}
