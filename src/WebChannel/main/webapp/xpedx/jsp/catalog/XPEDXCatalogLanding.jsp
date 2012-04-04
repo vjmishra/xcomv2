@@ -15,19 +15,9 @@
   	  %>
 <!-- INCLUDES GO HERE -->
 <!-- Version 1.1 Updated 8-18-10 -->
-
-
-<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/CATALOG.css" />
-
-
-	
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
@@ -35,6 +25,14 @@
 <!-- end styles -->
 
 <link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
+
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
 </head>
@@ -322,7 +320,7 @@
 <!-- FOOTER GOES HERE -->
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+
 
 <!--<script type="text/javascript" src="../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/ext-all.js"></script>
