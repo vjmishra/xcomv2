@@ -86,8 +86,8 @@
 			<param name="validationClass">com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordFormsValidation</param>
             <result name="questionList">/xpedx/jsp/home/XPEDXsecretQuestionList.jsp</result>
             <result name="requestIDvalidationSuccess">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
-            <result name="usernameerror">/xpedx/jsp/home/XPEDXpwdchangeerror.jsp</result>
-            <result name="requestIDvalidationerror">/xpedx/jsp/home/XPEDXpwdchangeerror.jsp</result>
+            <result name="usernameerror">/xpedx/jsp/home/XPEDXusername.jsp</result>
+            <result name="requestIDvalidationerror">/xpedx/jsp/home/XPEDXusername.jsp</result>
         </action>
         
         <action name="answerSubmit"
