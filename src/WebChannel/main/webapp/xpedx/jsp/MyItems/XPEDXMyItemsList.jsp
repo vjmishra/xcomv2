@@ -26,7 +26,8 @@
 --><!-- carousel scripts js   -->
 
 
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
  
 
 <!-- Hemantha -->
