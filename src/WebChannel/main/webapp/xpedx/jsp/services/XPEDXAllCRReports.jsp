@@ -6,7 +6,7 @@
 <%@ page import="java.util.* "%>
 
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en"
 	xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -14,35 +14,19 @@
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
-
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
+		
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="./swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-dan.css"/>
-
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.min.css" />
-<link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/home/portalhome.css" />
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/nav.css" />	
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
 
-
-<!-- javascript -->
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
@@ -50,36 +34,57 @@
 <script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
+<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+
+<!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
+
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jQuery.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
+
 
 <!-- carousel scripts css  -->
-
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/theme.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
-
-<!-- carousel scripts js   -->
-
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-
+<!-- carousel scripts js   -->
+<%-- <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> --%>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/demo.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
+<script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
 
-    <!-- Lightbox/Modal Window -->
-    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js" />"></script>
-    <script type="text/javascript" src="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.js" />"></script>
-<script type="text/javascript" src="/swc/xpedx/js/xpedx-new-ui.js" language="javascript"></script>
+<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+
+
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
-    
-<!--   This is Line Separator  -->
-<!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
-<!-- Web Trends tag end  -->
+
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/om2.css" />
+
+
+<!--  Change Location Light box -->
+<script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
+
+<!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+
+
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+
 
 
 
