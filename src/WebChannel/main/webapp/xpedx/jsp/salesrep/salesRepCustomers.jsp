@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.util.LinkedHashMap" %>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ page import="java.util.TreeMap" %>
@@ -55,26 +56,9 @@ function logoutMessage(){
 </head>
 <body>
 <div id="container">
-<%-- added for jira 3442 pagination--%>
-  <s:set name='_action' value='[0]'/>
-  <s:set name='wcContext' value="#_action.getWCContext()"/>
 
-  <s:url id="salesRepCustomersPaginated" action="salesRepLogin" namespace="/common">
-  <s:param name="pageNumber" value="'{0}'"/>
-  <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
-  </s:url>
- <div id="search"> 
-<div id="listOfCustomers" class="search-pagination-bottom">
-  <span>
-      <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="false" />
-  </span>
-</div>
-<div> </div>
- <%-- end of jira 3442 pagination--%>
   <div class="searchbg">
-  <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>					
-					  
+  <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>							  
   <div id="logout-text">
   <s:a onclick="javascript:return logoutMessage();" href="%{#logoutURL}" >Sign Out</s:a>
   </div>
@@ -87,6 +71,24 @@ function logoutMessage(){
           
         <input name="button" type="image" id="button" style="float:right;"  value="Submit" src="<s:url value='/xpedx/images/salesrep/button.png'/>" onclick="javascript:document.login2.submit"/> </s:form>
     </div>
+    </div>
+    <%-- added for jira 3442 pagination--%>
+  <s:set name='_action' value='[0]'/>
+  <s:set name='wcContext' value="#_action.getWCContext()"/>
+
+  <s:url id="salesRepCustomersPaginated" action="salesRepLogin" namespace="/common">
+  <s:param name="pageNumber" value="'{0}'"/>
+  <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
+  </s:url>
+ <div id="search"> 
+<div id="listOfCustomers" class="search-pagination-bottom">
+  <span>
+      <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
+      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="true" />
+  </span>
+</div>
+<div> </div>
+ <%-- end of jira 3442 pagination--%>
     <div class="table">     
     
     <table width="100%" id="mil-list-new" style="width:97%; margin:auto;">
@@ -101,8 +103,8 @@ function logoutMessage(){
           	String commandResult=(String)request.getAttribute("RESULT_COMMAND");
           	
           	if("searched".equals(commandResult)){
-          		final Map<String, String> searchedMap = (HashMap<String, String>)request.getAttribute("SEARCHED_CUSTOMERS");
-				final TreeMap<String,String> treeSortedByValues = new TreeMap<String,String>(new Comparator<Object>()
+          		final LinkedHashMap<String, String> searchedMap = (LinkedHashMap<String, String>)request.getAttribute("SEARCHED_CUSTOMERS");
+				/*final TreeMap<String,String> treeSortedByValues = new TreeMap<String,String>(new Comparator<Object>()
 				{
 					public int compare(Object o1, Object o2)
 					{
@@ -120,11 +122,14 @@ function logoutMessage(){
 						if(custID != null){
 						   customerID = custID[0];
 						}
-						String customerName = treeSortedByValues.get(customerId);
+						String customerName = treeSortedByValues.get(customerId); */
+					if(searchedMap.size()!=0 && null!=searchedMap){	
+						for(String customerId : searchedMap.keySet()){	
+							String customerName = searchedMap.get(customerId);
 				%>
                     <tr>
                       <td><%=customerName%></td>
-                      <td valign="top"><%=customerID%></td>
+                      <td valign="top"><%=customerId%></td>
                       <td valign="top">
                       <s:url id='selectedCustURL' namespace='/common' action='salesRepCustomerLogin'>
 						<s:param name='selectedCustomer'>
@@ -145,37 +150,15 @@ function logoutMessage(){
 				}			
           	}
           	else{
-			final Map<String, String> assignedCustomerMap = (Map<String, String>)session.getAttribute("ASSIGNED_CUSTOMERS");
-			final TreeMap<String,String> treeSorted = new TreeMap<String,String>(new Comparator<Object>()
-					{
-						public int compare(Object o1, Object o2)
-						{
-							int compareInts = assignedCustomerMap.get(o1).compareTo(assignedCustomerMap.get(o2));
-					        if (compareInts == 0) {
-					            return o1.toString().compareTo(o2.toString());
-					        } else {
-					            return compareInts;
-					        }
-
-							//return compareInts;
-						}
-
-					});
-					treeSorted.putAll(assignedCustomerMap);
-					
-			if(null!=treeSorted){
-				for(String customerId : treeSorted.keySet()){
-					String custID [] = customerId.split("_");
-					String customerID="";
-					if(custID != null){
-					   customerID = custID[0];
-					}
-					String customerName = treeSorted.get(customerId);
+			final LinkedHashMap<String, String> assignedCustomerMap = (LinkedHashMap<String, String>)session.getAttribute("ASSIGNED_CUSTOMERS");
+			if(null!=assignedCustomerMap){
+				for(String customerId : assignedCustomerMap.keySet()){					
+					String customerName = assignedCustomerMap.get(customerId);
 		%>
 		
                     <tr>
                        <td><%=customerName%></td>
-                      <td valign="top"><%=customerID%></td>
+                      <td valign="top"><%=customerId%></td>
                       <td valign="top">
                       <s:url id='selectedCustURL' namespace='/common' action='salesRepCustomerLogin'>
 						<s:param name='selectedCustomer'>
@@ -200,16 +183,28 @@ function logoutMessage(){
 	<br/>
 	<div id="errorMsgForCustomerData" align="center"><font color="red">No customer records found with the above criteria</font></div>
 </div>
-</div></div> <div id="strdiv2"></div>
-  </div>   
-  <div> </div>
+</div></div>
+<%-- added for jira 3442 pagination--%>
+  <s:set name='_action' value='[0]'/>
+  <s:set name='wcContext' value="#_action.getWCContext()"/>
+
+  <s:url id="salesRepCustomersPaginated" action="salesRepLogin" namespace="/common">
+  <s:param name="pageNumber" value="'{0}'"/>
+  <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
+  </s:url>
+ <div id="search"> 
 <div id="listOfCustomers" class="search-pagination-bottom">
   <span>
       <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="false" />
+      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="true" />
   </span>
 </div>
+<div> </div>
 </div>
+ <%-- end of jira 3442 pagination--%>
+ <div id="strdiv2"></div>
+  </div>   
+  <div> </div>
 </div>
  <script type="text/javascript">
  if(data=="true")
