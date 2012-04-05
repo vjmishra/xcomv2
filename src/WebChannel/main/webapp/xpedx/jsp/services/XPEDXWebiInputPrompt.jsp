@@ -11,33 +11,17 @@
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
+
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" /> 
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/global-1.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/home.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/home/portalhome.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/narrowBy.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/catalogExt.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/styles.css" />
-<link media="all" type="text/css" rel="stylesheet" href="./swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-mil-new.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-forms.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx-quick-add.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/xpedx.css" />
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/banner.css"/>
-
-<!--[if lt IE 8]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7.css" />
-<![endif]-->
-
-<!--[if gt IE 7]>
-<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie.css" />
-<![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 
@@ -57,12 +41,10 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jQuery.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
 
 
 <!-- carousel scripts css  -->
@@ -70,28 +52,21 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jcarousel/skins/xpedx/skin.css" />
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
-<%-- <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script> --%>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/demo.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.css"/>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.datepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="/swc/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/om2.css" />
@@ -103,12 +78,9 @@
 
 <title><s:property value="wCContext.storefrontId" /> - Webi Input Prompt</title>
 
-<script type="text/javascript" src="/swc/swc/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+
 
 <s:set name='_action' value='[0]' />
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />
@@ -656,7 +628,7 @@ $(function() {
     
 		
         <!-- LB CODE End -->
-           <table  cellpadding="0" cellspacing="0" width="60%" class="form"  id="order-filter">
+           <table  cellpadding="0" cellspacing="0" width="65%" class="form"  id="order-filter">
            <tr>
            <td> Location:</td>
            
