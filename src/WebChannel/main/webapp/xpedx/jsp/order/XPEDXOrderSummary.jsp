@@ -164,6 +164,7 @@ function setTotalPrice(val){
 		
 		setCustomerPONumber();
 	
+    var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
 	//Special Instructions field validation
 	var OrderSummaryForm_rushOrdrFlagField =   document.getElementById("OrderSummaryForm_rushOrdrFlag"); 	
 	var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
@@ -183,6 +184,14 @@ function setTotalPrice(val){
         errorDiv.style.display = 'inline';
         return returnval;
     }
+    else if (splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrDateFlagField.checked  == true ) )
+       {
+    	
+    	errorDiv.innerHTML = "Rush Order delivery date information is required. Please enter in the Comments field.";
+        splInstructionsField.style.borderColor="#FF0000";
+        errorDiv.style.display = 'inline';
+        return returnval;	
+       }
     else{
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
@@ -653,6 +662,16 @@ from session . We have customer Contact Object in session .
 <!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
 				</td></tr>
 			
+				<tr><td><s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="if (this.checked) this.form.SpecialInstructions.focus()"
+						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
+						value="" /><s:if
+						test='%{#_action.isDraftOrder()}'>
+						 Requested Delivery Date.Charges may apply.<span class="bold">MUST</span> add delivery date in Comments.						
+					</s:if> <s:else>
+						 Requested Delivery Date.Charges may apply.<span class="bold">MUST</span> add delivery date in Comments.
+					</s:else>	  
+<!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
+				</td></tr>			
 				<tr>
 					<td>
 						<s:set name='renderPersonInfo' value='#shipFrom' />
