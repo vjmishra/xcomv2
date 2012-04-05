@@ -303,6 +303,9 @@
 							<Or>
 							</Or>
 						</ComplexQuery>
+						<OrderBy>
+							<Attribute Desc="N" Name="ExtnCustomerName" />
+						</OrderBy>
 						</XPXSalesRepCustomers>
 					</Input>
 					<Template>
@@ -335,7 +338,11 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXGetSRCustomersListService" IsFlow="Y">
 					<Input>
-					 	<XPXSalesRepCustomers />
+					 	<XPXSalesRepCustomers>
+					 	<OrderBy>
+							<Attribute Desc="N" Name="ExtnCustomerName" />
+						</OrderBy>
+						</XPXSalesRepCustomers>
 					</Input>
 					<Template>
 						<XPXSalesRepCustomersList TotalNumberOfrecords="">
