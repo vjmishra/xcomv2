@@ -2,6 +2,7 @@ package com.sterlingcommerce.xpedx.webchannel.salesrep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class XPEDXSalesRepUtils {
 		if (YFCCommon.isVoid(networkId)){
 			return;
 		}
-    	Map<String, String> customersMap = new HashMap<String, String>();
+		LinkedHashMap<String, String> customersMap = new LinkedHashMap<String, String>();
     	// fetch the customers of sales rep
 		//added an extra parameter doc for jira 3442
 		customersMap.putAll(getCustomersForSalesRep(networkId, wcContext,doc));		
@@ -92,7 +93,7 @@ public class XPEDXSalesRepUtils {
 	 * @param wcContext
 	 * @return
 	 */
-	private Map<String, String> getCustomersForSalesRep(
+	private LinkedHashMap<String, String> getCustomersForSalesRep(
 		String networkId, IWCContext wcContext,Document doc) {
 		Document outputDoc = null;
 		//Modified for jira 3442
@@ -137,13 +138,12 @@ public class XPEDXSalesRepUtils {
 	}
 
 	//search the customers for sales rep - jira 3442
-	public Map<String, String> searchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
+	public LinkedHashMap<String, String> searchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
 		LOG.info(":: searching Customer For SalesRep in XPEDXSalesRepUtils.searchCustomerForSalesRep :: ");
 		String networkId = request.getParameter("DisplayUserID");
 		if (YFCCommon.isVoid(networkId)){
 			return null;
 		}
-    	Map<String, String> customersMapForSearch = new HashMap<String, String>();
 		// set attributes into seession
 		setAttributesInSession(wcContext, request);
 		Element outputElem= doc.getDocumentElement();
@@ -163,9 +163,9 @@ public class XPEDXSalesRepUtils {
 	 * @param wcContext 
 	 * @return
 	 */
-	private Map<String, String> getCustomersSetFromDoc(Document outputDoc,
+	private LinkedHashMap<String, String> getCustomersSetFromDoc(Document outputDoc,
 			String networkId, IWCContext wcContext) {
-		Map<String, String> customersMap = new HashMap<String, String>();
+		LinkedHashMap<String, String> customersMap = new LinkedHashMap<String, String>();
 		Map<String, String> customerIDsMap = new HashMap<String, String>();
 		Map<String, String> storefrontIDsMap = new HashMap<String, String>();
 		Map<String, String> salesRepIDsMap = new HashMap<String, String>();		
