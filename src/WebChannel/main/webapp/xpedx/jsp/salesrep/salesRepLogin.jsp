@@ -43,28 +43,30 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 
 //Start- fix for 3108
 function validateForm()
-{
+{	
 	var rtn = true;
 	var eDiv = document.getElementById("errMsg");
+	document.getElementById("InvalidCredentials").innerHTML = "";
 	if(document.salesRepForm.Password.value=="" && document.salesRepForm.DisplayUserID.value=="")
     {
       document.salesRepForm.DisplayUserID.focus();
-      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username and Password.</div>"
+      eDiv.innerHTML = "<div style=\"display: inline;color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username and Password.</div>"
       rtn = false;
     }
 	else if(document.salesRepForm.DisplayUserID.value=="")
     {
       document.salesRepForm.DisplayUserID.focus();
       rtn = false;
-      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username.</div>"
+      eDiv.innerHTML = "<div style=\"display: inline;color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Username.</div>"
     }
     else if(document.salesRepForm.Password.value=="")
     {
       document.salesRepForm.Password.focus();
-      eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Password.</div>"
+      eDiv.innerHTML = "<div style=\"display: inline;color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter Password.</div>"
       rtn = false;
     }
 	if (rtn == false){
+		
 		//commented for 3108
 		//eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter username and password.</div>"
 	}
@@ -187,15 +189,6 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 <div>
 </div>
 	<s:form action="/common/salesRepLogin.action" method="post" name="salesRepForm" id="salesRepForm" >
-	<s:if
-		test="%{(#session.ERROR_MESSAGE != '') && (#session.ERROR_MESSAGE != null) }">
-		<div class="error" style="display: inline; font-size: 1.1em; text-align: left;">
-		<s:text name="Please enter a valid Username and Password" />
-		<br/>
-		<s:property value="%{#session.REQUEST_URL}"/>
-		</div>
-	</s:if>
-
 <div>
  <h1>Sign In</h1> 
 <%-- <h1> <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.PGTITLE"/></h1> --%>
@@ -228,7 +221,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td>
-			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username/Password is the same as your Network ID/Password" id="sprytrigger1"> Forgot Password?</a></span>
+			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username/Password is the same as your Network ID/Password." id="sprytrigger1"> Forgot Password?</a></span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -242,13 +235,23 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="2">
-			<div id ="errMsg"></div>
-		</td>	
+	<td colspan="2">
+	<s:if test="%{(#session.ERROR_MESSAGE != '') && (#session.ERROR_MESSAGE != null)}">
+		<div id="InvalidCredentials" style="display: inline; font-size: 1.1em; text-align: left;color: #FF0000";>
+		<s:text name="Please enter a valid Username and Password." />
+		</div>
+	</s:if>
+	
+	<div id="errMsg"> </div>
+	</td>
 	</tr>
+	 <tr>
+		<td colspan="2">
+			
+		</td>	
+	</tr> 
 	<tr>
 		<td colspan="2"><span>Questions: Contact the support desk at 877 269-1784</span></td>
-		<%-- <td colspan="2"><span color:#999999;"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></span></td> --%>
 		
 	</tr>
 </table>
@@ -260,9 +263,6 @@ h1 { margin-bottom: 0px; padding-top:200px; }
  	request.setAttribute("SCUI_USER_TRYING_TO_LOGIN", true);
  %>
 </s:form>
-<!--  <div><img src="<s:url value='/xpedx/images/salesrep/login-bu.png'/>" width="300" height="39"
-	/></div>
-</div>-->
 
 <div id="footer">
 	<p>© International Paper Company. All rights reserved.</p>
