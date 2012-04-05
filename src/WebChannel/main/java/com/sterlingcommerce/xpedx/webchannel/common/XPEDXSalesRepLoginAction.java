@@ -1,6 +1,7 @@
 package com.sterlingcommerce.xpedx.webchannel.common;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -97,15 +98,13 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 		LOG.info(":: Logged In User :: " + DisplayUserID);
 		Document doc=null;
 		String result = WCAction.SUCCESS;
-		Map<String, String> customersMap = new HashMap<String, String>();
-		Map<String, String> customersMapToSearch = new HashMap<String, String>();
+		LinkedHashMap<String, String> customersMapToSearch = new LinkedHashMap<String, String>();
 		setRequiredAttrbutes();
 		try {
 			networkId = request.getParameter("DisplayUserID");
 			String searchText=request.getParameter("searchText");
 			String command=request.getParameter("command");
 			if("search".equals(command)){
-				customersMap = (HashMap<String, String>)wcContext.getSCUIContext().getSession().getAttribute("ASSIGNED_CUSTOMERS");
 				if(!"".equals(searchText) && !"Search for Customer".equals(searchText)){
 					//added for jira 3442 - sales rep search
 					Document outputDoc = null;
@@ -113,7 +112,7 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 					customersMapToSearch = (new XPEDXSalesRepUtils()).searchCustomerForSalesRep(request, wcContext,outputDoc);
 					parsePageInfo(outputDoc.getDocumentElement(), true);
 					//end of modification 3442
-					 Map<String, String> searchedMap = new HashMap<String, String>();
+					LinkedHashMap<String, String> searchedMap = new LinkedHashMap<String, String>();
 					 if(customersMapToSearch !=null){
     					for(String customerId : customersMapToSearch.keySet()){
     						String customerName = customersMapToSearch.get(customerId);
