@@ -2392,7 +2392,7 @@ function validateOrder()
 	var maxAmount='<s:property value="#maxOrderAmount"/>';//JIRA 3488
 	var fmtdMaxOrderAmount='<s:property value='#fmtdMaxOrderAmount' />';//JIRA 3488
 	//JIRA 3488 start
-	if(totalAmountNum>maxAmount)
+	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
 		var divId=document.getElementById("maxOrderErrorMessage");
 		if(divId != null)
