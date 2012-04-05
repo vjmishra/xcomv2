@@ -451,7 +451,14 @@
                      </xsl:attribute>
 
                      <xsl:attribute name="ExtnPriceOverrideFlag">
-                        <xsl:value-of select="normalize-space(PriceOverrideFlag)" />
+			<xsl:choose>
+				<xsl:when test="((normalize-space(PriceOverrideFlag)='P') or (normalize-space(PriceOverrideFlag)='p'))">
+					<xsl:value-of select="'Y'" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="'N'" />
+				</xsl:otherwise>
+			</xsl:choose> 
                      </xsl:attribute>
 
                      <xsl:attribute name="ExtnPricingUOM">
