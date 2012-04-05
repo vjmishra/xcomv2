@@ -59,10 +59,10 @@ html,	body {
 	clear:both;
 	margin-top:5px;}
 
-.forgot a:link{color:#003366; text-decoration:underline}
+.forgot a:link{color:#003366; text-decoration:none}
 .forgot a:active{color:#003366; text-decoration:underline}
-.forgot a:hover{color:#222; text-decoration:none}
-.forgot a:visited{color:#003366; text-decoration:underline}
+.forgot a:hover{color:#222; text-decoration:underline}
+.forgot a:visited{color:#003366; text-decoration:none}
 	
 .x-input{
 	-moz-border-radius: 6px 6px 6px 6px; 
@@ -98,10 +98,11 @@ html,	body {
 
 /*******************************************/
 #search{
-	margin:auto;
-	width:920px;
+	margin-top:5px;
+	margin-right:auto;
+	margin-left:auto;
+	width:726px;
 	overflow:auto; 
-	background-image:url(../../images/salesrep/search-bg.png);
 	background-repeat:no-repeat;
 	background-position:top center;
 }
@@ -109,7 +110,7 @@ html,	body {
 	background-image:url(../../images/salesrep/search-bg2.png);
 	background-repeat:no-repeat;
 	background-position:top;
-	padding-bottom:161px;
+	padding-bottom:15px;
 	margin-top:24px;
 	margin-right:auto;
 	margin-left:auto;
@@ -124,7 +125,7 @@ html,	body {
 .textbox [type="text"] { border:solid 0px #e4e4e4; width:550px; font-size:16px; color:#222; padding:8px; font-weight:bold; }
 
 .table{
-	margin-top:46px;} 
+	margin-top:15px;} 
 	
 .table-header-bar {
     background-color: #00255B;
@@ -224,8 +225,7 @@ html,	body {
 	margin:0;
 	padding:15px;
 }    
-.search-pagination-bottom{color:#000000;font-size:11px;text-align:right;font-weight:bold;margin-top:25px;margin-bottom:5px;margin-right:110px;}
+.search-pagination-bottom{color:#000000;font-size:11px;text-align:right;font-weight:bold;margin-top:5px;margin-bottom:5px;margin-right:10px;}
 .search-pagination-bottom span{font-size:13px;font-weight:bold;}
-.search-pagination-bottom a{font-size:12px;font-weight:bold;}
-
+.search-pagination-bottom a{font-size:12px;font-weight:bold;color: #003399;text-decoration: none;}
 
