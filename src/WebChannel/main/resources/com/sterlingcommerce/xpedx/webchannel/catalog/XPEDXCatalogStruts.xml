@@ -45,7 +45,8 @@
 			<param name="categoryDepth">2</param>
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
-			<result name="error">/swc/jsp/catalog/searchError.jsp</result>
+			<!-- result name="error">/swc/jsp/catalog/searchError.jsp</result-->
+			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 			<result name="singleItem" type="redirectAction">
 				<param name="actionName">itemDetails</param>
 				<param name="namespace">/catalog</param>
