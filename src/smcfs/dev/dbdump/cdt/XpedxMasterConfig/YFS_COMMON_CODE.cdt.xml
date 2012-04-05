@@ -4904,14 +4904,14 @@
     Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:06:11-05:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
-    CodeLongDescription="Description,M,Item#,Size,Color,Mfg.Item#,Environment,ListPrice"
+    CodeLongDescription="Description,M,Item#,Size,Color,Mfg. Item#,Environment,ListPrice"
     CodeName="" CodeShortDescription="Labels" CodeSymbol=""
     CodeType="XPXCatBrowseCol" CodeValue="Labels"
     CommonCodeKey="20111118022202107926" Createprogid=".YEntityServlet"
     Createts="2011-11-18T02:22:02-05:00" Createuserid="admin"
-    DocumentType="" DocumentTypeSpecific="" Lockid="2"
+    DocumentType="" DocumentTypeSpecific="" Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:25:34-04:00"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-04-04T02:03:20-04:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Environment,ListPrice"
