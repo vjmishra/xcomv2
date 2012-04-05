@@ -47,16 +47,9 @@
 <!-- end styles -->
 
 <!-- For the number formatting -->
-<!--start of Code for  jira 1402 -->
-
-<script>
-var pageName="MyItemDetails";
-</script>
-
-<!-- End of Code for Jira 1402 -->
 
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
@@ -2777,7 +2770,5 @@ function showSharedListForm(){
 -->
 <script type="text/javascript" src="../js/jquery.numberformatter-1.1.0.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
-
 </body>
 </html>
