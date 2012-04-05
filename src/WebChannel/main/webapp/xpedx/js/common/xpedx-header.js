@@ -1954,9 +1954,6 @@ var SVGAnnotator = {
 function initOpenClose()
 {
 
-/**changed code for jira 1402 ***/
-if(typeof pageName =="undefined"){
-
 	var blocks = document.getElementsByTagName("li");
 
 	for (var i=0; i<blocks.length; i++)
@@ -2035,8 +2032,6 @@ if(typeof pageName =="undefined"){
 
 	}
 
-	
- }//if pageName is undefined
 }
 
 function initNav()
