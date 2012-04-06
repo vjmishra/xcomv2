@@ -442,7 +442,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:" + chngcOrderEle0.getString());
 					}
-					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle0.getOwnerDocument().getDocument());
+					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderEx", chngcOrderEle0.getOwnerDocument().getDocument());
 					if (tempDoc == null) {
 						throw new Exception("Service XPXChangeOrder Failed to Update Customer Order!");
 					} 
