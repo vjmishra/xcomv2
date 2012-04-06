@@ -179,7 +179,7 @@ function setTotalPrice(val){
     
     if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
-    	errorDiv.innerHTML = "Rush Order delivery information is required. Please enter in the Comments field.";
+    	errorDiv.innerHTML = "Delivery Date information is required.  Please enter in the Comments field.";
         splInstructionsField.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
         return returnval;
