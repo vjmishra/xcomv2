@@ -67,10 +67,10 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			// To check whether all the quantities in the line has been cancelled.
 			String maxOrderStatus = rootElement.getAttribute("MaxOrderStatus");
 			String minOrderStatus = rootElement.getAttribute("MinOrderStatus");
-			isCancelEventTriggered = true;
 			if(!orderType.equalsIgnoreCase("Customer") && minOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS) && 
 					maxOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS)){
 				// Order cancelled status is '9000'
+				isCancelEventTriggered = true;
 				orderStatus = XPXLiterals.ORDER_CANCELLED_STATUS;
 			}
 			else {
@@ -95,7 +95,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.info("---------------------------------------------\n");
 			log.info(SCXmlUtil.getString(inXML)+"\n");
 			log.info("---------------------------------------------\n");
-			outDoc = api.invoke(env, "changeOrder", inXML);
+			outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", inXML); 
 		}
 		else{
 			Document changeOrderDoc = YFCDocument.createDocument("Order").getDocument();
@@ -110,12 +110,13 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.info("---------------------------------------------\n");
 			log.info(SCXmlUtil.getString(changeOrderDoc)+"\n");
 			log.info("---------------------------------------------\n");
-			outDoc = api.invoke(env, "changeOrder", changeOrderDoc);
+			outDoc = api.executeFlow(env, "XPXUpdateExOrderStatus", changeOrderDoc);
 		}
 		if(outDoc!=null)
 			log.info("O/P of changeOrder is \n"+SCXmlUtil.getString(outDoc));
 		
-		//If the fulfillment order status is canceled , update the customer order status
+		/* If the fulfillment order status is canceled , update the customer order status.
+		 * OU - Line Process Code 'C' with quantity '0'. Only fulfillment order will  be Cancelled and the customer order status should be modified accordingly. */
 		if(!orderType.equalsIgnoreCase("Customer") && !YFCCommon.isVoid(orderStatus) && isCancelEventTriggered)
 		{
 			// Order cancelled status is '9000'
@@ -175,7 +176,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				log.info("---------------------------------------------\n");
 				log.info(SCXmlUtil.getString(changeCustOrderDoc)+"\n");
 				log.info("---------------------------------------------\n");
-				outDoc = api.invoke(env, "changeOrder", changeCustOrderDoc);
+				outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", changeCustOrderDoc);
 			}
 		}
 		return inXML;
