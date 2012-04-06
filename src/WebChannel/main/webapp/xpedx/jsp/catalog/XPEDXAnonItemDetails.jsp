@@ -710,7 +710,7 @@
 		
 		</div>
 	</div>
-
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!-- BEGIN footer -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- END footer -->
