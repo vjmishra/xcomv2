@@ -15,9 +15,7 @@
 <link media="all" type="text/css" rel="stylesheet"  href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$(document).pngFix();
-	});
+	
 	function getPreviousPageUrl(){	
 		window.location.href = "<s:property value='%{itemDtlBackPageURL.substring(itemDtlBackPageURL.indexOf(xpedxSwcContext))}' escape='false'/>";
 	}
@@ -105,10 +103,8 @@
     </div>
 	<!-- end main  -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />   
-	</div>
-	<swc:dialogPanel title='${emailDialogTitle}' isModal="true"	id="emailDialogPanel">
-	<div class="dialog-body" id="ajax-body-1"></div>
-    </swc:dialogPanel>
+	
+	
 
 	<!-- end container  -->
 </body>
