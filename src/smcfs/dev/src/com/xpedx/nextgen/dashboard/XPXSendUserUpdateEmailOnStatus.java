@@ -58,166 +58,166 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		String orderType = "";
 		Document custContactOutputDoc = null;
 		Document fOrderOutputDoc = null;
-		Element fOrderElement = null;	
+		Element fOrderElement = null;
+		
 		if(inXML != null){
-			log.info("Input XML for selectEmailTemplate in XPXSendUserUpdateEmailOnStatus is :  " + SCXmlUtil.getString(inXML));
+			log.info("XPXSendUserUpdateEmailOnStatus_InXML:" + SCXmlUtil.getString(inXML));
 		}
+		
 		Element rootElement = inXML.getDocumentElement();		
-		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderStatusChange")){
+		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderStatusChange")) {
 			// For change order status.
-		orderStatus = rootElement.getAttribute("BaseDropStatus");
-			
+			orderStatus = rootElement.getAttribute("BaseDropStatus");	
 		} else if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("Order")) {
 			// For change order on cancellation.
 			orderType = rootElement.getAttribute("OrderType");
 			// To check whether all the quantities in the line has been cancelled.
 			String maxOrderStatus = rootElement.getAttribute("MaxOrderStatus");
 			String minOrderStatus = rootElement.getAttribute("MinOrderStatus");
-			if(!orderType.equalsIgnoreCase("Customer") && minOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS) && 
-					maxOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS)){
+			if(!orderType.equalsIgnoreCase("Customer") && minOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS) 
+					&& maxOrderStatus.equals(XPXLiterals.ORDER_CANCELLED_STATUS)) {
 				// Order cancelled status is '9000'
 				orderStatus = XPXLiterals.ORDER_CANCELLED_STATUS;
 			}									
 		} else {
-			log.info("Unknown document received to send email on order status change!!!");
+			log.info("Unknown Document Received To Send Email.");
 			emailRequired = "N";
 		}
-		if(!YFCObject.isNull(orderStatus) && !YFCObject.isVoid(orderStatus)) {
-			log.info("");
-			log.info("orderStatus = " + orderStatus);
-		}
+		
 		if(log.isDebugEnabled()){
 			log.debug("");
-			log.debug("orderStatus = " + orderStatus);
+			log.debug("Email Request For Order Status:" + orderStatus);
 		}
-		
 				
 		if(orderStatus != null && orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) 
 				|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_REJECTED_STATUS) 
 					|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_BACKORDERED_STATUS) 
-						|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS)){
-		// To get the fulfillment order details that needs to be sent in email.	
-		fOrderHeaderKey = rootElement.getAttribute("OrderHeaderKey");
-		if(!YFCObject.isNull(fOrderHeaderKey) && !YFCObject.isVoid(fOrderHeaderKey)) {
-			log.info("Fulfillment order header key : " + fOrderHeaderKey);
-		}
-		// To build input doc to call getOrderList API.
-		Document fOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
-		fOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, fOrderHeaderKey);		
-		// To set API template
-		env.setApiTemplate("getOrderList", getOrderListTemplate);
-		
-		fOrderOutputDoc = api.invoke(env,"getOrderList", fOrderInputDoc);
-		if(fOrderOutputDoc != null){
-			log.info("Fulfillment order details in XPXSendUserUpdateEmailOnStatus are : " + SCXmlUtil.getString(fOrderOutputDoc));
-		}
-		
-		// To clear API template for getOrderList
-		env.clearApiTemplate("getOrderList");
-		
-				NodeList orderList = fOrderOutputDoc.getElementsByTagName("Order");
-				if(orderList.getLength() > 0) {
-					
-				fOrderElement = (Element)orderList.item(0);
-				
+						|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS)) {
+			// To get the fulfillment order details that needs to be sent in email.	
+			fOrderHeaderKey = rootElement.getAttribute("OrderHeaderKey");
+			if(!YFCObject.isNull(fOrderHeaderKey) && !YFCObject.isVoid(fOrderHeaderKey)) {
+				log.info("Fulfillment Order Header Key: " + fOrderHeaderKey);
+			}
+			// To build input doc to call getOrderList API.
+			Document fOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
+			fOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, fOrderHeaderKey);		
+			// To set API template
+			env.setApiTemplate("getOrderList", getOrderListTemplate);
+			
+			fOrderOutputDoc = api.invoke(env,"getOrderList", fOrderInputDoc);
+			if(fOrderOutputDoc != null){
+				log.info("XPXSendUserUpdateEmailOnStatus_FulfillmentOrder: " + SCXmlUtil.getString(fOrderOutputDoc));
+			}
+			
+			// To clear API template for getOrderList
+			env.clearApiTemplate("getOrderList");
+			
+			NodeList orderList = fOrderOutputDoc.getElementsByTagName("Order");
+			if(orderList != null && orderList.getLength() > 0) {
+						
+				fOrderElement = (Element)orderList.item(0);		
 				// To get the details to prepare the subject for the email.
 				custPONo = fOrderElement.getAttribute("CustomerPONo");
 				brand = fOrderElement.getAttribute("EnterpriseCode");
 				NodeList extnList = fOrderElement.getElementsByTagName("Extn");
-				if(extnList.getLength() > 0){
-				Element orderExtnElement = (Element)extnList.item(0);
-				legacyOrdNo = orderExtnElement.getAttribute("ExtnLegacyOrderNo");
-				generationNo = orderExtnElement.getAttribute("ExtnGenerationNo");
-				division = orderExtnElement.getAttribute("ExtnCustomerDivision"); 
+				if(extnList != null && extnList.getLength() > 0){
+					Element orderExtnElement = (Element)extnList.item(0);
+					legacyOrdNo = orderExtnElement.getAttribute("ExtnLegacyOrderNo");
+					generationNo = orderExtnElement.getAttribute("ExtnGenerationNo");
+					division = orderExtnElement.getAttribute("ExtnCustomerDivision"); 
 					// Order No format : CustomerDivision - Legacy Order No - Generation No
 					if(!YFCObject.isNull(legacyOrdNo) && !YFCObject.isVoid(legacyOrdNo) && !YFCObject.isNull(generationNo) && !YFCObject.isVoid(generationNo)){
-					orderNo = division + "-" + legacyOrdNo + "-" + generationNo;
+						orderNo = division + "-" + legacyOrdNo + "-" + generationNo;
 					}
 				}
-								 				
+									 				
 				if(fOrderElement.hasAttribute("CustomerContactID")){
 					custContactID = fOrderElement.getAttribute("CustomerContactID");					
 				}
-				if(!YFCObject.isNull(custContactID) && !YFCObject.isVoid(custContactID)) {
-					log.info("custContactID : " + custContactID);	
+					
+				// To check email needs to be sent based on the flags set in customer contact table.			
+				if(!YFCObject.isNull(custContactID) && !YFCObject.isVoid(custContactID)){
+					
+					if (log.isDebugEnabled()) {
+						log.debug("CustomerContactID: " + custContactID);
+						log.debug("OrderNo: " + orderNo);
+					}
+					
+					// To set the template for getCustomerContactList API.
+					env.setApiTemplate("getCustomerContactList", getcustContactListTemplate);
+					
+					/* Input Doc Schema : <CustomerContact CustomerContactID="" /> */
+					Document custContactInputDoc = YFCDocument.createDocument("CustomerContact").getDocument();
+					custContactInputDoc.getDocumentElement().setAttribute("CustomerContactID", custContactID);
+					if (log.isDebugEnabled()) {
+						log.debug("getCustomerContactList_InXML: " + SCXmlUtil.getString(custContactInputDoc));
+					}
+					custContactOutputDoc = api.invoke(env,"getCustomerContactList", custContactInputDoc);
+					// To clear API template.
+					env.clearApiTemplate("getCustomerContactList");
+					if(custContactOutputDoc != null && log.isDebugEnabled()){
+						log.debug("getCustomerContactList_OutXML: " + SCXmlUtil.getString(custContactOutputDoc));
+					}
+					
+					NodeList extnNodeList = custContactOutputDoc.getElementsByTagName("Extn");
+					if(extnNodeList != null && extnNodeList.getLength() > 0){
+						Element extnElement = (Element) extnNodeList.item(0);
+						if(extnElement != null && extnElement.hasAttribute("ExtnOrderShipEmailFlag")){
+						extnOrderShipEmailFlag = extnElement.getAttribute("ExtnOrderShipEmailFlag");
+						}
+						if(extnElement != null && extnElement.hasAttribute("ExtnOrderCancelEmailFlag")){
+						extnOrderCancelEmailFlag = extnElement.getAttribute("ExtnOrderCancelEmailFlag");
+						}
+						if(extnElement != null && extnElement.hasAttribute("ExtnBackOrderEmailFlag")){
+						extnBackOrderEmailFlag = extnElement.getAttribute("ExtnBackOrderEmailFlag");
+						}
+					}	
+				} else {
+					log.info("Email can't be sent as MSAP Customer Contact ID doesn't exist.");
+					emailRequired = "N";
 				}
 				
-			// To check email needs to be sent based on the flags set in customer contact table.			
-			if(!YFCObject.isNull(custContactID) && !YFCObject.isVoid(custContactID)){
-				// To set the template for getCustomerContactList API.
-				env.setApiTemplate("getCustomerContactList",getcustContactListTemplate);
-				
-				/* Input Doc schema : <CustomerContact CustomerContactID="" /> */
-				Document custContactInputDoc = YFCDocument.createDocument("CustomerContact").getDocument();
-				custContactInputDoc.getDocumentElement().setAttribute("CustomerContactID", custContactID);				
-				custContactOutputDoc = api.invoke(env,"getCustomerContactList", custContactInputDoc);
-				if(custContactOutputDoc != null){
-					log.info("Customer Contact output doc : " + SCXmlUtil.getString(custContactOutputDoc));
-				}
-				// To clear API template.
-				env.clearApiTemplate("getCustomerContactList");
-				NodeList extnNodeList = custContactOutputDoc.getElementsByTagName("Extn");
-				if(extnNodeList.getLength() > 0){
-					Element extnElement = (Element) extnNodeList.item(0);
-					if(extnElement != null && extnElement.hasAttribute("ExtnOrderShipEmailFlag")){
-					extnOrderShipEmailFlag = extnElement.getAttribute("ExtnOrderShipEmailFlag");
-					}
-					if(extnElement != null && extnElement.hasAttribute("ExtnOrderCancelEmailFlag")){
-					extnOrderCancelEmailFlag = extnElement.getAttribute("ExtnOrderCancelEmailFlag");
-					}
-					if(extnElement != null && extnElement.hasAttribute("ExtnBackOrderEmailFlag")){
-					extnBackOrderEmailFlag = extnElement.getAttribute("ExtnBackOrderEmailFlag");
-					}
-				}
-				
-			} else {
-				log.info("Email can't be sent as MSAP Customer Contact ID doesn't exist.");
-				emailRequired = "N";
-			}
-			
-			// To check email required and set the email templates based on order status.
-			
-				if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) && !extnOrderShipEmailFlag.equalsIgnoreCase("N")){
+				// To check email required and set the email templates based on order status.
+				if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) && !extnOrderShipEmailFlag.equalsIgnoreCase("N")) {
 					emailTemplatepath = "/global/template/email/XPXOrderShipped.xsl";
 					subject = brand + " Order Shipped: PO " + custPONo +" Order " + orderNo;
-				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_REJECTED_STATUS)){
+				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_REJECTED_STATUS)) {
 					emailTemplatepath = "/global/template/email/XPXOrderRejected.xsl";	
 					subject = brand + ".com  Order Rejected: PO " + custPONo +" Order " + orderNo;
-				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_BACKORDERED_STATUS) && !extnBackOrderEmailFlag.equalsIgnoreCase("N")){
+				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_BACKORDERED_STATUS) && !extnBackOrderEmailFlag.equalsIgnoreCase("N")) {
 					emailTemplatepath = "/global/template/email/XPXBackOrdered.xsl";
 					subject = brand + " Back Order Confirmation: PO " + custPONo +" Order " + orderNo;
-				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS) && !extnOrderCancelEmailFlag.equalsIgnoreCase("N")){
+				} else if(orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS) && !extnOrderCancelEmailFlag.equalsIgnoreCase("N")) {
 					emailTemplatepath = "/global/template/email/XPXOrderCancelled.xsl";
 					subject = brand + " Order Cancelled: PO " + custPONo +" Order " + orderNo;
 				} else {
-					log.info(" Email not required.");
+					log.info(" Email Not Required.");
 					emailRequired = "N";
 				}	
-			
-			// To find the customer email address.
-			if(emailRequired.equalsIgnoreCase("Y") && custContactOutputDoc.getDocumentElement().hasChildNodes()){			
-				Document customerEmailDoc = getCustomerEmailIDsDoc(env,custContactOutputDoc);
-				fOrderElement.setAttribute("CCEmailAddress", customerEmailDoc.getDocumentElement().getAttribute("cEmailAddress"));
-				fOrderElement.setAttribute("ToEmailAddress", customerEmailDoc.getDocumentElement().getAttribute("strToEmailAddress"));
-			}			
-			
-			fOrderElement.setAttribute("EmailTemplatepath", emailTemplatepath);
-			fOrderElement.setAttribute("Subject", subject);
-			
-			// To set the Order no in the format requested by customer.
-			fOrderElement.setAttribute("OrderNo", orderNo);
-			
-			// To get the full path of organization logo.
-			Element orderElement = (Element) fOrderOutputDoc.getElementsByTagName("Order").item(0);
-			Document inDoc = YFCDocument.createDocument("Order").getDocument();
-			inDoc.getDocumentElement().setAttribute("SellerOrganizationCode", orderElement.getAttribute("SellerOrganizationCode"));
-			XPXUtils xpxUtils = new XPXUtils();
-			Document stampLogoDoc = xpxUtils.stampBrandLogo(env, inDoc);
+				
+				// To find the customer email address.
+				if(emailRequired.equalsIgnoreCase("Y") && custContactOutputDoc.getDocumentElement().hasChildNodes()){			
+					Document customerEmailDoc = getCustomerEmailIDsDoc(env,custContactOutputDoc);
+					fOrderElement.setAttribute("CCEmailAddress", customerEmailDoc.getDocumentElement().getAttribute("cEmailAddress"));
+					fOrderElement.setAttribute("ToEmailAddress", customerEmailDoc.getDocumentElement().getAttribute("strToEmailAddress"));
+				}			
+				
+				fOrderElement.setAttribute("EmailTemplatepath", emailTemplatepath);
+				fOrderElement.setAttribute("Subject", subject);
+				
+				// To set the Order no in the format requested by customer.
+				fOrderElement.setAttribute("OrderNo", orderNo);
+				
+				// To get the full path of organization logo.
+				Element orderElement = (Element) fOrderOutputDoc.getElementsByTagName("Order").item(0);
+				Document inDoc = YFCDocument.createDocument("Order").getDocument();
+				inDoc.getDocumentElement().setAttribute("SellerOrganizationCode", orderElement.getAttribute("SellerOrganizationCode"));
+				XPXUtils xpxUtils = new XPXUtils();
+				Document stampLogoDoc = xpxUtils.stampBrandLogo(env, inDoc);
 				if(stampLogoDoc.getDocumentElement().hasAttribute("BrandLogo")){					
-				fOrderElement.setAttribute("BrandLogo", stampLogoDoc.getDocumentElement().getAttribute("BrandLogo"));
+					fOrderElement.setAttribute("BrandLogo", stampLogoDoc.getDocumentElement().getAttribute("BrandLogo"));
 				}
 			} else {
-				log.info(" Email not required for the order ");
 				emailRequired = "N";
 			}
 		} else {
@@ -231,18 +231,14 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		} 				
 		
 		fOrderOutputDoc.getDocumentElement().setAttribute("EmailRequired", emailRequired);
-		if(log.isDebugEnabled()){
-			log.debug("fOrderOutputDoc in selectEmailTemplate() : " + SCXmlUtil.getString(fOrderOutputDoc));
+		if(log.isDebugEnabled()) {
+			log.debug("");
+			log.debug("EmailRequired:" + emailRequired);
+			log.debug("XPXSendUserUpdateEmailOnStatus_OutXML:" + SCXmlUtil.getString(fOrderOutputDoc));
 		}
-		if(fOrderOutputDoc != null){
-			log.info("");
-			log.info("fOrderOutputDoc in selectEmailTemplate() : " + SCXmlUtil.getString(fOrderOutputDoc));
-		}
-		
 		return fOrderOutputDoc;
 	}
-	
-	
+		
 	public Document getCustomerEmailIDsDoc(YFSEnvironment env,Document custContactOutputDoc) throws Exception
 	{				
 		String strcEmailAddress = "";
@@ -293,8 +289,7 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 		customerEmailDoc.getDocumentElement().setAttribute("cEmailAddress", strcEmailAddress);
 		customerEmailDoc.getDocumentElement().setAttribute("strToEmailAddress", strToEmailAddress);
 
-		return customerEmailDoc;
-		
+		return customerEmailDoc;	
 	}
 	
 	@Override
