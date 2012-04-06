@@ -17,6 +17,7 @@ public class XPEDXLogoutAction extends Logout {
 	
 	public String execute() {
 		String lastLoginDate="";
+		String returnType="WebUser";
 		YFCDate loginDate = new YFCDate();
     	lastLoginDate = loginDate.getString();
     	
@@ -29,6 +30,11 @@ public class XPEDXLogoutAction extends Logout {
 			createCCExtn = true;
 		else {
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
+		}
+		String isSalesRep="";
+		isSalesRep=(String)getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+		if( isSalesRep!= null && isSalesRep.equalsIgnoreCase("true")){
+			returnType="SalesRepUser";
 		}
 		if(custContRefKey!=null && custContRefKey.length()>0)
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_REF_ATTR, custContRefKey);
@@ -43,7 +49,7 @@ public class XPEDXLogoutAction extends Logout {
 			LOG.error("Error during logout " + e.getMessage());
 		}
 		
-		return SUCCESS;
+		return returnType;
 	}
 
 }
