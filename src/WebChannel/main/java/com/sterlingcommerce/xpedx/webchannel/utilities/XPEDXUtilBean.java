@@ -218,7 +218,10 @@ public class XPEDXUtilBean extends UtilBean {
     	
     	//Return same String if condition is not met.
     	String fmtPhoneNumber = phoneNumber;
-    	
+    	if(phoneNumber!=null){
+    		phoneNumber = phoneNumber.replaceAll(" ", "");
+    		phoneNumber = phoneNumber.replaceAll("-", "");
+    	}
     	if (phoneNumber != null && phoneNumber.trim().length() == 10)
     	{
     		 areaCode  = phoneNumber.substring(0, 3);
