@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
+
 
 <s:set name='_action' value='[0]'/>
 <s:set name='uId' value="%{uniqueId}"/>
