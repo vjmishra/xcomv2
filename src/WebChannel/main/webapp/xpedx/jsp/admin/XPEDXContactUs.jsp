@@ -23,6 +23,7 @@
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MISC.css" /> 
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <!-- javascript -->
 
@@ -306,8 +307,8 @@
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
   					            <br />
-				            	<s:if test="%{#csr2Phone != ''}">
-				            		<s:property value="#csr2Phone"/>,
+				            	<s:if test="%{#fmtCsr2Phone != ''}">
+				            		<s:property value="#fmtCsr2Phone"/>,
 				            		<br/>
 				            	</s:if>
 				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>
@@ -320,8 +321,8 @@
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
 				            	<br />
-				            	<s:if test="%{#csr2Phone != ''}">
-				            		<s:property value="#csr2Phone"/>,
+				            	<s:if test="%{#fmtCsr2Phone != ''}">
+				            		<s:property value="#fmtCsr2Phone"/>,
 				            		 <br/>
 				            	</s:if>
 				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>

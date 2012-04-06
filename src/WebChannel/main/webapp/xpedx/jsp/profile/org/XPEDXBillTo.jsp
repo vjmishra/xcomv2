@@ -6,6 +6,7 @@
 
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%><s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <% request.setAttribute("isMergedCSSJS","true"); %>
 <s:set name='_action' value='[0]'/>
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />
@@ -345,12 +346,13 @@ ul.checkboxTree li
 		          				<tr class="padding-bottom1">
 						            <td valign="top" class="no-border-right padding0">Sales Professional:</td>
 						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
-						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/>
+						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br/>
 					              	<span class="grey-italic">
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
-							         <s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></span></td>
+							         <a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>"><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a>
+							         </span></td>
 					             <!-- <s:if test="%{#salesRepUserInfo.getAttribute('DayPhone') != ''}">
 					              		<s:property value="%{#salesRepUserInfo.getAttribute('DayPhone')}"/>, 
 					              	</s:if>	 -->	
@@ -363,14 +365,16 @@ ul.checkboxTree li
 						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br />
 					              	<span class="grey-italic">
-					              	<br/>
-					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
-							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
+					              	
+					              	<s:if test='%{#fmtSalesRepPhone!= ""}'>
+							              <s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
 					             <!--  	<s:if test="%{#salesRepUserInfo.getAttribute('DayPhone') != ''}">
 					              		<s:property value="%{#salesRepUserInfo.getAttribute('DayPhone')}"/>, 
-					              	</s:if>		 -->			              	
-							    	<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></span></td>
+					              	</s:if>		 -->		              	
+							    	
+								<a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>" ><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a>
+							    	 </span></td>
 					          	</tr>
 	          				</s:else>
 	          			</s:if>
@@ -400,13 +404,14 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/>
+				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/><br/>
 				            	<span class="grey-italic">
-									<s:if test='%{#fmtCsr1Phone != ""}'>
+				            		<s:if test='%{#fmtCsr1Phone != ""}'>
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>
 							        </s:if>
-							    <s:a href="#csr1EMailID" ><s:property value="#csr1EMailID"/></s:a>
+									<a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
+									<br/>
 								</span></td>
 				          	</tr>
 				          	<s:set name="customerService" value="%{true}" />
@@ -417,13 +422,13 @@ ul.checkboxTree li
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
 				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
 				            	<span class="grey-italic">
+				            		<s:if test='%{#fmtCsr2Phone != ""}'>
+						           		<s:property value='%{#fmtCsr2Phone}'/><br/>
+						        	</s:if>
+	                                <a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 				            		<br/>
-				            	<s:if test='%{#fmtCsr2Phone != ""}'>
-						           	<s:property value='%{#fmtCsr2Phone}'/><br/>
-						           	<br/>
-						        </s:if>
 						     
-				            	<s:a href="#csr1EMailID" ><s:property value="#csr1EMailID"/></s:a></span></td>
+				            	</span></td>
 				          	</tr>
 						</s:else>
 					</s:if>
@@ -440,7 +445,7 @@ ul.checkboxTree li
 				            		<s:property value="#csr2Phone"/>,
 				            		<br/>
 				            	</s:if>
-				            	<s:a href="#csr2EMailID" ><s:property value="#csr2EMailID"/></s:a></span></td>
+				            	<a href="mailto:<s:property value="#csr2EMailID"/>" ><s:property value="#csr2EMailID"/></a><br/></span></td>
 				          	</tr>
 						</s:if>
 						<s:else>
@@ -450,12 +455,14 @@ ul.checkboxTree li
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
 				            	<br />
-				            	<s:if test="%{#csr2Phone != ''}">
-				            		<s:property value="#csr2Phone"/>,
+				            	<s:if test="%{#fmtCsr2Phone != ''}">
+				            		<s:property value="#fmtCsr2Phone"/>
 				            		 <br/>
 				            	</s:if>
-				            	<s:a href="#csr2EMailID" ><s:property value="#csr2EMailID"/></s:a></span></td>
-				          	</tr>
+								<a href="mailto:<s:property value="#csr2EMailID" />" ><s:property value="#csr2EMailID"/></a>	<br/>
+				            	</span></td>				          	
+				            </tr>
+	
 						</s:else>
 					</s:if>
         	 		<%--<tr>
@@ -657,7 +664,7 @@ ul.checkboxTree li
 				    </tr>
 				</table> --%>
 				<div class="clearview">&nbsp;</div>
-            	<div class="clearview">&nbsp;</div>
+            	
             	<div id="cart-actions" class="float-right">    
                     <ul id="cart-actions">
                        
