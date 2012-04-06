@@ -821,7 +821,7 @@ function printPOs(customerPos) {
 <!--<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery-ui.min.js"></script>
 --><!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 --><script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <%--
 <script type="text/javascript" src="../swc/js/jQuery.js"></script> 
 --%> 
