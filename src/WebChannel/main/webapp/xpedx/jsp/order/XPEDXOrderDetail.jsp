@@ -61,6 +61,7 @@
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+
 <script type="text/javascript">
 $(function() {
 	$(".datepicker").datepicker({
@@ -1571,7 +1572,7 @@ function displayLineAdjustments(panelId, lineKey) {
 <script type="text/javascript" src="<s:url value='/swc/js/order/approval.js'/>"></script>
 <script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/email.js'/>"></script>
 <script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/orderAdjustment.js'/>"></script>
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
