@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
@@ -16,6 +16,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MISC.css" />
 
 <!-- jQuery -->
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
