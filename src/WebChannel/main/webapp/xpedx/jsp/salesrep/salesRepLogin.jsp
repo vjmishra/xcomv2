@@ -46,7 +46,6 @@ function validateForm()
 {	
 	var rtn = true;
 	var eDiv = document.getElementById("errMsg");
-	document.getElementById("InvalidCredentials").innerHTML = "";
 	if(document.salesRepForm.Password.value=="" && document.salesRepForm.DisplayUserID.value=="")
     {
       document.salesRepForm.DisplayUserID.focus();
@@ -66,7 +65,7 @@ function validateForm()
       rtn = false;
     }
 	if (rtn == false){
-		
+		document.getElementById("InvalidCredentials").innerHTML = "";
 		//commented for 3108
 		//eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter username and password.</div>"
 	}
