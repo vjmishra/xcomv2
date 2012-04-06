@@ -179,7 +179,7 @@ function setTotalPrice(val){
     
     if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
-    	errorDiv.innerHTML = "Delivery Date information is required.  Please enter in the Comments field.";
+    	errorDiv.innerHTML = "Delivery Date information is required. Please enter in the Comments field.";
         splInstructionsField.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
         return returnval;
@@ -666,9 +666,9 @@ from session . We have customer Contact Object in session .
 						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
 						value="" /><s:if
 						test='%{#_action.isDraftOrder()}'>
-						 Requested Delivery Date.Charges may apply.<span class="bold">MUST</span> add delivery date in Comments.						
+						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.						
 					</s:if> <s:else>
-						 Requested Delivery Date.Charges may apply.<span class="bold">MUST</span> add delivery date in Comments.
+						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.
 					</s:else>	  
 <!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
 				</td></tr>			
