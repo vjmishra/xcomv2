@@ -6,19 +6,19 @@
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 
-<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=9" />
-<script type="text/javascript" src="/swc/xpedx/js/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/ext-all.js"></script>
+
 
 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
+<link rel="stylesheet" type="text/css"
+	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 
 <script type="text/javascript">
@@ -27,6 +27,9 @@
 	attrPickerActions[1] = '<s:url action="attributemanagement-getAttributeGroupListForDomain" namespace="/catalog" escapeAmp="false" includeParams="none" />';
 	attrPickerActions[2] = '<s:url action="attributemanagement-getAttributeGroupListForGroup" namespace="/catalog" escapeAmp="false" includeParams="none" />';               
 </script>
+<script type="text/javascript" src="/swc/xpedx/js/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/ext-all.js"></script>
+
 <%-- <script type="text/javascript"	src="<s:url value='/swc/js/catalog/itemdetails.js'/>"></script> --%>
 <script type="text/javascript"	src="<s:url value='/swc/js/catalog/XPEDXItemdetails.js'/>"></script>
 <script type="text/javascript"	src="<s:url value='/swc/js/catalog/advancedSearch.js'/>"></script>
@@ -637,7 +640,6 @@
 
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx//js/fancybox/jquery.fancybox-1.3.1.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window -->
 
@@ -647,16 +649,15 @@
 <link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 <!--[if IE]> -->
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 
 <!-- [endif] -->
 
 <%-- <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
  --%>
-<script type="text/javascript"	src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script src="/swc/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
 <script type="text/javascript" 
 	src='/swc/xpedx/js/jquery.numeric.js'> </script>
