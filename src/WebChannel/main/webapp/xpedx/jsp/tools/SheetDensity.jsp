@@ -3,7 +3,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
-<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -14,11 +13,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
-<script type="text/javascript"
-	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
- 
-<script type="text/javascript"
-	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+
 <link rel="stylesheet" type="text/css"
 	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
      
@@ -47,6 +42,10 @@
 <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
+	<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 
 <script type="text/javascript" src="../../xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
