@@ -114,12 +114,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						}
 					}
 				}
-			}else {
+			} else {
 				throw new Exception("Attribute HeaderProcessCode Not Available in Incoming Legace Message!");
 			}
 
 			validateInXML(rootEle);
-			
+
 			if(log.isDebugEnabled()){
 				log.debug("InXML After Validation:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
@@ -465,6 +465,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				throw new Exception("Invalid HeaderProcessCode in the Incoming Legacy Message!");
 			}
 		} catch (Exception ex) {
+			
+			if(log.isDebugEnabled()){
+				log.debug("Exception Description:" + ex.getMessage());
+			}
 			ex.printStackTrace();
 			APIException = ex;
 			prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
@@ -744,6 +748,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		errorObject.setErrorClass(errorClass);
 		errorObject.setInputDoc(inXML);
 		errorObject.setException(e);
+		errorObject.setExceptionMessage(e.getMessage());
 		ErrorLogger.log(errorObject, env);
 	}
 
