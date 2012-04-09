@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
@@ -227,19 +228,23 @@ public class ErrorLogger {
 			Document createErrorNotificatnInDoc = XmlUtils.createDocument("XPXErrorNotification");
 			Element xpxErrorNotifyRootElem = createErrorNotificatnInDoc
 					.getDocumentElement();
+			String exceptionMessage = null;
 			if (errorObj != null) {
 				if (errorObj.getException() != null
 						&& errorObj.getException().getMessage() != null) {
-					//handle the case where stack reaches more than 3800 char
-					if(errorObj.getException().getMessage().length()>3800)
-					{
-					String StackTrace=((String)errorObj.getException().getMessage());
-					StackTrace=StackTrace.substring(0, 3800);					
-					 xpxErrorNotifyRootElem.setAttribute("StackTrace",StackTrace);
-					}
-					else
-					{
-						xpxErrorNotifyRootElem.setAttribute("StackTrace",errorObj.getException().getMessage());
+					exceptionMessage = errorObj.getExceptionMessage();
+					if (YFCObject.isNull(exceptionMessage) || YFCObject.isVoid(exceptionMessage)) {
+						//handle the case where stack reaches more than 3800 char
+						if(errorObj.getException().getMessage().length()>3800) {
+							String StackTrace=((String)errorObj.getException().getMessage());
+							StackTrace=StackTrace.substring(0, 3800);					
+							xpxErrorNotifyRootElem.setAttribute("StackTrace",StackTrace);
+						} else {
+							xpxErrorNotifyRootElem.setAttribute("StackTrace",errorObj.getException().getMessage());
+						}
+					} else {
+						// To Set Only Exception Message For Order Update/Order Edit Interface.
+						xpxErrorNotifyRootElem.setAttribute("StackTrace",exceptionMessage);
 					}
 					 
 					 /** Added by Arun Sekhar on 31-Jan-20100 for CENT tool logging of EOF/SOF messages **/
