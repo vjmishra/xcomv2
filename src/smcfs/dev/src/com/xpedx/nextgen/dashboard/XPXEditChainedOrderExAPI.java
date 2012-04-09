@@ -205,7 +205,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			((YFSContext)env).rollback();
-			prepareErrorObject(ex, "OrderEdit", ex.getMessage(), env, inXML);
+			prepareErrorObject(ex, "OrderEdit", XPXLiterals.E_ERROR_CLASS, env, inXML);
 			inXML.getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());			
 			return inXML;
 		}
@@ -788,6 +788,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 		errorObject.setErrorClass(errorClass);
 		errorObject.setInputDoc(inXML);
 		errorObject.setException(e);
+		errorObject.setExceptionMessage(e.getMessage());
 		ErrorLogger.log(errorObject, env);
 	}
 	
