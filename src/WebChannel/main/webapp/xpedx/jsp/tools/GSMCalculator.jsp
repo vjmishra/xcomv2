@@ -14,11 +14,6 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/RESOURCES.css" />
 
-<script type="text/javascript"
-	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
- 
-<script type="text/javascript"
-	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 <link rel="stylesheet" type="text/css"
 	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
      
@@ -49,7 +44,11 @@
 
 <script type="text/javascript" src="../../xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
-
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
+ 
+<script type="text/javascript"
+	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
