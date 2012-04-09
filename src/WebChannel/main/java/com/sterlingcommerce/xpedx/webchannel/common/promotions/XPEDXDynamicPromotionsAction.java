@@ -7,10 +7,14 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.SCUILocalSession;
+import com.sterlingcommerce.webchannel.catalog.helper.CatalogContextHelper;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -401,7 +405,14 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		Map<String, String> MainCategories = new LinkedHashMap<String, String>();
 
 		Element outputXML = null;
-
+		//performance issue for filter action
+		Document outDoc = null;
+		Element catElem;
+		SCUILocalSession localSession = wcContext.getSCUIContext().getLocalSession();
+		outDoc  = (Document) localSession.getAttribute("categoryCache");
+		//SCXmlUtil.getString(outDoc);
+	if(outDoc == null || (outDoc!=null && outDoc.getDocumentElement() ==null)) 
+	{	
 		Map<String, String> valueMap = new HashMap<String, String>();
 		String orgCode = wcContext.getStorefrontId();
 		String customerId = wcContext.getCustomerId();
@@ -421,17 +432,20 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		if (null != outputXML) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
-		
-		//System.out.println("Output XML: " + SCXmlUtils.getString(oXML));
+	}else{
+		outputXML= outDoc.getDocumentElement();
+	}	
+		//System.out.println("Output XML: " + SCXmlUtils.getString(outputXML));
+	//SCXmlUtils.getString(categoryList);
 		Element categoryList = XMLUtilities
 				.getChildElementByName(outputXML, "CategoryList");
 		if (categoryList == null) {
 			return MainCategories;
 		}
-		NodeList cat = categoryList.getElementsByTagName("Category");
+		NodeList cat = categoryList.getChildNodes();
 		int numCats = cat.getLength();
 		for (int i = 0; i < numCats; i++) {
-			Element catElem = (Element) cat.item(i);
+			catElem = (Element) cat.item(i);
 			String catID = catElem.getAttribute("CategoryID");
 			String sDesc = catElem.getAttribute("ShortDescription");
 			MainCategories.put(catID, sDesc);

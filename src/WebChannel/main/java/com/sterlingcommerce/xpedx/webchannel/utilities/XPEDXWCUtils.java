@@ -4708,6 +4708,7 @@ public class XPEDXWCUtils {
 		   YFCElement categoryListEle = itemEle.getFirstChildElement();
 		   YFCElement categoryEle = categoryListEle.getFirstChildElement();
 		   categoryId = categoryEle.getAttribute("CategoryPath");
+		   path=categoryId;
 	   }
 	   else	
 		   categoryId = path;
@@ -4736,11 +4737,28 @@ public class XPEDXWCUtils {
 						cat = st.nextToken();
 				}
 			}
-			System.out.println("***************&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&***************************" + cat);
+			//System.out.println("***************&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&***************************" + cat);
 			if(null != cat)
 			{
-				YFCDocument getCategoryListInXML = YFCDocument
-				.createDocument("Category");
+				/*Added for performance filter.action - getting the category desc on basis of category id*/
+				Document catObjFromCache = (Document)context.getSCUIContext().getLocalSession().getAttribute("categoryCache");
+				if(catObjFromCache !=null){
+					Element outXml = catObjFromCache.getDocumentElement();
+					Element categoryList = XMLUtilities
+					.getChildElementByName(outXml, "CategoryList");
+				
+					if(categoryList != null)
+					{
+						Map<String,String> catMap = getCategoryMap(categoryList);
+						result = getCategoryShortDesc(catMap,cat);
+						
+					}
+				} 
+				if(result==null || (result!=null && result.trim().equalsIgnoreCase(""))){
+				/*End of performance*/
+					
+					YFCDocument getCategoryListInXML = YFCDocument
+					.createDocument("Category");
 				
 				YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
 				categoryLstEle.setAttribute("CategoryID", cat);
@@ -4761,6 +4779,7 @@ public class XPEDXWCUtils {
 				result = catEle.getAttribute("ShortDescription");
 				
 				//JIRA-2890 
+				}
 				result = adjugglerKeywordPrefix + result;
 			}
 			
@@ -4780,6 +4799,53 @@ public class XPEDXWCUtils {
 			return result;
 	}
 
+	/*Performance - filter.action
+	 * Getting all the list of categoryIds and short description from input CategoryList element*/
+	public static Map<String,String> getCategoryMap(Element outCatListElem){
+		Map<String, String> Categories = new LinkedHashMap<String, String>();
+		Element catElem;
+		NodeList categoryList;
+		Element childCatElem;
+		Element categoryEle;
+		String catID;
+		String sDesc;
+		//SCXmlUtils.getString(categoryList);
+		
+		if (outCatListElem == null) {
+			return Categories;
+		}
+		NodeList cat = outCatListElem.getChildNodes();
+		int numCats = cat.getLength();
+		int numChildCats =0;
+		for (int i = 0; i < numCats; i++) {
+			catElem = (Element) cat.item(i);
+			 catID = catElem.getAttribute("CategoryID");
+			 sDesc = catElem.getAttribute("ShortDescription");
+			Categories.put(catID, sDesc);
+			//Retrieving child categories
+			NodeList childCat = catElem.getChildNodes();
+			categoryList = childCat.item(0).getChildNodes();
+			numChildCats = categoryList.getLength();
+			for(int j=0;j<numChildCats; j++){
+				childCatElem = (Element) categoryList.item(j);
+				 catID = childCatElem.getAttribute("CategoryID");
+				 sDesc = childCatElem.getAttribute("ShortDescription");
+				 Categories.put(catID, sDesc);
+			}
+		}
+		return Categories;
+	}
+	
+	public static String getCategoryShortDesc(Map<String,String> Categories, String catId){
+		String categoryShortDesc="";
+		if(Categories != null){
+			categoryShortDesc = Categories.get(catId);
+		}
+		return categoryShortDesc;
+		
+	}
+	/*End of Performance - filter.action*/
+	
 	
 	/**
 	 * preddy: This methods sanitized ad_Jugler keywords before sending.

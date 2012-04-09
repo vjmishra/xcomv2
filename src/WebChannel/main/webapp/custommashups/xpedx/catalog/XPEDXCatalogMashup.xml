@@ -971,5 +971,38 @@
 		</API>
 	</mashup>
 	
-
+	<!-- Added for performance : overriding outOfBox catalogNavBar -->
+	<mashup id ='xpedxCatalogNavBar' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="searchCatalogIndex">
+			<Input>
+				<CatalogSearch CallingOrganizationCode="" OrganizationCode="" CategoryDomain=""
+								CategoryDepth="" DisplayLocalizedFieldInLocale=" " >
+					<Item>
+						<CustomerInformation CustomerID=""/>
+					</Item>
+				</CatalogSearch>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="" OrganizationCode="" SortDescending=""
+						CategoryDepth="" DisplayLocalizedFieldInLocale="" CategoryPath="">
+					<CategoryDomain AttributeName="" CategoryDomain="" Description="" IsClassification="" ShortDescription="">
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</CategoryDomain>
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Description="" ShortDescription="" Count="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Description="" ShortDescription="" Count=""/>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	
 </mashups>       

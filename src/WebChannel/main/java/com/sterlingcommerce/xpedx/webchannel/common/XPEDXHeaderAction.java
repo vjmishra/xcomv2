@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.SCUILocalSession;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
@@ -39,6 +40,7 @@ import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -1065,12 +1067,29 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	public String getCategories() {
 		SCUIContext uictx = getWCContext().getSCUIContext();
 		Document outDoc = null;
+		/* Commented for Performance - filter.action
 		outDoc = CatalogContextHelper.getCategoryFromCache(wcContext,
-				categoryDepth);
+				categoryDepth);*/
+		
+		
+		Element el1;
 		SCUILocalSession localSession = wcContext.getSCUIContext()
 				.getLocalSession();
+		outDoc=(Document) localSession.getAttribute("categoryCache");
 		if (outDoc == null) {
-			outDoc = callMashup(uictx, SEARCH_CATALOG_INDEX_MASHUP_ID);
+			try {
+				customerId = wcContext.getCustomerId();
+				el1= prepareAndInvokeMashup(SEARCH_CATALOG_INDEX_MASHUP_ID);
+				if(el1!=null){
+					outDoc = el1.getOwnerDocument();
+				}
+			} catch (XMLExceptionWrapper e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CannotBuildInputException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (outDoc == null) {
 			log.error("Exception in reading the Categories  ");
@@ -1206,7 +1225,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private static final long serialVersionUID = 1L;
 	// To get the Category list
 	protected Document prodCategoryOutputDoc;
-	private static final String SEARCH_CATALOG_INDEX_MASHUP_ID = "CatalogNavBar";
+	private static final String SEARCH_CATALOG_INDEX_MASHUP_ID = "xpedxCatalogNavBar";
 	private static final String SWC_BUSINESS_RULE_NO_CAT_TO_DISPLAY = "SWC_NUM_OF_CATEGORIES_DISPLAY";
 	private static final int NO_CAT_TO_DISPLAY = 7;
 	private int numOfCatToDisplay;

@@ -1465,6 +1465,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		// get the customers ship from division from the table
 		try {
 			//customerShipFromBranch = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
+			// Added for performance  - SortResultBy action
+			shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			if(shipToCustomer== null){
 				log.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
 				
