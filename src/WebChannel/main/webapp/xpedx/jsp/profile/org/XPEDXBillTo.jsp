@@ -3,11 +3,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %> 
-
+<% request.setAttribute("isMergedCSSJS","true"); %>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%><s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
-<% request.setAttribute("isMergedCSSJS","true"); %>
 <s:set name='_action' value='[0]'/>
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />
 <s:set name='sdoc' value="getOutputDoc().getDocumentElement()" />
@@ -16,7 +15,7 @@
 <s:set name='billToAddressElem' value='billToAddress' />
 <s:set name='custPersonInfoElem' value='#xmlUtil.getChildElement(#billToAddressElem,"PersonInfo")'/>
 <s:set name='custPersonInfoExtnElem' value='#xmlUtil.getChildElement(#custPersonInfoElem,"Extn")'/>
-
+<s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='wcUtil' />
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
@@ -27,8 +26,11 @@
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
-
-<!-- javascript -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+<!-- javascript
 
 <script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-base.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-all.js'/>"></script>
@@ -37,12 +39,12 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/global/dojoRequire.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/theme/theme-1/theme.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/catalog/catalogExt.js'/>"></script>
+ -->
 <script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
 
 <!-- carousel scripts js   -->
 
 <script type="text/javascript" src="<s:url value='/xpedx/js/jcarousel/xpedx-custom-carousel.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery-1.4.2.min.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/pngFix/jquery.pngFix.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js'/>"></script>
