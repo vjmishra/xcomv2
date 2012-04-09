@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -14,6 +13,8 @@
 <!--[if IE]> --> <!-- UI changes done  -->
 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link rel="stylesheet" type="text/css"
+	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <!-- [endif] -->
 
@@ -40,7 +41,7 @@
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/js/xpedx-new-ui.js" language="javascript"></script>
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
