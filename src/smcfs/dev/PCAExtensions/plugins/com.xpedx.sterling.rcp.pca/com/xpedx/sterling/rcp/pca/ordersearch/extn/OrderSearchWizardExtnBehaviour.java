@@ -45,6 +45,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		apiConterxt.setInputXml(YRCXmlUtils.createFromString("<CommonCode CallingOrganizationCode='xpedx' CodeLongDescription='GEN' CodeType='XpedxWCStatus' ><OrderBy><Attribute Name='CodeValue' Desc='N'/></OrderBy></CommonCode>"));
 		apiConterxt.setFormId("com.yantra.pca.ycd.rcp.tasks.orderSearch.wizards.YCDOrderSearchWizard");
 		callApi(apiConterxt);
+		
 	}
  
  	
@@ -266,20 +267,45 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		tblBindingData.setImageProvider(new YRCExtendedTableImageProvider(){
 			public String getImageThemeForColumn(Object object, String attribute) {
 				boolean needsAttention = false;
+				boolean willCallFlag = false;
+				boolean rushOrderFlag = false;
+				boolean lockedOrder = false;
 				Element inputEle = (Element) object;
+				Element eleWillCall = YRCXmlUtils.getChildElement(inputEle, "Extn");
 				Element eleHolds = YRCXmlUtils.getChildElement(inputEle, "OrderHoldTypes");
+				
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWillCall"))){
+					willCallFlag = true;
+				}else if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnRushOrderFlag"))){
+					rushOrderFlag = true;
+				}
 				if(eleHolds!=null){
 					Iterator itrHold = YRCXmlUtils.getChildren(eleHolds);
 					while(itrHold.hasNext()) {
 						Element eleHold = (Element) itrHold.next();
-						if((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType")) && "1100".equals(eleHold.getAttribute("Status"))){
+						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType"))) && "1100".equals(eleHold.getAttribute("Status"))){
 							needsAttention = true;
+						//Start- Added for 3391
+						}
+						if((XPXConstants.ORDER_IN_EXCEPTION_HOLD).equals(eleHold.getAttribute("HoldType"))){
+							lockedOrder = true;
 						}
 					}
 				}
-				if(attribute.endsWith("Status") && needsAttention){
-					return "Held_Order_Small";
-				}else{
+				if(attribute.endsWith("Status")&& willCallFlag  ){
+					return "WillCall";
+				}
+				else if(attribute.endsWith("Status")&& rushOrderFlag  ){
+					return "RushOrder";
+				}
+				else if(attribute.endsWith("Status")&& needsAttention  ){
+					return "NeedsAttention";
+				}
+				else if(attribute.endsWith("Status")&& lockedOrder  ){
+					return "NeedsAttention";
+				}
+				//End- Added for 3391
+				else{
 					return null;
 				}
 			}
@@ -381,6 +407,11 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			if(!YRCPlatformUI.isVoid(eleInput)&& !YRCPlatformUI.isVoid(eleInput.getAttribute("BillToID")))
 			{
 				eleInput.setAttribute("BillToIDQryType", "LIKE");
+			}
+			//Added for 3391
+			if(!YRCPlatformUI.isVoid(eleExtn)&& !YRCPlatformUI.isVoid(eleExtn.getAttribute("ExtnCustomerDivision")))
+			{
+				eleExtn.setAttribute("ExtnCustomerDivisionQryType", "LIKE");
 			}
 		}
 		return super.preCommand(apiContext);
