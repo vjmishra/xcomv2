@@ -43,6 +43,7 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
     int minNoOfSplChars;
     char[] allowedSplChars;
     char[] disallowedChars;
+    String enteredDisallowedChars="";
     int maxRepeatedChars;
     boolean disallowUserFirstName = false;
     boolean disallowUserLastName = false;
@@ -150,10 +151,16 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
 					}
 				}
                 
+                int intDisChar =0;
+                
                 for (char disallowedChar : disallowedChars) {
 					if(disallowedChar==c){
 						iNoOfDisallowedChars++;
-						break;
+						if(enteredDisallowedChars.length()>0 && enteredDisallowedChars.contains(Character.toString(c)))
+							continue;
+						else
+							enteredDisallowedChars = enteredDisallowedChars+ Character.toString(c);
+						//break;
 					}
 				}
                 
@@ -244,10 +251,15 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
 					}
 				}
                 
+                int intDisChar =0;
                 for (char disallowedChar : disallowedChars) {
 					if(disallowedChar==c){
 						iNoOfDisallowedChars++;
-						break;
+						if(enteredDisallowedChars!=null && enteredDisallowedChars.length()>0 && enteredDisallowedChars.contains(Character.toString(c)))
+							continue;
+						else
+							enteredDisallowedChars = enteredDisallowedChars + Character.toString(c);
+						//break;
 					}
 				}
                 
@@ -255,15 +267,15 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
             if(iNoOfAlphabeticalChars < minNoOfAlphabeticalChars)
             {
-               	errorMap.put("EXTNXPX0001", "The password must have atleast "+Integer.toString(minNoOfAlphabeticalChars)+" Alphabetical Characters.");
+               	errorMap.put("EXTNXPX0001", "The password must contain at least "+Integer.toString(minNoOfAlphabeticalChars)+" alphabetical characters");
             }
             if(iNoOfNumericChars < minNoOfNumericChars)
-            {
-              	errorMap.put("EXTNXPX0002", "The password must have atleast "+Integer.toString(minNoOfNumericChars)+" Numerical Characters.");
+            { 
+              	errorMap.put("EXTNXPX0002", "The password must contain at least "+Integer.toString(minNoOfNumericChars)+" numeric character");
             }
             if(iNoOfUpperCaseChars < minNoOfUpperCaseChars)
-            {
-            	errorMap.put("EXTNXPX0003", "The password must have atleast "+Integer.toString(minNoOfUpperCaseChars)+" Upper case Characters.");
+            { 
+            	errorMap.put("EXTNXPX0003", "The password must contain at least "+Integer.toString(minNoOfUpperCaseChars)+" uppercase character");
             }
             
             if(loginId!=null && newPassword.toUpperCase().contains(loginId.toUpperCase())){
@@ -272,13 +284,24 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             }
             
             if(iNoOfDisallowedChars > 0){
+            	String messageString = "";
+            	try
+            	{
+	            	for(int i = 0; i < enteredDisallowedChars.length() ; i++)
+	            	{
+	            		messageString = "The password must not contain the character '" + enteredDisallowedChars.charAt(i) + "'\n";
+	                	errorMap.put("EXTNXPX000" + (12 + i), messageString);
+	            	}
+            	}
+            	catch(Exception ex)
+            	{
+            	}
             	//return PasswordPolicyResult.FAILURE("EXTNXPX0008");
-            	errorMap.put("EXTNXPX0008", "The password must NOT contain " +Arrays.toString(disallowedChars) +" Characters");
             }
             
             if(exceededMaxRepeatedChars){
-            	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");
-            	errorMap.put("EXTNXPX0009", "The password has exceeded Maximum number "+maxRepeatedChars+" of repeated Characters");
+            	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");   
+            	errorMap.put("EXTNXPX0009", "The password must not exceed more than "+maxRepeatedChars+" consecutive repeated characters");
             }
             if(length < 8){
             	//return PasswordPolicyResult.FAILURE("EXTNXPX0009");
