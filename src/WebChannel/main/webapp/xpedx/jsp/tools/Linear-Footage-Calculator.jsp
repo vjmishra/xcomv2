@@ -108,7 +108,7 @@
                         </tr>
                         <tr>
                           <td>Roll                                                 Width:<br /></td>
-                          <td colspan="3" class="padding8"><input name="rWidth" type="text" style="width:80px;" class="x-input right-align" id="rWidth" onkeyup="calcPhone('Value',eform.calcpages);"/></td>
+                          <td colspan="3" class="padding8"><input name="rWidth" type="text" style="width:80px;" class="x-input right-align" id="rWidth" onkeyup="calcPhone('Value',eform.rWidth);"/></td>
                         </tr>
                         <tr>
                           <td>&nbsp;</td>
