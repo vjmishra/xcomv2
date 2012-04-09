@@ -6,6 +6,7 @@ public class Error {
 	
 	private Document inputDoc = null;
 	private Exception exception = null;
+	private String exceptionMessage = null;
 	private String errorClass = null;
 	private String transType = null;
 	/** Added by Arun Sekhar on 31-Jan-20100 for CENT tool logging of EOF/SOF messages **/
@@ -41,7 +42,10 @@ public class Error {
 	public void setErrorDesc(String errorDesc) {
 		this.errorDesc = errorDesc;
 	}
-	
-	
-
+	public String getExceptionMessage() {
+		return exceptionMessage;
+	}
+	public void setExceptionMessage(String exceptionMessage) {
+		this.exceptionMessage = exceptionMessage;
+	}
 }
