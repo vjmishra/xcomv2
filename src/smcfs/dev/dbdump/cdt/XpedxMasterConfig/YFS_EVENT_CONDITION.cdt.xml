@@ -229,20 +229,6 @@
     OwnerType="" Priority="1.00"/>
 <EventCondition ActionKey="20110705123741153498" ConditionKey=""
     Createprogid=".YCPWFRepositoryAPI"
-    Createts="2011-07-05T12:39:04-04:00" Createuserid="admin"
-    EventConditionKey="20110705123905153524" EventKey="2002081502"
-    Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2011-07-05T12:39:04-04:00" Modifyuserid="ng"
-    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110425170244131238" ConditionKey=""
-    Createprogid=".YCPWFRepositoryAPI"
-    Createts="2011-07-05T12:39:04-04:00" Createuserid="admin"
-    EventConditionKey="20110705123905153526" EventKey="2002081502"
-    Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2011-07-05T12:39:04-04:00" Modifyuserid="ng"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="1.00"/>
-<EventCondition ActionKey="20110705123741153498" ConditionKey=""
-    Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-05T12:40:02-04:00" Createuserid="admin"
     EventConditionKey="20110705124003153538"
     EventKey="2011022314202296100" Lockid="0"
@@ -313,4 +299,18 @@
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-02-08T05:16:15-05:00" Modifyuserid="admin"
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
+<EventCondition ActionKey="20110705123741153498" ConditionKey=""
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-04-06T08:15:44-04:00" Createuserid="admin"
+    EventConditionKey="20120406081545123656" EventKey="2002081502"
+    Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-04-06T08:15:44-04:00" Modifyuserid="admin"
+    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
+<EventCondition ActionKey="20120406081219123637" ConditionKey=""
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-04-06T08:15:44-04:00" Createuserid="admin"
+    EventConditionKey="20120406081545123658" EventKey="2002081502"
+    Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-04-06T08:15:44-04:00" Modifyuserid="admin"
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="1.00"/>
 </YFS_EVENT_CONDITIONList>
