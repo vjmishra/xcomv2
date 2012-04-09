@@ -62,21 +62,21 @@
         
         if(newPwd.value.trim()=="")
         {
-        	errorDiv.innerHTML = "Please enter a value for "+ newPwd.title +" field.";
+        	errorDiv.innerHTML = "Please enter a new password";
         	newPwd.style.borderColor="#FF0000";
         	errorDiv.style.display = 'inline';
 			return;
 		}
 		if(confirmNewPwd.value.trim()=="")
 		{
-			errorDiv.innerHTML = "Please enter a value for "+ confirmNewPwd.title +" field.";
+			errorDiv.innerHTML = "Please confirm new password";
 			confirmNewPwd.style.borderColor="#FF0000";
 			errorDiv.style.display = 'inline';
 			return;
 		}
 		if(newPwd.value!=confirmNewPwd.value)
 		{
-			errorDiv.innerHTML = "Please enter the same value in both password fields.";
+			errorDiv.innerHTML = "Please enter the same value in both password fields";
 			confirmNewPwd.style.borderColor="#FF0000";
 			errorDiv.style.display = 'inline';
 			return;
@@ -188,7 +188,7 @@
 					</tr>
 					
 					<tr><td colspan="2">
-					    <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsgForPassword" ></div>
+					    <div class="error"  style="float:left; margin-right: 12px;display:none;" id="errorMsgForPassword" ></div>
 					</td></tr>
 					<tr><td colspan="3">
 					    <div class="error"  style="float:left; margin-right: 12px;" id="pwdErrorDiv" ></div>
