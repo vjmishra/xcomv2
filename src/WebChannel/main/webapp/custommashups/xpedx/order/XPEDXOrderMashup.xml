@@ -276,7 +276,12 @@
 						ExtnAddnlEmailAddr="" ExtnCustomerDivision="" ExtnOrderedByName="" 
 						ExtnSourceType="" ExtnWebConfNum="" ExtnLegacyOrderNo=""
 						ExtnRushOrderFlag="" ExtnWebHoldFlag="" ExtnOrderSubTotal="" ExtnOrderCouponDiscount=""
-						ExtnOrderDiscount="" ExtnTotOrderAdjustments="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnLegTotOrderAdjustments=""/>
+						ExtnOrderDiscount="" ExtnTotOrderAdjustments="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnLegTotOrderAdjustments="">
+						
+						<XPXUeAdditionalAttrXmlList>
+							<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>
 					<Instructions>
 						<Instruction InstructionText=""
 							InstructionDetailKey="" />
