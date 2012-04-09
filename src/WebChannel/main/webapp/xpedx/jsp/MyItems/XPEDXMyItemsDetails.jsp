@@ -684,7 +684,7 @@ function showSharedListForm(){
 	           url = ReplaceAll(url,"&amp;",'&');
 	           //Show the waiting box
 	           var x = document.getElementById(divId);
-	           x.innerHTML = "Validating item " + itemId + "...please wait";
+	           x.innerHTML = "Validating item " + itemId;
 	           
 	           //Execute the call
 	           document.body.style.cursor = 'wait';
@@ -729,7 +729,7 @@ function showSharedListForm(){
 			 if(validateOrderMultiple(false,null) == false)
 			 {	
 				 //Added displayMsgHdrLevelForLineLevelError() here for displaying error msg when Add Item with Qty To cart
-				 displayMsgHdrLevelForLineLevelError ();
+				 //displayMsgHdrLevelForLineLevelError ();
 					return;
 			 }
 			var formItemIds 	= document.getElementById("formItemIds");
@@ -886,6 +886,8 @@ function showSharedListForm(){
 			}
 
 			var errorflag=true;
+			var isQuantityZero = true;
+			var uomCheck = false ;
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				var divId='errorDiv_'+	arrQty[i].id;
@@ -913,8 +915,6 @@ function showSharedListForm(){
 						divVal.style.display = 'block';
 						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
 						//Ctrl.focus();
-						
-						errorflag= false;
 					}
 				}
 				else if(quantity>0){
@@ -924,6 +924,7 @@ function showSharedListForm(){
 						arrOrdMul[i].value=1;
 					}
 					var ordMul = totalQty % arrOrdMul[i].value;
+					isQuantityZero = false;
 					if(ordMul!= 0)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
@@ -934,10 +935,16 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 							}
 						else {
-						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						document.getElementById("errorMsgTop").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgTop").style.display = "inline";
+						
+			            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgBottom").style.display = "inline";
+			            uomCheck = true;
 						}
 						errorflag= false;
 					}
@@ -948,15 +955,28 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 						}
 						else {
-							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
 							
 							}
 						
 						
-					}
-				}
+					}				
+				}				
+			}
+			if(uomCheck == true)
+			{
+				errorflag= false;
+			}	
+			if(isQuantityZero == true)
+			{
+				document.getElementById("errorMsgTop").innerHTML = "No items with quantity defined. Please review the list and try again." ;
+	            document.getElementById("errorMsgTop").style.display = "inline";
+	            
+	            document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
+	            document.getElementById("errorMsgBottom").style.display = "inline";
+				errorflag= false;
 			}
 			return errorflag;
 		}
@@ -1058,13 +1078,24 @@ function showSharedListForm(){
 		
 		function quickAddCopyAndPaste(data){
 			//Clean up the data
-			Ext.get('dlgCopyAndPasteText').dom.value = '';
-			$.fancybox.close();
+			//Ext.get('dlgCopyAndPasteText').dom.value = '';
+			//$.fancybox.close();
 			
 			//console.debug("data: ", data);
+			var itemLineFlag = "false";
 			var itemsString = data;
 			var char = '\n';
 			var itemLines = itemsString.split(char);
+			if(itemsString == "")
+			{
+				document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+		        document.getElementById("errorMsgCopyBottom").style.display = "inline";
+			}
+			else 
+			{
+				document.getElementById("errorMsgCopyBottom").innerHTML = "" ;
+		        document.getElementById("errorMsgCopyBottom").style.display = "none";
+			}
 						
 			for(var i=0;i < itemLines.length; i++)
 			{
@@ -1083,7 +1114,45 @@ function showSharedListForm(){
 				{
 					itemQty = itemLine[0];
 					itemSku = itemLine[1];
+					if(itemSku == ""){
+						itemLineFlag = "true";
+						document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+				        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
+					}
 				}
+				else
+				{
+					itemLineFlag = "true";
+					document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+			        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
+				}
+			}
+			if(itemLineFlag == "false")
+			{
+				for(var i=0;i < itemLines.length; i++)
+				{
+					var itemQty = null;
+					var itemSku = null;
+					var jobId = "";
+					var itemLine = itemLines[i].split('\t');
+					
+					if(itemLine.length > 1 )
+					{
+						itemQty = itemLine[0];
+						itemSku = itemLine[1];
+					}
+					itemLine = itemLines[i].split(',');
+					
+					if(itemLine.length > 1 )
+					{
+						itemQty = itemLine[0];
+						itemSku = itemLine[1];
+					}					
+					if((i+1) == itemLines.length && itemLineFlag == "false")
+					{
+						$.fancybox.close();
+						Ext.get('dlgCopyAndPasteText').dom.value = '';
+					}
 				
 				itemSku = Ext.util.Format.trim(itemSku);
 				itemQty = Ext.util.Format.trim(itemQty);
@@ -1092,7 +1161,7 @@ function showSharedListForm(){
 				document.getElementById("qty").value= itemQty;
 				qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
 			}
-			
+		 }	
 			//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
 			//w.hide();
 		}
@@ -1432,12 +1501,13 @@ function showSharedListForm(){
 	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
 <ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
 	<li><a class="grey-ui-btn" href="javascript:$.fancybox.close();"
-		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';"><span>Cancel</span></a></li>
+		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';Ext.get('errorMsgCopyBottom').dom.innerHTML='';Ext.get('errorMsgCopyBottom').dom.style.display='none'"><span>Cancel</span></a></li>
 	<li style="float: right;"><a href="javascript: quickAddCopyAndPaste( document.form1.dlgCopyAndPasteText.value);" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
 	
 	
 </ul>
 </form>
+</br></br></br><div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:130px" ></div>
 </div>
 
 
