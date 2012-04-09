@@ -15,18 +15,24 @@
 <s:set name='custAddressElem' value='custAddressElem' />
 <s:set name='custPersonInfoElem' value='#xmlUtil.getChildElement(#custAddressElem,"PersonInfo")'/>
 <s:set name='custPersonInfoExtnElem' value='#xmlUtil.getChildElement(#custPersonInfoElem,"Extn")'/>
-
+<s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='wcUtil' />
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <!-- begin styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 
-<!-- javascript -->
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
+		
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<!-- javascript 
 
 <script type="text/javascript" src="../../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="../../xpedx/js/global/ext-all.js"></script>
@@ -37,10 +43,11 @@
 
 <script type="text/javascript" src="../../xpedx/js/catalog/catalogExt.js"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
+-->
 <script type="text/javascript" src="<s:url value='/xpedx/js/quicklinks/xpedxCustomerQuickLinks.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
 
-<!-- carousel scripts js   -->
+<!-- carousel scripts js   
 
 <script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <script type="text/javascript" src="../../xpedx/js/jquery-1.4.2.min.js"></script>
@@ -50,6 +57,11 @@
 <script type="text/javascript" src="../../xpedx/js/quick-add/jquery.form.js"></script>
 <script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
 <script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script> 
+-->
+<script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 <script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js'/>" type="text/javascript" charset="utf-8"></script>
 <script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js'/>" type="text/javascript" charset="utf-8"></script> <!-- modified the path for jira 1833 -->
@@ -58,15 +70,18 @@
 <!-- /STUFF --><script type="text/javascript" src="<s:url value='/xpedx/js/xpedx-new-ui.js'/>" language="javascript">
 </script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
+<!--  
 
-<!-- Facy Box (Lightbox/Modal Window -->
+
+<!-- Facy Box (Lightbox/Modal Window 
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
-
+-->
 <link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
-
+<!--  
 <script type="text/javascript" src="../../xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../../xpedx/js/global-xpedx-functions.js"></script>
+-->
 <script src="<s:url value='/xpedx/js/SpryTabbedPanels.js'/>" type="text/javascript"></script> <!-- modified the path for jira 1833 -->
 
 <!--  to restrict numeric values in spending limit  -->
