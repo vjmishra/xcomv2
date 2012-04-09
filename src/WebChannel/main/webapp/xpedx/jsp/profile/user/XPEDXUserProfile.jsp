@@ -20,9 +20,10 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
-<script type="text/javascript" src="../xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <!-- styles -->
 
 <!-- begin styles. -->
@@ -33,7 +34,7 @@
 <![endif]-->
 <!-- end styles -->
 
-<!-- javascript -->
+<!-- 
 <script type="text/javascript"
 	src="../../xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript"
@@ -60,6 +61,7 @@
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript"
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+	javascript -->
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/profile/profile.js'/>"></script>
 <script type="text/javascript"
@@ -75,13 +77,15 @@
 <script type="text/javascript"
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
-<!-- Facy Box (Lightbox/Modal Window -->
+<!-- Facy Box (Lightbox/Modal Window
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript"
 	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+	-->
 <script type="text/javascript" 
 	src="../../xpedx/js/jquery.numeric.js"></script>
+	 
 <script type="text/javascript" 
 	src="../../xpedx/js/jquery.maskedinput-1.3.js"></script>
 <!--  to restrict numeric values in spending limit  -->
@@ -104,9 +108,9 @@
 <script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
 <script src="../../xpedx/js/SpryTabbedPanels.js"
 	type="text/javascript"></script>
-	
+	<!-- 
 <script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
-<!--  to restrict numeric values in spending limit  -->
+<!--  to restrict numeric values in spending limit  
 <script type="text/javascript" src="../../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script><!-- jira 1833 -->
 <script type="text/javascript">
     	
@@ -274,9 +278,10 @@ $(document).ready(function()
 });
 
 </script>
-
+<!-- 
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+	 -->
 <script type="text/javascript">
 xyz = function(){
 	expPhnPnl = '<s:property value="#expandPhonePanel" />';
