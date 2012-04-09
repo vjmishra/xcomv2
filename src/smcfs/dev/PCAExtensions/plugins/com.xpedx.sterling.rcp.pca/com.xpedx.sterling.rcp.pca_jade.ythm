@@ -21,4 +21,13 @@
         <ForegroundColor Blue="255" Green="255" Red="255"/>
         <BackgroundColor Blue="0" Green="0" Red="255"/>
     </ThemeEntry>
+    <ThemeEntry Name="WillCall">
+        <Image Path="/icons/Will Call.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="RushOrder">
+        <Image Path="/icons/Rush Order.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="NeedsAttention">
+        <Image Path="/icons/Needs Attention.gif"/>
+    </ThemeEntry>
 </Theme>
