@@ -182,7 +182,7 @@
            url = ReplaceAll(url,"&amp;",'&');
            //Show the waiting box
            var x = document.getElementById(divId);
-           x.innerHTML = "Loading data... please wait!";
+           x.innerHTML = "Loading data";
            
            
            //Execute the call

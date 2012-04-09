@@ -1809,6 +1809,8 @@ function callAjaxForSorting(url,divId)
 		document.getElementById("dynamiccontentHL").style.display = "none";
 		if(document.getElementById("shareAdminOnlyHL")!=null)
 		document.getElementById("shareAdminOnlyHL").style.display = "none";
+		document.getElementById("errorMsgForAddressFieldsHL").innerHTML ="";
+		document.getElementById("errorMsgForAddressFieldsHL").style.display = "none";
 	} 	
   	function showSharedListHLForm(){
   		var dlgForm 		= document.getElementById("dynamiccontentHL");
