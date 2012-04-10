@@ -41,7 +41,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXReturnItems_binding.xml</param>
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result>
-		<result name="orderDetailError">/swc/jsp/order/OrderDetailError.jsp</result>
+		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 	</action>
 	
 	<action name="returnItemsSendMailRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXReturnItemsRequestAction" method="sendMailToCSR">
@@ -50,7 +50,7 @@
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
 		<!-- <result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result> jira 3128 -->
-		<result name="orderDetailError">/swc/jsp/order/OrderDetailError.jsp</result>
+		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 	</action>
 	
 	<action name="returnItemsComplaintRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXReturnItemsRequestAction" method="returnItemComplaintRequest">
@@ -58,7 +58,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXReturnItems_binding.xml</param>
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success">/xpedx/jsp/services/XPEDXServicesHome.jsp</result>
-		<result name="orderDetailError">/swc/jsp/order/OrderDetailError.jsp</result>
+		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 	</action>
 	<!-- Start For Reporting  -->
 	<action name="promptInput" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
