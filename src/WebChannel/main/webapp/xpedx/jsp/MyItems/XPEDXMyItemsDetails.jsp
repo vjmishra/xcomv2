@@ -2237,7 +2237,7 @@ function showSharedListForm(){
 											<!-- UOM & Custom Fields -->
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
-												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
+												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"  maxlength="7"
 												value="%{#qty}" onchange="javascript:isValidQuantity(this);updateHidden(this,'%{#id}');this.value=addComma(this.value);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
