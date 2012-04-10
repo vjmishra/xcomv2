@@ -462,7 +462,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						.getParentNode(), "Filters");
 				Element filter = SCXmlUtil.createChild(filters, "Filter");
 				filter.setAttribute("IndexFieldName",
-						"showNormallyStockedItems");
+						"showStockedItems");
 				filter.setAttribute("Type", "Normal");
 				filter.setAttribute("Value", shipFromDivision);
 			}

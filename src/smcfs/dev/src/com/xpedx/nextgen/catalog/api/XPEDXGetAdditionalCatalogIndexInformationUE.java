@@ -145,6 +145,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 						valueElement.setAttribute("Value",
 								divisionForStockedItem.trim());
 					}
+					if ("showStockedItems".equals(searchFieldElement
+							.getAttribute("IndexFieldName"))) {
+						log.info("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());
+						valueElement.setAttribute("Value",
+								divisionForStockedItem.trim());
+					}
 				}
 			}
 		}
