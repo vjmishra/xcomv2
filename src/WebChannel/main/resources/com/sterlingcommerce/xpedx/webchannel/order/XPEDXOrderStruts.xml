@@ -172,7 +172,7 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderDetailBinding.xml</param>
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
 			<result name="success">/xpedx/jsp/order/XPEDXOrderDetail.jsp</result>
-			<result name="orderDetailError">/swc/jsp/order/OrderDetailError.jsp</result>
+			<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 		</action>
 		<!-- END: OrderList page: RUgrani -->
 		<!-- BEGIN: ReOrder page: RUgrani -->
@@ -332,7 +332,7 @@
 			<param name="mashups">xpedx_me_addToCartAddOrderLines</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
 			<result name="success">/swc/jsp/order/addToCartSuccess.jsp</result>
-			<result name="error">/swc/jsp/order/addToCartFailure.jsp</result>
+			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 		</action>
 
 		<!-- Product Details Changes End : Manoj Kodagali  -->
