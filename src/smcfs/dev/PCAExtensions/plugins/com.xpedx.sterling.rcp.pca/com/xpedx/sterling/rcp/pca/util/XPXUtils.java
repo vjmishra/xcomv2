@@ -38,6 +38,7 @@ public class XPXUtils {
 	public static String LEGACY_PRODUCT_TYPE= "P";
 	public static  HashMap<String, String> divisionMap = new HashMap<String, String>();
 	public static  Element orgList = YRCXmlUtils.createDocument("OrganizationList").getDocumentElement();
+	public static String masterCustomerID ;
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -605,5 +606,13 @@ public class XPXUtils {
 	public static boolean isCancelOrder(Element eleOrder) {
 		String status=YRCXmlUtils.getAttributeValue(eleOrder,"/Order/@Status");
 		return "Cancelled".equals(status);
+	}
+
+	public static String getMasterCustomerID() {
+		return masterCustomerID;
+	}
+
+	public static void setMasterCustomerID(String masterCustomerID) {
+		XPXUtils.masterCustomerID = masterCustomerID;
 	}
 }
