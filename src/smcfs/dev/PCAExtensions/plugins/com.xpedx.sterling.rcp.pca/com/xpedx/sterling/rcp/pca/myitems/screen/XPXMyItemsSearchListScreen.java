@@ -299,7 +299,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		GridData cmbListTypelayoutData = new GridData();
 		cmbListTypelayoutData.horizontalAlignment = 4;
 		cmbListType.setLayoutData(cmbListTypelayoutData);
-		cmpstEnterpriseCode.setVisible(true);
+		cmpstEnterpriseCode.setVisible(false);
 	}
 	
 	private void createPnlButtons(){
