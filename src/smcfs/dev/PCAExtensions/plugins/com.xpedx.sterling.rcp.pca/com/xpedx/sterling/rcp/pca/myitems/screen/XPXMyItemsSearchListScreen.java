@@ -280,12 +280,13 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		lblEnterpriselayoutData.verticalAlignment = 16777216;
 		lblEnterprise.setLayoutData(lblEnterpriselayoutData);
 		lblEnterprise.setText("Enterprise");
+		lblEnterprise.setVisible(false);
 	
 		cmbEnterprise = new Combo(cmpstEnterpriseCode, SWT.READ_ONLY);
 		GridData cmbEnterpriselayoutData = new GridData();
 		cmbEnterpriselayoutData.horizontalAlignment = 4;
 		cmbEnterprise.setLayoutData(cmbEnterpriselayoutData);
-		
+		cmbEnterprise.setVisible(false);
 		
 		//Adding For List type
 		lblListType = new Label(cmpstEnterpriseCode, SWT.LEFT);
@@ -299,7 +300,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		GridData cmbListTypelayoutData = new GridData();
 		cmbListTypelayoutData.horizontalAlignment = 4;
 		cmbListType.setLayoutData(cmbListTypelayoutData);
-		cmpstEnterpriseCode.setVisible(false);
+		
 	}
 	
 	private void createPnlButtons(){
