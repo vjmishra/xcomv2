@@ -222,7 +222,7 @@ var priceCheck;
 				}
 			}
 		}
-		if(qty =="")
+		if(qty =="" || qty == 0 )
 		{
 			qty=1;
 		}
