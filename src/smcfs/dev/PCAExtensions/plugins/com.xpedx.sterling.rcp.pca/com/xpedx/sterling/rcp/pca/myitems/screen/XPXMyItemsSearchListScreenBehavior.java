@@ -1,12 +1,10 @@
 package com.xpedx.sterling.rcp.pca.myitems.screen;
 
-
-
 import java.util.ArrayList;
-
-
+import java.util.StringTokenizer;
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -18,10 +16,12 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-
+import com.xpedx.sterling.rcp.pca.customerDetails.extn.CustomerDetailsWizardExtnBehavior;
 import com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor;
+import com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXGetCompleteChildCustomerTreeBehaviour;
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -37,7 +37,7 @@ import com.yantra.yfc.rcp.internal.YRCCommandRepository;
 
 
 /**
- * @author Sunith Dodda
+ * @author Manasa Mahapatra
  *
  * My Items List Search and List Panel Behavior
  */
@@ -52,15 +52,26 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	StringBuffer sap = new StringBuffer();
 	StringBuffer msap= new StringBuffer();
 	StringBuffer bt = new StringBuffer();
-	private static final String COMMAND_GET_LIST_OF_MY_ITEMS_LISTS="getListOfXPEDXMyItemsLists";
+	private static final String COMMAND_GET_LIST_OF_MY_ITEMS_LISTS="XPXGetBothMyItemsList";
 	private static final String COMMAND_DELETE_MY_ITEMS_LIST="deleteXPEDXMyItemsList";
 	
 	
 	private String enterpriseKey;
 	private String userId;
 	private String customerId;
-	private boolean isShared;
+	private static Element elemSearchModel;
+	private static boolean isShared;
+	private static boolean isPersonal;
+	private static boolean isBoth;
 	public static final String PAGINATION_STRATEGY_FOR_MIL_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
+	private static Element eleOutput;
+	public String OrgName;
+	public String createUserId;
+	public String strRootCustomerKey;
+	public Document BothList;
+	
+	public static final String PAGINATION_STRATEGY_FOR_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
+	//private static final String COMMAND_GET_LIST_OF_SHIPTO="XPXGetListOfAssignedShipTosForAUserService";
 	
 
 	public XPXMyItemsSearchListScreenBehavior(Composite ownerComposite, String formId, Object inputObject) {
@@ -69,7 +80,8 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         this.defaultOrgCode = "";
         Document docActions = YRCXmlUtils.createFromString("<Actions><Action Id='"+ACTION_EDIT+"' DisplayName='Edit'/><Action Id='"+ACTION_DELETE+"' DisplayName='Delete'/></Actions>");
         setModel(docActions.getDocumentElement());
-        
+        //Called For Creating Item List type Model
+        prepareItemListTypeDropdownModel();
         //Set static pagination data for the MIL Search Behavior
         this.getXpxPaginationData().setPaginationStrategy(PAGINATION_STRATEGY_FOR_MIL_SEARCH);
         
@@ -81,9 +93,9 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		this.getXpxPaginationData().setIsFlow("Y");
 		
 		//Set the model data. This is a pre-requisite before calling the handlePaginationOutput method
-		setSrcModelName("XPEDXMyItemsListList");
-		setRootListElemName("XPEDXMyItemsListList");
-		setRepeatingElemName("XPEDXMyItemsList");
+		setSrcModelName("XpedxMilBothLstList");
+		setRootListElemName("XpedxMilBothLstList");
+		setRepeatingElemName("XpedxMilBothLst");
 		
 		//Load the cache/Fetch data from cache for organization list for the logged in user
 		this.setOrganizationList(XPXUtils.orgList);
@@ -121,22 +133,68 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         			Element eOrgList = ctx.getOutputXmls()[i].getDocumentElement();
         			this.setOrganizationList(eOrgList);
         		}
-        		else */if(YRCPlatformUI.equals(apiname, COMMAND_GET_LIST_OF_MY_ITEMS_LISTS)){
+        		else if(YRCPlatformUI.equals(apiname, COMMAND_GET_LIST_OF_MY_ITEMS_LISTS)){
         			Document docOutput = ctx.getOutputXmls()[i];
-        			Element eleOutput = docOutput.getDocumentElement();
-        			ArrayList<Element> listMyItemsList = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
+        			eleOutput = docOutput.getDocumentElement();
+        			ArrayList<Element> listMyItemsList = YRCXmlUtils.getChildren(eleOutput, "XpedxMilBothLst");
         			for (Element eleMyItemsList : listMyItemsList) {
         				eleMyItemsList.setAttribute("Action", "");
 					}
         			setModel(eleOutput);
-        			repopulateModel("XPEDXMyItemsListList");
+        			setModel("XpedxMilBothLstList",eleOutput);
+        			repopulateModel("XpedxMilBothLstList");
         			
-        		}
+        		}*/
+        	 if (YRCPlatformUI.equals(apiname, "XPXGetBothMyItemsList")) {
+				Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+			if (outXml != null) {
+				NodeList listBothItemsList = outXml.getElementsByTagName("XpedxMilBothLst");
+				for (int k = 0; k < listBothItemsList.getLength(); k++) {
+					Element eleBothItemsList = (Element) listBothItemsList.item(k);
+					String sharePrivate = eleBothItemsList.getAttribute("SharePrivate");
+					String CreateUserName = eleBothItemsList.getAttribute("Createusername");
+					eleBothItemsList.setAttribute("Action", "");
+					if(sharePrivate != ""){
+						eleBothItemsList.setAttribute("ListType", CreateUserName);
+						
+					}
+					else{
+						eleBothItemsList.setAttribute("ListType", "Shared");
+					}
+				}
+			}
+			setModel("XpedxMilBothLstList",outXml);
+    		}
+        		else if (YRCPlatformUI.equals(apiname, "getCustomerList")) {
+					
+					Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+					setModel("CustomerList",outXml);
+					OrgName= YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/BuyerOrganization/@OrganizationName");
+					String customerName = 
+					strRootCustomerKey = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@RootCustomerKey");
+					BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
+					if("Both".equalsIgnoreCase(getFieldValue("cmbListType"))){
+					if(!YRCPlatformUI.isVoid(strRootCustomerKey)){
+						callBothListService(strRootCustomerKey);
+						
+					} 
+					}
+					
+					else if("Personal".equalsIgnoreCase(getFieldValue("cmbListType"))){
+						if(!YRCPlatformUI.isVoid(strRootCustomerKey)){
+							selectCustomerContact(strRootCustomerKey);
+							
+						} 
+						}
+					
+					
+				}
+        	
         			
         		else if(YRCPlatformUI.equals(apiname, "getPage")){
         			
         			Document docOutput = ctx.getOutputXmls()[i];
-					Element eleOutput = docOutput.getDocumentElement();
+					eleOutput = docOutput.getDocumentElement();
 					if (eleOutput != null) {
 						//Get the repeating elements and set their Action attribute
 						NodeList listMyItemsList = (NodeList) YRCXPathUtils
@@ -150,9 +208,18 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 							for (int k = 0; k < listMyItemsList.getLength(); k++) {
 								Element eleMyItemsList = (Element) listMyItemsList
 										.item(k);
+								String sharePrivate = eleMyItemsList.getAttribute("SharePrivate");
 								eleMyItemsList.setAttribute("Action", "");
+								if(sharePrivate != ""){
+									eleMyItemsList.setAttribute("ListType", sharePrivate);
+									
+								}
+								else{
+									eleMyItemsList.setAttribute("ListType", "Shared");
+								}
 							}
 						}
+						setModel("XpedxMilBothLstList",eleOutput);
 						//This is an inherited method which sets/replaces the model used to display the Paginated results.
 						handlePaginationOutput(eleOutput);
 					}
@@ -164,8 +231,6 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		
 	}
 	
-	
-	
 	private void setOrganizationList(Element eOrgList)
     {
         setModel("OrgList", eOrgList);
@@ -173,7 +238,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         if(null != nl && nl.getLength()>0)
         	defaultOrgCode = YRCPlatformUI.getUserElement().getAttribute("EnterpriseCode");
         
-        this.setDefaultEnterpriseCode();
+       // this.setDefaultEnterpriseCode();
     }
 
 	public void setDefaultEnterpriseCode()
@@ -181,9 +246,9 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		//Update the Search Criteria
         Element elemModel = getModel("SearchCriteria");
         if(YRCPlatformUI.isVoid(elemModel))
-            elemModel = YRCXmlUtils.createDocument("XPEDXMyItemsList").getDocumentElement();
+            elemModel = YRCXmlUtils.createDocument("XpedxMilBothLst").getDocumentElement();
 
-        Element orderByElem = YRCXmlUtils.getChildElement(elemModel, "OrderBy");
+        /*Element orderByElem = YRCXmlUtils.getChildElement(elemModel, "OrderBy");
         if(YRCPlatformUI.isVoid(orderByElem))
             orderByElem = YRCXmlUtils.createChild(elemModel, "OrderBy");
         Element attrElem = YRCXmlUtils.getChildElement(orderByElem, "Attribute");
@@ -195,7 +260,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         if(!YRCPlatformUI.isVoid(defaultOrgCode))
         {
             elemModel.setAttribute("EnterpriseKey", defaultOrgCode);
-        }
+        }*/
         setModel("SearchCriteria",elemModel);
     }
 
@@ -257,44 +322,33 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	 * This method is invoked on click of Search button as well as on clicking of the pagination controls to navigate to other pages of the result. 
 	 */
 	public void search() {
-		this.enterpriseKey = getTargetModel("SearchCriteria").getAttribute(
-				"EnterpriseKey");
-		this.userId = getTargetModel("SearchCriteria").getAttribute(
-				"SharePrivate");
-		this.customerId = getTargetModel("SearchCriteria").getAttribute(
-				"CustomerID");
-
+		//Condition for retrieving personal list
+		if(isShared == false && isPersonal == false && isBoth==false) {
+			this.getXpxPaginationData().setInputXml(
+					getTargetModel("SearchCriteria").getOwnerDocument());
+			
+			}else if(isPersonal == true){
+				Document personalList  = 	YRCXmlUtils.createFromString("<XpedxMilBothLst Createuserid='"+createUserId+"'/>");										
+				this.getXpxPaginationData().setInputXml(
+		        		personalList);
+		       
+			}
+		//COndition for retrieving Both List
+			else if(isBoth == true){
+				this.getXpxPaginationData().setInputXml(BothList);
+			}
 		
-		if (userId != "" && isShared == true) {
-			Element ele = getModel("XPEDXMyItemsList");
-			this.getXpxPaginationData().setInputXml(ele.getOwnerDocument());
-			repopulateModel("XPEDXMyItemsList");
-			
-			
-			isShared = false;
-			
-		} else if (userId != "") {
-			this.getXpxPaginationData().setInputXml(
-					getTargetModel("SearchCriteria").getOwnerDocument());
-			
-			
-			
-
-		} else if (customerId != "") {
-			this.getXpxPaginationData().setInputXml(
-					getTargetModel("SearchCriteria").getOwnerDocument());
-			
-			
+		//Condition for retrieving shared list
+		else{
+		setModel("ShareListModel",elemSearchModel);
+		 Document finalelem = getModel("ShareListModel").getOwnerDocument();
+		 if(YRCPlatformUI.isVoid(elemSearchModel))
+           isShared = false;
+        this.getXpxPaginationData().setInputXml(
+				finalelem);
 		}
-		super.search();
+    	super.search();
 	}
-
-	
-	
-	
-
-	
-
 
 	void callApi(String name, Document inputXml)
     {
@@ -321,6 +375,9 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	}	
 	public void create() {
 		YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask");
+	}
+	public void create1() {
+		YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask");
 	}
 	/**Added for XIRA ID-1176 for Reset functionality**/
 	public void reset() {
@@ -350,137 +407,99 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	@Override
 	public void setSrcModelName(String srcModelName) {
 		this.srcModelName = srcModelName;
-	}	
+	}
 	
-	public void selectShipToAddress() {
+	private void prepareItemListTypeDropdownModel() {
+		Element elemModel = YRCXmlUtils.createDocument("GetListType").getDocumentElement();
+		
+		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "ListType");
+		
+		attrElemComplex1.setAttribute("ListType", "Personal");
+		attrElemComplex1.setAttribute("ListValue", "Personal");
 
-		this.userId = getTargetModel("SearchCriteria").getAttribute(
-				"SharePrivate");
-		// Create Input XML
+		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "ListType");;
 
-		Document docInput = YRCXmlUtils.createDocument("User");
-		Element eleInput = docInput.getDocumentElement();
-		eleInput.setAttribute("UserID", userId);
-		eleInput.setAttribute("MIL", "MIL");
-		if (YRCPlatformUI.isTraceEnabled()) {
-			YRCPlatformUI.trace("Shared Task: Launching with Input XML - "
-					+ YRCXmlUtils.getString(docInput));
+		attrElemComplex2.setAttribute("ListType", "Shared");
+		attrElemComplex2.setAttribute("ListValue", "Shared");
+		
+		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "ListType");;
+
+		attrElemComplex3.setAttribute("ListType", "Both");
+		attrElemComplex3.setAttribute("ListValue", "Both");
+		
+		setModel("GetListType",elemModel);
+	}
+	
+	public static void selectShipToAddress(Element elemModel) {
+		elemSearchModel = elemModel;
+		isShared = true;
 		}
+	public void selectListType (){
+		String listtype = getFieldValue("cmbListType");
+		if ("Personal".equalsIgnoreCase(listtype)||"Shared".equalsIgnoreCase(listtype)){
+			getCustomerKey();
+			getFirstPage();
+		}
+		else if("Both".equalsIgnoreCase(listtype)){
+			
+			getCustomerKey();	
+		}
+		else{
+			YRCPlatformUI.showError("ITEMLISTTYPE_FIELD_IS_MANDATORY",
+					YRCPlatformUI
+							.getString("ITEMLISTTYPE_FIELD1_LABEL_IS_MANDATORY"));
+		}
+	}
 
+
+	void getCustomerKey() {
+		String customerID = getFieldValue("txtCustomer");
+		YRCApiContext apiCtx = new YRCApiContext();
+		if(!YRCPlatformUI.isVoid(customerID)) {
+			String[] apinames = {"getCustomerList"};
+			Document[] docInput = {
+					YRCXmlUtils.createFromString("<Customer CustomerID='"+customerID+"' OrganizationCode='xpedx'/>")										
+			};
+			apiCtx.setApiNames(apinames);
+			apiCtx.setInputXmls(docInput);
+		}
+		apiCtx.setFormId(getFormId());
+		callApi(apiCtx);
+		
+	}
+
+	private void callBothListService(String strRootCustomerKey) {
+		isPersonal = false;
+		isBoth = true;
+		YRCApiContext apiCtx = new YRCApiContext();
+		if(!YRCPlatformUI.isVoid(strRootCustomerKey)) {
+			getFirstPage();
+		}
+		
+
+		
+	}
+	
+	private void callPersonalUserItemList(Element eleContactPersonInfo) {
+		isBoth = false;
+		YRCApiContext apiCtx = new YRCApiContext();
+		createUserId = eleContactPersonInfo.getAttribute("Createuserid");
+		setFieldValue("txtUserId", createUserId);
+		
+			isPersonal = true;
+			getFirstPage();
+	}
+
+	
+	public void selectCustomerContact(String strRootCustomerKey) {
+		Document docInput = YRCXmlUtils.createFromString("<CustomerContact CustomerKey='"+strRootCustomerKey+"'/>");
 		//Launch Shared Task
 		YRCSharedTaskOutput output = YRCPlatformUI
 				.launchSharedTask(
-						"com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask",
-						eleInput);
+						"com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask",
+						docInput.getDocumentElement());
 		
 		Element eleContactPersonInfo = output.getOutput();
-
-		prepareInputXML(eleContactPersonInfo);
-
-		
+		callPersonalUserItemList(eleContactPersonInfo);
 	}
-	public void prepareInputXML(Element eleContactPersonInfo) {
-		//Update the Search Criteria
-		String[] customerID = null;
-		String[] msapcustomerID = null;
-		String[] sapcustomerID = null;
-		String[] billtocustomerID = null;
-		if (eleContactPersonInfo.getAttribute("CustomerID") != ""
-				&& eleContactPersonInfo.getAttribute("CustomerID") != null) {
-			customerID = eleContactPersonInfo.getAttribute("CustomerID").split(
-					",");
-		}
-		if (eleContactPersonInfo.getAttribute("MSAPCustomerID") != ""
-			&& eleContactPersonInfo.getAttribute("MSAPCustomerID") != null) {
-			msapcustomerID = eleContactPersonInfo.getAttribute("MSAPCustomerID").split(
-				",");
-		
-	}if (eleContactPersonInfo.getAttribute("SAPCustomerID") != ""
-		&& eleContactPersonInfo.getAttribute("SAPCustomerID") != null) {
-		sapcustomerID = eleContactPersonInfo.getAttribute("SAPCustomerID").split(
-				",");
-	}if (eleContactPersonInfo.getAttribute("BillToCustomerID") != ""
-		&& eleContactPersonInfo.getAttribute("BillToCustomerID") != null) {
-		billtocustomerID = eleContactPersonInfo.getAttribute("BillToCustomerID").split(
-				",");
-	}
-	   isShared = true;
-		
-	
-		
-		
-		Element elemModel = YRCXmlUtils.createDocument("XPEDXMyItemsList")
-				.getDocumentElement();
-		elemModel.setAttribute("IgnoreOrdering", "Y");
-		elemModel.setAttribute("SharePrivate", "");
-		
-		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsListShareList");
-		Element attrElemComplex2 = YRCXmlUtils.createChild(attrElemComplex1, "XPEDXMyItemsListShare");
-		Element attrElemComplex = YRCXmlUtils.createChild(attrElemComplex2, "ComplexQuery");
-		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
-
-		for (String custId : customerID) {
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "CustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-		for (String custId : msapcustomerID) {
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "CustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-		for (String custId : sapcustomerID) {
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "CustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-		for (String custId : billtocustomerID) {
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "CustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-
-		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
-		attrName1.setAttribute("Name", "Createuserid");
-		attrName1.setAttribute("Value", userId);
-		
-		
-		
-		
-		setModel(elemModel);
-		
-		
-
-		
-	}
-
-
-
-	
-	
-
 }
