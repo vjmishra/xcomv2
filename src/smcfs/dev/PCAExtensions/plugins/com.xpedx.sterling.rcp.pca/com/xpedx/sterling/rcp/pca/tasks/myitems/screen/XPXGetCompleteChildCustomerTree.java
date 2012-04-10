@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreenBehavior;
 import com.yantra.yfc.rcp.IYRCApiCallbackhandler;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
@@ -46,6 +47,8 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 	private Button btnSearchChildCustomers;
 	private Button btnCancel;
 	private XPXGetCompleteChildCustomerTreeBehaviour myBehavior;
+	private XPXMyItemsSearchListScreenBehavior customerListPopup;
+	
 	private Element elePageInput;
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXGetCompleteChildCustomerTree";
 	private Composite pnlProfileInfo;
@@ -60,13 +63,16 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 	Tree tree;
 	TreeItem localiItem=null;
 	private Composite pnlEntry;
-		
-	public XPXGetCompleteChildCustomerTree(Composite parent, int style, Object inputObject) {
+	ArrayList customerarray = new ArrayList();
+	
+		public XPXGetCompleteChildCustomerTree(Composite parent, int style, Object inputObject) {
 		super(parent, style);
 		elePageInput = (Element) inputObject;
 		initialize();
 	//	setBindingForComponents();
 		myBehavior = new XPXGetCompleteChildCustomerTreeBehaviour(this, FORM_ID);
+	//	myBehavior1 = new XPXMyItemsSearchListScreenBehavior(this, FORM_ID);
+	//	customerListPopup = new XPXMyItemsSearchListScreenBehavior(this, FORM_ID,inputObject);
 		adjustScrollPnl(scrolledPnlforInfo, pnlPrimaryInformation,pnlEntry, false, true);
 		pnlRoot.layout(true, true);
 	}
@@ -248,7 +254,15 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 		btnCreate.setData("name", "btnCreate");
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				myBehavior.createMyItemsList();
+
+				if(0!=customerarray.size()){
+				myBehavior.prepareInputXML(customerarray);
+				getParent().getShell().close();
+				}
+				else{
+					YRCPlatformUI.showError("SHOULD_BE_SHARED_ATLEAST_TO_ONE_LOCATION_TITLE",
+							YRCPlatformUI.getString("SHOULD_BE_SHARED_ATLEAST_TO_ONE_LOCATION_MSG"));
+				}
 			}
 		});
 		
@@ -364,7 +378,7 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 
 					//--handleApiCompletion function used to call API & fetch the response from API
 					public void handleApiCompletion(YRCApiContext ctx) {
-						System.out.println("ctx:"+ctx);
+						
 						if (ctx.getInvokeAPIStatus() > 0){
 							if (myBehavior.getOwnerForm().isDisposed()) {
 								YRCPlatformUI.trace("Page is Disposed");
@@ -414,12 +428,15 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 		tree.addListener(SWT.Selection, new Listener() {
 	        public void handleEvent(Event event) {
 	        	//Check box event Handler
-
+	        	
 	            if (event.detail == SWT.CHECK) {
 	                TreeItem item = (TreeItem) event.item;
 	                boolean checked = item.getChecked();
-	                checkItems(item, checked);     //--function used to check child nodes if parent is checked
-	                checkPath( item.getParentItem(), checked, false); //--function used to check parent if all its child are checked
+	                item.getText();
+	                
+	                customerarray.add(item.getText());	               
+	               // checkItems(item, checked);     //--function used to check child nodes if parent is checked
+	               // checkPath( item.getParentItem(), checked, false); //--function used to check parent if all its child are checked
 	            }
 	        
 	        }
@@ -440,7 +457,7 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 			String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
 			CustomerID=orgId;
 
-			iItem.setText(orgName+" ("+CustomerID+")");
+			iItem.setText(CustomerID+"|"+customerType);
 			iItem.setData("data", eleCust);
 			iItem.setItemCount(1);
 		}
@@ -475,12 +492,12 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 					 CustomerID=orgId;
 				}
 				else if("B".equalsIgnoreCase(customerType)){
-					CustomerID=shipFromBranch+"-"+legacyNo+"-"+billTosuffix;
+					CustomerID=orgId;
 				}
 				else if("S".equalsIgnoreCase(customerType)){
-						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
+					CustomerID=orgId;
 				}
-				iiItem.setText(orgName+" ("+CustomerID+")");
+				iiItem.setText(CustomerID+"|"+customerType);
 				
 				iiItem.setData("data",eleCust);
 				iiItem.setItemCount(1);
@@ -499,12 +516,14 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 
 	    item.setGrayed(false);
 	    item.setChecked(checked);
-
 	    TreeItem[] items = item.getItems();
+	    
+	 int length = items.length;
 	    for (int i = 0; i < items.length; i++) {
-
-	        checkItems(items[i], checked);
+	        String j = items[i].toString();
+	       
 	    }
+	   
 	}
     
     void checkPath( TreeItem item, boolean checked, boolean grayed) {
@@ -615,4 +634,5 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 		strDivisionID = eleExtn.getAttribute("ExtnShipFromBranch");
 		return strDivisionID;
 	}
+	
 }
