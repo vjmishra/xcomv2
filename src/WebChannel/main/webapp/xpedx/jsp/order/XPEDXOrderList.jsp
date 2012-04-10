@@ -932,7 +932,7 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		Ext.fly('statusSearchFieldName').dom.selectedIndex='0';
 		Ext.fly('ToDate').dom.value= Ext.fly('initialToDateString').dom.value ;
 		document.getElementById("errorDateDiv").innerHTML = '';
-		document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
+		//document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
 	}
 	function showShipTos(){		
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
