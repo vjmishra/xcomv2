@@ -347,16 +347,14 @@
 	
 </ul>
 
-<!--Added to fix 3098  -->
-<div class="error float-right">
-	<s:if test="#defaultShipTo == null">
-	<h5 align="right">Please select a Ship-To.</h5>
-	</s:if>
-</div>
+
 <div style="float:right;margin-top:1px;width:100%;">
-<s:if test="%{#NoShipTo}" >
-<div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
+<s:if test="#defaultShipTo == null">
+<div class="error float-right">	<h5 align="right">Please select a Ship-To.</h5></div>
 </s:if>
+<s:elseif test="%{#NoShipTo}" >
+<div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
+</s:elseif>
 <s:elseif test="#defaultShipTo != null">
 <div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
 </s:elseif>
