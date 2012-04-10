@@ -302,7 +302,7 @@
                     <task id="ViewInvoices"/>
                     <task id="BusinessExchange"/> 
                    	<task id="Help"/>                    
-                    <task id="MyItemsSearch"/>
+                   
                 </tasks>
             </category>
             <category id="XPX_CREATE_USER">
@@ -328,6 +328,11 @@
             <category id="YCD_ORDER_RELATED">
                 <tasks id="YCD_TASK_SEND_MAIL_NEED_ATTENTION">
                     <task id="SendMailTONeedAttention"/>
+                </tasks>
+            </category>
+            <category id="YCD_CUSTOMER_DETAIL_RELATED">
+                <tasks id="YCD_TASK_SEND_MAIL_NEED_ATTENTION">
+                    <task id="MyItemsSearch"/>
                 </tasks>
             </category>
        </categories>
@@ -398,14 +403,11 @@
             </task>
             <task
                 actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
-                filterRequired="false"
-                groupId="Other_Tasks"
-                id="MyItemsSearch"
-                isExtension="false"
-                name=""
-                 permissionId="ycdRCPX006">
+                filterRequired="false" groupId="Search_Tasks"
+                id="MyItemsSearch" isExtension="false"
+                name="My Items Search" permissionId="ycdRCPX006">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
-                    <category id="XPX_GLOBAL"/>
+                    <category id="YCD_CUSTOMER_DETAIL_RELATED"/>
                 </categories>
             </task>
              <task
