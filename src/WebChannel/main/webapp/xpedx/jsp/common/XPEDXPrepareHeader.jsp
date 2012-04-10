@@ -1393,8 +1393,9 @@ var toaWin = new Ext.Window({
 			 		'showCloseButton'	: false,
 			 		'enableEscapeButton': false,
 			 		'autoDimensions'	: false,
-			 		'width' 			: 750,
-			 		'height' 			: 490  
+			 		'scrolling'   		: 'no',
+			 		'width' 		    : 750,
+			 		'height' 		    : 505  
 				}).trigger('click');
 			}
 		}		
@@ -1421,7 +1422,8 @@ var toaWin = new Ext.Window({
  			},
  			'autoDimensions'	: false,
  			'width' 			: 750,
- 			'height' 			: 490
+ 			'scrolling'   		: 'no',
+ 			'height' 			: 505
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
