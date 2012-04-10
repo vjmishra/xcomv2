@@ -557,7 +557,7 @@ function addItemToCart(data)
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
 		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
-  		// document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+  		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
   		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
@@ -596,7 +596,7 @@ function resetQuantityErrorMessage()
 function validateOrderMultiple() {
 	resetQuantityErrorMessage();
 	var Qty = document.getElementById("qtyBox");
-	if(Qty.value == "" || Qty.value == null){
+	if(Qty.value == "" || Qty.value == null || Qty.value == '0'){
 		Qty.value = 1;
 	}
 	var UOM = document.getElementById("itemUOMsSelect");
