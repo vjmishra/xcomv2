@@ -49,12 +49,20 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	private Group grpSearchFields;
 
 	private Label lblListName;
+	
+	private Label lblCustName;
 
 	private Text txtListName;
+	
+	private Text txtCustName;
 
 	private Label lblListDesc;
+	
+	private Label lblListType;
 
 	private Text txtListDesc;
+	
+	private Text txtListType;
 
 	private Composite pnlButtonHolder;
 
@@ -182,20 +190,38 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		gdSrchGroup.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		grpSearchFields.setLayoutData(gdSrchGroup);
 		grpSearchFields.setLayout(srchGroupLayout);
-		srchGroupLayout.numColumns = 2;
+		srchGroupLayout.numColumns = 4;
+//Added for CustomerID
+		lblCustName = new Label(grpSearchFields, SWT.NONE);
+		lblCustName.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
+		lblCustName.setText("Customer_Name");
 
+		txtCustName = new Text(grpSearchFields, SWT.BORDER);
+		txtCustName.setTextLimit(80);
+		txtCustName.setData("name", "txtCustName");
+		
 		lblListName = new Label(grpSearchFields, SWT.NONE);
 		lblListName.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
 		lblListName.setText("My_Items_List_Name");
 
 		txtListName = new Text(grpSearchFields, SWT.BORDER);
 		txtListName.setTextLimit(50);
+		
 		GridData gdListName = new GridData();
 		gdListName.grabExcessHorizontalSpace = true;
 		gdListName.horizontalSpan = 1;
 		gdListName.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		txtListName.setLayoutData(gdListName);
+		txtCustName.setLayoutData(gdListName);
+	//Added For List Type
+		lblListType = new Label(grpSearchFields, SWT.NONE);
+		lblListType.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
+		lblListType.setText("List Type");
 
+		txtListType = new Text(grpSearchFields, SWT.BORDER);
+		txtListType.setTextLimit(20);
+		txtListType.setData("name", "txtListType");
+		
 		lblListDesc = new Label(grpSearchFields, SWT.NONE);
 		lblListDesc.setText("My_Items_List_Desc");
 
@@ -204,41 +230,38 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		txtListDesc.setData("yrc:customType", "Text");
 		txtListDesc.setData("name", "txtListDesc");
 		txtListDesc.setTextLimit(50);
+		txtListType.setLayoutData(gdListName);
 	}	
 
 	private void createpnlButtonHolder() {
 		GridData gridData10 = new GridData();
 		gridData10.heightHint = 25;
-		gridData10.widthHint = 80;
+		gridData10.widthHint = 90;
+		gridData10.horizontalAlignment = SWT.BEGINNING;
 		GridData gridData5 = new GridData();
 		gridData5.heightHint = 25;
 		gridData5.widthHint = 80;
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = 4;
+		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
 		gridData2.verticalAlignment = 4;
 		GridLayout gridLayout2 = new GridLayout();
-		gridLayout2.numColumns =8;
+		gridLayout2.numColumns =250;
 		pnlButtonHolder = new Composite(pnlProfileInfo, 0);
 		pnlButtonHolder.setLayout(gridLayout2);
 		pnlButtonHolder.setLayoutData(gridData2);
 		pnlButtonHolder.setData("name", "pnlButtonHolder");
 		pnlButtonHolder.setData("yrc:customType", "TaskComposite");
 
-		GridData gdListName = new GridData();
-		gdListName.grabExcessHorizontalSpace = true;
-		gdListName.horizontalSpan = 2;
-		gdListName.widthHint = 200;
-		lblResult = new Label(pnlButtonHolder, SWT.FILL);
-		lblResult.setText("");
-		lblResult.setLayoutData(gdListName);
-		lblResult.setVisible(false);
+		
 		
 		
 		btnAddItem = new Button(pnlButtonHolder, 0);
 		btnAddItem.setText("Add_Items");
 		btnAddItem.setLayoutData(gridData10);
 		btnAddItem.setData("name", "btnAddItem");
+		btnAddItem.setAlignment(SWT.BEGINNING);
 		btnAddItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.addItem();
@@ -249,6 +272,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		btnRemoveItems.setText("Remove_Items");
 		btnRemoveItems.setLayoutData(gridData10);
 		btnRemoveItems.setData("name", "btnRemoveItems");
+		btnRemoveItems.setAlignment(SWT.BEGINNING);
 		btnRemoveItems.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.removeItems();
@@ -258,6 +282,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		btnEditSharedList = new Button(pnlButtonHolder, SWT.NONE);
 		btnEditSharedList.setText("Edit Share List");
 		btnRemoveItems.setLayoutData(gridData10);
+		btnRemoveItems.setAlignment(SWT.BEGINNING);
 		btnEditSharedList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
 				myBehavior.editShareList();
@@ -269,6 +294,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		btnImportList.setText("Import_List");
 		btnImportList.setLayoutData(gridData10);
 		btnImportList.setData("name", "btnImportList");
+		btnImportList.setAlignment(SWT.BEGINNING);
 		btnImportList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.importItemsList();
@@ -279,15 +305,27 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		btnExportList.setText("Export_List");
 		btnExportList.setLayoutData(gridData10);
 		btnExportList.setData("name", "btnExportList");
+		btnExportList.setAlignment(SWT.BEGINNING);
 		btnExportList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.exportItemsList();
 			}
-		});		
+		});	
+		
+		GridData gdListName = new GridData();
+		gdListName.grabExcessHorizontalSpace = true;
+		gdListName.horizontalSpan = 225;
+		gdListName.widthHint = 200;
+		lblResult = new Label(pnlButtonHolder, SWT.FILL);
+		lblResult.setText("");
+		lblResult.setLayoutData(gdListName);
+		lblResult.setVisible(false);
+		
 		btnSaveChanges = new Button(pnlButtonHolder, 0);
 		btnSaveChanges.setText("Save_Changes");
 		btnSaveChanges.setLayoutData(gridData10);
-		btnSaveChanges.setData("name", "btnSaveChanges");		
+		btnSaveChanges.setData("name", "btnSaveChanges");
+		btnSaveChanges.setAlignment(SWT.RIGHT);
 		btnSaveChanges.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.saveChangesToMyItemsList();
@@ -312,7 +350,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
     }
     private void setBindingForItemsListTable() {
         YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[10];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[11];
 
         colBindings[0] = new YRCTblClmBindingData();
         colBindings[0].setName("tblClmCheckbox");
@@ -350,7 +388,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
         
         colBindings[4] = new YRCTblClmBindingData();        
-        colBindings[4].setAttributeBinding("UomDesc"); 
+        colBindings[4].setAttributeBinding("XPEDXMyItemsItems/@UomId"); 
         colBindings[4].setColumnBinding("UOM");        
         colBindings[4].setSortReqd(true);
         
@@ -379,11 +417,17 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[8].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField3");
         colBindings[8].setSortReqd(true);
         
-        colBindings[9] = new YRCTblClmBindingData();        
-        colBindings[9].setAttributeBinding("ItemOrder"); 
-        colBindings[9].setColumnBinding("Sequence");     
+        colBindings[9] = new YRCTblClmBindingData(); 
+        colBindings[9].setAttributeBinding("ItemPoNumber");
+        colBindings[9].setColumnBinding("LinePo"); 
         colBindings[9].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
         colBindings[9].setSortReqd(true);
+        
+        colBindings[10] = new YRCTblClmBindingData();        
+        colBindings[10].setAttributeBinding("ItemOrder"); 
+        colBindings[10].setColumnBinding("Sequence");     
+        colBindings[10].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
+        colBindings[10].setSortReqd(true);
         
         bindingData.setImageProvider(new IYRCTableImageProvider() {
         	public String getImageThemeForColumn(Object element, int columnIndex) {
@@ -526,6 +570,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		TableColumn clmQuantity = new TableColumn(tblItemsList, SWT.NONE);
 		clmQuantity.setText("Quantity");
 		clmQuantity.setWidth(50);
+		clmQuantity.setResizable(true);
 		
 		TableColumn clmUom = new TableColumn(tblItemsList, SWT.NONE);
 		clmUom.setText("UOM");
@@ -535,24 +580,31 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		TableColumn clmCustAccountField = new TableColumn(tblItemsList, SWT.NONE);
 		clmCustAccountField.setText("Cust.LineAcct#1");
 		clmCustAccountField.setWidth(50);
+		clmCustAccountField.setResizable(true);
 		
 		TableColumn clmCustField1 = new TableColumn(tblItemsList, SWT.NONE);
 		clmCustField1.setText("Cust.LineField1");
 		clmCustField1.setWidth(50);
+		clmCustField1.setResizable(true);
 		
 		TableColumn clmCustField2 = new TableColumn(tblItemsList, SWT.NONE);
 		clmCustField2.setText("Cust.LineField2");
 		clmCustField2.setWidth(50);
+		clmCustField2.setResizable(true);
 		
 		TableColumn clmCustField3 = new TableColumn(tblItemsList, SWT.NONE);
 		clmCustField3.setText("Cust.LineField3");
 		clmCustField3.setWidth(50);
+		clmCustField2.setResizable(true);
 		
-		
+		TableColumn clmLinePo = new TableColumn(tblItemsList, SWT.NONE);
+		clmLinePo.setText("LinePo");
+		clmLinePo.setWidth(50);
+
 		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
 		clmSequence.setText("Sequence");
 		clmSequence.setWidth(50);
-		
+		clmSequence.setResizable(true);
 
 		tblItemsListGD.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		tblItemsListGD.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
