@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <CustomerList>
-<Customer CustomerID="" CustomerKey="" OrganizationCode="">
-<Extn ExtnSuffixType=""/>
-    
+<Customer CustomerKey='' CustomerID='' OrganizationCode='' CustomerType='' RootCustomerKey=''>
+<Extn ExtnSuffixType='' ExtnShipFromBranch='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix='' ExtnCustomerDivision=''/>
+<BuyerOrganization OrganizationCode='' OrganizationName=''/>
 </Customer>
 </CustomerList>
