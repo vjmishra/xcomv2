@@ -39,13 +39,16 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private Element eleMyItemsList;
 	private Element outItemDetailXml;
 	private String updated = null;
+	
+	//Making UOM Column A ComboBox
+	
 	public XPXMyItemsListDetailsPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
         super(ownerComposite, formId,inputObject);
         page =(XPXMyItemsListDetailsPanel)ownerComposite;
         inpuElement = (Element) inputObject;
         myItemsListKey = inpuElement.getAttribute("MyItemsListKey");
         loadItemsList();
-        String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
+        String custName = XPXMyItemsSearchListScreen.getMyBehavior().customerName;
         setFieldValue("txtCustName", custName);
         setControlEditable("clmCustAccountField", true);
        }
@@ -55,7 +58,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		String enterpriseKey = (String)YRCPlatformUI.getUserElement().getAttribute("EnterpriseCode");
 		XPXCacheManager.getInstance().getUomList(enterpriseKey, this);
 		
-		String[] apinames = {/*"XPXGetItemUOMMasterList",*/"getXPEDXMyItemsListDetail"};
+		String[] apinames = {/*"XPXGetSKUDetailsService",*/"getXPEDXMyItemsListDetail"};
 		Document[] docInput = {
 				//YRCXmlUtils.createFromString("<ItemUOMMaster CallingOrganizationCode='" + YRCXmlUtils.getAttribute(this.inpuElement, "EnterpriseKey") + "'/>"),
 				YRCXmlUtils.createFromString("<XPEDXMyItemsList MyItemsListKey='"+myItemsListKey+"'/>")		
@@ -85,7 +88,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 					String apiname = apinames[i];
 					
 					//Added for JIRA 1155 - To get UOM Master List
-					if ("XPXGetItemUOMMasterList".equals(apiname)) {						
+					if ("XPXGetSKUDetailsService".equals(apiname)) {						
 						Element outUOMXml = ctx.getOutputXmls()[i].getDocumentElement();
 						NodeList nl = outUOMXml.getElementsByTagName("ItemUOMMaster");
 						if(!YRCPlatformUI.isVoid(nl))
@@ -296,6 +299,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 
 		callApi(ctx, page);
 		((XPXManageMyItemsListEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+		
 		
 	}
 
