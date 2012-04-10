@@ -5604,7 +5604,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		List<String> webLineNos = new ArrayList<String>();
 		String isOrdPlace = rootEle.getAttribute("IsOrderPlace");
 		String isOrdEdit = rootEle.getAttribute("IsOrderEdit");
-		if (YFCObject.isNull(isOrdPlace) && YFCObject.isVoid(isOrdPlace) && YFCObject.isNull(isOrdEdit) && YFCObject.isVoid(isOrdEdit)) {
+		if ((YFCObject.isNull(isOrdPlace) || YFCObject.isVoid(isOrdPlace)) 
+				&& (YFCObject.isNull(isOrdEdit) || YFCObject.isVoid(isOrdEdit))) {
 			rootEle.setAttribute("IsOrderUpdate", "Y");
 		}
 
@@ -5659,8 +5660,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					}
 
 					if (!YFCObject.isNull(lpc) && !YFCObject.isVoid(lpc)) {
-						if (lpc.equalsIgnoreCase("D") && !isOrdPlace.equalsIgnoreCase("Y")) {
-							rootOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
+						if (lpc.equalsIgnoreCase("D") && (YFCObject.isNull(isOrdPlace) || !isOrdPlace.equalsIgnoreCase("Y"))) {
+								rootOrdLineTranQtyEle.setAttribute("OrderedQty", Float.parseFloat("0"));
 						}
 					}
 				}
