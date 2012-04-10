@@ -1349,7 +1349,7 @@ function SubmitActionWithValidation()
 					value="%{#_action.getRequestedQty()}"
 					disabled='%{(#addToCartDisabled == "disabled")?"true":"false"}'
 					tabindex="260" theme="simple"
-					onkeyup="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);" 
+					onchange="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);" 
 					onmouseover="javascript:qtyInputCheck(this);">
 				</s:textfield>
 
