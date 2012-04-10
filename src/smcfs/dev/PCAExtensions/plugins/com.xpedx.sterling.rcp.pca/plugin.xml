@@ -263,6 +263,14 @@
             description="ManageCatalogExport"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateCatalogExportSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateCatalogExportSharedTask"/>
         <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask"
+            description="Launches CustomerTree popup"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask"/>
+            <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"
+            description="Launches CustomerContact List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"/>
+        <SharedTask
             class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask"
             description="Launches CreateMyItemsList popup"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask"/>
