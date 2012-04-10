@@ -221,10 +221,11 @@
         
     <!-- START main body (with scroll bar) -->
     <div class="paginationContainer" style="float: right;"><!-- pagination control -->
+    <span class="bold">
      	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
 		<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
 		urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="ajax-assignedShipToCustomers" 
-		showFirstAndLast="False" showMyUserFormat="false"/>
+		showFirstAndLast="False" showMyUserFormat="true"/></span>
     </div>
     
 			
@@ -317,7 +318,7 @@
 <div class="clearall"></div>
 </div>
 
-<div class="right">
+<div id="info" class="float-right">
 	<%-- Code added to fix XNGTP-3020 --%>
 	<s:if test="#defaultShipTo == null">
 	<!-- <h5 align="center"><div class="error">Please select a preferred ship-to and click Apply </div></h5> -->
@@ -329,8 +330,8 @@
 	 <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
-<div class="float-right" >
-<ul id="tool-bar" class="tool-bar-bottom" >
+<div class="tool-bar-bottom" >
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-170px;float:right;">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 	<li>
@@ -352,8 +353,7 @@
 	<h5 align="right">Please select a Ship-To.</h5>
 	</s:if>
 </div>
-
-
+<div style="float:right;margin-top:1px;width:100%;">
 <s:if test="%{#NoShipTo}" >
 <div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
 </s:if>
@@ -361,6 +361,7 @@
 <div id="errorText" class="notice float-right">Changing the Ship-To could impact pricing on orders.</div>
 </s:elseif>
 <div id="errorText" class="float-right"></div>
+</div>
 </div>
 </div>
 
