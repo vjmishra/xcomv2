@@ -2935,6 +2935,11 @@ td .inner {
 .float-right {
     float: right !important;
 }
+/*added for jira 3730 CHANGE-SHIP-T0 MODAL size*/
+.float-right#info {
+    float: right !important;
+    margin-top : 5px;
+}
 .nofloat {
     float: none !important;
 }
@@ -3723,6 +3728,14 @@ div.ship-to-body ul#tool-bar li {
 .tool-bar-bottom {
     margin-top: 10px;
 }
+/*added for jira 3730 CHANGE-SHIP-T0 MODAL size*/
+.tool-bar-bottom-right#tool-bar {
+width:auto;
+float: right !important;
+margin-top:20px;
+padding-top:10px; 
+}
+
 #table-avail-col {
     font-size: 11px;
     text-align: left;
@@ -7872,7 +7885,7 @@ margin-left:5px;
 }
 .xpedx-light-box #address-list ul 
 {
-    padding: 10px;
+    padding: 8px;
 }
 
 .xpedx-light-box #address-list li 
@@ -7918,7 +7931,7 @@ width: 740px;
 .ship-to-address-list
 {
 border: 1px solid #CCC; 
-height: 216px;
+height: 226px;
 /* overflow: auto; */
 }
 .apply-ship-to-btn
