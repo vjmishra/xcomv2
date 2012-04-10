@@ -703,6 +703,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 
 	public void resetOrganizationValuesForShipToCustomer(){
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if ( null == shipToCustomer )
+			shipToCustomer = new XPEDXShipToCustomer();
 		shipToCustomer.setShipToOrgExtnMinOrderAmt(null);
 		shipToCustomer.setShipToOrgExtnSmallOrderFee(null);
 		shipToCustomer.setShipToOrgOrganizationName(null);
