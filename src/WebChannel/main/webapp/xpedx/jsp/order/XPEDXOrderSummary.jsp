@@ -13,6 +13,7 @@
 
 <html>
 <head>
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- Webtrends Tag starts -->
 <meta name="WT.si_n" content="ShoppingCart" />
 <meta name="WT.si_x" content="3" />
@@ -211,7 +212,9 @@ function setTotalPrice(val){
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
---><!-- carousel scripts js   -->
+-->
+<link type="text/css" rel="stylesheet" href="/swc/xpedx/FlexBox/css/jquery.flexbox.css" />
+<!-- carousel scripts js   -->
 <script type="text/javascript" src="/swc/xpedx/FlexBox/js/jquery.flexbox.js"></script>
 <!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
