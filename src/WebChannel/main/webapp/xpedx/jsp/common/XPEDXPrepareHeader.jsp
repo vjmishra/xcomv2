@@ -1027,7 +1027,7 @@ var selectedShipCustomer = null;
         var selected_customerContactId=document.getElementById("customerContactId");
         if(selected_customerContactId)
         	selected_customerContactId = selected_customerContactId.value        
-        var setAsDefault= document.getElementById('setAsDefault');
+        var setAsDefault= true;
         if(selectedCustomer=='' || selectedCustomer==null){
         	var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
         	if(isCustomerSelectedIntoConext=="true"){
