@@ -17,8 +17,12 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PartInitException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.sun.org.apache.xpath.internal.operations.Equals;
+import com.xpedx.sterling.rcp.pca.customerDetails.extn.CustomerDetailsWizardExtnBehavior;
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
@@ -37,14 +41,14 @@ import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
 
 /**
- * @author Sunith Dodda
+ * @author Manasa Mahapatra
  *
  * My Items List Search and List Panel.
  */
 public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implements IYRCComposite,IYRCPaginatedSearchAndListComposite {
 
     public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreen";
-    private XPXMyItemsSearchListScreenBehavior myBehavior;
+    private static XPXMyItemsSearchListScreenBehavior myBehavior;
 
     private Composite pnlSearchTop;
     private Composite pnlSearchCriteriaTitle;
@@ -60,6 +64,8 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 //	search fields declaration starts here
     private Label lblEnterprise;
 	private Combo cmbEnterprise;
+	private Label lblListType;
+	private Combo cmbListType;
 	Combo cmbDivisions;
 	private Text txtCustomer;
 	private Text txtUserId;
@@ -77,22 +83,24 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 
 	public XPXMyItemsSearchListScreen(Composite parent, int style, Object inputObject) {
 		super(parent, style);
-
-		selectionAdapter = new SelectionAdapter() {
+		 selectionAdapter = new SelectionAdapter() {
 			
 			public void widgetSelected(SelectionEvent e) {
 				Widget ctrl = e.widget;
 				String ctrlName = (String) ctrl.getData("name");
 				if (!YRCPlatformUI.isVoid(ctrlName)){
 					if (YRCPlatformUI.equals(ctrlName, "btnSearch")){
-						//Fetches the first page of search results
-						myBehavior.getFirstPage();
+						myBehavior.selectListType();
+						
 					}
 				}
 			}
 		};
+		
 		initialize();
-        setBindingForComponents();
+		setBindingForEnterprise();
+		//setBindingForComponents();
+		setBindingForBothList();
         myBehavior = new XPXMyItemsSearchListScreenBehavior(this, FORM_ID,inputObject);
 	}
 
@@ -278,7 +286,20 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		cmbEnterpriselayoutData.horizontalAlignment = 4;
 		cmbEnterprise.setLayoutData(cmbEnterpriselayoutData);
 		
-		cmpstEnterpriseCode.setVisible(false);
+		
+		//Adding For List type
+		lblListType = new Label(cmpstEnterpriseCode, SWT.LEFT);
+		GridData lblListTyepelayoutData = new GridData();
+		lblListTyepelayoutData.horizontalAlignment = 16777224;
+		lblListTyepelayoutData.verticalAlignment = 16777216;
+		lblListType.setLayoutData(lblListTyepelayoutData);
+		lblListType.setText("List Type");
+	
+		cmbListType = new Combo(cmpstEnterpriseCode, SWT.READ_ONLY);
+		GridData cmbListTypelayoutData = new GridData();
+		cmbListTypelayoutData.horizontalAlignment = 4;
+		cmbListType.setLayoutData(cmbListTypelayoutData);
+		cmpstEnterpriseCode.setVisible(true);
 	}
 	
 	private void createPnlButtons(){
@@ -293,7 +314,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		pnlButtonslayoutData.horizontalSpan = 2;
 		pnlButtons.setLayoutData(pnlButtonslayoutData);
 		pnlButtons.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "TaskComposite");
-		GridLayout pnlButtonslayout = new GridLayout(5, false);
+		GridLayout pnlButtonslayout = new GridLayout(6, false);
 		pnlButtonslayout.marginHeight = 2;
 		pnlButtonslayout.marginWidth = 0;
 		pnlButtons.setLayout(pnlButtonslayout);
@@ -342,10 +363,19 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		});
 		
 		Button btnShiptoList = new Button(pnlButtons, SWT.NONE);
-		btnShiptoList.setText("Get Assigned Ship To ");
+		btnShiptoList.setText("Get Child Customers ");
 		btnShiptoList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
-				myBehavior.selectShipToAddress();
+				myBehavior.create1();
+				
+			}
+		});
+		//Adding a button for getUserList
+		Button btnUserList = new Button(pnlButtons, SWT.NONE);
+		btnUserList.setText("Get Users List ");
+		btnUserList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.getCustomerKey();
 				
 			}
 		});
@@ -480,6 +510,9 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		
 		TableColumn clmAction = new TableColumn(tblResults, SWT.NONE);
 		clmAction.setWidth(130);
+		
+		TableColumn clmListType = new TableColumn(tblResults, SWT.NONE);
+		clmListType.setWidth(130);
 //		clmAction.setText("Column 2");
 		
 		gridDataTblShipCustomers.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
@@ -505,8 +538,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 			}
 		});
 	}
-	
-	private void setBindingForComponents() {
+	private void setBindingForEnterprise(){
 		YRCComboBindingData cbd = new YRCComboBindingData();
 		cbd.setName("cmbEnterprise");
         cbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@EnterpriseKey");
@@ -515,9 +547,26 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
         cbd.setListBinding("OrgList:OrganizationList/Organization");
         cbd.setDescriptionBinding("OrganizationCode");
         cmbEnterprise.setData("YRCComboBindingDefination", cbd);
-
         
-        YRCTextBindingData textBindingData = new YRCTextBindingData();
+        YRCComboBindingData cbd1 = new YRCComboBindingData();
+        cbd1.setName("cmbListType");
+        cbd1.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@EnterpriseKey");
+        cbd1.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@EnterpriseKey");
+        cbd1.setCodeBinding("OrganizationKey");
+        cbd1.setListBinding("OrgList:OrganizationList/Organization");
+        cbd1.setDescriptionBinding("OrganizationCode");
+        cmbListType.setData("YRCComboBindingDefination", cbd);
+        
+        cbd = new YRCComboBindingData();
+        cbd.setName("cmbListType");
+		cbd.setCodeBinding("@ListValue");
+		cbd.setDescriptionBinding("@ListType");
+		cbd.setListBinding("GetListType:/ListType");
+		cmbListType.setData("YRCComboBindingDefination", cbd);
+	}
+	
+	private void setBindingForBothList(){
+		YRCTextBindingData textBindingData = new YRCTextBindingData();
         textBindingData = new YRCTextBindingData();
         textBindingData.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
         textBindingData.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
@@ -534,56 +583,68 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
         textBindingData.setName("txtUserId");
         txtUserId.setData("YRCTextBindingDefination", textBindingData);
 
-        /************/
-        YRCTableBindingData tblResultsBinding = new YRCTableBindingData();
-		YRCTblClmBindingData colBindings1[] = new YRCTblClmBindingData[tblResults.getColumnCount()];
-		colBindings1[0] = new YRCTblClmBindingData();
-		colBindings1[0].setName("clmCustAddress");
-		colBindings1[0].setAttributeBinding("@Name;@Desc;XPEDXMyItemsItemsList/@TotalNumberOfRecords");
-		colBindings1[0].setKey("My_Search_Item_List_Name_Key");
-        colBindings1[0].setColumnBinding("List_Nm");
-        colBindings1[0].setSortReqd(true);
-        colBindings1[0].setSortBinding("@Name");
-		colBindings1[0].setLinkReqd(true);
+		/************/
+		YRCComboBindingData cbd = new YRCComboBindingData();
+        YRCTableBindingData tblResultsBinding1 = new YRCTableBindingData();
+		YRCTblClmBindingData colBindings11[] = new YRCTblClmBindingData[tblResults.getColumnCount()];
+		colBindings11[0] = new YRCTblClmBindingData();
+		colBindings11[0].setName("clmCustAddress");
+		colBindings11[0].setAttributeBinding("@Name;@Desc;@TotalItems");
+		colBindings11[0].setKey("My_Search_Item_List_Name_Key");
+        colBindings11[0].setColumnBinding("List_Nm");
+        colBindings11[0].setSortReqd(true);
+        colBindings11[0].setSortBinding("@Name");
+		colBindings11[0].setLinkReqd(true);
+		colBindings11[0].setFilterReqd(true);
 		
-       
+		colBindings11[1] = new YRCTblClmBindingData();
+		colBindings11[1].setName("clmCreatedBy");
+		colBindings11[1].setAttributeBinding("@Createuserid");
+        colBindings11[1].setColumnBinding("Created_By");
+        colBindings11[1].setSortReqd(true);
+        colBindings11[1].setFilterReqd(true);
         
-        colBindings1[1] = new YRCTblClmBindingData();
-		colBindings1[1].setName("clmCreatedBy");
-		colBindings1[1].setAttributeBinding("@Createuserid");
-        colBindings1[1].setColumnBinding("Created_By");
-        colBindings1[1].setSortReqd(true);
+        colBindings11[2] = new YRCTblClmBindingData();
+		colBindings11[2].setName("clmLastModDate");
+		colBindings11[2].setAttributeBinding("@Modifyts");
+        colBindings11[2].setColumnBinding("Last_Modified_Date");
+        colBindings11[2].setSortReqd(true);
+        colBindings11[2].setFilterReqd(true);
         
-        colBindings1[2] = new YRCTblClmBindingData();
-		colBindings1[2].setName("clmLastModDate");
-		colBindings1[2].setAttributeBinding("@Modifyts");
-        colBindings1[2].setColumnBinding("Last_Modified_Date");
-        colBindings1[2].setSortReqd(true);
+        colBindings11[3] = new YRCTblClmBindingData();
+		colBindings11[3].setName("clmLastModUser");
+		colBindings11[3].setAttributeBinding("@Modifyuserid");
+        colBindings11[3].setColumnBinding("Last_Modified_User");
+        colBindings11[3].setSortReqd(true);
+        colBindings11[3].setFilterReqd(true);
         
-        colBindings1[3] = new YRCTblClmBindingData();
-		colBindings1[3].setName("clmLastModUser");
-		colBindings1[3].setAttributeBinding("@Modifyuserid");
-        colBindings1[3].setColumnBinding("Last_Modified_User");
-        colBindings1[3].setSortReqd(true);
-        
-		colBindings1[4] = new YRCTblClmBindingData();
-		colBindings1[4].setName("clmAction");
-        colBindings1[4].setAttributeBinding("@Action");
-        colBindings1[4].setColumnBinding("Action");        
-        colBindings1[4].setLabelProvider(new IYRCTableColumnTextProvider(){
+		colBindings11[4] = new YRCTblClmBindingData();
+		colBindings11[4].setName("clmAction");
+        colBindings11[4].setAttributeBinding("@Action");
+        colBindings11[4].setColumnBinding("Action");   
+        colBindings11[4].setFilterReqd(true);
+        colBindings11[4].setLabelProvider(new IYRCTableColumnTextProvider(){
 	
 			public String getColumnText(Element eleData) {
 				return "Select";
 			}
         	
         });
-        colBindings1[4].setTargetAttributeBinding("XPEDXMyItemsList/@Action");
+        colBindings11[4].setTargetAttributeBinding("XPEDXMyItemsList/@Action");
         cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("Id");
 		cbd.setListBinding("Actions:Actions/Action");
 		cbd.setDescriptionBinding("DisplayName");
-		colBindings1[4].setBindingData(cbd);
-		colBindings1[4].setSortReqd(true);
+		colBindings11[4].setBindingData(cbd);
+		colBindings11[4].setSortReqd(true);
+		
+		colBindings11[5] = new YRCTblClmBindingData();
+		colBindings11[5].setName("clmListType");
+		colBindings11[5].setAttributeBinding("@ListType");
+        colBindings11[5].setColumnBinding("List_Type");
+        colBindings11[5].setSortReqd(true);
+        colBindings11[5].setFilterReqd(true);
+       
         
         IYRCCellModifier cellModifier = new IYRCCellModifier() {
 			protected boolean allowModify(String property, String value, Element element) {
@@ -627,16 +688,25 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		};
 		String[] editors = new String[tblResults.getColumnCount()];
 		editors[4] = YRCConstants.YRC_COMBO_BOX_CELL_EDITOR;
-		tblResultsBinding.setCellTypes(editors);
-		tblResultsBinding.setCellModifierRequired(true);
-		tblResultsBinding.setCellModifier(cellModifier);
-		tblResultsBinding.setSortRequired(true);
-		tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
-        tblResultsBinding.setTargetBinding("SaveXPEDXMyItemsListList:/XPEDXMyItemsListList");
-        tblResultsBinding.setName("tblResultz");
-        tblResultsBinding.setTblClmBindings(colBindings1);
-        tblResultsBinding.setKeyNavigationRequired(true);
-        tblResultsBinding.setLinkProvider( new IYRCTableLinkProvider(){
+		tblResultsBinding1.setCellTypes(editors);
+		tblResultsBinding1.setCellModifierRequired(true);
+		tblResultsBinding1.setCellModifier(cellModifier);
+		tblResultsBinding1.setSortRequired(true);
+		tblResultsBinding1.setFilterReqd(true);
+		//Need to set the source binding conditionally 
+		/*if("Both".equalsIgnoreCase(myBehavior.getFieldValue("cmbListType"))){
+			tblResultsBinding.setSourceBinding("BothList:/XpedxMilBothLstList/XpedxMilBothLst");
+    		}
+		else{
+			tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
+		}*/
+		tblResultsBinding1.setSourceBinding("XpedxMilBothLstList:/XpedxMilBothLstList/XpedxMilBothLst");
+		//tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
+		tblResultsBinding1.setTargetBinding("SaveXPEDXMyItemsListList:/XPEDXMyItemsListList");
+		tblResultsBinding1.setName("tblResultz");
+        tblResultsBinding1.setTblClmBindings(colBindings11);
+        tblResultsBinding1.setKeyNavigationRequired(true);
+        tblResultsBinding1.setLinkProvider( new IYRCTableLinkProvider(){
         	public String getLinkTheme(Object element, int columnIndex) {
         			return "TableLink";
         	   	}
@@ -654,10 +724,10 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
            		return;
            	}
         });
-        tblResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblResultsBinding);
+        tblResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblResultsBinding1);
 
         /************/
-    }
+	}
 
     public IYRCPanelHolder getPanelHolder() {
         // TODO Complete getPanelHolder
@@ -669,7 +739,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		return null;
 	}
 
-	public XPXMyItemsSearchListScreenBehavior getMyBehavior() {
+	public static XPXMyItemsSearchListScreenBehavior getMyBehavior() {
 		return myBehavior;
 	}
 	
