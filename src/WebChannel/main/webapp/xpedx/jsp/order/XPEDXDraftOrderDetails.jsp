@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
-
+<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -42,7 +42,7 @@
 -->
 
 <!-- carousel scripts js   -->
-
+ <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
@@ -2104,6 +2104,7 @@ var currentAadd2ItemList = new Object();
 					$(this).attr('title', html );
 				}
 			});
+		});
 		</script>
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
