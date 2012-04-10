@@ -1,6 +1,7 @@
 package com.xpedx.sterling.rcp.pca.tasks.myitems.screen;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
@@ -16,6 +17,7 @@ import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 import com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreen;
+import com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreenBehavior;
 
 public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 
@@ -34,9 +36,9 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		super(ownerComposite, formId);
 		this.formId = formId;
 		this.page = (XPXGetCompleteChildCustomerTree) ownerComposite;
-		//String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
-		//setFieldValue("txtCustName", custName);
-		searchCustomers();
+		String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
+		setFieldValue("txtCustName", custName);
+//		searchCustomers();
 	}
 
 	/** Will be triggered on click of get Share List or getChilds */
@@ -57,7 +59,7 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 			if(!YRCPlatformUI.isVoid(MasterCustomerID)) {
 				String[] apinames = {"getCustomerList"};
 				Document[] docInput = {
-						YRCXmlUtils.createFromString("<Customer customerID='"+MasterCustomerID+"' />")										
+						YRCXmlUtils.createFromString("<Customer CustomerID='"+MasterCustomerID+"' OrganizationCode='xpedx'/>")										
 				};
 				apiCtx.setApiNames(apinames);
 				apiCtx.setInputXmls(docInput);
@@ -95,20 +97,19 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 						
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXGetImmediateChildCustomerListService",outXml);
-						
 						String strCustomerKey = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@CustomerKey");
 						String strCustomerID = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@CustomerID");
 						String strOrgCode = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@OrganizationCode");
 						String strSuffixType = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/Extn/@ExtnSuffixType");
 						if(YRCPlatformUI.isVoid(strSuffixType) || !"MC".equals(strSuffixType)){
-							//this.getChildList();
-							YRCApiContext apiCtx = new YRCApiContext();
+							this.getChildList();
+							/*YRCApiContext apiCtx = new YRCApiContext();
 							String cmdName = "XPXGetParentCustomerListService";
 							Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+strCustomerID+"' OrganizationCode='"+strOrgCode+"'/>");
 							apiCtx.setApiName(cmdName);
 							apiCtx.setInputXml(docInput);
 							apiCtx.setFormId(getFormId());
-							callApi(apiCtx);
+							callApi(apiCtx);*/
 						} else {
 							this.getChildList();    //--function used to set the values of child nodes in Tree structure
 						}
@@ -278,5 +279,139 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 	
 	public String getCustomerPathPrefix() {
 		return strCustomerPathPrefix;
+	}
+	
+	public void prepareInputXML(ArrayList customerarray) {
+		//Update the Search Criteria
+		String[] customerID = null;
+		ArrayList msaplist = new ArrayList();
+		ArrayList saplist = new ArrayList();
+		ArrayList shiptolist = new ArrayList();
+		ArrayList billtolist = new ArrayList();
+		String[] msapcustomerID = null;
+		String[] sapcustomerID = null;
+		String[] billtocustomerID = null;
+		String msapcustID = null;
+		String sapcustID = null;
+		String billtocustID = null;
+		String shiptocustID = null;
+			for(int i=0;i<customerarray.size();i++){
+			if(customerarray.get(i).toString().contains("|MC")){
+				String custId = customerarray.get(i).toString();
+				StringTokenizer  strtok = new StringTokenizer( custId, "|");
+				  while(strtok.hasMoreTokens()){					  
+					  msaplist.add(strtok.nextToken().toString());
+					  strtok.nextToken().toString();
+				  }
+			}
+			if(customerarray.get(i).toString().contains("|C")){
+				String custId = customerarray.get(i).toString();
+				StringTokenizer  strtok = new StringTokenizer( custId, "|");
+				  while(strtok.hasMoreElements()){					  
+				      saplist.add(strtok.nextToken().toString());
+				      strtok.nextToken().toString();
+				  }
+				 
+			}
+			if(customerarray.get(i).toString().contains("|S")){
+				String custId = customerarray.get(i).toString();
+				StringTokenizer  strtok = new StringTokenizer( custId, "|");
+				  while(strtok.hasMoreElements()){					  
+				    
+				      shiptolist.add(strtok.nextToken().toString());
+				      strtok.nextToken().toString();
+				  }
+				
+				  
+				
+				
+			}
+			if(customerarray.get(i).toString().contains("|B")){
+				String custId = customerarray.get(i).toString();
+				StringTokenizer  strtok = new StringTokenizer( custId, "|");
+				  while(strtok.hasMoreElements()){					  
+				    
+					  billtolist.add(strtok.nextToken().toString());
+					  strtok.nextToken().toString();
+				  }
+				
+				 
+				
+				
+			}
+		}
+	//   isShared = true;
+		
+	
+		
+		
+		Element elemModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+				.getDocumentElement();
+		elemModel.setAttribute("IgnoreOrdering", "Y");
+		elemModel.setAttribute("SharePrivate", "");
+		
+		//Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsListShareList");
+		//Element attrElemComplex2 = YRCXmlUtils.createChild(attrElemComplex1, "XPEDXMyItemsListShare");
+		Element attrElemComplex = YRCXmlUtils.createChild(elemModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+
+		for ( int i=0; i<shiptolist.size();i++) {
+			String custId = (String) shiptolist.get(i);
+			if (custId != null && custId != " ") {
+
+				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+				attrName.setAttribute("Name", "ShareCustomerID");
+				
+				attrName.setAttribute("Value", custId);
+				attrOr.appendChild(attrName);
+			}
+
+		}
+		for ( int i=0; i<msaplist.size();i++) {
+			String custId = (String) msaplist.get(i);
+			if (custId != null && custId != " ") {
+
+				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+				attrName.setAttribute("Name", "ShareCustomerID");
+				
+				attrName.setAttribute("Value", custId);
+				attrOr.appendChild(attrName);
+			}
+
+		}
+		for ( int i=0; i<billtolist.size();i++) {
+			String custId = (String) billtolist.get(i);
+			if (custId != null && custId != " ") {
+
+				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+				attrName.setAttribute("Name", "ShareCustomerID");
+				
+				attrName.setAttribute("Value", custId);
+				attrOr.appendChild(attrName);
+			}
+
+		}
+		for ( int i=0; i<saplist.size();i++) {
+			String custId = (String) saplist.get(i);
+			if (custId != null && custId != " ") {
+
+				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+				attrName.setAttribute("Name", "ShareCustomerID");
+				
+				attrName.setAttribute("Value", custId);
+				attrOr.appendChild(attrName);
+			}
+
+		}
+
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		//attrName1.setAttribute("Name", "Createuserid");
+		//attrName1.setAttribute("Value", userId);
+		
+		
+		setModel(elemModel);
+		XPXMyItemsSearchListScreenBehavior.selectShipToAddress(elemModel);
+		
+		
 	}
 }
