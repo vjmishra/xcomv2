@@ -895,6 +895,11 @@ function showSharedListForm(){
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
+
+				if (priceCheck == true){
+					if(quantity == '0'|| quantity == '')
+					quantity = 1;
+				}
 				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
 				if((quantity == '0' || quantity== '' ) )
