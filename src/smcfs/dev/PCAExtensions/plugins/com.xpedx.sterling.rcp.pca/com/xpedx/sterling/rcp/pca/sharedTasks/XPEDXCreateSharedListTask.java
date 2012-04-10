@@ -41,7 +41,7 @@ public class XPEDXCreateSharedListTask extends YRCSharedTask {
         {
         	createNewMyItemsListPopup = new XPXGetCompleteChildCustomerTree(YRCPlatformUI.getShell(), 0, inputObject);
         }
-        YRCDialog dialog = new YRCDialog(createNewMyItemsListPopup, 1000, 900, YRCPlatformUI.getString("TITLE_ADD_NEW_MY_ITEMS_LIST"), null);
+        YRCDialog dialog = new YRCDialog(createNewMyItemsListPopup, 1000, 900, YRCPlatformUI.getString("TITLE_SELECT_CHILD_CUSTOMER"), null);
         dialog.open();
 	}
 	
