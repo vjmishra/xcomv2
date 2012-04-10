@@ -194,13 +194,24 @@ function resetDeleteCart(formObj)
 }
 function quickAddCopyAndPaste(data){
 	//Clean up the data
-	Ext.get('dlgCopyAndPasteText').dom.value = '';
-	$.fancybox.close();
+	//Ext.get('dlgCopyAndPasteText').dom.value = '';
+	//$.fancybox.close();
 	
 	//console.debug("data: ", data);
+	var itemLineFlag = "false";
 	var itemsString = data;
 	var char = '\n';
 	var itemLines = itemsString.split(char);
+	if(itemsString == "")
+	{
+		document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+        document.getElementById("errorMsgCopyBottom").style.display = "inline";
+	}
+	else 
+	{
+		document.getElementById("errorMsgCopyBottom").innerHTML = "" ;
+        document.getElementById("errorMsgCopyBottom").style.display = "none";
+	}
 				
 	for(var i=0;i < itemLines.length; i++)
 	{
@@ -219,8 +230,20 @@ function quickAddCopyAndPaste(data){
 		{
 			itemQty = itemLine[0];
 			itemSku = itemLine[1];
+			if(itemSku == "" || itemQty == ""){
+				itemLineFlag = "true";
+				document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+		        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
+			}
+		}
+		else
+		{
+			itemLineFlag = "true";
+			document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
+	        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
 		}
 		
+		/*
 		itemSku = Ext.util.Format.trim(itemSku);
 		itemQty = Ext.util.Format.trim(itemQty);
 		
@@ -228,7 +251,43 @@ function quickAddCopyAndPaste(data){
 		document.getElementById("qaQuantity").value= itemQty;
 		//call metods for quick add 3349 by balkhi
 		  addProductToQuickAddList(document.getElementById('quickAddButton'));
-		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' ); 
+		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' );  */
+	}
+	if(itemLineFlag == "false")
+	{
+		for(var i=0;i < itemLines.length; i++)
+		{
+			var itemQty = null;
+			var itemSku = null;
+			var jobId = "";
+			var itemLine = itemLines[i].split('\t');
+			
+			if(itemLine.length > 1 )
+			{
+				itemQty = itemLine[0];
+				itemSku = itemLine[1];
+			}
+			itemLine = itemLines[i].split(',');
+		
+			if(itemLine.length > 1 )
+			{
+				itemQty = itemLine[0];
+				itemSku = itemLine[1];
+			}					
+			if((i+1) == itemLines.length && itemLineFlag == "false")
+			{
+				$.fancybox.close();
+				Ext.get('dlgCopyAndPasteText').dom.value = '';
+			}
+			itemSku = Ext.util.Format.trim(itemSku);
+			itemQty = Ext.util.Format.trim(itemQty);
+		
+			document.getElementById("qaProductID").value= itemSku;
+			document.getElementById("qaQuantity").value= itemQty;
+			//call metods for quick add 3349 by balkhi
+		  	addProductToQuickAddList(document.getElementById('quickAddButton'));
+			//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' ); 
+		}
 	}
 	
 	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
@@ -284,12 +343,13 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
 <ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
 	<li><a class="grey-ui-btn" href="javascript:$.fancybox.close();"
-		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';"><span>Cancel</span></a></li>
+		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';Ext.get('errorMsgCopyBottom').dom.innerHTML='';Ext.get('errorMsgCopyBottom').dom.style.display='none'"><span>Cancel</span></a></li>
 	<li style="float: right;"><a href="javascript: quickAddCopyAndPaste( document.form1.dlgCopyAndPasteText.value);" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
 	
 	
 </ul>
 </form>
+</br></br></br><div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:100px" ></div>
 </div>
 </div>
 

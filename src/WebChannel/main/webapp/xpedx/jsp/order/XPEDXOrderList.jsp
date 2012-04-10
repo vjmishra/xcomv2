@@ -238,6 +238,7 @@ function printPOs(customerPos) {
                 	<s:if test='!#blankValue '> 
 	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
 	                	<s:hidden name='sourceTab' value="%{'Open'}"/>
+	                	<s:set name='openOrder' value="%{'true'}"/>
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
 <br/>
@@ -272,6 +273,7 @@ function printPOs(customerPos) {
 	            							<td>Order Status: </td>
 													<td>
 														<s:select cssClass=" " name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
+														<s:set name='openOrder' value="%{'false'}"/>
 													</td>
 													<td colspan="2"></td>
 													
@@ -335,7 +337,7 @@ function printPOs(customerPos) {
 					</s:if>	
 					<s:set name="ViewInvoicesFlag" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getInvoiceFlagForLoggedInUser(wCContext)" />
 					 <s:if test="%{#ViewInvoicesFlag}"> 
-						<a  href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='%{userKey}' />&shipTo=<s:property value='%{custSuffix}' />" target="_blank" id="view-order-history-btn"><span class="underlink">View All Invoices  </span><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" title="Viewing invoices will open a separate pop-up window. Note: If the window does not open, check your pop-up blocker settings" /></a>
+						<a  href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='%{userKey}' />&shipTo=<s:property value='%{custSuffix}' />" target="_blank" id="view-order-history-btn"><span class="underlink">View All Invoices  </span><img src="../xpedx/images/icons/12x12_charcoal_help.png" alt="" title="Viewing invoices will open a separate pop-up window. If the window does not open, check your pop-up blocker settings." /></a>
 					</s:if> 
 				</div>
 	    </div> <!-- end top section -->
@@ -345,7 +347,7 @@ function printPOs(customerPos) {
 	    <!-- Begin mid-section -->
 	    <div class="midsection"> <!-- Begin mid-section container -->
 		
-             <div id="open-orders-Msg-top"  style="display: none; align: center;" class="error">&nbsp;</div> 
+             <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">
             	  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
                   <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
@@ -738,7 +740,7 @@ function printPOs(customerPos) {
                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
                  	urlSpec="%{#orderListPaginationURL}"/>
 			</div>
-		 <div id="open-orders-Msg-bottom" style="display: none;" align="center" class="error">&nbsp;</div> 
+		 <div id="open-orders-Msg-bottom" style="display: none;position:relative;left:375px;color:red;" align="center" class="error">&nbsp;</div> 
 		 
 	    </div> <!-- end mid-section container -->
 	    <!-- End mid section -->
@@ -844,25 +846,35 @@ function printPOs(customerPos) {
 	setErrorMessage('<s:property value="#openOrder"/>',"divid");
 	*/
 	<%-- start of Fix : JIRA - 3123 --%>
-	/*
-	function setErrorMessage(flag, divIdTop, divIdBottom)
+	
+	function setErrorMessage(flag)
 	{
 		if(flag == "true")
 		{
 		//"Currently No Open Orders are Available.";
-		var dividtop=document.getElementById(divIdTop);
+		var dividtop=document.getElementById("open-orders-Msg-top");
 		dividtop.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
 		dividtop.style.display = "inline"; 
 		
-		var dividbottom=document.getElementById(divIdBottom);
+		var dividbottom=document.getElementById("open-orders-Msg-bottom");
 		dividbottom.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
 		dividbottom.style.display = "inline"; 
-		dividbottom.style.align = "center"; 
+		}
+		else
+		{
+			//"Currently No Open Orders are Available.";
+			var dividtop=document.getElementById("open-orders-Msg-top");
+			dividtop.innerHTML="";
+			dividtop.style.display = "none"; 
+			
+			var dividbottom=document.getElementById("open-orders-Msg-bottom");
+			dividbottom.innerHTML="";
+			dividbottom.style.display = "none"; 
 		}
 	}
 	
-	setErrorMessage('<s:property value="#openOrder"/>',"open-orders-Msg-top", "open-orders-Msg-bottom");
-	*/
+	setErrorMessage('<s:property value="#openOrder"/>');
+	
 	<%-- End of Fix : JIRA - 3123 --%>
 	</script>
 
