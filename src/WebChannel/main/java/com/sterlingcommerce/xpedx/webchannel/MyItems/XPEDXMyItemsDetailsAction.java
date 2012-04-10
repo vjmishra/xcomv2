@@ -1017,7 +1017,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String itemLineNum = item.getAttribute("ItemOrder");
 				//String itemQty = item.getAttribute("Qty");
 				String itemQty = enteredQuantities.get(i);
-				if(itemQty==null || itemQty.trim().equals(""))
+				if(itemQty==null || itemQty.trim().equals("") || itemQty.equals("0") )
 					itemQty = "1";
 
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
