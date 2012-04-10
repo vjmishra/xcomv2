@@ -68,6 +68,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	public String OrgName;
 	public String createUserId;
 	public String strRootCustomerKey;
+	public String customerName;
 	public Document BothList;
 	
 	public static final String PAGINATION_STRATEGY_FOR_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
@@ -99,6 +100,10 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		
 		//Load the cache/Fetch data from cache for organization list for the logged in user
 		this.setOrganizationList(XPXUtils.orgList);
+		//CustomerDetailsWizardExtnBehavior customer = new CustomerDetailsWizardExtnBehavior();
+		//String custName = CustomerDetailsWizardExtnBehavior.getCustomerID();
+		//getExtensionBehavior().getFieldValue("extn_dummytext");
+	//	String myvalue = CustomerDetailsWizardExtnBehavior.getFieldValue("extn_dummytext");
 		
 		
     }
@@ -118,6 +123,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	
 	@Override
 	public void handleApiCompletion(YRCApiContext ctx) {
+		
 		if(ctx.getInvokeAPIStatus() < 1)
         {
             YRCPlatformUI.trace((new StringBuilder()).append("API exception in ").append(ctx.getFormId()).append(" page, ApiName ").append(ctx.getApiName()).append(",Exception : ").toString(), ctx.getException());
@@ -125,6 +131,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
             YRCPlatformUI.trace((new StringBuilder()).append(ctx.getFormId()).append(" page is disposed, ApiName ").append(ctx.getApiName()).append(",Exception : ").toString());
         else {
         	String[] apinames= ctx.getApiNames();
+        	
         	for(int i=0; i< apinames.length;i++){
         		String apiname = apinames[i]; 
 			
@@ -170,7 +177,10 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 					Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 					setModel("CustomerList",outXml);
 					OrgName= YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/BuyerOrganization/@OrganizationName");
-					String customerName = 
+					String customerid= YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@CustomerID");
+					String[] trimCustIDArray = customerid.split("-");
+					String trimCustID = trimCustIDArray[1];
+					customerName = OrgName.concat("(").concat(trimCustID).concat(")");
 					strRootCustomerKey = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@RootCustomerKey");
 					BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
 					if("Both".equalsIgnoreCase(getFieldValue("cmbListType"))){
