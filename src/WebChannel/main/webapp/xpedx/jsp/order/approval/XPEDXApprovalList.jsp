@@ -6,8 +6,8 @@
 <swc:html>
 <head>
 
-
 <!-- styles -->
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 <link rel="stylesheet" type="text/css"
@@ -35,7 +35,6 @@
 <script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/js/jQuery.js"></script>
-<script type="text/javascript" src="../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="../xpedx/js/common/ajaxValidation.js"></script>
@@ -143,12 +142,12 @@
 	function clearFilters_onclick(){
 		alwaysHideSearchField();
 		Ext.fly('searchFieldName').dom.selectedIndex='0';
-		Ext.fly('search_searchTerm').dom.value='Enter Search Terms';
+		//Ext.fly('search_searchTerm').dom.value='Enter Search Terms';
 		//Ext.fly('accountSearchFieldName').dom.selectedIndex='0';
 		Ext.fly('FromDate').dom.value='';
 		Ext.fly('shipToSearchFieldName').dom.value='';
 		Ext.fly('ToDate').dom.value='';
-		document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
+		//document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
 		//Ext.fly('order-ship-to').dom.selectedIndex='4';
 	}
 
@@ -157,7 +156,7 @@
 			 Ext.fly('FromDate').dom.value=='' && Ext.fly('shipToSearchFieldName').dom.selectedIndex=='0' && 
 			 	Ext.fly('ToDate').dom.value=='' )
 			{
-				Ext.fly('search_searchTerm').dom.value='';
+				//Ext.fly('search_searchTerm').dom.value='';
 			}
 			
 	}
