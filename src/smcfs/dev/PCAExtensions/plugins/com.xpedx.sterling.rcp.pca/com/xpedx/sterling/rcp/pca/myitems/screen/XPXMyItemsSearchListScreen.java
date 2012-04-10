@@ -239,6 +239,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		txtCustomer.setLayoutData(txtCustomerlayoutData);
 		txtCustomer.setEditable(true);
 		txtCustomer.setTextLimit(50);
+		txtCustomer.setText(XPXUtils.getMasterCustomerID());
 		
 		
 		Label lblUserId = new Label(pnlBasicSearchCriteriaBody, SWT.LEFT);
