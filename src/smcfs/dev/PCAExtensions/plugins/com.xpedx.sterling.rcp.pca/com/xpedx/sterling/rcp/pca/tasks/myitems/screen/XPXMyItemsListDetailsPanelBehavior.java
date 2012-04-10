@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor;
+import com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreen;
 import com.xpedx.sterling.rcp.pca.util.XPXCSVReader;
 import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -44,7 +45,10 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
         inpuElement = (Element) inputObject;
         myItemsListKey = inpuElement.getAttribute("MyItemsListKey");
         loadItemsList();
-    }
+        String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
+        setFieldValue("txtCustName", custName);
+        setControlEditable("clmCustAccountField", true);
+       }
     
 	public void loadItemsList() {
 		//Load the ItemUOM from cache
@@ -136,6 +140,16 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						//Element xmls = this.outItemDetailXml;
 						/* Removed unnecessary code ENDS */
 						this.eleMyItemsList = YRCXmlUtils.getXPathElement(this.outItemDetailXml, "/XPEDXMyItemsListList/XPEDXMyItemsList");
+						String sharePrivate = eleMyItemsList.getAttribute("SharePrivate");
+						String CreateUserName = eleMyItemsList.getAttribute("Createusername");
+						if(sharePrivate != ""){
+							setFieldValue("txtListType", CreateUserName);
+							
+						}
+						else{
+							setFieldValue("txtListType", "Shared");
+						}
+
 							Element eleItemsItemsList1 = YRCXmlUtils.getChildElement(this.eleMyItemsList, "XPEDXMyItemsItemsList");
 							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
 							for (Element eleItem : listItems1) {								
