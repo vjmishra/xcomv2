@@ -647,7 +647,7 @@ function showSplitDiv(divId)
                         Order placed<s:if test='#xpedxOrderedByName!=""' > by <s:property value='#xpedxOrderedByName' /></s:if> 
 		                    <s:if test='#xpedxOrderDate!=""' > on  <s:property value='#xpedxOrderDate' /></s:if> 
 <%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - begin --%>
-		                     <s:if test='#xpedxOrderSource=="Web"'> &lt;<s:property value='#xpedxOrderDateTimezone'/>&gt; </s:if>
+		                     <s:if test='#xpedxOrderSource=="Web"'><s:property value='#xpedxOrderDateTimezone'/></s:if>
 <%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders --%>
 		                     <s:if test='#xpedxOrderSource=="B2B" || #xpedxOrderSource=="Web" ||#xpedxOrderSource=="Call Center"' > via  <s:property value='#xpedxOrderSource' /></s:if>. <s:if test='#xpedxEmail!=""' >Order Confirmation emailed to 
 		                    <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@replaceSemiWithcomma(#xpedxEmail)' /></s:if> 
