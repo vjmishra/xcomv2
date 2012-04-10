@@ -13,11 +13,14 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
+import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
-import com.yantra.yfc.rcp.YRCExtendedTableImageProvider;
+import com.yantra.yfc.rcp.YRCApiContext;
+import com.yantra.yfc.rcp.YRCExtendedTableBindingData;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCTblClmBindingData;
+import com.yantra.yfc.rcp.YRCValidationResponse;
 import com.yantra.yfc.rcp.YRCWizardExtensionBehavior;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.YRCValidationResponse;
@@ -29,6 +32,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
  */
  public class CustomerDetailsWizardExtnBehavior extends YRCWizardExtensionBehavior {
 
+	 public static  String masterCustomerID;
+	 	 
 	/**
 	 * This method initializes the behavior class.
 	 */
@@ -109,7 +114,10 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			
 			 Document docOutput = getModel("getCustomerDetails_output").getOwnerDocument();
 			 Element eleCustomerContactDetails_output = docOutput.getDocumentElement();
-			 
+			 masterCustomerID = eleCustomerContactDetails_output.getAttribute("CustomerID");
+			 XPXUtils.setMasterCustomerID(masterCustomerID);
+			 YRCApiContext customerCTX = new YRCApiContext();
+			 setCustomerID(masterCustomerID);
 			 NodeList nodList=eleCustomerContactDetails_output.getElementsByTagName("CustomerContact");
 			 ArrayList eSalesRepList = new ArrayList();
 			 for(int i=0;i<nodList.getLength();i++){
@@ -226,4 +234,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 	 	//return super.getExtendedTableBindingData(tableName, tableColumnNames);
 			return tblBindingData;
 	 }
+			public String setCustomerID(String masterCustomerID)
+		{		
+			return masterCustomerID = masterCustomerID; 
+		}
 }
