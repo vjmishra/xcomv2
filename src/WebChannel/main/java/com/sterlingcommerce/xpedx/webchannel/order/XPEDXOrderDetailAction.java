@@ -29,12 +29,14 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUILocale;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.date.YDate;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfs.core.YFSSystem;
@@ -431,9 +433,11 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						LOG.error("Error encrypting invoice no " + e);
 					}
 				}
-				String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");
+				String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");				
 				if(extnInvoiceDate != null && extnInvoiceDate.trim().length() > 0) {
-					try {
+					try {						
+						String inputFormat = "yyyy-MM-dd";
+						extnInvoiceDate = XPEDXWCUtils.getUnformattedDate(inputFormat, extnInvoiceDate);									
 						extnInvoiceDate = XPEDXWCUtils.encrypt(extnInvoiceDate);
 						extnInvoiceDate = URLEncoder.encode(extnInvoiceDate);
 					} catch (Exception e) {

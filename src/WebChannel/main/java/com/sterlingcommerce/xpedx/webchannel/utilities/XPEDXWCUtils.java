@@ -76,6 +76,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
+import com.yantra.yfc.date.YDate;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
@@ -5070,6 +5071,12 @@ public class XPEDXWCUtils {
 	
 	public static String getInvoiceNoWithoutDate(String invoiceNo) {
 		return invoiceNo.substring(9, invoiceNo.length());
+	}
+	
+	public static String getUnformattedDate(String inputFormat, String date) {
+		String outputFormat = "yyyyMMdd";
+		YDate yDate = new YDate(date, inputFormat, true);
+		return yDate.getString(outputFormat);
 	}
 	
 	public static String encrypt(String plaintext) throws Exception {
