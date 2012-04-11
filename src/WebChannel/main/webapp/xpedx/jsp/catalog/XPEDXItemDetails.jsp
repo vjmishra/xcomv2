@@ -42,7 +42,7 @@
 <swc:html isXhtml="true" > 
 
 <head>
-
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/xpedx-header.css" />
