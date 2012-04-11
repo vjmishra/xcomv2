@@ -2791,7 +2791,7 @@
             <Input>
                 <Order OrderHeaderKey="">
                     <OrderLines>
-                        <OrderLine Action="" OrderLineKey=""/>
+                        <OrderLine Action="" OrderLineKey="" OrderedQty=""/>
                     </OrderLines>
                 </Order>
             </Input>
