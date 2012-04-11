@@ -608,5 +608,12 @@ public interface XpedxConstants {
 	public static final String PAGE_NOT_EXIST_DESC ="The Requested Page Does not Exist";
 	public static final String MANIFEST_ERROR_MSG = "Your orders could not be manifested at this time, Please try Again";
 
+	/*** Start of Code For JIra 3552***/
+	public static final String CUST_SKU_FLAG_FOR_CUSTOMER_ITEM = "1";
+	public static final String CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM = "2";
+	public static final String CUST_SKU_FLAG_FOR_MPC_ITEM = "3";
+	/***End of  CODE For Jira 3552***/
+
+
 }
 
