@@ -1,20 +1,23 @@
 package com.sterlingcommerce.xpedx.webchannel.common.promotions;
 
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.SCUILocalSession;
-import com.sterlingcommerce.webchannel.catalog.helper.CatalogContextHelper;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -89,6 +92,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	private String category;
 	private String categoryPath;
 	
+	private int imageCount; 
+	
 	//Initialized for pre-login stage
 	private String storeFrontId;
 	private boolean isGuestUser;
@@ -109,7 +114,9 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	private static final long serialVersionUID = 8339664862359079566L;
 	private static final String customerExtnInformation = "xpedx-customer-getCustomExtnFieldsInformation";
 	private static final Logger log = Logger.getLogger(XPEDXDynamicPromotionsAction.class);
-	
+	private static final Pattern IMG_PATTERN = Pattern.compile(
+	    		"<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>", 
+	                                               Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	/**
 	 * WebLogic Application Server path for Promotions and other conventions.
 	 */
@@ -344,9 +351,12 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			
 			//Now set fullpath for the file, Massage the path and set to setGeneratedFileFullPath
 			String tempFilePath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH.trim() + generatedFileName.trim();
-			tempFilePath = massageFileName(tempFilePath);
-			
+			tempFilePath = massageFileName(tempFilePath);			
 			setGeneratedFileFullPath(tempFilePath);
+			int imageCount = getPromoImageCount(tempFilePath);
+	
+			wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
+			//wcContext.getSCUIContext().getRequest().setAttribute("imageCounter", imageCount);
 			return true;
 		}
 		else
@@ -364,6 +374,61 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	
 
 	
+	public int getPromoImageCount(String tempFilePath)
+	{
+		int count=0;	
+		String fileContent = getFileContents(tempFilePath);
+		if (null == fileContent)
+			return count;
+		Matcher m = IMG_PATTERN.matcher(getFileContents(tempFilePath));
+		while (m.find()) { // find next match
+		    count=count+1;
+		
+		}	   
+		return count; 
+	}
+	
+	/**
+	 * Read  FILE Contents ...
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public String getFileContents(String fileName) {
+
+		InputStream inputStream = null;
+		InputStreamReader inputStreamReader = null;
+		BufferedReader bufferedReader = null;
+		StringBuffer imageLineBuffer = new StringBuffer();
+		try {
+			ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
+			inputStream = servletContext.getResourceAsStream(fileName);
+			if (null == inputStream )
+				return null;
+			
+			inputStreamReader = new InputStreamReader(inputStream);
+			bufferedReader = new BufferedReader(inputStreamReader);
+			do {
+				imageLineBuffer.append(bufferedReader.readLine());
+
+			} while (bufferedReader.readLine() != null);
+		} catch (IOException ioe) {
+			log.error("Exception in getFileContents  "+ioe.getMessage());
+		}
+
+		finally {
+			try {
+				inputStream.close();
+				inputStreamReader.close();
+				bufferedReader.close();
+			} catch (IOException e) {
+				log.error("Exception while closing inputStream  "+e.getMessage());
+			}			
+		}
+		return imageLineBuffer.toString();
+	}
+
 	/**
 	 * extracts catalog current category Name ...
 	 * 
@@ -435,8 +500,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	}else{
 		outputXML= outDoc.getDocumentElement();
 	}	
-		//System.out.println("Output XML: " + SCXmlUtils.getString(outputXML));
-	//SCXmlUtils.getString(categoryList);
+	
 		Element categoryList = XMLUtilities
 				.getChildElementByName(outputXML, "CategoryList");
 		if (categoryList == null) {
