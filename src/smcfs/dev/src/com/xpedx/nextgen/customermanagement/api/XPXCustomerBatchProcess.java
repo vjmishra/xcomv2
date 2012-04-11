@@ -25,7 +25,7 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
-
+import com.xpedx.constants.XpedxConstants;
 /*
  * input xml
  * <CustomerList>
@@ -1931,6 +1931,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
       manageCustomerInputDoc.getDocumentElement().appendChild(customerCurrencyListElement);
       YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
       extnElement.setAttribute("ExtnSuffixType", "MC");
+      /*** Start of code for jira 3552***/
+      extnElement.setAttribute("ExtnUseCustSKU",XpedxConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM);
+      /*** End of code for jira 3552***/
       manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
 
 //    api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
