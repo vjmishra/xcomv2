@@ -414,7 +414,7 @@
 					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
 					</xsl:if>
 					 </td>
-					<td class="right"> to be determined </td>
+					<td class="right"><xsl:value-of select="LineOverallTotals/@ExtendedPrice"/></td>
 				</tr>
 				<tr>
 
@@ -539,7 +539,7 @@
 			</tr>
 			<tr>
 				<td>Adjusted Subtotal:</td>
-				<td><xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
+				<td><xsl:value-of select="Order/Extn/@ExtnTotOrdValWithoutTaxes"/></td>
 			</tr>
 			<tr>
 				<td>Tax</td>
@@ -554,7 +554,7 @@
 			<tr class="last">
 				<td> Order Total (USD):</td>
 				<td><xsl:value-of select="Order/Extn/@ExtnTotalOrderValue"/></td>
-			</tr>
+				</tr>
 
 						</table>
 						</table>
