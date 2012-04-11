@@ -33,12 +33,16 @@ $('#signIn').hide();
 							<s:param name="callerPage">SignInPageTop</s:param>
 						</s:action>
 					</div>
-					<div id="home-image-rotation-nav">
-						<div class="img-navi-left"></div>
-
-						<div id="home-image-rotation-nav-inner"></div>
-						<div class="img-navi-right"></div>
-					</div>
+					
+					<s:if test="#request['imageCounter'] > 1" >
+						<div id="home-image-rotation-nav">
+							<div class="img-navi-left"></div>
+	
+							<div id="home-image-rotation-nav-inner"></div>
+							<div class="img-navi-right"></div>
+						</div>
+					</s:if>
+					
 				</div>
 			</td>
 			<td class="form-cell">	

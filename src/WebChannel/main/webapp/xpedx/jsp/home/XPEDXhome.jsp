@@ -136,12 +136,14 @@
 							<s:param name="callerPage">HomePage</s:param>
 						</s:action>
 			</div>
+			<s:if test="#request['imageCounter'] > 1" >
+				<div id="home-image-rotation-nav">
+					<div class="img-navi-left"></div>
+					<div id="home-image-rotation-nav-inner"></div>
+					<div class="img-navi-right"></div>
+				</div>
+			</s:if>
 			
-			<div id="home-image-rotation-nav">
-				<div class="img-navi-left"></div>
-				<div id="home-image-rotation-nav-inner"></div>
-				<div class="img-navi-right"></div>
-			</div>
 		</div>
 		
 		<div id="homepage-ad-area">
