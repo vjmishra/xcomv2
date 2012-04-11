@@ -84,9 +84,10 @@ $("#various4").fancybox();
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
            
           	<tr>
-           		 <td >
+          	<div class="estimators">
+           		 <td>
            		 <%-- Print Estimator for <s:property value='%{organizationName}'/> - <s:property value='%{pricingWareHouse}'/><br /> --%>
-					<div class="estimators">
+					
 	                     <s:iterator id='CatalogExp' value='%{CatalogExp}'>
 						   <ul>
 								<%-- 			                     
@@ -105,9 +106,8 @@ $("#various4").fancybox();
 		                     </ul>				
 					   </s:iterator> 
 					   			  
-
-				   </div> 
 			   </td>
+			   </div> 
 			   <td>
 			   		<s:if test="%{CatalogExp.size()} <= 0 ">
 					   	<%-- <span>No Printable Catalogs & Estimating Files available </span> --%>
