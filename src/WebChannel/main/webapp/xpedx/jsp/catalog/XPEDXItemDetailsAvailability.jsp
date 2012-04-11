@@ -167,7 +167,16 @@
 					<s:set name='UOMDesc' value='%{#UOM.substring(2,(#UOM.length()))}'/>
 					<s:set name='cost' value='%{getItemCost()}' />
 					<s:set name='formattedCost' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#cost,#showCurrencySymbol)' />
-						<td class="bold">Cost (<s:property value='priceCurrencyCode'/>):&nbsp;<a id="show-hide" onclick="return showCost(this);" href="#">[Show]</a></td><td id="cost" style="display:none"> <s:property value='%{#formattedCost}' /> / <s:property value='UOMDesc'/></td>
+					<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
+						<td class="bold">Cost (<s:property value='priceCurrencyCode'/>):&nbsp;<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a></td>
+						<td><div id="cost" style="display:none;"> 
+							<s:if test="%{#formattedCost == #priceWithCurrencyTemp1}">
+								<s:property value='%{#formattedCost}' />
+							</s:if>
+							<s:else>
+								<s:property value='%{#formattedCost}' /> / <s:property value='UOMDesc'/>
+							</s:else>
+							</div></td>	
 					</tr>
 				</s:if>
 				<tr>
