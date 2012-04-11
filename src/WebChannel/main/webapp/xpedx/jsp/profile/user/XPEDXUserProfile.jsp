@@ -19,7 +19,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
@@ -1212,7 +1212,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	
 	<s:set name='SalesRepUserId' value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('loggedInUserId')}" />
 		<td colspan="2" class="no-border-right-user">
-		<s:if test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false}"><span class="page-title">Username:</span><s:property value="%{#SalesRepUserId}" /></s:if>
+		<s:if test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false}"><span class="page-title">Username:&nbsp;</span><s:property value="%{#SalesRepUserId}" /></s:if>
 		<s:else><span class="page-title">Username:</span><s:if
 			test='%{#userExists}'>
 			<s:property value="%{#displayUserID}" />
