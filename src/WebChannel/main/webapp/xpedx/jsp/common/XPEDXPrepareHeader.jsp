@@ -1394,8 +1394,8 @@ var toaWin = new Ext.Window({
 			 		'enableEscapeButton': false,
 			 		'autoDimensions'	: false,
 			 		'scrolling'   		: 'no',
-			 		'width' 		    : 750,
-			 		'height' 		    : 505  
+			 		'width' 		: 750,
+			 		'height' 		: 505  
 				}).trigger('click');
 			}
 		}		
@@ -1421,9 +1421,9 @@ var toaWin = new Ext.Window({
  				}
  			},
  			'autoDimensions'	: false,
- 			'width' 			: 750,
+ 			'width' 		: 750,
  			'scrolling'   		: 'no',
- 			'height' 			: 505
+ 			'height' 		: 505
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
@@ -2070,10 +2070,10 @@ function callAjaxForSorting(url,divId)
 					<s:if test="%{#isSalesRep}">
 						<s:if test='%{#session.loggedInUserName != null}'>		
 							Welcome <s:property value='%{#session.loggedInUserName}'/> 
-							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />
 							<s:if test='{#welcomeUserShipToName != null}'>
 							, <s:property value='welcomeUserShipToName'/>
-							</s:if>							
+							</s:if>
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />						
 						</s:if>
 					</s:if>
 					<s:else>
