@@ -32,18 +32,13 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
         XPEDXWCUtils.setYFSEnvironmentVariablesForDiscounts(getWCContext());
         try
         {
-        	System.out.println("ORDER HEADER KEY : "+cicRefreshingMashupOrderHeaderKey); 
         	try {
-        		for(int i=0;i<selectedLineItem.size();i++){ 
-        			System.out.println("selectd line items : "+selectedLineItem.get(i));
-        		}
-        		
         		Map<String, Element> out = prepareAndInvokeMashups();
      			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
      			outputDocument = (Document)out.get("xpedx_me_draftOrderDeleteLineItems").getOwnerDocument();
      			getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, outputDocument);
      			/*End - Changes made by Mitesh Parikh for JIRA#3595*/                 
-                 returnValue = SUCCESS;
+                returnValue = SUCCESS;
              }
              catch(Throwable t) {
                  log.error("Error in prepareAndInvokeMashups invocation", t);
@@ -125,6 +120,7 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
     	Element orderLineEle=SCXmlUtil.getXpathElement(inputOrderElem, "OrderLines/OrderLine");
     	orderLineEle.setAttribute("Action", deleteActions.get(0));
     	orderLineEle.setAttribute("OrderLineKey", selectedLineItem.get(0));
+    	orderLineEle.setAttribute("OrderedQty", deleteQuantities.get(0));
 	    
 	}
 	
