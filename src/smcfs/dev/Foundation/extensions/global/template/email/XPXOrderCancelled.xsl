@@ -1,13 +1,14 @@
-<?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:lxslt="http://xml.apache.org/xslt"
-                version="1.0">
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:emailformatters="com.yantra.pca.email.formatters"
+    xmlns:java="java"
+    exclude-result-prefixes="java emailformatters">
 
 <xsl:template match="/OrderList/Order">
-
-    <xsl:variable name="brandLogo" >
-                <xsl:value-of select="@BrandLogo" />
-    </xsl:variable> 
+<xsl:comment>CONTENT_TYPE=text/html; charset=UTF-8</xsl:comment>
+<xsl:variable name="brandLogo" >
+	<xsl:value-of select="@BrandLogo" />
+</xsl:variable> 
 
 <html>
 <body>
