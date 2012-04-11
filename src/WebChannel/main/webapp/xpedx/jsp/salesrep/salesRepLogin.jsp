@@ -220,7 +220,9 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td>
-			<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username/Password is the same as your Network ID/Password." id="sprytrigger1"> Forgot Password?</a></span>
+			<%--<span class="forgot underlink" style="float:left;"> <a href="#" title="Your Username/Password is the same as your Network ID/Password." id="sprytrigger1"> Forgot Password?</a></span> --%>
+			<br/>
+			<span style="float:left;width:400px;">Your Username/Password is the same as your Network ID/Password.</span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
