@@ -611,16 +611,17 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		//JIRA 3487 start
 		String isSecuityQuestionset=null;
-		NodeList customerContactList=XPEDXWCUtils.getCustomerContactDetails(wcContext.getCustomerId()).getDocumentElement().getElementsByTagName("CustomerContact");
+		NodeList customerContactList=XPEDXWCUtils.getCustomerContactDetails(XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext)).getDocumentElement().getElementsByTagName("CustomerContact");
 		for(int i=0;i<customerContactList.getLength();i++)
 		{
 			Element _customerContactElem=(Element)customerContactList.item(i);
 			String contactId=_customerContactElem.getAttribute("CustomerContactID");
-			if(contactId!=null&&contactId.trim().equalsIgnoreCase(wcContext.getCustomerContactId())){
+			if(contactId!=null&&contactId.trim().equalsIgnoreCase(wcContext.getCustomerContactId())){						
 				String authQuestion=SCXmlUtil.getXpathAttribute(_customerContactElem, "//CustomerContact/User/AuthQuestionList/AuthQuestion/@AuthQuestionKey");
 
-				if (authQuestion != null && authQuestion.trim().length() >0) 
-				isSecuityQuestionset="Y";
+				if (authQuestion != null && authQuestion.trim().length() >0) {
+					isSecuityQuestionset="Y";
+				}				
 			}
 			
 		}
