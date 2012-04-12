@@ -131,7 +131,21 @@
 		<action name="xpedxGetTermsOfAccess" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDTermsOfAccessModal.jsp</result>
 		</action>
+		<!-- JIRA 3487 Security Question Modal -->
+		<action name="xpedxGetSecurityQuestion" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSetSecurityQuestionAction">
+			<param name="mashups">getOrgSecretQuestionList</param> 
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXSetSecurityQuestionActionBinding.xml</param>
+			<result name="success">/xpedx/jsp/home/XPEDXSecrectQuestionModal.jsp</result>
+		</action>
 		
+		<action name="xpedxSubmitSecurityQuestion" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSetSecurityQuestionAction" method="saveAnswer">
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/home</param>
+				<param name="parse">true</param>
+			</result>
+		</action>
+		<!-- JIRA 3487 Security Question Modal End -->
 		<action name="xpedxPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
 		</action>
