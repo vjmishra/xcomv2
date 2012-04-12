@@ -127,10 +127,12 @@
 			}
 			table.order-total {
 				border: 1px solid #ccc;
-				width:30%;
+				width:20%;
+				
 				position:relative;
-				left:80%;
-				border-radius: 5px;
+				left:54%;
+				
+				border-radius: 8px;
 				padding: 5px;
 			}
 			.tbd{
@@ -526,7 +528,7 @@
 			</table>
 					</td>
 					</tr>
-					<table class="order-total">
+					<table class="order-total" align="">
 						<tr>
 
 				<td>Subtotal:</td>
