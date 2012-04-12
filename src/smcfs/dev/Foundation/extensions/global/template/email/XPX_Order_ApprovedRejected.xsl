@@ -53,6 +53,145 @@
 		    BACKGROUND-COLOR: #e0e0e0;
 		    TEXT-ALIGN: left
 		}
+			html {
+				width: 7.5in;
+				font-family: Arial, Helvetica, Sans-serif;
+				font-size: 12px;
+			}
+			table {
+				border-spacing: 0px;
+				width: 80%;
+				font-size: 12px;
+			}
+			table.price {
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				border-collapse:0px;
+			}
+			table.price td {
+				padding: 2px;
+				}
+			table.price th{
+				background-color: #003399;
+				color: white;
+				padding: 10px;
+				font-size: 11px;
+			}
+			table.price tr.special-instructions td{
+				border-top: 1px solid #ccc;
+				border-bottom: 1px solid #ccc;
+			}
+			table.price th:first-of-type{
+				border-radius: 5px 0 0 0;
+			}
+			table.price th:last-of-type{
+				border-radius: 0 5px 0 0;
+			}
+			th {
+				text-align: left;
+			}
+			a {
+				color: #003399;
+				text-decoration: none;
+			}
+			a:hover {
+				color: #003399;
+				text-decoration: underline;
+			}
+			ul {
+				padding-left: 20px;
+			}
+			div {
+				border: 1px solid #ccc;;
+				padding: 5px;
+				border-radius: 5px;
+			}
+			.bold {
+				font-weight: 700;
+			}
+			.logo {
+				margin-bottom: 10px;
+			}
+			.align-right {
+				text-align: right;
+			}
+			table.price td.right, table.price th.right{
+				padding-right: 0px;
+				text-align:right;
+			}
+			table.price td.right:last-of-type, table.price th.right:last-of-type{
+				padding-right: 5px;
+			}
+			table.price td.left{
+				padding-left: 0px;
+			}
+			table.order-total {
+				border: 1px solid #ccc;
+				width:30%;
+				position:relative;
+				left:80%;
+				border-radius: 5px;
+				padding: 5px;
+			}
+			.tbd{
+				color: red;
+				font-weight: bold;
+			}
+			table.order-total td {
+				padding: 2px;
+			}
+			table.order-total tr.last td {
+				font-weight: bold;
+				background-color: #ccc;				
+			}
+			table.order-total tr td:last-of-type {
+				text-align:right;
+			}
+			p.bottom {
+				
+			}
+			p.short-desc {
+				width: 250px;
+				word-wrap: break-word;
+			}
+			ul.long-desc li {
+				width: 250px;
+				word-wrap: break-word;				
+			}
+			div.si-label {
+				border: 0px;
+				float: left;
+				width: 115px;
+				padding-right: 0px;
+				padding-left: 0px;
+			}
+			div.si-text {
+				border: 0px;
+				float: right;
+				word-wrap: break-word;
+				width: 573px; 
+				padding-left: 0px;
+			}
+			div.clearall {
+				clear: both;
+				height: 0px;
+				border: 0px; 
+			}
+			table.inner td{
+				border-top: 0px !important;
+				border-bottom: 0px !important;
+			}
+			table.inner td.first{
+				border-right: 1px solid #cccccc;
+				width: 115px;
+			}
+			table.inner td.last{
+				padding-left: 4px;
+			}
+			tr.specialcharges td {
+				border-top: 1px solid #cccccc;
+			}
+					
 	    </STYLE>
 
 	</HEAD>
@@ -80,7 +219,7 @@
 		</xsl:variable>
 		
 		<xsl:variable name="storeFrontURL">    
-			<xsl:value-of select="Order/@approvedOrderURL"/>   
+			<xsl:value-of select="concat($urlPrefix, $storeFront, $urlSuffix)"/>   
 		</xsl:variable> 
 		
 		<xsl:variable name="brandLogo" >
@@ -95,244 +234,330 @@
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
-			<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
+			<table width="100%" border="0" align="center" cellpadding="2" cellspacing="2">
 				<tr>
 					<td>
 						<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
 					</td>
 				</tr>
+				
 				<tr>
-					<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-						<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
-							<tr>
-								<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-									<table width="" border="0">
-										<tr>
-											<td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-										</tr>
-										<tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													  This email is to inform you that this order has been rejected.  Please review all of the information to make sure the 
-													  order is correct.  <a href="{$storeFrontURL}" style="color:#000;">Click Here</a>
-													  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com.		
-											</td>
-										</tr>
-										<tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-										</tr>
-										<tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												<table width="100%" border="0">
-													<tr>
-														<td colspan="2" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<strong>Order Information:</strong>
-														</td>
-														<td colspan="2" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<strong>Shipping Information:</strong>
-														</td>
-													</tr>
-													<tr>
-														<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-															Order #:
-														</td>
-														<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/@FormattedOrderNo"/>
-														</td>
-														<td width="17%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															Location:
-														</td>
-														<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:if test="(contains($shipToID,$maxDelim))">
-																<xsl:value-of select="substring-before($shipToID, $maxDelim)"/>
-																,<span style="padding-left:10px">
-																	<xsl:value-of select="$shipToName"/>
-																</span>
-															</xsl:if>	
-															<xsl:if test="(contains($shipToID,$accDelim))">
-																<xsl:value-of select="substring-before($shipToID, $accDelim)"/>
-																,<span style="padding-left:10px">
-																	<xsl:value-of select="$shipToName"/>
-																</span>
-															</xsl:if>	
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Order Date:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-														<!--<xsl:value-of select="Order/@OrderDate"/>
-														 OrderDate="2010-11-24T14:10:07-05:00" to date format mm/dd/yyyy-->
-															<xsl:value-of select="substring(Order/@OrderDate,6,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,9,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,1,4)"/>
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Address Line 1:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >Order Status:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/@Status"/>
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Address Line 2:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">PO#:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/@CustomerPONo"/>
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">City, State:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,
-															<xsl:value-of select="Order/PersonInfoShipTo/@State"/>
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Ordered By:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/@Createuserid"/>
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Postal Code:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/PersonInfoShipTo/Extn/@ExtnZip4"/>
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"></td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Country:</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															Order Comments:
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-														<xsl:value-of select="Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															Shipping Comments:
-														</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															NA
-														</td>
-													</tr>
-													<tr>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160; </td>
-														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												<table width="100%" border="0" cellpadding="0" cellspacing="0">
-													<tr>
-														<td width="7" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181;"></td>
-														<td width="99" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181; padding:0px 2px; ">Item Number</td>
-														<td width="76" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  padding:0px 2px;  background-color:#818181;">Item Description</td>
-														<td width="53" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff; background-color:#818181; padding:0px 2px; ">Ordered Qty</td>
-														<td width="66" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff; background-color:#818181;  padding:0px 2px; ">Backordered Qty</td>
-														<td width="57" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181; padding:0px 2px; ">Qty UOM </td>
-														<td width="62" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181;  padding:0px 2px; ">Price / Price UOM</td>
-														<td width="79" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181;  padding:0px 2px; ">Shippable <br />Qty</td>
-														<td width="76" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181;  padding:0px 2px; ">Shippable Total</td>
-														<td width="7" style="font-family: Arial, Geneva, sans-serif;font-size:11px; color:#fff;  background-color:#818181;"></td>
-													</tr>
-												
-												<!-- add for each order line here -->						  
-													<xsl:for-each select="Order/OrderLines/OrderLine">						  
-														<tr>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px;border-bottom:solid 1px #818181; color:#000;border-left:solid 1px #818181; color:#000;">&#160;</td>
-															<xsl:choose><xsl:when test="Item/@ItemID !=''"> 															
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;padding:10px 2px; "><xsl:value-of select="Item/@ItemID"/></td>
-															</xsl:when><xsl:otherwise>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;padding:10px 2px; ">&#160;</td>
-															</xsl:otherwise></xsl:choose>
-															<xsl:choose><xsl:when test="Item/@ItemDesc !=''">															
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; color:#000;border-bottom:solid 1px #818181; color:#000;padding:10px 2px; "><xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/></td>
-                                                              </xsl:when>
-                                                              <xsl:otherwise>
-                                                              <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; color:#000;border-bottom:solid 1px #818181; color:#000;padding:10px 2px; ">&#160;</td>
-                                                              </xsl:otherwise>
-                                                              </xsl:choose>
-                                                              <xsl:choose><xsl:when test="OrderLineTranQuantity/@OrderedQty !=''">                                                             
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/></td>
-															</xsl:when><xsl:otherwise>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; ">&#160;</td>
-      														</xsl:otherwise></xsl:choose>
-															<xsl:choose><xsl:when test="Extn/@ExtnReqBackOrdQty !=''">  
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/></td>
-															</xsl:when><xsl:otherwise>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; ">&#160;</td>
-															</xsl:otherwise></xsl:choose>
-															<xsl:choose><xsl:when test="OrderLineTranQuantity/@TransactionalUOM !=''">  
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; "><xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM"/></td>
-															</xsl:when><xsl:otherwise>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; ">&#160;</td>
-															</xsl:otherwise></xsl:choose>
-															<xsl:choose><xsl:when test="Extn/@ExtnPricingUOM !=''"> 
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnUnitPrice"/>/<xsl:value-of select="Extn/@ExtnPricingUOM"/></td>
-														    </xsl:when><xsl:otherwise>
-														    <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; ">&#160;</td>
-														    </xsl:otherwise></xsl:choose>
-														    <xsl:choose><xsl:when test="Extn/@ExtnReqShipOrdQty !=''"> 
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/></td>
-                                                             </xsl:when><xsl:otherwise>
-                                                             <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; ">&#160;</td>
-                                                             </xsl:otherwise></xsl:choose>
-                                                             <xsl:choose><xsl:when test="Extn/@ExtnLineShippableTotal !=''"> 
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnLineShippableTotal"/></td>
-															</xsl:when><xsl:otherwise>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; ">&#160;</td>
-															</xsl:otherwise></xsl:choose>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;  border-right:solid 1px #818181; color:#000;">&#160;</td>
-														</tr>
-														<tr>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;border-left:solid 1px #818181; color:#000;">&#160;</td>
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;padding:10px 2px; ">Line Comments:</td>
-															<xsl:choose>
-    															<xsl:when test="Instructions/Instruction[@InstructionType='LINE']/@InstructionText !=''">
-															<td colspan="7"  style="font-family: Arial, Geneva, sans-serif;font-size:12px;border-bottom:solid 1px #818181; color:#000; border-left:solid 1px #818181; color:#000;; color:#000;padding:10px 2px; "><xsl:value-of select="Instructions/Instruction[@InstructionType='LINE']/@InstructionText" /></td>                  
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;  border-right:solid 1px #818181; color:#000;">&#160;</td>
-															</xsl:when>
-															<xsl:otherwise>
-															<td colspan="7"  style="font-family: Arial, Geneva, sans-serif;font-size:12px;border-bottom:solid 1px #818181; color:#000; border-left:solid 1px #818181; color:#000;; color:#000;padding:10px 2px; ">&#160;</td>                  
-															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-bottom:solid 1px #818181; color:#000;  border-right:solid 1px #818181; color:#000;">&#160;</td>
-															</xsl:otherwise>
-															</xsl:choose>
-														</tr>  
-												</xsl:for-each>
-												
-												</table>
-												<div align="center"></div>
-											</td>
-										</tr>
-										<tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												<div align="left">            This document merely confirms your order; it is not an acceptance of your order. Additional fees may apply to accepted orders.  </div>                </td>
-									    </tr>
-									    <tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												<div align="left">            Please do not reply  to this email. This mailbox is not monitored and you will not receive a response. </div>                </td>
-									    </tr>
-									    <tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
-									    </tr>
-									</table>
-								</td>
-							</tr>
+					<td style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
+					<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 0px 20px 20px;">
+					<tr>
+					
+					
+					<td>
+					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com
+
+												</td>
+									</tr>
 						</table>
+						<table width="500%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
+						<thead>
+					<tr>
+						
+						<th>  </th>
+						<th>  </th>
+					</tr>
+				</thead>
+						
+														
+						<thead>
+					<tr>
+						<th> Order Information: </th>
+
+						<th>  </th>
+						<th> Shipping Information: </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td> Web Confirmation: </td>
+
+						<td> <xsl:value-of select="Order/Extn/@ExtnWebConfNum"/>
+						 </td>
+					</tr>
+					<tr>
+						<td> Order #: </td>
+
+						<td> <xsl:value-of select="Order/@OrderNo"/> </td>
+						<td>
+						<xsl:if test="(contains($shipToID,$maxDelim))">							
+						
+								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+								,
+								<span style="padding-left:10px">
+									<xsl:value-of select="$shipToName" />
+								</span>
+								</xsl:if>
+							<xsl:if test="(contains($shipToID,$accDelim))">
+								<xsl:value-of select="substring-before($shipToID, $accDelim)" />
+								,
+								<span style="padding-left:10px">
+									<xsl:value-of select="$shipToName" />
+								</span>
+							</xsl:if>
+						
+						</td>
+											</tr>
+					<tr>
+						<td> Order Status: </td>
+
+						<td> <xsl:value-of select="Order/@Status"/> </td>
+						<!-- if (attention field is not null) -->
+						<xsl:if test="Order/Extn/@ExtnAttentionName">
+						<td> <xsl:value-of select="Order/Extn/@ExtnAttentionName"/> </td>
+						</xsl:if>
+					</tr>
+					<tr>
+
+						<td> PO #: </td>
+						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
+						<!-- if (attention field is not null) -->
+						<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine1!=""' >
+								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/> </td>
+								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+								,
+								</xsl:if>
+						</xsl:if>
+						
+					</tr>
+					<tr>
+						<td> Ordered By: </td>
+						<td><xsl:value-of select="Order/@Createuserid"/></td><!-- if (attention field is not null) -->
+								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/> </td>
+								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+								,
+								</xsl:if>
+						</xsl:if>
+						
+						<!-- /if                          
+							 else if (address line 3 is not null)                          
+								<td> &lt;address line 3&gt; </td>
+						     /else                          -->
+					</tr>					
+					<tr>
+						<td> </td>
+						<td> </td>
+						<!-- if (attention field is not null) -->
+								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/> </td>
+								</xsl:if>
+						
+						<!-- /if                          
+							 else                            
+								<td> &lt;city&gt;, &lt;state&gt; &lt;postal code&gt; &lt;country code&gt;  </td>
+						     /else                          -->
+					</tr>					
+					<tr>
+						<td> </td>
+						<td> </td>
+						<!-- if (attention field is not null) -->
+								<td> <xsl:value-of select="Order/PersonInfoShipTo/@City"/>, <xsl:value-of select="Order/PersonInfoShipTo/@State"/>,<xsl:value-of select="Order/PersonInfoShipTo/Extn/@ExtnZip4"/>,<xsl:value-of select="Order/PersonInfoShipTo/@Country"/> </td>
+
+						<!-- /if                          
+							 else                             
+								<td> &nbsp; </td>
+						     /else                            -->
+					</tr>
+					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
+						<td></td>
+						<td></td>
+						<td> </td>
+
+					</tr><!-- End intentionally blank row. -->
+					<tr>
+						<td colspan="3"> <span class="bold"> Shipping Options: </span> </td>
+					</tr>
+					<tr> <!-- This row is intentionally left blank. Do not alter this row. -->
+
+						<td> </td>
+						<td> </td>
+						<td> </td>
+					</tr><!-- End intentionally blank row. -->
+					<tr>
+						<td colspan="3"> <span class="bold"> Order Comments: </span>
+						<xsl:value-of select="Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
+						</td>
+
+					</tr>
+				</tbody>
+	</table>
 					</td>
 				</tr>
+				<tr>
+				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+				<table class="price" >
+			<thead>
+				<th> </th>
+
+				<th> </th>
+				<th> </th>
+				<th class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
+				<th class="right"> Extended Price (USD) </th> <!-- The currency code on this line is dynamic.-->
+
+			</thead>
+			<xsl:for-each select="Order/OrderLines/OrderLine">						  
+													
+			<tbody>
+				<tr>
+					<td rowspan="7" valign="top">
+					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
+											</td>
+					<td class="right"> Ordered Qty:</td>
+
+					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM"/></td>
+					<td class="right"> <xsl:value-of select="Extn/@ExtnUnitPrice"/>
+					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >					
+					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
+					</xsl:if>
+					 </td>
+					<td class="right"><xsl:value-of select="LineOverallTotals/@ExtendedPrice"/></td>
+				</tr>
+				<tr>
+
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"> Shippable Qty:</td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/></td>
+					<td class="right"><xsl:value-of select="Extn/@ExtnLineShippableTotal"/></td>
+					<td class="right"></td>
+				</tr>
+
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"> Backorder Qty:</td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/></td>
+					<td class="right"><xsl:value-of select="Extn/@ExtnBackQtyBase"/></td>
+					<td class="right"></td>
+
+				</tr>
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"> Line Status:</td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnLineStatusCode"/> </td>
+					<td class="right">per CWT</td>
+
+					<td class="right"></td>
+				</tr>
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"><xsl:value-of select="Extn/@ExtnLineStatusCode"/>  </td>
+					<td class="left"></td>
+					<td class="right"></td>
+					<td class="right"></td>
+				</tr>
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"> Line PO#:</td>
+					<td class="left"><xsl:value-of select="Extn/@CustomerLinePONo"/></td>
+					<td class="right">per Carton</td>
+					<td class="right"></td>
+
+				</tr>
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right" valign="top"> Cust Acct Line #:</td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
+					<td class="right"></td>
+					<td class="right"></td>
+				</tr>
+
+				<tr>
+					<td><span class="itemno">xpedx item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
+					<td class="right"> Mfg. Item #:</td>
+					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
+					<td class="right">My Item #:</td>
+					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
+
+				</tr>
+				<!-- if (specialInstructions is not null) -->
+				<tr class="special-instructions"> 
+					<td colspan="5"> 
+						<table class="inner">
+							<tr>
+								<td class="first" valign="top"> Special Instructions:</td>
+								<td class="last"></td>
+
+							</tr>
+						</table>
+					 </td>
+				</tr>
+				<!-- /if -->
+				
+				<!-- if (moreItems = true) -->
+										<!-- if (specialInstructions is not null) -->
+										<!-- <tr>
+
+					<td> <br/> Fuel Surcharge </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="right"><br/>$7.00</td>
+				</tr>
+					
+ -->				<!-- /if -->
+				
+				<!-- if (specialCharges is not null) -->
+				<!-- <tr>
+
+					For all special charges, a <br/> on each line before the value.
+					<td> <br/> Fuel Surcharge </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="right"><br/>$7.00</td>
+				</tr>
+
+				if there are multiple special charges, the 'specialcharges' class needs to be added to include the gridlines.
+				<tr class="specialcharges">
+					For all special charges, a <br/> on each line before the value.
+					<td> <br/> Fuel Surcharge 2</td>
+					<td></td>
+					<td></td>
+					<td></td>
+
+					<td class="right"><br/>$7.00</td>
+				</tr>
+ -->				<!-- /if -->
+			</tbody>
+			</xsl:for-each>
 			</table>
+					</td>
+					</tr>
+					<table class="order-total">
+						<tr>
+
+				<td>Subtotal:</td>
+				<td> <xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
+			</tr>
+			<tr>
+				<td> Order Total Adjustments:</td>
+				<td><xsl:value-of select="Order/Extn/@ExtnTotOrderAdjustments"/></td>
+
+			</tr>
+			<tr>
+				<td>Adjusted Subtotal:</td>
+				<td><xsl:value-of select="Order/Extn/@ExtnTotOrdValWithoutTaxes"/></td>
+			</tr>
+			<tr>
+				<td>Tax</td>
+
+				<td><span class="tbd">To be determined</span></td>
+			</tr>
+			<tr>
+				<td> Shipping and Handling</td>
+				<td><span class="tbd">To be determined</span></td>
+			</tr>
+
+			<tr class="last">
+				<td> Order Total (USD):</td>
+				<td><xsl:value-of select="Order/Extn/@ExtnTotalOrderValue"/></td>
+				</tr>
+
+						</table>
+						</table>
 			</BODY>
 		</HTML>
 		
