@@ -10,11 +10,10 @@
 <s:set name='_action' value='[0]' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 <s:set name="xutil" value="XMLUtils" />
+<s:set name='xmlUtil' value="#_action.getXMLUtils()" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-
-
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -95,6 +94,7 @@
 	                <div class="page-title"> Contact Us</div>
                 
                 <s:if test="#isGuestUser == false">
+                <%-- Code Commented for JIra 3307 
                 <s:set name="csr1ListEle" value="csr1UserEle" />
 				<s:set name="csr2ListEle" value="csr2UserEle" />
 				<s:if test='#csr1ListEle != null'>
@@ -106,14 +106,40 @@
 					<s:set name="csr1Phone" value='#xutil.getAttribute(#csr1Ele,"DayPhone")' />
 					<s:set name="fmtCsr1Phone" value='#xpedxUtilBean.getFormattedPhone( #csr1Phone )' />
 				</s:if>
-				<s:if test='#csr2ListEle != null'>
+				< s:if test='#csr2ListEle != null'>
 					<s:set name="csr2Ele" value='#xutil.getChildElement(#csr2ListEle,"CustomerContact")' />
 					<s:set name="csr2FirstName" value='#xutil.getAttribute(#csr2Ele,"FirstName")' />
 					<s:set name="csr2LastName" value='#xutil.getAttribute(#csr2Ele,"LastName")' />
+					
+					
 					<s:set name="csr2EMailID" value='#xutil.getAttribute(#csr2Ele,"EMailID")' />
 					<s:set name="csr2Phone" value='#xutil.getAttribute(#csr2Ele,"DayPhone")' />
 					<s:set name="fmtCsr2Phone" value='#xpedxUtilBean.getFormattedPhone( #csr2Phone )' />
-				</s:if>
+				<  /s:if>
+				-->
+				
+				<%--  Start of  Code for JIra 3307 --%>
+				
+					<s:set name="csr1ListEle" value="csr1CustServEle" />
+					<s:set name="csr2ListEle" value="csr2CustServEle" />
+					<s:if test='#csr1ListEle != null'>
+						<s:set name="csr1Ele" value='#xmlUtil.getChildElement(#csr1ListEle,"ContactPersonInfo")' />
+						<s:set name="csr1FirstName" value='#xmlUtil.getAttribute(#csr1Ele,"FirstName")' />
+						<s:set name="csr1LastName" value='#xmlUtil.getAttribute(#csr1Ele,"LastName")' />
+						<s:set name="csr1EMailID" value='#xmlUtil.getAttribute(#csr1Ele,"EMailID")' />
+						<s:set name="csr1Phone" value='#xmlUtil.getAttribute(#csr1Ele,"DayPhone")' />
+						<s:set name="fmtCsr1Phone" value='#xpedxUtilBean.getFormattedPhone( #csr1Phone )' />
+					</s:if>
+					<s:if test='#csr2ListEle != null'>
+						<s:set name="csr2Ele" value='#xmlUtil.getChildElement(#csr2ListEle,"ContactPersonInfo")' />
+						<s:set name="csr2FirstName" value='#xmlUtil.getAttribute(#csr2Ele,"FirstName")' />
+						<s:set name="csr2LastName" value='#xmlUtil.getAttribute(#csr2Ele,"LastName")' />
+						<s:set name="csr2EMailID" value='#xmlUtil.getAttribute(#csr2Ele,"EMailID")' />
+						<s:set name="csr2Phone" value='#xmlUtil.getAttribute(#csr2Ele,"DayPhone")' />
+						<s:set name="fmtCsr2Phone" value='#xpedxUtilBean.getFormattedPhone(#csr2Phone )' />
+					</s:if>
+				
+				<%--  End of  Code for JIra 3307 --%>
 				
 				<s:set name="CustExtn" value="#xutil.getChildElement(customerElement,'Extn')" />
 				<s:set name="orgListEle" value="organizationElement" />
@@ -194,13 +220,15 @@
 								<!--   <tr>							  
 								 	<td colspan="2" class="underlines no-border-right-user"><strong>A few others who want to help...</strong></td>
 								 </tr> -->
-								 <s:if test='#csr1Ele != null || #csr2Ele != null'> 
+								<%--  
+								  Code commented for JIra 3307
+								<s:if test='#csr1Ele != null || #csr2Ele != null'> 
 									 <tr>
 										 <td valign="top" class="underlines no-border-right-user">Customer Service Representative:</td>
 										 <td class="underlines no-border-right-user">
 										 	<s:hidden name="csr1EMailID" value='%{#csr1EMailID1}'/>
 						          			<s:if test='#csr1Ele != null'>
-							                   <s:property value='%{#csr1FirstName}'/> <s:property value='%{#csr1LastName}'/><br/>
+							                 <s:property value='%{#csr1FirstName}'/> <s:property value='%{#csr1LastName}'/><br/>
 							                    <s:if test='%{#fmtCsr1Phone != ""}'>
 							                    	<s:property value='%{#fmtCsr1Phone}'/><br/>
 							                    </s:if>
@@ -219,7 +247,7 @@
 						                   </s:if>
 										 </td>
 									 </tr>
-								 </s:if>
+								 </s:if>--%>
 								 <s:if test='(#salesRepUserList != null && #salesRepUserList.size > 0)'>
 								 	<tr>
 								 		<td valign="top" class="underlines no-border-right-user">
@@ -246,24 +274,7 @@
 								 	</tr>
 								 </s:if>
 							</s:if>
-	          			<s:set name="csr1ListEle" value="csr1CustServEle" />
-					<s:set name="csr2ListEle" value="csr2CustServEle" />
-					<s:if test='#csr1ListEle != null'>
-						<s:set name="csr1Ele" value='#xmlUtil.getChildElement(#csr1ListEle,"ContactPersonInfo")' />
-						<s:set name="csr1FirstName" value='#xmlUtil.getAttribute(#csr1Ele,"FirstName")' />
-						<s:set name="csr1LastName" value='#xmlUtil.getAttribute(#csr1Ele,"LastName")' />
-						<s:set name="csr1EMailID" value='#xmlUtil.getAttribute(#csr1Ele,"EMailID")' />
-						<s:set name="csr1Phone" value='#xmlUtil.getAttribute(#csr1Ele,"DayPhone")' />
-						<s:set name="fmtCsr1Phone" value='#xpedxUtilBean.getFormattedPhone( #csr1Phone )' />
-					</s:if>
-					<s:if test='#csr2ListEle != null'>
-						<s:set name="csr2Ele" value='#xmlUtil.getChildElement(#csr2ListEle,"ContactPersonInfo")' />
-						<s:set name="csr2FirstName" value='#xmlUtil.getAttribute(#csr2Ele,"FirstName")' />
-						<s:set name="csr2LastName" value='#xmlUtil.getAttribute(#csr2Ele,"LastName")' />
-						<s:set name="csr2EMailID" value='#xmlUtil.getAttribute(#csr2Ele,"EMailID")' />
-						<s:set name="csr2Phone" value='#xmlUtil.getAttribute(#csr2Ele,"DayPhone")' />
-						<s:set name="fmtCsr2Phone" value='#xpedxUtilBean.getFormattedPhone( #csr2Phone )' />
-					</s:if>
+	          		
 					
 					
 					<s:set name="customerService" value="%{'false'}" />
@@ -272,14 +283,14 @@
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/>
+				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/><br/>
 				            	<span class="grey-italic">
 									<s:if test='%{#fmtCsr1Phone != ""}'>
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>
 							        </s:if>
-							       <s:a href="#csr1EMailID"><s:property value="#csr1EMailID"/></s:a>
-								</span></td>
+							        <a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a>
+						   	    </span></td>
 				          	</tr>
 				          	<s:set name="customerService" value="%{true}" />
 						</s:if>
@@ -294,7 +305,8 @@
 						           	<s:property value='%{#fmtCsr2Phone}'/><br/>
 						           	<br/>
 						        </s:if>
-						              	 <s:a href="#csr1EMailID"><s:property value="#csr1EMailID"/></s:a></span></td>
+						         <a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a>
+						            	 
 				          	</tr>
 						</s:else>
 					</s:if>
@@ -311,7 +323,8 @@
 				            		<s:property value="#fmtCsr2Phone"/>,
 				            		<br/>
 				            	</s:if>
-				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>
+				            	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
+				            	
 				          	</tr>
 						</s:if>
 						<s:else>
@@ -325,7 +338,8 @@
 				            		<s:property value="#fmtCsr2Phone"/>,
 				            		 <br/>
 				            	</s:if>
-				            	<s:a href="#csr2EMailID"><s:property value="#csr2EMailID"/></s:a></span></td>
+				            	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
+				            	</span></td>
 				          	</tr>
 						</s:else>
 					</s:if>
