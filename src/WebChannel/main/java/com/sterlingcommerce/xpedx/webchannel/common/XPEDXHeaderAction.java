@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
@@ -608,13 +609,33 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		if (addnlPOList == null || (addnlPOList != null && addnlPOList.trim().length() == 0)) {
 			addnlPOList = "";
 		}
+		//JIRA 3487 start
+		String isSecuityQuestionset=null;
+		NodeList customerContactList=XPEDXWCUtils.getCustomerContactDetails(wcContext.getCustomerId()).getDocumentElement().getElementsByTagName("CustomerContact");
+		for(int i=0;i<customerContactList.getLength();i++)
+		{
+			Element _customerContactElem=(Element)customerContactList.item(i);
+			String contactId=_customerContactElem.getAttribute("CustomerContactID");
+			if(contactId!=null&&contactId.trim().equalsIgnoreCase(wcContext.getCustomerContactId())){
+				String authQuestion=SCXmlUtil.getXpathAttribute(_customerContactElem, "//CustomerContact/User/AuthQuestionList/AuthQuestion/@AuthQuestionKey");
+
+				if (authQuestion != null && authQuestion.trim().length() >0) 
+				isSecuityQuestionset="Y";
+			}
+			
+		}
 		
+		if (isSecuityQuestionset == null || (isSecuityQuestionset != null && isSecuityQuestionset.trim().length() == 0)) {
+			isSecuityQuestionset = "N";
+		}
+		//JIRA 3487 end
 		//request.setAttribute("isTOAaccepted", toaFlag);
 		//isTOAaccepted=toaFlag;
 		getWCContext().setWCAttribute("isTOAaccepted", toaFlag, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("addnlEmailAddrs", addnlEmailAddrs, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("addnlPOList", addnlPOList, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("lastLoginDate", lastLoginDate, WCAttributeScope.LOCAL_SESSION);
+		getWCContext().setWCAttribute("setSecretQuestion", isSecuityQuestionset, WCAttributeScope.LOCAL_SESSION);//JIRA 3487
 	}
 
 	//Commented for Home performance issue
