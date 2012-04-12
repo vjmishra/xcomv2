@@ -217,11 +217,11 @@
     </category>
 
    <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
-       <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
        <appender-ref ref="SOCKET" />
 	   <appender-ref ref="CONSOLE" />
 	   <appender-ref ref="CENT_APPENDER" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
-
+	
 </log4j:configuration>
