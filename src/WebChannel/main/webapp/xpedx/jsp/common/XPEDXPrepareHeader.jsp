@@ -55,7 +55,7 @@ function saveAnswer(){
     errorDiv.innerHTML = "";
    answerFiled.style.borderColor="";
     errorDiv.style.display = "none";
-alert(questionEle.selectedIndex);
+//alert(questionEle.selectedIndex);
     if(questionEle.selectedIndex==0){
     	errorDiv.innerHTML = "Required fields missing. Please review and try again.";
     	//questionEle.style.borderColor="#FF0000";
