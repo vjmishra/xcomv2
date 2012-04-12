@@ -9,8 +9,7 @@
 				<Customer CustomerID="" OrganizationCode="">
     <CustomerContactList>
         <CustomerContact CustomerContactID="">
-            <User>
-               
+            <User Loginid="">               
                 <AuthAnswerList Reset="Y">
                     <AuthAnswer Answer="" AuthQuestionKey=""/>
                 </AuthAnswerList>

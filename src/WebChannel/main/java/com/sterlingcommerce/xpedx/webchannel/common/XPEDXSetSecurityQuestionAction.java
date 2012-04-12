@@ -14,6 +14,7 @@ import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.ui.backend.util.Util;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 
@@ -129,9 +130,10 @@ public class XPEDXSetSecurityQuestionAction extends WCMashupAction {
 		Element input=null;
 	
 		HashMap<String,String> valueMap = new HashMap<String, String>();
-		valueMap.put("/Customer/@CustomerID",wcContext.getCustomerId() );
+		valueMap.put("/Customer/@CustomerID",XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext));
 		valueMap.put("/Customer/@OrganizationCode",wcContext.getStorefrontId() );
 		valueMap.put("/Customer/CustomerContactList/CustomerContact/@CustomerContactID",wcContext.getCustomerContactId() );
+		valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Loginid",wcContext.getCustomerContactId());
 		valueMap.put("/Customer/CustomerContactList/CustomerContact/User/AuthAnswerList/AuthAnswer/@Answer",this.secretAnswer);
 		valueMap.put("/Customer/CustomerContactList/CustomerContact/User/AuthAnswerList/AuthAnswer/@AuthQuestionKey",this.secretQuestion );
 		try {
