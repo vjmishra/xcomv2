@@ -546,6 +546,8 @@ function funDivOpenClose(val1)
 			    {
 					new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
 					document.getElementById("errorMsgFor_userpassword").style.display = "inline";
+					document.getElementById("successMsgFor_save").innerHTML = "";
+					document.getElementById("successMsgFor_save").style.display = "none";
 					return false;
 			         
 			    }
@@ -779,7 +781,14 @@ function funDivOpenClose(val1)
 			{
 				document.getElementById("errorMsgFor_currency").style.display = "none";
 			}
-			
+			if(document.getElementById("errorNote") != null)
+			{
+				document.getElementById("errorNote").style.display = "none";
+			}
+			if(document.getElementById("successMsgFor_save") != null)
+			{
+				document.getElementById("successMsgFor_save").style.display = "none";
+			}
 		}
 		
 		function testFieldValueCheck(component, docDivId){
@@ -1223,10 +1232,11 @@ a.underlink:hover { text-decoration: underline !important; }
 				cssClass="x-input" cssStyle="width: 130px;" />
 			<s:hidden name="validateUserId" value="%{true}" />
 		</s:else></s:else></td>
-		<s:if test="%{#session.errorNote!= null}">
+		
+		<%-- <s:if test="%{#session.errorNote!= null}">
 		<td><h5 align="center"><b><font color="red"><s:property value='%{#session.errorNote}'/></font></b></h5></td>
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
-		</s:if>
+		</s:if> --%>
 	</tr>
 	<s:if test='%{#isCustomerNotAdmin == false && !#isSalesRep}'>
 	<tr>
@@ -2606,11 +2616,17 @@ a.underlink:hover { text-decoration: underline !important; }
 	<div class="clearview">&nbsp;</div>
 <%--Code Added For XNGTP-3196 --%>
 
-<div class="success" id="msgFor_resetpassword" style="display : none; float: right"/>Instructions to reset this password have been sent to the registered user�s email address.</div> 
+<div class="success" id="msgFor_resetpassword" style="display : none; float: right"/>Instructions to reset this password have been sent to the registered user's email address.</div> 
 
 <div class="error" id="errorMsgFor_userpassword" style="display : none; float: right"/>Please enter the same password in both Password and Confirm Password fields.</div>
 
 <div class="error" id="errorMsgForMandatoryFields_myAccount" style="display : none; float: right"></div>
+
+<s:if test="%{#session.errorNote!= null}">
+	<div id="errorNote" class="error" style="display : inline; float: right"><s:property value='%{#session.errorNote}'/>
+		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
+		</div>
+</s:if>
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 

@@ -168,7 +168,7 @@ function mandatoryFieldValidation(docDivId, ignoreDivIds){
 		}
 		else{
 			returnErrorMsg = returnErrorMsg;
-			document.getElementById("errorMsgForMandatoryFields_"+docDivId).innerHTML = "Required fields missing: "+returnErrorMsg;
+			document.getElementById("errorMsgForMandatoryFields_"+docDivId).innerHTML = "Required fields missing. Please review and try again.";
 		}
 		
 		document.getElementById("errorMsgForMandatoryFields_"+docDivId).style.display = "inline";

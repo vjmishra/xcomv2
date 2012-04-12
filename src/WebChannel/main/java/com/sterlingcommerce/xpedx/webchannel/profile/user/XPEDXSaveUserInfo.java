@@ -400,9 +400,11 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						wcContext)) {
 
 					if (checkIfAnswerChanged() || checkIfPasswordChanged()) {
-						if (checkIfPasswordChanged()) {
 							String newPassword = wcContext.getSCUIContext()
 									.getRequest().getParameter("userpassword");
+						String useLoginID = wcContext.getSCUIContext()
+						.getRequest().getParameter("userName");
+						if (checkIfPasswordChanged()) {
 							//Added For Jira-3106
 							if(newPassword.length()<8){
 
@@ -411,6 +413,66 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								setSuccess(false);
 								setSaveAddUser(false);
 								return REDIRECT;
+							}
+							else if(newPassword.length()>=8){
+								char[] newPwdChar = newPassword.toCharArray();
+								int countSpclChar = 0;
+								int pwdCharLength = newPwdChar.length;
+								int iNoOfNumericChars = 0;
+								int iNoOfUpperCaseChars = 0;
+								int iNoOfAlphabeticalChars = 0;
+								boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
+								for(int i=0;i<pwdCharLength;i++){
+									char c = newPwdChar[i];
+									if (newPwdChar[i] == 33 || newPwdChar[i] == 36 || newPwdChar[i] == 63){
+										countSpclChar++;
+									}
+									if(Character.isUpperCase(c) || Character.isLowerCase(c)){
+					                	iNoOfAlphabeticalChars++;
+					                }
+									if(Character.isDigit(c)){
+					                	iNoOfNumericChars++;
+					                }
+									if(Character.isUpperCase(c)){
+					                	iNoOfUpperCaseChars++;
+					                }
+								}
+								if(newPassword.toUpperCase().contains(useLoginID.toUpperCase())){
+									request.getSession().setAttribute("errorNote","The password cannot contain the user's login ID. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
+								if(iNoOfAlphabeticalChars < 2){
+									request.getSession().setAttribute("errorNote","The password must contain at least 2 alpha characters. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
+								if(iNoOfNumericChars < 1){
+									request.getSession().setAttribute("errorNote","The password must contain at least 1 numeric character. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
+								if(iNoOfUpperCaseChars < 1){
+									request.getSession().setAttribute("errorNote","The password must contain at least 1 uppercase character. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
+								if(exceededMaxRepeatedChars){
+									request.getSession().setAttribute("errorNote","The password cannot exceed more than 2 consecutive repeated characters. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
+								if(countSpclChar > 0){
+									request.getSession().setAttribute("errorNote","The password cannot contain $, ? or ! characters. Please revise and try again.");
+									setSuccess(false);
+									setSaveAddUser(false);
+									return REDIRECT;
+								}
 							}
 							//Fix End For Jira-3106
 							valuemap
@@ -528,6 +590,47 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		setSuccess(true);
 		setSaveAddUser(true);
 		return REDIRECT;
+	}
+	//Added for 3106
+	private boolean checkIfExceedsMaxRepeatedChars(String newPassword) {	
+		
+		ArrayList<String> setOfRepeatedChars = new ArrayList<String>();
+	//Commented for JIRA 1454
+		//newPassword = newPassword.toUpperCase();
+		char[] cArray = newPassword.toCharArray();
+		char c1, c2; 
+		boolean exceededMaxRepeatedChars = false;
+		for (int i=0; i<cArray.length ; i++) {
+			c1 = cArray[i];
+			
+			if((i+1)<cArray.length){
+				for(int j=i+1;j<cArray.length; j++){
+					c2 = cArray[j];
+					
+					if(c1==c2){
+						
+						setOfRepeatedChars.add(String.valueOf(c1));
+						setOfRepeatedChars.add(String.valueOf(c2));
+							
+						if(setOfRepeatedChars.size()>2){
+							exceededMaxRepeatedChars = true;						
+							break;
+						}
+						
+					}
+					else{					
+						setOfRepeatedChars.clear();
+						break;
+					}
+				}
+			}
+			if(setOfRepeatedChars.size()>2){
+				exceededMaxRepeatedChars = true;
+				break;
+			}
+		}
+
+		return exceededMaxRepeatedChars;
 	}
 	
 	private void saveXPXCustomerContactFields()
