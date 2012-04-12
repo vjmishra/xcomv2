@@ -4243,6 +4243,14 @@
     IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
     Modifyts="2012-04-06T08:35:28-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="WLJMS"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-04-12T02:34:23-04:00" Createuserid="admin"
+    FlowGroupName="XPXOrderUpdateEx" FlowKey="20120412023423124208"
+    FlowName="XPXGetOrderListForLegacyOrderUpdateEx" FlowType="00"
+    GraphUIKey="20120412023423124207" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-04-12T02:34:23-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
