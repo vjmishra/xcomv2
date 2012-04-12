@@ -127,10 +127,12 @@
 			}
 			table.order-total {
 				border: 1px solid #ccc;
-				width:30%;
+				width:20%;
+				
 				position:relative;
-				left:80%;
-				border-radius: 5px;
+				left:54%;
+				
+				border-radius: 8px;
 				padding: 5px;
 			}
 			.tbd{
@@ -230,7 +232,8 @@
 	<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 	<tr>
 	<td height="44">
-	</td></tr></table>
+	</td></tr>
+	</table>
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
@@ -254,7 +257,7 @@
 									</tr>
 						</table>
 						<table width="500%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
-						<thead>
+			<thead>
 					<tr>
 						
 						<th>  </th>
@@ -526,8 +529,7 @@
 			</table>
 					</td>
 					</tr>
-					<table class="order-total">
-						<tr>
+					<table class="order-total">	<tr>
 
 				<td>Subtotal:</td>
 				<td> <xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
