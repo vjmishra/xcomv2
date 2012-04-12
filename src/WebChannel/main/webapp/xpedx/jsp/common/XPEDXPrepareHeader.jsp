@@ -44,6 +44,54 @@
 </s:url>
 			
 <script type="text/javascript">
+function saveAnswer(){
+    var answerFiled = document.secrectQuestionForm.secretAnswer ;
+    var answerConfirmFiled = document.secrectQuestionForm.confirmAnswer ;
+    var errorDiv = document.getElementById("errorMsgForAnswer");
+    var returnval = false;
+    
+    var questionEle = document.getElementById("secretQuestion");
+        
+    errorDiv.innerHTML = "";
+   answerFiled.style.borderColor="";
+    errorDiv.style.display = "none";
+alert(questionEle.selectedIndex);
+    if(questionEle.selectedIndex==0){
+    	errorDiv.innerHTML = "Required fields missing. Please review and try again.";
+    	//questionEle.style.borderColor="#FF0000";
+    	questionEle.focus();
+        errorDiv.style.display = 'inline';
+        return ;
+        }
+    
+    else if(answerFiled.value.trim().length == 0)
+    {
+        errorDiv.innerHTML = "Required fields missing. Please review and try again.";
+        answerFiled.style.borderColor="#FF0000";
+        errorDiv.style.display = 'inline';
+        return ;
+    }
+    else if(answerConfirmFiled.value.trim().length == 0){
+    	 errorDiv.innerHTML = "Required fields missing. Please review and try again.";
+    	 answerConfirmFiled.style.borderColor="#FF0000";
+         errorDiv.style.display = 'inline';
+         return ;
+        }
+    else if(answerFiled.value!=answerConfirmFiled.value){
+    	errorDiv.innerHTML = "Must be equal!";
+       	answerFiled.style.borderColor="#FF0000";
+       	answerConfirmFiled.style.borderColor="#FF0000";
+        errorDiv.style.display = 'inline';
+        return ;
+        }
+    else{
+    document.secrectQuestionForm.submit();
+    returnval = true;
+    }
+    return returnval;
+    
+}
+
 var selectedShipCustomer = null;
 		function updateShareListChild(){
 		}		
@@ -653,6 +701,17 @@ var selectedShipCustomer = null;
 		style="width: 1000px; height: 400px; overflow: auto;">
 	</div>
 </div> 
+<%--JIRA 3487 start--%>
+<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>	
+<s:url id='securityQueURL' namespace='/common' action='xpedxGetSecurityQuestion' >
+<s:param name="organizationCode" value="#loggedInUserOrgCode" />
+</s:url>
+<div class='x-hidden dialog-body ' id="securityQueContent">
+	<div id="ajax-securityQueContent" class="xpedx-light-box"
+		style="width: 900px; height: 300px; overflow: auto;">
+	</div>
+</div>
+<%--JIRA 3487 end--%>
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
 <s:url id='setStockedCheckboxURL' action="setStockedCheckbox" namespace="/catalog"/>
 <input type="hidden" value="" id="orderDescending" name="orderDescending" />
@@ -1186,20 +1245,71 @@ var toaWin = new Ext.Window({
         baseCls: 'swc-ext',
         shadowOffset: 10
       	}); 	
-    loadTermsOfAccess();
+//JIRA 3487 start
+var securityQuestionWin = new Ext.Window({
+    autoScroll: false,
+    closeAction: 'hide',
+    cloaseable: false,
+    contentEl: 'securityQueContent',
+    hidden: true,
+    id: 'securityQuestionBox',
+    modal: true,
+    width: 1050,
+    height: 'auto',
+    resizable   : false,
+    draggable   : false,
+    closable    : false,
+    shadow: 'drop',
+    baseCls: 'swc-ext',
+    scrolling : 'no',
+    shadowOffset: 10
+  	}); 	
+
+var isGuestuser = "<s:property value='%{wCContext.guestUser}'/>";
+var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 
+var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
+if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
+	loadTermsOfAccess();
+}
+else if((isGuestuser!="true") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+  	//	alert(secrectQuestionSet);
+  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
+  	}	  
+  //JIRA 3487 end
+    
     function loadTermsOfAccess()
     {
-		var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
-        if(isguestuser!="true"){
-			var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 			
-			if(isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")
+		
+				
+		//	alert("isTOAaccepted="+isTOAaccepted);		
+			
          		showTermsOfAccessDialog('<s:property value="#toaURL"/>');
-	    }
+	    
     }
     function toaSubmit(key){
     	 document.getElementById('toaChecked').value=key;
-    	 document.toaform.submit();
+    	document.toaform.submit();
+    
     }     
+
+    function selectSecurityQuestionDialog(url){
+		  Ext.get('ajax-securityQueContent').load({
+	            url :url,
+	            method: 'POST',
+	            callback:function(el, success, response){
+	                if(success)
+	                {
+	                	DialogPanel.show('securityQuestionBox');
+	                	
+	               }
+	                else
+	                {	
+	                    alert("Error getting securityQuestionBox");
+	                }
+	            }
+	        });     
+    	//document.toaform.submit();
+        }
     function showTermsOfAccessDialog(url)
     {
         Ext.get('ajax-termsOfAccessContent').load({
