@@ -1,5 +1,6 @@
 <ItemList CallingOrganizationCode="" Currency="" TotalItemList="">
 <Item ItemID="" OrganizationCode="" UnitOfMeasure="">
 	<PrimaryInformation Description="" ShortDescription="" ExtendedDescription=""/>
+	<AlternateUOMList />   
 </Item>
 </ItemList>
