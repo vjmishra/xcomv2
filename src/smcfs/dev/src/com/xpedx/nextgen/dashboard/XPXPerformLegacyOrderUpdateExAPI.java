@@ -5155,7 +5155,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 
 		YFCDocument getOrdListOutDoc = null;
-		Document tempDoc = api.executeFlow(env, "XPXGetOrderListForLegacyOrderUpdate", getOrdListInDoc.getDocument());
+		Document tempDoc = api.executeFlow(env, "XPXGetOrderListForLegacyOrderUpdateEx", getOrdListInDoc.getDocument());
 		if (tempDoc != null) {
 			getOrdListOutDoc = YFCDocument.getDocumentFor(tempDoc);
 
