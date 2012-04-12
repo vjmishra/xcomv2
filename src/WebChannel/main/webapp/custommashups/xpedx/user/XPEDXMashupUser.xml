@@ -1,4 +1,27 @@
 <mashups>
+<!--Start of JIRA 3487 changes -->
+<mashup id='SetSecretQuestion' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+    <CustomerContactList>
+        <CustomerContact CustomerContactID="">
+            <User>
+               
+                <AuthAnswerList Reset="Y">
+                    <AuthAnswer Answer="" AuthQuestionKey=""/>
+                </AuthAnswerList>
+            </User>
+</CustomerContact>
+</CustomerContactList>
+</Customer>
+</Input>
+		</API>
+	</mashup>
+	<!--End of JIRA 3487 changes -->
 	<mashup id='ManageXpedxUser' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Contact General Information">
 		<classInformation
