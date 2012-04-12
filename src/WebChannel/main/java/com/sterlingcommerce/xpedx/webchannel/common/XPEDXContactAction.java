@@ -75,10 +75,15 @@ public class XPEDXContactAction extends WCMashupAction {
 					organizationElement = outputDoc.getDocumentElement();
 				}
 				
-				String custCSR1UserId = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR");
+				Element custParntEle = XMLUtilities.getElement(customerElement, "ParentCustomer");
+				Element CustExtnParntEle=XMLUtilities.getElement(custParntEle,"Extn");
+				String custCSR1UserId = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR");
+				//System.out.println("custCSR1UserId"+custCSR1UserId);
+				
 				String custCSR2UserId = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR2");
 				
-				if(custCSR1UserId!=null && custCSR1UserId.trim().length() > 0)
+				//System.out.println("custCSR2UserId"+custCSR2UserId);
+				/*if(custCSR1UserId!=null && custCSR1UserId.trim().length() > 0)
 				{
 					csr1UserEle = XPEDXWCUtils.getUserInfo(custCSR1UserId, getWCContext()
 						.getStorefrontId());
@@ -87,17 +92,24 @@ public class XPEDXContactAction extends WCMashupAction {
 				{
 					csr2UserEle = XPEDXWCUtils.getUserInfo(custCSR2UserId, getWCContext()
 						.getStorefrontId());
-				}
+				}*/
 				
 				/** Modified code for Jira 3307 ***/
 				
-				String custCSR1UserKey = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR1Key");
-				String custCSR2UserKey = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR2Key");
+				String custCSR1UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR1Key");
+				String custCSR2UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR2Key");
+				
+				/*System.out.println("custCSR1UserKey"+custCSR1UserKey);
+				System.out.println("custCSR2UserKey"+custCSR2UserKey);*/
+				
 				if(custCSR1UserKey!=null && custCSR1UserKey.trim().length()>0) {
 					 csr1CustServEle = getUserPersonInfo(custCSR1UserKey, null);
+				/*System.out.println("csr1CustServEle"+SCXmlUtil.getString(csr1CustServEle))	;*/ 
+					 
 				}					
 				if(custCSR2UserKey!=null && custCSR2UserKey.trim().length()>0) {
 					csr2CustServEle = getUserPersonInfo(custCSR2UserKey, null);
+					//System.out.println("csr2CustServEle"+SCXmlUtil.getString(csr2CustServEle))	;
 				}	
 				
 				/** Modified code for Jira 3307 ***/
@@ -392,11 +404,14 @@ public class XPEDXContactAction extends WCMashupAction {
 	Element organizationElement = null;
 	Element csr1UserEle = null;
 	Element csr2UserEle = null;
+	Element csr1CustServEle=null;
+	Element csr2CustServEle=null;
+	
 	Map emailSubjects = null;
 	String eBusinessPhoneNo = null;
 	
 	private String firstName = null;
-	private String compName = null;
+	private String compName = null;  
 	private String userEmail=null;
 	private String userPhone = null;
 	private String orderNo = null;
@@ -412,8 +427,6 @@ public class XPEDXContactAction extends WCMashupAction {
 	private String czipcode = null;
 	private String eBusinessEmailID = null;
 	private XPEDXShipToCustomer shipToAddress = null;
-	private Element csr1CustServEle=null;
-	private Element csr2CustServEle=null;
 	
 	
 	private static final Logger log = Logger.getLogger(XPEDXContactAction.class);
@@ -449,12 +462,12 @@ public class XPEDXContactAction extends WCMashupAction {
 
 
 	public Element getCsr2CustServEle() {
-		return csr1CustServEle;
+		return csr2CustServEle;
 	}
 
 
-	public void setCsr2CustServEle(Element csr1CustServEle) {
-		this.csr1CustServEle = csr1CustServEle;
+	public void setCsr2CustServEle(Element csr2CustServEle) {
+		this.csr2CustServEle = csr2CustServEle;
 	}
 
 	
