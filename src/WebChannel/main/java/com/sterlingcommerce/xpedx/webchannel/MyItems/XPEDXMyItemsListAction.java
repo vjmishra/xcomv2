@@ -1166,7 +1166,6 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	}
 
 	public void setPageSetToken(String pageSetToken) {
-		System.out.println("page set token is : "+pageSetToken);
 		this.pageSetToken = pageSetToken;
 	}
 	
