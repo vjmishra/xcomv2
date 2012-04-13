@@ -140,7 +140,8 @@ public class XPEDXOrderUtils {
 		String shipFromBranch = "";
 		String enviCode = null;
 		XPEDXShipToCustomer customer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		enviCode = customer.getExtnEnvironmentCode();
+		if (customer != null)
+			enviCode = customer.getExtnEnvironmentCode();
 
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
