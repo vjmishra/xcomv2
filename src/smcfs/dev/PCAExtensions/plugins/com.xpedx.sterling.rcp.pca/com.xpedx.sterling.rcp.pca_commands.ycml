@@ -464,6 +464,8 @@
             <command APIName="XPXMILItemReplacementToolForDivisionsService" APIType="SERVICE" Name="XPXMILItemReplacementToolForDivisionsService"
                 OutputTemplateName="XPXMILItemReplacementToolForDivisionsService_output" URL="" postCommand="" preCommand=""/>
             <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="XPXGetBothMyItemsList" APIType="SERVICE" Name="XPXGetBothMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetBothMyItemsList_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
@@ -471,6 +473,8 @@
             <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
             <namespace name="getPage" templateName="getPage" type="output"/>
             <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
+            <namespace name="OrganizationList" templateName="OrganizationList" type="output"/>
+            <namespace name="XPXGetBothMyItemsList_output" templateName="XPXGetBothMyItemsList_output" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.customerSearch.wizards.YCDCustomerSearchWizard">
@@ -546,6 +550,7 @@
             <command APIName="getItemUOMMasterList" APIType="API" Name="XPXGetItemUOMMasterList" URL="" inputNamespace="Input_XPXGetItemUOMMasterList" outputNamespace="XPXGetItemUOMMasterList_output"
                 postCommand="" preCommand=""/>
             <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="getOrganizationList_output" version=""/>
+            <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
         </commands>
         <namespaces>
             <namespace name="Input_XPXGetLineTypeList" templateName="Input_XPXGetLineTypeList" type="input"/>
