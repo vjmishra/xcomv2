@@ -352,11 +352,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			//Now set fullpath for the file, Massage the path and set to setGeneratedFileFullPath
 			String tempFilePath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH.trim() + generatedFileName.trim();
 			tempFilePath = massageFileName(tempFilePath);			
-			setGeneratedFileFullPath(tempFilePath);
-			int imageCount = getPromoImageCount(tempFilePath);
-	
-			wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
-			//wcContext.getSCUIContext().getRequest().setAttribute("imageCounter", imageCount);
+			setGeneratedFileFullPath(tempFilePath);			
 			return true;
 		}
 		else
@@ -377,10 +373,10 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	public int getPromoImageCount(String tempFilePath)
 	{
 		int count=0;	
-		String fileContent = getFileContents(tempFilePath);
+		String fileContent = getFileContents(tempFilePath);		
 		if (null == fileContent)
 			return count;
-		Matcher m = IMG_PATTERN.matcher(getFileContents(tempFilePath));
+		Matcher m = IMG_PATTERN.matcher(fileContent);
 		while (m.find()) { // find next match
 		    count=count+1;
 		
@@ -402,26 +398,34 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		BufferedReader bufferedReader = null;
 		StringBuffer imageLineBuffer = new StringBuffer();
 		try {
+			
 			ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
 			inputStream = servletContext.getResourceAsStream(fileName);
-			if (null == inputStream )
+			if (null == inputStream ) {
 				return null;
+			}
 			
 			inputStreamReader = new InputStreamReader(inputStream);
 			bufferedReader = new BufferedReader(inputStreamReader);
-			do {
-				imageLineBuffer.append(bufferedReader.readLine());
-
-			} while (bufferedReader.readLine() != null);
+			String thisLine = "";
+			
+			while ((thisLine = bufferedReader.readLine()) != null) {
+				imageLineBuffer.append (thisLine);
+			}
+			
+			
 		} catch (IOException ioe) {
 			log.error("Exception in getFileContents  "+ioe.getMessage());
 		}
 
 		finally {
 			try {
-				inputStream.close();
-				inputStreamReader.close();
-				bufferedReader.close();
+				if (inputStream != null)
+					inputStream.close();
+				if (inputStreamReader != null)
+					inputStreamReader.close();
+				if (bufferedReader != null)
+					bufferedReader.close();
 			} catch (IOException e) {
 				log.error("Exception while closing inputStream  "+e.getMessage());
 			}			
@@ -585,6 +589,9 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				logMessage("EXECUTE METHOD CALLED (Pre Login page) : " + massagedPromoHtml);
 				log.debug("Promotions file Pre-Login : " + newCallerPageTag);
 				setInRequest(massagedPromoHtml);
+				int imageCount = getPromoImageCount(massagedPromoHtml);
+				
+				wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
 				return SUCCESS;
 			}
 		else{
@@ -597,7 +604,11 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				{
 				massagedPostLoginPromoHtml = getGeneratedFileFullPath();
 				logMessage("EXECUTE METHOD CALLED (Post Login page) : " + massagedPostLoginPromoHtml);
-				setInRequest(  getGeneratedFileFullPath());
+				String finalFilePath = getGeneratedFileFullPath();
+				setInRequest(finalFilePath);
+				int imageCount = getPromoImageCount(finalFilePath);
+				
+				wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
 				return SUCCESS;
 				}
 			else
