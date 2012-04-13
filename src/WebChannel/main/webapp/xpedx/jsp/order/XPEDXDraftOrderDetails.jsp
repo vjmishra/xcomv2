@@ -2063,8 +2063,8 @@ var currentAadd2ItemList = new Object();
 			<ul id="youMightConsiderCarousel" class="jcarousel-skin-xpedx">
 			<!-- Begin - Changes made by Mitesh for JIRA 3186 -->
 		    <s:if test='xpedxYouMightConsiderItems.size() < 4'>
-			    	<div disabled="disabled" class="jcarousel-prev jcarousel-prev-disabled"></div>
-	   			 	<div disabled="disabled" class="jcarousel-next jcarousel-next-disabled"></div>
+			    <div disabled="disabled" class="jcarousel-prev jcarousel-prev-hide-horizontal"></div> 
+			    <div disabled="disabled" class="jcarousel-next jcarousel-next-hide-horizontal"></div>
 		    </s:if>
 		    <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 				<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
