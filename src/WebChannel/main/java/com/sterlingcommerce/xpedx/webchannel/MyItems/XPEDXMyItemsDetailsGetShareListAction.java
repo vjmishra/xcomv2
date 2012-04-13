@@ -72,7 +72,9 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
     private Integer totalNumberOfPages = new Integer(1);
     private String custSuffixType = null;
     private int shipTosSize = 0;
+    private String countCustomer="0";
 	
+
 	//Added for JIRA 3589 : For paginating shipsTos
     private String billtosuffixtype;
 	public String getBilltosuffixtype() {
@@ -171,7 +173,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 				parsePageInfo(document.getDocumentElement(), true);
 				List<String> shipTos = parseForShiptoIds(document);
 				shipTosSize = shipTos.size();
-			//	System.out.println(SCXmlUtil.getString(document));
+			 //	System.out.println(SCXmlUtil.getString(document));
 				
 			if(shipTosSize>0){							
 				Element custElem = null;
@@ -250,7 +252,14 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 				outDoc = (Document)listOfCustomer.getOwnerDocument();
 				setCustomerInformationMaps();
 			}
-				
+
+		/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
+		 ArrayList<Element> countCustomerList=SCXmlUtil.getElements(outDoc.getDocumentElement(), "Customer/CustomerList/Customer");
+		 
+		 if(countCustomerList!=null)
+		 {
+			 setCountCustomer(countCustomerList.size()+"");
+	     }
 			
 			/*
 			out = prepareAndInvokeMashups();
@@ -672,6 +681,19 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 
 	public void setCustomerPathMap(HashMap<String, String> customerPathMap) {
 		this.customerPathMap = customerPathMap;
+	}
+	/**
+	 * @return the countCustomer
+	 */
+	public String getCountCustomer() {
+		return countCustomer;
+	}
+
+	/**
+	 * @param countCustomer the countCustomer to set
+	 */
+	public void setCountCustomer(String countCustomer) {
+		this.countCustomer = countCustomer;
 	}
 
 }

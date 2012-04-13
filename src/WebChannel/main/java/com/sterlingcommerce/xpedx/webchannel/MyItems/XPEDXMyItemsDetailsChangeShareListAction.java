@@ -1,11 +1,16 @@
 package com.sterlingcommerce.xpedx.webchannel.MyItems;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.components.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -61,6 +66,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 	private String clItemPO = "";
 	private boolean clAjax = false;
 	private boolean newList;
+	private ArrayList<String> countCustomer;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -82,7 +88,56 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				LOG.info("Check 1 - Done: getListKey = " + getListKey());
 			}
+			/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
 			
+			 Map<String ,Integer> customerIDCountMap=new HashMap<String ,Integer>();
+			for(int i=0;i<countCustomer.size();i++)
+			{
+				String str=countCustomer.get(i);
+				String customerIdCount[]=str.split("\\|");
+				if(customerIdCount != null)
+				{				
+					String totalChildCuntStr= customerIdCount[1];
+					if(totalChildCuntStr !=null && !"".equals(totalChildCuntStr.trim()))
+						customerIDCountMap.put(customerIdCount[0],Integer.valueOf(totalChildCuntStr));
+					else
+						customerIDCountMap.put(customerIdCount[0],0);
+						
+					
+					
+				}
+			}
+			Map<String,ArrayList<String>> parentCustmerMap=getChildCustomers();
+			ArrayList<String> customerIdList=new ArrayList<String>();
+			List<String> arrayList=Arrays.asList(customerIds);
+			for(int i=0;i<customerIds.length;i++)
+			{ 
+				ArrayList<String> selectedList=parentCustmerMap.get(customerIds[i]);
+				if(selectedList != null && parentCustmerMap.containsKey(customerIds[i]))
+				{
+					
+					for(int j=0;j<selectedList.size();j++)
+					{
+						if(arrayList.contains(selectedList.get(j)))
+						{
+							customerIdList.add(selectedList.get(j));
+						}
+					}
+				}
+			}
+			int actualLength=customerIds.length-new HashSet(customerIdList).size();
+			String _customerIds[]=new String[actualLength];
+			int idx=0;
+			for(int i=0;i<customerIds.length;i++)
+			{
+				if(!customerIdList.contains(customerIds[i]))
+				{
+					_customerIds[idx]=customerIds[i];
+					idx += 1;
+				}
+					
+			}
+			customerIds=_customerIds;
 			//1 - Erase all the list
 			Element result = null;
 			
@@ -281,6 +336,72 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		if(clAjax && newList)
 			return "copy";
 		return SUCCESS;
+	}
+	
+
+	/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
+	private Map<String,ArrayList<String>> getChildCustomers()
+	{
+		Map<String,ArrayList<String>> customersMap=new HashMap<String,ArrayList<String>>();
+		for(int i=0;i<customerIds.length;i++)
+		{
+			String []_customerIds=customerPaths[i].split("\\|");
+			if(_customerIds !=null)
+			{
+				int length=_customerIds.length;
+				int parentLength=length-2;
+				int parentLength1=length-3;
+				int parentLength2=length-4;
+				if(parentLength >=0)
+				{
+					String parentCustomer=_customerIds[parentLength];
+					
+					
+					ArrayList<String>  customers=customersMap.get(parentCustomer);
+					if(customers == null)
+						customers=new ArrayList<String>();
+					customers.add(customerIds[i]);
+					customersMap.put(parentCustomer, customers);
+					if(parentLength1 >=0)
+					{
+						String parentCustomer1=_customerIds[parentLength1];
+						ArrayList<String>  customers1=customersMap.get(parentCustomer1);
+						if(customers1 == null)
+							customers1=new ArrayList<String>();
+						customers1.add(customerIds[i]);
+						customers1.add(parentCustomer);
+						customersMap.put(parentCustomer1, customers1);
+						if(parentLength2 >=0)
+						{
+							String parentCustomer2=_customerIds[parentLength2];
+							ArrayList<String>  customers2=customersMap.get(parentCustomer2);
+							if(customers2 == null)
+								customers2=new ArrayList<String>();
+							customers2.add(customerIds[i]);
+							customers2.add(parentCustomer1);
+							customers1.add(parentCustomer);
+							customersMap.put(parentCustomer2, customers2);
+						}
+
+					}
+				}
+			}
+		}
+		return customersMap;
+	}
+
+	/**
+	 * @return the countCustomer
+	 */
+	public ArrayList<String> getCountCustomer() {
+		return countCustomer;
+	}
+
+	/**
+	 * @param countCustomer the countCustomer to set
+	 */
+	public void setCountCustomer(ArrayList<String> countCustomer) {
+		this.countCustomer = countCustomer;
 	}
 
 	public Document getOutDoc() {
@@ -570,5 +691,5 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 
 	public void setClAjax(boolean clAjax) {
 		this.clAjax = clAjax;
-	}
+	}	
 }
