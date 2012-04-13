@@ -32,6 +32,7 @@ import com.yantra.yfc.rcp.IYRCPaginatedSearchAndListComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
 import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
 import com.yantra.yfc.rcp.IYRCTableLinkProvider;
+import com.yantra.yfc.rcp.YRCButtonBindingData;
 import com.yantra.yfc.rcp.YRCComboBindingData;
 import com.yantra.yfc.rcp.YRCConstants;
 import com.yantra.yfc.rcp.YRCPaginationData;
@@ -63,10 +64,10 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
     private Label lblResultsTitle;
 //	search fields declaration starts here
     private Label lblEnterprise;
+    private Label lblCustomerName;
+    private Label txtCustomerName;
 	private Combo cmbEnterprise;
 	private Label lblListType;
-	private Combo cmbListType;
-	Combo cmbDivisions;
 	private Text txtCustomer;
 	private Text txtUserId;
     
@@ -79,6 +80,10 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 	private Button btnReset = null;
 	private Button btnCreate;
 	private SelectionAdapter selectionAdapter;
+	private Button radIsBoth;
+	private Button radIsPersonal;
+	private Button radIsShared;
+	private int count=0;
 	
 
 	public XPXMyItemsSearchListScreen(Composite parent, int style, Object inputObject) {
@@ -90,7 +95,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 				String ctrlName = (String) ctrl.getData("name");
 				if (!YRCPlatformUI.isVoid(ctrlName)){
 					if (YRCPlatformUI.equals(ctrlName, "btnSearch")){
-						myBehavior.selectListType();
+						myBehavior.selectShipToAddress();
 						
 					}
 				}
@@ -100,8 +105,15 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		initialize();
 		setBindingForEnterprise();
 		//setBindingForComponents();
-		setBindingForBothList();
+		setBindingMILList();
         myBehavior = new XPXMyItemsSearchListScreenBehavior(this, FORM_ID,inputObject);
+        
+               if (count == 0) {
+			count++;
+			myBehavior.callBothListService(count);
+
+		}
+       
 	}
 
 	private void initialize() {
@@ -229,6 +241,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		lblCustomerlayoutData.verticalAlignment = 16777216;
 		lblCustomer.setLayoutData(lblCustomerlayoutData);
 		lblCustomer.setText("Customer_ID");
+		lblCustomer.setVisible(false);
 		
 		GridData txtCustomerlayoutData = new GridData();
 		txtCustomerlayoutData.horizontalAlignment = 4;
@@ -240,13 +253,14 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		txtCustomer.setEditable(true);
 		txtCustomer.setTextLimit(50);
 		txtCustomer.setText(XPXUtils.getMasterCustomerID());
+		txtCustomer.setVisible(false);
 		
-		
-		Label lblUserId = new Label(pnlBasicSearchCriteriaBody, SWT.LEFT);
+		/*Label lblUserId = new Label(pnlBasicSearchCriteriaBody, SWT.LEFT);
 		GridData lblUserIdlayoutData = new GridData();
 		lblUserIdlayoutData.verticalAlignment = 16777216;
 		lblUserId.setLayoutData(lblUserIdlayoutData);
 		lblUserId.setText("User Id");
+		lblUserId.setVisible(false);
 		
 		GridData txtUserIdlayoutData = new GridData();
 		txtUserIdlayoutData.horizontalAlignment = 4;
@@ -257,7 +271,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		txtUserId.setLayoutData(txtCustomerlayoutData);
 		txtUserId.setEditable(true);
 		txtUserId.setTextLimit(50);
-
+		txtUserId.setVisible(false);*/
 	}
 
 	private void createCmpstEnterpriseCode(){
@@ -266,41 +280,95 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		cmpstEnterpriseCode.setBackgroundMode(SWT.INHERIT_NONE);
 		cmpstEnterpriseCode.setData(YRCConstants.YRC_CONTROL_NAME, "cmpstEnterpriseCode");
 		GridData cmpstEnterpriseCodelayoutData = new GridData();
-		cmpstEnterpriseCodelayoutData.horizontalAlignment = 4;
-		cmpstEnterpriseCodelayoutData.verticalAlignment = 16777216;
+		cmpstEnterpriseCodelayoutData.horizontalAlignment = 14;
+		//cmpstEnterpriseCodelayoutData.verticalAlignment = 16777216;
 		cmpstEnterpriseCodelayoutData.grabExcessHorizontalSpace = true;
-		cmpstEnterpriseCodelayoutData.horizontalSpan = 2;
+		cmpstEnterpriseCodelayoutData.horizontalSpan = 4;
 		cmpstEnterpriseCode.setLayoutData(cmpstEnterpriseCodelayoutData);
-		GridLayout cmpstEnterpriseCodelayout = new GridLayout(2, false);
+		GridLayout cmpstEnterpriseCodelayout = new GridLayout(4, true);
 		cmpstEnterpriseCodelayout.marginHeight = 0;
 		cmpstEnterpriseCode.setLayout(cmpstEnterpriseCodelayout);
 		
+		//Add Lebel Customer Name
+		Label lblCustomerName = new Label(cmpstEnterpriseCode, SWT.LEFT);
+		GridData lblcustomernamelayoutData = new GridData();
+		lblCustomerName.setLayoutData(lblcustomernamelayoutData);
+		lblCustomerName.setText("Customer Name: ");
+		lblCustomerName.setVisible(true);
+		
+		txtCustomerName = new Label(cmpstEnterpriseCode, SWT.LEFT);
+		GridData txtcustomernamelayoutData = new GridData();
+		txtcustomernamelayoutData.horizontalAlignment = 4;
+		txtcustomernamelayoutData.horizontalSpan = 3;
+		txtCustomerName.setLayoutData(txtcustomernamelayoutData);
+		txtCustomerName.setData("name", "txtCustomerName");
+		txtCustomerName.setText(XPXUtils.getCustomerName());
+
+		//Adding For List type
+		lblListType = new Label(cmpstEnterpriseCode, SWT.LEFT);
+		GridData lblListTyepelayoutData = new GridData();
+		lblListType.setLayoutData(lblListTyepelayoutData);
+		lblListType.setText("List Type:");
+	
+		//Added Radio Buttons
+		radIsBoth = new Button(cmpstEnterpriseCode, SWT.RADIO);
+		radIsBoth.setText("Both");
+		radIsBoth.setData("name", "radIsBoth");
+		radIsBoth.setData("yrc:customType", "Label");
+		radIsBoth.setSelection(true);
+		radIsBoth.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				boolean isSelected = radIsBoth.getSelection();
+				System.out.println(isSelected);
+				if(isSelected == true){
+					myBehavior.callBothListService(count);
+				}
+			}
+			
+		});
+		
+		radIsPersonal = new Button(cmpstEnterpriseCode, SWT.RADIO);
+		radIsPersonal.setText("Personal");
+		radIsPersonal.setData("name", "radIsPersonal");
+		radIsPersonal.setData("yrc:customType", "Label");
+		radIsPersonal.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				boolean isSelected = radIsPersonal.getSelection();
+				System.out.println(isSelected);
+				if(isSelected == true){
+					myBehavior.selectCustomerContact();
+				}
+			}
+			
+		});
+		
+		radIsShared = new Button(cmpstEnterpriseCode, SWT.RADIO);
+		radIsShared.setText("Shared");
+		radIsShared.setData("name", "radIsShared");
+		radIsShared.setData("yrc:customType", "Label");
+		radIsShared.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				boolean isSelected = radIsShared.getSelection();
+				System.out.println(isSelected);
+				if(isSelected == true){
+					myBehavior.CreateSharedList();
+				}
+			}
+		});
+		
 		lblEnterprise = new Label(cmpstEnterpriseCode, SWT.LEFT);
 		GridData lblEnterpriselayoutData = new GridData();
-		lblEnterpriselayoutData.horizontalAlignment = 16777224;
-		lblEnterpriselayoutData.verticalAlignment = 16777216;
+		/*lblEnterpriselayoutData.horizontalAlignment = 16777224;
+		lblEnterpriselayoutData.verticalAlignment = 16777216;*/
 		lblEnterprise.setLayoutData(lblEnterpriselayoutData);
 		lblEnterprise.setText("Enterprise");
 		lblEnterprise.setVisible(false);
-	
+		
 		cmbEnterprise = new Combo(cmpstEnterpriseCode, SWT.READ_ONLY);
 		GridData cmbEnterpriselayoutData = new GridData();
 		cmbEnterpriselayoutData.horizontalAlignment = 4;
 		cmbEnterprise.setLayoutData(cmbEnterpriselayoutData);
 		cmbEnterprise.setVisible(false);
-		
-		//Adding For List type
-		lblListType = new Label(cmpstEnterpriseCode, SWT.LEFT);
-		GridData lblListTyepelayoutData = new GridData();
-		lblListTyepelayoutData.horizontalAlignment = 16777224;
-		lblListTyepelayoutData.verticalAlignment = 16777216;
-		lblListType.setLayoutData(lblListTyepelayoutData);
-		lblListType.setText("List Type");
-	
-		cmbListType = new Combo(cmpstEnterpriseCode, SWT.READ_ONLY);
-		GridData cmbListTypelayoutData = new GridData();
-		cmbListTypelayoutData.horizontalAlignment = 4;
-		cmbListType.setLayoutData(cmbListTypelayoutData);
 		
 	}
 	
@@ -323,7 +391,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 //		createPnlShowHideCriteria();
 //		createPnlOrderByOptions();
 	
-		btnSearch = new Button(pnlButtons, SWT.PUSH);
+		/*btnSearch = new Button(pnlButtons, SWT.PUSH);
 		btnSearch.setData("name","btnSearch");
 		GridData btnSearchlayoutData = new GridData();
 		btnSearchlayoutData.horizontalAlignment = 16777224;
@@ -342,13 +410,13 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		btnResetlayoutData.widthHint = 80;
 		btnReset.setLayoutData(btnResetlayoutData);
 		btnReset.setText("Reset");
-		/**changed for XIRA ID-1176**/
+		*//**changed for XIRA ID-1176**//*
 		btnReset.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
 				myBehavior.reset();
 				
 			}
-		});
+		});*/
 		btnCreate = new Button(pnlButtons, SWT.NONE);
 		btnCreate.setText("Create_myitems");
 		btnCreate.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
@@ -364,11 +432,11 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 			}
 		});
 		
-		Button btnShiptoList = new Button(pnlButtons, SWT.NONE);
+		/*Button btnShiptoList = new Button(pnlButtons, SWT.NONE);
 		btnShiptoList.setText("Get Child Customers ");
 		btnShiptoList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
-				myBehavior.create1();
+				myBehavior.CreateSharedList();
 				
 			}
 		});
@@ -381,7 +449,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 				
 			}
 		});
-		
+	*/	
 	}
 	
 	private void createCmpstSearchResultsAndControls(){
@@ -501,20 +569,26 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		clmCustAddress.setWidth(130);
 		clmCustAddress.setText("Column 1");
 		
-		TableColumn clmCreatedBy = new TableColumn(tblResults, SWT.NONE);
-		clmCreatedBy.setWidth(130);
-		
-		TableColumn clmLastModDate = new TableColumn(tblResults, SWT.NONE);
-		clmLastModDate.setWidth(130);
+		TableColumn Description = new TableColumn(tblResults, SWT.NONE);
+		Description.setWidth(130);
+		Description.setText("Description");
 		
 		TableColumn clmLastModUser = new TableColumn(tblResults, SWT.NONE);
 		clmLastModUser.setWidth(130);
 		
-		TableColumn clmAction = new TableColumn(tblResults, SWT.NONE);
-		clmAction.setWidth(130);
+		TableColumn clmLastModDate = new TableColumn(tblResults, SWT.NONE);
+		clmLastModDate.setWidth(130);
+		
+		TableColumn clmCreatedBy = new TableColumn(tblResults, SWT.NONE);
+		clmCreatedBy.setWidth(130);
 		
 		TableColumn clmListType = new TableColumn(tblResults, SWT.NONE);
 		clmListType.setWidth(130);
+		
+		TableColumn clmAction = new TableColumn(tblResults, SWT.NONE);
+		clmAction.setWidth(130);
+		
+		
 //		clmAction.setText("Column 2");
 		
 		gridDataTblShipCustomers.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
@@ -550,48 +624,39 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
         cbd.setDescriptionBinding("OrganizationCode");
         cmbEnterprise.setData("YRCComboBindingDefination", cbd);
         
-        YRCComboBindingData cbd1 = new YRCComboBindingData();
-        cbd1.setName("cmbListType");
-        cbd1.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@EnterpriseKey");
-        cbd1.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@EnterpriseKey");
-        cbd1.setCodeBinding("OrganizationKey");
-        cbd1.setListBinding("OrgList:OrganizationList/Organization");
-        cbd1.setDescriptionBinding("OrganizationCode");
-        cmbListType.setData("YRCComboBindingDefination", cbd);
-        
-        cbd = new YRCComboBindingData();
-        cbd.setName("cmbListType");
-		cbd.setCodeBinding("@ListValue");
-		cbd.setDescriptionBinding("@ListType");
-		cbd.setListBinding("GetListType:/ListType");
-		cmbListType.setData("YRCComboBindingDefination", cbd);
+   		YRCButtonBindingData btnDivisionBindingData = new YRCButtonBindingData();
+		btnDivisionBindingData.setName("radIsPersonal");
+		btnDivisionBindingData.setCheckedBinding("P");
+		radIsPersonal.setData("YRCButtonBindingDefination",
+				btnDivisionBindingData);
+		YRCButtonBindingData btnDivisionBindingDataS = new YRCButtonBindingData();
+		btnDivisionBindingDataS.setName("radIsShared");
+		btnDivisionBindingDataS.setCheckedBinding("S");
+		radIsShared.setData("YRCButtonBindingDefination",
+				btnDivisionBindingDataS);
+		YRCButtonBindingData btnDivisionBindingDataB = new YRCButtonBindingData();
+		btnDivisionBindingDataB.setName("radIsBoth");
+		btnDivisionBindingDataB.setCheckedBinding("B");
+		radIsBoth.setData("YRCButtonBindingDefination",
+				btnDivisionBindingDataB);
 	}
 	
-	private void setBindingForBothList(){
+	private void setBindingMILList(){
 		YRCTextBindingData textBindingData = new YRCTextBindingData();
         textBindingData = new YRCTextBindingData();
-        textBindingData.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        textBindingData.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        textBindingData.setName("txtCustomer");
-        txtCustomer.setData("YRCTextBindingDefination", textBindingData);
-        
-        
-      //  txtUserId
         
         textBindingData = new YRCTextBindingData();
         textBindingData = new YRCTextBindingData();
         textBindingData.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@SharePrivate");
         textBindingData.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@SharePrivate");
-        textBindingData.setName("txtUserId");
-        txtUserId.setData("YRCTextBindingDefination", textBindingData);
-
+        
 		/************/
 		YRCComboBindingData cbd = new YRCComboBindingData();
         YRCTableBindingData tblResultsBinding1 = new YRCTableBindingData();
 		YRCTblClmBindingData colBindings11[] = new YRCTblClmBindingData[tblResults.getColumnCount()];
 		colBindings11[0] = new YRCTblClmBindingData();
 		colBindings11[0].setName("clmCustAddress");
-		colBindings11[0].setAttributeBinding("@Name;@Desc;@TotalItems");
+		colBindings11[0].setAttributeBinding("@Name;@TotalItems");
 		colBindings11[0].setKey("My_Search_Item_List_Name_Key");
         colBindings11[0].setColumnBinding("List_Nm");
         colBindings11[0].setSortReqd(true);
@@ -600,52 +665,61 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		colBindings11[0].setFilterReqd(true);
 		
 		colBindings11[1] = new YRCTblClmBindingData();
-		colBindings11[1].setName("clmCreatedBy");
-		colBindings11[1].setAttributeBinding("@Createuserid");
-        colBindings11[1].setColumnBinding("Created_By");
+		colBindings11[1].setName("Description");
+		colBindings11[1].setAttributeBinding("@Desc");
+		colBindings11[1].setColumnBinding("Desc");
         colBindings11[1].setSortReqd(true);
-        colBindings11[1].setFilterReqd(true);
-        
-        colBindings11[2] = new YRCTblClmBindingData();
-		colBindings11[2].setName("clmLastModDate");
-		colBindings11[2].setAttributeBinding("@Modifyts");
-        colBindings11[2].setColumnBinding("Last_Modified_Date");
+        colBindings11[1].setSortBinding("@Desc");
+		colBindings11[1].setLinkReqd(true);
+		colBindings11[1].setFilterReqd(true);
+		
+		colBindings11[2] = new YRCTblClmBindingData();
+		colBindings11[2].setName("clmLastModUser");
+		colBindings11[2].setAttributeBinding("@Modifyuserid");
+        colBindings11[2].setColumnBinding("Last_Modified_User");
         colBindings11[2].setSortReqd(true);
         colBindings11[2].setFilterReqd(true);
         
         colBindings11[3] = new YRCTblClmBindingData();
-		colBindings11[3].setName("clmLastModUser");
-		colBindings11[3].setAttributeBinding("@Modifyuserid");
-        colBindings11[3].setColumnBinding("Last_Modified_User");
+		colBindings11[3].setName("clmLastModDate");
+		colBindings11[3].setAttributeBinding("@Modifyts");
+        colBindings11[3].setColumnBinding("Last_Modified_Date");
         colBindings11[3].setSortReqd(true);
         colBindings11[3].setFilterReqd(true);
-        
+		
 		colBindings11[4] = new YRCTblClmBindingData();
-		colBindings11[4].setName("clmAction");
-        colBindings11[4].setAttributeBinding("@Action");
-        colBindings11[4].setColumnBinding("Action");   
+		colBindings11[4].setName("clmCreatedBy");
+		colBindings11[4].setAttributeBinding("@Createuserid");
+        colBindings11[4].setColumnBinding("Created_By");
+        colBindings11[4].setSortReqd(true);
         colBindings11[4].setFilterReqd(true);
-        colBindings11[4].setLabelProvider(new IYRCTableColumnTextProvider(){
+        
+   		colBindings11[5] = new YRCTblClmBindingData();
+		colBindings11[5].setName("clmListType");
+		colBindings11[5].setAttributeBinding("@ListType");
+        colBindings11[5].setColumnBinding("List_Type");
+        colBindings11[5].setSortReqd(true);
+        colBindings11[5].setFilterReqd(true);
+        
+        colBindings11[6] = new YRCTblClmBindingData();
+		colBindings11[6].setName("clmAction");
+        colBindings11[6].setAttributeBinding("@Action");
+        colBindings11[6].setColumnBinding("Action");   
+        colBindings11[6].setFilterReqd(true);
+        colBindings11[6].setLabelProvider(new IYRCTableColumnTextProvider(){
 	
 			public String getColumnText(Element eleData) {
 				return "Select";
 			}
         	
         });
-        colBindings11[4].setTargetAttributeBinding("XPEDXMyItemsList/@Action");
+        colBindings11[6].setTargetAttributeBinding("XPEDXMyItemsList/@Action");
         cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("Id");
 		cbd.setListBinding("Actions:Actions/Action");
 		cbd.setDescriptionBinding("DisplayName");
-		colBindings11[4].setBindingData(cbd);
-		colBindings11[4].setSortReqd(true);
-		
-		colBindings11[5] = new YRCTblClmBindingData();
-		colBindings11[5].setName("clmListType");
-		colBindings11[5].setAttributeBinding("@ListType");
-        colBindings11[5].setColumnBinding("List_Type");
-        colBindings11[5].setSortReqd(true);
-        colBindings11[5].setFilterReqd(true);
+		colBindings11[6].setBindingData(cbd);
+		colBindings11[6].setSortReqd(true);
        
         
         IYRCCellModifier cellModifier = new IYRCCellModifier() {
@@ -689,21 +763,13 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 			
 		};
 		String[] editors = new String[tblResults.getColumnCount()];
-		editors[4] = YRCConstants.YRC_COMBO_BOX_CELL_EDITOR;
+		editors[6] = YRCConstants.YRC_COMBO_BOX_CELL_EDITOR;
 		tblResultsBinding1.setCellTypes(editors);
 		tblResultsBinding1.setCellModifierRequired(true);
 		tblResultsBinding1.setCellModifier(cellModifier);
 		tblResultsBinding1.setSortRequired(true);
 		tblResultsBinding1.setFilterReqd(true);
-		//Need to set the source binding conditionally 
-		/*if("Both".equalsIgnoreCase(myBehavior.getFieldValue("cmbListType"))){
-			tblResultsBinding.setSourceBinding("BothList:/XpedxMilBothLstList/XpedxMilBothLst");
-    		}
-		else{
-			tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
-		}*/
 		tblResultsBinding1.setSourceBinding("XpedxMilBothLstList:/XpedxMilBothLstList/XpedxMilBothLst");
-		//tblResultsBinding.setSourceBinding("XPEDXMyItemsListList:/XPEDXMyItemsListList/XPEDXMyItemsList");
 		tblResultsBinding1.setTargetBinding("SaveXPEDXMyItemsListList:/XPEDXMyItemsListList");
 		tblResultsBinding1.setName("tblResultz");
         tblResultsBinding1.setTblClmBindings(colBindings11);
