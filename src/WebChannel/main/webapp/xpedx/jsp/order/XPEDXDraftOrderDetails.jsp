@@ -2036,6 +2036,7 @@ var currentAadd2ItemList = new Object();
 </s:else>
 </div>
 <!--Added for 3098  -->
+<br/><br/><b><div  id="maxOrderErrorMessageBottom" style="position:relative;left:600px;color:red;display:inline" ></div></b>
 <br/><br/><b><div  id="minOrderErrorMessageBottom" style="position:relative;left:550px;color:red" ></div></b>
 <br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
@@ -2062,10 +2063,8 @@ var currentAadd2ItemList = new Object();
 			<ul id="youMightConsiderCarousel" class="jcarousel-skin-xpedx">
 			<!-- Begin - Changes made by Mitesh for JIRA 3186 -->
 		    <s:if test='xpedxYouMightConsiderItems.size() < 4'>
-		    	<!-- Begin - Added by Mitesh Parikh for JIRA#3186  -->
-				<div disabled="disabled" class="jcarousel-prev jcarousel-prev-hide-horizontal"></div> 
-			    <div disabled="disabled" class="jcarousel-next jcarousel-next-hide-horizontal"></div>
-			    <!-- End - Added by Mitesh Parikh for JIRA#3186  -->
+			    	<div disabled="disabled" class="jcarousel-prev jcarousel-prev-disabled"></div>
+	   			 	<div disabled="disabled" class="jcarousel-next jcarousel-next-disabled"></div>
 		    </s:if>
 		    <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 				<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
@@ -2458,11 +2457,17 @@ function validateOrder()
 	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
 		var divId=document.getElementById("maxOrderErrorMessage");
+		var divId1 = document.getElementById("maxOrderErrorMessageBottom");
 		if(divId != null)
 		{		
 			
 			divId.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
 		}
+		if(divId1 != null)
+		{
+			divId1.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
+		}
+			
 	}
 	//JIRA 3488 end
 	if(minAmount >totalAmountNum)
