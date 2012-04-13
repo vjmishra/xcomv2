@@ -55,7 +55,7 @@ function saveAnswer(){
     errorDiv.innerHTML = "";
    answerFiled.style.borderColor="";
     errorDiv.style.display = "none";
-//alert(questionEle.selectedIndex);
+
     if(questionEle.selectedIndex==0){
     	errorDiv.innerHTML = "Required fields missing. Please review and try again.";
     	//questionEle.style.borderColor="#FF0000";
@@ -78,7 +78,7 @@ function saveAnswer(){
          return ;
         }
     else if(answerFiled.value!=answerConfirmFiled.value){
-    	errorDiv.innerHTML = "Must be equal!";
+    	errorDiv.innerHTML = "Please enter the same answers in both answer and confirm answer fields.";
        	answerFiled.style.borderColor="#FF0000";
        	answerConfirmFiled.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
@@ -1271,11 +1271,6 @@ var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecr
 if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
 }
-else if((isGuestuser!="true") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
-  	//	alert(secrectQuestionSet);
-  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
-  	}	  
-  //JIRA 3487 end
     
     function loadTermsOfAccess()
     {
@@ -1469,6 +1464,7 @@ else if((isGuestuser!="true") && (secrectQuestionSet == null || secrectQuestionS
         });
         var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
+		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
@@ -1507,6 +1503,8 @@ else if((isGuestuser!="true") && (secrectQuestionSet == null || secrectQuestionS
 			 		'width' 		: 750,
 			 		'height' 		: 505  
 				}).trigger('click');
+			} else if((!isSalesRep) && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		
         $("#shipToSelect,#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
