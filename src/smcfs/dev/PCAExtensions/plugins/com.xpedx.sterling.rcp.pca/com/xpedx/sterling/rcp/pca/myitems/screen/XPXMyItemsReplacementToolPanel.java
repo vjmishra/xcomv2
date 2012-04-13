@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
@@ -90,6 +91,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 	private Text ShipToId = null;
 	private Text SAPId = null;
 	private Text MasterCustomerId = null;
+	private Composite pnlDivisions; 
 		
 	public XPXMyItemsReplacementToolPanel(Composite parent, int style, String enterpriseKey) {
 		super(parent, style);
@@ -164,6 +166,11 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 	private void createTblSearchResults() {
 		GridData tblSearchResultsGD = new org.eclipse.swt.layout.GridData();
 		tblSearchResults = new Table(pnlTableHolder,SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);
+		
+		TableColumn clmDivision = new TableColumn(tblSearchResults, SWT.LEFT);
+		clmDivision.setText("DivisionName_DivisionNo_Key");
+		clmDivision.setWidth(150);
+		
 		TableColumn clmName = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmName.setText("My_Items_List_Name");
 		clmName.setWidth(150);
@@ -172,6 +179,10 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		clmDesc.setText("My_Items_List_Desc");
 		clmDesc.setWidth(150);
 		
+		TableColumn clmListType = new TableColumn(tblSearchResults, SWT.NONE);
+		clmListType.setWidth(130);
+		
+
 		TableColumn clmCheckBox = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmCheckBox.setToolTipText("Check_This");
 		clmCheckBox.setWidth(30);
@@ -281,7 +292,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		txtReplaceLPC.setLayoutData(gdReplaceLPC);
 		txtReplaceLPC.setData("name", "txtReplaceLPC");
 		
-		
+		addArticleToDivisions();
 //		GridLayout grpSrchCriteriaLayout = new GridLayout();
 //		GridData gdSrchCriteriaGroup = new GridData();
 //		Group grpSrchCriteriaFields = new Group(grpSearchFields, SWT.NONE);
@@ -295,6 +306,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 //		grpSrchCriteriaLayout.numColumns = 2;
 		
 		// Search by Divisions
+		
 		GridLayout grpSrchByDivsLayout = new GridLayout();
 		GridData gdSrchByDivsGroup = new GridData();
 		grpSrchByDivsFields = new Group(grpSearchFields, SWT.NONE);
@@ -307,7 +319,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		grpSrchByDivsFields.setLayout(grpSrchByDivsLayout);
 		grpSrchByDivsLayout.numColumns = 2;
 		
-		lblDivisionID = new Label(grpSrchByDivsFields,SWT.NONE);
+		/*lblDivisionID = new Label(grpSrchByDivsFields,SWT.NONE);
 		lblDivisionID.setText("Division");
 		GridData gdDivisionLbl = new GridData();
 		gdDivisionLbl.verticalSpan = 3;
@@ -337,7 +349,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 					}
 				}
 			}
-		});
+		});*/
 		
 		txtDivisionID = new Text(grpSrchByDivsFields,SWT.BORDER);
 		GridData gdDivisionID = new GridData();
@@ -508,7 +520,88 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		
 		createButtonComposite();
 	}
+	private Table tblDivisions;
+	private void addArticleToDivisions() {
+		pnlDivisions = new Composite(grpSearchFields, 0);
+		pnlDivisions.setBackgroundMode(0);
+		pnlDivisions.setData("name", "pnlDivisions");
+		GridData gdDivisions = new GridData();
+		gdDivisions.horizontalAlignment = 4;
+		gdDivisions.verticalAlignment = 4;
+		gdDivisions.grabExcessHorizontalSpace = true;
+		gdDivisions.grabExcessVerticalSpace = true;
+		gdDivisions.horizontalSpan = 2;
+		pnlDivisions.setLayoutData(gdDivisions);
+		GridLayout layoutDivisions = new GridLayout(1, false);
+		layoutDivisions.marginHeight = 0;
+		layoutDivisions.marginWidth = 0;
+		layoutDivisions.numColumns = 2;
+		pnlDivisions.setLayout(layoutDivisions);
+		
+		tblDivisions = new Table(pnlDivisions, 67586);
+		tblDivisions.setHeaderVisible(true);
+		tblDivisions.setLinesVisible(true);
+		tblDivisions.setData("name", "tblDivisions");
+		GridData gdSrcDivisions = new GridData();
+		gdSrcDivisions.horizontalAlignment = 4;
+		gdSrcDivisions.verticalAlignment = 4;
+		gdSrcDivisions.grabExcessHorizontalSpace = true;
+		gdSrcDivisions.grabExcessVerticalSpace = true;
+		gdSrcDivisions.heightHint = 100;
+		tblDivisions.setLayoutData(gdSrcDivisions);
+		TableColumn clmSrcDivisions = new TableColumn(tblDivisions, 16384);
+		clmSrcDivisions.setWidth(70);
+		clmSrcDivisions.setResizable(true);
+		clmSrcDivisions.setMoveable(true);
+		
+		TableColumn clmSrcDivisionsName = new TableColumn(tblDivisions, 16384);
+		clmSrcDivisionsName.setWidth(133);
+		clmSrcDivisionsName.setResizable(true);
+		clmSrcDivisionsName.setMoveable(true);
+		
 
+		
+		/* Bindings....*****/
+		YRCTableBindingData tblbd = new YRCTableBindingData();
+		YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[2];
+		colBindings[0] = new YRCTblClmBindingData();
+		colBindings[0].setAttributeBinding("OrganizationCode");
+		colBindings[0].setColumnBinding("Division");
+		colBindings[0].setSortReqd(true);
+		colBindings[1] = new YRCTblClmBindingData();
+		colBindings[1].setAttributeBinding("OrganizationName");
+		colBindings[1].setColumnBinding("Name");
+		colBindings[1].setSortReqd(true);
+		tblbd.setSortRequired(true);
+		tblbd.setSourceBinding("Divisions:/OrganizationList/Organization");
+		tblbd.setName("tblDivisions");
+		tblbd.setTblClmBindings(colBindings);
+		tblDivisions.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblbd);
+		tblDivisions.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) { 
+				Widget ctrl = e.widget;
+			    String ctrlName = (String)ctrl.getData("name");
+			    if(ctrlName != null)
+			    {
+			    	TableItem tblItems[] = getTblDivisions().getSelection();
+			        if(tblItems.length > 0){
+			        	for(int i = 0; i < tblItems.length; i++){
+			        	Element eleDetailsInput = (Element)tblItems[i].getData();
+			        	String txtDivisionIDs = txtDivisionID.getText();
+						
+							if( !YRCPlatformUI.isVoid(txtDivisionIDs)){
+								txtDivisionID.setText(txtDivisionIDs+","+eleDetailsInput.getAttribute("OrganizationCode"));
+							} else {
+								txtDivisionID.setText(eleDetailsInput.getAttribute("OrganizationCode"));
+							}
+						}
+			        	
+						}
+			        }
+				}
+		});
+	}
+		
 	private void createPnlReplaceButtonHolder() {
 
 		RowLayout pnlBottomButtonHolderRL1 = new RowLayout();
@@ -611,97 +704,71 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
         cbd.setDescriptionBinding("OrganizationCode");
         cmbEnterprise.setData("YRCComboBindingDefination", cbd);
     	
-    	YRCListBindingData listbd = new YRCListBindingData();
+    	/*YRCListBindingData listbd = new YRCListBindingData();
     	listbd.setName("listDivisions");
     	listbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@Division");
     	listbd.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@Division");
     	listbd.setCodeBinding("ShipnodeKey");
     	listbd.setListBinding("TeamNodesList:TeamNodesList/TeamNodes");
     	listbd.setDescriptionBinding("ShipnodeKey");
-        listDivisions.setData(YRCConstants.YRC_LIST_BINDING_DEFINITION, listbd);
+        listDivisions.setData(YRCConstants.YRC_LIST_BINDING_DEFINITION, listbd);*/
         YRCTextBindingData bdDivisionID = new YRCTextBindingData();
         bdDivisionID.setName("DivisionID");
         bdDivisionID.setTargetBinding("/XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/@DivisionID");
         bdDivisionID.setSourceBinding("");
         txtDivisionID.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,bdDivisionID);
-        lblDivisionID.setData(YRCConstants.YRC_CONTROL_NAME,"lblDivisionID");
+       // lblDivisionID.setData(YRCConstants.YRC_CONTROL_NAME,"lblDivisionID");
         
-        /* cbd = new YRCComboBindingData();
-        cbd.setName("cmbMasterCustomer");
-        cbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        cbd.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@MasterCustomerID");
-    	cbd.setCodeBinding("CustomerID");
-        cbd.setListBinding("MSAPCustomerList:CustomerList/Customer");
-        cbd.setDescriptionBinding("@CustomerID;Extn/@ExtnSuffixType");
-        cbd.setKey("CustomerNameKsy");
-        cmbMasterCustomer.setData("YRCComboBindingDefination", cbd);
-        lblMasterCustomer.setData(YRCConstants.YRC_CONTROL_NAME,"lblMasterCustomer");
-        
-        cbd = new YRCComboBindingData();
-        cbd.setName("cmbCustomer");
-        cbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        cbd.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@SAPCustomerID");
-        cbd.setCodeBinding("CustomerID");
-        cbd.setListBinding("SAPCustomerList:CustomerList/Customer");
-        cbd.setDescriptionBinding("@CustomerID;Extn/@ExtnSuffixType");
-        cbd.setKey("CustomerNameKsy");
-        cmbCustomer.setData("YRCComboBindingDefination", cbd);
-        lblCustomer.setData(YRCConstants.YRC_CONTROL_NAME,"lblCustomer");
-        
-        cbd = new YRCComboBindingData();
-        cbd.setName("cmbBillToCustomer");
-        cbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        cbd.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@BillToCustomerID");
-        cbd.setCodeBinding("CustomerID");
-        cbd.setListBinding("BillToCustomerList:CustomerList/Customer");
-        cbd.setDescriptionBinding("@CustomerID;Extn/@ExtnSuffixType");
-        cbd.setKey("CustomerNameKsy");
-        cmbBillToCustomer.setData("YRCComboBindingDefination", cbd);
-        lblBillToCustomer.setData(YRCConstants.YRC_CONTROL_NAME,"lblBillToCustomer");
-        
-        cbd = new YRCComboBindingData();
-        cbd.setName("cmbShipToCustomer");
-        cbd.setSourceBinding("SearchCriteria:/XPEDXMyItemsList/@CustomerID");
-        cbd.setTargetBinding("SearchCriteria:/XPEDXMyItemsList/@ShipToCustomerID");
-        cbd.setCodeBinding("CustomerID");
-        cbd.setListBinding("ShipToCustomerList:CustomerList/Customer");
-        cbd.setDescriptionBinding("@CustomerID;Extn/@ExtnSuffixType");
-        cbd.setKey("CustomerNameKsy");
-        cmbShipToCustomer.setData("YRCComboBindingDefination", cbd);
-        lblShipToCustomer.setData(YRCConstants.YRC_CONTROL_NAME,"lblShipToCustomer");*/
+       
     }
     
     private void setBindingForSearchResults() {
         YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[3];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[5];
         bindingData.setName("tblSearchResults");
         bindingData.setTargetBinding("replace_input:/XPEDXMyItemsListList");
-        bindingData.setSourceBinding("/XPEDXMyItemsListList/XPEDXMyItemsList");
+        bindingData.setSourceBinding("XpedxMilBothLstList:/XpedxMilBothLstList/XpedxMilBothLst");
 
         colBindings[0] = new YRCTblClmBindingData();
-        colBindings[0].setAttributeBinding("Name");
-        colBindings[0].setColumnBinding("Name");
+        colBindings[0].setName("clmDivision");
+        colBindings[0].setAttributeBinding("@OrganizationName;@OrganizationCode");
+        colBindings[0].setKey("DivisionName_DivisionNo_Key");
+        colBindings[0].setColumnBinding("Division");
         colBindings[0].setSortReqd(true);
 
         colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("@Desc");
-        colBindings[1].setColumnBinding("Desc");
+        colBindings[1].setAttributeBinding("Name");
+        colBindings[1].setColumnBinding("Name");
         colBindings[1].setSortReqd(true);
-        
+
         colBindings[2] = new YRCTblClmBindingData();
-        colBindings[2].setName("clmCheckBox");
-        colBindings[2].setAttributeBinding("@Replace");
-//        colBindings[2].setTooltipKey("Checked/UnChecked");
-        colBindings[2].setCheckedBinding("Y");
-        colBindings[2].setUnCheckedBinding("N");
-        colBindings[2].setFilterReqd(false);
-        colBindings[2].setTargetAttributeBinding("XPEDXMyItemsList/@Checked");
-	
+        colBindings[2].setAttributeBinding("@Desc");
+        colBindings[2].setColumnBinding("Desc");
+        colBindings[2].setSortReqd(true);
+        
+
+        colBindings[3] = new YRCTblClmBindingData();
+        colBindings[3].setName("clmListType");
+        colBindings[3].setAttributeBinding("ListType");
+		colBindings[3].setColumnBinding("ListType/Creator");
+		colBindings[3].setSortReqd(true);
+		
+		
+	    
+        colBindings[4] = new YRCTblClmBindingData();
+        colBindings[4].setName("clmCheckBox");
+        colBindings[4].setAttributeBinding("@Replace");
+        colBindings[4].setCheckedBinding("Y");
+        colBindings[4].setUnCheckedBinding("N");
+        colBindings[4].setFilterReqd(false);
+        colBindings[4].setTargetAttributeBinding("XPEDXMyItemsList/@Checked");
+       
+        
         bindingData.setImageProvider(new IYRCTableImageProvider() {
 			public String getImageThemeForColumn(Object element, int columnIndex) {
 				Element orderline = (Element) element;
 				String sAlreadyChecked = orderline.getAttribute("Replace"); 
-				if (columnIndex == 2) {
+				if (columnIndex == 4) {
 					if (YRCPlatformUI.equals(sAlreadyChecked, "Y")) {
 						return "TableCheckboxCheckedImageLarge";
 					} else if (YRCPlatformUI.equals(sAlreadyChecked, "N") || YRCPlatformUI.equals(sAlreadyChecked, "")) {
@@ -713,7 +780,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		});
         
         String[] editors = new String[tblSearchResults.getColumnCount()];
-		editors[2] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
+		editors[4] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
 		
 		bindingData.setFilterReqd(false);
 		bindingData.setTblClmBindings(colBindings);
@@ -743,5 +810,9 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		// TODO Auto-generated method stub
 		return getBehavior();
 	}
+	public Table getTblDivisions() {
+		return tblDivisions;
+	}
+	
 }
 
