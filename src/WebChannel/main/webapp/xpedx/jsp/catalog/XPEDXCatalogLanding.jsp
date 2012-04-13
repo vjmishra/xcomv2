@@ -24,15 +24,14 @@
 <![endif]-->
 <!-- end styles -->
 
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
 </head>
