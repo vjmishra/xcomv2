@@ -39,8 +39,7 @@
 <s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 
 <!-- begin styles. These should be the only three styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
@@ -53,8 +52,9 @@
 <script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
-
-<link rel="stylesheet" type="text/css" href="<s:url value="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" />" media="screen" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
+<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript" src="../js/jquery.numeric.js"></script>
 <script type="text/javascript">
 function maxLength(field,maxlimit) {
@@ -2519,15 +2519,22 @@ function showSharedListForm(){
                 <div id="cross-sell" class="float-left">
                     <span class="consider-text"> You might also consider...</span>
                     <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
-                    <!-- Begin - Changes made by Mitesh for JIRA 3186 -->
-					<s:if test='xpedxYouMightConsiderItems.size() < 4'>
-			    		<div disabled="disabled" class="jcarousel-prev jcarousel-prev-disabled"></div>
-	   			 		<div disabled="disabled" class="jcarousel-next jcarousel-next-disabled"></div>
-		    		</s:if>
+                    <!-- Begin - Changes made by Mitesh for JIRA 3186 -->							    		
 					<s:if test='xpedxYouMightConsiderItems.size() > 0'>
 						<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
+							
 							<s:set name="itemAssetList"
-									value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+									value='#xutil.getAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+								
+								<s:set name='dispItemId' value='#xutil.getChildElement(#reltItem, "ItemID")'/>
+								<s:set name='dispItemUom' value='#xutil.getChildElement(#reltItem, "UnitOfMeasure")'/>
+								<s:url id='dispItemDetailsLink' namespace="/catalog"
+									action='itemDetails.action' includeParams='none' escapeAmp="false">
+									<s:param name="itemID" value="#dispItemId" />
+									<s:param name="sfId" value="#parameters.sfId" />
+									<s:param name="unitOfMeasure" value="#dispItemUom" />
+								</s:url>
+					
 								<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 									<s:set name="itemAsset" value='#itemAssetList[0]' />
 									<s:set name='imageLocation'
@@ -2541,10 +2548,16 @@ function showSharedListForm(){
 											<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
 									</s:if>	
 
-<%-- 									<li> <a href="#"> <img src="<s:url value='%{#imageURL}' includeParams='none' />" width="91" height="94" alt="" />  --%>
-<!-- 										<b></b><br /><br /><br /> -->
-<!-- 										<br /> -->
-<!-- 										</a> </li> -->
+ 									
+ 										
+ 										<li>
+ 										<a href='<s:property value="%{dispItemDetailsLink}"  />'  > 
+										<s:property value="#desc" escape="false"/>
+										<img src="<s:url value='%{#imageURL}' includeParams='none' />"  width="91" height="95" alt="CarouselItem">
+										</a>
+ 		
+							
+ 										</li> 
 
 								</s:if> <s:else>
 									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
@@ -2560,9 +2573,17 @@ function showSharedListForm(){
 									</li>
 
 								</s:else>
-							
+								
 						</s:iterator>
+						
 					</s:if>
+					<!-- Begin - Added by Mitesh Parikh for JIRA#3186  -->
+					<s:if test='xpedxYouMightConsiderItems.size() < 4'>
+						<div disabled="disabled" class="jcarousel-prev jcarousel-prev-hide-horizontal"></div> 
+			    		<div disabled="disabled" class="jcarousel-next jcarousel-next-hide-horizontal"></div>
+	   			 		
+		    		</s:if>
+		    		<!-- End - Added by Mitesh Parikh for JIRA#3186  -->
 					<!-- End - Changes made by Mitesh for JIRA 3186 -->
                         <!-- I will leave this piece of sampe html for reference -->
 						<!-- li> <a href="#"> <img src="/swc/xpedx/images/catalog/carousel-demo-1.jpg" width="91" height="94" alt="" /> <b>Rubbermaid Ridget Can Liners</b><br />
@@ -2574,6 +2595,7 @@ function showSharedListForm(){
                         
                     </ul>
                 </div>
+                
             </div>
 			</s:if>
         <!-- END carousel -->
@@ -2820,8 +2842,8 @@ function showSharedListForm(){
 <!-- Web Trends tag end  -->
 
 <script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
 <script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>-->
