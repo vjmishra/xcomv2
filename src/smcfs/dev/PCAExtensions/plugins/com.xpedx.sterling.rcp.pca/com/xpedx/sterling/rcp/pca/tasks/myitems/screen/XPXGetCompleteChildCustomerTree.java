@@ -249,7 +249,7 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 		pnlButtonHolder.setData("yrc:customType", "TaskComposite");
 		
 		btnCreate = new Button(pnlButtonHolder, 0);
-		btnCreate.setText("MyItemsList_Create");
+		btnCreate.setText("Select");
 		btnCreate.setLayoutData(gridData5);
 		btnCreate.setData("name", "btnCreate");
 		btnCreate.addSelectionListener(new SelectionAdapter() {
