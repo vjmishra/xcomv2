@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor;
 import com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
@@ -36,7 +37,7 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		super(ownerComposite, formId);
 		this.formId = formId;
 		this.page = (XPXGetCompleteChildCustomerTree) ownerComposite;
-		String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomer");
+		String custName = XPXUtils.getMasterCustomerID();
 		setFieldValue("txtCustName", custName);
 //		searchCustomers();
 	}
@@ -295,53 +296,7 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		String sapcustID = null;
 		String billtocustID = null;
 		String shiptocustID = null;
-			for(int i=0;i<customerarray.size();i++){
-			if(customerarray.get(i).toString().contains("|MC")){
-				String custId = customerarray.get(i).toString();
-				StringTokenizer  strtok = new StringTokenizer( custId, "|");
-				  while(strtok.hasMoreTokens()){					  
-					  msaplist.add(strtok.nextToken().toString());
-					  strtok.nextToken().toString();
-				  }
-			}
-			if(customerarray.get(i).toString().contains("|C")){
-				String custId = customerarray.get(i).toString();
-				StringTokenizer  strtok = new StringTokenizer( custId, "|");
-				  while(strtok.hasMoreElements()){					  
-				      saplist.add(strtok.nextToken().toString());
-				      strtok.nextToken().toString();
-				  }
-				 
-			}
-			if(customerarray.get(i).toString().contains("|S")){
-				String custId = customerarray.get(i).toString();
-				StringTokenizer  strtok = new StringTokenizer( custId, "|");
-				  while(strtok.hasMoreElements()){					  
-				    
-				      shiptolist.add(strtok.nextToken().toString());
-				      strtok.nextToken().toString();
-				  }
-				
-				  
-				
-				
-			}
-			if(customerarray.get(i).toString().contains("|B")){
-				String custId = customerarray.get(i).toString();
-				StringTokenizer  strtok = new StringTokenizer( custId, "|");
-				  while(strtok.hasMoreElements()){					  
-				    
-					  billtolist.add(strtok.nextToken().toString());
-					  strtok.nextToken().toString();
-				  }
-				
-				 
-				
-				
-			}
-		}
-	//   isShared = true;
-		
+			
 	
 		
 		
@@ -354,9 +309,12 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		//Element attrElemComplex2 = YRCXmlUtils.createChild(attrElemComplex1, "XPEDXMyItemsListShare");
 		Element attrElemComplex = YRCXmlUtils.createChild(elemModel, "ComplexQuery");
 		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
-
-		for ( int i=0; i<shiptolist.size();i++) {
-			String custId = (String) shiptolist.get(i);
+		
+		for ( int i=0; i<customerarray.size();i++) {
+			String custId = (String) customerarray.get(i);
+			int indexOfChar = custId.indexOf("(");
+			int indexOfCharone = custId.indexOf(")");
+			custId = custId.substring(indexOfChar + 1, indexOfCharone);
 			if (custId != null && custId != " ") {
 
 				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
@@ -367,50 +325,15 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 			}
 
 		}
-		for ( int i=0; i<msaplist.size();i++) {
-			String custId = (String) msaplist.get(i);
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "ShareCustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-		for ( int i=0; i<billtolist.size();i++) {
-			String custId = (String) billtolist.get(i);
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "ShareCustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-		for ( int i=0; i<saplist.size();i++) {
-			String custId = (String) saplist.get(i);
-			if (custId != null && custId != " ") {
-
-				Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
-				attrName.setAttribute("Name", "ShareCustomerID");
-				
-				attrName.setAttribute("Value", custId);
-				attrOr.appendChild(attrName);
-			}
-
-		}
-
+	
 		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
 		//attrName1.setAttribute("Name", "Createuserid");
 		//attrName1.setAttribute("Value", userId);
 		
 		
 		setModel(elemModel);
-		XPXMyItemsSearchListScreenBehavior.selectShipToAddress(elemModel);
+		XPXUtils.setElemModel(elemModel);
+		//XPXMyItemsSearchListScreenBehavior.selectShipToAddress(elemModel);
 		
 		
 	}
