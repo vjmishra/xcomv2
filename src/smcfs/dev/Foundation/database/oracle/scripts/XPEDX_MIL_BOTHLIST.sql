@@ -22,13 +22,15 @@ SELECT
     MILS.CUSTOMER_PATH,
     ORG.ORGANIZATION_NAME,
     ORG.ORGANIZATION_CODE,
+	MSAPORG.ORGANIZATION_NAME || ' (' || substr(MSAPCUST.CUSTOMER_ID,4,10) || ')' AS MSAPNAME,
     COUNT(MY_ITEMS_KEY) AS TOTALITEMS
 FROM xpedx_my_items_list MIL
 inner join yfs_customer CUST on (MIL.Customer_id) = trim(CUST.Customer_id)
+inner join yfs_customer MSAPCUST on trim(CUST.ROOT_CUSTOMER_KEY) = trim(MSAPCUST.CUSTOMER_KEY) 
+inner join yfs_organization MSAPORG on trim(MSAPCUST.CUSTOMER_ID) = trim(MSAPORG.ORGANIZATION_KEY) 
 INNER JOIN xpedx_my_items_items ITEM on trim(MIL.MY_ITEMS_LIST_KEY) = trim(ITEm.MY_ITEMS_LIST_KEY)
 LEFT OUTER JOIN xpedx_my_items_list_share MILS ON trim(MIL.MY_ITEMS_LIST_KEY) = trim(mils.MY_ITEMS_LIST_KEY)
 LEFT OUTER JOIN yfs_organization ORG ON trim(cust.EXTN_CUSTOMER_DIVISION) = replace(trim(ORG.organization_code),'_M','')
-
 GROUP BY
     MIL.MY_ITEMS_LIST_KEY,
     MIL.CUSTOMER_ID,
@@ -50,5 +52,6 @@ GROUP BY
     MILS.CUSTOMER_ID,
     MILS.CUSTOMER_PATH,
     ORG.ORGANIZATION_NAME,
-    ORG.ORGANIZATION_CODE
+    ORG.ORGANIZATION_CODE,
+	MSAPORG.ORGANIZATION_NAME || ' (' || substr(MSAPCUST.CUSTOMER_ID,4,10) || ')'
 
