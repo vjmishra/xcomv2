@@ -439,7 +439,7 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right"> Line Status:</td>
 					<td class="left"><xsl:value-of select="Extn/@ExtnLineStatusCode"/> </td>
-					<td class="right">per CWT</td>
+					<td class="right"></td>
 
 					<td class="right"></td>
 				</tr>
@@ -454,7 +454,7 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right"> Line PO#:</td>
 					<td class="left"><xsl:value-of select="Extn/@CustomerLinePONo"/></td>
-					<td class="right">per Carton</td>
+					<td class="right"></td>
 					<td class="right"></td>
 
 				</tr>
