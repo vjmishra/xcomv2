@@ -182,6 +182,9 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		TableColumn clmListType = new TableColumn(tblSearchResults, SWT.NONE);
 		clmListType.setWidth(130);
 		
+		TableColumn clmSapName = new TableColumn(tblSearchResults, SWT.NONE);
+		clmSapName.setWidth(130);
+		
 
 		TableColumn clmCheckBox = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmCheckBox.setToolTipText("Check_This");
@@ -724,7 +727,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
     
     private void setBindingForSearchResults() {
         YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[5];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[6];
         bindingData.setName("tblSearchResults");
         bindingData.setTargetBinding("replace_input:/XPEDXMyItemsListList");
         bindingData.setSourceBinding("XpedxMilBothLstList:/XpedxMilBothLstList/XpedxMilBothLst");
@@ -746,29 +749,32 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
         colBindings[2].setColumnBinding("Desc");
         colBindings[2].setSortReqd(true);
         
-
         colBindings[3] = new YRCTblClmBindingData();
         colBindings[3].setName("clmListType");
-        colBindings[3].setAttributeBinding("ListType");
+        colBindings[3].setAttributeBinding("@ListType");
 		colBindings[3].setColumnBinding("ListType/Creator");
 		colBindings[3].setSortReqd(true);
 		
+		colBindings[4] = new YRCTblClmBindingData();
+        colBindings[4].setName("clmSapName");
+        colBindings[4].setAttributeBinding("@MsapName");
+		colBindings[4].setColumnBinding("SAP Parent Name");
+		colBindings[4].setSortReqd(true);
 		
-	    
-        colBindings[4] = new YRCTblClmBindingData();
-        colBindings[4].setName("clmCheckBox");
-        colBindings[4].setAttributeBinding("@Replace");
-        colBindings[4].setCheckedBinding("Y");
-        colBindings[4].setUnCheckedBinding("N");
-        colBindings[4].setFilterReqd(false);
-        colBindings[4].setTargetAttributeBinding("XPEDXMyItemsList/@Checked");
+		colBindings[5] = new YRCTblClmBindingData();
+        colBindings[5].setName("clmCheckBox");
+        colBindings[5].setAttributeBinding("@Replace");
+        colBindings[5].setCheckedBinding("Y");
+        colBindings[5].setUnCheckedBinding("N");
+        colBindings[5].setFilterReqd(false);
+        colBindings[5].setTargetAttributeBinding("XPEDXMyItemsList/@Checked");
        
         
         bindingData.setImageProvider(new IYRCTableImageProvider() {
 			public String getImageThemeForColumn(Object element, int columnIndex) {
 				Element orderline = (Element) element;
 				String sAlreadyChecked = orderline.getAttribute("Replace"); 
-				if (columnIndex == 4) {
+				if (columnIndex == 5) {
 					if (YRCPlatformUI.equals(sAlreadyChecked, "Y")) {
 						return "TableCheckboxCheckedImageLarge";
 					} else if (YRCPlatformUI.equals(sAlreadyChecked, "N") || YRCPlatformUI.equals(sAlreadyChecked, "")) {
@@ -780,7 +786,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		});
         
         String[] editors = new String[tblSearchResults.getColumnCount()];
-		editors[4] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
+		editors[5] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
 		
 		bindingData.setFilterReqd(false);
 		bindingData.setTblClmBindings(colBindings);
