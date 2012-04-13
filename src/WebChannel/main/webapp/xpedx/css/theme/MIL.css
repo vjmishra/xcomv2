@@ -5363,24 +5363,10 @@ input label {
     border: medium none;
     padding: 3px;
 }
-.jcarousel-skin-xpedx .jcarousel-container-horizontal {
-    float: left;
-    height: 151px;
-    margin: 7px 20px 0;
-    width: 879px;
-}
 .print-ico-xpedx {
     margin-right: 10px;
 }
-.jcarousel-skin-xpedx .jcarousel-prev-horizontal, .jcarousel-skin-xpedx .jcarousel-next-horizontal {
-    height: 151px;
-}
-.jcarousel-skin-xpedx .jcarousel-clip-horizontal {
-    height: 127px;
-    margin-top: 35px;
-    padding-left: 27px;
-    width: 820px;
-}
+
 .mil-wrap-condensed-container {
     float: left;
     height: auto;
@@ -5544,35 +5530,7 @@ div#replacementItemBody .mil-wrap-condensed {
 }
 input:focus, textarea:focus {
 }
-.jcarousel-container a {
-    border-right: 1px solid #CCCCCC;
-    color: #003399;
-    float: left;
-    font-size: 12px;
-    margin-right: 21px;
-    padding-right: 10px;
-    text-align: left !important;
-    width: 242px;
-}
-.jcarousel-skin-xpedx img {
-    float: left !important;
-    height: 150px;
-    margin-left: -20px;
-    margin-right: 15px;
-    width: 150px;
-}
-.jcarousel-skin-xpedx .jcarousel-item-horizontal {
-    height: 160px;
-    padding-left: 20px;
-    vertical-align: middle;
-    width: 255px !important;
-}
-.jcarousel-skin-xpedx .jcarousel-clip-horizontal {
-    height: 152px;
-    margin-top: 0;
-    padding-left: 27px;
-    width: 841px !important;
-}
+
 .ad-float {
     color: #666666;
     float: right;
@@ -6164,3 +6122,41 @@ div#main.userProfile { min-height: 850px; }
 	padding-left: 0px;
 	padding-right: 0px;	
 }
+/* Begin - Changes made by Mitesh Parikh for JIRA#3186 */
+.jcarousel-container a
+{
+	color: #003399;
+	float: left;
+	font-size: 12px;
+	margin-right: 21px;
+	padding-right: 10px;
+	border-right: 1px solid #ccc;
+	text-align: left!important;
+	width:242px;
+}
+.jcarousel-skin-xpedx img {
+	float: left !important;
+	margin-left: -20px;
+	margin-right: 15px;
+	width: 150px;
+	height: 150px;
+}
+.jcarousel-skin-xpedx .jcarousel-item-horizontal {
+	height: 160px;
+	padding-left: 20px;
+	width: 255px !important;
+	vertical-align: middle;
+}
+.jcarousel-skin-xpedx .jcarousel-clip-horizontal {
+	height: 152px;
+	margin-top: 0px;
+	padding-left: 27px;
+	width: 841px!important;
+}
+.jcarousel-skin-xpedx .jcarousel-container-horizontal {
+	float: left;
+	height: 151px;
+	margin: 7px 20px 0px;
+	width: 879px;
+}
+/* End - Changes made by Mitesh Parikh for JIRA#3186 */
