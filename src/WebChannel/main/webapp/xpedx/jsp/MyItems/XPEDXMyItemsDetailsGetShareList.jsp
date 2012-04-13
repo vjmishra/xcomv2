@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
+<s:set name='_action' value='[0]' />
 <script type="text/javascript" >
 /*
 //this page sets the saved selection from display as submenu jsp
@@ -120,6 +121,7 @@ $(document).ready(function() {
 			<div id='divShareList_<s:property value="#randomId"/>' >
 				<s:set name='itemChildListElement' value="getXMLUtils().getChildElement(#item,'CustomerList')" />
 				<s:set name='itemChildCount' value="#itemChildListElement.getAttribute('TotalNumberOfRecords')" />
+				<s:hidden name="countCustomer" value="%{#customerId + '|' +#_action.getCountCustomer()}"/>
 				<s:iterator id="item2" value='XMLUtils.getElements(#item, "CustomerList/Customer")' status="iterStatus">
 					<s:set name='id2' 		value='#item2.getAttribute("CustomerID")'/>
 					<s:set name='name2' 	value='#item2.getAttribute("CustomerID")'/>
@@ -149,6 +151,8 @@ $(document).ready(function() {
 							<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getShareList('<s:property value="#customerId2"/>','<s:property value="#suffixType"/>', 'divShareList_<s:property value="#randomId2"/>_base', false) " />
 						</s:if>
 						<input type="checkbox" 	id="customerPaths_<s:property value="#controlId2"/>"  onclick="selectNode('<s:property value="#controlId2"/>', this.checked);" name="customerPaths" value="<s:property value="customerPath2"/>" /> <s:property value="#name2"/>
+						
+						
 						<div style="display: none;" >
 							<input type="checkbox" id="customerIds_<s:property value="#controlId2"/>" name="customerIds" 	value="<s:property value="#customerId2"/>">
 							<input type="checkbox" id="customerDivs_<s:property value="#controlId2"/>" name="customerDivs" 	value="<s:property value="#div3"/>">
@@ -169,6 +173,7 @@ $(document).ready(function() {
 					<s:param name="pageSetToken" value="%{pageSetToken}"/>
 					<s:param name="suffixtype" value="%{billtosuffixtype}"/>
 					<s:param name="customerId" value="customerId"/>
+					
 				</s:url>
  				<xpedx:pagectl currentPage="%{pageNumber}"  divId="%{#paginateDivID}" lastPage="%{totalNumberOfPages}" urlSpec="%{#paginatedShipTo}" isAjax="true" />
 			</div>
