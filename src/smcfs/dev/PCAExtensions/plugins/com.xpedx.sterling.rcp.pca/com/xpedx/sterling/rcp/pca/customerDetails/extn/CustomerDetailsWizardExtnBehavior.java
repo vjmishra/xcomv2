@@ -8,8 +8,6 @@ package com.xpedx.sterling.rcp.pca.customerDetails.extn;
  
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,9 +20,6 @@ import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCValidationResponse;
 import com.yantra.yfc.rcp.YRCWizardExtensionBehavior;
-import com.yantra.yfc.rcp.IYRCComposite;
-import com.yantra.yfc.rcp.YRCValidationResponse;
-import com.yantra.yfc.rcp.YRCExtendedTableBindingData;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 /**
  * @author vchandra-tw
@@ -33,6 +28,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
  public class CustomerDetailsWizardExtnBehavior extends YRCWizardExtensionBehavior {
 
 	 public static  String masterCustomerID;
+	 public static  String CustomerName;
+	 public static  String customerkey;
 	 	 
 	/**
 	 * This method initializes the behavior class.
@@ -115,9 +112,16 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			 Document docOutput = getModel("getCustomerDetails_output").getOwnerDocument();
 			 Element eleCustomerContactDetails_output = docOutput.getDocumentElement();
 			 masterCustomerID = eleCustomerContactDetails_output.getAttribute("CustomerID");
+			 String OrgName= YRCXmlUtils.getAttributeValue(eleCustomerContactDetails_output, "/Customer/BuyerOrganization/@OrganizationName");
+			 String[] trimCustIDArray = masterCustomerID.split("-");
+			 String trimCustID = trimCustIDArray[1];
+			 CustomerName = OrgName.concat("(").concat(trimCustID).concat(")");
+			 
+			 customerkey = eleCustomerContactDetails_output.getAttribute("CustomerKey");
+			 XPXUtils.setCustomerKey(customerkey);
 			 XPXUtils.setMasterCustomerID(masterCustomerID);
 			 YRCApiContext customerCTX = new YRCApiContext();
-			 setCustomerID(masterCustomerID);
+			 XPXUtils.setCustomerName(CustomerName);
 			 NodeList nodList=eleCustomerContactDetails_output.getElementsByTagName("CustomerContact");
 			 ArrayList eSalesRepList = new ArrayList();
 			 for(int i=0;i<nodList.getLength();i++){
@@ -149,6 +153,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		 }
 		 super.postSetModel(model);
 	 }
+	
+
 	/**
 	 * Create and return the binding data for advanced table columns added to the tables.
 	 */
@@ -238,4 +244,6 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		{		
 			return masterCustomerID = masterCustomerID; 
 		}
+			
+
 }
