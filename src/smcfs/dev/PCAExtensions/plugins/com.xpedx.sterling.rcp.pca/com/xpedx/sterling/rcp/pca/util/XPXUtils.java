@@ -37,8 +37,12 @@ public class XPXUtils {
 	public static String CHARGE_TYPE= "M";
 	public static String LEGACY_PRODUCT_TYPE= "P";
 	public static  HashMap<String, String> divisionMap = new HashMap<String, String>();
+	public static  HashMap<String, String> SorteddivisionMap = new HashMap<String, String>();
 	public static  Element orgList = YRCXmlUtils.createDocument("OrganizationList").getDocumentElement();
 	public static String masterCustomerID ;
+	public static String CustomerName;
+	public static String customerKey;
+	public static Element elemModel;
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -481,6 +485,7 @@ public class XPXUtils {
 			String orgCode=ele.getAttribute("OrganizationCode");
 			String OrganizationName=ele.getAttribute("OrganizationName");
 			divisionMap.put(orgCode, OrganizationName);
+			SorteddivisionMap.put(OrganizationName, orgCode);
 			
 		}
 	}
@@ -563,6 +568,10 @@ public class XPXUtils {
 		orgList = outXml;
 	}
 	
+	public static void getOrganizationListElemForUser(Element outXml) {
+		orgList = outXml;
+	}
+	
 	/**
 	 * Used to open a specified URL (with Query Scring)in the System Browser.
 	 * 
@@ -614,5 +623,29 @@ public class XPXUtils {
 
 	public static void setMasterCustomerID(String masterCustomerID) {
 		XPXUtils.masterCustomerID = masterCustomerID;
+	}
+
+	public static String getCustomerName() {
+		return CustomerName;
+	}
+
+	public static void setCustomerName(String customerName) {
+		XPXUtils.CustomerName = customerName;
+	}
+
+	public static Element getElemModel() {
+		return elemModel;
+	}
+
+	public static void setElemModel(Element elemModel) {
+		XPXUtils.elemModel = elemModel;
+	}
+
+	public static String getCustomerKey() {
+		return customerKey;
+	}
+
+	public static void setCustomerKey(String customerKey) {
+		XPXUtils.customerKey = customerKey;
 	}
 }
