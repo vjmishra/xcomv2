@@ -9,13 +9,18 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.internal.win32.DOCINFO;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -37,10 +42,12 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	private XPXMyItemsReplacementToolPanel page;
 	private static final String COMMAND_GET_TEAM_LIST="getTeamList";
 	public static final String PAGINATION_STRATEGY_FOR_MIL_REPTOOL_SEARCH = GENERIC_PAGINATION_STRATEGY;
-	private static final String COMMAND_GET_LIST_OF_MY_ITEMS_LISTS="getListOfXPEDXMyItemsLists";
+	private static final String COMMAND_GET_LIST_OF_MY_ITEMS_LISTS="XPXGetBothMyItemsList";
 	private String defaultOrgCode ;
 	public ArrayList parentcustomer = new ArrayList();
+	public ArrayList arrListKey = new ArrayList();
 	public int numberOfCustomer;
+	public Element elemreplaceModel;
 	public XPXMyItemsReplacementToolPanelBehavior(Composite ownerComposite, String formId) {
         super(ownerComposite, formId);
         this.page=(XPXMyItemsReplacementToolPanel) ownerComposite;
@@ -49,15 +56,16 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 		this.getXpxPaginationData().setSortColumn("Name");
 		this.defaultOrgCode = "";
 		this.setOrganizationList(XPXUtils.orgList);
+		XPXCacheManager.getInstance().getDivisionList(getModel("UserNameSpace").getAttribute("DataSecurityGroupId"), this);
 		YRCCommand command = YRCCommandRepository.getCommand((new StringBuilder()).append(getFormId()).append(COMMAND_GET_LIST_OF_MY_ITEMS_LISTS).toString());
 		//System.out.println("Command's API name is "+command.getCommandAPIName());
 		this.getXpxPaginationData().setApiName(command.getCommandAPIName());//getXPEDX_MyItemsList_List_Hdr service
 		this.getXpxPaginationData().setIsFlow("Y");
 		
 		//Set the model data. This is a pre-requisite before calling the handlePaginationOutput method
-		setSrcModelName("XPEDXMyItemsListList");
-		setRootListElemName("XPEDXMyItemsListList");
-		setRepeatingElemName("XPEDXMyItemsList");
+		setSrcModelName("XpedxMilBothLstList");
+		setRootListElemName("XpedxMilBothLstList");
+		setRepeatingElemName("XpedxMilBothLst");
 		
 		initBehavior();
 	}
@@ -72,6 +80,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 		
 	    loadIntialDataAndSetModel();
 	    this.getCustomers("MC");
+	    
 	    //getTeamList();
 	}
 	
@@ -118,19 +127,19 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
     
 	public void search() {
 		
-		Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");	
+		Element eleXPEDXMyItemsList = elemreplaceModel;	
     	
     	
     	
     //	String strDivisionID = YRCXmlUtils.getAttributeValue(eleXPEDXMyItemsList, "XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/@DivisionID");
     	
     		// If DivisionID is void Remove Share List element.
-    		Element eleXPEDXMyItemsListShareList = YRCXmlUtils.getChildElement(eleXPEDXMyItemsList, "XPEDXMyItemsListShareList");
+    	/*	Element eleXPEDXMyItemsListShareList = YRCXmlUtils.getChildElement(eleXPEDXMyItemsList, "XPEDXMyItemsListShareList");
     		if(!YRCPlatformUI.isVoid(eleXPEDXMyItemsListShareList)){
     			eleXPEDXMyItemsListShareList.getParentNode().removeChild(eleXPEDXMyItemsListShareList);
-    		}
+    		}*/
     	
-    	setCustomerPathAttribute(eleXPEDXMyItemsList);
+   // 	setCustomerPathAttribute(eleXPEDXMyItemsList);
 
 		this.getXpxPaginationData().setInputXml(eleXPEDXMyItemsList.getOwnerDocument());
 		super.search();
@@ -169,7 +178,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
         		String strBillToCustomerID = (String) parentcustomer.get(1);
            		String strShipToCustomerID = (String) parentcustomer.get(0);
            		
-               		if (strMasterCustomerID.isEmpty()) {
+               		if (strMasterCustomerID ==null) {
         			// CustomerPath is null
         			System.out.println("customer path is null");
 
@@ -202,7 +211,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
         		
            		
         		
-               		if (strMasterCustomerID.isEmpty()) {
+               		if (strMasterCustomerID ==null) {
         			// CustomerPath is null
         			System.out.println("customer path is null");
 
@@ -254,24 +263,52 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
         		String apiname = apinames[i]; 
         		if ( YRCPlatformUI.equals(apiname, "getListOfXPEDXMyItemsLists")) {
 			    	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
-		    	} 
+			    	Document docOutput = ctx.getOutputXmls()[i];
+			    	Element eleOutput = docOutput.getDocumentElement();
+			    	System.out.println(YRCXmlUtils.getString(eleOutput));
+			    	
+			    	ArrayList listParentCustomers = YRCXmlUtils.getChildren(eleOutput, "Customer");
+					if (!YRCPlatformUI.isVoid(listParentCustomers) ) {
+					
+					for (int y=0; y<listParentCustomers.size(); y++){
+					Element customerEle = (Element)listParentCustomers.get(y);
+					String CustomerIDValue=YRCXmlUtils.getAttribute(customerEle,"CustomerID");		
+					parentcustomer.add(CustomerIDValue);
+					numberOfCustomer = parentcustomer.size(); 
+					System.out.println("Testing*****************************" + parentcustomer.size());
+					
+					
+					Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
+					YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
+					}
+
+		    	} }
 		    	else if(YRCPlatformUI.equals(apiname, "getPage")){
         			Document docOutput = ctx.getOutputXmls()[i];
 					Element eleOutput = docOutput.getDocumentElement();
 					if (eleOutput != null) {
 						//Get the repeating elements and set their Action attribute
-						NodeList listMyItemsList = (NodeList) YRCXPathUtils
+						NodeList XpedxMilBothLst = (NodeList) YRCXPathUtils
 								.evaluate(eleOutput, "./Output/"
 										+ getRootListElemName() + "/"
 										+ getRepeatingElemName(),
 										XPathConstants.NODESET);
-						if (listMyItemsList != null
-								&& listMyItemsList.getLength() > 0) {
+						if (XpedxMilBothLst != null
+								&& XpedxMilBothLst.getLength() > 0) {
 
-							for (int k = 0; k < listMyItemsList.getLength(); k++) {
-								Element eleMyItemsList = (Element) listMyItemsList
+							for (int k = 0; k < XpedxMilBothLst.getLength(); k++) {
+								Element eleMyItemsList = (Element) XpedxMilBothLst
 										.item(k);
 								eleMyItemsList.setAttribute("Replace", "Y");
+								String sharePrivate = eleMyItemsList.getAttribute("SharePrivate");
+								String createUserId = eleMyItemsList.getAttribute("Createuserid");
+								if(sharePrivate != ""){
+									eleMyItemsList.setAttribute("ListType", createUserId);
+									
+								}
+								else{
+									eleMyItemsList.setAttribute("ListType", "Shared");
+								}
 							}
 						}
 						//This is an inherited method which sets/replaces the model used to display the Paginated results.
@@ -313,7 +350,18 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 		    		String messageKey=resSuccessValue+" My Item Lists Updated.";
 		    		YRCPlatformUI.showInformation("Information", messageKey);
 		    		}
+		    		
 		    	}
+		    	else if("XPXGetDivisionsManagedByTeam".equals(apiname)){
+					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
+					
+					setModel("Divisions",eleOutput);
+	    		}
+		    	else if("XPXGetBothMyItemsList".equals(apiname)){
+					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
+					
+					setModel("XpedxMilBothLstList",eleOutput);
+	    		}
         	}
     	}
     }
@@ -347,8 +395,22 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	}*/
 
 	private void handleSearchApiCompletion(Element eleOutput) {
+		ArrayList<Element> listParentCustomers = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");;
+		if (!YRCPlatformUI.isVoid(listParentCustomers) ) {
 		
-		ArrayList<Element> list = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");;
+		for (int y=0; y<listParentCustomers.size(); y++){
+		Element customerEle = (Element)listParentCustomers.get(y);
+		System.out.println("" + customerEle.getAttribute("MyItemsListKey"));
+		String listKeyValue=customerEle.getAttribute("MyItemsListKey");		
+		arrListKey.add(listKeyValue);
+		Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
+		YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
+		}
+		System.out.println("The list Key array is :" +arrListKey);
+		prepareInputXML(arrListKey) ;
+
+	}
+		ArrayList<Element> list = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
 		for (Element eleXPEDXMyItemsList : list) {
 			eleXPEDXMyItemsList.setAttribute("Replace", "Y");
 		}
@@ -564,8 +626,8 @@ private void updateModelWithParentInfo(Element outXml) {
 		Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
 		YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
 		}
-		
-		getFirstPage();
+		testmethod();
+		//getFirstPage();
 		
 		/*if ("MC".equals(suffixType)) {
 			Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
@@ -625,5 +687,57 @@ public void getParentCustomers() {
 	
 }
 
+public void addSelectedDivisions(SelectionEvent e) {
+	Widget ctrl = e.widget;
+    String ctrlName = (String)ctrl.getData("name");
+    if(ctrlName != null)
+    {
+    	TableItem tblItems[] = page.getTblDivisions().getSelection();
+        if(tblItems.length > 0){
+        	for(int i = 0; i < tblItems.length; i++){
+        	Element eleDetailsInput = (Element)tblItems[i].getData();
+        	System.out.println(eleDetailsInput.getAttribute("OrganizationCode"));
+        	}
+			}
+        }
+    
+}
+public void testmethod(){
+	Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");	
+    		Element eleXPEDXMyItemsListShareList = YRCXmlUtils.getChildElement(eleXPEDXMyItemsList, "XPEDXMyItemsListShareList");
+    		if(!YRCPlatformUI.isVoid(eleXPEDXMyItemsListShareList)){
+    			eleXPEDXMyItemsListShareList.getParentNode().removeChild(eleXPEDXMyItemsListShareList);
+    		}
+    	
+    	setCustomerPathAttribute(eleXPEDXMyItemsList);
 
+		
+		
+		callApi("getListOfXPEDXMyItemsLists",eleXPEDXMyItemsList.getOwnerDocument());
+}
+public void prepareInputXML(ArrayList arrListKey) {
+      elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+                .getDocumentElement();
+    
+    Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+    Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+    
+    for ( int i=0; i<arrListKey.size();i++) {
+          String listKey = (String) arrListKey.get(i);
+          if (listKey != null && listKey != " ") {
+                Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+                attrName.setAttribute("Name", "MyItemsListKey");
+                attrName.setAttribute("Value", listKey);
+                attrOr.appendChild(attrName);
+          }
+
+    }
+
+    Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+    setModel(elemreplaceModel);
+    this.elemreplaceModel = elemreplaceModel;
+    getFirstPage();
+    //System.out.println("The input XML is " +elemModel);
+   // callApi("XPXGetBothMyItemsList",elemModel.getOwnerDocument());
+   }
 }
