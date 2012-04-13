@@ -16,14 +16,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Element;
 
+import com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreenBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXSortListener;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCCellModifier;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
+import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
 import com.yantra.yfc.rcp.IYRCTableImageProvider;
+import com.yantra.yfc.rcp.YRCComboBindingData;
 import com.yantra.yfc.rcp.YRCConstants;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCTableBindingData;
@@ -37,6 +41,22 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	private static final String QTY = "Qty";
 
 	private static final String QTY_OLD_VALUE = "QtyOldValue";
+	
+	private static final String LINEPO = "ItemPoNumber";
+
+	private static final String LINEPO_OLD_VALUE = "linePOOldValue";
+	
+	private static final String JOBID_OLD_VALUE = "JobIDOldValue";
+	private static final String JOBID = "JobId";
+
+	private static final String UDF1_OLD_VALUE = "udf1OldValue";
+	private static final String UDF1 = "ItemCustomField1";
+
+	private static final String UDF2_OLD_VALUE = "udf2OldValue";
+	private static final String UDF2 = "ItemCustomField2";
+
+	private static final String UDF3_OLD_VALUE = "udf3OldValue";
+	private static final String UDF3 = "ItemCustomField3";
 
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXMyItemsListDetailsPanel";
 	
@@ -54,7 +74,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 	private Text txtListName;
 	
-	private Text txtCustName;
+	private Label txtCustName;
 
 	private Label lblListDesc;
 	
@@ -62,7 +82,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 	private Text txtListDesc;
 	
-	private Text txtListType;
+	private Label txtListType;
 
 	private Composite pnlButtonHolder;
 
@@ -196,8 +216,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		lblCustName.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
 		lblCustName.setText("Customer_Name");
 
-		txtCustName = new Text(grpSearchFields, SWT.BORDER);
-		txtCustName.setTextLimit(80);
+		txtCustName = new Label(grpSearchFields, SWT.NONE);
 		txtCustName.setData("name", "txtCustName");
 		
 		lblListName = new Label(grpSearchFields, SWT.NONE);
@@ -218,8 +237,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		lblListType.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
 		lblListType.setText("List Type");
 
-		txtListType = new Text(grpSearchFields, SWT.BORDER);
-		txtListType.setTextLimit(20);
+		txtListType = new Label(grpSearchFields, SWT.NONE);
 		txtListType.setData("name", "txtListType");
 		
 		lblListDesc = new Label(grpSearchFields, SWT.NONE);
@@ -227,9 +245,9 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 		txtListDesc = new Text(grpSearchFields, SWT.BORDER);
 		txtListDesc.setLayoutData(gdListName);
-		txtListDesc.setData("yrc:customType", "Text");
-		txtListDesc.setData("name", "txtListDesc");
 		txtListDesc.setTextLimit(50);
+		txtListDesc.setData("yrc:customType", "Label");
+		txtListDesc.setData("name", "txtListDesc");
 		txtListType.setLayoutData(gdListName);
 	}	
 
@@ -280,7 +298,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		});
 		
 		btnEditSharedList = new Button(pnlButtonHolder, SWT.NONE);
-		btnEditSharedList.setText("Edit Share List");
+		btnEditSharedList.setText("Share List");
 		btnRemoveItems.setLayoutData(gridData10);
 		btnRemoveItems.setAlignment(SWT.BEGINNING);
 		btnEditSharedList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
@@ -362,73 +380,81 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[0].setFilterReqd(false);
         colBindings[0].setTargetAttributeBinding("XPEDXMyItemsItems/@Checked");
         
-         colBindings[1] = new YRCTblClmBindingData();
+        colBindings[1] = new YRCTblClmBindingData();
         colBindings[1].setAttributeBinding("Name");
-        colBindings[1].setColumnBinding("Product Name");
-//        colBindings[1].setSortReqd(true);
-/*        colBindings[1].setTargetAttributeBinding("ItemId");
-        colBindings[1].setAttributeBinding("@Desc;@ItemId" ); 
-        colBindings[1].setColumnBinding("Product Name");
-        colBindings[1].setKey("My_Item_List_Name_Key");
-*/      
+        colBindings[1].setColumnBinding("Item Desc");
         colBindings[1].setTargetAttributeBinding("XPEDXMyItemsItems/@Name");
         colBindings[1].setSortReqd(true);
         
-        
         colBindings[2] = new YRCTblClmBindingData();
         colBindings[2].setAttributeBinding("ItemId");
-        colBindings[2].setColumnBinding("SKU#");
-//        colBindings[1].setSortReqd(true);
+        colBindings[2].setColumnBinding("Item#");
+        colBindings[2].setSortReqd(true);
         colBindings[2].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemId");
         
         colBindings[3] = new YRCTblClmBindingData();
         colBindings[3].setAttributeBinding(QTY);
         colBindings[3].setColumnBinding("Quantity");
-//        colBindings[1].setSortReqd(true);
         colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
         
         colBindings[4] = new YRCTblClmBindingData();        
         colBindings[4].setAttributeBinding("XPEDXMyItemsItems/@UomId"); 
-        colBindings[4].setColumnBinding("UOM");        
-        colBindings[4].setSortReqd(true);
+        colBindings[4].setColumnBinding("UOM");    
         
-        colBindings[5] = new YRCTblClmBindingData();        
-        colBindings[5].setAttributeBinding("JobId"); 
-        colBindings[5].setColumnBinding("Cust.LineAcct#1");    
-        colBindings[5].setTargetAttributeBinding("XPEDXMyItemsItems/@JobId");
-        colBindings[5].setSortReqd(true);
-        
+        colBindings[5] = new YRCTblClmBindingData(); 
+        colBindings[5].setAttributeBinding("ItemPoNumber");
+        colBindings[5].setColumnBinding("LinePo#"); 
+        colBindings[5].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemPoNumber");
+
         colBindings[6] = new YRCTblClmBindingData();        
-        colBindings[6].setAttributeBinding("ItemCustomField1"); 
-        colBindings[6].setColumnBinding("Cust.LineField1");   
-        colBindings[6].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField1");
-        colBindings[6].setSortReqd(true);
-        
+        colBindings[6].setAttributeBinding("JobId"); 
+        colBindings[6].setColumnBinding("Line Account #");    
+        colBindings[6].setTargetAttributeBinding("XPEDXMyItemsItems/@JobId");
+
         colBindings[7] = new YRCTblClmBindingData();        
-        colBindings[7].setAttributeBinding("ItemCustomField2"); 
-        colBindings[7].setColumnBinding("Cust.LineField2");   
-        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField2");
-        colBindings[7].setSortReqd(true);
-        
-        
+        colBindings[7].setAttributeBinding("ItemCustomField1"); 
+        colBindings[7].setColumnBinding("UDF1");   
+        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField1");
+
         colBindings[8] = new YRCTblClmBindingData();        
-        colBindings[8].setAttributeBinding("ItemCustomField3"); 
-        colBindings[8].setColumnBinding("Cust.LineField3");  
-        colBindings[8].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField3");
-        colBindings[8].setSortReqd(true);
-        
-        colBindings[9] = new YRCTblClmBindingData(); 
-        colBindings[9].setAttributeBinding("ItemPoNumber");
-        colBindings[9].setColumnBinding("LinePo"); 
-        colBindings[9].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
-        colBindings[9].setSortReqd(true);
-        
+        colBindings[8].setAttributeBinding("ItemCustomField2"); 
+        colBindings[8].setColumnBinding("UDF2");   
+        colBindings[8].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField2");
+
+        colBindings[9] = new YRCTblClmBindingData();        
+        colBindings[9].setAttributeBinding("ItemCustomField3"); 
+        colBindings[9].setColumnBinding("UDF3");  
+        colBindings[9].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField3");
+
         colBindings[10] = new YRCTblClmBindingData();        
         colBindings[10].setAttributeBinding("ItemOrder"); 
         colBindings[10].setColumnBinding("Sequence");     
         colBindings[10].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
         colBindings[10].setSortReqd(true);
         
+        
+        /*colBindings[11] = new YRCTblClmBindingData();
+		colBindings[11].setName("clmAction");
+        colBindings[11].setAttributeBinding("@Action");
+        colBindings[11].setColumnBinding("Action");   
+        colBindings[11].setFilterReqd(true);
+        colBindings[11].setLabelProvider(new IYRCTableColumnTextProvider(){
+	
+			public String getColumnText(Element eleData) {
+				return "Select";
+			}
+        	
+        });
+        colBindings[11].setTargetAttributeBinding("XPEDXMyItemsItems/@Action");
+        YRCComboBindingData cbd = new YRCComboBindingData();
+        cbd = new YRCComboBindingData();
+		cbd.setCodeBinding("Id");
+		cbd.setListBinding("Actions:Actions/ActionList/Action");
+		cbd.setDescriptionBinding("DisplayName");
+		colBindings[11].setBindingData(cbd);
+		colBindings[11].setSortReqd(true);
+		*/
+		
         bindingData.setImageProvider(new IYRCTableImageProvider() {
         	public String getImageThemeForColumn(Object element, int columnIndex) {
         	Element orderline = (Element) element;
@@ -490,6 +516,208 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 						e.printStackTrace();
 					}	
 				}
+				if("@ItemPoNumber".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute(LINEPO_OLD_VALUE)){
+						oldValue = element.getAttribute(LINEPO_OLD_VALUE);
+					}
+					else {
+						oldValue = element.getAttribute(LINEPO);
+						if ("".equalsIgnoreCase(element.getAttribute(LINEPO))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(LINEPO))) {
+							oldValue = "0.00";
+							element.setAttribute(LINEPO_OLD_VALUE, oldValue);
+							element.setAttribute(LINEPO, value);
+						} else {
+							element.setAttribute(LINEPO_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+							element.setAttribute(IS_MODIFIED, "Y");
+						} else {
+							if(element.hasAttribute(IS_MODIFIED)){
+								element.removeAttribute(IS_MODIFIED);
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
+				if("@JobId".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute(JOBID_OLD_VALUE)){
+						oldValue = element.getAttribute(JOBID_OLD_VALUE);
+					}
+					else {
+						oldValue = element.getAttribute(JOBID);
+						if ("".equalsIgnoreCase(element.getAttribute(JOBID))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(JOBID))) {
+							oldValue = "0.00";
+							element.setAttribute(JOBID_OLD_VALUE, oldValue);
+							element.setAttribute(JOBID, value);
+						} else {
+							element.setAttribute(JOBID_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+							element.setAttribute(IS_MODIFIED, "Y");
+						} else {
+							if(element.hasAttribute(IS_MODIFIED)){
+								element.removeAttribute(IS_MODIFIED);
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
+				
+				if("@ItemCustomField1".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute(UDF1_OLD_VALUE)){
+						oldValue = element.getAttribute(UDF1_OLD_VALUE);
+					}
+					else {
+						oldValue = element.getAttribute(UDF1);
+						if ("".equalsIgnoreCase(element.getAttribute(UDF1))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(UDF1))) {
+							oldValue = "0.00";
+							element.setAttribute(UDF1_OLD_VALUE, oldValue);
+							element.setAttribute(UDF1, value);
+						} else {
+							element.setAttribute(UDF1_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+							element.setAttribute(IS_MODIFIED, "Y");
+						} else {
+							if(element.hasAttribute(IS_MODIFIED)){
+								element.removeAttribute(IS_MODIFIED);
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
+				
+				if("@ItemCustomField2".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute(UDF2_OLD_VALUE)){
+						oldValue = element.getAttribute(UDF2_OLD_VALUE);
+					}
+					else {
+						oldValue = element.getAttribute(UDF2);
+						if ("".equalsIgnoreCase(element.getAttribute(UDF2))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(UDF2))) {
+							oldValue = "0.00";
+							element.setAttribute(UDF2_OLD_VALUE, oldValue);
+							element.setAttribute(UDF2, value);
+						} else {
+							element.setAttribute(UDF2_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+							element.setAttribute(IS_MODIFIED, "Y");
+						} else {
+							if(element.hasAttribute(IS_MODIFIED)){
+								element.removeAttribute(IS_MODIFIED);
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
+				
+				if("@ItemCustomField3".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute(UDF3_OLD_VALUE)){
+						oldValue = element.getAttribute(UDF3_OLD_VALUE);
+					}
+					else {
+						oldValue = element.getAttribute(UDF3);
+						if ("".equalsIgnoreCase(element.getAttribute(UDF3))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(UDF3))) {
+							oldValue = "0.00";
+							element.setAttribute(UDF3_OLD_VALUE, oldValue);
+							element.setAttribute(UDF3, value);
+						} else {
+							element.setAttribute(UDF3_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+							element.setAttribute(IS_MODIFIED, "Y");
+						} else {
+							if(element.hasAttribute(IS_MODIFIED)){
+								element.removeAttribute(IS_MODIFIED);
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
+				if("@Action".equals(property)){
+					String oldValue = "0.00";
+					if(element.hasAttribute("UomId")){
+						oldValue = element.getAttribute("UomId");
+					}
+					else {
+						oldValue = element.getAttribute(UDF3);
+						if ("".equalsIgnoreCase(element.getAttribute(UDF3))
+								|| "null".equalsIgnoreCase(element
+										.getAttribute(UDF3))) {
+							oldValue = "0.00";
+							element.setAttribute(UDF3_OLD_VALUE, oldValue);
+							element.setAttribute(UDF3, value);
+						} else {
+							element.setAttribute(UDF3_OLD_VALUE, oldValue);
+						}
+					}
+					
+					try {
+							element.setAttribute(IS_MODIFIED, "Y");
+					} catch (NumberFormatException e) {
+						
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
 				
 				return value;
 			}
@@ -498,6 +726,13 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		String[] editors = new String[tblItemsList.getColumnCount()];
 		editors[0] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
 		editors[3] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[4] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[5] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[6] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[7] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[8] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[9] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[10] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		bindingData.setCellTypes(editors);
 		bindingData.setCellModifierRequired(true);
 		bindingData.setCellModifier(cellModifier);
@@ -576,35 +811,39 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		clmUom.setText("UOM");
 		clmUom.setWidth(50);
 		
+		TableColumn clmLinePo = new TableColumn(tblItemsList, SWT.NONE);
+		clmLinePo.setText("LinePo#");
+		clmLinePo.setWidth(50);
 		
 		TableColumn clmCustAccountField = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustAccountField.setText("Cust.LineAcct#1");
+		clmCustAccountField.setText("Line Account #");
 		clmCustAccountField.setWidth(50);
 		clmCustAccountField.setResizable(true);
 		
 		TableColumn clmCustField1 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField1.setText("Cust.LineField1");
+		clmCustField1.setText("UDF1");
 		clmCustField1.setWidth(50);
 		clmCustField1.setResizable(true);
 		
 		TableColumn clmCustField2 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField2.setText("Cust.LineField2");
+		clmCustField2.setText("UDF2");
 		clmCustField2.setWidth(50);
 		clmCustField2.setResizable(true);
 		
 		TableColumn clmCustField3 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField3.setText("Cust.LineField3");
+		clmCustField3.setText("UDF3");
 		clmCustField3.setWidth(50);
 		clmCustField2.setResizable(true);
 		
-		TableColumn clmLinePo = new TableColumn(tblItemsList, SWT.NONE);
-		clmLinePo.setText("LinePo");
-		clmLinePo.setWidth(50);
-
 		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
 		clmSequence.setText("Sequence");
 		clmSequence.setWidth(50);
 		clmSequence.setResizable(true);
+		
+		/*TableColumn clmAction = new TableColumn(tblItemsList, SWT.NONE);
+		clmAction.setText("Action");
+		clmAction.setWidth(50);
+		clmAction.setResizable(true);*/
 
 		tblItemsListGD.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		tblItemsListGD.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
