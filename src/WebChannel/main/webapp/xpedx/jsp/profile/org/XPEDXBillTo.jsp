@@ -12,8 +12,8 @@
 <s:set name='sdoc' value="getOutputDoc().getDocumentElement()" />
 <s:set name='extnElem' value='#xmlUtil.getChildElement(#sdoc, "Extn")'/>
 <s:set name='currencyList' value='#xmlUtil.getElements(#sdoc, "CustomerCurrencyList/CustomerCurrency")'/>
-<s:set name='billToAddressElem' value='billToAddress' />
-<s:set name='custPersonInfoElem' value='#xmlUtil.getChildElement(#billToAddressElem,"PersonInfo")'/>
+
+<s:set name='custPersonInfoElem' value='billToAddress'/>
 <s:set name='custPersonInfoExtnElem' value='#xmlUtil.getChildElement(#custPersonInfoElem,"Extn")'/>
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='wcUtil' />
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
