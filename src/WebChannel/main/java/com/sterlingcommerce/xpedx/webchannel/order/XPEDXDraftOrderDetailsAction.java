@@ -27,6 +27,7 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
@@ -1018,7 +1019,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						for(Element altItem: currentItemAltList)
 						{
 							if(!xpedxYouMightConsiderItems.contains(altItem))
-								xpedxYouMightConsiderItems.add(altItem);
+								addToYouMightAlsoConsiderItemList(altItem);
 						}
 					}
 				}
@@ -1036,7 +1037,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						for(Element upgradeItem: currentItemUpgradeList)
 						{
 							if(!xpedxYouMightConsiderItems.contains(upgradeItem))
-								xpedxYouMightConsiderItems.add(upgradeItem);
+								addToYouMightAlsoConsiderItemList(upgradeItem);
 						}
 					}
 				}
@@ -1054,7 +1055,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						for(Element usItem: currentItemUSList)
 						{
 							if(!xpedxYouMightConsiderItems.contains(usItem))
-								xpedxYouMightConsiderItems.add(usItem);
+								addToYouMightAlsoConsiderItemList(usItem);
 						}
 					}
 				}
@@ -2139,6 +2140,27 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			ArrayList<Element> xpedxYouMightConsiderItems) {
 		this.xpedxYouMightConsiderItems = xpedxYouMightConsiderItems;
 	}
+	
+	public void addToYouMightAlsoConsiderItemList(Element elm) {
+		String currItemId = SCXmlUtil.getAttribute(elm, "ItemID");
+		String unitOfMeasure = SCXmlUtil.getAttribute(elm, "UnitOfMeasure");
+		
+		try {
+			LOG.debug(" currItemId " + currItemId );
+			LOG.debug(" unitOfMeasure " + unitOfMeasure );
+		
+		if( (currItemId != null &&  currItemId.length() > 0 ) && (unitOfMeasure != null &&  unitOfMeasure.length() > 0 ) )
+			this.xpedxYouMightConsiderItems.add(elm) ;
+		else
+			LOG.warn("ItemId or UOM missing for Carousel Display Items. Item not added to list\n Details : " + SCXmlUtils.getString(elm) );
+		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		
+	}
+	
 	public ArrayList<Element> getXpedxPopularAccessoriesItems() {
 		return xpedxPopularAccessoriesItems;
 	}
@@ -2277,6 +2299,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				modificationsElem.appendChild(modificationElem);
 			}
 		}
-	}	
+	}
 	
 }
