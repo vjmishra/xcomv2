@@ -294,7 +294,7 @@ ul.checkboxTree li
 				    <td class="no-border-right">Phone 1:</td>
 				
 					    <td width="31%" class="no-border-right"> 	
-					     <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} && {#extnElem.getAttribute('ExtnPhone1')!=null} ">
+					     <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} ">
 					    <s:set id="Phone1FormatChange" name="Phone1FormatChange" value="%{#extnElem.getAttribute('ExtnPhone1')}" />								    				    
 				        <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Phone1FormatChange)'/>
 					    	</s:if>
@@ -314,7 +314,7 @@ ul.checkboxTree li
 				    <tr>
 					    <td class="no-border-right">Fax 1:</td>
 					    <td class="no-border-right">
-					    	 <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} && {#extnElem.getAttribute('ExtnFax1')!=null}">
+					    	 <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} ">
 					    	<s:set id="Fax1FormatChange" name="Fax1FormatChange" value="%{#extnElem.getAttribute('ExtnFax1')}" />									    
 				            <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Fax1FormatChange)'/>
 				            </s:if>
