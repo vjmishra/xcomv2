@@ -89,10 +89,16 @@ public class XPXSendUserUpdateEmailOnStatus implements YIFCustomApi{
 			log.debug("Email Request For Order Status:" + orderStatus);
 		}
 				
-		if(orderStatus != null && orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) 
-				|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_REJECTED_STATUS) 
-					|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_BACKORDERED_STATUS) 
-						|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS)) {
+		if(orderStatus != null && orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_REJECTED_STATUS)) { 
+			
+			/* 
+			 * This code has been commented as email functionality for the below status is not part of Phase I implementation. 
+			 * Uncomment it for Phase II so that email will be sent for the below status.
+			 **/
+			//	|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_SHIPPED_STATUS) 
+			//		|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_BACKORDERED_STATUS) 
+			//			|| orderStatus.equalsIgnoreCase(XPXLiterals.ORDER_CANCELLED_STATUS)
+			
 			// To get the fulfillment order details that needs to be sent in email.	
 			fOrderHeaderKey = rootElement.getAttribute("OrderHeaderKey");
 			if(!YFCObject.isNull(fOrderHeaderKey) && !YFCObject.isVoid(fOrderHeaderKey)) {
