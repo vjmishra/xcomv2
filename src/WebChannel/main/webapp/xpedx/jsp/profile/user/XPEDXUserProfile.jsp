@@ -2630,6 +2630,8 @@ a.underlink:hover { text-decoration: underline !important; }
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 
+<div class="error" id="errorMsgFor_secretAnswer" style="display : none; float: right"/>Please enter the same answers in both answer and confirm answer fields.</div>
+
 <s:hidden name='test_success' id="test_success" value="%{#_action.isSuccess()}" />
 	<s:if test="%{#_action.isSuccess() && #disableSinceSelfApprover }">
 		<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Profile has been updated successfully.</div> 	
