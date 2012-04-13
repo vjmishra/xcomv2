@@ -433,8 +433,9 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 	                TreeItem item = (TreeItem) event.item;
 	                boolean checked = item.getChecked();
 	                item.getText();
-	                
-	                customerarray.add(item.getText());	               
+	                if(checked==true){
+	                	customerarray.add(item.getText());
+	                }
 	               // checkItems(item, checked);     //--function used to check child nodes if parent is checked
 	               // checkPath( item.getParentItem(), checked, false); //--function used to check parent if all its child are checked
 	            }
@@ -457,7 +458,7 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 			String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
 			CustomerID=orgId;
 
-			iItem.setText(CustomerID+"|"+customerType);
+			iItem.setText(orgName+" ("+CustomerID+")");
 			iItem.setData("data", eleCust);
 			iItem.setItemCount(1);
 		}
@@ -497,7 +498,7 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 				else if("S".equalsIgnoreCase(customerType)){
 					CustomerID=orgId;
 				}
-				iiItem.setText(CustomerID+"|"+customerType);
+				iiItem.setText(orgName+" ("+CustomerID+")");
 				
 				iiItem.setData("data",eleCust);
 				iiItem.setItemCount(1);
