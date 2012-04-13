@@ -7140,7 +7140,11 @@ background-position:0 -64px;
 cursor:default;
 background-position:0 -96px;
 }
-
+/*Begin - Added by Mitesh Parikh for JIRA#3186*/
+.jcarousel-skin-xpedx .jcarousel-prev-hide-horizontal,.jcarousel-skin-xpedx .jcarousel-next-hide-horizontal{
+	visibility:hidden;
+}
+/*End - Added by Mitesh Parikh for JIRA#3186*/
 /*End <link media="all" type="text/css" rel="stylesheet" href="../xpedx/js/jcarousel/skins/xpedx/skin.css" />
 */
 
