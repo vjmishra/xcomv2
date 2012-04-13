@@ -15,6 +15,7 @@ import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 
@@ -27,12 +28,13 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	 private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
 	 public static final String CART_ERROR = "CartError";
 	 private static final String CHECKOUT_MINI_CART_MASHUP="checkoutOrderForMiniCart";
-	 
+	 XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	 public String execute()
 	 {
 		XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
 		 String returnValue = ERROR;
 		 Element orderLelement=null;
+		 xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 	        try
 	        {
 	        	Map<String, Element> outputMap=prepareAndInvokeMashups();
@@ -43,6 +45,12 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        		//check for cart errors to redirect it to cart page instead of checkout
 	        		boolean minOrderError = checkMinOrderFee(orderLelement);
 	        		if(minOrderError){
+	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+	        			XPEDXWCUtils.releaseEnv(wcContext);
+	        			return CART_ERROR;
+	        		}
+	        		boolean maxOrderError = checkMaxOrderFee(orderLelement);
+	        		if(maxOrderError){
 	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	        			XPEDXWCUtils.releaseEnv(wcContext);
 	        			return CART_ERROR;
@@ -62,7 +70,12 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        			XPEDXWCUtils.releaseEnv(wcContext);
 	        			return CART_ERROR;
 	        		}	        		
-	        		
+	        		boolean maxOrderError = checkMaxOrderFee(orderLelement);
+	        		if(maxOrderError){
+	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+	        			XPEDXWCUtils.releaseEnv(wcContext);
+	        			return CART_ERROR;
+	        		}
 	        	}
 	        	else if(getMashupIds().contains(DELETE_MINI_CART_MASHUP))
 	        	{
@@ -80,6 +93,42 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        XPEDXWCUtils.releaseEnv(wcContext);
 	        return returnValue;
 	}
+	 
+	 private boolean checkMaxOrderFee(Element orderLelement){
+		 boolean maxOrderError = false;
+		 String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
+		 float maxOrderAmt = 0;
+		 float orderTotal = 0;
+		 if(maxOrderAmountStr != null  && !"".equals(maxOrderAmountStr.trim()) &&
+					Float.parseFloat(maxOrderAmountStr)>0)
+			 maxOrderAmt = Float.parseFloat(maxOrderAmountStr);
+		 if(maxOrderAmt==0)
+		 {
+			 XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
+				if(billToElement != null )
+				{
+					maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
+					if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr.trim()))) &&
+							Float.parseFloat(maxOrderAmountStr)>0)
+					{
+						maxOrderAmt = Float.parseFloat(maxOrderAmountStr);
+					}
+				}
+		 }
+		 if(orderLelement != null){
+				//find the order total without tax
+				String orderTotalStr = SCXmlUtil.getXpathAttribute(orderLelement, "//Order/Extn/@ExtnTotOrdValWithoutTaxes"); 
+				
+				if (orderTotalStr != null && (!"".equals(orderTotalStr))) {
+					orderTotal = Float.parseFloat(orderTotalStr);
+				}
+				
+		}
+		if(maxOrderAmt != 0 && maxOrderAmt < orderTotal){
+				maxOrderError = true;
+			}
+		 return maxOrderError;
+	 }
 	
 	private boolean checkMinOrderFee(Element orderLelement) throws RemoteException {
 		boolean minOrderError = false;
