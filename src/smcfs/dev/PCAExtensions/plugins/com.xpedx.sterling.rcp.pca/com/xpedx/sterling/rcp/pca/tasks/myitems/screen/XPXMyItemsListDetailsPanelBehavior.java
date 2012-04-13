@@ -39,7 +39,9 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private Element eleMyItemsList;
 	private Element outItemDetailXml;
 	private String updated = null;
-	
+	/*public static final String ACTION_EDIT = "EDIT";
+	public static final String ACTION_DELETE = "DELETE";*/
+
 	//Making UOM Column A ComboBox
 	
 	public XPXMyItemsListDetailsPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
@@ -48,7 +50,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
         inpuElement = (Element) inputObject;
         myItemsListKey = inpuElement.getAttribute("MyItemsListKey");
         loadItemsList();
-        String custName = XPXMyItemsSearchListScreen.getMyBehavior().customerName;
+        String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomerName");
         setFieldValue("txtCustName", custName);
         setControlEditable("clmCustAccountField", true);
        }
@@ -58,9 +60,11 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		String enterpriseKey = (String)YRCPlatformUI.getUserElement().getAttribute("EnterpriseCode");
 		XPXCacheManager.getInstance().getUomList(enterpriseKey, this);
 		
-		String[] apinames = {/*"XPXGetSKUDetailsService",*/"getXPEDXMyItemsListDetail"};
+		 Document docActions = YRCXmlUtils.createFromString("<Actions></Actions>");
+	     setModel(docActions.getDocumentElement());
+		String[] apinames = {"XPXGetItemUOMMasterList","getXPEDXMyItemsListDetail"};
 		Document[] docInput = {
-				//YRCXmlUtils.createFromString("<ItemUOMMaster CallingOrganizationCode='" + YRCXmlUtils.getAttribute(this.inpuElement, "EnterpriseKey") + "'/>"),
+				YRCXmlUtils.createFromString("<ItemUOMMaster CallingOrganizationCode='xpedx'/>"),
 				YRCXmlUtils.createFromString("<XPEDXMyItemsList MyItemsListKey='"+myItemsListKey+"'/>")		
 				
 				//YRCXmlUtils.createFromString("<Item  CallingOrganizationCode='xpedx' ItemID='"+myItemsListKey+"'  GetAvailabilityFromCache='Y'  />")
@@ -88,7 +92,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 					String apiname = apinames[i];
 					
 					//Added for JIRA 1155 - To get UOM Master List
-					if ("XPXGetSKUDetailsService".equals(apiname)) {						
+					if ("XPXGetItemUOMMasterList".equals(apiname)) {						
 						Element outUOMXml = ctx.getOutputXmls()[i].getDocumentElement();
 						NodeList nl = outUOMXml.getElementsByTagName("ItemUOMMaster");
 						if(!YRCPlatformUI.isVoid(nl))
@@ -116,12 +120,16 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 					}
 					else if ("getCompleteItemList".equals(apiname)) {
 						//Commented unnecessary code below
-						/*Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						int itemlist = ctx.getOutputXmls().length;*/
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						/*int itemlist = ctx.getOutputXmls().length;*/
+						String itemID = null;
+						String uomIds =null;
 						Element item = ctx.getOutputXmls()[i].getDocumentElement();
 						Element eleItemsList1 = YRCXmlUtils.getChildElement(item, "Item");
+						ArrayList uomList = new ArrayList(); 
 						if(eleItemsList1!=null) {
-							String itemID = eleItemsList1.getAttribute("ItemID");
+							itemID = eleItemsList1.getAttribute("ItemID");
+							//uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
 							Element primaryInfoElem =  YRCXmlUtils.getChildElement(eleItemsList1, "PrimaryInformation");
 							if(primaryInfoElem!=null)
 							{
@@ -136,9 +144,29 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 							temp.getAttribute("Description");
 							itemDescList.put(ItemID, temp.getAttribute("ShortDescription"));
 						}*/
-						
-						//getCompleteItemListAPICall(itemList);
-						
+						/*Element listUom = YRCXmlUtils.getChildElement(eleItemsList1, "AlternateUOMList");
+						ArrayList<Element> listItemsUOM = YRCXmlUtils.getChildren(listUom, "AlternateUOM");
+						for (Element eleItem : listItemsUOM) {
+							eleItem.getAttribute("UnitOfMeasure");
+							uomList.add(eleItem.getAttribute("UnitOfMeasure"));
+							//eleItem.setAttribute("DisplayName",(String) masterUOMList.get(uomIds));
+						}
+						//getCompleteItemListAPICall(itemList);UnitOfMeasure
+						Element actions = getModel("Actions");
+						Element uomElement = YRCXmlUtils.createChild(actions, "ActionList");
+						for(int uom =0; uom < uomList.size() ; uom++){
+							Element uomElement1 = YRCXmlUtils.createChild(actions, "Action");
+							uomElement1.setAttribute("DisplayName", (String) masterUOMList.get(uomList.get(uom)));
+							
+							uomElement1.setAttribute("Id", (String) masterUOMList.get(uomList.get(uom)));
+							uomElement.appendChild(uomElement1);
+							
+						}*/
+						/*ArrayList<Element> listItemsActions = YRCXmlUtils.getChildren(actions, "Action");
+						for (Element eleItem : listItemsActions) {								
+							eleItem.setAttribute("DisplayName",(String) masterUOMList.get(uomIds));
+						}*/
+						//setModel(actions);
 						//if(duplicateitemList.size() == itemList.size()){
 						//Element xmls = this.outItemDetailXml;
 						/* Removed unnecessary code ENDS */
@@ -159,6 +187,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 								String itemsId = eleItem.getAttribute("ItemId");
 								if(itemDescList!=null && itemDescList.containsKey(itemsId))
 									eleItem.setAttribute("Name", (String) itemDescList.get(itemsId));
+									eleItem.setAttribute("Action","");
 							}							
 							
 						//} - Removed unnecessary code
@@ -312,11 +341,17 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
 		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
 		for(int i=0;i<nlItems.getLength();i++){
+			
 			Element tempElement =(Element)nlItems.item(i);
 			Element xPEDXMyItemsItems= YRCXmlUtils.createChild(xPEDXMyItemsItemsList, "XPEDXMyItemsItems");
 			xPEDXMyItemsItems.setAttribute("MyItemsKey", tempElement.getAttribute("MyItemsKey"));
 			xPEDXMyItemsItems.setAttribute("MyItemsListKey", myItemsListKey);
 			xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("Qty"));
+			xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
+			xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
+			xPEDXMyItemsItems.setAttribute("ItemCustomField1",tempElement.getAttribute("ItemCustomField1"));
+			xPEDXMyItemsItems.setAttribute("ItemCustomField2",tempElement.getAttribute("ItemCustomField2"));
+			xPEDXMyItemsItems.setAttribute("ItemCustomField3",tempElement.getAttribute("ItemCustomField3"));
 		}
 		return updateXPEDXMyItemsListInput.getOwnerDocument();
 	}
