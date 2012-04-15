@@ -1103,7 +1103,9 @@ var selectedShipCustomer = null;
         var xpedxSTCity=document.FormToPost.xpedxSTCity.value;
         var xpedxSTState=document.FormToPost.xpedxSTState.value;
         var xpedxSTZip=document.FormToPost.xpedxSTZip.value;
-    	var checkboxChecked = setAsDefault.checked;
+//var checkboxChecked = setAsDefault.checked;
+    	var checkboxChecked = document.getElementById("setAsDefault").checked;
+    	
         if(selectedCustomer != null){
             document.body.style.cursor = 'wait';
             Ext.Ajax.request({
