@@ -2,24 +2,24 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
-
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/mini-cart.css" /> 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/change-ship-to.css" />
- <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
-  <script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	
-  <!--<script type="text/javascript" src="/swc/xpedx/js/common/request.js"></script>	
-  <script type="text/javascript" src="/swc/xpedx/js/common/applicationinfo.js"></script>
-  <script type="text/javascript" src="/swc/xpedx/js/common/userpreferences.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/mini-cart.css" /> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/change-ship-to.css" />
+ <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" />
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>	
+  <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/request.js"></script>	
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/applicationinfo.js"></script>
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/userpreferences.js"></script>
   
-  <script type="text/javascript" src="/swc/xpedx/js/common/scuiplat.js"></script>
-  <script type="text/javascript" src="/swc/xpedx/js/common/debugger.js"></script> !-->
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/scuiplat.js"></script>
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/debugger.js"></script> !-->
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
 
 <script type="text/javascript">
 	Ext.Ajax.timeout = 240000;
@@ -41,12 +41,12 @@
 	
 	
 </script>	
-<script type="text/javascript" src="/swc/xpedx/js/cluetip/jquery.cluetip.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip.js"></script>
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/css/order/mini-cart.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/mini-cart.css" media="screen" />
 	
 
 
@@ -66,7 +66,7 @@
 	}
 	#panel {
 	       height: 200px; width:200px; left:-23px; top:-47px; 
-	       display: none; z-index:10000; position:relative; background-image:url(/swc/xpedx/images/common/customer-block-hover.png); background-repeat:no-repeat;
+	       display: none; z-index:10000; position:relative; background-image:url(<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/customer-block-hover.png); background-repeat:no-repeat;
 	}
 	.slide {
 	       margin: 0;

@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -10,9 +12,9 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet"	href="../xpedx/css/global/ext-all.css" />
-<link media="all" type="text/css" rel="stylesheet"  href="../xpedx/css/global/swc.css" />
-<link media="all" type="text/css" rel="stylesheet"  href="../xpedx/css/theme/theme-xpedx_v1.2.css" />
+<link media="all" type="text/css" rel="stylesheet"	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc.css" />
+<link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/theme-xpedx_v1.2.css" />
 
 <script type="text/javascript">
 	
