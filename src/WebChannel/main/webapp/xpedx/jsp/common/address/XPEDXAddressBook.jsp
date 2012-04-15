@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <%
 /*
 This JSP is intended to be used as part of the Address Book component.  For more information on
@@ -8,7 +10,7 @@ com.sterlingcommerce.webchannel.common.address.GetAddressBookAction.java.
 */
 %>
 
-<script type="text/javascript" src="<s:url value='/swc/js/common/address/addressBook.js'/>" ></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/addressBook.js" ></script>
 <script type="text/javascript" language="JavaScript">
 
 var <s:property value="addressArrayName"/> = new Array();
@@ -61,7 +63,7 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 
 </script>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/common/address/addressBook.css'/>" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/common/address/addressBook.css" />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 
 <s:if test="!addressBook.isEmpty()">
