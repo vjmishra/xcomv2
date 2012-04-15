@@ -4,6 +4,7 @@
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <%@ taglib prefix="xpedx" uri="/WEB-INF/xpedx.tld"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -16,22 +17,22 @@
 <!-- INCLUDES GO HERE -->
 <!-- Version 1.1 Updated 8-18-10 -->
 <!-- begin styles. These should be the only three styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/CATALOG.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG.css" />
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
 </head>
@@ -281,7 +282,7 @@
 			
 			<div id="right-col-int" class="cat-landing" style="margin-top:0px;">
 				<div class="ad-float smallBody" style="margin-top: 0;">
-				<img class="float-left" height="4" width="7" alt="" src="/swc/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
+				<img class="float-left" height="4" width="7" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
 				 <br/>
 				<!-- Ad Juggler Tag Starts  -->
 				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
@@ -330,18 +331,18 @@
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script> 
 <script type="text/javascript" src="../xpedx/js/swc.js"></script>
 -->
-<script type="text/javascript" src="../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!-- carousel scripts js   -->
 
 
-<script type="text/javascript" src="../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
  
-<script type="text/javascript" src="../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <!--<script type="text/javascript" src="../xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript" src="../xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
 <script type="text/javascript" src="../xpedx/js/quick-add/quick-add.js"></script>
 
---><script type="text/javascript" src="../xpedx/js/quick-add/jquery.form.js"></script>
+--><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
 
 <!--<script type="text/javascript" src="../xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="../xpedx/js/pseudofocus.js"></script>-->

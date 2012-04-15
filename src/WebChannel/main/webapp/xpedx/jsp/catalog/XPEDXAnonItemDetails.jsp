@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 
 <div id="main-container">
@@ -282,7 +283,7 @@
 		style="border-top: 1px solid #CCCCCC; padding-top: 20px;">
 		<li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
 		<li style="float: right;"><a href="javascript:submitSL();"> <img
-			src="../xpedx/images/theme/theme-1/ui-buttons/ui-btn-save.gif"
+			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save.gif"
 			width="49" height="23" alt="Save" title="Save" /> </a></li>
 	</ul>
 
@@ -392,7 +393,7 @@
 						<s:property value='wCContext.storefrontId' />  Item #: <s:property value='%{#itemID}' />
 						<s:set name="certImage" value="#_action.getCertImagePath()" /> 
 								<s:if test='%{#certFlag=="Y"}'>
-									<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" />
+									<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" />
 								</s:if>
 					</div>
 		<s:if test='%{#isModelItem != "Y"}'>
@@ -504,9 +505,9 @@
 		</s:else> <s:if
 			test='%{#hasItemLargeImages != null && #hasItemLargeImages == "true"}'>
 			<script type="text/javascript"
-				src="<s:url value='/swc/js/component/lightbox.js' includeParams="none"/>"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox.js"></script>
 			<script type="text/javascript"
-				src="<s:url value='/swc/js/common/commonutils.js' includeParams="none"/>"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils.js"></script>
 			<script>
         	Ext.ux.Lightbox.register('a.imageViewer', true); // true to show them as a set
         	</script>
@@ -710,7 +711,7 @@
 		
 		</div>
 	</div>
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!-- BEGIN footer -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- END footer -->

@@ -76,7 +76,7 @@
 		<span style="font-size: 10px;" class="grey">Product Type</span>
 		<div style="display: inline;">
 		<div class="toggle"><img width="77" height="21" alt=""
-			src="../xpedx/images/catalog/view-all-narrow-by-drop-hover.png"
+			src="<s:property value='#util.staticFileLocation' />/xpedx/images/catalog/view-all-narrow-by-drop-hover.png"
 			style="display: inline; position: absolute; margin-top: -42px; margin-left: 82px;"></div>
 
 			<div id="viewAll" class=" favorita x-corners"
