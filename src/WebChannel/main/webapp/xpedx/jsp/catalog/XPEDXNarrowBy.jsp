@@ -57,7 +57,7 @@ function setStockItemFlag()
 						<div id="narrow_header2" class="header" style="background-color:#003399">
 						  <span class="float-right">
 						    <a href="#" class="expand-narrow-by" title="Show/Hide">
-						      <img src="../xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
+						      <img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
 						    </a>
 						  </span>					
 								  
@@ -118,7 +118,7 @@ function setStockItemFlag()
 			
 			
 				<s:set name='headercount' value='%{#headercount + 1}' />
-				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399"><span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide"><img src="../xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a></span>
+				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399"><span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide"><img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a></span>
 				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
 				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />
 				<s:property value='#ShortDescription1' id="facet" /></div>
