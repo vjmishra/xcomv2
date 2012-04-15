@@ -571,7 +571,7 @@
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
                 <param name="zipCode">${#parameters.zipCode}</param>
                 <param name="canCheckout">${#parameters.canCheckout}</param>
-                <param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
+               <!-- <param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param> -->
                 <param name="isEditOrder">${#parameters.isEditOrder}</param>
                 <param name="draft">${draft}</param>
             </result>
