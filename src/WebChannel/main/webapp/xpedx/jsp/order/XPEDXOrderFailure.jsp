@@ -15,7 +15,11 @@
 
 
 <!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 <link media="all" type="text/css" rel="stylesheet"	href="../xpedx/css/order/shipping-option.css" />
 <link media="all" type="text/css" rel="stylesheet"	href="../xpedx/css/order/draft-order-list.css" />
 <link media="all" type="text/css" rel="stylesheet"	href="../xpedx/css/order/shopping-cart-detail.css" />
