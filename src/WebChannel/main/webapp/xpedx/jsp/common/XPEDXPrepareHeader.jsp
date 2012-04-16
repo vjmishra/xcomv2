@@ -1505,7 +1505,7 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 			 		'width' 		: 750,
 			 		'height' 		: 505  
 				}).trigger('click');
-			} else if((!isSalesRep) && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+			} else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		
