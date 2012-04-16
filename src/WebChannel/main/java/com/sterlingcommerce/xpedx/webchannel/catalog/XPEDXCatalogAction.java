@@ -990,6 +990,21 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
+
+			//Added for performance of sortResultByAction
+			Document catDoc = getOutDoc();
+			if(catDoc!=null){
+				NodeList itemList = catDoc.getElementsByTagName("ItemList"); 
+				if(itemList != null) {
+					for(int i=0;i<itemList.getLength();i++)
+					{
+						Element _categoryElem=(Element)itemList.item(i);								
+						path=SCXmlUtil.getXpathAttribute(_categoryElem, "//ItemList/Item/CategoryList/Category/@CategoryPath");
+					}
+				}
+			}
+			// end of performance sortResultByAction
+			
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
