@@ -425,8 +425,7 @@ ul.checkboxTree li
 				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
 				            	 <a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 				            		<br/>
-						   
-				            	<span class="grey-italic">
+						            	<span class="grey-italic">
 				            	
 				            		<s:if test='%{#fmtCsr2Phone != ""}'>
 						           		<s:property value='%{#fmtCsr2Phone}'/><br/>
@@ -458,14 +457,15 @@ ul.checkboxTree li
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
-				            	<span class="grey-italic">
 				            	<br />
+								<a href="mailto:<s:property value="#csr2EMailID" />" ><s:property value="#csr2EMailID"/></a><br/>
+				            	
+								<span class="grey-italic">
 				            	<s:if test="%{#fmtCsr2Phone != ''}">
 				            		<s:property value="#fmtCsr2Phone"/>
 				            		 <br/>
 				            	</s:if>
-								<a href="mailto:<s:property value="#csr2EMailID" />" ><s:property value="#csr2EMailID"/></a>	<br/>
-				            	</span></td>				          	
+								</span></td>				          	
 				            </tr>
 	
 						</s:else>
