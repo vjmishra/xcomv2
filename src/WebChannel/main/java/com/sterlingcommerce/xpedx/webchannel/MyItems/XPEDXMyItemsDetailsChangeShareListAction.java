@@ -91,53 +91,56 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
 			
 			 Map<String ,Integer> customerIDCountMap=new HashMap<String ,Integer>();
-			for(int i=0;i<countCustomer.size();i++)
-			{
-				String str=countCustomer.get(i);
-				String customerIdCount[]=str.split("\\|");
-				if(customerIdCount != null)
-				{				
-					String totalChildCuntStr= customerIdCount[1];
-					if(totalChildCuntStr !=null && !"".equals(totalChildCuntStr.trim()))
-						customerIDCountMap.put(customerIdCount[0],Integer.valueOf(totalChildCuntStr));
-					else
-						customerIDCountMap.put(customerIdCount[0],0);
-						
-					
-					
-				}
-			}
-			Map<String,ArrayList<String>> parentCustmerMap=getChildCustomers();
-			ArrayList<String> customerIdList=new ArrayList<String>();
-			List<String> arrayList=Arrays.asList(customerIds);
-			for(int i=0;i<customerIds.length;i++)
-			{ 
-				ArrayList<String> selectedList=parentCustmerMap.get(customerIds[i]);
-				if(selectedList != null && parentCustmerMap.containsKey(customerIds[i]))
+			 if(customerIds != null && customerIds.length>0)
+			 {
+				 for(int i=0;i<countCustomer.size();i++)
 				{
-					
-					for(int j=0;j<selectedList.size();j++)
+					String str=countCustomer.get(i);
+					String customerIdCount[]=str.split("\\|");
+					if(customerIdCount != null)
+					{				
+						String totalChildCuntStr= customerIdCount[1];
+						if(totalChildCuntStr !=null && !"".equals(totalChildCuntStr.trim()))
+							customerIDCountMap.put(customerIdCount[0],Integer.valueOf(totalChildCuntStr));
+						else
+							customerIDCountMap.put(customerIdCount[0],0);
+							
+						
+					}	
+					}
+				
+				Map<String,ArrayList<String>> parentCustmerMap=getChildCustomers();
+				ArrayList<String> customerIdList=new ArrayList<String>();
+				List<String> arrayList=Arrays.asList(customerIds);
+				for(int i=0;i<customerIds.length;i++)
+				{ 
+					ArrayList<String> selectedList=parentCustmerMap.get(customerIds[i]);
+					if(selectedList != null && parentCustmerMap.containsKey(customerIds[i]))
 					{
-						if(arrayList.contains(selectedList.get(j)))
+						
+						for(int j=0;j<selectedList.size();j++)
 						{
-							customerIdList.add(selectedList.get(j));
+							if(arrayList.contains(selectedList.get(j)))
+							{
+								customerIdList.add(selectedList.get(j));
+							}
 						}
 					}
 				}
-			}
-			int actualLength=customerIds.length-new HashSet(customerIdList).size();
-			String _customerIds[]=new String[actualLength];
-			int idx=0;
-			for(int i=0;i<customerIds.length;i++)
-			{
-				if(!customerIdList.contains(customerIds[i]))
+				int actualLength=customerIds.length-new HashSet(customerIdList).size();
+				String _customerIds[]=new String[actualLength];
+				int idx=0;
+				for(int i=0;i<customerIds.length;i++)
 				{
-					_customerIds[idx]=customerIds[i];
-					idx += 1;
+					if(!customerIdList.contains(customerIds[i]))
+					{
+						_customerIds[idx]=customerIds[i];
+						idx += 1;
+					}
+						
 				}
-					
-			}
-			customerIds=_customerIds;
+				customerIds=_customerIds;
+			 }
 			//1 - Erase all the list
 			Element result = null;
 			
@@ -343,6 +346,8 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 	private Map<String,ArrayList<String>> getChildCustomers()
 	{
 		Map<String,ArrayList<String>> customersMap=new HashMap<String,ArrayList<String>>();
+		 if(customerIds != null && customerIds.length>0)
+		 {
 		for(int i=0;i<customerIds.length;i++)
 		{
 			String []_customerIds=customerPaths[i].split("\\|");
@@ -386,7 +391,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					}
 				}
 			}
-		}
+		}}
 		return customersMap;
 	}
 
