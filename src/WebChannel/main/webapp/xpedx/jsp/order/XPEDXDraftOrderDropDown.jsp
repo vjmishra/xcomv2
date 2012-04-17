@@ -2,13 +2,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <s:set name='_action' value='[0]' />
 
 <link media="all" type="text/css" rel="stylesheet"
-	href="<s:url value='/swc/xpedx/css/order/draft-order-list.css'/>" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/draft-order-list.css" />
 
 <script type="text/javascript"
-	src="<s:url value='/swc/js/order/draftOrderList.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/draftOrderList.js"></script>
 <script type="text/javascript">
 function loadCartDetails(){
 	document.doddForm.OrderHeaderKey.value = document.doddForm.draftOrders.value;

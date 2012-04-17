@@ -31,18 +31,18 @@
 
 <!-- begin styles. These should be the only three styles. -->
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!--  End Styles -->
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 
 
 <script type="text/javascript">
@@ -211,34 +211,34 @@ function setTotalPrice(val){
 
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
-<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 -->
-<link type="text/css" rel="stylesheet" href="/swc/xpedx/FlexBox/css/jquery.flexbox.css" />
+<link type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/FlexBox/css/jquery.flexbox.css" />
 <!-- carousel scripts js   -->
-<script type="text/javascript" src="/swc/xpedx/FlexBox/js/jquery.flexbox.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/FlexBox/js/jquery.flexbox.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
 <!-- Facy Box (Lightbox/Modal Window -->
-<!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>-->
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>-->
 
 <!-- Page Calls -->
 
 <!-- END head-calls.php -->
-<!-- <script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script> -->
-<script type="text/javascript" src="../xpedx/js/order/email.js"></script> 
-<script type="text/javascript" src="../xpedx/js/order/order.js"></script>
-<script type="text/javascript" src="../xpedx/js/order/orderSummary.js"></script>
-<script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
-<script type="text/javascript" src="../xpedx/js/order/addCoupon.js"></script>
+<!-- <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.datepicker.js"></script> -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/email.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderSummary.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAdjustment.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/addCoupon.js"></script>
 
 <script type="text/javascript">
 // See http://www.fairwaytech.com/flexbox
@@ -491,7 +491,7 @@ from session . We have customer Contact Object in session .
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
 		<span class="page-title">Checkout</span>
 	<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
-		<img src="../xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
+		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
 		</div>
 		<!--Commented for 3098  -->
 		<!-- <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div> -->
@@ -1206,7 +1206,7 @@ from session . We have customer Contact Object in session .
 			    	<div class="brand-info">
 			    		<p><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' />
 			    			<s:if test='#certFlag=="Y"'>
-							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
+							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
 			    		</p>			    		
 			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
@@ -1560,22 +1560,22 @@ from session . We have customer Contact Object in session .
 	id='updateURLid' namespace='/order' action='draftOrderSummaryUpdate' />
 <s:a id='updateURL' href='%{#updateURLid}' /></div>
 
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>-->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>-->
 
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script> 
-<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>-->
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="../xpedx/js/order/XPEDXOrderSummaryCommon.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>-->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/XPEDXOrderSummaryCommon.js"></script>
 
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 <script>
 //setTotalPrice('<s:property value="#totalPrice" />');

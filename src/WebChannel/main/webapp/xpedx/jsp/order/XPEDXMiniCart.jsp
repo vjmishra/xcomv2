@@ -9,8 +9,8 @@
 
 <s:bean name="com.sterlingcommerce.webchannel.utilities.UtilBean" id="util" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
-<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="xpedxWCUtils" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart.css" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil'
 	id='priceUtil' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' /> <!-- added for 2769jira -->
@@ -121,7 +121,7 @@
 	            <td  style="width: 17px;">
 	                <s:if test='!#isReadOnly'>
 	                    <s:a href="javascript:deleteLine('%{orderHeaderKey}', '%{#orderLineKey}')" id="delete_%{#orderLineKey}">
-	                    <img title="Remove" src="/swc/xpedx/images/icons/12x12_red_x.png" title="Remove"></s:a>
+	                    <img title="Remove" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png" title="Remove"></s:a>
 	                </s:if>
 	            </td>
 	            <td class="mini-cart-qty">
@@ -144,7 +144,7 @@
  				</td>
 	            <td>
 	            	<s:hidden name="orderLineReqUOMs" id="orderLineReqUOMs_%{#orderLineKey}" value="%{#orderLineTran.getAttribute('TransactionalUOM')}" />       
-	            	<s:property value='#xpedxWCUtils.getUOMDescription(#orderLineTran.getAttribute("TransactionalUOM"))'/>
+	            	<s:property value='#wcUtil.getUOMDescription(#orderLineTran.getAttribute("TransactionalUOM"))'/>
 				</td>
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>
