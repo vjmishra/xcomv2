@@ -95,7 +95,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		
 		//Load the cache/Fetch data from cache for organization list for the logged in user
 		this.setOrganizationList(XPXUtils.orgList);
-		String customerID = getFieldValue("txtCustomer");
+		/*String customerID = getFieldValue("txtCustomer");
 		YRCApiContext apiCtx = new YRCApiContext();
 		String[] apinames = {"getCustomerList"};
 		Document[] docInput = {
@@ -103,8 +103,8 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		};
 		apiCtx.setApiNames(apinames);
 		apiCtx.setInputXmls(docInput);
-		apiCtx.setFormId(getFormId());
-		callApi(apiCtx);
+		apiCtx.setFormId(getFormId());*/
+		//callApi(apiCtx);
     }
 	
 	
@@ -282,7 +282,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		
 		//Condition for retrieving personal list
 		if("P".equalsIgnoreCase(personalSelect)){
-				Document personalList  = 	YRCXmlUtils.createFromString("<XpedxMilBothLst Createuserid='"+createUserId+"'/>");										
+				Document personalList  = 	YRCXmlUtils.createFromString("<XpedxMilBothLst SharePrivate='"+createUserId+"'/>");										
 				this.getXpxPaginationData().setInputXml(
 		        		personalList);
 		       
