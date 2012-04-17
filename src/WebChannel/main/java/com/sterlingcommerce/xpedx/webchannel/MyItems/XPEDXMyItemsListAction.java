@@ -601,10 +601,16 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					if(itemCount.trim().equals("0.00")){
 						itemCount = "0";
 					}else{
-					StringTokenizer st = new StringTokenizer(itemCount, ".00"); 
+					/*StringTokenizer st = new StringTokenizer(itemCount, ".00"); 
                     while(st.hasMoreTokens()){
                     	itemCount = st.nextToken();
-                    }}
+                    }*/
+						String splited[]=itemCount.split(".00");						
+						if(splited[0] != null)
+						itemCount=splited[0];
+
+                    
+                    }
 					listSizeMap.put(listKey, itemCount);
 					listModifiedByMap.put(listKey, modifyUserId);
 				}
