@@ -34,10 +34,10 @@
 				        <!-- p><s:property value='%{#Article}'/></p -->
 				        <p><a href="<s:url namespace='/home' action='xpedxLearnMoreArticle'/>" class="hp-learn-more">Learn More »</a></p>			        
 				        <div style="height:25px; margin-right:10px; float:right; margin-left:65px; width:75px;">
-			            	<img style="padding-right:10px;" class="float-left" src="../xpedx/images/home/hp-announce-left-arrow.gif" 
+			            	<img style="padding-right:10px;" class="float-left" src="<s:property value='#util.staticFileLocation' />/xpedx/images/home/hp-announce-left-arrow.gif" 
 			            		width="13" height="14" alt="Previous" onclick="javascript:showPrevious('<s:property value='#articleLineCount.count'/>','<s:property value='articleLines.size'/>')"/>
 				            <span class="checkboxtxt"><s:property value='#articleLineCount.count'/> of <s:property value='articleLines.size'/></span> 
-				            <img class="float-right"  src="../xpedx/images/home/hp-announce-right-arrow.gif" 
+				            <img class="float-right"  src="<s:property value='#util.staticFileLocation' />/xpedx/images/home/hp-announce-right-arrow.gif" 
 				            	width="13" height="14" alt="Next" onclick="javascript:showNext('<s:property value='#articleLineCount.count'/>','<s:property value='articleLines.size'/>')"/> </div>
 			        </div>
 			        --%>
