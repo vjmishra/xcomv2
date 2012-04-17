@@ -3,6 +3,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -41,21 +43,21 @@
 <!-- begin styles. These should be the only three styles. -->
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 
 <!-- For the number formatting -->
 
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/MIL.css" />
-<link rel="stylesheet" type="text/css" href="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-<script type="text/javascript" src="../js/jquery.numeric.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MIL.css" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
 <script type="text/javascript">
 function maxLength(field,maxlimit) {
 	if (field.value.length > maxlimit) // if too long...trim it!
@@ -1598,18 +1600,18 @@ function showSharedListForm(){
                	<span class="page-title"> <s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:</span> 
                	&nbsp; <span><s:property value="listName" /> </span>
 				<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="font-weight:normal; font-size:12px;">
-				<img src="/swc/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
+				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
 		    
  		<%--             
  			<s:if test='editMode != true'>	 	
 				<div id="breadcumbs-list-name" > <span class="page-title"> My Items List:</span> &nbsp; <span><s:property value="listName" /> </span>
 				<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="font-weight:normal; font-size:12px;">
-				<img src="/swc/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
+				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
 			</s:if>
 			<s:else>
 				<div id="breadcumbs-list-name"><span class="page-title"> Edit My Items List: </span> &nbsp; <span><s:property value="listName" /> </span>
 				<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="font-weight:normal; font-size:12px;">
-				<img src="/swc/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
+				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a> </div>
 			</s:else> 
 			--%>
 			
@@ -1643,7 +1645,7 @@ function showSharedListForm(){
                         <div class="ad-float">
                         <div class="float-left smallBody">
 						
-						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="/swc/xpedx/images/mil/ad-arrow.gif" width="7" height="4" alt="" />advertisement</div>
+						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" width="7" height="4" alt="" />advertisement</div>
 						
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
@@ -1816,7 +1818,7 @@ function showSharedListForm(){
 									<li class="nomarginright">
 										<label>&nbsp;</label>
 										<input type="image"
-											src="/swc/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
+											src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
 											onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
 									</li>
 
@@ -1857,7 +1859,7 @@ function showSharedListForm(){
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>width="694"</s:if><s:else>width="524"</s:else>>
 								</table>
 								<div class="fFVVEM_wrap"><div style="display: none;" class="error" id="errorMsgForMandatoryFields_quick-add"></div></div> 
-                              <!-- <input id="btnQLAdd2Cart" type="image" src="/swc/xpedx/images/theme/theme-1/quick-add/addtolist.png" 
+                              <!-- <input id="btnQLAdd2Cart" type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtolist.png" 
 								class="add-to-cart-btn" onclick="add2List();return false;" /> -->
 								<a href="#" id="btnQLAdd2Cart" class="orange-ui-btn add-to-cart-btn" onclick="add2List();return false;"><span>Add to My Items List</span></a>
                             </s:form> <!-- CODE_END Quick Add - PN -->
@@ -2144,7 +2146,7 @@ function showSharedListForm(){
 								<s:if test="%{#showItemType}">
 									<p ><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" />									
 										<s:if test='#certFlag=="Y"'>
-											<img src="/swc/xpedx/images/catalog/green-e-logo_small.png" style="margin-left:0px; display: inline;">
+											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" style="margin-left:0px; display: inline;">
 										</s:if>
 									</p>
 									
@@ -2828,44 +2830,44 @@ function showSharedListForm(){
 	
 
 
-<!--<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
 -->
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 
-<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
-<script type="text/javascript" src="/swc/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>-->
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<!-- script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/modals/checkboxtree/jquery.checkboxtree.js"></script>-->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+<!-- script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script -->
 
-<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
---><!--<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
+--><!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
 
 --><!-- Lightbox/Modal Window --> 
-<!--<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
 <!-- page specific JS includes -->
-<script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXMyItemsDetails.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/MyItems/XPEDXAddToCartAndAvailability.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
-<!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXMyItemsDetails.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXAddToCartAndAvailability.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
+<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/ajaxValidation.js"></script>
 -->
-<script type="text/javascript" src="../js/jquery.numberformatter-1.1.0.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numberformatter-1.1.0.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI.js"></script>
 </body>
 </html>
