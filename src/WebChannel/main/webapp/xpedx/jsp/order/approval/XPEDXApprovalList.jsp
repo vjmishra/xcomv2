@@ -357,7 +357,7 @@
 	                                    	<span style="padding-left: 1.5em;"></span>
 											&nbsp;To&nbsp;&nbsp;
 												<s:hidden id="initialToDateString" value="%{getInitialToDateString()}" />
-	                                   	<s:textfield name='submittedTSTo' theme="simple" size="15" cssClass='calendar-input-fields datepicker' value="%{#parameters.submittedTSTo}" onchange="javascript:searchTerm_onclick()" id="ToDate"/>
+	                                   	<s:textfield name='submittedTSTo' theme="simple" size="15" cssClass='calendar-input-fields datepicker' value="%{#parameters.submittedTSTo}"  id="ToDate"/>
 													 &nbsp; (mm/dd/yyyy)</td>
 													 <td colspan="2"></td>
 													 <!-- <td> Amount: </td>
