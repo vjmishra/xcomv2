@@ -2,6 +2,9 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
+
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 
@@ -21,10 +24,10 @@
 		<input type="radio" name="itemListRadio" id="itemListRadio" value="<s:property value="#listDetail.getAttribute('MyItemsListKey')"/>"
 		onclick='javascript:currentAadd2ItemList =  this; currentAadd2ItemListIndex = "<s:property value='#listIndex.index'/>";' />
 		</td><td>&nbsp;</td><td><s:if test="#listDetail.getAttribute('SharePrivate').length()>0">
-		     <img src="<s:url value='/xpedx/images/theme/theme-1/20x20_personal_list.png'/>" alt="List Img" />
+		     <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_personal_list.png" alt="List Img" />
 		</s:if>
 		<s:else>
-		    <img src="<s:url value='/xpedx/images/theme/theme-1/20x20_shared_list.png'/>" alt="List Img" />
+		    <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_shared_list.png" alt="List Img" />
 		</s:else>
 		</td><td>&nbsp;</td><td><s:property value="#listDetail.getAttribute('ListName')"/></td>
 		</tr>

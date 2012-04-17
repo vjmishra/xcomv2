@@ -2,11 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
+
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
     This is to avoid a defect in Struts that's creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 
 <table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0">
@@ -68,7 +71,7 @@
 <s:set name='currency' value='#priceCurrencyCode'/>
 								
 <tbody>
-		<tr style="border-top: 0px none; background:url('../images/global/dot-gray.gif') repeat-x scroll left center;">
+		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<td colspan="3"><i><span>Availability</i></span></td>
 			<s:if test="%{#_action.getValidateOM() == 'true'}">

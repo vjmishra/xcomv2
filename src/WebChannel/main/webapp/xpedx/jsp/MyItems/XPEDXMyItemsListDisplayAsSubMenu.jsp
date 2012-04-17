@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
@@ -593,7 +596,7 @@
     margin-right: 8px;
     width: 18px;
     height: 18px;
-    background:url("/swc/xpedx/images/theme/theme-1/icon-plus.png") no-repeat;
+    background:url("<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/icon-plus.png") no-repeat;
     border:none;    
 }
 .icon-minus {
@@ -601,7 +604,7 @@
     margin-right: 8px;
     width: 18px;
     height: 18px;
-    background:url("/swc/xpedx/images/theme/theme-1/icon-minus.png") no-repeat;
+    background:url("<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/icon-minus.png") no-repeat;
     border:none;    
 }
 </style>

@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 <s:set name='_action' value='[0]' />
 <s:set name="lineNumber" value="%{1}" />
@@ -78,7 +80,7 @@
 <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 <s:set name='currency' value='#priceCurrencyCode'/>
 <tbody>
-		<tr style="border-top: 0px none; background:url('../images/global/dot-gray.gif') repeat-x scroll left center;">
+		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<td colspan="3"><i><span>Availability</i></span></td>
 			<s:if test="%{#_action.getValidateCheck().get(#itemId) != true}">

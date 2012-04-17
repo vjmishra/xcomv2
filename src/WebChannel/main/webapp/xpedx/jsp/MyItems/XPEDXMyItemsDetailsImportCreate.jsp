@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
 <swc:html>
@@ -8,8 +11,8 @@
         <swc:head />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><s:property value="wCContext.storefrontId" /> - <s:text name='Items' /></title>
-        <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
-        <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/catalog/advancedSearch.css"/>
+        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
+        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/advancedSearch.css"/>
         <script type="text/javascript">
   				 var attrPickerActions  = new Array(3);
 				 attrPickerActions[0] = '<s:url action="attributemanagement-getattributeConfiguration" namespace="/catalog" escapeAmp="false" includeParams="none" />';
@@ -17,12 +20,12 @@
 				 attrPickerActions[2] = '<s:url action="attributemanagement-getAttributeGroupListForGroup" namespace="/catalog" escapeAmp="false" includeParams="none" />';
                
        </script>
-        <script type="text/javascript" src="<s:url value='/swc/js/catalog/advancedSearch.js'/>"></script>
-        <script type="text/javascript" src="<s:url value='/swc/js/catalog/swcxmltreeloader.js'/>"></script>
-        <script type="text/javascript" src="<s:url value='/swc/js/sbc/picker/sbctreeloader.js'/>"></script>
-        <script type="text/javascript" src="<s:url value='/swc/js/sbc/picker/itemattrtreeloader.js'/>"></script>
-        <script type="text/javascript" src="<s:url value='/swc/js/sbc/picker/attrtreepanel.js'/>"></script>
-        <script type="text/javascript" src="<s:url value='/swc/js/sbc/picker/attributeutils.js'/>"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/advancedSearch.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/swcxmltreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/sbctreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/itemattrtreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attrtreepanel.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attributeutils.js"></script>
         <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
 		    This is to avoid a defect in Struts that�s creating contention under load. 
 		    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
