@@ -310,7 +310,7 @@
 						
 				<div id="breadcrumbs-list-name">
 				<div id="breadcrumb-my-selection" style="margin-left:11px; padding-right: 4px; text-align: left;">My Selection</div>
-				 <img id="rbtn" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png"/><!-- -FX2- tile="Remove"  -->
+				 <s:url value='/xpedx/images/icons/12x12_charcoal_x.png' id='rbtn' />  <!-- -FX2- tile="Remove"  -->
 				
 				<span class="breadcrumbs-inner" id="searchBreadcrumb" >
 				<!--  <img  class="breadcrumb-x" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="Remove" title="Remove" id='rbtn' />  -->
@@ -574,7 +574,7 @@
 				<%-- <s:set name='showCurrencySymbol' value='true' /> --%>
 				<%-- <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/> --%>
 				<%-- Do not remove pImg. This is used in XPEDXItemsDataTemplateComponent--%>
-				<img id="pImg" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/INF_150x150.jpg"/>
+				<s:url id='pImg' value='/xpedx/images/INF_150x150.jpg'/>
 				
 <%--  I don't think this piece of code is used in this page. Commenting:12/29/2011 - Vignesh
 
