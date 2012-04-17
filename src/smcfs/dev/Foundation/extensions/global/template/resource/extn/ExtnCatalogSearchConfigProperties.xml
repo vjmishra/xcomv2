@@ -10,7 +10,7 @@
 							UseSynonyms="N" Sortable="Y" />
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="NOT_ANALYZED" Store="Y"
-							IndexFieldName="showNormallyStockedItems" Searchable="Y"
+							IndexFieldName="showNormallyStockedItems" Searchable="N"
 							UseSynonyms="N" Sortable="Y"/>
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
