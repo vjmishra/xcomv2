@@ -1477,29 +1477,20 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			if((defaultShipTo == "" || defaultShipTo == "null") && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){				
+			if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){
-			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
-			   	 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';           
-			          	if(isguestuser!="true"){
-			               var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
-			               var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			               if(assgnCustomerSize>0){
-			            	   showAssignedShipTo('<s:property value="#targetURL"/>');
-			               }else if(assgnCustomerSize==0){
-					                alert("There are no shipTo locations assigned for your profile, Please contact administrator..");
-			 	    	            $.fancybox.close();
-			 	        	     }
-			 	           }
-			 			},
+			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";            
+			          	if(isguestuser!="true"){			               
+			            	showAssignedShipTo('<s:property value="#targetURL"/>');
+			 	        }
+			 		},
 			 		'onClosed'	: function(){
 			 			var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
-			 			var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 			 			if(isguestuser!="true"){
 			 				 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			 				 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			 				if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
+			 				if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
 			 					 showAssignedShipTo('<s:property value="#targetURL"/>');
 			 				}
 			 			}
@@ -1518,21 +1509,17 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 		}		
         $("#shipToSelect,#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
  			'onStart' 	: function(){
- 	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
-       	 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';  
- 	          	if(isguestuser!="true"){
- 	                var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
- 	                var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+ 	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";   
+ 	          	if(isguestuser!="true"){ 	                
  	                showAssignedShipTo('<s:property value="#targetURL"/>');
  	           }
  			},
  			'onClosed'	: function(){
  				var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
- 				var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
  				if(isguestuser!="true"){
  					 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
  					 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
- 					if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
+ 					if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
  						 showAssignedShipTo('<s:property value="#targetURL"/>');
  					}
  				}
@@ -1544,26 +1531,17 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
- 	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
-       	 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';           
+ 	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";            
  	          	if(isguestuser!="true"){
- 	                var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
- 	                var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
- 	               if(assgnCustomerSize>0){
- 	            	   showAssignedShipTo('<s:property value="#targetURL"/>');
- 	               }else if(assgnCustomerSize==0){
- 	                   alert("There are no shipTo locations assigned for your profile, Please contact administrator..");
- 	                  $.fancybox.close();
- 	               }
+ 	          		showAssignedShipTo('<s:property value="#targetURL"/>');
  	           }
  			},
  			'onClosed'	: function(){
- 				var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
- 				var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
+ 				var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 				
  				if(isguestuser!="true"){
  					 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
  					 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
- 					if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
+ 					if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
  						 showAssignedShipTo('<s:property value="#targetURL"/>');
  					}
  				}
