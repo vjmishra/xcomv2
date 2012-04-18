@@ -88,7 +88,13 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				
 				}				
 			}			
+			
+			//DOMDocFromXMLString doc = new DOMDocFromXMLString();
+			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
+			//setOutputDocument(orderOutputDocument);
 			super.execute();
+			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
+			
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
 			{
@@ -210,6 +216,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				//processPandA(pna.getItems());
 				getCustomerDetails();
 			}
+			if(getPriceHoverMap()!=null)
+				LOG.debug("PRICEHOVERMAP KEYS in XPEDXDraftOrderDetails class  : "+getPriceHoverMap());
 			/*setDivisionName(XPEDXWCUtils.getDivisionName());
 			setState(XPEDXWCUtils.getState());
 			This is removed and the same function is implemented in setDivsionAndState method
@@ -234,7 +242,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				this.execute();
 			}
 			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
-			LOG.error(ex.getMessage());
+			LOG.error("Error in Draft Order Details action class : "+ex.getMessage());
 		}
 		return SUCCESS;
 	}
