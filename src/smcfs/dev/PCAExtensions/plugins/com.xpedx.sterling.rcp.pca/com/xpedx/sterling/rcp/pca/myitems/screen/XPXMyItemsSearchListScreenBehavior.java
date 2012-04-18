@@ -72,7 +72,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	public static final String PAGINATION_STRATEGY_FOR_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
 
 	public XPXMyItemsSearchListScreenBehavior(Composite ownerComposite, String formId, Object inputObject) {
-        super(ownerComposite, formId,inputObject);
+       super(ownerComposite, formId,inputObject);
         this.page = (XPXMyItemsSearchListScreen)getOwnerForm();
         this.defaultOrgCode = "";
         Document docActions = YRCXmlUtils.createFromString("<Actions><Action Id='"+ACTION_EDIT+"' DisplayName='Edit'/><Action Id='"+ACTION_DELETE+"' DisplayName='Delete'/></Actions>");
@@ -171,9 +171,11 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 								Element eleMyItemsList = (Element) listMyItemsList
 										.item(k);
 								String sharePrivate = eleMyItemsList.getAttribute("SharePrivate");
+								String CreateUserName = eleMyItemsList.getAttribute("Createusername");
 								eleMyItemsList.setAttribute("Action", "");
 								if(sharePrivate != ""){
-									eleMyItemsList.setAttribute("ListType", sharePrivate);
+									String personalListType = CreateUserName.concat("(").concat(sharePrivate).concat(")");
+									eleMyItemsList.setAttribute("ListType", personalListType);
 									
 								}
 								else{
