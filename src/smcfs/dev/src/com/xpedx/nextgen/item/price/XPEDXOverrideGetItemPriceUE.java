@@ -35,6 +35,7 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 	public Document overrideGetItemPrice(YFSEnvironment env, Document arg1)
 			throws YFSUserExitException {
 		SCXmlUtil.getString(arg1);
+		log.debug("overrideGetItemPrice method in XPEDXOverrideGetItemPriceUE : "+SCXmlUtil.getString(arg1));
 		
 		Element itemPriceElement = arg1.getDocumentElement();
 		//Fetching CustomerID for PNA call
