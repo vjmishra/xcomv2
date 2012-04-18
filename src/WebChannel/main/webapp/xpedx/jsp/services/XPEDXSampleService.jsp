@@ -554,7 +554,8 @@
 
 			   // alert(" submitForm ");
 			    var errorDiv = document.getElementById("errorMsgForRequestSample");
-			    var errorDivMessage = "Please enter required field(s) : ";
+			    //error messgae changed for jira 3648
+			    var errorDivMessage = "Required fields missing. Please review and try again.";
 			    var returnval = true;
 			    
 			    var completeDataNew = isCompleteData(tableRefOne, tableRefTwo );
@@ -564,7 +565,7 @@
 			    
 			    if (contactField.value.trim().length == 0)
 			    {
-			        errorDivMessage= errorDivMessage + "-Company ";
+			        //commented for jira 3648 errorDivMessage= errorDivMessage + "-Company ";
 			        contactField.style.borderColor="#FF0000";
 			        errorDiv.style.display = 'inline';
 			        returnval = false;
@@ -574,7 +575,7 @@
 			    
 			    if (attnField.value.trim().length == 0)
 			    {
-			        errorDivMessage= errorDivMessage + "-Attention ";
+			       //commented for jira 3648 errorDivMessage= errorDivMessage + "-Attention ";
 			        attnField.style.borderColor="#FF0000";
 			        errorDiv.style.display = 'inline';
 			        returnval = false;
@@ -584,7 +585,7 @@
 			    
 			    if(phoneField.value.trim().length == 0)
 			    {
-			        errorDivMessage= errorDivMessage + "-Phone ";
+			        //commented for jira 3648 errorDivMessage= errorDivMessage + "-Phone ";
 			        phoneField.style.borderColor="#FF0000";
 			        errorDiv.style.display = 'inline';
 			        returnval = false;
@@ -594,7 +595,7 @@
 			    
 			    if (emailField.value.trim().length == 0)
 			    {
-			        errorDivMessage= errorDivMessage + "-Email Address ";
+			        //commented for jira 3648 errorDivMessage= errorDivMessage + "-Email Address ";
 			        emailField.style.borderColor="#FF0000";
 			        errorDiv.style.display = 'inline';
 			        returnval = false;
@@ -608,7 +609,7 @@
 			    	
 			    	if(( fedExServiceProviderNumberField.value.trim().length ==0 ) && ( upsServiceProviderNumberField.value.trim().length ==0 )) 
 			    		{
-					        errorDivMessage= errorDivMessage + "-FedEx/UPS Number ";
+					        //commented for jira 3648 errorDivMessage= errorDivMessage + "-FedEx/UPS Number ";
 					        fedExServiceProviderNumberField.style.borderColor="#FF0000";
 					        errorDiv.style.display = 'inline';
 					        returnval = false;
@@ -1017,8 +1018,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
           </div>
         
         </div> 
-        <div class="clearview"> &nbsp;</div>
-        <center><div class="error" id="errorMsgForRequestSample" style="display : none"></div></center>
+        <div class="clearview"> &nbsp;</div>       
            
         <div style="width:96%; margin:auto;">
 	</div>
@@ -1046,6 +1046,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
             </table>
           </div> 
           </s:form>
+          <center><div class="error" id="errorMsgForRequestSample" style="display : none"></div></center>
 </div>
 <div class="clearview">&nbsp;</div>
 </div>
