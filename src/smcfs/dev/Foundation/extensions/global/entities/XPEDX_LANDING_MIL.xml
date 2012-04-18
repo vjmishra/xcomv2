@@ -86,7 +86,20 @@
 	    XMLName="Modifyts"
 	   />   
            
-                  
+	    <Attribute ColumnName="CREATEUSERID" 
+	    DataType="UserId"
+	    DefaultValue="' '" 
+	    Description="Creating User ID" 
+	    Nullable="true" 
+	    XMLName="Createuserid"
+	   />   
+	    <Attribute ColumnName="MODIFYUSERID" 
+	    DataType="UserId"
+	    DefaultValue="' '"
+	    Description="Modifying User ID" 
+	    Nullable="true" 
+	    XMLName="Modifyuserid"
+	   />         
         </Attributes>
         <PrimaryKey Name="XPX_LNDG_MIL_PK">
 		<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
