@@ -1014,10 +1014,14 @@ public class XPEDXPriceandAvailabilityUtil {
 							if(isLineNuberRequired)
 							{
 								int lineNumber=Integer.parseInt(pandAItem.getLineNumber());
+								log.debug("PRICEHOVERMAP KEYS FOR IF CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.KEY : "+pandAItem.getLegacyProductCode()+"_"+lineNumber);
+								log.debug("PRICEHOVERMAP VALUES FOR IF CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.VALUE.extendedPrice : "+extendedPrice);
 								priceUomDisplayMap.put(pandAItem.getLegacyProductCode()+"_"+lineNumber, pricingInfo);
 							}
 							else
 							{
+								log.debug("PRICEHOVERMAP KEYS FOR ELSE CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.KEY : "+pandAItem.getLegacyProductCode());
+								log.debug("PRICEHOVERMAP VALUES FOR ELSE CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.VALUE.extendedPrice : "+extendedPrice);								
 								priceUomDisplayMap.put(pandAItem.getLegacyProductCode(), pricingInfo);
 							}
 						}
