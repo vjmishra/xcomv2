@@ -19,6 +19,9 @@
 
 <link rel="stylesheet" type="text/css"
 	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<![endif]-->
 
 
 <script type="text/javascript">
@@ -165,22 +168,24 @@
         		var data5 = document.createElement("td");    				
         		var data6 = document.createElement("td");
         		
-
-				var deleteLink = document.createElement('a');
-				var imageIcon = document.createElement('a');
-				imageIcon.setAttribute('src','../../xpedx/images/common/icon_delete.gif');
-				imageIcon.setAttribute('alt','delete');
-				imageIcon.setAttribute('width','16');
-				imageIcon.setAttribute('height','16');
-				imageIcon.setAttribute('border','0');
-				
-				//imageIcon.setAttribute('style','float:left');
-				imageIcon.setAttribute('style','float:left;margin-left: 2px;');
-				imageIcon.setAttribute('class','grey-ui-btn');
-				imageIcon.innerHTML = '<span> Remove</span>';
-				deleteLink.appendChild (imageIcon);
 				var table = document.getElementById("tbl_data_facilitySupplies").getElementsByTagName("tbody")[0];
 				var rowCount = table.rows.length;
+				//var deleteLink = document.createElement('a');
+				var deleteLink = document.createElement('a');
+				//modified for jira 3636
+				deleteLink.setAttribute('src','../../xpedx/images/common/icon_delete.gif');
+				deleteLink.setAttribute('alt','delete');
+				deleteLink.setAttribute('width','16');
+				deleteLink.setAttribute('height','16');
+				deleteLink.setAttribute('border','0');
+				deleteLink.id = 'removeID'+(rowCount);
+				
+				//deleteLink.setAttribute('style','float:left');
+				deleteLink.setAttribute('style','float:left;margin-left: 2px;');
+				deleteLink.setAttribute('class','grey-ui-btn');
+				deleteLink.innerHTML = '<span> Remove</span>';
+				//deleteLink.appendChild (deleteLink);
+				//end of jira 3636
 				deleteLink.setAttribute('href', 'javascript:deleteRowIconFS('+rowCount+');');
 				data0.appendChild(deleteLink);
         		
@@ -248,18 +253,19 @@
 	        		
 
 					var deleteLink = document.createElement('a');
-					var imageIcon = document.createElement('a');
-					imageIcon.setAttribute('src','../../xpedx/images/common/icon_delete.gif');
-					imageIcon.setAttribute('alt','delete');
-					imageIcon.setAttribute('width','16');
-					imageIcon.setAttribute('height','16');
-					imageIcon.setAttribute('border','0');
+					//modified for jira 3636
+					deleteLink.setAttribute('src','../../xpedx/images/common/icon_delete.gif');
+					deleteLink.setAttribute('alt','delete');
+					deleteLink.setAttribute('width','16');
+					deleteLink.setAttribute('height','16');
+					deleteLink.setAttribute('border','0');
 		
 					
-					imageIcon.setAttribute('style','float:left;margin-left: 2px;');
-					imageIcon.setAttribute('class','grey-ui-btn');
-					imageIcon.innerHTML = '<span> Remove</span>';
-					deleteLink.appendChild (imageIcon);
+					deleteLink.setAttribute('style','float:left;margin-left: 2px;');
+					deleteLink.setAttribute('class','grey-ui-btn');
+					deleteLink.innerHTML = '<span> Remove</span>';
+					//deleteLink.appendChild (deleteLink);
+					//end of jira 3636
 					var table = document.getElementById("tbl_data_paperSupplies").getElementsByTagName("tbody")[0];
 					var rowCount = table.rows.length;
 					deleteLink.setAttribute('href', 'javascript:deleteRowIconPS('+rowCount+');');
@@ -373,7 +379,19 @@
             	                var row = table.rows[i];
                                 row.cells[5].childNodes[0].setAttribute('href', 'javascript:deleteRowIconPS('+(i)+');');
             				}
+					//added for jira 3636
+            				for(var i=1; i<rowCount;i++){
+        						var row = table.rows[i];
+        						var removeSeq = row.cells[5].childNodes[0];
+        	                    var removeIndex = removeSeq.selectedIndex;
+        	                    if(removeIndex > deletedSeqIndex){
+        	                    	removeSeq.selectedIndex = removeSeq.selectedIndex - 1;
+        		                    //selectSeq.setAttribute('name', 'QuickLinksSeq' + i);
+        		                    removeSeq.setAttribute('id', 'removeID' + i);
+        	                    }
             				
+            			}
+				//end of jira 3636
             			}
         			
         		}catch(e) {
@@ -389,16 +407,27 @@
             			var rowCount = table.rows.length;
             			if(rowId > 0 && rowId < rowCount){
             				var deletedSeqIndex = 0;
-                            deletedSeqIndex = table.rows[rowId].cells[3].childNodes[0].selectedIndex;
+                            deletedSeqIndex = table.rows[rowId].cells[5].childNodes[0].selectedIndex;
             				document.getElementById("tbl_data_facilitySupplies").deleteRow(rowId);
             				rowCount = table.rows.length;
             				for(var i=rowId; i<rowCount; i++) {
             	                var row = table.rows[i];
                                 row.cells[5].childNodes[0].setAttribute('href', 'javascript:deleteRowIconFS('+(i)+');');
             				}
+            				//added for jira 3636
+            				for(var i=1; i<rowCount;i++){
+        						var row = table.rows[i];
+        						var removeSeq = row.cells[5].childNodes[0];
+        	                    var removeIndex = removeSeq.selectedIndex;
+        	                    if(removeIndex > deletedSeqIndex){
+        	                    	removeSeq.selectedIndex = removeSeq.selectedIndex - 1;
+        		                    //selectSeq.setAttribute('name', 'QuickLinksSeq' + i);
+        		                    removeSeq.setAttribute('id', 'removeID' + i);
+        	                    }
             				
-            			}
-        			
+            				}
+							//end of jira 3636
+            			}        			
         		}catch(e) {
         			alert(e);
         		}
@@ -519,6 +548,7 @@
 			    var phoneField = document.serviceRequestForm.phone;
 			    var emailField = document.serviceRequestForm.email;
 			    var contactField = document.getElementById("serviceRequestForm_contact");
+			    var attnField = document.getElementById("serviceRequestForm_attn");
 			    var fedExServiceProviderNumberField = document.serviceRequestForm.serviceRequestForm_serviceProviderNumber_FedEx; 
 			    var upsServiceProviderNumberField = document.serviceRequestForm.serviceRequestForm_serviceProviderNumber_UPS; 
 
@@ -534,12 +564,22 @@
 			    
 			    if (contactField.value.trim().length == 0)
 			    {
-			        errorDivMessage= errorDivMessage + "-Attention ";
+			        errorDivMessage= errorDivMessage + "-Company ";
 			        contactField.style.borderColor="#FF0000";
 			        errorDiv.style.display = 'inline';
 			        returnval = false;
 			    }else{
-			        contactField.style.borderColor="";
+			    	contactField.style.borderColor="";
+			    }
+			    
+			    if (attnField.value.trim().length == 0)
+			    {
+			        errorDivMessage= errorDivMessage + "-Attention ";
+			        attnField.style.borderColor="#FF0000";
+			        errorDiv.style.display = 'inline';
+			        returnval = false;
+			    }else{
+			    	attnField.style.borderColor="";
 			    }
 			    
 			    if(phoneField.value.trim().length == 0)
@@ -772,7 +812,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                       <tr>
                         <td width="13%"  style="padding-left:3px;"><span class="red">*</span>&nbsp;Attention:</td>
                         
-                        <td width="33%"><s:textfield tabindex="50" id="serviceRequestForm_contact" name="attention" cssClass="x-input width-250px" maxlength="30"  value="%{#currentShipTo.firstName} %{#currentShipTo.lastName}" /></td>
+                        <td width="33%"><s:textfield tabindex="50" id="serviceRequestForm_attn" name="attention" cssClass="x-input width-250px" maxlength="30"  value="%{#currentShipTo.firstName} %{#currentShipTo.lastName}" /></td>
                        </td>
                         <td colspan="2" valign="top">
                                
@@ -894,7 +934,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
              			 </div> --%>
                            <br></br>
                            <div id="facility-results-table" style="display:none;"><!-- begin facility-results-table -->
-                        <table width="99%" cellspacing="0" cellpadding="0" border="0" align="center" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_facilitySupplies">
+                        <table width="99%" cellspacing="0" cellpadding="0" border="0" align="center" class="standard-table" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_facilitySupplies">
                             <tbody>
                               <tr id="none" class="padding8 table-header-bar" >
                                 <td  width="16%"  class="padding8  table-header-bar-left"  style="word-wrap: break-word; width:130px;"><span class="white">Mfg. Item #</span></td>
@@ -952,7 +992,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
              			 </div> --%>
                <br></br>                          
                 <div id="paper-results-table" style="display:none;"><!-- begin paper-results-table -->
-                        <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_paperSupplies">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" class="standard-table" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_paperSupplies">
                             <tbody>
                               <tr id="none" class="padding8 table-header-bar">
                                 <td  width="16%" class="padding8  table-header-bar-left"><span class="white">Mfg. Item #</span></td>
