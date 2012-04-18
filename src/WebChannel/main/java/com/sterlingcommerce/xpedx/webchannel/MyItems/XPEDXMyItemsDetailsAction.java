@@ -153,6 +153,35 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public ArrayList<String> itemOrder;
 	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
 	private Map<String,String> catMap=new HashMap<String,String>();
+	private String modifyts;
+    private String createUserId;
+    private String modifyUserid;
+    
+    
+	public String getModifyts() {
+		return modifyts;
+	}
+
+	public void setModifyts(String modifyts) {
+		this.modifyts = modifyts;
+	}
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public String getModifyUserid() {
+		return modifyUserid;
+	}
+
+	public void setModifyUserid(String modifyUserid) {
+		this.modifyUserid = modifyUserid;
+	}
+
 	public Map<String, String> getCatMap() {
 		return catMap;
 	}
@@ -365,7 +394,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			@SuppressWarnings("unused")
 			ArrayList<Element> items = getXMLUtils().getElements(
 					getOutDoc().getDocumentElement(), "XPEDXMyItemsItems");
-			ArrayList<String> itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
+			ArrayList<String> itemListEntitled=new ArrayList<String>();
+			if(items.size() > 0){
+				itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
+			}
 			sbCSV.append("Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,");
 			
 			
@@ -653,14 +685,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			setCustomerId(getWCContext().getCustomerId());
 
 			//This is the Mashup which gets the items
-			out = prepareAndInvokeMashups();
-			if (out.values().iterator().next() != null) {
-				outDoc = (Document) out.values().iterator().next()
-						.getOwnerDocument();
+			if(getItemCount() != null && !getItemCount().equals("0"))
+			{
+				out = prepareAndInvokeMashups();
+				if (out.values().iterator().next() != null) {
+					outDoc = (Document) out.values().iterator().next()
+							.getOwnerDocument();
+					setListOfItems(getXMLUtils().getElements(
+							outDoc.getDocumentElement(), "XPEDXMyItemsItems"));
+				}
+			}
+			else
+			{
+				outDoc=SCXmlUtil.createDocument("XPEDXMyItemsItemsList");
 				setListOfItems(getXMLUtils().getElements(
 						outDoc.getDocumentElement(), "XPEDXMyItemsItems"));
 			}
-			
 			setAllMyItems();
 
 			// Set the current list of custom fields in the session cache
@@ -856,30 +896,45 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		String createUserIDStr = "";
 		String modifyUserIdStr = "";
 		String lastModifiedDateStr = "";
-		Document outputDoc;
-		Element input = WCMashupHelper.getMashupInput(
-				"XPEDXMyItemsList_ListInfo", getWCContext()
-						.getSCUIContext());
-		//input.setAttribute("CustomerID", getCustomerId());
-		input.setAttribute("MyItemsListKey", getListKey());
-		Document inputDoc = input.getOwnerDocument();
-		Element inXML = inputDoc.getDocumentElement();
+		Document outputDoc=null;
+		if(modifyts == null || modifyts.trim().length()==0)
+		{
+			Element input = WCMashupHelper.getMashupInput(
+					"XPEDXMyItemsList_ListInfo", getWCContext()
+							.getSCUIContext());
+			//input.setAttribute("CustomerID", getCustomerId());
+			input.setAttribute("MyItemsListKey", getListKey());
+			Document inputDoc = input.getOwnerDocument();
+			Element inXML = inputDoc.getDocumentElement();
+			
+			Object obj = WCMashupHelper.invokeMashup(
+					"XPEDXMyItemsList_CreatedInfo", inXML, getWCContext()
+							.getSCUIContext());
+			outputDoc = ((Element) obj).getOwnerDocument();
 		
-		Object obj = WCMashupHelper.invokeMashup(
-				"XPEDXMyItemsList_CreatedInfo", inXML, getWCContext()
-						.getSCUIContext());
-		outputDoc = ((Element) obj).getOwnerDocument();
-		
-		Element xpedxMyItemsListElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "XPEDXMyItemsList");
-		if(xpedxMyItemsListElement!=null){
-			modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
-			if(YFCUtils.isVoid(modifyUserIdStr)){
-				createUserIDStr = xpedxMyItemsListElement.getAttribute("Createuserid");
+			Element xpedxMyItemsListElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "XPEDXMyItemsList");
+			if(xpedxMyItemsListElement!=null){
+				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
+				if(YFCUtils.isVoid(modifyUserIdStr)){
+					createUserIDStr = xpedxMyItemsListElement.getAttribute("Createuserid");
+					setLastModifiedUserId(createUserIDStr);
+				}else{
+					setLastModifiedUserId(modifyUserIdStr);
+				}
+				lastModifiedDateStr = xpedxMyItemsListElement.getAttribute("Modifyts");
+				setLastModifiedDateString(lastModifiedDateStr);
+				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
+			}
+		}
+		else
+		{
+			if(YFCUtils.isVoid(modifyUserid)){
+				createUserIDStr = createUserId;
 				setLastModifiedUserId(createUserIDStr);
 			}else{
-				setLastModifiedUserId(modifyUserIdStr);
+				setLastModifiedUserId(modifyUserid);
 			}
-			lastModifiedDateStr = xpedxMyItemsListElement.getAttribute("Modifyts");
+			lastModifiedDateStr = modifyts;
 			setLastModifiedDateString(lastModifiedDateStr);
 			setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
 		}

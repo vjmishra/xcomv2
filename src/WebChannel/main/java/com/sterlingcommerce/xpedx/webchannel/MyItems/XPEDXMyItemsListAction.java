@@ -50,9 +50,40 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
     protected Integer pageSize = 25;
     protected String orderByAttribute ="Modifyts";
     protected String orderDesc="Y";
+    private String modifyts;
+    private String createUserId;
+    private String modifyUserid;
     
     
 	
+	public String getModifyts() {
+		return modifyts;
+	}
+
+
+	public void setModifyts(String modifyts) {
+		this.modifyts = modifyts;
+	}
+
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+
+	public String getModifyUserid() {
+		return modifyUserid;
+	}
+
+
+	public void setModifyUserid(String modifyUserid) {
+		this.modifyUserid = modifyUserid;
+	}
 	public String getOrderDesc() {
 		return orderDesc;
 	}
@@ -595,6 +626,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					//List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
 					String modifyUserId = elem.getAttribute("UserName");
+					this.modifyUserid=elem.getAttribute("Modifyuserid");
+					this.createUserId=elem.getAttribute("Createuserid");
+					this.modifyts=elem.getAttribute("Modifyts");
 					String listKey = elem.getAttribute("MyItemsListKey");					
 					//Element itemElem=items.get(0);
 					itemCount=elem.getAttribute("NumberOFItems");

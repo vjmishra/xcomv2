@@ -84,7 +84,9 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 			Set<String> itemIdset = new HashSet<String>();
 			Collections.addAll(itemIdset,itemsIds);
 			itemIdset.addAll(custpartNitemidMap.values());
-			entitledItemsDoc = XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),new ArrayList(itemIdset));
+			if(itemIdset != null && itemIdset.size()>0){
+				entitledItemsDoc = XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),new ArrayList(itemIdset));
+			}
 		}
 		
 		
