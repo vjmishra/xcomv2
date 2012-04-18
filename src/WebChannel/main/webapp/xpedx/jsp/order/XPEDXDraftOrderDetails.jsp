@@ -17,52 +17,52 @@
 
 
 <!-- begin styles. These should be the only three styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/ORDERS.css" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
 <![endif]-->
-<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!--  End Styles -->
 
 <!-- javascript -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/ajaxValidation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-ext-header.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/common/ajaxValidation.js"></script>
 
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/swc.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 -->
 
 <!-- carousel scripts js   -->
- <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
+ <script type="text/javascript" src="../xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/common/xpedx-header.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.numeric.js"></script>
 
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/quick-add.js"></script>
 
 -->
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 -->
 
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
+<!--<script type="text/javascript" src="/swc/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pseudofocus.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/global-xpedx-functions.js"></script>
 -->
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 
@@ -76,8 +76,8 @@
 <!-- /STUFF -->
 
 <!-- Lightbox/Modal Window -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 
 <!-- Page Calls -->
 
@@ -121,7 +121,7 @@ function checkHiddenCheckboxAndDeleteItem (oImg, sChkId){
 	
 	  var oChk = document.getElementById(sChkId);
 	  oChk.checked = !oChk.checked;
-	  oImg.src = (oChk.checked) ? "<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png" : "<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png";
+	  oImg.src = (oChk.checked) ? "/swc/xpedx/images/icons/12x12_red_x.png" : "/swc/xpedx/images/icons/12x12_charcoal_x.png";
 	
 	  //This piggibacks on old delete function. But called after each checkbox selection. So only one item will be deleted on each click.
 	  //call remove function after checking the checkbox (which going to be hidden)
@@ -356,7 +356,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 <s:set name='_action' value='[0]' />
 <s:bean
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
-	id='wcUtil' />
+	id='XPEDXWCUtils' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />	
@@ -534,7 +534,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 		<span class="page-title">Quick Add</span>
 		<p class="quick-add-aux-links" style="margin-top:5px; margin-right:5px;"> 
 			<a class="modal underlink" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste" >Copy and Paste</a>
-			<img class="pointers" alt="[close]" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" id="quick-add-close" title="Close">
+			<img class="pointers" alt="[close]" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" id="quick-add-close" title="Close">
 		</p>
 		<div class="clear">&nbsp;</div>
 			<form name="QuickAddForm" class="form selector quick-add-to-cart-form" id="QuickAddForm">
@@ -686,7 +686,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	
 
 <br/><br/>
-<a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
+<a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:url value='/xpedx/images/common/print-icon.gif'/>" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
 </div>
 
 <div id="mid-col-mil">
@@ -697,7 +697,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 	<!-- promotion -->
 	<div class="ad-margin">
 		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
-		<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" alt="advertisement" />advertisement</div>
+		<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="/swc/xpedx/images/mil/ad-arrow.gif" alt="advertisement" />advertisement</div>
 				<s:iterator value='majorLineElements' id='orderLine' status="rowStatus">
 				<s:set name='item' value='#util.getElement(#orderLine, "Item")' />
 				<s:if test="%{#rowStatus.index == 0}">				
@@ -1053,7 +1053,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
                      <%-- <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" /> --%>                    
                    <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' cssStyle="display:none" onclick="checkHiddenCheckboxAndDeleteItem(this, 'selectedLineItem_%{#orderLineKey}')" fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" />
                    <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-                   	<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" />
+                   	<img src="/swc/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" />
                    </s:if> 
                   </div>
                 <!-- end checkbox   -->
@@ -1189,7 +1189,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					 				&nbsp;
 					 			</s:if>
 					 			<s:else>
-									/&nbsp;<s:property value="#wcUtil.getUOMDescription(#json.get('UOM'))" />
+									/&nbsp;<s:property value="#XPEDXWCUtils.getUOMDescription(#json.get('UOM'))" />
 								</s:else>
 								</td>
                     	    </tr>
@@ -1205,7 +1205,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 									<s:set name="bracketUOMDesc" value="bracketUOM" />
 									
-					 				<s:if test='%{#disUOMStatus.index < #displayIndex && (#wcUtil.getUOMDescription(#json.get("UOM")) != #bracketUOMDesc) }' >
+					 				<s:if test='%{#disUOMStatus.index < #displayIndex && (#XPEDXWCUtils.getUOMDescription(#json.get("UOM")) != #bracketUOMDesc) }' >
 									
 										<tr>
 				                        	<td class="text-right">
@@ -1378,12 +1378,12 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
 					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
-					<s:set name="jsonUOMDesc" value="#wcUtil.getUOMDescription(#jsonUOM)"/>
+					<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)"/>
 					<s:set name="jsonAvailability" value="#json.get('Availability')" />
 					<s:set name="jsonTotal" value="#json.get('Total')" />
-					<s:set name="jsonImage1" value="#wcUtil.getImage('Immediate')" />
-					<s:set name="jsonImage3" value="#wcUtil.getImage('TwoPlusDays')" />
-					<s:set name="jsonImage2" value="#wcUtil.getImage('NextDay')" />
+					<s:set name="jsonImage1" value="#XPEDXWCUtils.getImage('Immediate')" />
+					<s:set name="jsonImage3" value="#XPEDXWCUtils.getImage('TwoPlusDays')" />
+					<s:set name="jsonImage2" value="#XPEDXWCUtils.getImage('NextDay')" />
 					<s:set name="divName" value="#_action.getDivisionName()" />
 					<s:set name="stateCode" value="#_action.getState()" />
 					<s:if test="(#stateCode == '')">
@@ -1487,7 +1487,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
 			    		<p><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' />
 				    		<s:if test='#certFlag=="Y"'>
-							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
+							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
 			    		</p>
 			    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
@@ -1510,7 +1510,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 						</s:if>
 						
 						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
+			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="/swc/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
 			    		</s:if>
 			    		
 			    	</div>
@@ -1722,7 +1722,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 		<ul id="tool-bar" class="tool-bar-bottom" style="border-top: 1px solid #CCCCCC; padding-top: 20px;">
 			<li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
 			<li style="float: right;"><a href="javascript:submitSL();"> <img
-				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save.gif" width="49" height="23" alt="Save" title="Save" /> </a></li>
+				src="../xpedx/images/theme/theme-1/ui-buttons/ui-btn-save.gif" width="49" height="23" alt="Save" title="Save" /> </a></li>
 		</ul>
 	
 	</s:form> 
@@ -2245,7 +2245,7 @@ var currentAadd2ItemList = new Object();
                         
 							 <p>xpedx Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
 								 <s:if test='#certFlagVal=="Y"'>
-								 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
+								 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
 								 
                              <p style="margin-top:0px;">Mfg. Item #: <s:property value="#extnVendorNo" /> </p>
@@ -2400,7 +2400,7 @@ var currentAadd2ItemList = new Object();
 			href="javascript:closeCopyPasteDialog()"><span>Cancel</span></a></li>
 <!-- 		<li style="float: right;"><a -->
 <!-- 			href="javascript:addItemsToQuickAddList()"><img -->
-<!-- 			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-add.gif" -->
+<!-- 			src="../xpedx/images/theme/theme-1/ui-buttons/ui-btn-add.gif" -->
 <!-- 			width="49" height="23" alt="Save" title="Save" /></a></li>			 -->
 			<li style="float: right;"><a href="#" onclick="javascript:addItemsToQuickAddList(); return false;" class="green-ui-btn" style="margin-left:5px;"><span>bb1Add to Quick List</span></a></li>
 	</ul>
@@ -2520,24 +2520,24 @@ function validateOrder()
 	openQuickAdd();
 </script>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx.swc.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/xpedx.swc.min.js"></script>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
 
-<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js"
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js"
 	type="text/javascript" charset="utf-8"></script>
-<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js"
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/XPEDXDraftOrderDetails.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/XPEDXOrder.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/XPEDXItemAssociation.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAdjustment.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog.js"></script>
+<script src="/swc/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="<s:url includeParams="all" value='/swc/js/order/XPEDXDraftOrderDetails.js'/>"></script>
+<script type="text/javascript" src="<s:url includeParams="none" value='/swc/js/order/XPEDXOrder.js'/>"></script>
+<script type="text/javascript" src="<s:url value='/swc/js/order/XPEDXItemAssociation.js'/>"></script>
+<script type="text/javascript" src="../xpedx/js/order/orderAdjustment.js"></script>
+<script type="text/javascript" src="/swc/xpedx/js/jqdialog/jqdialog.js"></script>
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 </html>
