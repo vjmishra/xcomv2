@@ -140,7 +140,7 @@
 		<!-- preferred ship-to start-->
 		
 		<div style="font-weight:bold;font-size:12px;" class="black">Preferred Ship-To:</div>
-		
+<s:if test="#defaultShipTo != null">		
 		<table valign="top" align="left">
 			<tr>
 				<td width="33%" valign="top">
@@ -206,6 +206,7 @@
 			</tr>
 			 --%>
 		</table>
+		</s:if> 
 		<!-- preferred ship-to end -->
 		</div>		
 			<s:if test="%{defualtShipToAssigned.customerID.trim() != ''}">
@@ -330,8 +331,8 @@
 	 <s:text name="MSG.SWC.SHIPTO.CHANGESHIPTO.INFO.PREFERREDSHIPTO" />
 </div>
 
-<div class="tool-bar-bottom" >
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-170px;float:right;">
+<div class="tool-bar-bottom">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-170px;float:right">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 	<li>
