@@ -7,7 +7,8 @@
 <s:set name='customerDetailsElem' value='customerOrganizationEle' />
 <!-- <s:set name="defualtShipTAddress" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getShipToAddressOfCustomer(#customerDetailsElem)" /> -->
 
-<s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
+<%-- <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" /> --%>
+<s:set name='currentShipTo' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")'/>
 <s:set name='_action' value='[0]'/>
 <s:set name='defualtShipTAddress'  value="%{#_action.getShipToAddress()}" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
