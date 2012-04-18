@@ -399,7 +399,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		GridData cmbEnterpriselayoutData = new GridData();
 		cmbEnterpriselayoutData.horizontalAlignment = 4;
 		cmbEnterprise.setLayoutData(cmbCustomerslayoutData);
-		cmbEnterprise.addModifyListener(new ModifyListener(){
+		/*cmbEnterprise.addModifyListener(new ModifyListener(){
 
 			
 			public String strOldValue = "";
@@ -417,7 +417,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 					strOldValue = strNewValue;
 				}
 			}
-		});
+		});*/
 		
 		lblMasterCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
 		lblMasterCustomer.setText("Master_Customer");
