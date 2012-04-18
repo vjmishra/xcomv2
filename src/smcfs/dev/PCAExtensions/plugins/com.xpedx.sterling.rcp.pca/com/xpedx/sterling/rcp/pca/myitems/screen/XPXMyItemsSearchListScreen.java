@@ -2,6 +2,8 @@ package com.xpedx.sterling.rcp.pca.myitems.screen;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -88,21 +90,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 
 	public XPXMyItemsSearchListScreen(Composite parent, int style, Object inputObject) {
 		super(parent, style);
-		 selectionAdapter = new SelectionAdapter() {
-			
-			public void widgetSelected(SelectionEvent e) {
-				Widget ctrl = e.widget;
-				String ctrlName = (String) ctrl.getData("name");
-				if (!YRCPlatformUI.isVoid(ctrlName)){
-					if (YRCPlatformUI.equals(ctrlName, "btnSearch")){
-						myBehavior.selectShipToAddress();
-						
-					}
-				}
-			}
-		};
-		
-		initialize();
+		 	initialize();
 		setBindingForEnterprise();
 		//setBindingForComponents();
 		setBindingMILList();
