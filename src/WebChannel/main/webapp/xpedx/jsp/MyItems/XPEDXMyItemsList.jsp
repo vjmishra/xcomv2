@@ -969,6 +969,10 @@
 			<s:hidden name="itemCount" value="%{#numOfItems}" />
 			<s:hidden name="shareAdminOnly" value="%{#spShareAdminOnly}"></s:hidden>
 			
+			<s:hidden name="modifyts" value="%{#_action.getModifyts()}"></s:hidden>
+			<s:hidden name="modifyUserid" value="%{#_action.getModifyUserid()}"></s:hidden>
+			<s:hidden name="createUserId" value="%{#_action.getCreateUserId()}"></s:hidden>
+			
 			<s:hidden name="filterBySelectedListChk" value="%{#_action.getFilterBySelectedListChk()}"/>
 			<s:hidden name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}"/>
 			<s:hidden name="filterByAllChk" value="%{#_action.getFilterByAllChk()}"/>
