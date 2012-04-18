@@ -1085,8 +1085,15 @@ var selectedShipCustomer = null;
 		// JIRA 1878 :  getting the userName of selected user, and sending as a parameter to Ajax request
         var selected_customerContactId=document.getElementById("customerContactId");
         if(selected_customerContactId)
-        	selected_customerContactId = selected_customerContactId.value        
-        var setAsDefault= true;
+        	selected_customerContactId = selected_customerContactId.value   ;     
+        	 if(document.getElementById("setAsDefault").checked == null){
+        		 var setAsDefault= true;
+             }
+        	 else{
+        		 var setAsDefault=document.getElementById("setAsDefault");
+        	 }
+           
+             
         if(selectedCustomer=='' || selectedCustomer==null){
         	var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
         	if(isCustomerSelectedIntoConext=="true"){
@@ -1103,8 +1110,8 @@ var selectedShipCustomer = null;
         var xpedxSTCity=document.FormToPost.xpedxSTCity.value;
         var xpedxSTState=document.FormToPost.xpedxSTState.value;
         var xpedxSTZip=document.FormToPost.xpedxSTZip.value;
-//var checkboxChecked = setAsDefault.checked;
-    	var checkboxChecked = document.getElementById("setAsDefault").checked;
+var checkboxChecked = setAsDefault.checked;
+    	//var checkboxChecked = document.getElementById("setAsDefault").checked;
     	
         if(selectedCustomer != null){
             document.body.style.cursor = 'wait';
