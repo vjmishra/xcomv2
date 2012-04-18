@@ -49,15 +49,9 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	private static final String JOBID_OLD_VALUE = "JobIDOldValue";
 	private static final String JOBID = "JobId";
 
-	private static final String UDF1_OLD_VALUE = "udf1OldValue";
-	private static final String UDF1 = "ItemCustomField1";
-
-	private static final String UDF2_OLD_VALUE = "udf2OldValue";
-	private static final String UDF2 = "ItemCustomField2";
-
-	private static final String UDF3_OLD_VALUE = "udf3OldValue";
-	private static final String UDF3 = "ItemCustomField3";
-
+	private static final String ITEMORDER_OLD_VALUE = "itemOrderOldValue";
+	private static final String ITEMORDER = "ItemOrder";
+	
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXMyItemsListDetailsPanel";
 	
     private XPXMyItemsListDetailsPanelBehavior myBehavior;
@@ -93,7 +87,9 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	private Button btnExportList;
 
 	private Button btnSaveChanges;
-
+	
+	private Button btnCancelChanges;
+	
 	private Table tblItemsList;
 
 	private Group pnlItemsList;
@@ -210,8 +206,11 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		gdSrchGroup.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		grpSearchFields.setLayoutData(gdSrchGroup);
 		grpSearchFields.setLayout(srchGroupLayout);
+		//srchGroupLayout.marginHeight = 20;
 		srchGroupLayout.numColumns = 4;
+	
 //Added for CustomerID
+		
 		lblCustName = new Label(grpSearchFields, SWT.NONE);
 		lblCustName.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
 		lblCustName.setText("Customer_Name");
@@ -223,15 +222,16 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		lblListName.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
 		lblListName.setText("My_Items_List_Name");
 
-		txtListName = new Text(grpSearchFields, SWT.BORDER);
-		txtListName.setTextLimit(50);
-		
 		GridData gdListName = new GridData();
 		gdListName.grabExcessHorizontalSpace = true;
 		gdListName.horizontalSpan = 1;
+		gdListName.heightHint = 20;
 		gdListName.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+		
+		txtListName = new Text(grpSearchFields, SWT.BORDER);
+		txtListName.setTextLimit(50);
 		txtListName.setLayoutData(gdListName);
-		txtCustName.setLayoutData(gdListName);
+		//txtCustName.setLayoutData(gdListName);
 	//Added For List Type
 		lblListType = new Label(grpSearchFields, SWT.NONE);
 		lblListType.setData(YRCConstants.YRC_CONTROL_NAME, "lblArticleName");
@@ -239,6 +239,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 		txtListType = new Label(grpSearchFields, SWT.NONE);
 		txtListType.setData("name", "txtListType");
+		txtListType.setLayoutData(gdListName);
 		
 		lblListDesc = new Label(grpSearchFields, SWT.NONE);
 		lblListDesc.setText("My_Items_List_Desc");
@@ -248,7 +249,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		txtListDesc.setTextLimit(50);
 		txtListDesc.setData("yrc:customType", "Label");
 		txtListDesc.setData("name", "txtListDesc");
-		txtListType.setLayoutData(gdListName);
+		
 	}	
 
 	private void createpnlButtonHolder() {
@@ -272,9 +273,6 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		pnlButtonHolder.setData("name", "pnlButtonHolder");
 		pnlButtonHolder.setData("yrc:customType", "TaskComposite");
 
-		
-		
-		
 		btnAddItem = new Button(pnlButtonHolder, 0);
 		btnAddItem.setText("Add_Items");
 		btnAddItem.setLayoutData(gridData10);
@@ -286,36 +284,13 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 			}
 		});
 		
-		btnRemoveItems = new Button(pnlButtonHolder, 0);
-		btnRemoveItems.setText("Remove_Items");
-		btnRemoveItems.setLayoutData(gridData10);
-		btnRemoveItems.setData("name", "btnRemoveItems");
-		btnRemoveItems.setAlignment(SWT.BEGINNING);
-		btnRemoveItems.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				myBehavior.removeItems();
-			}
-		});
-		
 		btnEditSharedList = new Button(pnlButtonHolder, SWT.NONE);
 		btnEditSharedList.setText("Share List");
-		btnRemoveItems.setLayoutData(gridData10);
-		btnRemoveItems.setAlignment(SWT.BEGINNING);
+		btnEditSharedList.setLayoutData(gridData10);
+		btnEditSharedList.setAlignment(SWT.BEGINNING);
 		btnEditSharedList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
 				myBehavior.editShareList();
-			}
-		});
-		
-		// Cancel button
-		btnImportList = new Button(pnlButtonHolder, 0);
-		btnImportList.setText("Import_List");
-		btnImportList.setLayoutData(gridData10);
-		btnImportList.setData("name", "btnImportList");
-		btnImportList.setAlignment(SWT.BEGINNING);
-		btnImportList.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				myBehavior.importItemsList();
 			}
 		});
 		
@@ -330,14 +305,31 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 			}
 		});	
 		
-		GridData gdListName = new GridData();
-		gdListName.grabExcessHorizontalSpace = true;
-		gdListName.horizontalSpan = 225;
-		gdListName.widthHint = 200;
-		lblResult = new Label(pnlButtonHolder, SWT.FILL);
-		lblResult.setText("");
-		lblResult.setLayoutData(gdListName);
-		lblResult.setVisible(false);
+		btnImportList = new Button(pnlButtonHolder, 0);
+		btnImportList.setText("Import_List");
+		btnImportList.setLayoutData(gridData10);
+		btnImportList.setData("name", "btnImportList");
+		btnImportList.setAlignment(SWT.BEGINNING);
+		btnImportList.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.importItemsList();
+			}
+		});
+		
+		GridData gridDataRemoveItem = new GridData();
+		gridDataRemoveItem.heightHint = 25;
+		gridDataRemoveItem.widthHint = 140;
+		gridDataRemoveItem.horizontalAlignment = SWT.BEGINNING;
+		btnRemoveItems = new Button(pnlButtonHolder, 0);
+		btnRemoveItems.setText("Remove_Items");
+		btnRemoveItems.setLayoutData(gridDataRemoveItem);
+		btnRemoveItems.setData("name", "btnRemoveItems");
+		btnRemoveItems.setAlignment(SWT.BEGINNING);
+		btnRemoveItems.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.removeItems();
+			}
+		});
 		
 		btnSaveChanges = new Button(pnlButtonHolder, 0);
 		btnSaveChanges.setText("Save_Changes");
@@ -350,6 +342,27 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 			}
 		});
 		
+		btnCancelChanges = new Button(pnlButtonHolder, 0);
+		btnCancelChanges.setText("Cancel");
+		btnCancelChanges.setLayoutData(gridData10);
+		btnCancelChanges.setData("name", "btnCancelChanges");
+		btnCancelChanges.setAlignment(SWT.CENTER);
+		btnCancelChanges.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.cancelChangesToMyItemsList();
+			}
+		});
+		
+		
+		GridData gdListName = new GridData();
+		gdListName.grabExcessHorizontalSpace = true;
+		gdListName.horizontalSpan = 200;
+		gdListName.widthHint = 150;
+		
+		lblResult = new Label(pnlButtonHolder, SWT.FILL);
+		lblResult.setText("");
+		lblResult.setLayoutData(gdListName);
+		lblResult.setVisible(false);
 		}
 
 	private void setBindingForComponents() {
@@ -368,12 +381,12 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
     }
     private void setBindingForItemsListTable() {
         YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[11];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[8];
 
         colBindings[0] = new YRCTblClmBindingData();
         colBindings[0].setName("tblClmCheckbox");
         colBindings[0].setAttributeBinding("@Checked");
-        colBindings[0].setColumnBinding("#");
+        colBindings[0].setColumnBinding("Delete");
         colBindings[0].setCheckedBinding("Y");
         colBindings[0].setUnCheckedBinding("N");
         colBindings[0].setVisible(true);
@@ -382,7 +395,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         
         colBindings[1] = new YRCTblClmBindingData();
         colBindings[1].setAttributeBinding("Name");
-        colBindings[1].setColumnBinding("Item Desc");
+        colBindings[1].setColumnBinding("Item Description");
         colBindings[1].setTargetAttributeBinding("XPEDXMyItemsItems/@Name");
         colBindings[1].setSortReqd(true);
         
@@ -398,8 +411,9 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
         
         colBindings[4] = new YRCTblClmBindingData();        
-        colBindings[4].setAttributeBinding("XPEDXMyItemsItems/@UomId"); 
-        colBindings[4].setColumnBinding("UOM");    
+        colBindings[4].setAttributeBinding("UomId"); 
+        colBindings[4].setColumnBinding("UOM");
+        colBindings[4].setTargetAttributeBinding("XPEDXMyItemsItems/@UomId");
         
         colBindings[5] = new YRCTblClmBindingData(); 
         colBindings[5].setAttributeBinding("ItemPoNumber");
@@ -412,25 +426,10 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[6].setTargetAttributeBinding("XPEDXMyItemsItems/@JobId");
 
         colBindings[7] = new YRCTblClmBindingData();        
-        colBindings[7].setAttributeBinding("ItemCustomField1"); 
-        colBindings[7].setColumnBinding("UDF1");   
-        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField1");
-
-        colBindings[8] = new YRCTblClmBindingData();        
-        colBindings[8].setAttributeBinding("ItemCustomField2"); 
-        colBindings[8].setColumnBinding("UDF2");   
-        colBindings[8].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField2");
-
-        colBindings[9] = new YRCTblClmBindingData();        
-        colBindings[9].setAttributeBinding("ItemCustomField3"); 
-        colBindings[9].setColumnBinding("UDF3");  
-        colBindings[9].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemCustomField3");
-
-        colBindings[10] = new YRCTblClmBindingData();        
-        colBindings[10].setAttributeBinding("ItemOrder"); 
-        colBindings[10].setColumnBinding("Sequence");     
-        colBindings[10].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
-        colBindings[10].setSortReqd(true);
+        colBindings[7].setAttributeBinding("ItemOrder"); 
+        colBindings[7].setColumnBinding("Sequence");     
+        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
+        colBindings[7].setSortReqd(true);
         
         
         /*colBindings[11] = new YRCTblClmBindingData();
@@ -493,7 +492,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 								|| "null".equalsIgnoreCase(element
 										.getAttribute(QTY))) {
 							oldValue = "0.00";
-							element.setAttribute(QTY_OLD_VALUE, value);
+							element.setAttribute(QTY_OLD_VALUE, oldValue);
 							element.setAttribute(QTY, value);
 						} else {
 							element.setAttribute(QTY_OLD_VALUE, oldValue);
@@ -584,22 +583,21 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 						e.printStackTrace();
 					}	
 				}
-				
-				if("@ItemCustomField1".equals(property)){
+				if("@ItemOrder".equals(property)){
 					String oldValue = "0.00";
-					if(element.hasAttribute(UDF1_OLD_VALUE)){
-						oldValue = element.getAttribute(UDF1_OLD_VALUE);
+					if(element.hasAttribute(ITEMORDER_OLD_VALUE)){
+						oldValue = element.getAttribute(ITEMORDER_OLD_VALUE);
 					}
 					else {
-						oldValue = element.getAttribute(UDF1);
-						if ("".equalsIgnoreCase(element.getAttribute(UDF1))
+						oldValue = element.getAttribute(ITEMORDER);
+						if ("".equalsIgnoreCase(element.getAttribute(ITEMORDER))
 								|| "null".equalsIgnoreCase(element
-										.getAttribute(UDF1))) {
+										.getAttribute(ITEMORDER))) {
 							oldValue = "0.00";
-							element.setAttribute(UDF1_OLD_VALUE, oldValue);
-							element.setAttribute(UDF1, value);
+							element.setAttribute(ITEMORDER_OLD_VALUE, oldValue);
+							element.setAttribute(ITEMORDER, value);
 						} else {
-							element.setAttribute(UDF1_OLD_VALUE, oldValue);
+							element.setAttribute(ITEMORDER_OLD_VALUE, oldValue);
 						}
 					}
 					
@@ -620,76 +618,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 					}	
 				}
 				
-				if("@ItemCustomField2".equals(property)){
-					String oldValue = "0.00";
-					if(element.hasAttribute(UDF2_OLD_VALUE)){
-						oldValue = element.getAttribute(UDF2_OLD_VALUE);
-					}
-					else {
-						oldValue = element.getAttribute(UDF2);
-						if ("".equalsIgnoreCase(element.getAttribute(UDF2))
-								|| "null".equalsIgnoreCase(element
-										.getAttribute(UDF2))) {
-							oldValue = "0.00";
-							element.setAttribute(UDF2_OLD_VALUE, oldValue);
-							element.setAttribute(UDF2, value);
-						} else {
-							element.setAttribute(UDF2_OLD_VALUE, oldValue);
-						}
-					}
-					
-					try {
-						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
-							element.setAttribute(IS_MODIFIED, "Y");
-						} else {
-							if(element.hasAttribute(IS_MODIFIED)){
-								element.removeAttribute(IS_MODIFIED);
-							}
-						}
-					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
-				}
-				
-				if("@ItemCustomField3".equals(property)){
-					String oldValue = "0.00";
-					if(element.hasAttribute(UDF3_OLD_VALUE)){
-						oldValue = element.getAttribute(UDF3_OLD_VALUE);
-					}
-					else {
-						oldValue = element.getAttribute(UDF3);
-						if ("".equalsIgnoreCase(element.getAttribute(UDF3))
-								|| "null".equalsIgnoreCase(element
-										.getAttribute(UDF3))) {
-							oldValue = "0.00";
-							element.setAttribute(UDF3_OLD_VALUE, oldValue);
-							element.setAttribute(UDF3, value);
-						} else {
-							element.setAttribute(UDF3_OLD_VALUE, oldValue);
-						}
-					}
-					
-					try {
-						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
-							element.setAttribute(IS_MODIFIED, "Y");
-						} else {
-							if(element.hasAttribute(IS_MODIFIED)){
-								element.removeAttribute(IS_MODIFIED);
-							}
-						}
-					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
-				}
-				if("@Action".equals(property)){
+			/*if("@Action".equals(property)){
 					String oldValue = "0.00";
 					if(element.hasAttribute("UomId")){
 						oldValue = element.getAttribute("UomId");
@@ -717,7 +646,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}	
-				}
+				}*/
 				
 				return value;
 			}
@@ -726,13 +655,10 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		String[] editors = new String[tblItemsList.getColumnCount()];
 		editors[0] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
 		editors[3] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[4] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		editors[5] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		editors[6] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		editors[7] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[8] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[9] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[10] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		
 		bindingData.setCellTypes(editors);
 		bindingData.setCellModifierRequired(true);
 		bindingData.setCellModifier(cellModifier);
@@ -789,7 +715,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	
 		TableColumn tblClmCheckbox = new TableColumn(tblItemsList, SWT.NONE);
 		tblClmCheckbox.setText("#");
-		tblClmCheckbox.setWidth(30);//
+		tblClmCheckbox.setWidth(50);//
 		tblClmCheckbox.setResizable(false);
 		
 		TableColumn clmProductDesc = new TableColumn(tblItemsList, SWT.NONE);
@@ -819,22 +745,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		clmCustAccountField.setText("Line Account #");
 		clmCustAccountField.setWidth(50);
 		clmCustAccountField.setResizable(true);
-		
-		TableColumn clmCustField1 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField1.setText("UDF1");
-		clmCustField1.setWidth(50);
-		clmCustField1.setResizable(true);
-		
-		TableColumn clmCustField2 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField2.setText("UDF2");
-		clmCustField2.setWidth(50);
-		clmCustField2.setResizable(true);
-		
-		TableColumn clmCustField3 = new TableColumn(tblItemsList, SWT.NONE);
-		clmCustField3.setText("UDF3");
-		clmCustField3.setWidth(50);
-		clmCustField2.setResizable(true);
-		
+
 		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
 		clmSequence.setText("Sequence");
 		clmSequence.setWidth(50);
