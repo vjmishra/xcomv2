@@ -31,6 +31,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private String myItemsListKey;
 	private XPXMyItemsListDetailsPanel page;
 	private boolean exportRequested = false;
+	private boolean cancel;
 	private Element multiAPIDocElement;
 	public static final HashMap masterUOMList = new HashMap<String, String>();
 	public  HashMap itemDescList = new HashMap<String, String>();
@@ -115,7 +116,14 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						Element eleMyItemsList = YRCXmlUtils.getXPathElement(outXml, "/XPEDXMyItemsList");
 						setModel("getXPEDXMyItemsListDetail",eleMyItemsList);
 						updated = "updated List";
-						this.page.showResultMessage("Update Successful!!" , updated);
+						if(cancel==true){
+							this.page.showResultMessage("Update Cancelled!!" , updated);
+							cancel = false;
+						}
+						else{
+							this.page.showResultMessage("Update Successful!!" , updated);
+						}
+						
 						loadItemsList();
 					}
 					else if ("getCompleteItemList".equals(apiname)) {
@@ -174,7 +182,8 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						String sharePrivate = eleMyItemsList.getAttribute("SharePrivate");
 						String CreateUserName = eleMyItemsList.getAttribute("Createusername");
 						if(sharePrivate != ""){
-							setFieldValue("txtListType", CreateUserName);
+							String personalListType = CreateUserName.concat("(").concat(sharePrivate).concat(")");
+							setFieldValue("txtListType", personalListType);
 							
 						}
 						else{
@@ -349,12 +358,78 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 			xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("Qty"));
 			xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
 			xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
-			xPEDXMyItemsItems.setAttribute("ItemCustomField1",tempElement.getAttribute("ItemCustomField1"));
-			xPEDXMyItemsItems.setAttribute("ItemCustomField2",tempElement.getAttribute("ItemCustomField2"));
-			xPEDXMyItemsItems.setAttribute("ItemCustomField3",tempElement.getAttribute("ItemCustomField3"));
+			
 		}
 		return updateXPEDXMyItemsListInput.getOwnerDocument();
 	}
+	
+	//Cancel Function
+	public void cancelChangesToMyItemsList()
+	{
+		cancel = true;
+		Element eleUpdateMyItemsListData = getTargetModel("SaveXPEDXMyItemsListDetail");
+		eleUpdateMyItemsListData.setAttribute("MyItemsListKey", myItemsListKey);
+		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
+		for(int i=0;i<nlItems.getLength();i++){
+			Element eleItemData =(Element)nlItems.item(i);
+			if(!(eleItemData.hasAttribute(IS_MODIFIED))){
+				eleItemData.getParentNode().removeChild(eleItemData);
+				i--;
+			} 
+		}
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setApiNames(new String[]{"updateXPEDXMyItemsList"});
+		Document[] docInput = {cancelUpdateXPEDXMyItemsListInput(eleUpdateMyItemsListData)};
+		ctx.setInputXmls(docInput);
+		ctx.setFormId(getFormId());
+
+		callApi(ctx, page);
+		((XPXManageMyItemsListEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+		
+		
+	}
+
+	private Document cancelUpdateXPEDXMyItemsListInput(Element eleUpdateMyItemsListData) {
+		
+		Element updateXPEDXMyItemsListInput = YRCXmlUtils.createDocument("XPEDXMyItemsItemsList").getDocumentElement();
+		updateXPEDXMyItemsListInput.setAttribute("MyItemsListKey", myItemsListKey);
+		updateXPEDXMyItemsListInput.setAttribute("Name", eleUpdateMyItemsListData.getAttribute("Name"));
+		updateXPEDXMyItemsListInput.setAttribute("Desc", eleUpdateMyItemsListData.getAttribute("Desc"));
+		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
+		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
+		for(int i=0;i<nlItems.getLength();i++){
+			
+			Element tempElement =(Element)nlItems.item(i);
+			Element xPEDXMyItemsItems= YRCXmlUtils.createChild(xPEDXMyItemsItemsList, "XPEDXMyItemsItems");
+			xPEDXMyItemsItems.setAttribute("MyItemsKey", tempElement.getAttribute("MyItemsKey"));
+			xPEDXMyItemsItems.setAttribute("MyItemsListKey", myItemsListKey);
+			if(tempElement.getAttribute("QtyOldValue")!= null){
+				xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("QtyOldValue"));
+			}
+			else{
+				xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("Qty"));
+				}
+			if(tempElement.getAttribute("linePOOldValue").equalsIgnoreCase("")){
+				xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
+ 				
+			}
+			else{
+				xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("linePOOldValue"));
+			}
+			if(tempElement.getAttribute("JobIDOldValue").equalsIgnoreCase("")){
+				xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
+			}
+			else{
+				xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobIDOldValue"));
+			}
+			
+			
+			
+			
+		}
+		return updateXPEDXMyItemsListInput.getOwnerDocument();
+	}
+	//Cancel Function Ended
 	
 	public void importItemsList()
 	{
