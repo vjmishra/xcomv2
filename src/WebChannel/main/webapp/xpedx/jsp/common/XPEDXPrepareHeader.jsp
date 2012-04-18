@@ -1085,8 +1085,8 @@ var selectedShipCustomer = null;
 		// JIRA 1878 :  getting the userName of selected user, and sending as a parameter to Ajax request
         var selected_customerContactId=document.getElementById("customerContactId");
         if(selected_customerContactId)
-        	selected_customerContactId = selected_customerContactId.value   ;     
-        	 if(document.getElementById("setAsDefault").checked == null){
+        	selected_customerContactId = selected_customerContactId.value   ; 
+        	 if(document.getElementById("setAsDefault")== null || document.getElementById("setAsDefault").checked == null){
         		 var setAsDefault= true;
              }
         	 else{
