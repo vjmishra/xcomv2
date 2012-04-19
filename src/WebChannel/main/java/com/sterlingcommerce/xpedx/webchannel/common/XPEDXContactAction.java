@@ -64,7 +64,8 @@ public class XPEDXContactAction extends WCMashupAction {
 				String custDivison = SCXmlUtil.getAttribute(custExtnEle, "ExtnCustOrderBranch");
 				String customerId=getWCContext().getCustomerId();
 				String envId= SCXmlUtil.getAttribute(custExtnEle, "ExtnEnvironmentCode");
-				
+				String shipFromBranch = SCXmlUtil.getAttribute(custExtnEle, "ExtnShipFromBranch");
+				boolean getDivisionInfo = true;
 				if(custDivison!=null && custDivison.trim().length() > 0)
 				{
 					if(envId!=null && envId.trim().length()>0 && !custDivison.contains("_")){
@@ -111,7 +112,31 @@ public class XPEDXContactAction extends WCMashupAction {
 					csr2CustServEle = getUserPersonInfo(custCSR2UserKey, null);
 					//System.out.println("csr2CustServEle"+SCXmlUtil.getString(csr2CustServEle))	;
 				}	
-				
+				if(getDivisionInfo) {
+					Document organizationDetails = null;
+					if (envId != null && envId.trim().length() > 0) {
+						try {
+							organizationDetails = XPEDXWCUtils.getOrganizationDetails(shipFromBranch
+									+ "_" + envId);
+						} catch (CannotBuildInputException e) {
+							log.error("Unable to get Organization details. "+ shipFromBranch + "_" + envId + " " +e.getMessage());
+						}
+					} else {
+						try {
+							organizationDetails = XPEDXWCUtils.getOrganizationDetails(shipFromBranch);
+						} catch (CannotBuildInputException e) {
+							log.error("Unable to get Organization details. "+ shipFromBranch +e.getMessage());
+						}
+					}
+					Element docEle = organizationDetails.getDocumentElement();
+					Element orgEle = SCXmlUtil.getChildElement(docEle, "Organization");
+					Element extnEle = SCXmlUtil.getChildElement(orgEle,"Extn");
+					String extnDivisionContact = extnEle.getAttribute("ExtnDivisionContact");
+					
+					if(extnDivisionContact != null && extnDivisionContact.trim().length()>0) {
+						csr1CustServEle = getUserPersonInfo(null, extnDivisionContact);
+					}					
+				}
 				/** Modified code for Jira 3307 ***/
 			}
 		}
