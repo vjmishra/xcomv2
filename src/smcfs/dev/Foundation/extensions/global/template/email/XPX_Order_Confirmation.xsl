@@ -314,7 +314,7 @@
 						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
 						<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
 								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/> </td>
-								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
 								,
 								</xsl:if>
 						</xsl:if>
@@ -429,7 +429,7 @@
 						<xsl:if test = '@LineType!="M"' >					
 									
 					<td class="right"> Ordered Qty:</td>
-					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
+					<td class="left"><xsl:value-of select="@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>
 					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >	
 					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
@@ -593,16 +593,16 @@
 				 </tr>
 
 						</table>
-						</table>
-						<table align="center"><tr><td>
-						<p class="bottom">This document merely confirms your order; it is not an acceptance 
-						of your order.  Additional Fees may apply to accepted orders.</p><p>Please 
-						do not reply to this email.  This mailbox is not monitored and 
-						you will not receive a response.</p>
+						<table width="70%" border="0" align="center" cellpadding="1" cellspacing="1">
+				<tr>
+					<td>
+					This document merely confirms your order, it is not an acceptance of your order.Additional Fees may apply to accepted orders. 
+					Please do not reply to this email.<br>This mailbox is not monitored and you will not receive a response</br>
 						</td>
-						</tr>
+				</tr>
+			</table>
 						</table>
-		
+						
 			</BODY>
 		</HTML>
 		
