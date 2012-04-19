@@ -28,7 +28,7 @@
 		<span class="add-non-catalog-qty-label">Qty:</span> 
 		<s:textfield tabindex="12" cssClass="input-label add-non-catalog-qty-input" 
 			name="siUIQty_%{#uId}" value="%{qty}" maxlength="7"
-			onkeyup="javascript:isValidQuantityRemoveAlpha(this);" theme="simple" /> 
+			onkeyup="javascript:isValidQtyRemoveAlpha(this);" theme="simple" /> 
 			
 		<span class="bold">UOM:</span>
 	
