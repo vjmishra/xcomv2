@@ -229,11 +229,6 @@
 		</xsl:variable>	
 
 	<xsl:template match="/">
-	<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
-	<tr>
-	<td height="44">
-	</td></tr>
-	</table>
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
@@ -251,13 +246,13 @@
 					
 					
 					<td>
-					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com
+					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on xpedx.com
 
 												</td>
 									</tr>
-						</table>
+						</table>	
 						<table width="500%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
-			<thead>
+						<thead>
 					<tr>
 						
 						<th>  </th>
@@ -317,8 +312,7 @@
 
 						<td> PO #: </td>
 						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
-						<!-- if (attention field is not null) -->
-						<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine1!=""' >
+						<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
 								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/> </td>
 								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
 								,
@@ -329,9 +323,9 @@
 					<tr>
 						<td> Ordered By: </td>
 						<td><xsl:value-of select="Order/@Createuserid"/></td><!-- if (attention field is not null) -->
-								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
 								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/> </td>
-								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
 								,
 								</xsl:if>
 						</xsl:if>
@@ -345,7 +339,7 @@
 						<td> </td>
 						<td> </td>
 						<!-- if (attention field is not null) -->
-								<xsl:if test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
 								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/> </td>
 								</xsl:if>
 						
@@ -372,7 +366,28 @@
 
 					</tr><!-- End intentionally blank row. -->
 					<tr>
-						<td colspan="3"> <span class="bold"> Shipping Options: </span> </td>
+						<td colspan="3"> <span class="bold"> Shipping Options: </span>
+						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
+						Ship Order Complete
+						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+					    ,
+					    </xsl:if>
+						</xsl:if>						
+						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+						
+					    Will Call
+					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+						,
+						</xsl:if>					    					
+						</xsl:if>
+						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+						Rush Order
+						</xsl:if>
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+						Order Placed on Hold
+						</xsl:if>
+						
+						 </td>
 					</tr>
 					<tr> <!-- This row is intentionally left blank. Do not alter this row. -->
 
@@ -381,8 +396,8 @@
 						<td> </td>
 					</tr><!-- End intentionally blank row. -->
 					<tr>
-						<td colspan="3"> <span class="bold"> Order Comments: </span>
-						<xsl:value-of select="Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
+					<td colspan="3"> <span class="bold"> Order Comments: </span>
+						<xsl:value-of select="Order/Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
 						</td>
 
 					</tr>
@@ -407,73 +422,119 @@
 			<tbody>
 				<tr>
 					<td rowspan="7" valign="top">
+					<xsl:value-of select="Item/@ItemShortDesc" disable-output-escaping="yes"/>
+						<br></br>
 					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
 											</td>
+						<xsl:if test = '@LineType!="M"' >					
+									
 					<td class="right"> Ordered Qty:</td>
-
-					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM"/></td>
-					<td class="right"> <xsl:value-of select="Extn/@ExtnUnitPrice"/>
-					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >					
+					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
+					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>
+					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >	
 					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
 					</xsl:if>
 					 </td>
-					<td class="right"><xsl:value-of select="LineOverallTotals/@ExtendedPrice"/></td>
+					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
+					</xsl:if>
 				</tr>
 				<tr>
 
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<xsl:if test = '@LineType!="M"' >
+								
+						<xsl:if test = 'Extn/@ExtnReqShipOrdQty!=""' >	
+					
 					<td class="right"> Shippable Qty:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/></td>
-					<td class="right"><xsl:value-of select="Extn/@ExtnLineShippableTotal"/></td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td> 
 					<td class="right"></td>
+					<td class="right"></td>
+					    </xsl:if>
+					</xsl:if>
 				</tr>
 
 				<tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<xsl:if test = '@LineType!="M"' >					
+						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!=""' >	
+					
 					<td class="right"> Backorder Qty:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/></td>
-					<td class="right"><xsl:value-of select="Extn/@ExtnBackQtyBase"/></td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
 					<td class="right"></td>
-
+					<td class="right"></td>
+					</xsl:if>
+                     </xsl:if>
 				</tr>
 				<tr>
+				<xsl:if test = '@LineType!="M"' >					
+						
+				<xsl:if test = '@lineOrderNO!=""' >					
+					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"> Line Status:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnLineStatusCode"/> </td>
-					<td class="right"></td>
-
-					<td class="right"></td>
-				</tr>
-				<tr>
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"><xsl:value-of select="Extn/@ExtnLineStatusCode"/>  </td>
+					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="@UOMDescription"/>  </td>
 					<td class="left"></td>
 					<td class="right"></td>
 					<td class="right"></td>
+					</xsl:if>
+					</xsl:if>
 				</tr>
 				<tr>
+				<xsl:if test = '@LineType!="M"' >					
+						
+				<xsl:if test = '@lineOrderNO!=""' >					
+					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<td class="right"><xsl:value-of select="@Status"/>  </td>
+					<td class="left"></td>
+					<td class="right"></td>
+					<td class="right"></td>
+					</xsl:if>
+					</xsl:if>
+				</tr>
+				
+				<tr>
+					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<xsl:if test = '@LineType!="M"' >					
+						
+					<xsl:if test = 'Extn/@CustomerLinePONo!=""' >					
+					
 					<td class="right"> Line PO#:</td>
 					<td class="left"><xsl:value-of select="Extn/@CustomerLinePONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
+					</xsl:if>
+					</xsl:if>
 
 				</tr>
 				<tr>
+				<xsl:if test = '@LineType!="M"' >					
+						
+				<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
+					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right" valign="top"> Cust Acct Line #:</td>
 					<td class="left"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
+					</xsl:if>
+					</xsl:if>
 				</tr>
 
 				<tr>
+				<xsl:if test = 'Item/@ItemID!=""' >					
+				
 					<td><span class="itemno">xpedx item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
+					</xsl:if>
+					<xsl:if test = 'Item/@ManufacturerItem!=""' >					
+				
 					<td class="right"> Mfg. Item #:</td>
 					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
+					</xsl:if>
+					<xsl:if test = 'Item/@CustomerItem!=""' >					
+				
 					<td class="right">My Item #:</td>
 					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
-
+                    </xsl:if>
 				</tr>
 				<!-- if (specialInstructions is not null) -->
 				<tr class="special-instructions"> 
@@ -481,85 +542,67 @@
 						<table class="inner">
 							<tr>
 								<td class="first" valign="top"> Special Instructions:</td>
-								<td class="last"></td>
+								<td class="last"><xsl:value-of select="Instructions/Instruction/@InstructionText"/></td>
 
 							</tr>
 						</table>
 					 </td>
 				</tr>
-				<!-- /if -->
-				
-				<!-- if (moreItems = true) -->
-										<!-- if (specialInstructions is not null) -->
-										<!-- <tr>
-
-					<td> <br/> Fuel Surcharge </td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td class="right"><br/>$7.00</td>
-				</tr>
-					
- -->				<!-- /if -->
-				
-				<!-- if (specialCharges is not null) -->
-				<!-- <tr>
-
-					For all special charges, a <br/> on each line before the value.
-					<td> <br/> Fuel Surcharge </td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td class="right"><br/>$7.00</td>
-				</tr>
-
-				if there are multiple special charges, the 'specialcharges' class needs to be added to include the gridlines.
-				<tr class="specialcharges">
-					For all special charges, a <br/> on each line before the value.
-					<td> <br/> Fuel Surcharge 2</td>
-					<td></td>
-					<td></td>
-					<td></td>
-
-					<td class="right"><br/>$7.00</td>
-				</tr>
- -->				<!-- /if -->
-			</tbody>
+							</tbody>
 			</xsl:for-each>
 			</table>
 					</td>
 					</tr>
-					<table class="order-total">	<tr>
+					<table class="order-total">
+						<tr>
 
 				<td>Subtotal:</td>
-				<td> <xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
+				<td>$<xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
 			</tr>
 			<tr>
 				<td> Order Total Adjustments:</td>
-				<td><xsl:value-of select="Order/Extn/@ExtnTotOrderAdjustments"/></td>
+				<td>$<xsl:value-of select="Order/Extn/@ExtnTotOrderAdjustments"/></td>
 
 			</tr>
 			<tr>
 				<td>Adjusted Subtotal:</td>
-				<td><xsl:value-of select="Order/Extn/@ExtnTotOrdValWithoutTaxes"/></td>
-			</tr>
+				 <td>$<xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"#.00")'/></td>
+			 </tr>
 			<tr>
 				<td>Tax</td>
-
+              <xsl:choose><xsl:when test="Order/Extn/@ExtnOrderTax !='0.00'"> 															
+				
+				<td><span class="tbd">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></span></td>
+				</xsl:when><xsl:otherwise>
 				<td><span class="tbd">To be determined</span></td>
-			</tr>
+				</xsl:otherwise></xsl:choose>
+				</tr>
 			<tr>
 				<td> Shipping and Handling</td>
+				<xsl:choose>$<xsl:when test="Order/Extn/@ExtnTotalOrderFreight !='0.00'"> 															
+															
+				<td><span class="tbd"><xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></span></td>
+				</xsl:when><xsl:otherwise>
 				<td><span class="tbd">To be determined</span></td>
-			</tr>
+				</xsl:otherwise></xsl:choose>
+				</tr>
 
 			<tr class="last">
 				<td> Order Total (USD):</td>
-				<td><xsl:value-of select="Order/Extn/@ExtnTotalOrderValue"/></td>
-				</tr>
+				 <td>$<xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"#.00")'/></td>
+				 </tr>
 
 						</table>
 						</table>
+						<table align="center"><tr><td>
+						<p class="bottom">This document merely confirms your order; it is not an acceptance 
+						of your order.  Additional Fees may apply to accepted orders.</p><p>Please 
+						do not reply to this email.  This mailbox is not monitored and 
+						you will not receive a response.</p>
+						</td>
+						</tr>
+						</table>
+		
 			</BODY>
 		</HTML>
 		
