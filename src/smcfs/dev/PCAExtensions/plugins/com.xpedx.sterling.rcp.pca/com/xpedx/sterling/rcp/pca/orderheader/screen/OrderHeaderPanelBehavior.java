@@ -60,9 +60,11 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
        	//Added to get the invoiceNo and invoiceDate splitted For Jira 2561
     	String[] invoice;
     	//String delimiter = "M";
-    	invoice = invoiced.split("M"); 	
-    	invoiceNo = invoice[1];
-    	invoiceDate = invoice[0];
+    	if(invoiced !=null && invoiced != ""){
+	    	invoice = invoiced.split("M"); 	
+	    	invoiceNo = invoice[1];
+	    	invoiceDate = invoice[0];
+    	}
     	
 		//Comenting for jira 2561
 /*		//Added For Jira 3006: To change the Date fromat from YYYY-MM-DD to YYYYMMDD:
