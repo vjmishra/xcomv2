@@ -203,6 +203,13 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	@SuppressWarnings("unchecked")
 	private void organizeProductInformationResults()
 			throws XPathExpressionException {
+		String isVaidquantity;
+		String[] isVaidquantityArray=null;
+		HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
+		isVaidquantity = httpRequest.getParameter("validItemFlagArray");
+		if(isVaidquantity != null){
+			isVaidquantityArray = isVaidquantity.split(",");
+		}
 		// Loop through each product ID that was entered.
 		for (int i = 0; i < this.enteredProductIDs.size(); i++) {
 			String itemID = enteredProductIDs.get(i);
@@ -211,6 +218,9 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 			String enteredQtyStr = this.enteredQuantities.get(i);
 			if(enteredQtyStr == null || enteredQtyStr.equalsIgnoreCase("") || enteredQtyStr.equalsIgnoreCase("0")){
+				continue;
+			}
+			if(isVaidquantityArray!=null && isVaidquantityArray[i].equalsIgnoreCase("false")){
 				continue;
 			}
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
