@@ -138,8 +138,8 @@
 	            <td  style="width: 78px;">
 	            <s:set name='qty' value='#orderLineTran.getAttribute("OrderedQty")' />
 	            <s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
-	          <!--<s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#util.formatQuantity(wCContext, #orderLineTran.getAttribute("OrderedQty"))}' onkeyup="isValidQuantity(this)" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />  -->  
-	              <s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#qty}' onkeyup="isValidQuantity(this)" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />
+	          <!--<s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#util.formatQuantity(wCContext, #orderLineTran.getAttribute("OrderedQty"))}' onchange="isValidQuantity(this)" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />  -->  
+	              <s:textfield theme="simple" cssClass="mini-cart-row-input-length" maxlength="7" name="orderLineQtys" id="orderLineQtys_%{#orderLineKey}" size="5" value='%{#qty}' onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onkeypress="return onEnter(event)" disabled='%{#isReadOnly}' />
 	             
  				</td>
 	            <td>

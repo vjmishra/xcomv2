@@ -568,7 +568,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</li>
 					<li>
 						<label>Qty:</label>						
-						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this)"  onchange="javascript:this.value=addComma(this.value);" />
+						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
 						<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 					</li>
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
