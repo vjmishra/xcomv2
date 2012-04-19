@@ -149,7 +149,10 @@ function showSharedListForm(){
 <script type="text/javascript">
 	var availabilityURL = '<s:property value="#availabilityURL"/>';
 	var addToCartURL = '<s:property value="#addToCartURL"/>';
-
+	var divId;
+	var isGlobal;
+	var addToCartFlag;
+	var validAddtoCartItemsFlag  = new Array();
 	function hideSharedListFormIfPrivate() {
 		var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
 		var div = document.getElementById("dynamiccontent");
@@ -414,7 +417,8 @@ function showSharedListForm(){
 		
 		//Resets the Messages and calls the actual javascript function
 		function myAddItemToCart(itemId, id){
-			
+			//Added isGlobal for Jira 3770
+			isGlobal = true;
 			//Clear previous messages if any
 			clearPreviousDisplayMsg();
 			javascript:addItemToCart(itemId, id );
@@ -722,16 +726,19 @@ function showSharedListForm(){
 	       	document.body.style.cursor = 'default';
 	
 		}
-	
+		
+		
+		
 		function addToCart(){
-
+			isGlobal = false;
 			clearPreviousDisplayMsg();
 			
 			resetQuantityError();
-			 if(validateOrderMultiple(false,null) == false)
+			 if( validateOrderMultipleFromAddQtyToCart(false,null) == false)
 			 {	
 				 //Added displayMsgHdrLevelForLineLevelError() here for displaying error msg when Add Item with Qty To cart
 				 //displayMsgHdrLevelForLineLevelError ();
+				 if(addToCartFlag == false)
 					return;
 			 }
 			var formItemIds 	= document.getElementById("formItemIds");
@@ -744,7 +751,7 @@ function showSharedListForm(){
 				selCart = "_CREATE_NEW_";
 			}
 			
-		    <s:url id='addToCartLink' action='XPEDXMyItemsDetailsAddToCart.action'>
+		    <s:url id='addToCartLink' action='XPEDXMyItemsDetailsAddToCart.action'>		   
 		    </s:url>
 		
 			if (formItemIds){
@@ -758,13 +765,33 @@ function showSharedListForm(){
 				//Ext.Msg.wait("Adding items to cart...Please wait!");
 	                     //xpedx_working_start();
                          //setTimeout(xpedx_working_stop, 3000);
+                         var URL = "<s:property value='%{addToCartLink}' escape='false'/>" + "&validItemFlagArray=" +validAddtoCartItemsFlag;
+                         alert("URL="+URL);
 	                 Ext.Ajax.request({
-	                   url: '<s:property value='%{addToCartLink}' escape='false'/>',
+	                   url: URL,
 	                   form: 'formItemIds',
 	                   method: 'POST',
 	                   success: function (response, request){
+	                	   var addedItems = new Array();
+	                	   var arrQty = new Array();
+	                	   addedItems = document.getElementsByName("enteredProductIDs");
+	           				arrQty = document.getElementsByName("qtys");
+	           				for(var i = 0; i < addedItems.length; i++){
+	           					//alert("arrQty[i].value= "+ arrQty[i].value);
+	           					if(validAddtoCartItemsFlag[i]== true){alert("true");
+	           					divId='errorDiv_'+ arrQty[i].id;
+	           					var divVal=document.getElementById(divId);
+	           					divVal.innerHTML = "Item has been added to cart." ;
+								  divVal.style.display = "inline-block"; 
+								  divVal.setAttribute("style", "margin-right:5px;float:right;");
+								  divVal.setAttribute("class", "success");
+	           					}
+	           				}
+	           				
+
 	                      Ext.MessageBox.hide();
 	                      refreshMiniCartLink();
+	                     		 
 	                   },
 	                   failure: function (response, request){
 						  Ext.MessageBox.hide();
@@ -860,7 +887,135 @@ function showSharedListForm(){
 			}
 			return errorflag;
 		}*/
+		//// Function Start - Jira 3770
+		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
+			var arrQty = new Array();
+			var arrUOM = new Array();
+			var arrItemID = new Array();
+			var arrOrdMul = new Array();
+			var baseUOM = new Array();
+			arrQty = document.getElementsByName("qtys");
+				arrUOM = document.getElementsByName("UOMconversion");
+				arrItemID = document.getElementsByName("orderLineItemIDs");
+				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
+				baseUOM = document.getElementsByName("baseUOM");
+			
+			var errorflag=true;
+			addToCartFlag=false;
+			var isQuantityZero = true;
+			var uomCheck = false ;
+			for(var i = 0; i < arrItemID.length; i++)
+			{	
+				divId='errorDiv_'+	arrQty[i].id;
+				var divVal=document.getElementById(divId);
 
+				var quantity = arrQty[i].value;
+				quantity = ReplaceAll(quantity,",","");
+
+				if (priceCheck == true){
+					if(quantity == '0'|| quantity == '')
+					quantity = 1;
+				}
+				
+				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
+				if(isGlobal == true){
+					
+					if(quantity == '0' || quantity== '' ){
+							//Display Generic Message at Header level first then Update Line Level message.
+						
+						/* divVal.innerHTML='Qty Should be greater than 0'; */
+							divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
+							divVal.setAttribute("class", "error");
+							divVal.style.display = 'block';
+							document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+							//Ctrl.focus();
+						}
+					isQuantityZero = false;
+				}
+				if((quantity == '0' || quantity== '' ) )
+				{  validAddtoCartItemsFlag[i]=false;
+					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
+					{
+						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) + " "+baseUOM[i].value;
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						errorflag= false;						
+					}
+					
+				}
+				else if(quantity>0){
+					var totalQty = arrUOM[i].value * quantity;
+					if(arrOrdMul[i].value == undefined || arrOrdMul[i].value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul[i].value == null)
+					{
+						arrOrdMul[i].value=1;
+					}
+					var ordMul = totalQty % arrOrdMul[i].value;
+					isQuantityZero = false;
+					if(ordMul!= 0)
+					{
+						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
+						//added for jira 3253
+						if (priceCheck == true){
+							divVal.setAttribute("class", "error");
+							divVal.style.display = 'block';
+							}
+						else {
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						document.getElementById("errorMsgTop").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgTop").style.display = "inline";
+						
+			            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgBottom").style.display = "inline";
+			            uomCheck = true;
+						}
+						errorflag= false; validAddtoCartItemsFlag[i]=false;
+					}
+					else if (arrOrdMul[i].value > 1 && priceCheck == true){
+						if (priceCheck == true){
+							
+							divVal.setAttribute("class", "notice");
+							divVal.style.display = 'block';
+						}
+						else {
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.setAttribute("class", "notice");
+							divVal.style.display = 'block';
+							
+							}
+						
+						
+					}	
+					else{
+						addToCartFlag = true;
+						validAddtoCartItemsFlag[i]=true;
+					}
+				}	
+				
+			}
+			if(uomCheck == true)
+			{
+				errorflag= false;
+			}	
+			if(isQuantityZero == true)
+			{
+				document.getElementById("errorMsgTop").innerHTML = "No items with quantity defined. Please review the list and try again." ;
+	            document.getElementById("errorMsgTop").style.display = "inline";
+	            
+	            document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
+	            document.getElementById("errorMsgBottom").style.display = "inline";
+				errorflag= false;
+			}
+			
+			return errorflag;
+			
+		}
+// Function End - Jira 3770
 		function validateOrderMultiple(isOnlyOneItem,listId)
 		{
 			
@@ -871,7 +1026,7 @@ function showSharedListForm(){
 			var arrOrdMul = new Array();
 			var baseUOM = new Array();
 			if(isOnlyOneItem != undefined && isOnlyOneItem == true)
-			{
+			{	
 				arrQty[0]=document.getElementById("qtys_"+listId);
 				arrUOM[0]=document.getElementById("UOMconversion_"+listId);
 				arrItemID[0]=document.getElementById("orderLineItemIDs_"+listId);
@@ -879,7 +1034,7 @@ function showSharedListForm(){
 				baseUOM[0]=document.getElementById("baseUOM_"+listId);
 			}
 			else
-			{
+			{	
 				arrQty = document.getElementsByName("qtys");
 				arrUOM = document.getElementsByName("UOMconversion");
 				arrItemID = document.getElementsByName("orderLineItemIDs");
@@ -892,7 +1047,7 @@ function showSharedListForm(){
 			var uomCheck = false ;
 			for(var i = 0; i < arrItemID.length; i++)
 			{
-				var divId='errorDiv_'+	arrQty[i].id;
+				divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
 
 				var quantity = arrQty[i].value;
@@ -904,6 +1059,22 @@ function showSharedListForm(){
 				}
 				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
+				//Added For Jira 3770
+				if(isGlobal == true){
+					
+					if(quantity == '0' || quantity== '' ){
+							//Display Generic Message at Header level first then Update Line Level message.
+						
+						/* divVal.innerHTML='Qty Should be greater than 0'; */
+							divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
+							divVal.setAttribute("class", "error");
+							divVal.style.display = 'block';
+							document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+							//Ctrl.focus();
+						}
+					isQuantityZero = false;
+				}
+				//End Fix For Jira 3770
 				if((quantity == '0' || quantity== '' ) )
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
@@ -913,8 +1084,7 @@ function showSharedListForm(){
 						divVal.style.display = 'block';
 						errorflag= false;
 					}
-					if(quantity == '0' || quantity== '' ){
-						//Display Generic Message at Header level first then Update Line Level message.
+					//Display Generic Message at Header level first then Update Line Level message.
 					
 					/* divVal.innerHTML='Qty Should be greater than 0'; */
 						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
@@ -922,7 +1092,7 @@ function showSharedListForm(){
 						divVal.style.display = 'block';
 						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
 						//Ctrl.focus();
-					}
+					
 				}
 				else if(quantity>0){
 					var totalQty = arrUOM[i].value * quantity;
