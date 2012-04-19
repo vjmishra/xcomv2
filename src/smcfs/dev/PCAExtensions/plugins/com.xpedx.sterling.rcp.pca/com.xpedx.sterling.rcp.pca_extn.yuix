@@ -395,11 +395,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@FromStatus"/>
-                <SetData name="YRCTargetBinding" value="/Order/@FromStatus"/>
                 <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
+                <SetData name="YRCTargetBinding" value="/Order/@FromStatus"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -417,11 +417,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@ToStatus"/>
-                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="YRCTargetBinding" value="/Order/@ToStatus"/>
+                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -1447,11 +1447,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CarrierServiceCode"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_ShipMethods:/CarrierServiceList/CarrierService"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="OrderDetails:/Order/@CarrierServiceCode"/>
-                <SetData name="YRCDescriptionBinding" value="CarrierServiceDesc"/>
                 <SetData name="YRCTargetBinding" value="SaveOrder:/Order/@CarrierServiceCode"/>
+                <SetData name="YRCDescriptionBinding" value="CarrierServiceDesc"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -1574,11 +1574,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="OrderCharges:/CommonCodeList/CommonCode"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="YRCTargetBinding" value=""/>
+                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -2407,6 +2407,22 @@
                 </Field>
                 <SetData name="YRCTableColumnBinding" value="UserName"/>
             </NewField>
+            <NewField>
+                <Field attachTo="tblOrderHistory" attachType="BEFORE"
+                    defaultValue="Please refer to Customer Order Search on the Tasks panel"
+                    enabled="true" isAdvanced="false"
+                    name="extn_Lbl_msg" type="Label" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="TaskHeader"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Center"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
         </NewFields>
         <ExistingFields>
             <ExistingField attachTo="" attachType="" enabled="true"
@@ -2433,6 +2449,166 @@
             <ExistingField attachTo="" attachType="" enabled="true"
                 name="tblclmLastName" tableName="tblCustomerContact"
                 type="TableColumn" width="82" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="pnlOrderSearchCriteriaBody" type="Composite" visible="true">
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="5"
+                    marginWidth="5" numberOfColumns="6" verticalSpacing="5"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="true" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Fill" vColSpan="1" widthHint="-1"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" name="cmbHoldType"
+                type="Combo" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="yrc:customType" value="Combo"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="grpStatusSearch" type="Group" visible="true">
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="5"
+                    marginWidth="5" numberOfColumns="3" verticalSpacing="5"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType=""
+                name="bttnStatusOpen" type="Radio" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="End"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+                <SetData name="yrc:customType" value="Text"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType=""
+                name="pnlOrderSearchCriteriaHolder" type="Composite" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <Layout horizontalSpacing="0"
+                    makeColumnsEqualWidth="false" marginHeight="1"
+                    marginWidth="1" numberOfColumns="1" verticalSpacing="0"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+                <SetData name="yrc:customType" value="Composite"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmDisplayStatusDescription"
+                tableName="tblOrderHistory" type="TableColumn"
+                width="177" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmTotalAmount" tableName="tblOrderHistory"
+                type="TableColumn" width="175" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmAddressLine1" tableName="tblOrderHistory"
+                type="TableColumn" width="205" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmOrderDate" tableName="tblOrderHistory"
+                type="TableColumn" width="196" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmCustomerFirstName"
+                tableName="tblOrderHistory" type="TableColumn"
+                width="453" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmCustomerLastName"
+                tableName="tblOrderHistory" type="TableColumn"
+                width="449" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <SetData name="yrc:customType" value="Table"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType=""
+                name="pnlHistoryRecentSwitch" type="Composite" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="2"
+                    marginWidth="5" numberOfColumns="1" verticalSpacing="5"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+                <SetData name="yrc:customType" value="Composite"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType=""
+                name="pnlCustomerOrderListPaginationPanel"
+                type="Composite" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="2"
+                    marginWidth="2" numberOfColumns="5" verticalSpacing="5"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Fill"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Fill" vColSpan="1" widthHint="-1"/>
+                <SetData name="yrc:customType" value="Composite"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="pnlOrderHistory" type="Composite" visible="true">
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="5"
+                    marginWidth="5" numberOfColumns="1" verticalSpacing="0"/>
+                <styles>
+                    <style style="NONE"/>
+                </styles>
+            </ExistingField>
+            <ExistingField attachTo="" attachType="" enabled="true"
+                name="tblclmOrderNo" tableName="tblOrderHistory"
+                type="TableColumn" width="50" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
                 <SetData name="yrc:customType" value="Table"/>
                 <styles>
                     <style style="NONE"/>
@@ -3097,9 +3273,9 @@
                 </Field>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="Extn_BillToInfo:/PersonInfo/@AddressLine6"/>
-                <SetData name="YRCTargetBinding" value=""/>
                 <SetData
                     name="keycorrespondingtowhichvaluewillbedisplayed" value="xpedx_address_key"/>
+                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -3309,11 +3485,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="OrganizationCode"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_DivisionList:/OrganizationList/Organization"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCDescriptionBinding" value="OrganizationName"/>
                 <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision"/>
+                <SetData name="YRCDescriptionBinding" value="OrganizationName"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3329,11 +3505,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="@CustomerTypeCode"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_CustomerTypes:/CustomerTypes/CustomerType"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCDescriptionBinding" value="@CustomerTypeDesc"/>
                 <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnSuffixType"/>
+                <SetData name="YRCDescriptionBinding" value="@CustomerTypeDesc"/>
                 <SetData name="yrc:customType" value=""/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3474,5 +3650,10 @@
                 </styles>
             </ExistingField>
         </ExistingFields>
+    </Form>
+    <Form extensionBehaviorName=""
+        id="com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel" wizard="false">
+        <NewFields/>
+        <ExistingFields/>
     </Form>
 </Forms>
