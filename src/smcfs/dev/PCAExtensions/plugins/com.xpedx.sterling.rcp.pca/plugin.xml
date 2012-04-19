@@ -45,6 +45,10 @@
             class="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor"
             icon=""
             id="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor" name="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor" name="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor"/>
     </extension>
     <extension id="org.eclipse.ui.actionSets" point="org.eclipse.ui.actionSets">
         <actionSet
@@ -345,6 +349,7 @@
             <category id="YCD_CUSTOMER_DETAIL_RELATED">
                 <tasks id="YCD_TASK_SEND_MAIL_NEED_ATTENTION">
                     <task id="MyItemsSearch"/>
+                    <task id="CustomerOrderSearch"/>
                 </tasks>
             </category>
         </categories>
@@ -456,6 +461,15 @@
                     <category id="YCD_ORDER_RELATED"/>
                 </categories>
             </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                filterRequired="false" groupId="Search_Tasks"
+                id="CustomerOrderSearch" isExtension="false"
+                name="Customer Order Search" permissionId="ycdRCPX006">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="YCD_CUSTOMER_DETAIL_RELATED"/>
+                </categories>
+            </task>
         </tasks>
     </extension>
     <extension id="XPXActionSets" name="XPXActionSets" point="org.eclipse.ui.actionSets">
@@ -551,6 +565,15 @@
                 class="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
                 id="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
                 label="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+            label="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                id="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                label="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
                 state="true" style="push"/>
         </actionSet>
     </extension>
