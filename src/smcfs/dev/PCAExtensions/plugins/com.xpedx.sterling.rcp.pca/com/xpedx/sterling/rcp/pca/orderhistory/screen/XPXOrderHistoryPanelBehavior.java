@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
 import com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor;
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
-import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
+//import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCEditorInput;
@@ -250,7 +250,7 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
                         }
                     }
                     if(!isRefOrderEditorFound){
-                    	YCDExtensionUtils.launchTaskInEditor("YCD_TASK_VIEW_ORDER_SUMMARY", orderElement);
+                    	//YCDExtensionUtils.launchTaskInEditor("YCD_TASK_VIEW_ORDER_SUMMARY", orderElement);
 
                         
                     }
