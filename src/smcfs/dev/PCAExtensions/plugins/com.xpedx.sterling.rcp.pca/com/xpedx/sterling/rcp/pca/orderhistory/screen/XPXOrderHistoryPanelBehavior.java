@@ -4,6 +4,13 @@
  */
 package com.xpedx.sterling.rcp.pca.orderhistory.screen;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.xml.xpath.XPathConstants;
+
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -16,10 +23,12 @@ import org.w3c.dom.NodeList;
 import com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor;
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
+import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
@@ -28,12 +37,15 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 	private XPXOrderHistoryPanel page ;
 	private String defaultOrgCode ;
 	private String refOrderHdrKey;
-
+	public String masterCustomer;
+	public static final HashMap statusList = new HashMap<String, String>();
 	public XPXOrderHistoryPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
         super(ownerComposite, formId,inputObject);
         this.page = (XPXOrderHistoryPanel)getOwnerForm();
         this.defaultOrgCode = "";
 //        init();
+        getStatusList();
+        masterCustomer = XPXUtils.masterCustomerID;
         createSearchBy();
         createOrderType();
         createOrderStatus();
@@ -81,11 +93,11 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		
 		
 		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "OrdType");
-		attrElemComplex2.setAttribute("OrderTypeValue", "FO");
+		attrElemComplex2.setAttribute("OrderTypeValue", "0002");
 		attrElemComplex2.setAttribute("OrderTypeDescription", "Fulfillment Orders");
 
 		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrdType");
-		attrElemComplex3.setAttribute("OrderTypeValue", "CO");
+		attrElemComplex3.setAttribute("OrderTypeValue", "0001");
 		attrElemComplex3.setAttribute("OrderTypeDescription", "Customer Orders");
 							
 		setModel("OrderType",elemModel);
@@ -96,15 +108,15 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		Element elemModel = YRCXmlUtils.createDocument("OrderStatus").getDocumentElement();
 		
 		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex1.setAttribute("OrderStatusValue", "OpenOrd");
+		attrElemComplex1.setAttribute("OrderStatusValue", "1100.5250");
 		attrElemComplex1.setAttribute("OrderStatusDescription", "Open Orders");
 		
 		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex2.setAttribute("OrderStatusValue", "BackOrd");
+		attrElemComplex2.setAttribute("OrderStatusValue", "1100.5100");
 		attrElemComplex2.setAttribute("OrderStatusDescription", "Backordered");
 
 		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex3.setAttribute("OrderStatusValue", "OrdNum");
+		attrElemComplex3.setAttribute("OrderStatusValue", "1100.5550");
 		attrElemComplex3.setAttribute("OrderStatusDescription", "Shipped");
 							
 		setModel("OrderStatus",elemModel);
@@ -139,11 +151,32 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
 	        	//refresh search results
 	        	search();
-	        }        	
+	        }      	
 	        else if(YRCPlatformUI.equals(ctx.getApiName(), "XPXReprocessReferenceOrderService"))
 	        {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
-	        }        	
+	        }  
+        	//Calling Child Customer List Servie
+	        else if(YRCPlatformUI.equals(ctx.getApiName(), "getOrderList"))
+	        {
+	        	Element orderListXml=ctx.getOutputXml().getDocumentElement();
+	        	//Adding Status Column
+	        	NodeList listOrderList = orderListXml.getElementsByTagName("Order");
+	        	for (int k = 0; k < listOrderList.getLength(); k++) {
+					Element eleOrderList = (Element) listOrderList.item(k);
+					Element extn = YRCXmlUtils.getChildElement(eleOrderList, "Extn");
+					String extnOrderStatus = extn.getAttribute("ExtnOrderStatus");
+					
+					
+						eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
+						
+					
+					
+				}
+	        	/*********************************************/
+	        	setModel("OrderListModel",orderListXml);
+	        }
+	        
 	        
         }
 		
@@ -192,7 +225,8 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
         		orderElement = YRCXmlUtils.getCopy(orderElement, false);
                 if(!YRCPlatformUI.isVoid(tblItems[i]) && !tblItems[i].isDisposed())
                 {
-                	String currRefOrderHdrKey = orderElement.getAttribute("RefOrderHdrKey");
+                	String currRefOrderHdrKey = orderElement.getAttribute("OrderHeaderKey");
+                	String OrderNo=orderElement.getAttribute("OrderNo");
 
                     boolean isRefOrderEditorFound = false;
                     IEditorReference editorReferences[] = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
@@ -204,9 +238,9 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
                             if(tEditor == null || !(tEditor instanceof XPXOrderHistoryEditor))
                                 continue;
                             Element orderEntryEditorInput = ((YRCEditorInput)tEditorInput).getXml();
-                            if(YRCPlatformUI.isVoid(orderEntryEditorInput) || !YRCPlatformUI.equals(currRefOrderHdrKey, orderEntryEditorInput.getAttribute("RefOrderHdrKey")))
+                            if(YRCPlatformUI.isVoid(orderEntryEditorInput) || !YRCPlatformUI.equals(currRefOrderHdrKey, orderEntryEditorInput.getAttribute("OrderHeaderKey")))
                                 continue;
-                            YRCPlatformUI.openEditor("com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor", (YRCEditorInput)tEditorInput);
+                            YRCPlatformUI.openEditor("com.yantra.pca.ycd.rcp.editors.YCDOrderEditor", (YRCEditorInput)tEditorInput);
                             isRefOrderEditorFound = true;
                             break;
                         }
@@ -216,10 +250,9 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
                         }
                     }
                     if(!isRefOrderEditorFound){
-                    	String[] arrayEditorComparisonAttrs = new String[] {
-                                "RefOrderHdrKey"
-                            };
-                        YRCPlatformUI.openEditor(XPXOrderHistoryEditor.ID_EDITOR, new YRCEditorInput(orderElement, arrayEditorComparisonAttrs, ""));
+                    	YCDExtensionUtils.launchTaskInEditor("YCD_TASK_VIEW_ORDER_SUMMARY", orderElement);
+
+                        
                     }
                 }
         	}
@@ -294,6 +327,141 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 				YRCXmlUtils.createFromString("<XPXRefOrderHdr RefOrderHdrKey='" + refOrderHdrKey + "'  IsMarkOdrCompleteFlag='Y'/>")
 		};
 	    callApis(api, docInput);	
+		
+	}
+	//Method created for fetcching child customers
+	public void getOrderList()
+	{
+		YRCApiContext apiCtx = new YRCApiContext();
+		Element elemModel = YRCXmlUtils.createDocument("Order").getDocumentElement();
+		elemModel.setAttribute("BillToID", masterCustomer);
+		elemModel.setAttribute("ReadFromHistory","N");
+		boolean isExtnChildCreated = false;
+		Element attrElemComplex2 =null;
+		//Condition For Item Number
+		if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("ItemNum"))){
+			Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrderLines");
+			Element attrElemComplex4 = YRCXmlUtils.createChild(attrElemComplex3, "OrderLine");
+			Element attrElemComplex5 = YRCXmlUtils.createChild(attrElemComplex4, "Item");
+			attrElemComplex5.setAttribute("ItemID", getFieldValue("txtSearchBy"));
+		}
+					//Condition For Order Search By
+		if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("WebConf")|| getFieldValue("cmbSearchBy").equalsIgnoreCase("OrdNum"))){
+			attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
+			isExtnChildCreated = true;
+			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
+			attrElemComplex2.setAttribute("Division", "12_M");
+			attrElemComplex2.setAttribute("ShipToID", "");*/
+			if(getFieldValue("cmbSearchBy").equalsIgnoreCase("WebConf") && ((getFieldValue("txtSearchBy")) !=null || (getFieldValue("txtSearchBy")) != "")){
+				attrElemComplex2.setAttribute("ExtnWebConfNum", getFieldValue("txtSearchBy"));
+			}
+			else if(getFieldValue("cmbSearchBy").equalsIgnoreCase("OrdNum") && ((getFieldValue("txtSearchBy")) !=null || (getFieldValue("txtSearchBy")) != "")){
+				attrElemComplex2.setAttribute("ExtnLegacyOrderNo", getFieldValue("txtSearchBy"));
+			}
+			
+		}
+		if(getFieldValue("txtSuffix")!= null || getFieldValue("txtCompany")!= null || getFieldValue("txtShipFrom")!= null || getFieldValue("txtAccount")!= null){
+			if(isExtnChildCreated){
+				attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
+				attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
+				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+				attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
+			}
+			else{
+				attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
+				attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
+				attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
+				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+				attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
+			}
+			isExtnChildCreated = false;
+			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
+			attrElemComplex2.setAttribute("Division", "12_M");
+			attrElemComplex2.setAttribute("ShipToID", "");*/
+			
+			
+		}
+		/*else if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("Item Number"))){
+			
+		}*/
+		//Condition For OrderType
+		if((getFieldValue("cmbOrderType")!= null) && (getFieldValue("cmbOrderType").equalsIgnoreCase("0001"))){
+			elemModel.setAttribute("OrderType", "Customer");
+		}
+		 if((getFieldValue("cmbOrderType")!= null) && (getFieldValue("cmbOrderType").equalsIgnoreCase("0002"))){
+			elemModel.setAttribute("OrderType","STOCK_ORDER");
+		}
+
+		//Condition For Order Status
+		 if((getFieldValue("cmbOrderStatus")!= null) && (getFieldValue("cmbOrderStatus").equalsIgnoreCase("1100.5250"))){
+			elemModel.setAttribute("Status", "1100.5250");
+		}
+		if((getFieldValue("cmbOrderStatus")!= null) && (getFieldValue("cmbOrderStatus").equalsIgnoreCase("1100.5100"))){
+			elemModel.setAttribute("Status", "1100.5100");
+		}
+		 if((getFieldValue("cmbOrderStatus")!= null) && (getFieldValue("cmbOrderStatus").equalsIgnoreCase("1100.5550"))){
+			elemModel.setAttribute("Status", "1100.5550");
+		}
+
+		//Condition For DateRange
+		
+		 if(getFieldValue("txtFromDate")!= null && getFieldValue("txtFromDate")!= ""){
+			 String datefrom=getFieldValue("txtFromDate");
+			    SimpleDateFormat sdfSource = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+			    Date date=new Date();
+			   try {
+					date = sdfSource.parse(datefrom);
+					} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			    String fromdateReturn=sdfDestination.format(date);
+			    elemModel.setAttribute("FromOrderDate", fromdateReturn);
+			elemModel.setAttribute("OrderDateQryType","DATERANGE");
+		}
+		if(getFieldValue("txtToDate")!= null && getFieldValue("txtToDate")!= ""){
+			String dateTo=getFieldValue("txtToDate");
+		    SimpleDateFormat sdfSource = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		    Date date=new Date();
+		   try {
+				date = sdfSource.parse(dateTo);
+				} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		    String todateReturn=sdfDestination.format(date);
+			elemModel.setAttribute("ToOrderDate", todateReturn);
+		}
+		//Condition for Company
+		
+
+			apiCtx.setApiName("getOrderList");
+			apiCtx.setInputXml(elemModel.getOwnerDocument());
+		
+		apiCtx.setFormId(getFormId());
+		callApi(apiCtx);
+		
+	}
+	
+	private HashMap getStatusList(){
+		statusList.put("1100.0100", "Submitted");
+		statusList.put("1100.5100", "Backorder");
+		statusList.put("1100.5250", "Open");
+		statusList.put("1100.5300", "Direct from Manufacturer");
+		statusList.put("1100.5350", "Customer Hold");
+		statusList.put("1100.5400", "System Hold");
+		statusList.put("1100.5450", "Web Hold");
+		statusList.put("1100.5500", "Released for Fullfillment");
+		statusList.put("1100.5550", "Shipped");
+		statusList.put("1100.5700", "Invoiced");
+		statusList.put("1100.5750", "Return");
+		statusList.put("1100.5900", "Quote");
+		statusList.put("1100.5950", "Invoice Only");
+		statusList.put("9000", "Cancelled");
+		return statusList;
+		
 		
 	}
 
