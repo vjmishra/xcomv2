@@ -17436,8 +17436,20 @@ function restrictTextareaMaxLength(Object, maxLen){
  return true;
  
 }
-
-function isValidQuantityRemoveAlpha(component){
+//added for jira 3241
+function isValidQuantityRemoveAlpha(component,e){
+	var characterCode
+	if(e && e.which){ // NN4 specific code
+		e = e
+		characterCode = e.which
+	}
+	else {
+		e = event
+		characterCode = e.keyCode // IE specific code
+	}
+	if(characterCode==37 || characterCode==38 || characterCode==39 || characterCode==40 ){
+		return;
+	}
 
 	var quantity = component.value.trim();
     var qtyLen = quantity.length;
@@ -17462,6 +17474,33 @@ function isValidQuantityRemoveAlpha(component){
     }
     return true;
 }
+//end for jira 3241
+
+function isValidQtyRemoveAlpha(component){
+	var quantity = component.value.trim();
+    var qtyLen = quantity.length;
+    var validVals = "0123456789";
+    //var isValid=true;
+    var char;
+    for (i = 0; i < qtyLen ; i++) {
+       char = quantity.charAt(i); 
+       if (validVals.indexOf(char) == -1) 
+       {
+    	quantity = quantity.substr(0,i) ;
+    	//alert ("Quantity After: " + quantity)
+         // isValid = false;
+       }
+   	}
+    component.value = quantity;
+
+    if (quantity.length > 7){
+        var val = quantity.substr(0,7);
+		quantity = val;
+        component.value = quantity;
+    }
+    return true;
+}
+
 
 
 // Our "please wait" function
