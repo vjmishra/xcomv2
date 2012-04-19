@@ -23,10 +23,12 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanelBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
+import com.yantra.yfc.rcp.IYRCCellModifier;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCDefaultServerImageProvider;
 import com.yantra.yfc.rcp.IYRCPaginatedSearchAndListComposite;
@@ -82,11 +84,14 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
     private Text txtSuffix;
     private Text txtShipFrom;
     private Text txtOrderStatus;
+    private Text txtSearchButton;
+    private Text txtClearButton;
 	private Combo cmbSearchBy;
 	private Combo cmbOrderStatus;
 	private Combo cmbOrderType;
     private Label lblBuyerID;
     private Text txtSearchBy;
+    private Text txtOrderType;
     private Label lblOrderDate;
     private Label lblDateFormat;
     private Composite pnlOrderDate;
@@ -116,7 +121,8 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
     private TableColumn clmOrdered;
     private TableColumn clmAmount;
     private TableColumn clmShipDate;
-    
+    private TableColumn clmCompany;
+    private TableColumn clmWarehouse;
 	private Composite pnlRoot = null;
 	private Composite pnlButtons = null;
 	private Button btnSearch = null;
@@ -137,7 +143,8 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 				String ctrlName = (String) ctrl.getData("name");
 				if (!YRCPlatformUI.isVoid(ctrlName)){
 					if (YRCPlatformUI.equals(ctrlName, "btnSearch"))
-						myBehavior.search();
+						//myBehavior.search();
+						myBehavior.getOrderList();
 					else if (YRCPlatformUI.equals(ctrlName, "btnClear"))
 						myBehavior.reset();
 					else if(YRCPlatformUI.equals(ctrlName, "btnFromDateCalendar"))
@@ -159,6 +166,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		};
 		initialize();
         setBindingForComponents();
+        setBindingORDERist();
         myBehavior = new XPXOrderHistoryPanelBehavior(this, FORM_ID,inputObject);
 	}
 
@@ -190,7 +198,6 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         pnlRootlayout.marginWidth = 2;
         pnlRoot.setLayout(pnlRootlayout);
         createPnlSearchTop();
-        createPnlButtons();
         createCmpstSearchResultsAndControls();
         
 	}
@@ -292,9 +299,18 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		GridData cmbOrderTypelayoutData = new GridData();
 		cmbOrderTypelayoutData.verticalAlignment = 1;
 		cmbOrderTypelayoutData.horizontalSpan = 2;
+		cmbOrderTypelayoutData.horizontalAlignment = 4;
 		cmbOrderTypelayoutData.grabExcessVerticalSpace = true;
 		cmbOrderTypelayoutData.grabExcessHorizontalSpace = true;
 		cmbOrderType.setLayoutData(cmbOrderTypelayoutData);
+		
+		txtOrderType = new Text(pnlBasicSearchCriteriaBody, SWT.BORDER);
+		GridData txtOrderTypelayoutData = new GridData();
+		txtOrderTypelayoutData.horizontalAlignment = 4;
+		txtOrderTypelayoutData.grabExcessHorizontalSpace = true;
+		txtOrderType.setLayoutData(txtOrderTypelayoutData);
+		txtOrderType.setData("name", "txtOrderType");
+		txtOrderType.setVisible(false);
 		
 		this.createPnlFilter();
         
@@ -507,44 +523,59 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		txtShipFromlayoutData.grabExcessHorizontalSpace = true;
 		txtShipFrom.setLayoutData(txtShipFromlayoutData);
 		txtShipFrom.setData("name", "txtShipFrom");
-
+		this.createPnlSearch();
     }
 	
-	private void createPnlButtons(){
-		
-		pnlButtons = new Composite(pnlRoot, SWT.NONE);
-		pnlButtons.setBackgroundMode(SWT.INHERIT_NONE);
-		pnlButtons.setData(YRCConstants.YRC_CONTROL_NAME, "pnlButtons");
-		GridData pnlButtonslayoutData = new GridData();
-		pnlButtonslayoutData.horizontalAlignment = 4;
-		pnlButtonslayoutData.verticalAlignment = 4;
-		pnlButtonslayoutData.grabExcessHorizontalSpace = true;
-		pnlButtonslayoutData.horizontalSpan = 2;
-		pnlButtons.setLayoutData(pnlButtonslayoutData);
-		pnlButtons.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "TaskComposite");
-		GridLayout pnlButtonslayout = new GridLayout(4, false);
-		pnlButtonslayout.marginHeight = 2;
-		pnlButtonslayout.marginWidth = 0;
-		pnlButtons.setLayout(pnlButtonslayout);
+	private void createPnlSearch(){
+		pnlSearch = new Composite(pnlBasicSearchCriteriaBody, SWT.None);
+		pnlSearch.setBackgroundMode(0);
+		pnlSearch.setData("name", "pnlSearch");
+		GridData pnlSearchlayoutData = new GridData();
+		pnlSearchlayoutData.horizontalAlignment = 4;
+		pnlSearchlayoutData.verticalAlignment = 4;
+		pnlSearchlayoutData.grabExcessHorizontalSpace = true;
+		pnlSearchlayoutData.horizontalSpan = 4;
+		pnlSearch.setLayoutData(pnlSearchlayoutData);
+		GridLayout pnlSearchlayout = new GridLayout(4, false);
+		pnlSearchlayout.marginHeight = 2;
+		pnlSearchlayout.marginWidth = 0;
+		pnlSearch.setLayout(pnlSearchlayout);
 //		createPnlShowHideCriteria();
 //		createPnlOrderByOptions();
-	
-		btnClear = new Button(pnlButtons, SWT.PUSH);
+		
+		
+		txtClearButton = new Text(pnlSearch, SWT.BORDER);
+		GridData txtClearButtonlayoutData = new GridData();
+		txtClearButtonlayoutData.horizontalAlignment = 4;
+		txtClearButtonlayoutData.grabExcessHorizontalSpace = true;
+		txtClearButton.setLayoutData(txtClearButtonlayoutData);
+		txtClearButton.setData("name", "txtClearButton");
+		txtClearButton.setVisible(false);
+		
+		txtSearchButton = new Text(pnlSearch, SWT.BORDER);
+		GridData txtSearchButtonlayoutData = new GridData();
+		txtSearchButtonlayoutData.horizontalAlignment = 4;
+		txtSearchButtonlayoutData.grabExcessHorizontalSpace = true;
+		txtSearchButton.setLayoutData(txtSearchButtonlayoutData);
+		txtSearchButton.setData("name", "txtSearchButton");
+		txtSearchButton.setVisible(false);
+		
+		
+		btnClear = new Button(pnlSearch, SWT.PUSH);
 		btnClear.setData("name","btnClear");
 		GridData btnClearlayoutData = new GridData();
-		btnClearlayoutData.horizontalAlignment = 2;
+		btnClearlayoutData.horizontalAlignment = 4;
 		btnClearlayoutData.heightHint = 25;
 		btnClearlayoutData.widthHint = 80;
-		btnClearlayoutData.horizontalIndent = 1200;
 		btnClear.setLayoutData(btnClearlayoutData);
 		btnClear.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "Button");
 		btnClear.setText("Clear");
 		btnClear.addSelectionListener(selectionAdapter);
 		
-		btnSearch = new Button(pnlButtons, SWT.PUSH);
+		btnSearch = new Button(pnlSearch, SWT.PUSH);
 		btnSearch.setData("name","btnSearch");
 		GridData btnSearchlayoutData = new GridData();
-		btnSearchlayoutData.horizontalAlignment = 2;
+		btnSearchlayoutData.horizontalAlignment = 4;
 		btnSearchlayoutData.heightHint = 25;
 		btnSearchlayoutData.widthHint = 80;
 		btnSearch.setLayoutData(btnSearchlayoutData);
@@ -757,6 +788,18 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		clmPONum.setResizable(true);
 		clmPONum.setMoveable(false);
 		
+		clmCompany = new TableColumn(tblSearchResults, SWT.LEFT);
+		clmCompany.setText("Company");
+		clmCompany.setWidth(120);
+		clmCompany.setResizable(true);
+		clmCompany.setMoveable(false);
+		
+		clmWarehouse = new TableColumn(tblSearchResults, SWT.LEFT);
+		clmWarehouse.setText("Warehouse");
+		clmWarehouse.setWidth(80);
+		clmWarehouse.setResizable(true);
+		clmWarehouse.setMoveable(false);
+		
 		clmBillTo = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmBillTo.setText("Bill-To / Ship-To #");
 		clmBillTo.setWidth(80);
@@ -856,10 +899,6 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         txtSearchBy.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
         
         tbd = new YRCTextBindingData();
-        tbd.setName("txtOrderStatus");
-        txtOrderStatus.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
-        
-        tbd = new YRCTextBindingData();
         tbd.setName("txtCompany");
         txtCompany.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
         
@@ -875,13 +914,13 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         tbd.setName("txtShipFrom");
         txtShipFrom.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
         
-        // Search Results Table bindings
-       /* YRCTableBindingData tblSearchResultsbd = new YRCTableBindingData();
+       /* // Search Results Table bindings
+       YRCTableBindingData tblSearchResultsbd = new YRCTableBindingData();
 		tblSearchResultsbd.setName("tblSearchResults");
-		tblSearchResultsbd.setSourceBinding("XPXRefOrderHdrList:XPXRefOrderHdrList/XPXRefOrderHdr");
+		tblSearchResultsbd.setSourceBinding("XPXRefOrderHdrList:XPXRefOrderHdrList/XPXRefOrderHdr");*/
 	
-		YRCTblClmBindingData tblSearchResultsClmBd[] = new YRCTblClmBindingData[10];
-		int tblSearchResultsCounter=0;*/
+		
+		
 		
 		/*tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
 		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmReprocess");
@@ -1065,6 +1104,112 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		tblSearchResultsbd.setSortAttributeBinding("@Createts");
 		tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblSearchResultsbd);*/
     }
+	
+	private void setBindingORDERist(){
+		YRCTextBindingData textBindingData = new YRCTextBindingData();
+        textBindingData = new YRCTextBindingData();
+  
+        
+		/************/
+		YRCComboBindingData cbd = new YRCComboBindingData();
+        YRCTableBindingData tblResultsBinding1 = new YRCTableBindingData();
+		YRCTblClmBindingData colBindings11[] = new YRCTblClmBindingData[tblSearchResults.getColumnCount()];
+		colBindings11[0] = new YRCTblClmBindingData();
+		colBindings11[0].setName("Status");
+		colBindings11[0].setAttributeBinding("@Status");
+		colBindings11[0].setColumnBinding("clmStatus");
+        colBindings11[0].setSortReqd(true);
+        colBindings11[0].setSortBinding("@Status");
+		//colBindings11[0].setLinkReqd(true);
+		colBindings11[0].setFilterReqd(true);
+		
+		
+		colBindings11[1] = new YRCTblClmBindingData();
+		colBindings11[1].setName("clmWebConfirmation");
+		colBindings11[1].setAttributeBinding("Extn/@ExtnWebConfNum");
+		colBindings11[1].setColumnBinding("Web Confirmation");
+        colBindings11[1].setSortReqd(true);
+   		//colBindings11[1].setLinkReqd(true);
+		colBindings11[1].setFilterReqd(true);
+		
+		colBindings11[2] = new YRCTblClmBindingData();
+		colBindings11[2].setName("clmOrderNum");
+		colBindings11[2].setAttributeBinding("Extn/@ExtnLegacyOrderNo");
+        colBindings11[2].setColumnBinding("Order #");
+        colBindings11[2].setSortReqd(true);
+        colBindings11[2].setFilterReqd(true);
+        
+        colBindings11[3] = new YRCTblClmBindingData();
+		colBindings11[3].setName("clmPONum");
+		colBindings11[3].setAttributeBinding("@CustomerPONo");
+        colBindings11[3].setColumnBinding("PO #");
+        colBindings11[3].setSortReqd(true);
+        colBindings11[3].setFilterReqd(true);
+        
+        colBindings11[4] = new YRCTblClmBindingData();
+		colBindings11[4].setName("clmCompany");
+		colBindings11[4].setAttributeBinding("Extn/@ExtnSAPParentName");
+        colBindings11[4].setColumnBinding("Company");
+        colBindings11[4].setSortReqd(true);
+        colBindings11[4].setFilterReqd(true);
+        
+        colBindings11[5] = new YRCTblClmBindingData();
+		colBindings11[5].setName("clmWarehouse");
+		colBindings11[5].setAttributeBinding("Extn/@ExtnCustomerDivision");
+        colBindings11[5].setColumnBinding("Warehouse");
+        colBindings11[5].setSortReqd(true);
+        colBindings11[5].setFilterReqd(true);
+		
+		colBindings11[6] = new YRCTblClmBindingData();
+		colBindings11[6].setName("clmBillTo");
+		colBindings11[6].setAttributeBinding("@BillToID");
+        colBindings11[6].setColumnBinding("Bill-To / Ship-To #");
+        colBindings11[6].setSortReqd(true);
+        colBindings11[6].setFilterReqd(true);
+        
+   		colBindings11[7] = new YRCTblClmBindingData();
+		colBindings11[7].setName("clmShipToName");
+		colBindings11[7].setAttributeBinding("Extn/@ExtnShipToName");
+        colBindings11[7].setColumnBinding("Ship-To Name");
+        colBindings11[7].setSortReqd(true);
+        colBindings11[7].setFilterReqd(true);
+        
+        colBindings11[8] = new YRCTblClmBindingData();
+		colBindings11[8].setName("clmOrderedBy");
+        colBindings11[8].setAttributeBinding("Extn/@ExtnOrderedByName");
+        colBindings11[8].setColumnBinding("Ordered By");   
+        colBindings11[8].setFilterReqd(true);
+      
+        colBindings11[9] = new YRCTblClmBindingData();
+		colBindings11[9].setName("clmOrdered");
+		colBindings11[9].setAttributeBinding("@OrderDate");
+        colBindings11[9].setColumnBinding("Ordered");
+        colBindings11[9].setSortReqd(true);
+        colBindings11[9].setFilterReqd(true);
+        
+        colBindings11[10] = new YRCTblClmBindingData();
+		colBindings11[10].setName("clmAmount");
+		colBindings11[10].setAttributeBinding("Extn/@ExtnTotalOrderValue");
+        colBindings11[10].setColumnBinding("Amount");
+        colBindings11[10].setSortReqd(true);
+        colBindings11[10].setFilterReqd(true);
+        
+        colBindings11[11] = new YRCTblClmBindingData();
+		colBindings11[11].setName("clmShipDate");
+		colBindings11[11].setAttributeBinding("@ReqDeliveryDate");
+        colBindings11[11].setColumnBinding("Ship Date");
+        colBindings11[11].setSortReqd(true);
+        colBindings11[11].setFilterReqd(true);
+        
+        tblResultsBinding1.setSourceBinding("OrderListModel:/OrderList/Order");
+		tblResultsBinding1.setName("tblResultz");
+        tblResultsBinding1.setTblClmBindings(colBindings11);
+        tblResultsBinding1.setKeyNavigationRequired(true);
+      
+        tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblResultsBinding1);
+
+        /************/
+	}
 
     public IYRCPanelHolder getPanelHolder() {
         // TODO Complete getPanelHolder
