@@ -775,7 +775,7 @@ return new Ext.XTemplate(
  '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="no-border table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" ><a href="#" title="Mill / Mfg. Item" onclick="toggleStockSort();">M<span id="directionMArrow"></span></a></td>',</s:if>
+   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" ><span title="Mill / Mfg. Item" id="directionMArrow">M</span></td>',</s:if>
   '<td class="Item-hname"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
