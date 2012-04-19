@@ -61,14 +61,15 @@
 
  <!-- modal window container -->
     <div class="xpedx-light-box" id="select-ship-to">    
-    
+    <br />
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
 		<!-- <h2 class="no-border"  style="float:left;" >Select Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" > <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE" /></h2>
+		
 		<!-- <img id="magGlass" class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();">		 -->
-		<span id="magGlass" class="searchButton"  onclick="javascript:searchShipToAddress('shipToOrderSearchDiv');">&nbsp;</span>
-		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToOrderSearchDiv','%{#searchURL}');" />	
+		<span id="magGlass" class="searchButton"  onclick="javascript:searchShipToAddress('shipToOrderSearchDiv');">&nbsp;&nbsp;</span>
+		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToOrderSearchDiv','%{#searchURL}');" />
 		<s:hidden id="magGlass" name="searchButton"></s:hidden>
 </div>
 <div class="clearall">&nbsp;</div>
@@ -79,7 +80,7 @@
        <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
        <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
        urlSpec="%{#assignedCustomersPaginated}" isAjax="true" divId="shipToOrderSearchDiv" 
-       showFirstAndLast="False" showMyUserFormat="false"/>
+       showFirstAndLast="False" showMyUserFormat="true"/>
     </div> 
 	
 	<div class="ship-to-body">

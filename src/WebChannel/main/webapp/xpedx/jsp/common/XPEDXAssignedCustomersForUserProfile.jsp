@@ -64,7 +64,7 @@
 </s:if>
 <s:else>
  <!-- modal window container -->
-    <div  id="change-ship-to">    
+  <div class="xpedx-light-box" id="select-ship-to"> 
     
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
@@ -219,7 +219,7 @@
      <!--divId Modified For XNGTP-3088  -->
      <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
        <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#assignedCustomersPaginated}" 
-       isAjax="true" divId="shipToUserProfile" showFirstAndLast="False" showMyUserFormat="false"/>
+       isAjax="true" divId="shipToUserProfile" showFirstAndLast="False" showMyUserFormat="true"/>
     </div> 
 
 	
