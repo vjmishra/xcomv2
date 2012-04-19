@@ -1343,12 +1343,11 @@ function SubmitActionWithValidation()
 					value="%{#util.formatQuantity(wCContext, #dispMinQty)}" />
 				<s:set name="requestedQty"  value="%{#_action.getRequestedQty()}" />
 				<s:textfield name='qtyBox' id="qtyBox"
-					cssClass="input-label x-input" size="4"
+					cssClass="input-label x-input" size="7" maxlength="7"
 					value="%{#_action.getRequestedQty()}"
 					disabled='%{(#addToCartDisabled == "disabled")?"true":"false"}'
-					tabindex="260" theme="simple"
-					onchange="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);" 
-					onmouseover="javascript:qtyInputCheck(this);">
+					tabindex="260" theme="simple" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"
+					onchange="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);" onmouseover="javascript:qtyInputCheck(this);">
 				</s:textfield>
 
 				
@@ -2239,7 +2238,7 @@ o.value=""
             </td>
             <s:hidden id="Itemdescription" name="Itemdescription" value='%{#xutil.getAttribute(#primaryInfoElem,"ShortDescription")}' />
             <td class="padding9 left-border"> <s:property value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></td>				
-            <td class="padding9 left-border right-border"><s:textfield name="Quantity" id="Quantity" cssClass="x-input width55" id="Quantity" onchange="javascript:this.value=addComma(this.value);" maxlength="7" /></td></tr>
+            <td class="padding9 left-border right-border"><s:textfield name="Quantity" id="Quantity" cssClass="x-input width55" id="Quantity" maxlength="7" /></td></tr>
             </tbody>
             </table>         
 <div id="table-bottom-bar" class=" width993 clear-both">
