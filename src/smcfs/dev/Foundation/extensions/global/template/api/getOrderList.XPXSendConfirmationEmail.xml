@@ -1,13 +1,12 @@
 <OrderList>
 	<Order OrderNo="" OrderDate="" Status="" CustomerPONo="" Createuserid="" BuyerOrganizationCode="" SellerOrganizationCode="" ShipToID=""          
 	       EntryType="" BillToID=""  >
-		<Extn ExtnCustomerDivision="" ExtnShipToName="" ExtnWebConfNum="" ExtnGenerationNo="" ExtnLegacyOrderNo="" ExtnAddnlEmailAddr="" />
+		<Extn />
 		<OrderLines>
-			<OrderLine LineType="">
-				<Extn ExtnReqBackOrdQty="" ExtnUnitPrice="" ExtnPricingUOM="" ExtnReqShipOrdQty="" ExtnLineShippableTotal=""
-				      ExtnWebLineNumber="" />
-				<Item ItemID="" ItemDesc="" />				
-				<OrderLineTranQuantity  OrderedQty="" TransactionalUOM=""/>				
+			<OrderLine>
+				<Extn />
+				<Item />				
+				<OrderLineTranQuantity />				
 				<Instructions>
 					<Instruction InstructionType="" InstructionText=""/>
 				</Instructions>
@@ -17,7 +16,6 @@
 			<Extn ExtnZip4=""/>
 		</PersonInfoShipTo>
 		<Instructions>
-			<Instruction InstructionType="" InstructionText=""/>
-		</Instructions>
+			</Instructions>
 	</Order>
 </OrderList>
