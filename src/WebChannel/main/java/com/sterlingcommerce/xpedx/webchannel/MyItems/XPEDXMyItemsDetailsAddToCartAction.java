@@ -204,6 +204,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	private void organizeProductInformationResults()
 			throws XPathExpressionException {
 		String isVaidquantity;
+		//Added isVaidquantityArray for setting flag when item is validated for Jira 3770
 		String[] isVaidquantityArray=null;
 		HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
 		isVaidquantity = httpRequest.getParameter("validItemFlagArray");
