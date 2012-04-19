@@ -65,13 +65,14 @@
 <s:else>
  <!-- modal window container -->
     <div class="xpedx-light-box" id="change-ship-to">    
-    
+   
 	<!-- START modal 'header' -->
+	<br />
 	<div class="ship-to-header">
 		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
-		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();errorValidate();">&nbsp;</span>		
+		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();errorValidate();">&nbsp;&nbsp;</span>		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="Search Ship-To…" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
 		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
@@ -332,7 +333,7 @@
 </div>
 
 <div class="tool-bar-bottom">
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-170px;float:right">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-180px;float:right">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 	<li>
