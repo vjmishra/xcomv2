@@ -28,15 +28,12 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 	private XPXOrderHistoryPanel page ;
 	private String defaultOrgCode ;
 	private String refOrderHdrKey;
-	public String masterCustomer;
-	public String webConfNo = "120131E9588963";
-	public String legOrdNo = "56831";
+
 	public XPXOrderHistoryPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
         super(ownerComposite, formId,inputObject);
         this.page = (XPXOrderHistoryPanel)getOwnerForm();
         this.defaultOrgCode = "";
 //        init();
-        masterCustomer = XPXUtils.masterCustomerID;
         createSearchBy();
         createOrderType();
         createOrderStatus();
@@ -84,11 +81,11 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		
 		
 		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "OrdType");
-		attrElemComplex2.setAttribute("OrderTypeValue", "0002");
+		attrElemComplex2.setAttribute("OrderTypeValue", "FO");
 		attrElemComplex2.setAttribute("OrderTypeDescription", "Fulfillment Orders");
 
 		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrdType");
-		attrElemComplex3.setAttribute("OrderTypeValue", "0001");
+		attrElemComplex3.setAttribute("OrderTypeValue", "CO");
 		attrElemComplex3.setAttribute("OrderTypeDescription", "Customer Orders");
 							
 		setModel("OrderType",elemModel);
@@ -99,25 +96,19 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		Element elemModel = YRCXmlUtils.createDocument("OrderStatus").getDocumentElement();
 		
 		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex1.setAttribute("OrderStatusValue", "1100.5250");
+		attrElemComplex1.setAttribute("OrderStatusValue", "OpenOrd");
 		attrElemComplex1.setAttribute("OrderStatusDescription", "Open Orders");
 		
 		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex2.setAttribute("OrderStatusValue", "1100.5100");
+		attrElemComplex2.setAttribute("OrderStatusValue", "BackOrd");
 		attrElemComplex2.setAttribute("OrderStatusDescription", "Backordered");
 
 		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrdStatus");
-		attrElemComplex3.setAttribute("OrderStatusValue", "1100.5550");
+		attrElemComplex3.setAttribute("OrderStatusValue", "OrdNum");
 		attrElemComplex3.setAttribute("OrderStatusDescription", "Shipped");
 							
 		setModel("OrderStatus",elemModel);
 		
-		setDefaultValue();
-	}
-	
-	public void setDefaultValue(){
-		setFieldValue("cmbOrderStatus", "All Orders");
-		setFieldValue("cmbOrderType","Open Orders");
 	}
 
 	void callApis(String names[], Document inputXmls[])
@@ -148,18 +139,11 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
 	        	//refresh search results
 	        	search();
-	        }      	
+	        }        	
 	        else if(YRCPlatformUI.equals(ctx.getApiName(), "XPXReprocessReferenceOrderService"))
 	        {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
-	        }  
-        	//Calling Child Customer List Servie
-	        else if(YRCPlatformUI.equals(ctx.getApiName(), "getOrderList"))
-	        {
-	        	Element childCustomerXml=ctx.getOutputXml().getDocumentElement();
-	        	System.out.println("The Child Customer Element is :" + YRCXmlUtils.getString(childCustomerXml));
-	        }
-	        
+	        }        	
 	        
         }
 		
@@ -279,8 +263,16 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
     }
 
 	public void reset() {
-		setModel("SearchCriteria", YRCXmlUtils.createDocument("XPXRefOrderHdr").getDocumentElement());
-		setDefaultEnterpriseCode();
+		setFieldValue("txtCompany", "");
+		setFieldValue("txtAccount", "");
+		setFieldValue("txtSuffix", "");
+		setFieldValue("txtShipFrom", "");
+		setFieldValue("txtSearchBy", "");
+		setFieldValue("cmbSearchBy", "");
+		setFieldValue("cmbOrderStatus", "");
+		setFieldValue("cmbOrderType", "");
+		setFieldValue("txtFromDate", "");
+		setFieldValue("txtToDate", "");
 	}
 	
 	public void reprocessRefOrder(Element eleTableItem)
@@ -302,42 +294,6 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 				YRCXmlUtils.createFromString("<XPXRefOrderHdr RefOrderHdrKey='" + refOrderHdrKey + "'  IsMarkOdrCompleteFlag='Y'/>")
 		};
 	    callApis(api, docInput);	
-		
-	}
-	//Method created for fetcching child customers
-	public void getChildCustomers()
-	{
-		System.out.println("Test");
-		YRCApiContext apiCtx = new YRCApiContext();
-		Element elemModel = YRCXmlUtils.createDocument("Order").getDocumentElement();
-		elemModel.setAttribute("BillToID", masterCustomer);
-		elemModel.setAttribute("ReadFromHistory","N");
-		String testvalue = getFieldValue("cmbSearchBy");
-		if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("WebConf")|| getFieldValue("cmbSearchBy").equalsIgnoreCase("OrdNum"))){
-			Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
-			if(getFieldValue("cmbSearchBy").equalsIgnoreCase("WebConf")){
-				attrElemComplex2.setAttribute("ExtnWebConfNum", webConfNo);
-			}
-			else{
-				attrElemComplex2.setAttribute("ExtnLegacyOrderNo", legOrdNo);
-			}
-			
-		}
-		/*else if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("Item Number"))){
-			
-		}*/
-		else if((getFieldValue("cmbOrderType")!= null) && (getFieldValue("cmbOrderType").equalsIgnoreCase("0001"))){
-			elemModel.setAttribute("DocumentType", "0001");
-		}
-		else if((getFieldValue("cmbOrderType")!= null) && (getFieldValue("cmbOrderType").equalsIgnoreCase("0002"))){
-			elemModel.setAttribute("DocumentType", "0002");
-		}
-		
-			apiCtx.setApiName("getOrderList");
-			apiCtx.setInputXml(elemModel.getOwnerDocument());
-		
-		apiCtx.setFormId(getFormId());
-		callApi(apiCtx);
 		
 	}
 
