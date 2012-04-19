@@ -436,17 +436,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			}
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
-			if (null != customerDivision
-					&& !"".equalsIgnoreCase(customerDivision.trim())
-					&& null != legacyOrderNo
-					&& !"".equalsIgnoreCase(legacyOrderNo.trim())
-					&& null != extnGenerationNo
-					&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
-				orderNo = orderNo.concat(customerDivision).concat("-")
-						.concat(legacyOrderNo).concat("-")
-						.concat(extnGenerationNo).concat(", ");
-				yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
-			}
+			
 			/** **************************************************************/
 
 			NodeList orderLineList = customerDoc
@@ -472,6 +462,19 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				}
 			}
 
+		}
+		
+		if (null != customerDivision
+				&& !"".equalsIgnoreCase(customerDivision.trim())
+				&& null != legacyOrderNo
+				&& !"".equalsIgnoreCase(legacyOrderNo.trim())
+				&& null != extnGenerationNo
+				&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
+			orderNo = orderNo.concat(customerDivision).concat("-")
+					.concat(legacyOrderNo).concat("-")
+					.concat(extnGenerationNo);
+			yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
+			
 		}
 		if (!"".equalsIgnoreCase(orderNo)) {
 			/** Logic to remove the last comma **/
