@@ -581,4 +581,23 @@
             <namespace name="getPage" templateName="getPage" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" inputNamespace="OrgListInput" outputNamespace="OrgList" version="ver77"/>
+            <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="changeXPXRefOrderHdr" APIType="SERVICE" Name="changeXPXRefOrderHdr" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXReprocessReferenceOrderService" APIType="SERVICE" Name="XPXReprocessReferenceOrderService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXGetChildCustomerListService" APIType="SERVICE" Name="XPXGetChildCustomerListService" URL="DEFAULT" inputNamespace=""
+                outputNamespace="XPXGetChildCustomerListService_output" version="ver77"/>
+            <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="OrgListInput" templateName="getOrganizationListInput" type="output"/>
+            <namespace name="OrgList" templateName="getOrganizationList" type="output"/>
+            <namespace name="XPXReferenceOrderList" templateName="XPXReferenceOrderList" type="output"/>
+            <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
+            <namespace name="XPXGetChildCustomerListService_output" templateName="XPXGetChildCustomerListService_output" type="output"/>
+            <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
+        </namespaces>
+    </form>
 </forms>
