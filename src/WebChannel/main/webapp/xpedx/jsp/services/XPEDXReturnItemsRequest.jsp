@@ -337,7 +337,7 @@ function toggleFields (str, el)
 					name="returnsqty[%{#orderLineStatIndex.index}]"
 					id="returnsqty[%{#orderLineStatIndex.index}]"
 					maxlength="7" title="Qty to Return"
-					tabindex="%{#itemPanelStartTabIndex+#tabIndexCount}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);"></s:textfield>
+					tabindex="%{#itemPanelStartTabIndex+#tabIndexCount}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"></s:textfield>
 						</td>
 		    			<td  width="175" class="text-right table-return-input-td ">
 		    			

@@ -200,7 +200,7 @@
 				data2.appendChild (document.createTextNode(document.getElementById("rManufacturer1").value))
 				data3.appendChild (document.createTextNode(document.getElementById("rManufacturer2").value))
 				data4.appendChild (document.createTextNode(document.getElementById("rDescription1").value))
-				data5.appendChild (document.createTextNode(document.getElementById("rQty").value))
+				data5.appendChild (document.createTextNode(addComma(document.getElementById("rQty").value)))
 				data6.appendChild (document.createTextNode("")) 
 				
 				/*
@@ -297,7 +297,7 @@
     				data2.appendChild (document.createTextNode(document.getElementById("mil").value));
     				data3.appendChild (document.createTextNode(document.getElementById("mfgsku").value));
     				data4.appendChild (document.createTextNode(document.getElementById("description").value));
-    				data5.appendChild (document.createTextNode(document.getElementById("qty").value));
+    				data5.appendChild (document.createTextNode(addComma(document.getElementById("qty").value)));
         			data6.appendChild (document.createTextNode(" "));
     				
     				/*
@@ -920,7 +920,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                 <td class="padding8 border-left-gray"> 
                                   <input name="rDescription1" type="text" class="x-input width-300px" id="rDescription1" maxlength="255" />
                                </td>
-                                <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" onchange="javascript:this.value=addComma(this.value);"/>
+                                <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"/>
                                </td>
                                 <td width="10%" class="padding8 border-left-gray  border-right-gray"><ul id="cart-actions">
                                   <li><a href="javascript:void(0)" class="grey-ui-btn" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');"><span>Add</span></a></li> 
@@ -978,7 +978,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 	                                         </td>
 	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='description'	cssClass="x-input width-300px"   name='description' tabindex="" value='' maxlength="255" size="10" /> 
 	                                 </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='qty' name='qty' cssClass="x-input width-50px" tabindex="" value='' maxlength="7" size="10" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" /> 
+	                                <td class="padding8 border-left-gray"><s:textfield id='qty' name='qty' cssClass="x-input width-50px" tabindex="" value='' maxlength="7" size="10" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" /> 
 	                                </td>
 	                                <td class="padding8 border-left-gray border-right-gray"><ul id="cart-actions">
 	             							 <li><a href="javascript:void(0)" class="grey-ui-btn" onclick="return validateAndAddDataRecord('tbl_data_paperSupplies');"><span>Add</span></a></li> 
