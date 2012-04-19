@@ -12,7 +12,7 @@ import com.yantra.yfc.rcp.YRCPlatformUI;
 public class XPXOrderHistoryEditor extends YRCEditorPart{
 
 	public static final String ID_EDITOR = "com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor";
-	private String titleKey = "XPXOrderHistoryEditor";
+	private String titleKey = "Customer Order Search";
 	private Composite pnlRoot;
 
 	public XPXOrderHistoryEditor() {
