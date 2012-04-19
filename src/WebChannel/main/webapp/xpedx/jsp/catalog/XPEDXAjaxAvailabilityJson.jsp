@@ -29,7 +29,7 @@
 	</tr>
 	<tr>
 		<td><s:text name="Qty"></s:text></td>
-		<td><s:textfield name="Qty" id="Qty" onkeyup="javascript:isValidQuantityRemoveAlpha(this);"/></td>
+		<td><s:textfield name="Qty" id="Qty" onkeyup="javascript:isValidQtyRemoveAlpha(this);"/></td>
 	</tr>
 	<tr>
 		<td><s:text name="Job">JOB#</s:text></td>

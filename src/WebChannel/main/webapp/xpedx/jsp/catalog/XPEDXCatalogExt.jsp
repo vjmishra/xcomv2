@@ -683,7 +683,7 @@ return new Ext.XTemplate(
   '<table class="bottable">','<tr>','<td class="compare_check">',
 	// Do not delete this code. This will come as a CR. '<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
   '</td>','<td class="item_number">','<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}','</td>',
-  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="10" maxlength="10" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
+  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
   '</td>','</tr>',
   '<tr>','<td></td>','<td class="item_number">{partno}</td>',
   '<td class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -724,7 +724,7 @@ return new Ext.XTemplate(
    // Do not delete this code. This will come as a CR.'<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
    '</td>','</tr>',
    '<tr>','<td class="item_number">','<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}','</td>',
-    '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="10" maxlength="10" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>'</td>','</tr>',
+    '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);"  onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>'</td>','</tr>',
    '<tr>','<td class="item_number">{partno}</td>',
     '<td class="uom_cell">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</td>','</tr>',
    '<tr>','<td class="mill-mfg">{itemtypedesc}</td>',
@@ -754,7 +754,7 @@ return new Ext.XTemplate(
    '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>','<div class="clearBoth">&nbsp;</div>',
    '<div class="item_number"><s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}<br />{partno} {itemtypedesc}</div>',
    '<div class="quantity_box">',
-	'<div class="qty">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="10" maxlength="10" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>
+	'<div class="qty">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>
    '</div>','<div class="uom-select">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</div>',
    '<div class="clearall">&nbsp;</div>',
    <s:if test='!#guestUser'>'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#" onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else>
