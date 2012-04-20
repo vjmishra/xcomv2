@@ -594,12 +594,33 @@ function showSplitDiv(divId)
                         			</s:else>                        				
 	                        			<s:if test='%{#status == "Invoiced"}'>
 	                        				: Invoice #: 
-	                        				<s:if test='%{#isSalesRep}'>
-	                        				     <s:property value='#extnInvoiceNo'/>
+	                        				<s:if test='#orderType != "Customer" ' >	                        				
+		                        				<s:if test='%{#isSalesRep}'>
+		                        				     <s:property value='#extnInvoiceNo'/>
+		                        				</s:if>
+		                        				<s:else>
+		                        				 <a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNumber=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
+		                        				</s:else>
 	                        				</s:if>
 	                        				<s:else>
-	                        				 <a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNumber=<s:property value='%{encInvoiceNo}'/>&shipTo=<s:property value='%{custSuffix}'/>&InvoiceDate=<s:property value='%{encInvoiceDate}'/>"><s:property value='#extnInvoiceNo'/></a>
-	                        				</s:else>
+	                        					<s:set name="splitOrderCount" value="chainedOrderCountMap.get(#orderLineKey)"/>
+	                        					<s:if test='#splitOrderCount.size() == 1'>	                        						
+	                        						<s:iterator  value="#splitOrderCount" id='splitOrder' >																
+														<s:if test='%{#splitOrder.getAttribute("Status") == "Invoiced"}'>
+															<s:set name="extnInvcNo" value='#splitOrder.getAttribute("ExtnInvoiceNo")'/>
+															<s:set name="encInvcNo" value='#splitOrder.getAttribute("EncInvoiceNo")'/>
+															<s:set name="extnInvcDt" value='#splitOrder.getAttribute("ExtnInvoicedDate")'/>
+															<s:set name="splitCustSuff" value='#splitOrder.getAttribute("ShipToID")'/>														  	
+														  	<s:if test='%{#isSalesRep}'>
+					                        				     <s:property value='#extnInvcNo'/>
+					                        				</s:if>
+					                        				<s:else>									  	
+														  		<a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNumber=<s:property value='#encInvcNo'/>&shipTo=<s:property value='#splitCustSuff'/>&InvoiceDate=<s:property value='extnInvcDt'/>"><s:property value='#extnInvcNo'/></a>														  				
+														  	</s:else>
+									        			</s:if>									        			
+								        			</s:iterator>	                        						
+			                        			</s:if>
+	                        				</s:else>		                        					                        				
 	                        			</s:if>
                         			</td>
                         		</tr>
