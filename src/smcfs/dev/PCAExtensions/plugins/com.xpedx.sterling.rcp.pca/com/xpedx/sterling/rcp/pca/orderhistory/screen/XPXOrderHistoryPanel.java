@@ -123,6 +123,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
     private TableColumn clmShipDate;
     private TableColumn clmCompany;
     private TableColumn clmWarehouse;
+    private TableColumn clmOrderType;
 	private Composite pnlRoot = null;
 	private Composite pnlButtons = null;
 	private Button btnSearch = null;
@@ -770,6 +771,12 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		clmStatus.setResizable(true);
 		clmStatus.setMoveable(false);
 		
+		clmOrderType = new TableColumn(tblSearchResults, SWT.LEFT);
+		clmOrderType.setText("Order Type");
+		clmOrderType.setWidth(80);
+		clmOrderType.setResizable(true);
+		clmOrderType.setMoveable(false);
+		
 		clmWebConfirmation = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmWebConfirmation.setText("Web Confirmation");
 		clmWebConfirmation.setWidth(80);
@@ -913,196 +920,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         tbd = new YRCTextBindingData();
         tbd.setName("txtShipFrom");
         txtShipFrom.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
-        
-       /* // Search Results Table bindings
-       YRCTableBindingData tblSearchResultsbd = new YRCTableBindingData();
-		tblSearchResultsbd.setName("tblSearchResults");
-		tblSearchResultsbd.setSourceBinding("XPXRefOrderHdrList:XPXRefOrderHdrList/XPXRefOrderHdr");*/
-	
-		
-		
-		
-		/*tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmReprocess");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@EtradingID");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLinkReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setIgnoreText(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setServerImageConfiguration(YRCConstants.IMAGE_SMALL);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Resubmit");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setDefaultServerImageProvider(new IYRCDefaultServerImageProvider(){
-			public String getImageTheme(Object obj) {
-				Element eleTableItem = (Element)obj;
-				if(YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsReprocessibleFlag")))
-					return "Refresh";
-				else 
-					return null;
-			}
-			
-		});
-		tblSearchResultsCounter++;
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmMarkOrderComplete");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@IsMarkOdrCompleteFlag");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLinkReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLabelProvider(new IYRCTableColumnTextProvider(){
-
-	
-			public String getColumnText(Element obj) {
-				Element eleTableItem = (Element)obj;
-				if(YRCPlatformUI.equals("N", eleTableItem.getAttribute("IsMarkOdrCompleteFlag")))
-					return "MarkComplete";
-				else
-					return "";
-			}
-			
-		});
-		tblSearchResultsCounter++;
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmCustName");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@CustomerName");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Customer_Name_List");
-		tblSearchResultsCounter++;
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmCustDivision");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@CustomerDivision");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Customer_Division_List");
-		tblSearchResultsCounter++;
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmETradingId");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@EtradingID");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("eTrading_ID");
-		tblSearchResultsbd.setColorProvider(new IYRCTableColorProvider() {
-
-			public String getColorTheme(Object element, int chkShowInvalidETradingIDOnly) {
-				
-				if(chkShowInvalidETradingIDOnly==4 && "Y".equals(YRCXmlUtils.getAttribute((Element) element, "IsInvalidETradingID")))
-				{
-					return "InvalidData";
-				}
-				return null;
-			}
-
-		});
-		tblSearchResultsCounter++;
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmCustPO#");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@CustomerPONO");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Customer_PO_NO");
-		tblSearchResultsCounter++;
-			
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmShipTo");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@ShipToName");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Ship_To_List");
-		
-		tblSearchResultsCounter++;
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmReceivedDate");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setAttributeBinding("@Createts");		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setSortReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Received_On_List");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setDataType("OrderDate");
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLabelProvider(new IYRCTableColumnTextProvider(){
-
-			public String getColumnText(Element obj) {
-				Element eleTableItem = (Element)obj;
-				String dateReturn="";
-				String dateTmp=eleTableItem.getAttribute("OrderDate");
-			    SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			    Date date=new Date();
-				try {
-					date = sdfSource.parse(dateTmp);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyy/MM/dd hh:mm aaa");
-			    dateReturn=sdfDestination.format(date);
-				    
-				return dateReturn;
-			}
-			
-		});
-		tblSearchResultsCounter++;
-		
-		tblSearchResultsClmBd[tblSearchResultsCounter] = new YRCTblClmBindingData();
-		tblSearchResultsClmBd[tblSearchResultsCounter].setName("clmOriginalOrder");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setFilterReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLinkReqd(true);
-		tblSearchResultsClmBd[tblSearchResultsCounter].setColumnBinding("Original_Order");
-		tblSearchResultsClmBd[tblSearchResultsCounter].setLabelProvider(new IYRCTableColumnTextProvider(){
-
-			@Override
-			public String getColumnText(Element element) {
-			//	Element eleTableItem = (Element)element;
-				return "View";
-			}
-			
-		});
-		
-		tblSearchResultsCounter++;*/
-		
-		/*tblSearchResultsbd.setLinkProvider(new IYRCTableLinkProvider(){
-        	public String getLinkTheme(Object element, int columnIndex) {
-        		Element eleTableItem = (Element)element;
-        		if((columnIndex == 0 && !YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsReprocessable"))) 
-        				|| (columnIndex == 1 && !YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsMarkedComplete")))||columnIndex == 8){
-        			return "TableLink";
-        		}
-        		return null;
-        	}
-        	
-        	public void linkSelected(Object element, int columnIndex) {
-        		Element eleTableItem = (Element)element;
-        		if(columnIndex == 0 && !YRCPlatformUI.equals("N", eleTableItem.getAttribute("IsReprocessibleFlag"))&& !YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsMarkOdrCompleteFlag"))){
-        			myBehavior.reprocessRefOrder(eleTableItem);
-        			return ;
-        		} else if(columnIndex == 1 && !YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsMarkOdrCompleteFlag"))&&!YRCPlatformUI.equals("N", eleTableItem.getAttribute("IsReprocessibleFlag"))){
-        			myBehavior.markRefOrderComplete(eleTableItem);
-        			return ;
-        		} 
-        		else if(columnIndex == 8){
-        			TableItem tblItems[] = tblSearchResults.getSelection();
-        			myBehavior.openMultipleOrders(tblItems);
-        		}
-        	}
-        });*/
-
-
-//		tblSearchResultsbd.setImageProvider(new IYRCTableImageProvider()	{
-//
-//			public String getImageThemeForColumn(Object element, int columnIndex) {
-//				Element eleTableItem = (Element)element;
-//				if(columnIndex == 4 && !YRCPlatformUI.equals("Y", eleTableItem.getAttribute("IsReprocessable"))){
-//					return "Copy";
-//				}
-//				return null;
-//			}
-//        	
-//        }
-//        );
-		 
-		/*tblSearchResultsbd.setTblClmBindings(tblSearchResultsClmBd) ;
-		tblSearchResultsbd.setSortRequired(true);
-		tblSearchResultsbd.setDefaultSort(true);
-		tblSearchResultsbd.setSortAttributeBinding("@Createts");
-		tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblSearchResultsbd);*/
+               
     }
 	
 	private void setBindingORDERist(){
@@ -1115,91 +933,130 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         YRCTableBindingData tblResultsBinding1 = new YRCTableBindingData();
 		YRCTblClmBindingData colBindings11[] = new YRCTblClmBindingData[tblSearchResults.getColumnCount()];
 		colBindings11[0] = new YRCTblClmBindingData();
-		colBindings11[0].setName("Status");
+		colBindings11[0].setName("clmStatus");
 		colBindings11[0].setAttributeBinding("@Status");
-		colBindings11[0].setColumnBinding("clmStatus");
+		colBindings11[0].setColumnBinding("Status");
         colBindings11[0].setSortReqd(true);
         colBindings11[0].setSortBinding("@Status");
-		//colBindings11[0].setLinkReqd(true);
+        colBindings11[0].setServerImageConfiguration(YRCConstants.IMAGE_SMALL);
 		colBindings11[0].setFilterReqd(true);
+		colBindings11[0].setDefaultServerImageProvider(new IYRCDefaultServerImageProvider(){
+			public String getImageTheme(Object obj) {
+				boolean willCallFlag = false;
+				boolean rushOrderFlag = false;
+				boolean needsAttention = false;
+				Element eleTableItem = (Element)obj;
+				Element eleWillCall = YRCXmlUtils.getChildElement(eleTableItem, "Extn");
+				
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWillCall"))){
+					willCallFlag = true;
+				}else if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnRushOrderFlag"))){
+					rushOrderFlag = true;
+				}else if("Y".equalsIgnoreCase(eleTableItem.getAttribute("IsNeedsAttention"))){
+					needsAttention = true;
+				}
+				
+				if(willCallFlag){
+					return "WillCall";
+				}
+				else if(rushOrderFlag){
+					return "RushOrder";
+				}
+				else if (needsAttention){
+					return "NeedsAttention";
+				}
+				else
+					return null;
+			}
+			
+		});
 		
 		
 		colBindings11[1] = new YRCTblClmBindingData();
-		colBindings11[1].setName("clmWebConfirmation");
-		colBindings11[1].setAttributeBinding("Extn/@ExtnWebConfNum");
-		colBindings11[1].setColumnBinding("Web Confirmation");
+		colBindings11[1].setName("clmOrderType");
+		colBindings11[1].setAttributeBinding("@OrderType");
+		colBindings11[1].setColumnBinding("Order Type");
         colBindings11[1].setSortReqd(true);
    		//colBindings11[1].setLinkReqd(true);
 		colBindings11[1].setFilterReqd(true);
 		
 		colBindings11[2] = new YRCTblClmBindingData();
-		colBindings11[2].setName("clmOrderNum");
-		colBindings11[2].setAttributeBinding("Extn/@ExtnLegacyOrderNo");
-        colBindings11[2].setColumnBinding("Order #");
+		colBindings11[2].setName("clmWebConfirmation");
+		colBindings11[2].setAttributeBinding("Extn/@ExtnWebConfNum");
+		colBindings11[2].setColumnBinding("Web Confirmation");
         colBindings11[2].setSortReqd(true);
-        colBindings11[2].setFilterReqd(true);
-        
-        colBindings11[3] = new YRCTblClmBindingData();
-		colBindings11[3].setName("clmPONum");
-		colBindings11[3].setAttributeBinding("@CustomerPONo");
-        colBindings11[3].setColumnBinding("PO #");
+   		//colBindings11[1].setLinkReqd(true);
+		colBindings11[2].setFilterReqd(true);
+		
+		colBindings11[3] = new YRCTblClmBindingData();
+		colBindings11[3].setName("clmOrderNum");
+		colBindings11[3].setAttributeBinding("Extn/@ExtnLegacyOrderNo");
+        colBindings11[3].setColumnBinding("Order #");
         colBindings11[3].setSortReqd(true);
         colBindings11[3].setFilterReqd(true);
         
         colBindings11[4] = new YRCTblClmBindingData();
-		colBindings11[4].setName("clmCompany");
-		colBindings11[4].setAttributeBinding("Extn/@ExtnSAPParentName");
-        colBindings11[4].setColumnBinding("Company");
+		colBindings11[4].setName("clmPONum");
+		colBindings11[4].setAttributeBinding("@CustomerPONo");
+		
+        colBindings11[4].setColumnBinding("PO #");
         colBindings11[4].setSortReqd(true);
         colBindings11[4].setFilterReqd(true);
         
         colBindings11[5] = new YRCTblClmBindingData();
-		colBindings11[5].setName("clmWarehouse");
-		colBindings11[5].setAttributeBinding("Extn/@ExtnCustomerDivision");
-        colBindings11[5].setColumnBinding("Warehouse");
+		colBindings11[5].setName("clmCompany");
+		colBindings11[5].setAttributeBinding("Extn/@ExtnSAPParentName");
+        colBindings11[5].setColumnBinding("Company");
         colBindings11[5].setSortReqd(true);
         colBindings11[5].setFilterReqd(true);
-		
-		colBindings11[6] = new YRCTblClmBindingData();
-		colBindings11[6].setName("clmBillTo");
-		colBindings11[6].setAttributeBinding("@BillToID");
-        colBindings11[6].setColumnBinding("Bill-To / Ship-To #");
+        
+        colBindings11[6] = new YRCTblClmBindingData();
+		colBindings11[6].setName("clmWarehouse");
+		colBindings11[6].setAttributeBinding("Extn/@ExtnCustomerDivision");
+        colBindings11[6].setColumnBinding("Warehouse");
         colBindings11[6].setSortReqd(true);
         colBindings11[6].setFilterReqd(true);
-        
-   		colBindings11[7] = new YRCTblClmBindingData();
-		colBindings11[7].setName("clmShipToName");
-		colBindings11[7].setAttributeBinding("Extn/@ExtnShipToName");
-        colBindings11[7].setColumnBinding("Ship-To Name");
+		
+		colBindings11[7] = new YRCTblClmBindingData();
+		colBindings11[7].setName("clmBillTo");
+		colBindings11[7].setAttributeBinding("@BillToID");
+        colBindings11[7].setColumnBinding("Bill-To / Ship-To #");
         colBindings11[7].setSortReqd(true);
         colBindings11[7].setFilterReqd(true);
         
-        colBindings11[8] = new YRCTblClmBindingData();
-		colBindings11[8].setName("clmOrderedBy");
-        colBindings11[8].setAttributeBinding("Extn/@ExtnOrderedByName");
-        colBindings11[8].setColumnBinding("Ordered By");   
+   		colBindings11[8] = new YRCTblClmBindingData();
+		colBindings11[8].setName("clmShipToName");
+		colBindings11[8].setAttributeBinding("Extn/@ExtnShipToName");
+        colBindings11[8].setColumnBinding("Ship-To Name");
+        colBindings11[8].setSortReqd(true);
         colBindings11[8].setFilterReqd(true);
-      
-        colBindings11[9] = new YRCTblClmBindingData();
-		colBindings11[9].setName("clmOrdered");
-		colBindings11[9].setAttributeBinding("@OrderDate");
-        colBindings11[9].setColumnBinding("Ordered");
-        colBindings11[9].setSortReqd(true);
-        colBindings11[9].setFilterReqd(true);
         
+        colBindings11[9] = new YRCTblClmBindingData();
+		colBindings11[9].setName("clmOrderedBy");
+        colBindings11[9].setAttributeBinding("Extn/@ExtnOrderedByName");
+        colBindings11[9].setColumnBinding("Ordered By");   
+        colBindings11[9].setFilterReqd(true);
+      
         colBindings11[10] = new YRCTblClmBindingData();
-		colBindings11[10].setName("clmAmount");
-		colBindings11[10].setAttributeBinding("Extn/@ExtnTotalOrderValue");
-        colBindings11[10].setColumnBinding("Amount");
+		colBindings11[10].setName("clmOrdered");
+		colBindings11[10].setAttributeBinding("@OrderDate");
+        colBindings11[10].setColumnBinding("Ordered");
         colBindings11[10].setSortReqd(true);
         colBindings11[10].setFilterReqd(true);
         
         colBindings11[11] = new YRCTblClmBindingData();
-		colBindings11[11].setName("clmShipDate");
-		colBindings11[11].setAttributeBinding("@ReqDeliveryDate");
-        colBindings11[11].setColumnBinding("Ship Date");
+		colBindings11[11].setName("clmAmount");
+		colBindings11[11].setAttributeBinding("Extn/@ExtnTotalOrderValue");
+        colBindings11[11].setColumnBinding("Amount");
         colBindings11[11].setSortReqd(true);
         colBindings11[11].setFilterReqd(true);
+        
+        colBindings11[12] = new YRCTblClmBindingData();
+		colBindings11[12].setName("clmShipDate");
+		colBindings11[12].setAttributeBinding("@ReqDeliveryDate");
+        colBindings11[12].setColumnBinding("Ship Date");
+        colBindings11[12].setSortReqd(true);
+        colBindings11[12].setFilterReqd(true);
         
         tblResultsBinding1.setSourceBinding("OrderListModel:/OrderList/Order");
 		tblResultsBinding1.setName("tblResultz");
