@@ -317,7 +317,7 @@
 						<s:if test="#customerService == 'false'">
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/><br />
 				            	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
 				            	<br />
@@ -333,7 +333,7 @@
 						<s:else>
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
 				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
 				            	<span class="grey-italic">
 				            	<br/>
