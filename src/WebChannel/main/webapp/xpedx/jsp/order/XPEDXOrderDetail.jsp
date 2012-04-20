@@ -604,7 +604,7 @@ function showSplitDiv(divId)
 	                        				</s:if>
 	                        				<s:else>
 	                        					<s:set name="splitOrderCount" value="chainedOrderCountMap.get(#orderLineKey)"/>
-	                        					<s:if test='#splitOrderCount.size() == 1'>	                        						
+	                        					<s:if test='chainedFOMap.size() == 1'>	                        						
 	                        						<s:iterator  value="#splitOrderCount" id='splitOrder' >																
 														<s:if test='%{#splitOrder.getAttribute("Status") == "Invoiced"}'>
 															<s:set name="extnInvcNo" value='#splitOrder.getAttribute("ExtnInvoiceNo")'/>
