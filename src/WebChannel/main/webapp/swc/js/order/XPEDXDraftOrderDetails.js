@@ -531,10 +531,10 @@ function redrawQuickAddList()
 		        code +='<input type="hidden" name="quickAddBaseUOMs" value='+convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) +' />';
 		// code += encodeForHTML(QuickAddElems[i].quantity);
 		        if(QuickAddElems[i].itemTypeText == "Special Item"){
-		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
-		        	code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
+		        	code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onchange="javascript:isValidQuantity(this);" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
+		        	code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');"  />';
 		        }else{
-		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
+		        	code += '<input type="text" name="enteredQuantities" id="enteredQuantities_' + i + '" value="' + encodeForHTML(QuickAddElems[i].quantity) + '" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\','+ i +');" />';
 		        	
 		        }
 		        code += '</td>';
