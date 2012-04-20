@@ -3,6 +3,7 @@ package com.xpedx.nextgen.dashboard;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -401,10 +402,12 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	private void legacyOnCustomer(YFSEnvironment env, Document customerDoc,
 			HashMap<String, String> legacyMap) throws YFSException, RemoteException {
-		String webLineNo = "";
+		String orderLineKey = "";
 		String legacyOrderNo = "";
 		String transactionalUOM = "";
 		String[] valueArray =  new String[5];
+		HashSet<String> hs = new HashSet<String>();
+		
 		
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
 		String value = null;
@@ -417,11 +420,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		yfcLogCatalog.info("Size" + legacyMap.size());
 		while (mapIterator.hasNext()) {
 			String itemUomDescription = "";
-			webLineNo = mapIterator.next();
+			orderLineKey = mapIterator.next();
             
 			/** Modified by Arun Sekhar on 31-March-2011 for Email Template **/
 			/* legacyOrderNo = legacyMap.get(webLineNo); */
-			value = legacyMap.get(webLineNo);
+			value = legacyMap.get(orderLineKey);
 			
 			if(value!=null && !"".equalsIgnoreCase(value))
 			{
@@ -438,6 +441,20 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			}
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
+			if (null != customerDivision
+					&& !"".equalsIgnoreCase(customerDivision.trim())
+					&& null != legacyOrderNo
+					&& !"".equalsIgnoreCase(legacyOrderNo.trim())
+					&& null != extnGenerationNo
+					&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
+				hs.add(orderNo.concat(customerDivision).concat("-")
+						.concat(legacyOrderNo).concat("-")
+						.concat(extnGenerationNo));
+				yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
+				
+	        	
+	          
+			}
 			
 			/** **************************************************************/
 			
@@ -448,11 +465,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				for (int counter = 0; counter < length; counter++) {
 					Element orderLineElement = (Element) orderLineList
 							.item(counter);
-					String webLine = SCXmlUtil.getXpathAttribute(
-							orderLineElement, "./Extn/@ExtnWebLineNumber");
+					String keyOfOrderLine = orderLineElement.getAttribute("OrderLineKey");
 					transactionalUOM = SCXmlUtil.getXpathAttribute(
 							orderLineElement, "./OrderLineTranQuantity/@TransactionalUOM");
-					if (webLineNo.equals(webLine)) {
+					if (orderLineKey.equals(keyOfOrderLine)) {
 						orderLineElement.setAttribute("LegacyOrderNo",
 								legacyOrderNo);
 						
@@ -491,28 +507,24 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 		}
 		
-		if (null != customerDivision
-				&& !"".equalsIgnoreCase(customerDivision.trim())
-				&& null != legacyOrderNo
-				&& !"".equalsIgnoreCase(legacyOrderNo.trim())
-				&& null != extnGenerationNo
-				&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
-			orderNo = orderNo.concat(customerDivision).concat("-")
-					.concat(legacyOrderNo).concat("-")
-					.concat(extnGenerationNo);
-			yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
-			
-        	
-          
+		String[] unique = (String[]) hs.toArray(new String[hs.size()]);
+      
+		String orderNumber = "";
+		for (int i = 0; i < unique.length; i++) {
+			orderNumber = orderNumber  + unique[i] + ",";
 		}
+	
+		orderNumber = orderNumber.substring(0, orderNumber.length() - 1);
+
 		
 		if (!"".equalsIgnoreCase(orderNo)) {
 			/** Logic to remove the last comma **/
 			formatOrderNo();
 		}
 		
-		customerDoc.getDocumentElement().setAttribute("OrderNo", orderNo);
-		
+		customerDoc.getDocumentElement().setAttribute("OrderNo", orderNumber);
+		System.out.println("customerDoc after legacyOnCustomer(): "
+				+ SCXmlUtil.getString(customerDoc));
 		yfcLogCatalog.info("customerDoc after legacyOnCustomer(): "
 				+ SCXmlUtil.getString(customerDoc));
 	}
@@ -540,7 +552,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	private HashMap<String, String> populateLegacyMap(YFSEnvironment env,
 			Element orderElement, HashMap<String, String> legacyMap) {
 		yfcLogCatalog.info(" entering populateLegacyMap ");
-		String webLineNo = "";
+		String orderLineKey = "";
 		String legacyOrderNo = "";
 
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
@@ -554,8 +566,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			for (int counter = 0; counter < orderLineLength; counter++) {
 				Element orderLineElement = (Element) orderLineList
 						.item(counter);
-				webLineNo = SCXmlUtil.getXpathAttribute(orderLineElement,
-						"./Extn/@ExtnWebLineNumber");
+				orderLineKey = orderLineElement.getAttribute("OrderLineKey");
 				legacyOrderNo = SCXmlUtil.getXpathAttribute(orderElement,
 						"./Extn/@ExtnLegacyOrderNo");
 
@@ -567,7 +578,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				/****************************************************************************************/
 
 				/** Modified by Arun Sekhar on 31-March-2011 for Email Template **/
-				legacyMap.put(webLineNo, value);
+				legacyMap.put(orderLineKey, value);
 			}
 		}
 		return legacyMap;
