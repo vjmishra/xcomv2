@@ -3,7 +3,7 @@
 	       EntryType="" BillToID=""  >
 		<Extn />
 		<OrderLines>
-			<OrderLine OrderLineKey="">
+			<OrderLine>
 				<Extn />
 				<Item />				
 				<OrderLineTranQuantity />				
