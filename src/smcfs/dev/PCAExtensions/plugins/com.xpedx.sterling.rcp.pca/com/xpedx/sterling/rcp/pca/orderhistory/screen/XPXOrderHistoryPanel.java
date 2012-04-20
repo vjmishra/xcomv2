@@ -990,7 +990,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		
 		colBindings11[3] = new YRCTblClmBindingData();
 		colBindings11[3].setName("clmOrderNum");
-		colBindings11[3].setAttributeBinding("Extn/@ExtnLegacyOrderNo");
+		colBindings11[3].setAttributeBinding("@FormatedLegacyOrderNo");
         colBindings11[3].setColumnBinding("Order #");
         colBindings11[3].setSortReqd(true);
         colBindings11[3].setFilterReqd(true);
