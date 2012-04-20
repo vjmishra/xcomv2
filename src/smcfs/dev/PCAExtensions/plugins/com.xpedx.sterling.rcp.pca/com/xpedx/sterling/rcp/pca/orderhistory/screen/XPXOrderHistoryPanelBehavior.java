@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
 import com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor;
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
-//import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
+import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCEditorInput;
@@ -166,10 +166,10 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 					Element eleOrderList = (Element) listOrderList.item(k);
 					Element extn = YRCXmlUtils.getChildElement(eleOrderList, "Extn");
 					String extnOrderStatus = extn.getAttribute("ExtnOrderStatus");
-					
-					
-						eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
-						
+					String extnOrderType = eleOrderList.getAttribute("OrderType");
+					extnOrderType = extnOrderType + " " + "Order";	
+					eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
+					eleOrderList.setAttribute("OrderType", extnOrderType);	
 					
 					
 				}
@@ -250,7 +250,7 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
                         }
                     }
                     if(!isRefOrderEditorFound){
-                    	//YCDExtensionUtils.launchTaskInEditor("YCD_TASK_VIEW_ORDER_SUMMARY", orderElement);
+                    	YCDExtensionUtils.launchTaskInEditor("YCD_TASK_VIEW_ORDER_SUMMARY", orderElement);
 
                         
                     }
