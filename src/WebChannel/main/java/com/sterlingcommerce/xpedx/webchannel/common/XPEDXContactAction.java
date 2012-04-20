@@ -105,11 +105,13 @@ public class XPEDXContactAction extends WCMashupAction {
 				
 				if(custCSR1UserKey!=null && custCSR1UserKey.trim().length()>0) {
 					 csr1CustServEle = getUserPersonInfo(custCSR1UserKey, null);
+					 getDivisionInfo = false;
 				/*System.out.println("csr1CustServEle"+SCXmlUtil.getString(csr1CustServEle))	;*/ 
 					 
 				}					
 				if(custCSR2UserKey!=null && custCSR2UserKey.trim().length()>0) {
 					csr2CustServEle = getUserPersonInfo(custCSR2UserKey, null);
+					getDivisionInfo = false;
 					//System.out.println("csr2CustServEle"+SCXmlUtil.getString(csr2CustServEle))	;
 				}	
 				if(getDivisionInfo) {
