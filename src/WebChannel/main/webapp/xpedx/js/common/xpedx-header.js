@@ -17447,7 +17447,8 @@ function isValidQuantityRemoveAlpha(component,e){
 		e = event
 		characterCode = e.keyCode // IE specific code
 	}
-	if(characterCode==37 || characterCode==38 || characterCode==39 || characterCode==40 ){
+	//characterCode for left and right arrows and backSpace buttons for onkeyup events
+	if(characterCode==37 || characterCode==38 || characterCode==39 || characterCode==40 || characterCode==8 ){
 		return;
 	}
 
