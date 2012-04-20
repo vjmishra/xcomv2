@@ -523,8 +523,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		}
 		
 		customerDoc.getDocumentElement().setAttribute("OrderNo", orderNumber);
-		System.out.println("customerDoc after legacyOnCustomer(): "
-				+ SCXmlUtil.getString(customerDoc));
+		
 		yfcLogCatalog.info("customerDoc after legacyOnCustomer(): "
 				+ SCXmlUtil.getString(customerDoc));
 	}
