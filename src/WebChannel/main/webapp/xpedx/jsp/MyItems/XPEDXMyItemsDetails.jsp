@@ -766,7 +766,7 @@ function showSharedListForm(){
 	                     //xpedx_working_start();
                          //setTimeout(xpedx_working_stop, 3000);
                          var URL = "<s:property value='%{addToCartLink}' escape='false'/>" + "&validItemFlagArray=" +validAddtoCartItemsFlag;
-                         alert("URL="+URL);
+                        // alert("URL="+URL);
 	                 Ext.Ajax.request({
 	                   url: URL,
 	                   form: 'formItemIds',
@@ -778,7 +778,7 @@ function showSharedListForm(){
 	           				arrQty = document.getElementsByName("qtys");
 	           				for(var i = 0; i < addedItems.length; i++){
 	           					//alert("arrQty[i].value= "+ arrQty[i].value);
-	           					if(validAddtoCartItemsFlag[i]== true){alert("true");
+	           					if(validAddtoCartItemsFlag[i]== true){
 	           					divId='errorDiv_'+ arrQty[i].id;
 	           					var divVal=document.getElementById(divId);
 	           					divVal.innerHTML = "Item has been added to cart." ;
