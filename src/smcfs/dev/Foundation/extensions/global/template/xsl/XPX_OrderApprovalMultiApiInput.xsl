@@ -36,9 +36,7 @@
 					    TaxExemptionCertificate="" TaxJurisdiction="" TaxPayerId="" TeamCode=""
 					    TermsCode="" TotalAdjustmentAmount="" VendorID="" isHistory=""
 					    Createuserid="" strCustomerAdminEmailList="" strToEmailid="" >
-					    <Extn ExtnAddnlEmailAddr="" ExtnCustomerDivision=""
-						ExtnGenerationNo="" ExtnLegacyOrderNo="" ExtnOrderDivision=""
-						ExtnShipToName="" ExtnWebConfNum=""/>
+					    <Extn/>
 					    <OrderLines>
 						<OrderLine AllocationDate="" ApptStatus="" ApptType=""
 						    AwaitingDeliveryRequest="" CanAddServiceLines=""
@@ -62,20 +60,10 @@
 						    SegmentType="" SerialNo="" ShipNode="" ShipToID=""
 						    ShipTogetherNo="" SplitQty="" Status="" StatusQuantity=""
 						    SubLineNo="" isHistory="">
-						    <Extn ExtnLineShippableTotal="" ExtnPricingUOM=""
-							ExtnReqBackOrdQty="" ExtnReqShipOrdQty=""
-							ExtnUnitPrice="" ExtnWebLineNumber=""/>
-						    <Item CostCurrency="" CountryOfOrigin="" CustomerItem=""
-							CustomerItemDesc="" ECCNNo="" HarmonizedCode="" ISBN=""
-							ItemDesc="" ItemID="" ItemShortDesc="" ItemWeight=""
-							ItemWeightUOM="" ManufacturerItem=""
-							ManufacturerItemDesc="" ManufacturerName="" NMFCClass=""
-							NMFCCode="" NMFCDescription="" ProductClass=""
-							ProductLine="" ScheduleBCode="" SupplierItem=""
-							SupplierItemDesc="" TaxProductCode="" UPCCode=""
-							UnitCost="" UnitOfMeasure=""/>
-							<Instructions NumberOfInstructions=""/>
-							<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+						    <Extn/>
+						    <Item/>
+							<Instructions NumberOfInstructions="" InstructionType="" InstructionText=""/>
+							<OrderLineTranQuantity/>
 						    <LineOverallTotals Charges="" Discount="" ExtendedPrice=""
 							LineTotal="" OptionPrice="" PricingQty="" Tax="" UnitPrice=""/>
 						    <LinePriceInfo ActualPricingQty="" DiscountPercentage=""
