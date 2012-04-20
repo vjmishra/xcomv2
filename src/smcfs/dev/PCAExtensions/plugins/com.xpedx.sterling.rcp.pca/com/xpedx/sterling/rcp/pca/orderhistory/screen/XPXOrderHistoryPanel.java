@@ -1062,8 +1062,11 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		tblResultsBinding1.setName("tblResultz");
         tblResultsBinding1.setTblClmBindings(colBindings11);
         tblResultsBinding1.setKeyNavigationRequired(true);
+        tblResultsBinding1.setFilterReqd(true);
       
         tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblResultsBinding1);
+        
+
 
         /************/
 	}
