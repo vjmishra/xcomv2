@@ -184,6 +184,17 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 					eleOrderList.setAttribute("Status", (String) statusList
 							.get(extnOrderStatus));
 					
+					//Formating The Legacy Order Number
+					String fmtLegacyOrderNumber = null;
+					String divisionNo = extn.getAttribute("ExtnOrderDivision");
+					String wareHouseNo[] = divisionNo.split("_");
+					String legacyNo = extn.getAttribute("ExtnLegacyOrderNo");
+					if(legacyNo !=null && !"".equalsIgnoreCase(legacyNo)){
+					String generationNo = extn.getAttribute("ExtnGenerationNo");
+					fmtLegacyOrderNumber = XPXUtils.getFormattedOrderNumber(divisionNo, legacyNo, generationNo);
+					eleOrderList.setAttribute("FormatedLegacyOrderNo", fmtLegacyOrderNumber);
+					}
+					
 				}
 	        	/*********************************************/
 	        	setModel("OrderListModel",orderListXml);
