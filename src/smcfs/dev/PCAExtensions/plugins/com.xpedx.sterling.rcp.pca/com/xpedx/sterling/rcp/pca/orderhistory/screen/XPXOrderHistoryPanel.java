@@ -952,7 +952,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 					willCallFlag = true;
 				}else if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnRushOrderFlag"))){
 					rushOrderFlag = true;
-				}else if("Y".equalsIgnoreCase(eleTableItem.getAttribute("IsNeedsAttention"))){
+				}else if("Needs Attention".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWebHoldReason"))){
 					needsAttention = true;
 				}
 				
