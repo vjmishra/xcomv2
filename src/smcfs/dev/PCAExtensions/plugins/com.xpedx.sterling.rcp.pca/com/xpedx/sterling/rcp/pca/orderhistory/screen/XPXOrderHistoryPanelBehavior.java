@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.ExtnAutoLoader;
 import com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor;
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
@@ -167,10 +168,21 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 					Element extn = YRCXmlUtils.getChildElement(eleOrderList, "Extn");
 					String extnOrderStatus = extn.getAttribute("ExtnOrderStatus");
 					String extnOrderType = eleOrderList.getAttribute("OrderType");
-					extnOrderType = extnOrderType + " " + "Order";	
-					eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
-					eleOrderList.setAttribute("OrderType", extnOrderType);	
 					
+					if (extnOrderType.equalsIgnoreCase("STOCK_ORDER")) {
+						extnOrderType = "Fulfillment Order";
+						eleOrderList.setAttribute("OrderType", extnOrderType);
+					}
+					else if(extnOrderType != null && extnOrderType != "" && extnOrderType.equalsIgnoreCase("Customer")){
+						extnOrderType = extnOrderType + " " + "Order";
+						eleOrderList.setAttribute("OrderType", extnOrderType);
+					}
+					else if(extnOrderType != null && extnOrderType != "" && extnOrderType.equalsIgnoreCase("Fulfillment")){
+						extnOrderType = extnOrderType + " " + "Order";
+						eleOrderList.setAttribute("OrderType", extnOrderType);
+					}
+					eleOrderList.setAttribute("Status", (String) statusList
+							.get(extnOrderStatus));
 					
 				}
 	        	/*********************************************/
