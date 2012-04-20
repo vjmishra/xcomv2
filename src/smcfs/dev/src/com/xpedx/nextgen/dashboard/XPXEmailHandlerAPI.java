@@ -480,7 +480,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				        		if (itemUomMasterElement.hasAttribute("Description")) {
 				        			itemUomDescription = itemUomMasterElement.getAttribute("Description");
 				        		} else {
-				        			itemUomDescription = "";
+				        			itemUomDescription = "transactionalUOM";
 				        		}
 				        	}
 				        	orderLineElement.setAttribute("UOMDescription",itemUomDescription);
