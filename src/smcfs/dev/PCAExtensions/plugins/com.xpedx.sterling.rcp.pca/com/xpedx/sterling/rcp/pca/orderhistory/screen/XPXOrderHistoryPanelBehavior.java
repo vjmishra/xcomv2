@@ -340,8 +340,7 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		Element attrElemComplex2 =null;
 		//Condition For Item Number
 		if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("ItemNum"))){
-			Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrderLines");
-			Element attrElemComplex4 = YRCXmlUtils.createChild(attrElemComplex3, "OrderLine");
+			Element attrElemComplex4 = YRCXmlUtils.createChild(elemModel, "OrderLine");
 			Element attrElemComplex5 = YRCXmlUtils.createChild(attrElemComplex4, "Item");
 			attrElemComplex5.setAttribute("ItemID", getFieldValue("txtSearchBy"));
 		}
