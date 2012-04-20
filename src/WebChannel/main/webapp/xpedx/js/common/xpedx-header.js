@@ -17461,7 +17461,8 @@ function isValidQuantityRemoveAlpha(component,e){
        char = quantity.charAt(i); 
        if (validVals.indexOf(char) == -1) 
        {
-    	quantity = quantity.substr(0,i) ;
+    	var quantity1 = quantity.substr(i+1,qtyLen) ;
+    	quantity = quantity.substr(0,i) +quantity1;
     	//alert ("Quantity After: " + quantity)
          // isValid = false;
        }
