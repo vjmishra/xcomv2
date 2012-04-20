@@ -246,8 +246,8 @@
 					
 					
 					<td>
-					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on xpedx.com
-
+					Your order has been rejected.If you have any questions, please contact your order approver.Click here to review on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com. 
+					
 												</td>
 									</tr>
 						</table>	
@@ -422,21 +422,38 @@
 			<tbody>
 				<tr>
 					<td rowspan="7" valign="top">
+						
 					<xsl:value-of select="Item/@ItemShortDesc" disable-output-escaping="yes"/>
 						<br></br>
-					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
-											</td>
 						<xsl:if test = '@LineType!="M"' >					
-									
+						
+					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
+					</xsl:if>
+											</td>
+						<xsl:choose><xsl:when test='@LineType!="M"'> 															
+							
 					<td class="right"> Ordered Qty:</td>
-					<td class="left"><xsl:value-of select="@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
+					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>
 					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >	
 					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
 					</xsl:if>
 					 </td>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
-					</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+					<td class="right"> </td>
+					<td class="left"></td>
+					<td class="right">
+					 </td>
+					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
+					
+					</xsl:otherwise>
+					</xsl:choose>
+					
+					
+					
+					
 				</tr>
 				<tr>
 
@@ -525,6 +542,8 @@
 				
 					<td><span class="itemno">xpedx item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
 					</xsl:if>
+					<xsl:if test = '@LineType!="M"' >					
+						
 					<xsl:if test = 'Item/@ManufacturerItem!=""' >					
 				
 					<td class="right"> Mfg. Item #:</td>
@@ -534,6 +553,7 @@
 				
 					<td class="right">My Item #:</td>
 					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
+                    </xsl:if>
                     </xsl:if>
 				</tr>
 				<!-- if (specialInstructions is not null) -->
@@ -553,6 +573,7 @@
 			</table>
 					</td>
 					</tr>
+					
 					<table class="order-total">
 						<tr>
 
@@ -593,7 +614,6 @@
 				 </tr>
 
 						</table>
-						</table>
 						<table width="70%" border="0" align="center" cellpadding="1" cellspacing="1">
 				<tr>
 					<td>
@@ -602,7 +622,9 @@
 						</td>
 				</tr>
 			</table>
-					
+			
+						</table>
+						
 			</BODY>
 		</HTML>
 		
