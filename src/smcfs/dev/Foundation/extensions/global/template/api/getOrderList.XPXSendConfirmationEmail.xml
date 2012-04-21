@@ -3,10 +3,10 @@
 	       EntryType="" BillToID=""  >
 		<Extn />
 		<OrderLines>
-			<OrderLine>
+			<OrderLine> 
 				<Extn />
 				<Item />				
-				<OrderLineTranQuantity />				
+				<OrderLineTranQuantity OrderedQty="" TransactionalUOM="" />				
 				<Instructions>
 					<Instruction InstructionType="" InstructionText=""/>
 				</Instructions>
