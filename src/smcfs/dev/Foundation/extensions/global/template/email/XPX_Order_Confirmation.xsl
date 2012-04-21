@@ -206,6 +206,9 @@
 			<xsl:value-of select="Order/@ShipToID" />
 		</xsl:variable>
 
+		<xsl:variable name="IsOrderSplit" >
+			<xsl:value-of select="Order/@IsOrderSplit" />
+		</xsl:variable>
 		<xsl:variable name="maxDelim" select="'-M'"/>
 		<xsl:variable name="accDelim" select="'-A'"/>	
 			
@@ -433,11 +436,8 @@
 						<xsl:choose><xsl:when test='@LineType!="M"'> 															
 							
 					<td class="right"> Ordered Qty:</td>
-					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
-					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>
-					<xsl:if test = 'Extn/@ExtnPricingUOM!=""' >	
-					/<xsl:value-of select="Extn/@ExtnPricingUOM"/> 
-					</xsl:if>
+					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>/<xsl:value-of select="Extn/@ExtnPricingUOMDescription"/> 
 					 </td>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
 					</xsl:when>
@@ -460,10 +460,10 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >
 								
-						<xsl:if test = 'Extn/@ExtnReqShipOrdQty!=""' >	
+						<xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >	
 					
 					<td class="right"> Shippable Qty:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td> 
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
 					<td class="right"></td>
 					<td class="right"></td>
 					    </xsl:if>
@@ -473,10 +473,10 @@
 				<tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
-						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!=""' >	
+						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!="" and  ($IsOrderSplit ="N")' >	
 					
 					<td class="right"> Backorder Qty:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/>&#160;<xsl:value-of select="@UOMDescription"/></td>
+					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -488,7 +488,7 @@
 				<xsl:if test = '@lineOrderNO!=""' >					
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="@UOMDescription"/>  </td>
+					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>  </td>
 					<td class="left"></td>
 					<td class="right"></td>
 					<td class="right"></td>
