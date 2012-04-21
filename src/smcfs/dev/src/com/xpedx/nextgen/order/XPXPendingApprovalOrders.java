@@ -1,10 +1,13 @@
 package com.xpedx.nextgen.order;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -26,6 +29,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	private String approverUserId = null;
 	private String approverProxyUserId = null;
 	private static YFCLogCategory log;
+	String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
@@ -81,7 +85,6 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			if(totalOrderValue >= spendingLimit)
 				isApprovalReq = true;
 		}
-		// if approval is required
 		if(isApprovalReq) {
 			if(approverUserId!=null || approverProxyUserId!=null) {//if at least there is one approver put the order on Hold
 				String approverOnHold = null;
@@ -229,6 +232,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
 			String formattedOrderNo = getFormattedOrderNumber(orderExtn);
 			inXML.getDocumentElement().setAttribute("FormattedOrderNo",formattedOrderNo);
+			Map<String,String> getUOMListMap = getUOMList(env);
+			
+			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(order, "OrderLines/OrderLine");
+			adduomDescription(orderLinesElem,getUOMListMap);
 			
 			//stamp the approval related URLs.
 			String baseURL = YFSSystem.getProperty("baseURL");
@@ -323,6 +330,86 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			customerContact.setAttribute("ToEmailID", toEmailID);
 			customerContact.setAttribute("CCEmailID", ccEmailId);
 		}
+	}
+	private void adduomDescription(ArrayList<Element> orderLinesElement,Map<String,String> uomDesriptionMap)
+	{
+		
+		if(orderLinesElement != null)
+		{
+			for(int i=0;i<orderLinesElement.size();i++)
+			{
+				Element orderElement=orderLinesElement.get(i);
+				Element orderLineTranQty=(Element)orderElement.getElementsByTagName("OrderLineTranQuantity").item(0);
+				
+				if(orderLineTranQty !=null )
+				{
+					String checkUOMDescription = uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM"));
+					if(checkUOMDescription!=null && !checkUOMDescription.equals("")){
+					orderLineTranQty.setAttribute("UOMDescription", uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM")));
+					}else{
+						orderLineTranQty.setAttribute("UOMDescription", orderLineTranQty.getAttribute("TransactionalUOM"));
+						
+					}
+				}
+				Element orderLineExtnElem=(Element)orderElement.getElementsByTagName("Extn").item(0);
+				
+				if(orderLineExtnElem !=null )
+				{
+					String checkUOMPriceDesc = uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM"));
+					if(checkUOMPriceDesc!=null && checkUOMPriceDesc.equals("")){
+						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", uomDesriptionMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM")));
+						
+					}else{
+						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", orderLineExtnElem.getAttribute("ExtnPricingUOM"));
+						
+					}
+					
+					}
+			}
+		}
+	}
+	private Map<String,String> getUOMList(YFSEnvironment env){
+		Map<String,String> UOMDesriptionMap = new HashMap<String,String>();
+		try
+		{
+			Document getItemUomMasterListInputDoc = YFCDocument.createDocument("ItemUOMMaster").getDocument();
+	    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure","" );
+	    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "");
+	    	env.setApiTemplate("getItemUOMMasterList", getItemUomMasterListTemplate);
+	    	Document getItemUomMasterListOutputDoc = api.invoke(env, "getItemUOMMasterList", getItemUomMasterListInputDoc);
+	    	env.clearApiTemplate("getItemUOMMasterList");
+	    	env.clearApiTemplate("getItemUOMMasterList");
+	    	NodeList itemUOMMasterList = getItemUomMasterListOutputDoc.getDocumentElement().getElementsByTagName("ItemUOMMaster");
+	    	if (itemUOMMasterList != null) 
+	    	{
+	        	int itemUOMLength = itemUOMMasterList.getLength();
+	        	if(itemUOMLength > 0) 
+	        	{
+	        		for(int i=0; i < itemUOMLength ;i++)
+	        		{
+	        			String itemUomDescriptionMaster ="";
+	        			String itemUomMaster = "";
+		        		Element itemUomMasterElement = (Element) itemUOMMasterList.item(i);
+		        		if (itemUomMasterElement.hasAttribute("Description")) 
+		        		{
+		        		   itemUomDescriptionMaster = itemUomMasterElement.getAttribute("Description");
+		        		   itemUomMaster = itemUomMasterElement.getAttribute("UnitOfMeasure");
+		        		} 
+		        		else 
+		        		{
+		        			itemUomDescriptionMaster = "";
+		        		}
+		        		UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
+		        		System.out.println("Inside loop"+UOMDesriptionMap.size());
+	        		}
+	        	}
+	        }
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting UOM Description "+e.getMessage());
+		}
+    	return UOMDesriptionMap;
 	}
 	
 	private void appendDummyContactList(Document inXML) {
