@@ -63,7 +63,7 @@
 						    <Extn/>
 						    <Item/>
 							<Instructions NumberOfInstructions="" InstructionType="" InstructionText=""/>
-							<OrderLineTranQuantity/>
+							<OrderLineTranQuantity OrderedQty="" TransactionalUOM="" />
 						    <LineOverallTotals Charges="" Discount="" ExtendedPrice=""
 							LineTotal="" OptionPrice="" PricingQty="" Tax="" UnitPrice=""/>
 						    <LinePriceInfo ActualPricingQty="" DiscountPercentage=""
