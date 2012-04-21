@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.parsers.FactoryConfigurationError;
@@ -87,6 +88,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		int orderLength = orderNodeList.getLength();
 		if (orderLength != 0) {
 			Element orderElement = (Element) orderNodeList.item(0);
+			if(orderLength >2)
+				orderElement.setAttribute("IsOrderSplit", "Y");
+			else
+				orderElement.setAttribute("IsOrderSplit", "N");
 			//This is assumed as the Customer order
 			customerDoc = YFCDocument.createDocument().getDocument();
 			customerDoc.appendChild(customerDoc.importNode(orderElement, true));
@@ -373,6 +378,35 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		Element customerElement = customerDoc.getDocumentElement();
 		// get the legacy order no
 		HashMap<String, String> legacyMap = new HashMap<String, String>();
+		Map<String,String>UOMDesriptionMap = new HashMap<String,String>();
+		String itemUomDescriptionMaster = "";
+		String itemUomMaster = "";
+		
+		Document getItemUomMasterListInputDoc = YFCDocument.createDocument("ItemUOMMaster").getDocument();
+    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure","" );
+    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "");
+    	env.setApiTemplate("getItemUOMMasterList", getItemUomMasterListTemplate);
+    	Document getItemUomMasterListOutputDoc = api.invoke(env, "getItemUOMMasterList", getItemUomMasterListInputDoc);
+    	env.clearApiTemplate("getItemUOMMasterList");
+    	env.clearApiTemplate("getItemUOMMasterList");
+    	NodeList itemUOMMasterList = getItemUomMasterListOutputDoc.getDocumentElement().getElementsByTagName("ItemUOMMaster");
+    	if (itemUOMMasterList != null) {
+        	int itemUOMLength = itemUOMMasterList.getLength();
+        	if(itemUOMLength > 0) {
+        		for(int i=0; i < itemUOMLength ;i++){
+        		Element itemUomMasterElement = (Element) itemUOMMasterList.item(i);
+        		if (itemUomMasterElement.hasAttribute("Description")) {
+        		   itemUomDescriptionMaster = itemUomMasterElement.getAttribute("Description");
+        		   itemUomMaster = itemUomMasterElement.getAttribute("UnitOfMeasure");
+        		   } else {
+        			itemUomDescriptionMaster = "";
+        		}
+        		UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
+        		System.out.println("Inside loop"+UOMDesriptionMap.size());
+        		}
+        	}
+        	}
+    	
 		/*Document inputOrderDoc = SCXmlUtil.createDocument("Order");
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		Element extnElement = inputOrderDoc.createElement("Extn");
@@ -397,18 +431,20 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			}
 		}
 
-		legacyOnCustomer(env, customerDoc, legacyMap);
+		legacyOnCustomer(env, customerDoc, legacyMap,UOMDesriptionMap);
 	}
 
 	private void legacyOnCustomer(YFSEnvironment env, Document customerDoc,
-			HashMap<String, String> legacyMap) throws YFSException, RemoteException {
-		String orderLineKey = "";
+			HashMap<String, String> legacyMap,Map<String,String>UOMDesriptionMap) throws YFSException, RemoteException {
+		String webLineNo = "";
 		String legacyOrderNo = "";
 		String transactionalUOM = "";
+		String extnPrisingUOM = "";
 		String[] valueArray =  new String[5];
+		String[] unique = null ;
 		HashSet<String> hs = new HashSet<String>();
-		
-		
+
+		System.out.println("UOMDesriptionMap -----------"+UOMDesriptionMap.size());
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
 		String value = null;
 		String extnGenerationNo = null;
@@ -420,11 +456,12 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		yfcLogCatalog.info("Size" + legacyMap.size());
 		while (mapIterator.hasNext()) {
 			String itemUomDescription = "";
-			orderLineKey = mapIterator.next();
+			String priceUOMDescription = "";
+			webLineNo = mapIterator.next();
             
 			/** Modified by Arun Sekhar on 31-March-2011 for Email Template **/
 			/* legacyOrderNo = legacyMap.get(webLineNo); */
-			value = legacyMap.get(orderLineKey);
+			value = legacyMap.get(webLineNo);
 			
 			if(value!=null && !"".equalsIgnoreCase(value))
 			{
@@ -442,20 +479,30 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
 			if (null != customerDivision
+
 					&& !"".equalsIgnoreCase(customerDivision.trim())
+
 					&& null != legacyOrderNo
+
 					&& !"".equalsIgnoreCase(legacyOrderNo.trim())
+
 					&& null != extnGenerationNo
+
 					&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
-				hs.add(orderNo.concat(customerDivision).concat("-")
-						.concat(legacyOrderNo).concat("-")
-						.concat(extnGenerationNo));
-				yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
-				
-	        	
-	          
-			}
-			
+
+					hs.add(orderNo.concat(customerDivision).concat("-")
+
+					.concat(legacyOrderNo).concat("-")
+
+					.concat(extnGenerationNo));
+
+					yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
+
+
+
+
+					}
+
 			/** **************************************************************/
 			
 			NodeList orderLineList = customerDoc
@@ -465,10 +512,13 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				for (int counter = 0; counter < length; counter++) {
 					Element orderLineElement = (Element) orderLineList
 							.item(counter);
-					String keyOfOrderLine = orderLineElement.getAttribute("OrderLineKey");
-					transactionalUOM = SCXmlUtil.getXpathAttribute(
-							orderLineElement, "./OrderLineTranQuantity/@TransactionalUOM");
-					if (orderLineKey.equals(keyOfOrderLine)) {
+					Element orderLineExtnElem=(Element)orderLineElement.getElementsByTagName("Extn").item(0);
+					String webLine = orderLineExtnElem.getAttribute("ExtnWebLineNumber");
+					 extnPrisingUOM = orderLineExtnElem.getAttribute("ExtnPricingUOM");
+					
+					 Element orderLineTranQtyElem=(Element)orderLineElement.getElementsByTagName("OrderLineTranQuantity").item(0);
+					transactionalUOM = orderLineTranQtyElem.getAttribute("TransactionalUOM");
+					if (webLineNo.equals(webLine)) {
 						orderLineElement.setAttribute("LegacyOrderNo",
 								legacyOrderNo);
 						
@@ -482,6 +532,27 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 						/*****************************************************************/
 					}
 					if(transactionalUOM!=null && transactionalUOM!=""){
+					itemUomDescription = UOMDesriptionMap.get(transactionalUOM);
+					}if(extnPrisingUOM!=null && extnPrisingUOM!=""){
+						priceUOMDescription = UOMDesriptionMap.get(extnPrisingUOM);
+						
+					}
+					if(itemUomDescription!=null && !itemUomDescription.equals("")){
+						orderLineTranQtyElem.setAttribute("UOMDescription",itemUomDescription);
+						
+					}else
+					{
+						orderLineTranQtyElem.setAttribute("UOMDescription",transactionalUOM);
+						
+					}
+					if(priceUOMDescription!=null && !priceUOMDescription.equals("")){
+						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription",priceUOMDescription);
+						
+					}else{
+						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription",extnPrisingUOM);
+						
+					}
+					/*if(transactionalUOM!=null && transactionalUOM!=""){
 						Document getItemUomMasterListInputDoc = YFCDocument.createDocument("ItemUOMMaster").getDocument();
 			        	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure", transactionalUOM);
 			        	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "xpedx");
@@ -501,22 +572,43 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				        	}
 				        	orderLineElement.setAttribute("UOMDescription",itemUomDescription);
 			        	}
-					}	
+					}*/	
 				}
 			}
 
 		}
 		
-		String[] unique = (String[]) hs.toArray(new String[hs.size()]);
-      
+		
 		String orderNumber = "";
-		for (int i = 0; i < unique.length; i++) {
-			orderNumber = orderNumber  + unique[i] + ",";
+
+		if(hs.isEmpty()){
+
+		orderNumber = "In Progress";
+
 		}
-	
+
+		else if(!hs.isEmpty())
+
+		{
+
+		unique = (String[]) hs.toArray(new String[hs.size()]);
+
+		}
+
+
+
+		if( unique != null && unique.length > 0){
+
+		for (int i = 0; i < unique.length; i++) {
+
+		orderNumber = orderNumber + unique[i] + ",";
+
+		}
+
+		}
+
 		orderNumber = orderNumber.substring(0, orderNumber.length() - 1);
 
-		
 		if (!"".equalsIgnoreCase(orderNo)) {
 			/** Logic to remove the last comma **/
 			formatOrderNo();
@@ -551,7 +643,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	private HashMap<String, String> populateLegacyMap(YFSEnvironment env,
 			Element orderElement, HashMap<String, String> legacyMap) {
 		yfcLogCatalog.info(" entering populateLegacyMap ");
-		String orderLineKey = "";
+		String webLineNo = "";
 		String legacyOrderNo = "";
 
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
@@ -565,7 +657,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			for (int counter = 0; counter < orderLineLength; counter++) {
 				Element orderLineElement = (Element) orderLineList
 						.item(counter);
-				orderLineKey = orderLineElement.getAttribute("OrderLineKey");
+				webLineNo = SCXmlUtil.getXpathAttribute(orderLineElement,
+						"./Extn/@ExtnWebLineNumber");
 				legacyOrderNo = SCXmlUtil.getXpathAttribute(orderElement,
 						"./Extn/@ExtnLegacyOrderNo");
 
@@ -577,7 +670,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				/****************************************************************************************/
 
 				/** Modified by Arun Sekhar on 31-March-2011 for Email Template **/
-				legacyMap.put(orderLineKey, value);
+				legacyMap.put(webLineNo, value);
 			}
 		}
 		return legacyMap;
