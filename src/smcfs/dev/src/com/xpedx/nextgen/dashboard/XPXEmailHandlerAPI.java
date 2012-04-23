@@ -107,6 +107,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				"Extn").item(0);
 		    customerDivision = inputExtnElement
 				.getAttribute("ExtnCustomerDivision");
+		    if(customerDivision != null) {
+		    customerDivision = customerDivision.substring(0, customerDivision.length() - 2);
+		    }
 		}   
 		/*************************************************************************************/
 		
@@ -402,8 +405,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         			itemUomDescriptionMaster = "";
         		}
         		UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
-        		System.out.println("Inside loop"+UOMDesriptionMap.size());
-        		}
+        		  }
         	}
         	}
     	
@@ -433,6 +435,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 		legacyOnCustomer(env, customerDoc, legacyMap,UOMDesriptionMap);
 	}
+	
 
 	private void legacyOnCustomer(YFSEnvironment env, Document customerDoc,
 			HashMap<String, String> legacyMap,Map<String,String>UOMDesriptionMap) throws YFSException, RemoteException {
@@ -444,14 +447,16 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String[] unique = null ;
 		HashSet<String> hs = new HashSet<String>();
 
-		System.out.println("UOMDesriptionMap -----------"+UOMDesriptionMap.size());
+		
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
 		String value = null;
 		String extnGenerationNo = null;
 		/**************************************************************/
+		
 
-		// Iterator it = hashmap.keySet().iterator(); while(it.hasNext()) {
-		// Object key = it.next(); Object val = hashmap.get(key); }
+		//Generation number and Division number logic to form order number
+		//Similar to logic implemented in XPEDX Order Details Of WC
+		
 		Iterator<String> mapIterator = legacyMap.keySet().iterator();
 		yfcLogCatalog.info("Size" + legacyMap.size());
 		while (mapIterator.hasNext()) {
@@ -476,6 +481,14 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			       extnGenerationNo = valueArray[1];
 			     }
 			}
+			
+			if(extnGenerationNo!=null && extnGenerationNo.length()>0)
+			{
+				if(extnGenerationNo.trim().length()==1)
+				{
+					extnGenerationNo="0"+extnGenerationNo;
+				}					
+			}
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
 			if (null != customerDivision
@@ -497,9 +510,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					.concat(extnGenerationNo));
 
 					yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
-
-
-
+					
 
 					}
 
@@ -618,6 +629,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		
 		yfcLogCatalog.info("customerDoc after legacyOnCustomer(): "
 				+ SCXmlUtil.getString(customerDoc));
+		
 	}
 	
 	/** Added by Arun Sekhar on 13-April-2011 for Email templates **/
