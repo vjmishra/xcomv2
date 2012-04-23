@@ -504,11 +504,23 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private void getItemDetails() throws Exception {
 		Element itemEle = XMLUtilities.getElement(m_itemListElem, "Item");
 		ArrayList<Element> catPath = SCXmlUtil.getElements(itemEle, "CategoryList/Category");
-		Description = catPath.get(0).getAttribute("Description");
+		String categoryPath = catPath.get(0).getAttribute("CategoryPath");
+		Map<String,String> mainCats = XPEDXWCUtils.getMainCategories();
+		String pathElements[] = categoryPath.split("/");
+		String currentCategoryName="";
+		for(int i = 0; i <pathElements.length ; i++) {			
+			if(mainCats !=null && mainCats.size() > 0 )
+				if( mainCats.containsKey(pathElements[i]) ){ 
+					currentCategoryName = mainCats.get(pathElements[i]);
+					XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
+					currentCategoryName = currentCategoryName.replaceAll(" ", "");
+					continue;
+				}
+			
+		}
 		Element primaryInfoEle = XMLUtilities.getElement(itemEle,"PrimaryInformation");
 		Element itemExtnEle = XMLUtilities.getElement(itemEle, "Extn");
-		String[] desc = Description.split("/");
-		catagory = desc[0];
+		catagory = currentCategoryName;
 		minOrderQty = SCXmlUtil.getAttribute(primaryInfoEle,"MinOrderQuantity");
 		pricingUOM = SCXmlUtil.getAttribute(primaryInfoEle, "PricingUOM");
 		pricingUOMConvFactor = SCXmlUtil.getAttribute(primaryInfoEle,"PricingQuantityConvFactor");
