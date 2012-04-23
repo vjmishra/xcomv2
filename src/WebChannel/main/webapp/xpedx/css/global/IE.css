@@ -58,6 +58,7 @@ div#home-image-rotation-nav-inner { display: table-cell; }
 div#catalog-image-rotation-nav-inner { display: table-cell; }
 div#home-image-rotation-nav div.img-navi-right { margin-top: -17px; } 
 div#catalog-image-rotation-nav div.img-navi-right { margin-top: -10px; }
+div.change-shipto-error { float:right;margin-top:1px;width:100%; }
 
 
 /* Begin Catalog UI review Changes */

@@ -350,7 +350,7 @@
 </ul>
 
 
-<div style="float:right;margin-top:1px;width:100%;">
+<div class="change-shipto-error">
 <s:if test="%{#NoShipTo}" >
 <div id="errorText" class="error float-right">No Ship-To locations were found that meet the search criteria. Please enter new search criteria or click the 'Cancel' button.</div>
 </s:if>
