@@ -1155,9 +1155,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						Element itemElem=(Element)itemsNode.item(i);
 						String itemID = itemElem.getAttribute("ItemID");
 						ArrayList<Element> catPath = SCXmlUtil.getElements(itemElem, "CategoryList/Category");
-						String Description = catPath.get(0).getAttribute("Description");
-						String[] desc = Description.split("/");
-						catagory = desc[0];
+						String categoryPath = catPath.get(0).getAttribute("CategoryPath");
+						Map<String,String> mainCats = XPEDXWCUtils.getMainCategories();
+						String pathElements[] = categoryPath.split("/");
+						String currentCategoryName="";
+						for(int j = 0; j <pathElements.length ; j++) {			
+							if(mainCats !=null && mainCats.size() > 0 )
+								if( mainCats.containsKey(pathElements[j]) ){ 
+									currentCategoryName = mainCats.get(pathElements[j]);
+									XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
+									currentCategoryName = currentCategoryName.replaceAll(" ", "");
+									continue;
+								}
+						}
+						catagory = currentCategoryName;
 						catMap.put(itemID,catagory);
 					}
 					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true,null,false,null);
@@ -2005,9 +2016,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(!(requestedUOM!= null && requestedUOM.trim().length()>0))
 				requestedUOM = SCXmlUtil.getAttribute(itemEle, "UnitOfMeasure");
 			ArrayList<Element> catPath = SCXmlUtil.getElements(itemEle, "CategoryList/Category");
-			String Description = catPath.get(0).getAttribute("Description");
-			String[] desc = Description.split("/");
-			catagory = desc[0];	
+			String categoryPath = catPath.get(0).getAttribute("CategoryPath");
+			Map<String,String> mainCats = XPEDXWCUtils.getMainCategories();
+			String pathElements[] = categoryPath.split("/");
+			String currentCategoryName="";
+			for(int j = 0; j <pathElements.length ; j++) {			
+				if(mainCats !=null && mainCats.size() > 0 )
+					if( mainCats.containsKey(pathElements[j]) ){ 
+						currentCategoryName = mainCats.get(pathElements[j]);
+						XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
+						currentCategoryName = currentCategoryName.replaceAll(" ", "");
+						continue;
+					}
+			}
+			catagory = currentCategoryName;	
 			LOG.debug("Requested UOM: " + requestedUOM);
 			//modified for jira 3392
 			ArrayList<XPEDXItem> inputItems = getPnAInputDoc(getPnaItemId(),requestedUOM,"1");
