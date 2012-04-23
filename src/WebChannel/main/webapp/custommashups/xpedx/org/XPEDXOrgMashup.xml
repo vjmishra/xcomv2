@@ -72,7 +72,7 @@
 		<API FlowName="GetXpedxArticleList">
 			<Input>
 				<XPXArticle OrganizationCode="" StartDate="" EndDate=""
-					StartDateQryType="LE" EndDateQryType="GE">
+					StartDateQryType="LE" EndDateQryType="GE" IgnoreOrdering="N">
 					<ComplexQuery Operator="AND">
 						<And>
 							<Or>
@@ -80,6 +80,9 @@
 							</Or>
 						</And>
 					</ComplexQuery>
+					<OrderBy>
+							<Attribute Desc="Y" Name="EndDate" />
+					</OrderBy>
 				</XPXArticle>
 			</Input>
 			<Template>
@@ -683,8 +686,8 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API FlowName="GetXpedxArticleList">
 			<Input>
-				<XPXArticle OrganizationCode="" StartDate="" EndDate=""
-					StartDateQryType="LE" EndDateQryType="GE">
+				<XPXArticle OrganizationCode="xpedx" StartDate="" EndDate=""
+					StartDateQryType="LE" EndDateQryType="GE" IgnoreOrdering="N">
 					<ComplexQuery>
 						<Or>
 							<Exp Name='ArticleType' Value='S' />
@@ -694,6 +697,9 @@
 							</And>
 						</Or>
 					</ComplexQuery>
+					<OrderBy>
+							<Attribute Desc="Y" Name="EndDate" />
+					</OrderBy>
 				</XPXArticle>
 			</Input>
 			<Template>
