@@ -618,7 +618,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						SCXmlUtil
 						.createFromString("<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
-								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey=''>"
+								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey='' PrimeLineNo=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
 								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
 								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
@@ -638,7 +638,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						.createFromString(""+"<OrderList>"
 								+ "<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
-								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey=''>"
+								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey='' PrimeLineNo=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
 								+"<LinePriceInfo IsPriceLocked='' UnitPrice='' /><Extn ExtnLineOrderedTotal='' ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice='' ExtnPriceOverrideFlag='' ExtnEditOrderFlag='' ExtnPricingUOM='' ExtnUnitPrice=''/> <Item ItemID='' ></Item>"
 								+ "<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''></OrderLineTranQuantity>"
