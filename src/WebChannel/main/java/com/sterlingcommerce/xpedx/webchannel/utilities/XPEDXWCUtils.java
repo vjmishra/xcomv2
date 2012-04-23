@@ -42,6 +42,7 @@ import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.SCUIConstants;
+import com.sterlingcommerce.ui.web.framework.SCUILocalSession;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
@@ -5945,4 +5946,73 @@ public class XPEDXWCUtils {
 	public static String getStaticFileLocation() {		
 		return staticFileLocation;
 	}
+	
+	/**
+	 * extracts catalog main categories...
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public static Map<String,String> getMainCategories() throws Exception {
+		Map<String, String> MainCategories = new LinkedHashMap<String, String>();
+
+		Element outputXML = null;
+		//performance issue for filter action
+		Document outDoc = null;
+		Element catElem;
+		Element el1;
+		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		SCUILocalSession localSession = wcContext.getSCUIContext().getLocalSession();
+		outDoc  = (Document) localSession.getAttribute("categoryCache");
+		//SCXmlUtil.getString(outDoc);
+	if(outDoc == null || (outDoc!=null && outDoc.getDocumentElement() ==null)) 
+	{	
+		Map<String, String> valueMap = new HashMap<String, String>();
+		String orgCode = wcContext.getStorefrontId();
+		String customerId = wcContext.getCustomerId();
+		valueMap.put("/SearchCatalogIndex/@CallingOrganizationCode", orgCode);
+		valueMap.put("/SearchCatalogIndex/Item/CustomerInformation/@CustomerID", customerId);
+
+		Element input = WCMashupHelper.getMashupInput("xpedx-PreferredCatalogOptions", valueMap, wcContext
+						.getSCUIContext());
+		
+		String inputXml = SCXmlUtil.getString(input);
+		log.debug("Input XML: " + inputXml);
+		
+		el1 = (Element) WCMashupHelper.invokeMashup(
+				"xpedx-PreferredCatalogOptions", input, wcContext
+						.getSCUIContext());
+		if(el1 != null){
+			outDoc = el1.getOwnerDocument();
+			outputXML = el1.getOwnerDocument().getDocumentElement();
+			localSession.setAttribute("categoryCache", outDoc);
+		}
+		if (null != outputXML) {
+			log.debug("Output XML: " + SCXmlUtil.getString(el1));
+		}
+		
+	}else{
+		outputXML= outDoc.getDocumentElement();
+	}	
+	
+		Element categoryList = XMLUtilities
+				.getChildElementByName(outputXML, "CategoryList");
+		if (categoryList == null) {
+			return MainCategories;
+		}
+		NodeList cat = categoryList.getChildNodes();
+		int numCats = cat.getLength();
+		for (int i = 0; i < numCats; i++) {
+			catElem = (Element) cat.item(i);
+			String catID = catElem.getAttribute("CategoryID");
+			String sDesc = catElem.getAttribute("ShortDescription");
+			MainCategories.put(catID, sDesc);
+		}
+		
+		XPEDXConstants.logMessage("MainCategories List : " + MainCategories );
+
+		return MainCategories;
+	}
+
 }
