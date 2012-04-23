@@ -275,28 +275,20 @@
 
 						<td> <xsl:value-of select="Order/Extn/@ExtnWebConfNum"/>
 						 </td>
+						 <td>
+						 <xsl:if test="(contains($shipToID,$maxDelim))">							
+						
+								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+						</xsl:if>
+						 </td>
 					</tr>
 					<tr>
 						<td> Order #: </td>
 
 						<td> In Progress </td>
 						<td>
-						<xsl:if test="(contains($shipToID,$maxDelim))">							
-						
-								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
-								<br></br>
-								<span style="padding-left:10px">
 									<xsl:value-of select="$shipToName" />
-								</span>
-								</xsl:if>
-							<xsl:if test="(contains($shipToID,$accDelim))">
-								<xsl:value-of select="substring-before($shipToID, $accDelim)" />
-								<br></br>
-								<span style="padding-left:10px">
-									<xsl:value-of select="$shipToName" />
-								</span>
-							</xsl:if>
-						
+								
 						</td>
 											</tr>
 					<tr>
