@@ -355,8 +355,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				
 				if(orderLineExtnElem !=null )
 				{
-					String checkUOMPriceDesc = uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM"));
-					if(checkUOMPriceDesc!=null && checkUOMPriceDesc.equals("")){
+					String checkUOMPriceDesc = uomDesriptionMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM"));
+					if(checkUOMPriceDesc!=null && !checkUOMPriceDesc.equals("")){
 						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", uomDesriptionMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM")));
 						
 					}else{
@@ -400,8 +400,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		        			itemUomDescriptionMaster = "";
 		        		}
 		        		UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
-		        		System.out.println("Inside loop"+UOMDesriptionMap.size());
-	        		}
+		        	}
 	        	}
 	        }
 		}
