@@ -279,19 +279,19 @@
 					<tr>
 						<td> Order #: </td>
 
-						<td> <xsl:value-of select="Order/@OrderNo"/> </td>
+						<td>In Progress </td>
 						<td>
 						<xsl:if test="(contains($shipToID,$maxDelim))">							
 						
 								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
-								,
+								<br></br>
 								<span style="padding-left:10px">
 									<xsl:value-of select="$shipToName" />
 								</span>
 								</xsl:if>
 							<xsl:if test="(contains($shipToID,$accDelim))">
 								<xsl:value-of select="substring-before($shipToID, $accDelim)" />
-								,
+								<br></br>
 								<span style="padding-left:10px">
 									<xsl:value-of select="$shipToName" />
 								</span>
@@ -369,32 +369,42 @@
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
 						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
 						Ship Order Complete
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
 					    ,
 					    </xsl:if>
 						</xsl:if>						
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
 						
 					    Will Call
-					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWillCall!="N"' >					
 						,
 						</xsl:if>					    					
 						</xsl:if>
 						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
 						Rush Order
 						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
-						Order Placed on Hold
-						</xsl:if>
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >		
+								<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
+								,							
+						  </xsl:if>
+						  Order Placed on Hold
+						</xsl:if>						
+						 </td>					
 						
-						 </td>
-					</tr>
-					<tr> <!-- This row is intentionally left blank. Do not alter this row. -->
+						</tr>
+					<tr> 
 
 						<td> </td>
 						<td> </td>
 						<td> </td>
-					</tr><!-- End intentionally blank row. -->
+					</tr>
+					<tr> 
+
+						<td> </td>
+						<td> </td>
+						<td> </td>
+					</tr>
+					
 					<tr>
 					<td colspan="3"> <span class="bold"> Order Comments: </span>
 						<xsl:value-of select="Order/Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
