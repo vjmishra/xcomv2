@@ -1113,7 +1113,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
 								</s:if>
@@ -1122,7 +1122,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								  </s:if>
 								  <s:else>
 								  		<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
