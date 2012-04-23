@@ -1233,6 +1233,8 @@ div.bottom-btn-bar.scp a.grey-ui-btn { margin-right:5px;}
 div.shopping-cart .cart-availability-section div.red p.red { margin-top: 10px;}
 div.last-modified-div.sc { margin-top:30px; }
 div.bottom-btn-bar.scp .sc-update-cart.grey-ui-btn { float:right; }
+.change-shipto-error { float:right;margin-top:1px;width:100%; }
+
 
   /*
    <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/order/shopping-cart.css" />

@@ -5778,6 +5778,9 @@ input, textarea, option, select{}
 .vertical-filter ul li ul li{width:95%;vertical-align:top;}
 .vertical-filter ul li ul.inner{display:block;}
 .vertical-filter ul li.close ul.inner{display:none;}
+
+.change-shipto-error { float:right;margin-top:35px;width:100%; }
+
 /*End <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
 */
 
@@ -7935,7 +7938,7 @@ width: 740px;
 .ship-to-address-list
 {
 border: 1px solid #CCC; 
-height: 226px;
+height: 235px;
 /* overflow: auto; */
 }
 .apply-ship-to-btn

@@ -1501,7 +1501,7 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 			 		'autoDimensions'	: false,
 			 		'scrolling'   		: 'no',
 			 		'width' 		: 750,
-			 		'height' 		: 505  
+			 		'height' 		: 530  
 				}).trigger('click');
 			} else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
@@ -1527,7 +1527,7 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
  			'autoDimensions'	: false,
  			'width' 		: 750,
  			'scrolling'   		: 'no',
- 			'height' 		: 505
+ 			'height' 		: 530
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
