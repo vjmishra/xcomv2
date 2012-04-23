@@ -135,7 +135,7 @@ a { outline:0px;}
 .padding-right8{ padding-right:8px;}
 .sprint-list li { padding:8px 0px; border-bottom:solid 1px #E5E5E5; width:50%;} 
 .marginbuttom-10{margin-bottom:0px; padding-bottom:10px; border-bottom:solid 1px #e4e4e4; } 
-  
+
 /***********************************************/  
 /**********************************************/
 
@@ -539,6 +539,7 @@ div.fp-btn-container {margin-left:90px;     margin-top: 10px; }
 a.orange-ui-btn:hover { text-decoration: none !important; }
 #customersOne { min-width:735px !important; height:150px !important; }
 div#customers1_div div { width: 730px !important; }
+.change-shipto-error { float:right;margin-top:1px;width:100%; }
 /***************************End brian bridge changes ***********************************************/
 
 /**********************************************************************************************************************
