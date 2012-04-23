@@ -20,6 +20,7 @@
 	<!-- begin styles. -->
 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 	<!-- end styles -->
 	
 	
@@ -60,7 +61,7 @@
 	
 	<!-- Facy Box (Lightbox/Modal Window -->
 	<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
-	<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+	<!--<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>	-->
 	<script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 	<script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
     <script src="../../xpedx/js/sorting.js" type="text/javascript"></script>
