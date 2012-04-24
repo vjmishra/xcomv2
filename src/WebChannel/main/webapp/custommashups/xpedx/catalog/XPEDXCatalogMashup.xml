@@ -734,7 +734,10 @@
 							 <Association AssociatedQuantity="" AssociationType="" EffectiveFrom="" EffectiveTo="" Priority="">
 								 <Item ItemID="" UnitOfMeasure="" >
 								   <PrimaryInformation Description="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ExtendedDescription="" IsValid=""/>
-								  </Item>
+								   <AssetList TotalNumberOfRecords="">
+								      <Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type=""/>
+								   </AssetList>
+								 </Item>
 							 </Association>
 						  </AssociationList>
 						</AssociationType>
