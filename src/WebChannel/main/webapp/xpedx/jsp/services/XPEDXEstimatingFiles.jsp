@@ -106,7 +106,7 @@ $("#various4").fancybox();
 			                          <span><s:property value='#CatalogExp.value'/></span></a>			                     
 			                     </li>
 			                   
-		                     </ul>				
+		                     </ul>	<ul>&nbsp;</ul>			
 					   </s:iterator> 
 					   			  
 			   </td>
