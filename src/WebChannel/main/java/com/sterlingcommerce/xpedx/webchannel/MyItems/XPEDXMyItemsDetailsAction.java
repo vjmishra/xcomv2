@@ -952,8 +952,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		//int count = 0;
 		try {
 			XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
-			if(allItemsDoc == null)
-				allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			//if(allItemsDoc == null) // commented for Jira 3664
+				Document allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 			//ArrayList<Element> itemElements =  SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
 			for(int i =0; i<allItemIds.size();i++) {
 				Element itemElem = SCXmlUtil.getElementByAttribute(allItemsDoc.getDocumentElement(), "Item", "ItemID", allItemIds.get(i));
