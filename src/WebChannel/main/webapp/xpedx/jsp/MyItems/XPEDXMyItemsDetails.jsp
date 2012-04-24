@@ -1735,7 +1735,7 @@ function showSharedListForm(){
 		namespace="/common" />
 	</s:if>	
 	
-        <div class="container">
+        <div class="container" style="min-height: 535px;">
             <!-- breadcrumb -->
 			<s:url action='home.action' namespace='/home' id='urlHome'
 				includeParams='none' /> <s:url id='urlMIL' namespace='/xpedx/myItems'
@@ -2664,7 +2664,6 @@ function showSharedListForm(){
             </li>
 			</ul>
             <div class="clearall"></div>
-            
                
             <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
 						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
@@ -2682,8 +2681,8 @@ function showSharedListForm(){
 				</s:if>
 				
 				
-<br/>
-			<s:if test='editMode != true'>
+	<br/>
+	<s:if test='editMode != true'>
             <!-- START Carousel -->
 		
 		<s:if test='xpedxYouMightConsiderItems.size() > 0'>
@@ -2691,96 +2690,80 @@ function showSharedListForm(){
                 <div id="cross-sell" class="float-left">
                     <span class="consider-text"> You might also consider...</span>
                     <ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
-                    <!-- Begin - Changes made by Mitesh for JIRA 3186 -->							    		
-					<s:if test='xpedxYouMightConsiderItems.size() > 0'>
-						<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
+	                    <!-- Begin - Changes made by Mitesh for JIRA 3186 -->	
+	                    <s:if test='xpedxYouMightConsiderItems.size() < 4'>
+							<div disabled="disabled" class="jcarousel-prev jcarousel-prev-hide-horizontal"></div> 
+				    		<div disabled="disabled" class="jcarousel-next jcarousel-next-hide-horizontal"></div>
+		   			 		
+			    		</s:if>
+			    		<!-- End - Added by Mitesh Parikh for JIRA#3186  -->						    		
+						<s:if test='xpedxYouMightConsiderItems.size() > 0'>						
+							<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
 							
-							<s:set name="itemAssetList"
-									value='#xutil.getAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
-								
-								<s:set name='dispItemId' value='#xutil.getChildElement(#reltItem, "ItemID")'/>
-								<s:set name='dispItemUom' value='#xutil.getChildElement(#reltItem, "UnitOfMeasure")'/>
-								<s:url id='dispItemDetailsLink' namespace="/catalog"
-									action='itemDetails.action' includeParams='none' escapeAmp="false">
-									<s:param name="itemID" value="#dispItemId" />
-									<s:param name="sfId" value="#parameters.sfId" />
-									<s:param name="unitOfMeasure" value="#dispItemUom" />
-								</s:url>
-					
-								<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
-									<s:set name="itemAsset" value='#itemAssetList[0]' />
-									<s:set name='imageLocation'
-										value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
-									<s:set name='imageId'
-										value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
-									<s:set name='imageLabel'
-										value="#xutil.getAttribute(#itemAsset, 'Label')" />
-									<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
-									<s:if test='%{#imageURL=="/"}'>
+								<s:set name="itemAssetList"
+										value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+									
+									<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
+										<s:set name="itemAsset" value='#itemAssetList[0]' />
+										<s:set name='imageLocation'
+											value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+										<s:set name='imageId'
+											value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
+										<s:set name='imageLabel'
+											value="#xutil.getAttribute(#itemAsset, 'Label')" />
+										<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
+										<s:if test='%{#imageURL=="/"}'>
 											<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
-									</s:if>	
-
- 									
- 										
- 										<li>
- 										<a href='<s:property value="%{dispItemDetailsLink}"  />'  > 
-										<s:property value="#desc" escape="false"/>
-										<img src="<s:url value='%{#imageURL}' includeParams='none' />"  width="91" height="95" alt="CarouselItem">
-										</a>
- 		
-							
- 										</li> 
-
-								</s:if> <s:else>
-									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
-									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
-									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
-									<li> 
-									    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-										<s:property value="%{#shortDesc}"/>
-											<br />
-											<br />
-											<br />
+										</s:if>					
+	 										
+										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
+										<li> 
+										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+												<s:property value="%{#shortDesc}"/>
+												<br />
+												<br />
+												<br />
 											</s:a> 
-									</li>
-
-								</s:else>
-								
-						</s:iterator>
-						
-					</s:if>
-					<!-- Begin - Added by Mitesh Parikh for JIRA#3186  -->
-					<s:if test='xpedxYouMightConsiderItems.size() < 4'>
-						<div disabled="disabled" class="jcarousel-prev jcarousel-prev-hide-horizontal"></div> 
-			    		<div disabled="disabled" class="jcarousel-next jcarousel-next-hide-horizontal"></div>
-	   			 		
-		    		</s:if>
-		    		<!-- End - Added by Mitesh Parikh for JIRA#3186  -->
-					<!-- End - Changes made by Mitesh for JIRA 3186 -->
-                        <!-- I will leave this piece of sampe html for reference -->
-						<!-- li> <a href="#"> <img src="/swc/xpedx/images/catalog/carousel-demo-1.jpg" width="91" height="94" alt="" /> <b>Rubbermaid Ridget Can Liners</b><br />
-                            <br />
-                            Seemless lightweight and easy to clean.<br />
-                            <br />
-
-                            </a> </li -->
-                        
+										</li>
+	
+									</s:if> 
+									<s:else>
+										<s:set name='imageIdBlank' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
+										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
+										<li> 
+										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+												<s:property value="%{#shortDesc}"/>
+												<br />
+												<br />
+												<br />
+											</s:a> 
+										</li>
+									</s:else>								
+							</s:iterator>						
+						</s:if>
+						<!-- End - Changes made by Mitesh for JIRA 3186 -->
+	                        <!-- I will leave this piece of sampe html for reference -->
+							<!-- li> <a href="#"> <img src="/swc/xpedx/images/catalog/carousel-demo-1.jpg" width="91" height="94" alt="" /> <b>Rubbermaid Ridget Can Liners</b><br />
+	                            <br />
+	                            Seemless lightweight and easy to clean.<br />
+	                            <br />
+	
+	                            </a> </li -->                        
                     </ul>
                 </div>
                 
             </div>
 			</s:if>
         <!-- END carousel -->
-
-			</s:if>
-			            <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
-             <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
-             <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-			<div class="last-modified-div">Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> </div> 
-			
-
-        </div>
-    </div>
+		 </s:if>
+		 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
+         <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
+         <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
+		 <div class="last-modified-div">Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> </div> 
+	</div>
+ </div>
     <!-- end main  -->
     <!-- CODE_START Footer -PN -->
     
