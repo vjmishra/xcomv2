@@ -335,10 +335,11 @@ $(document).ready(function(){
 <%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
-<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
-Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 <br />
+<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
+<p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
 </p>
 <br />
+
 <form id="form1" name="form1" method="post" action=""><textarea
 	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
 <ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
@@ -568,7 +569,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 					</li>
 					<li>
 						<label>Qty:</label>						
-						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
+						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this)"  onchange="javascript:this.value=addComma(this.value);" />
 						<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 					</li>
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
@@ -1113,7 +1114,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
 								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
 								</s:if>
@@ -1122,7 +1123,7 @@ Or enter manually with quantity and item #, separated by a comma, per line. Exam
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
 								  </s:if>
 								  <s:else>
 								  		<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
