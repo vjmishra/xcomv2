@@ -969,8 +969,23 @@ function showSplitDiv(divId)
 												<s:set name='splitqty' value='%{#strUtil.replace(#splitqty, ".00", "")}' />
 												<s:set name='splitqty' value="#xpedxUtilBean.formatQuantityForCommas(#splitqty)"/>
 												<s:property value='%{#splitOrderAttributes.get(3)}'/>: <s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
-						    					
-						    					
+						    					</td>
+								    			<td>&nbsp;</td>
+								    			<td class="text-right">&nbsp;</td>
+								    			<td class="text-right">&nbsp;</td>
+								    			</tr>
+								    			<s:if test='chainedFOMap.size() > 1'>
+									    			<s:if test='%{#splitOrderAttributes.get(3) == "Invoiced"}'>		
+									    				<s:set name='enptInvcNo' value='#splitOrderAttributes.get(5)' />
+									    				<s:set name='splitCustomerSuff' value='#splitOrderAttributes.get(6)' />
+									    				<s:set name='extnInvcedDt' value='#splitOrderAttributes.get(7)' />
+									    				<s:set name='extnInvocNo' value='#splitOrderAttributes.get(8)' />						    			
+										    			<tr>
+														<td>&nbsp;</td>
+														<td rowspan="3" valign="top" style="text-align:left;">
+														Invoice #: <a class="underlink" target="_blank" href="<s:property value='%{invoiceURL}'/>UserID=<s:property value='#createuserkey'/>&InvoiceNumber=<s:property value='#enptInvcNo'/>&shipTo=<s:property value='#splitCustomerSuff'/>&InvoiceDate=<s:property value='extnInvcedDt'/>"><s:property value='#extnInvocNo'/></a>
+													</s:if>
+												</s:if>						    					
 						    			</s:else>
 										</td>
 						    			<td>&nbsp;</td>

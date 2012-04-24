@@ -67,10 +67,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		//END: sort the orderlines based on legacy line number
 		
 		userKey = super.getUserKey();
-		String encUserKey = (String)getWCContext().getSCUIContext().getSession().getAttribute(ENC_USER_KEY);
-		if(encUserKey != null && encUserKey.trim().length() > 0) {
-			userKey = encUserKey;
-		} else {
+		if(userKey != null && userKey.trim().length() > 0) {
 			try {
 				userKey = XPEDXWCUtils.encrypt(userKey);
 			} catch (Exception e) {
@@ -498,6 +495,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						attrList.add(status);
 						//Added for JIRA 2731
 						attrList.add(formattedLegacyOrderNumber);
+						attrList.add(encInvoiceNumber);
+						attrList.add(chainCustSuffix);
+						attrList.add(extnInvoiceDate);
+						attrList.add(extnInvoiceNumber);
 					} else {
 						ArrayList<String> chainedOrderAttributes = new ArrayList<String>();
 						chainedOrderAttributes.add(orderHeaderKey);
@@ -505,6 +506,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						chainedOrderAttributes.add(quantity);
 						chainedOrderAttributes.add(status);
 						chainedOrderAttributes.add(formattedLegacyOrderNumber);
+						chainedOrderAttributes.add(encInvoiceNumber);
+						chainedOrderAttributes.add(chainCustSuffix);
+						chainedOrderAttributes.add(extnInvoiceDate);
+						chainedOrderAttributes.add(extnInvoiceNumber);
 						//Added for JIRA 2731
 						chainedOrderMap.put(chainedFromOrderLineKey,
 								chainedOrderAttributes);
