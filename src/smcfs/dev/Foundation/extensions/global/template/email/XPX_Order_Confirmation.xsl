@@ -288,7 +288,7 @@
 					<tr>
 						<td> Order #: </td>
 
-						<td> In Progress </td>
+						<td> <xsl:value-of select="Order/@OrderNo"/> </td>
 						<td>
 									<xsl:value-of select="$shipToName" />
 								
