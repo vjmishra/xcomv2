@@ -1859,7 +1859,7 @@ var currentAadd2ItemList = new Object();
 </ul> -->
 </div>
 
-<s:set name="xutil" value="xMLUtils" /> <s:set
+<s:set name="xutil" value="XMLUtils" /> <s:set
 	name='subtotalWithoutTaxes'
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("SubtotalWithoutTaxes"))' />
 <s:set name='hdrShippingTotal'
@@ -2083,28 +2083,32 @@ var currentAadd2ItemList = new Object();
 							<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 							<s:if test='%{#imageURL=="/"}'>
 								<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
-							</s:if>					   				
+							</s:if>
+							
+							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<!--Jira 2918 - Modified For Image Path -->
-							<%--<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
-							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
+							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+								<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
 								<br />
-								</s:a>  </li> --%>
-
-						</s:if> <s:else>								
-									<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
-									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
-									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
-									<li> 
-									    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-										<s:property value="%{#shortDesc}"/>
-											<br />
-											<br />
-											<br />
-										</s:a> 
-									</li>
+								</s:a>  
+							</li>
+						</s:if> 
+						<s:else>								
+							<s:set name='imageIdBlank' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
+							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
+							<li> 
+							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+								<s:property value="%{#shortDesc}"/>
+									<br />
+									<br />
+									<br />
+								</s:a> 
+							</li>
 						</s:else>
 						<!-- End - Changes made by Mitesh for JIRA 3186 -->					
 				</s:iterator>
