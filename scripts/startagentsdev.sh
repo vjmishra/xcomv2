@@ -31,10 +31,20 @@ if [[ "$HOST_NAME" = "zxpappd01" ]];then
 	nohup ./xpedxSearchIndexagentserver.sh port=1660 xpedxSearchIndexBuild > /xpedx/sterling/Foundation/logs/SIB_`date +"%Y%m%d-%H%M"`_J1.log 2>&1 &
 	nohup ./xpedxSearchIndexagentserver.sh port=1661 xpedxSearchIndexBuild > /xpedx/sterling/Foundation/logs/SIB_`date +"%Y%m%d-%H%M"`_J2.log 2>&1 & 
 
+	#nohup ./xpedxSearchIndexagentserver.sh port=1697 xpedxIncrSearchIndexBuild > /xpedx/sterling/Foundation/logs/SIB_INCR_`date +"%Y%m%d-%H%M"`_J1.log 2>&1 &
+	nohup ./xpedxStartIntegrationServer.sh port=1698 XPXOrderConfirmationEmailServer > /xpedx/sterling/Foundation/logs/OrderConfirmationEmails_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+
+	
+	# to trigger the auto-trigger agent CATALOG_INDEX_BUILD_AUTO_TRIGGERED or CATALOG_INDEX_BUILD_AUTO_TRIGGERED_INCR, you need to insert the trigger via command below
+	#./triggeragent.sh CATALOG_INDEX_BUILD_AUTO_TRIGGERED
+	#or
+	#./triggeragent.sh CATALOG_INDEX_BUILD_AUTO_TRIGGERED_INCR
 
 	nohup ./xpedxStartIntegrationServer.sh port=1662 XPXLoadInvoiceServer > /xpedx/sterling/Foundation/logs/LoadInvoiceServer_`date +"%Y%m%d-%H%M"`.log 2>&1 & 
 	#After the above Agent Server has started (Message that all Services for Agent have been successfully started) then run the following  Trigger Agent. 
 	#pause for 5mins before triggering the invoiceupdate agent (per Winston Edwards)
+	#Jira 3710 for Staney
+	nohup ./startIntegrationServer.sh XPXOrderStatusEmailServer > /xpedx/sterling/Foundation/logs/XPXOrderStatusEmailServer_`date +"%Y%m%d-%H%M"`.log &
 	sleep 300
 	./triggeragent.sh Invoice_Update 
 	exit 0

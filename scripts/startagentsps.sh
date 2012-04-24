@@ -18,7 +18,8 @@ if [[ "$HOST_NAME" = "zxpapps01" ]];then
 	#The only change that I have made to this file is to add Memory Parameters to the startup process
 
 	#Start MQ Dataload agent
-	#nohup ./xpedxStartIntegrationServer.sh XpedxDataFeedMQServer> ../logs/Item_`date +"%Y%m%d_%H%M"`.log 2>&1 &
+	nohup ./startIntegrationServer.sh port=1655 XpedxDataFeedMQServer > /xpedx/sterling/Foundation/logs/Item_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	nohup ./startHealthMonitor.sh 1 > /xpedx/sterling/Foundation/logs/HealthMonitor_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 
 	#Integration Server:
 	#nohup ./xpedxStartIntegrationServer.sh xpedxMaxUOMFeedServer> ../logs/MaxUOM_`date +"%Y%m%d_%H%M"`.log 2>&1 &  
