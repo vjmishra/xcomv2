@@ -26,6 +26,7 @@ if [[ "$HOST_NAME" = "zxpappt01" ]];then
 
 	# start the order approval emails agent
 	nohup ./xpedxStartIntegrationServer.sh port=1659 OrderApprovalEmailsServer > /xpedx/sterling/Foundation/logs/OrderApprovalEmails_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	nohup ./xpedxStartIntegrationServer.sh port=1698 XPXOrderConfirmationEmailServer > /xpedx/sterling/Foundation/logs/OrderConfirmationEmails_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 
 	#Catalog index build. Note: We're starting 2 JVMs/instances of this agent. It was a recommendation of the Sterling Engineering team for performance reasons. 
 	#Note: If catalog builds need to be enabled in dev, just uncomment the below one or two lines. 
@@ -36,6 +37,7 @@ if [[ "$HOST_NAME" = "zxpappt01" ]];then
 	nohup ./xpedxStartIntegrationServer.sh port=1662 XPXLoadInvoiceServer > /xpedx/sterling/Foundation/logs/LoadInvoiceServer_`date +"%Y%m%d-%H%M"`.log 2>&1 & 
 	#After the above Agent Server has started (Message that all Services for Agent have been successfully started) then run the following  Trigger Agent. 
 	#pause for 5mins before triggering the invoiceupdate agent (per Winston Edwards)
+	nohup ./startIntegrationServer.sh XPXOrderStatusEmailServer > /xpedx/sterling/Foundation/logs/XPXOrderStatusEmailServer_`date +"%Y%m%d-%H%M"`.log &
 	sleep 300
 	./triggeragent.sh Invoice_Update 
 	exit 0
