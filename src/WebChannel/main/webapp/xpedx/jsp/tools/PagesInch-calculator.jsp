@@ -3,12 +3,12 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
-<%request.setAttribute("isMergedCSSJS","true");%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <!-- Webtrend tag starts -->
 <meta name="WT.ti" content="Pages/Inch Calculator">
+<meta content='IE=9' http-equiv='X-UA-Compatible' />
 <!-- Webtrend tag stops --> 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
