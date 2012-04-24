@@ -1360,7 +1360,6 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		else if(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM.equalsIgnoreCase(customerSku.trim()))
 		{
 			itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allItemIds, getWCContext());
-			System.out.println(SCXmlUtil.getString(itemcustXrefDoc));
 			if(itemcustXrefDoc!=null) {
 				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
