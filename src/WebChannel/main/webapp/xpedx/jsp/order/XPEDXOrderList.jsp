@@ -547,10 +547,11 @@ function printPOs(customerPos) {
 										</s:a>
 									</s:else> --%>
 		
-							<s:set name="priceInfo"
+							<%--<s:set name="priceInfo"
 								value='#parentOrder.getElementsByTagName("PriceInfo")' />
 							<s:set name='currencyCode'
-								value='%{#priceInfo.item(0).getAttribute("Currency")}' />
+								value='%{#priceInfo.item(0).getAttribute("Currency")}' /> --%>
+								
 							<s:set name='priceWithCurrency'
 								value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #OrderExtn.getAttribute("ExtnTotalOrderValue"))}' />
 							<s:set name="orderDate"
@@ -659,9 +660,9 @@ function printPOs(customerPos) {
 	            		<s:set name='chainedOrderListKey' value='key'/>
 	                	<s:set name='chainedOrderList' value='value'/>
 	                	<s:iterator value='#chainedOrderList' id='chainedOrder' status='iStatus'>
-	                		<s:if test='#chainedOrderListKey==#parentOrder.getAttribute("OrderHeaderKey")'>
-	                		<s:set name="priceInfo" value='#parentOrder.getElementsByTagName("PriceInfo")'/>
-			            	<s:set name='currencyCode' value='%{#priceInfo.item(0).getAttribute("Currency")}'/>
+	                		<s:if test='#chainedOrderListKey==#parentOrder.getAttribute("OrderHeaderKey")'>	                		
+			            	<s:set name="priceInfo" value='#parentOrder'/>
+	            			<s:set name='currencyCode' value='%{#priceInfo.getAttribute("Currency")}'/>			            	
 			            	<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}'/>
 			            	<s:set name='ChainedOrderExtn' value='#chainedOrder'/>
 							<s:set name='ChainedLegacyOrderNumber' value='#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")'/>
