@@ -648,7 +648,10 @@ function funDivOpenClose(val1)
 		if(spendingLimit!="" && spendingLimit != null && (document.getElementById("primaryApprover") !=null)){
 
 			var primaryApprover = document.getElementById("primaryApprover").value;
-			var alternateApprover = document.getElementById("alternateApprover").value;
+			var alternateApprover = '';
+			if(document.getElementById("alternateApprover") != undefined || document.getElementById("alternateApprover") != null){
+				alternateApprover = document.getElementById("alternateApprover").value;	
+			}
 			var currency = document.getElementById("spendingLtCurrency").value;
 			if(primaryApprover==null || primaryApprover==""){
 				if (alternateApprover==null || alternateApprover==""){
@@ -2630,7 +2633,7 @@ a.underlink:hover { text-decoration: underline !important; }
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 
-<div class="error" id="errorMsgFor_secretAnswer" style="display : none; float: right"/>Please enter the same answers in both answer and confirm answer fields.</div>
+<div class="error" id="errorMsgFor_secretAnswer" style="display : none; float: right"/>Please enter the same Answer in both the Security Answer and the Confirm Answer fields.</div>
 
 <s:hidden name='test_success' id="test_success" value="%{#_action.isSuccess()}" />
 	<s:if test="%{#_action.isSuccess() && #disableSinceSelfApprover }">
