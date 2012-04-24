@@ -1060,9 +1060,14 @@ var selectedShipCustomer = null;
     	Ext.fly('Text1').dom.value='';
    		 return; 
    		 } 
+		
     function clearTxt() { 
-    	Ext.fly('newSearch_searchTerm').dom.value='';
-   		 return; 
+    	 //Added for JIRA 3692 
+    	if(Ext.fly('newSearch_searchTerm').dom.value =='Search Catalog...')
+   		{
+        	Ext.fly('newSearch_searchTerm').dom.value='';
+   		}
+        return;
    		 }     
     function saveShipToChanges(url)
     {
