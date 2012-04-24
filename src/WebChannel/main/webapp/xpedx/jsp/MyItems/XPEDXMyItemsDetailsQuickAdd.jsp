@@ -33,7 +33,8 @@
 					<s:hidden id="siItemId_%{#uId}" name="itemIds" value="%{itemId}"></s:hidden>
 				</td>
 				<td class="col-item" style="width: 39px; padding: 0px;">
-					<s:textfield id="siQty_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="qtys" value="%{qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this,event);"></s:textfield>
+					<s:textfield id="siQty_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 63px;" name="qtys" value="%{qty}" maxlength="7"
+					 onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this,event);isValidQuantityRemoveAlpha(this,event);"></s:textfield>
 				</td>
 				<td class="col-item" style="width: 110px; padding: 0px;">
 					<s:if test='%{isItemValid == true}'>
