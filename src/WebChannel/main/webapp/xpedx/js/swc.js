@@ -4091,7 +4091,8 @@ function setCartEventHandlers(initTriggerVal) {
     }
 
 }
-
+var hideMiniCart = 'miniCartMouseoverArea1';
+var stIsIE = /*@cc_on!@*/false;
 function refreshMiniCartLink(forceRefresh)
 
 {
@@ -4126,8 +4127,16 @@ function refreshMiniCartLink(forceRefresh)
            //   $('.mini-cart-trigger').trigger("mouseenter.cluetip");
         	//$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
         	//$('.mini-cart-trigger').trigger('mouseover');
-        	$('.mini-cart-trigger').trigger('click');
+        	//$('.mini-cart-trigger').trigger('click');
         	//document.getElementById("miniCartMouseoverArea1").click();
+        	if(!stIsIE)
+            	$('.mini-cart-trigger').trigger('click');
+            	else
+            	{
+            	//if(hideMiniCart =='miniCartMouseoverArea2')
+            		document.getElementById("miniCartMouseoverArea2").click();
+            		document.getElementById("miniCartMouseoverArea1").click();
+            	}
 // Have to include jqquery implementation to refresh cart
 // if(qvw !== null)
 // {
