@@ -151,6 +151,7 @@ function showSharedListForm(){
 	var addToCartURL = '<s:property value="#addToCartURL"/>';
 	var divId;
 	var isGlobal;
+	var errorflag;
 	var addToCartFlag;
 	var validAddtoCartItemsFlag  = new Array();
 	function hideSharedListFormIfPrivate() {
@@ -766,7 +767,8 @@ function showSharedListForm(){
 	                     //xpedx_working_start();
                          //setTimeout(xpedx_working_stop, 3000);
                          var URL = "<s:property value='%{addToCartLink}' escape='false'/>" + "&validItemFlagArray=" +validAddtoCartItemsFlag;
-                        // alert("URL="+URL);
+                       if( isAddToCart == true)
+                    	   {
 	                 Ext.Ajax.request({
 	                   url: URL,
 	                   form: 'formItemIds',
@@ -778,7 +780,7 @@ function showSharedListForm(){
 	           				arrQty = document.getElementsByName("qtys");
 	           				for(var i = 0; i < addedItems.length; i++){
 	           					//alert("arrQty[i].value= "+ arrQty[i].value);
-	           					if(validAddtoCartItemsFlag[i]== true){
+	           					if(validAddtoCartItemsFlag[i]== true ){
 	           					divId='errorDiv_'+ arrQty[i].id;
 	           					var divVal=document.getElementById(divId);
 	           					divVal.innerHTML = "Item has been added to cart." ;
@@ -796,7 +798,8 @@ function showSharedListForm(){
 	                   failure: function (response, request){
 						  Ext.MessageBox.hide();
 						  alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");	                   }
-	               });     
+	               });    
+	                } 
 				
 				//END - Submit the form via ajax
 				
@@ -888,7 +891,9 @@ function showSharedListForm(){
 			return errorflag;
 		}*/
 		//// Function Start - Jira 3770
+		var isAddToCart=true;
 		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
+			isAddToCart=true;
 			var arrQty = new Array();
 			var arrUOM = new Array();
 			var arrItemID = new Array();
@@ -900,7 +905,7 @@ function showSharedListForm(){
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			
-			var errorflag=true;
+			errorflag=true;
 			addToCartFlag=false;
 			var isQuantityZero = true;
 			var uomCheck = false ;
@@ -918,6 +923,7 @@ function showSharedListForm(){
 				}
 				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
+				//alert("isGlobal==="+ isGlobal);
 				if(isGlobal == true){
 					
 					if(quantity == '0' || quantity== '' ){
@@ -936,14 +942,15 @@ function showSharedListForm(){
 				{  validAddtoCartItemsFlag[i]=false;
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
+						
+						//alert("WE are in if block of quantity == '0'");
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) + " "+baseUOM[i].value;
-						divVal.setAttribute("class", "error");
+						divVal.setAttribute("class", "notice");
 						divVal.style.display = 'block';
-						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						//document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
 						errorflag= false;						
 					}
-					
 				}
 				else if(quantity>0){
 					var totalQty = arrUOM[i].value * quantity;
@@ -975,8 +982,12 @@ function showSharedListForm(){
 			            uomCheck = true;
 						}
 						errorflag= false; validAddtoCartItemsFlag[i]=false;
+						isAddToCart=false;
 					}
+					
+					
 					else if (arrOrdMul[i].value > 1 && priceCheck == true){
+						
 						if (priceCheck == true){
 							
 							divVal.setAttribute("class", "notice");
@@ -994,6 +1005,19 @@ function showSharedListForm(){
 					else{
 						addToCartFlag = true;
 						validAddtoCartItemsFlag[i]=true;
+						if((arrOrdMul[i].value >1 && isAddToCart==false))
+						{
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.setAttribute("class", "notice");
+							divVal.style.display = 'block';
+						}
+						else if(arrOrdMul[i].value >1 && ordMul == 0)
+						{
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.setAttribute("class", "notice");
+							divVal.style.display = 'block';
+							
+						}
 					}
 				}	
 				
@@ -1071,6 +1095,7 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 							document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
 							//Ctrl.focus();
+							errorflag= false;
 						}
 					isQuantityZero = false;
 				}
