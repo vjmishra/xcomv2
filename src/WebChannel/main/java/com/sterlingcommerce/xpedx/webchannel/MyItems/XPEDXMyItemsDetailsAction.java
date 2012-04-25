@@ -8,13 +8,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
@@ -26,12 +24,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
@@ -1628,12 +1626,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemAltList = alternateListMap.get(key);
 						for(Element altItem: currentItemAltList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(altItem))
+							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");							
+							if(!SCUtil.isVoid(altItemID) && !xpedxYouMightConsiderItemIds.contains(altItemID)){
 								addToYouMightAlsoConsiderItemList(altItem);
+								xpedxYouMightConsiderItemIds.add(altItemID);
+							}
 							
-							String currItemId = SCXmlUtil.getAttribute(altItem, "ItemID");
-							if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
-								xpedxYouMightConsiderItemIds.add(currItemId);
+							//String currItemId = SCXmlUtil.getAttribute(altItem, "ItemID");
+							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
+							//	xpedxYouMightConsiderItemIds.add(currItemId);
+								
 						}
 					}
 				}
@@ -1650,12 +1652,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemUpgradeList = upgradeListMap.get(key);
 						for(Element upgradeItem: currentItemUpgradeList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(upgradeItem))
+							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");							
+							if(!SCUtil.isVoid(upgradeItemID) && !xpedxYouMightConsiderItemIds.contains(upgradeItemID)){
 								addToYouMightAlsoConsiderItemList(upgradeItem);
+								xpedxYouMightConsiderItemIds.add(upgradeItemID);
+							}
 
-							String currItemId = SCXmlUtil.getAttribute(upgradeItem, "ItemID");
-							if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
-								xpedxYouMightConsiderItemIds.add(currItemId);
+							//String currItemId = SCXmlUtil.getAttribute(upgradeItem, "ItemID");
+							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
+							//	xpedxYouMightConsiderItemIds.add(currItemId);
 						}
 					}
 				}
@@ -1672,12 +1677,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemUSList = upSellListMap.get(key);
 						for(Element usItem: currentItemUSList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(usItem))
+							String upSellItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
+							if(!SCUtil.isVoid(upSellItemId) && !xpedxYouMightConsiderItemIds.contains(upSellItemId)){
 								addToYouMightAlsoConsiderItemList(usItem);
+								xpedxYouMightConsiderItemIds.add(upSellItemId);
+							}
 							
-							String currItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
-							if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
-								xpedxYouMightConsiderItemIds.add(currItemId);
+							//String currItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
+							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
+							//	xpedxYouMightConsiderItemIds.add(currItemId);
 						}
 					}
 				}
@@ -3118,10 +3126,6 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	public void setDescriptionMap(Map<String, Element> descriptionMap) {
 		this.descriptionMap = descriptionMap;
-	}
-	
-	
-	
-	
+	}	
 	
 }
