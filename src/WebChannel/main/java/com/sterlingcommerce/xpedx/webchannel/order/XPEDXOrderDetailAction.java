@@ -65,17 +65,34 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		ArrayList<Element> tempMajorLineElements = getMajorLineElements();
 		Collections.sort(tempMajorLineElements, new XpedxLineSeqNoComparator());
 		//END: sort the orderlines based on legacy line number
-		
-		userKey = super.getUserKey();
-		if(userKey != null && userKey.trim().length() > 0) {
+				
+		userKey = (String)getWCContext().getSCUIContext().getSession().getAttribute(ENC_USER_KEY);
+		if (userKey == null || userKey.trim().equals("")) {
+			//Getting the User Key from loginID
+			String loginId = getWCContext().getLoggedInUserId();
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/User/@Loginid", loginId);
+			Element inputEle;
 			try {
-				userKey = XPEDXWCUtils.encrypt(userKey);
+				inputEle = WCMashupHelper.getMashupInput("XPEDXUserListMashup",
+						valueMap, wcContext.getSCUIContext());
+
+				Element userEle = (Element)WCMashupHelper.invokeMashup("XPEDXUserListMashup",
+						inputEle, wcContext.getSCUIContext());
+				userKey = SCXmlUtil.getXpathAttribute(userEle, "//UserList/User/@UserKey");
+				if(userKey != null && userKey.trim().length() > 0) {
+					userKey = XPEDXWCUtils.encrypt(userKey);
+					userKey = URLEncoder.encode(userKey);
+					getWCContext().getSCUIContext().getSession().setAttribute(ENC_USER_KEY, userKey);
+				}
+				
+			} catch (CannotBuildInputException e) {
+				LOG.error("Error while getting user key : "+ e);
 			} catch (Exception e) {
-				LOG.error("Error in encrypting user key.", e);
+				LOG.error("Error while getting user key : "+ e);
 			}
-			userKey = URLEncoder.encode(userKey);
-			getWCContext().getSCUIContext().getSession().setAttribute(ENC_USER_KEY, userKey);
 		}
+	
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
