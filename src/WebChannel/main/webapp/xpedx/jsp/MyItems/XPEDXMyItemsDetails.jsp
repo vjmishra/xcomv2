@@ -18,7 +18,7 @@
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
-
+<s:bean	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xutil' />
 <%-- 
 <s:if test="#currentCartInContextOHK == null ">
 	<s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper@getCartInContextOrderHeaderKey(wCContext)'/>
@@ -1641,7 +1641,8 @@ function showSharedListForm(){
 			    This is to avoid a defect in Struts that?s creating contention under load. 
 			    The explicit call style will also help the performance in evaluating Struts? OGNL statements. --%>
 <s:set name='_action' value='[0]' />
-<s:set name="xutil" value="XMLUtils" />
+
+
 <s:set name='categoryListElem' value="categoryListElement" />
 <s:set name='childCategoryListElem' value="childCategoryListElement" />
 <s:set name='fieldListElem'
@@ -2735,13 +2736,14 @@ function showSharedListForm(){
 											value="#xutil.getAttribute(#itemAsset, 'Label')" />
 										<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 										<s:if test='%{#imageURL=="/"}'>
-											<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
+											<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 										</s:if>					
 	 										
 										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
 										<li> 
-										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+										    	<img src="<s:url value='%{#imageURL}' includeParams='none' />" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="<s:text name='%{#imageMainLabel}'/>" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
 												<s:property value="%{#shortDesc}"/>
 												<br />
 												<br />
@@ -2751,7 +2753,7 @@ function showSharedListForm(){
 	
 									</s:if> 
 									<s:else>
-										<s:set name='imageIdBlank' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
+										<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />									
 										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
 										<li> 
