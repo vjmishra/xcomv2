@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
@@ -1007,6 +1008,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected void prepareXPEDXItemAssociation(ArrayList<String> itemIDList) throws XPathExpressionException, CannotBuildInputException{
 		/*prepareXpedxItemAssociationMap(itemIDList);
 		prepareXpedxItemBranchItemAssociationMap(itemIDList);*/
+		ArrayList<String> youMightConsiderItemIDs = new ArrayList<String>();
 		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = XPEDXOrderUtils.getXpedxAssociationsForItems(itemIDList, wcContext, true);
 		if(allAssociatedItemsMap!=null && !allAssociatedItemsMap.isEmpty())
 		{
@@ -1026,8 +1028,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemAltList = alternateListMap.get(key);
 						for(Element altItem: currentItemAltList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(altItem))
+							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");							
+							if(!SCUtil.isVoid(altItemID) && !youMightConsiderItemIDs.contains(altItemID))
+							{
 								addToYouMightAlsoConsiderItemList(altItem);
+								youMightConsiderItemIDs.add(altItemID);
+							}
 						}
 					}
 				}
@@ -1044,8 +1050,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemUpgradeList = upgradeListMap.get(key);
 						for(Element upgradeItem: currentItemUpgradeList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(upgradeItem))
+							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");							
+							if(!SCUtil.isVoid(upgradeItemID) && !youMightConsiderItemIDs.contains(upgradeItemID))
+							{
 								addToYouMightAlsoConsiderItemList(upgradeItem);
+								youMightConsiderItemIDs.add(upgradeItemID);
+							}
 						}
 					}
 				}
@@ -1062,8 +1072,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemUSList = upSellListMap.get(key);
 						for(Element usItem: currentItemUSList)
 						{
-							if(!xpedxYouMightConsiderItems.contains(usItem))
+							String upSellItemID = XMLUtils.getAttributeValue(usItem, "ItemID");							
+							if(!SCUtil.isVoid(upSellItemID) && !youMightConsiderItemIDs.contains(upSellItemID))
+							{
 								addToYouMightAlsoConsiderItemList(usItem);
+								youMightConsiderItemIDs.add(upSellItemID);
+							}
 						}
 					}
 				}
