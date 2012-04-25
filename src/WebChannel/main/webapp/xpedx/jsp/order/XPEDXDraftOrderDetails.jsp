@@ -2089,7 +2089,7 @@ var currentAadd2ItemList = new Object();
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<!--Jira 2918 - Modified For Image Path -->
 							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
-								<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
+								<img src="<s:url value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
@@ -2102,8 +2102,8 @@ var currentAadd2ItemList = new Object();
 							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<li> 
-							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-								<s:property value="%{#shortDesc}"/>
+							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+							    	<s:property value="%{#shortDesc}"/>
 									<br />
 									<br />
 									<br />
