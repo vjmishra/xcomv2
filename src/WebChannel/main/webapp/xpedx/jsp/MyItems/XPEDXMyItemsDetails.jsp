@@ -2348,7 +2348,6 @@ function showSharedListForm(){
 								<s:if test='editMode == true'>
 								<%-- Show Replacement link only in Edit mode --%>
 									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-										<s:set name='qty' value="#xpedxUtilBean.formatQuantityForCommas(#qty)"/>
 										<p class="mil-replaced"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This Item has been replaced.</a></p>
 									</s:if>
 								</s:if>
@@ -2424,9 +2423,7 @@ function showSharedListForm(){
 								</s:if>
 								<tr>
                                     <td align="right" width="112"><label style="text-align:right;">Qty:</label></td>
-                                    <td width="142" colspan="2">
-                                    <s:set name='qty' value="#xpedxUtilBean.formatQuantityForCommas(#qty)"/>
-                                    
+                                    <td width="142" colspan="2">                                    
 										<!-- Qty --> <s:hidden
 											name="itemQty" value="%{#qty}" /> <s:hidden
 											id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" /> 
