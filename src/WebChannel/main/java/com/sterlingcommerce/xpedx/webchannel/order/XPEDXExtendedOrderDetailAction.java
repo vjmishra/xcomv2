@@ -48,7 +48,6 @@ public class XPEDXExtendedOrderDetailAction extends
 	private String parentOHK = null;
 	private String enterpriseCode = null;
 	private Element elementOrder = null;
-	private String userKey = "";
 	private boolean enableChangeOrder = false;
 	private String approvalHoldStatus = "";
 	private String resolverUserID = "";
@@ -130,36 +129,9 @@ public class XPEDXExtendedOrderDetailAction extends
 			if (outputDoc != null) {
 				Element outputDocElement = outputDoc.getDocumentElement();
 				
-				String userIdForOrder = outputDocElement.getAttribute("Createuserid");
-				Map<String, String> valueMap = new HashMap<String, String>();
-				valueMap.put("/User/@Loginid", userIdForOrder);
-				
 				if(!"Customer".equals(outputDocElement.getAttribute("OrderType"))){
 					parentOHK = getParentOrderHeaderKey((Element)outputDocElement.getElementsByTagName("OrderLines").item(0));
 				}
-				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
-				if(XPEDXWCUtils.getInvoiceFlagForLoggedInUser(getWCContext()))
-				{
-					if(getWCContext().getLoggedInUserId().equals(userIdForOrder)){
-						userKey = getWCContext().getSCUIContext().getSession().getAttribute("ENC_USER_KEY").toString();
-					
-					} else {
-						Element inputEle;
-						try {
-							inputEle = WCMashupHelper.getMashupInput("XPEDXUserListMashup",
-									valueMap, wcContext.getSCUIContext());
-		
-							Element userEle = (Element)WCMashupHelper.invokeMashup("XPEDXUserListMashup",
-									inputEle, wcContext.getSCUIContext());
-							userKey = SCXmlUtil.getXpathAttribute(userEle, "//UserList/User/@UserKey");
-						} catch (CannotBuildInputException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-					}
-				}
-				/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 				
 				String actualDraftOrderFlag = outputDocElement
 						.getAttribute("DraftOrderFlag");
@@ -1052,14 +1024,6 @@ public class XPEDXExtendedOrderDetailAction extends
 	 */
 	public void setOrderShipToID(String orderShipToID) {
 		this.orderShipToID = orderShipToID;
-	}
-
-	public String getUserKey() {
-		return userKey;
-	}
-
-	public void setUserKey(String userKey) {
-		this.userKey = userKey;
 	}
 
 	public String getParentOHK() {
