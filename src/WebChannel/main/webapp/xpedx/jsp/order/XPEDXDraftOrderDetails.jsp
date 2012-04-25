@@ -2070,26 +2070,26 @@ var currentAadd2ItemList = new Object();
 		    <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 				<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
 					<s:set name="itemAssetList"
-							value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+							value='#xpedxSCXmlUtil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
 						<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
-								value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentLocation')" />
 							<s:set name='imageId'
-								value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentID')" />
 							<s:set name='imageLabel'
-								value="#xutil.getAttribute(#itemAsset, 'Label')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'Label')" />
 							<!--Removed "/" -->
 							<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 							<s:if test='%{#imageURL=="/"}'>
-								<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
+								<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 							</s:if>
 							
 							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<!--Jira 2918 - Modified For Image Path -->
 							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
-								<img src="<s:url value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
+								<img src="<s:url value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="<s:text name='%{#imageMainLabel}'/>" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
@@ -2098,7 +2098,7 @@ var currentAadd2ItemList = new Object();
 							</li>
 						</s:if> 
 						<s:else>								
-							<s:set name='imageIdBlank' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
+							<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />									
 							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<li> 
