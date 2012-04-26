@@ -565,10 +565,19 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					if( errorMessages!=null )
 					{						
 						errorMsg=errorMessages.getAttribute("ErrorDescription");
+						String errorCode = errorMessages.getAttribute("ErrorCode");
 						if( errorMsg!=null && errorMsg.trim().length()!=0)
 						{
-							isPPMesage=true;
-							request.getSession().setAttribute("errorNote",errorMsg);
+							//Added for JIRA 3553
+							if(errorCode.equalsIgnoreCase("YCP0468") || errorMsg.equalsIgnoreCase("The new password matches one of the old password.")){
+								setSuccess(true);
+								setSaveAddUser(true);
+								return REDIRECT;
+							}else
+							{
+								isPPMesage=true;
+								request.getSession().setAttribute("errorNote",errorMsg);
+							}
 						}
 					}
 					
