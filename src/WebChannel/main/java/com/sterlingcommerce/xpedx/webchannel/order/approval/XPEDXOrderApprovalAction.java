@@ -26,8 +26,10 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
+import com.sterlingcommerce.webchannel.order.OrderListAction;
 import com.sterlingcommerce.webchannel.order.approval.OrderApprovalAction;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
+import com.sterlingcommerce.webchannel.utilities.WCDataDeFormatHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -41,7 +43,7 @@ import com.yantra.yfc.util.YFCDate;
  * @author RUgrani
  * 
  */
-public class XPEDXOrderApprovalAction extends WCMashupAction{
+public class XPEDXOrderApprovalAction extends OrderListAction{
 	
 	private Boolean isFirstPage = Boolean.FALSE;
 	private Boolean isLastPage = Boolean.FALSE;
@@ -72,7 +74,8 @@ public class XPEDXOrderApprovalAction extends WCMashupAction{
     private boolean userAlwdForSrch = false;
     private String approvalHoldType = "";
     private String orderListReturnUrl = "";
-
+    private String webConfNumberValue;
+    private String extnWebConfNumQryType;
 
     private static final String XPATH_RESOLVER_USER_ID ="/Page/API/Input/Order/OrderHoldType/@ResolverUserId";
     private static final String XPATH_RESOLVER_USER_ID_QRY_TYPE ="/Page/API/Input/Order/OrderHoldType/@ResolverUserIdQryType";
@@ -105,7 +108,7 @@ public class XPEDXOrderApprovalAction extends WCMashupAction{
 	public Map getSearchListNew() {
 		//searchListNew.put("- Select Search Criteria -","- Select Search Criteria -");
 		searchListNew.put(XPEDXConstants.DEFAULT_SELECT_SEARCH_CRITERIA_LABEL,XPEDXConstants.DEFAULT_SELECT_SEARCH_CRITERIA_LABEL);
-	    searchListNew.put("OrderOwner", "Ordered By");
+	    searchListNew.put("OrderNameValue", "Ordered By");
 		searchListNew.put("PurchaseOrderNumberValue", "PO #");
 		searchListNew.put("WebConfNumberValue", "Web Confirmation");
 		
@@ -421,7 +424,13 @@ private boolean checkUserAllowedForSearch(List<String> list) {
 	
 	protected void setDateRangeFieldSearch(Element orderListInput) throws CannotBuildInputException
 	{
-	    Element orderElem = SCXmlUtils.getXpathElement(orderListInput, "API/Input/Order");
+		Element orderElem = SCXmlUtils.getXpathElement(orderListInput, "API/Input/Order");
+		if(!YFCCommon.isVoid(getSubmittedTSFrom()))
+            orderElem.setAttribute("FromOrderDate", WCDataDeFormatHelper.getDeformattedDate(getWCContext().getSCUIContext(), getSubmittedTSFrom()));
+        if(!YFCCommon.isVoid(getSubmittedTSTo()))
+        	orderElem.setAttribute("ToOrderDate", WCDataDeFormatHelper.getDeformattedDate(getWCContext().getSCUIContext(), getSubmittedTSTo()));        
+        
+	    
         if(!YFCCommon.isVoid(getOrderApprovalSearchDateRangeField())){
         	YDate startDate = YDate.newDate();
         	String startDateString = startDate.getString(YDate.ISO_DATETIME_FORMAT, wcContext.getSCUIContext().getUserPreferences().getLocale().getJLocale());
@@ -782,12 +791,57 @@ private boolean checkUserAllowedForSearch(List<String> list) {
     {
         this.searchFieldName=searchFieldName;
     }
+    
+    /**
+	 * @return the extnWebConfNumQryType
+	 */
+	public String getExtnWebConfNumQryType() {
+		return extnWebConfNumQryType;
+	}
 
+	/**
+	 * @param extnWebConfNumQryType the extnWebConfNumQryType to set
+	 */
+	public void setExtnWebConfNumQryType(String extnWebConfNumQryType) {
+		this.extnWebConfNumQryType = extnWebConfNumQryType;
+	}
+    
+    public String getWebConfNumberValue() {
+		return webConfNumberValue;
+	}
+    /**
+	 * @param webConfNumberValue the webConfNumberValue to set
+	 */
+	public void setWebConfNumberValue(String webConfNumberValue) {
+		if(!webConfNumberValue.equals(""))
+        {
+            if(webConfNumberValue.endsWith("*"))
+            {
+            	this.webConfNumberValue = webConfNumberValue.substring(0, webConfNumberValue.length() - 1);
+            	setExtnWebConfNumQryType(queryTypeFlike);
+            } else
+            {
+            	this.webConfNumberValue = webConfNumberValue;
+            }
+        }
+	}
     public String getSearchFieldValue(){
         return this.searchFieldValue;
     }
     public void setSearchFieldValue(String searchFieldValue)
     {
+        
+        if("OrderNumberValue".equals(getSearchFieldName()))
+        	setOrderNumberValue(searchFieldValue);
+        else
+        if("OrderNameValue".equals(getSearchFieldName()))
+        	setOrderNameValue(searchFieldValue);
+        else if("PurchaseOrderNumberValue".equals(getSearchFieldName()))
+            setPurchaseOrderNumberValue(searchFieldValue);
+       
+        else if("WebConfNumberValue".equals(getSearchFieldName()))
+            setWebConfNumberValue(searchFieldValue);
+        
         this.searchFieldValue=searchFieldValue;
     }
 	public Map getSearchList()
