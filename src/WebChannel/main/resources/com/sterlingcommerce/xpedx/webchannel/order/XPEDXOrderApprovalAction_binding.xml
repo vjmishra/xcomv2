@@ -19,4 +19,7 @@
 	<entry key="accountSearchFieldName">orderApprovalList:/Page/API/Input/Order/@BillToID</entry>
   	<entry key="shipToSearchFieldName">orderApprovalList:/Page/API/Input/Order/@ShipToID</entry>
   	<entry key="orderHeaderKey">xpedxCreateLegacyOrderOnApproval:/Order/@OrderHeaderKey,orderApproval:/Order/@OrderHeaderKey</entry>
+  	 <entry key="purchaseOrderNumberValue">orderApprovalList:/Page/API/Input/Order/@CustomerPONo</entry>
+  	 <entry key="webConfNumberValue">orderApprovalList:/Page/API/Input/Order/Extn/@ExtnWebConfNum</entry>
+  	 <entry key="OrderNameValue">orderApprovalList:/Page/API/Input/Order/Extn/@ExtnOrderedByName</entry> 
 </properties>
