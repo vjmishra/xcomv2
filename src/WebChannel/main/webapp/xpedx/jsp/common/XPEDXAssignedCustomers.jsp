@@ -17,19 +17,23 @@
 <s:bean
 	name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils"
 	id="wcUtil" />
-<s:set name="defaultShipTo" value="defaultShipToCustomerId" />
+
 <%--
 <s:property value="#defaultShipTo"/>
  --%>
-<s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
+<%-- <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />  --%>
+<s:set name="currentShipTo" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")'/>
 <s:set name='_action' value='[0]' />
 <s:url id='targetURL' namespace='/common'
 	action='setCurrentCustomerIntoContext' />
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
 <s:url id='setAsDefaultURL' namespace='/common'
 	action='setSelectedShipToAsDefault' />
-<s:set name="assgnCustomers"
-	value="#wcUtil.getAssignedCustomers(#loggedInUser)" />
+<%--  <s:set name="assgnCustomers"
+	value="#wcUtil.getAssignedCustomers(#loggedInUser)" /> --%>
+	 <s:set name="assgnCustomers"
+	value="#wcUtil.getObjectFromCache('XPEDX_Customer_Contact_Info_Bean')" />
+<s:set name="defaultShipTo" value="#assgnCustomers.getExtnDefaultShipTo()" />	
 <s:if test="#_action.isSearch()">
 	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomers" namespace="/common">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
@@ -65,7 +69,7 @@
 <s:else>
  <!-- modal window container -->
     <div class="xpedx-light-box" id="change-ship-to">    
-   
+    
 	<!-- START modal 'header' -->
 	<br />
 	<div class="ship-to-header">
@@ -341,7 +345,7 @@
 			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
 
 	</li>
-	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
+	<s:if test="#defaultShipTo!='' || (#assgnCustomers != null && #assgnCustomers.getNumberOfAssignedShioTos()==0)">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
 		</li>
