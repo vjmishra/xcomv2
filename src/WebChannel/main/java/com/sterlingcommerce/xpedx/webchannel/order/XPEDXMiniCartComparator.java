@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 
 import org.w3c.dom.Element;
@@ -19,16 +20,19 @@ public class XPEDXMiniCartComparator implements Comparator<Element> {
 		if(YFCCommon.isVoid(elem1OrderLineKey)){
 			return -1;
 		}
-		
-		double legacyLineNo = Double.parseDouble(elemOrderLineKey);
-		double legacyLineNo1 = Double.parseDouble(elem1OrderLineKey);
-		if(legacyLineNo > legacyLineNo1)
-			return -1;
-		else if(legacyLineNo < legacyLineNo1)
-			return 1;
+		BigDecimal bg1=new BigDecimal(elemOrderLineKey);
+		BigDecimal bg2=new BigDecimal(elem1OrderLineKey);
+		/*double legacyLineNo = Double.parseDouble(elemOrderLineKey);
+		double legacyLineNo1 = Double.parseDouble(elem1OrderLineKey);*/
+		int retVal=-(bg1.compareTo(bg2));
+		return retVal;
+		/*if(legacyLineNo > legacyLineNo1)
+		return -1;
+		else if(bg2.compareTo(bg1))
+		return 1;
 		else
-			return 0;
-		
+		return 0;*/
+
 	}
 
 }

@@ -709,7 +709,9 @@ function redrawQuickAddList()
 		        	}
 					
 				    	 code += '</select>';
-				    	 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
+				    	 if(defaultSelUOM != undefined){
+				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
+				    	 }	 
 						    code += '</td>';
 
 				    	
