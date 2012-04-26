@@ -1839,7 +1839,7 @@ function SubmitActionWithValidation()
 			<div id="tabs" >
 				<ul>
 					<li><a href="#tabs-1">Availability</a></li>
-					<li><a href="#tabs-2">Specifications</a></li>
+					<li><a href="#tabs-2" onclick="javascript:blockDiv();">Specifications</a></li>
 				</ul>
 				
 				<p class="tablinks">&nbsp;
@@ -1862,7 +1862,7 @@ function SubmitActionWithValidation()
 				<!-- end tab1 -->
                                     
 				<!-- tab2 -->
-		<div id="tabs-2" ><s:set name="certImage"
+		<div id="tabs-2" style="display: none" ><s:set name="certImage"
 			value="#_action.getCertImagePath()" /> 
 		<s:if
 			test="%{null != #certImage}">
@@ -2300,6 +2300,11 @@ function callPnA(requestedUom)
 	pandaByAjax(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
 }
 
+function blockDiv()
+{
+	var divId=document.getElementById("tabs-2");
+	divId.style.display="block";
+}
 </script>
 <!-- added for jira 2971 --> 
 <div style="display: none;">
