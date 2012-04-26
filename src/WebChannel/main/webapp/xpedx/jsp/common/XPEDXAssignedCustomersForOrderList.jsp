@@ -21,15 +21,20 @@
 <%--
 <s:property value="#defaultShipTo"/>
  --%>
-<s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
+<%--  <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" /> --%>
+<s:set name="currentShipTo" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")'/>
 <s:set name='_action' value='[0]' />
 <s:url id='targetURL' namespace='/common'
 	action='setCurrentCustomerIntoContext' />
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomersForOrderList' />
 <s:url id='setAsDefaultURL' namespace='/common'
 	action='setSelectedShipToAsDefault' />
+<%-- 
 <s:set name="assgnCustomers"
 	value="#wcUtil.getAssignedCustomers(#loggedInUser)" />
+	--%>
+	<s:set name="assgnCustomers"
+	value="#wcUtil.getObjectFromCache('XPEDX_Customer_Contact_Info_Bean')" />
 <s:if test="#_action.isSearch()">
 	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomersForOrderList" namespace="/common">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
@@ -183,9 +188,9 @@
 <div class="float-right">
 <ul id="tool-bar" class="tool-bar-bottom">
 		<li>
-		   <a class="green-ui-btn"  href="#" onclick = "setVariable('<s:property value="#defaultShipTo"/>' , '<s:property value="#assgnCustomers.size()"/>');$.fancybox.close();"><span>Select</span></a> 		
+		   <a class="green-ui-btn"  href="#" onclick = "setVariable('<s:property value="#defaultShipTo"/>' , '<s:property value="#assgnCustomers.getNumberOfAssignedShioTos()"/>');$.fancybox.close();"><span>Select</span></a> 		
 	</li>
-	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
+	<s:if test="#defaultShipTo!='' || (#assgnCustomers != null && #assgnCustomers.getNumberOfAssignedShioTos()==0)">
 		<li>
 			<a class="grey-ui-btn" href="#" style="" onclick="clearShipToField();$.fancybox.close();"><span>Cancel</span></a>
 		</li>
