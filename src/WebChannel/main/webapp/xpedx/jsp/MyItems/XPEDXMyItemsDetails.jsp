@@ -2321,24 +2321,21 @@ function showSharedListForm(){
 						name="itemIds" value="%{#itemId}" />
 						
 						<div class="mil-desc-wrap">
-                            <div class="mil-wrap-condensed-desc" style="height:auto; max-height:59px;">  
+                            <div class="mil-wrap-condensed-desc" style="height:auto;">  
 								<s:if test="%{#itemType != 99}">
 									<a class="short-description" href='<s:property value="%{itemDetailsLink}" />'>
 									<s:property value="#name" />
 									</a>
 								</s:if>					
-							</div>
-                            <div class="mil-attr-wrap">
-                                <ul class="prodlist">
-									<s:if test="%{#itemType != 99}"> 
+                                <ul class="prodlist"> 
+									<s:if test="%{#itemType != 99}">
 										<a href='<s:property value="%{itemDetailsLink}" />'> 
 										<s:property value="#desc" escape="false"/>
 										</a>
 									</s:if> 
 										<s:hidden name="itemsDesc" value="%{#desc}" /> 
 										<s:hidden name="descs" value="%{#desc}" />
-                                </ul>                             
-				
+                                </ul>                                                 
 								<s:if test="%{#showItemType}">
 									<p ><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" />									
 										<s:if test='#certFlag=="Y"'>
