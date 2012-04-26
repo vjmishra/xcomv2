@@ -1539,7 +1539,8 @@
 							<Order DraftOrderFlag="N" StatusQryType="NE" Status="9000"
 								CustomerContactID="" CustomerContactIDQryType="" EnterpriseCode=""
 								DocumentType="0001" OrderName="" OrderNameQryType="EQ" OrderNo=""
-								OrderNoQryType="EQ" BuyerOrganizationCode="">
+								OrderNoQryType="EQ" BuyerOrganizationCode="" CustomerPONo="" OrderedByName="" OrderDateQryType="DATERANGE">
+								<Extn ExtnWebConfNum="" ExtnOrderedByName=""/>
 								<OrderHoldType ResolverUserIdQryType=""
 									ResolverUserId="" HoldType="" Status="1100">
 									<ComplexQuery>
