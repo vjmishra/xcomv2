@@ -1413,6 +1413,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
+			e.printStackTrace();
 		}
 	}
 	
@@ -1434,6 +1435,18 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		try {
 			allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 			//itemXrefDoc = XPEDXOrderUtils.getXpedxItemBranchItemAssociationDetails(allItemIds, wcContext.getCustomerId(), customerDivision, envCode, wcContext);
+			ArrayList<Element> itemsElem=SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
+			if(itemsElem != null)
+			{
+				for(int i=0;i<itemsElem.size();i++)
+				{
+					Element itemElem=itemsElem.get(i);
+					if(itemElem!=null){
+						String Itemid = SCXmlUtil.getAttribute(itemElem,"ItemID");
+						baseUOMmap.put(Itemid,itemElem.getAttribute("UnitOfMeasure"));
+					}
+				}
+			}
 		} catch (Exception e) {
 			LOG.error("Error getting item branch item association.",e);
 		}
