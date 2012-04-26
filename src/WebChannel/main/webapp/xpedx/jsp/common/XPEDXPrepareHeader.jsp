@@ -1091,11 +1091,13 @@ var selectedShipCustomer = null;
         var selected_customerContactId=document.getElementById("customerContactId");
         if(selected_customerContactId)
         	selected_customerContactId = selected_customerContactId.value   ; 
-        	 if(document.getElementById("setAsDefault")== null || document.getElementById("setAsDefault").checked == null){
+        	 if(document.getElementById("setAsDefault")== null || document.getElementById("setAsDefault").checked == null || document.getElementById("setAsDefault") =='undefined' ){
         		 var setAsDefault= true;
+        		 var checkboxChecked = setAsDefault;
              }
         	 else{
         		 var setAsDefault=document.getElementById("setAsDefault");
+        		 var checkboxChecked = setAsDefault.checked;
         	 }
            
              
@@ -1115,9 +1117,8 @@ var selectedShipCustomer = null;
         var xpedxSTCity=document.FormToPost.xpedxSTCity.value;
         var xpedxSTState=document.FormToPost.xpedxSTState.value;
         var xpedxSTZip=document.FormToPost.xpedxSTZip.value;
-var checkboxChecked = setAsDefault.checked;
+
     	//var checkboxChecked = document.getElementById("setAsDefault").checked;
-    	
         if(selectedCustomer != null){
             document.body.style.cursor = 'wait';
             Ext.Ajax.request({
@@ -1151,6 +1152,16 @@ var checkboxChecked = setAsDefault.checked;
 	                    var selectedTab=document.getElementById("selectedTab").value;
 	                    var pathname=window.location.pathname;
 	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y";;
+                    }
+                    else if(pathname=="/swc/profile/user/xpedxUserProfile.action" && checkboxChecked == true)
+                    {
+                    	var storeFrontId = '<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>';
+ 	                    var customerContactId = document.getElementById("customerContactId").value;
+ 	                    var customerId = document.getElementById("customerId").value;
+ 	                    var selectedTab=document.getElementById("selectedTab").value;
+ 	                    var pathname=window.location.pathname;
+ 	                    var success = true;
+ 	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y"+ "&success="+ success;;	
                     }
                     else
                     {
