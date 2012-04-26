@@ -49,6 +49,9 @@
 
 function processDetail(itemid, uom) {
 	<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
+	 <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
+     <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
+     <s:param name='_r_url_' value='%{orderDetailsURL}'/>
 	</s:url>
 	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
 	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
@@ -889,6 +892,8 @@ from session . We have customer Contact Object in session .
                
                 <div class="mil-desc-wrap">
                     <div id="description-text" class="short-description" class="mil-wrap-condensed-desc item-short-desc">
+                       	  
+                    
                         <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
 						<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
 							<s:property	value='%{#item.getAttribute("ItemDesc")}' />
@@ -899,6 +904,7 @@ from session . We have customer Contact Object in session .
 						</s:a>
 					</div>
 	                <div class="mil-attr-wrap">
+	                    <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
 	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
 								<ul class="mil-desc-attribute-list">
@@ -906,6 +912,7 @@ from session . We have customer Contact Object in session .
 								</ul>
 							</s:if>
 						</s:if>
+						</s:a>
 	                </div>
 				</div>
 				
