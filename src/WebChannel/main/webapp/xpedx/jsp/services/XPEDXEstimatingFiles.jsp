@@ -102,7 +102,7 @@ $("#various4").fancybox();
 			                     --%>
 			                     <%-- jira 3709--%>
 			                      <li>
-			                          <span><a href="<s:property value='#CatalogExp.key'/>" target="_blank">
+			                          <span><a href="<s:property value='#CatalogExp.key'/>" target="_blank"></span>
 			                          <span><s:property value='#CatalogExp.value'/></span></a>			                     
 			                     </li>
 			                   
