@@ -416,6 +416,8 @@ function showSplitDiv(divId)
 		            <s:hidden name="copyFromOrderHeaderKey" value="%{dorderHeaderKey}" />
 		            <s:hidden name="orderNo" value="%{dorderNo}" />
 		            <s:hidden name="orderName" value="%{dorderName}" />
+		            <%--Adding extnLegOrderType for Jira 3544 --%>
+		            <s:set name="extnLegOrderType" value='#OrderExtn.getAttribute("ExtnLegacyOrderType")' />
 		            <s:iterator value="#_action.getMajorLineElements()" id='orderLine' status='orderLineStatIndex'>
 			            <s:set name='orderLineKey' value='#xutil.getAttribute(#orderLine,"OrderLineKey")'/>
 			            <s:hidden name="orderLineKeyList" value='%{#orderLineKey}' id='orderLineKeyList_<s:property value="#orderLineKey"/>'/>
@@ -434,7 +436,10 @@ function showSplitDiv(divId)
 	            <s:if test="!#isEstimator">
 	               <s:if test='%{#status != "Cancelled"}'>
 					<s:if test="#_action.canOrderAgain() && #orderType == 'Customer' ">
+						<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
+						<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
 						<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn orders"><span>Re-Order</span></a>
+						</s:if>
 					</s:if>
 					</s:if>
 				</s:if>
@@ -1327,7 +1332,10 @@ function showSplitDiv(divId)
 			<s:if test="!#isEstimator">
 			<s:if test='%{#status != "Cancelled"}'>
 				<s:if test="#_action.canOrderAgain()  && #orderType == 'Customer'">
+					<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
+					<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
 					<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn re-order"><span>Re-Order</span></a>
+					</s:if>
 				</s:if>
 				</s:if>
 			</s:if>
