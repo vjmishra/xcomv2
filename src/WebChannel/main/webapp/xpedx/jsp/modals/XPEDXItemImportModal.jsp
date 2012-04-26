@@ -36,7 +36,7 @@
                 <li><a class="grey-ui-btn" href="../sample/SampleImport.csv"><span>Download Sample</span></a></li>
 
             </ul>
-            <p><strong>Please note:</strong> An individual My Items List cannot exceed 200 items. </p>
+            <p>Please note that an individual My Items List cannot exceed 200 items. </p>
             <p>To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below. After the file is located, click 'Open' and then click the 'Import' button. </p>
             <br />
             
