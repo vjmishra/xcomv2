@@ -5279,7 +5279,6 @@ public class XPEDXWCUtils {
 						.getAttribute("OrganizationName"));
 				Element extnElement = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "Extn");
-			
 				Element personInfoElement = SCXmlUtil.getXpathElement(
 						customerOrganizationEle, "//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");
 				Element customerPaymentInfoElement = SCXmlUtil.getXpathElement(
@@ -5304,7 +5303,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setExtnCurrencyCode(extnElement.getAttribute("ExtnCurrencyCode"));
 				shipToCustomer.setExtnCustomerName(extnElement.getAttribute("ExtnCustomerName"));
 				shipToCustomer.setExtnSampleRequestFlag(extnElement.getAttribute("ExtnSampleRequestFlag"));
-				
+				shipToCustomer.setLocationID(extnElement.getAttribute("ExtnCustomerStoreNumber"));
 				//For performance issue itemdetail.action
 				shipToCustomer.setExtnUseOrderMulUOMFlag(extnElement.getAttribute("ExtnUseOrderMulUOMFlag"));
 				shipToCustomer.setExtnPrimarySalesRep(extnElement.getAttribute("ExtnPrimarySalesRep"));
@@ -5317,7 +5316,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setDayPhone(personInfoElement.getAttribute("DayPhone"));
 				shipToCustomer.setCity(personInfoElement.getAttribute("City"));
 				shipToCustomer.setState(personInfoElement.getAttribute("State"));
-				
+				shipToCustomer.setCompany(personInfoElement.getAttribute("Company"));
 				List<String> arrAddress = new ArrayList<String>();
 				String sAddr = "AddressLine";
 				
