@@ -409,21 +409,23 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private void setDefaultShipTo() {
 		try {
 			
+			//String logedinCustomer=getWCContext().getCustomerContactId();
 			//JIRA 1878 Start
-			if (customerContactId != null
-					|| customerContactId.trim().length() > 0) {
+			if ((customerContactId != null
+					|| customerContactId.trim().length() > 0) && !customerContactId.equals(getWCContext().getCustomerContactId())) {
 				defaultShipToCustomerId = XPEDXWCUtils.getDefaultShipTo(customerContactId);
-			}
-			else{
-				defaultShipToCustomerId = XPEDXWCUtils.getDefaultShipTo();
-			}
-			//JIRA 1878 END
-			
-			if (defaultShipToCustomerId != null
+				if (defaultShipToCustomerId != null
 					&& defaultShipToCustomerId.trim().length() > 0) {
 				defualtShipToAddress = XPEDXWCUtils.getShipToAdress(
 						defaultShipToCustomerId, getWCContext().getStorefrontId());
+				}
 			}
+			else{
+				//defaultShipToCustomerId = XPEDXWCUtils.getDefaultShipTo();				
+				defualtShipToAddress=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			}
+			//JIRA 1878 END
+			
 			//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"true",WCAttributeScope.LOCAL_SESSION);
 			//Commenting to use new method to put in cache
 			//wcContext.getSCUIContext().getRequest().getSession().setAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
