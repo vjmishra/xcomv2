@@ -2916,27 +2916,26 @@ function showSharedListForm(){
 <s:form action="addComplementaryItemToCart"
 	name="addReplacementItemToCartForm" id="addReplacementItemToCartForm"
 	namespace="/order" method="POST">
-<div id="replacementItems" style="height: 380px; display: none;">
-
-	<s:hidden name='#action.name' id='validationActionName'
-		value='addReplacementItemToCart' />
-	<s:hidden name='#action.namespace' value='/order' />
-
-	<div id="replacementItemBody"  class="xpedx-light-box"/>
+	<div id="replacementItems" style="height: 380px; display: none;">
 	
-</div> 
-
-<!--  <div id="table-bottom-bar">-->
-<!--<div id="table-bottom-bar-L"/>-->
-<!--<div id="table-bottom-bar-R"/>-->
-<!--</div>-->
-
- <ul class="tool-bar-bottom" id="tool-bar" style="margin-right:30px;float:right;">
-	<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
-	<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
-	<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
-</ul>
-
+		<s:hidden name='#action.name' id='validationActionName'
+			value='addReplacementItemToCart' />
+		<s:hidden name='#action.namespace' value='/order' />
+	
+		<div id="replacementItemBody"  class="xpedx-light-box"/>
+		
+	</div> 
+	
+	<!--  <div id="table-bottom-bar">-->
+	<!--<div id="table-bottom-bar-L"/>-->
+	<!--<div id="table-bottom-bar-R"/>-->
+	<!--</div>-->
+	
+	<ul class="tool-bar-bottom" id="tool-bar" style="margin-right:30px;float:right;">
+		<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
+		<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
+		<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
+	</ul>
 </s:form> <s:form id="formRIAddToList" action="XPEDXMyItemsDetailsCreate"
 	method="post">
 	<s:hidden name="listKey" value="%{listKey}"></s:hidden>
