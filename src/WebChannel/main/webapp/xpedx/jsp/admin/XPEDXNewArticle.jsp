@@ -29,6 +29,7 @@
 <!-- begin styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
+<link rel="stylesheet" type="text/css"	href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" /> 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
@@ -52,9 +53,7 @@
 <!-- /STUFF -->
 <!-- Lightbox/Modal Window -->
 <script type="text/javascript" src="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
 
 <script type="text/javascript" src="<s:property value='#util.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="<s:property value='#util.staticFileLocation' />/xpedx/js/jquery.ui.datepicker.js"></script>
