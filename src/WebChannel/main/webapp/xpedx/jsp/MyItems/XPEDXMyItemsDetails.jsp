@@ -2487,12 +2487,29 @@ function showSharedListForm(){
 												<%-- Creating text field with name as the Customer field name --%>
 												
 												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
+												<%--Start JIRA 3693  --%>
+												<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
+												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="24"
+													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
+													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
+													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>
+												<s:hidden name='customerField_%{#custFieldStatus.count}_%{#id}' id='customerField_%{#custFieldStatus.count}_%{#id}' value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}'/>
+												<s:hidden id="entered%{#FieldLabel}_%{#id}" name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" /></s:if>
+												<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
+												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="22"
+													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
+													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
+													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>
+												<s:hidden name='customerField_%{#custFieldStatus.count}_%{#id}' id='customerField_%{#custFieldStatus.count}_%{#id}' value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}'/>
+												<s:hidden id="entered%{#FieldLabel}_%{#id}" name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" /></s:elseif>
+												<s:else>
 												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="25"
 													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
 													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
 													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>
 												<s:hidden name='customerField_%{#custFieldStatus.count}_%{#id}' id='customerField_%{#custFieldStatus.count}_%{#id}' value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}'/>
-												<s:hidden id="entered%{#FieldLabel}_%{#id}" name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
+												<s:hidden id="entered%{#FieldLabel}_%{#id}" name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" /></s:else>
+												<%--End JIRA 3693 --%>
 											</td>
 										</tr>
 									</s:iterator>
