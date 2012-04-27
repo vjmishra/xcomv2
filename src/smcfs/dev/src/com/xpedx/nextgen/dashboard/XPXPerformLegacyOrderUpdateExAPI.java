@@ -2299,6 +2299,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	
 	private YFCElement getShipToCustomerInformation(YFSEnvironment env, YFCElement rootEle) throws Exception {
 		
+		String legacyCustNo = null;
+		String shipToSuffix = null;
 		YFCElement extnRootEle = rootEle.getChildElement("Extn");
 
 		YFCDocument getCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
@@ -2317,7 +2319,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		custInXMLEle.appendChild(extnCustInXMLEle);
 
 		if (extnRootEle.hasAttribute("ExtnCustomerNo")) {
-			String legacyCustNo = extnRootEle.getAttribute("ExtnCustomerNo");
+			legacyCustNo = extnRootEle.getAttribute("ExtnCustomerNo");
 			if (YFCObject.isNull(legacyCustNo) || YFCObject.isVoid(legacyCustNo)) {
 				throw new Exception("Attribute ExtnCustomerNo Cannot be NULL or Void!");
 			}
@@ -2327,7 +2329,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
  
 		if (extnRootEle.hasAttribute("ExtnShipToSuffix")) {
-			String shipToSuffix = extnRootEle.getAttribute("ExtnShipToSuffix");
+			shipToSuffix = extnRootEle.getAttribute("ExtnShipToSuffix");
 			if (YFCObject.isNull(shipToSuffix) || YFCObject.isVoid(shipToSuffix)) {
 				throw new Exception("Attribute ExtnShipToSuffix Cannot be NULL or Void!");
 			}
@@ -2344,7 +2346,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
-			throw new Exception("XPXGetCustomerList Flow Returned ZERO Customers - ShipTo Customer Isn't Available.");
+			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
 		if(log.isDebugEnabled()){
@@ -3337,6 +3339,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (getItemListOutXML != null) {
 					YFCElement _itemListEle = getItemListOutXML.getDocumentElement();
 					YFCIterable<YFCElement> yfcItr_ = _itemListEle.getChildren("Item");
+					if (!yfcItr_.hasNext()) {
+						if (lineType.equalsIgnoreCase("M") || lineType.equalsIgnoreCase("C")) {
+							stockType = "STOCK";
+						} else {
+							// Item Doesn't Exist in DB.
+							if (log.isDebugEnabled()) {
+								log.debug("Item# "+itemID+" Doesn't Exist In Web/Xpedx.com");
+							}
+							throw new Exception("Item# "+itemID+" Doesn't Exist In Web.");
+						}
+					}
 					while (yfcItr_.hasNext()) {	
 						
 						String itemID_ = null;
@@ -3455,6 +3468,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				} else {
 					if (lineType.equalsIgnoreCase("M") || lineType.equalsIgnoreCase("C")) {
 						stockType = "STOCK";
+					} else {
+						// Item Doesn't Exist in DB.
+						if (log.isDebugEnabled()) {
+							log.debug("Item# "+itemId+" Doesn't Exist In Web/Xpedx.com");
+						}
+						throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 					}
 				}
 			}
