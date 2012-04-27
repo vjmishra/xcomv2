@@ -27,6 +27,7 @@ import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
 import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
 import com.yantra.yfc.rcp.IYRCTableImageProvider;
+import com.yantra.yfc.rcp.IYRCTableLinkProvider;
 import com.yantra.yfc.rcp.YRCComboBindingData;
 import com.yantra.yfc.rcp.YRCConstants;
 import com.yantra.yfc.rcp.YRCPlatformUI;
@@ -90,7 +91,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 	
 	private Button btnCancelChanges;
 	
-	private Table tblItemsList;
+	public Table tblItemsList;
 
 	private Group pnlItemsList;
 
@@ -411,9 +412,10 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
         
         colBindings[4] = new YRCTblClmBindingData();        
-        colBindings[4].setAttributeBinding("UomId"); 
+        colBindings[4].setAttributeBinding("UomDesc"); 
         colBindings[4].setColumnBinding("UOM");
-        colBindings[4].setTargetAttributeBinding("XPEDXMyItemsItems/@UomId");
+       // colBindings[4].setTargetAttributeBinding("XPEDXMyItemsItems/@UomDesc");
+        colBindings[4].setLinkReqd(true);
         
         colBindings[5] = new YRCTblClmBindingData(); 
         colBindings[5].setAttributeBinding("ItemPoNumber");
@@ -669,6 +671,22 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         bindingData.setTblClmBindings(colBindings);
         bindingData.setKeyNavigationRequired(true);
         tblItemsList.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, bindingData);
+        bindingData.setLinkProvider( new IYRCTableLinkProvider(){
+        	public String getLinkTheme(Object element, int columnIndex) {
+        			return "TableLink";
+        	   	}
+        	
+        	public void linkSelected(Object element, int columnIndex) {
+           		Element eleTableItem = (Element)element;
+           		try {
+					myBehavior.openMultipleEditors(eleTableItem);
+				} catch (PartInitException e) {
+		
+					e.printStackTrace();
+				}
+           	     return;
+           	}
+        });
     }
 	
 	private void createItemListsPnlInfo() {
@@ -764,7 +782,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		tblItemsList.setLayoutData(tblItemsListGD);
 		tblItemsList.setHeaderVisible(true);
 		tblItemsList.setLinesVisible(true);
-
+		
 	}
 	
 	private void createPnlTitleHolder() {
