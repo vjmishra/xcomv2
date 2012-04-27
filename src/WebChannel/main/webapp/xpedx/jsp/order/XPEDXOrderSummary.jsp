@@ -1146,8 +1146,6 @@ from session . We have customer Contact Object in session .
 								<td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
 							</tr>
 							<tr>
-								<td></td>
-								<td></td>
 								<td colspan="2" style="text-align:right;"> 
 								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:set name="itemID3" value='#item.getAttribute("ItemID")' />
