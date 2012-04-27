@@ -600,4 +600,12 @@
             <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUOMPanel">
+        <commands>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetSKUDetailsService_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+        </namespaces>
+    </form>
 </forms>
