@@ -8,8 +8,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,7 +26,9 @@ import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
+import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCSharedTaskOutput;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
@@ -358,6 +365,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 			xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("Qty"));
 			xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
 			xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
+			xPEDXMyItemsItems.setAttribute("UomId",tempElement.getAttribute("UomId"));
 			
 		}
 		return updateXPEDXMyItemsListInput.getOwnerDocument();
@@ -665,5 +673,30 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		YRCPlatformUI.launchSharedTask(this.page,"com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask",eleMyItemsList);
 		
 	}
+	
+	public	void openMultipleEditors(Element eleTableItem)throws PartInitException {
+			
+		System.out.println("T0----he Table element is "+YRCXmlUtils.getString(eleTableItem));
+		Element uomElement = eleTableItem;
+		String currItemID = eleTableItem.getAttribute("ItemId");
+		//String currItemID = "2001020";
+	    Document docInput = YRCXmlUtils.createFromString("<Item SKU='"+currItemID+"' SKUType='LPC'/>");
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask",docInput.getDocumentElement());
+		Element eleUOMInfo = output.getOutput();
+	     String value =  eleUOMInfo.getAttribute("UOMID");            
+	      //Saving the updated value
+		String oldValue = eleTableItem.getAttribute("UomId");
+		if (oldValue != value) {
+			
+			eleTableItem.setAttribute("UOM_OLD_VALUE", oldValue);
+			eleTableItem.setAttribute("UomId", value);
+			eleTableItem.setAttribute("isModified", "Y");
+		} else {
+			eleTableItem.setAttribute("UOM_OLD_VALUE", oldValue);
+		}
+		
+		saveChangesToMyItemsList();
+	}
+	
 
 }
