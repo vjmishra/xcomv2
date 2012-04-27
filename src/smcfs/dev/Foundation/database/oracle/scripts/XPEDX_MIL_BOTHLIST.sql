@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW "NG"."XPEDX_MIL_BOTHLIST" 
+CREATE OR REPLACE VIEW XPEDX_MIL_BOTHLIST 
 AS
 SELECT 
     MIL.MY_ITEMS_LIST_KEY,
@@ -28,7 +28,7 @@ FROM xpedx_my_items_list MIL
 inner join yfs_customer CUST on (MIL.Customer_id) = trim(CUST.Customer_id)
 inner join yfs_customer MSAPCUST on trim(CUST.ROOT_CUSTOMER_KEY) = trim(MSAPCUST.CUSTOMER_KEY) 
 inner join yfs_organization MSAPORG on trim(MSAPCUST.CUSTOMER_ID) = trim(MSAPORG.ORGANIZATION_KEY) 
-INNER JOIN xpedx_my_items_items ITEM on trim(MIL.MY_ITEMS_LIST_KEY) = trim(ITEm.MY_ITEMS_LIST_KEY)
+LEFT OUTER JOIN xpedx_my_items_items ITEM on trim(MIL.MY_ITEMS_LIST_KEY) = trim(ITEm.MY_ITEMS_LIST_KEY)
 LEFT OUTER JOIN xpedx_my_items_list_share MILS ON trim(MIL.MY_ITEMS_LIST_KEY) = trim(mils.MY_ITEMS_LIST_KEY)
 LEFT OUTER JOIN yfs_organization ORG ON trim(cust.EXTN_CUSTOMER_DIVISION) = replace(trim(ORG.organization_code),'_M','')
 GROUP BY
