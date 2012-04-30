@@ -350,7 +350,10 @@ function funDivOpenClose(val1)
 		                    //selectSeq.setAttribute('name', 'QuickLinksSeq' + i);
 		                    selectSeq.setAttribute('id', 'QuickLinksSeq' + i);
 	                    }
-	                    options[options.length-1] = null;
+						else{
+									//options[options.length-1] = null; //Jira 3630
+								 options[options.length] = null
+						}
 					}
 				}
 			}catch(e) {
@@ -472,6 +475,7 @@ function funDivOpenClose(val1)
 			element4.name = "showURL";  	
 			element4.setAttribute('class', ' margin-15');
 			element4.checked = true;
+			element4.setAttribute('tabindex','12');	
 			data3.appendChild(element4);
 			
 
@@ -481,6 +485,7 @@ function funDivOpenClose(val1)
 			var combo = document.createElement("select");
 			combo.setAttribute('name','combo');
 			combo.setAttribute('class', 'x-input');
+			combo.setAttribute('tabindex','12');
 			combo.setAttribute('onfocus','this.oldvalue = this.value;');
 			combo.setAttribute('onchange', 'javascript:onChangeItemOrder(this, this.oldvalue, this.value);');
 			combo.id = 'QuickLinksSeq'+rowCount;
@@ -2611,9 +2616,9 @@ a.underlink:hover { text-decoration: underline !important; }
 	<div class="clearview">&nbsp;</div>
 	<div>
 	<ul class="float-right">
-		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
+		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn" tabindex="12"><span>Cancel</span></a></li>
 		<li class="float-right"><a class="green-ui-btn" href="javascript:void(0);"
-			onclick="javascript:callSave('myAccount', []);"><span>Save</span></a></li>
+			onclick="javascript:callSave('myAccount', []);"  tabindex="12"><span>Save</span></a></li>
 	</ul>
 	</div>
 	<div class="clearview">&nbsp;</div>
@@ -2718,10 +2723,46 @@ document.onkeypress = enterPressed;
 			element3.setAttribute('tabindex','12');		
 			element3.setAttribute('maxlength','150');
 			element3.setAttribute('onblur','saveClick();');
+			//added for checkbox and sequence 3630
+			var data3 = document.createElement("td");
+			data3.setAttribute('valign', 'top');
+			var element4 = document.createElement("input");  
+			element4.type = "checkbox";
+			element4.name = "showURL";  
+			element4.setAttribute('tabindex','12');			
+			element4.setAttribute('class', ' margin-15');
+    		        element4.checked = true;
+			data3.appendChild(element4);
+			var data4 = document.createElement("td");
+			data4.setAttribute('valign', 'top');
+
+			var combo = document.createElement("select");
+			combo.setAttribute('name','combo');
+			combo.setAttribute('class', 'x-input');
+			combo.setAttribute('tabindex','12');
+			combo.setAttribute('onfocus','this.oldvalue = this.value;');
+			combo.setAttribute('onchange', 'javascript:onChangeItemOrder(this, this.oldvalue, this.value);');
+			combo.id = 'QuickLinksSeq'+rowCount;
+				for(var i=1; i<=rowCount; i++) {
+				var option = document.createElement("option");  
+			    option.text = i;  
+			    option.value = i;  
+			    if(i == rowCount) {
+				    option.selected = true;
+			    }
+			    try {  
+			        combo.add(option, null); //Standard  
+			    }catch(error) {  
+			        combo.add(option); // IE only  
+			    }
+			}
+			data4.appendChild(combo);
+			//added for checkbox and sequence 3630
 			data2.appendChild(element3);
 			row.appendChild(data1);
 			row.appendChild(data2);
-
+			row.appendChild(data3);//added for 3630
+			row.appendChild(data4);//added for 3630
 			tbody.appendChild(row);		  
 	  /*
 	  var tbody = document.getElementById("tb1").getElementsByTagName("tbody")[0];
@@ -2771,7 +2812,7 @@ document.onkeypress = enterPressed;
 			data1.setAttribute('class', ' noBorders padding-left1');
 			var deleteLink = document.createElement('a');
 			var imageIcon = document.createElement('img');
-			imageIcon.setAttribute('src','../../xpedx/images/icons/12x12_grey_x.png');
+			imageIcon.setAttribute('src','../../xpedx/images/icons/12x12_red_x.png');//3630
 			imageIcon.setAttribute('alt','delete');
 			imageIcon.setAttribute('width','16');
 			imageIcon.setAttribute('height','16');
@@ -2810,7 +2851,8 @@ document.onkeypress = enterPressed;
 			data3.setAttribute('valign', 'top');
 			var element4 = document.createElement("input");  
 			element4.type = "checkbox";
-			element4.name = "showURL";  	
+			element4.name = "showURL";  
+			element4.setAttribute('tabindex','12');		//Jira 3630	
 			element4.setAttribute('class', ' margin-15');
 			var showLink = '<s:property value="showQuickLink"/>';
 		    if (showLink == 'Y')
@@ -2825,6 +2867,7 @@ document.onkeypress = enterPressed;
 			var combo = document.createElement("select");
 			combo.setAttribute('name','combo');
 			combo.setAttribute('class', 'x-input');
+			combo.setAttribute('tabindex','12');//Jira 3630
 			combo.setAttribute('onfocus','this.oldvalue = this.value;');
 			combo.setAttribute('onchange', 'javascript:onChangeItemOrder(this, this.oldvalue, this.value);');
 			combo.id = 'QuickLinksSeq'+"<s:property value="%{#arrStatus.index+1}" escape='false'/>";
