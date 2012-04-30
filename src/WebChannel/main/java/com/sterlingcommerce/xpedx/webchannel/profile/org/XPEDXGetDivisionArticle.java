@@ -45,6 +45,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 	private String customerDivisionToQry;
     private String isChildCustomer;
     private String customerContactId;
+    private String orgCode;
     
     //ResourceIds
     private static final String USER_LIST_RESOURCE_ID = "/swc/profile/ManageUserList";
@@ -120,19 +121,52 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
     		XPEDXShipToCustomer shipCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
     		customerDivisionToQry = shipCustomer.getExtnCustOrderBranch();
     		String customerID= wcContext.getCustomerId();
+    		orgCode = getWCContext().getStorefrontId();
+    		startTodayDate = getStartTodayDate();
+    		endTodayDate = getEndTodayDate();
     		
     		/*Comment since the article is created on order branch level not on customer division.
     		String[] customerIdParts = customerID.split("-");
     		customerDivisionToQry=customerIdParts[0];
     		String customerDivision = SCXmlUtil.getXpathAttribute(customerInfo, "/Customer/Extn/@ExtnCustomerDivision");
     		customerDivisionToQry = '|'+customerDivision+'|';*/
-    		
-    		custArticleSearchName.add("XPXDivision");
+
+    		/* Commented for jira 3640.
+    		 * custArticleSearchName.add("XPXDivision");
     		custArticleSearchValue.add(customerDivisionToQry);
     		custArticleSearchName.add("ArticleType");
-    		custArticleSearchValue.add("D");
- 			Element e = prepareAndInvokeMashup("XPEDXDivisionArticleList");
- 			String xml = SCXmlUtil.getString(e.getOwnerDocument());
+    		custArticleSearchValue.add("D");*/
+    		
+    		//Start of jira 3640
+    		Element input = WCMashupHelper.getMashupInput("XPEDXDivisionArticleList", wcContext);
+    		input.setAttribute("StartDate", startTodayDate);
+    		input.setAttribute("EndDate", endTodayDate);
+    		Element xpxArticle = (Element) input.getElementsByTagName("XPXArticle").item(0);
+			Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
+			Element orElement = SCXmlUtil.getChildElement(complexQuery, "Or");
+			
+			Element andElement = SCXmlUtil.getChildElement(orElement, "And");
+			Element expElement=SCXmlUtil.createChild(andElement, "Exp");
+			expElement.setAttribute("Name", "XPXDivision");
+			expElement.setAttribute("Value", customerDivisionToQry);
+			expElement.setAttribute("QryType", "LIKE");
+			Element expElement1=SCXmlUtil.createChild(andElement, "Exp");
+			expElement1.setAttribute("Name", "ArticleType");
+			expElement1.setAttribute("QryType", "LIKE");
+			expElement1.setAttribute("Value", "D");
+			
+			
+			Element and1Element=SCXmlUtil.createChild(orElement, "And");
+			orElement.appendChild(and1Element);
+			Element expElem=SCXmlUtil.createChild(and1Element, "Exp");
+			expElem.setAttribute("Name", "OrganizationCode");
+			expElem.setAttribute("Value", orgCode);
+			Element expElem1=SCXmlUtil.createChild(and1Element, "Exp");
+			expElem1.setAttribute("Name", "ArticleType");
+			expElem1.setAttribute("Value", "S");
+			Element e = (Element)WCMashupHelper.invokeMashup("XPEDXDivisionArticleList", input, wcContext.getSCUIContext());//prepareAndInvokeMashup("XPEDXDivisionArticleList");
+ 			//end of jira 3640 changes
+			String xml = SCXmlUtil.getString(e.getOwnerDocument());
  			this.articleElements = getArticleElements(e,getArticleLocation());
          }
  		catch(Exception e){
@@ -215,7 +249,10 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
         YFCTimeZone oTz = new YFCTimeZone(YFCLocale.getDefaultLocale(), date);
         oTz.adjustToTimeZone(TimeZone.getTimeZone(wcContext.getSCUIContext().getUserPreferences().getLocale().getTimezone()), date);
         String dateString = date.getString(wcContext.getSCUIContext().getUserPreferences().getLocale().getDateFormat());
-        return dateString;
+        //added for jira 3640
+        String inputFormat = "MM/dd/yyyy";
+        YDate yDate = new YDate(dateString, inputFormat, true);
+        return yDate.getString("yyyy-MM-dd'T'HH:mm:ss");
 	}
 
 	/**
@@ -254,5 +291,4 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 	public void setCustArticleSearchValue(List custArticleSearchValue) {
 		this.custArticleSearchValue = custArticleSearchValue;
 	}
-	
 }
