@@ -915,13 +915,15 @@ from session . We have customer Contact Object in session .
 				</s:if>
 				<s:else>
 				<div class="mil-desc-wrap">
-                    <div id="description-text" class="short-description_M" class="mil-wrap-condensed-desc item-short-desc">
+					<div id="description-text" class="mil-wrap-condensed-desc item-short-desc">
+                   	 <span class="short-description_M" >
 						<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
 							<s:property	value='%{#item.getAttribute("ItemDesc")}' />
 						</s:if>
 						<s:else>
 							<s:property	value='%{#item.getAttribute("ItemShortDesc")}' />
 						</s:else>
+					</span>
 					</div>
 	                <div class="mil-attr-wrap">
 	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
