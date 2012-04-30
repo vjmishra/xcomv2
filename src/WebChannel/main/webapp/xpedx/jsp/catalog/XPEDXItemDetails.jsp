@@ -1836,10 +1836,10 @@ function SubmitActionWithValidation()
 			<!-- END prod-config -->
 		<!-- TABS -->
 		<div class="avail-grid">
-			<div id="tabs" >
-				<ul>
-					<li><a href="#tabs-1">Availability</a></li>
-					<li><a href="#tabs-2" onclick="javascript:blockDiv();">Specifications</a></li>
+			<div id="tabs"class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+					<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Availability</a></li>
+					<li class="ui-state-default ui-corner-top"><a href="#tabs-2" onclick="javascript:blockDiv();">Specifications</a></li>
 				</ul>
 				
 				<p class="tablinks">&nbsp;
@@ -2009,7 +2009,6 @@ function SubmitActionWithValidation()
 			<div class="clearall">&nbsp;</div>
 		 <!--</div>   end tabs -->
 	</div>
-	
 	</s:if>
 	
 		<s:url id='addToItemListURLid' namespace='/xpedx/myItems'
