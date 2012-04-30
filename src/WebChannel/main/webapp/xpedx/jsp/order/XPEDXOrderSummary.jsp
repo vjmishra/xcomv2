@@ -48,11 +48,10 @@
 <script type="text/javascript">
 
 function processDetail(itemid, uom) {
-	<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
-	 <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
-     <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
+	<s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>	
      <s:param name='_r_url_' value='%{orderDetailsURL}'/>
 	</s:url>
+	//alert("<s:property value='%{detailURL}'/>");
 	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
 	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
 	// End - Changes made by Mitesh Parikh for 2422 JIRA
