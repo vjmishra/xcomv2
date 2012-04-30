@@ -888,7 +888,7 @@ from session . We have customer Contact Object in session .
 	    </s:else>
          	<div class="mil-container">               
                 <!-- begin description  -->
-               
+               <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
                 <div class="mil-desc-wrap">
                     <div id="description-text" class="short-description" class="mil-wrap-condensed-desc item-short-desc">
                        	  
@@ -904,6 +904,26 @@ from session . We have customer Contact Object in session .
 					</div>
 	                <div class="mil-attr-wrap">
 	                    <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
+							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
+								<ul class="mil-desc-attribute-list">
+									<s:property	value='%{#item.getAttribute("ItemDesc")}' escape="false" />
+								</ul>
+							</s:if>						
+						</s:a>
+	                </div>
+				</div>
+				</s:if>
+				<s:else>
+				<div class="mil-desc-wrap">
+                    <div id="description-text" class="short-description_M" class="mil-wrap-condensed-desc item-short-desc">
+						<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
+							<s:property	value='%{#item.getAttribute("ItemDesc")}' />
+						</s:if>
+						<s:else>
+							<s:property	value='%{#item.getAttribute("ItemShortDesc")}' />
+						</s:else>
+					</div>
+	                <div class="mil-attr-wrap">
 	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
 								<ul class="mil-desc-attribute-list">
@@ -911,10 +931,9 @@ from session . We have customer Contact Object in session .
 								</ul>
 							</s:if>
 						</s:if>
-						</s:a>
 	                </div>
 				</div>
-				
+				</s:else>
 				<!-- end description -->
                         
 				<div class="mil-action-list-wrap no-border-left" style="float:right;">
