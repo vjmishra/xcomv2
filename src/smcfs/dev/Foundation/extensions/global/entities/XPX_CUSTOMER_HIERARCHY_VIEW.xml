@@ -77,7 +77,28 @@
 					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Flag" />
 				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD3_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
 					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Label" />
-
+				<Attribute ColumnName="SAP_CUSTOMER_NAME" DataType="Text-240"
+					Description="The Bill to Customer Name" Nullable="true" XMLName="SAPCustomerName" />
+				<Attribute ColumnName="MSAP_CUSTOMER_NAME" DataType="Text-240"
+					Description="The Bill to Customer Name" Nullable="true" XMLName="MSAPCustomerName" />
+				<Attribute ColumnName="SHIP_TO_SAP_PARENT_ACC_NO" DataType="AccountNo" DefaultValue="' '" Description="SAP Parent Account Number"  
+          			Nullable="false" XMLName="ShipToSAPParentAccNo" />	
+				<Attribute ColumnName="BILL_TO_PARENT_ACC_NO" DataType="AccountNo" DefaultValue="' '" Description=" SAP Parent Account Number"  
+          			Nullable="false" XMLName="BillToSAPParentAccNo" />	
+				<Attribute ColumnName="SAP_SAP_PARENT_ACC_NO" DataType="AccountNo" DefaultValue="' '" Description=" SAP Parent Account Number"  
+          			Nullable="false" XMLName="SAPSAPParentAccNo" />	
+				<Attribute ColumnName="MSAP_SAP_PARENT_ACC_NO" DataType="AccountNo" DefaultValue="' '" Description=" SAP Parent Account Number"  
+          			Nullable="false" XMLName="MSAPSAPParentAccNo" />	
+          		
+          		<Attribute ColumnName="SHIP_TO_SAP_NUMBER" DataType="AccountNo" DefaultValue="' '" Description="SAP Number"  
+          			Nullable="false" XMLName="ShipToSAPNumber" />	
+				<Attribute ColumnName="BILL_TO_SAP_NUMBER" DataType="AccountNo" DefaultValue="' '" Description="SAP Parent Account Number"  
+          			Nullable="false" XMLName="BillToSAPNumber" />	
+				<Attribute ColumnName="SAP_SAP_NUMBER" DataType="AccountNo" DefaultValue="' '" Description="SAP Parent Account Number"  
+          			Nullable="false" XMLName="SAPSAPNumber" />	
+				<Attribute ColumnName="MSAP_SAP_NUMBER" DataType="AccountNo" DefaultValue="' '" Description="SAP Parent Account Number"  
+          			Nullable="false" XMLName="MSAPSAPNumber" />	
+				
 			</Attributes>
 			<PrimaryKey Name="XPX_CUST_H_PK">
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" />
