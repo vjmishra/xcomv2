@@ -764,13 +764,20 @@ function showSplitDiv(divId)
 			                    <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
 			                    <s:param name='_r_url_' value='%{orderDetailsURL}'/>
 			                </s:url>
-					    
+					    <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 			                <s:a href="%{#detailURL}" id="detailAnchor_%{#orderLineKey}" tabindex='%{#itemPanelStartTabIndex+#tabIndexCount}'>
 						    	<div class="short-description"><s:property value='#showDesc'/></div>
 								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
 									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedDescription(#unformatteddesc)' escape="false"/>
 								</s:if>
 						    </s:a>
+						    </s:if>
+						    <s:else>
+						    	<div class="short-description_M"><s:property value='#showDesc'/></div>
+								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedDescription(#unformatteddesc)' escape="false"/>
+								</s:if>
+						    </s:else>
 			    		</div>
 					    <p class="line-spacing"><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")'/>
 					    	<s:if test='#certFlag=="Y"'>

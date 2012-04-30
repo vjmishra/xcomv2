@@ -1060,11 +1060,34 @@ $(document).ready(function(){
                 <!-- end checkbox   -->
                         
                 <!-- begin description  -->
+                <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
                 <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
 	                <div class="mil-desc-wrap">
 	                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
 	
 							<span class="short-description">
+							<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
+								<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
+							</s:if>
+							<s:else>
+								<s:property escape='false'	value='%{#item.getAttribute("ItemShortDesc")}' />
+							</s:else></span>
+						</div>
+		                <div class="mil-attr-wrap">
+							<s:if test='#item.getAttribute("ItemDesc") != ""'>
+								<ul class="mil-desc-attribute-list">
+									<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
+								</ul>
+							</s:if>							
+		                </div>
+					</div>
+				 </s:a>
+				</s:if>
+				<s:else>
+	                <div class="mil-desc-wrap">
+	                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
+	
+							<span class="short-description_M">
 							<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
 								<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 							</s:if>
@@ -1082,7 +1105,7 @@ $(document).ready(function(){
 							</s:if>
 		                </div>
 					</div>
-				 </s:a>
+				</s:else>
 				
 				<!-- Disable the fields for line type C -->
 				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
@@ -1404,9 +1427,10 @@ $(document).ready(function(){
 					
 					
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
-					<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+					
 				     	<div class="cart-availability text-left">
 				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />"></div> 
+				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 						    	<tbody>
 						    		<tr>
@@ -1432,8 +1456,9 @@ $(document).ready(function(){
 								    <%-- </s:if> --%>
 							    </tbody>
 					    	</table>
+					    	</s:if>
 				    	</div>
-			    	</s:if>
+			    	
 			    	
 			    	<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
@@ -1453,7 +1478,7 @@ $(document).ready(function(){
 				<br/> 
 				<div class="clearall">&nbsp; </div>
 			    	<div class="red float-left">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
@@ -1516,7 +1541,7 @@ $(document).ready(function(){
 			    		
 			    	</div>
 			    	<div class="special-instructions-div">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 			    				<p class="special-instructions-padding">Special Instructions:</p>
 					    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
 								<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />
