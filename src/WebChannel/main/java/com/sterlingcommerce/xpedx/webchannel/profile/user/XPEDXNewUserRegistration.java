@@ -72,7 +72,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			 * 
 			 * */
 			
-			setMailCCAddress(sb.toString());
+			setMailCCAddress(newUserEmail);
 			setMailFromAddress(sb.toString());
 			
 			setMailSubject("NewUserInfo");
