@@ -445,6 +445,8 @@ function showSharedListForm(){
 					
 						formItemIds.listName.value 	= Ext.get("listName").dom.value;
 						formItemIds.listDesc.value 	= Ext.get("listDesc").dom.value;
+						//Added for JIRA 3642
+						formItemIds.itemCount.value=itemCount; 
 						
 						Ext.get("btnQLAdd2Cart").dom.disabled = true;
 						formItemIds.submit();
