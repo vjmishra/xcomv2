@@ -1038,7 +1038,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
 					rootOrdLineExtnEle.setAttribute("ExtnLineType", extnLineType);
 				} else {
-					throw new Exception("ExtnLineType Cannot be NULL or Void!");
+					throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 				}
 		} else {
 			throw new Exception("OrderLine/Extn Element Not Available in Incoming Legacy Message!");
@@ -1112,7 +1112,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
 				rootOrdLineExtnEle.setAttribute("ExtnLineType", extnLineType);
 			} else {
-				throw new Exception("ExtnLineType Cannot be NULL or Void!");
+				throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 			}
 
 		} else {
