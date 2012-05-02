@@ -127,11 +127,7 @@
 			}
 			table.order-total {
 				border: 1px solid #ccc;
-				width:20%;
-				
-				position:relative;
-				left:54%;
-				
+				width:25%;
 				border-radius: 8px;
 				padding: 5px;
 			}
@@ -232,14 +228,24 @@
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
-			<table width="100%" border="0" align="center" cellpadding="2" cellspacing="2">
-				<tr>
-					<td>
-						<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
+			
+			<table width="90%" border="0" align="center" cellpadding="1" cellspacing="1">
+				<tr>	
+					<td >
+						<table width="100%" border="0" >
+							<tr>
+								<td >
+								</td>
+								<td width="75%">
+								<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
+								</td>
+							</tr>
+						</table> 
+					    
 					</td>
 				</tr>
 				
-				<tr>
+				<tr align="right">
 					<td style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
 					<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 0px 20px 20px;">
 					<tr>
@@ -275,53 +281,49 @@
 
 						<td> <xsl:value-of select="Order/Extn/@ExtnWebConfNum"/>
 						 </td>
-						 <td>
-						 <xsl:if test="(contains($shipToID,$maxDelim))">							
+						 <td rowspan="5">
+						 <xsl:if test="(contains($shipToID,$maxDelim))">					
 						
 								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+								</xsl:if>
+								<xsl:if test="$shipToName!=''">
+								<BR/>
+								<xsl:value-of select="$shipToName" />
+								</xsl:if>
+								<xsl:if test='Order/Extn/@ExtnAttentionName!=""'>
+								<BR/>
+								<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
+								</xsl:if>
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
+								<BR/>
+								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
+								,
+								</xsl:if>
+						       </xsl:if>
+						       <xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
+						       <BR/>
+								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
+								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
+								,
+								</xsl:if>
+						       </xsl:if>
+						      <xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
+						      <BR/>
+								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
+								</xsl:if>
+								<xsl:if test = 'Order/PersonInfoShipTo/@City!="" or Order/PersonInfoShipTo/@State or Order/PersonInfoShipTo/@ZipCode or Order/PersonInfoShipTo/@Country' >
+					       <BR/>
+						    <xsl:value-of select="Order/PersonInfoShipTo/@City"/>, <xsl:value-of select="Order/PersonInfoShipTo/@State"/>,<xsl:value-of select="translate(Order/PersonInfoShipTo/@ZipCode, '&#x20;&#x9;&#xD;&#xA;','')"/>,<xsl:value-of select="Order/PersonInfoShipTo/@Country"/> 
+						    
 						</xsl:if>
-						 </td>
-					
+								
+											 </td>
 					</tr>
 					<tr>
 						<td> Order #: </td>
 
 						<td> In Progress </td>
-						<td>
-									<xsl:value-of select="$shipToName" />
-								
-						</td>
-											</tr>
-					<tr>
-						<td> Order Status: </td>
-
-						<td> <xsl:value-of select="Order/@Status"/> </td>
-						<!-- if (attention field is not null) -->
-						<xsl:if test="Order/Extn/@ExtnAttentionName">
-						<td> <xsl:value-of select="Order/Extn/@ExtnAttentionName"/> </td>
-						</xsl:if>
-					</tr>
-					<tr>
-
-						<td> PO #: </td>
-						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
-						<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
-								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/> </td>
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-								,
-								</xsl:if>
-						</xsl:if>
-						
-					</tr>
-					<tr>
-						<td> Ordered By: </td>
-						<td><xsl:value-of select="Order/@Createuserid"/></td><!-- if (attention field is not null) -->
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/> </td>
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-								,
-								</xsl:if>
-						</xsl:if>
 						
 						<!-- /if                          
 							 else if (address line 3 is not null)                          
@@ -329,29 +331,22 @@
 						     /else                          -->
 					</tr>					
 					<tr>
-						<td> </td>
-						<td> </td>
-						<!-- if (attention field is not null) -->
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-								<td> <xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/> </td>
-								</xsl:if>
-						
-						<!-- /if                          
-							 else                            
-								<td> &lt;city&gt;, &lt;state&gt; &lt;postal code&gt; &lt;country code&gt;  </td>
-						     /else                          -->
-					</tr>					
-					<tr>
-						<td> </td>
-						<td> </td>
-						<!-- if (attention field is not null) -->
-								<td> <xsl:value-of select="Order/PersonInfoShipTo/@City"/>, <xsl:value-of select="Order/PersonInfoShipTo/@State"/>,<xsl:value-of select="Order/PersonInfoShipTo/Extn/@ExtnZip4"/>,<xsl:value-of select="Order/PersonInfoShipTo/@Country"/> </td>
+						<td> Order Status: </td>
 
-						<!-- /if                          
-							 else                             
-								<td> &nbsp; </td>
-						     /else                            -->
+						<td> <xsl:value-of select="Order/@Status"/> </td>
+						
 					</tr>
+					<tr>
+
+						<td> PO #: </td>
+						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
+						
+					</tr>
+					<tr>
+						<td> Ordered By: </td>
+						 <td><xsl:value-of select="Order/@Createuserid"/></td>
+						 
+					</tr>	
 					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
 						<td></td>
 						<td></td>
@@ -408,7 +403,7 @@
 	</table>
 					</td>
 				</tr>
-				<tr>
+				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 				<table class="price" >
 			<thead>
@@ -573,8 +568,9 @@
 			</table>
 					</td>
 					</tr>
-					
-					<table class="order-total">
+					<tr>
+					<td >
+					<table class="order-total" align="right">
 						<tr>
 
 				<td>Subtotal:</td>
@@ -614,14 +610,17 @@
 				 </tr>
 
 						</table>
-						<table width="70%" border="0" align="center" cellpadding="1" cellspacing="1">
+						
+						</td></tr>
+						<tr align="right"><td>
+						<table width="70%" border="0" align="" cellpadding="1" cellspacing="1">
 				<tr>
 					<td>
 					This document merely confirms your order, it is not an acceptance of your order.Additional Fees may apply to accepted orders. 
 					Please do not reply to this email.<br>This mailbox is not monitored and you will not receive a response</br>
 						</td>
 				</tr>
-			</table>
+			</table></td></tr>
 			
 						</table>
 						
