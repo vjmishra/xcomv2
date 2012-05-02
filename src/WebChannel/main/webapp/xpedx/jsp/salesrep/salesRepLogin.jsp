@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -17,12 +19,12 @@
 <!-- styles 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
 -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/salesrep/lib.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/salesrep/SpryTooltip.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/lib.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/SpryTooltip.js"></script>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/style.css'/>" />
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style.css" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript">
 
 function clearFields(field){
@@ -106,7 +108,7 @@ function loadWindow(){
 /* Green */
 a.green-ui-btn {
 	background: transparent
-		url('/swc/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
+		url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-a.png')
 		no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
@@ -122,7 +124,7 @@ a.green-ui-btn {
 
 a.green-ui-btn span {
 	background: transparent
-		url('/swc/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
+		url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/orange-bg-btn-span.png')
 		no-repeat;
 	display: block;
 	line-height: 12px;
@@ -230,7 +232,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		<td style="text-align:left;">
 		 <a name="button" id="button" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /> 
 		
-		<%-- <input name="button" type="image" id="button"  value="Submit" src="<s:url value='/xpedx/images/salesrep/signin.png'/>" onClick="return validateForm();"/> <br /> --%>
+		<%-- <input name="button" type="image" id="button"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/signin.png" onClick="return validateForm();"/> <br /> --%>
 		 
 		</td>
 		<td>&nbsp;</td>
