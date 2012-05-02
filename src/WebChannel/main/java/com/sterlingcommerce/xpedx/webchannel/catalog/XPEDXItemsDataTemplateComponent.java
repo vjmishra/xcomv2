@@ -20,6 +20,7 @@ import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -63,14 +64,49 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		else 
 			myPrice = validate(price.getAttribute("UnitPrice"));
 		String pImg = (String)findValue("pImg");
-		String imageMainURL = validate(xmlUtils.getAttribute(info,"ImageLocation")) + "/" + validate(info.getAttribute("ImageID"));
+		
+		//Anil start here for ticket 3155
+		String attributeName="ImageLocation";
+		String attributeValue=xmlUtils.getAttribute(info,"ImageLocation");
+		boolean isImageOrContentLocation = "ContentLocation".equals(attributeName) || "ImageLocation".equals(attributeName);
+		String imageMainURL="/";
+		if (isImageOrContentLocation
+			&& attributeValue != null
+			&& (attributeValue.equals(XPEDXConstants.IMAGE_SERVER)
+					|| attributeValue.equals(XPEDXConstants.CONTENT_SERVER_MSDS) || attributeValue
+					.equals(XPEDXConstants.CONTENT_SERVER) || attributeValue
+					.equals(XPEDXConstants.CONTENT_SERVER_FSC) || attributeValue
+					.equals(XPEDXConstants.CONTENT_SERVER_PEFC) || attributeValue
+					.equals(XPEDXConstants.CONTENT_SERVER_SFI))) {
+		 ;
+		  imageMainURL = validate(XPEDXWCUtils.getServerLocation(attributeValue)) + "/" + validate(info.getAttribute("ImageID"));
+	}
+	else
+	{
+		  imageMainURL = validate(xmlUtils.getAttribute(info,"ImageLocation")) + "/" + validate(info.getAttribute("ImageID"));
+	}
+		
+		//Don't know why this is required so commenteing out the this method Anil start here
+		/*if(!imageMainURL.equals("/"))
+		{
 		if(!"/".equals(imageMainURL)) {
 			if (imageMainURL.startsWith("/"))
 				pImg = pImg.substring(0, pImg.indexOf("/", 1)) + imageMainURL;
 			else
 				pImg = pImg.substring(0, pImg.indexOf("/", 1)) + "/" + imageMainURL;
 		}
+		}*/
+		//Don't know why this is required so commenteing out the this method Anil End here
+		if("/".equals(imageMainURL))
+		{
+			pImg="/swc/xpedx/images/INF_150x150.jpg";
+		}
+		else
+		{
+			pImg=imageMainURL;
+		}
 		
+		//Anil End here for ticket 3155
 		
 		//ItemID value is required not string - JIRA 3538
 		HashMap<String, String> skuMap = tag.getItemMap().get(itemID);
