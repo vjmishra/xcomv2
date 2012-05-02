@@ -10,6 +10,8 @@
 <%@ taglib prefix="swc" uri="swc" %>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -20,15 +22,15 @@
  <title>Sales Representative Search</title> 
 <%-- <title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.SEARCH.GENERIC.TABITLE"/></title> --%>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/style.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/salesrep/SpryTooltip.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/SpryTooltip.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
 
-<script type="text/javascript" src="<s:url value='/xpedx/js/lib.js'/>">
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/lib.js">
 </script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/SpryTooltip.js'/>"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTooltip.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
 
 <style>
 div a.underlink { text-decoration: none; }
@@ -70,7 +72,7 @@ var data="false";
       <s:hidden name="DisplayUserID" id="DisplayUserID" value="%{networkId}"/>
       <s:hidden name="command" id="command" value="%{'search'}"/>
           
-        <input name="button" type="image" id="button" style="float:right;"  value="Submit" src="<s:url value='/xpedx/images/salesrep/button.png'/>" onclick="javascript:document.login2.submit"/> </s:form>
+        <input name="button" type="image" id="button" style="float:right;"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/button.png" onclick="javascript:document.login2.submit"/> </s:form>
     </div>
     </div>
     <%-- added for jira 3442 pagination--%>
