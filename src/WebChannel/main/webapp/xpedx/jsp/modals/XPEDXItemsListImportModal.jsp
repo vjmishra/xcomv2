@@ -19,10 +19,10 @@
 <div style="display: none;">
 
 <div class="xpedx-light-box" id="dlgImportForm">
-	<div  id="importItems">
+	
 		<!-- <h2>Import My Items List</h2> -->
 		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
-		
+	<div  id="importItems">
 		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
 		  
@@ -30,13 +30,12 @@
 		</div> 
 		
 		<div>
-            <p>The import feature allows you to import a list of items into your My Items Lists. Lists can be imported as a new list or added to an existing My Items List. In order for the list to be imported, it first must be saved as a Comma Separated Values (CSV) file. </p>
-            <p>Use the sample below as a template. Delete the contents and enter your own data.</p>
-            <p><strong>Please note:</strong> An individual My Items List cannot exceed 200 items. </p>
+            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. A sample file is provided. Delete the item contents and enter your own data. </p>
             <ul id="tool-bar" class="tool-bar-bottom">
                 <li><a class="grey-ui-btn" href="../sample/SampleImport.csv"><span>Download Sample</span></a></li>
 
             </ul>
+            <p>Please note that an individual My Items List cannot exceed 200 items. </p>
             <p>To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below. After the file is located, click 'Open' and then click the 'Import' button. </p>
             <br />
             
