@@ -71,7 +71,7 @@
 					},
 					'autoDimensions'	:false,
 	    			'width'				: 620,
-	    			'height'			: 460
+	    			'height'			: 375
 				});
 				
 				$("#various3,#various4").fancybox({
