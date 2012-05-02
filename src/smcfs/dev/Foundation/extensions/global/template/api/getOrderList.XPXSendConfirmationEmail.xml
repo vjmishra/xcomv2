@@ -12,7 +12,7 @@
 				</Instructions>
 			</OrderLine>
 		</OrderLines>
-		<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="">
+		<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode="">
 			<Extn ExtnZip4=""/>
 		</PersonInfoShipTo>
 		<Instructions>
