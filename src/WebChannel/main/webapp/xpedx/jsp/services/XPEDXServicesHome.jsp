@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en"
@@ -17,37 +19,37 @@
 <!-- styles -->
 
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/global/swc.min.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc.min.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/global/ext-all.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/theme/xpedx.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx.css" />
 
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/theme/xpedx-mil.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/theme/xpedx-dan.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-dan.css" />
 <link media="all" type="text/css" rel="stylesheet"
-	href="/swc/xpedx/css/theme/nav.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/nav.css" />
 
 
 <!-- jQuery -->
-<link type="text/css" href="/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
 
 
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
 
 <script type="text/javascript"
-	src="/swc/xpedx/js/jquery.dropdownPlain.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
 <script type="text/javascript"
-	src="/swc/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.core.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.widget.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.core.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.widget.js"></script>
 <!-- // XNGTP-524 : for Adding Calendar icon for Order Date and validating Order Date -->
-<script type="text/javascript" src="/swc/xpedx/js/jquery.ui.datepicker.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.datepicker.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -58,7 +60,7 @@
 			showOn: 'button',
 						numberOfMonths: 1,
 
-			buttonImage: '/swc/xpedx/images/theme/theme-1/calendar-icon.png',
+			buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
 			buttonImageOnly: true
 		});
 	});
