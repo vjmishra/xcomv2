@@ -526,6 +526,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					xpedxCustomerContactInfoBean.setExtnViewReportsFlag(getViewReports());
 //					wcContext.getSCUIContext().getSession().setAttribute("viewPricesFlag", getViewPrices());
 //					wcContext.getSCUIContext().getSession().setAttribute("viewReportsFlag", getViewReports());
+					//added for jira 3780
+					xpedxCustomerContactInfoBean.setEmailID(getEmailId());
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 				}
 			}
