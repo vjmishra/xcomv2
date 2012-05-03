@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -18,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -206,8 +204,8 @@ public class XPXUOMListAPI implements YIFCustomApi {
 		/*NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 				customerNumber, customerBranch, env);*/
 		/*Begin - Changes made by Mitesh for JIRA# 3641*/
-		//ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
-		List<Element> XpxItemcustXrefList = XMLUtilities.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		//List<Element> XpxItemcustXrefList = XPXUtils.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
 		/*End - Changes made by Mitesh for JIRA# 3641*/
 		int length3 = XpxItemcustXrefList.size();
 		for (int m = 0; m < length3; m++) {
@@ -610,4 +608,15 @@ public class XPXUOMListAPI implements YIFCustomApi {
 		itemExtnDoc = api.executeFlow(env,"getXPXItemExtnList",inputDocument.getDocument());
 		env.clearApiTemplate("getXPXItemExtnList");
 	}
+	
+	/*public static void main(String [] args) {
+		try{
+		Document document=MCFDOMDocFromXMLString.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile2.xml");
+		//Element ele = SCXmlUtil.get
+		java.util.List<Element> XpxItemcustXrefList =  XPXUtils.getElements(document.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber=2001015]");
+		System.out.println("Arraylist size : "+XpxItemcustXrefList.size());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}*/
 }
