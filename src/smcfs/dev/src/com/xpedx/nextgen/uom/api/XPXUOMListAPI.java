@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+
+import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,6 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -54,7 +58,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
 	}
 
 	public Document getXpedxUOMList(YFSEnvironment env, Document inXML)
-			throws YFSException, YIFClientCreationException, RemoteException {
+			throws XPathExpressionException, YFSException, YIFClientCreationException, RemoteException {
 		log.beginTimer("XPXUOMListAPI:getUOMList started...");
 		LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
 		String LegacyCustomerNumber = "";
@@ -195,13 +199,16 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			String customerNumber, String customerBranch,
 			String useOrderMulUOMFlag, String orderMultiple,
 			HashMap<String, String> wUOMsToConversionFactors, YFSEnvironment env, String entryType)
-			throws YFSException, RemoteException, YIFClientCreationException {
+			throws XPathExpressionException,YFSException, RemoteException, YIFClientCreationException {
 		
 		Node customerUnitNode = null;
 		
 		/*NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 				customerNumber, customerBranch, env);*/
-		ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		/*Begin - Changes made by Mitesh for JIRA# 3641*/
+		//ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		List<Element> XpxItemcustXrefList = XMLUtilities.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		/*End - Changes made by Mitesh for JIRA# 3641*/
 		int length3 = XpxItemcustXrefList.size();
 		for (int m = 0; m < length3; m++) {
 			Node XpxItemcustXref = XpxItemcustXrefList.get(m);
