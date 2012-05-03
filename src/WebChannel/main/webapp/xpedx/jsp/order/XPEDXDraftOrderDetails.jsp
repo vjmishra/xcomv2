@@ -1106,7 +1106,7 @@ $(document).ready(function(){
 							</s:if>
 		                </div>
 					</div>
-				 </s:a>
+				 </s:else>
 				
 				<!-- Disable the fields for line type C -->
 				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
