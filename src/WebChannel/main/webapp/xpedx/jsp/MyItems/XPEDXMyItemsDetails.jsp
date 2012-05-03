@@ -2432,7 +2432,7 @@ function showSharedListForm(){
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"  maxlength="7"
-												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this);updateHidden(this,'%{#id}');" theme="simple"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden
 													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2446,7 +2446,7 @@ function showSharedListForm(){
 											</s:if> <s:else>
 												<s:textfield
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"
-												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:updateHidden(this,'%{#id}');isValidQuantity(this);" theme="simple" readonly="true"></s:textfield>
+												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' '/>
