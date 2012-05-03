@@ -50,9 +50,9 @@
      	<s:property value='%{#fmtDayPhone}'/><br/><br/>
      </s:if>
       
-     <s:if test='(#renderPersonInfo.getAttribute("EMailID") != null) && (#renderPersonInfo.getAttribute("EMailID") != "")'>
+    <%-- commented for jira 3780 <s:if test='(#renderPersonInfo.getAttribute("EMailID") != null) && (#renderPersonInfo.getAttribute("EMailID") != "")'>
      	<s:property value="#renderPersonInfo.getAttribute('EMailID')"/><br/>
-     </s:if>
+     </s:if>   --%>
 
 	<s:if test='!(#contentOnly == "true")'>
 	     <s:set name='isCommercial' value='#renderPersonInfo.getAttribute("IsCommercialAddress")'/>

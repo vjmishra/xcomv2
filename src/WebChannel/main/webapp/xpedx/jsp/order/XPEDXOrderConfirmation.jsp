@@ -379,14 +379,10 @@
                                 <tr>
 
                                     <td valign="top" align="left"><b>Ordered By:</b></td>
-                                    <td valign="top" align="left"><s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnOrderedByName")'/>
-                                    	<s:if test='#xpedxCustomerContactInfoBean.getPersonInfoEmailID() !=null && #xpedxCustomerContactInfoBean.getPersonInfoEmailID().trim() !="" ' >
-                                    	,<s:property value='#xpedxCustomerContactInfoBean.getPersonInfoEmailID()' />
-                                    	</s:if>
+                                    <td valign="top" align="left">
+                                    <s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnOrderedByName")'/><s:if test='#xpedxCustomerContactInfoBean.getEmailID() != null && #xpedxCustomerContactInfoBean.getEmailID().trim() !="" ' >, <s:property value='#xpedxCustomerContactInfoBean.getEmailID()' /></s:if>
                                     	<%--for jira 3438 - sales rep emailID display --%>
-                                    	<s:if test="%{#isSalesRep && #session.SRSalesRepEmailID != ''}">
-                                    	,<s:property value='%{#session.SRSalesRepEmailID}'/>
-                                    	</s:if>
+                                    <s:if test="%{#isSalesRep && #session.SRSalesRepEmailID != ''}">, <s:property value='%{#session.SRSalesRepEmailID}'/></s:if>
                                     	<%--end of jira 3438 changes- sales rep emailID display --%>
                                     </td>
                                 </tr>
