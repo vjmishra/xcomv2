@@ -18,55 +18,55 @@
 	<%@ taglib prefix="s" uri="/struts-tags"%>
 	<head>
 	<!-- begin styles. -->
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
-	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
 	<!-- end styles -->
 	
 	
 	<!-- javascript -->
-	<script type="text/javascript" src="../../xpedx/js/global/ext-base.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/global/ext-all.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/global/validation.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/common/ajaxValidation.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/global/dojo.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/global/dojoRequire.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/theme/theme-1/theme.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/ajaxValidation.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
 	
-	<script type="text/javascript" src="../../xpedx/js/catalog/catalogExt.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/swc.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/xpedx-new-ui.js" language="javascript"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js" language="javascript"></script>
 	
 	
 	<!-- carousel scripts js   -->
 	
-	<script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery.dropdownPlain.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/quick-add/jquery.form.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
 	
 	<!-- STUFF YOU NEED FOR BEAUTYTIPS -->
-	<script src="../../xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
-	<!--[if IE]><script src="../../xpedx/js/jquery-tool-tip/other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
-	<script src="../../xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
+	<!--[if IE]><script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+	<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
 	<!-- /STUFF -->
 	
 	<!-- Facy Box (Lightbox/Modal Window -->
-	<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
-	<!--<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>	-->
-	<script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-	<script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
-    <script src="../../xpedx/js/sorting.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable.js"></script>
+    <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorting.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="../../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 	
 	<script type="text/javascript">
 	
@@ -166,9 +166,9 @@
 	</script>
 			
 <script type="text/javascript" 
-	src='/swc/xpedx/js/jquery.numeric.js'> </script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"> </script>
 <script type="text/javascript" 
-	src='/swc/xpedx/js/jquery.maskedinput-1.3.js'></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3.js"></script>
 <script type="text/javascript">
 			$(document).ready(function() {
 			$('.phone-numeric').numeric(false); 
@@ -233,7 +233,7 @@
 			                    				<div  class="question">
 				                      				<ul>
 				                        				<li> User Type:</li>
-				                        				<li> <a href="#" id="purposeofmails-u1"><img src="../../xpedx/images/icons/12x12_grey_help.png" width="12" height="12" alt="One or more roles may be assigned to each user. Hover over each role to see more details." title="One or more roles may be assigned to each user. Hover over each role to see more details." border="0" /></a></li>
+				                        				<li> <a href="#" id="purposeofmails-u1"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" width="12" height="12" alt="One or more roles may be assigned to each user. Hover over each role to see more details." title="One or more roles may be assigned to each user. Hover over each role to see more details." border="0" /></a></li>
 				                      				</ul>
 			                    				</div>
 			                    			</td>
@@ -285,7 +285,7 @@
 				                    			<div class="question">
 				                      				<ul>
 							                        	<li><div class="mandatory float-left">*</div> Email Address:</li>
-					            			            <li> <a href="#" id="purposeofmails-u2"><img src="../../xpedx/images/icons/12x12_grey_help.png" width="12" height="12" border="0"  alt="Used for all user specific communications from this website, including new password and password resets." title="Used for all user specific communications from this website, including new password and password resets."/></a></li>
+					            			            <li> <a href="#" id="purposeofmails-u2"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" width="12" height="12" border="0"  alt="Used for all user specific communications from this website, including new password and password resets." title="Used for all user specific communications from this website, including new password and password resets."/></a></li>
 				    	                  			</ul>
 				                    			</div>
 				                    		</td>

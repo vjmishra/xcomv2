@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 <s:set name='ctxt' value="getWCContext()" />
@@ -15,16 +17,15 @@
 <title><s:text name="my.Account.page" /></title>
 
 <link media="all" type="text/css" rel="stylesheet"
-	href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
 <script type="text/javascript"
-	src="<s:url value='/swc/js/profile/profile.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
 <script type="text/javascript"
-	src="<s:url value='/swc/js/user/user.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/user.js"></script>
 <script type="text/javascript"
-	src="<s:url value
-  ='/swc/js/common/address/editableAddress.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js"></script>
 <script type="text/javascript"
-	src="<s:url value='/swc/js/common/verifyAddress.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js"></script>
 <s:set name='expandAddressPanel' value="getExpandAddressPanel()" />
 <s:set name='expandPhonePanel' value="isExpandPhonePanel()" />
 <script type="text/javascript">

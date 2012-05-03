@@ -4,6 +4,8 @@
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
     This is to avoid a defect in Struts that?s creating contention under load. 
@@ -43,7 +45,7 @@
                     <td valign="top" class="no-border-right-user padding0"><div class="question">
                         <ul>
                           <li>Authorized Locations:</li>
-                          <li><span class="float-right  padding-right4 margin-right"><a href="#" id="purposeofmails-al2"><img src="../../xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;"  width="12" height="12" border="0" alt="Chosen from Available Locations, these are all the Ship-To locations to which the user has access." title="Chosen from Available Locations, these are all the Ship-To locations to which the user has access."/></a></span></li>
+                          <li><span class="float-right  padding-right4 margin-right"><a href="#" id="purposeofmails-al2"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;"  width="12" height="12" border="0" alt="Chosen from Available Locations, these are all the Ship-To locations to which the user has access." title="Chosen from Available Locations, these are all the Ship-To locations to which the user has access."/></a></span></li>
                         </ul>
                       </div>
                       
@@ -78,10 +80,10 @@
 	                        <td align="right" valign="top" class="no-border-right-user padding0">
 		                    	<div class="float-left padding-left0" style="" align="center">
 		                    		<a href='javascript:moveCustomers("customersTwo","customersOne")'>
-		                    			<img src="../../xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
+		                    			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
 	                    			</a>
 		                    		<a href='javascript:moveCustomers("customersOne","customersTwo")'>
-										<img src="../../xpedx/ster/images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
+										<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
 		                    		</a>
 		                    	</div>
 		                    </td>
@@ -93,7 +95,7 @@
                     <td valign="top" class="no-border-right-user padding0"><div class="question">
                         <ul>
                           <li>Available Locations:</li>
-                          <li><span class="float-right   padding-right4 margin-right"><a href="#" id="purposeofmails-al3"><img src="../../xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;" width="12" height="12" border="0" alt="A list of available locations for this account." title="A list of available locations for this account."/></a></span></li>
+                          <li><span class="float-right   padding-right4 margin-right"><a href="#" id="purposeofmails-al3"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" style="margin-top:2px;" width="12" height="12" border="0" alt="A list of available locations for this account." title="A list of available locations for this account."/></a></span></li>
                         </ul>
                     </div></td>
                     <td valign="top" class="no-border-right-user padding0">
