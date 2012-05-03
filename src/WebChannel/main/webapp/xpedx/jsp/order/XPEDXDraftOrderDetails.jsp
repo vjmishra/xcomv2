@@ -1106,7 +1106,7 @@ $(document).ready(function(){
 							</s:if>
 		                </div>
 					</div>
-				 </s:else>
+				</s:else>
 				
 				<!-- Disable the fields for line type C -->
 				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
@@ -1138,7 +1138,7 @@ $(document).ready(function(){
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
 								</s:if>
@@ -1147,7 +1147,7 @@ $(document).ready(function(){
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
 									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
-									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this);" maxlength="7"/>
+									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								  </s:if>
 								  <s:else>
 								  		<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
@@ -1214,7 +1214,7 @@ $(document).ready(function(){
 					 				&nbsp;
 					 			</s:if>
 					 			<s:else>
-									/&nbsp;<s:property value="#wcUtil.getUOMDescription(#json.get('UOM'))" />
+									/&nbsp;<s:property value="#XPEDXWCUtils.getUOMDescription(#json.get('UOM'))" />
 								</s:else>
 								</td>
                     	    </tr>
@@ -1230,7 +1230,7 @@ $(document).ready(function(){
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 									<s:set name="bracketUOMDesc" value="bracketUOM" />
 									
-					 				<s:if test='%{#disUOMStatus.index < #displayIndex && (#wcUtil.getUOMDescription(#json.get("UOM")) != #bracketUOMDesc) }' >
+					 				<s:if test='%{#disUOMStatus.index < #displayIndex && (#XPEDXWCUtils.getUOMDescription(#json.get("UOM")) != #bracketUOMDesc) }' >
 									
 										<tr>
 				                        	<td class="text-right">
@@ -1403,12 +1403,12 @@ $(document).ready(function(){
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
 					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
-					<s:set name="jsonUOMDesc" value="#wcUtil.getUOMDescription(#jsonUOM)"/>
+					<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)"/>
 					<s:set name="jsonAvailability" value="#json.get('Availability')" />
 					<s:set name="jsonTotal" value="#json.get('Total')" />
-					<s:set name="jsonImage1" value="#wcUtil.getImage('Immediate')" />
-					<s:set name="jsonImage3" value="#wcUtil.getImage('TwoPlusDays')" />
-					<s:set name="jsonImage2" value="#wcUtil.getImage('NextDay')" />
+					<s:set name="jsonImage1" value="#XPEDXWCUtils.getImage('Immediate')" />
+					<s:set name="jsonImage3" value="#XPEDXWCUtils.getImage('TwoPlusDays')" />
+					<s:set name="jsonImage2" value="#XPEDXWCUtils.getImage('NextDay')" />
 					<s:set name="divName" value="#_action.getDivisionName()" />
 					<s:set name="stateCode" value="#_action.getState()" />
 					<s:if test="(#stateCode == '')">
@@ -1479,7 +1479,7 @@ $(document).ready(function(){
 				<br/> 
 				<div class="clearall">&nbsp; </div>
 			    	<div class="red float-left">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
@@ -1542,7 +1542,7 @@ $(document).ready(function(){
 			    		
 			    	</div>
 			    	<div class="special-instructions-div">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" || #orderLine.getAttribute("LineType") !="M" '>
+			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 			    				<p class="special-instructions-padding">Special Instructions:</p>
 					    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
 								<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />
@@ -1885,7 +1885,7 @@ var currentAadd2ItemList = new Object();
 </ul> -->
 </div>
 
-<s:set name="xutil" value="xMLUtils" /> <s:set
+<s:set name="xutil" value="XMLUtils" /> <s:set
 	name='subtotalWithoutTaxes'
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("SubtotalWithoutTaxes"))' />
 <s:set name='hdrShippingTotal'
@@ -2096,43 +2096,45 @@ var currentAadd2ItemList = new Object();
 		    <s:if test='xpedxYouMightConsiderItems.size() > 0'>
 				<s:iterator value='xpedxYouMightConsiderItems' id='reltItem' status='iStatus'>
 					<s:set name="itemAssetList"
-							value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+							value='#xpedxSCXmlUtil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
 						<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 							<s:set name="itemAsset" value='#itemAssetList[0]' />
 							<s:set name='imageLocation'
-								value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentLocation')" />
 							<s:set name='imageId'
-								value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'ContentID')" />
 							<s:set name='imageLabel'
-								value="#xutil.getAttribute(#itemAsset, 'Label')" />
+								value="#xpedxSCXmlUtil.getAttribute(#itemAsset, 'Label')" />
 							<!--Removed "/" -->
 							<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 							<s:if test='%{#imageURL=="/"}'>
-								<s:set name='imageURL' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />
-							</s:if>					   				
-	<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+								<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+							</s:if>
+							
+							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<!--Jira 2918 - Modified For Image Path -->
-							<%--<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
-							<img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b><br />
+							<li><s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+								<img src="<s:url value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="<s:text name='%{#imageMainLabel}'/>" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --> <br />
 								<s:property value="%{#shortDesc}"/>
 								<br />
 								<br />
 								<br />
-								</s:a>  </li> --%>
-
-						</s:if> <s:else>								
-									<s:set name='imageIdBlank' value='%{"/swc/xpedx/images/INF_150x150.jpg"}' />									
-									<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
-									<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
-									<li> 
-									    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:property value='%{#imageURL}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-										<s:property value="%{#shortDesc}"/>
-											<br />
-											<br />
-											<br />
-										</s:a> 
-									</li>
+								</s:a>  
+							</li>
+						</s:if> 
+						<s:else>								
+							<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />									
+							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
+							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
+							<li> 
+							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+							    	<s:property value="%{#shortDesc}"/>
+									<br />
+									<br />
+									<br />
+								</s:a> 
+							</li>
 						</s:else>
 						<!-- End - Changes made by Mitesh for JIRA 3186 -->					
 				</s:iterator>
