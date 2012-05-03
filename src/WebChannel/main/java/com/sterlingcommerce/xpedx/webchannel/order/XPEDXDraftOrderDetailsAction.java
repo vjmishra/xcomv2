@@ -41,6 +41,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
@@ -2321,6 +2322,22 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				modificationsElem.appendChild(modificationElem);
 			}
 		}
+	}
+	
+	public String getImagePath(Element primaryInfo) {
+		String imageUrl = "/xpedx/images/INF_150x150.jpg";
+		XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
+		if(primaryInfo!=null) {
+			String ImageLocation = xpedxScxmlUtil.getAttribute(primaryInfo, "ImageLocation");
+			String ImageID = xpedxScxmlUtil.getAttribute(primaryInfo, "ImageID");
+			if(ImageLocation!= null && ImageID!=null && ImageLocation!="" && ImageID!="") {
+				if(ImageLocation.lastIndexOf("/") == ImageLocation.length()-1)
+					imageUrl = ImageLocation+ImageID;
+				else
+					imageUrl = ImageLocation+"/"+ImageID;
+			}
+		}
+		return imageUrl;
 	}
 	
 }
