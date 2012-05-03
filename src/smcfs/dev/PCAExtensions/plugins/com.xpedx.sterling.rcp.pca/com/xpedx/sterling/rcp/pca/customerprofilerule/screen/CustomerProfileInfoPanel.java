@@ -1825,7 +1825,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCountryCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnInvoiceDistMethodName");
+		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnInvoiceDistMethod");
 		tbd.setName("txtInvoiceDistMethod");
 		txtInvoiceDistMethod.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
 				tbd);
