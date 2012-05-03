@@ -777,6 +777,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		//displayItemUOMsMap = new HashMap();
 		displayItemUOMsMap = uomListMap;
 		//2964 end
+		
 		itemUOMsMap = uomListMap;
 		/*for (Iterator it = itemUOMsMap.keySet().iterator(); it.hasNext();) {
 			String uomDesc = (String) it.next();
@@ -879,11 +880,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	
 	private void handleXpxItemcustXrefList(String itemID,String useOrderMulUOMFlag, String orderMultiple,
 			HashMap<String, String> wUOMsToConversionFactors, String entryType)
-			throws YFSException, RemoteException, YIFClientCreationException {
+			throws XPathExpressionException, YFSException, RemoteException, YIFClientCreationException {
 		
 		Node customerUnitNode = null;
-		
-		ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemCustXrefList, "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		/*Begin - Changes made by Mitesh Parikh for JIRA# 3641*/
+		//ArrayList<Element> XpxItemcustXrefList = SCXmlUtil.getElements(itemCustXrefList, "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		List<Element> XpxItemcustXrefList = XMLUtilities.getElements(itemCustXrefList, "XPXItemcustXref[@LegacyItemNumber="+itemID+"]");
+		/*End - Changes made by Mitesh Parikh for JIRA# 3641*/
 		int length3 = XpxItemcustXrefList.size();
 		for (int m = 0; m < length3; m++) {
 			Node XpxItemcustXref = XpxItemcustXrefList.get(m);
