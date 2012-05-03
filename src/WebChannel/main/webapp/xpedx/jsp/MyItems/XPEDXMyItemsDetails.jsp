@@ -2526,16 +2526,16 @@ function showSharedListForm(){
 							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
-								<span class="mil-mpna">My Price &amp; Availability</span></a></li>
+								<span class="mil-mpna">My Price &amp; Availability&nbsp;&nbsp;</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
                                 	<li style="margin-left: 180px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                 </s:if>
                                 <s:else>
-                                	<li style="margin-left: 180px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
+                                	<li style="margin-left: 165px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
                                 </s:else> 
                                  <s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
-	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 225px;"> 
+	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
 	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
