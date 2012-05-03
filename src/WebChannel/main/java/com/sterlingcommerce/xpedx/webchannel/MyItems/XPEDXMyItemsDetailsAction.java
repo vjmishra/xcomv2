@@ -832,7 +832,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//PNA Call for Replacement Items removed as per JIRA#1357
 			//checkPnAForReplacementItems();
 			
-			setMyItemsImages();
+			//setMyItemsImages();
 			
 			setLastModifiedListInfo();
 			
@@ -944,14 +944,53 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		jsonString = jsonObject.toString();
 		return jsonString;
 	}
-
+	
+	private void setMyItemsImages(Element itemElem) {
+		try {
+			XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
+			if(itemElem != null)
+			{
+				String itemId =itemElem.getAttribute("ItemID");
+				if(allItemIds != null && allItemIds.contains(itemId))
+				{
+						Element primaryInfo = SCXmlUtil.getChildElement(itemElem, "PrimaryInformation");
+						if(primaryInfo != null)
+						{
+							String ImageLocation = xpedxScxmlUtil.getAttribute(primaryInfo, "ImageLocation");
+							String ImageID = xpedxScxmlUtil.getAttribute(primaryInfo, "ImageID");
+							String itemDescription = xpedxScxmlUtil.getAttribute(primaryInfo, "Description");
+							String imageUrl = "/";
+							if(ImageLocation!= null && ImageID!=null && ImageLocation!="" && ImageID!="") {
+								if(ImageLocation.lastIndexOf("/") == ImageLocation.length()-1)
+									imageUrl = ImageLocation+ImageID;
+								else
+									imageUrl = ImageLocation+"/"+ImageID;
+							}else{
+								imageUrl = "/xpedx/images/INF_150x150.jpg";
+							}
+							itemImagesMap.put(itemId, imageUrl);
+							if(itemDescription!=null)
+								itemDescMap.put(itemId, itemDescription);
+						}
+					}
+			}
+		}catch (Exception e) {
+			LOG.error(e.getStackTrace());
+			LOG.error("Error getting the all items doc, so setting all the images to default - setMyItemsImages()");
+			for(int i =0; i<allItemIds.size();i++) {
+				String imageUrl = "/xpedx/images/INF_150x150.jpg";
+				itemImagesMap.put(allItemIds.get(i), imageUrl);
+			}
+		}
+	}
+	
 
 	private void setMyItemsImages() {
 		//int count = 0;
 		try {
 			XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
-			//if(allItemsDoc == null) // commented for Jira 3664
-				Document allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			if(allItemsDoc == null)
+				allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 			//ArrayList<Element> itemElements =  SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
 			for(int i =0; i<allItemIds.size();i++) {
 				Element itemElem = SCXmlUtil.getElementByAttribute(allItemsDoc.getDocumentElement(), "Item", "ItemID", allItemIds.get(i));
@@ -1445,6 +1484,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						String Itemid = SCXmlUtil.getAttribute(itemElem,"ItemID");
 						baseUOMmap.put(Itemid,itemElem.getAttribute("UnitOfMeasure"));
 					}
+					setMyItemsImages(itemElem);
+				}
+			}
+			for(int i=0;i<allItemIds.size();i++)
+			{
+				Set<String> keySet=itemImagesMap.keySet();
+				if( keySet!=null && !keySet.contains(allItemIds.get(i)))
+				{
+					String imageUrl = "/xpedx/images/INF_150x150.jpg";
+					itemImagesMap.put(allItemIds.get(i), imageUrl);
 				}
 			}
 		} catch (Exception e) {
