@@ -27,10 +27,10 @@
 <!-- styles -->
 
 <!-- begin styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 
@@ -63,19 +63,19 @@
 	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
 	javascript -->
 <script type="text/javascript"
-	src="<s:url value='/xpedx/js/profile/profile.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/profile.js"></script>
 <script type="text/javascript"
-	src="<s:url value='/swc/js/common/address/editableAddress.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js"></script>
 <script type="text/javascript"
-	src="<s:url value='/swc/js/common/verifyAddress.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js"></script>
 <script type="text/javascript"
-	src="<s:url value='/swc/js/user/user.js'/>"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/user.js"></script>
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="/swc/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
-<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
 <script type="text/javascript"
-	src="../../xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window
 <script type="text/javascript"
@@ -84,10 +84,10 @@
 	src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 	-->
 <script type="text/javascript" 
-	src="../../xpedx/js/jquery.numeric.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
 	 
 <script type="text/javascript" 
-	src="../../xpedx/js/jquery.maskedinput-1.3.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3.js"></script>
 <!--  to restrict numeric values in spending limit  -->
 	
 <!-- Facy Box (Lightbox/Modal Window -->
@@ -102,11 +102,11 @@
 
 <s:set name="selectedTab" value="#request.selectedTab" />
 <link rel="stylesheet" type="text/css"
-	href="../../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript"
-	src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/sorttable.js"></script>
-<script src="../../xpedx/js/SpryTabbedPanels.js"
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable.js"></script>
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTabbedPanels.js"
 	type="text/javascript"></script>
 	<!-- 
 <script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
@@ -431,7 +431,7 @@ function funDivOpenClose(val1)
 
 			var deleteLink = document.createElement('a');
 			var imageIcon = document.createElement('img');
-			imageIcon.setAttribute('src','../../xpedx/images/icons/12x12_red_x.png');
+			imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png');
 			imageIcon.setAttribute('alt','delete');
 			imageIcon.setAttribute('title','Remove');
 			imageIcon.setAttribute('width','16');
@@ -1125,8 +1125,8 @@ a.underlink:hover { text-decoration: underline !important; }
 
 
 </style>
-<link href="../../xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript"	src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<link href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
@@ -1252,7 +1252,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<div class="question">
 		<ul>
 			<li><a id="selectusertomodifyProfile" href="#viewUsersDlg" class="underlink">Show My Users&nbsp;</a></li>
-			<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"		border="0" width="12" height="12"
+			<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"		border="0" width="12" height="12"
 				alt="Displays all users set up for this account."
 				title="Displays all users set up for this account." align="right" /></a>
 			</li>
@@ -1353,7 +1353,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>Preferred Catalog View:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" height="12" border="0"
 					alt="Default view setting for Catalog display."
 					title="Default view setting for Catalog display." /></a></li>
@@ -1371,7 +1371,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div><s:radio list="#{'2': ''}" name="b2bCatalogView"
 				id="b2bCatalogView" value='defaultB2bCatalogView' /></div>
 <!-- 			<div class="view3"></div> -->
-			<div><img src="../../xpedx/images/theme/theme-1/mini-view.png" style="margin: 0 6px;" class="mini-view" title="Mini View" alt="mini-view"/></div>
+			<div><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png" style="margin: 0 6px;" class="mini-view" title="Mini View" alt="mini-view"/></div>
 			<div>Mini View - 4 items per row</div>
 			</div>
 			<div class="divs">
@@ -1384,7 +1384,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div><s:radio list="#{'3': ''}" name="b2bCatalogView"
 				id="b2bCatalogView" value='defaultB2bCatalogView' /></div>
 <!-- 			<div class="view4"></div> -->
-			<div><img src="../../xpedx/images/theme/theme-1/grid-view.png" style="margin: 0 6px;" class="grid-view" title="Grid View" alt="grid-view"/></div>
+			<div><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png" style="margin: 0 6px;" class="grid-view" title="Grid View" alt="grid-view"/></div>
 			<div>Grid View - No images</div>
 			</div>
 			</td>
@@ -1394,7 +1394,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>Preferred Product Category:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					alt="Defaults your preferred catalog on the homepage."
 					title="Defaults your preferred catalog on the homepage." width="12"
 					height="12" border="0" /></a></li>
@@ -1414,7 +1414,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img
 					alt="List of PO numbers made available at order submission."
 					title="List of PO numbers made available at order submission."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" width="12" height="12"
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" width="12" height="12"
 					border="0" /></a></li>
 			</ul>
 			</div>
@@ -1479,7 +1479,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img
 					title="Types of email notifications regarding order status."
 					alt="Types of email notifications regarding order status."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" alt="help" width="12"
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" alt="help" width="12"
 					height="12" border="0" /></a></li>
 			</ul>
 			</div>
@@ -1497,7 +1497,7 @@ a.underlink:hover { text-decoration: underline !important; }
 					title="Email notification that your order has been placed."
 					title="Email notification that your order has been placed."
 					height="12" border="0" width="12"
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -1565,7 +1565,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img width="12" height="12" border="0"
 					alt="Email notification that your order has been shipped."
 					title="Email notification that your order has been shipped."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -1581,7 +1581,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img border="0"
 					alt="Email notification for backorders."
 					title="Email notification for backorders." width="12" height="12"
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -1598,7 +1598,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img width="12" height="12" border="0"
 					title="Email notification that your order has been cancelled."
 					alt="Email notification that your order has been cancelled."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -1610,7 +1610,7 @@ a.underlink:hover { text-decoration: underline !important; }
 
 			<ul class="padding-top3">
 				<li><strong>Quick Links&nbsp;</strong></li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					alt="User defined bookmarked links which display on the homepage."
 					title="User defined bookmarked links which display on the homepage."
 					width="12" height="12" border="0" /></a></li>
@@ -1761,7 +1761,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>User Type:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" height="12"
 					alt="One or more roles may be assigned to each user. Hover over each role to see more details."
 					title="One or more roles may be assigned to each user. Hover over each role to see more details."
@@ -1881,7 +1881,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li>
 				<div class="mandatory float-left">*</div>
 				Password:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" height="12" border="0"
 					title="Min 8, Max of 14 characters; at least 2 alpha; 1 uppercase; 1 numeric; Max repeated consecutive characters = 2. Following characters cannot be used: $, ?, !, Example:  &quot;Password1&quot;."
 					alt="Min 8, Max of 14 characters; at least 2 alpha; 1 uppercase; 1 numeric; Max repeated consecutive characters = 2. Following characters cannot be used: $, ?, !, Example: &quot;Password1&quot;." /></a></li>
@@ -1949,7 +1949,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>Password:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" 
 					title="System will automatically generate a new password and send a message to the user's email address as shown in this record."
 					alt="System will automatically generate a new password and send a message to the user's email address as shown in this record."
@@ -1974,7 +1974,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li>
 				<div class="mandatory float-left">*</div>
 				Email Address:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" height="12" border="0"
 					alt="Used for all user specific communications from this website, including new password and password resets."
 					title="Used for all user specific communications from this website, including new password and password resets." /></a></li>
@@ -2114,7 +2114,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<ul>
 					<li>Preferred Ship-To:&nbsp;</li>
 					<li><span class="float-left"><a href="#"><img
-						src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+						src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 						alt="Preferred Authorized Location."
 						title="Preferred Authorized Location." width="12" height="12"
 						border="0" /></a></span></li>
@@ -2144,7 +2144,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<tr>	<td valign="top" class="no-border-right-user padding0"><div class="question">
                         <ul>
                           <li>Preferred Ship-To:&nbsp;</li>
-                          <li><span class="float-right  padding-right4 margin-right"><a id="purposeofmails-al2" href="#"><img width="12" height="12" border="0" title="Preffered Authorized Location" alt="Preffered Authorized Location" style="margin-top:2px;" src="../../xpedx/images/icons/12x12_grey_help.png"></a></span>
+                          <li><span class="float-right  padding-right4 margin-right"><a id="purposeofmails-al2" href="#"><img width="12" height="12" border="0" title="Preffered Authorized Location" alt="Preffered Authorized Location" style="margin-top:2px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"></a></span>
                           </li>
                         </ul>
                         </br><a id='changeShipTo' href='#ajax-assignedShipToCustomers' class="txt-lnk-sml-1">[Change]</a>
@@ -2188,7 +2188,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>Preferred Catalog View:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					width="12" height="12" border="0"
 					alt="Default view setting for Catalog display."
 					title="Default view setting for Catalog display." /></a></li>
@@ -2206,7 +2206,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div><s:radio list="#{'2': ''}" name="b2bCatalogView"
 				id="b2bCatalogView" value='defaultB2bCatalogView' /></div>
 <!-- 			<div class="view3"></div> -->
-			<div><img src="../../xpedx/images/theme/theme-1/mini-view.png" style="margin: 0 6px;" class="mini-view" title="Mini View" alt="mini-view"/></div>
+			<div><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png" style="margin: 0 6px;" class="mini-view" title="Mini View" alt="mini-view"/></div>
 			<div>Mini View - 4 items per row</div>
 			</div>
 			<div class="divs">
@@ -2219,7 +2219,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div><s:radio list="#{'3': ''}" name="b2bCatalogView"
 				id="b2bCatalogView" value='defaultB2bCatalogView' /></div>
 <!-- 			<div class="view4"></div> -->
-			<div><img src="../../xpedx/images/theme/theme-1/grid-view.png" style="margin: 0 6px;" class="grid-view" title="Grid View" alt="grid-view"/></div>
+			<div><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png" style="margin: 0 6px;" class="grid-view" title="Grid View" alt="grid-view"/></div>
 			<div>Grid View - No images</div>
 			</div>
 			</td>
@@ -2229,7 +2229,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="question">
 			<ul>
 				<li>Preferred Product Category:&nbsp;</li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					alt="Defaults your preferred catalog on the homepage."
 					title="Defaults your preferred catalog on the homepage." width="12"
 					height="12" border="0" /></a></li>
@@ -2249,7 +2249,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img
 					alt="List of PO numbers made available at order submission."
 					title="List of PO numbers made available at order submission."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" width="12" height="12"
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" width="12" height="12"
 					border="0" /></a></li>
 			</ul>
 			</div>
@@ -2314,7 +2314,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img
 					title="Types of email notifications regarding order status."
 					alt="Types of email notifications regarding order status."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" alt="help" width="12"
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" alt="help" width="12"
 					height="12" border="0" /></a></li>
 			</ul>
 			</div>
@@ -2332,7 +2332,7 @@ a.underlink:hover { text-decoration: underline !important; }
 					title="Email notification that your order has been placed."
 					title="Email notification that your order has been placed."
 					height="12" border="0" width="12"
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -2400,7 +2400,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img width="12" height="12" border="0"
 					alt="Email notification that your order has been shipped."
 					title="Email notification that your order has been shipped."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -2416,7 +2416,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img border="0"
 					alt="Email notification for backorders."
 					title="Email notification for backorders." width="12" height="12"
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -2433,7 +2433,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<li><a href="#"><img width="12" height="12" border="0"
 					title="Email notification that your order has been cancelled."
 					alt="Email notification that your order has been cancelled."
-					src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;" /></a></li>
 			</ul>
 			</div>
 			</td>
@@ -2445,7 +2445,7 @@ a.underlink:hover { text-decoration: underline !important; }
 
 			<ul class="padding-top3">
 				<li><strong>Quick Links&nbsp;</strong></li>
-				<li><a href="#"><img src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+				<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
 					alt="User defined bookmarked links which display on the homepage."
 					title="User defined bookmarked links which display on the homepage."
 					width="12" height="12" border="0" /></a></li>
@@ -2487,7 +2487,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				class="no-border-right-user padding00">
 			<div style="width: 120px;"><span class="subtitle">Spending Limit&nbsp;</span>
 			<a href="#"><img
-				src="../../xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px; display: inline;"
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px; display: inline;"
 				alt="Manage who can approve orders and set order spending limits."
 				title="Manage who can approve orders and set order spending limits."
 				width="12" height="12" border="0" /></a>
@@ -2616,7 +2616,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<div class="clearview">&nbsp;</div>
 	<div>
 	<ul class="float-right">
-		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn" tabindex="12"><span>Cancel</span></a></li>
+		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
 		<li class="float-right"><a class="green-ui-btn" href="javascript:void(0);"
 			onclick="javascript:callSave('myAccount', []);"  tabindex="12"><span>Save</span></a></li>
 	</ul>
@@ -2687,7 +2687,7 @@ document.onkeypress = enterPressed;
 			data1.setAttribute('class', ' noBorders padding-left1');
 			var deleteLink = document.createElement('a');
 			var imageIcon = document.createElement('img');
-			imageIcon.setAttribute('src','../../xpedx/images/icons/12x12_red_x.png');
+			imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png');
 			imageIcon.setAttribute('alt','delete');
 			imageIcon.setAttribute('title','Remove');
 			imageIcon.setAttribute('width','16');
@@ -2812,7 +2812,7 @@ document.onkeypress = enterPressed;
 			data1.setAttribute('class', ' noBorders padding-left1');
 			var deleteLink = document.createElement('a');
 			var imageIcon = document.createElement('img');
-			imageIcon.setAttribute('src','../../xpedx/images/icons/12x12_red_x.png');//3630
+			imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png');
 			imageIcon.setAttribute('alt','delete');
 			imageIcon.setAttribute('width','16');
 			imageIcon.setAttribute('height','16');

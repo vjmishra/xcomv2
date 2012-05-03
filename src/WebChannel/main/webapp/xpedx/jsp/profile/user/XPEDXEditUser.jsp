@@ -15,65 +15,65 @@
 
 <!-- styles -->
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/global-1.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/swc.min.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/home/home.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/home/portalhome.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/catalog/narrowBy.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/catalog/catalogExt.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/styles.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/global/ext-all.css'/>" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-1.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc.min.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/home/home.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/home/portalhome.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/narrowBy.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/catalogExt.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/styles.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-dan.css'/>" />
-<link type="text/css" href="<s:url value='/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css'/>" rel="stylesheet" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-dan.css" />
+<link type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <s:include value="../../common/XPEDXStaticInclude.jsp"/>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/prod-details.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-mil.css'/>" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/xpedx/css/theme/xpedx-mil-new.css'/>" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/prod-details.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil-new.css" />
 
 
 <!-- javascript -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-base.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/global/ext-all.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/global/validation.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/global/dojo.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/global/dojoRequire.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/theme/theme-1/theme.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
 
-<script type="text/javascript" src="<s:url value='/xpedx/js/catalog/catalogExt.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/pngFix/jquery.pngFix.pack.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js'/>"></script>
-
-<!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
-<link rel="stylesheet" type="text/css" href="/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css'/>" media="screen" />
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
+<!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
-<script  type="text/javascript" src="<s:url value='/xpedx/js/SpryTabbedPanels.js'/>"></script>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
-<script type="text/javascript" src="<s:url value='/swc/js/profile/profile.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/address/editableAddress.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/verifyAddress.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/user/user.js'/>"></script>
-<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-<script type="text/javascript" src="../xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<link rel="stylesheet" type="text/css" href="../xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-<script type="text/javascript" src="../js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
+<script  type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTabbedPanels.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' /><s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/user.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 
 
  
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min.js"></script>
 
 <!-- Facy Box (expand and collpse Modal Window -->
 
@@ -258,7 +258,7 @@
 
 
 
-<link href="<s:url value='/xpedx/css/theme/SpryTabbedPanels.css' />" rel="stylesheet" type="text/css" />
+<link href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/SpryTabbedPanels.css' />" rel="stylesheet" type="text/css" />
 
  
 </head>
@@ -483,7 +483,7 @@ $("#various22").fancybox({
                 <div id="searchBreadcrumb">
 	    			<a href="<s:url action="XPEDXAdminProfile" namespace="/profile/user" includeParams='none'/>"><s:text name="admin.title" /></a> / <span class="page-title"><s:text name="admin.myprofile.title" /></span> 
 	    			<a href="javascript:window.print()"><span class="print-ico-xpedx">
-	    			<img src="<s:url value='/xpedx/images/common/print-icon.gif'/>" width="16" height="15" alt="Print Page" />Print Page</span></a>
+	    			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
    				</div>
 
                 <div id="mid-col-mil">
@@ -810,7 +810,7 @@ $("#various22").fancybox({
 												<br/>
 												<a id='changeShipTo' href='#viewShipToDlg' class="txt-lnk-sml-1">Change Default</a>
 											</td>
-											<td valign="top" class="no-borders paddingtop0"><div class="float-right"><img height="19" border="0" width="19" alt="help" src="<s:url value='/xpedx/images/icons/12x12_grey_help.png'/>"/></div>
+											<td valign="top" class="no-borders paddingtop0"><div class="float-right"><img height="19" border="0" width="19" alt="help" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"/></div>
 												<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#defaultShipToId)" /><br/>
 												<s:if test="%{#shipTo.getOrganizationName()!=''}">
 													<s:property	value='#shipTo.getOrganizationName()'/><br/>
@@ -831,7 +831,7 @@ $("#various22").fancybox({
 											<td width="15%" class="no-borders paddingtop0" valign="top">
 												<s:text name="Default Ship-To:"></s:text>
 											</td>
-											<td valign="top" class="no-borders paddingtop0"><div class="float-right"><img height="12" border="0" width="12" alt="help" src="<s:url value='/xpedx/images/icons/12x12_grey_help.png'/>"/></div>
+											<td valign="top" class="no-borders paddingtop0"><div class="float-right"><img height="12" border="0" width="12" alt="help" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"/></div>
 													<s:text name="No Default Ship To is selected"></s:text><br/>
 													<s:url id='targetURL' namespace='/common' action='xpedxGetAssignedCustomers' />
 													<a id='changeShipTo' href='#viewShipToDlg' class="txt-lnk-sml-1">Change Default</a>

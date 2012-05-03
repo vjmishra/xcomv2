@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
     This is to avoid a defect in Struts that�s creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
@@ -40,10 +42,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title><s:text name="my.Account.page"/></title>
 
-<script type="text/javascript" src="../xpedx/js/sorttable.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable.js"></script>
     <link media="all" type="text/css" rel="stylesheet"
-    	href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
-    <script type="text/javascript" src="<s:url value='/swc/js/user/userList.js'/>"></script>
+    	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
+    <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/userList.js'/>"></script>
     <SCRIPT type="text/javascript">
     function callAjaxForSorting(url,divId)
 {
@@ -119,7 +121,7 @@
      a.underlink:hover { text-decoration: underline !important; } 
      div#fancybox-content { height: 540px !important; }
      </style> 
-     <script type="text/javascript" src="../../js/pngFix/jquery.pngFix.pack.js"></script>      	 
+     <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/js/pngFix/jquery.pngFix.pack.js"></script>      	 
 </head>
 <body>
     <s:set name='hasAccessToEdit' value="#_action.getIsChildCustomer()" />
@@ -173,7 +175,7 @@
             <div id="inline1" class="xpedx-light-box">
            <!-- <div style=" float:right; text-align:right; margin-top:-5px;" >User Search: <input name="textfield" type="text" class="x-input" style="width:120px; margin-bottom:15px;" id="textfield" />  <button type="submit" id="newSearch_0" value="Submit" class="searchButton"></button>     </div>  -->
 <h2><span style="margin:0px;">My Users</span></h2> 
-<p class="less-margin">  <img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
+<p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
    <!-- <div class="paginationContainer">-- pagination control -->
        <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page&nbsp;
        <%--added for jira 3317 --%>
@@ -234,7 +236,7 @@
 							<div style="width:230px; word-wrap:break-word;">
 								<input type="radio" onchange="javascript:setSelectedUrl('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />');" name="selectRadio" id="selectRadio"/>
 															<s:if test="#_action.isAdminMap.get(#userList.getAttribute('CustomerContactID'))">
-									<img class="inline-image" src="/swc/xpedx/images/theme/theme-1/20x20_admin.png" />
+									<img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" />
 								</s:if>
 							&nbsp;<s:property value='%{#userList.getAttribute("CustomerContactID")}'/>
 
