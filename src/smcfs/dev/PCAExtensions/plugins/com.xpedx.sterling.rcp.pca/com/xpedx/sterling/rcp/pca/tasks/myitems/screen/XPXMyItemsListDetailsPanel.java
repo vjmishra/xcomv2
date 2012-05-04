@@ -248,7 +248,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		txtListDesc = new Text(grpSearchFields, SWT.BORDER);
 		txtListDesc.setLayoutData(gdListName);
 		txtListDesc.setTextLimit(50);
-		txtListDesc.setData("yrc:customType", "Label");
+		txtListDesc.setData("yrc:customType", "Text");
 		txtListDesc.setData("name", "txtListDesc");
 		
 	}	
@@ -336,7 +336,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		btnSaveChanges.setText("Save_Changes");
 		btnSaveChanges.setLayoutData(gridData10);
 		btnSaveChanges.setData("name", "btnSaveChanges");
-		btnSaveChanges.setAlignment(SWT.RIGHT);
+		btnSaveChanges.setAlignment(SWT.CENTER);
 		btnSaveChanges.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.saveChangesToMyItemsList();
