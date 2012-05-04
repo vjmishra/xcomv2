@@ -121,7 +121,7 @@
      a.underlink:hover { text-decoration: underline !important; } 
      div#fancybox-content { height: 540px !important; }
      </style> 
-     <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/js/pngFix/jquery.pngFix.pack.js"></script>      	 
+     <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>      	 
 </head>
 <body>
     <s:set name='hasAccessToEdit' value="#_action.getIsChildCustomer()" />
