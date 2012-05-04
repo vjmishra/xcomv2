@@ -480,7 +480,8 @@ public class XPEDXPriceandAvailabilityUtil {
 				{
 					XPEDXItem item=items.get(i);
 					if(!"00".equals(item.getLineStatusCode()))
-						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
+						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
+						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
 				}
 			}
 		} catch (MalformedURLException e) {
@@ -1203,7 +1204,7 @@ public class XPEDXPriceandAvailabilityUtil {
 					errorMessage="";
 				}
 				else{
-				       errorMessage = item.getLineStatusErrorMsg()+".";
+				       errorMessage = item.getLineStatusErrorMsg();
 				}
 				pnALineErrorMessage.put(itemID, errorMessage);
 			}
