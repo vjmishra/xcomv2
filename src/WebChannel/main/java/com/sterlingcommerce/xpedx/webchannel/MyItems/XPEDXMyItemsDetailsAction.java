@@ -154,7 +154,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String modifyts;
     private String createUserId;
     private String modifyUserid;
-    
+    //Added for JIRA 1402 Starts
+	private ArrayList<String> itemValue = new ArrayList<String>();
+    //Added for JIRA 1402 Ends
     
 	public String getModifyts() {
 		return modifyts;
@@ -847,6 +849,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
 			XPEDXWCUtils.setObectInCache("orderMultipleFromSession", getItemOrderMultipleMap());
+			//Added for JIRA 1402 Starts
+			XPEDXWCUtils.setObectInCache("listOfItemsSize", getListOfItems().size());
+			//Added for JIRA 1402 End
 			XPEDXWCUtils.setObectInCache("itemConUOM", getItemIdConVUOMMap());
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
@@ -3188,6 +3193,23 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	public void setDescriptionMap(Map<String, Element> descriptionMap) {
 		this.descriptionMap = descriptionMap;
-	}	
+	}
+	
+	//Added for JIRA 1402 Starts
+	/**
+	 * @return the itemValue
+	 */
+	public ArrayList<String> getItemValue() {
+		return itemValue;
+	}
+
+	/**
+	 * @param itemValue the itemValue to set
+	 */
+	public void setItemValue(ArrayList<String> itemValue) {
+		this.itemValue = itemValue;
+	}
+	//Added for JIRA 1402 End
+
 	
 }
