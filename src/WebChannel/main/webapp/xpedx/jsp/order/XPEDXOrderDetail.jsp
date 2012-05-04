@@ -304,7 +304,7 @@ function showSplitDiv(divId)
 	<s:set name='xpedxOrderDateTimezone' value="%{'ET'}"/>
 </s:if>
 <s:if test='%{#xpedxOrderSource == "Web"}'>
-	<s:set name='xpedxOrderDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null, 'MM/dd/yyyy hh:MM:ss')" />
+	<s:set name='xpedxOrderDate' value="#xpedxutil.formatDate(#xpedxOrderDate, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'yyyy-MM-dd HH:mm:ss')" />
 </s:if>
 <s:else>
 	<s:set name='xpedxOrderDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null,'MM/dd/yyyy')" />
