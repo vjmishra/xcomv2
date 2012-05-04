@@ -18,6 +18,6 @@
 	<entry key="newUserState">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@State</entry>
 	<entry key="newUserZipCode">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ZipCode</entry>
 	<entry key="newUserComments">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Comments</entry>
-	<entry key="imageURL">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ImageUrl</entry>
+	<entry key="imageUrlPath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ImageUrl</entry>
 	<entry key="templatePath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@TemplateFile</entry>
 </properties>
