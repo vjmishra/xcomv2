@@ -1,9 +1,12 @@
 package com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup;
+import java.util.ArrayList;
+
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -67,7 +70,31 @@ public class XPXShowListOfUsersPanelBehaviour extends XPXPaginationBehavior{
 		     			Document docOutput = apiContext.getOutputXmls()[i];
 						if (docOutput != null) {
 							Element eleOutput = docOutput.getDocumentElement();
-							//This is an inherited method which sets/replaces the model used to display the Paginated results.
+							//This is added to remove the dummy customer contacts
+							 NodeList nodList=eleOutput.getElementsByTagName("CustomerContact");
+							 ArrayList eSalesRepList = new ArrayList();
+							 for(int k=0;k<nodList.getLength();k++){
+								
+								 Element  eleCust=(Element) nodList.item(k);
+								 String customerID = eleCust.getAttribute("CustomerContactID");			
+									Element statusElement = YRCXmlUtils.getXPathElement(eleCust, "/CustomerContact/Extn");
+									String eSalesRep = statusElement.getAttribute("ExtnIsSalesRep");
+									if("Y".equalsIgnoreCase(eSalesRep)){
+										eSalesRepList.add(customerID);
+									}
+								 }
+							 
+							 // Added to remove the elements
+							 NodeList nodeCustContact=eleOutput.getElementsByTagName("CustomerContact");
+								for(int j=0;j<nodeCustContact.getLength();j++){
+									Element elementCust=(Element) nodeCustContact.item(j);
+									String customerID = elementCust.getAttribute("CustomerContactID");
+									if (eSalesRepList.contains(customerID)){
+										elementCust.getParentNode().removeChild(elementCust);
+										j--;
+									}
+									
+								}
 							setModel("UserList",eleOutput);
 						}
 		     		}
