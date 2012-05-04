@@ -583,6 +583,8 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		} catch (Exception ex) {
 			if (ex.getMessage()!=null) {
 				setErrorMesage("Your request can not be processed at this time due to technical issues. Please contact administrator");
+				LOG.error("XPEDXSaveServicesAction() Input XML: " + ex.getMessage());
+				
 				return returnVal;
 			}
 			returnVal = "error";
