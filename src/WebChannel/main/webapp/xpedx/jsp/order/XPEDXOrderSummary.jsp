@@ -1030,7 +1030,7 @@ from session . We have customer Contact Object in session .
 											</td>
 			                         		
 									 		<td class="text-right" width="147">
-								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" && #orderLine.getAttribute("LineType") =="M" '>
+								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 								  	  				<%--	Using CustomerContactBean object from session
 								  	  				<s:if test='%{#session.viewPricesFlag == "Y"}'>
 													--%>													
