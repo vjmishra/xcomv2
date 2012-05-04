@@ -19,6 +19,9 @@
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <s:bean	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xutil' />
+<!-- Added for JIRA 1402 Starts -->
+<s:set name='ItemSize' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("listOfItemsSize")'/>
+<!-- Added for JIRA 1402 Ends-->
 <%-- 
 <s:if test="#currentCartInContextOHK == null ">
 	<s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper@getCartInContextOrderHeaderKey(wCContext)'/>
@@ -1626,7 +1629,80 @@ function showSharedListForm(){
 		}
 		
 	</script>
- 
+            <!-- Added for JIRA 1402 Starts-->
+      <script type="text/javascript">
+            var count=0;
+		    var elementUniqueID = '';
+		    var itemSize = <s:property value="#ItemSize"/>;
+            var myArray2= new Array();
+            var oldvalue = 0;	  
+				  function populate(elemetnID)
+				  {
+					 
+				  var combo = document.getElementById(elemetnID);
+				  oldvalue = combo.value;
+				  
+				  if(myArray2.length == 0){
+								
+				  for (i=0; i<itemSize; i++)
+					{ 
+					 var j = i;
+					++j;
+					myArray2[i] = "itemOrder_"+j;
+					}
+					}              
+					 if(combo.length < 2){
+					 if(elementUniqueID == combo){
+
+					 if(count == 0){
+						elementUniqueID = combo;
+						for (i=1; i<=itemSize; i++)
+						{
+						if(combo.value != i){ 
+						
+						var option = document.createElement("option");
+							   option.text = i;
+							   option.value = i;
+							   combo.add(option);
+							   ++count;
+						}
+									
+					 }
+					}
+                      }             
+				  else{
+					  elementUniqueID = combo;
+					  for (i=1; i<=itemSize; i++)
+						{
+						 if(combo.value != i){        
+						 var option = document.createElement("option");
+							   option.text = i;
+							   option.value = i;
+							   combo.add(option);
+							   ++count;
+								 }
+									
+							}
+                                             
+                           }
+                          } 
+                        }
+					  function populateValue(targetElement,elemetnID) {
+								   document.getElementById(elemetnID).value =
+								   targetElement.options[targetElement.selectedIndex].value;
+								 for (var i = 0; i < myArray2.length; i++) {
+										if(elemetnID != myArray2[i] && document.getElementById(elemetnID).value == document.getElementById(myArray2[i]).value){
+											var modifiedOldValue = oldvalue;
+											populate(myArray2[i]);
+											document.getElementById(myArray2[i]).value = modifiedOldValue;
+										 
+										}
+									 }  
+                                                  
+                              }
+
+    </script>
+    <!-- Added for JIRA 1402 Ends--> 
 
 </head>
 <!-- Hemantha -->
@@ -2414,10 +2490,12 @@ function showSharedListForm(){
 											onkeyup="javascript:isValidQuantity(this);resetQuantityError('%{#id}');" 
 											cssStyle="width: 50px;" theme="simple"/>
 										--%>
-									   <s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;" name="orders"
-											list="itemOrderList" value="itemOrder2" onfocus="this.oldvalue = this.value;" 
-											onchange="onChangeItemOrder(this, this.oldvalue, this.value);"
-											id="itemOrder_%{#itemOrder2}" headerKey="-1"  emptyOption="false" theme="simple"/>
+										<!-- Modified for JIRA 1402 Starts-->			    
+								         <s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;" name="orders"
+											list="itemValue" value='%{itemOrder2}' onfocus="populate(this.id);" 
+											onchange="populateValue(this,this.id);"
+											id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}' headerValue='%{itemOrder2}' emptyOption="false" theme="simple"/>
+										<!-- Modified for JIRA 1402 End-->
 										</td>
 									</tr>
 								</s:if>
