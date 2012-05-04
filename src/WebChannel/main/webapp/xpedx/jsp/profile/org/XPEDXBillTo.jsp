@@ -20,10 +20,10 @@
 <head>
 
 <!-- begin styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>		
@@ -40,34 +40,34 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/theme/theme-1/theme.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/catalog/catalogExt.js'/>"></script>
  -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/org/xpedxCustomerLocations.js"></script>
 
 <!-- carousel scripts js   -->
 
-<script type="text/javascript" src="<s:url value='/xpedx/js/jcarousel/xpedx-custom-carousel.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/pngFix/jquery.pngFix.pack.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jquery.dropdownPlain.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/quick-add/jquery.form.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/quick-add/quick-add.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
 <!--  to restrict numeric values in spending limit  -->
 
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js'/>" type="text/javascript" charset="utf-8"></script>
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
 <!--[if IE]><script src="<s:url value='/xpedx/other_libs/excanvas_r3/excanvas.js'/>" type="text/javascript" charset="utf-8"></script><![endif]-->
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.bt.min.js'/>" type="text/javascript" charset="utf-8"></script>
-<!-- /STUFF --><script type="text/javascript" src="<s:url value='/xpedx/js/xpedx-new-ui.js'/>" language="javascript">
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- /STUFF --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js" language="javascript">
 	
 </script>
 
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min.js"></script>
 
 <!-- Facy Box (Lightbox/Modal Window -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <script type="text/javascript">
 
@@ -147,8 +147,8 @@ function Clear()
 	
 </script> 
 
-<script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
-<script type="text/javascript" src="../../xpedx/js/jquery.maskedinput-1.3.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3.js"></script>
 <script type="text/javascript">
 		$(document).ready(function() {
 		$('.phone-numeric').numeric(false); 
@@ -224,7 +224,7 @@ ul.checkboxTree li
         	 		<tr>
 					    <td width="13%" class="no-border-right">Attention:
 							<span class="float-right" style="margin-right:45px"><a href="#">
-				   	 			<img src="../../xpedx/images/icons/12x12_grey_help.png"  height="12" width="12" border="0" title=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service. " alt=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service." /></a>
+				   	 			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  height="12" width="12" border="0" title=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service. " alt=" Invoice billing data which cannot be edited online. If data is incorrect please call customer service." /></a>
 				   	 		</span>
 						</td>
 					    <td colspan="3" class="no-border-right noBorder-left">
