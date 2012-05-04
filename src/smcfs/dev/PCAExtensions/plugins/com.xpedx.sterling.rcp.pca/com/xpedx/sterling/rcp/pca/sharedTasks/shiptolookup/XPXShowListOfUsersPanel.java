@@ -61,13 +61,15 @@ public class XPXShowListOfUsersPanel extends XPXPaginationComposite implements I
         colBindings[0] = new YRCTblClmBindingData();
         colBindings[0].setAttributeBinding("CustomerContactID");
         colBindings[0].setColumnBinding("User_ID");
-        colBindings[0].setSortReqd(true);   
+        colBindings[0].setSortReqd(true); 
+        
         colBindings[1] = new YRCTblClmBindingData();
         colBindings[1].setAttributeBinding("@FirstName;@LastName;");
         colBindings[1].setColumnBinding("UserName");
         colBindings[1].setKey("xpedx_username_key");
         colBindings[1].setSortReqd(true);
-
+        colBindings[1].setSortBinding("@FirstName");
+        
         bindingData.setSortRequired(true);
         bindingData.setSourceBinding("UserList:/CustomerContactList/CustomerContact");
         bindingData.setName("tblSearchResults");
