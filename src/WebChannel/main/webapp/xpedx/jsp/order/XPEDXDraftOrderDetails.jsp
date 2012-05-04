@@ -575,7 +575,11 @@ $(document).ready(function(){
 					</li>
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
 					<s:set name="chargeAmount" value='%{chargeAmount}'></s:set>
+					<%--JIRA 3547 start--%>
+					<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)'/>
 					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
+					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)'/>
+					<%--JIRA 3547 end--%>
 					<%--JIRA 3488 start--%>
 					<s:set name="maxOrderAmount" value='%{maxOrderAmount}'></s:set>
 					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
@@ -2482,6 +2486,8 @@ function validateOrder()
 	var totalAmountNum=Number(totalAmount);
 	var maxAmount='<s:property value="#maxOrderAmount"/>';//JIRA 3488
 	var fmtdMaxOrderAmount='<s:property value='#fmtdMaxOrderAmount' />';//JIRA 3488
+	var fmtdMinOrderAmount='<s:property value='#fmtdMinOrderAmount' />';//JIRA 3547
+	var fmtdchargeAmount='<s:property value='#fmtdchargeAmount' />';//JIRA 3547
 	//JIRA 3488 start
 	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
@@ -2505,13 +2511,15 @@ function validateOrder()
 		var divId1=document.getElementById("minOrderErrorMessageBottom");
 		if(divId != null)
 		{		
-			//Start fix for 3098
-			divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			//Start fix for 3547
+			//divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			divId.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + "."
 		}
 		if(divId1 != null)
 		{
-			divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			//End fix for 3098
+			divId1.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + ".";
+			//divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
+			//End fix for 3547
 		}
 	}
 }
