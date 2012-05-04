@@ -14,7 +14,9 @@
 
 <!--[if IE]> --> <!-- UI changes done  -->
 
+ 	<!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+	<![endif]-->
 <link rel="stylesheet" type="text/css"
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
