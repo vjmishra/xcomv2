@@ -60,7 +60,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	private static boolean isShared;
 	private static boolean isPersonal;
 	private static boolean isBoth;
-	public static final String PAGINATION_STRATEGY_FOR_MIL_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
+	public static final String PAGINATION_STRATEGY_FOR_MIL_SEARCH = GENERIC_PAGINATION_STRATEGY;
 	private static Element eleOutput;
 	public String OrgName;
 	public String createUserId;
@@ -69,8 +69,6 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	public Document BothList;
 	public int count =1;
 	
-	public static final String PAGINATION_STRATEGY_FOR_SEARCH = NEXTPAGE_PAGINATION_STRATEGY;
-
 	public XPXMyItemsSearchListScreenBehavior(Composite ownerComposite, String formId, Object inputObject) {
        super(ownerComposite, formId,inputObject);
         this.page = (XPXMyItemsSearchListScreen)getOwnerForm();
