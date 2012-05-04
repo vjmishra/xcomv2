@@ -4,7 +4,11 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
@@ -214,7 +218,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						if(exportRequested){
 							synchronized (getFormId()) {
 								StringBuilder sbCSV = new StringBuilder();
-								sbCSV.append("Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,");
+								sbCSV.append("Customer Part Number|Supplier Part Number|Quantity|Unit of Measure|");
 								sbCSV.append("Description");
 								sbCSV.append("\n");
 								Element eleItemsItemsList = YRCXmlUtils.getChildElement(eleMyItemsList, "XPEDXMyItemsItemsList");								
@@ -229,11 +233,11 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 										uomId = eleItem.getAttribute("UomId");
 									}
 									eleItem.setAttribute("Name", (String) itemDescList.get(eleItem.getAttribute("ItemId")));
-									sbCSV.append("\"").append(eleItem.getAttribute("")).append("\"").append(",");
-									sbCSV.append("\"").append(eleItem.getAttribute("ItemId")).append("\"").append(",");
-									sbCSV.append("").append(eleItem.getAttribute("Qty")).append("").append(",");
-									sbCSV.append("\"").append(uomId).append("\"").append(",");
-									sbCSV.append("\"").append(eleItem.getAttribute("Name")).append("\"").append(",");
+									sbCSV.append("\"").append(eleItem.getAttribute("")).append("\"").append("|");
+									sbCSV.append("\"").append(eleItem.getAttribute("ItemId")).append("\"").append("|");
+									sbCSV.append("").append(eleItem.getAttribute("Qty")).append("").append("|");
+									sbCSV.append("\"").append(uomId).append("\"").append("|");
+									sbCSV.append("\"").append(eleItem.getAttribute("Name")).append("\"").append("|");
 									sbCSV.append("\n");
 								}
 								
@@ -356,6 +360,13 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		updateXPEDXMyItemsListInput.setAttribute("Desc", eleUpdateMyItemsListData.getAttribute("Desc"));
 		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
 		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
+		
+			//System.out.println("The file is not updated");
+			Calendar currentDate = Calendar.getInstance();
+			SimpleDateFormat formatter=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			String dateNow = formatter.format(currentDate.getTime());
+			updateXPEDXMyItemsListInput.setAttribute("Modifyts", dateNow);
+		
 		for(int i=0;i<nlItems.getLength();i++){
 			
 			Element tempElement =(Element)nlItems.item(i);
