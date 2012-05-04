@@ -2172,7 +2172,7 @@ var currentAadd2ItemList = new Object();
 <div style="display: none;">
 
 <!-- Light Box -->
-<div style=" height:202px; width:995px; overflow:auto;">
+<div style=" height:202px; width:600px; overflow:auto;">
 <!-- START of Hidden Layer -PN --> <!-- CODE_START Replacement items - PN -->
 <!-- START: XPEDX Panel for Replacement items --> <s:set name='tabIndex'
 	value='3001' /> 
@@ -2181,7 +2181,7 @@ var currentAadd2ItemList = new Object();
 	
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
-	         <!-- Light Box --><div style=" height:202px; width:995px; overflow:auto;  border:1px solid #CCCCCC;">
+	         <!-- Light Box --><div style=" height:202px; width:600px; overflow:auto;  border:1px solid #CCCCCC;">
 		<script type="text/javascript">
 		Ext.onReady(function(){		
 
@@ -2201,13 +2201,13 @@ var currentAadd2ItemList = new Object();
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
 		<!--  hide in case of one item  -->
-            <s:if test='#iStatus.index == 0'>
-			<div class="mil-wrap-condensed" style="border:0px; width:100%; background-color:white; height:202px;" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
-            </s:if>
-            <s:else>
-            <div class="mil-wrap-condensed" style="border:0px; width:100%; background-color:white; border-bottom:1px solid #CCCCCC;" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
-            </s:else>
-
+            <s:if test="!#iStatus.last" >
+				<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
+			</s:if>
+			<s:else>
+				<div class="mil-wrap-condensed-container last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
+			</s:else>
+			<div class="mil-wrap-condensed" style="min-height:200px;">
 				<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
 				
 	<!-- begin image / checkbox   -->
@@ -2221,9 +2221,7 @@ var currentAadd2ItemList = new Object();
 						 <s:set name='certFlagVal' value='%{#extnTag.getAttribute("ExtnCert")}' />
 						<s:set name='rItemID' value='%{#altItem.getAttribute("ItemID")}' /> 
 						<s:set name='rdesc' value='%{#altItemPrimaryInfo.getAttribute("Description")}' />
-						<s:url id='pImg'
-						value='%{#xpedxSCXmlUtil.getAttribute(#altItemPrimaryInfo,"ImageLocation")+"/"+#altItemPrimaryInfo.getAttribute("ImageID")}' />
-						
+						<s:url id='pImg' value='%{#_action.getImagePath(#altItemPrimaryInfo)}' />						
 						
 						<s:set name='ritemUomId' value='#altItem.getAttribute("UnitOfMeasure")' />
 						<s:set name='ritemType' value='#altItem.getAttribute("ItemType")' />
@@ -2238,7 +2236,7 @@ var currentAadd2ItemList = new Object();
 						onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />
                     <div class="mil-question-mark"> 
                                <s:a href="javascript:processDetail('%{#altItem.getAttribute('ItemID')}', '%{#altItem.getAttribute('UnitOfMeasure')}')" >
-                                     <img src="<s:url value='%{#pImg}' includeParams='none' />" width="150" height="150" alt="" />
+                                     <img src="<s:property value='%{#pImg}'/>" width="150" height="150" alt="" />
                                  </s:a>
                     </div>
                     <!--  image hardcoded  -->
@@ -2259,20 +2257,22 @@ var currentAadd2ItemList = new Object();
 
                 <!-- begin description  -->
                 <div class="mil-desc-wrap">
-                    <div class="mil-wrap-condensed-desc item-short-desc"><s:if test="%{#ritemType != 99}">
+                    <div class="mil-wrap-condensed-desc item-short-desc" ><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
+									<s:property value="#name" />
+								</a>
 							</s:if> 
-							<s:property value="#name" />
-							 <s:if test="%{#itemType != 99}"></a></s:if> </div>
+							<%--<s:if test="%{#itemType != 99}"><a/></s:if> --%>
+					</div>
                     <div class="mil-attr-wrap">
                         <ul class="mil-desc-attribute-list">                        
 							<s:property value='#rdesc' escape='false'/>
 					    </ul>
 					    
 					    <%-- key contains the original itemId --%>
-					    <!-- 
+					    <%-- 
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
-                        <p>Replacement Item #: <s:property value='rItemID' /></p>  -->
+                        <p>Replacement Item #: <s:property value='rItemID' /></p>  --%>
                         
 							 <p>xpedx Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
 								 <s:if test='#certFlagVal=="Y"'>
@@ -2284,10 +2284,10 @@ var currentAadd2ItemList = new Object();
                     </div>
                     
                 </div>
-                
-                <div class="clearall"> &nbsp; </div>
-				<%-- Qty, UOM, PNA added for Cart details removed as per 1357--%>
-				
+                </div>
+                <%--<div class="clearall"> &nbsp; </div>
+				 Qty, UOM, PNA added for Cart details removed as per 1357--%>
+				</div>
 				<%-- --%>                
   			</div>
 	 </s:iterator></div></div>
@@ -2298,21 +2298,19 @@ var currentAadd2ItemList = new Object();
 <s:form action="addComplementaryItemToCart"
 	name="addReplacementItemToCartForm" id="addReplacementItemToCartForm"
 	namespace="/order" method="POST">
-<div id="replacementItems" style="height: 380px; display: none;">
-
-	<s:hidden name='#action.name' id='validationActionName'
-		value='addReplacementItemToCart' />
-	<s:hidden name='#action.namespace' value='/order' />
-
-	<div id="replacementItemBody"  class="xpedx-light-box"> 
-
- <ul class="tool-bar-bottom" id="tool-bar" style="margin-right:10px;float:right;">
-	<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
-	<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
-	<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
-</ul>
-</div>
-</div>
+	<div id="replacementItems" style="height: 380px; display: none;">
+	
+		<s:hidden name='#action.name' id='validationActionName'
+			value='addReplacementItemToCart' />
+		<s:hidden name='#action.namespace' value='/order' />
+	
+		<div id="replacementItemBody"  class="xpedx-light-box"/> 
+	</div>
+	<ul class="tool-bar-bottom" id="tool-bar" style="margin-right:30px;float:right;">
+		<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
+		<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
+		<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
+	</ul>
 </s:form> 
 <s:form id="formRIAddToList" action="draftOrderAddReplacementOrderLines"
 	method="post">
