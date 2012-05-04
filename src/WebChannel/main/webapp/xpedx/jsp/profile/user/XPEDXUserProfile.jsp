@@ -271,6 +271,7 @@ $(document).ready(function()
 			'transitionOut' : 'none'
 								
 		});
+		$('#spendingLt').numeric(".",false);
 		$('#spendingLt').numeric(false); 
 		$('.phone-numeric').numeric(false); 
 		$("#dayPhone_new").mask("999 999-9999");
@@ -2525,14 +2526,14 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="16%" valign="top" class="no-border-right-user padding00">Spending
 			Limit:</td>
 			<td valign="top" width="84%" class="no-border-right-user padding00">
-			
-				 <s:set name='spendingLimit' value="%{getSpendingLimit()}"/>
+							 
+				  <s:set name='spendingLimit' value="%{showSpendingLimit()}"/>
 				 <s:if test="#spendingLimit != null && #spendingLimit != ''">
 				   <s:if test="#disableSinceSelfApprover">
-				     <s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" readonly="%{true}" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
+				     <s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" readonly="%{true}" name="spendingLt" maxlength="6" value="%{showSpendingLimit()}" ></s:textfield>
 				   </s:if>
 				   <s:else>
-				 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value="%{getSpendingLimit()}"></s:textfield>
+				 	<s:textfield cssClass="x-input" cssStyle="width:148px;" id="spendingLt" name="spendingLt" maxlength="6" value="%{getUnformattedSpendingLimit()}"></s:textfield>
 				  </s:else>	
 				 </s:if>
 				 <s:else>
