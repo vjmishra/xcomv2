@@ -2428,6 +2428,8 @@ public class XPXUtils implements YIFCustomApi {
 		String storeFrontId = SCXmlUtil.getAttribute(
 				inputDocument.getDocumentElement(), "EnterpriseCode");
 		StringBuffer sb = new StringBuffer();
+		try{
+			
 		if(storeFrontId!=null && storeFrontId.length()>0)
 		{
 			String userName = YFSSystem.getProperty("fromAddress.username");
@@ -2496,6 +2498,11 @@ public class XPXUtils implements YIFCustomApi {
 						urlElem.setAttribute("URL", url);
 					}
 		}
+		}catch(Exception e){
+			log.error("There is an issue " + e.getMessage());
+
+		}
+
 		if(log.isDebugEnabled()){
 			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
