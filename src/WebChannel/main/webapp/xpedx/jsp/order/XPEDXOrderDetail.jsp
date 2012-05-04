@@ -860,7 +860,7 @@ function showSplitDiv(divId)
 						    				<s:if test="#orderType != 'Customer'">
 						    				  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>	
 						    				  	<s:if test="%{#myPriceValue == 'false'}">	    					
-						    						<s:property value='#util.formatQuantity(wCContext, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
+						    						<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext,#currencyCode, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
 						    					</s:if>
 						    					<s:else>
 						    						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>

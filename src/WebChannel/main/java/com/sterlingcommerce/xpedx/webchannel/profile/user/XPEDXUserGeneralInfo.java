@@ -4,6 +4,8 @@
 
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,7 +140,8 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	protected Map POList = new LinkedHashMap();
 
 	/* ENDS - Customer-User Profile Changes - adsouza */
-	
+	protected String showspendingLimit="";
+	protected String unformattedSpendingLimit="";
 	protected String spendingLimit = "";
 	protected String spendingLtCurrency = "";
 	protected String primaryApprover = "";
@@ -2078,7 +2081,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	 * @return the spendingLimit
 	 */
 	public String getSpendingLimit() {
-		return spendingLimit;
+		return spendingLimit;		
 	}
 
 	/**
@@ -2216,7 +2219,24 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	public void setAddnlPOList(String addnlPOList) {
 		this.addnlPOList = addnlPOList;
+	}	
+	
+	public String showSpendingLimit() {
+
+		double spendingLimitValue = Double.parseDouble(spendingLimit);
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(2);
+		nf.setMaximumFractionDigits(2);
+		showspendingLimit = nf.format(spendingLimitValue);
+		return showspendingLimit;
 	}
 	
+	public String getUnformattedSpendingLimit() {
+		
+		double spendingLimitValue = Double.parseDouble(spendingLimit);		
+		NumberFormat formatter = new DecimalFormat("#########");
+		unformattedSpendingLimit = formatter.format(spendingLimitValue);
+		return unformattedSpendingLimit;
+	}
 	
 }
