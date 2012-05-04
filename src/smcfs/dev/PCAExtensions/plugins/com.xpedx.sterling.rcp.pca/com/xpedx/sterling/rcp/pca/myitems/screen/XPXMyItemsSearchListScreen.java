@@ -2,8 +2,6 @@ package com.xpedx.sterling.rcp.pca.myitems.screen;
 
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -17,14 +15,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PartInitException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
-import com.xpedx.sterling.rcp.pca.customerDetails.extn.CustomerDetailsWizardExtnBehavior;
-import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
@@ -732,7 +725,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 				} else if(YRCPlatformUI.equals(XPXMyItemsSearchListScreenBehavior.ACTION_DELETE, value)){
 					if(YRCPlatformUI.getConfirmation("TITLE_KEY_Confirm_Delete", "MSG_KEY_Confirm_My_Items_List_Delete", element.getAttribute("Name"))){
 						myBehavior.delete(element);
-						myBehavior.search();
+						//myBehavior.search();
 						YRCPlatformUI.showInformation("TITLE_KEY_Successfully_Deleted", "MSG_KEY_Deleted_My_Items_List_Successfully", element.getAttribute("Name"));
 						myBehavior.getFirstPage();
 					}
