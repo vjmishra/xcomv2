@@ -231,9 +231,9 @@ public class XPXAddItemPopupPanelBehavior extends YRCBehavior {
 		eleMyItemsList.setAttribute("UomId",unitOfMeasure);
 		eleMyItemsList.setAttribute("Desc",getFieldValue("txtItemDesc"));
 		eleMyItemsList.setAttribute("JobId",getFieldValue("txtCustLineAccount"));
-		eleMyItemsList.setAttribute("ItemCustomField1",getFieldValue("txtCustLineNoOne"));
-		eleMyItemsList.setAttribute("ItemCustomField2",getFieldValue("txtCustLineNoTwo"));
-		eleMyItemsList.setAttribute("ItemCustomField3",getFieldValue("txtCustLineNoThree"));
+		/*eleMyItemsList.setAttribute("ItemCustomField1",getFieldValue("txtCustLineNoOne"));
+		eleMyItemsList.setAttribute("ItemCustomField2",getFieldValue("txtCustLineNoTwo"));*/
+		eleMyItemsList.setAttribute("ItemPoNumber",getFieldValue("txtLinePO"));
 		int maxValue = getMaxVaue();
 		maxValue = maxValue + 1;
 		String aString = Integer.toString(maxValue);
