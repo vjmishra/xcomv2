@@ -35,10 +35,9 @@ IYRCComposite {
 	private Text txtItemDesc;
 	private Text txtUOM;
 	private Text txtQuantity;
-	private Text txtCustLineNoOne;
-	private Text txtCustLineNoTwo;
-	private Text txtCustLineNoThree;
+	
 	private Text txtCustLineAccount;
+	private Text txtLinePO;
 	private Composite pnlButtonHolder;
 	private Button btnCancel;
 	private Button btnAdd;
@@ -211,7 +210,7 @@ IYRCComposite {
 		lbldummy5.setData("yrc:customType", "Label");
 		lbldummy5.setData("name", "lbldummy4");
 
-		Label lblCustomerLineFieldOne = new Label(pnlProfileInfo,
+		/*Label lblCustomerLineFieldOne = new Label(pnlProfileInfo,
 				SWT.HORIZONTAL);
 		lblCustomerLineFieldOne.setText("Cust Line Field1#");
 		lblCustomerLineFieldOne.setLayoutData(gridDatabl1);
@@ -219,15 +218,15 @@ IYRCComposite {
 		lblCustomerLineFieldOne.setData("name", "lblCustomerLineFieldOne");
 		txtCustLineNoOne = new Text(pnlProfileInfo, 2048);
 		txtCustLineNoOne.setLayoutData(gridDatabl1);
-		txtCustLineNoOne.setData("name", "txtCustLineNoOne");
+		txtCustLineNoOne.setData("name", "txtCustLineNoOne");*/
 
-		Label lbldummy6 = new Label(pnlProfileInfo, SWT.HORIZONTAL);
+		/*Label lbldummy6 = new Label(pnlProfileInfo, SWT.HORIZONTAL);
 		lbldummy6.setText("");
 		lbldummy6.setLayoutData(gridDatabl1);
 		lbldummy6.setData("yrc:customType", "Label");
 		lbldummy6.setData("name", "lbldummy5");
-
-		Label lblCustomerLineFieldTwo = new Label(pnlProfileInfo,
+*/
+		/*Label lblCustomerLineFieldTwo = new Label(pnlProfileInfo,
 				SWT.HORIZONTAL);
 		lblCustomerLineFieldTwo.setText("Cust Line Field2#");
 		lblCustomerLineFieldTwo.setLayoutData(gridDatabl1);
@@ -235,23 +234,23 @@ IYRCComposite {
 		lblCustomerLineFieldTwo.setData("name", "lblCustomerLineFieldTwo");
 		txtCustLineNoTwo = new Text(pnlProfileInfo, 2048);
 		txtCustLineNoTwo.setLayoutData(gridDatabl1);
-		txtCustLineNoTwo.setData("name", "txtCustLineNoTwo");
+		txtCustLineNoTwo.setData("name", "txtCustLineNoTwo");*/
 
-		Label lbldummy7 = new Label(pnlProfileInfo, SWT.HORIZONTAL);
+/*		Label lbldummy7 = new Label(pnlProfileInfo, SWT.HORIZONTAL);
 		lbldummy7.setText("");
 		lbldummy7.setLayoutData(gridDatabl1);
 		lbldummy7.setData("yrc:customType", "Label");
 		lbldummy7.setData("name", "lbldummy6");
-
-		Label lblCustomerLineFieldThree = new Label(pnlProfileInfo,
+*/
+		Label lblLinePO = new Label(pnlProfileInfo,
 				SWT.HORIZONTAL);
-		lblCustomerLineFieldThree.setText("Cust Line Field3#");
-		lblCustomerLineFieldThree.setLayoutData(gridDatabl1);
-		lblCustomerLineFieldThree.setData("yrc:customType", "Label");
-		lblCustomerLineFieldThree.setData("name", "lblCustomerLineFieldThree");
-		txtCustLineNoThree = new Text(pnlProfileInfo, 2048);
-		txtCustLineNoThree.setLayoutData(gridDatabl1);
-		txtCustLineNoThree.setData("name", "txtCustLineNoThree");
+		lblLinePO.setText("Line PO#");
+		lblLinePO.setLayoutData(gridDatabl1);
+		lblLinePO.setData("yrc:customType", "Label");
+		lblLinePO.setData("name", "lblCustomerLineFieldThree");
+		txtLinePO = new Text(pnlProfileInfo, 2048);
+		txtLinePO.setLayoutData(gridDatabl1);
+		txtLinePO.setData("name", "txtLinePO");
 
 
 		Label lbldummy8 = new Label(pnlProfileInfo, SWT.HORIZONTAL);
