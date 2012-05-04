@@ -6,13 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.woodstock.util.frame.log.base.ISCILogger;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -23,7 +29,6 @@ import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
-import com.yantra.yfc.log.YFCLogCategoryFactory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -41,6 +46,7 @@ public class XPXUtils implements YIFCustomApi {
 	/** API object. */
 	private static YIFApi api = null;
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+	private static final XPathFactory xPathFactory = XPathFactory.newInstance();
 
 	static {
 		
@@ -2494,5 +2500,33 @@ public class XPXUtils implements YIFCustomApi {
 			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
 		return inputDocument;
+	}
+	
+	public static XPath getXPathInstance()
+	{
+		synchronized (xPathFactory) {
+	      return xPathFactory.newXPath();
+	    }
+	}
+	
+	public static final List<Element> getElements(Node node, String expression) throws XPathExpressionException
+    {	      
+	    XPathExpression xpr = getXPathInstance().compile(expression);
+	    NodeList list=null;
+	    if(xpr!=null)
+	    	list = (NodeList)xpr.evaluate(node, XPathConstants.NODESET);
+	      
+	    List toReturn = new ArrayList();
+	    if(list!=null)
+	    {
+		    for (int i = 0; i < list.getLength(); i++)
+		    {
+		      Node n = list.item(i);
+		      if (1 != n.getNodeType())
+		        continue;
+		      toReturn.add((Element)n);
+		    }
+	    }	
+	    return toReturn;	    
 	}
 }
