@@ -3,8 +3,9 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="/WEB-INF/swc.tld"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
-<script type="text/javascript" src="<s:url value='/swc/js/common/XPEDXUtils.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
     This is to avoid a defect in Struts that?s creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts? OGNL statements. --%>
@@ -14,7 +15,7 @@
     	<div class="question">
     		<ul class="padding-top3">
             	<li class="no-margin"> <strong>Quick Links</strong></li>
-                <li><a href="#"><img height="12" width="12" border="0" title="Account defined bookmarked links which display on the homepage." alt="Account defined bookmarked links which display on the homepage." src="../../xpedx/images/icons/12x12_grey_help.png"></a></li>
+                <li><a href="#"><img height="12" width="12" border="0" title="Account defined bookmarked links which display on the homepage." alt="Account defined bookmarked links which display on the homepage." src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"></a></li>
 			</ul>
 	        <s:if test="%{#isUserAdmin}" >
 	        	<div class="txt-small clearview padding-bottom2"><s:a id="addNewQL" name="addNewQL" href="#newQL" cssClass="underlines">[Add New]</s:a></div>          	                                      
@@ -65,7 +66,7 @@ function loadDataOnStart() {
 
 		var deleteLink = document.createElement('a');
 		var imageIcon = document.createElement('img');
-		imageIcon.setAttribute('src','../../xpedx/images/common/icon_delete.gif');
+		imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/icon_delete.gif');
 		imageIcon.setAttribute('alt','delete');
 		imageIcon.setAttribute('width','16');
 		imageIcon.setAttribute('height','16');

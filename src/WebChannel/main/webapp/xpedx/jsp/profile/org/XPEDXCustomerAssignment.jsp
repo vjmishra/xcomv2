@@ -2,12 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <swc:html isXhtml="true">
 <head>
-  <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
-  <link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/common/notes-list.css'/>" />
-  <script type="text/javascript" src="<s:url value='/swc/js/user/userPreferences.js'/>"></script>
+  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
+  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/common/notes-list.css" />
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/userPreferences.js"></script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="Customer Assignments" /></title>
 <script type="text/javascript">			
 	function moveCustomers(lboFrom, lboTo )

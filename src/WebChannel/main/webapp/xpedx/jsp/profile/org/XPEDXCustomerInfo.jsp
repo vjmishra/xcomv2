@@ -21,7 +21,7 @@
 <!-- begin styles. -->
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!-- end styles -->
 
@@ -30,8 +30,8 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
-		<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/GLOBAL.css" />
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/ADMIN.css" />
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
 <!-- javascript 
 
 <script type="text/javascript" src="../../xpedx/js/global/ext-base.js"></script>
@@ -44,8 +44,8 @@
 <script type="text/javascript" src="../../xpedx/js/catalog/catalogExt.js"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/swc.js'/>"></script>
 -->
-<script type="text/javascript" src="<s:url value='/xpedx/js/quicklinks/xpedxCustomerQuickLinks.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/xpedx/js/profile/org/xpedxCustomerLocations.js'/>"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quicklinks/xpedxCustomerQuickLinks.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/org/xpedxCustomerLocations.js"></script>
 
 <!-- carousel scripts js   
 
@@ -58,18 +58,18 @@
 <script type="text/javascript" src="../../xpedx/js/quick-add/quick-add.js"></script>
 <script type="text/javascript" src="../../xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script> 
 -->
-<script type="text/javascript" src="../../xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js'/>" type="text/javascript" charset="utf-8"></script>
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js'/>" type="text/javascript" charset="utf-8"></script> <!-- modified the path for jira 1833 -->
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bgiframe.min.js" type="text/javascript" charset="utf-8"></script> <!-- modified the path for jira 1833 -->
 <!--[if IE]><script src="<s:url value='/xpedx/other_libs/excanvas_r3/excanvas.js'/>" type="text/javascript" charset="utf-8"></script><![endif]-->
-<script src="<s:url value='/xpedx/js/jquery-tool-tip/jquery.bt.min.js'/>" type="text/javascript" charset="utf-8"></script>
-<!-- /STUFF --><script type="text/javascript" src="<s:url value='/xpedx/js/xpedx-new-ui.js'/>" language="javascript">
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery.bt.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- /STUFF --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js" language="javascript">
 </script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min.js"></script>
 <!--  
 
 
@@ -77,12 +77,12 @@
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js'/>"></script>
 <script type="text/javascript" src="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.js'/>"></script>
 -->
-<link rel="stylesheet" type="text/css" href="<s:url value='/xpedx/js/fancybox/jquery.fancybox-1.3.4.css'/>" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!--  
 <script type="text/javascript" src="../../xpedx/js/jquery.shorten.js"></script>
 <script type="text/javascript" src="../../xpedx/js/global-xpedx-functions.js"></script>
 -->
-<script src="<s:url value='/xpedx/js/SpryTabbedPanels.js'/>" type="text/javascript"></script> <!-- modified the path for jira 1833 -->
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script> <!-- modified the path for jira 1833 -->
 
 <!--  to restrict numeric values in spending limit  -->
 
@@ -146,8 +146,8 @@ $("#various5").fancybox();
 	}
 </script>
 
-<script type="text/javascript" src="../../xpedx/js/jquery.numeric.js"></script>
-<script type="text/javascript" src="../../xpedx/js/jquery.maskedinput-1.3.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 $('.phone-numeric').numeric(false); 
@@ -221,7 +221,7 @@ ul.checkboxTree li
 	        <div class="question">
 	          <ul class="padding-top2 padding-bottom2">
 	            <li> <strong>Central Contact Information </strong></li>
-	            <li><a href="#"><img height="12" width="12" border="0" title="Optional information for online viewing only." alt="Optional information for online viewing only." src="../../xpedx/images/icons/12x12_grey_help.png" /></a></li>
+	            <li><a href="#"><img height="12" width="12" border="0" title="Optional information for online viewing only." alt="Optional information for online viewing only." src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" /></a></li>
 	          </ul>
 	        </div>
 	        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -332,7 +332,7 @@ ul.checkboxTree li
       <div class="question">
         <ul class="padding-top3 padding-bottom2">
           <li> <strong>Custom Fields</strong></li>
-          <li><a href="#"><img height="12" width="12" border="0" title="Customized line level fields." alt="Customized line level fields." src="../../xpedx/images/icons/12x12_grey_help.png"/></a></li>
+          <li><a href="#"><img height="12" width="12" border="0" title="Customized line level fields." alt="Customized line level fields." src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"/></a></li>
         </ul>
       </div>
       <table id="customerFieldsTable" style="width:100%" class="standard-table">
