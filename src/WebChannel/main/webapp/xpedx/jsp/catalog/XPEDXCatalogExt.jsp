@@ -665,13 +665,15 @@ true;"
 
 <script>	
 <%-- //IMPORTANT: The templates are optimized to reduce the space and # of lines in JS for performance reasons. Please maintain this in future. --%>
+
+<%-- //IMPORTANT: Removed redundant class="itemdiv" style from all Views (grid,normal,condensed) - JIRA 2798 --%>
 var itemWin;			
 var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{<xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
 
 function getNormalView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" >',
    '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
     '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
    '</div>',
@@ -710,7 +712,7 @@ return new Ext.XTemplate(
 function getCondensedView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv" style="height:auto;">',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  style="height:auto;">',
   '<div class="imgs">',
    '<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
@@ -745,7 +747,7 @@ return new Ext.XTemplate(
 function getMiniView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" >',
   '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
   '</div>','<div class="contents">',
