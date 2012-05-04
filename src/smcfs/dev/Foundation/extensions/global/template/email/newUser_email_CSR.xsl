@@ -3,11 +3,13 @@
     xmlns:emailformatters="com.yantra.pca.email.formatters"
     xmlns:java="java"
     exclude-result-prefixes="java emailformatters">
-    <xsl:variable name="imageURL">    
-		<xsl:value-of select="//@ImageUrl"/>
-	</xsl:variable> 
     
     <xsl:template match="NewUser">
+    
+    <xsl:variable name="imageURL">    
+		<xsl:value-of select="@ImageUrl"/>
+	</xsl:variable> 
+    
      <html>
 		<xsl:template match="/">
 			<xsl:comment>RECIPIENTS=</xsl:comment>
