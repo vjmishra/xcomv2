@@ -4,6 +4,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs’. 
     This is to avoid a defect in Struts that’s creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts’ OGNL statements. --%>
@@ -16,9 +18,9 @@
     <s:property value="wCContext.storefrontId" /> - <s:text name="CustomerProfile"/>
  </title>
 <swc:head/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
-<script type="text/javascript" src="<s:url value='/swc/js/profile/profile.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/profile/org/corporateInfo.js'/>"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/org/corporateInfo.js"></script>
 
 
 </head>

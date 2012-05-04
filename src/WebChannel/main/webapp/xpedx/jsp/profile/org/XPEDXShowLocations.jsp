@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 
 <s:set name='_action' value='[0]'/>
@@ -14,10 +15,10 @@
 <s:set name="sapParentName" value="%{#_action.getmSapName()}" />
 <s:set name="msap" value="%{#_action.getBuyrOrgName()}"/>
 
-<script type="text/javascript" src="/swc/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="/swc/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
 
 <script type="text/javascript">
 //<!--

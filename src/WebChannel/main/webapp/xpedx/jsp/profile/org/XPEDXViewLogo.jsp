@@ -5,6 +5,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
 
 
 <swc:html isXhtml="true">
@@ -17,12 +19,12 @@
     <s:property value="wCContext.storefrontId" /> - <s:text name="CustomerProfile"/>
  </title>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/user/my-account.css'/>" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
 
-<script type="text/javascript" src="<s:url value='/swc/js/profile/profile.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/profile/org/org.js'/>"></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/verifyAddress.js'/>" ></script>
-<script type="text/javascript" src="<s:url value='/swc/js/common/address/editableAddress.js'/>" ></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/org/org.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js" ></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js" ></script>
 
 </head>
 			 <s:set name='userListResId' value='"/swc/profile/ManageUserList"'/>
