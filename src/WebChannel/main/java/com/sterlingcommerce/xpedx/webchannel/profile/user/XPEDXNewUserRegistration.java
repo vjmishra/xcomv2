@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.yantra.yfs.core.YFSSystem;
@@ -36,7 +37,13 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
 	private String messageType="NewUser";
-	private String imageUrl = null; //Start -Jira 3261
+	private String imageUrlPath = null; //Start -Jira 3261
+	public String getImageUrlPath() {
+		return imageUrlPath;
+	}
+	public void setImageUrlPath(String imageUrlPath) {
+		this.imageUrlPath = imageUrlPath;
+	}
 	private static final String SUCCESS = "success";
 	
 	
@@ -58,13 +65,13 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			 * 
 			 * 
 			 * */
-			String imageUrl = "";
+			//String imageUrl = "";
 			if(storeFrontId!=null && storeFrontId.trim().length() > 0){
 			String imageName = getLogoName(storeFrontId);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
-				imageUrl = imagesRootFolder + imageName;
-			    setImageUrl(imageUrl); 	
+				imageUrlPath = imagesRootFolder + imageName;
+			    setImageUrlPath(imageUrlPath); 	
 			}
 			}
 			/** End ------- JIRA 3261 for logo changes
@@ -94,9 +101,10 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 					}
 				}
 				prepareAndInvokeMashup("XPEDXSendNewUserInfoToCSR");	
-			}catch (Exception e) {
+				
+				}catch (Exception e) {
 				e.printStackTrace();
-				log.error("Couldn't send the Mail to CSR");
+				log.error("Couldn't send the Mail to CSR"+e.getMessage());
 				return ERROR;
 				// TODO: handle exception
 			}
@@ -132,12 +140,6 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				_imageName = "/xpedx_r_rgb_lo.jpg";
 			} 
 			return _imageName;
-		}
-		public String getImageUrl() {
-			return imageUrl;
-		}
-		public void setImageUrl(String imageUrl) {
-			this.imageUrl = imageUrl;
 		}
 		/**
 		 * End JIRA 3261
