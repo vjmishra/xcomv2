@@ -12,6 +12,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUILocale;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
@@ -335,5 +336,42 @@ public class XPEDXUtilBean extends UtilBean {
 	        
 	        return date[1]+"/"+date[2]+"/"+date[0];
 	    }
+		public String formatDate(String inputDate,IWCContext wcContext,  String inputFormat, String outputFormat)
+	    {
 	    
+			 ISCUILocale locale = wcContext.getSCUIContext().getUserPreferences().getLocale();
+		        if(YFCCommon.isVoid(inputFormat))
+		        {
+		            inputFormat = DEFAULT_XML_DATE_FORMAT;
+		        }
+
+		        if(YFCCommon.isVoid(outputFormat))
+		        {
+		            outputFormat = locale.getDateFormat();
+		        }
+
+		        YDate yDate = new YDate(inputDate, inputFormat, true);
+		        String dateTimes[]=inputDate.split("T");
+		        if(dateTimes!=null && dateTimes.length >1)
+		        {
+		        	String timesStr=dateTimes[1];
+		        	if(timesStr != null)
+		        	{
+		        		String times[]=dateTimes[1].split(":");
+		        		if(times[0] != null)
+		        			yDate.setHours(Integer.parseInt(times[0]));
+		        		if(times[1] != null)
+		        			yDate.setMinutes(Integer.parseInt(times[1]));
+		        		if(times[2] != null)
+		        		{
+		        			String seconds[]=times[2].split("-");
+		        			if(seconds !=null && seconds[0] !=null)
+		        			yDate.setSeconds(Integer.parseInt(seconds[0]));
+		        		}
+		        	}
+		        }
+		        String returnValue = yDate.getString(outputFormat, locale.getJLocale());
+
+		        return returnValue;
+	    }
 }
