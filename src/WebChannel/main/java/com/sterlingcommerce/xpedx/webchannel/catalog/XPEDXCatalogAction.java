@@ -411,15 +411,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
 		
-		Set<String> keySet = valueMap.keySet();
-		Iterator<String> iterator = keySet.iterator();
-		String searchStringValue = "";
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			if (key.contains("Value"))
-				searchStringValue = valueMap.get(key);
-		}		
-		if (!"".equals(searchStringValue.trim())) {
+		String searchStringValue = valueMap.get("/SearchCatalogIndex/Terms/Term[" + 1 + "]/@Value");
+		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
