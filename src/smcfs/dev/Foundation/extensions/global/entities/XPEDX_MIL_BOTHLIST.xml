@@ -15,7 +15,7 @@
 				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
 				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="SharePrivate"/>
 				<Attribute ColumnName="CUSTOMER_KEY"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="CustomerKey"/>
-				<Attribute ColumnName="PARENT_CUSTOMER_KEY"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="ParentCustomerKey"/>
+				<Attribute ColumnName="PARENT_CUSTOMER_KEY"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="ParentCustomerKey"/>
 				<Attribute ColumnName="ROOT_CUSTOMER_KEY"  	DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="RootCustomerKey"/>
 				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="true" XMLName="ExtnCustomerDivision"
 				XMLGroup="Extn" />
