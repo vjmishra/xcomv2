@@ -28,7 +28,10 @@ public class ErrorLogger {
 	//Commenting this line as one logger is enough and appenders can be controlled in config file.
 	//private static Logger log4jLogger;
 	static {
-		yfcLogCatlog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+		
+		//Please do not change anything here this is very specific to cent logging  and if the getlogger path going to change this will be conflict with log4jconfig.custom.xml
+		//cent_appender entry for logging
+				yfcLogCatlog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.cent");
 		//Commenting this line as one logger is enough and appenders can be controlled in config file.
 		//log4jLogger = YFCLogCategory.getLogger("cent");
 		try {

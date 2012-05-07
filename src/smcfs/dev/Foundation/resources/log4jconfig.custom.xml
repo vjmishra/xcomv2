@@ -215,11 +215,16 @@
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
-
-   <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+    
+    <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
        <appender-ref ref="SOCKET" />
-	   <appender-ref ref="CONSOLE" />
+	   <appender-ref ref="CONSOLE" />		 
+	   <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+	 <category name="com.xpedx.nextgen.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
 	   <appender-ref ref="CENT_APPENDER" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
