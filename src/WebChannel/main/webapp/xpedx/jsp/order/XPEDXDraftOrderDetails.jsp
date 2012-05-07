@@ -2068,7 +2068,7 @@ var currentAadd2ItemList = new Object();
 </div>
 <!--Added for 3098  -->
 <br/><br/><b><div  id="maxOrderErrorMessageBottom" style="position:relative;left:600px;color:red;display:inline" ></div></b>
-<br/><br/><b><div  id="minOrderErrorMessageBottom" style="position:relative;left:550px;color:red" ></div></b>
+<br/><br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
 <br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
 <div id="errorDiv_orderHeader" style="color:red;" ></div>
