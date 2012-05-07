@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 
 import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -30,13 +31,14 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
  * This class takes care of building JS objects with the items data for the templates in Catalog search results pages.
  */
 public class XPEDXItemsDataTemplateComponent extends Component {
-
+	XPEDXSCXmlUtils xpedxScxmlUtil;
 	
 	public XPEDXItemsDataTemplateComponent(ValueStack stack, HttpServletRequest req,
             HttpServletResponse res, XPEDXItemsDataTemplateTag tag) {
 		super(stack);
 		this.tag = tag;
 		this.req = req;
+		xpedxScxmlUtil = new XPEDXSCXmlUtils();
 	}
 
 	@Override
@@ -65,48 +67,17 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			myPrice = validate(price.getAttribute("UnitPrice"));
 		String pImg = (String)findValue("pImg");
 		
-		//Anil start here for ticket 3155
-		String attributeName="ImageLocation";
-		String attributeValue=xmlUtils.getAttribute(info,"ImageLocation");
-		boolean isImageOrContentLocation = "ContentLocation".equals(attributeName) || "ImageLocation".equals(attributeName);
-		String imageMainURL="/";
-		if (isImageOrContentLocation
-			&& attributeValue != null
-			&& (attributeValue.equals(XPEDXConstants.IMAGE_SERVER)
-					|| attributeValue.equals(XPEDXConstants.CONTENT_SERVER_MSDS) || attributeValue
-					.equals(XPEDXConstants.CONTENT_SERVER) || attributeValue
-					.equals(XPEDXConstants.CONTENT_SERVER_FSC) || attributeValue
-					.equals(XPEDXConstants.CONTENT_SERVER_PEFC) || attributeValue
-					.equals(XPEDXConstants.CONTENT_SERVER_SFI))) {
-		 ;
-		  imageMainURL = validate(XPEDXWCUtils.getServerLocation(attributeValue)) + "/" + validate(info.getAttribute("ImageID"));
-	}
-	else
-	{
-		  imageMainURL = validate(xmlUtils.getAttribute(info,"ImageLocation")) + "/" + validate(info.getAttribute("ImageID"));
-	}
-		
-		//Don't know why this is required so commenteing out the this method Anil start here
-		/*if(!imageMainURL.equals("/"))
-		{
-		if(!"/".equals(imageMainURL)) {
-			if (imageMainURL.startsWith("/"))
-				pImg = pImg.substring(0, pImg.indexOf("/", 1)) + imageMainURL;
+		String imageUrl = "/swc/xpedx/images/INF_150x150.jpg";
+		String ImageLocation = xpedxScxmlUtil.getAttribute(info, "ImageLocation");
+		String ImageID = xpedxScxmlUtil.getAttribute(info, "ImageID");
+		if(ImageLocation!= null && ImageID!=null && !("").equals(ImageLocation) && !("").equals(ImageID)) {
+			if(ImageLocation.lastIndexOf("/") == ImageLocation.length()-1)
+				imageUrl = ImageLocation+ImageID;
 			else
-				pImg = pImg.substring(0, pImg.indexOf("/", 1)) + "/" + imageMainURL;
+				imageUrl = ImageLocation+"/"+ImageID;
 		}
-		}*/
-		//Don't know why this is required so commenteing out the this method Anil End here
-		if("/".equals(imageMainURL))
-		{
-			pImg="/swc/xpedx/images/INF_150x150.jpg";
-		}
-		else
-		{
-			pImg=imageMainURL;
-		}
-		
-		//Anil End here for ticket 3155
+
+		pImg = imageUrl;
 		
 		//ItemID value is required not string - JIRA 3538
 		HashMap<String, String> skuMap = tag.getItemMap().get(itemID);
@@ -275,7 +246,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
 		}
 		sb.append("\",");
-		sb = parseData(sb);
+		//sb = parseData(sb);
 		
 		try {
 			writer.append((CharSequence) sb);
@@ -297,7 +268,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	 */
 	private StringBuffer parseData(StringBuffer sb) {
 		int startIndex = -1;
-		while((startIndex = sb.indexOf("//")) >= 0) {
+		while((startIndex = sb.indexOf("//")) >= 0) {			
 			sb = sb.replace(startIndex, (startIndex+2), "/");
 		}
 		return sb;
