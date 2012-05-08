@@ -585,6 +585,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 						e.printStackTrace();
 					}	
 				}
+				//Sequence Editing
 				if("@ItemOrder".equals(property)){
 					String oldValue = "0.00";
 					if(element.hasAttribute(ITEMORDER_OLD_VALUE)){
@@ -619,7 +620,6 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 						e.printStackTrace();
 					}	
 				}
-				
 			/*if("@Action".equals(property)){
 					String oldValue = "0.00";
 					if(element.hasAttribute("UomId")){
