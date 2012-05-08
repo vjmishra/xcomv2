@@ -325,7 +325,7 @@ public class XPEDXOrderCancelAction extends WCMashupAction {
 		} catch (Exception ex) {
 			setErrorMsg("Your order cannot be cancelled at this moment. Please try again later.");
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
-			generatedErrorMessage = "Unexpected error while placing the order.Please contact system admin.";
+			generatedErrorMessage = "There was an error processing your last request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
 			return "error";
 		}
 	}
