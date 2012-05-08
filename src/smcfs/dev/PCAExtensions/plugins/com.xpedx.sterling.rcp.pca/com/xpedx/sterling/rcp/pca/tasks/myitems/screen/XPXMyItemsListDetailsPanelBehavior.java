@@ -146,13 +146,25 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						Element item = ctx.getOutputXmls()[i].getDocumentElement();
 						Element eleItemsList1 = YRCXmlUtils.getChildElement(item, "Item");
 						ArrayList uomList = new ArrayList(); 
-						if(eleItemsList1!=null) {
+
+						if (eleItemsList1 != null) {
+
 							itemID = eleItemsList1.getAttribute("ItemID");
-							//uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
-							Element primaryInfoElem =  YRCXmlUtils.getChildElement(eleItemsList1, "PrimaryInformation");
-							if(primaryInfoElem!=null)
-							{
-								itemDescList.put(itemID, primaryInfoElem.getAttribute("ExtendedDescription"));
+
+							uomIds = eleItemsList1
+									.getAttribute("UnitOfMeasure");
+
+							/*
+							 * uomIds =
+							 * eleItemsList1.getAttribute("UnitOfMeasure");
+							 * String uomDesc = (String)
+							 * masterUOMList.get(uomIds);
+							 */Element primaryInfoElem = YRCXmlUtils
+									.getChildElement(eleItemsList1,
+											"PrimaryInformation");
+							if (primaryInfoElem != null) {
+								itemDescList.put(itemID, primaryInfoElem
+										.getAttribute("ExtendedDescription"));
 							}
 						}
 						/* Removed unnecessary code STARTS */
@@ -205,9 +217,15 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
 							for (Element eleItem : listItems1) {								
 								String itemsId = eleItem.getAttribute("ItemId");
+								/*uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
+								String uomDesc = (String) masterUOMList.get(uomIds);*/
 								if(itemDescList!=null && itemDescList.containsKey(itemsId))
 									eleItem.setAttribute("Name", (String) itemDescList.get(itemsId));
 									eleItem.setAttribute("Action","");
+									eleItem.setAttribute("UnitOfMeasure", uomIds);
+
+
+									//eleItem.setAttribute("Desc", uomDesc);
 							}							
 							
 						//} - Removed unnecessary code
@@ -377,6 +395,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 			xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
 			xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
 			xPEDXMyItemsItems.setAttribute("UomId",tempElement.getAttribute("UomId"));
+			xPEDXMyItemsItems.setAttribute("ItemOrder",tempElement.getAttribute("ItemOrder"));
 			
 		}
 		return updateXPEDXMyItemsListInput.getOwnerDocument();
