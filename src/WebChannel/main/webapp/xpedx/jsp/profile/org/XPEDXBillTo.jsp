@@ -385,6 +385,7 @@ ul.checkboxTree li
           			<s:set name="csr1ListEle" value="csr1UserEle" />
 					<s:set name="csr2ListEle" value="csr2UserEle" />
 					<s:if test='#csr1ListEle != null'>
+						<s:set name="csr1UserName" value='#xmlUtil.getAttribute(#csr1ListEle,"Username")' />
 						<s:set name="csr1Ele" value='#xmlUtil.getChildElement(#csr1ListEle,"ContactPersonInfo")' />
 						<s:set name="csr1FirstName" value='#xmlUtil.getAttribute(#csr1Ele,"FirstName")' />
 						<s:set name="csr1LastName" value='#xmlUtil.getAttribute(#csr1Ele,"LastName")' />
@@ -393,6 +394,7 @@ ul.checkboxTree li
 						<s:set name="fmtCsr1Phone" value='#xpedxUtilBean.getFormattedPhone( #csr1Phone )' />
 					</s:if>
 					<s:if test='#csr2ListEle != null'>
+						<s:set name="csr2UserName" value='#xmlUtil.getAttribute(#csr2ListEle,"Username")' />
 						<s:set name="csr2Ele" value='#xmlUtil.getChildElement(#csr2ListEle,"ContactPersonInfo")' />
 						<s:set name="csr2FirstName" value='#xmlUtil.getAttribute(#csr2Ele,"FirstName")' />
 						<s:set name="csr2LastName" value='#xmlUtil.getAttribute(#csr2Ele,"LastName")' />
@@ -406,7 +408,7 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/>&nbsp;<s:property value="#csr1LastName"/><br/>
+				            	<s:property value='%{#csr1UserName}'/><br/>
 				            		<a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 									<br/>
 				            	<span class="grey-italic">
@@ -422,10 +424,11 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr1FirstName"/> &nbsp; <s:property value="#csr1LastName"/><br />
+				            	<s:property value='%{#csr1UserName}'/><br />
 				            	 <a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 				            		<br/>
-						            	<span class="grey-italic">
+						   
+				            	<span class="grey-italic">
 				            	
 				            		<s:if test='%{#fmtCsr2Phone != ""}'>
 						           		<s:property value='%{#fmtCsr2Phone}'/><br/>
@@ -441,7 +444,7 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/><br />
+				            	<s:property value='%{#csr2UserName}'/><br />
 				            	<a href="mailto:<s:property value="#csr2EMailID"/>" ><s:property value="#csr2EMailID"/></a><br/>
 				            	<span class="grey-italic">
   					          
@@ -456,7 +459,7 @@ ul.checkboxTree li
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
-				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
+				            	<s:property value='%{#csr2UserName}'/>
 				            	<br />
 								<a href="mailto:<s:property value="#csr2EMailID" />" ><s:property value="#csr2EMailID"/></a><br/>
 				            	
