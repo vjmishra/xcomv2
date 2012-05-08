@@ -97,9 +97,10 @@
 		  	  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		 }
 		
+		/* Commented For Jira 3646 
 		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
 		      alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
-		}
+		} */
 		
 		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
 		     alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
