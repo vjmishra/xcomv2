@@ -683,8 +683,12 @@ var selectedShipCustomer = null;
 	action='xpedxGetAssignedCustomers' />
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
+<s:url id='shipToForUserProfileSearch' namespace='/common'
+	action='xpedxGetAssignedCustomersForUserProfile' />
 <s:url id='shipToSearchForOrderList' namespace='/common'
 	action='xpedxSearchAssignedCustomersForOrderList' />	
+<s:url id='shipToSearchForUserProfile' namespace='/common'
+	action='xpedxSearchAssignedCustomersForUserProfile' />	
 <s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
 	action='xpedxManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
@@ -1587,6 +1591,10 @@ function searchShipToAddress(divId,url) {
     		url = '<s:property value="#shipToForOrderSearch"/>';
    		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
    			url = '<s:property value="#shipToSearchForOrderList"/>';
+		if(divId == 'shipToUserProfile' && searchText == '')
+		  	url = '<s:property value="#shipToForUserProfileSearch"/>';
+		if(divId == 'shipToUserProfile' && searchText != '')                                  
+		 	url = '<s:property value="#shipToSearchForUserProfile"/>';
 		if(url == null)
 			url = '<s:property value="%{searchURL}"/>';
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
