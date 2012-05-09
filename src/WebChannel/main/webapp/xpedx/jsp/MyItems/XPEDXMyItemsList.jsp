@@ -1018,7 +1018,18 @@
 				</td> 
 				<td class="createdby-lastmod"><s:property value="#modifiedBy" /></td>
 				<td class="createdby-lastmod"><s:property value='%{#util.formatDate(#lastMod, #wcContext, null, "MM/dd/yyyy")}' /></td>
-				<s:if test="%{#showAllActions == true}">
+				<s:if test="%{#spShareAdminOnly != ''}">
+				<s:if test='%{#isUserAdmin == false && #spShareAdminOnly == "Y"}'>
+					<td class="actions right-cell">
+						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
+							<option value="select" selected="selected">- Select Action -</option>
+							<option value="view">Open List</option>
+							<option value="export">Export List</option>
+							<option value="copy">Copy List</option>
+						</select>
+					</td>
+				</s:if>
+				<s:else>
 					<td class="actions right-cell">
 						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
 							<option value="select" selected="selected">- Select Action -</option>
@@ -1029,6 +1040,7 @@
 							<option value="delete">Delete List</option>
 						</select>
 					</td>
+				</s:else>
 				</s:if>
 				<s:else>
 					<td class="actions right-cell">
@@ -1036,7 +1048,9 @@
 							<option value="select" selected="selected">- Select Action -</option>
 							<option value="view">Open List</option>
 							<option value="export">Export List</option>
+							<option value="import">Import New Items</option>
 							<option value="copy">Copy List</option>
+							<option value="delete">Delete List</option>
 						</select>
 					</td>
 				</s:else>
