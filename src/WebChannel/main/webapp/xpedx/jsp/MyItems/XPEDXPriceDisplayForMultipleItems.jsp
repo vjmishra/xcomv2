@@ -100,7 +100,7 @@
 			<td colspan="3" width="36%" valign="top">
 
 
-			<s:div id='availability_%{#id}'>
+			<s:div id='availability_%{#id}' cssStyle="border-bottom:none;">
 				<s:if test="%{pnaHoverMap != null}">
 					<s:if test="%{#jsonKey != ''}">
 						<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
@@ -202,7 +202,7 @@
 			--%>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<s:if test="#isBracketPricing == 'true'">
-			<s:div id="bracketPricing_%{#id}">
+			<s:div id="bracketPricing_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="isMyPriceZero" value="%{'false'}" />
 				<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
@@ -248,7 +248,7 @@
 				--%>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 				<s:if test="#displayPriceForUoms.size()>0" >
-				<s:div id="myPrice_%{#id}">
+				<s:div id="myPrice_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="break" value="false"></s:set>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
