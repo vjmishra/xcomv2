@@ -642,7 +642,8 @@ public class XPEDXMyItemsUtils {
 		return outputDoc;
 	} 
 	public static String getReplacedValue(String CustomerField){		
-		CustomerField=CustomerField.replaceAll("'","");			
-		return CustomerField; 
+		CustomerField=CustomerField.replaceAll("'","");
+		// Blank space removed for JIRA 3693
+		return CustomerField.trim(); 
 		}
 }
