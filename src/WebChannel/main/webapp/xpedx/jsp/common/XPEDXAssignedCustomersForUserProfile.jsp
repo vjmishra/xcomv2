@@ -31,7 +31,7 @@
 <s:set name="assgnCustomers"
 	value="#wcUtil.getAssignedCustomers(#loggedInUser)" />
 <s:if test="#_action.isSearch()">
-	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomers" namespace="/common">
+	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomersForUserProfile" namespace="/common">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
@@ -71,7 +71,7 @@
 		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
-		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();">&nbsp;</span>		
+		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress('shipToUserProfile');">&nbsp;</span>		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
 		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
