@@ -163,8 +163,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 									.getChildElement(eleItemsList1,
 											"PrimaryInformation");
 							if (primaryInfoElem != null) {
-								itemDescList.put(itemID, primaryInfoElem
-										.getAttribute("ExtendedDescription"));
+								itemDescList.put(itemID, primaryInfoElem.getAttribute("ShortDescription"));
 							}
 						}
 						/* Removed unnecessary code STARTS */
@@ -236,7 +235,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						if(exportRequested){
 							synchronized (getFormId()) {
 								StringBuilder sbCSV = new StringBuilder();
-								sbCSV.append("Customer Part Number|Supplier Part Number|Quantity|Unit of Measure|");
+								sbCSV.append("Customer Part Number,Supplier Part Number,Quantity,Unit of Measure,");
 								sbCSV.append("Description");
 								sbCSV.append("\n");
 								Element eleItemsItemsList = YRCXmlUtils.getChildElement(eleMyItemsList, "XPEDXMyItemsItemsList");								
@@ -251,11 +250,11 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 										uomId = eleItem.getAttribute("UomId");
 									}
 									eleItem.setAttribute("Name", (String) itemDescList.get(eleItem.getAttribute("ItemId")));
-									sbCSV.append("\"").append(eleItem.getAttribute("")).append("\"").append("|");
-									sbCSV.append("\"").append(eleItem.getAttribute("ItemId")).append("\"").append("|");
-									sbCSV.append("").append(eleItem.getAttribute("Qty")).append("").append("|");
-									sbCSV.append("\"").append(uomId).append("\"").append("|");
-									sbCSV.append("\"").append(eleItem.getAttribute("Name")).append("\"").append("|");
+									sbCSV.append("\"").append(eleItem.getAttribute("")).append("\"").append(",");
+									sbCSV.append("\"").append(eleItem.getAttribute("ItemId")).append("\"").append(",");
+									sbCSV.append("").append(eleItem.getAttribute("Qty")).append("").append(",");
+									sbCSV.append("\"").append(uomId).append("\"").append(",");
+									sbCSV.append("\"").append(eleItem.getAttribute("Name")).append("\"").append(",");
 									sbCSV.append("\n");
 								}
 								
