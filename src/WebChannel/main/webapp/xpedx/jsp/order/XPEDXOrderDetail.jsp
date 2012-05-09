@@ -659,6 +659,9 @@ function showSplitDiv(divId)
                         <div class="clearall">&nbsp;</div>
                         <br/><!-- blank line for george -->
                         <div class="order-placed-by">
+                        <s:if test='#xpedxReqDeliveryDate != ""'>
+                        	Estimated Delivery Date: <s:property value="%{#util.formatDate(#xpedxReqDeliveryDate, #wcContext)}"/> <br/><br/>
+                        </s:if>
 							<s:if test='#xpedxExtnHeaderComments != "" && #xpedxHeaderInstructionType == "HEADER"'>
 	                        	<p>Comments: <s:property value='#xpedxExtnHeaderComments' /> </p> <br/>
 	                        </s:if>
