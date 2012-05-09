@@ -1544,10 +1544,16 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
  					}
  				}
  			},
- 			'autoDimensions'	: false,
- 			'width' 		: 750,
- 			'scrolling'   		: 'no',
- 			'height' 		: 530
+ 			'autoDimensions' : false,
+
+ 			'width' : '49.4%',
+
+ 			'scrolling' : 'auto',
+
+ 			'autoscale' : true,
+
+ 			'height' : '74%'
+
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
  			'onStart' 	: function(){
