@@ -41,6 +41,7 @@
 			<s:hidden name="listDesc" value="%{listDesc}"></s:hidden>
 			<s:hidden name="editMode" value="%{editMode}"></s:hidden>
 			<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
+			<s:hidden name="shareAdminOnly1" value="%{shareAdminOnly}"></s:hidden>
 			
 			<s:set name="rbPermissionShared" value="%{''}" />
 			<s:set name="rbPermissionPrivate" value="%{''}" />
@@ -57,6 +58,9 @@
 	</s:if>
 	<s:set name="saCV" value="%{''}" />
 	<s:if test='%{shareAdminOnly == "Y"}'>
+		<s:set name="saCV" value="%{' checked '}" />
+	</s:if>
+	<s:if test='%{shareAdminOnly1 == "Y"}'>
 		<s:set name="saCV" value="%{' checked '}" />
 	</s:if>
 
@@ -80,8 +84,7 @@
 			onclick="hideSharedListForm()" />&nbsp;Personal (only you will be able to view and edit this list)  
 		</p>
 		<s:if test="%{!#isUserAdmin}">
-			<div style="display: none;">
-		</s:if>
+			<div style="display: none;"> 	
 		
 		<input style="margin-left:53px; margin-top:5px; margin-bottom:10px;" 
 			onchange="" id="rbPermissionShared"
@@ -89,10 +92,15 @@
 			type="radio" name="sharePermissionLevel" value=" "
 			onclick="showSharedListForm()" />&nbsp;Shared &nbsp;&nbsp;&nbsp;
 		
-		<s:if test="%{!#isUserAdmin}">
+		
 			</div>
 		</s:if>
-	
+	<s:else><input style="margin-left:53px; margin-top:5px; margin-bottom:10px;" 
+			onchange="" id="rbPermissionShared"
+			<s:property value="#rbPermissionShared"/> 
+			type="radio" name="sharePermissionLevel" value=" "
+			onclick="showSharedListForm()" />&nbsp;Shared &nbsp;&nbsp;&nbsp;
+	 </s:else>
 		<s:set name="displayStyle" value="%{''}" />
 	
 		<s:if test="%{(!#isUserAdmin) || (getSharePrivateField() != '' && getSharePrivateField() != null)}">
@@ -101,7 +109,7 @@
 		
 		<span style="<s:property value="#displayStyle"/>" id="shareAdminOnlyShared" >
 		<input type="checkbox" <s:property value="#saCV"/>
-			name="shareAdminOnly" id="shareAdminOnly" value="Y" /> Edit by Admin users only<br>
+			name="shareAdminOnly" id="shareAdminOnly" value="Y" onchange="javascript:setAdminFlag(this);"/> Edit by Admin users only<br>
 		</span>
 			
 	<div style="<s:property value="#displayStyle"/>" id="dynamiccontent" >
@@ -130,7 +138,15 @@
 		/*if ("<s:property value="rbPermissionPrivate"/>" != ""){
 			Ext.get('dlgShareListShared').hide();
 		}*/
-		
+
+		function setAdminFlag(obj){
+			if(obj.checked == true)
+				obj.value="Y";
+			else
+				obj.value="N";
+			//alert(obj.value);
+			return;
+			}
 		function submitSL(){
 		//added for jira 2940
 			var customerPaths=document.getElementsByName("customerPaths");
