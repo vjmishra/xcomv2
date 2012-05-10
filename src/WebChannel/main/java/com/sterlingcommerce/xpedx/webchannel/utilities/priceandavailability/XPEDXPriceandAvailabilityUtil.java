@@ -37,6 +37,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -885,7 +886,11 @@ public class XPEDXPriceandAvailabilityUtil {
 							}
 							else{
 								//If price currency code is not set,set the currency code from customer profile
-								String custCurrencyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_CURRENCY_CODE);
+								//String custCurrencyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_CURRENCY_CODE);
+								//added for jira 3788 - display of currency code in mil non edit
+								XPEDXShipToCustomer shipToCustomer= new XPEDXShipToCustomer();
+								shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+								String custCurrencyCode = shipToCustomer.getBillTo().getExtnCurrencyCode();
 								pricingInfo.setPriceCurrencyCode(custCurrencyCode);
 							}
 							List<String> uomsList=itemsUOMMap.get(itemId);
@@ -1091,7 +1096,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 		String ajaxMsg = "";	
 		//modified for jira 2885
-		if(( pna == null || pna.getItems().size()==0) && (!"F".equals(pna.getTransactionStatus())))
+		if(( pna == null || pna.getItems().size()==0) && ("F".equals(pna.getTransactionStatus())))
 			ajaxMsg  =   XPEDXPriceandAvailabilityUtil.WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR;
 		else
 			ajaxMsg  =   pna.getStatusVerboseMsg();
