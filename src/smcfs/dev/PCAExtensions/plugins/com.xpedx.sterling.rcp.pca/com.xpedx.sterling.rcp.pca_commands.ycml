@@ -590,6 +590,7 @@
             <command APIName="XPXGetChildCustomerListService" APIType="SERVICE" Name="XPXGetChildCustomerListService" URL="DEFAULT" inputNamespace=""
                 outputNamespace="XPXGetChildCustomerListService_output" version="ver77"/>
             <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="OrgListInput" templateName="getOrganizationListInput" type="output"/>
@@ -598,6 +599,7 @@
             <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
             <namespace name="XPXGetChildCustomerListService_output" templateName="XPXGetChildCustomerListService_output" type="output"/>
             <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUOMPanel">
@@ -606,6 +608,14 @@
         </commands>
         <namespaces>
             <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfCustomerPanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
         </namespaces>
     </form>
 </forms>
