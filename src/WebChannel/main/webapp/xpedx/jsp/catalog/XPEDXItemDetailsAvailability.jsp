@@ -168,7 +168,9 @@
 					<s:set name='cost' value='%{getItemCost()}' />
 					<s:set name='formattedCost' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#cost,#showCurrencySymbol)' />
 					<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
-						<td class="bold">Cost (<s:property value='priceCurrencyCode'/>):&nbsp;<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a></td>
+						<td class="bold">
+						<s:if test="%{#formattedCost != ''}">
+						Cost (<s:property value='priceCurrencyCode'/>):&nbsp;<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a></s:if></td>
 						<td><div id="cost" style="display:none;"> 
 							<s:if test="%{#formattedCost == #priceWithCurrencyTemp1}">
 								<s:property value='%{#formattedCost}' />
