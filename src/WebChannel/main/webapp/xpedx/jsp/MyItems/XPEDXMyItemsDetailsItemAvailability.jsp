@@ -73,16 +73,19 @@
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
-			<td colspan="3"><i><span>Availability</i></span></td>
+			<td colspan="3" width="32%"><i><span>Availability</i></span></td>
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
-			<td class="left" colspan="3"><i><s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></i></td>
-			</s:if>
+			<td class="left" colspan="3" width="32%"><i><s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></i></td>
+			</s:if></s:if></s:if>
 			<s:else>
-			<td class="left" colspan="3"><span>&nbsp;</span></td>
+			<td class="left" colspan="3" width="32%"><span>&nbsp;</span></td>
 			</s:else>
-			<td colspan="3"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
+			<td colspan="3" width="32%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
+			
 
 		</tr>
 		
@@ -114,8 +117,8 @@
 
 				<table cellpadding="0" cellspacing="0" border="0" >
 					<tr>
-						<td width="28%"><strong>Total Available:</strong></td>
-						<td width="19%" class="right"><strong>
+						<td width="45%"><strong>Total Available:</strong></td>
+						<td width="20%" class="right"><strong>
 						<s:if test='%{#jsonTotal != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />  -->
 							<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
@@ -126,10 +129,10 @@
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
 						</s:else>
 						</strong></td>
-						<td class="left" ><strong><s:property value="#jsonUOMDesc" /></strong></td>
+						<td class="left" width="30%" ><strong><s:property value="#jsonUOMDesc" /></strong></td>
 					</tr>
 					<tr>
-						<td align="center">Next Day:</td>
+						<td>Next Day:</td>
 						<td class="right"> 
 						<s:if test='%{#jsonNextDay != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />  -->
@@ -144,7 +147,7 @@
 						<td class="left" ><%--<s:property value="#jsonUOMDesc" />--%></td>
 					</tr>
 					<tr>
-						<td align="center">2+ Days: </td>
+						<td>2+ Days: </td>
 						<td class="right">
 						<s:if test='%{#jsonTwoPlus != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />  -->
@@ -194,7 +197,7 @@
 			--%>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<s:if test="#isBracketPricing == 'true'">
-			<s:div id="bracketPricing_%{#id}">
+			<s:div id="bracketPricing_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="isMyPriceZero" value="%{'false'}" />
 				<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
@@ -249,7 +252,7 @@
 						<s:if test="#disUOMStatus.last">
 						<tr>
 							<td><strong>Extended Price: </strong></td>
-							<td class="right" width="39%">
+							<td class="left" width="39%">
 							<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
 								<s:set name="isMyPriceZero" value="%{'true'}" />
 								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>   
@@ -267,16 +270,15 @@
 						<s:else>
 						<s:if test="%{#break == false}">
 							<tr>
-								<td width="35%"><strong><s:if test="#disUOMStatus.first">My Price:</s:if></strong></td>
-								<td class="right" width="39%">
+								<td width="40%"><strong><s:if test="#disUOMStatus.first">My Price:</s:if></strong></td>
+								<td class="left" width="60%">
 								<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
 										<s:set name="isMyPriceZero" value="%{'true'}" />
 										<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
 										<s:set name="break" value="true"></s:set>
 							    </s:if>
 							    <s:else>
-										<s:property value="#bracketPriceForUOM" />
-										<td> / <s:property value="#bracketUOMDesc" /></td>
+										<s:property value="#bracketPriceForUOM" /> / <s:property value="#bracketUOMDesc" />
 								</s:else></td>
 							</tr>
 						</s:if>
