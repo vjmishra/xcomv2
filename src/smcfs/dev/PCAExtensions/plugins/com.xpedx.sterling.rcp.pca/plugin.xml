@@ -281,6 +281,10 @@
             description="Launches CustomerTree popup"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask"/>
         <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask"
+            description="Launches Customer List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask"/>
+        <SharedTask
             class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"
             description="Launches CustomerContact List"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"/>
