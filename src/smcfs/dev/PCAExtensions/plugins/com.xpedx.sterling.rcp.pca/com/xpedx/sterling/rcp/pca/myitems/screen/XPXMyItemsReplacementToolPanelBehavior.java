@@ -27,6 +27,7 @@ import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCSharedTaskOutput;
 import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 import com.yantra.yfc.rcp.internal.YRCCommand;
@@ -263,7 +264,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
         	for(int i=0; i< apinames.length;i++){
         		String apiname = apinames[i]; 
         		if ( YRCPlatformUI.equals(apiname, "getListOfXPEDXMyItemsLists")) {
-          			Document docOutput = ctx.getOutputXmls()[i];
+        			Document docOutput = ctx.getOutputXmls()[i];
 			    	Element eleOutput = docOutput.getDocumentElement();
 			    	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
 			     	}
@@ -756,6 +757,96 @@ public void CallReplacementServiceForDivision(){
     	
     	callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
 }
+public void searchCustomer(){
+	String BillToValue = getFieldValue("BillToId");
+	String ShipToValue = getFieldValue("ShipToId");
+	String SAPIdValue = getFieldValue("SAPId");
+	String MasterCustomerValue = getFieldValue("MasterCustomerId");
+	String enterPriseKey=getEnterPriseKey();
+	String customerIdSelected =  null;
+	
+	if(BillToValue != null && BillToValue != ""){
+		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
+		elemModel.setAttribute("CustomerType", "01");
+		Element e1 = YRCXmlUtils.createChild(elemModel, "BuyerOrganization");
+		e1.setAttribute("OrganizationName", BillToValue);
+		e1.setAttribute("OrganizationNameQryType", "FLIKE");
+		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
+		e2.setAttribute("ExtnSuffixType", "B");
+		
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
+		Element eleUOMInfo = output.getOutput();
+		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		CallReplacementServiceForCustomerName(customerIdSelected);
+	}
+	
+	if(ShipToValue != null && ShipToValue != ""){
+		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
+		elemModel.setAttribute("CustomerType", "01");
+		Element e1 = YRCXmlUtils.createChild(elemModel, "BuyerOrganization");
+		e1.setAttribute("OrganizationName", ShipToValue);
+		e1.setAttribute("OrganizationNameQryType", "FLIKE");
+		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
+		e2.setAttribute("ExtnSuffixType", "S");
+		
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
+		Element eleUOMInfo = output.getOutput();
+		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		CallReplacementServiceForCustomerName(customerIdSelected);
+	}
+	if(SAPIdValue != null && SAPIdValue != ""){
+		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
+		elemModel.setAttribute("CustomerType", "01");
+		Element e1 = YRCXmlUtils.createChild(elemModel, "BuyerOrganization");
+		e1.setAttribute("OrganizationName", SAPIdValue);
+		e1.setAttribute("OrganizationNameQryType", "FLIKE");
+		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
+		e2.setAttribute("ExtnSuffixType", "C");
+		
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
+		Element eleUOMInfo = output.getOutput();
+		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		CallReplacementServiceForCustomerName(customerIdSelected);
+	}
+	if(MasterCustomerValue != null && MasterCustomerValue != ""){
+		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
+		elemModel.setAttribute("CustomerType", "01");
+		Element e1 = YRCXmlUtils.createChild(elemModel, "BuyerOrganization");
+		e1.setAttribute("OrganizationName", MasterCustomerValue);
+		e1.setAttribute("OrganizationNameQryType", "FLIKE");
+		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
+		e2.setAttribute("ExtnSuffixType", "MC");
+		
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
+		Element eleUOMInfo = output.getOutput();
+		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		CallReplacementServiceForCustomerName(customerIdSelected);
+	}
+	
+	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
+		YRCPlatformUI.showInformation("Information", "Please enter a customer name");	
+	}
+	
+	
+}
+public void CallReplacementServiceForCustomerName(String customerIdSelected){
+	Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");	
+	String itemID = getFieldValue("txtLPC");
+	String replaceItemID = getFieldValue("txtReplaceLPC");
+	//Prepare the Input XML when Search By CustomerName
+	Element elemModel = YRCXmlUtils.createDocument("XPEDXMyItemsList").getDocumentElement();
+	elemModel.setAttribute("ReplaceWithLPC", replaceItemID);
+	Element e1 = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsItemsList");
+	Element e2 = YRCXmlUtils.createChild(e1, "XPEDXMyItemsItems");
+	e2.setAttribute("ItemId", itemID);
+	Element e3 = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsListShareList");
+	Element e4 = YRCXmlUtils.createChild(e3, "XPEDXMyItemsListShare");
+	e4.setAttribute("customerID", customerIdSelected);
 
-
+callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
+}
 }
