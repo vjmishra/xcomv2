@@ -13,6 +13,9 @@ import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategoryFactory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -64,6 +67,7 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 		Element eleInput = inXML.getDocumentElement();
 		String strLPC = eleInput.getAttribute("LPC");
 		String strReplaceLPC = eleInput.getAttribute("ReplaceWithLPC");
+		String replaceItemUOM = null;
 		if(SCUtil.isVoid(strLPC) 
 				|| SCUtil.isVoid(strReplaceLPC)){
 			throw new YFSException("LPC and ReplaceLPC attributes cannot be VOID.");
@@ -89,6 +93,27 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 			//b. invoke API and get the Items List
 			Document docMyItemsItems = api.executeFlow(env, "getXPEDX_MyItemsItems_List", docAPIInput);
 			
+			// To Get UOM For The Item(LPC) To Be Replaced.
+			Document getItemListInDoc = SCXmlUtil.createDocument("Item");
+			getItemListInDoc.getDocumentElement().setAttribute("ItemID", strReplaceLPC);
+			env.setApiTemplate("getItemList", SCXmlUtil.createFromString("<ItemList><Item UnitOfMeasure='' /></ItemList>"));
+			Document getItemListOutDoc = api.invoke(env,"getItemList", getItemListInDoc);
+			env.clearApiTemplate("getItemList");
+			YFCDocument itemListOutDoc = YFCDocument.getDocumentFor(getItemListOutDoc);
+			YFCElement rootListElem = itemListOutDoc.getDocumentElement();
+			if (rootListElem.hasChildNodes()) {
+				YFCElement itemElem = rootListElem.getChildElement("Item");
+				if (itemElem != null && itemElem.hasAttribute("UnitOfMeasure")) {
+					replaceItemUOM = itemElem.getAttribute("UnitOfMeasure");
+				}
+			}
+			
+			log.info("Item To Be Replaced:" + strReplaceLPC);
+			if (YFCObject.isNull(replaceItemUOM) || YFCObject.isVoid(replaceItemUOM)) {
+				throw new Exception("Invalid Item: "+strReplaceLPC);
+			}
+			log.info("Item Unit Of Measure To Be Replaced:" + replaceItemUOM);
+			
 			//2.  Prepare and invoke changeXPEDX_MyItemsDetails Service for each MyItemsItems
 			ArrayList<Element> listOfReplacibleMyItems = SCXmlUtil.getChildren(docMyItemsItems.getDocumentElement(), "XPEDXMyItemsItems");
 			if(listOfReplacibleMyItems.size()>0){
@@ -97,6 +122,7 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 				for (Element eleReplacibleMyIteme : listOfReplacibleMyItems) {
 					Element eleItem = SCXmlUtil.createChild(docReplaceItem.getDocumentElement(), "XPEDXMyItemsItems");
 					eleItem.setAttribute("ItemId", strReplaceLPC);
+					eleItem.setAttribute("UomId", replaceItemUOM);
 					eleItem.setAttribute("MyItemsKey", eleReplacibleMyIteme.getAttribute("MyItemsKey"));
 				}
 				Document docMultiApiOutput = new XPXUtils().loadDataUsingMutliApi(env, docReplaceItem);
