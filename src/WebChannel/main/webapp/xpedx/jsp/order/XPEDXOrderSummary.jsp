@@ -1074,8 +1074,10 @@ from session . We have customer Contact Object in session .
 															<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#editOrderOrderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 														</s:if>
 														<s:else>
-															--%>														  
-											 			  <s:if test="%{#isMyPriceZero == 'true'}">
+															--%>	
+														<s:set name= 'extendedPrice'  value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
+														<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+														<s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">	
 																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 														  </s:if>
 														  <s:else>
@@ -1430,6 +1432,7 @@ from session . We have customer Contact Object in session .
 			<div class="cart-sum-right">
 			<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<table cellspacing="0"  align="right">
+					<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 					<tr>
 						<th>Subtotal:</th>
 						<td><%-- <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#subTotal.toString())' />--%> 
@@ -1438,7 +1441,8 @@ from session . We have customer Contact Object in session .
 							</s:if>
 							<s:else>
 								--%>								
-								<s:if test="%{#myPriceValue == 'true'}">						    			       
+								<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
+ 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp}">							    			       
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
@@ -1476,7 +1480,8 @@ from session . We have customer Contact Object in session .
 							</s:if>
 							<s:else>
 								--%>
-								<s:if test="%{#myPriceValue == 'true'}">
+								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
@@ -1510,7 +1515,8 @@ from session . We have customer Contact Object in session .
 							</s:if>
 							<s:else>
 								--%>
-								 <s:if test="%{#myPriceValue == 'true'}">
+								 <s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
+		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>

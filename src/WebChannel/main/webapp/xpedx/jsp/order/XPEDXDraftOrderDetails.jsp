@@ -1255,6 +1255,8 @@ $(document).ready(function(){
 					 		--%>
 					 		
 					 		<s:set name="isMyPriceZero" value="%{'false'}" />
+					 	
+					 		<s:set name="break" value="false"></s:set>
 					 		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
 					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
@@ -1263,6 +1265,7 @@ $(document).ready(function(){
 									<s:if test='%{!#disUOMStatus.last}' >
 										<s:if test='%{#disUOMStatus.first}' >
 											<tr>
+											<s:if test="%{#break == false}">
 								  	  			<td class="text-right" width="130">
 								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 									 				
@@ -1270,19 +1273,23 @@ $(document).ready(function(){
 									 			<s:else>
 									 			
 									 			  <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
-									 			  <s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
-									 			    	<s:set name="isMyPriceZero" value="%{'true'}" />
+									 			  <s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
 									 			    	<s:set name="myPriceValue" value="%{'true'}" />
+									 			    	
 														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
+														<s:set name="break" value="true"></s:set>
 												  </s:if>
 												  <s:else>
+												  <s:if test="%{#bracketPriceForUOM != #priceWithCurrencyTemp1}">
 												    <s:property value="#bracketPriceForUOM" /><br/>
-													per&nbsp;<s:property value="#bracketUOMDesc" />
+													per&nbsp;<s:property value="#bracketUOMDesc" /></s:if>
 												  </s:else>
 												</s:else>
-												</td>
+												</td></s:if>
 				                            	<td class="text-right" width="147" valign="top">
 					                            	<span class="mil-action-list-wrap-num-span">
+					                            	<s:set name= 'extendedPrice'  value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
+					                            	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 					                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
 														
 													</s:if>
@@ -1291,7 +1298,7 @@ $(document).ready(function(){
 															<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#editOrderOrderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
 														</s:if>
 														<s:else> --%>														  
-											 			  <s:if test="%{#isMyPriceZero == 'true'}">											 			  
+											 			  <s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">											 			  
 																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 														  </s:if>
 														  <s:else>
@@ -1313,7 +1320,7 @@ $(document).ready(function(){
 										 				&nbsp;
 										 			</s:if>
 										 			<s:else>
-										 				<s:if test="%{#isMyPriceZero == 'false'}">
+										 				<s:if test="%{#break == false}">
 										 			    	<s:property	value='#bracketPriceForUOM' />
 													    </s:if>
 										 			</s:else>					                        														  
@@ -1325,7 +1332,7 @@ $(document).ready(function(){
 								 				&nbsp;
 								 			</s:if>
 								 			<s:else>									 			
-												<s:if test="%{#isMyPriceZero == 'false'}">
+												<s:if test="%{#break == false}">
 													per&nbsp;<s:property value="#bracketUOMDesc" />
 												</s:if>											
 											</s:else>
@@ -1919,6 +1926,7 @@ var currentAadd2ItemList = new Object();
 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 <div class="cart-sum-right">
 	<table cellspacing="0" align="right">
+	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		<tr>
 			<th>Subtotal:</th>
 			<td>
@@ -1926,8 +1934,9 @@ var currentAadd2ItemList = new Object();
 					<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnOrderSubTotal"))' />
 				</s:if>
 				<s:else>
-					--%>					
- 			  		<s:if test="%{#myPriceValue=='true'}">
+					--%>	
+					<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
+ 			  		 <s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0 ">	
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 			  		</s:if>						  
 				  	<s:else>
@@ -1965,8 +1974,8 @@ var currentAadd2ItemList = new Object();
 				</s:if>
 				<s:else>
 					--%>
-					
-	 			  <s:if test="%{#myPriceValue=='true'}">
+					<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+	 			  <s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0">
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 				  </s:if>					
 					<s:else>
@@ -1997,7 +2006,8 @@ var currentAadd2ItemList = new Object();
 				</s:if>
 				<s:else>
 					--%>
-		 			  		<s:if test="%{#myPriceValue=='true'}">
+				<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
+		 			  		 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 					  		</s:if>						  
 						  <s:else>
