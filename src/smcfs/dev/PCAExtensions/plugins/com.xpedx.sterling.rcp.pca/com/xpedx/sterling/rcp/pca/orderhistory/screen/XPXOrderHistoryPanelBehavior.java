@@ -392,8 +392,12 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 			else{
 				attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
 				attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
-				attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
-				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtCompany"));
+
+				if(getFieldValue("txtShipFrom")!= null && getFieldValue("txtShipFrom")!= "")
+				{
+					attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+				}
 				attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
 			}
 			isExtnChildCreated = false;

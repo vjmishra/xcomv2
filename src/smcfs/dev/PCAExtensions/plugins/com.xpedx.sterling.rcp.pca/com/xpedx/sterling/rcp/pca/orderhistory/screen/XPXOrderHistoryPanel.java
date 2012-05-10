@@ -485,14 +485,14 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		
 		lblSuffix = new Label(pnlFilter, SWT.LEFT);
 		GridData lblSuffixlayoutData = new GridData();
-		lblSuffixlayoutData.horizontalAlignment = 2;
+		lblSuffixlayoutData.horizontalAlignment = 4;
 		lblSuffixlayoutData.verticalAlignment = 16777216; 
 		lblSuffix.setLayoutData(lblSuffixlayoutData);
 		lblSuffix.setText("Suffix");
 		
 		lblShipFrom = new Label(pnlFilter, SWT.LEFT);
 		GridData lblShipFromlayoutData = new GridData();
-		lblShipFromlayoutData.horizontalAlignment = 2;
+		lblShipFromlayoutData.horizontalAlignment = 4;
 		lblShipFromlayoutData.verticalAlignment = 16777216; 
 		lblShipFrom.setLayoutData(lblShipFromlayoutData);
 		lblShipFrom.setText("Ship From");
@@ -513,14 +513,14 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		
 		txtSuffix = new Text(pnlFilter, SWT.BORDER);
 		GridData txtSuffixlayoutData = new GridData();
-		txtSuffixlayoutData.horizontalAlignment = 2;
+		txtSuffixlayoutData.horizontalAlignment = 4;
 		txtSuffixlayoutData.grabExcessHorizontalSpace = true;
 		txtSuffix.setLayoutData(txtSuffixlayoutData);
 		txtSuffix.setData("name", "txtSuffix");
 		
 		txtShipFrom = new Text(pnlFilter, SWT.BORDER);
 		GridData txtShipFromlayoutData = new GridData();
-		txtShipFromlayoutData.horizontalAlignment = 2;
+		txtShipFromlayoutData.horizontalAlignment = 4;
 		txtShipFromlayoutData.grabExcessHorizontalSpace = true;
 		txtShipFrom.setLayoutData(txtShipFromlayoutData);
 		txtShipFrom.setData("name", "txtShipFrom");
@@ -1036,6 +1036,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         colBindings11[9].setAttributeBinding("Extn/@ExtnOrderedByName");
         colBindings11[9].setColumnBinding("Ordered By");   
         colBindings11[9].setFilterReqd(true);
+        colBindings11[9].setSortReqd(true);
       
         colBindings11[10] = new YRCTblClmBindingData();
 		colBindings11[10].setName("clmOrdered");
@@ -1063,7 +1064,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         tblResultsBinding1.setTblClmBindings(colBindings11);
         tblResultsBinding1.setKeyNavigationRequired(true);
         tblResultsBinding1.setFilterReqd(true);
-      
+        tblResultsBinding1.setSortRequired(true);
         tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblResultsBinding1);
         
 
