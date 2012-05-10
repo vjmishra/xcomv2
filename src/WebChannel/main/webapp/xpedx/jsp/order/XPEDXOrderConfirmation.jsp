@@ -391,14 +391,17 @@
                                     <td valign="top" align="left">
                                     <s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
                                     <s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>
-								<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
+                                    <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
+									<s:if test="%{#theMyPrice==#priceWithCurrencyTemp}">
 						    			        <s:set name="isMyPriceZero" value="%{'true'}" />
 											    <span class="gray"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-                                 </s:if>
-                                 <s:else>
+                                	</s:if>
+                                	 <s:else> 
                                     <%-- <h1><s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/></h1>Additional charges may apply</p> --%>
                                     <h1><s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/></h1> <s:text name='MSG.SWC.ORDR.OM.INFO.ADDITIONALCHARGESTXT' /> </p>
                                     </s:else>
+                                    </s:if>
+                                    <s:else></s:else>
                                     </td>
 
                                 </tr>
