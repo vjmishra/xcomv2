@@ -56,6 +56,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 	private Group grpSrchByCustomersFields=null;
 	private Composite pnlButtons = null;
 	private Button btnSearch = null;
+	private Button btnSearchCustomer = null;
 	private Button btnReset = null;
 	private Group pnlSearchResults = null;
 	private Composite pnlTitleHolder = null;
@@ -188,7 +189,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 
 		TableColumn clmCheckBox = new TableColumn(tblSearchResults, SWT.LEFT);
 		clmCheckBox.setToolTipText("Check_This");
-		clmCheckBox.setWidth(30);
+		clmCheckBox.setWidth(80);
 		clmCheckBox.setResizable(false);
 		
 		tblSearchResultsGD.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
@@ -640,6 +641,14 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		pnlButtons.setLayout(btnPanelLayout);
 		btnPanelLayout.numColumns = 3;
 		// button creation
+		btnSearchCustomer = new Button(pnlButtons, SWT.NONE);
+		btnSearchCustomer.setText("Search Customer");
+		btnSearchCustomer.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.searchCustomer();
+			}
+		});
+		
 		btnSearch = new Button(pnlButtons, SWT.NONE);
 		btnSearch.setText("Generate_List");
 		
@@ -764,6 +773,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		colBindings[5] = new YRCTblClmBindingData();
         colBindings[5].setName("clmCheckBox");
         colBindings[5].setAttributeBinding("@Replace");
+        colBindings[5].setColumnBinding("Replace");
         colBindings[5].setCheckedBinding("Y");
         colBindings[5].setUnCheckedBinding("N");
         colBindings[5].setFilterReqd(false);
