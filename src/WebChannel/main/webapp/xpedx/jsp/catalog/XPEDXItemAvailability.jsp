@@ -28,19 +28,28 @@
 
 	<tbody>
 		<tr class="my-headings">
-			<td colspan="3" class="leftmost my-availability"><span><i>Availability</i></span></td>
+			<td colspan="3"><span><i>Availability</i></span></td>
+			
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
-			<td colspan="3" class="left"><span><i>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
+			
+			<td colspan="3" class="left"><s:if test="isBracketPricing == 'true'"><span><i>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></s:if>
+			</td>
+			
+			</s:if>
 			</s:if>
 			<s:else>
 			<td colspan="3" class="left"><span>&nbsp;</span></td>
 			</s:else>
-			<td colspan="3" class="my-pricing"><span><i>Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
+			<td colspan="3"><span><i>Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
+			</s:if>
+			
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="3" width="36%" valign="top">
 
 			<s:if test="%{pnaHoverMap != null}">
 					<s:if test="%{#itemId != ''}">
@@ -60,7 +69,7 @@
 								value="#json.get('ExtendedPrice')" />
 							<s:set name="currencyCode" value="#json.get('currencyCode')" />
 
-				<TABLE>
+				<TABLE cellpadding="0" cellspacing="0" border="0">
 				<TR>
 					<td class="leftmost my-available"><strong>Total Available:</strong></td>
 					<td class="my-number"><strong>
@@ -121,7 +130,7 @@
 			</td>
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
-			<td colspan="3">
+			<td colspan="3" width='35%'>
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>		
 			--%>
@@ -131,9 +140,9 @@
 					<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 						<s:if test="#disUOMStatus.last">
 							<s:set name="bracketPriceForUOM" value="bracketPrice" />
-							<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+							<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 							<s:if test="%{#bracketPriceForUOM != #priceWithCurrencyTemp}">
-								<TABLE  width="100%">
+								<TABLE  width="100%" style="align:center;">
 									<s:iterator value='bracketsPricingList' id='bracket'
 											status='bracketStatus'>
 					
@@ -145,7 +154,7 @@
 												<s:set name='formattedbracketUOM'
 													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
 									<TR>
-										<td><s:property value="bracketQTY" /> <s:property value="%{#formattedbracketUOM}" /> - <s:property value='%{#formattedBracketpriceForUom}' />
+										<td style="text-align:left; width='35%'; "><s:property value="bracketQTY" /> <s:property value="%{#formattedbracketUOM}" /> - <s:property value='%{#formattedBracketpriceForUom}' />
 											/ <s:property value="%{#formattedbracketUOM}" />
 										</td>
 										<td></td>
@@ -164,7 +173,7 @@
 			<s:else>
 			<td colspan="3"><span>&nbsp;</span></td>
 			</s:else>		
-			<td colspan="3">
+			<td colspan="3" width="35%;">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>	
 			--%>
@@ -181,12 +190,12 @@
 				<s:if test="#disUOMStatus.last">				
 
 				<TR>
-					<td class="my-ext-price">Extended Price:</td>
+					<td class="my-price left" width="50%">Extended Price:</td>
 					<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp}">
-						<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span></td>
+						<td class="left"  width="50%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span></td>
 					</s:if>
 					<s:else>
-						<td class="my-number"><s:property value="#bracketPriceForUOM" /></td>
+						<td class="right" width="50%"><s:property value="#bracketPriceForUOM" /></td>
 					</s:else>
 					
 					<%-- <td>&nbsp;/&nbsp;<s:property value="#bracketUOMDesc" /></td>--%>
@@ -197,15 +206,15 @@
 				<s:else>
 				<s:if test="%{#break == false}">
 					<TR>
-						<td class="my-price"><s:if test="#disUOMStatus.first">My Price:</s:if></td>
+						<td width="45%" class="my-price left"><s:if test="#disUOMStatus.first">My Price:</s:if></td>
 						
 						<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
-							<td><span class="red bold"><s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span></td>
+							<td class="left" width="55%"><span class="red bold"><s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span></td>
 							<s:set name="break" value="true"></s:set>
 						</s:if>
 						<s:else>
-						<td class="my-number"><s:property value="#bracketPriceForUOM" /></td>
-						<td class="my-uom">/&nbsp;<s:property value="#bracketUOMDesc" /></td>
+						<td class="right" width="55%"><s:property value="#bracketPriceForUOM" /></td>
+						<td class="my-uom"> /&nbsp;<s:property value="#bracketUOMDesc" /></td>
 						</s:else>
 					</TR>
 				</s:if>
