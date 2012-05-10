@@ -2185,7 +2185,7 @@ var currentAadd2ItemList = new Object();
 	
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
-	         <!-- Light Box --><div style=" height:202px; width:600px; overflow:auto;  border:1px solid #CCCCCC;">
+	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
 		<script type="text/javascript">
 		Ext.onReady(function(){		
 
@@ -2269,7 +2269,7 @@ var currentAadd2ItemList = new Object();
 							<%--<s:if test="%{#itemType != 99}"><a/></s:if> --%>
 					</div>
                     <div class="mil-attr-wrap">
-                        <ul class="mil-desc-attribute-list">                        
+                        <ul class="prodlist">                        
 							<s:property value='#rdesc' escape='false'/>
 					    </ul>
 					    
