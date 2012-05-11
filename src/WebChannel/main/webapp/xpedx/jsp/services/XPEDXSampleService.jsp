@@ -880,7 +880,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                         <input type="hidden" id="txtstran" name="txtstran" />
                          </td>
                         <td   style="padding-left:3px;"><span class="red">*</span>&nbsp;Email Address:</td>
-                        <td><s:textfield tabindex="58" cssClass="x-input width-160px" id="serviceRequestForm_email" name="email"	maxlength="500" value="%{#currentShipTo.eMailID}" />
+                        <td><s:textfield tabindex="58" cssClass="x-input width-160px" id="serviceRequestForm_email" name="email"	maxlength="500" value="" />
                         </td>
                       </tr>
                     </table>
