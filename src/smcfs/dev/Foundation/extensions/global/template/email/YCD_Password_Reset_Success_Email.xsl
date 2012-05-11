@@ -108,7 +108,7 @@
 	</xsl:variable> 
 
 	<xsl:template match="/">
-	<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
+	<table width="600" border="0"  cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 	<tr>
 	<td height="44">
 	<img src="{$imageURL}"	width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
@@ -122,20 +122,20 @@
 	</xsl:template>
 
 	<xsl:template match="User">
-	<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
+	<table width="700" border="0" align="left" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
 		  <tr>
 		    <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 		<p>Dear <xsl:value-of select="@Username"/>,</p>
 		<xsl:if test="/User/User/@RequestId">
 		<p>
-		You are receiving this notification because we recently received a password reset request for your account.
+		You are receiving this notification because we recently received a password reset request for your account. <br/><br/>
 		To reset your password, click on the following link: <br/>
 			<a><xsl:attribute name="href">
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
 			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /></a><br/><br/>
-			When you click on the link, you will be prompted to verify your identity.<br/>After successful verification, you can create a new password.
+			When you click on the link, you will be prompted to create a new password.
 		</p>
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
