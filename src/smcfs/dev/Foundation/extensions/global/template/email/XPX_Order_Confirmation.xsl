@@ -588,22 +588,25 @@
 			 </tr>
 			<tr>
 				<td>Tax</td>
-              <xsl:choose><xsl:when test="Order/Extn/@ExtnOrderTax !='0.00'"> 															
-				
-				<td><span class="tbd">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></span></td>
-				</xsl:when><xsl:otherwise>
-				<td><span class="tbd">To be determined</span></td>
-				</xsl:otherwise></xsl:choose>
-				</tr>
+				<xsl:choose>
+	              	<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
+		              	<td>$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></td>							
+					</xsl:when>
+					<xsl:otherwise>
+						<td><span class="tbd">To be determined</span></td>
+					</xsl:otherwise>
+				</xsl:choose>
+			</tr>
 			<tr>
 				<td> Shipping and Handling</td>
-				<xsl:choose>$<xsl:when test="Order/Extn/@ExtnTotalOrderFreight !='0.00'"> 															
-															
-				<td><span class="tbd"><xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></span></td>
-				</xsl:when><xsl:otherwise>
-				<td><span class="tbd">To be determined</span></td>
+				<xsl:choose>
+					<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >												
+						<td>$<xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></td>
+					</xsl:when>
+				<xsl:otherwise>
+					<td><span class="tbd">To be determined</span></td>
 				</xsl:otherwise></xsl:choose>
-				</tr>
+			</tr>
 
 			<tr class="last">
 				<td> Order Total (USD):</td>

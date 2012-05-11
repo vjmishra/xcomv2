@@ -1,6 +1,6 @@
 <OrderList>
 	<Order OrderNo="" OrderDate="" Status="" CustomerPONo="" Createuserid="" BuyerOrganizationCode="" SellerOrganizationCode="" ShipToID=""          
-	       EntryType="" BillToID=""  >
+	       EntryType="" BillToID="" MaxOrderStatus="" >
 		<Extn />
 		<OrderLines>
 			<OrderLine> 
