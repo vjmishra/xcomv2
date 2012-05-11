@@ -10,15 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.Comparator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
@@ -29,14 +24,12 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
-import com.sterlingcommerce.ui.web.framework.extensions.ISCUILocale;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.yfc.date.YDate;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfs.core.YFSSystem;
@@ -61,6 +54,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		String returnString = super.execute();
 		XPEDXWCUtils.setItemDetailBackPageURLinSession();
 		setHeaderComment(getHeaderCommentValue());
+		setDisplayTaxAndShipHandlingAmt(getMaxOrderStatusValue());
 		//BEGIN: sort the orderlines based on legacy line number
 		ArrayList<Element> tempMajorLineElements = getMajorLineElements();
 		Collections.sort(tempMajorLineElements, new XpedxLineSeqNoComparator());
@@ -92,7 +86,6 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				LOG.error("Error while getting user key : "+ e);
 			}
 		}
-	
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
@@ -704,8 +697,17 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	private String custSuffix = "";
 	private String invoiceURL = "";
 	private String encInvoiceNo = "";
-	private String encInvoiceDate = "";	
+	private String encInvoiceDate = "";
+	private String displayTaxAndShipHandlingAmt="N";	
 	
+	public String getDisplayTaxAndShipHandlingAmt() {
+		return displayTaxAndShipHandlingAmt;
+	}
+
+	public void setDisplayTaxAndShipHandlingAmt(String displayTaxAndShipHandlingAmt) {
+		this.displayTaxAndShipHandlingAmt = displayTaxAndShipHandlingAmt;
+	}
+
 	public boolean isCSRReview() {
 		return isCSRReview;
 	}
@@ -848,4 +850,17 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		}
 		return calculatedOrderedQuantity;
 	}
+	
+	private String getMaxOrderStatusValue(){
+		String maxOrderStatus = SCXmlUtil.getAttribute(getElementOrder(),"MaxOrderStatus");
+		if (maxOrderStatus.equals("1100.5700") || // INVOICED
+		    maxOrderStatus.equals("1100.5950") || // INVOICE ONLY
+		    maxOrderStatus.equals("1100.5750"))   // RETURN
+		{
+			return "Y";			
+		} else {
+			return "N";
+			
+		}
+	}	
 }
