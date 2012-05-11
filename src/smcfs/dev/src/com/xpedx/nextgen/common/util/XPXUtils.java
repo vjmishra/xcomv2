@@ -2440,11 +2440,11 @@ public class XPXUtils implements YIFCustomApi {
 			String suffix = YFSSystem.getProperty("fromAddress.suffix");
 			sb.append(userName).append("@").append(storeFrontId).append(suffix);
 			
-			String resetSubString = storeFrontId + ".com" + " Password";
+			String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
 			Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 			"ResetPwdEmailSubject");
 				resetSubject.setAttribute("Subject", resetSubString);
-			String notificationiSubString = storeFrontId + ".com" + " Password";			
+			String notificationiSubString = storeFrontId + ".com" + " Password ";			
 			
 			String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
 			
