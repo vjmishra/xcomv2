@@ -1233,33 +1233,38 @@ function showSplitDiv(divId)
 					</s:if>
 					<tr>
 						<th>Tax:</th>
-						<td class="gray">					    	                        
-	                        <s:if test="%{#isMyPriceZero == 'false'}">
-	                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
-	                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
-	                        	</s:if>
-	                        	<s:else>
-	                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
-	                        			<s:set name="isInProgress" value="%{'false'}" />
-	                        			<s:iterator value="chainedFOMap" >												
-											<s:set name='chainedFONo' value="value"/>	
-											<s:if test='#chainedFONo == "In progress"'>
-												<s:set name="isInProgress" value="%{'true'}" />
-											</s:if>												
-										</s:iterator>             
-										<s:if test="%{#isInProgress == 'false'}">
-											<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
-										</s:if>    
+						<td class="gray">
+							<s:if test='#_action.getDisplayTaxAndShipHandlingAmt()=="Y"'>											    	                        
+		                        <s:if test="%{#isMyPriceZero == 'false'}">
+		                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
+		                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
+		                        	</s:if>
+		                        	<s:else>
+		                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
+		                        			<s:set name="isInProgress" value="%{'false'}" />
+		                        			<s:iterator value="chainedFOMap" >												
+												<s:set name='chainedFONo' value="value"/>	
+												<s:if test='#chainedFONo == "In progress"'>
+													<s:set name="isInProgress" value="%{'true'}" />
+												</s:if>												
+											</s:iterator>             
+											<s:if test="%{#isInProgress == 'false'}">
+												<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
+											</s:if>    
+											<s:else>										
+												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+											</s:else>       				                        			
+		                        		</s:if>
 										<s:else>										
 											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-										</s:else>       				                        			
-	                        		</s:if>
-									<s:else>										
-										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-									</s:else>
-								</s:else>							
+										</s:else>
+									</s:else>							
+								</s:if>
+								<s:else>								
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+								</s:else>
 							</s:if>
-							<s:else>								
+							<s:else>
 								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 							</s:else>
 						</td>
@@ -1267,34 +1272,39 @@ function showSplitDiv(divId)
 					<tr class="bottom-padding">
 						<th>Shipping &amp; Handling:</th>					
 						<td class="gray">
-						<s:if test="%{#isMyPriceZero == 'false'}">
-                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
-                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
-                        	</s:if>
-                        	<s:else>
-                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
-                        			<s:set name="isInProgress" value="%{'false'}" />
-                        			<s:iterator value="chainedFOMap" >												
-										<s:set name='chainedFONo' value="value"/>	
-										<s:if test='#chainedFONo == "In progress"'>
-											<s:set name="isInProgress" value="%{'true'}" />
-										</s:if>												
-									</s:iterator>             
-									<s:if test="%{#isInProgress == 'false'}">
-										<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
-									</s:if>    
-									<s:else>										
-										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-									</s:else>       				                        			
-                        		</s:if>
-								<s:else>										
+							<s:if test='#_action.getDisplayTaxAndShipHandlingAmt()=="Y"'>
+								<s:if test="%{#isMyPriceZero == 'false'}">
+		                        	<s:if test='#orderType != "Customer" && #xpedxLegacyOrderNumber != ""'>
+		                        		<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
+		                        	</s:if>
+		                        	<s:else>
+		                        		<s:if test='#_action.getChainedFOMap().size() >= 1'>	
+		                        			<s:set name="isInProgress" value="%{'false'}" />
+		                        			<s:iterator value="chainedFOMap" >												
+												<s:set name='chainedFONo' value="value"/>	
+												<s:if test='#chainedFONo == "In progress"'>
+													<s:set name="isInProgress" value="%{'true'}" />
+												</s:if>												
+											</s:iterator>             
+											<s:if test="%{#isInProgress == 'false'}">
+												<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
+											</s:if>    
+											<s:else>										
+												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+											</s:else>       				                        			
+		                        		</s:if>
+										<s:else>										
+											<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+										</s:else>
+									</s:else>							
+								</s:if>
+								<s:else>								
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
 								</s:else>
-							</s:else>							
-						</s:if>
-						<s:else>								
-							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-						</s:else>									
+							</s:if>
+							<s:else>
+								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+							</s:else>									
 						</td>						
 					</tr>
 					<tr class="order-total">
