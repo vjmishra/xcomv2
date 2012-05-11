@@ -4388,8 +4388,10 @@ function setCartEventHandlers(initTriggerVal) {
     }
 
 }
-var hideMiniCart = 'miniCartMouseoverArea1';
-var stIsIE = /*@cc_on!@*/false;
+//Commenting for the jira 3782
+/*var hideMiniCart = 'miniCartMouseoverArea1';
+var stIsIE = /*@cc_on!@*/
+//false;
 function refreshMiniCartLink(forceRefresh)
 
 {
@@ -4425,14 +4427,15 @@ function refreshMiniCartLink(forceRefresh)
         //	$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
         	//$('.mini-cart-trigger').trigger('mouseover');
         	//Added  if..else condn For Jira 3481 - Minicart Closes On Update Issue
-        	if(!stIsIE)
+        	//Commented for Jira 3782
+        	/*if(!stIsIE)
         	$('.mini-cart-trigger').trigger('click');
         	else
         	{
         	//if(hideMiniCart =='miniCartMouseoverArea2')
         		document.getElementById("miniCartMouseoverArea2").click();
         		document.getElementById("miniCartMouseoverArea1").click();
-        	}
+        	}*/
         	//fireEvent(document.getElementById("miniCartMouseoverArea1"),'click');
 // Have to include jqquery implementation to refresh cart
 // if(qvw !== null)
