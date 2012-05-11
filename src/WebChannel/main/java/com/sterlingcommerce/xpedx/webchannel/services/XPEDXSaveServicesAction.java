@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import javax.xml.xpath.XPathExpressionException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -20,8 +22,9 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.DOMDocFromXMLString;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -52,7 +55,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	private String country;
 	private String email;
 	private String imageUrl;
-	private String billtoFullName = "";
+	private String accountName = "";
 	private String billtoCustid = "";
 	private String divisionName = "";
 	private String serviceProviderNone = "";
@@ -130,11 +133,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	}
 
 	public String getBilltoFullName() {
-		return billtoFullName;
+		return accountName;
 	}
 
 	public void setBilltoFullName(String billtoFullName) {
-		this.billtoFullName = billtoFullName;
+		this.accountName = billtoFullName;
 	}
 
 	public String getBilltoCustid() {
@@ -314,26 +317,46 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		try {
 			XPEDXShipToCustomer shipToCustomer = null;
 			List<String> customerAddressList = null;
-			Document customerDetailsDoc = null;
+			Document outputDocSales = null;  //JIRA 3756 Changes done 
 			String customerId = getWCContext().getCustomerId();
 			storefrontId = getWCContext().getStorefrontId();
 			StringBuffer sb = new StringBuffer();
-			System.out.println("XPEDXSaveServicesAction():execute()");
 			
 			// Getting ship to address and customer details
 
 			shipToCustomer = XPEDXWCUtils.getShipToAdress(customerId,
 					storefrontId);
-			/**
+			
+			
+						/**
 			 * JIRA 243
 			 * Modified getCustomerDetails method to consider the mashup to be invoked
 			 * so that, we get only the required information - here Customer Adress List.
 			 * @param inputItems
 			 * @return
 			 */
-			customerDetailsDoc = XPEDXWCUtils.getCustomerDetails(customerId,
-					storefrontId, customerShipToInformationMashUp);
-
+			/*
+			 * 
+			 * JIRA 3756 Code changes Start			
+			 */
+			outputDocSales = XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext()
+					.getStorefrontId(), customerExtnInformation);
+			
+			
+			Element customerElement = null;
+			
+			if(outputDocSales != null){
+			customerElement = outputDocSales.getDocumentElement();
+			
+     		salesProfessional = getSalesRepInfo(customerElement);
+			
+			}
+			
+			/*
+			 * 
+			 * JIRA 3756 Code changes End			
+			 */
+			
 			if (shipToCustomer != null) {
 				customerAddressList = shipToCustomer.getAddressList();
 			}
@@ -370,7 +393,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
 				sb.append(userName).append("@").append(storefrontId).append(suffix);
 				customerEmail = sb.toString();
-				System.out.println("customerEmail from email"+customerEmail);
 				
 			}
 			 /**
@@ -413,24 +435,22 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			 JIRA 3160 -Start
 			 */
 			String ccEMail = "";
+			String extnECsr1EmailID = "";
+			String extnECsr2EmailID = "";
+			String sapCustomerKey = "";
 			
-			XPEDXShipToCustomer shipToCustomerObject =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-			String extnECsr1EmailID = shipToCustomerObject.getBillTo().getExtnECsr1EMailID();
-			String extnECsr2EmailID = shipToCustomerObject.getBillTo().getExtnECsr2EMailID();
-			String sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
-			String firstName = shipToCustomerObject.getBillTo().getFirstName();
-			String lastName = shipToCustomerObject.getBillTo().getLastName();
-			salesProfessional = getSalesRepInfo(sapCustomerKey,wcContext);
-			if((firstName!=null && firstName.trim().length() > 0) && (lastName!=null && lastName.trim().length() > 0)){
-			billtoFullName = firstName+lastName;
-			}else if(firstName!=null && firstName.trim().length() > 0){
-				billtoFullName = firstName;
-				
-			}else if(lastName!=null && lastName.trim().length() > 0){
-				billtoFullName = lastName;
-				
-			}else{
-				billtoFullName = "";
+			XPEDXShipToCustomer shipToCustomerObject = new XPEDXShipToCustomer();
+			shipToCustomerObject =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			if(shipToCustomerObject!=null){
+		
+            if(shipToCustomerObject.getBillTo()!=null && shipToCustomerObject.getBillTo().getExtnCustomerName()!=null && shipToCustomerObject.getBillTo().getExtnCustomerName().trim().length() > 0){
+				accountName = shipToCustomerObject.getBillTo().getExtnCustomerName();
+            }
+			if(shipToCustomerObject.getBillTo()!=null){
+			extnECsr1EmailID = shipToCustomerObject.getBillTo().getExtnECsr1EMailID();
+			extnECsr2EmailID = shipToCustomerObject.getBillTo().getExtnECsr2EMailID();
+			}
+			sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
 			}
 			
 			billtoCustid = shipToCustomerObject.getBillTo().getCustomerID();
@@ -442,15 +462,26 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			
 			if(csrEmailID != null && csrEmailID.trim().length() > 0 && saleRepEmail!=null && saleRepEmail.trim().length() > 0){
 				ccEMail = csrEmailID + XPEDXConstants.EMAILIDSEPARATOR +saleRepEmail;
-				System.out.println("ccEMail"+ccEMail);
 			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
 				System.out.println("ccEMail"+ccEMail);				
 				ccEMail = saleRepEmail;				
 			}else if(csrEmailID != null && csrEmailID.trim().length() > 0){
-				System.out.println("ccEMail"+ccEMail);
 				ccEMail = csrEmailID;				
 				
 			}
+			/*
+			 * JIRA 3756 -Changes done for JIRA 3756 START 
+			 * 
+			 */
+			if(ccEMail !=null && ccEMail.trim().length() >0 && getEmail() !=null && getEmail().trim().length() > 0){
+				ccEMail = ccEMail + XPEDXConstants.EMAILIDSEPARATOR +getEmail();
+			}else if(getEmail()!=null && getEmail().trim().length() > 0){
+				ccEMail = getEmail();
+			}
+			/*
+			 * JIRA 3756 -Changes done for JIRA 3756 END 
+			 * 
+			 */
 			String paperFSObj = "";
 			String paperPSObj = "";
 			String checkbothToken = "";
@@ -527,8 +558,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 									.getSCUIContext());
 					outputDoc = ((Element) obj).getOwnerDocument();
 					if (null != outputDoc) {
-						System.out.println("bothFlag---gen"+SCXmlUtil.getString((Element) obj));
-						LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+						LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));  //Jira 3554 Changes done
 					}
 				}
 				if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
@@ -538,15 +568,13 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				sampleServiceRequest = "SampleServiceRequestPaper";				
 				Element input = createInputXMLForGeneral(customerEmail, toEmailPaper,ccEMail,paperList,sampleServiceRequest);
 				String inputXml = SCXmlUtil.getString(input);
-				System.out.println("input xml----"+SCXmlUtil.getString(input));
 				LOG.debug("XPEDXSaveServicesAction() Input XML : " + inputXml);
 				Object obj = WCMashupHelper.invokeMashup(
 						"SendSampleServiceRequest", input, wcContext
 								.getSCUIContext());
 				outputDoc1 = ((Element) obj).getOwnerDocument();
 				if (null != outputDoc1) {
-					System.out.println("bothFlag---pep"+SCXmlUtil.getString((Element) obj));
-					LOG.debug("Output1 XML: " + SCXmlUtil.getString((Element) obj));
+					LOG.debug("Output1 XML: " + SCXmlUtil.getString((Element) obj)); //Jira 3554 Changes done
 				}
 			}	
 			}else{
@@ -567,15 +595,13 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			Document outputDoc = null;
 			Element input = createInputXML(customerEmail, toMailaddres,ccEMail,sampleServiceRequest);
 			String inputXml = SCXmlUtil.getString(input);
-			System.out.println("input xml----"+SCXmlUtil.getString(input));
 			LOG.debug("XPEDXSaveServicesAction() Input XML: " + inputXml);
 			Object obj = WCMashupHelper.invokeMashup(
 					"SendSampleServiceRequest", input, wcContext
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
 			if (null != outputDoc) {
-				System.out.println("else---"+SCXmlUtil.getString((Element) obj));
-				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj)); //Jira 3554 Changes done
 			}
 		}
 		}
@@ -583,8 +609,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		} catch (Exception ex) {
 			if (ex.getMessage()!=null) {
 				setErrorMesage("Your request can not be processed at this time due to technical issues. Please contact administrator");
-				LOG.error("XPEDXSaveServicesAction() Input XML: " + ex.getMessage());
-				
+				LOG.error("Issue in XPEDXSaveServicesAction"+ex.getMessage()); //Jira 3554 Changes done 
 				return returnVal;
 			}
 			returnVal = "error";
@@ -651,8 +676,13 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			
        return paperEmailID;
 	}
+	/*
+	 * 
+	 * JIRA 3756 Code changes Start -Code Commented 		
+	 */
+	
 
-	private String getCustomerEmail(Document customerDetailsDoc) {
+	/*private String getCustomerEmail(Document customerDetailsDoc) {
 		Element customerDetailsElement = customerDetailsDoc
 				.getDocumentElement();
 		NodeList custAddAddList = customerDetailsElement
@@ -667,7 +697,12 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 
 		return emailId;
 	}
-
+*/
+	/*
+	 * 
+	 * JIRA 3756 Code changes End -Code Commented			
+	 */
+	
 	private Element createInputXML(String customerEmail, String sampleRoomEmail ,String ccEMail,String sampleServiceRequest) {
  
 		String subjectEmail = "";
@@ -998,78 +1033,34 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 /*
  * getSalesRepInfo method which get saler professional first name and last name .
  * */
-	public static String getSalesRepInfo(String sapCustomerKey,IWCContext wcContext) {
+	/*
+	 * 
+	 * JIRA 3756 Code changes Start			
+	 */
+	
+	public static String getSalesRepInfo(Element customerElement) throws XPathExpressionException {
  		
-		 String SalesRepInfo = "";
+		 String primarySalesRepName = "";
 		 
-	 	 if (sapCustomerKey != null && !sapCustomerKey.equalsIgnoreCase("")) {
-	 		 
-	 		Element xpedxSalesRep = SCXmlUtil.createDocument("XPEDXSalesRep").getDocumentElement();
-	 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);  
-	 		
-	 		Document outputDoc;
-			
-	 		Object obj = WCMashupHelper.invokeMashup("getXpedxSalesRepList", xpedxSalesRep, wcContext.getSCUIContext());
-			outputDoc = ((Element) obj).getOwnerDocument();
-	        
-	 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");  
-			int salesRepLength = nodeList.getLength();
-			List<String> salesRepUserKeysList = new ArrayList<String>();
-			
-			for (int counter = 0; counter < salesRepLength ; counter++) {
-				Element salesRepElem = (Element) nodeList.item(counter);
-				
-				String salesUserKey = "";
-				if (salesRepElem.hasAttribute("SalesUserKey")) {
-					salesUserKey = salesRepElem.getAttribute("SalesUserKey");
-				}
-				if(salesUserKey !=null && salesUserKey.trim().length() > 0)
-					salesRepUserKeysList.add(salesUserKey);
-			}
-			
-			if(salesRepUserKeysList.size() > 0){
-				try {
-				Element inputElem = WCMashupHelper.getMashupInput("getUserListWithContactPersonInfo", wcContext);
-				Element complexQueryElem = SCXmlUtil.getChildElement(inputElem, "ComplexQuery");
-				Element OrElem = SCXmlUtil.getChildElement(complexQueryElem, "Or");
-				Iterator<String> itr = salesRepUserKeysList.iterator();
-				while(itr.hasNext()) {
-					String userKey = (String)itr.next();
-					if(userKey!=null && !userKey.equals("")){
-						Element exp = inputElem.getOwnerDocument().createElement("Exp");
-						exp.setAttribute("Name", "UserKey");
-						exp.setAttribute("Value", userKey);
-						SCXmlUtil.importElement(OrElem, exp);
+		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList");
+		if(salesRepInfo != null){	
+			if(salesRepInfo.size() > 0){
+				Element salesRepElement=salesRepInfo.get(0);
+				String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@FirstName");
+				String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@LastName");
+					if(firstName !=null && firstName.trim().length() > 0 && lastName !=null && lastName.trim().length() > 0){
+						primarySalesRepName = firstName + " " + lastName ;
+					}else if(firstName !=null && firstName.trim().length() > 0){
+						primarySalesRepName = firstName;
+					}else if(lastName !=null && lastName.trim().length() > 0){
+						primarySalesRepName = lastName ; 
 					}
-				}
-				 
-				outputDoc =((Element) WCMashupHelper.invokeMashup("getUserListWithContactPersonInfo", inputElem, wcContext.getSCUIContext())).getOwnerDocument();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				 
-				NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
-		 		int contactPersonInfoLength = personInfoList.getLength();
-		 		System.out.println("contactPersonInfoLength-"+contactPersonInfoLength);
-	 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
-	 				Element personInfoElem = (Element) personInfoList.item(counter);
-	 				if (personInfoElem != null && personInfoElem.hasAttribute("FirstName") && personInfoElem.hasAttribute("LastName")) {
-	 					SalesRepInfo = personInfoElem.getAttribute("FirstName") + personInfoElem.getAttribute("LastName");
-	 					
-	 				}else if(personInfoElem != null && personInfoElem.hasAttribute("FirstName")){
-	 					SalesRepInfo = personInfoElem.getAttribute("FirstName");
-	 				}else if(personInfoElem != null && personInfoElem.hasAttribute("LastName")){
-	 					SalesRepInfo = personInfoElem.getAttribute("LastName");
-	 				} else {
-	 					SalesRepInfo = "";
-	 				}
-	 				System.out.println("SCXmlUtil.getString(personInfoElem)"+SCXmlUtil.getString(personInfoElem));
-	 			}
-		 		
-		    }	
-	 	}
-	 	return SalesRepInfo;
+					
+			}
+		}
+		 
+			
+	 	return primarySalesRepName;
 	 	}
 	
 
