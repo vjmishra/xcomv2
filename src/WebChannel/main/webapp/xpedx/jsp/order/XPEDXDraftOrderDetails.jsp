@@ -1135,7 +1135,7 @@ $(document).ready(function(){
 	                    	<tr>
 								<td class="text-right" style="padding:0px;">
 								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-									<label>Qty: </label>
+									<label style="font-size:12px">Qty: </label>
 								</s:if>
 								<s:if test='#isReadOnly'>
 								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
@@ -1185,10 +1185,10 @@ $(document).ready(function(){
 				 --%>
 				 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 				 	<s:if test="#rowStatus.first == true ">
-				 		<table class="float-right pricing-table" >
+				 		<table class="float-right pricing-table" style="font-size:12px">
 				 	</s:if>
 				 	<s:else>
-				 		<table class="float-right pricing-table">
+				 		<table class="float-right pricing-table" style="font-size:12px">
 				 	</s:else>
 				 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				 	
@@ -1443,7 +1443,7 @@ $(document).ready(function(){
 				     	<div class="cart-availability text-left">
 				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />"></div> 
 				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
+					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
 						    	<tbody>
 						    		<tr>
 										<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
@@ -1570,7 +1570,7 @@ $(document).ready(function(){
     				</div>
     
 			    	<div class="cust-defined-fields">
-			    		<table>
+			    		<table style="font-size:12px">
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 				    			<s:if test="%{requiredCustFieldsErrorMap!=null && requiredCustFieldsErrorMap.size>0}" >
@@ -1925,7 +1925,7 @@ var currentAadd2ItemList = new Object();
 --%>
 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 <div class="cart-sum-right">
-	<table cellspacing="0" align="right">
+	<table cellspacing="0" align="right" style="font-size:12px">
 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		<tr>
 			<th>Subtotal:</th>
