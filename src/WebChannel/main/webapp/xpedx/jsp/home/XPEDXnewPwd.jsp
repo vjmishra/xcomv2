@@ -216,8 +216,40 @@
 </div>
 <!-- end main  -->
 <Script>
-function validateResetPassword(){
+function validateResetPassword(){	
+	var newPwd = document.forgotPwdSubmitForm.newPassword;
+    var confirmNewPwd = document.forgotPwdSubmitForm.confirmNewPassword;
+   // alert(confirmNewPwd.value);
+    var errorDiv = document.getElementById("errorMsgForPassword");
+    
+    errorDiv.innerHTML = "";
+    newPwd.style.borderColor="";
+    confirmNewPwd.style.borderColor="";
+    errorDiv.style.display = "none";
+    
+    if(newPwd.value.trim()=="")
+    {
+    	errorDiv.innerHTML = "Please enter a new password";
+    	newPwd.style.borderColor="#FF0000";
+    	errorDiv.style.display = 'inline';
+		return;
+	}
+	if(confirmNewPwd.value.trim()=="")
+	{
+		errorDiv.innerHTML = "Please confirm new password";
+		confirmNewPwd.style.borderColor="#FF0000";
+		errorDiv.style.display = 'inline';
+		return;
+	}
+	if(newPwd.value!=confirmNewPwd.value)
+	{
+		errorDiv.innerHTML = "Please enter the same value in both password fields";
+		confirmNewPwd.style.borderColor="#FF0000";
+		errorDiv.style.display = 'inline';
+		return;
+	}
 	var url = '<s:property value="#ValidatePasswordURL" />';
+	
 		Ext.Ajax.request({
 	        url :url,
 	        params:{loginId :'<s:property value="#loginid" />',
@@ -226,8 +258,10 @@ function validateResetPassword(){
 	        success: function (response, request){
 	           var responseText = response.responseText;
 	           errorDiv = document.getElementById("pwdErrorDiv");
-	           if(errorDiv){            	   
-               		if(responseText.indexOf("error")>-1){
+	           
+	           if(errorDiv){     
+		            	   
+               		if(responseText.indexOf("error")>-1){                   		
 	                    errorDiv.innerHTML = response.responseText;
 	                    errorDiv.style.border = 'none';
 	                    errorDiv.style.background = 'none';
@@ -248,13 +282,18 @@ function validateResetPassword(){
 	        }
 	    });
 }
-</Script>
-<Script>
+
 function clearErrorDiv(){
 		errorDiv = document.getElementById("pwdErrorDiv");
 		errorDiv.innerHTML ="";
+		errorDiv = document.getElementById("errorMsgForPassword");
+		errorDiv.innerHTML ="";
+		var newPwd = document.forgotPwdSubmitForm.newPassword;
+	    var confirmNewPwd = document.forgotPwdSubmitForm.confirmNewPassword;
+	    newPwd.style.borderColor="";
+	    confirmNewPwd.style.borderColor="";
   }
-</Script>
+</script>
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	
 <!-- end container  -->
