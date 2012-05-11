@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import com.xpedx.sterling.rcp.pca.ExtnAutoLoader;
 import com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor;
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel;
+import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.pca.ycd.rcp.exposed.YCDExtensionUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -31,20 +32,35 @@ import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
+import com.yantra.yfc.rcp.internal.YRCCommand;
+import com.yantra.yfc.rcp.internal.YRCCommandRepository;
 
-public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
+public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 
 	
 	private XPXOrderHistoryPanel page ;
+	public static final String PAGINATION_STRATEGY_FOR_MIL_REPTOOL_SEARCH = GENERIC_PAGINATION_STRATEGY;
+	private static final String COMMAND_GET_LIST_OF_ORDERS_LISTS="getOrderList";
 	private String defaultOrgCode ;
 	private String refOrderHdrKey;
 	public String masterCustomer;
+	
 	public static final HashMap statusList = new HashMap<String, String>();
 	public XPXOrderHistoryPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
         super(ownerComposite, formId,inputObject);
         this.page = (XPXOrderHistoryPanel)getOwnerForm();
         this.defaultOrgCode = "";
 //        init();
+        
+        //Added for Pagination
+        this.getXpxPaginationData().setPaginationStrategy(PAGINATION_STRATEGY_FOR_MIL_REPTOOL_SEARCH);
+        this.getXpxPaginationData().setSortColumn("");
+        YRCCommand command = YRCCommandRepository.getCommand((new StringBuilder()).append(getFormId()).append(COMMAND_GET_LIST_OF_ORDERS_LISTS).toString());
+		this.getXpxPaginationData().setApiName(command.getCommandAPIName());//getXPEDX_MyItemsList_List_Hdr service
+		this.getXpxPaginationData().setIsFlow("N");
+        setSrcModelName("OrderListModel");
+    	setRootListElemName("OrderList");
+    	setRepeatingElemName("Order");
         getStatusList();
         masterCustomer = XPXUtils.masterCustomerID;
         createSearchBy();
@@ -151,14 +167,19 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 	        {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
 	        	//refresh search results
-	        	search();
+	        	search1();
 	        }      	
 	        else if(YRCPlatformUI.equals(ctx.getApiName(), "XPXReprocessReferenceOrderService"))
 	        {
 	        	Element outXml=ctx.getOutputXml().getDocumentElement();
-	        }  
+	        } 
+	        else if(YRCPlatformUI.equals(ctx.getApiName(), "getOrderList")){
+	        	Element outXml=ctx.getOutputXml().getDocumentElement(); 
+				
+				setModel("OrderListModel",outXml);
+    		}
         	//Calling Child Customer List Servie
-	        else if(YRCPlatformUI.equals(ctx.getApiName(), "getOrderList"))
+	        else if(YRCPlatformUI.equals(ctx.getApiName(), "getPage"))
 	        {
 	        	Element orderListXml=ctx.getOutputXml().getDocumentElement();
 	        	//Adding Status Column
@@ -194,7 +215,7 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 					fmtLegacyOrderNumber = XPXUtils.getFormattedOrderNumber(divisionNo, legacyNo, generationNo);
 					eleOrderList.setAttribute("FormatedLegacyOrderNo", fmtLegacyOrderNumber);
 					}
-					
+					handlePaginationOutput(orderListXml);
 				}
 	        	/*********************************************/
 	        	setModel("OrderListModel",orderListXml);
@@ -280,7 +301,7 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
                 }
         	}
 	}
-	public void search() {
+	public void search1() {
 		Element elemModel = getTargetModel("SearchCriteria");
 		
 		// if 'elemModel' is null then create a dummy element with root element name as 'XPXRefOrderHdr'.
@@ -353,12 +374,14 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		
 	}
 	//Method created for fetcching child customers
-	public void getOrderList()
+	public void search()
 	{
 		YRCApiContext apiCtx = new YRCApiContext();
 		Element elemModel = YRCXmlUtils.createDocument("Order").getDocumentElement();
 		elemModel.setAttribute("BillToID", masterCustomer);
 		elemModel.setAttribute("ReadFromHistory","N");
+		Element customerOrderElem = YRCXmlUtils.createChild(elemModel, "customerOrder");
+		customerOrderElem.setAttribute("isCustomerOrderPage", "Y");
 		boolean isExtnChildCreated = false;
 		Element attrElemComplex2 =null;
 		//Condition For Item Number
@@ -461,13 +484,14 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 			elemModel.setAttribute("ToOrderDate", todateReturn);
 		}
 		//Condition for Company
-		
+		this.getXpxPaginationData().setInputXml(elemModel.getOwnerDocument());
+		super.search();
 
-			apiCtx.setApiName("getOrderList");
+			/*apiCtx.setApiName("getOrderList");
 			apiCtx.setInputXml(elemModel.getOwnerDocument());
 		
 		apiCtx.setFormId(getFormId());
-		callApi(apiCtx);
+		callApi(apiCtx);*/
 		
 	}
 	
@@ -488,6 +512,24 @@ public class XPXOrderHistoryPanelBehavior extends YRCBehavior {
 		statusList.put("9000", "Cancelled");
 		return statusList;
 		
+		
+	}
+
+	@Override
+	public void setRepeatingElemName(String repeatingElemName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRootListElemName(String rootListElemName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSrcModelName(String srcModelName) {
+		// TODO Auto-generated method stub
 		
 	}
 

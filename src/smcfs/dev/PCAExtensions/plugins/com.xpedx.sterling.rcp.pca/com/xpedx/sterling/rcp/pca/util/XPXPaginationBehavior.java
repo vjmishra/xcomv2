@@ -73,6 +73,14 @@ public abstract class XPXPaginationBehavior extends YRCBehavior {
 		apiElem.setAttribute("IsFlow", getXpxPaginationData().getIsFlow());
 		
 		Element inputXmlElem = getXpxPaginationData().getInputXml().getDocumentElement();
+		Element customerOrderelem = YRCXmlUtils.getChildElement(inputXmlElem, "customerOrder");
+		if(customerOrderelem != null){
+			String isCustomerOrderPageCheck = customerOrderelem.getAttribute("isCustomerOrderPage");	
+			if("Y".equalsIgnoreCase(isCustomerOrderPageCheck)){
+				createSearchOrderXML(apiElem);
+				
+			}
+		}
 		
 		if(!YRCPlatformUI.isVoid(getXpxPaginationData().getSortColumn())){
 			Element orderByElem = YRCXmlUtils.createChild(inputXmlElem, "OrderBy");
@@ -83,7 +91,6 @@ public abstract class XPXPaginationBehavior extends YRCBehavior {
 		
 		Element inputElem = YRCXmlUtils.createChild(apiElem, "Input");
 		YRCXmlUtils.importElement(inputElem, inputXmlElem); 
-		
 		//Create the PreviousPage element and set the PageNumber attribute if the pagination strategy is NEXTPAGE
 		//and set the previous page's last record as a child to the PreviousPage element
 		if(!YRCPlatformUI.isVoid(getXpxPaginationData().getPreviousPageElem()) && paginationStrategy.equals(NEXTPAGE_PAGINATION_STRATEGY)){
@@ -236,4 +243,164 @@ public abstract class XPXPaginationBehavior extends YRCBehavior {
 	}
 
 	public abstract void setRepeatingElemName(String repeatingElemName);
+	
+	public Element createSearchOrderXML(Element elem){
+	//	Element elemModel = YRCXmlUtils.createDocument("Template").getDocumentElement();
+		Element elemModel = YRCXmlUtils.createChild(elem, "Template");
+		Element OrderListelem = YRCXmlUtils.createChild(elemModel, "OrderList");
+		OrderListelem.setAttribute("TotalNumberOfRecords", "");
+		OrderListelem.setAttribute("TotalOrderList", "");
+		Element Orderelem = YRCXmlUtils.createChild(OrderListelem, "Order");
+		Orderelem.setAttribute("ActualPricingDate", "");
+		Orderelem.setAttribute("AdjustmentInvoicePending", "");
+		Orderelem.setAttribute("AllAddressesVerified", "");
+		Orderelem.setAttribute("ApprovalCycle", "");
+		Orderelem.setAttribute("AuthorizationExpirationDate", "");
+		Orderelem.setAttribute("AuthorizedClient", "");
+		Orderelem.setAttribute("BillToID", "");
+		Orderelem.setAttribute("BillToKey", "");
+		Orderelem.setAttribute("BuyerOrganizationCode", "");
+		Orderelem.setAttribute("CarrierAccountNo", "");
+		Orderelem.setAttribute("CarrierServiceCode", "");
+		Orderelem.setAttribute("ChainType", "");
+		Orderelem.setAttribute("ChargeActualFreightFlag", "");
+		Orderelem.setAttribute("ComplimentaryGiftBoxQty", "");
+		Orderelem.setAttribute("CreatedAtNode", "");
+		Orderelem.setAttribute("Createprogid", "");
+		Orderelem.setAttribute("Createts", "");
+		Orderelem.setAttribute("Createuserid", "");
+		Orderelem.setAttribute("CustCustPONo", "");
+		Orderelem.setAttribute("CustomerContactID", "");		
+		Orderelem.setAttribute("CustomerFirstName", "");
+		Orderelem.setAttribute("CustomerLastName", "");
+		Orderelem.setAttribute("CustomerPONo", "");
+		Orderelem.setAttribute("CustomerPhoneNo", "");
+		Orderelem.setAttribute("CustomerZipCode", "");
+		Orderelem.setAttribute("DeliveryCode", "");
+		Orderelem.setAttribute("Division", "");
+		Orderelem.setAttribute("DoNotConsolidate", "");
+		Orderelem.setAttribute("DocumentType", "");
+		Orderelem.setAttribute("DraftOrderFlag", "");
+		Orderelem.setAttribute("EnterpriseCode", "");
+		Orderelem.setAttribute("EntryType", "");
+		Orderelem.setAttribute("FormatedLegacyOrderNo", "");
+		Orderelem.setAttribute("FreightTerms", "");
+		Orderelem.setAttribute("HasDerivedChild", "");
+		Orderelem.setAttribute("HasDerivedParent", "");
+		Orderelem.setAttribute("HoldFlag", "");
+		Orderelem.setAttribute("HoldReasonCode", "");
+		Orderelem.setAttribute("InternalApp", "");
+		Orderelem.setAttribute("InvoiceComplete", "");
+		Orderelem.setAttribute("Lockid", "");
+		Orderelem.setAttribute("Modifyprogid", "");
+		Orderelem.setAttribute("Modifyts", "");
+		Orderelem.setAttribute("Modifyuserid", "");
+		Orderelem.setAttribute("NextAlertTs", "");
+		Orderelem.setAttribute("NoOfAuthStrikes", "");
+		Orderelem.setAttribute("NotifyAfterShipmentFlag", "");
+		Orderelem.setAttribute("OrderComplete", "");
+		Orderelem.setAttribute("OrderDate", "");
+		Orderelem.setAttribute("OrderHeaderKey", "");
+		Orderelem.setAttribute("OrderName", "");
+		Orderelem.setAttribute("OrderNo", "");
+		Orderelem.setAttribute("OrderType", "");
+		Orderelem.setAttribute("OriginalTax", "");
+		Orderelem.setAttribute("OriginalTotalAmount", "");
+		Orderelem.setAttribute("OtherCharges", "");
+		Orderelem.setAttribute("Override", "");
+		Orderelem.setAttribute("PaymentStatus", "");
+		Orderelem.setAttribute("PendingTransferIn", "");
+		Orderelem.setAttribute("PersonalizeCode", "");
+		Orderelem.setAttribute("PriceOrder", "");
+		Orderelem.setAttribute("PriceProgramName", "");
+		Orderelem.setAttribute("PriorityCode", "");
+		Orderelem.setAttribute("PriorityNumber", "");
+		Orderelem.setAttribute("PropagateCancellations", "");
+		Orderelem.setAttribute("Purpose", "");
+		Orderelem.setAttribute("ReqDeliveryDate", "");
+		Orderelem.setAttribute("ReserveInventoryFlag", "");
+		Orderelem.setAttribute("ReturnByGiftRecipient", "");
+		Orderelem.setAttribute("SCAC", "");
+		Orderelem.setAttribute("SaleVoided", "");
+		Orderelem.setAttribute("SearchCriteria1", "");
+		Orderelem.setAttribute("SearchCriteria2", "");
+		Orderelem.setAttribute("SellerOrganizationCode", "");
+		Orderelem.setAttribute("ShipNode", "");
+		Orderelem.setAttribute("ShipToID", "");
+		Orderelem.setAttribute("ShipToKey", "");
+		Orderelem.setAttribute("SourceIPAddress", "");
+		Orderelem.setAttribute("SourceType", "");
+		Orderelem.setAttribute("Status", "");
+		Orderelem.setAttribute("TaxExemptFlag", "");
+		Orderelem.setAttribute("TaxExemptionCertificate", "");
+		Orderelem.setAttribute("TaxJurisdiction", "");
+		Orderelem.setAttribute("TaxPayerId", "");
+		Orderelem.setAttribute("TermsCode", "");
+		Orderelem.setAttribute("TotalAdjustmentAmount", "");
+		Orderelem.setAttribute("isHistory", "");
+		Element Extnelem = YRCXmlUtils.createChild(Orderelem, "Extn");
+		
+		Extnelem.setAttribute("ExtnAddnlEmailAddr", "");
+		Extnelem.setAttribute("ExtnAttentionName", "");
+		Extnelem.setAttribute("ExtnBillToCustomerID", "");
+		Extnelem.setAttribute("ExtnBillToName", "");
+		Extnelem.setAttribute("ExtnBillToSuffix", "");
+		Extnelem.setAttribute("ExtnCompanyId", "");
+		Extnelem.setAttribute("ExtnCurrencyCode", "");
+		Extnelem.setAttribute("ExtnCustomerDivision", "");
+		Extnelem.setAttribute("ExtnCustomerNo", "");
+		Extnelem.setAttribute("ExtnDeliveryHoldFlag", "");
+		Extnelem.setAttribute("ExtnDeliveryHoldTime", "");
+		Extnelem.setAttribute("ExtnETradingID", "");
+		Extnelem.setAttribute("ExtnEnvtId", "");
+		Extnelem.setAttribute("ExtnGenerationNo", "");
+		Extnelem.setAttribute("ExtnHeaderStatusCode", "");
+		Extnelem.setAttribute("ExtnInvoiceNo", "");
+		Extnelem.setAttribute("ExtnInvoiceTotal", "");
+		Extnelem.setAttribute("ExtnIsProcessedFlag", "");
+		Extnelem.setAttribute("ExtnLegTotOrderAdjustments", "");
+		Extnelem.setAttribute("ExtnLegacyOrderNo", "");
+		Extnelem.setAttribute("ExtnLegacyOrderType", "");
+		Extnelem.setAttribute("ExtnMsgHeaderId", "");
+		Extnelem.setAttribute("ExtnOrderCouponDiscount", "");
+		Extnelem.setAttribute("ExtnOrderDesc", "");
+		Extnelem.setAttribute("ExtnOrderDiscount", "");
+		Extnelem.setAttribute("ExtnOrderDivision", "");
+		Extnelem.setAttribute("ExtnOrderLockFlag", "");
+		Extnelem.setAttribute("ExtnOrderSpecialCharges", "");
+		Extnelem.setAttribute("ExtnOrderStatus", "");
+		Extnelem.setAttribute("ExtnOrderSubTotal", "");
+		Extnelem.setAttribute("ExtnOrderTax", "");
+		Extnelem.setAttribute("ExtnOrderedByName", "");
+		Extnelem.setAttribute("ExtnOrigEnvironmentCode", "");
+		Extnelem.setAttribute("ExtnRushOrderComments", "");
+		Extnelem.setAttribute("ExtnRushOrderFlag", "");
+		Extnelem.setAttribute("ExtnSAPParentName", "");
+		Extnelem.setAttribute("ExtnShipComplete", "");
+		Extnelem.setAttribute("ExtnShipToName", "");
+		Extnelem.setAttribute("ExtnShipToSuffix", "");
+		Extnelem.setAttribute("ExtnSourceType", "");
+		Extnelem.setAttribute("ExtnSystemIdentifier", "");
+		Extnelem.setAttribute("ExtnTotOrdValWithoutTaxes", "");
+		Extnelem.setAttribute("ExtnTotOrderAdjustments", "");
+		Extnelem.setAttribute("ExtnTotalOrderFreight", "");
+		Extnelem.setAttribute("ExtnTotalOrderValue", "");
+		Extnelem.setAttribute("ExtnTotalShipValue", "");
+		Extnelem.setAttribute("ExtnWebConfNum", "");
+		Extnelem.setAttribute("ExtnWebHoldFlag", "");
+		Extnelem.setAttribute("ExtnWebHoldReason", "");
+		Extnelem.setAttribute("ExtnWillCall", "");
+		
+		Element PriceInfoelem = YRCXmlUtils.createChild(Orderelem, "PriceInfo");
+		PriceInfoelem.setAttribute("Currency", "");
+		PriceInfoelem.setAttribute("EnterpriseCurrency", "");
+		PriceInfoelem.setAttribute("TotalAmount", "");
+		Element OrderHoldTypeselem = YRCXmlUtils.createChild(Orderelem, "OrderHoldTypes");
+		Element OrderHoldTypeelem = YRCXmlUtils.createChild(OrderHoldTypeselem, "OrderHoldType");
+		OrderHoldTypeelem.setAttribute("HoldType", "");
+		OrderHoldTypeelem.setAttribute("ResolverUserId", "");
+		OrderHoldTypeelem.setAttribute("Status", "");
+		
+		return elemModel;
+	}
 }

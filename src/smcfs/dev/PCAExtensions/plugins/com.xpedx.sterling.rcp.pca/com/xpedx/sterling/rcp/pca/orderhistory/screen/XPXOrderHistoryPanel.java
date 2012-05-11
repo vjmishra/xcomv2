@@ -7,6 +7,7 @@ package com.xpedx.sterling.rcp.pca.orderhistory.screen;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +28,9 @@ import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanelBehavior;
+import com.xpedx.sterling.rcp.pca.util.XPXConstants;
+import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
+import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCCellModifier;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -46,8 +50,8 @@ import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
-
-public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IYRCPaginatedSearchAndListComposite {
+//extends XPXPaginationComposite  implements IYRCComposite
+public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYRCComposite,IYRCPaginatedSearchAndListComposite {
 
 
     public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel";
@@ -145,7 +149,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 				if (!YRCPlatformUI.isVoid(ctrlName)){
 					if (YRCPlatformUI.equals(ctrlName, "btnSearch"))
 						//myBehavior.search();
-						myBehavior.getOrderList();
+						myBehavior.getFirstPage();
 					else if (YRCPlatformUI.equals(ctrlName, "btnClear"))
 						myBehavior.reset();
 					else if(YRCPlatformUI.equals(ctrlName, "btnFromDateCalendar"))
@@ -687,7 +691,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		});
 		createPnlResultsHeader();
 		createPnlOrderSearchResults();
-
+		createPaginationLinks(pnlOrderSearchResults, myBehavior.PAGINATION_STRATEGY_FOR_MIL_REPTOOL_SEARCH);
 	}
 
 	private void createPnlResultsHeader(){
@@ -741,6 +745,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 		createTblSearchResults();
 //		createCmpPaginationPanel() ;
 //		createPnlHistoryRecentSwitch();
+		
 
 	}
 	
@@ -947,13 +952,20 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 				boolean needsAttention = false;
 				Element eleTableItem = (Element)obj;
 				Element eleWillCall = YRCXmlUtils.getChildElement(eleTableItem, "Extn");
-				
+				Element eleHolds = YRCXmlUtils.getChildElement(eleTableItem, "OrderHoldTypes");
 				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWillCall"))){
 					willCallFlag = true;
 				}else if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnRushOrderFlag"))){
 					rushOrderFlag = true;
-				}else if("Needs Attention".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWebHoldReason"))){
-					needsAttention = true;
+				}
+				if(eleHolds!=null){
+					Iterator itrHold = YRCXmlUtils.getChildren(eleHolds);
+					while(itrHold.hasNext()) {
+						Element eleHold = (Element) itrHold.next();
+						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType")))){
+							needsAttention = true;
+						}
+					}
 				}
 				
 				if(willCallFlag){
@@ -1059,7 +1071,7 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
         colBindings11[12].setSortReqd(true);
         colBindings11[12].setFilterReqd(true);
         
-        tblResultsBinding1.setSourceBinding("OrderListModel:/OrderList/Order");
+        tblResultsBinding1.setSourceBinding("OrderListModel:/Page/Output/OrderList/Order");
 		tblResultsBinding1.setName("tblResultz");
         tblResultsBinding1.setTblClmBindings(colBindings11);
         tblResultsBinding1.setKeyNavigationRequired(true);
@@ -1116,6 +1128,12 @@ public class XPXOrderHistoryPanel extends Composite  implements IYRCComposite,IY
 	public boolean search() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public XPXPaginationBehavior getPaginationBehavior() {
+		// TODO Auto-generated method stub
+		return getMyBehavior();
 	}
 
 }
