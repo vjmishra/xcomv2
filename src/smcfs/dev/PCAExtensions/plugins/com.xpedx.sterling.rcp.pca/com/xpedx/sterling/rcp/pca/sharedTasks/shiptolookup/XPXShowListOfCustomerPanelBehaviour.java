@@ -92,7 +92,13 @@ public class XPXShowListOfCustomerPanelBehaviour extends XPXPaginationBehavior{
 					Element eleAddress = YRCXmlUtils.createDocument("XpedxMilBothLst").getDocumentElement();
 					if(!YRCPlatformUI.isVoid(eleCustomer.getAttribute("CustomerID")))
 						eleAddress.setAttribute("CustomerIdSelected", eleCustomer.getAttribute("CustomerID"));
-						eleAddress.setAttribute("CustomerNameSelected", eleCustomer.getAttribute("OrganizationName"));
+					NodeList nodList=eleCustomer.getElementsByTagName("BuyerOrganization");
+					for (int z=0; z<nodList.getLength(); z++){
+						Element  eleCust=(Element) nodList.item(z);
+						eleAddress.setAttribute("CustomerNameSelected", eleCust.getAttribute("OrganizationName"));
+						
+					}
+						
                     this.page.eleSelected = eleAddress;
                     
                 }
