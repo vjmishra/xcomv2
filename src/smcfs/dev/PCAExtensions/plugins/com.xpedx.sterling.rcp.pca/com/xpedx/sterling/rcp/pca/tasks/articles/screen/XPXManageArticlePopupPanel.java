@@ -162,7 +162,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@OrganizationCode");
 		cbd.setDescriptionBinding("@OrganizationCode");
-		cbd.setListBinding("StoreFronts:/OrganizationList/Organization");
+		cbd.setListBinding("Divisions:/OrganizationList/Organization");
 		cbd.setSourceBinding("XPXArticle:XPXArticle/@OrganizationCode");
 		cbd.setTargetBinding("SaveArticle:/XPXArticle/@OrganizationCode");
 		cbd.setName("comboStorefrontCode");		

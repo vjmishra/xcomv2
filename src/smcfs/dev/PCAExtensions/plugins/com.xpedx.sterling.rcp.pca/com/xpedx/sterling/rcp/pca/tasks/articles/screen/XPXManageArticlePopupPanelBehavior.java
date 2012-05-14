@@ -252,7 +252,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 				else if("getOrganizationList".equals(apiname)){
 					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
 					
-					setModel("StoreFronts",eleOutput);
+					setModel("Divisions",eleOutput);
 				}				
 			}
 		}
