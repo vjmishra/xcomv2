@@ -259,7 +259,8 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					Document myitemsList = SCXmlUtil.createDocument("XPEDXMyItemsList");
 					Element myItemsItemsList = myitemsList.createElement("XPEDXMyItemsItemsList");
 					myitemsList.getDocumentElement().appendChild(myItemsItemsList);
-					
+					//Added setItemCount() for Jira 3848
+					setItemCount(String.valueOf(alAllItems.size()));
 					//2 - Loop through the items and prepare the data
 					for (Iterator iterator = alAllItems.iterator(); iterator.hasNext();) {
 						Element tmpRecord = (Element) iterator.next();
