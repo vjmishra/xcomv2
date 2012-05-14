@@ -214,7 +214,7 @@
 						</s:if>
 						<s:else>
 						<td class="right" width="55%"><s:property value="#bracketPriceForUOM" /></td>
-						<td class="my-uom"> /&nbsp;<s:property value="#bracketUOMDesc" /></td>
+						<td class="my-uom">&nbsp;/&nbsp;<s:property value="#bracketUOMDesc" /></td>
 						</s:else>
 					</TR>
 				</s:if>
