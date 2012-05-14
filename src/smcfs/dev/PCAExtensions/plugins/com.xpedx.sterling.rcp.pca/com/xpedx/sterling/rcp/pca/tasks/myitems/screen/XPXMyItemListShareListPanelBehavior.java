@@ -25,7 +25,7 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 	private String strMILCustomerID;
 	private HashMap<String, Element> assignedMap;
 	private String strCustomerPathPrefix = "";
-	
+	public ArrayList parentcustomer = new ArrayList();
 	public XPXMyItemListShareListPanelBehavior(
 			XPXMyItemListShareListPanel myItemListShareListPanel,
 			Element inputElement) {
@@ -152,9 +152,51 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 			            		}
 			            	}
 				        }
-						
-						this.getChildList();    //--function used to set the values of child nodes in Tree structure
-					} else if ("multiApi".equals(apiname)) {
+						ArrayList listParentCustomers = YRCXmlUtils.getChildren(outXml, "Customer");
+						int numberOfCustomer = 0;
+						if (!YRCPlatformUI.isVoid(listParentCustomers) ) {
+						for (int k=0; k<listParentCustomers.size(); k++){
+							Element customerEle = (Element)listParentCustomers.get(k);
+							String CustomerIDValue=YRCXmlUtils.getAttribute(customerEle,"CustomerID");		
+							parentcustomer.add(CustomerIDValue);
+							numberOfCustomer = parentcustomer.size(); 
+							}
+						}
+						if(numberOfCustomer==3){
+				    		String strMasterCustomerID = (String) parentcustomer.get(2);
+				    		YRCApiContext apiCtx = new YRCApiContext();
+							String cmdName = "getCustomerList";
+							Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+strMasterCustomerID+"' />");
+							apiCtx.setApiName(cmdName);
+							apiCtx.setInputXml(docInput);
+							apiCtx.setFormId(getFormId());
+							callApi(apiCtx);
+						}
+						else if(numberOfCustomer==4){
+			        		String strMasterCustomerID = (String) parentcustomer.get(3);
+			        		YRCApiContext apiCtx = new YRCApiContext();
+							String cmdName = "getCustomerList";
+							Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+strMasterCustomerID+"' />");
+							apiCtx.setApiName(cmdName);
+							apiCtx.setInputXml(docInput);
+							apiCtx.setFormId(getFormId());
+							callApi(apiCtx);
+						}
+						else if(numberOfCustomer==2){
+			        		String strMasterCustomerID = (String) parentcustomer.get(1);
+			        		YRCApiContext apiCtx = new YRCApiContext();
+							String cmdName = "getCustomerList";
+							Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+strMasterCustomerID+"' />");
+							apiCtx.setApiName(cmdName);
+							apiCtx.setInputXml(docInput);
+							apiCtx.setFormId(getFormId());
+							callApi(apiCtx);
+						}
+						//this.getChildList();    //--function used to set the values of child nodes in Tree structure
+					} 
+					
+					
+					else if ("multiApi".equals(apiname)) {
 						this.getCustomerAssignmentsAfterUpdate();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
