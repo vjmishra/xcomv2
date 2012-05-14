@@ -1556,7 +1556,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			</div>
 			</td>
 		</tr>
-<!-- 		<tr>
+<%-- 		<tr>
 			<td valign="top" class="no-border-right-user padding00">
 			<div class="question">
 			<ul>
@@ -1604,7 +1604,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			</div>
 			</td>
 			<td valign="top" class="no-border-right-user padding00">&nbsp;</td>
-		</tr> -->
+		</tr> --%>
 		<tr>
 			<td valign="top" colspan="2" class="no-border-right-user padding00">
 			<div class="question">
