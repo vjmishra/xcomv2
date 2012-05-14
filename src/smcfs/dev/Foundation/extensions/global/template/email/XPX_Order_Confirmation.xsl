@@ -355,6 +355,27 @@
 
 					</tr><!-- End intentionally blank row. -->
 					<tr>
+					<td colspan="3"> <span class="bold"> Expected Delivery Date: </span>
+					<xsl:choose>
+					<xsl:when test = 'Order/@ReqDeliveryDate!=""' >
+					<xsl:value-of select="substring(Order/@ReqDeliveryDate,6,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,9,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,1,4)"/>
+					</xsl:when>
+					<xsl:when test = 'Order/@ReqDeliveryDate = ""' >
+					To Be Determined
+					</xsl:when>
+					<xsl:otherwise>
+					To Be Determined
+					</xsl:otherwise>
+					</xsl:choose>
+						
+					</td></tr>	
+					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
+						<td></td>
+						<td></td>
+						<td> </td>
+
+					</tr><!-- End intentionally blank row. -->
+					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
 						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
 						Ship Order Complete
