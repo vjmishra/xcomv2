@@ -64,7 +64,7 @@ public class XPXShowListOfCustomerPanel extends XPXPaginationComposite implement
         colBindings[0].setSortReqd(true); 
         
         colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("OrganizationName");
+        colBindings[1].setAttributeBinding("/BuyerOrganization/@OrganizationName");
         colBindings[1].setColumnBinding("Organization Name");
         colBindings[1].setSortReqd(true);
         colBindings[1].setSortBinding("OrganizationName");
