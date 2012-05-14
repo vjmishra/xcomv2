@@ -64,11 +64,10 @@ public class XPXShowListOfCustomerPanel extends XPXPaginationComposite implement
         colBindings[0].setSortReqd(true); 
         
         colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("@FirstName;@LastName;");
-        colBindings[1].setColumnBinding("UserName");
-        colBindings[1].setKey("xpedx_username_key");
+        colBindings[1].setAttributeBinding("OrganizationName");
+        colBindings[1].setColumnBinding("Organization Name");
         colBindings[1].setSortReqd(true);
-        colBindings[1].setSortBinding("@FirstName");
+        colBindings[1].setSortBinding("OrganizationName");
         
         bindingData.setSortRequired(true);
         bindingData.setSourceBinding("CustomerList:/CustomerList/Customer");
@@ -132,7 +131,7 @@ public class XPXShowListOfCustomerPanel extends XPXPaginationComposite implement
 		clmArticleName.setWidth(150);//TODO: set appropriate width
 		
 		TableColumn clmStartDate = new TableColumn(tblResults, SWT.NONE);
-		clmStartDate.setText("UserName");
+		clmStartDate.setText("Organization Name");
 		clmStartDate.setWidth(150);//TODO: set appropriate width
 		
 		tblResultsGD.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
