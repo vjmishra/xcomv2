@@ -121,6 +121,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	    // with the same context.
 		
 		this.getCustomers("MC");
+		
     }
 
     public void getCustomers(String strExtnSuffixType) {
@@ -764,6 +765,33 @@ public void searchCustomer(){
 	String MasterCustomerValue = getFieldValue("MasterCustomerId");
 	String enterPriseKey=getEnterPriseKey();
 	String customerIdSelected =  null;
+	if(YRCPlatformUI.isVoid(getFieldValue("txtLPC")) 
+			|| YRCPlatformUI.isVoid(getFieldValue("txtReplaceLPC"))){
+		
+		if(YRCPlatformUI.isVoid(getFieldValue("txtLPC"))){
+			YRCPlatformUI.showError("Message", "Current Legacy Product Code is mandatory.");
+			getControl("txtLPC").setFocus();
+			return;
+		}
+		if(YRCPlatformUI.isVoid(getFieldValue("txtReplaceLPC"))){
+			YRCPlatformUI.showError("Message", "Replace with Legacy Product Code is mandatory.");
+			getControl("txtReplaceLPC").setFocus();
+			return;
+		}
+	}
+	
+	String currLPC=getFieldValue("txtLPC");
+	String replaceLPC=getFieldValue("txtReplaceLPC");
+	if(!YRCPlatformUI.isVoid(getFieldValue("txtLPC")) && !YRCPlatformUI.isVoid(getFieldValue("txtReplaceLPC")) && currLPC.equals(replaceLPC) ){
+		YRCPlatformUI.showError("Message", "Replace With Legacy Product Code is Same as Current Legacy Product Code");
+		getControl("txtReplaceLPC").setFocus();
+		return;
+	}
+	
+	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
+		YRCPlatformUI.showError("Information", "Please enter a customer name");	
+		return;
+	}
 	
 	if(BillToValue != null && BillToValue != ""){
 		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
@@ -778,6 +806,10 @@ public void searchCustomer(){
 		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
 		Element eleUOMInfo = output.getOutput();
 		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		String customerNameSelected = eleUOMInfo.getAttribute("CustomerNameSelected");
+		if(customerNameSelected != null){
+			setFieldValue("BillToId",customerNameSelected);
+		}
 		CallReplacementServiceForCustomerName(customerIdSelected);
 	}
 	
@@ -794,6 +826,10 @@ public void searchCustomer(){
 		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
 		Element eleUOMInfo = output.getOutput();
 		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		String customerNameSelected = eleUOMInfo.getAttribute("CustomerNameSelected");
+		if(customerNameSelected != null){
+			setFieldValue("ShipToId",customerNameSelected);
+		}
 		CallReplacementServiceForCustomerName(customerIdSelected);
 	}
 	if(SAPIdValue != null && SAPIdValue != ""){
@@ -805,10 +841,13 @@ public void searchCustomer(){
 		e1.setAttribute("OrganizationNameQryType", "FLIKE");
 		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
 		e2.setAttribute("ExtnSuffixType", "C");
-		
 		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
 		Element eleUOMInfo = output.getOutput();
 		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		String customerNameSelected = eleUOMInfo.getAttribute("CustomerNameSelected");
+		if(customerNameSelected != null){
+			setFieldValue("SAPId",customerNameSelected);
+		}
 		CallReplacementServiceForCustomerName(customerIdSelected);
 	}
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
@@ -820,16 +859,17 @@ public void searchCustomer(){
 		e1.setAttribute("OrganizationNameQryType", "FLIKE");
 		Element e2 = YRCXmlUtils.createChild(elemModel, "Extn");
 		e2.setAttribute("ExtnSuffixType", "MC");
-		
 		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModel);
 		Element eleUOMInfo = output.getOutput();
 		customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+		String customerNameSelected = eleUOMInfo.getAttribute("CustomerNameSelected");
+		if(customerNameSelected != null){
+			setFieldValue("MasterCustomerId",customerNameSelected);
+		}
 		CallReplacementServiceForCustomerName(customerIdSelected);
 	}
 	
-	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
-		YRCPlatformUI.showInformation("Information", "Please enter a customer name");	
-	}
+	
 	
 	
 }
