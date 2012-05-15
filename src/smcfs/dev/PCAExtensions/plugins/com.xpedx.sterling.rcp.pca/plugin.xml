@@ -383,7 +383,7 @@
                 </categories>
             </task>
             <task
-                actionId="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel"
+                actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
                 filterRequired="false" groupId="Other_Tasks"
                 id="Replacement Items" isExtension="false"
                 name="Replacement Items" permissionId="ycdRCP01002">
@@ -558,12 +558,12 @@
                 state="true" style="push"/>
         </actionSet>
         <actionSet
-            id="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel"
-            label="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel" visible="true">
+            id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+            label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction" visible="true">
             <action
-                class="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel"
-                id="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel"
-                label="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel"
+                class="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
                 state="true" style="push"/>
         </actionSet>
         <actionSet
