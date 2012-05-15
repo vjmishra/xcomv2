@@ -68,6 +68,8 @@
 							<s:set name="jsonMyPriceExtended"
 								value="#json.get('ExtendedPrice')" />
 							<s:set name="currencyCode" value="#json.get('currencyCode')" />
+							<s:set name="jsonPricingUOM"
+								value="#json.get('PricingUOM')" />
 
 				<TABLE cellpadding="0" cellspacing="0" border="0">
 				<TR>
@@ -153,9 +155,11 @@
 												<s:set name="bracketUOMDesc" value="bracketUOM" />
 												<s:set name='formattedbracketUOM'
 													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+												<s:set name='formattedPricingUOM'
+														value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
 									<TR>
 										<td style="text-align:left; width='35%'; "><s:property value="bracketQTY" /> <s:property value="%{#formattedbracketUOM}" /> - <s:property value='%{#formattedBracketpriceForUom}' />
-											/ <s:property value="%{#formattedbracketUOM}" />
+											/ <s:property value="%{#formattedPricingUOM}" />
 										</td>
 										<td></td>
 										<td></td>
