@@ -151,8 +151,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 
 							itemID = eleItemsList1.getAttribute("ItemID");
 
-							uomIds = eleItemsList1
-									.getAttribute("UnitOfMeasure");
+							uomIds = eleItemsList1.getAttribute("UomId");
 
 							/*
 							 * uomIds =
@@ -214,19 +213,15 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 
 							Element eleItemsItemsList1 = YRCXmlUtils.getChildElement(this.eleMyItemsList, "XPEDXMyItemsItemsList");
 							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
-							for (Element eleItem : listItems1) {								
+							/*for (Element eleItem : listItems1) {								
 								String itemsId = eleItem.getAttribute("ItemId");
-								/*uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
-								String uomDesc = (String) masterUOMList.get(uomIds);*/
+								uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
+								String uomDesc = (String) masterUOMList.get(uomIds);
 								if(itemDescList!=null && itemDescList.containsKey(itemsId))
 									eleItem.setAttribute("Name", (String) itemDescList.get(itemsId));
-									eleItem.setAttribute("Action","");
-									eleItem.setAttribute("UnitOfMeasure", uomIds);
-
-
-									//eleItem.setAttribute("Desc", uomDesc);
-							}							
-							
+									eleItem.setAttribute("UnitOfMeasure",uomIds);
+									}							
+							*/
 						//} - Removed unnecessary code
 						
 						//moved here as we need to export correct Item details from YFS_Item
