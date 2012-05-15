@@ -69,16 +69,29 @@ public class XPXShowListOfUOMPanelBehaviour extends XPXPaginationBehavior{
 		     			Document docOutput = apiContext.getOutputXmls()[i];
 						if (docOutput != null) {
 							Element eleOutput = docOutput.getDocumentElement();
-							Element eleUOMList = YRCXmlUtils.createDocument("AlternateUOMList").getDocumentElement();
+							//Retrieved BaseUOM And its Description
+							String BaseUOM = eleOutput.getAttribute("UnitOfMeasure");
+							String BaseUOMDesc = (String) masterUOMList.get(BaseUOM) ;
 							NodeList listUOMList = eleOutput.getElementsByTagName("AlternateUOM");
 							for (int k = 0; k < listUOMList.getLength(); k++) {
-								Element eleBothItemsList = (Element) listUOMList.item(k);
-								String UOMID = eleBothItemsList.getAttribute("UnitOfMeasure");
+								Element eleOrderOMList = (Element) listUOMList.item(k);
+								String IsOrderingUOMFlag = eleOrderOMList.getAttribute("IsOrderingUOM");
+								if ("N".equalsIgnoreCase(IsOrderingUOMFlag)) {
+									eleOrderOMList.getParentNode().removeChild(eleOrderOMList);
+									k--;
+								}
+								String UOMID = eleOrderOMList.getAttribute("UnitOfMeasure");
 								String uomDesc = (String) masterUOMList.get(UOMID) ;
-								eleBothItemsList.setAttribute("UomDesc", uomDesc);
-								eleBothItemsList.setAttribute("UomID", UOMID);
+								eleOrderOMList.setAttribute("UomDesc", uomDesc);
+								eleOrderOMList.setAttribute("UomID", UOMID);
 							}
-							setModel("UserList",eleOutput);
+							
+							//Added Base UOM to the XML
+							Element AlternateUOMListelem = YRCXmlUtils.getChildElement(eleOutput, "AlternateUOMList");
+							Element AlternateUOMelem = YRCXmlUtils.createChild(AlternateUOMListelem, "AlternateUOM");
+							AlternateUOMelem.setAttribute("UomID", BaseUOM);
+							AlternateUOMelem.setAttribute("UomDesc", BaseUOMDesc);
+							setModel("UOMList",eleOutput);
 						}
 		     		}
 				}
