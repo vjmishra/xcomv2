@@ -673,7 +673,7 @@ var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XML
 function getNormalView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" >',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
    '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
     '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
    '</div>',
@@ -712,7 +712,7 @@ return new Ext.XTemplate(
 function getCondensedView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  style="height:auto;">',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  class="itemdiv" style="height:auto;">',
   '<div class="imgs">',
    '<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
@@ -747,7 +747,7 @@ return new Ext.XTemplate(
 function getMiniView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" >',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv" >',
   '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
   '</div>','<div class="contents">',
