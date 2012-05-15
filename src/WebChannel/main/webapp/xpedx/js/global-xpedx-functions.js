@@ -71,45 +71,102 @@ function restrictTextareaMaxLength(Object, maxLen){
  
 }
 //added for jira 3241
-function isValidQuantityRemoveAlpha(component,e){
-	var characterCode
-	if(e && e.which){ // NN4 specific code
-		e = e
-		characterCode = e.which
-	}
-	else {
-		e = event
-		characterCode = e.keyCode // IE specific code
-	}
-	//characterCode for left and right arrows and backSpace buttons for onkeyup events
-	if(characterCode==37 || characterCode==38 || characterCode==39 || characterCode==40 || characterCode==8 ){
-		return;
-	}
 
-	var quantity = component.value.trim();
-    var qtyLen = quantity.length;
-    var validVals = "0123456789";
-    //var isValid=true;
-    var char;
-    for (i = 0; i < qtyLen ; i++) {
-       char = quantity.charAt(i); 
-       if (validVals.indexOf(char) == -1) 
-       {
-    	var quantity1 = quantity.substr(i+1,qtyLen) ;
-    	quantity = quantity.substr(0,i) +quantity1;
-    	//alert ("Quantity After: " + quantity)
-         // isValid = false;
-       }
-   	}
-    component.value = quantity;
+function doGetCaretPosition (ctrl) {
 
-    if (quantity.length > 7){
-        var val = quantity.substr(0,7);
-		quantity = val;
-        component.value = quantity;
-    }
-    return true;
+var CaretPos = 0;
+// IE Support
+if (document.selection) {
+
+ctrl.focus ();
+var Sel = document.selection.createRange ();
+
+Sel.moveStart ('character', -ctrl.value.length);
+
+CaretPos = Sel.text.length;
 }
+// Firefox support
+else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+CaretPos = ctrl.selectionStart;
+
+return (CaretPos);
+
+}
+
+
+function setCaretPosition(ctrl, pos)
+{
+
+if(ctrl.setSelectionRange)
+{
+ctrl.focus();
+ctrl.setSelectionRange(pos,pos);
+}
+else if (ctrl.createTextRange) {
+var range = ctrl.createTextRange();
+range.collapse(true);
+range.moveEnd('character', pos);
+range.moveStart('character', pos);
+range.select();
+}
+}
+
+function isValidQuantityRemoveAlpha(component,e){
+var characterCode;
+var position=doGetCaretPosition(component);
+
+if(e && e.which){ // NN4 specific code
+e = e;
+characterCode = e.which;
+}
+else {
+e = event;
+characterCode = e.keyCode; // IE specific code
+}
+//characterCode for left and right arrows and backSpace buttons for onkeyup events
+if(characterCode==37 || characterCode==38 || characterCode==39 || characterCode==40 || characterCode==8 ){
+return;
+}
+
+var quantity = component.value.trim();
+var qtyLen = quantity.length;
+var validVals = "0123456789";
+var char;
+var isError = false;
+
+for (i = 0; i < qtyLen ; i++) {
+char = quantity.charAt(i);
+if (validVals.indexOf(char) == -1)
+{
+var quantity1 = quantity.substr(i+1,qtyLen) ;
+quantity = quantity.substr(0,i) +quantity1;
+
+isError = true;
+
+}
+}
+component.value = quantity;
+
+
+if (quantity.length > 7){
+var val = quantity.substr(0,7);
+quantity = val;
+component.value = quantity;
+}
+
+if(position!=0 && isError == true)
+{
+setCaretPosition(component,position-1);
+}
+else if(position!=0 && isError == false)
+{
+setCaretPosition(component,position);
+}
+
+return true;
+}
+
+
 //end for jira 3241
 
 function isValidQtyRemoveAlpha(component){
