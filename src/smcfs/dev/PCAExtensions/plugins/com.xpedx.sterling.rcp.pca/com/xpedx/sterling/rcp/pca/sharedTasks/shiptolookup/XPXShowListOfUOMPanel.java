@@ -160,8 +160,8 @@ public class XPXShowListOfUOMPanel extends XPXPaginationComposite implements IYR
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UomID");
 		cbd.setDescriptionBinding("@UomDesc");
-		cbd.setListBinding("UserList:/Order/AlternateUOMList/AlternateUOM");
-		cbd.setSourceBinding("UserList:/Order/AlternateUOMList/AlternateUOM/@UomDesc");
+		cbd.setListBinding("UOMList:/Order/AlternateUOMList/AlternateUOM");
+		cbd.setSourceBinding("UOMList:/Order/AlternateUOMList/AlternateUOM/@UomDesc");
 		//cbd.setTargetBinding("XPXCustomercontactExtn:/CustomerContact/@ApproverUserId");
 		cbd.setName("uomIDCombo");
 		uomIDCombo.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
