@@ -718,6 +718,22 @@
 </td>
 </tr>
 </s:if>
+<s:else>
+<tr>
+<td height="5px" width="5px">
+ <a class="underlink"   id="" name="" href="javascript:showListForSelectedOption();">  
+  <div id="Layer2" style="FONT-WEIGHT: bold; WIDTH:300px; HEIGHT: 10px"></div></a>
+ 
+</td>
+<td valign="right">
+<div class="search-pagination-bottom" style="WIDTH:630px; HEIGHT: 10px">
+                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
+			</div>
+</td>
+</tr>
+
+ </s:else>
 
 </td>
 </tr>
