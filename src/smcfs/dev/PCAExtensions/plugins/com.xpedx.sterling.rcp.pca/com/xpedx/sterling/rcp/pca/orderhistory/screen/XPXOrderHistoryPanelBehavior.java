@@ -406,22 +406,28 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 			
 		}
 		if(getFieldValue("txtSuffix")!= null || getFieldValue("txtCompany")!= null || getFieldValue("txtShipFrom")!= null || getFieldValue("txtAccount")!= null){
-			if(isExtnChildCreated){
-				attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
-				attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
-				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
-				attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
-			}
-			else{
-				attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
-				attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
-				attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtCompany"));
+            if(isExtnChildCreated){
+                  attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
+                  attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
+                  attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+                  attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
+                  attrElemComplex2.setAttribute("ExtnLegacyOrderType" , "F");
+                  attrElemComplex2.setAttribute("ExtnLegacyOrderTypeQryType", "NE");
+            }
+            else{
+                  attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
+                  attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
+                  attrElemComplex2.setAttribute("ExtnSAPParentName", getFieldValue("txtCompany"));
+                  attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
 
-				if(getFieldValue("txtShipFrom")!= null && getFieldValue("txtShipFrom")!= "")
-				{
-					attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
-				}
-				attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
+                  if(getFieldValue("txtShipFrom")!= null && getFieldValue("txtShipFrom")!= "")
+                  {
+                	  attrElemComplex2.setAttribute("ExtnCustomerDivision", getFieldValue("txtShipFrom"));
+                  }
+                  attrElemComplex2.setAttribute("ExtnCustomerNo", getFieldValue("txtAccount"));
+                  attrElemComplex2.setAttribute("ExtnLegacyOrderType" , "F");
+                  attrElemComplex2.setAttribute("ExtnLegacyOrderTypeQryType", "NE");
+
 			}
 			isExtnChildCreated = false;
 			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
