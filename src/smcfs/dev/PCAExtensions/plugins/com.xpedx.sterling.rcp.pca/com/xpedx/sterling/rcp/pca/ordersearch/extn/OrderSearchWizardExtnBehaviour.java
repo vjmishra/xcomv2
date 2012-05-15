@@ -413,6 +413,13 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			{
 				eleExtn.setAttribute("ExtnCustomerDivisionQryType", "LIKE");
 			}
+			
+			
+			//if("9000".equalsIgnoreCase(eleInput.getAttribute("FromStatus")) || "9000".equalsIgnoreCase(eleInput.getAttribute("ToStatus"))){
+				eleExtn.setAttribute("ExtnLegacyOrderType" , "F");
+				eleExtn.setAttribute("ExtnLegacyOrderTypeQryType", "NE");
+			//}
+			System.out.println(YRCXmlUtils.getString(eleInput));
 		}
 		return super.preCommand(apiContext);
 	}
