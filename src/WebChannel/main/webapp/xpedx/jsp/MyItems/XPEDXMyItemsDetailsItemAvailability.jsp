@@ -217,9 +217,11 @@
 								<s:set name="bracketUOMDesc" value="bracketUOM" />
 								<s:set name='formattedbracketUOM'
 									value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+								<s:set name='formattedPricingUOM'
+									value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
 	
 						<tr>
-							<td ><s:property value="bracketQTY" />&nbsp;<s:property value="%{#formattedbracketUOM}" /> -&nbsp;<s:property value='%{#formattedBracketpriceForUom}' /> / <s:property value="%{#jsonPricingUOM}" /></td>
+							<td ><s:property value="bracketQTY" />&nbsp;<s:property value="%{#formattedbracketUOM}" /> -&nbsp;<s:property value='%{#formattedBracketpriceForUom}' /> / <s:property value="%{#formattedPricingUOM}" /></td>
 							<td ></td>
 							<td ></td>
 						</tr>
