@@ -558,7 +558,7 @@ function printPOs(customerPos) {
 								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />
 		
 							<td><s:set name='customerPO'
-								value='%{#parentOrder.getAttribute("CustomerPoNo")}' /> <SCRIPT type="text/javascript">
+								value='%{#parentOrder.getAttribute("CustomerPONo")}' /> <SCRIPT type="text/javascript">
 								printPOs('<s:property value="#customerPO" escape='false'/>');
 								</SCRIPT></td>
 		
@@ -695,7 +695,7 @@ function printPOs(customerPos) {
 										</s:a>
 									</s:else>
 				            	</td>
-			            		<td><s:set name='customerPO' value='%{#parentOrder.getAttribute("CustomerPoNo")}'/>
+			            		<td><s:set name='customerPO' value='%{#parentOrder.getAttribute("CustomerPONo")}'/>
 									<SCRIPT type="text/javascript">
 									printPOs('<s:property value="#customerPO" escape='false'/>');
 									</SCRIPT>
