@@ -584,18 +584,20 @@ $(document).ready(function(){
 					<s:set name="maxOrderAmount" value='%{maxOrderAmount}'></s:set>
 					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
 					<%--JIRA 3488 end--%>
+					<%--JIRA 3853 start--%>
 					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
 						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
 						<input maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
-						<s:hidden name="#qaJobID.type" value="ItemID" />
+						<s:hidden name="#qaJobID.type" value="" />
 					</li>
 					</s:if>
 					<s:else>
 						<s:hidden id="qaJobID" name="qaJobID" value="" />
-						<s:hidden name="#qaJobID.type" value="ItemID" />
+						<s:hidden name="#qaJobID.type" value="" />
 					</s:else>
+						<%--JIRA 3853 end--%>
 					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 					<li>
@@ -844,7 +846,7 @@ $(document).ready(function(){
 	</s:else>
 </s:if>
 <s:else>
-<%-- <span class="red bold">Don’t forget to ‘Checkout’ to apply these changes to your order</span> --%>
+<%-- <span class="red bold">Donâ€™t forget to â€˜Checkoutâ€™ to apply these changes to your order</span> --%>
 <span class="red bold"> <s:text name='MSG.SWC.ORDR.DRAFTORDRDETAIL.GENERIC.CHKOUTMUST.FORCHANGES' /> </span>
 	<s:if test="#canChangeOrderName">
 	<%-- <s:textfield id="cartDesc_new" name='cartDesc_new' id="cartDesc_new" size="50"
