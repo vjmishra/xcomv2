@@ -2747,9 +2747,9 @@ td .inner {
     width: 185px;
 }
 #right-col-int {
-    float: right;
-    margin-right: 10px;
-    width: 185px;
+   position:absolute;
+   top:1;
+   right:0
 }
 #multi-view {
     float: right;
