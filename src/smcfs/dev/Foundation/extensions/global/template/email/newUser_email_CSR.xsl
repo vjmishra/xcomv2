@@ -14,12 +14,12 @@
 		<xsl:template match="/">
 			<xsl:comment>RECIPIENTS=</xsl:comment>
 			<xsl:comment>FROM=tester@stercomm.com</xsl:comment>
-			<xsl:comment>SUBJECT=xpedx.com-Registration Request</xsl:comment>
+			<xsl:comment>SUBJECT=<xsl:value-of select="@Brand"/>.com Registration Request Notification</xsl:comment>
 			<xsl:comment>CONTENT_TYPE=text/html</xsl:comment>
 		</xsl:template>
 		
 			<body>
-				<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
+				<table width="400" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
 						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
 					</tr>
@@ -35,7 +35,7 @@
 											
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;">		Registration Request 
+													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;"><xsl:value-of select="@Brand"/>.com Registration Request 
 													</span>
 												</td>
 											</tr>
@@ -55,8 +55,8 @@
 											</td>
 											 -->
 											 <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												Thank you for registering online with xpedx.com.                
-												The information below has been sent to your local customer service department for processing .A representative will contact you with your login information.
+												Thank you for registering online with <xsl:value-of select="@Brand"/>.com.                
+												The information below has been sent to your local support <br></br>contact for processing. A representative will contact you.
 												<span ></span>
 											</td>
 										</tr>
@@ -67,7 +67,7 @@
 										<!--Start for Jira 3269  -->
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<table width="100%" border="0">
+													<table width="65%" border="0">
 														<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Name:
@@ -79,7 +79,7 @@
 															</tr>
 															<tr>
 															<td width="22%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																Company Name:
+																Company:
 															</td>
 															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@CompanyName"/><BR/>
@@ -93,6 +93,7 @@
 																<xsl:value-of select="@Address1"/>
 															</td>
 															</tr>
+															<xsl:if test = '@Address2!=""'>
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																
@@ -101,6 +102,7 @@
 																<xsl:value-of select="@Address2"/>
 															</td>
 															</tr>
+															</xsl:if>
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																City:
@@ -111,7 +113,7 @@
 															</tr>
 															<tr>
 															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																State:
+																State / Province:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@State"/>
@@ -122,7 +124,7 @@
 																Postal Code:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="@PostalCode"/>
+																<xsl:value-of select="@ZipCode"/>
 															</td>
 															</tr>
 															<tr>
@@ -133,15 +135,15 @@
 																<xsl:value-of select="@Phone"/><BR/>
 															</td></tr>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td width="16%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Email Address:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@EmailID"/>
 															</td></tr>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Questions / Comments :
+															<td width="10%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Questions / Comments:
 															</td>
 															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Comments"/>
@@ -159,12 +161,15 @@
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 													<div align="left">                
-														Thank You!
+														Thank you!
 														</div>                
 													
 											</td>
 											</tr>
-											
+											<tr>
+												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"> &#160; </td>
+											</tr>                                                                                   
+                                            
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 													<div align="left">                
