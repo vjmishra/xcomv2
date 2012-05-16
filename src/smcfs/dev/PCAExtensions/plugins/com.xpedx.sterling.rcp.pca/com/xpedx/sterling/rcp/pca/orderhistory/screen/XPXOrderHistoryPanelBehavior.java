@@ -202,9 +202,15 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 						extnOrderType = extnOrderType + " " + "Order";
 						eleOrderList.setAttribute("OrderType", extnOrderType);
 					}
-					eleOrderList.setAttribute("Status", (String) statusList
+					else if (extnOrderType.equalsIgnoreCase("DIRECT_ORDER")) {
+						extnOrderType = "Fulfillment Order";
+						eleOrderList.setAttribute("OrderType", extnOrderType);
+					}
+					if(extnOrderStatus != null && extnOrderStatus != "")
+					{
+						eleOrderList.setAttribute("Status", (String) statusList
 							.get(extnOrderStatus));
-					
+					}
 					//Formating The Legacy Order Number
 					String fmtLegacyOrderNumber = null;
 					String divisionNo = extn.getAttribute("ExtnOrderDivision");
@@ -511,11 +517,15 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 		statusList.put("1100.5450", "Web Hold");
 		statusList.put("1100.5500", "Released for Fullfillment");
 		statusList.put("1100.5550", "Shipped");
+		statusList.put("1100.6000", "Partially Blanket");
 		statusList.put("1100.5700", "Invoiced");
 		statusList.put("1100.5750", "Return");
 		statusList.put("1100.5900", "Quote");
 		statusList.put("1100.5950", "Invoice Only");
 		statusList.put("9000", "Cancelled");
+		statusList.put("1310", "Awaiting FO Creation");
+		statusList.put("1000", "Draft Order Created");
+		statusList.put("1100", "Created");
 		return statusList;
 		
 		
