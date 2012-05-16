@@ -14,6 +14,7 @@ by the US patent number 5,555,403 and 6,247,008
 --><%@ include file="wistartpage.jsp" %>
 <%
 response.setDateHeader("expires", 0);
+
 _logger.info("-->viewDocument.jsp");
 boolean blnEnteringViewer = false;
 ViewerInstance viewerInstance = null;
@@ -232,6 +233,7 @@ isInteractive = false;
 }
 else if (strViewType.equals("H"))
 {
+	
 isInteractive = false;
 isPDF = false;
 }
@@ -275,7 +277,7 @@ strRefreshOnOpen = strRefreshOnOpen.toLowerCase();
 String strRefresh = requestWrapper.getQueryParameter("sRefresh", false, "no");
 if (strRefresh.equalsIgnoreCase("y")) strRefresh = "yes";
 if (strRefresh.equals("yes"))
-{
+ {
 if (!strRefreshOnOpen.equals("true"))
 {
 _logger.info("Refresh document");
@@ -305,9 +307,11 @@ objContext.enterValues(arrSelContexts);
 }
 doc.setContexts();
 }
-}
+} 
 if (strRefresh.equals("yes") || strRefreshOnOpen.equals("true"))
-{
+	
+/* Commented For Reporting.. Jira 2810 
+{ 
 if (doc.getMustFillContexts())
 {
 strRedirectTo = "sForwardTo=getContextsInfos";
@@ -319,11 +323,13 @@ strRedirectTo = "sForwardTo=getPrompts";
 String strPreviousURL = requestWrapper.getQueryParameter("backUrl", false, "");
 if (!strPreviousURL.equals(""))
 session.setAttribute("CDZ." + strViewerID + ".PreviousURL", strPreviousURL);
-blnNeedAnswerCP = true;
+blnNeedAnswerCP = false;
 }
 if (strRedirectTo != null && !strRedirectTo.equals(""))
 strRedirectTo += "&iViewerID=" + strViewerID + "&sNEV=" + strNEV + "&viewType=" + strViewType;
-}
+} */
+ 
+
 blnNeedAnswerCP = objUserSettings.getHasPrompts()? true : blnNeedAnswerCP;
 int nbReports = 0;
 Reports arrReports = null;
