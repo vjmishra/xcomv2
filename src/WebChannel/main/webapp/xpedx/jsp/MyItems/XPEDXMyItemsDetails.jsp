@@ -1702,20 +1702,29 @@ function showSharedListForm(){
                            }
                           } 
                         }
-					  function populateValue(targetElement,elemetnID) {
-								   document.getElementById(elemetnID).value =
-								   targetElement.options[targetElement.selectedIndex].value;
-								 for (var i = 0; i < myArray2.length; i++) {
-										if(elemetnID != myArray2[i] && document.getElementById(elemetnID).value == document.getElementById(myArray2[i]).value){
-											var modifiedOldValue = oldvalue;
-											populate(myArray2[i]);
-											document.getElementById(myArray2[i]).value = modifiedOldValue;
-										 
-										}
-									 }  
-                                                  
-                              }
-
+				  function populateValue(targetElement,elemetnID) {
+					   document.getElementById(elemetnID).value =
+					   targetElement.options[targetElement.selectedIndex].value;
+					   var modifiedOldValue = 0;
+					   var counterVal = 0;
+					 for (var i = 0; i < myArray2.length; i++) {
+					    	   if( document.getElementById(elemetnID).value > oldvalue && document.getElementById(myArray2[i]).value <= document.getElementById(elemetnID).value){
+								   modifiedOldValue = oldvalue*1+counterVal*1;
+									populate(myArray2[i]);
+									document.getElementById(myArray2[i]).value = modifiedOldValue;
+									counterVal++; 
+							   	
+							   }
+							   if( document.getElementById(elemetnID).value < oldvalue && document.getElementById(myArray2[i]).value >= document.getElementById(elemetnID).value){
+								   modifiedOldValue = document.getElementById(elemetnID).value*1+counterVal*1;
+									populate(myArray2[i]);
+									document.getElementById(myArray2[i]).value = modifiedOldValue;
+									counterVal++; 
+							   	
+							   }
+						 }  
+                                     
+                 }
     </script>
     <!-- Added for JIRA 1402 Ends--> 
 
