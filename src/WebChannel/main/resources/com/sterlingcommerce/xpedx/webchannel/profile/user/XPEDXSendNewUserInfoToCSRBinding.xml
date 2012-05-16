@@ -20,4 +20,5 @@
 	<entry key="newUserComments">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Comments</entry>
 	<entry key="imageUrlPath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ImageUrl</entry>
 	<entry key="templatePath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@TemplateFile</entry>
+	<entry key="brandEmail">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Brand</entry>
 </properties>
