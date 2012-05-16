@@ -539,7 +539,7 @@
 					</MessageHeader>
 					<MessageDetail>
 						<NewUser FirstName="" LastName="" EmailID="" Phone=""
-							CompanyName="" Address1="" Address2="" City="" State="" ZipCode="" Comments="" ImageUrl=""/>
+							CompanyName="" Address1="" Address2="" City="" State="" ZipCode="" Comments="" ImageUrl="" Brand=""/>
 					</MessageDetail>
 				</SendMail>
 			</Input>
