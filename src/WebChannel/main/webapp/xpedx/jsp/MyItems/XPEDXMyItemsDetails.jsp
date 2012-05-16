@@ -2103,14 +2103,16 @@ function showSharedListForm(){
 	                                    <li>
 	                                        <!-- label>Job Number:</label>  -->
 	                                        <label><s:property value="#jobIdFlag" />:</label>
-											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=" "></s:textfield>
+	                                        <!--Blank space removed 3693  -->
+											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
 	                                    </li>
 									</s:if>
 									<!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 										<li>
 											<label>Line PO #</label>
-											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=" "></s:textfield>
+											 <!--Blank space removed 3693  -->
+											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
 										</li>
 									</s:if>
 									<li class="nomarginright">
