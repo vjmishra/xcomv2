@@ -370,7 +370,7 @@
                 	<XPEDXOrderSearchListView AddressLine1=""
                    	 	AddressLine2="" AddressLine3="" AddressLine4=""
                    		 AddressLine5="" AddressLine6="" City="" Country=""
-                   		 Currency="" CustomerPoNo="" DraftOrderFlag=""
+                   		 Currency="" CustomerPONo="" DraftOrderFlag=""
                    		 ExtnLegacyOrderNo="" ExtnLegacyOrderType=""
                   	 	 ExtnOrderDivision="" ExtnOrderStatus=""
                  	  	 ExtnOrderSubTotal="" ExtnOrderedByName=""
@@ -688,7 +688,7 @@
 						</Input>
 						<Template>
 							<XPEDXOrderSearchListViewList>
- 								 <XPEDXOrderSearchListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPoNo="" OrderDate="" 
+ 								 <XPEDXOrderSearchListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPONo="" OrderDate="" 
  								 		Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" 
  								 		ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus=""
  								 		 HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State="" 
@@ -727,7 +727,7 @@
 						</Input>
 						<Template>
 							<XPEDXOrderSearchLineListViewList>
- 								 <XPEDXOrderSearchLineListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPoNo="" OrderDate="" 
+ 								 <XPEDXOrderSearchLineListView OrderHeaderKey="" ShipToID="" OrderName="" OrderType="" DraftOrderFlag="" CustomerPONo="" OrderDate="" 
  								 		Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" 
  								 		ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus=""
  								 		 HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State="" 
