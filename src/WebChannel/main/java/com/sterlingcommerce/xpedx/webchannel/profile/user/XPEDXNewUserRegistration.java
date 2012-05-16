@@ -38,6 +38,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	private String newUserLastName = null;
 	private String messageType="NewUser";
 	private String imageUrlPath = null; //Start -Jira 3261
+	private String brandEmail = null;
+	
 	public String getImageUrlPath() {
 		return imageUrlPath;
 	}
@@ -48,23 +50,31 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	
 	
 		public String execute(){
-			mailHost = YFSSystem.getProperty("EMailServer");	
+			mailHost = YFSSystem.getProperty("EMailServer");
 			if(mailHost==null){
 				mailHost=XPEDXConstants.MAIL_HOSTUSEREMAIL;
 			}
 			StringBuffer sb = new StringBuffer();
-			String storeFrontId = wcContext.getStorefrontId();
+			StringBuffer sbm = new StringBuffer();
+			String suffix = "";
 			
+			String storeFrontId = wcContext.getStorefrontId();
 			if(storeFrontId!=null && storeFrontId.length()>0){
 				String userName = YFSSystem.getProperty("fromAddress.username");
-				String suffix = YFSSystem.getProperty("fromAddress.suffix");
+				suffix = YFSSystem.getProperty("fromAddress.suffix");
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+				String marketingCC = "marketing";
+				suffix = YFSSystem.getProperty("fromAddress.suffix");
+				sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
+				brandEmail = storeFrontId;			
+				
 			}
 			
 			/** Start ------- JIRA 3261 for logo changes
 			 * 
 			 * 
 			 * */
+			
 			//String imageUrl = "";
 			if(storeFrontId!=null && storeFrontId.trim().length() > 0){
 			String imageName = getLogoName(storeFrontId);
@@ -79,14 +89,15 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			 * 
 			 * */
 			
-			setMailCCAddress(newUserEmail);
+			setMailCCAddress(sbm.toString());   
 			setMailFromAddress(sb.toString());
 			
 			setMailSubject("NewUserInfo");
 			setTemplatePath("/global/template/email/newUser_email_CSR.xsl");
 			try
 			{
-				Element outputElem = prepareAndInvokeMashup("xpedxGetCustomCommonCodesForCSREmailIDs");
+				//JIRA 3261 Start-Code Commentd as per JIRA Requirement
+				/*Element outputElem = prepareAndInvokeMashup("xpedxGetCustomCommonCodesForCSREmailIDs");
 				NodeList nl = outputElem.getElementsByTagName("CommonCode");
 				int i =0;
 				for (i=0;i<nl.getLength();i++)
@@ -100,6 +111,10 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 						appendedCSREmailIDs = appendedCSREmailIDs.concat(","+commonCodeElem.getAttribute("CodeShortDescription"));
 					}
 				}
+				//JIRA 3261 End-Code Commentd as per JIRA Requirement
+				*/
+				appendedCSREmailIDs = newUserEmail;
+				log.debug("XPEDXNewUserRegistration Before Mashup -Email wassucessfull send to "+appendedCSREmailIDs+ "," +newUserEmail);
 				prepareAndInvokeMashup("XPEDXSendNewUserInfoToCSR");	
 				
 				}catch (Exception e) {
@@ -170,6 +185,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 		}
 		public void setNewUserEmail(String newUserEmail) {
 			this.newUserEmail = newUserEmail;
+		}
+		public String getBrandEmail() {
+			return brandEmail;
+		}
+		public void setBrandEmail(String brandEmail) {
+			this.brandEmail = brandEmail;
 		}
 		/*public String getNewUserName() {
 			return newUserName;
