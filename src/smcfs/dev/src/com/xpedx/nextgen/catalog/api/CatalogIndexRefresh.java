@@ -62,7 +62,7 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 				String searchIndexSecondLatestTriggerKey = searchIndexTriggerSecondLatestElement.getAttribute("SearchIndexTriggerKey");
 
 				activate = activateSearchIndex(env, searchIndexSecondLatestTriggerKey);
-				Thread.sleep(10000000);
+				Thread.sleep(240000);
 			} else {
 				activate = true;
 			}
