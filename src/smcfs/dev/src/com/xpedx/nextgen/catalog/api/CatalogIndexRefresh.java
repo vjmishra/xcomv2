@@ -62,21 +62,25 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 				String searchIndexSecondLatestTriggerKey = searchIndexTriggerSecondLatestElement.getAttribute("SearchIndexTriggerKey");
 
 				activate = activateSearchIndex(env, searchIndexSecondLatestTriggerKey);
-				Thread.sleep(240000);
+				Thread.sleep(420000);
 			} else {
+				LOG.info("searchIndexTriggerSecondLatestElement is null");
 				activate = true;
 			}
 			LOG.info("After Getting value of Second Active Index in CatalogIndexRefresh Java File");
 			if (activate == true) {
 				// Need to get first latest completed element to re-activate it again
 				YFCElement searchIndexTriggerLatestElement = getLatestSearchIndex(env);
+				if(searchIndexTriggerLatestElement!=null){
 				String searchIndexLatestTriggerKey = searchIndexTriggerLatestElement.getAttribute("SearchIndexTriggerKey");
 				activate = activateSearchIndex(env, searchIndexLatestTriggerKey);
-				LOG.info("After Getting value of First Active Index in CatalogIndexRefresh Java File");	
-
+				LOG.info("After Getting value of First Active Index in CatalogIndexRefresh Java File");
+				}
+				LOG.info("searchIndexTriggerLatestElement is null");
 			}
 		} catch (Exception exception) {
 			LOG.error("Error in Invoke Operation of CatalogIndexRefresh", exception);
+			exception.printStackTrace();
 			throw new Exception("Error from CatalogIndexRefresh Service");
 		}
 		return null;
@@ -108,9 +112,11 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 						searchIndexTriggerElement = iterator.next();
 						String status = searchIndexTriggerElement.getAttribute("Status");
 						if (status.equalsIgnoreCase(STATUS_COMPLETE)) {
+							LOG.info("status is complete");
 							return searchIndexTriggerElement;
 						}
 						if (status.equalsIgnoreCase(STATUS_ACTIVE)) {
+							LOG.info("status is active");
 							return null;
 						}
 					}
