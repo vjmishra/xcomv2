@@ -63,6 +63,7 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
+	public String productID;
 	public String execute() {
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
@@ -745,6 +746,52 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}//if customerList is not null
 */
+				
+				//Added for JIRA 3523
+				
+					Document entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+					Iterator productIDIter = allItemIds.iterator();
+					ArrayList<Element> itemlist = new ArrayList<Element>(); 
+					allItemID = new ArrayList<String>();
+					while (productIDIter.hasNext()) {
+						productID = (String) productIDIter.next();
+						allItemID.add(productID);
+							Element itemElement = null;
+							if(entitledItemsDoc!=null) {
+								 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+							}
+						}
+					String item = "";
+					for(int i=0;i<itemlist.size();i++){	
+						String itemId = itemlist.get(i).getAttribute("ItemID");
+						itemList.add(itemId);
+					}	
+						for(int i=0; i<allItemID.size();i++) {
+							
+							if(!itemList.contains(allItemID.get(i))){
+								entlErrorList.add(allItemID.get(i));
+								continue;
+							}
+							if(entlErrorList != null && entlErrorList.size() != 0){
+							if(entlErrorList.size()> 1){
+								Iterator itr = entlErrorList.iterator();
+								String strVal="";
+								while(itr.hasNext())
+								{
+									erroMsg+= itr.next().toString()+",";
+
+								}
+								int lastIndex = erroMsg.lastIndexOf(",");
+								erroMsg = erroMsg.substring(0,lastIndex);
+
+							}
+							else{
+								erroMsg=entlErrorList.get(0);
+							}
+							}
+						}
+						
+				//End of JIRA 3523
 				
 				//JIRA 3488 start
 				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
@@ -1998,6 +2045,52 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private String 	uniqueId = ""; 
 	private float minOrderAmount;
 	private float chargeAmount;
+	public ArrayList<String> entlErrorList = new ArrayList<String>();
+	private String 	erroMsg = "";
+	public String getErroMsg() {
+		return erroMsg;
+	}
+
+	public void setErroMsg(String erroMsg) {
+		this.erroMsg = erroMsg;
+	}
+
+	public ArrayList<String> getEntlErrorList() {
+		return entlErrorList;
+	}
+
+	public void setEntlErrorList(ArrayList<String> entlErrorList) {
+		this.entlErrorList = entlErrorList;
+	}
+
+
+
+	public ArrayList<String> itemList = new ArrayList<String>();
+	
+
+	public ArrayList<String> getItemMap() {
+		return itemList;
+	}
+
+	public void setItemMap(ArrayList<String> itemList) {
+		this.itemList = itemList;
+	}
+
+
+
+	public ArrayList<String> allItemID;
+
+	
+	public ArrayList<String> getAllItemID() {
+		return allItemID;
+	}
+
+	public void setAllItemID(ArrayList<String> allItemID) {
+		this.allItemID = allItemID;
+	}
+
+
+
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
 	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
