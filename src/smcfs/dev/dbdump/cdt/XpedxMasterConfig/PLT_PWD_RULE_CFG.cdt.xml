@@ -141,10 +141,10 @@
     PasswordPolicyKey="20110609145102144556"
     PasswordRuleCfgKey="20110609145102144557" PasswordRuleDefnKey="20110609144745144555"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2011-07-14T18:05:29-04:00" Createuserid="admin" Lockid="2"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-09T01:11:30-05:00"
+    Createts="2011-07-14T18:05:29-04:00" Createuserid="admin" Lockid="3"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-02T06:12:42-04:00"
     Modifyuserid="admin"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;10&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;9999999&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;10&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;30&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110714180530160349" PasswordRuleDefnKey="20110420183007130852"/>
 </PLT_PWD_RULE_CFGList>
