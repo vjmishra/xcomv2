@@ -1,5 +1,10 @@
 function checkOut()
 {
+	//Added for JIRA 3523
+	var entitleErrorMessage=document.getElementById("entileErrorMessade").innerHTML;
+	if(entitleErrorMessage !=null && entitleErrorMessage.trim().length>0){
+		return;
+	}
 	document.OrderDetailsForm.modifyOrderLines.value = "false";
 	//JIRA 3488 Start
 	var maxOrderAmtMsg=document.getElementById("maxOrderErrorMessage").innerHTML;
