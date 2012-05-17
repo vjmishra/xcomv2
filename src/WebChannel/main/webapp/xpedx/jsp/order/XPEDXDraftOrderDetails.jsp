@@ -661,9 +661,9 @@ $(document).ready(function(){
 <%--	<h5 align="center"><b><font color="red"><s:property
 		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
 	</div>
-	<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5>
-	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5>
-	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5>
+	<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5><br/>
+	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
+	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
 </s:if>
 
 <!-- breadcrumb / 'print page' button -->
