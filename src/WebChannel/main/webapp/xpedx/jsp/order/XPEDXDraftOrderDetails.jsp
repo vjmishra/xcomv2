@@ -579,6 +579,7 @@ $(document).ready(function(){
 					<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)'/>
 					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
 					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)'/>
+					<s:set name="erroMsg" value='%{erroMsg}'></s:set>
 					<%--JIRA 3547 end--%>
 					<%--JIRA 3488 start--%>
 					<s:set name="maxOrderAmount" value='%{maxOrderAmount}'></s:set>
@@ -662,6 +663,7 @@ $(document).ready(function(){
 	</div>
 	<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5>
 	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5>
+	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5>
 </s:if>
 
 <!-- breadcrumb / 'print page' button -->
@@ -2080,6 +2082,7 @@ var currentAadd2ItemList = new Object();
 </div>
 <!--Added for 3098  -->
 <br/><br/><b><div  id="maxOrderErrorMessageBottom" style="position:relative;left:600px;color:red;display:inline" ></div></b>
+<br/><br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:100px;color:red;display:inline" ></div></b>
 <br/><br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
 <br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
@@ -2500,6 +2503,24 @@ function validateOrder()
 	var fmtdMaxOrderAmount='<s:property value='#fmtdMaxOrderAmount' />';//JIRA 3488
 	var fmtdMinOrderAmount='<s:property value='#fmtdMinOrderAmount' />';//JIRA 3547
 	var fmtdchargeAmount='<s:property value='#fmtdchargeAmount' />';//JIRA 3547
+	var erroMsg = '<s:property value='#erroMsg' />';//Added for JIRA 3523
+	
+	//Added for JIRA 3523
+	if(erroMsg != null && erroMsg != ""){
+		var divId=document.getElementById("entileErrorMessade");
+		var divId1 = document.getElementById("entitleErrorMessageBottom");
+		alert("errorMaPI="+erroMsg);
+		if(divId != null)
+		{		
+			
+			divId.innerHTML="This account is no longer entitled to xpedx item # "+erroMsg+". Please delete it from your cart.";
+		}
+		if(divId1 != null)
+		{
+			divId1.innerHTML="This account is no longer entitled to xpedx item # "+erroMsg+". Please delete it from your cart.";
+		}
+	}
+	
 	//JIRA 3488 start
 	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
