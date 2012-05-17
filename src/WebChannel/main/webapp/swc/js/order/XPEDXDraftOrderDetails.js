@@ -725,7 +725,8 @@ function redrawQuickAddList()
 				    	 code += '</select>';
 				    	 if(defaultSelUOM != undefined){
 				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
-						    code += '</td>';
+				    	 }
+				    	code += '</td>';
 
 				    	
 				    	
