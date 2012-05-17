@@ -181,7 +181,7 @@
 		            <tr>
 		              <td  width="79"> Effective Date:</td>
 		              <td width="120" valign="top"><div class="demo"><input type="text" name="submittedTSFrom" id="submittedTSFrom" class="x-input datepicker" value="<s:property value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleElement,"StartDate"),wCContext)}'/>" size="14" maxlength="10"/></div></td>
-		              <td width="87">Expiration Date:</td>
+		              <td width="87" align="right">Expiration Date:</td>
 		              <td valign="top"><div class="demo"><input type="text" name="submittedTSTo" id="submittedTSTo" class="x-input  datepicker" value="<s:property value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleElement,"EndDate"),wCContext)}'/>" size="14" maxlength="10"/></div></td>
 		            </tr> 
 		            <tr>
@@ -195,7 +195,7 @@
 		            </tr>
 		           <tr>
 		              <td colspan="4"><ul id="cart-actions" class="float-right">
-		            <li><s:a cssClass="grey-ui-btn" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
+		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
 		         <!-- <li><s:a href="javascript:document.newArticleForm.submit();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>   -->
 		            <li><s:a href="#" onclick="javascript:articleFormValidation();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>
 		          	</ul></td>

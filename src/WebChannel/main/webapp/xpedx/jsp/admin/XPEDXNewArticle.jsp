@@ -130,9 +130,18 @@
 		if(articleName=="" || articleName==null){
 
 			document.getElementById("articleName").style.borderColor="#FF0000";
+			if(effectiveDate != "" || effectiveDate != null) {
+				document.getElementById("submittedTSFrom").style.borderColor="";
+			}
+			if (expirationDate != "" || expirationDate != null){
+			 	document.getElementById("submittedTSTo").style.borderColor="";
+			}
 			alert("Article Title cannot be blank. Please enter the article name.");
 			document.getElementById("articleName").focus();
 			return false; 
+			}
+		else {
+			document.getElementById("articleName").style.borderColor="";
 			}
 		
 		if((effectiveDate=="" || effectiveDate==null) && (expirationDate=="" || expirationDate==null))
@@ -144,18 +153,26 @@
 			 return false;
 				 
 			}
-		else if(effectiveDate=="" || effectiveDate==null){
+		if(effectiveDate=="" || effectiveDate==null){
 			document.getElementById("submittedTSFrom").style.borderColor="#FF0000";
 			alert("Please enter effective date for the article");
 			document.getElementById("submittedTSFrom").focus();
 		        return false;    
 			}
-		else if(expirationDate=="" || expirationDate==null){
+		else{
+			document.getElementById("submittedTSFrom").style.borderColor="";
+		}
+		if(expirationDate=="" || expirationDate==null){
+			document.getElementById("submittedTSFrom").style.borderColor="";
 			document.getElementById("submittedTSTo").style.borderColor="#FF0000";
 			alert("Please enter expiration date for the article");
 		 	document.getElementById("submittedTSTo").focus();
 	        	return false;    
 			}
+		else{
+			document.getElementById("submittedTSTo").style.borderColor="";
+			
+		}
 		// Start Fix For Jira 3315
 		var effectiveDateDay = new Date(document.getElementById("submittedTSFrom").value); 
 		var expirationDateDay = new Date(document.getElementById("submittedTSTo").value);
@@ -241,7 +258,7 @@ margin-top:2px; }
 		            <tr>
 		              <td> Effective Date:</td>
 		              <td width="120" valign="top"><div class="demo"><input type="text" name="submittedTSFrom" id="submittedTSFrom" class="x-input datepicker" value="" size="14" maxlength="10"/></div></td>
-		              <td width="87">Expiration Date:</td>
+		              <td width="87" align="right">Expiration Date:</td>
 		              <td ><div class="demo"><input type="text" name="submittedTSTo" id="submittedTSTo" class="x-input  datepicker" value="" size="14" maxlength="10"/></div></td>
 		            </tr> 
 		          <tr>
@@ -260,7 +277,7 @@ margin-top:2px; }
 		            <tr>
 		              <td colspan="4">
 		              <ul id="cart-actions" class="float-right news-page">
-		            <li><s:a cssClass="grey-ui-btn" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
+		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
 		           <!--<li><s:a href="javascript:document.newArticleForm.submit();" onclick="javascript:isDateSelected();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>  commented for 2647jira-->
 		            <li><s:a href="#" onclick="javascript:isArticleFormValidation();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li> <!-- modified for jira  2647 -->
 		            
