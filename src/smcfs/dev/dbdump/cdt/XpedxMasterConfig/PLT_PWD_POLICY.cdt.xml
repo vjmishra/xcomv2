@@ -89,4 +89,11 @@
     Modifyts="2011-08-16T16:32:53-04:00" Modifyuserid="ngmc"
     Name="XPXGuestUsrPwdPolicy" OrganizationCode="xpedx"
     PasswordPolicyKey="20110816163253171847" Priority="1" Status="1"/>
+<PasswordPolicy Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:00:35-04:00" Createuserid="admin"
+    Description="Password Policy for Sales Rep Users" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:00:35-04:00"
+    Modifyuserid="admin" Name="XPXSalesRepPwdPolicy"
+    OrganizationCode="xpedx" PasswordPolicyKey="20120517150035505539"
+    Priority="1" Status="1"/>
 </PLT_PWD_POLICYList>
