@@ -131,7 +131,7 @@
                       <tr>
                         <td>Basis size: </td>
                         <td><span class="no-border-left">
-                          <select style="width:80px;" name="size" id="size">
+                          <select style="width:90px;" name="size" id="size">
 																																	
                             <option  selected="selected" value="">Select size</option>
                             <option value="374">17x22</option>
