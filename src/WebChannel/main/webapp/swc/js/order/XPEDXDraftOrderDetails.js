@@ -648,7 +648,6 @@ function redrawQuickAddList()
 				    	}
 				    	//Condn added to check if selected UOM is equal to any alernate UOMs - Done for Jira 3841
 				    	if(selUOM!='' && selUOM == fvar){
-				    		_uomDescription = convertToUOMDescription(_uomCode);
 				    		code += '<option value="' + encodeForHTML(uomValues[uomidx]) + '" selected="yes">' + _uomDescription + '</option>'
 				    	}
 				    	//else we are doing defaulting of UOMs as it is.
