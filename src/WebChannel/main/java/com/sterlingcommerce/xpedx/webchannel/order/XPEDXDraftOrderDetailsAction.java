@@ -63,7 +63,6 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
-	public String productID;
 	public String execute() {
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
@@ -753,15 +752,36 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					Iterator productIDIter = allItemIds.iterator();
 					ArrayList<Element> itemlist = new ArrayList<Element>(); 
 					allItemID = new ArrayList<String>();
-					while (productIDIter.hasNext()) {
-						productID = (String) productIDIter.next();
-						allItemID.add(productID);
-							Element itemElement = null;
-							if(entitledItemsDoc!=null) {
-								 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
-							}
+					
+					Iterator<Element> it=getMajorLineElements().iterator();
+					while(it.hasNext())
+					{
+						Element orderLineElem=it.next();						
+						Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
+						String itemId = itemElement.getAttribute("ItemID");
+						String lineType=orderLineElem.getAttribute("LineType");
+						if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
+						{
+							
+							allItemID.add(itemId);
 						}
+					}
+					if(entitledItemsDoc!=null) {
+						 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+					}
 					String item = "";
+					if(itemlist.size() == 0){
+							for(int i=0; i<allItemID.size();i++) {
+							
+								Iterator itr = allItemID.iterator();
+								while(itr.hasNext())
+								{
+									erroMsg+= itr.next().toString();
+
+								}
+						}
+					}
+					else{
 					for(int i=0;i<itemlist.size();i++){	
 						String itemId = itemlist.get(i).getAttribute("ItemID");
 						itemList.add(itemId);
@@ -772,7 +792,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 								entlErrorList.add(allItemID.get(i));
 								continue;
 							}
-							if(entlErrorList != null && entlErrorList.size() != 0){
+							if(entlErrorList != null || entlErrorList.size() != 0){
 							if(entlErrorList.size()> 1){
 								Iterator itr = entlErrorList.iterator();
 								String strVal="";
@@ -790,7 +810,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 							}
 							}
 						}
-						
+					}	
 				//End of JIRA 3523
 				
 				//JIRA 3488 start
