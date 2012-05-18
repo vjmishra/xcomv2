@@ -2082,7 +2082,7 @@ var currentAadd2ItemList = new Object();
 </div>
 <!--Added for 3098  -->
 <br/><br/><b><div  id="maxOrderErrorMessageBottom" style="position:relative;left:600px;color:red;display:inline" ></div></b>
-<br/><br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:100px;color:red;display:inline" ></div></b>
+<br/><br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
 <br/><br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
 <br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
@@ -2509,7 +2509,6 @@ function validateOrder()
 	if(erroMsg != null && erroMsg != ""){
 		var divId=document.getElementById("entileErrorMessade");
 		var divId1 = document.getElementById("entitleErrorMessageBottom");
-		alert("errorMaPI="+erroMsg);
 		if(divId != null)
 		{		
 			
