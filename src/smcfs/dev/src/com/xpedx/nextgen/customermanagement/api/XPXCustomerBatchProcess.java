@@ -1040,7 +1040,38 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	//method to create master customer user
 	private void createMasterCustomer(YFSEnvironment env, String masterCustomerUser, String customerKey, String customerId) throws YFSException, RemoteException
 	{
+		
+		/*** Start of COde for JIra 3838 *********/
 		//form the input 
+		Document inputPwdPolicyDoc =SCXmlUtil.createDocument("PasswordPolicy");
+		//<PasswordPolicy CallingOrganizationCode="" Description="" Name="" OrganizationCode="" PasswordPolicyKey="" Priority="" Status=""/>
+		Element inputPwdPolicyElement=inputPwdPolicyDoc.getDocumentElement();
+		inputPwdPolicyElement.setAttribute("Name",XpedxConstants.SalesRep_Password_Policy);
+		inputPwdPolicyElement.setAttribute("OrganizationCode","xpedx");
+		
+		
+		//System.out.println("inputPwdPolicyDoc:::"+SCXmlUtil.getString(inputPwdPolicyDoc));
+		Document pwdPolicyDetailDoc =api.invoke(env, "getPasswordPolicyDetails", inputPwdPolicyDoc);
+		
+		//System.out.println("OutputPwdPolicyDoc"+SCXmlUtil.getString(pwdPolicyDetailDoc));
+		
+		String pwdPolicyKey = null;
+		if(null!=pwdPolicyDetailDoc){
+			NodeList policyElemsList = pwdPolicyDetailDoc.getElementsByTagName("PasswordPolicy");
+			Element policyElem;
+			if( policyElemsList!=null){
+				policyElem = (Element)policyElemsList.item(0);
+				pwdPolicyKey = policyElem.getAttribute("PasswordPolicyKey");
+				
+				//System.out.println("pwdPolicyKey is :: "+pwdPolicyKey);
+				
+			}
+		}
+		
+		
+		
+		/*** End of COde for JIra 3838 *********/
+		
 		Document inputCustomerDoc = SCXmlUtil.createDocument("Customer");
 		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
 		inputCustomerElement.setAttribute("CustomerKey", customerKey);
@@ -1061,8 +1092,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		Element userElement = inputCustomerDoc.createElement("User");
 		inputContactElement.appendChild(userElement);
 		userElement.setAttribute("Activateflag", "Y");
+		userElement.setAttribute("PasswordPolicyKey",pwdPolicyKey);//modified code for jira 3838
+		
 		userElement.setAttribute("Loginid", masterCustomerUser);
-		userElement.setAttribute("Password", masterCustomerUser);
 		userElement.setAttribute("CreatorOrganizationKey", customerId);
 		userElement.setAttribute("Localecode", "en_US_EST");
 		Element userGroupsElement = inputCustomerDoc.createElement("UserGroupLists");
@@ -1074,6 +1106,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		userGroupsElement.appendChild(userGroupElement);
 		userGroupsElement.appendChild(userGroupElement1);
 		log.debug("inputCustomerDoc"+SCXmlUtil.getString(inputCustomerDoc));
+		
+	//	System.out.println("inputCustomerDoc"+SCXmlUtil.getString(inputCustomerDoc));
 		api.invoke(env, "manageCustomer", inputCustomerDoc);
 	}
 
