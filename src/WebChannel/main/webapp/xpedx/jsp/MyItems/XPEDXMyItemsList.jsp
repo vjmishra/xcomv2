@@ -160,12 +160,20 @@
 <!-- END swc:head -->
  <s:url id="orderListPaginationURL" action="XPEDXMyItemsList">
     	 <s:param name="pageNumber" value="'{0}'"/>
-         <s:param name="pageSetToken" value="%{pageSetToken}"/>
-    	  <s:param name="orderByAttribute" value="orderByAttribute"/>
-           <s:param name="orderDesc" value="orderDesc"/>
-    
-    
-    	</s:url>
+    	 <s:param name="pageSetToken" value="%{pageSetToken}"/>
+         <s:param name="orderByAttribute" value="orderByAttribute"/>
+         <s:param name="orderDesc" value="orderDesc"/>
+         <s:param name="customerIds" value="customerIds"/>
+  		 <s:param name="customerPaths" value="customerPaths"/>
+ </s:url>
+ <s:url id="milListSortURL" action="XPEDXMyItemsList" >
+  <s:param name="orderByAttribute" value="'{0}'"/>   
+  <s:param name="pageNumber" value="%{pageNumber}"/>
+  <s:param name="orderDesc" value="'{1}'"/>
+  <s:param name="customerIds" value="customerIds"/>
+  <s:param name="customerPaths" value="customerPaths"/>
+   
+</s:url>
    
 <!-- CODE_START - Global Vars -PN -->
 <s:set name='wcContext' value="wCContext" />
@@ -412,7 +420,7 @@
                     failure: function (response, request){
                         var x = document.getElementById(divId);
                         x.innerHTML = "";
-                        alert('Failed to fecth the share list');
+                        alert('Failed to fetch the share list');
                         document.body.style.cursor = 'default';                                                  
                     }
                 });     
@@ -902,17 +910,12 @@
   <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
   <a class=""   id="" name="" href="">  
   <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px"></div></a></div>
- </s:else><!-- 2774 CR End -->
- 
- <s:url id="milListSortURL" action="XPEDXMyItemsList" >
-  <s:param name="orderByAttribute" value="'{0}'"/>   
-  <s:param name="pageNumber" value="%{pageNumber}"/>
-   <s:param name="orderDesc" value="'{1}'"/>
-</s:url>	
+ </s:else><!-- 2774 CR End --> 
+	
 <div class="clearview">&nbsp;</div>
 
 <div id="divMyItemLists">
-					
+
 <table id="mil-list" class="standard-table">
 <swc:sortctl sortField='%{orderByAttribute}'  sortDirection='%{orderDesc}' down="Y" up="N"   urlSpec='%{#milListSortURL}'>
 	<tbody>
