@@ -322,7 +322,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			Element eleInput = docInput.getDocumentElement();
 			
 			//Added for jira 2540
-			eleInput.setAttribute("BillToID",getFieldValue("extn_txtMasterCustomer")) ;
+			//eleInput.setAttribute("BillToID",getFieldValue("extn_txtMasterCustomer")) ;
 			
 //			Remove DraftOrderFlag attribute which is being defaulted by product.
 			eleInput.removeAttribute("DraftOrderFlag");
@@ -401,7 +401,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			}
 			if(!YRCPlatformUI.isVoid(eleInput)&& !YRCPlatformUI.isVoid(eleInput.getAttribute("CustomerPONo")))
 			{
-				eleInput.setAttribute("CustomerPONoQryType", "LIKE");
+				eleInput.setAttribute("CustomerPONoQryType", "EQ");
 			}
 			//Add for JIRA 2540
 			if(!YRCPlatformUI.isVoid(eleInput)&& !YRCPlatformUI.isVoid(eleInput.getAttribute("BillToID")))
@@ -435,6 +435,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 //			and OrderSummary Screen(in case of N) respectively, here we always route to OrderSummary Screen.
 			for (int i = 0; i < noOfOrders; i++) {
 				Element eleOrd =(Element)nl.item(i);
+				Element eleExtn = YRCXmlUtils.getChildElement(eleOrd, "Extn", true);
+				eleOrd.setAttribute("BillToID",eleExtn.getAttribute("ExtnCustomerNo")) ;
 				if("Y".equals(eleOrd.getAttribute("DraftOrderFlag"))){
 					eleOrd.setAttribute("DraftOrderFlag", "N");
 				}
