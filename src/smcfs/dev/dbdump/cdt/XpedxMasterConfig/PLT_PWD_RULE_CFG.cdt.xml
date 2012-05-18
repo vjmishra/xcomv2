@@ -147,4 +147,39 @@
     Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;10&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;30&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110714180530160349" PasswordRuleDefnKey="20110420183007130852"/>
+<PasswordRuleCfg Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;ResetType&quot; Value=&quot;Email&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;60&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    PasswordPolicyKey="20120517150035505539"
+    PasswordRuleCfgKey="20120517150931505681" PasswordRuleDefnKey="2010092120055658444"/>
+<PasswordRuleCfg Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MinLength&quot; Value=&quot;8&quot;/>&#xa;    &lt;Param Name=&quot;MaxLength&quot; Value=&quot;50&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    PasswordPolicyKey="20120517150035505539"
+    PasswordRuleCfgKey="20120517150931505682" PasswordRuleDefnKey="20110420182435130847"/>
+<PasswordRuleCfg Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;EntriesToStore&quot; Value=&quot;5&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    PasswordPolicyKey="20120517150035505539"
+    PasswordRuleCfgKey="20120517150931505683" PasswordRuleDefnKey="20110420182610130848"/>
+<PasswordRuleCfg Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;NumDaysValid&quot; Value=&quot;600&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    PasswordPolicyKey="20120517150035505539"
+    PasswordRuleCfgKey="20120517150931505684" PasswordRuleDefnKey="20110420182845130851"/>
+<PasswordRuleCfg Createprogid=".YEntityServlet"
+    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;20&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;60&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    PasswordPolicyKey="20120517150035505539"
+    PasswordRuleCfgKey="20120517150931505685" PasswordRuleDefnKey="20110420183007130852"/>
 </PLT_PWD_RULE_CFGList>
