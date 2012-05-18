@@ -614,6 +614,10 @@ public interface XpedxConstants {
 	public static final String CUST_SKU_FLAG_FOR_MPC_ITEM = "3";
 	/***End of  CODE For Jira 3552***/
 
+	/***Start of Code for Jira 3838 ****/
+	public static final String SalesRep_Password_Policy="XPXSalesRepPwdPolicy";
+	/***End of Code for Jira 3838***/
+	
 
 }
 
