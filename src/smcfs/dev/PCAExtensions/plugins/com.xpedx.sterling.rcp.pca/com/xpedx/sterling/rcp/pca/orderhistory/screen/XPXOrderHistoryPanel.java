@@ -813,8 +813,8 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		clmWarehouse.setMoveable(false);
 		
 		clmBillTo = new TableColumn(tblSearchResults, SWT.LEFT);
-		clmBillTo.setText("Bill-To / Ship-To #");
-		clmBillTo.setWidth(80);
+		clmBillTo.setText("Bill-To#");
+		clmBillTo.setWidth(60);
 		clmBillTo.setResizable(true);
 		clmBillTo.setMoveable(false);
 		
@@ -1031,8 +1031,8 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		
 		colBindings11[7] = new YRCTblClmBindingData();
 		colBindings11[7].setName("clmBillTo");
-		colBindings11[7].setAttributeBinding("@BillToID");
-        colBindings11[7].setColumnBinding("Bill-To / Ship-To #");
+		colBindings11[7].setAttributeBinding("Extn/@ExtnCustomerNo");
+        colBindings11[7].setColumnBinding("Bill-To#");
         colBindings11[7].setSortReqd(true);
         colBindings11[7].setFilterReqd(true);
         
