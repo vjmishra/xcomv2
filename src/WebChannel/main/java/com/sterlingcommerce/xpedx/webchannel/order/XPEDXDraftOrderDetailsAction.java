@@ -237,17 +237,108 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				setEditOrdersMap(orderHeaderKey);
 			}*/
+			checkforEntitlement();
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception ex) {
 			if (ex != null && ex.toString() != null
 					&& ex.toString().contains("YFC0101")) {
 				this.execute();
 			}
-			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
+//			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
 			LOG.error("Error in Draft Order Details action class : "+ex.getMessage());
 		}
 		return SUCCESS;
 	}
+	
+	
+	private void checkforEntitlement(){
+		//Added for JIRA 3523
+		String item = "";
+		ArrayList<String> entlErrorList = new ArrayList<String>();
+		Document entitledItemsDoc;
+		try {
+			entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+		
+		Iterator productIDIter = allItemIds.iterator();
+		ArrayList<Element> itemlist = new ArrayList<Element>(); 
+		allItemID = new ArrayList<String>();
+		
+		Iterator<Element> it=getMajorLineElements().iterator();
+		while(it.hasNext())
+		{
+			Element orderLineElem=it.next();						
+			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
+			String itemId = itemElement.getAttribute("ItemID");
+			String lineType=orderLineElem.getAttribute("LineType");
+			if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
+			{
+				
+				allItemID.add(itemId);
+			}
+		}
+		if(entitledItemsDoc!=null) {
+			 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+		}
+		
+		if(itemlist.size() == 0){
+				for(int i=0; i<allItemID.size();i++) {
+					entlErrorList.add(allItemID.get(i));
+				}	
+						if(entlErrorList.size()> 1){
+							Iterator itr = entlErrorList.iterator();
+							String strVal="";
+							while(itr.hasNext())
+							{
+								erroMsg+= itr.next().toString()+",";
+
+							}
+							int lastIndex = erroMsg.lastIndexOf(",");
+							erroMsg = erroMsg.substring(0,lastIndex);
+
+						}
+						else{
+							erroMsg=entlErrorList.get(0);
+						}
+						
+			
+		}
+		else{
+		for(int i=0;i<itemlist.size();i++){	
+			String itemId = itemlist.get(i).getAttribute("ItemID");
+			itemList.add(itemId);
+		}	
+			for(int i=0; i<allItemID.size();i++) {
+				
+				if(!itemList.contains(allItemID.get(i))){
+					entlErrorList.add(allItemID.get(i));
+				}
+			}
+				 if(entlErrorList != null && entlErrorList.size() > 0){
+				if(entlErrorList.size()> 1){
+					Iterator itr = entlErrorList.iterator();
+					String strVal="";
+					while(itr.hasNext())
+					{
+						erroMsg+= itr.next().toString()+",";
+
+					}
+					int lastIndex = erroMsg.lastIndexOf(",");
+					erroMsg = erroMsg.substring(0,lastIndex);
+
+				}
+				else {
+					erroMsg=entlErrorList.get(0);
+				}
+				}
+			
+		}	
+	} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+	//End of JIRA 3523
+	}
+	
 	
 	private void changeCurrentCartOwner() {
 		String orderHeaderKey = XPEDXCommerceContextHelper
@@ -746,72 +837,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				}//if customerList is not null
 */
 				
-				//Added for JIRA 3523
-				
-					Document entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
-					Iterator productIDIter = allItemIds.iterator();
-					ArrayList<Element> itemlist = new ArrayList<Element>(); 
-					allItemID = new ArrayList<String>();
-					
-					Iterator<Element> it=getMajorLineElements().iterator();
-					while(it.hasNext())
-					{
-						Element orderLineElem=it.next();						
-						Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
-						String itemId = itemElement.getAttribute("ItemID");
-						String lineType=orderLineElem.getAttribute("LineType");
-						if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
-						{
-							
-							allItemID.add(itemId);
-						}
-					}
-					if(entitledItemsDoc!=null) {
-						 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
-					}
-					String item = "";
-					if(itemlist.size() == 0){
-							for(int i=0; i<allItemID.size();i++) {
-							
-								Iterator itr = allItemID.iterator();
-								while(itr.hasNext())
-								{
-									erroMsg+= itr.next().toString();
-
-								}
-						}
-					}
-					else{
-					for(int i=0;i<itemlist.size();i++){	
-						String itemId = itemlist.get(i).getAttribute("ItemID");
-						itemList.add(itemId);
-					}	
-						for(int i=0; i<allItemID.size();i++) {
-							
-							if(!itemList.contains(allItemID.get(i))){
-								entlErrorList.add(allItemID.get(i));
-								continue;
-							}
-							if(entlErrorList != null || entlErrorList.size() != 0){
-							if(entlErrorList.size()> 1){
-								Iterator itr = entlErrorList.iterator();
-								String strVal="";
-								while(itr.hasNext())
-								{
-									erroMsg+= itr.next().toString()+",";
-
-								}
-								int lastIndex = erroMsg.lastIndexOf(",");
-								erroMsg = erroMsg.substring(0,lastIndex);
-
-							}
-							else{
-								erroMsg=entlErrorList.get(0);
-							}
-							}
-						}
-					}	
-				//End of JIRA 3523
 				
 				//JIRA 3488 start
 				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
@@ -930,6 +955,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						}
 				}
 			}// if customerId is not null
+
+			
 	} catch (Exception ex) {
 		//log.error(ex.getMessage());
 		scuiTransactionContext.rollback();
@@ -2065,7 +2092,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private String 	uniqueId = ""; 
 	private float minOrderAmount;
 	private float chargeAmount;
-	public ArrayList<String> entlErrorList = new ArrayList<String>();
+	
 	private String 	erroMsg = "";
 	public String getErroMsg() {
 		return erroMsg;
@@ -2075,13 +2102,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.erroMsg = erroMsg;
 	}
 
-	public ArrayList<String> getEntlErrorList() {
-		return entlErrorList;
-	}
-
-	public void setEntlErrorList(ArrayList<String> entlErrorList) {
-		this.entlErrorList = entlErrorList;
-	}
+	
 
 
 
