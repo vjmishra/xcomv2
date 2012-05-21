@@ -380,7 +380,10 @@
                      </select> 
                     </s:if>
                  </div>   
-               
+   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
+	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
+	<s:set name='sortName' value='%{theSpanNameValue}' />
+	<s:set name='sortDir' value='%{sortDirection}' />           
                  <p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
                  <!-- Webtrend Meta Tag start -->
                  <%--added for jira 3317 --%>
@@ -395,7 +398,9 @@
  				<!-- Webtrend Meta Tag endt -->
  
                  	<s:url id="goToPageURL" action="goToPage">
-					<s:param name="pageNumber" value="'{0}'" />
+                 		<s:param name="sortDirection" value="#sortDir"/>
+						<s:param name="theSpanNameValue" value="#sortName"/>
+						<s:param name="pageNumber" value="'{0}'" />
 					</s:url> <swc:pagectl currentPage='%{#pageNumber}'
 						lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
 						urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
@@ -770,10 +775,18 @@ return new Ext.XTemplate(
 '</div>'                        
 );
 }
-				
+	
+
+
+var globalsortField='<%=request.getParameter("sortField")%>';
+var globalsortDirection='<%=request.getParameter("sortDirection")%>';
+var globaltheSpanNameValue='<%=request.getParameter("theSpanNameValue")%>';
+
+
 function getGridView() {
 return new Ext.XTemplate(
-  '<div id="item-ct">',
+'<div class="clearview">&nbsp;</div>',
+ '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
    <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" title="Mill / Mfg. Item">M</td>',</s:if>
@@ -928,7 +941,10 @@ var ct = Ext.get('item-box-inner');
 	<s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
 		<s:property value="%{#pageNumber}"/>
 	</s:if></span>
-	<s:url id="goToPageURL" action="goToPage">
+	
+	<s:url id="goToPageURL" action="goToPage">		
+		<s:param name="sortDirection" value="#sortDir"/>
+		<s:param name="theSpanNameValue" value="#sortName"/>
 		<s:param name="pageNumber" value="'{0}'" />
 	</s:url> 
 	<swc:pagectl currentPage='%{#pageNumber}'
@@ -1212,7 +1228,33 @@ function processSortByUpperTroy(theValue,directionValue,theSpanNameValue)
 }               
 function processSortByUpper(){
 	var sortFieldValue = Ext.fly('sortFieldUpper').dom.value;
-	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue;
+	var ArrowDirection="";
+	
+	if(sortFieldValue.indexOf("--D")>-1)
+		{
+		if(sortFieldValue.indexOf("SortableShortDescription")>-1)
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionDescArrow";
+			}
+		else
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionItemArrow";
+			}
+		
+		}
+	else
+		{
+		     if(sortFieldValue.indexOf("SortableShortDescription")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionDescArrow";
+				}
+			else
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionItemArrow";
+				}		
+		}
+	
+	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue+ArrowDirection;
 }
 
 function processSortByLower(){

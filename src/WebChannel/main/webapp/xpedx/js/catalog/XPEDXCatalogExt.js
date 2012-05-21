@@ -542,6 +542,7 @@ function shortenItemDescriptions()
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. 
 		 */
+		 SetArrowForSorting();
 			$('.prodlist ul li, #prodlist ul li ').each(function() {
 				var html = $(this).html();
 				var shortHTML = html.substring(0, 25);
@@ -1159,6 +1160,36 @@ function processSortByUpperTroyJS(theValue,directionValue,theSpanNameValue,pUrl)
 	}
 	setTimeout("changeUrl()",1000);
 }  
+
+function SetArrowForSorting()
+{
+	
+	/*var globalsortField='<%=request.getParameter("sortField")%>';
+	var globalsortDirection='<%=request.getParameter("sortDirection")%>';
+	var globaltheSpanNameValue='<%=request.getParameter("theSpanNameValue")%>';*/
+	
+	var theImageSpan = eval("document.getElementById('" + globaltheSpanNameValue + "')" );
+		//alert(theImageSpan);
+        if(theImageSpan==null || theImageSpan=='null')
+        	{
+        	 return;
+        	}
+		if(globalsortDirection == "sortDown")
+		{	// alert("up");
+		
+		theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
+		// alert(theImageSpan);
+		
+		}
+		else if(globalsortDirection == "sortUp")
+		{
+			//alert("down");		
+		theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
+		// alert(theImageSpan);
+		}
+		
+}
+
 function changeUrl()
 {
   window.location.href=theUrl

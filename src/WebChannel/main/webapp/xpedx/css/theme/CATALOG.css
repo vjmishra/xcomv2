@@ -1082,7 +1082,7 @@ ul
 #x-tbl-cmmn td.M-hname,
 #x-tbl-cmmn td.Environment-hname
 {
-	width: 1em;
+	width: 3em;
 	text-align: center;
 }
 #x-tbl-cmmn td.sku,
@@ -1103,7 +1103,7 @@ ul
 #x-tbl-cmmn td.basis,
 #x-tbl-cmmn td.Basis-hname
 {
-	width: 2.5em;
+	width: 5em;
 }
 #x-tbl-cmmn td.mwt,
 #x-tbl-cmmn td.Mwt-hname

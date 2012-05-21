@@ -73,6 +73,26 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private Map <String, List<Element>> PLLineMap;	
 	private String firstItem = "";
 	
+	/*Added for Jira 3624*/
+	private String theSpanNameValue;
+	private String sortDirection;
+	
+	public String getSortDirection() {
+		return sortDirection;
+	}
+
+	public void setSortDirection(String sortDirection) {
+		this.sortDirection = sortDirection;
+	}
+
+	public String getTheSpanNameValue() {
+		return theSpanNameValue;
+	}
+
+	public void setTheSpanNameValue(String theSpanNameValue) {
+		this.theSpanNameValue = theSpanNameValue;
+	}
+	/*End of  Jira 3624*/
 	private String categoryPath = "";
 	
 	public String getCategoryPath() {
