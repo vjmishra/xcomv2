@@ -175,7 +175,10 @@
                         	
                     }
             		displayString =  displayString + hdnCity.value + ", " + hdnState.value + " " + hdnZcode.value + " " + hdncountry.value;
-                    textElement.value = displayString;
+                    var customizeString1= displayString.replace("[","");
+            		var onScreenString= customizeString1.replace("]","");
+            		//alert("onScreenString=="+ onScreenString);
+            		textElement.value = onScreenString;
             		var hdnLocType = document.getElementById('selectedLocationType');
             		hdnLocType.value="Ship To";
             		var hdnCustId = document.getElementById('selectedCustId');
@@ -204,8 +207,7 @@
 		hdncustomerID.value = customerID;
 		hdnCompany.value = company;
 		hdnAddress.value = address;
-
-    	hdnLocid.value = locid;
+		hdnLocid.value = locid;
 		hdnCity.value = city;
 		hdnState.value = state;
 		hdnZcode.value = zcode;
