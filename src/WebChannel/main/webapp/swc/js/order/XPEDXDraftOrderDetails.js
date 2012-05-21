@@ -727,8 +727,13 @@ function redrawQuickAddList()
 		        	}
 					
 				    	 code += '</select>';
-				    	 if(defaultSelUOM != undefined){
-				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';
+				    	 //Added selUOM condn.If UOM is not changed,pass default UOM,else pass selUOM. - Jira 3841
+				    	 if(defaultSelUOM != undefined && selUOM==''){
+				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';	
+				    		 
+				    	 }
+				    	 else{
+				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selUOM + '" />'; 
 				    	 }
 				    	code += '</td>';
 
