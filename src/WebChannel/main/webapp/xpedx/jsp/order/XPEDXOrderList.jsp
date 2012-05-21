@@ -374,7 +374,7 @@ function printPOs(customerPos) {
 									<span style="color: white">Order&nbsp;#</span>
 								</td>
 								<td style="min-width: 9.5em;"><swc:sortable
-										fieldname="%{'CustomerPoNo'}">
+										fieldname="%{'CustomerPONo'}">
 										<span style="color: white;" class="underlink"> PO # </span>
 									</swc:sortable></td>
 								<td style="min-width: 6em;"><swc:sortable
