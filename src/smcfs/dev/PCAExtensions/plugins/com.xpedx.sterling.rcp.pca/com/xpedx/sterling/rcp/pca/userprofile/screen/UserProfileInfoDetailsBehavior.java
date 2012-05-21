@@ -861,6 +861,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("EntryType", entryType);
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("OldEmailID", oldMailId);
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("newEmailID", changedMailId);
+    	docLDAPSearchInputQry.getDocumentElement().setAttribute("SellerOrganizationCode", strEnterpriseCode);
     	apinames = new String[]{"XPXSendUserUpdateEmailService"};
     	docInput = new Document[]{docLDAPSearchInputQry};
     	callApis(apinames, docInput);
