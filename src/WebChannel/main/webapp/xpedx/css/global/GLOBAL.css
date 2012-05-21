@@ -1807,7 +1807,7 @@ inStoreIcon {
     margin-left: 20px;
 }
 #item-ct dd {
-    cursor: move;
+    cursor: pointer;
     float: left;
     margin: 0;
     padding: 3px;
@@ -3182,6 +3182,7 @@ td .inner {
     width: auto;
 }
 .notice {
+    cursor: pointer;
     background-color: #F9F9E5;
     border: 1px solid #828400;
     color: #828400;
