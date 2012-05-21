@@ -2207,20 +2207,34 @@ public class XPXUtils implements YIFCustomApi {
 
 	public Document stampSubjectLine_UserProfChange(YFSEnvironment env,
 			Document inputDocument) throws Exception {
+		
 		String _subjectLine = null;
+		String imageUrl = "";
+		Element rootElem = inputDocument.getDocumentElement();
 
-		String brand = inputDocument.getDocumentElement().getAttribute(
-				"SellerOrganizationCode");
+		String brand = rootElem.getAttribute("SellerOrganizationCode");
+		imageUrl = rootElem.getAttribute("ImageUrl");
 		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Update Notification"); //Start - Jira 3262
 		
-		if(log.isDebugEnabled()){
-			log.debug("_subjectLine: " + _subjectLine);
+		log.info("brand:" + brand);
+		log.info("imageUrl:" + imageUrl);
+		log.info("_subjectLine:" + _subjectLine);
+		
+		if( !YFCObject.isNull(brand) && !YFCObject.isVoid(brand) 
+				&& (YFCObject.isNull(imageUrl) || YFCObject.isVoid(imageUrl)) ) {	
+				String imageName = getLogoImageName(env, brand);
+				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+				if( !YFCObject.isNull(imagesRootFolder) && !YFCObject.isVoid(imagesRootFolder)
+						&& !YFCObject.isNull(imageName) && !YFCObject.isVoid(imageName)){
+					imageUrl = imagesRootFolder + imageName;
+					rootElem.setAttribute("ImageUrl",imageUrl);
+				}
 		}
-		inputDocument.getDocumentElement()
-				.setAttribute("Subject", _subjectLine);
+		
+		rootElem.setAttribute("Subject", _subjectLine);
+		
 		if(log.isDebugEnabled()){
-			log.debug("inputDocument with SubjectLine: "
-				+ SCXmlUtil.getString(inputDocument));
+			log.debug("stampSubjectLine_UserProfChange()_OutXML: "+ SCXmlUtil.getString(inputDocument));
 		}
 		return inputDocument;
 	}
@@ -2423,7 +2437,6 @@ public class XPXUtils implements YIFCustomApi {
 	public Document getAdditionalAttributes(YFSEnvironment env,
 			Document inputDocument) throws Exception {
 		
-		System.out.println("SCXmlUtil.getString(inputDocument)"+SCXmlUtil.getString(inputDocument));
 		log.debug("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		
 		if(log.isDebugEnabled()){
@@ -2512,7 +2525,6 @@ public class XPXUtils implements YIFCustomApi {
 			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
 		log.debug("getAdditionalAttributes End Method - Email was sucessfull send : "+SCXmlUtil.getString(inputDocument) );
-		System.out.println("SCXmlUtil.getString(inputDocument) ===="+SCXmlUtil.getString(inputDocument));
 		return inputDocument;
 	}
 	
