@@ -76,7 +76,8 @@ public class XPEDXOrderUtils {
 	public final static String CROSS_SELL_ITEMS_KEY = "CROSS-SELL";
 	public final static String UP_SELL_ITEMS_KEY = "UP-SELL";
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
-
+	public static ArrayList<String> itemList = new ArrayList<String>();
+	
 	public static Document getXPEDXItemAssociation(String custID,
 			String divNumber, String itemID, IWCContext wcContext)
 			throws Exception {
@@ -1711,6 +1712,33 @@ public class XPEDXOrderUtils {
 	{
 		refreshMiniCart(webContext,output,isGetCompleteOrder,false,maxElements);
 	}
+	
+	//Added for Jira 3523
+	public static boolean checkforNonEntitlement(ArrayList<String> allItemIds,IWCContext wcContext){
+		boolean errorFlag = false;	
+		ArrayList<Element> itemlist = new ArrayList<Element>();
+		Document entitledItemsDoc;
+		try {
+			//Check for entitlements of items list.			
+			entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			if(entitledItemsDoc!=null) {
+				 itemlist  = SCXmlUtil.getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+			}
+			//If all items are entitled, return false
+			if(itemlist.size()==allItemIds.size()){
+				return false;
+			}else{//even if single item in the list is non-entitled, return true
+				return true;
+			}
+			
+	} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}	
+		return errorFlag;
+	}
+	//End of JIRA 3523
+	
 	
 	public static void refreshMiniCart(IWCContext webContext,Element output,boolean isGetCompleteOrder,boolean readOrderLinesFromStart,int maxElements)
 	{

@@ -1,7 +1,9 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -28,6 +30,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	 private static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
 	 public static final String CART_ERROR = "CartError";
 	 private static final String CHECKOUT_MINI_CART_MASHUP="checkoutOrderForMiniCart";
+	 public ArrayList<String> allItemID = new ArrayList<String>();//Added for Jira 3523
 	 XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	 public String execute()
 	 {
@@ -42,6 +45,31 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        	{
 	        		orderLelement=outputMap.get(CHECKOUT_MINI_CART_MASHUP);
 	        		
+	        	//Added for Jira 3523
+	        		ArrayList<Element> itemList = new ArrayList<Element>();
+	        		itemList.add(orderLelement);
+	        		Iterator<Element> it=itemList.iterator();
+	        		while(it.hasNext())
+	        		{
+	        			Element orderLineElem=it.next();						
+	        			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
+	        			String itemId = itemElement.getAttribute("ItemID");
+        				Element lineType=(Element)orderLineElem.getElementsByTagName("OrderLine").item(0);
+        				String linetype = lineType.getAttribute("LineType");
+        				//For Charge line, we will not be checking for entitlements.
+        				if(!"M".equals(linetype) &&  !"C".equals(linetype) && !allItemID.contains(itemId))
+        				{        				
+        					allItemID.add(itemId);
+        				}
+	        		}        		
+	        		boolean entitleCheck = XPEDXOrderUtils.checkforNonEntitlement(allItemID , wcContext);
+	        		// If there is even a single item in mini cart which is non entitled, we will show error and not allow user to checkout.
+					if(entitleCheck){
+	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+	        			XPEDXWCUtils.releaseEnv(wcContext);
+	        			return CART_ERROR;
+					}
+        		//End of Jira 3523
 	        		//check for cart errors to redirect it to cart page instead of checkout
 	        		boolean minOrderError = checkMinOrderFee(orderLelement);
 	        		if(minOrderError){
