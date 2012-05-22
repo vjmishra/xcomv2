@@ -284,7 +284,7 @@
 						<s:if test="%{#customerService == 'false'}">
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
-				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
+				            	<td colspan="3" valign="top" class="underlines no-border-right-user padding-bottom1">
 				            	<s:property value='%{#csr1UserName}'/><br/>
 				            	<a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a><br/>
 								<span class="grey-italic">
@@ -299,7 +299,7 @@
 						</s:if>
 						<s:else>
 							<tr class="padding-bottom1">
-				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
+				            	<td valign="top" class="underlines no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
 				            	<s:property value='%{#csr2UserName}'/><br />
 				            	<a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a>
@@ -319,8 +319,8 @@
 						<s:if test="#customerService == 'false'">
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
-				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
-				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/><br />
+				            	<td colspan="3" valign="top" class="underlines no-border-right-user padding-bottom1">
+				            	<s:property value="#csr2UserName"/><br />
 				            	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
 				            	<br />
 								<span class="grey-italic">
@@ -335,8 +335,8 @@
 						<s:else>
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
-				            	<td colspan="3" valign="top" class="no-border-right-user padding-bottom1">
-				            	<s:property value="#csr2FirstName"/>&nbsp;<s:property value="#csr2LastName"/>
+				            	<td colspan="3" valign="top" class="underlines no-border-right-user padding-bottom1">
+				            	<s:property value="#csr2UserName"/>
 				            	<span class="grey-italic">
 				            	<br/>
 				            	 	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>

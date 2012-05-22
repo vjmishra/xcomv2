@@ -347,7 +347,7 @@ ul.checkboxTree li
 	          				<s:if test="#salesProfessionalSet == 'false'">
 		          				<tr class="padding-bottom1">
 						            <td valign="top" class="no-border-right padding0">Sales Professional:</td>
-						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
+						            <td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br/>
 					              	<span class="grey-italic">
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
@@ -364,7 +364,7 @@ ul.checkboxTree li
 	          				<s:else>
 	          					<tr class="padding-bottom1">
 						            <td valign="top" class="no-border-right padding0">&nbsp;</td>
-						            <td colspan="3" valign="top" class="no-border-right padding-bottom1">
+						            <td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br />
 					              	<span class="grey-italic">
 					              	
@@ -407,7 +407,7 @@ ul.checkboxTree li
 						<s:if test="%{#customerService == 'false'}">
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 				            	<s:property value='%{#csr1UserName}'/><br/>
 				            		<a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 									<br/>
@@ -423,7 +423,7 @@ ul.checkboxTree li
 						<s:else>
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 				            	<s:property value='%{#csr1UserName}'/><br />
 				            	 <a href="mailto:<s:property value="#csr1EMailID"/>" ><s:property value="#csr1EMailID"/></a>
 				            		<br/>
@@ -443,7 +443,7 @@ ul.checkboxTree li
 						<s:if test="#customerService == 'false'">
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 				            	<s:property value='%{#csr2UserName}'/><br />
 				            	<a href="mailto:<s:property value="#csr2EMailID"/>" ><s:property value="#csr2EMailID"/></a><br/>
 				            	<span class="grey-italic">
@@ -458,7 +458,7 @@ ul.checkboxTree li
 						<s:else>
 							<tr class="padding-bottom1">
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
-				            	<td colspan="3" valign="top" class="no-border-right padding-bottom1">
+				            	<td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 				            	<s:property value='%{#csr2UserName}'/>
 				            	<br />
 								<a href="mailto:<s:property value="#csr2EMailID" />" ><s:property value="#csr2EMailID"/></a><br/>
