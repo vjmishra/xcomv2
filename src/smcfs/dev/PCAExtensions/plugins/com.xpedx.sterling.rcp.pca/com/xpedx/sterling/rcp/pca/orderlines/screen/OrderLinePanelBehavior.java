@@ -778,6 +778,11 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 										.getChildElement(eleItem,
 												"ExtendedPrice")
 										.getTextContent();
+								//Added for jira 3689
+								
+								if((extendedPrice != null || extendedPrice != "") && extendedPrice.length() ==3){
+									extendedPrice = extendedPrice.concat("0");
+								}
 								setFieldValue("txtExtnPrice", extendedPrice);
 								Element elePricingUOM = YRCXmlUtils
 										.getXPathElement(eleItem,
@@ -1028,6 +1033,10 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				if (YRCPlatformUI.isVoid(strUnitPrice)) {
 					setFieldValue("stxtUnitPrice", "0.00");
 				} else {
+					//Added for jira 3689
+					if((strUnitPrice != null || strUnitPrice != "") && strUnitPrice.length() ==3){
+						strUnitPrice = strUnitPrice.concat("0");
+					}
 					setFieldValue("stxtUnitPrice", strUnitPrice);
 				}
 			}
