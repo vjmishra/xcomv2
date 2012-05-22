@@ -1082,8 +1082,8 @@ ul
 #x-tbl-cmmn td.M-hname,
 #x-tbl-cmmn td.Environment-hname
 {
-	width: 3em;
-	text-align: center;
+              width: 5em;
+              text-align: center;
 }
 #x-tbl-cmmn td.sku,
 #x-tbl-cmmn td.Item-hname
