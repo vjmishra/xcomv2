@@ -1318,6 +1318,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderSource = new Text(pnlRoot, 72);
 		txtOrderSource.setLayoutData(gridData5);
 		txtOrderSource.setData("name", "txtOrderSource");
+		txtOrderSource.setEnabled(false);
 		
 		
 		}
@@ -1341,6 +1342,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderType = new Text(pnlRoot, 72);
 		txtOrderType.setLayoutData(gridData7);
 		txtOrderType.setData("name", "txtOrderType");
+		txtOrderType.setEnabled(false);
 		
 		 
 		GridData gridDatax9 = new GridData();
@@ -1371,6 +1373,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderNo = new Text(pnlRoot, 72);
 		txtOrderNo.setLayoutData(gridData2);
 		txtOrderNo.setData("name", "txtOrderNo");
+		txtOrderNo.setEnabled(false);
 		
 		 
 		GridData gridDatax304 = new GridData();
@@ -1411,6 +1414,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderDate = new Text(pnlRoot, 72);
 		txtOrderDate.setLayoutData(gridData5);
 		txtOrderDate.setData("name", "txtOrderDate");
+		txtOrderDate.setEnabled(false);
 		
 		}
 		else
@@ -1447,6 +1451,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			txtLegacyOrderType = new Text(pnlRoot, 72);
 			txtLegacyOrderType.setLayoutData(gridData7);
 			txtLegacyOrderType.setData("name", "txtLegacyOrderType");
+			txtLegacyOrderType.setEnabled(false);
 			
 			 
 			GridData gridDatax8 = new GridData();
@@ -1530,6 +1535,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderTime = new Text(pnlRoot, 72);
 		txtOrderTime.setLayoutData(gridData5);
 		txtOrderTime.setData("name", "txtOrderTime");
+		txtOrderTime.setEnabled(false);
 		}
 		else
 		{
@@ -1585,6 +1591,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderStatus = new Text(pnlRoot, 72);
 		txtOrderStatus.setLayoutData(gridData2);
 		txtOrderStatus.setData("name", "txtOrderStatus");
+		txtOrderStatus.setEnabled(false);
 		txtOrderSttsComment = new Text(pnlRoot, 72);
 		txtOrderSttsComment.setLayoutData(gridData3);
 		txtOrderSttsComment.setData("name", "txtOrderSttsComment");
@@ -1673,6 +1680,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtTotOrderTax = new Text(pnlRoot, 72);
 		txtTotOrderTax.setLayoutData(gridData7);
 		txtTotOrderTax.setData("name", "txtTotOrderTax");
+		txtTotOrderTax.setEnabled(false);
 		
 		
 		 
@@ -1906,6 +1914,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtLineCount = new Text(pnlLineCount, 72);
 		txtLineCount.setLayoutData(gridData41);
 		txtLineCount.setData("name", "txtLineCount");
+		txtLineCount.setEnabled(false);
 		Label lblOther = new Label(pnlLineCount, SWT.LEFT);
 		lblOther.setText("Other:");
 		lblOther.setLayoutData(gridData42);
@@ -1913,6 +1922,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOtherCount = new Text(pnlLineCount, 72);
 		txtOtherCount.setLayoutData(gridData43);
 		txtOtherCount.setData("name", "txtOtherCount");
+		txtOtherCount.setEnabled(false);
 		
 		 
 		GridData gridDatax = new GridData();
@@ -1999,6 +2009,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtCurrencyCode = new Text(pnlRoot, 72);
 		txtCurrencyCode.setLayoutData(gridData7);
 		txtCurrencyCode.setData("name", "txtCurrencyCode");
+		txtCurrencyCode.setEnabled(false);
 		
 		
 		GridData gridData18 = new GridData();
@@ -2054,6 +2065,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderedBy = new Text(pnlRoot, 72);
 		txtOrderedBy.setLayoutData(gridData25);
 		txtOrderedBy.setData("name", "txtOrderedBy");
+		txtOrderedBy.setEnabled(false);
 		
 		 
 		GridData gridDatax12 = new GridData();
@@ -2107,6 +2119,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderedByEmail = new Text(pnlRoot, 72);
 		txtOrderedByEmail.setLayoutData(gridData7);
 		txtOrderedByEmail.setData("name", "txtOrderedByEmail");
+		txtOrderedByEmail.setEnabled(false);
+		
 		
 		
 		
@@ -2154,6 +2168,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtApprovedBy = new Text(pnlRoot, 72);
 		txtApprovedBy.setLayoutData(gridData7);
 		txtApprovedBy.setData("name", "txtApprovedBy");
+		txtApprovedBy.setEnabled(false);
 		
 		
 		
@@ -2198,6 +2213,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtApprovedDate = new Text(pnlRoot, 72);
 		txtApprovedDate.setLayoutData(gridData16);
 		txtApprovedDate.setData("name", "txtApprovedDate");
+		txtApprovedDate.setEnabled(false);
 		
 		 
 		GridData gridDatax21 = new GridData();
@@ -2291,6 +2307,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			//txtPCardNo.setLayoutData(gridData16);
 			txtPCardNo.setLayoutData(gridData7);
 			txtPCardNo.setData("name", "txtPCardNo");
+			txtPCardNo.setEnabled(false);
 			
 			 
 			GridData gridDatax15 = new GridData();
@@ -2348,6 +2365,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//txtCardExpDt.setLayoutData(gridData16);
 		txtCardExpDt.setLayoutData(gridData7);
 		txtCardExpDt.setData("name", "txtCardExpDt");
+		txtCardExpDt.setEnabled(false);
 		
 		GridData gridDatax16 = new GridData();
 		gridDatax16.widthHint = 10;
@@ -2399,6 +2417,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//txtCardType.setLayoutData(gridData16);
 		txtCardType.setLayoutData(gridData7);
 		txtCardType.setData("name", "txtCardType");
+		txtCardType.setEnabled(false);
 		
 		GridData gridDatax17 = new GridData();
 		gridDatax17.widthHint = 10;
@@ -2450,6 +2469,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//txtNameOnPcard.setLayoutData(gridData16);
 		txtNameOnPcard.setLayoutData(gridData7);
 		txtNameOnPcard.setData("name", "txtNameOnPcard");
+		txtNameOnPcard.setEnabled(false);
 		
 		GridData gridDatax18 = new GridData();
 		gridDatax18.widthHint = 10;
