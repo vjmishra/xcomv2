@@ -785,8 +785,7 @@ var globaltheSpanNameValue='<%=request.getParameter("theSpanNameValue")%>';
 
 function getGridView() {
 return new Ext.XTemplate(
-'<div class="clearview">&nbsp;</div>',
- '<div id="item-ct">',
+  '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
    <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" title="Mill / Mfg. Item">M</td>',</s:if>
