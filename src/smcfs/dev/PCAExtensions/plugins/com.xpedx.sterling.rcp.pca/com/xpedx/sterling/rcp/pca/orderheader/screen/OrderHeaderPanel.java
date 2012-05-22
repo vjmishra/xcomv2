@@ -1031,6 +1031,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		gridData5.grabExcessHorizontalSpace = false;
 		gridData5.horizontalAlignment = SWT.BEGINNING;
 		gridData5.verticalAlignment = 4;
+		
+		GridData gridData51 = new GridData();
+		gridData51.grabExcessHorizontalSpace = false;
+		gridData51.horizontalAlignment = SWT.BEGINNING;
+		gridData51.verticalAlignment = 4;
 				
 		GridData gridData6 = new GridData();
 		gridData6.widthHint = 145;
@@ -1080,9 +1085,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtBillToName = new Text(pnlRoot, 72);
 		txtBillToName.setLayoutData(gridData9);
 		txtBillToName.setData("name", "txtBillToName");
+		txtBillToName.setEnabled(false);
 	
 		Text txtDummy111 = new Text(pnlRoot, 72);
 		txtDummy111.setLayoutData(gridData6);
+		txtDummy111.setEnabled(false);
 		
 		GridData gridData112 = new GridData();
 		gridData112.widthHint = 125;
@@ -1103,6 +1110,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtETradingID = new Text(pnlRoot, 72);
 		txtETradingID.setLayoutData(gridData7);
 		txtETradingID.setData("name", "txtETradingID");
+		txtETradingID.setEnabled(false);
 
 		
 		 
@@ -1118,6 +1126,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy301 = new Text(pnlRoot, 72);
 		txtDummy301.setLayoutData(gridDatax11);
+		txtDummy301.setEnabled(false);
 		
 		 
 				
@@ -1133,6 +1142,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy109 = new Text(pnlRoot, 72);
 		txtDummy109.setLayoutData(gridData3);
+		txtDummy109.setEnabled(false);
 		
 		 
 		GridData gridDatax300 = new GridData();
@@ -1144,6 +1154,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy300 = new Text(pnlRoot, 72);
 		txtDummy300.setLayoutData(gridDatax300);
+		txtDummy300.setEnabled(false);
 		 
 
 
@@ -1155,6 +1166,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtStoreId = new Text(pnlRoot, 72);
 		txtStoreId.setLayoutData(gridData5);
 		txtStoreId.setData("name", "txtStoreId");
+		txtStoreId.setEnabled(false);
 		 
 		GridData gridDatax10 = new GridData();
 		gridDatax10.widthHint = 100;
@@ -1165,10 +1177,12 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2010 = new Text(pnlRoot, 72);
 		txtDummy2010.setLayoutData(gridDatax10);
+		txtDummy2010.setEnabled(false);
 		 	
 		
 		Text txtDummy112 = new Text(pnlRoot, 72);
 		txtDummy112.setLayoutData(gridData6);
+		txtDummy112.setEnabled(false);
 		
 		GridData gridData31 = new GridData();
 		gridData31.widthHint = 80;
@@ -1177,6 +1191,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy113 = new Text(pnlRoot, 72);
 		txtDummy113.setLayoutData(gridData31);
+		txtDummy113.setEnabled(false);
 		
 		//if(!isFromOrderEntryWizard()){
 		btnViewOriginal = new Button(pnlRoot, 0);
@@ -1196,6 +1211,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy106 = new Text(pnlRoot, 72);
 		txtDummy106.setLayoutData(gridData1);
+		txtDummy106.setEnabled(false);
 			
 			GridData gridDataM10 = new GridData();
 			//gridData101.widthHint = 95;
@@ -1226,6 +1242,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy302 = new Text(pnlRoot, 72);
 			txtDummy302.setLayoutData(gridDatax302);
+			txtDummy302.setEnabled(false);
 			 
 
 
@@ -1233,21 +1250,25 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy105 = new Text(pnlRoot, 72);
 			txtDummy105.setLayoutData(gridData3);
-
+			txtDummy105.setEnabled(false);
 			
 			Text txtDummy104 = new Text(pnlRoot, 72);
 			txtDummy104.setLayoutData(gridData4);
+			txtDummy104.setEnabled(false);
 			
 			Text txtDummy103 = new Text(pnlRoot, 72);
 			txtDummy103.setLayoutData(gridData5);
+			txtDummy103.setEnabled(false);
 			
 			
 			Text txtDummy102 = new Text(pnlRoot, 72);
 			txtDummy102.setLayoutData(gridData1);
+			txtDummy102.setEnabled(false);
 
 			
 			Text txtDummy101 = new Text(pnlRoot, 72);
 			txtDummy101.setLayoutData(gridData7);
+			txtDummy101.setEnabled(false);
 		
  		
 		
@@ -1267,9 +1288,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtWebConfirmationNo = new Text(pnlRoot, 72);
 		txtWebConfirmationNo.setLayoutData(gridData2);
 		txtWebConfirmationNo.setData("name", "txtWebConfirmationNo");
+		txtWebConfirmationNo.setEnabled(false);
 		
 		Text txtWebConfirmationNo1 = new Text(pnlRoot, 72);
 		txtWebConfirmationNo1.setLayoutData(gridData3);
+		txtWebConfirmationNo1.setEnabled(false);
 		//txtWebConfirmationNo1.setData("name", "txtWebConfirmationNo1");
 		
 		 
@@ -1282,6 +1305,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy303 = new Text(pnlRoot, 72);
 		txtDummy303.setLayoutData(gridDatax303);
+		txtDummy303.setEnabled(false);
 		 
 
 
@@ -1306,6 +1330,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 10;
 			txtEntryWebConfirmNo.setLayoutData(gridDataE1);
+			txtEntryWebConfirmNo.setEnabled(false);
 		}
 		
 		lblOrderType = new Label(pnlRoot, SWT.LEFT);
@@ -1327,6 +1352,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy209 = new Text(pnlRoot, 72);
 		txtDummy209.setLayoutData(gridDatax9);
+		txtDummy209.setEnabled(false);
 		 
 				
 		lblOrderNo = new Label(pnlRoot, SWT.LEFT);
@@ -1356,6 +1382,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy304 = new Text(pnlRoot, 72);
 		txtDummy304.setLayoutData(gridDatax304);
+		txtDummy304.setEnabled(false);
 		 
 
 
@@ -1372,6 +1399,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy305 = new Text(pnlRoot, 72);
 			txtDummy305.setLayoutData(gridDatax305);
+			txtDummy305.setEnabled(false);
 			 
 
 
@@ -1396,6 +1424,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy401 = new Text(pnlRoot, 72);
 			txtDummy401.setLayoutData(gridDatax401);
+			txtDummy401.setEnabled(false);
 			
 			Text txtEntryOrderDt = new Text(pnlRoot,72);
 			GridData gridDataE1 = new GridData();
@@ -1404,6 +1433,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 2;
 			txtEntryOrderDt.setLayoutData(gridDataE1);
+			txtEntryOrderDt.setEnabled(false);
 		}
 		
 		
@@ -1428,6 +1458,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy208 = new Text(pnlRoot, 72);
 			txtDummy208.setLayoutData(gridDatax8);
+			txtDummy208.setEnabled(false);
 			 
 		
 		
@@ -1441,6 +1472,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 3;
 			txtEntryLegacyOrderType.setLayoutData(gridDataE1);
+			txtEntryLegacyOrderType.setEnabled(false);
 		}
 		
 		
@@ -1452,6 +1484,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//gridData14.verticalIndent = 2;
 		Text txtDummy = new Text(pnlRoot, 72);
 		txtDummy.setLayoutData(gridData14);
+		txtDummy.setEnabled(false);
 		
 		lblCustPONo = new Label(pnlRoot, SWT.LEFT);
 		lblCustPONo.setText("Customer PO#:");
@@ -1464,6 +1497,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//gridData16.verticalAlignment = 4;
 		gridData16.horizontalSpan = 2;
 		//gridData16.verticalIndent = 2;
+		GridData gridData161 = new GridData();
+		gridData161.heightHint = 20;
+		gridData161.horizontalAlignment = SWT.BEGINNING;
+		//gridData16.verticalAlignment = 4;
+		gridData161.horizontalSpan = 2;
 		txtCustPONo = new Text(pnlRoot, SWT.BORDER);
 		txtCustPONo.setLayoutData(gridData16);
 		txtCustPONo.setData("yrc:customType","Text");
@@ -1482,6 +1520,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy305 = new Text(pnlRoot, 72);
 			txtDummy305.setLayoutData(gridDatax305);
+			txtDummy305.setEnabled(false);
 			
 		
 		lblOrderTime = new Label(pnlRoot, SWT.LEFT);
@@ -1503,6 +1542,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy401 = new Text(pnlRoot, 72);
 			txtDummy401.setLayoutData(gridDatax401);
+			txtDummy401.setEnabled(false);
 			
 			Text txtEntryOrderDt = new Text(pnlRoot,72);
 			GridData gridDataE1 = new GridData();
@@ -1511,6 +1551,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 2;
 			txtEntryOrderDt.setLayoutData(gridDataE1);
+			txtEntryOrderDt.setEnabled(false);
 		}
 		
 
@@ -1521,6 +1562,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtTotOrderFreight = new Text(pnlRoot, 72);
 		txtTotOrderFreight.setLayoutData(gridData7);
 		txtTotOrderFreight.setData("name", "txtTotOrderFreight");
+		txtTotOrderFreight.setEnabled(false);
 		
 		 
 		GridData gridDatax7 = new GridData();
@@ -1532,6 +1574,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy207 = new Text(pnlRoot, 72);
 		txtDummy207.setLayoutData(gridDatax7);
+		txtDummy207.setEnabled(false);
 		 
 		
 		if(!isFromOrderEntryWizard()){
@@ -1545,6 +1588,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtOrderSttsComment = new Text(pnlRoot, 72);
 		txtOrderSttsComment.setLayoutData(gridData3);
 		txtOrderSttsComment.setData("name", "txtOrderSttsComment");
+		txtOrderSttsComment.setEnabled(false);
 		
 		
 		}
@@ -1557,6 +1601,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 3;
 			txtEntryOrderStatus.setLayoutData(gridDataE1);
+			txtEntryOrderStatus.setEnabled(false);
 		}
 
 	
@@ -1570,6 +1615,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy306 = new Text(pnlRoot, 72);
 		txtDummy306.setLayoutData(gridDatax306);
+		txtDummy306.setEnabled(false);
 		 
 		
 		lblShipDate = new Label(pnlRoot, SWT.LEFT);
@@ -1639,6 +1685,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy206 = new Text(pnlRoot, 72);
 		txtDummy206.setLayoutData(gridDatax6);
+		txtDummy206.setEnabled(false);
 		 	
        			
 		lblOrderHoldCode = new Label(pnlRoot, SWT.LEFT);
@@ -1650,9 +1697,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		chkOrderHoldFlag.setText("");
 		chkOrderHoldFlag.setVisible(true);
 		chkOrderHoldFlag.setData("yrc:customType", "Label");
-		chkOrderHoldFlag.setLayoutData(gridData16);
+		chkOrderHoldFlag.setLayoutData(gridData161);
 		chkOrderHoldFlag.setData("name", "chkOrderHoldFlag");
-		
 		
 		GridData gridDatax307 = new GridData();
 		gridDatax307.widthHint = 10;
@@ -1663,6 +1709,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy307 = new Text(pnlRoot, 72);
 		txtDummy307.setLayoutData(gridDatax307);
+		txtDummy307.setEnabled(false);
 		 
 
 
@@ -1688,6 +1735,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtShippedValue = new Text(pnlRoot, 72);
 		txtShippedValue.setLayoutData(gridData7);
 		txtShippedValue.setData("name", "txtShippedValue");
+		txtShippedValue.setEnabled(false);
 		
 		 
 		GridData gridDatax4 = new GridData();
@@ -1699,6 +1747,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy204 = new Text(pnlRoot, 72);
 		txtDummy204.setLayoutData(gridDatax4);
+		txtDummy204.setEnabled(false);
 		 
 					
 		if(!isFromOrderEntryWizard()){
@@ -1711,7 +1760,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		chkWebHoldFlag.setText("");
 		chkWebHoldFlag.setVisible(true);
 		chkWebHoldFlag.setData("yrc:customType", "Label");
-		chkWebHoldFlag.setLayoutData(gridData16);
+		chkWebHoldFlag.setLayoutData(gridData161);
 		chkWebHoldFlag.setData("name", "chkWebHoldFlag");
 		}
 		else
@@ -1723,6 +1772,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			gridDataE1.verticalAlignment = 4;
 			gridDataE1.horizontalSpan = 3;
 			txtEntryWebHold.setLayoutData(gridDataE1);
+			txtEntryWebHold.setEnabled(false);
 		}
 		
 		 
@@ -1735,6 +1785,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy308 = new Text(pnlRoot, 72);
 		txtDummy308.setLayoutData(gridDatax308);
+		txtDummy308.setEnabled(false);
 		 
 
 
@@ -1747,7 +1798,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		chkWillCall.setText("");
 		chkWillCall.setVisible(true);
 		chkWillCall.setData("yrc:customType", "Label");
-		chkWillCall.setLayoutData(gridData5);
+		chkWillCall.setLayoutData(gridData51);
 		chkWillCall.setData("name", "chkWillCall");
 		
 		lblTotalAmount = new Label(pnlRoot, SWT.LEFT);
@@ -1757,6 +1808,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtTotalAmount = new Text(pnlRoot, 72);
 		txtTotalAmount.setLayoutData(gridData7);
 		txtTotalAmount.setData("name", "txtTotalAmount");
+		txtTotalAmount.setEnabled(false);
 		
 		 
 		GridData gridDatax2 = new GridData();
@@ -1768,6 +1820,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy203 = new Text(pnlRoot, 72);
 		txtDummy203.setLayoutData(gridDatax2);
+		txtDummy203.setEnabled(false);
 		 
 		
 		lblHdrComments = new Label(pnlRoot, SWT.LEFT);
@@ -1783,7 +1836,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		gridData20.horizontalSpan = 2;
 		gridData20.verticalSpan = 2;
 		
-		txtHdrComments = new Text(pnlRoot, SWT.BORDER|SWT.WRAP);
+		txtHdrComments = new Text(pnlRoot, SWT.BORDER|SWT.WRAP|SWT.TAB);
 		txtHdrComments.setLayoutData(gridData20);
 		txtHdrComments.setTextLimit(250);//According to JIRA - 1354
 		txtHdrComments.setData("name", "txtHdrComments");
@@ -1802,6 +1855,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy309 = new Text(pnlRoot, 72);
 		txtDummy309.setLayoutData(gridDatax309);
 		txtDummy309.setData("name","txtDummy309");
+		txtDummy309.setEnabled(false);
 		 
 
 
@@ -1871,6 +1925,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy201 = new Text(pnlRoot, 72);
 		txtDummy201.setLayoutData(gridDatax);
 		txtDummy201.setData("name","txtDummy201");
+		txtDummy201.setEnabled(false);
 		 
 
 		//}
@@ -1897,6 +1952,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy310 = new Text(pnlRoot, 72);
 		txtDummy310.setLayoutData(gridDatax310);
 		txtDummy310.setData("name","txtDummy310");
+		txtDummy310.setEnabled(false);
 		 
 
 
@@ -1921,6 +1977,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy202 = new Text(pnlRoot, 72);
 		txtDummy202.setLayoutData(gridDatax);
 		txtDummy202.setData("name","txtDummy202");
+		txtDummy202.setEnabled(false);
 		
 		GridData gridDatax25 = new GridData();
 		gridDatax25.widthHint = 10;
@@ -1932,6 +1989,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy25 = new Text(pnlRoot, 72);
 		txtDummy25.setLayoutData(gridDatax25);
 		txtDummy25.setData("name","txtDummy25");
+		txtDummy25.setEnabled(false);
 		 
 		
 		lblCurrencyCode = new Label(pnlRoot, SWT.LEFT);
@@ -1958,7 +2016,8 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummyInternal = new Text(pnlRoot,72);
 		txtDummyInternal.setLayoutData(gridData1);
 		txtDummyInternal.setData("name","txtDummyInternal");
-		txtInternalComments = new Text(pnlRoot, SWT.BORDER|SWT.WRAP);
+		txtDummyInternal.setEnabled(false);
+		txtInternalComments = new Text(pnlRoot, SWT.BORDER|SWT.WRAP|SWT.TAB);
 		txtInternalComments.setLayoutData(gridData20);
 		txtInternalComments.setData("name", "txtInternalComments");
 		
@@ -1973,6 +2032,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy311 = new Text(pnlRoot, 72);
 		txtDummy311.setLayoutData(gridDatax311);
 		txtDummy311.setData("name","txtDummy311");
+		txtDummy311.setEnabled(false);
 		 
 
 
@@ -2006,6 +2066,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy2012 = new Text(pnlRoot, 72);
 		txtDummy2012.setLayoutData(gridDatax12);
 		txtDummy2012.setData("name","txtDummy2012");
+		txtDummy2012.setEnabled(false);
 		 
 		
 		
@@ -2021,6 +2082,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy312 = new Text(pnlRoot, 72);
 		txtDummy312.setLayoutData(gridDatax312);
 		txtDummy312.setData("name","txtDummy312");
+		txtDummy312.setEnabled(false);
 		
 		/*Text txtDummy3 = new Text(pnlRoot,72);
 		txtDummy3.setLayoutData(gridData17);
@@ -2036,6 +2098,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy2013 = new Text(pnlRoot, 72);
 		txtDummy2013.setLayoutData(gridDatax13);
 		txtDummy2013.setData("name","txtDummy2013");
+		txtDummy2013.setEnabled(false);
 		
 		lblOrderedByEmail = new Label(pnlRoot, SWT.LEFT);
 		lblOrderedByEmail.setText("Order By Email:");
@@ -2064,11 +2127,13 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Text txtDummy313 = new Text(pnlRoot, 72);
 		txtDummy313.setLayoutData(gridDatax313);
 		txtDummy313.setData("name","txtDummy313");
+		txtDummy313.setEnabled(false);
 
 		
 		Text txtDummy4 = new Text(pnlRoot,72);
 		txtDummy4.setLayoutData(gridData22);
 		txtDummy4.setData("name","txtDummy4");
+		txtDummy4.setEnabled(false);
 		 
 		GridData gridDatax14 = new GridData();
 		gridDatax14.widthHint = 10;
@@ -2079,6 +2144,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2014 = new Text(pnlRoot, 72);
 		txtDummy2014.setLayoutData(gridDatax14);
+		txtDummy2014.setEnabled(false);
 		 
 		
 		lblApprovedBy = new Label(pnlRoot, SWT.LEFT);
@@ -2117,11 +2183,13 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy314 = new Text(pnlRoot, 72);
 		txtDummy314.setLayoutData(gridDatax314);
+		txtDummy314.setEnabled(false);
 		 
 
 
 		Text txtDummy5 = new Text(pnlRoot,72);
 		txtDummy5.setLayoutData(gridData19);
+		txtDummy5.setEnabled(false);
 		
 		lblApprovedDate = new Label(pnlRoot, SWT.LEFT);
 		lblApprovedDate.setText("Approved Date:");
@@ -2141,6 +2209,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2021 = new Text(pnlRoot, 72);
 		txtDummy201.setLayoutData(gridDatax21);
+		txtDummy2021.setEnabled(false);
 		 
 		
 		GridData gridData = new GridData();
@@ -2203,12 +2272,15 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy316 = new Text(pnlRoot, 72);
 		txtDummy316.setLayoutData(gridDatax316);
+		txtDummy316.setEnabled(false);
 		 
 
 
 		
 		Text txtDummy6 = new Text(pnlRoot,72); 
 		txtDummy6.setLayoutData(gridData32);
+		txtDummy6.setEnabled(false);
+		
 		if(!isFromOrderEntryWizard()){
 			
 			lblPCardNo = new Label(pnlRoot, SWT.LEFT);
@@ -2230,6 +2302,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy2015 = new Text(pnlRoot, 72);
 			txtDummy2015.setLayoutData(gridDatax15);
+			txtDummy2015.setEnabled(false);
 			 
 			
 		
@@ -2239,8 +2312,11 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy607 = new Text(pnlRoot,72); 
 			txtDummy607.setLayoutData(gridData30);
+			txtDummy607.setEnabled(false);
 			Text txtDummy10 = new Text(pnlRoot,72); 
 			txtDummy10.setLayoutData(gridData33);
+			txtDummy10.setEnabled(false);
+			
 		}
 		
 		 
@@ -2253,12 +2329,15 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy317 = new Text(pnlRoot, 72);
 		txtDummy317.setLayoutData(gridDatax317);
+		txtDummy317.setEnabled(false);
 		 
 
 
 		
 		Text txtDummy7 = new Text(pnlRoot,72); 
 		txtDummy7.setLayoutData(gridData32);
+		txtDummy7.setEnabled(false);
+		
 		if(!isFromOrderEntryWizard()){
 						
 		lblCardExpDt = new Label(pnlRoot, SWT.LEFT);
@@ -2279,14 +2358,17 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2016 = new Text(pnlRoot, 72);
 		txtDummy2016.setLayoutData(gridDatax16);
+		txtDummy2016.setEnabled(false);
 		}
 		else
 		{
 			
 			Text txtDummy605 = new Text(pnlRoot,72); 
 			txtDummy605.setLayoutData(gridData30);
+			txtDummy605.setEnabled(false);
 			Text txtDummy10 = new Text(pnlRoot,72); 
 			txtDummy10.setLayoutData(gridData33);
+			txtDummy10.setEnabled(false);
 		}
 		
 		 
@@ -2299,11 +2381,14 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy318 = new Text(pnlRoot, 72);
 		txtDummy318.setLayoutData(gridDatax318);
+		txtDummy318.setEnabled(false);
 		 
 
 
 		Text txtDummy8 = new Text(pnlRoot,72); 
 		txtDummy8.setLayoutData(gridData32);
+		txtDummy8.setEnabled(false);
+		
 		if(!isFromOrderEntryWizard()){
 						
 		lblCardType = new Label(pnlRoot, SWT.LEFT);
@@ -2324,14 +2409,17 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2017 = new Text(pnlRoot, 72);
 		txtDummy2017.setLayoutData(gridDatax17);
+		txtDummy2017.setEnabled(false);
 		}
 		else
 		{
 			
 			Text txtDummy603 = new Text(pnlRoot,72); 
 			txtDummy603.setLayoutData(gridData30);
+			txtDummy603.setEnabled(false);
 			Text txtDummy10 = new Text(pnlRoot,72); 
 			txtDummy10.setLayoutData(gridData33);
+			txtDummy10.setEnabled(false);
 		}
 		
 		 
@@ -2344,11 +2432,14 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy320 = new Text(pnlRoot, 72);
 		txtDummy320.setLayoutData(gridDatax320);
+		txtDummy320.setEnabled(false);
 		 
 
 
 		Text txtDummy9 = new Text(pnlRoot,72); 
 		txtDummy9.setLayoutData(gridData32);
+		txtDummy9.setEnabled(false);
+		
 		if(!isFromOrderEntryWizard()){
 			 
 		lblNameOnPcard = new Label(pnlRoot, SWT.LEFT);
@@ -2369,14 +2460,17 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2018 = new Text(pnlRoot, 72);
 		txtDummy2018.setLayoutData(gridDatax18);
+		txtDummy2018.setEnabled(false);
 		}
 		else
 		{
 			
 			Text txtDummy601 = new Text(pnlRoot,72); 
 			txtDummy601.setLayoutData(gridData30);
+			txtDummy601.setEnabled(false);
 			Text txtDummy10 = new Text(pnlRoot,72); 
 			txtDummy10.setLayoutData(gridData33);
+			txtDummy10.setEnabled(false);
 			
 			
 		}
@@ -2391,11 +2485,13 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy321 = new Text(pnlRoot, 72);
 		txtDummy321.setLayoutData(gridDatax321);
+		txtDummy321.setEnabled(false);
 		 
 
 
 		Text txtDummy10 = new Text(pnlRoot,72); 
 		txtDummy10.setLayoutData(gridData32);
+		txtDummy10.setEnabled(false);
 				
 		lblCoupon = new Label(pnlRoot, SWT.LEFT);
 		lblCoupon.setText("Coupon");
@@ -2416,6 +2512,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		Text txtDummy2019 = new Text(pnlRoot, 72);
 		txtDummy2019.setLayoutData(gridDatax19);
+		txtDummy2019.setEnabled(false);
 		
 		if(XPXUtils.isFullFillmentOrder(this.eleOrderDetails)){
 			txtCouponCode.setEnabled(false);
