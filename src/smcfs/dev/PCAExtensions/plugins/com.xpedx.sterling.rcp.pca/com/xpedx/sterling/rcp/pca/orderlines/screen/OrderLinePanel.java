@@ -743,6 +743,14 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		gridDataLbl.horizontalSpan = 1;
 		gridDataLbl.verticalSpan = 1;
 		gridDataLbl.widthHint = 100;
+		
+		GridData gridDataLbl0 = new GridData();
+		gridDataLbl0.horizontalAlignment = SWT.BEGINNING;
+		gridDataLbl0.verticalAlignment = SWT.FILL;
+		gridDataLbl0.grabExcessVerticalSpace = false;
+		gridDataLbl0.grabExcessHorizontalSpace = true;
+		gridDataLbl0.horizontalSpan = 1;
+		gridDataLbl0.verticalSpan = 1;
 
 		GridData gridDataVal = new GridData();
 		gridDataVal.horizontalAlignment = 4;
@@ -825,6 +833,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		stxtLegacyLineNumber.setLayoutData(gridDataLbl);
 		stxtLegacyLineNumber.setEditable(false);
 		stxtLegacyLineNumber.setData("name", "stxtLegacyLineNumber");
+		stxtLegacyLineNumber.setEnabled(false);
 		
 		GridData gridDataLbl1 = new GridData();
 		gridDataLbl1.horizontalAlignment = SWT.END;
@@ -844,6 +853,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtMfrItemId.setLayoutData(gridDataLbl);
 		txtMfrItemId.setData("name", "txtMfrItemId");
 		txtMfrItemId.addFocusListener(focusListenerLatest);
+		txtMfrItemId.setEnabled(false);
 
 		Label lblMpcItemId = new Label(pnlLeftData, SWT.HORIZONTAL);
 		lblMpcItemId.setText("MPC # :");
@@ -854,6 +864,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtMpcItemId.setLayoutData(gridDataLbl);
 		txtMpcItemId.setData("name", "txtMpcItemId");
 		txtMpcItemId.addFocusListener(focusListenerLatest);
+		txtMpcItemId.setEnabled(false);
 
 		lblComboItemId = new Label(pnlLeftData, SWT.HORIZONTAL);
 		lblComboItemId.setText("Legacy Item#");
@@ -883,6 +894,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtItemDesc.setLayoutData(gridDataVal);
 		txtItemDesc.setEditable(false);
 		txtItemDesc.setData("name", "txtItemDesc");
+		txtItemDesc.setEnabled(false);
 
 		Label lblUnitPrice = new Label(pnlLeftData, SWT.HORIZONTAL);
 		lblUnitPrice.setText("Unit Price: ");
@@ -896,6 +908,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		//stxtUnitPrice.setEditable(false);
 		stxtUnitPrice.setData("name", "stxtUnitPrice");
 		stxtUnitPrice.setEditable(false);
+		stxtUnitPrice.setEnabled(false);
 		
 		if(!isNewLine()){
 			if(isPriceOverrideChecked()){
@@ -908,6 +921,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		stxtPricingUOM.setLayoutData(gridDataLbl);
 		stxtPricingUOM.setEditable(false);
 		stxtPricingUOM.setData("name", "stxtPricingUOM");
+		stxtPricingUOM.setEnabled(false);
 		} else {
 			comboPricingUOM = new Combo(pnlLeftData, 8);
 			comboPricingUOM.setLayoutData(gridDataLbl);
@@ -924,7 +938,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		chkPriceOverride.setVisible(true);
 		chkPriceOverride.setData("name", "chkPriceOverride");
 		chkPriceOverride.setData("yrc:customType", "Label");
-		chkPriceOverride.setLayoutData(gridDataLbl);	
+		chkPriceOverride.setLayoutData(gridDataLbl0);	
 		
 		chkPriceOverride.addSelectionListener(new SelectionAdapter(){
 
@@ -933,9 +947,11 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 				boolean checked=chkPriceOverride.getSelection();
 				if(checked){
 					stxtUnitPrice.setEditable(true);
+					stxtUnitPrice.setEnabled(true);
 				}
 				else{
 					stxtUnitPrice.setEditable(false);
+					stxtUnitPrice.setEnabled(false);
 				}
 				
 			}
@@ -952,11 +968,13 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		stxtOthrCost.setLayoutData(gridDataLbl);
 		stxtOthrCost.setEditable(false);
 		stxtOthrCost.setData("name", "stxtOthrCost");
+		stxtOthrCost.setEnabled(false);
 		stxtOthrCostUOM = new StyledText(pnlLeftData, SWT.SIMPLE);
 		stxtOthrCostUOM.setText("");
 		stxtOthrCostUOM.setLayoutData(gridDataLbl);
 		stxtOthrCostUOM.setEditable(false);
 		stxtOthrCostUOM.setData("name", "stxtOthrCostUOM");
+		stxtOthrCostUOM.setEnabled(false);
 		Label lblGp = new Label(pnlLeftData, SWT.HORIZONTAL);
 		lblGp.setText("Gross Profit:");
 		lblGp.setLayoutData(gridDataLbl);
@@ -974,7 +992,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		lblLineComment.setData("yrc:customType", "Label");
 		lblLineComment.setData("name", "lblLineComment");
 
-		txtComment = new Text(pnlLeftData, 2626);
+		txtComment = new Text(pnlLeftData, 2626|SWT.TAB);
 		txtComment.setText("");
 		txtComment.setLayoutData(gridDataVal);
 //		txtItemDesc.setEditable(false);
@@ -1169,6 +1187,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtGTM.setEditable(false);
 		txtGTM.setLayoutData(gridDataLbl1);
 		txtGTM.setData("name", "txtGTM");
+		txtGTM.setEnabled(false);
 
 		Label lblExtendedCost = new Label(pnlRightData, SWT.HORIZONTAL);
 		lblExtendedCost.setText("Extended Cost:");
@@ -1179,7 +1198,8 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtExtendedCost.setEditable(false);
 		txtExtendedCost.setText("");
 		txtExtendedCost.setLayoutData(gridDataLbl1);
-		txtExtendedCost.setData("name", "txtExtendedCost");		
+		txtExtendedCost.setData("name", "txtExtendedCost");
+		txtExtendedCost.setEnabled(false);
 
 		Label lblOrderedQtyTotal = new Label(pnlRightData, SWT.HORIZONTAL);
 		lblOrderedQtyTotal.setText("Ordered Amount:");
@@ -1252,6 +1272,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			
 			Text txtDummy1 = new Text(pnlRightData, 72);
 			txtDummy1.setLayoutData(gridData1);
+			txtDummy1.setEnabled(false);
 			
 		}
 		
@@ -1299,6 +1320,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtExtnOrdQty.setEditable(false);
 		txtExtnOrdQty.setLayoutData(gridDataExtnOrdQty);
 		txtExtnOrdQty.setData("name", "txtExtnOrdQty");
+		txtExtnOrdQty.setEnabled(false);
 		
 		Label lblExtnPrice = new Label(pnlRightData, SWT.HORIZONTAL);
 		lblExtnPrice.setText("Extended:");
@@ -1339,6 +1361,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		stxtBaseUOM.setLayoutData(gridDataLbl1);
 		stxtBaseUOM.setEditable(false);
 		stxtBaseUOM.setData("name", "stxtBaseUOM");
+		stxtBaseUOM.setEnabled(false);
 		
 		Label lblCouponCode = new Label(pnlRightData, SWT.HORIZONTAL);
 		lblCouponCode.setText("Coupon Code:");
