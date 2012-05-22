@@ -84,6 +84,7 @@
 			}
 			table.price tr.special-instructions td{
 				border-top: 1px solid #ccc;
+				border-bottom: 1px solid #ccc;
 				
 			}
 			table.price th:first-of-type{
@@ -593,7 +594,7 @@
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right" valign="top"> Cust Acct Line #:&#160;</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
+					<td class="left" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
