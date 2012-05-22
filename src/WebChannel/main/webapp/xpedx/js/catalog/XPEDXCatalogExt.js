@@ -462,7 +462,7 @@ function shortenItemDescriptions()
 		 */
 			$('.prodlist ul li, #prodlist ul li ').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
+				var shortHTML = html.substring(0, 200);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);
@@ -476,12 +476,12 @@ function shortenItemDescriptions()
 	else if(selectedClass == "condensed-view") {
 		
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
-		 * Added per Jira 3318. 
+		 * Added per Jira 3318. (Looks like substring is ignoring the spaces.)
 		 */
 			/* Begin long desc. shortener */
 			$('.prodlist ul li, #prodlist ul li ').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
+				var shortHTML = html.substring(0, 20);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);
@@ -494,7 +494,7 @@ function shortenItemDescriptions()
 			/* Begin short desc. shortener */
 			$('a#item-detail-lnk p.ddesc').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 50);
+				var shortHTML = html.substring(0, 45);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);
@@ -513,7 +513,7 @@ function shortenItemDescriptions()
 			/* Begin long desc. shortener */
 			$('.prodlist ul li, #prodlist ul li ').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
+				var shortHTML = html.substring(0, 20);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);
@@ -526,7 +526,7 @@ function shortenItemDescriptions()
 			/* Begin short desc. shortener */
 			$('a#item-detail-lnk p.ddesc').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 40);
+				var shortHTML = html.substring(0, 35);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);

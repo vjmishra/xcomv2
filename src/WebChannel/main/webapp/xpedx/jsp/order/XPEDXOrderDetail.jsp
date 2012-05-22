@@ -147,6 +147,31 @@ $(document).ready(function(){
 			return false;
 	});
 		
+	
+
+/* 	$('.short-description').each(function(){
+        $(this).shorten({noblock: true, width:($(this).width() - 15)});
+	});  */
+	
+	
+	$('.short-description').each(function() {
+		var html = $(this).html();
+		var shortHTML = html.substring(0, 70);
+		if( html.length > shortHTML.length )
+		{
+			$(this).html(shortHTML);
+			$(this).append('...');	
+			$(this).attr('title', html );
+		}
+	});
+	
+	//We are displaying long description by reducing the size of the container, 
+	//It is different from other pages. This is to acoomidate spaces and capitals, special chars.
+	
+	$('.pin-height  ul li').each(function(){
+        $(this).shorten({noblock: true, width:($(this).width() - 21)});
+	}); 
+	
    	theParentConfNum = urlParams["parentOrderKey"];
 	theWebConfNum = urlParams["theWebConfNumber"];
 	//alert(theParentConfNum + " " + theWebConfNum);
@@ -393,11 +418,11 @@ function showSplitDiv(divId)
                 	<span class="page-title">
                 	<s:if test='#orderType != "Customer" ' >
                 		<!-- Order Detail  -->
-                		<s:text name='MSG.SWC.ORDR.ORDRDETAIL.GENERIC.PGTITLE' />
+                		 <s:text name='MSG.SWC.ORDR.ORDRDETAIL.GENERIC.PGTITLE' />
                 	</s:if>
                 	<s:else>
                 		<!-- Web Confirmation Detail -->
-                		<s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' />
+                	   <s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' />
                 	</s:else>
                 	</span>
                 	<a href="javascript:window.print()"><span class="print-ico-xpedx orders"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>

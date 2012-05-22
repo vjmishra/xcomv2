@@ -902,7 +902,7 @@ ul
 .normal-view #item-ct dd .ddesc, .mini-view #item-ct dd .ddesc
 {
 	font-weight: bold;
-	width: 165px;
+	/* width: 165px; */
     word-wrap: break-word;
 }
 .normal-view #item-ct dd { min-height: 230px; }
