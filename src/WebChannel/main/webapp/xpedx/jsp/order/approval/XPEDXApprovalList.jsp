@@ -381,7 +381,7 @@
                         <tr>
 						<td> Ship-To: </td>
 						<td colspan="2">						
-						<s:select cssClass=" " name="shipToSearchFieldName" headerValue="All Ship-Tos"
+						<s:select cssClass=" " name="shipToSearchFieldName" headerValue="All Ship-To(s)"
 						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTos();"/>
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
 						<%--<s:select cssClass="ship-to-input-field x-input" name="shipToSearchFieldName" list="shipToList" 

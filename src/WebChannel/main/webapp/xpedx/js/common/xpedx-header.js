@@ -17368,7 +17368,7 @@ Ext.onReady(function() {
 	 * BEGIN Alternate shorten function for long descriptions
 	 */
 	
-	$('.prodlist ul li, #prodlist ul li ').each(function() {
+/*	$('.prodlist ul li, #prodlist ul li ').each(function() {
 		var html = $(this).html();
 		var shortHTML = html.substring(0, 25);
 		if( html.length > shortHTML.length )
@@ -17377,7 +17377,7 @@ Ext.onReady(function() {
 			$(this).append('...');	
 			$(this).attr('title', html );
 		}
-	});
+	});*/
 	
 	/*
 	 * END Alternate shorten function for long descriptions
