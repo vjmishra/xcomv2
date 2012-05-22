@@ -178,6 +178,32 @@ function showSharedListForm(){
 			'height' 			: 340  
 		});
 		
+		/* Begin Short desc. shortener */
+		$('.short-description').each(function() {
+			var html = $(this).html();
+			var shortHTML = html.substring(0, 90);
+			if( html.length > shortHTML.length )
+			{
+				$(this).html(shortHTML);
+				$(this).append('...');	
+				$(this).attr('title', html );
+			}
+		});
+		
+		/* Begin long desc. shortener */
+		$('.prodlist ul li, #prodlist ul li').each(function() {
+			var html = $(this).html();
+			var shortHTML = html.substring(0, 35);
+			if( html.length > shortHTML.length )
+			{
+				$(this).html(shortHTML);
+				$(this).append('...');	
+				$(this).attr('title', html );
+			}
+		});
+		
+		
+		
 		$("#dlgShareListLink1").fancybox({
 			'onStart' 	: function(){
 			if (isUserAdmin){
@@ -1703,19 +1729,19 @@ function showSharedListForm(){
                           } 
                         }
 				  function populateValue(targetElement,elemetnID) {
-					  document.getElementById(elemetnID).value =
-						   targetElement.options[targetElement.selectedIndex].value;
+					   document.getElementById(elemetnID).value =
+					   targetElement.options[targetElement.selectedIndex].value;
 						   var idx =  document.getElementById(elemetnID).value;
 						   var currIdx =  oldvalue;
-						   
+							   	
 						   var currValue = null;
 							idx = parseInt(idx);
 							currIdx = parseInt(currIdx);
 							var currentSelElemName = targetElement.name;
 							if (!targetElement) {
 								targetElement = null;
-							}
-
+							   }
+							   	
 							var selectElems = document.getElementsByName(currentSelElemName);
 							if (selectElems == null)
 								return;
@@ -1726,12 +1752,12 @@ function showSharedListForm(){
 								if (targetElement == currElem) {
 									targetElement.value = idx;
 									continue;
-								}
+							   }
 							if (idx < currIdx) {
 									if (currValue >= idx && currValue < currIdx) {
 									    document.getElementById(currElem.id).value = currValue + 1;
 										//currElem.selectedIndex = currElem.selectedIndex + 1;
-									}
+						 }  
 								}
 							   else {
 									if (currValue > currIdx && currValue <= idx) {
@@ -1740,8 +1766,8 @@ function showSharedListForm(){
 									}
 								}
 							}
-	                                     
-	                 }
+                                     
+                 }
     </script>
     <!-- Added for JIRA 1402 Ends--> 
 
@@ -2952,18 +2978,12 @@ function showSharedListForm(){
    		<script type="text/javascript">
 			Ext.onReady(function(){		
 	       
-				/* Begin long desc. shortener */
-				$('.prodlist ul li, #prodlist ul li ').each(function() {
-					var html = $(this).html();
-					var shortHTML = html.substring(0, 25);
-					if( html.length > shortHTML.length )
-					{
-						$(this).html(shortHTML);
-						$(this).append('...');	
-						$(this).attr('title', html );
-					}
+				
+			//
+				
+				
+				
 				});
-			});
 		</script>  
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<s:if test="!#iStatus.last" >

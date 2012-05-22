@@ -309,8 +309,28 @@ $(document).ready(function(){
 				$('#tq-quick-add-overlay').toggle();
 				return false;
 		});
-		$('ul.mil-desc-attribute-list li').each(function(){
+/* 		$('ul.mil-desc-attribute-list li').each(function(){
             $(this).shorten({noblock: true, width:($(this).width() - 20)});
+		}); */
+		
+
+		/* FIX FOR : CART, WC, EDIT ORDER PAGES */
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. (Looks like substring is ignoring the spaces.)
+		 */
+		 //mil-wrap-condensed-desc item-short-desc
+			/* Begin long desc. shortener */
+			//mil-wrap-condensed-desc item-short-desc
+			// $('.mil-desc-wrap mil-wrap-condensed-desc item-short-desc short-description').each(function() { 
+			 $('.short-description').each(function() { 
+				var html = $(this).html();
+				var shortHTML = html.substring(0, 70);
+				if( html.length > shortHTML.length )
+				{
+					$(this).html(shortHTML);
+					$(this).append('...');	
+					$(this).attr('title', html );
+				}
 		});
 });
 </script>
@@ -1084,7 +1104,7 @@ $(document).ready(function(){
 						</div>
 		                <div class="mil-attr-wrap">
 							<s:if test='#item.getAttribute("ItemDesc") != ""'>
-								<ul class="mil-desc-attribute-list">
+								<ul class="prodlist">
 									<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 								</ul>
 							</s:if>							
@@ -1107,7 +1127,7 @@ $(document).ready(function(){
 		                <div class="mil-attr-wrap">
 		                    <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 								<s:if test='#item.getAttribute("ItemDesc") != ""'>
-									<ul class="mil-desc-attribute-list">
+									<ul class="prodlist">
 										<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 									</ul>
 								</s:if>
@@ -2201,7 +2221,7 @@ var currentAadd2ItemList = new Object();
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
 	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
-		<script type="text/javascript">
+<%-- 		<script type="text/javascript">
 		Ext.onReady(function(){		
 
 			/* Begin long desc. shortener */
@@ -2216,7 +2236,7 @@ var currentAadd2ItemList = new Object();
 				}
 			});
 		});
-		</script>
+		</script> --%>
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
 		<!--  hide in case of one item  -->
