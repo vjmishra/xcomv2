@@ -1703,28 +1703,45 @@ function showSharedListForm(){
                           } 
                         }
 				  function populateValue(targetElement,elemetnID) {
-					   document.getElementById(elemetnID).value =
-					   targetElement.options[targetElement.selectedIndex].value;
-					   var modifiedOldValue = 0;
-					   var counterVal = 0;
-					 for (var i = 0; i < myArray2.length; i++) {
-					    	   if( document.getElementById(elemetnID).value > oldvalue && document.getElementById(myArray2[i]).value <= document.getElementById(elemetnID).value){
-								   modifiedOldValue = oldvalue*1+counterVal*1;
-									populate(myArray2[i]);
-									document.getElementById(myArray2[i]).value = modifiedOldValue;
-									counterVal++; 
-							   	
-							   }
-							   if( document.getElementById(elemetnID).value < oldvalue && document.getElementById(myArray2[i]).value >= document.getElementById(elemetnID).value){
-								   modifiedOldValue = document.getElementById(elemetnID).value*1+counterVal*1;
-									populate(myArray2[i]);
-									document.getElementById(myArray2[i]).value = modifiedOldValue;
-									counterVal++; 
-							   	
-							   }
-						 }  
-                                     
-                 }
+					  document.getElementById(elemetnID).value =
+						   targetElement.options[targetElement.selectedIndex].value;
+						   var idx =  document.getElementById(elemetnID).value;
+						   var currIdx =  oldvalue;
+						   
+						   var currValue = null;
+							idx = parseInt(idx);
+							currIdx = parseInt(currIdx);
+							var currentSelElemName = targetElement.name;
+							if (!targetElement) {
+								targetElement = null;
+							}
+
+							var selectElems = document.getElementsByName(currentSelElemName);
+							if (selectElems == null)
+								return;
+							for ( var i = 0; i < selectElems.length; i++) {
+								var currElem = selectElems[i];
+								populate(currElem.id);
+								currValue = parseInt(currElem.value);
+								if (targetElement == currElem) {
+									targetElement.value = idx;
+									continue;
+								}
+							if (idx < currIdx) {
+									if (currValue >= idx && currValue < currIdx) {
+									    document.getElementById(currElem.id).value = currValue + 1;
+										//currElem.selectedIndex = currElem.selectedIndex + 1;
+									}
+								}
+							   else {
+									if (currValue > currIdx && currValue <= idx) {
+										document.getElementById(currElem.id).value = currValue - 1;
+										//currElem.selectedIndex = currElem.selectedIndex - 1;
+									}
+								}
+							}
+	                                     
+	                 }
     </script>
     <!-- Added for JIRA 1402 Ends--> 
 
