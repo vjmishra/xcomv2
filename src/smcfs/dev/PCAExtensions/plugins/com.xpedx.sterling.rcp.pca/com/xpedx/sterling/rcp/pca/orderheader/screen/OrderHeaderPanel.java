@@ -1074,6 +1074,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtBillTo = new Text(pnlRoot, 72);
 		txtBillTo.setLayoutData(gridData2);
 		txtBillTo.setData("name", "txtBillTo");
+		txtBillTo.setEnabled(false);
 		
 				
 		GridData gridData9 = new GridData();
@@ -1100,6 +1101,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtBillToName = new Text(pnlRoot, 72);
 		txtBillToName.setLayoutData(gridData112);
 		txtBillToName.setData("name", "txtBillToName");
+		txtBillToName.setEnabled(false);
 				
 		
 		lblETradingID = new Label(pnlRoot, SWT.LEFT);
@@ -1139,6 +1141,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtShipTo = new Text(pnlRoot, 72);
 		txtShipTo.setLayoutData(gridData2);
 		txtShipTo.setData("name", "txtShipTo");
+		txtShipTo.setEnabled(false);
 		
 		Text txtDummy109 = new Text(pnlRoot, 72);
 		txtDummy109.setLayoutData(gridData3);
@@ -1228,6 +1231,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 			txtShipToName = new Text(pnlRoot, 72);
 			txtShipToName.setLayoutData(gridDataShipToName);
 			txtShipToName.setData("name", "txtShipToName");
+			txtShipToName.setEnabled(false);
 			
 //			Text txtDummyx109 = new Text(pnlRoot, 72);
 //			txtDummyx109.setLayoutData(gridData3);
