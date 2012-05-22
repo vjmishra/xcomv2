@@ -169,18 +169,7 @@ var selectedShipCustomer = null;
 		}		
 		Ext.onReady(function(){		
 		
-			/* Begin long desc. shortener */
-			$('.prodlist ul li, #prodlist ul li ').each(function() {
-				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
-				if( html.length > shortHTML.length )
-				{
-					$(this).html(shortHTML);
-					$(this).append('...');	
-					$(this).attr('title', html );
-				}
-			});
-			/* End long desc. shortener */
+
 			
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){

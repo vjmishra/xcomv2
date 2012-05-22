@@ -1044,7 +1044,7 @@ from session . We have customer Contact Object in session .
 									 			  		<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp1}">
 									 			  			<s:set name="isMyPriceZero" value="%{'true'}" />
 									 			    		<s:set name="myPriceValue" value="%{'true'}" />
-									 			  			<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
+									 			  			 <span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
 												 		</s:if>
 												  		<s:else>
 															<s:property	value='#bracketPriceForUOM' />
@@ -1209,7 +1209,43 @@ from session . We have customer Contact Object in session .
 						<script type="text/javascript">
 								 Ext.onReady(function(){
 				                        	          		 
-				                    		  new Ext.ToolTip({        
+										/* Begin Short desc. shortener */
+										$('.short-description').each(function() {
+											var html = $(this).html();
+											var shortHTML = html.substring(0, 90);
+											if( html.length > shortHTML.length )
+											{
+												$(this).html(shortHTML);
+												$(this).append('...');	
+												$(this).attr('title', html );
+											}
+										});
+										
+										/* Begin long desc. shortener */
+										
+									$('.mil-desc-attribute-list ul li, #mil-desc-attribute-list ul li').each(function() {
+											var html = $(this).html();
+											var shortHTML = html.substring(0, 30);
+											if( html.length > shortHTML.length )
+											{
+												$(this).html(shortHTML);
+												$(this).append('...');	
+												$(this).attr('title', html );
+											}
+										});
+										
+										$('.prodlist ul li, #prodlist ul li').each(function() {
+											var html = $(this).html();
+											var shortHTML = html.substring(0, 35);
+											if( html.length > shortHTML.length )
+											{
+												$(this).html(shortHTML);
+												$(this).append('...');	
+												$(this).attr('title', html );
+											}
+										});
+										
+										new Ext.ToolTip({        
 				                    			  	 target: 'tip_${orderLineKey}',
 													 anchor: 'left',
 													 html:	Ext.DomQuery.selectNode('.lineAdj_${orderLineKey}').innerHTML,													
