@@ -478,14 +478,14 @@
 					<xsl:choose>
 					<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
 					<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
-					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$,000.00000")'/></xsl:otherwise>
+					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,###.00000")'/></xsl:otherwise>
 					</xsl:choose>
 					 </td>
 					<td class="align-right">
 					<xsl:choose>
 					<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 					<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$,000.00")'/></xsl:otherwise>
+					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
 					</xsl:choose>
 					</td>
 					</xsl:when>
@@ -498,7 +498,7 @@
 					 <xsl:choose>
 					<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 					<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$,000.00")'/></xsl:otherwise>
+					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
 					</xsl:choose>
 			
 					</td>
@@ -652,19 +652,19 @@
 
 				<td>Subtotal:</td>
 				<td>
-				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnOrderSubTotal,"$,000.00")'></xsl:value-of></td>
+				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnOrderSubTotal,"$#,###,###,###.00")'></xsl:value-of></td>
 				</td>
 			</tr>
 			<tr>
 				<td> Order Total Adjustments:</td>
 				<td>
-				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrderAdjustments,"$,000.00")'/></td>
+				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrderAdjustments,"$#,###,###,###.00")'/></td>
 				</td>
 			</tr>
 			<tr>
 			<td>Adjusted Subtotal:</td>
 				 <td>
-				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"$,000.00")'/></td>
+				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"$#,###,###,###.00")'/></td>
 				 </td>
 			 </tr>
 			<tr>
@@ -700,7 +700,7 @@
 			<tr class="last">
 				<td> Order Total (USD):</td>
 				<td>
-				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$,000.00")'/></td>
+				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,###.00")'/></td>
 				 </td>
 			
 				 </tr>
