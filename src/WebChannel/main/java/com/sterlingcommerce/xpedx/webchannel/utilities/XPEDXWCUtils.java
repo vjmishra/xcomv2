@@ -3252,33 +3252,34 @@ public class XPEDXWCUtils {
 		
 		return customerHashMap;
 	}
-	public static String getFormattedZipCode(String zipCode){
-		
+	
+	public static String getFormattedZipCode(String zipCode){		
 		try
 		{		
-			if (zipCode.length()>5)
-			{
-				String LastDigitZipCode=zipCode.substring(5,zipCode.length());
-				String firstDigitZipCode=zipCode.substring(0,5);
-				if(Integer.parseInt(firstDigitZipCode)>0)
-				{
-					return firstDigitZipCode+"-"+LastDigitZipCode;
+			if (zipCode != null && zipCode.length() > 0) {
+				String zipCode1 = "";
+				if (zipCode.indexOf("-") > -1) {
+					zipCode1 = zipCode.replaceAll("-", "");
+				} else {
+					zipCode1 = zipCode;
 				}
-				else
-				{
-					return firstDigitZipCode;
+				long zipCode2 = Long.parseLong(zipCode1);
+				String zipCode3 = String.valueOf(zipCode2);
+				if(zipCode3.length() > 5) {					
+					java.text.MessageFormat phoneMsgFmt=new java.text.MessageFormat("{0}-{1}"); 
+					String[] numArr = {zipCode3.substring(0, 5), zipCode3.substring(5, zipCode3.length())};
+					return phoneMsgFmt.format(numArr);
+				} else {
+					return zipCode1;
 				}
-			}
-			else
-			{
+			} else {
 				return zipCode;
 			}
 		}
 		catch(Exception e)
 		{
-			log.error(e.getMessage());
 			return zipCode;
-		}		
+		}
 	}
 	
 	
