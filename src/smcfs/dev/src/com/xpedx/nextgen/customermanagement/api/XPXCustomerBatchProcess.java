@@ -1095,6 +1095,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		userElement.setAttribute("PasswordPolicyKey",pwdPolicyKey);//modified code for jira 3838
 		
 		userElement.setAttribute("Loginid", masterCustomerUser);
+		userElement.setAttribute("Password", masterCustomerUser);
 		userElement.setAttribute("CreatorOrganizationKey", customerId);
 		userElement.setAttribute("Localecode", "en_US_EST");
 		Element userGroupsElement = inputCustomerDoc.createElement("UserGroupLists");
