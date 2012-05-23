@@ -19,16 +19,16 @@
 		</xsl:template>
 		
 			<body>
-				<table width="400" border="0" align="left" cellpadding="2" cellspacing="2">
+				<table width="600" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
 						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
 					</tr>
 					<tr>
-						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 							<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
 								<tr>
 									<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-										<table width="" border="0">
+										<table width="100%" border="0">
 											<tr>
 												<td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"></td>
 											</tr>
@@ -40,7 +40,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"> &#160; </td>
+												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">  &#160; </td>
 											</tr>                                                                                   
                                             <tr>
 											<!-- <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
@@ -56,7 +56,7 @@
 											 -->
 											 <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 												Thank you for registering online with <xsl:value-of select="@Brand"/>.com.                
-												The information below has been sent to your local support <br></br>contact for processing. A representative will contact you.
+												The information below has been sent to your local support contact for processing. A representative will contact you.
 												<span ></span>
 											</td>
 										</tr>
@@ -69,84 +69,83 @@
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 													<table width="65%" border="0">
 														<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Name:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@FirstName"/><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
 																<xsl:value-of select="@LastName"/>
 															</td>
 															</tr>
 															<tr>
-															<td width="22%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																Company:
 															</td>
-															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@CompanyName"/><BR/>
 															</td>
 														   </tr>
 														   <tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Address:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Address1"/>
 															</td>
 															</tr>
 															<xsl:if test = '@Address2!=""'>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Address2"/>
 															</td>
 															</tr>
 															</xsl:if>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																City:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@City"/>
 															</td>
 															</tr>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																State / Province:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@State"/>
 															</td>
 															</tr>
 															<tr>
-															<td width="19%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Postal Code:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@ZipCode"/>
 															</td>
 															</tr>
 															<tr>
-															<td width="22%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																Phone:
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+																Phone:	
 															</td>
-															<td width="32%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@Phone"/><BR/>
 															</td></tr>
 															<tr>
-															<td width="16%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Email Address:
 															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@EmailID"/>
 															</td></tr>
+															</table>
+															<table>
 															<tr>
-															<td width="10%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Questions / Comments:
-															</td>
-															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-																<xsl:value-of select="@Comments"/>
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
+																Questions / Comments:<xsl:value-of select="@Comments"/>
 															</td>
 															</tr>
 															
