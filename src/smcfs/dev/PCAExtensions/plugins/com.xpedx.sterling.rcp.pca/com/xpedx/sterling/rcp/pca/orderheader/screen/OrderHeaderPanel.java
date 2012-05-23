@@ -2256,6 +2256,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtBillToAddress.setLayoutData(gridData);
 		txtBillToAddress.setData("yrc:customType", "Text");
 		txtBillToAddress.setData("name", "txtBillToAddress");
+		txtBillToAddress.setEnabled(false);
 		
 //		
 //		Text txtDummyAddress = new Text(pnlRoot, 72);
@@ -2657,6 +2658,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtShipToAddress.setLayoutData(gridDatal00);
 		txtShipToAddress.setData("yrc:customType", "Text");
 		txtShipToAddress.setData("name", "txtShipToAddress");
+		txtShipToAddress.setEnabled(false);
 		
 		
 		lblAttentionName = new Label(pnlRoottxtn, SWT.LEFT);
