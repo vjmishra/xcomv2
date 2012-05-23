@@ -8,6 +8,8 @@
 <swc:html>
 <head>
 <!-- styles -->
+<%--Added meta tag for Navigation Tab Issue- Jira 3886/3872 --%>
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 
