@@ -1750,7 +1750,7 @@ function showSharedListForm(){
 								populate(currElem.id);
 								currValue = parseInt(currElem.value);
 								if (targetElement == currElem) {
-									targetElement.value = idx;
+									document.getElementById(currElem.id).value = idx;
 									continue;
 							   }
 							if (idx < currIdx) {
