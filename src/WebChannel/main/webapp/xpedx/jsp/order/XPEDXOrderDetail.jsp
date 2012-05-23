@@ -425,7 +425,7 @@ function showSplitDiv(divId)
                 	   <s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' />
                 	</s:else>
                 	</span>
-                	<a href="javascript:window.print()"><span class="print-ico-xpedx orders"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
+                	<a href="javascript:window.print()"><span style="margin-top: 5px" class="print-ico-xpedx orders underlink"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
 					<s:if test = "#_action.isOrderInPendingChageState()" >
                 	   <div style="margin-right:5px; font-weight: normal;float:right;" class="notice">Click 'Refresh' to cancel changes in progress and return to the original order</div>
                 	  
