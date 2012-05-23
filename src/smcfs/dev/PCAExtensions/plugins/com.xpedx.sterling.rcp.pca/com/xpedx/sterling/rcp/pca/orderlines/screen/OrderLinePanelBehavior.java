@@ -778,9 +778,10 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 										.getChildElement(eleItem,
 												"ExtendedPrice")
 										.getTextContent();
-								//Added for jira 3689
-								
-								if((extendedPrice != null || extendedPrice != "") && extendedPrice.length() ==3){
+								//Added for jira 3869
+								String[] afterDecimalStringArr = extendedPrice.replace(".", ",").split(",");
+								String afterDecimalString = afterDecimalStringArr[1];
+								if((extendedPrice != null || extendedPrice != "") && afterDecimalString.length() ==1){
 									extendedPrice = extendedPrice.concat("0");
 								}
 								setFieldValue("txtExtnPrice", extendedPrice);
@@ -1033,8 +1034,10 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				if (YRCPlatformUI.isVoid(strUnitPrice)) {
 					setFieldValue("stxtUnitPrice", "0.00");
 				} else {
-					//Added for jira 3689
-					if((strUnitPrice != null || strUnitPrice != "") && strUnitPrice.length() ==3){
+					//Added for 3689
+					String[] afterDecimalStringArr = strUnitPrice.replace(".", ",").split(",");
+					String afterDecimalString = afterDecimalStringArr[1];
+					if((strUnitPrice != null || strUnitPrice != "") && afterDecimalString.length() ==1){
 						strUnitPrice = strUnitPrice.concat("0");
 					}
 					setFieldValue("stxtUnitPrice", strUnitPrice);
