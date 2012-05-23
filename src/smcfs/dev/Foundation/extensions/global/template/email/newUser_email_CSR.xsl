@@ -145,7 +145,7 @@
 															<table>
 															<tr>
 															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Questions / Comments:<xsl:value-of select="@Comments"/>
+																Questions / Comments:&#160;<xsl:value-of select="@Comments"/>
 															</td>
 															</tr>
 															
