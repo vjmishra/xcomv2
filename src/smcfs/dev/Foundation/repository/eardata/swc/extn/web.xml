@@ -614,6 +614,20 @@
             <param-value>86400</param-value>
         </init-param>
     </filter>
+    <!--Session Manage Filter - Start 1650 -->
+	<filter>
+	    <filter-name>SessionManageFilter</filter-name>
+	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.SessionManageFilter</filter-class>
+		<init-param>
+	<param-name>excludeActions</param-name>
+	<param-value>login.action,home.action</param-value>
+    </init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionManageFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<!--Session Manage Filter - End 1650 -->
     <filter-mapping>
         <filter-name>Ariba Integration Filter</filter-name>
         <url-pattern>/interop/ariba</url-pattern>
