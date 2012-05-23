@@ -57,6 +57,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 				"ArticleKey")))
 			this.getArticleDetails(page.getPageInput());
 		initialize();
+		
 	}
 
 	/**
@@ -79,6 +80,16 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 			callApi(context);*/
 			// JIRA 3622 - Performance Fix - Division Cache 
 			XPXCacheManager.getInstance().getDivisionList(getModel("UserNameSpace").getAttribute("DataSecurityGroupId"), this);
+			String[] apinames = {"getOrganizationList"};
+			Document[] docInput = {
+					YRCXmlUtils.createFromString("<Organization IsEnterprise='Y'/>"),
+			};				
+			YRCApiContext context = new YRCApiContext();
+			context.setApiNames(apinames);
+			context.setInputXmls(docInput);
+			context.setFormId("com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel");
+
+			callApi(context);
 		}
 	}
 
@@ -252,7 +263,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 				else if("getOrganizationList".equals(apiname)){
 					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
 					
-					setModel("Divisions",eleOutput);
+					setModel("StoreFronts",eleOutput);
 				}				
 			}
 		}
