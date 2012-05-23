@@ -4,15 +4,19 @@ import java.util.Properties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -36,12 +40,11 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 		}
 	}
 	
-	public Document invokeActions(YFSEnvironment env, Document inputXML) 
-	{
+	public Document invokeActions(YFSEnvironment env, Document inputXML) {
+		
+		log.info("XPXInvokeOrderPlaceActions_invokeActions(): "+ SCXmlUtil.getString(inputXML));
+		
 		Document getCustomerProfileDetailsDoc = null;
-		
-		log.info("The input xml in XPXInvokeOrderPlaceActions: "+ SCXmlUtil.getString(inputXML));
-		
 		try
 		{
 		   Element inputRoot = inputXML.getDocumentElement();
@@ -69,9 +72,10 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 		   		   
 		   api.executeFlow(env, "XPXInvokeRulesEngineAndLegacyOrderCreationService", changeOrderOutputDocument);
 		   
-		   //3. Send Order confirmation emails(Not reqd at the moment as action component is still retained
-		  // api.executeFlow(env, "XPXProcessOrdConfEmailService", inputXML);
-		           
+		   // 3. Set Web Confirmation Number In The Output Document.
+		   setWebConfInOutputDoc(changeOrderOutputDocument,inputXML);
+		   
+		   log.debug("XPXInvokeOrderPlaceActions_OutXML:" + SCXmlUtil.getString(inputXML));
 		   
 		}
 		
@@ -142,7 +146,34 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
         
 		return getCustomerDetailsOutputDoc;
 	}
-
+	
+	private void setWebConfInOutputDoc(Document changeOrderOutputDocument,Document inputXML){
+		
+		String webConfNum = null;
+		if (changeOrderOutputDocument != null) {
+			log.debug("XPXCreateSplChgLineAndWebConfNumService_OutXML:" + SCXmlUtils.getString(changeOrderOutputDocument));
+			YFCDocument custOrderDoc = YFCDocument.getDocumentFor(changeOrderOutputDocument);
+			YFCElement rootElem = custOrderDoc.getDocumentElement();
+			if (rootElem != null) {
+				YFCElement extnOrderElem = rootElem.getChildElement("Extn");
+				if (extnOrderElem != null && extnOrderElem.hasAttribute("ExtnWebConfNum")) {
+					webConfNum = extnOrderElem.getAttribute("ExtnWebConfNum");
+				}
+			}
+	    }
+		   
+		log.info("Order has been confirmed for the Web Confirmation Number: " + webConfNum);
+		   
+	    if (!YFCObject.isNull(webConfNum) && !YFCObject.isVoid(webConfNum)) {
+		   // To Set Web Confirmation Number In The Output XML.
+		   Element rootElem = inputXML.getDocumentElement();
+		   NodeList extnElemList = rootElem.getElementsByTagName("Extn");
+		   if (extnElemList != null && extnElemList.getLength() > 0) {
+			   Element extnElem = (Element) extnElemList.item(0);
+			   extnElem.setAttribute("ExtnWebConfNum", webConfNum);
+		   }
+	    }
+	}
 
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
