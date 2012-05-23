@@ -962,7 +962,7 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 					Iterator itrHold = YRCXmlUtils.getChildren(eleHolds);
 					while(itrHold.hasNext()) {
 						Element eleHold = (Element) itrHold.next();
-						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType")))){
+						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType"))) && "1100".equals(eleHold.getAttribute("Status"))){
 							needsAttention = true;
 						}
 					}
