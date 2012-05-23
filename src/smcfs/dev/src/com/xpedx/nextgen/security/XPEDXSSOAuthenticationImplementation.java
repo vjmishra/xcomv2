@@ -79,11 +79,11 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String userId = getUserId(request);
 		String actualUserId = userId;
 		String password = getPassword(request);
-		
+
 		String ldapServerURL = YFSSystem.getProperty(LDAP_SERVER_URL);
 		String ldapSchema = YFSSystem.getProperty(LDAP_SCHEMA);
 		String ldapAuthAttrName = YFSSystem.getProperty(LDAP_AUTH_ATTR_NAME);
-		
+		String contextPath = request.getContextPath();
 		String ldapAuthAttrsuffix = YFSSystem.getProperty(LDAP_AUTH_ATTR_SUFFIX);
 		if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 			userId = userId + ldapAuthAttrsuffix.trim();
@@ -93,6 +93,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String ldapAuthIsActiveDir = YFSSystem.getProperty(LDAP_AUTH_IS_ACTIVE_DIR);
 		String ldapAuthIsRequired = YFSSystem.getProperty(LDAP_AUTH_IS_REQUIRED);
 		//start of jira 3393 condition
+		if("/swc".equalsIgnoreCase(contextPath)){
 		if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
 		if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 			if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
@@ -138,6 +139,58 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
 		}
+		} 
+//JIRA 3852 starts
+		else
+		{
+			if(!YFCCommon.isVoid(ldapAuthIsRequired)){
+				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+						if (!userId.startsWith(ldapAuthAttrDomain)){
+							userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+						}
+					}
+					else {
+						if (!userId.endsWith(ldapAuthAttrDomain)){
+							userId = userId  + "@" + ldapAuthAttrDomain.trim();
+						}
+					}
+				}
+				
+				String ldapDN=null;
+				if (!YFCCommon.isVoid(ldapSchema)){
+					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+				}
+				else {
+					ldapDN=userId;
+				}
+				if (!YFCCommon.isVoid(ldapAuthAttrName)){
+					ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+				}
+				
+				
+
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+				LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+
+		        Hashtable<String, String> env = new Hashtable<String, String>();
+		        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+				env.put(Context.PROVIDER_URL, ldapServerURL);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());	
+				env.put(Context.SECURITY_CREDENTIALS, password.trim());
+
+		        DirContext ctx = new InitialDirContext(env);
+		        ctx.close();
+				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+				}
+			
+			
+		}   //JIRA 3852 ends
 //end of jira 3393 condition
 		// need this attribute set in request to avoid customer contact lookup by post authentication
 		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
