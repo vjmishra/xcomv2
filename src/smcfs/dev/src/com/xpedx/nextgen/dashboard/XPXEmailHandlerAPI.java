@@ -17,10 +17,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
@@ -72,16 +74,14 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return inXML;
 	}
 
-	public Document sendEmail(YFSEnvironment env, Document inXML)
-			throws Exception {
+	public Document sendEmail(YFSEnvironment env, Document inXML) throws Exception {
+		
+		yfcLogCatalog.info("XPXEmailHandlerAPI_InXML: "+ SCXmlUtil.getString(inXML));
+		
 		Document customerDoc= null;
-		yfcLogCatalog.info("entering XPXEmailHandlerAPI sendEmail: "
-				+ SCXmlUtil.getString(inXML));
 		api = YIFClientFactory.getInstance().getApi();
 		Element inputElement = inXML.getDocumentElement();
 
-		
-		
 		Document orderListOutput = formInputToGetCustomerOrder(env, inputElement);
 
 		NodeList orderNodeList = orderListOutput.getDocumentElement().getElementsByTagName("Order");
@@ -171,36 +171,6 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 			Element customerElem = (Element) getCustomerContactElement
 					.getElementsByTagName("Customer").item(0);
-//			Element extnCustomerElem = (Element) customerElem
-//					.getElementsByTagName("Extn").item(0);
-
-//			strExtnECSR1EmailConfirmFlag = extnCustomerElem
-//					.getAttribute("ExtnECSR1EmailConfirmFlag");
-//			yfcLogCatalog.info("strExtnECSR1EmailConfirmFlag ::"
-//					+ strExtnECSR1EmailConfirmFlag);
-//
-//			if (!strExtnECSR1EmailConfirmFlag.equalsIgnoreCase("N")) {
-//				strExtnECsr1EMailID = extnCustomerElem
-//						.getAttribute("ExtnECsr1EMailID");
-//				yfcLogCatalog.info("strExtnECsr1EMailID ::"
-//						+ strExtnECsr1EMailID);
-//				customerDoc.getDocumentElement().setAttribute(
-//						"strExtnECsr1EMailID", strExtnECsr1EMailID);
-//			}
-//
-//			strExtnECSR2EmailConfirmFlag = extnCustomerElem
-//					.getAttribute("ExtnECSR2EmailConfirmFlag");
-//			yfcLogCatalog.info("strExtnECSR2EmailConfirmFlag ::"
-//					+ strExtnECSR2EmailConfirmFlag);
-//
-//			if (!strExtnECSR2EmailConfirmFlag.equalsIgnoreCase("N")) {
-//				strExtnECsr2EMailID = extnCustomerElem
-//						.getAttribute("ExtnECsr2EMailID");
-//				yfcLogCatalog.info("strExtnECsr2EMailID ::"
-//						+ strExtnECsr2EMailID);
-//				customerDoc.getDocumentElement().setAttribute(
-//						"strExtnECsr2EMailID", strExtnECsr2EMailID);
-//			}
 
 			String strCustomerAdminEmailList = "";
 			/** Added by Arun Sekhar on 14-April-2011 for Email templates **/
@@ -299,10 +269,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				extnElement.setAttribute("ExtnAddnlEmailAddr",
 						addlnEmailAddresses);
 			}
-			yfcLogCatalog.info("customerDoc ::"
-					+ SCXmlUtil.getString(customerDoc));
-			yfcLogCatalog.info("Exit sendEmail");
-
+			yfcLogCatalog.info("XPXEmailHandlerAPI_OutXML:"+ SCXmlUtil.getString(customerDoc));
 		} // End of if loop if Customer Contact list doc is empty.
 		return customerDoc;
 	}
@@ -435,7 +402,6 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 		legacyOnCustomer(env, customerDoc, legacyMap,UOMDesriptionMap);
 	}
-	
 
 	private void legacyOnCustomer(YFSEnvironment env, Document customerDoc,
 			HashMap<String, String> legacyMap,Map<String,String>UOMDesriptionMap) throws YFSException, RemoteException {
@@ -446,13 +412,12 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String[] valueArray =  new String[5];
 		String[] unique = null ;
 		HashSet<String> hs = new HashSet<String>();
-
+		
 		
 		/** Added by Arun Sekhar on 31-March-2011 for Email Template **/
 		String value = null;
 		String extnGenerationNo = null;
 		/**************************************************************/
-		
 
 		//Generation number and Division number logic to form order number
 		//Similar to logic implemented in XPEDX Order Details Of WC
@@ -492,15 +457,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
 			if (null != customerDivision
-
 					&& !"".equalsIgnoreCase(customerDivision.trim())
-
 					&& null != legacyOrderNo
-
 					&& !"".equalsIgnoreCase(legacyOrderNo.trim())
-
 					&& null != extnGenerationNo
-
 					&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
 
 					hs.add(orderNo.concat(customerDivision).concat("-")
@@ -629,7 +589,6 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		
 		yfcLogCatalog.info("customerDoc after legacyOnCustomer(): "
 				+ SCXmlUtil.getString(customerDoc));
-		
 	}
 	
 	/** Added by Arun Sekhar on 13-April-2011 for Email templates **/
@@ -688,111 +647,42 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return legacyMap;
 	}
 
-	/*
-	 * private String getLegacyOrders(YFSEnvironment env, Document customerDoc)
-	 * throws YFSException, RemoteException { boolean check = false; String
-	 * sendmail = "N"; Element customerElement =
-	 * customerDoc.getDocumentElement(); //get the legacy orders for the
-	 * customer order Document inputOrderDoc =
-	 * SCXmlUtil.createDocument("Order"); Element inputOrderElement =
-	 * inputOrderDoc.getDocumentElement(); Element extnElement =
-	 * inputOrderDoc.createElement("Extn");
-	 * extnElement.setAttribute("ExtnWebConfNum",
-	 * SCXmlUtil.getXpathAttribute(customerElement, "./Extn/@ExtnWebConfNum"));
-	 * inputOrderElement.appendChild(extnElement);
-	 * env.setApiTemplate("getOrderList", getOrderListTemplate); Document
-	 * orderListDoc = api.invoke(env, "getOrderList", inputOrderDoc);
-	 * env.clearApiTemplate("getOrderList"); NodeList orderNodeList =
-	 * orderListDoc.getElementsByTagName("Order"); int orderLength =
-	 * orderNodeList.getLength(); if(orderLength != 0) { for(int counter = 1;
-	 * counter<orderLength;counter++) { Element orderElement =
-	 * (Element)orderNodeList.item(counter); //check if the lines are processed
-	 * check = checkForAllLinesProcessed(env,orderElement); if(check) { sendmail
-	 * = "N"; break; } else { sendmail = "Y"; }
-	 * 
-	 * } }
-	 * 
-	 * return sendmail; }
-	 */
+	private Document formInputToGetCustomerOrder(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
 
-	/*
-	 * private boolean checkForAllLinesProcessed(YFSEnvironment env, Element
-	 * orderElement) { String lineStatus = ""; boolean check = false; NodeList
-	 * orderLineList = orderElement.getElementsByTagName("OrderLine"); int
-	 * orderLineLength = orderLineList.getLength(); if(orderLineLength != 0) {
-	 * for(int counter = 0;counter<orderLineLength;counter++) { Element
-	 * orderLineElement = (Element)orderLineList.item(counter); lineStatus =
-	 * SCXmlUtil.getXpathAttribute(orderLineElement,
-	 * "./Extn/@ExtnLineStatusCode"); if(YFCCommon.isVoid(lineStatus)) { check =
-	 * true; break; } }
-	 * 
-	 * } return check; }
-	 */
-
-	private Document formInputToGetCustomerOrder(YFSEnvironment env,
-			Element inputElement) throws YFSException, RemoteException {
-
-		yfcLogCatalog.info("entering formInputToGetCustomerOrder ");
-		Document outDoc = null;
-		Document orderListDoc = null;
+		yfcLogCatalog.info("XPXEmailHandlerAPI_formInputToGetCustomerOrder():" + SCXmlUtil.getString(inputElement));
+		
 		Document inputOrderDoc = SCXmlUtil.createDocument("Order");
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		Element extnElement = inputOrderDoc.createElement("Extn");
-		// retrieve WebConfirmationNumber fromt txnobject
-		String strWebConfirmationNumber = (String) env
-				.getTxnObject("WebConfirmationNumber");
-						
+		
+		// To Get WebConfirmation Number
+		String strWebConfirmationNumber = null;
+		YFCDocument inDoc = YFCDocument.getDocumentFor(inputElement.getOwnerDocument());
+		YFCElement rootElem = inDoc.getDocumentElement();
+		if (rootElem != null) {
+			YFCElement extnElem = rootElem.getChildElement("Extn");
+			if (extnElem != null && extnElem.hasAttribute("ExtnWebConfNum")) {
+				strWebConfirmationNumber = extnElem.getAttribute("ExtnWebConfNum");
+			}
+		}		
 		
 		if(yfcLogCatalog.isDebugEnabled()){
-		yfcLogCatalog.debug("strWebConfirmationNumber :"+strWebConfirmationNumber);
-		}
-		if (strWebConfirmationNumber == null
-				|| strWebConfirmationNumber.isEmpty()) {
-			strWebConfirmationNumber = SCXmlUtil.getXpathAttribute(
-					inputElement, "./Extn/@ExtnWebConfNum");
+			yfcLogCatalog.debug("strWebConfirmationNumber :"+strWebConfirmationNumber);
 		}
 		
-		if (strWebConfirmationNumber != null
-				&& !strWebConfirmationNumber.isEmpty()) {
-
-			// extnElement.setAttribute("ExtnWebConfNum",
-			// SCXmlUtil.getXpathAttribute(inputElement,
-			// "./Extn/@ExtnWebConfNum"));
-
-			extnElement
-					.setAttribute("ExtnWebConfNum", strWebConfirmationNumber);
-			inputOrderElement.appendChild(extnElement);
-			env.setApiTemplate("getOrderList", getOrderListTemplate);
-			yfcLogCatalog.info("inputOrderDoc ::"
-					+ SCXmlUtil.getString(inputOrderDoc));
-			yfcLogCatalog.info("api invoked getOrderList");
-			orderListDoc = api.invoke(env, "getOrderList",
-					inputOrderDoc);
-			yfcLogCatalog.debug("api outdoc "
-					+ SCXmlUtil.getString(orderListDoc));
-			env.clearApiTemplate("getOrderList");
-		
-			/*NodeList orderNodeList = orderListDoc.getElementsByTagName("Order");
-			int orderLength = orderNodeList.getLength();
-			if (orderLength != 0) {
-				Element orderElement = (Element) orderNodeList.item(0);
-				outDoc = YFCDocument.createDocument().getDocument();
-				outDoc.appendChild(outDoc.importNode(orderElement, true));
-				outDoc.renameNode(outDoc.getDocumentElement(),
-						outDoc.getNamespaceURI(), "Order");
-
-			}// if(orderLength != 0)
-*/		} else {
-			//
-
-			YFSException emptyWebConfEx = new YFSException(
-					"WebConfirmationNumber is Null or Empty",
-					"YFSWEBConfNullOrEmpty",
-					"WebConfirmationNumber is Null or Empty");
+		if (YFCObject.isNull(strWebConfirmationNumber) || YFCObject.isVoid(strWebConfirmationNumber)) {
+			YFSException emptyWebConfEx = new YFSException("WebConfirmationNumber is Null or Empty","YFSWEBConfNullOrEmpty","WebConfirmationNumber is Null or Empty");
 			throw emptyWebConfEx;
-
 		}
-
+		
+		extnElement.setAttribute("ExtnWebConfNum", strWebConfirmationNumber);
+		inputOrderElement.appendChild(extnElement);
+		env.setApiTemplate("getOrderList", getOrderListTemplate);
+		yfcLogCatalog.info("getOrderList_InXML :"+ SCXmlUtil.getString(inputOrderDoc));
+		Document orderListDoc = api.invoke(env, "getOrderList",inputOrderDoc);
+		yfcLogCatalog.debug("getOrderList_OutXML :"+ SCXmlUtil.getString(orderListDoc));
+		env.clearApiTemplate("getOrderList");
+		
 		return orderListDoc;
 	}
 	
