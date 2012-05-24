@@ -1163,30 +1163,28 @@ from session . We have customer Contact Object in session .
 						<s:hidden name="orderLineKeyLists" id="orderLineKeyLists_%{#orderLineKey}" value="%{#orderLineKey}" /> 
 						
 						<!-- PURMA check if condition... not working? -->
-						<s:if test='%{#inventoryChk !="Y"}'>
+						
 							<tr>
 								<td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
 							</tr>
 							<tr>
 								<td colspan="2" style="text-align:right;"> 
-								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-									<s:set name="itemID3" value='#item.getAttribute("ItemID")' />
-									<s:iterator value="inventoryIndicatorMap" id="inventoryIndicatorMap" status="status" >
-										<s:property value='#key'/>
+								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>									
+									<s:iterator value="inventoryIndicatorMap" id="inventoryIndicatorMap" status="status" >										
 										<s:set name="inventoryChk" value="value" />
-										<s:set name="itemID1" value="key" />
-									<s:if test='#itemID1 == #itemID3'>
-										<s:if test='%{#inventoryChk !="Y"}'>
-											<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-										</s:if>
-									</s:if>	 
+										<s:set name="itemId" value="key" />
+										<s:if test='#item.getAttribute("ItemID") == #itemId'>	
+											<s:if test='%{#inventoryChk !="Y"}'>
+												<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+											</s:if>
+										</s:if>	 
 									</s:iterator>
 								</s:if>
 								</td>
 								<td></td>
 								<td></td>
 							</tr>
-						</s:if>
+						
 						
 						</tbody>
 				 	</table>
