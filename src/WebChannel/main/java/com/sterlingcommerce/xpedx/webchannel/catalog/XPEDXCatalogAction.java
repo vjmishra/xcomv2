@@ -437,9 +437,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			for (String searchStringToken : searchStringTokenList) {
-				valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken);
+				if(!"".equals(searchStringToken.trim())) {
+					valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
 				valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
 				i++;
+				}			
 			}
 		}					
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
