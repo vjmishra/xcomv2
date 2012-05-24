@@ -138,12 +138,14 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         DirContext ctx = new InitialDirContext(env);
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		}
 		} 
 //JIRA 3852 starts
 		else
 		{
-			if(!YFCCommon.isVoid(ldapAuthIsRequired)){
+			System.out.println("COM Logging");
+			
 				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
 						if (!userId.startsWith(ldapAuthAttrDomain)){
@@ -187,13 +189,12 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		        DirContext ctx = new InitialDirContext(env);
 		        ctx.close();
 				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-				}
-			
-			
+				request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
+				
 		}   //JIRA 3852 ends
 //end of jira 3393 condition
 		// need this attribute set in request to avoid customer contact lookup by post authentication
-		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
+		
 		String userName = (String)request.getAttribute("loggedInUserName");
 		//SRSalesRepEmailID added for jira 3438
 		String SRemailID = (String)request.getAttribute("SRSalesRepEmailID");
