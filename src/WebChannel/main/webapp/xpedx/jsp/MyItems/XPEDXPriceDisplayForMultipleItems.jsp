@@ -141,7 +141,7 @@
 						<td class="left" width="30%"><strong><s:property value="#jsonUOMDesc" /></strong></td>
 					</tr>
 					<tr>
-						<td>Next Day:</td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Next Day:</td>
 						<td class="right"> 
 						<s:if test='%{#jsonNextDay != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />  -->
@@ -156,7 +156,7 @@
 						<td class="left" ><%--<s:property value="#jsonUOMDesc" />--%></td>
 					</tr>
 					<tr>
-						<td>2+ Days: </td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2+ Days: </td>
 						<td class="right">
 						<s:if test='%{#jsonTwoPlus != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />  -->
