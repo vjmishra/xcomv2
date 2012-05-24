@@ -61,10 +61,10 @@
 
 <script  type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTabbedPanels.js"></script>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' /><s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/user.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/profile.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/address/editableAddress.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/verifyAddress.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/user.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />

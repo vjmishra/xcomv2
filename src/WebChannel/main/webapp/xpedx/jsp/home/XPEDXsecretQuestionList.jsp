@@ -78,7 +78,7 @@
     }
 </script>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/home/forgotPassword.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/home/forgotPassword.js"></script>
 
 <!-- <title>Forgot Password</title> -->
 <title><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.TABTITLE"/></title>

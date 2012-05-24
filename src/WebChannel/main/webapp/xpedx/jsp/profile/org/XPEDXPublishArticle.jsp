@@ -17,7 +17,7 @@
   <title><s:property value="wCContext.storefrontId" /> - <s:text name="my.Account.page"/></title>
   <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
   <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/common/notes-list.css" />
-  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/userPreferences.js"></script>
+  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/userPreferences.js"></script>
 </head>
     <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
     <s:set name='xmlUtils' value="#_action.getXMLUtils()" />

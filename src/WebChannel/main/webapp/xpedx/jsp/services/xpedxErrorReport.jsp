@@ -102,7 +102,7 @@
 <!-- <title>xpedx /  Reporting Error Page</title> -->
 <title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.REPTERR.GENERIC.TABTITLE" /> </title>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/jQuery.js"></script>  
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jQuery.js"></script>  
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>

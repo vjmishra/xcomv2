@@ -33,9 +33,9 @@
 	</s:else>
 	</title>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/order-address.css" />
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/order.js" ></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js" ></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/orderAddress.js" ></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order.js" ></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/verifyAddress.js" ></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAddress.js" ></script>
 </head>
 <body>
 

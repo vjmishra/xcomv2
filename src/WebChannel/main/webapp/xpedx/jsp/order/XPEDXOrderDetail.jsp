@@ -1657,10 +1657,10 @@ function displayLineAdjustments(panelId, lineKey) {
 	}
 </script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/order.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/approval.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/email.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/orderAdjustment.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/approval.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/email.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAdjustment.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jQuery.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>

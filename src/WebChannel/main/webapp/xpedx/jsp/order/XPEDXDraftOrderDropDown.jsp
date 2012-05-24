@@ -10,7 +10,7 @@
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/draft-order-list.css" />
 
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/order/draftOrderList.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/draftOrderList.js"></script>
 <script type="text/javascript">
 function loadCartDetails(){
 	document.doddForm.OrderHeaderKey.value = document.doddForm.draftOrders.value;

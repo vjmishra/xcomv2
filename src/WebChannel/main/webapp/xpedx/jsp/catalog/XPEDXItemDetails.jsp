@@ -1307,9 +1307,9 @@ function SubmitActionWithValidation()
 		</s:else> <s:if
 			test='%{#hasItemLargeImages != null && #hasItemLargeImages == "true"}'>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/component/lightbox.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox.js"></script>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/commonutils.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils.js"></script>
 			<script>
         	Ext.ux.Lightbox.register('a.imageViewer', true); // true to show them as a set
         	</script>

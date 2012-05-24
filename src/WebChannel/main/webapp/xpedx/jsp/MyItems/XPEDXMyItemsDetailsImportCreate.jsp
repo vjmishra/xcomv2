@@ -20,12 +20,12 @@
 				 attrPickerActions[2] = '<s:url action="attributemanagement-getAttributeGroupListForGroup" namespace="/catalog" escapeAmp="false" includeParams="none" />';
                
        </script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/advancedSearch.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/swcxmltreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/sbctreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/itemattrtreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attrtreepanel.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attributeutils.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/advancedSearch.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/swcxmltreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/sbctreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/itemattrtreeloader.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attrtreepanel.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attributeutils.js"></script>
         <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
 		    This is to avoid a defect in Struts that�s creating contention under load. 
 		    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>
