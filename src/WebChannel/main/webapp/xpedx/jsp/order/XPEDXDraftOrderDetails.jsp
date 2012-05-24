@@ -318,8 +318,7 @@ $(document).ready(function(){
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. (Looks like substring is ignoring the spaces.)
 		 */
-		 //mil-wrap-condensed-desc item-short-desc
-			/* Begin long desc. shortener */
+			/* Begin Short desc. shortener */
 			//mil-wrap-condensed-desc item-short-desc
 			// $('.mil-desc-wrap mil-wrap-condensed-desc item-short-desc short-description').each(function() { 
 			 $('.short-description').each(function() { 
@@ -332,6 +331,32 @@ $(document).ready(function(){
 					$(this).attr('title', html );
 				}
 		});
+			 /* End Short desc. shortener */
+			 
+				/* Begin Long desc. shortener */
+				$('.mil-desc-attribute-list ul li').each(function() {
+					var html = $(this).html();
+					var shortHTML = html.substring(0, 50);
+					if( html.length > shortHTML.length )
+					{
+						$(this).html(shortHTML);
+						$(this).append('...');	
+						$(this).attr('title', html );
+					}
+				});
+				
+				$('.prodlist ul li, #prodlist ul li').each(function() {
+					var html = $(this).html();
+					var shortHTML = html.substring(0, 50);
+					if( html.length > shortHTML.length )
+					{
+						$(this).html(shortHTML);
+						$(this).append('...');	
+						$(this).attr('title', html );
+					}
+				});
+				/* end Long desc. shortener */
+			/* End Jira 3318 changes */
 });
 </script>
 
@@ -693,14 +718,14 @@ $(document).ready(function(){
 		My Cart:&nbsp;
 		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
 			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
-        	Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
+        	 Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
         </s:if>
         <s:else>
         	Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/>
         </s:else>
 	</s:if>
 	<s:else>
-					<s:property value='#orderDetails.getAttribute("OrderName")' />
+			 	<s:property value='#orderDetails.getAttribute("OrderName")' />
 		</s:else>
 	</s:if>
 	<s:else>
@@ -2219,9 +2244,10 @@ var currentAadd2ItemList = new Object();
 	<s:set name='altItemList' value='value' />
 	
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
-	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
+	  <%-- <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2> --%> <%-- key contains the original itemId --%>
+	  <h2><s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
 	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
-<%-- 		<script type="text/javascript">
+		<script type="text/javascript">
 		Ext.onReady(function(){		
 
 			/* Begin long desc. shortener */
@@ -2236,7 +2262,7 @@ var currentAadd2ItemList = new Object();
 				}
 			});
 		});
-		</script> --%>
+		</script> 
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
 		<!--  hide in case of one item  -->
@@ -2309,6 +2335,7 @@ var currentAadd2ItemList = new Object();
 					    </ul>
 					    
 					    <%-- key contains the original itemId --%>
+					    <!--  <s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> -->
 					    <%-- 
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p>  --%>
