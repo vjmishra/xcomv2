@@ -1535,13 +1535,13 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
  			},
  			'autoDimensions' : false,
 
- 			'width' : '49.4%',
+ 			'width' : '50%',
 
  			'scrolling' : 'auto',
 
  			'autoscale' : true,
 
- 			'height' : '74%'
+ 			'height' : '90%'
 
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
