@@ -462,7 +462,7 @@ function shortenItemDescriptions()
 		 */
 			$('.prodlist ul li, #prodlist ul li ').each(function() {
 				var html = $(this).html();
-				var shortHTML = html.substring(0, 200);
+				var shortHTML = html.substring(0, 65);
 				if( html.length > shortHTML.length )
 				{
 					$(this).html(shortHTML);
