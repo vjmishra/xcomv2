@@ -195,9 +195,12 @@
 			</div> 		
 			<!-- Header promotion End-->
 
-
-			<div class="catalog-ad"><div class="ad-float smallBody" style="float: none;">
-			<img class="float-left" height="4" width="7" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" style="margin-top: 5px; padding-right: 5px;">advertisement</div>
+            <div align="left" style="padding-right: 15px;">
+			
+			<div class="catalog-ad">
+			<div class="ad-float smallBody" style="float: none;"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" alt="" class="float-left" /> advertisement</div>
+			
+			
 				<!-- Ad Juggler Tag Starts -->
 				<s:set name='ad_keyword' value='' />
 				<s:set name='firstItem1' value='%{firstItem}' />
@@ -290,7 +293,9 @@
 			
 			
 			</div>
+			
 			<div class="clearall">&nbsp;</div>
+			</div>
 
 		
 	</div>		
@@ -704,8 +709,8 @@ return new Ext.XTemplate(
    '</div>',
   </s:if>
   '</td>','</tr>',
-  '<tr>',<s:if test='!#guestUser'>'<td style="height:auto;"></td>','<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
-  <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
+  '<tr>',<s:if test='!#guestUser'>'<td style="height:auto;"></td>','<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>'</s:if>,'<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+  //<s:if test='!#guestUser'>'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
   '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
   '</table>',
   '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',
