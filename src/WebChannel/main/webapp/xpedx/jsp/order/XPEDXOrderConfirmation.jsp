@@ -238,7 +238,7 @@
 						<span class="page-title">Confirmation</span>
 <%-- 							<a href="<s:url action="portalHome" namespace="/home" includeParams='none'/>">Orders</a> / <span class="breadcrumb-inactive">Order Confirmation: <span class="breadcrumb-alert"></span>Success</span> --%>
 						</s:else>
-                	<a href="javascript:window.print()')"  class="underlink"><span class="print-ico-xpedx order-confirm" ><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>
+                	    <a href="javascript:window.print()"><span class="print-ico-xpedx order-confirm underlink" ><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>
 <%--                     <a href="javascript:emailLightBox('<s:property value="%{urlEmail}" />')" class="underlink"><span class="print-ico-xpedx order-confirm"><img width="16" height="15" alt="Print This Page" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/email-icon.gif">Email Page</span></a> --%>
 					<br/>
 					<br/>
