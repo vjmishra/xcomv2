@@ -336,7 +336,7 @@ $(document).ready(function(){
 				/* Begin Long desc. shortener */
 				$('.mil-desc-attribute-list ul li').each(function() {
 					var html = $(this).html();
-					var shortHTML = html.substring(0, 50);
+					var shortHTML = html.substring(0, 40);
 					if( html.length > shortHTML.length )
 					{
 						$(this).html(shortHTML);
@@ -347,7 +347,7 @@ $(document).ready(function(){
 				
 				$('.prodlist ul li, #prodlist ul li').each(function() {
 					var html = $(this).html();
-					var shortHTML = html.substring(0, 50);
+					var shortHTML = html.substring(0, 40);
 					if( html.length > shortHTML.length )
 					{
 						$(this).html(shortHTML);
