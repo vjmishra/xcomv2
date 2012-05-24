@@ -45,7 +45,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable.js"></script>
     <link media="all" type="text/css" rel="stylesheet"
     	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
-    <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/userList.js'/>"></script>
+    <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/userList.js'/>"></script>
     <SCRIPT type="text/javascript">
     function callAjaxForSorting(url,divId)
 {

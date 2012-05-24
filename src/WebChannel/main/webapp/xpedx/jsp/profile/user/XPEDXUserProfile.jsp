@@ -65,11 +65,11 @@
 <script type="text/javascript"
 	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/profile.js"></script>
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/editableAddress.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/address/editableAddress.js"></script>
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/verifyAddress.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/verifyAddress.js"></script>
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/user/user.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/user.js"></script>
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->

@@ -10,7 +10,7 @@ com.sterlingcommerce.webchannel.common.address.GetAddressBookAction.java.
 */
 %>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/address/addressBook.js" ></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/address/addressBook.js" ></script>
 <script type="text/javascript" language="JavaScript">
 
 var <s:property value="addressArrayName"/> = new Array();

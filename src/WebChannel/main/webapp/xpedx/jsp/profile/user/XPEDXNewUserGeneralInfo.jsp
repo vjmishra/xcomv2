@@ -22,7 +22,7 @@
 <link media="all" type="text/css" rel="stylesheet"
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/profile/profile.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/profile.js"></script>
 </head>
 <body>
 <s:set name='xmlUtil' value="#_action.getXMLUtils()" />

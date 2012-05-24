@@ -37,12 +37,12 @@
 
 <%-- <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/itemdetails.js"></script> --%>
 <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/XPEDXItemdetails.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/advancedSearch.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/swcxmltreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/sbctreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/itemattrtreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attrtreepanel.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attributeutils.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/advancedSearch.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/swcxmltreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/sbctreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/itemattrtreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attrtreepanel.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attributeutils.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
 
 
