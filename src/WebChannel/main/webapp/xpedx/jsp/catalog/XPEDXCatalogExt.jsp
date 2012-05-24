@@ -794,11 +794,11 @@ return new Ext.XTemplate(
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
    <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" title="Mill / Mfg. Item">M</td>',</s:if>
-  '<td class="Item-hname"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
+  '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
+  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname" style="min-width:45px;"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
@@ -807,14 +807,14 @@ return new Ext.XTemplate(
   <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
   <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
-  <s:if test='!#isReadOnly && !#guestUser'>'<td class="no border table-header-bar-right lprice-hname">List Price</td>',</s:if>
+  <s:if test='!#isReadOnly && !#guestUser'>'<td class="no border table-header-bar-right lprice-hname" style="width:120px;">List Price</td>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'>//	'<td class="no border table-header-bar-right sorttable_nosort" align="center">Action</td>',</s:if>
   '</tr>','</thead>',
   '<tpl for=".">','<tbody>',
   '<tpl for="items">',
    '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
 	  '<span class="ddesc desc-hname">{name}</span></a>','</td>',
-      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td>'+
+      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;">'+
       '<a  id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
       <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname">{size}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
@@ -827,8 +827,8 @@ return new Ext.XTemplate(
       <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname">{form}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname">{gauge}</td>',</s:if>   
 	  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname">{vendorNumber}</td>',</s:if>
-      <s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname" style="margin-left:0px; padding: 5px 5px 25px 10px;">{cert}</td>',</s:if>
-	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname">{listprice}</td>',</s:if>
+      <s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname" style="margin-left:0px; padding: 2px 5px 25px 10px;">{cert}</td>',</s:if>
+	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname" style="width:120px;">1 CTN-999999.73</td>',</s:if>
     '</tr>',
   '</tpl>','</tbody>','</table>','</tpl>',
 '</div>');
