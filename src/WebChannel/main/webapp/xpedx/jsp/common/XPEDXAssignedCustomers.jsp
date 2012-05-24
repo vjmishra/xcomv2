@@ -90,7 +90,7 @@
     	<s:if test="#defaultShipTo != null">
     		<div class="ship-to-top-left" style="margin-left:0px;">
     		<div style="font-weight:bold;font-size:12px;" class="black">Currently Shopping For:</div>
-			<table valign="top" align="left">
+			<table valign="top" align="left" style="font-weight:normal;font-size:12px;" class="black">
 				<tr>
 					<td width="33%" valign="top"><s:property
 						value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#currentShipTo.getCustomerID())" /></td>
@@ -146,7 +146,7 @@
 		
 		<div style="font-weight:bold;font-size:12px;" class="black">Preferred Ship-To:</div>
 <s:if test="#defaultShipTo != null">		
-		<table valign="top" align="left">
+		<table valign="top" align="left" style="font-weight:normal;font-size:12px;" class="black">
 			<tr>
 				<td width="33%" valign="top">
 				<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(getDefualtShipToAssigned().getCustomerID())"/>
@@ -226,7 +226,7 @@
         
         
     <!-- START main body (with scroll bar) -->
-    <div class="paginationContainer" style="float: right;"><!-- pagination control -->
+    <div class="paginationContainer" style="float: right;margin-right:10px;"><!-- pagination control -->
     <span class="bold">
      	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;
 		<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" 
@@ -257,7 +257,7 @@
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
 		<s:set name='orgName' value="#shipToAddress.getOrganizationName()"/>
 		<li class="ship-to-list">	
-		<table>
+		<table style="font-weight:normal;font-size:12px;" class="black">
 			<tr>
 				<td>&nbsp;</td>
 				<td><s:radio list="#{customerID:customerID}" 
@@ -337,7 +337,7 @@
 </div>
 
 <div class="tool-bar-bottom">
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-180px;float:right">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-171px;float:right">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 	<li>
