@@ -1234,6 +1234,9 @@ var selectedShipCustomer = null;
   	  	while(searchRes.indexOf("\"")!= -1){
   	  	searchRes = searchRes.replace("\"", "");    	  
   	 	}
+  	  	while(searchRes.indexOf("*")!= -1){
+   	  		searchRes = searchRes.replace("*", " ");    	  
+   	 	}
   	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
   	}
   }	
@@ -1242,6 +1245,9 @@ var selectedShipCustomer = null;
 	 	var searchText = document.getElementById("newSearch_searchTerm").value;
 	 	while(searchText.indexOf("\"")!= -1){
     	 	searchText = searchText.replace("\"", "");    	  
+	 	}
+	 	while(searchText.indexOf("*")!= -1){
+    	 	searchText = searchText.replace("*", " ");    	  
 	 	}
 	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
 }
