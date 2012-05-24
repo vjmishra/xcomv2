@@ -1974,7 +1974,7 @@
 				<ItemList Currency="" >
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
-							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" />
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation=""/>
 						<ComputedPrice UnitPrice=""/>
 						<AssetList>
 							<Asset/>					
