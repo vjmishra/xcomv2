@@ -828,7 +828,7 @@ return new Ext.XTemplate(
       <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname">{gauge}</td>',</s:if>   
 	  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname">{vendorNumber}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname" style="margin-left:0px; padding: 2px 5px 25px 10px;">{cert}</td>',</s:if>
-	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname" style="width:120px;">1 CTN-999999.73</td>',</s:if>
+	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname" style="width:120px;">{listprice}</td>',</s:if>
     '</tr>',
   '</tpl>','</tbody>','</table>','</tpl>',
 '</div>');
