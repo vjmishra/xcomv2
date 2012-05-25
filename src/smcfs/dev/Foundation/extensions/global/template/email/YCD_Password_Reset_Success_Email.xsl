@@ -145,7 +145,7 @@
 		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
 		<p>Your initial password is: <b><xsl:value-of select="/User/User/@GeneratedPassword" /></b></p>
 		<p>
-			Please reset your password the next time you sign into <a><xsl:attribute name="href">http://www.<xsl:value-of select="$Brand"/>.com/<xsl:value-of select="$Brand"/></xsl:attribute>
+			Please reset your password the next time you sign into <a><xsl:attribute name="href">http://www.<xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
 			http://www.<xsl:value-of select="$Brand"/>.com/order</a>.
 		</p>
