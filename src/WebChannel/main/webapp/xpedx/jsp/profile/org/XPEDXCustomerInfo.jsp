@@ -18,6 +18,7 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='wcUtil' />
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- begin styles. -->
 
 <!--[if IE]>
