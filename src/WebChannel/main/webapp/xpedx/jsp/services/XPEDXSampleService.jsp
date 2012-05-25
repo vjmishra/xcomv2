@@ -18,13 +18,11 @@
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/RESOURCES.css" />
-
-<link rel="stylesheet" type="text/css"
-	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
-<![endif]-->
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+	<![endif]-->
 
+<!-- javascript -->
 
 <script type="text/javascript">
 	var attrPickerActions  = new Array(3);
@@ -37,13 +35,47 @@
 
 <%-- <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/itemdetails.js"></script> --%>
 <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/XPEDXItemdetails.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/advancedSearch.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/swcxmltreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/sbctreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/itemattrtreeloader.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attrtreepanel.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attributeutils.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/advancedSearch.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/swcxmltreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/sbctreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/itemattrtreeloader.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attrtreepanel.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/sbc/picker/attributeutils.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script><!-- javascript --> 
+
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
+
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
+<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js"></script> 
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script> 
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script> 
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script> 
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script> 
+<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
+
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script> 
+<link rel="stylesheet" type="text/css"
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+    
+
+<!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js" language="javascript"></script> 
+
+<link href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+
+
+
 
 
 <script type="text/javascript">
@@ -662,45 +694,6 @@
 <!-- End of Original Code -->
 
 
-<!-- javascript -->
-
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
-<script type="text/javascript"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx-new-ui.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
-
-<!-- Facy Box (Lightbox/Modal Window -->
-
-<!-- Facy Box (Lightbox/Modal Window -->
-<script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
-
-<link href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
-<script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-<!--[if IE]> -->
-
-
-<!-- [endif] -->
-
-<%-- <script type="text/javascript" src="../../xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
- --%>
 <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTabbedPanels.js" type="text/javascript"></script>
 <script type="text/javascript" 
 	src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js'> </script>
