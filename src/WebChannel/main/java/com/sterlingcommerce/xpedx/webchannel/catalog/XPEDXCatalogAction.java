@@ -487,6 +487,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String newSearch() {
+		try{
 		init();
 		setCustomerNumber();
 		String returnString = super.newSearch();
@@ -549,7 +550,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 	/****End of Code Changed for Promotions JIra 2599 *******/
 		
 
-	}		
+	}	
+		}catch(Exception exception){
+			//Not throwing any exception as it gives exception for JIRA 3705
+			log.info("Error while refeshing catalog cache in method newSearch", exception);
+			log.error("Error while refeshing catalog cache in method newSearch", exception);
+		}	
 		return SUCCESS;
 	}
 
@@ -605,6 +611,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String navigate() {
+		try{
 		init();		
 		if(!YFCCommon.isVoid(draft) && "N".equals(draft))
 		{
@@ -655,6 +662,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setColumnListForUI();
 			//prepareMyItemListList();
 			getSortFieldDocument();
+		}
+		}catch(Exception exception){
+			//Not throwing any exception as it gives exception for JIRA 3705
+			log.info("Error while refeshing catalog cache in method navigate", exception);
+			log.error("Error while refeshing catalog cache in method navigate", exception);
 		}
 		return SUCCESS;
 	}
