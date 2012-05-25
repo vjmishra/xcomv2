@@ -273,6 +273,32 @@ function setTotalPrice(val){
 		'transitionOut' : 'none',
 		//added for clearing the copycart name and copycartdescription fields							
 	});
+	
+	
+	/* Begin Short desc. shortener */
+	  $('.short-description chkout, #short-description chkout').each(function() { 
+		var html = $(this).html();
+		var shortHTML = html.substring(0, 70); 
+		if( html.length > shortHTML.length )
+		{
+			$(this).html(shortHTML);
+			$(this).append('...');	
+			$(this).attr('title', html );
+		}
+	});
+	
+	/* Begin Long desc. shortener */
+	$('.prodlist ul li, #prodlist ul li').each(function() {
+		var html = $(this).html();
+		var shortHTML = html.substring(0, 40);
+		if( html.length > shortHTML.length )
+		{
+			$(this).html(shortHTML);
+			$(this).append('...');	
+			$(this).attr('title', html );
+		}
+	});
+	
 
 $('#po_combo_input').attr("maxlength","22");
 $('#po_combo_input').attr("name","po_combo_input");
@@ -890,8 +916,8 @@ from session . We have customer Contact Object in session .
                 <!-- begin description  -->
                <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
                 <div class="mil-desc-wrap">
-                    <div id="description-text" class="short-description" class="mil-wrap-condensed-desc item-short-desc">
-                       	  
+                     <div id="description-text" class="short-description chkout" > 
+	  	  
                     
                         <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
 						<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
@@ -905,7 +931,7 @@ from session . We have customer Contact Object in session .
 	                <div class="mil-attr-wrap">
 	                    <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
 							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
-								<ul class="mil-desc-attribute-list">
+								<ul class="prodlist">
 									<s:property	value='%{#item.getAttribute("ItemDesc")}' escape="false" />
 								</ul>
 							</s:if>						
@@ -928,7 +954,7 @@ from session . We have customer Contact Object in session .
 	                <div class="mil-attr-wrap">
 	                	<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 							<s:if test='#item.getAttribute("ItemShortDesc") != ""'>
-								<ul class="mil-desc-attribute-list">
+								<ul class="prodlist">
 									<s:property	value='%{#item.getAttribute("ItemDesc")}' escape="false" />
 								</ul>
 							</s:if>
@@ -1162,7 +1188,6 @@ from session . We have customer Contact Object in session .
 						<s:hidden name="itemId" id="itemId_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
 						<s:hidden name="orderLineKeyLists" id="orderLineKeyLists_%{#orderLineKey}" value="%{#orderLineKey}" /> 
 						
-						<!-- PURMA check if condition... not working? -->
 						
 							<tr>
 								<td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
@@ -1207,42 +1232,7 @@ from session . We have customer Contact Object in session .
 						<script type="text/javascript">
 								 Ext.onReady(function(){
 				                        	          		 
-										/* Begin Short desc. shortener */
-										$('.short-description').each(function() {
-											var html = $(this).html();
-											var shortHTML = html.substring(0, 90);
-											if( html.length > shortHTML.length )
-											{
-												$(this).html(shortHTML);
-												$(this).append('...');	
-												$(this).attr('title', html );
-											}
-										});
-										
-										/* Begin long desc. shortener */
-										
-									$('.mil-desc-attribute-list ul li, #mil-desc-attribute-list ul li').each(function() {
-											var html = $(this).html();
-											var shortHTML = html.substring(0, 30);
-											if( html.length > shortHTML.length )
-											{
-												$(this).html(shortHTML);
-												$(this).append('...');	
-												$(this).attr('title', html );
-											}
-										});
-										
-										$('.prodlist ul li, #prodlist ul li').each(function() {
-											var html = $(this).html();
-											var shortHTML = html.substring(0, 35);
-											if( html.length > shortHTML.length )
-											{
-												$(this).html(shortHTML);
-												$(this).append('...');	
-												$(this).attr('title', html );
-											}
-										});
-										
+																			
 										new Ext.ToolTip({        
 				                    			  	 target: 'tip_${orderLineKey}',
 													 anchor: 'left',
@@ -1250,7 +1240,9 @@ from session . We have customer Contact Object in session .
 													 autoHide: true,
 													 closable: true
 												});
-				                    		 Ext.QuickTips.init();
+				                    		 Ext.QuickTips.init(); 
+				                    		 
+				                    		 
 				                    	 });
                     	</script>
                     	<%--
