@@ -8,7 +8,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <!-- styles -->
@@ -65,9 +65,9 @@ $(document).ready(function() {
 
 					<div>
 						<div class="padding-top2 float-right">
-							<a href="javascript:window.print()"><span class="print-ico-xpedx underlink"><img
+							<a href="javascript:window.print()" class="underlink"><span class="print-ico-xpedx underlink"><img
 									height="15" width="16" alt="Print This Page"
-									src="<s:property value='#wcUtil.staticFileLocation' />/swc/xpedx/images/common/print-icon.gif">Print Page
+									src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif">Print Page
 							</span>
 							</a>
 						</div>
