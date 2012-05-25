@@ -108,6 +108,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String spendingLtCurrency;
 	private String currentSelTab;
 	private String userPwdToValidate;
+	
+	/*Added for Jira 3902*/
+	private String loginId;
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
 	private Map<String, String> pwdValidationResultMap;
 	private boolean success;
 	private boolean saveAddUser;
@@ -746,7 +757,12 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		//userInfoMap.put("firstName", getFirstName());
 		//userInfoMap.put("lastName", getLastName());
 		userInfoMap.put("newPassword", getUserPwdToValidate());
-		userInfoMap.put("loginId", wcContext.getLoggedInUserId());
+		//userInfoMap.put("loginId", wcContext.getLoggedInUserId());
+		if(getLoginId()!=null && getLoginId().equalsIgnoreCase("")){
+			userInfoMap.put("loginId", wcContext.getLoggedInUserId());
+		}else
+			userInfoMap.put("loginId", getLoginId());		
+		
 		String returnStr = SUCCESS;
 		
 		try {
