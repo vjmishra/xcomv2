@@ -620,6 +620,11 @@
                     </xsl:if>
                     </xsl:if>
 				</tr>
+				<tr>
+				<td colspan="5" style="border-bottom:1px solid #ccc;" >
+				</td>
+				</tr>
+				
 				<!-- if (specialInstructions is not null) -->
 				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
 				<tr class="special-instructions"> 
