@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -573,8 +574,21 @@ public class XPEDXCatalogAction extends CatalogAction {
 						"/CatalogSearch/FacetList/ItemAttribute");
 		attributeMap = new HashMap();
 		for (int i = 0; i < FacetList.getLength(); i++) {
-
+			//Added for JIRA 3821
 			Element facetEle = (Element) FacetList.item(i);
+			Element itemattr = SCXmlUtil.getChildElement(facetEle, "Attribute");
+			String shortDesc = itemattr.getAttribute("ShortDescription");
+			List<Element> itemAttribute = SCXmlUtil.getElements(facetEle, "AssignedValueList/AssignedValue");
+			Collections.sort(itemAttribute, new  Comparator<Element>()			
+			{
+				public int compare(Element elem, Element elem1) {
+					String attrValue =elem.getAttribute("Value");
+					String attrValue1 =elem1.getAttribute("Value");
+					return attrValue.compareTo(attrValue1);
+				}
+			});
+			facetListMap.put(shortDesc,itemAttribute);
+			//End of JIRA 3821
 			String attrName = facetEle.getAttribute("ItemAttributeName");
 			String isFiltered = facetEle.getAttribute("IsProvidedFilter");
 			if (!(isFiltered != null && isFiltered.trim().length() > 0 && "Y"
@@ -2090,6 +2104,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 	protected String editedOrderHeaderKey="";
 	protected String draft;
 	protected String path;	
+	public Map<String,List<Element>> facetListMap = new HashMap<String , List<Element>>();//Added for JIRA 3821
+	
+	public Map<String, List<Element>> getFacetListMap() {
+		return facetListMap;
+	}
+
+	public void setFacetListMap(Map<String, List<Element>> facetListMap) {
+		this.facetListMap = facetListMap;
+	}
+
 	
 	/**
 	 * @return the itemMap
