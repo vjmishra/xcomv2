@@ -144,7 +144,8 @@
 			<s:hidden id="actionName" name="#action.name" value="changePwdForgotPwd"/>
 			<s:hidden id="validationField" name="validationField" value="true"/>
 			<input type="hidden" id="requestId" name="requestId" value='<%=request.getParameter("requestId")%>'/>
-			
+			<input type="hidden" id="loginid1" name="loginid1" value='<%=request.getParameter("UserId")%>'/>
+		
 		 	<!-- <s:url id='homePage' namespace='/home' action='home' /> --> 
 
 			<table class="full-width">
@@ -252,7 +253,7 @@ function validateResetPassword(){
 	
 		Ext.Ajax.request({
 	        url :url,
-	        params:{loginId :'<s:property value="#loginid" />',
+	        params:{loginId :document.getElementById("loginid1").value,
 			userPwdToValidate : document.getElementById("newPassword").value},
 	        method: 'POST',
 	        success: function (response, request){
