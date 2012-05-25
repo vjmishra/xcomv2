@@ -2596,7 +2596,7 @@ inStoreIcon {
 	border: none;
 	position: relative;
 	/* left: -14px; */
-	top: -2px;
+	/* top: -2px; */
 	margin-left: 0px !important;
 	cursor: pointer;
 }
