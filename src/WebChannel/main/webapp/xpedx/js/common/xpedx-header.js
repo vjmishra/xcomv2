@@ -4596,7 +4596,7 @@ function resetQuantityErrorMessageMinicart()
 	{
 		var divId='errorDiv_'+	arrQty[i].id;
 		var divVal=document.getElementById(divId);
-		divVal.style.display='inline-block';
+		divVal.innerHTML='';
 	}
 }
 function validateOrderMultipleForMinicart()
@@ -4619,6 +4619,7 @@ function validateOrderMultipleForMinicart()
 	for(var i = 0; i < arrItemID.length; i++)
 	{	
 		var zeroError=false;
+		var noError=true;
 		var divId='errorDiv_orderLineQtys_'+	arrlineKeys[i].value;
 		var divIdError=document.getElementById(divId);
 		var qtyElement =  document.getElementById(arrQty[i].id);
@@ -4629,6 +4630,7 @@ function validateOrderMultipleForMinicart()
 			
 			retVal=false;
 			zeroError=true;
+			noError=false;
 		}else
 		{
 			qtyElement.style.borderColor = "";
@@ -4650,6 +4652,12 @@ function validateOrderMultipleForMinicart()
 			divIdError.style.display = "inline-block"; 
 			divIdError.setAttribute("class", "error");
 			retVal=false;
+			noError=false;
+		}
+		if(arrOrdMul[i].value > 1 && noError==true) {
+			divIdError.innerHTML ="Must be ordered in units of " +addCommaForMiniCart(arrOrdMul[i].value) +" "+baseUOM[i].value;
+			divIdError.style.display = "inline-block"; 
+			divIdError.setAttribute("class", "notice");
 		}
 	}
 	return retVal;
