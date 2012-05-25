@@ -10,6 +10,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!--Web trends tag start  -->
 <meta name="DCSext.w_x_news_edit" content="1" />
 <Meta name="WT.ti" Content="News Maintenance">
