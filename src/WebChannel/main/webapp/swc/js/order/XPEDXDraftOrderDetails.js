@@ -49,11 +49,13 @@ function addProductsToOrder()
 		 var selectedUomFromStr;
 		 var orderMultiple;// only one..refine to set it only once.
 		 var isError = false;
+		 var noError = true;
 		 var selectedUOM = new Array();
 		 selectedUOM= document.getElementsByName("enteredUOMs");
 		 baseUOM = document.getElementsByName("quickAddBaseUOMs");
 		 for(var i=0 ; i < QuickAddElems.length ; i++)
 		 {
+			 noError = true; 
 			orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
 			if(orderMultiple!=undefined && orderMultiple > 1 && orderMultiple.replace(/^\s*|\s*$/g,"") !='' && orderMultiple != null && orderMultiple !=0){
 			var enteredUOM = selectedUOM[i].value;
@@ -97,15 +99,29 @@ function addProductsToOrder()
 						//3098
 						document.getElementById(divId).innerHTML ='Please enter a valid quantity and try again.';
 						//3098
+						document.getElementById(divId).style.display = "inline-block";
+						document.getElementById(divId).style.marginLeft = "20px";
 						document.getElementById(divId).setAttribute("class", "error");
+						document.getElementById(divId).setAttribute("align", "center");
 						isError = true;
+						noError = false;
 					}					
 					else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
 						//Added for 3098
 						document.getElementById(divId).innerHTML ="Please order in units of " + orderMultiple +" "+baseUOM[i].value;
+						document.getElementById(divId).style.display = "inline-block";
+						document.getElementById(divId).style.marginLeft = "20px";
 						document.getElementById(divId).setAttribute("class", "error");
+						document.getElementById(divId).setAttribute("align", "center");
+						noError = false;
+					}
+					if(orderMultiple > 1 && noError == true) {
+						document.getElementById(divId).innerHTML ="Must be ordered in units of " + orderMultiple +" "+baseUOM[i].value;
+						document.getElementById(divId).style.display = "inline-block";
+						document.getElementById(divId).setAttribute("class", "notice");
+						document.getElementById(divId).setAttribute("align", "center");
 					}
 				}
 			}else{
@@ -224,6 +240,7 @@ function validateOrderMultiple()
 	for(var i = 0; i < arrItemID.length; i++)
 	{
 		var zeroError=false;
+		var noError = true;
 		var divId='errorDiv_'+	arrQty[i].id;
 		var divIdError=document.getElementById(divId);
 		var qtyElement =  document.getElementById(arrQty[i].id);
@@ -235,6 +252,7 @@ function validateOrderMultiple()
 			
 			retVal=false;
 			zeroError=true;
+			noError=false;
 		}else
 		{
 			qtyElement.style.borderColor = "";
@@ -251,10 +269,17 @@ function validateOrderMultiple()
 			    ordMul= 0
 			}		
 		if(ordMul != 0 && zeroError == false)
-		{	divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+		{			
+			divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
 			divIdError.style.display = "inline-block"; 
 			divIdError.setAttribute("class", "error");
 			retVal=false;
+			noError=false;
+		}
+		if(arrOrdMul[i].value > 1 && noError==true) {
+			divIdError.innerHTML ="Must be ordered in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+			divIdError.style.display = "inline-block"; 
+			divIdError.setAttribute("class", "notice");			
 		}
 	}
 	return retVal;
