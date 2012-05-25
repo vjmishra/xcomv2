@@ -458,6 +458,7 @@
 				<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
                 </thead>
 			<xsl:for-each select="Order/OrderLines/OrderLine">						  
+								<xsl:sort select="Extn/@ExtnLegacyLineNumber"/>
 													
 			<tbody>
 				<tr>
