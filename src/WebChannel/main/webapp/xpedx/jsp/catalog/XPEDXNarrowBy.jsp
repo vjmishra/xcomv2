@@ -126,17 +126,16 @@ function setStockItemFlag()
 	
 				
 			<ul>
-			
-				<s:iterator id='facetVal' value='#facetList'>
-					
+			<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
+				<s:iterator value="facetMap" id="factVal">
 						<s:set name='count1' value='%{#count1 + 1}' />
 						<s:url id='narrowURL' namespace='/catalog' action='filter.action'>
 						
 							
 							<s:param name='indexField'
 								value='#facets.getAttribute("IndexFieldName")' />
-							<s:param name='facet' value='#facetVal.getAttribute("Value")' />
-							<s:param name='cname' value='#facetVal.getAttribute("Value")' />
+							<s:param name='facet' value='#factVal.getAttribute("Value")' />
+							<s:param name='cname' value='#factVal.getAttribute("Value")' />
 							<s:param name='filterDesc' value='#ShortDescription1' />
 							<s:param name="categoryPath" value='#parameters.path'/>
 							<s:param name="path" value='#parameters.path'/>
@@ -144,9 +143,8 @@ function setStockItemFlag()
 						
 						<li class="roll close"><s:a href="%{narrowURL}"
 							tabindex="%{#count1}">
-							<s:property value='#facetVal.getAttribute("Value")' />
+							<s:property value='#factVal.getAttribute("Value")' />
 						</s:a> </li>
-					
 				</s:iterator>
 			</ul>
 			</div>	
