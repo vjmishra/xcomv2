@@ -12,7 +12,7 @@
 <s:set name='_action' value='[0]' />
 <html>
 <head>
-
+<meta content='IE=8' http-equiv='X-UA-Compatible' />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:property   value="wCContext.storefrontId" /> - Catalog - Compare Items </title>
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
