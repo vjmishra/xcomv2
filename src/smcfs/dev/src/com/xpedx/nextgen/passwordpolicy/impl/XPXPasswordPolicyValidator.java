@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
 import com.yantra.shared.dbi.YFS_User;
 import com.yantra.ycp.passwordpolicy.YCPPasswordPolicyUtil;
 import com.yantra.ycp.passwordpolicy.factory.IPasswordPolicyForPasswordChange;
@@ -195,7 +196,7 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             
             if(loginId!=null && newPassword.toUpperCase().contains(loginId.toUpperCase())){
             	//return PasswordPolicyResult.FAILURE("EXTNXPX0006");
-            	return setPasswordPolicyResult("EXTNXPX0006", "The password must not contain the users loginId");
+            	return setPasswordPolicyResult("EXTNXPX0006", "The password must not be the same as your login ID");
             }
             /* COmmented for Jira 1454 - as per DDD
             if(iNoOfAllowedSplChars < minNoOfSplChars){
@@ -280,7 +281,7 @@ public class XPXPasswordPolicyValidator implements IPasswordPolicyForPasswordCha
             
             if(loginId!=null && newPassword.toUpperCase().contains(loginId.toUpperCase())){
             	//return PasswordPolicyResult.FAILURE("EXTNXPX0006");
-            	errorMap.put("EXTNXPX0006", "The password must not contain the users loginId");
+            	errorMap.put("EXTNXPX0006", "The password must not be the same as your login ID");
             }
             
             if(iNoOfDisallowedChars > 0){
