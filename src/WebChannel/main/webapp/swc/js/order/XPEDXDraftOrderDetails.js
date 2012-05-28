@@ -708,9 +708,22 @@ function redrawQuickAddList()
 				        	var _uomCodes = QuickAddElems[i].uomCodes;
 				        	code += '<td class="col-item">'; 
 						    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
+						  //********
+						    //Passing selUOM as selcted - Done For Jira 3841/3862
+						    var selUOM= QuickAddElems[i].selectedUOM;
+						   // alert("selUOM="+selUOM);
 						    for(var uomidx =0; uomidx < uomValues.length; uomidx++)
 						    {
 						    	var _uomCode=encodeForHTML(uomValues[uomidx]);
+						    	//******
+						    	//customizeUOM This var is used to customize the UOM(like M_SHT_C(36) to M_SHT) - Done for Jira 3841
+						    	var customizeUOM= uomValues[uomidx];
+						    	var testArray = new Array();
+						    	testArray = customizeUOM.split("(");
+						    	//fvar is the final var storing customize UOM- Done for Jira 3841
+						    	var fvar=testArray[0];
+						    	//alert("fvar"+fvar);
+						    	//******
 						    	var _uomDescription=convertToUOMDescription(_uomCode);
 						    	var firstIndex = uomValues[uomidx].indexOf('(');
 						    	var lastIndex = uomValues[uomidx].indexOf(')');
@@ -718,7 +731,15 @@ function redrawQuickAddList()
 						    	{
 						    		_uomDescription = convertToUOMDescription(_uomCode.substring(0,firstIndex))+uomValues[uomidx].substring(firstIndex,lastIndex)+')';
 						    	}
-						    	if(_uomCodes[uomidx].trim() == QuickAddElems[i].uom.trim())
+						    	//*****************
+						    	//Condn added to check if selected UOM is equal to any alernate UOMs - Done for Jira 3841
+						    	if(selUOM!='' && selUOM == fvar){
+						    		code += '<option value="' + encodeForHTML(uomValues[uomidx]) + '" selected="yes">' + _uomDescription + '</option>'
+						    	}
+						    	//else we are doing defaulting of UOMs as it is.
+						    	
+						    	//*************
+						    	else if(_uomCodes[uomidx].trim() == QuickAddElems[i].uom.trim() && selUOM=='')
 						    	{
 						    		if(firstIndex!= -1) {				    			
 						    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) + '" selected="yes">' + _uomDescription + '</option>'
@@ -739,9 +760,20 @@ function redrawQuickAddList()
 						    }
 						
 					  }
-		        	if(defaultSelUOM == undefined){
+		        	if(defaultSelUOM == undefined && selUOM==''){
 		        		code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
 
+		        	}
+		        	else if(!selUOM==''){
+			        	var selectedUOMQty = selUOM.split(" ");
+			        	var selectedUOMs;
+						if(selectedUOMQty.length == 2){
+							selectedUOMs =selectedUOMQty[0];
+						}
+						else{
+							selectedUOMs = selectedUOMQty;
+						}
+			        	
 		        	}
 		        	else{
 		        	var selectedUOMQty = defaultSelUOM.split(" ");
