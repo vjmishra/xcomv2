@@ -238,13 +238,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	
 	private void init() {
+		try{
 		req.setAttribute("Tag_WCContext", wcContext);	
 		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
 		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 		setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		
 	    /* End - Changes made by Mitesh Parikh for 2422 JIRA */
+		}catch(Exception exception){
+			//Not throwing any exception as it gives exception for JIRA 3705
+			log.info("Error in Init Method", exception);
+			log.error("Error in Init Method", exception);
+		}
 	}
 
 	private void getSortFieldDocument(){
@@ -612,8 +619,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	public String navigate() {
 		try{
-		init();		
-		if(!YFCCommon.isVoid(draft) && "N".equals(draft))
+		init();	
+		if(draft!=null && !YFCCommon.isVoid(draft) && "N".equals(draft))
 		{
 			XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, editedOrderHeaderKey);
 		}
