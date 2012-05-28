@@ -760,9 +760,10 @@ function redrawQuickAddList()
 						    }
 						
 					  }
+		        	var createNewHiddenField=true;
 		        	if(defaultSelUOM == undefined && selUOM==''){
 		        		code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
-
+		        		createNewHiddenField=false;
 		        	}
 		        	else if(!selUOM==''){
 			        	var selectedUOMQty = selUOM.split(" ");
@@ -788,11 +789,11 @@ function redrawQuickAddList()
 					
 				    	 code += '</select>';
 				    	 //Added selUOM condn.If UOM is not changed,pass default UOM,else pass selUOM. - Jira 3841
-				    	 if(defaultSelUOM != undefined && selUOM==''){
+				    	 if(defaultSelUOM != undefined && selUOM=='' && createNewHiddenField){
 				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selectedUOMs + '" />';	
 				    		 
 				    	 }
-				    	 else{
+				    	 else if(createNewHiddenField){
 				    		 code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selUOM + '" />'; 
 				    	 }
 				    	code += '</td>';
