@@ -41,7 +41,8 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 	public String prodValdAjaxResp = null;
 	public static final String MASHUP_DO_ADD_ORDER_LINES = "xpedx_me_draftOrderAddOrderLines";
 	public static final String MASHUP_DO_DELETE_ORDER_LINES = "xpedx_me_draftOrderReplaceOrderLines";
-	
+	private String orderedLineType;	
+
 	public String execute() {
 		try {
 			setDefaultvaluesIfNull();
@@ -70,6 +71,7 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 		if(YFCUtils.isVoid(getQty())){
 			setQty("1");
 		}
+		setOrderedLineType("P");
 	}
 
 	/**
@@ -275,5 +277,13 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 
 	public void setOriginalQuantity(String originalQuantity) {
 		this.originalQuantity = originalQuantity;
+	}	
+
+	public String getOrderedLineType() {
+		return orderedLineType;
+	}
+
+	public void setOrderedLineType(String orderedLineType) {
+		this.orderedLineType = orderedLineType;
 	}
 }
