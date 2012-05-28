@@ -275,22 +275,6 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-07-26T18:02:39-04:00" Modifyuserid="ngmc"
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110826134513173885" ConditionKey=""
-    Createprogid=".YCPWFRepositoryAPI"
-    Createts="2011-08-26T14:14:49-04:00" Createuserid="admin"
-    EventConditionKey="20110826141449173994"
-    EventKey="DEFAULT_EVENT_KEY_224" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-08-26T14:14:49-04:00"
-    Modifyuserid="ngmc" MoreActionsFlag="Y" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2011011016342987489" ConditionKey=""
-    Createprogid=".YCPWFRepositoryAPI"
-    Createts="2011-08-26T14:14:49-04:00" Createuserid="admin"
-    EventConditionKey="20110826141449173996"
-    EventKey="DEFAULT_EVENT_KEY_224" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-08-26T14:14:49-04:00"
-    Modifyuserid="ngmc" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="1.00"/>
 <EventCondition ActionKey="20120207032938117437" ConditionKey=""
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2012-02-08T05:16:15-05:00" Createuserid="admin"
@@ -313,4 +297,12 @@
     Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-04-06T08:15:44-04:00" Modifyuserid="admin"
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="1.00"/>
+<EventCondition ActionKey="20110826134513173885" ConditionKey=""
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-05-28T05:40:58-04:00" Createuserid="admin"
+    EventConditionKey="20120528054058648547"
+    EventKey="DEFAULT_EVENT_KEY_224" Lockid="0"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-05-28T05:40:58-04:00" Modifyuserid="admin"
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
 </YFS_EVENT_CONDITIONList>
