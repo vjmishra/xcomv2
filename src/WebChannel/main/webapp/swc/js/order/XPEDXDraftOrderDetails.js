@@ -1,9 +1,12 @@
 function checkOut()
 {
 	//Added for JIRA 3523
-	var entitleErrorMessage=document.getElementById("entileErrorMessade").innerHTML;
-	if(entitleErrorMessage !=null && entitleErrorMessage.trim().length>0){
-		return;
+	var entitleErrorMessage;
+	if(document.getElementById("entileErrorMessade")!=null){
+		entitleErrorMessage=document.getElementById("entileErrorMessade").innerHTML;
+		if(entitleErrorMessage !=null && entitleErrorMessage.trim().length>0){
+			return;
+		}
 	}
 	document.OrderDetailsForm.modifyOrderLines.value = "false";
 	//JIRA 3488 Start
