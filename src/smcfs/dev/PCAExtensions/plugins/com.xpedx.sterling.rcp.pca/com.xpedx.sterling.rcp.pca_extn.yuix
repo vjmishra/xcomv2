@@ -102,7 +102,7 @@
                     </styles>
                 </Field>
                 <SetData name="YRCTableAttributeBinding" value="@BillToID"/>
-                <SetData name="YRCTableColumnBinding" value="Bill-To#"/>
+                <SetData name="YRCTableColumnBinding" value="Bill-To #"/>
                 <SetData name="YRCSourceBinding" value="OrderList:/OrderList/Order"/>
                 <SetData name="yrc:customType" value=""/>
             </NewField>

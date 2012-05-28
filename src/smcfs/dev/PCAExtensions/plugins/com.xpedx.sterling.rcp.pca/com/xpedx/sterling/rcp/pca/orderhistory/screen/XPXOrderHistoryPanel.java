@@ -485,21 +485,21 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		lblAccountlayoutData.horizontalAlignment = 4;
 		lblAccountlayoutData.verticalAlignment = 16777216; 
 		lblAccount.setLayoutData(lblAccountlayoutData);
-		lblAccount.setText("Account");
+		lblAccount.setText("Bill-To #");
 		
 		lblSuffix = new Label(pnlFilter, SWT.LEFT);
 		GridData lblSuffixlayoutData = new GridData();
 		lblSuffixlayoutData.horizontalAlignment = 4;
 		lblSuffixlayoutData.verticalAlignment = 16777216; 
 		lblSuffix.setLayoutData(lblSuffixlayoutData);
-		lblSuffix.setText("Suffix");
+		lblSuffix.setText("Ship-To Suffix #");
 		
 		lblShipFrom = new Label(pnlFilter, SWT.LEFT);
 		GridData lblShipFromlayoutData = new GridData();
 		lblShipFromlayoutData.horizontalAlignment = 4;
 		lblShipFromlayoutData.verticalAlignment = 16777216; 
 		lblShipFrom.setLayoutData(lblShipFromlayoutData);
-		lblShipFrom.setText("Ship From");
+		lblShipFrom.setText("Warehouse");
         
 		txtCompany = new Text(pnlFilter, SWT.BORDER);
 		GridData txtCompanylayoutData = new GridData();
@@ -813,7 +813,7 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		clmWarehouse.setMoveable(false);
 		
 		clmBillTo = new TableColumn(tblSearchResults, SWT.LEFT);
-		clmBillTo.setText("Bill-To#");
+		clmBillTo.setText("Bill-To #");
 		clmBillTo.setWidth(60);
 		clmBillTo.setResizable(true);
 		clmBillTo.setMoveable(false);
@@ -1032,7 +1032,7 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		colBindings11[7] = new YRCTblClmBindingData();
 		colBindings11[7].setName("clmBillTo");
 		colBindings11[7].setAttributeBinding("Extn/@ExtnCustomerNo");
-        colBindings11[7].setColumnBinding("Bill-To#");
+        colBindings11[7].setColumnBinding("Bill-To #");
         colBindings11[7].setSortReqd(true);
         colBindings11[7].setFilterReqd(true);
         
