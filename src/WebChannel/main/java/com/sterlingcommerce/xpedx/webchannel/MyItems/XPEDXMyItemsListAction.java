@@ -639,7 +639,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
                     while(st.hasMoreTokens()){
                     	itemCount = st.nextToken();
                     }*/
-						String splited[]=itemCount.split(".00");						
+						String splited[]=itemCount.split("\\.00");						
 						if(splited[0] != null)
 						itemCount=splited[0];
 
