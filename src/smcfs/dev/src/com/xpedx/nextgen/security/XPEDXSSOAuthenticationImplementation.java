@@ -140,12 +140,12 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
 		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		}
-		}
+		} 
 //JIRA 3852 starts
 		else
 		{
-			System.out.println("COM Logging");
-
+	System.out.println("COM Logging"); // Vijay commetned to check the log as it was not coming in log.debug
+			
 				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
 						if (!userId.startsWith(ldapAuthAttrDomain)){
@@ -158,7 +158,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 						}
 					}
 				}
-
+				
 				String ldapDN=null;
 				if (!YFCCommon.isVoid(ldapSchema)){
 					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
@@ -295,8 +295,9 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		//Added to fetch User name for Jira 2367
 		String userName = null;
 		String SRemailID = null;
-
-
+		String password = getPassword(request);
+		System.out.println(" paassword given is -- " + password);
+		String contextPath = request.getContextPath();
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
 		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
@@ -350,6 +351,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: User " + loggedInUser + " is " +userType);
 
 		  // if the user is internal then it goes through authentication
+		if("/swc".equalsIgnoreCase(contextPath)){
 		if(userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())){
 			if (request.getSession(false) != null){
 				request.getSession(false).setAttribute("IS_SALES_REP","true");
@@ -365,9 +367,33 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
 				}
 			isInternal = true;
-		}else
+		}else 
 			isInternal = false;
+		}else{
+			if((userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())) && ((!"".equalsIgnoreCase(password)) && password!= null)){
+				System.out.println("password is coming as ");
+				if (request.getSession(false) != null){
+					request.getSession(false).setAttribute("IS_SALES_REP","true");
+					request.getSession(false).setAttribute("loggedInUserName",userName);
+					request.getSession(false).setAttribute("loggedInUserId",loggedInUser);
+	    			//SRSalesRepEmailID added for jira 3438
+					request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
 
+					request.setAttribute("IS_SALES_REP", "true");
+					request.setAttribute("loggedInUserName", userName);
+					request.setAttribute("loggedInUserId", loggedInUser);
+					request.setAttribute("SRSalesRepEmailID", SRemailID);
+					LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
+					}
+				isInternal = true;
+			}else {
+				System.out.println("INternal user is false");
+				isInternal = false;
+			}
+			
+		}
+		
+		
 		return isInternal;
 	}
 
