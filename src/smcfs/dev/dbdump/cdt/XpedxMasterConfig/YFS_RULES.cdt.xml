@@ -1094,6 +1094,28 @@
     Modifyuserid="ngmc" OrganizationCode="xpedxCanada"
     RuleSetFieldDescription=""
     RuleSetFieldName="SLOT_GROUP_FOR_CUST_PREF" RuleSetValue="" RulesKey="20111003114443177534"/>
+<Rules Createprogid=".YCPBusinessRulesAPI"
+    Createts="2012-05-28T04:15:00-04:00" Createuserid="admin"
+    DocumentType="" Lockid="0" MeantForInternal="" MeantForSupplier=""
+    Modifyprogid=".YCPBusinessRulesAPI"
+    Modifyts="2012-05-28T04:15:00-04:00" Modifyuserid="admin"
+    OrganizationCode="DEFAULT" RuleSetFieldDescription=""
+    RuleSetFieldName="YCD_ALERT_CONFIG" RuleSetValue="N" RulesKey="20120528041500647023"/>
+<Rules Createprogid=".YCPBusinessRulesAPI"
+    Createts="2012-05-28T04:15:00-04:00" Createuserid="admin"
+    DocumentType="" Lockid="0" MeantForInternal="" MeantForSupplier=""
+    Modifyprogid=".YCPBusinessRulesAPI"
+    Modifyts="2012-05-28T04:15:00-04:00" Modifyuserid="admin"
+    OrganizationCode="DEFAULT" RuleSetFieldDescription=""
+    RuleSetFieldName="YCD_ALERT_POLING_INTERVAL" RuleSetValue="" RulesKey="20120528041500647026"/>
+<Rules Createprogid=".YCPBusinessRulesAPI"
+    Createts="2012-05-28T04:15:00-04:00" Createuserid="admin"
+    DocumentType="" Lockid="0" MeantForInternal="" MeantForSupplier=""
+    Modifyprogid=".YCPBusinessRulesAPI"
+    Modifyts="2012-05-28T04:15:00-04:00" Modifyuserid="admin"
+    OrganizationCode="DEFAULT" RuleSetFieldDescription=""
+    RuleSetFieldName="YCD_ALERT_STORE_BASED_SEARCH_FLAG"
+    RuleSetValue="Y" RulesKey="20120528041500647028"/>
 <Rules Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" DocumentType="" Lockid="0"
     MeantForInternal="Y" MeantForSupplier="N" Modifyprogid="XMLMigrator"
