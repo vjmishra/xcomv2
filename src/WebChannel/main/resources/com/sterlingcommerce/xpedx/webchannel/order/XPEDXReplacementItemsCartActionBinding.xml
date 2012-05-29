@@ -14,7 +14,7 @@
     <entry key="uomId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@UnitOfMeasure</entry>
     <entry key="uomId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@TransactionalUOM</entry>
     <!--  <entry key="orderedProductClass">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ProductClass</entry> -->
-    <entry key="desc">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ItemShortDesc</entry>
+    <entry key="name">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ItemShortDesc</entry>
     <!-- <entry key="jobId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Extn/@ExtnCustLineAccNo</entry>  -->
     <!--  <entry key="itemType">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/@LineType</entry> -->
     <!-- <entry key="recordPendingChange">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry> -->
