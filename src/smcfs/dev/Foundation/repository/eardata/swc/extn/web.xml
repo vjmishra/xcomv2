@@ -614,7 +614,7 @@
             <param-value>86400</param-value>
         </init-param>
     </filter>
-    <!--Session Manage Filter - Start 1650 -->
+    <!--Session Manage Filter - Start 1650 
 	<filter>
 	    <filter-name>SessionManageFilter</filter-name>
 	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.SessionManageFilter</filter-class>
