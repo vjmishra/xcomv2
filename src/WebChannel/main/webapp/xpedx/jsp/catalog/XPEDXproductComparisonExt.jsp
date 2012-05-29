@@ -5,9 +5,7 @@
 <%@ taglib prefix="swc" uri="swc"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <%@ taglib prefix="xpedx" uri="/WEB-INF/xpedx.tld"%>
-<%request.setAttribute("isMergedCSSJS","true");%>
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
     This is to avoid a defect in Struts that's creating contention under load. 
@@ -136,22 +134,25 @@
 <s:url id="ajaxAvailabilityJsonURL" action="ajaxAvailabilityJson" namespace="/catalog"/>
 <s:url id="ajaxAvailabilityJson_PriceURL" action="ajaxAvailabilityJson_Price" namespace="/catalog"/>
 <div id="main-container">
-	<s:if test='!#guestUser'>  
-		<div id="main">
-	</s:if>
-	<s:else>
+  <s:if test='!#guestUser'>  	
+		<div id="main"><!-- begin header -->
+		</s:if>
+		<s:else>
 		<div id="main" class="anon-pages">
-	</s:else>
-	<s:if test='!#guestUser'>  
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
-			<s:param name='shipToBanner' value="%{'true'}" />
-		</s:action>
-	</s:if>
-	<s:else>
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-	</s:else>
- 
- 		<div class="container" style="overflow: auto;" >
+		</s:else>
+		<div class="t2-header commonHeader" id="headerContainer"><!-- add content here for header information -->
+			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+		</div>
+
+		<s:if test='!#guestUser'>  	
+			<s:action name="xpedxShiptoHeader" executeResult="true" namespace="/common" />
+		</s:if>	
+ 		<s:if test='!#guestUser'> 
+ 			<div class="container" style="overflow: auto;" >
+ 		</s:if>
+ 		<s:else>
+ 			<div class="container" style="overflow: auto; margin-top: -30px;" >
+ 		</s:else>
  
  		<!--- begin breadcrumbs header--->
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
