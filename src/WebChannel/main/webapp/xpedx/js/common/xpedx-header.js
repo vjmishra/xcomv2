@@ -4458,7 +4458,74 @@ function refreshMiniCartLink(forceRefresh)
 
 
 }
+//JIRA 3916 Changes Start -method refreshMiniCartLinkforUpdate call for clicking update button in minicart
+var hideMiniCart = 'miniCartMouseoverArea1';
+var stIsIE = /*@cc_on!@*/false;
+function refreshMiniCartLinkforUpdate(forceRefresh)
 
+{
+
+	if(typeof forceRefresh == "undefined")
+
+    {
+
+        forceRefresh = false;
+
+    }
+
+    Ext.Ajax.request({
+
+        url : document.getElementById('miniCartLinkDisplayURL').href,
+
+        params : {
+
+            forceRefresh: forceRefresh
+
+        },
+
+        method: 'GET',
+
+        // if we get a successful response, parse the data then render the panel
+
+        success: function ( response, request ) {
+        	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
+        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
+           //   $('.mini-cart-trigger').trigger("mouseenter.cluetip");
+        //	$('.mini-cart-trigger').fireEvent('mouseenter.cluetip');
+        	//$('.mini-cart-trigger').trigger('mouseover');
+        	//Added  if..else condn For Jira 3481 - Minicart Closes On Update Issue
+        	if(!stIsIE)
+        	$('.mini-cart-trigger').trigger('click');
+        	else
+        	{
+        	//if(hideMiniCart =='miniCartMouseoverArea2')
+        		document.getElementById("miniCartMouseoverArea2").click();
+        		document.getElementById("miniCartMouseoverArea1").click();
+        	}
+        	//fireEvent(document.getElementById("miniCartMouseoverArea1"),'click');
+// Have to include jqquery implementation to refresh cart
+// if(qvw !== null)
+// {
+// qvw.getWindowHandle().destroy();
+// qvw = null;
+// setCartEventHandlers("hi");
+// }
+
+        },
+
+        failure: function ( response, request ) {
+
+            alert(document.miniCartForm.miniCartDisplayError.value);
+
+        }
+
+    });
+
+
+
+}
+
+//JIRA 3916 Changes End -method refreshMiniCartLinkforUpdate call for clicking update button in minicart
 
 
 function showMiniCartWindow() {
@@ -4763,7 +4830,7 @@ function updateLines() {
 
         success: function (response, request){
 
-            refreshMiniCartLink();
+        	refreshMiniCartLinkforUpdate();
             //added for jira 3232
             Ext.MessageBox.hide();
         },
@@ -4772,7 +4839,7 @@ function updateLines() {
         	// The web server is returning Failure even though the app server
         	//is successful. Just refresh the mini cart always.The application error if it happens, should
         	//be handled separately
-        	refreshMiniCartLink();
+        	refreshMiniCartLinkforUpdate();
         	 //added for jira 3232
         	Ext.MessageBox.hide();
         }
