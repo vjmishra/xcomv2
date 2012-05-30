@@ -217,6 +217,25 @@ public class XPXUtils {
 			// getFieldValue("txtComment")
 			instructionElem.setAttribute("InstructionText", comments);
 		}
+		//START- Added for JIRA 3910
+		else if(YRCPlatformUI.isVoid(comments))
+		{
+			if ("INTERNAL".equals(instructionType)) {
+				instructionElem = (Element) YRCXPathUtils
+						.evaluate(
+								instructionsListElem,
+								"/Instructions/Instruction[@InstructionType='INTERNAL']",
+								XPathConstants.NODE);
+				if (YRCPlatformUI.isVoid(instructionElem)) {
+					instructionElem = YRCXmlUtils.createChild(instructionsListElem, "Instruction");
+				}
+				instructionElem.setAttribute("InstructionType", "INTERNAL");
+				instructionElem.setAttribute("InstructionDetailKey",strInstructionKey );
+				instructionElem.setAttribute("InstructionText", "DummyText");
+				instructionElem.setAttribute("Action", "REMOVE");
+			}
+		}
+		//End- JIRA 3910
 	}
 	public static Document preparePnAInputDocForOrderLines(Element orderDetailsElement, Element custDetailsElement) {
 		Document returnDoc = null;

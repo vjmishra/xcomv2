@@ -2035,6 +2035,9 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtInternalComments = new Text(pnlRoot, SWT.BORDER|SWT.WRAP|SWT.TAB);
 		txtInternalComments.setLayoutData(gridData20);
 		txtInternalComments.setData("name", "txtInternalComments");
+		//Added for JIRA 3910
+		txtInternalComments.setEditable(true);
+		txtInternalComments.setTextLimit(250);
 		
 		 
 		GridData gridDatax311 = new GridData();
