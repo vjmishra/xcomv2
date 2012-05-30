@@ -40,7 +40,7 @@ ActualPricingDate=""
 <Extn/>
 <PriceInfo/>
 <Instructions>
-<Instruction InstructionType="" InstructionText=""/>
+<Instruction  InstructionDetailKey="" InstructionType="" InstructionText=""/>
 </Instructions>
 <OverallTotals GrandTotal=""/>
 <OrderHoldTypes>
