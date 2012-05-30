@@ -1659,6 +1659,11 @@ $(document).ready(function(){
 												<%-- --%>
 												<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 											</s:if>
+											<s:else> 
+												<s:hidden name='orderLine%{#FieldLabel}' id="orderLine%{#FieldLabel}_%{#orderLineKey}"
+														value="" />
+											
+											</s:else>
 											</td>
 										</tr>
                                 </s:iterator>
