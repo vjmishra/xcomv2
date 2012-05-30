@@ -114,9 +114,9 @@
 <script type="text/javascript" src="../../xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script><!-- jira 1833 -->
 <script type="text/javascript">
     	
-function getNewContactInfo(url){
-	document.userList.action = url;
-	document.userList.submit();
+function getNewContactInfo1(url){
+ 	document.userListaddForm.action = url;//JIRA 3917
+	document.userListaddForm.submit();//JIRA 3917
 	} 
 
 function loadLocations(userId) {
@@ -1249,19 +1249,29 @@ a.underlink:hover { text-decoration: underline !important; }
 	</tr>
 	<s:if test='%{#isCustomerNotAdmin == false && !#isSalesRep}'>
 	<tr>
-		<td width="30%" class="padding-left0 no-border-right-user">
-		<div class="question">
+	     <%--JIRA 3917 Start --%>
+		<td width="5%"  class="padding-left0 no-border-right-user">
+
+		<div  class="question">
 		<ul>
+		 <s:form name="userList" id="userList">
 			<li><a id="selectusertomodifyProfile" href="#viewUsersDlg" class="underlink">Show My Users&nbsp;</a></li>
 			<li><a href="#"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"		border="0" width="12" height="12"
 				alt="Displays all users set up for this account."
 				title="Displays all users set up for this account." align="right" /></a>
 			</li>
+			</s:form>
+			</ul>
+	        </div>	   
+		    </td>	
+			
+			<td width="36%" align="left" class="padding-left0 no-border-right-user">
+			<div class="question">
+			<ul>
 			<s:set name='custID' value='#customerId'/>
 			<s:set name='storeFrontID' value="wCContext.storefrontId"/>
-			
-			    <li>
-				    <s:form name="userList" id="userList">
+			  <li>
+				    <s:form name="userListaddForm" id="userListaddForm"><%--JIRA 3917 Finish --%>
 					    <s:hidden name="customerID" value="%{#_action.getCustomerID()}"/>
 					    <s:hidden name="buyerOrgCode" value="%{#buyerOrgCode}"/>
 					    <s:url id="showAllUsersURL" action='getUserList' namespace='/profile/user'>
@@ -1273,15 +1283,15 @@ a.underlink:hover { text-decoration: underline !important; }
 					    <s:set name='extnSuffixType' value='%{#SCXmlUtils.getXpathAttribute(#userCustElement, "//Extn/@ExtnSuffixType")}' />
 					    <div id="searchTable" >
 					    	<ul class="tool-bar-bottom" style="float:left">
-					            <li>
-					          	<a href="javascript:getNewContactInfo('<s:url value="/profile/user/xpedxNewUserCreate.action"/>');" class="grey-ui-btn">
+					            
+					          	<a href="javascript:getNewContactInfo1('<s:url value="/profile/user/xpedxNewUserCreate.action"/>');" class="grey-ui-btn">
 					          		<span><s:text name='Add_User'/></span>
 					          	</a>
 					        </ul>
 					    </div>
 				    </s:form>
 			    </li> 
-		</ul>
+		 </ul>
 		</div>
 		</td>
 	</tr>
