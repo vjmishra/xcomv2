@@ -1079,7 +1079,10 @@ public class XPEDXOrderUtils {
 	        if(orderLineElem != null)
 	        {
 	            String orderLineKey = SCXmlUtil.getAttribute(orderLineElem, "OrderLineKey");
+	            String orderLineType = SCXmlUtil.getAttribute(orderLineElem, "LineType");
 	            Element orderLineExtn = SCXmlUtil.getChildElement(orderLineElem, "Extn");
+	          // Added for Jira 3853 - Rules are not applied to comment and charge line.  
+	          if(orderLineType!=null && !orderLineType.equalsIgnoreCase("M")&& !orderLineType.equalsIgnoreCase("C")){
 	            for(Iterator<String> requiredFieldsIter = requiredCustFields.iterator(); requiredFieldsIter.hasNext();)
 	            {
 	                String requiredCustField = (String)requiredFieldsIter.next();
@@ -1098,6 +1101,7 @@ public class XPEDXOrderUtils {
 	                		 missingReqFieldsForOLK.add(requiredCustField.substring(4, requiredCustField.length()));
 	                }
 	            }
+	          }
 	            if(missingReqFieldsForOLK!=null && !missingReqFieldsForOLK.isEmpty())
 	            	requiredCustFieldsErrorMap.put(orderLineKey, missingReqFieldsForOLK);
 	            
