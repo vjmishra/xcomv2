@@ -424,7 +424,7 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	          document.body.style.cursor = 'default';
 	          Ext.Msg.hide();
 	          
-	          alert("Error creating new list. Please try again later.");                                      
+	          //alert("Error creating new list. Please try again later.");  //JIRA3920                                    
 	      }
 	  });
 	  document.body.style.cursor = 'default';
