@@ -1234,9 +1234,9 @@ var selectedShipCustomer = null;
   	  	while(searchRes.indexOf("\"")!= -1){
   	  	searchRes = searchRes.replace("\"", "");    	  
   	 	}
-  	  	while(searchRes.indexOf("*")!= -1){
+  	  	/*while(searchRes.indexOf("*")!= -1){
    	  		searchRes = searchRes.replace("*", " ");    	  
-   	 	}
+   	 	}*/
   	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
   	}
   }	
@@ -1246,9 +1246,9 @@ var selectedShipCustomer = null;
 	 	while(searchText.indexOf("\"")!= -1){
     	 	searchText = searchText.replace("\"", "");    	  
 	 	}
-	 	while(searchText.indexOf("*")!= -1){
+	 	/*while(searchText.indexOf("*")!= -1){
     	 	searchText = searchText.replace("*", " ");    	  
-	 	}
+	 	}*/
 	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
 }
   // End of Jira # 2415 
