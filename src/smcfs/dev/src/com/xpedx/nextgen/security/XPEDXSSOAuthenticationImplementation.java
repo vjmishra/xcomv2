@@ -92,7 +92,10 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String ldapAuthAttrDomain = YFSSystem.getProperty(LDAP_AUTH_ATTR_DOMAIN);
 		String ldapAuthIsActiveDir = YFSSystem.getProperty(LDAP_AUTH_IS_ACTIVE_DIR);
 		String ldapAuthIsRequired = YFSSystem.getProperty(LDAP_AUTH_IS_REQUIRED);
+		String isSWCReq = request.getParameter("isSWCReq");
+		System.out.println("+++ Is from WebChannel getUserData +++ " + isSWCReq);
 		//start of jira 3393 condition
+		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
 		if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
 		if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 			if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
@@ -137,10 +140,69 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         DirContext ctx = new InitialDirContext(env);
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		}
+		} 
+//JIRA 3852 starts
+		else
+		{
+	System.out.println("COM Logging"); // Vijay commetned to check the log as it was not coming in log.debug
+			
+				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+						if (!userId.startsWith(ldapAuthAttrDomain)){
+							userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+						}
+					}
+					else {
+						if (!userId.endsWith(ldapAuthAttrDomain)){
+							userId = userId  + "@" + ldapAuthAttrDomain.trim();
+						}
+					}
+				}
+				
+				String ldapDN=null;
+				if (!YFCCommon.isVoid(ldapSchema)){
+					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+				}
+				else {
+					ldapDN=userId;
+		}
+				if (!YFCCommon.isVoid(ldapAuthAttrName)){
+					ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+				}
+
+
+
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+				LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+
+		        Hashtable<String, String> env = new Hashtable<String, String>();
+		        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+				env.put(Context.PROVIDER_URL, ldapServerURL);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
+				env.put(Context.SECURITY_CREDENTIALS, password.trim());
+
+		        DirContext ctx = new InitialDirContext(env);
+		        ctx.close();
+				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+				if("".equalsIgnoreCase(password) || password==null)
+								{
+									request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.FALSE);
+								}else{
+									request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
+				}
+				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+
+		}   //JIRA 3852 ends
 //end of jira 3393 condition
 		// need this attribute set in request to avoid customer contact lookup by post authentication
-		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
+
 		String userName = (String)request.getAttribute("loggedInUserName");
 		//SRSalesRepEmailID added for jira 3438
 		String SRemailID = (String)request.getAttribute("SRSalesRepEmailID");
@@ -235,7 +297,10 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		//Added to fetch User name for Jira 2367
 		String userName = null;
 		String SRemailID = null;
-		
+		String password = getPassword(request);
+		System.out.println(" paassword given is -- " + password);
+		String isSWCReq = request.getParameter("isSWCReq");
+		System.out.println("+++ Is from WebChannel isInternal +++ " + isSWCReq);
 		String contextPath = request.getContextPath();
 		System.out.println("Context path for SWC is --" + contextPath);
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
@@ -291,6 +356,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: User " + loggedInUser + " is " +userType);
 		
 		  // if the user is internal then it goes through authentication
+		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
 		if(userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())){
 			if (request.getSession(false) != null){
 				request.getSession(false).setAttribute("IS_SALES_REP","true");
@@ -308,6 +374,30 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			isInternal = true;
 		}else 
 			isInternal = false;
+		}else{
+			if((userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())) && ((!"".equalsIgnoreCase(password)) && password!= null)){
+				System.out.println("password is coming as ");
+				if (request.getSession(false) != null){
+					request.getSession(false).setAttribute("IS_SALES_REP","true");
+					request.getSession(false).setAttribute("loggedInUserName",userName);
+					request.getSession(false).setAttribute("loggedInUserId",loggedInUser);
+	    			//SRSalesRepEmailID added for jira 3438
+					request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
+
+					request.setAttribute("IS_SALES_REP", "true");
+					request.setAttribute("loggedInUserName", userName);
+					request.setAttribute("loggedInUserId", loggedInUser);
+					request.setAttribute("SRSalesRepEmailID", SRemailID);
+					LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
+					}
+				isInternal = true;
+			}else {
+				System.out.println("INternal user is false");
+				isInternal = false;
+			}
+			
+		}
+		
 		
 		return isInternal;
 	}
