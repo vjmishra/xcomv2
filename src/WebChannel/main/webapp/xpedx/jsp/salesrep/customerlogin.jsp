@@ -29,6 +29,7 @@ Ext.onReady(function() {
 			<s:hidden name ="loggedInUserId" value="%{#session.loggedInUserId}"/>
 			<s:hidden name ="SRSalesRepEmailID" value="%{#session.SRSalesRepEmailID}"/>
 			<s:hidden name="EnterpriseCode" value="%{#request.selected_storefrontId}"/>
+			<s:hidden name="isSWCReq" value="true"/>
 			<a href="javascript:(function(){document.singForm.submit();})();"><span></span></a>
 		</s:form>
 	</div>
