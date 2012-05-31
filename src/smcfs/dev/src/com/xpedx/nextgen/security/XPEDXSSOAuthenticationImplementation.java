@@ -236,7 +236,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String userName = null;
 		String SRemailID = null;
 		
-		
+		String contextPath = request.getContextPath();
+		System.out.println("Context path for SWC is --" + contextPath);
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
 		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
