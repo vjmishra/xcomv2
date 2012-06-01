@@ -551,7 +551,7 @@ function showSharedListForm(){
 			
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{saveAllLink}' escape='false'/>";
-				formItemIds.editMode.value = "false";
+				formItemIds.editMode.value = "true";
 				formItemIds.listName.value = Ext.get("listName").dom.value;
 				formItemIds.listDesc.value = Ext.get("listDesc").dom.value;
 				try{ console.log("Action: " + formItemIds.action); }catch(ee){}
