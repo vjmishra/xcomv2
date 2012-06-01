@@ -540,6 +540,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				 }
 				 if(userGroupElement.getAttribute("UsergroupName").equalsIgnoreCase("Buyer User")){
 					 userGroupElement.setAttribute("UsergroupName", "Buyer");
+					 userGroupElement.setAttribute("Checked", "Y");
 				 }
 			 }
 			 repopulateModel("getUserGroupList_output");
