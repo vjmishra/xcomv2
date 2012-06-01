@@ -1719,7 +1719,7 @@ inStoreIcon {
     height: 22px;
     margin-left: 0px;
     position: relative;
-    top: -4px;
+    top: -2px;
     width: 22px;
 }
 .checkboxtxt {
@@ -3537,7 +3537,7 @@ td .inner {
 }
 table#prod-details-tbl tr:first-child {
     border-top: medium none;
-    background-image: url("../../images/catalog/prod-header-bg.gif");
+    /*background-image: url("../../images/catalog/prod-header-bg.gif");*/
 }
 table#prod-details-tbl tr {
     border-top: 1px solid #EBEBEB;
@@ -4549,6 +4549,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
     top: 8px;
 }
 .prod-config a:hover {
+text-decoration: underline;	
 }
 #catalog-header-breadcrumbs #breadcrumbs-list-name.breadcrumbs-no-float {
     float: none;
@@ -8240,7 +8241,7 @@ button.ui-button::-moz-focus-inner{border:0;padding:0;}
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
 .ui-widget-content { border: 1px solid #cccccc/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url(/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-bg_flat_75_ffffff_40x100.png)/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
-.ui-widget-content a { color: #222222/*{fcContent}*/; }
+.ui-widget-content a { color: #003399/*{fcContent}*/; }
 .ui-widget-header { border: 1px solid #cccccc/*{borderColorHeader}*/;/* background: #cccccc{bgColorHeader} url(/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png){bgImgUrlHeader}*/ 50%/*{bgHeaderXPos}*/ 50%/*{bgHeaderYPos}*/ repeat-x/*{bgHeaderRepeat}*/; color: #222222/*{fcHeader}*/; font-weight: bold; }
 .ui-widget-header a { color: #222222/*{fcHeader}*/; }
 
