@@ -52,6 +52,7 @@
 				<param name="namespace">/catalog</param>
 				<param name="parse">true</param>
 				<param name="itemID">${itemID}</param>
+				<param name="goBackFlag">true</param>
 				<param name="scFlag">Y</param>
 				<param name="unitOfMeasure">${unitOfMeasure}</param>
 			</result>
