@@ -94,6 +94,10 @@ div#catalog-landing-page #right-col-int {
 	top: 135px;
 }
 
+a.orange-ui-btn {
+height:22px;
+}
+
 /* fieldset.mil-col-mil-div legend {
 	margin-bottom: 10px;
 } */
@@ -113,7 +117,7 @@ input#newSearch_searchTerm {
 }
 
 .searchbox-1 .searchButton {
-    top: -4px;
+    top: -2px;
     margin-left: 3px;
 }
 
