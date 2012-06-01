@@ -243,10 +243,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
 		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
-		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
-		setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
-		
-	    /* End - Changes made by Mitesh Parikh for 2422 JIRA */
+		if(searchTerm != null && !searchTerm.trim().equals(""))
+		{					  
+			String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11";
+			XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
+		}
+		else
+		{
+			XPEDXWCUtils.setItemDetailBackPageURLinSession();
+		}
+		setItemDtlBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
+		//setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		//setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		setProductCompareBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
+	   /* End - Changes made for 2422 JIRA */
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			log.info("Error in Init Method", exception);
@@ -1025,11 +1035,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				
 				
 			}
-			
 			/**End of code for JIra 2599****/
-					
-
-
 	}
 		//Webrtends	tag start
 		setStockedItemFromSession();				
@@ -1037,12 +1043,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 setsearchMetaTag(true);
 		}
 		//Webrtends	tag End
-		
 		return SUCCESS;
 	}
-
-
-
 
 	@Override
 	public String sortResultBy() {

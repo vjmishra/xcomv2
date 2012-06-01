@@ -1834,6 +1834,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	String custPartNumber = null;
 	String requestedUOM = null;
 	String requestedDefaultUOM = null;
+	//added for jira 2422
+	private String goBackFlag;
+
+	public String getGoBackFlag() {
+		return goBackFlag;
+	}
+
+	public void setGoBackFlag(String goBackFlag) {
+		this.goBackFlag = goBackFlag;
+	}
+
 	public String getRequestedDefaultUOM() {
 		return requestedDefaultUOM;
 	}
