@@ -80,8 +80,11 @@ var focusDelay = 100;
         document.postOrderForm.submit();
     }
      function editOrder(action) {
-        document.postOrderForm.action = action;
-        document.postOrderForm.submit();
+     //commented for jira 2442
+        //document.postOrderForm.action = action;
+        //document.postOrderForm.submit();
+        window.location.href=action;
+
     }
 
      function refreshOrder(action) {
