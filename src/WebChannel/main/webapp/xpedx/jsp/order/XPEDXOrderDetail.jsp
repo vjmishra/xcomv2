@@ -385,7 +385,9 @@ function showSplitDiv(divId)
 <s:url id="urlPrint"  includeParams="none" escapeAmp="false" action='PrintOrderDetail.action' namespace = '/order' ></s:url>
 <s:url id="urlOrderAgainId"  includeParams="none"  action='orderAgain' namespace = '/order' ></s:url>
 <s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
+	<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
 	<s:param name="isEditOrder" value="%{'true'}" ></s:param>
+	<s:param name="draft" value='%{"N"}'></s:param>
 	<s:param name="resetDesc" value="%{'true'}" ></s:param>
 </s:url>
 <s:url id="urlResetOrderId"  includeParams="none"  action='XPEDXResetPendingOrder' namespace = '/order' ></s:url>
