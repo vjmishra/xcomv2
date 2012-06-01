@@ -40,6 +40,8 @@
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
+	<s:set name="goBackFlag" value='%{"false"}' />
+	<s:hidden id="goBackFlag" name="goBackFlag" value="%{goBackFlag}"></s:hidden>
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
 			
@@ -1249,6 +1251,7 @@ var selectedShipCustomer = null;
 	 	/*while(searchText.indexOf("*")!= -1){
     	 	searchText = searchText.replace("*", " ");    	  
 	 	}*/
+		document.getElementById("goBackFlag").value = 'true';
 	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
 }
   // End of Jira # 2415 
