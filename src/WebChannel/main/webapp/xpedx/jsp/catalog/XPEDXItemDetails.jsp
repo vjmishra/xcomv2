@@ -1074,7 +1074,7 @@ function SubmitActionWithValidation()
 			
 			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
 			
-			<a href="javascript:window.print()"><span class="print-ico-xpedx" style="margin-right: 15px;"> <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16"
+			<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="margin-right: 15px;margin-top: 0px;"> <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16"
 			height="15" alt="Print Page" />Print Page</span>
 			</a>
 		</div>				
@@ -1196,7 +1196,6 @@ function SubmitActionWithValidation()
 					<ul class="bullet_pts" >
 						<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
 					</ul>
-
 					<br/>
 					<p>					
 					<ul class="bullet_pts" style="padding-left: 0px;">
@@ -1504,7 +1503,7 @@ function SubmitActionWithValidation()
 				
 				<!-- <div class="error" id="errorMsgForQty" style="display : none">Please enter a quantity greater than 0.<br/></div> -->
 				<%-- <div class="error" id="errorMsgForQty" style="display : none"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' /><br/></div> --%>
-				<br /><br />
+				<br />
 		<script type="text/javascript">
 		
 		function qtyInputCheck(component){
@@ -1821,7 +1820,6 @@ function SubmitActionWithValidation()
 				 
 				<!-- table to properly format the pricing per the mockup -->
 				<div class="bottom_right">				
-				<br/>	
 					<s:if test='%{#isStocked !="Y"}'>
 						<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
 					</s:if>
@@ -1872,9 +1870,9 @@ function SubmitActionWithValidation()
 		<!-- <div id="tabs-2" class="ie_tabsfix" >	 -->
 		<table id="prod-details-tbl" border="0" cellspacing="0"
 			cellpadding="0" style="overflow: auto;">
-			<tr class="detail-head-prod-bg">
-				<td class="tblhead-white int-deets2">Specification</td>
-				<td class="tblhead-white">Details</td>
+			<tr class="detail-head-prod-bg ui-corner-all">
+				<td class="tblhead-white int-deets2" style="border-top-left-radius: 5px;border-top-right-radius: 0;">Specification</td>
+				<td class="tblhead-white" style="border-top-left-radius: 0px;border-top-right-radius: 5px;">Details</td>
 			</tr>
 			<s:iterator
 				value='#xutil.getChildren(#itemAttributeGroupTypeList, "ItemAttributeGroupType")'
