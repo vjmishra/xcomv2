@@ -113,7 +113,7 @@ input#newSearch_searchTerm {
 }
 
 .searchbox-1 .searchButton {
-    top: 0px;
+    top: -4px;
     margin-left: 3px;
 }
 
