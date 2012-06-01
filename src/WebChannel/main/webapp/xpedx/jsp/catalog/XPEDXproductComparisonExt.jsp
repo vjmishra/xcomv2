@@ -165,7 +165,7 @@
 				window.location.href=backUrl;
 			}
 			</script>
-			<a href="javascript:getbackUrl();">Back</a> / <span class="page-title"> Compare Items </span>
+			<a href="javascript:getbackUrl();" style="margin-left:-10px">Back</a> / <span class="page-title"> Compare Items </span>
 			<%--<s:property value='%{#session.lastPage}' />
 			 String referer = request.getHeader("referer");
 			

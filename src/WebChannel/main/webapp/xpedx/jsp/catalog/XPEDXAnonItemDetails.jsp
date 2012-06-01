@@ -630,18 +630,48 @@
 									</s:if> <s:iterator
 										value='#xutil.getChildren(#assignedValueList, "AssignedValue")'
 										id='assignedValue'>
-										<s:if test='%{"" != #derivedFrom}'>
+										<%-- commented for jira 3824 <s:if test='%{"" != #derivedFrom}'>
 											<s:property
 												value='#xutil.getAttribute(#assignedValue,"Value")' />
 											<s:property
 												value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
-										</s:if>
+										</s:if> --%>
+									<%-- commented for 3824jira 
 										<s:elseif test="%{#dataType=='TEXT'}">
 											<s:property
 												value='#xutil.getAttribute(#assignedValue,"Value")' />
 											<s:property
 												value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
 										</s:elseif>
+										--%>
+										<!-- Jira 3824, Adding To Fetch Asset of Attr -->
+										<s:set name="Value" value='#xutil.getAttribute(#assignedValue,"Value")' />
+										<s:hidden name="hdn_Value" value="%{#Value}" />
+										<s:if test='%{"" != #derivedFrom}'>
+											<s:property
+												value='#xutil.getAttribute(#assignedValue,"Value")' />
+											<s:property
+												value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+										</s:if>
+										<!-- Jira 3824 - Check if Attribute has Asset -->
+										<s:elseif test="%{#dataType=='TEXT'}">
+										<s:set name="found" value="false" />
+										<!-- Adding Iterator assetLinkMap for Jira 2634 -->
+										<s:iterator value="assetLinkMap" id="assetMap" status="status" >
+											<s:set name="link" value="value" />
+											<s:set name="assetId" value="key" />										
+											<s:hidden name="hdn_test" value="%{#assetId}"  />
+											<s:if test='%{#assetId == #Value}'>
+												<a href="<s:property value='#link'/>" target="_blank"><s:property value='#xutil.getAttribute(#assignedValue,"Value")'/></a>
+												<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+												<s:set name="found" value="true" />
+											</s:if>
+										</s:iterator>
+										<s:if test="%{#found == false}"> 
+											<s:property value='#xutil.getAttribute(#assignedValue,"Value")'/>
+											<s:property	value='#xutil.getAttribute(#attribute,"AttributePostFix")' />
+										</s:if>
+										</s:elseif> <%-- end of jira 3824 --%>
 										<s:elseif test="%{#dataType=='BOOLEAN'}">
 											<s:property
 												value='#xutil.getAttribute(#assignedValue,"Value")' />
