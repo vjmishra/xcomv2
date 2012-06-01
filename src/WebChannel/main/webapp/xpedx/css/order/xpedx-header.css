@@ -2395,6 +2395,7 @@ div#tabs{
  height:auto; 
  border:none ;
  width:330px;
+ border-top: 1px solid #AAAAAA !important;
 }
 
 p#milltext{
