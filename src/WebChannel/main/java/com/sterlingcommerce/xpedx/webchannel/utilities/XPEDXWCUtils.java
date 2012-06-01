@@ -5855,14 +5855,30 @@ public class XPEDXWCUtils {
 
 	/* Method created for JIra 2599 ****/
 
-	
+	//changes added for jira 2422 for search within the result
 	public static void setItemDetailBackPageURLinSession()
+	{
+		setItemDetailBackPageURLinSession("");
+	}
+   
+	public static void setItemDetailBackPageURLinSession(String append)
 	{
 		IWCContext wcContext =WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String backPageURL=(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString();
-		wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);		
+		if(append != null && !"".equals(append))
+		{
+			//String splited[]=backPageURL.split("&scFlag=Y");				
+			if(backPageURL != null)		{
+				String splited=backPageURL.replaceAll("&scFlag=Y", "");	
+				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", splited+append+"&scFlag=Y");
+			}
+		}
+		else
+		{
+			wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);
+		}
 	}
-   
+   //end of jira 2422 changes
    public static void logExceptionIntoCent(String ExceptionMsg)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
