@@ -1059,8 +1059,12 @@ function SubmitActionWithValidation()
 				window.location.href=backPageUrl;
 			}
 			</script>
-			
-			<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
+			<s:if test= '%{#_action.getGoBackFlag() == "true"}'>
+			<a href="#"  onclick="javascript:window.history.back();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
+			</s:if>
+			<s:else>
+				<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
+			</s:else>
 			<% 
 			HttpServletRequest httpRequest = (HttpServletRequest) request; 
 			String referer1 = httpRequest.getHeader("referer");
