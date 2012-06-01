@@ -108,6 +108,7 @@
 	                <s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	                    <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
 	                    <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
+	                    <s:param name='goBackFlag'>true</s:param>
 	                    <s:param name='_r_url_' value='%{returnURL}'/>
 	                </s:url>
 	            </s:if>
@@ -115,6 +116,7 @@
 	                <s:url id='detailURL' namespace='/catalog' action='itemDetails.action'>
 	                    <s:param name='itemID'><s:property value='#item.getAttribute("ItemID")'/></s:param>
 	                    <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
+	                    <s:param name='goBackFlag'>true</s:param>
 	                </s:url>
 	            </s:else>
 	        <tr>
