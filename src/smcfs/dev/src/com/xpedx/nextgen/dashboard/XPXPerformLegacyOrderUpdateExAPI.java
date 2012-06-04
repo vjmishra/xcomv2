@@ -49,6 +49,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	private static YIFApi api = null;
 	private Properties _prop;
 	private static YFCLogCategory log;
+	boolean centExempt=false;
 
 	static {
 
@@ -118,7 +119,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				throw new Exception("Attribute HeaderProcessCode Not Available in Incoming Legace Message!");
 			}
 
-			validateInXML(rootEle);
+			validateInXML(rootEle,headerProcessCode);
 
 			if(log.isDebugEnabled()){
 				log.debug("InXML After Validation:" + YFCDocument.getDocumentFor(inXML).getString());
@@ -471,8 +472,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 			ex.printStackTrace();
 			APIException = ex;
-			prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
-
+			if(!centExempt){
+				prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
+			}
 			// Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(log.isDebugEnabled()){
 				log.debug("IsOrderPlaceFlag:" + isOrderPlaceFlag);
@@ -986,7 +988,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 			}
 		} else {
-			throw new Exception("Element OrderLines Not Available in Incoming Legacy Message!");
+			throw new Exception("Element OrderLines Not Available In Incoming Legacy Message!");
 		}
 	}
 
@@ -2346,6 +2348,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
+			centExempt = true;
 			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
@@ -3221,7 +3224,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				expEle0.setAttribute("QryType", "EQ");
 			}
 		} else {
-			throw new Exception("Element OrderLines Not Available in Incoming Legacy Message!");
+			throw new Exception("Element OrderLines Not Available In Incoming Legacy Message!");
 		}
 		
 		if(log.isDebugEnabled()){
@@ -5618,7 +5621,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 	}
 
-	private void validateInXML(YFCElement rootEle) throws Exception {
+	private void validateInXML(YFCElement rootEle, String headerProcessCode) throws Exception {
 
 		List<String> webLineNos = new ArrayList<String>();
 		String isOrdPlace = rootEle.getAttribute("IsOrderPlace");
@@ -5639,6 +5642,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
 		if (rootOrdLinesEle != null) {
 			YFCIterable<YFCElement> yfcItr = rootOrdLinesEle.getChildren("OrderLine");
+			if(!yfcItr.hasNext())
+			{
+				if(headerProcessCode.equalsIgnoreCase("A")){
+					centExempt = true;
+					throw new Exception("OrderLines Not Available In Incoming Legacy Message!");
+				}	
+			}
+			
 			while (yfcItr.hasNext()) {
 				YFCElement rootOrdLineEle = (YFCElement) yfcItr.next();
 				String lpc = rootOrdLineEle.getAttribute("LineProcessCode");
@@ -5684,6 +5695,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						}
 					}
 				}
+			}
+		} else {
+			if (headerProcessCode.equalsIgnoreCase("A")) {
+				centExempt = true;
+				throw new Exception("OrderLines Not Available In Incoming Legacy Message!");
 			}
 		}
 
