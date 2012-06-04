@@ -261,6 +261,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 
 </div>
    <s:hidden name="SALES_REP_LOGIN_PAGE" value="true"/>
+   <s:hidden name="isSWCReq" value="true"/>
  
  <%
  	request.setAttribute("SCUI_USER_TRYING_TO_LOGIN", true);
