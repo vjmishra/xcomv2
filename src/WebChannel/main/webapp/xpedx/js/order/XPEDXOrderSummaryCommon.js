@@ -1083,7 +1083,7 @@ function sendEmail(emailAction) {
 	        inputClass: 'ffb-input',
 	        arrowClass: 'ffb-arrow',
 	        matchClass: 'ffb-match',
-	        noResultsText: 'No matching results', // text to show when no results match the query
+	        //noResultsText: 'No matching results', // text to show when no results match the query --For JIRA 3645
 	        noResultsClass: 'ffb-no-results', // class to apply to noResultsText
 	        showResults: true, // whether to show results at all, or just typeahead
 	        selectFirstMatch: true, // whether to highlight the first matching value

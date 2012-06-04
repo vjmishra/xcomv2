@@ -1,11 +1,14 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +39,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInput
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXPaymentMethodHelper;
+import com.sterlingcommerce.xpedx.webchannel.utilities.AlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
@@ -816,10 +820,17 @@ END of JIRA 3382*/
 		//Fecth all the customer POs from the user profile
 		/*String addnlPOList = custExtnEle.getAttribute("ExtnPOList");*/
 		if (!YFCCommon.isVoid(addnlPOList)){
-			String[] poListSplit = addnlPOList.replace(" ","").split(",");
-			for (int i = 0; i < poListSplit.length; i++) {
+			//Start for JIRA 3645 - Sorting 
+			String[] poListSplit = addnlPOList.split(",");
+			
+			Arrays.sort(poListSplit, new AlphanumericSorting());
+			/*for (int i = 0; i < poListSplit.length; i++) {
 				addAddnlPoNumberList(poListSplit[i]);
-			}			
+			}	*/
+			addnlPoNumberList = new LinkedHashSet<String>();
+			addnlPoNumberList.addAll(Arrays.asList(poListSplit));
+			addnlPoNumberList.remove(null);
+			//End for JIRA 3645 - Sorting 
 		}
 		
 		//Fetch all the customer POs from the order
@@ -1143,7 +1154,7 @@ END of JIRA 3382*/
 	}
 
 	public Map<String, String> getAddnlPoNumberList() {
-		Map<String, String> newMap = new HashMap<String, String>();
+		Map<String, String> newMap = new LinkedHashMap<String, String>();//Retain insertion Order - JIRA 3645
 		for(String poNumber : this.addnlPoNumberList){
 			newMap.put(poNumber, poNumber);
 		}
