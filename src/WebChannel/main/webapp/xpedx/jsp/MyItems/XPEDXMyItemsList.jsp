@@ -420,7 +420,7 @@
                     failure: function (response, request){
                         var x = document.getElementById(divId);
                         x.innerHTML = "";
-                        alert('Failed to fetch the share list');
+                        alert('Unable to load the share locations. Please try again.');//JIRA 3943
                         document.body.style.cursor = 'default';                                                  
                     }
                 });     
