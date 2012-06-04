@@ -283,9 +283,15 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 					Iterator itrHold = YRCXmlUtils.getChildren(eleHolds);
 					while(itrHold.hasNext()) {
 						Element eleHold = (Element) itrHold.next();
-						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType"))) && "1100".equals(eleHold.getAttribute("Status"))){
+						//Customer Suspend case handled for JIRA 3929
+						if (((XPXConstants.NEEDS_ATTENTION).equals(eleHold
+								.getAttribute("HoldType")))
+								&& "1100"
+										.equals(eleHold.getAttribute("Status"))
+								|| "M0007".equalsIgnoreCase(eleWillCall
+										.getAttribute("ExtnHeaderStatusCode"))) {
 							needsAttention = true;
-						//Start- Added for 3391
+							//Start- Added for 3391
 						}
 						if((XPXConstants.ORDER_IN_EXCEPTION_HOLD).equals(eleHold.getAttribute("HoldType"))){
 							lockedOrder = true;
