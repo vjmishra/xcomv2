@@ -96,6 +96,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		System.out.println("+++ Is from WebChannel getUserData +++ " + isSWCReq);
 		//start of jira 3393 condition
 		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
+			request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
 		if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
 		if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 			if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
@@ -140,9 +141,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         DirContext ctx = new InitialDirContext(env);
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-		request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
+}
 		}
-		} 
 //JIRA 3852 starts
 		else
 		{
