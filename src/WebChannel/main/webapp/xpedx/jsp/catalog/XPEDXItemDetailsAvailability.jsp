@@ -89,7 +89,7 @@
 		<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />   -->
 			<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)" /> 
 			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />
-			&nbsp;<s:property value='%{#jsonUOMDesc}' /> 
+			<s:property value='%{#jsonUOMDesc}' /> 
 			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
 	</div>
 	<div id="pricesDiv">
