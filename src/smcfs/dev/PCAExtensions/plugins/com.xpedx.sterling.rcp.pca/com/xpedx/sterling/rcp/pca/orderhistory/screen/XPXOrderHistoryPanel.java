@@ -962,9 +962,10 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 					Iterator itrHold = YRCXmlUtils.getChildren(eleHolds);
 					while(itrHold.hasNext()) {
 						Element eleHold = (Element) itrHold.next();
-						if(((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType"))) && "1100".equals(eleHold.getAttribute("Status"))){
-							needsAttention = true;
-						}
+						//Customer Suspend case handled for JIRA 3929
+		if (((XPXConstants.NEEDS_ATTENTION).equals(eleHold.getAttribute("HoldType")))&& "1100".equals(eleHold.getAttribute("Status"))|| "M0007".equalsIgnoreCase(eleWillCall.getAttribute("ExtnHeaderStatusCode"))) {
+									needsAttention = true;
+								}
 					}
 				}
 				
