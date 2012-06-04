@@ -20,9 +20,6 @@
 				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="true" XMLName="ExtnCustomerDivision"
 				XMLGroup="Extn" />
 				<Attribute ColumnName="EXTN_SUFFIX_TYPE" DataType="Text-2" DefaultValue="' '" Description="ShipTo or BillTo"  Nullable="true" XMLName="ExtnSuffixType" XMLGroup="Extn"/>
-				<Attribute ColumnName="MY_ITEMS_LIST_SHARE_KEY"  	DataType="Key" 			Description="" Nullable="true" XMLName="MyItemsListShareKey"/>
-				<Attribute ColumnName="SHARE_CUSTOMER_ID"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="ShareCustomerID"/>
-				<Attribute ColumnName="CUSTOMER_PATH"  	 	 		DataType="Text-1000" 	DefaultValue=" " Description="" Nullable="true" XMLName="CustomerPath"/>
 				<Attribute ColumnName="ORGANIZATION_CODE"  	 	 	DataType="OrgCode" 	DefaultValue=" " Description="" Nullable="true" XMLName="OrganizationCode"/>
 				<Attribute ColumnName="ORGANIZATION_NAME"  	 	 	DataType="OrganizationName" 	DefaultValue=" " Description="" Nullable="true" XMLName="OrganizationName"/>
 				<Attribute ColumnName="TOTALITEMS"  	 	 		DataType="Integer" 	DefaultValue=" " Description="" Nullable="true" XMLName="TotalItems"/>
@@ -30,7 +27,6 @@
         </Attributes>
 		<PrimaryKey Name="XPEDX_MIL_LST_PK">
 			<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
-			<Attribute ColumnName="MY_ITEMS_LIST_SHARE_KEY" />
 		</PrimaryKey>
 	<Indices>
             <Index Name="CUST_KEY" Unique="False">
