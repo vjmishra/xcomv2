@@ -10,7 +10,11 @@ function checkOut()
 	}
 	document.OrderDetailsForm.modifyOrderLines.value = "false";
 	//JIRA 3488 Start
-	var maxOrderAmtMsg=document.getElementById("maxOrderErrorMessage").innerHTML;
+	//Added for JIRA 3958
+	var maxOrderAmtMsg = null; 
+	if(document.getElementById("maxOrderErrorMessage") != null && document.getElementById("maxOrderErrorMessage") != "" && document.getElementById("maxOrderErrorMessage")!= 'undefined' ){
+		maxOrderAmtMsg=document.getElementById("maxOrderErrorMessage").innerHTML;
+	}
 	if(maxOrderAmtMsg !=null && maxOrderAmtMsg.trim().length>0){
 		return;
 	}
