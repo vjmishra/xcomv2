@@ -700,7 +700,7 @@ $(document).ready(function(){
 
 <s:if test='ajaxLineStatusCodeMsg!=null'>
 	<div id="errorMsgDiv">
-	<s:if test='#pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+	<s:if test='#pnaErrorStatusMsg !=null && pnaErrorStatusMsg != "" '>
 	<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 	</s:if>
 <%--	<h5 align="center"><b><font color="red"><s:property
