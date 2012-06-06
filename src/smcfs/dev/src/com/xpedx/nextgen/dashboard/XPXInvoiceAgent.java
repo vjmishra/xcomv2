@@ -69,7 +69,7 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 		Document outputInvoiceHeaderListDoc = api.executeFlow(env, "getXPXInvoiceHdrListService", inputInvoiceHeaderDoc);
 //		NodeList invoiceHdrNodeList = outputInvoiceHeaderListDoc.getElementsByTagName("XPXInvoiceHdr");
 //		int invoiceHdrLength = invoiceHdrNodeList.getLength();
-		log.info("The output from the invoice agent service getXPXInvoiceHdrListService is :" + SCXmlUtil.getString(outputInvoiceHeaderListDoc));
+		log.debug("The output from the invoice agent service getXPXInvoiceHdrListService is :" + SCXmlUtil.getString(outputInvoiceHeaderListDoc));
 		List listOrders = SCXmlUtil.getChildrenList(outputInvoiceHeaderListDoc.getDocumentElement());
 		List listOfJobs = new ArrayList();
 		for(int counter = 0;counter<listOrders.size();counter++)
@@ -92,7 +92,7 @@ public class XPXInvoiceAgent extends YCPBaseAgent {
 		// TODO Auto-generated method stub
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		String strTransType = "B2B-Inv";
-		log.info("The input to the XPXInvoiceProcessMessage service is : "+ inputDoc);
+		log.debug("The input to the XPXInvoiceProcessMessage service is : "+ inputDoc);
 		try {
 			api.executeFlow(env, "XPXInvoiceProcessMessage", inputDoc);
 		/**old exception catch block replaced with CENT Tool
