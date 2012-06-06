@@ -81,7 +81,7 @@ public class QuickQuery {
 		}
 		Date end = new Date();
 		LOG.debug("Execution API: "+apiName+" Query: "+query+" End: "+(end));
-		LOG.info("Execution API: "+apiName+" Took: "+(end.getTime()-start.getTime())+" ms");
+		LOG.debug("Execution API: "+apiName+" Took: "+(end.getTime()-start.getTime())+" ms");
 		return result;
 	}
 
@@ -130,7 +130,7 @@ public class QuickQuery {
 		}
 		Date end = new Date();
 		LOG.debug("Execution Flow: "+flowName+" Query: "+query+" End: "+(end));
-		LOG.info("Execution Flow: "+flowName+" Took: "+(end.getTime()-start.getTime())+" ms");
+		LOG.debug("Execution Flow: "+flowName+" Took: "+(end.getTime()-start.getTime())+" ms");
 		return result;
 	}
 
@@ -184,7 +184,7 @@ public class QuickQuery {
 		}
 		Date end = new Date();
 		LOG.debug("Execution API: "+apiName+" Query: "+query+" End: "+(end));
-		LOG.info("Execution API: "+apiName+" Took: "+(end.getTime()-start.getTime())+" ms");
+		LOG.debug("Execution API: "+apiName+" Took: "+(end.getTime()-start.getTime())+" ms");
 		return result;
 	}
 
