@@ -24,7 +24,7 @@ public class XPXPriceChangeOrderOnSuccessAPI {
 	
 	public Document onSuccess(YFSEnvironment env, Document inXML)
 	{
-		log.info("Inside Change Order On success");
+		log.debug("Inside Change Order On success");
 		Document inputDoc=null;
 		String ischangeOrderInprogress=null;
 		String isDiscountCalculate = null;
@@ -46,7 +46,7 @@ public class XPXPriceChangeOrderOnSuccessAPI {
 				try
 				{
 					String inputXML = SCXmlUtil.getString(inputDoc);
-					log.info("inputXML for changeOrder : " + inputXML);
+					log.debug("inputXML for changeOrder : " + inputXML);
 				
 					env
 							.setApiTemplate(
@@ -79,7 +79,7 @@ public class XPXPriceChangeOrderOnSuccessAPI {
 				}
 				catch(Exception e)
 				{
-					log.info("Error while updating the order "+e );
+					log.debug("Error while updating the order "+e );
 				}
 				
 		}
