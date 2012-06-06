@@ -58,7 +58,7 @@ public class XPXGetCSREmailIDFromSAPCustomerAPI implements YIFCustomApi
 	 	   
 	 	   if(csrEmailId==null || csrEmailId.trim().length()==0)
 	 	   {
-	 		   log.info("The csr email id is not available and hence no mail is sent");
+	 		   log.debug("The csr email id is not available and hence no mail is sent");
 	 	   }
 	 	   else
 	 	   {
