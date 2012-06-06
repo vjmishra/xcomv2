@@ -57,7 +57,7 @@ public class XPXRRDSecurityFileGenerationAPI implements YIFCustomApi{
 	public Document securityFileGeneration(YFSEnvironment env, Document inputXML)  throws Exception
 	{
 		if(inputXML != null){
-			log.info("InputXML to securityFileGeneration"+SCXmlUtil.getString(inputXML));
+			log.debug("InputXML to securityFileGeneration"+SCXmlUtil.getString(inputXML));
 		}
 		Element inputElement = inputXML.getDocumentElement();
 		String nodeName = inputElement.getNodeName();
