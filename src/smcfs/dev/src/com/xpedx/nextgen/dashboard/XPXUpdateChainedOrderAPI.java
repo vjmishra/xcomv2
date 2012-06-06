@@ -131,12 +131,12 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 			// To create Direct Fulfillment order.
 			Document createOrderDoc = htDirectOrder.get("Direct");
 			if(createOrderDoc != null){
-			log.info("XPXUpdateChainedOrderAPI_DirectOrderCreateDoc:"+SCXmlUtil.getString(createOrderDoc));
+			log.debug("XPXUpdateChainedOrderAPI_DirectOrderCreateDoc:"+SCXmlUtil.getString(createOrderDoc));
 			}
 			env.setApiTemplate("createOrder",changeOrderTemplate);
 			directOrderDoc = api.invoke(env, "createOrder", createOrderDoc);
 			if(directOrderDoc != null){
-			log.info("XPXUpdateChainedOrderAPI_DirectOrderCreateOutputDoc:"+SCXmlUtil.getString(directOrderDoc));
+			log.debug("XPXUpdateChainedOrderAPI_DirectOrderCreateOutputDoc:"+SCXmlUtil.getString(directOrderDoc));
 			}
 			env.clearApiTemplate("createOrder");
 		}
@@ -161,7 +161,7 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 	        String weblinekey = (String) Enumeration.nextElement (); 
 
 	        if(!YFCObject.isNull(weblinekey) && !YFCObject.isVoid(weblinekey)) {
-	        log.info("weblinekey of identifyChanges = " + weblinekey);	        
+	        log.debug("weblinekey of identifyChanges = " + weblinekey);	        
 	        }
 	        //2. Check if line exists on Fulfillment Order
 	        Element foLineElement = htFulfillmentOrder.get(weblinekey);
@@ -934,7 +934,7 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 			sOrderToLegacyDoc = directOrderDoc;
 		}
 		if(sOrderToLegacyDoc != null){
-		log.info("sOrderToLegacyDoc input to Legacy: "+SCXmlUtil.getString(sOrderToLegacyDoc));
+		log.debug("sOrderToLegacyDoc input to Legacy: "+SCXmlUtil.getString(sOrderToLegacyDoc));
 		}
 		Document legacyFormatOrderDoc = api.executeFlow(env, "XPXConvertToLegacyOrder", sOrderToLegacyDoc);
 		if(log.isDebugEnabled()){
@@ -1049,7 +1049,7 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 		}
 		Document outputOrderDoc = api.invoke(env, "changeOrder", inputOrderDoc);
 		if(outputOrderDoc != null){
-		log.info("ChangeOrder_CO_OutputDoc:"+SCXmlUtil.getString(outputOrderDoc));
+		log.debug("ChangeOrder_CO_OutputDoc:"+SCXmlUtil.getString(outputOrderDoc));
 		}
 		env.clearApiTemplate("changeOrder");
 		
@@ -1087,12 +1087,12 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 	public Document callChangeFulfillmentOrder(YFSEnvironment env, Element inputXML) throws Exception{
 		Document inputOrderDoc = buildChangeFulfillmentOrderInputXML(inputXML);	
 		if(inputOrderDoc != null){
-		log.info("callChangeFulfillmentOrder_inputOrderDoc:"+SCXmlUtil.getString(inputOrderDoc));
+		log.debug("callChangeFulfillmentOrder_inputOrderDoc:"+SCXmlUtil.getString(inputOrderDoc));
 		}
 		env.setApiTemplate("changeOrder",changeOrderTemplate);
 		Document outputOrderDoc = api.invoke(env, "changeOrder", inputOrderDoc);
 		if(outputOrderDoc != null){
-		log.info("ChangeOrder_FO_OutputDoc:"+SCXmlUtil.getString(outputOrderDoc));
+		log.debug("ChangeOrder_FO_OutputDoc:"+SCXmlUtil.getString(outputOrderDoc));
 		}
 	return outputOrderDoc;	
 	}
@@ -1419,7 +1419,7 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 						webLineNo = XPXAddParametersAPI.generateWebLineNumber(entryType,uniqueSequenceNo,envtCode);
 			    	}
 				    if(!YFCObject.isNull(webLineNo) && !YFCObject.isVoid(webLineNo)) {
-				    log.info("webLineNo in populateCurrentOrderHashtable method = " + webLineNo);
+				    log.debug("webLineNo in populateCurrentOrderHashtable method = " + webLineNo);
 				    }
 					//Element extnOrderLineElement = parentDoc.createElement("Extn");
 					//oElement.appendChild(extnOrderLineElement);
@@ -1845,20 +1845,20 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 		}
 
 		
-		log.info("");
+		log.debug("");
 		if(!YFCObject.isNull(orderType) && !YFCObject.isVoid(orderType)) {
-		log.info("orderType = " + orderType);
+		log.debug("orderType = " + orderType);
 		}
 		if(!YFCObject.isNull(extnOrderType) && !YFCObject.isVoid(extnOrderType)) {
-		log.info("extnOrderType = " + extnOrderType);
+		log.debug("extnOrderType = " + extnOrderType);
 		}
 		if(!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
-		log.info("extnLineType = " + extnLineType);
+		log.debug("extnLineType = " + extnLineType);
 		}
 		if(!YFCObject.isNull(changeFlag) && !YFCObject.isVoid(changeFlag)) {
-		log.info("changeFlag = " + changeFlag);
+		log.debug("changeFlag = " + changeFlag);
 		}
-		log.info("");
+		log.debug("");
 		
 		ArrayList<String> lineTypeList = new ArrayList<String>();
 		lineTypeList.add(changeFlag);
@@ -1911,14 +1911,14 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 			NodeList instructionsList = inputElement.getElementsByTagName("Instruction");
 			int instructionListSize = instructionsList.getLength();
 			if(!YFCObject.isNull(instructionListSize) && !YFCObject.isVoid(instructionListSize)) {
-			log.info("instructionListSize = " + instructionListSize);
+			log.debug("instructionListSize = " + instructionListSize);
 			}
 			for(int i=0;i<instructionListSize;i++){
 				Element instructionElement = (Element) instructionsList.item(i);			
 				if(instructionElement.hasAttribute("InstructionType")){
 					String instructionType = instructionElement.getAttribute("InstructionType");
 					if(!YFCObject.isNull(instructionType) && !YFCObject.isVoid(instructionType)) {
-					log.info("instructionType = " + instructionType);
+					log.debug("instructionType = " + instructionType);
 					}
 					if(!YFCObject.isNull(instructionType) && !YFCObject.isVoid(instructionType) 
 							&& (instructionType.equalsIgnoreCase("HEADER") || instructionType.equalsIgnoreCase("LINE")) ){
@@ -2012,24 +2012,24 @@ public class XPXUpdateChainedOrderAPI implements YIFCustomApi{
 					if((XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag) &&
 							!(XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag))
 					{
-						log.info("Inside first if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
+						log.debug("Inside first if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
 						extnOrderElemT.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_1);
 					}
 					
 					else if((XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag) &&
 							!(XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag))
 					{
-						log.info("Inside second if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
+						log.debug("Inside second if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
 						extnOrderElemT.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_2);
 					}
 					
 					else if ((XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag) &&
 							(XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag))
 					{
-						log.info("Inside third if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
+						log.debug("Inside third if loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI ");
 						extnOrderElemT.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_1_AND_2);
 					} else {
-						log.info("Inside else loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI");
+						log.debug("Inside else loop of mergeLegacyAttributes in XPXUpdateChainedOrderAPI");
 						extnOrderElemT.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,"Order is on Web Hold.");
 					}
 					
