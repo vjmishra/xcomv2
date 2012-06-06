@@ -746,7 +746,7 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 						
 			if(isECSR1Empty && isECSR2Empty)
 			{
-				log.info("There are no To email addresses and hence mail will not be sent!!!");
+				log.debug("There are no To email addresses and hence mail will not be sent!!!");
 			}
 			else
 			{
