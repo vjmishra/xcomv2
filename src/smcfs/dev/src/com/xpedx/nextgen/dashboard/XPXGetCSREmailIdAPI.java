@@ -324,7 +324,7 @@ public class XPXGetCSREmailIdAPI implements YIFCustomApi
 		}	
 
 		String entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
-		log.info("Entry type = " + entryType);
+		log.debug("Entry type = " + entryType);
 		Element extnElem = (Element) inputDocRoot.getElementsByTagName("Extn").item(0);
 		String envtCode = extnElem.getAttribute(XPXLiterals.A_EXTN_ENVIRONMENT_CODE);
 		/* Changes made to fix issue 926 
