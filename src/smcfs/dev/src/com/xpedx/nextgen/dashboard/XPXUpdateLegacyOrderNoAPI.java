@@ -67,7 +67,7 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 		
 		changeOrderInputDoc = getChangeOrderInputDoc(foDetailsMap,webLineNumberList,legacyOrderNumber,generationNumber);
 		if(inputXML != null){
-			log.info("UpdateSterlingOrders_ChangeOrderInputDoc:"+ SCXmlUtil.getString(changeOrderInputDoc));
+			log.debug("UpdateSterlingOrders_ChangeOrderInputDoc:"+ SCXmlUtil.getString(changeOrderInputDoc));
 		}
 		try {
 			api.invoke(env, XPXLiterals.CHANGE_ORDER_API, changeOrderInputDoc);
