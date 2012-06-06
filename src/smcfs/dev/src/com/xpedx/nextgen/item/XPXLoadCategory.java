@@ -45,7 +45,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 			 */
 			api = YIFClientFactory.getInstance().getLocalApi();
 			if(inXML != null){
-				log.info("Input XML for XPXLoadCategory : " + SCXmlUtil.getString(inXML));
+				log.debug("Input XML for XPXLoadCategory : " + SCXmlUtil.getString(inXML));
 			}
 			
 			Element eCategoryList = inXML.getDocumentElement();
