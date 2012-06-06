@@ -67,7 +67,7 @@ public class XPXCheckCustomerContactExtnExist implements YCPDynamicConditionEx
 			}		
 		}
 		
-		log.info("Customer Contact Extn information exist: " + custContactExtnExist);
+		log.debug("Customer Contact Extn information exist: " + custContactExtnExist);
 		return custContactExtnExist;
 	}
 
