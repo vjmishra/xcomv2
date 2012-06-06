@@ -49,7 +49,7 @@ public class XPXInvokeConfirmDraftOrderCreationAPI implements YIFCustomApi
 			/*//Retrieve ref Order Header key from the environment object
 			
 			String referenceOrderHeaderKey= (String) env.getTxnObject("ReferenceOrderHeaderKey");
-			log.info("The reference order header key is: "+referenceOrderHeaderKey);
+			log.debug("The reference order header key is: "+referenceOrderHeaderKey);
 			
 			Document changeRefOrderInputDocument = YFCDocument.createDocument("XPXRefOrderHdr").getDocument();
 			changeRefOrderInputDocument.getDocumentElement().setAttribute("RefOrderHdrKey", referenceOrderHeaderKey);
