@@ -33,7 +33,7 @@ public class XPXGetPOAckDetailsAPI implements YIFCustomApi{
 		ArrayList<String> orderArray = new ArrayList<String>();
 		String orderNo = "";
 		String etradingID = "";
-		log.info("The input XML for XPXGetPOAckDetailsAPI is :" + SCXmlUtil.getString(inXML));
+		log.debug("The input XML for XPXGetPOAckDetailsAPI is :" + SCXmlUtil.getString(inXML));
 		orderArray = getOrderDetails(env,inXML);
 		orderNo = orderArray.get(0);
 		etradingID = orderArray.get(1);
