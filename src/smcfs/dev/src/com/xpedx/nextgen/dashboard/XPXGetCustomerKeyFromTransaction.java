@@ -45,7 +45,7 @@ public class XPXGetCustomerKeyFromTransaction implements YIFCustomApi
 		} else {
 			throw new Exception("Customer Key cannot be null in XPXGetCustomerKeyFromTransaction");
 		}
-		log.info("XPXGetCustomerKeyFromTransaction_CustomerKey" + customerKeyStr);
+		log.debug("XPXGetCustomerKeyFromTransaction_CustomerKey" + customerKeyStr);
 		
 		Element rootElem = inputXML.getDocumentElement();
 		rootElem.setAttribute("CustomerKey", customerKeyStr);		
