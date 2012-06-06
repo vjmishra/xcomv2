@@ -61,7 +61,7 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
             String timeout = null;
 			Integer timeoutInSecs;
 			if(inputXML != null){
-				log.info("The input XML to the Price and Availability Webservice is " + SCXmlUtil.getString(inputXML));
+				log.debug("The input XML to the Price and Availability Webservice is " + SCXmlUtil.getString(inputXML));
 			}
 			endPointURL = YFSSystem.getProperty("PandAWSDL");
 			
