@@ -2888,7 +2888,6 @@ function showSharedListForm(){
 							
 								<s:set name="itemAssetList"
 										value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
-									
 									<s:if test='#itemAssetList != null && #itemAssetList.size() > 0 '>
 										<s:set name="itemAsset" value='#itemAssetList[0]' />
 										<s:set name='imageLocation'
@@ -2920,8 +2919,12 @@ function showSharedListForm(){
 										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
 										<li> 
-										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-												<s:property value="%{#shortDesc}"/>
+										    <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+										    	<img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+												<!-- Added span for Jira 3931 -->
+												<span class="short-description">
+													<s:property value="%{#shortDesc}"/>
+												</span>
 												<br />
 												<br />
 												<br />
