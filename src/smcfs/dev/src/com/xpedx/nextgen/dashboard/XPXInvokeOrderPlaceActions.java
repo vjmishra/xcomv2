@@ -42,7 +42,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 	
 	public Document invokeActions(YFSEnvironment env, Document inputXML) {
 		
-		log.info("XPXInvokeOrderPlaceActions_invokeActions(): "+ SCXmlUtil.getString(inputXML));
+		log.debug("XPXInvokeOrderPlaceActions_invokeActions(): "+ SCXmlUtil.getString(inputXML));
 		
 		Document getCustomerProfileDetailsDoc = null;
 		try
@@ -162,7 +162,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi
 			}
 	    }
 		   
-		log.info("Order has been confirmed for the Web Confirmation Number: " + webConfNum);
+		log.debug("Order has been confirmed for the Web Confirmation Number: " + webConfNum);
 		   
 	    if (!YFCObject.isNull(webConfNum) && !YFCObject.isVoid(webConfNum)) {
 		   // To Set Web Confirmation Number In The Output XML.
