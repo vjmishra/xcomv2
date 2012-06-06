@@ -49,7 +49,7 @@ public class XPXHandleTransactionFailure implements YIFCustomApi {
 			YFCElement rootEle = YFCDocument.getDocumentFor(inXML)
 					.getDocumentElement();
 
-			log.info("XPXHandleTransactionFailure_InXML:" + rootEle.getString());
+			log.debug("XPXHandleTransactionFailure_InXML:" + rootEle.getString());
 		
 			if (rootEle.hasChildNodes()) {
 				YFCElement headerCodeElem = rootEle
