@@ -440,7 +440,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		env.setApiTemplate("getCustomerList", getCustomerListTemplate);
 		Document getCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
 		if(getCustomerListOutputDoc != null){
-			yfcLogCatalog.info("The shipTo getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
+			yfcLogCatalog.debug("The shipTo getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
 		}
 		Element customerElement = (Element) getCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element parentCustomerElement = (Element) customerElement.getElementsByTagName("ParentCustomer").item(0);
@@ -449,7 +449,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		inputCustomerElement.setAttribute("CustomerID", billToCustomerId);
 		Document getBillToCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
 		if(getBillToCustomerListOutputDoc != null){
-			yfcLogCatalog.info("The billTo getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
+			yfcLogCatalog.debug("The billTo getCustomerList is: "+SCXmlUtil.getString(getBillToCustomerListOutputDoc));
 		}
 		Element billToCustomerElement = (Element) getBillToCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element billToParentCustomerElement = (Element) billToCustomerElement.getElementsByTagName("ParentCustomer").item(0);
@@ -457,7 +457,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		inputCustomerElement.setAttribute("CustomerID", sapCustomerId);
 		Document getSAPCustomerListOutputDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
 		if(getSAPCustomerListOutputDoc != null){
-			yfcLogCatalog.info("The SAP getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
+			yfcLogCatalog.debug("The SAP getCustomerList is: "+SCXmlUtil.getString(getSAPCustomerListOutputDoc));
 		}
 		Element sapCustomerElement = (Element) getSAPCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		Element sapExtnCustomerElement = (Element) sapCustomerElement.getElementsByTagName("Extn").item(0);
@@ -476,7 +476,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 				mSAPCustomerkey = custElement.getAttribute("RootCustomerKey");
 			}			
 		}*/
-		/*yfcLogCatalog.info("MSAPCustomerkey = " + mSAPCustomerkey);
+		/*yfcLogCatalog.debug("MSAPCustomerkey = " + mSAPCustomerkey);
 		log.debug("MSAPCustomerkey = " + mSAPCustomerkey);*/
 		// To check PO Ack is required.
 		/*if(mSAPCustomerkey != null && mSAPCustomerkey != ""){
@@ -500,7 +500,7 @@ public class XPXSendPOAckOnCreateOrderAPI implements YIFCustomApi{
 		}*/		
 		env.clearApiTemplate("getCustomerList");
 		if(!YFCObject.isNull(isPOACKRequired) && !YFCObject.isVoid(isPOACKRequired)) {
-			yfcLogCatalog.info("isPOACKRequired = " + isPOACKRequired);
+			yfcLogCatalog.debug("isPOACKRequired = " + isPOACKRequired);
 		}
 		return isPOACKRequired;
 	}
