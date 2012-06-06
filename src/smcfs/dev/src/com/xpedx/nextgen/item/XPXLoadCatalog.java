@@ -52,7 +52,7 @@ public class XPXLoadCatalog implements YIFCustomApi {
 					.getDocumentElement();
 			eModifyCategoryItems.setAttribute("CallingOrganizationCode",
 					_ORG_CODE);
-			log.info("Input XML in the invoke method of XPXLoadCatalog :" + SCXmlUtil.getString(inXML));
+			log.debug("Input XML in the invoke method of XPXLoadCatalog :" + SCXmlUtil.getString(inXML));
 			Element eItemList = inXML.getDocumentElement();
 
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
