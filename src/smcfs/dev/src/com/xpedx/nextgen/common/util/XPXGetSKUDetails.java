@@ -32,7 +32,7 @@ public class XPXGetSKUDetails implements YIFCustomApi{
 	{
 		
 		api = YIFClientFactory.getInstance().getApi();
-		log.info("InputXML for getSKUDetails is : "+SCXmlUtil.getString(inputXML));
+		log.debug("InputXML for getSKUDetails is : "+SCXmlUtil.getString(inputXML));
 		Element inputElement = inputXML.getDocumentElement();
 		String sku = inputElement.getAttribute("SKU");
 		String organizationCode = inputElement.getAttribute("OrganizationCode");
