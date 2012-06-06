@@ -425,7 +425,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		}	
 
 		entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
-		log.info("Entry type = " + entryType);
+		log.debug("Entry type = " + entryType);
 		/* Changes made to fix issue 926 
 		IF order is placed from B2B,WEB or COM  Environment ID is Changed to constant('E') */
 		if(entryType != null && (XPXLiterals.SOURCE_TYPE_B2B.equals(entryType) || XPXLiterals.SOURCE_WEB.equals(entryType) 
