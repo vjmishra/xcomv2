@@ -72,7 +72,7 @@ public class XPXGetCustomerListForCOMOrderSummaryAPI implements YIFCustomApi {
 			throw new YFSException("Input XML document cannot be null or invalid to XPXGetCustomerListForCOMOrderSummaryAPI.getCustomerList(...)");
 		}
 
-		log.info("XPXGetCustomerListForCOMOrderSummaryAPI.getCustomerList(...)--> Input XML" + SCXmlUtil.getString(docIn));
+		log.debug("XPXGetCustomerListForCOMOrderSummaryAPI.getCustomerList(...)--> Input XML" + SCXmlUtil.getString(docIn));
 		
 		// create references with VOID values.
 		Document docOut = null;
@@ -176,7 +176,7 @@ public class XPXGetCustomerListForCOMOrderSummaryAPI implements YIFCustomApi {
 		//clear the template.
 		env.clearApiTemplate("getCustomerList");
 
-		log.info("XPXGetCustomerListForCOMOrderSummaryAPI.getCustomerList(...)--> Output XML" + SCXmlUtil.getString(docOut));
+		log.debug("XPXGetCustomerListForCOMOrderSummaryAPI.getCustomerList(...)--> Output XML" + SCXmlUtil.getString(docOut));
 		return docOut;
 	}
 
