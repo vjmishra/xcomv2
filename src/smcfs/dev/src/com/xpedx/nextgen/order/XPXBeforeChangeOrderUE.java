@@ -372,7 +372,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					//}
 					catch(Exception e)
 					{
-						log.info("Error while updating the order "+e );
+						log.debug("Error while updating the order "+e );
 					}
 					
 			}
