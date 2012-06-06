@@ -28,7 +28,7 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
 	public Document invokeWebService(YFSEnvironment env, Document inputXML) throws Exception
 	{
 			
-			log.info("OrderEditInterface_InputXML:" + SCXmlUtil.getString(inputXML));	
+			log.debug("OrderEditInterface_InputXML:" + SCXmlUtil.getString(inputXML));	
             Document orderEditResponseDoc = null;
             String endPointURL = null;
             
@@ -46,7 +46,7 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
             FPlaceOrderE inputOrderXml = new FPlaceOrderE();
             FPlaceOrder inputPlaceOrder = new FPlaceOrder();
             String inputXMLString = SCXmlUtil.getString(inputXML);
-            log.info("Input xml for OrderPlace to Legacy: "+inputXMLString);
+            log.debug("Input xml for OrderPlace to Legacy: "+inputXMLString);
             inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
             inputOrderXml.setFPlaceOrder(inputPlaceOrder);
             FPlaceOrderResponseE orderResponse=null;
@@ -65,7 +65,7 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
 
             orderEditResponseDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
              
-            log.info("OrderEditInterface_LegacyResponse:" + SCXmlUtil.getString(orderEditResponseDoc));
+            log.debug("OrderEditInterface_LegacyResponse:" + SCXmlUtil.getString(orderEditResponseDoc));
             // Throw error to revert the transaction if there a transaction failure message from legacy.
             Element orderElement = orderEditResponseDoc.getDocumentElement(); 
             NodeList tranStatusList = (NodeList)orderElement.getElementsByTagName("TransactionStatus");
@@ -75,7 +75,7 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
      			// Transaction status has been checked for Failure.
      			if(tranStatus != null && tranStatus.equalsIgnoreCase("F")){
      				// Error logged in CENT and thrown to revert the Order changes made in sterling database.
-     				log.info("Order Edit - Transaction has failed when trying to modify order in Legacy.");	
+     				log.debug("Order Edit - Transaction has failed when trying to modify order in Legacy.");	
      				Exception oeException = new Exception("Transaction has failed when trying to modify order in Legacy.");
      				// setErrorDescription("Transaction has failed when trying to modify order in Legacy.");
      				prepareErrorObject(oeException, "Order Edit", XPXLiterals.YFE_ERROR_CLASS, env, inputXML);
@@ -90,7 +90,7 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
             	  // Flag set to identify order edit interface when doing order update.
             	  orderEditResponseDoc.getDocumentElement().setAttribute("IsOrderEdit", "Y");
 	              String outputXMLString = SCXmlUtil.getString(orderEditResponseDoc);
-	              log.info("Output xml for OrderPlace from Legacy: "+outputXMLString);
+	              log.debug("Output xml for OrderPlace from Legacy: "+outputXMLString);
              } else {
 	              log.error("Output from Legacy for Order placement is empty");
              }
