@@ -37,7 +37,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 		if (stockStatus == null || stockStatus.trim().length() == 0) {
 			stockStatus = "W";
 		}
-		log.info("XPEDXGetAdditionalCatalogIndexInformationUE_StockStatus : "+stockStatus);
+		log.debug("XPEDXGetAdditionalCatalogIndexInformationUE_StockStatus : "+stockStatus);
 		try {
 			mEnvironment = environment;
 			YFCDocument inDocument = YFCDocument.getDocumentFor(inDocumentUE);
@@ -78,7 +78,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					.getAttribute("OrganizationCode");
 			String[] divisionsForStockedItem = getDivisionsForStockedItem(
 					itemID, organizationCode);
-			log.info("getLocaleDoc_divisionsForStockedItem : "+divisionsForStockedItem);
+			log.debug("getLocaleDoc_divisionsForStockedItem : "+divisionsForStockedItem);
 			NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 					mEnvironment);
 			int lengthC = XpxItemcustXrefList.getLength();
@@ -117,7 +117,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 			for (YFCElement searchFieldElement : searchFieldListIterator) {
 				YFCElement valueElement = valueListElement
 						.createChild("AdditionalCatalogIndexInformation");
-				log.info("getLocaleDoc_searchFieldElement:" + searchFieldElement);
+				log.debug("getLocaleDoc_searchFieldElement:" + searchFieldElement);
 				valueElement.setAttribute("IndexFieldName", searchFieldElement
 						.getAttribute("IndexFieldName"));
 				if (customerNumberPlusPartNumber != null
@@ -131,7 +131,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 				}
 				if (divisionsForStockedItem != null
 						&& divisionsForStockedItem.length > 0) {
-					log.info("getLocaleDoc_divisionsForStockedItem="+divisionsForStockedItem);
+					log.debug("getLocaleDoc_divisionsForStockedItem="+divisionsForStockedItem);
 					String divisionForStockedItem = "";
 					for (String division : divisionsForStockedItem) {
 						if (division != null && division.trim().length() > 0) {
@@ -141,13 +141,13 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 					}
 					if ("showNormallyStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
-						log.info("getLocaleDoc_showNormallyStockedItems=" + divisionForStockedItem.trim());
+						log.debug("getLocaleDoc_showNormallyStockedItems=" + divisionForStockedItem.trim());
 						valueElement.setAttribute("Value",
 								divisionForStockedItem.trim());
 					}
 					if ("showStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
-						log.info("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());
+						log.debug("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());
 						valueElement.setAttribute("Value",
 								divisionForStockedItem.trim());
 					}
