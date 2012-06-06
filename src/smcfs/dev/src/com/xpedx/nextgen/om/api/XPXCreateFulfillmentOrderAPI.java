@@ -62,7 +62,7 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		
 		setProgressYFSEnvironmentVariables(env);
 		
-		log.info("XPXCreateFulfillmentOrderAPI.invoke()--> Input XML" + SCXmlUtil.getString(inXML));
+		log.debug("XPXCreateFulfillmentOrderAPI.invoke()--> Input XML" + SCXmlUtil.getString(inXML));
 		// Set createOrder API Output Template
 		env.setApiTemplate(XPXLiterals.CREATE_ORDER_API, createOrderTemplate);
 		
@@ -98,7 +98,7 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
             return inXML;
 		}
 		
-		log.info("XPXCreateFulfillmentOrderAPI.invoke()--> Output XML" + SCXmlUtil.getString(inXML));
+		log.debug("XPXCreateFulfillmentOrderAPI.invoke()--> Output XML" + SCXmlUtil.getString(inXML));
 		return  inXML;
 	}
 	
