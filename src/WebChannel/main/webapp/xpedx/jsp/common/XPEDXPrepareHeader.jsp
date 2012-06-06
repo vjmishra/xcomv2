@@ -297,7 +297,7 @@ var selectedShipCustomer = null;
                    failure: function (response, request){
                        var x = document.getElementById(divId);
                        x.innerHTML = "";
-                       alert('Failed to fecth the share list');
+                       alert('Unable to load the share locations. Please try again.');
                        document.body.style.cursor = 'default';                                                  
                    }
                });     
