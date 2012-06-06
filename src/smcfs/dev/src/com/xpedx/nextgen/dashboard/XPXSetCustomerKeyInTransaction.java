@@ -44,7 +44,7 @@ public class XPXSetCustomerKeyInTransaction implements YIFCustomApi
 		} else {
 			throw new Exception("Customer Key cannot be null in XPXSetCustomerKeyInTransaction");
 		}				
-		log.info("XPXSetCustomerKeyInTransaction_CustomerKey:" + customerKey);		
+		log.debug("XPXSetCustomerKeyInTransaction_CustomerKey:" + customerKey);		
 		env.setTxnObject("CustomerKey", customerKey);	
 		return inputXML;		
 	}
