@@ -1815,8 +1815,8 @@
 				<Order OrderHeaderKey="" />
 			</Input>
 			<Template>
-				<Order>
-					<OrderHoldTypes>
+					<Order Status="">
+						<OrderHoldTypes>
 						<OrderHoldType HoldType="" LastHoldTypeDate=""
 							OrderAuditKey="" OrderHeaderKey="" OrderLineKey="" ReasonText=""
 							ResolverUserId="" Status="" StatusDescription="" TransactionId=""
