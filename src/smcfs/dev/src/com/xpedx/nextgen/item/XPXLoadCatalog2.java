@@ -51,7 +51,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			YFCElement eModifyCategoryItems = modifyCategoryItemsDoc.getDocumentElement();
 			eModifyCategoryItems.setAttribute("CallingOrganizationCode", _ORG_CODE);
 			if(inXML != null){
-				log.info("Input to XPXLoadCatalog : " + SCXmlUtil.getString(inXML));
+				log.debug("Input to XPXLoadCatalog : " + SCXmlUtil.getString(inXML));
 			}
 			Element eItemList = inXML.getDocumentElement();
 			
