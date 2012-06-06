@@ -66,7 +66,7 @@ public class XPXUOMDetailsSwapUtil implements YIFCustomApi
                 }
                 	
                 
-                log.info("Propery Name is: " + name + " Value is: " + props.getProperty(name));
+                log.debug("Propery Name is: " + name + " Value is: " + props.getProperty(name));
             }
         }
 		
@@ -87,7 +87,7 @@ public class XPXUOMDetailsSwapUtil implements YIFCustomApi
 		  {
 			  Element attributeElement = (Element)elementList.item(i);
 			  
-			  log.info("The attribute is: "+attributeElement.getAttribute(attributeName));
+			  log.debug("The attribute is: "+attributeElement.getAttribute(attributeName));
 			  
 			  String UOMCode = attributeElement.getAttribute(attributeName);
 			  
@@ -178,7 +178,7 @@ public class XPXUOMDetailsSwapUtil implements YIFCustomApi
 						        	nonOrderLineElementList.add(changeOrderELementInputDoc);
 				         }*/
 						  
-					    log.info("The UOM value used for replacement is: "+uomValue);
+					    log.debug("The UOM value used for replacement is: "+uomValue);
 					    attributeElement.setAttribute(attributeName,uomValue);
 					    codeToDescriptionMap.put(UOMCode, uomValue);  
 					    
