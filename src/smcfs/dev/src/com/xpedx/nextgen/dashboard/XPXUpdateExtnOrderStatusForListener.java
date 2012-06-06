@@ -38,7 +38,7 @@ public class XPXUpdateExtnOrderStatusForListener implements YIFCustomApi {
 		String orderStatus = "";
 		String orderStatusPrefix = "";
 		Element rootElement = inXML.getDocumentElement();
-		log.info("updateCustomerExtnOrderStatusrootElement:" + SCXmlUtil.getString(rootElement));
+		log.debug("updateCustomerExtnOrderStatusrootElement:" + SCXmlUtil.getString(rootElement));
 		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderLine")) {
 			Element orderElem = SCXmlUtil.getChildElement(rootElement, "Order");
 			if(orderElem!=null)
@@ -65,10 +65,10 @@ public class XPXUpdateExtnOrderStatusForListener implements YIFCustomApi {
 				extnElementInCODoc.setAttribute("ExtnOrderStatus", orderStatus);
 				extnElementInCODoc.setAttribute("ExtnOrderStatusPrefix", orderStatusPrefix);
 					
-				log.info("Calling changeOrder with Input\n");
-				log.info("---------------------------------------------\n");
-				log.info(SCXmlUtil.getString(changeOrderDoc)+"\n");
-				log.info("---------------------------------------------\n");
+				log.debug("Calling changeOrder with Input\n");
+				log.debug("---------------------------------------------\n");
+				log.debug(SCXmlUtil.getString(changeOrderDoc)+"\n");
+				log.debug("---------------------------------------------\n");
 				Document outDoc = api.invoke(env, "changeOrder", changeOrderDoc);
 				
 				
