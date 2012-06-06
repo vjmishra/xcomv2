@@ -120,7 +120,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 	    Element customerListOutputElement = null;
 	    boolean setWebHoldFlag = false;
 
-        log.info("The input xml to ADDParametersAPI is: "+SCXmlUtil.getString(inputXML));
+        log.debug("The input xml to ADDParametersAPI is: "+SCXmlUtil.getString(inputXML));
         
         /***********************************************/
         
@@ -139,19 +139,19 @@ public class XPXAddParametersAPI implements YIFCustomApi
         
         inputDocRoot =  inputXML.getDocumentElement();
         
-        //log.info("inputDocRoot"+SCXmlUtil.getString(inputDocRoot));
+        //log.debug("inputDocRoot"+SCXmlUtil.getString(inputDocRoot));
         
         /*********************************************/
          
 
 		orderHeaderKey = inputDocRoot.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
-		log.info("The order header key of the customer order is: "+orderHeaderKey);
+		log.debug("The order header key of the customer order is: "+orderHeaderKey);
 
 		customerContactID = inputDocRoot.getAttribute("CustomerContactID");
 		
 		/*********Fix done on 14/09/10 so that default Shipping method is always passed during order confirmation*********/
 		carrierServiceCode = inputDocRoot.getAttribute("CarrierServiceCode");
-		log.info("The carrier service code is: "+carrierServiceCode);
+		log.debug("The carrier service code is: "+carrierServiceCode);
 		
 		if(carrierServiceCode == null || carrierServiceCode.trim().length()==0)
 		{
@@ -194,7 +194,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 		/**************Added by Prasanth Kumar M. as fix for Bug #11643***************************/
 		
 		buyerOrgCode = inputDocRoot.getAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE);
-		//log.info("The buyerOrganizationCode is: "+buyerOrgCode);
+		//log.debug("The buyerOrganizationCode is: "+buyerOrgCode);
 		
 		if(buyerOrgCode!=null || buyerOrgCode.trim().length()!=0)
 		{
@@ -208,17 +208,17 @@ public class XPXAddParametersAPI implements YIFCustomApi
            	 if(i==2)
            	 {
            		 shipToSuffix = splitArrayOnBuyerOrgCode[i];
-           		log.info("The shipToSuffix is: "+shipToSuffix);
+           		log.debug("The shipToSuffix is: "+shipToSuffix);
            	 }
            	 if(i==3)
            	 {
            		envtCode = splitArrayOnBuyerOrgCode[i];
-           		log.info("The envt code is: "+envtCode);
+           		log.debug("The envt code is: "+envtCode);
            	 }
            	if(i==4)
           	 {
           		compCode = splitArrayOnBuyerOrgCode[i];
-          		log.info("The comp code is: "+compCode);
+          		log.debug("The comp code is: "+compCode);
           	 }
            	 
             }
@@ -268,10 +268,10 @@ public class XPXAddParametersAPI implements YIFCustomApi
 			{	
 				try {
 		              getCustomerListInputDoc = createGetCustomerListInput(env,buyerOrgCode);
-		         	   log.info("The input to getCustomerList for shipTo is: "+SCXmlUtil.getString(getCustomerListInputDoc));	
+		         	   log.debug("The input to getCustomerList for shipTo is: "+SCXmlUtil.getString(getCustomerListInputDoc));	
 		              /**********************getCustomerList call changed to MultiAPI call as part of fix for bug#11643*********/
 			          getCustomerListOutputDoc = api.invoke(env,XPXLiterals.MULTI_API, getCustomerListInputDoc);
-					log.info("The output of multiApi getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
+					log.debug("The output of multiApi getCustomerList is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
 			         /************************************************************************************************************/
 		           } 
 				catch (Exception e) {
@@ -311,17 +311,17 @@ public class XPXAddParametersAPI implements YIFCustomApi
 						
 						customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
 						customerOrderingDivision = customerExtnElement.getAttribute("ExtnCustOrderBranch")+"_"+envtCode;
-						//log.info("The customer ordering division is: "+customerOrderingDivision);
+						//log.debug("The customer ordering division is: "+customerOrderingDivision);
 						customerDivision = customerExtnElement.getAttribute("ExtnCustomerDivision")+"_"+envtCode;
-						//log.info("The customer division is: "+customerDivision);
+						//log.debug("The customer division is: "+customerDivision);
 						
 						Element customerBuyerOrgElement  = (Element)customerElement.getElementsByTagName(XPXLiterals.E_BUYER_ORGANIZATION).item(0);
 						shipToName = customerBuyerOrgElement.getAttribute(XPXLiterals.A_ORGANIZATION_NAME);
-						//log.info("The shipTo name is: "+shipToName);
+						//log.debug("The shipTo name is: "+shipToName);
 						
 						Element customerParentElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_PARENT_CUSTOMER).item(0);
 						billToId = customerParentElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
-						log.info("The billTo customer id is: "+billToId);
+						log.debug("The billTo customer id is: "+billToId);
 						
 						if(billToId!=null || billToId.trim().length()!=0)
 						{
@@ -336,7 +336,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				           	 {
 				           		 billToSuffix = splitArrayOnBillToId[c];
 				           		 
-				           		 log.info("The billToSuffix is: "+billToSuffix);
+				           		 log.debug("The billToSuffix is: "+billToSuffix);
 				           	 }
 				            }
 						}
@@ -364,17 +364,17 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					
 					customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
 					customerOrderingDivision = customerExtnElement.getAttribute("ExtnCustOrderBranch")+"_"+envtCode;
-					//log.info("The customer ordering division is: "+customerOrderingDivision);
+					//log.debug("The customer ordering division is: "+customerOrderingDivision);
 					customerDivision = customerExtnElement.getAttribute("ExtnCustomerDivision")+"_"+envtCode;
-					//log.info("The customer division is: "+customerDivision);
+					//log.debug("The customer division is: "+customerDivision);
 					
 					Element customerBuyerOrgElement  = (Element)customerListOutputElement.getElementsByTagName(XPXLiterals.E_BUYER_ORGANIZATION).item(0);
 					shipToName = customerBuyerOrgElement.getAttribute(XPXLiterals.A_ORGANIZATION_NAME);
-					//log.info("The shipTo name is: "+shipToName);
+					//log.debug("The shipTo name is: "+shipToName);
 					
 					Element customerParentElement = (Element) customerListOutputElement.getElementsByTagName(XPXLiterals.E_PARENT_CUSTOMER).item(0);
 					billToId = customerParentElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
-					log.info("The billTo customer id is: "+billToId);
+					log.debug("The billTo customer id is: "+billToId);
 					
 					if(billToId!=null || billToId.trim().length()!=0)
 					{
@@ -385,7 +385,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 			           	 {
 			           		 billToSuffix = splitArrayOnBillToId[c];
 			           		 
-			           		 log.info("The billToSuffix is: "+billToSuffix);
+			           		 log.debug("The billToSuffix is: "+billToSuffix);
 			           	 }
 			            }
 					}				
@@ -409,7 +409,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					
 					Document getParentCustomerListOutputDoc = api.invoke(env,XPXLiterals.MULTI_API, getCustomerListInputDoc);
 					
-					log.info("The output of multiApi getCustomerList is: "+SCXmlUtil.getString(getParentCustomerListOutputDoc));
+					log.debug("The output of multiApi getCustomerList is: "+SCXmlUtil.getString(getParentCustomerListOutputDoc));
 					
 					if(getParentCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).getLength() > 0)
 					{
@@ -436,12 +436,12 @@ public class XPXAddParametersAPI implements YIFCustomApi
 		/* Start - changes made for CR 1360 */
         NodeList instructionsList = inputDocRoot.getElementsByTagName("Instruction");
         int instructionListSize = instructionsList.getLength();
-        log.info("instructionListSize = " + instructionListSize);
+        log.debug("instructionListSize = " + instructionListSize);
         for(int i=0;i<instructionListSize;i++){
               Element instructionElement = (Element) instructionsList.item(i);              
               if(instructionElement.hasAttribute("InstructionType")){
                     String instructionType = instructionElement.getAttribute("InstructionType");
-                    log.info("instructionType = " + instructionType);
+                    log.debug("instructionType = " + instructionType);
                     if(!YFCObject.isNull(instructionType) && !YFCObject.isVoid(instructionType) 
                                 && (instructionType.equalsIgnoreCase("HEADER") ) ){
                     	setWebHoldFlag = true;
@@ -456,13 +456,13 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				|| (orderUpdateFlag != null && orderUpdateFlag.trim().length() != 0 && orderUpdateFlag.equalsIgnoreCase(XPXLiterals.BOOLEAN_FLAG_N))
 				|| (setWebHoldFlag == true))
 		{
-			log.info("Setting webHoldFlag as Y");
+			log.debug("Setting webHoldFlag as Y");
 			webHoldFlag=XPXLiterals.BOOLEAN_FLAG_Y;
 		}
 		
 		/*if(webConfirmationNumber != null && webConfirmationNumber.trim().length() != 0)
 		{*/
-			//log.info("The Web Confirmation Number is: "+ webConfirmationNumber);
+			//log.debug("The Web Confirmation Number is: "+ webConfirmationNumber);
 
 			if(orderExtn != null)
 			{		
@@ -478,21 +478,21 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					if((XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag) &&
 							!(XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag))
 					{
-						log.info("Inside first if");
+						log.debug("Inside first if");
 						orderExtn.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_1);
 					}
 					
 					else if((XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag) &&
 							!(XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag))
 					{
-						log.info("Inside second if");
+						log.debug("Inside second if");
 						orderExtn.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_2);
 					}
 					
 					else if ((XPXLiterals.CONSTANT_CHAR_P).equalsIgnoreCase(willCallFlag) &&
 							(XPXLiterals.BOOLEAN_FLAG_N).equalsIgnoreCase(orderUpdateFlag))
 					{
-						log.info("Inside third if");
+						log.debug("Inside third if");
 						orderExtn.setAttribute(XPXLiterals.A_EXTN_WEB_HOLD_REASON,XPXLiterals.WEB_HOLD_FLAG_REASON_1_AND_2);
 					}
 						
@@ -530,14 +530,14 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				{
 					environment_id = envtCode;
 					orderExtn.setAttribute(XPXLiterals.A_EXTN_ENVT_ID,environment_id);
-					log.info("Stamping the environment id");
+					log.debug("Stamping the environment id");
 				}
 				company_code = orderExtn.getAttribute(XPXLiterals.A_EXTN_COMPANY_CODE);
 				if(company_code == null || company_code.trim().length()<=0)
 				{
 					company_code = compCode;
 					orderExtn.setAttribute(XPXLiterals.A_EXTN_COMPANY_CODE,company_code);
-					log.info("Stamping the company code");
+					log.debug("Stamping the company code");
 				}
 				if(customerContactID != null && customerContactID .trim().length()>0)
 				{
@@ -545,15 +545,15 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					//Getting the user name of the customerContact to stamp as OrderedByName
 					
 					String extnOrderedByName = orderExtn.getAttribute("ExtnOrderedByName");
-					log.info("The extnOrderedByName is: "+extnOrderedByName);
+					log.debug("The extnOrderedByName is: "+extnOrderedByName);
 					
 					if(extnOrderedByName == null || extnOrderedByName.trim().length()<=0)
 					{
 					   Document getCustomerContactListInputDoc = YFCDocument.createDocument("CustomerContact").getDocument();
 					   getCustomerContactListInputDoc.getDocumentElement().setAttribute("CustomerContactID", customerContactID);
-					   log.info("The input to getCustomerContactList is: "+SCXmlUtil.getString(getCustomerContactListInputDoc));
+					   log.debug("The input to getCustomerContactList is: "+SCXmlUtil.getString(getCustomerContactListInputDoc));
 					   Document getCustomerContactListOutputDoc = api.invoke(env, "getCustomerContactList", getCustomerContactListInputDoc);
-					   log.info("The output of getCustomerContactList is: "+SCXmlUtil.getString(getCustomerContactListOutputDoc));
+					   log.debug("The output of getCustomerContactList is: "+SCXmlUtil.getString(getCustomerContactListOutputDoc));
 					   if(getCustomerContactListOutputDoc.getDocumentElement().getElementsByTagName("CustomerContact").getLength()>0)
 					    {
 						Element customerContactElement = (Element) getCustomerContactListOutputDoc.getDocumentElement().getElementsByTagName("CustomerContact").item(0);
@@ -592,7 +592,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 		    if(!"Cancelled".equalsIgnoreCase(lineStatus))
 		    {	
 			lineType = orderLine.getAttribute(XPXLiterals.A_LINE_TYPE);
-			log.info("lineType"+lineType);
+			log.debug("lineType"+lineType);
 			orderLineKey = orderLine.getAttribute(XPXLiterals.A_ORDER_LINE_KEY);
 			orderLineShipNode = orderLine.getAttribute(XPXLiterals.A_SHIP_NODE);
 			
@@ -611,7 +611,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 	           	 if(j==0)
 	           	 {
 	           		orderLineShipNode = splitArrayOnorderLineShipNode[j];
-	           		log.info("The order line ship node after stripping off division code is: "+orderLineShipNode);
+	           		log.debug("The order line ship node after stripping off division code is: "+orderLineShipNode);
 	           	 }
 	            }
 			}
@@ -624,11 +624,11 @@ public class XPXAddParametersAPI implements YIFCustomApi
 			if(orderLineExtn!=null && linePriceInfo!=null)
 			{
 			String extnDiscountedUnitPrice = orderLineExtn.getAttribute(XPXLiterals.A_EXTN_UNIT_PRICE_DISCOUNT);
-			log.info("The extn discount price before switch is: "+extnDiscountedUnitPrice);
+			log.debug("The extn discount price before switch is: "+extnDiscountedUnitPrice);
 			
 			
 			String unitPrice = linePriceInfo.getAttribute(XPXLiterals.A_UNIT_PRICE);
-			log.info("The unitPrice before switch is: "+unitPrice);
+			log.debug("The unitPrice before switch is: "+unitPrice);
 			
 			
 			//orderLineExtn.setAttribute(XPXLiterals.A_EXTN_UNIT_PRICE_DISCOUNT, unitPrice);
@@ -690,7 +690,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					
                      //Querying XPX_ITEMCUST_XREF to get the Customer Part No.
 					
-					log.info("The environment id used to query XREF table is: "+environment_id);					
+					log.debug("The environment id used to query XREF table is: "+environment_id);					
 					/*Document XREFOutputDoc = invokeXREF(env,itemId,legacyCustomerNo,environment_id,company_code,customer_branch);
 					if(XREFOutputDoc!=null)
 					{
@@ -700,7 +700,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					     {
 						        Element XREFElement = (Element) XREFCustElementList.item(0);
 						        customerItem = XREFElement.getAttribute("CustomerItemNumber");
-						        log.info("The customer part no is: "+customerItem);
+						        log.debug("The customer part no is: "+customerItem);
 						        item.setAttribute(XPXLiterals.A_CUSTOMER_ITEM, customerItem);
 					     }					
 				     }*/
@@ -740,7 +740,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 				/*****************New logic added on 01/07/2010 for line type determination*********************/
 				
 				/*Document getXPXItemBranchListInputDoc = createXPXItemBranchListInputDoc(itemId,orderLineShipNode,environment_id);
-				log.info("The input to getXPXitemBranchExtnListService is: "+SCXmlUtil.getString(getXPXItemBranchListInputDoc));				
+				log.debug("The input to getXPXitemBranchExtnListService is: "+SCXmlUtil.getString(getXPXItemBranchListInputDoc));				
 				Document getXPXItemBranchListOutputDoc = api.executeFlow(env,XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE, getXPXItemBranchListInputDoc);				
 				Element getXPXItemBranchListOutputDocRoot = getXPXItemBranchListOutputDoc.getDocumentElement();
 				Element XPXItemExtnElement = (Element)getXPXItemBranchListOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_EXTN).item(0);
@@ -754,7 +754,7 @@ public class XPXAddParametersAPI implements YIFCustomApi
 					 Changes made for issue 1501 
 					if("W".equalsIgnoreCase(inventoryIndicator) || "I".equalsIgnoreCase(inventoryIndicator))
 					{	
-						log.info("Line type is a stock !!!");
+						log.debug("Line type is a stock !!!");
 						orderLineExtn.setAttribute(XPXLiterals.A_EXTN_LINE_TYPE, "STOCK");
 					}
 					
@@ -947,12 +947,12 @@ public class XPXAddParametersAPI implements YIFCustomApi
 		log.debug("The final input to changeOrder from XPXAddParameters API is: "+SCXmlUtil.getString(inputXML));
 		}
 		//this was changed for special chargeline requirement
-		//log.info("inputDocRoot"+SCXmlUtil.getString(inputDocRoot));
+		//log.debug("inputDocRoot"+SCXmlUtil.getString(inputDocRoot));
 		/*Document newInputDoc = YFCDocument.createDocument().getDocument();
 		newInputDoc.appendChild(newInputDoc.importNode(inputDocRoot, true));
 		newInputDoc.renameNode(newInputDoc.getDocumentElement(), newInputDoc.getNamespaceURI(), "Order");*/
 		return inputXML;
-		/*log.info("newInputDoc"+SCXmlUtil.getString(newInputDoc));
+		/*log.debug("newInputDoc"+SCXmlUtil.getString(newInputDoc));
 		return newInputDoc;*/
 	}
 
@@ -1234,15 +1234,15 @@ public class XPXAddParametersAPI implements YIFCustomApi
               //XREFInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_BRANCH,customer_branch);
               XREFInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_LEGACY_ITEM_NO,itemId);
 		
-		      log.info("The input to getXrefList is: "+SCXmlUtil.getString(XREFInputDoc));
+		      log.debug("The input to getXrefList is: "+SCXmlUtil.getString(XREFInputDoc));
               //<XPXItemcustXrefList />
               
               try {
             	  
-            	  //log.info("The input to getXRefList is: "+SCXmlUtil.getString(XREFInputDoc));
+            	  //log.debug("The input to getXRefList is: "+SCXmlUtil.getString(XREFInputDoc));
 				XREFOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, XREFInputDoc);
 				
-				log.info("The output of getXrefList is: "+SCXmlUtil.getString(XREFOutputDoc));
+				log.debug("The output of getXrefList is: "+SCXmlUtil.getString(XREFOutputDoc));
 			} catch (YFSException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1368,12 +1368,12 @@ public class XPXAddParametersAPI implements YIFCustomApi
 
 		int uniqueSequenceLength = 8;
 		int keyLength = String.valueOf(uniqueSequenceNo).length();
-		log.info("KeyLength = "+keyLength);
+		log.debug("KeyLength = "+keyLength);
 		if(keyLength < 8)
 		{
 			formatted = String.format("%08d", uniqueSequenceNo); 
 
-			log.info("Number with leading zeros: " + formatted); 
+			log.debug("Number with leading zeros: " + formatted); 
 		}
 		else if(keyLength > 8)
 		{
