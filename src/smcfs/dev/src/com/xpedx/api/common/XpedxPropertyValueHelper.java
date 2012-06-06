@@ -61,7 +61,7 @@ public class XpedxPropertyValueHelper {
 			if (oldProperties.containsKey(propertyNameStr) == false
 					|| oldProperties.get(propertyNameStr).toString().equalsIgnoreCase(propertyValue) == false) {
 				
-				LOG.info("Fetched Property {" + propertyNameStr + "} Value {" + propertyValue + "} from " + propertySource);
+				LOG.debug("Fetched Property {" + propertyNameStr + "} Value {" + propertyValue + "} from " + propertySource);
 				
 				if (propertyValue != null) {
 					oldProperties.put(propertyNameStr, propertyValue);
