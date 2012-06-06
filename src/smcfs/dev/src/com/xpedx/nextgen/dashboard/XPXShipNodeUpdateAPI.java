@@ -119,7 +119,7 @@ public class XPXShipNodeUpdateAPI  implements YIFCustomApi
 			
 			shipNode = extnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
 			
-			log.info("The value of shipnode is: "+shipNode);
+			log.debug("The value of shipnode is: "+shipNode);
 			
 		}
 			
@@ -202,7 +202,7 @@ public class XPXShipNodeUpdateAPI  implements YIFCustomApi
 		}	
 
 		entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
-		log.info("Entry type = " + entryType);
+		log.debug("Entry type = " + entryType);
 		/* Changes made to fix issue 926 
 		IF order is placed from B2B,WEB or COM  Environment ID is Changed to constant('E') */
 		if(entryType != null && (XPXLiterals.SOURCE_TYPE_B2B.equals(entryType) || XPXLiterals.SOURCE_WEB.equals(entryType) 
@@ -325,7 +325,7 @@ public class XPXShipNodeUpdateAPI  implements YIFCustomApi
 			/* changes made to fix issue 926 */
 			// webLineNumber = generateWebLineNumber(uniqueSequenceNo,envtCode);
 			webLineNumber = XPXAddParametersAPI.generateWebLineNumber(entryType, uniqueSequenceNo,envtCode);
-			log.info("webLineNumber :::: " + webLineNumber);
+			log.debug("webLineNumber :::: " + webLineNumber);
 			
 			Element orderLineExtn = getChangeOrderInputDoc.createElement(XPXLiterals.E_EXTN);
 			orderLineExtn.setAttribute(XPXLiterals.A_WEB_LINE_NUMBER, webLineNumber);
