@@ -512,13 +512,19 @@ public class XPEDXExtendedOrderDetailAction extends
 	// Call getCustomerContactList to check if the logged-in user is Approver or
 	// Proxy-Approver for the order owner
 	public boolean approvalAllowed() throws CannotBuildInputException {
+		String proxyApproverID="";
+		String primaryApproverID="";
 		if (isSupportedFunction(true)) {
 			if (this.approvalHoldStatus.equals(OrderConstants.OPEN_HOLD_STATUS)) {
 				//modified for jira 3484
 				if(this.resolverUserID != null){
 					String approverUserIDs [] = this.resolverUserID.split(",");
-					String primaryApproverID = approverUserIDs[0];
-					String proxyApproverID = approverUserIDs[1];
+					if(approverUserIDs!=null && approverUserIDs.length>0){
+					 	primaryApproverID = approverUserIDs[0];
+					}
+					if(approverUserIDs!=null && approverUserIDs.length>1){
+						proxyApproverID = approverUserIDs[1];
+					}
 					if ((primaryApproverID != null && primaryApproverID.equals(wcContext.getCustomerContactId())) || (proxyApproverID != null && proxyApproverID.equals(wcContext.getCustomerContactId())) ) {
 						return true;
 					} else if (UserProfileHelper.isContactProxyForResolver(
