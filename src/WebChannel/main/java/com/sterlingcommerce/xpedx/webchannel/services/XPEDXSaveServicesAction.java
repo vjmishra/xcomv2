@@ -21,6 +21,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
@@ -320,6 +321,12 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String customerId = getWCContext().getCustomerId();
 			storefrontId = getWCContext().getStorefrontId();
 			StringBuffer sb = new StringBuffer();
+			String saleRepEmail = "";
+			String ccEMail = "";
+			String extnECsr1EmailID = "";
+			String extnECsr2EmailID = "";
+			String sapCustomerKey = "";
+			
 			
 			// Getting ship to address and customer details
 
@@ -347,8 +354,30 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			if(outputDocSales != null){
 			customerElement = outputDocSales.getDocumentElement();
 			
-     		salesProfessional = getSalesRepInfo(customerElement);
+			HashMap<String,String> csrEmailMAP = new HashMap<String,String>();
+			csrEmailMAP = getCSREmailID(customerElement);
+			if(csrEmailMAP.size()>0){
+				if(csrEmailMAP.get("csr1EmailID")!=null && csrEmailMAP.get("csr1EmailID").trim().length() > 0){
+					extnECsr1EmailID = csrEmailMAP.get("csr1EmailID");
+				}
+				if(csrEmailMAP.get("csr2EmailID")!=null && csrEmailMAP.get("csr2EmailID").trim().length() > 0){
+					extnECsr2EmailID = csrEmailMAP.get("csr2EmailID");
+				}
+			}
 			
+			
+			
+			HashMap<String,String> salesProfessionalMap = new HashMap<String,String>();
+			salesProfessionalMap = getSalesRepInfo(customerElement);
+			if(salesProfessionalMap.size() > 0){
+				
+				if(salesProfessionalMap.get("salesProfessional")!=null && salesProfessionalMap.get("salesProfessional").trim().length() >0){
+					salesProfessional = salesProfessionalMap.get("salesProfessional");
+				}
+				if(salesProfessionalMap.get("salesRepemailId")!=null && salesProfessionalMap.get("salesRepemailId").trim().length() > 0){
+					saleRepEmail = salesProfessionalMap.get("salesRepemailId");
+				}
+			}
 			}
 			
 			/*
@@ -433,10 +462,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			/**
 			 JIRA 3160 -Start
 			 */
-			String ccEMail = "";
-			String extnECsr1EmailID = "";
-			String extnECsr2EmailID = "";
-			String sapCustomerKey = "";
 			
 			XPEDXShipToCustomer shipToCustomerObject = new XPEDXShipToCustomer();
 			shipToCustomerObject =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
@@ -445,20 +470,14 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
             if(shipToCustomerObject.getBillTo()!=null && shipToCustomerObject.getBillTo().getExtnCustomerName()!=null && shipToCustomerObject.getBillTo().getExtnCustomerName().trim().length() > 0){
 				accountName = shipToCustomerObject.getBillTo().getExtnCustomerName();
             }
-			if(shipToCustomerObject.getBillTo()!=null){
-			extnECsr1EmailID = shipToCustomerObject.getBillTo().getExtnECsr1EMailID();
-			extnECsr2EmailID = shipToCustomerObject.getBillTo().getExtnECsr2EMailID();
-			}
-			sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
+			 sapCustomerKey = shipToCustomerObject.getBillTo().getParentCustomerKey();
 			}
 			
 			billtoCustid = shipToCustomerObject.getBillTo().getCustomerID();
 			
 			String csrEmailID = XPEDXWCUtils.setCSREmails(extnECsr1EmailID,extnECsr2EmailID);
 			
-			String saleRepEmail = XPEDXWCUtils.getSalesRepEmail(sapCustomerKey,wcContext);
-			
-			
+						
 			if(csrEmailID != null && csrEmailID.trim().length() > 0 && saleRepEmail!=null && saleRepEmail.trim().length() > 0){
 				ccEMail = csrEmailID + XPEDXConstants.EMAILIDSEPARATOR +saleRepEmail;
 			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
@@ -1037,16 +1056,18 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	 * JIRA 3756 Code changes Start			
 	 */
 	
-	public static String getSalesRepInfo(Element customerElement) throws XPathExpressionException {
+	public static HashMap<String, String> getSalesRepInfo(Element customerElement) throws XPathExpressionException {
  		
 		 String primarySalesRepName = "";
-		 
+		 String salesRepemailId = "";
+		 HashMap<String,String> salesProfessionalplusEmailMap = new HashMap<String,String>();
 		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList");
 		if(salesRepInfo != null){	
 			if(salesRepInfo.size() > 0){
 				Element salesRepElement=salesRepInfo.get(0);
 				String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@FirstName");
 				String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@LastName");
+				salesRepemailId = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@EMailID");
 					if(firstName !=null && firstName.trim().length() > 0 && lastName !=null && lastName.trim().length() > 0){
 						primarySalesRepName = firstName + " " + lastName ;
 					}else if(firstName !=null && firstName.trim().length() > 0){
@@ -1054,13 +1075,73 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 					}else if(lastName !=null && lastName.trim().length() > 0){
 						primarySalesRepName = lastName ; 
 					}
+					if(salesRepemailId!=null && salesRepemailId.trim().length() > 0){
+						salesProfessionalplusEmailMap.put("salesRepemailId",salesRepemailId);
+					}
+					if(primarySalesRepName!=null && primarySalesRepName.trim().length() > 0){
+						salesProfessionalplusEmailMap.put("salesProfessional", primarySalesRepName);
+					}
 					
 			}
 		}
 		 
 			
-	 	return primarySalesRepName;
+	 	return salesProfessionalplusEmailMap;
 	 	}
-	
+	private HashMap<String,String> getCSREmailID(Element customerElement) throws XPathExpressionException{
+		
+		Element csr1CustServEle = null;
+		Element csr2CustServEle = null;
+		HashMap<String,String> storeCSREmail = new HashMap<String,String>();
+		Element custParntEle = XMLUtilities.getElement(customerElement, "ParentCustomer");
+		Element CustExtnParntEle=XMLUtilities.getElement(custParntEle,"Extn");
+		String custCSR1UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR1Key");
+		String custCSR2UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR2Key");
+		if(custCSR1UserKey!=null && custCSR1UserKey.trim().length()>0) {
+			 csr1CustServEle = getUserPersonInfo(custCSR1UserKey);
+			 String csr1EmailID = SCXmlUtil.getXpathAttribute(csr1CustServEle, "ContactPersonInfo/@EMailID");
+			 storeCSREmail.put("csr1EmailID", csr1EmailID);
+				
+		}					
+		if(custCSR2UserKey!=null && custCSR2UserKey.trim().length()>0) {
+			csr2CustServEle = getUserPersonInfo(custCSR2UserKey);
+			String csr2EmailID = SCXmlUtil.getXpathAttribute(csr2CustServEle, "ContactPersonInfo/@EMailID");
+			 storeCSREmail.put("csr2EmailID", csr2EmailID);
+				
+		}
+		return storeCSREmail;
+	}
+	/**
+	 * JIRA 3756 Changes start for geting CSR email id .
+	 * @param userKey
+	 * @param loginId
+	 * @return
+	 */
+	private Element getUserPersonInfo(String userKey) {
+		IWCContext wcContext = WCContextHelper
+		.getWCContext(ServletActionContext.getRequest());
+		
+		Map<String, String> valueMap = new HashMap<String, String>();
+		if(userKey != null && userKey.trim().length()>0)
+			valueMap.put("/User/@UserKey", userKey);
+		Element input = null;
+		try {
+			input = WCMashupHelper.getMashupInput(
+					"getXpedxUserPersonInfo", valueMap, wcContext
+							.getSCUIContext());
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get User Person Info. "+ userKey +e.getMessage());
+		}
+		Object obj = WCMashupHelper.invokeMashup(
+				"getXpedxUserPersonInfo", input, wcContext
+						.getSCUIContext());
+		Document outputDocPersonInfo = ((Element) obj).getOwnerDocument();
+		Element wElement = outputDocPersonInfo.getDocumentElement();
+		Element userEle = SCXmlUtil.getChildElement(wElement, "User");	
+		return userEle;
+	}
+	/**
+	 * JIRA 3756 Changes end
+	 */
 
 }
