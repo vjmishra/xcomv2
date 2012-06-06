@@ -48,7 +48,7 @@ public class XPXCustomerProfileMigrationService {
 				.info("***************************************************************************");
 		yfcLogCatalog
 				.info("Inside XPXCustomerProfileMigrationService :: manageRuleID()");
-		yfcLogCatalog.info("Input to the custom API: "
+		yfcLogCatalog.debug("Input to the custom API: "
 				+ SCXmlUtil.getString(inXML));
 		yfcLogCatalog
 				.info("***************************************************************************");
@@ -73,10 +73,10 @@ public class XPXCustomerProfileMigrationService {
 				ruleID = custRulesProfileEle.getAttribute("RuleID");
 				
 				if (ruleID == null || ruleID.trim().length() == 0) {
-					yfcLogCatalog.info("Input document doesn't have any value for the attribute 'RuleID'");
+					yfcLogCatalog.debug("Input document doesn't have any value for the attribute 'RuleID'");
 				} else {
 					/** Call the service 'XPXGetRuleDefnList' **/
-					yfcLogCatalog.info("RuleID: " + ruleID);
+					yfcLogCatalog.debug("RuleID: " + ruleID);
 					ruleDefinitionListOutput = getRuleDefinitionList(env,
 							ruleID);
 
@@ -131,10 +131,10 @@ public class XPXCustomerProfileMigrationService {
 		Document getRuleDefnInputDoc = YFCDocument
 				.createDocument("XPXRuleDefn").getDocument();
 		getRuleDefnInputDoc.getDocumentElement().setAttribute("RuleID", ruleID);
-		yfcLogCatalog.info("The input xml to XPXGetRuleDefnList is: " + SCXmlUtil.getString(getRuleDefnInputDoc));
+		yfcLogCatalog.debug("The input xml to XPXGetRuleDefnList is: " + SCXmlUtil.getString(getRuleDefnInputDoc));
 		Document getRuleDefnOutputDoc = api.executeFlow(env,
 				"XPXGetRuleDefnList", getRuleDefnInputDoc);
-		yfcLogCatalog.info("The output xml of XPXGetRuleDefnList is: "+ SCXmlUtil.getString(getRuleDefnOutputDoc));
+		yfcLogCatalog.debug("The output xml of XPXGetRuleDefnList is: "+ SCXmlUtil.getString(getRuleDefnOutputDoc));
 
 		return getRuleDefnOutputDoc;
 	}
@@ -154,13 +154,13 @@ public class XPXCustomerProfileMigrationService {
 		ruleDefnCount = ruleDefnList.getLength();
 		
 		if (ruleDefnCount > 0) {
-			yfcLogCatalog.info("ruleDefnCount: " + ruleDefnCount);
+			yfcLogCatalog.debug("ruleDefnCount: " + ruleDefnCount);
 			ruleDefExists = true;
-			yfcLogCatalog.info("ruleDefExists: " + ruleDefExists);
+			yfcLogCatalog.debug("ruleDefExists: " + ruleDefExists);
 		} else {
-			yfcLogCatalog.info("Rule definition for this RuleID does NOT exist in the DataBase.");
+			yfcLogCatalog.debug("Rule definition for this RuleID does NOT exist in the DataBase.");
 			ruleDefExists = false;
-			yfcLogCatalog.info("ruleDefExists: " + ruleDefExists);
+			yfcLogCatalog.debug("ruleDefExists: " + ruleDefExists);
 		}
 		return ruleDefExists;
 	}
@@ -177,7 +177,7 @@ public class XPXCustomerProfileMigrationService {
 				.getElementsByTagName(XPXLiterals.RULE_DEFINITION).item(0);
 		ruleKey = ruleDefnEle.getAttribute("RuleKey");
 		if(!YFCObject.isNull(ruleKey) && !YFCObject.isVoid(ruleKey)){
-			yfcLogCatalog.info("ruleKey: " + ruleKey);
+			yfcLogCatalog.debug("ruleKey: " + ruleKey);
 		}
 		return ruleKey;
 	}
