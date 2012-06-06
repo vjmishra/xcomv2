@@ -45,7 +45,7 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			FPlaceOrderE inputOrderXml = new FPlaceOrderE();
 			FPlaceOrder inputPlaceOrder = new FPlaceOrder();
 			if(inputXML != null){
-				log.info("Input xml for OrderPlace to Legacy: "+SCXmlUtil.getString(inputXML));
+				log.debug("Input xml for OrderPlace to Legacy: "+SCXmlUtil.getString(inputXML));
 			}
 			
 			String inputXMLString = SCXmlUtil.getString(inputXML);
@@ -62,7 +62,7 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			
 			if(null!=orderPlaceResponseDoc){
 				String outputXMLString = SCXmlUtil.getString(orderPlaceResponseDoc);
-				log.info("Output xml for OrderPlace from Legacy: "+outputXMLString);
+				log.debug("Output xml for OrderPlace from Legacy: "+outputXMLString);
 			}else{
 				log.error("Output from Legcy for Order placement is empty");
 			}
