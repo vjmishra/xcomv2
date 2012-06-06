@@ -52,7 +52,7 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 	 */
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception {
 
-		LOG.info("Inside Invoke operation of CatalogIndexRefresh " + SCXmlUtil.getString(inXML));
+		LOG.debug("Inside Invoke operation of CatalogIndexRefresh " + SCXmlUtil.getString(inXML));
 		try {
 			// Need to get Second latest Completed element
 			YFCElement searchIndexTriggerSecondLatestElement = getSecondLatestSearchIndex(env);
@@ -64,19 +64,19 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 				activate = activateSearchIndex(env, searchIndexSecondLatestTriggerKey);
 				Thread.sleep(420000);
 			} else {
-				LOG.info("searchIndexTriggerSecondLatestElement is null");
+				LOG.debug("searchIndexTriggerSecondLatestElement is null");
 				activate = true;
 			}
-			LOG.info("After Getting value of Second Active Index in CatalogIndexRefresh Java File");
+			LOG.debug("After Getting value of Second Active Index in CatalogIndexRefresh Java File");
 			if (activate == true) {
 				// Need to get first latest completed element to re-activate it again
 				YFCElement searchIndexTriggerLatestElement = getLatestSearchIndex(env);
 				if(searchIndexTriggerLatestElement!=null){
 				String searchIndexLatestTriggerKey = searchIndexTriggerLatestElement.getAttribute("SearchIndexTriggerKey");
 				activate = activateSearchIndex(env, searchIndexLatestTriggerKey);
-				LOG.info("After Getting value of First Active Index in CatalogIndexRefresh Java File");
+				LOG.debug("After Getting value of First Active Index in CatalogIndexRefresh Java File");
 				}
-				LOG.info("searchIndexTriggerLatestElement is null");
+				LOG.debug("searchIndexTriggerLatestElement is null");
 			}
 		} catch (Exception exception) {
 			LOG.error("Error in Invoke Operation of CatalogIndexRefresh", exception);
@@ -112,11 +112,11 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 						searchIndexTriggerElement = iterator.next();
 						String status = searchIndexTriggerElement.getAttribute("Status");
 						if (status.equalsIgnoreCase(STATUS_COMPLETE)) {
-							LOG.info("status is complete");
+							LOG.debug("status is complete");
 							return searchIndexTriggerElement;
 						}
 						if (status.equalsIgnoreCase(STATUS_ACTIVE)) {
-							LOG.info("status is active");
+							LOG.debug("status is active");
 							return null;
 						}
 					}
@@ -184,8 +184,8 @@ public class CatalogIndexRefresh extends XpedxYIFCustomApi implements XpedxConst
 			inputDocElement.setAttribute("SearchIndexTriggerKey", searchIndexTriggerKey);
 			inputDocElement.setAttribute("CategoryDomain", YFSSystem.getProperty("xpedx.searhindex.categoryDomain"));
 			Document output = api.invoke(env, "manageSearchIndexTrigger", inputDoc.getDocument());
-			LOG.info("Sucessfully activated search index" + searchIndexTriggerKey);
-			LOG.info("Output: " + SCXmlUtil.getString(output));
+			LOG.debug("Sucessfully activated search index" + searchIndexTriggerKey);
+			LOG.debug("Output: " + SCXmlUtil.getString(output));
 			if (output != null) {
 				return true;
 			} else {
