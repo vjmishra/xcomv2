@@ -64,7 +64,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 			Document inputXML) throws ParserConfigurationException,
 			FactoryConfigurationError, YFSException, RemoteException {
 	
-		log.info("PXGetListOfMyItemsListsForUIAPI_InputXML :" + SCXmlUtil.getString(inputXML));
+		log.debug("PXGetListOfMyItemsListsForUIAPI_InputXML :" + SCXmlUtil.getString(inputXML));
 		
 		Document getXPEDX_MyItemsList_ListInputXML = prepareXPEDX_MyItemsList_ListInputXML(inputXML);
 		Element elemXPEDXMyItemsList = getXPEDX_MyItemsList_ListInputXML
@@ -199,7 +199,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 
 		if (strMasterCustomerID.isEmpty()) {
 			// CustomerPath is null
-			log.info("customer path is null");
+			log.debug("customer path is null");
 
 		} else {
 			// CustomerPath is not null ignore DivisionId
@@ -297,7 +297,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 
 		} else {
 			// prepare input with division id
-			log.info("Customer Path is Null");
+			log.debug("Customer Path is Null");
 
 			// prepare input xml with division id
 			String strDivisionID = xPEDXMyItemsList.getAttribute("DivisionID");
@@ -315,7 +315,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				 * </XPEDXMyItemsItemsList> </XPEDXMyItemsList>
 				 **/
 
-				log.info("Division  ID is Null");
+				log.debug("Division  ID is Null");
 
 				Element elemXPEDXMyItemsItemsList = getXPEDX_MyItemsList_ListInputXML
 						.createElement("XPEDXMyItemsItemsList");
@@ -334,7 +334,7 @@ public class XPXGetListOfMyItemsListsForUIAPI implements YIFCustomApi {
 				// if total no of division id is 1 send input xml with division
 				// id and item id
 
-				log.info("Only one Division ID.");
+				log.debug("Only one Division ID.");
 
 				// prepare input xml with customer path
 				/**
