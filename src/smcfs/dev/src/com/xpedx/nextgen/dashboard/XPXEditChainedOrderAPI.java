@@ -57,7 +57,7 @@ public class XPXEditChainedOrderAPI implements YIFCustomApi {
 				
 				YFCElement editOrdEle = YFCDocument.getDocumentFor(inXML).getDocumentElement();
 				
-				log.info("XPXEditChainedOrderAPI-InXML:"+editOrdEle.getString());
+				log.debug("XPXEditChainedOrderAPI-InXML:"+editOrdEle.getString());
 				
 				String ordType = null;
 				if(editOrdEle.hasAttribute("OrderType")) {
@@ -341,13 +341,13 @@ public class XPXEditChainedOrderAPI implements YIFCustomApi {
 						Document businessRuleOutputDoc = api.executeFlow(env, "XPXBusinessRuleValidationFOService", postToLegacyOrdEle.getOwnerDocument().getDocument());																		
 						updateWebHold(businessRuleOutputDoc,postToLegacyOrdEle);				
 							
-						log.info("XPXPostEditOrderToLegacy-InXML:"+postToLegacyOrdEle.getString());
+						log.debug("XPXPostEditOrderToLegacy-InXML:"+postToLegacyOrdEle.getString());
 						
 						Document editOrdMsgFromLegacy = this.api.executeFlow(env, "XPXPostEditOrderToLegacy", postToLegacyOrdEle.getOwnerDocument().getDocument());
 						if(editOrdMsgFromLegacy != null) {
 							
 							
-							log.info("XPXPostEditOrderToLegacy-OutXML:"+YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getString());
+							log.debug("XPXPostEditOrderToLegacy-OutXML:"+YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getString());
 							
 							
 							YFCElement editOrdMsgFromLegacyEle = YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getDocumentElement();
@@ -364,7 +364,7 @@ public class XPXEditChainedOrderAPI implements YIFCustomApi {
 								Document ordUpdateDoc = this.api.executeFlow(env, "XPXLegacyOrderUpdateService", editOrdMsgFromLegacy);
 								if(ordUpdateDoc != null) {
 															
-									log.info("XPXLegacyOrderUpdateService-OutXML:"+YFCDocument.getDocumentFor(ordUpdateDoc).getString());						
+									log.debug("XPXLegacyOrderUpdateService-OutXML:"+YFCDocument.getDocumentFor(ordUpdateDoc).getString());						
 									
 									YFCElement ordUpdateEle = YFCDocument.getDocumentFor(ordUpdateDoc).getDocumentElement();
 									YFCNodeList _nodeListEle = ordUpdateEle.getElementsByTagName("TransactionStatus");
