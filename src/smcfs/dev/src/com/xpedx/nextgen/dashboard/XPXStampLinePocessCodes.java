@@ -33,7 +33,7 @@ public class XPXStampLinePocessCodes implements YIFCustomApi
 	public Document stampLineProcessCodes(YFSEnvironment env, Document inputXML) {
 		
 		if(inputXML != null){
-			log.info("XPXStampLineProcessCodes_InXML: " + SCXmlUtil.getString(inputXML));
+			log.debug("XPXStampLineProcessCodes_InXML: " + SCXmlUtil.getString(inputXML));
 		}
 		
 		Element inputDocRoot = inputXML.getDocumentElement();	
