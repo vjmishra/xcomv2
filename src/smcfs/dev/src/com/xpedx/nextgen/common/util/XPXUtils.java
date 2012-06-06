@@ -79,11 +79,11 @@ public class XPXUtils implements YIFCustomApi {
 		}
 
 		// api = YIFClientFactory.getInstance().getApi();
-		log.info("XPXUtils.postOrderManageMsgToLegacy() Input XML: " + SCXmlUtil.getString(inXML));
+		log.debug("XPXUtils.postOrderManageMsgToLegacy() Input XML: " + SCXmlUtil.getString(inXML));
 		if (true)
 			throw new YFSException("");
 
-		log.info("XPXUtils.postOrderManageMsgToLegacy() Output XML: " + SCXmlUtil.getString(inXML));
+		log.debug("XPXUtils.postOrderManageMsgToLegacy() Output XML: " + SCXmlUtil.getString(inXML));
 		// api = null;
 		return inXML;
 	}
@@ -118,7 +118,7 @@ public class XPXUtils implements YIFCustomApi {
 			throw new YFSException(
 					"Input XML document cannot be null or invalid to XPXUtils.loadDataUsingMutliApi()");
 		}
-		log.info("XPXUtils.loadDataUsingMutliApi(): Input XML: - "
+		log.debug("XPXUtils.loadDataUsingMutliApi(): Input XML: - "
 				+ SCXmlUtil.getString(inXML));
 
 		String strServiceName = inXML.getDocumentElement().getAttribute(
@@ -153,10 +153,10 @@ public class XPXUtils implements YIFCustomApi {
 		}
 
 		// api = YIFClientFactory.getInstance().getApi();
-		log.info("XPXUtils.loadDataUsingMutliApi(): Input XML for 'multiApi':- "
+		log.debug("XPXUtils.loadDataUsingMutliApi(): Input XML for 'multiApi':- "
 				+ SCXmlUtil.getString(docMultiApi));
 		Document docMultiApiOutput = api.invoke(env, "multiApi", docMultiApi);
-		log.info("XPXUtils.loadDataUsingMutliApi(): Output XML:- "
+		log.debug("XPXUtils.loadDataUsingMutliApi(): Output XML:- "
 				+ SCXmlUtil.getString(docMultiApiOutput));
 		// api = null;
 		return docMultiApiOutput;
@@ -225,7 +225,7 @@ public class XPXUtils implements YIFCustomApi {
 				throw new YFSException(
 						"Input XML document cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
 			}
-			log.info("XPXUtils.postOrderManageMsgToLegacy()--> Input XML"
+			log.debug("XPXUtils.postOrderManageMsgToLegacy()--> Input XML"
 					+ SCXmlUtil.getString(inXML));
 
 			/** Commented by Arun Sekhar as it is done above **/
@@ -270,11 +270,11 @@ public class XPXUtils implements YIFCustomApi {
 				if (rootElementMatches) {
 					this.processEOFOrSOFMessage(env, inXML);
 				} else {
-					log.info("The root element does not match with the root names configured for the service");
+					log.debug("The root element does not match with the root names configured for the service");
 				}
 
 			}
-			log.info("XPXUtils.postOrderManageMsgToLegacy()--> Output XML"
+			log.debug("XPXUtils.postOrderManageMsgToLegacy()--> Output XML"
 					+ SCXmlUtil.getString(inXML));
 
 		} catch (NullPointerException ne) {
@@ -410,7 +410,7 @@ public class XPXUtils implements YIFCustomApi {
 				if (docInput.getDocumentElement().hasChildNodes()) {
 					api.invoke(env, "modifyServer", docInput);
 				} else {
-					log.info("No service id found in Service Arguments to disable or enable: Root Element Name-"
+					log.debug("No service id found in Service Arguments to disable or enable: Root Element Name-"
 							+ strRoot + "LoadIdentifier" + strRoot);
 				}
 
@@ -599,11 +599,11 @@ public class XPXUtils implements YIFCustomApi {
 				api.invoke(env, "modifyCache", modifyCacheInput);
 
 			} else {
-				log.info("Unable to find the ServerId for given ServerName:"
+				log.debug("Unable to find the ServerId for given ServerName:"
 						+ strServerName);
 			}
 		} else {
-			log.info("Argument 'IntegrationServerName' is either blank or not configured.");
+			log.debug("Argument 'IntegrationServerName' is either blank or not configured.");
 		}
 
 		// method to trigger catalog index build
@@ -686,13 +686,13 @@ public class XPXUtils implements YIFCustomApi {
 		if (rootNode.startsWith("EOF")) {
 			messageAttributes[1] = XPXLiterals.EOF_ERROR_CLASS;
 			messageAttributes[2] = XPXLiterals.EOF_ERROR_DESC + " " + feedName;
-			log.info(messageAttributes[2]);
+			log.debug(messageAttributes[2]);
 		}
 		/** Check if this is an SOF Feed **/
 		else if ("SOF".equalsIgnoreCase(rootNode)) {
 			messageAttributes[1] = XPXLiterals.SOF_ERROR_CLASS;
 			messageAttributes[2] = XPXLiterals.SOF_ERROR_DESC + " " + feedName;
-			log.info(messageAttributes[2]);
+			log.debug(messageAttributes[2]);
 		}
 		/** TRANS_TYPE represents the type of batch feed coming in **/
 		return messageAttributes;
@@ -1221,7 +1221,7 @@ public class XPXUtils implements YIFCustomApi {
 			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
 				if (i == 1) {
 					legacyCustomerNumber = splitArrayOnBuyerOrgCode[i];
-					log.info("The shipToSuffix is: " + legacyCustomerNumber);
+					log.debug("The shipToSuffix is: " + legacyCustomerNumber);
 				}
 				if (i == 3) {
 					environment_id = splitArrayOnBuyerOrgCode[i];
@@ -1408,7 +1408,7 @@ public class XPXUtils implements YIFCustomApi {
 								"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
 					}
 				} else {
-					log.info("Inside the loop where the uom type is L");
+					log.debug("Inside the loop where the uom type is L");
 					replacedUOM = incomingUOM;
 				}
 			}
@@ -1514,7 +1514,7 @@ public class XPXUtils implements YIFCustomApi {
 				if (i == 1) {
 					legacyCustomerNumber = splitArrayOnBuyerOrgCode[i];
 					
-					log.info("The shipToSuffix is: " + legacyCustomerNumber);
+					log.debug("The shipToSuffix is: " + legacyCustomerNumber);
 				}
 				if (i == 3) {
 					environment_id = splitArrayOnBuyerOrgCode[i];
@@ -1898,7 +1898,7 @@ public class XPXUtils implements YIFCustomApi {
 
 			}
 		} else {
-			log.info("Inside the loop where extn uom type is not E");
+			log.debug("Inside the loop where extn uom type is not E");
 			customerProfileUOM = incomingUOM;
 		}
 		return customerProfileUOM;
@@ -2118,7 +2118,7 @@ public class XPXUtils implements YIFCustomApi {
 				imagesRootFolder = _properties
 						.getProperty("IMAGES_ROOT_FOLDER");
 			}
-			log.info("imagesRootFolder: " + imagesRootFolder);
+			log.debug("imagesRootFolder: " + imagesRootFolder);
 
 			String sellerOrgCode = inputDocument.getDocumentElement()
 					.getAttribute("SellerOrganizationCode");
@@ -2129,7 +2129,7 @@ public class XPXUtils implements YIFCustomApi {
 				_imageName = getLogoImageName(env, sellerOrgCode);
 			}
 			brandLogo = imagesRootFolder.concat(_imageName);
-			log.info("brandLogo: " + brandLogo);
+			log.debug("brandLogo: " + brandLogo);
 
 			inputDocument.getDocumentElement().setAttribute("BrandLogo",
 					brandLogo);
@@ -2197,7 +2197,7 @@ public class XPXUtils implements YIFCustomApi {
 
 		_subjectLine = brand.concat(" Order Confirmation: PO ")
 				.concat(customerPO).concat(" Order ").concat(orderNo);
-		log.info("_subjectLine: " + _subjectLine);
+		log.debug("_subjectLine: " + _subjectLine);
 
 		inputDocument.getDocumentElement()
 				.setAttribute("Subject", _subjectLine);
@@ -2216,9 +2216,9 @@ public class XPXUtils implements YIFCustomApi {
 		imageUrl = rootElem.getAttribute("ImageUrl");
 		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Update Notification"); //Start - Jira 3262
 		
-		log.info("brand:" + brand);
-		log.info("imageUrl:" + imageUrl);
-		log.info("_subjectLine:" + _subjectLine);
+		log.debug("brand:" + brand);
+		log.debug("imageUrl:" + imageUrl);
+		log.debug("_subjectLine:" + _subjectLine);
 		
 		if( !YFCObject.isNull(brand) && !YFCObject.isVoid(brand) 
 				&& (YFCObject.isNull(imageUrl) || YFCObject.isVoid(imageUrl)) ) {	
@@ -2357,7 +2357,7 @@ public class XPXUtils implements YIFCustomApi {
 		boolean callItemList = false;
 		Document itemDoc;
 		if(log.isDebugEnabled()){
-			log.info("Inventory Indicator : " + invIndicator);
+			log.debug("Inventory Indicator : " + invIndicator);
 		}
 		if(YFCObject.isNull(invIndicator) || YFCObject.isVoid(invIndicator)) {
 			callItemList = true;
@@ -2428,8 +2428,8 @@ public class XPXUtils implements YIFCustomApi {
 		if(log.isDebugEnabled()){
 			log.debug("");
 			log.debug("allowDirectOrderFlag : " + allowDirectOrderFlag);		
-			log.info("");
-			log.info("allowDirectOrderFlag = " + allowDirectOrderFlag);
+			log.debug("");
+			log.debug("allowDirectOrderFlag = " + allowDirectOrderFlag);
 		}
 		return allowDirectOrderFlag;
 	}
@@ -2481,7 +2481,7 @@ public class XPXUtils implements YIFCustomApi {
 				imagesRootFolder = _properties
 						.getProperty("IMAGES_ROOT_FOLDER");
 			}
-			log.info("imagesRootFolder: " + imagesRootFolder);
+			log.debug("imagesRootFolder: " + imagesRootFolder);
 
 			String url = imagesRootFolder + imageName;
 			Element brandImageUrl = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
