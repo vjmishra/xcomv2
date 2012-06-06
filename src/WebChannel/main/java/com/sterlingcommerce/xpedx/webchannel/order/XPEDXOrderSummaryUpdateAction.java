@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderSummaryUpdateAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
@@ -284,6 +285,8 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 		if (!YFCCommon.isVoid(getNewPoNumber()) && this.isPoNumberSaveNeeded()){
 			addnlPoList = addnlPoList + getNewPoNumber();
 			String[] splitPOs = addnlPoList.split(",");
+			//Replacing session object PO List - to have PO's added in the session - JIRA 3645
+			getWCContext().setWCAttribute("addnlPOList", addnlPoList, WCAttributeScope.LOCAL_SESSION);
 			Set<String> pos= new HashSet<String>();
 			for (int i =0; i < splitPOs.length; i++){
 				pos.add(splitPOs[i].trim());
