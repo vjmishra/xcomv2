@@ -68,7 +68,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		try {
 			api.executeFlow(env, "XPXSendOrderConfirmationEmailService", inXML);
 		} catch (Exception e) {
-			yfcLogCatalog.info("Exception caught in processOrdConfEmail");
+			yfcLogCatalog.debug("Exception caught in processOrdConfEmail");
 			// To add the component of handle failure scenario
 		}
 		return inXML;
@@ -76,7 +76,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	public Document sendEmail(YFSEnvironment env, Document inXML) throws Exception {
 		
-		yfcLogCatalog.info("XPXEmailHandlerAPI_InXML: "+ SCXmlUtil.getString(inXML));
+		yfcLogCatalog.debug("XPXEmailHandlerAPI_InXML: "+ SCXmlUtil.getString(inXML));
 		
 		Document customerDoc= null;
 		api = YIFClientFactory.getInstance().getApi();
@@ -131,9 +131,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		/*****************************************************/
 		
 		// }
-		// yfcLogCatalog.info("customerDoc ::" +
+		// yfcLogCatalog.debug("customerDoc ::" +
 		// SCXmlUtil.getString(customerDoc));
-		// yfcLogCatalog.info("inputElement :: " +
+		// yfcLogCatalog.debug("inputElement :: " +
 		// SCXmlUtil.getString(inputElement));
 
 		// get the email ids to be sent in to and cc list
@@ -190,7 +190,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 				int nlCustomerContactLen = nlCustomerContact.getLength();
 
-				yfcLogCatalog.info("nlCustomerContactLen :: "
+				yfcLogCatalog.debug("nlCustomerContactLen :: "
 						+ nlCustomerContactLen);
 				Element tempCustomerContact = null;
 				String GROUP_BUYER_ADMIN = "BUYER-ADMIN";
@@ -207,7 +207,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 							.getElementsByTagName("Extn").item(0);
 					strExtnOrderConfEmailFlag = extnCCElem
 							.getAttribute("ExtnOrderConfEmailFlag");
-					yfcLogCatalog.info("strExtnOrderConfEmailFlag :: "
+					yfcLogCatalog.debug("strExtnOrderConfEmailFlag :: "
 							+ strExtnOrderConfEmailFlag);
 
 					if (!strExtnOrderConfEmailFlag.equalsIgnoreCase("N")) {
@@ -216,20 +216,20 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 								.getElementsByTagName("UserGroupList");
 						nlUserGroupListLen = nlUserGroupList.getLength();
 
-						yfcLogCatalog.info(" nlUserGroupListLen :: "
+						yfcLogCatalog.debug(" nlUserGroupListLen :: "
 								+ nlUserGroupListLen);
 
 						for (int j = 0; j < nlUserGroupListLen; j++) {
 							tempUserGroupList = (Element) nlUserGroupList
 									.item(j);
-							yfcLogCatalog.info(" tempUserGroupList :: "
+							yfcLogCatalog.debug(" tempUserGroupList :: "
 									+ SCXmlUtil.getString(tempUserGroupList));
 
 							strUsergroupId = tempUserGroupList
 									.getAttribute("UsergroupKey");
-							yfcLogCatalog.info("strCustomerAdminEmailList :: "
+							yfcLogCatalog.debug("strCustomerAdminEmailList :: "
 									+ strCustomerAdminEmailList);
-							yfcLogCatalog.info("strUsergroupId :: "
+							yfcLogCatalog.debug("strUsergroupId :: "
 									+ strUsergroupId);
 
 							if (strUsergroupId
@@ -263,13 +263,13 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 						extnElement, "./@ExtnAddnlEmailAddr");
 				if (addlnEmailAddresses.indexOf(";") > -1) {
 					addlnEmailAddresses = addlnEmailAddresses.replace(";", ",");
-					yfcLogCatalog.info("addln email addresses ::"
+					yfcLogCatalog.debug("addln email addresses ::"
 							+ addlnEmailAddresses);
 				}
 				extnElement.setAttribute("ExtnAddnlEmailAddr",
 						addlnEmailAddresses);
 			}
-			yfcLogCatalog.info("XPXEmailHandlerAPI_OutXML:"+ SCXmlUtil.getString(customerDoc));
+			yfcLogCatalog.debug("XPXEmailHandlerAPI_OutXML:"+ SCXmlUtil.getString(customerDoc));
 		} // End of if loop if Customer Contact list doc is empty.
 		return customerDoc;
 	}
@@ -324,7 +324,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			CustomerContact.setAttribute("CustomerContactID",
 					strCustomerContactID);	
 
-			yfcLogCatalog.info("input xml to getCustomerContactList api :: "
+			yfcLogCatalog.debug("input xml to getCustomerContactList api :: "
 					+ SCXmlUtil.getString(docCustomerContact));
 			
 			
@@ -334,7 +334,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			
 			getCCListDoc = api.getCustomerContactList(env, docCustomerContact);
 
-			yfcLogCatalog.info("getCCListDoc ::"
+			yfcLogCatalog.debug("getCCListDoc ::"
 					+ SCXmlUtil.getString(getCCListDoc));
 			
 		}
@@ -392,7 +392,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			for (int counter = 0; counter < orderLength; counter++) {
 				Element orderElement = (Element) orderNodeList.item(counter);
 				strOrderType = orderElement.getAttribute("OrderType");
-				yfcLogCatalog.info("strOrderType ::" + strOrderType);
+				yfcLogCatalog.debug("strOrderType ::" + strOrderType);
 				if (!strOrderType.equalsIgnoreCase("Customer")) {
 					legacyMap = populateLegacyMap(env, orderElement, legacyMap);
 				}
@@ -423,7 +423,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		//Similar to logic implemented in XPEDX Order Details Of WC
 		
 		Iterator<String> mapIterator = legacyMap.keySet().iterator();
-		yfcLogCatalog.info("Size" + legacyMap.size());
+		yfcLogCatalog.debug("Size" + legacyMap.size());
 		while (mapIterator.hasNext()) {
 			String itemUomDescription = "";
 			String priceUOMDescription = "";
@@ -469,7 +469,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 					.concat(extnGenerationNo));
 
-					yfcLogCatalog.info("After concatenation - OrderNo: " + orderNo);
+					yfcLogCatalog.debug("After concatenation - OrderNo: " + orderNo);
 					
 
 					}
@@ -587,7 +587,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		
 		customerDoc.getDocumentElement().setAttribute("OrderNo", orderNumber);
 		
-		yfcLogCatalog.info("customerDoc after legacyOnCustomer(): "
+		yfcLogCatalog.debug("customerDoc after legacyOnCustomer(): "
 				+ SCXmlUtil.getString(customerDoc));
 	}
 	
@@ -598,11 +598,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		int lastIdx = strLen - 1;
 
 		char last = orderNo.charAt(lastIdx);
-		yfcLogCatalog.info("last: " + last);
+		yfcLogCatalog.debug("last: " + last);
 		if (last == ' ') {
 			int clipIdx = lastIdx - 1;
 			char clipChar = orderNo.charAt(clipIdx);
-			yfcLogCatalog.info("clipChar: " + clipChar);
+			yfcLogCatalog.debug("clipChar: " + clipChar);
 			if (clipChar == ',') {
 				orderNo = orderNo.substring(0, clipIdx);
 			}
@@ -613,7 +613,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	private HashMap<String, String> populateLegacyMap(YFSEnvironment env,
 			Element orderElement, HashMap<String, String> legacyMap) {
-		yfcLogCatalog.info(" entering populateLegacyMap ");
+		yfcLogCatalog.debug(" entering populateLegacyMap ");
 		String webLineNo = "";
 		String legacyOrderNo = "";
 
@@ -649,7 +649,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	private Document formInputToGetCustomerOrder(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
 
-		yfcLogCatalog.info("XPXEmailHandlerAPI_formInputToGetCustomerOrder():" + SCXmlUtil.getString(inputElement));
+		yfcLogCatalog.debug("XPXEmailHandlerAPI_formInputToGetCustomerOrder():" + SCXmlUtil.getString(inputElement));
 		
 		Document inputOrderDoc = SCXmlUtil.createDocument("Order");
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
@@ -678,7 +678,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		extnElement.setAttribute("ExtnWebConfNum", strWebConfirmationNumber);
 		inputOrderElement.appendChild(extnElement);
 		env.setApiTemplate("getOrderList", getOrderListTemplate);
-		yfcLogCatalog.info("getOrderList_InXML :"+ SCXmlUtil.getString(inputOrderDoc));
+		yfcLogCatalog.debug("getOrderList_InXML :"+ SCXmlUtil.getString(inputOrderDoc));
 		Document orderListDoc = api.invoke(env, "getOrderList",inputOrderDoc);
 		yfcLogCatalog.debug("getOrderList_OutXML :"+ SCXmlUtil.getString(orderListDoc));
 		env.clearApiTemplate("getOrderList");
@@ -717,7 +717,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			yfcLogCatalog.debug(" getCustomerListCSREmailTemplate " + getCustomerListCSREmailTemplate);
 			//yfcLogCatalog.debug(" api " + api.toString());
 			Document custListDoc = api.getCustomerList(env,docCustomer.getDocument());
-			yfcLogCatalog.info("api getCustomerList outdoc "
+			yfcLogCatalog.debug("api getCustomerList outdoc "
 					+ SCXmlUtil.getString(custListDoc));
 			env.clearApiTemplate("getCustomerList");
 	
@@ -736,7 +736,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				if (!strExtnECSR1EmailConfirmFlag.equalsIgnoreCase("N")) {
 					strExtnECsr1EMailID = custExtnElement
 							.getAttribute("ExtnECsr1EMailID");
-					yfcLogCatalog.info("strExtnECsr1EMailID ::"
+					yfcLogCatalog.debug("strExtnECsr1EMailID ::"
 							+ strExtnECsr1EMailID);
 					customerDoc.getDocumentElement().setAttribute(
 							"strExtnECsr1EMailID", strExtnECsr1EMailID);
@@ -746,7 +746,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				if (!strExtnECSR2EmailConfirmFlag.equalsIgnoreCase("N")) {
 					strExtnECsr2EMailID = custExtnElement
 							.getAttribute("ExtnECsr2EMailID");
-					yfcLogCatalog.info("strExtnECsr2EMailID ::"
+					yfcLogCatalog.debug("strExtnECsr2EMailID ::"
 							+ strExtnECsr2EMailID);
 					customerDoc.getDocumentElement().setAttribute(
 							"strExtnECsr2EMailID", strExtnECsr2EMailID);
