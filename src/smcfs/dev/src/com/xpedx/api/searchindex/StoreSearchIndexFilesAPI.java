@@ -72,24 +72,24 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception {
 
-		LOG.info("Start storing search index to database.");
+		LOG.debug("Start storing search index to database.");
 
 
-		LOG.info("Evaluating latest search index trigger.");
+		LOG.debug("Evaluating latest search index trigger.");
 		//Here we check if the most recent search index trigger has a completed status
 		YFCElement searchIndexTriggerElement = getLatestSearchIndex(env);
 		if(searchIndexTriggerElement == null) {
-			LOG.info("Latest search index trigger is not completed yet.");
+			LOG.debug("Latest search index trigger is not completed yet.");
 			return null;
 		}
-		LOG.info("Completed search index trigger found.");
-		LOG.info("Latest search index element :\n"+searchIndexTriggerElement);
+		LOG.debug("Completed search index trigger found.");
+		LOG.debug("Latest search index element :\n"+searchIndexTriggerElement);
 		String indexPath="";
 		String searchIndexTriggerKey = "";
 
 		//Getting the Search Index Root from yfs.properties_ysc_ext.in file
 		String searchIndexRootDirectory = YFSSystem.getProperty("yfs.searchIndex.rootDirectory");
-		LOG.info("Search Index Root Directory :"+searchIndexRootDirectory);
+		LOG.debug("Search Index Root Directory :"+searchIndexRootDirectory);
 
 
 		String searchIndexCompletePath="";
@@ -97,16 +97,16 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			
 			//Constructing the Complete Path
 			searchIndexTriggerKey = searchIndexTriggerElement.getAttribute("SearchIndexTriggerKey");
-			LOG.info("searchIndexTriggerKey :"+searchIndexTriggerKey);
+			LOG.debug("searchIndexTriggerKey :"+searchIndexTriggerKey);
 			indexPath = searchIndexTriggerElement.getAttribute("IndexPath");
-			LOG.info("indexPath :"+indexPath);
+			LOG.debug("indexPath :"+indexPath);
 			searchIndexCompletePath=searchIndexRootDirectory+indexPath;
-			LOG.info("searchIndexCompletePath :"+searchIndexCompletePath);
+			LOG.debug("searchIndexCompletePath :"+searchIndexCompletePath);
 			
 			/*BEGIN: Make the search index copy, property driven.Return if there are no app servers configured in the property file*/
 			String endPointURLs= XpedxPropertyValueHelper.getPropertyValue("xpedx.searhindex.serverURLs");
 			if(YFCCommon.isVoid(endPointURLs)){
-				LOG.info("There are no app servers configured for for search index copy. The system will return gracefully.");
+				LOG.debug("There are no app servers configured for for search index copy. The system will return gracefully.");
 				//activateSearchIndex(env, searchIndexTriggerKey);
 				return null;
 			}
@@ -120,16 +120,16 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			int len = zipFolder.getAbsolutePath().lastIndexOf(File.separator);
 			String baseName = zipFolder.getAbsolutePath().substring(0,len+1);
 
-			LOG.info("base name :"+baseName);
+			LOG.debug("base name :"+baseName);
 
 			//Now that the search index is stored in database, we call the app servers to pick it up
-			LOG.info("Calling App Servers to pick up search index.");
+			LOG.debug("Calling App Servers to pick up search index.");
 			if(copySearchIndexFiles(searchIndexTriggerKey,searchIndexCompletePath, baseName)){
-				//LOG.info("Activate search index it is after successfully picked up by all app servers");
+				//LOG.debug("Activate search index it is after successfully picked up by all app servers");
 				//activateSearchIndex(env, searchIndexTriggerKey);
-				LOG.info("Start cleaning up the temporary files and db tables");
+				LOG.debug("Start cleaning up the temporary files and db tables");
 				SearchIndexCleanUp.cleanUp(null,env);
-				LOG.info("Finished cleaning up the temporary files and db tables");
+				LOG.debug("Finished cleaning up the temporary files and db tables");
 			}else{
 				LOG.error("Error!! App Server(s) failed to pcik up the search index. Not Activating!!");
 				//More Error Handling & Notification could be added here if desired.
@@ -158,9 +158,9 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			}
 			if(searchIndexTriggerElement!=null){
 				String status = searchIndexTriggerElement.getAttribute("Status");
-				LOG.info("Status :"+status);
+				LOG.debug("Status :"+status);
 				String searchIndexTriggerKey = searchIndexTriggerElement.getAttribute("SearchIndexTriggerKey");
-				LOG.info("SearchIndexTriggerKey :"+searchIndexTriggerKey);
+				LOG.debug("SearchIndexTriggerKey :"+searchIndexTriggerKey);
 				if(status ==STATUS_COMPLETE){
 					inputDoc = YFCDocument.createDocument("XPEDXSearchIndex");
 					inputDocElement = inputDoc.getDocumentElement();
@@ -191,13 +191,13 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 	}
 
 	private  void zipSearchIndexFiles(String searchIndexCompletePath)throws Exception{  
-		LOG.info("Search index path :"+searchIndexCompletePath);
+		LOG.debug("Search index path :"+searchIndexCompletePath);
 		String outFilename = searchIndexCompletePath +".zip";
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 		File zipFolder = new File(searchIndexCompletePath);
 		int len = zipFolder.getAbsolutePath().lastIndexOf(File.separator);
 		String baseName = zipFolder.getAbsolutePath().substring(0,len+1);
-		LOG.info("Base Name :"+baseName);
+		LOG.debug("Base Name :"+baseName);
 		addFolderToZip(zipFolder, out, baseName);
 		out.close();
 	}
@@ -225,7 +225,7 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 		long length = file.length();
 		byte[] bytes = new byte[(int)length];
 
-		LOG.info("Length_storeSearchIndexFiles():"+length);
+		LOG.debug("Length_storeSearchIndexFiles():"+length);
 		int offset = 0;
 		int numRead = 0;
 		while ( (offset < bytes.length)
@@ -276,7 +276,7 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			for(int i=0;i<endPointURLsArr.length;i++){
 				if(endPointURLsArr[i]!=null && endPointURLsArr[i].trim().length()>0){
 					String endPointURL = endPointURLsArr[i];
-					LOG.info("calling copySearchIndexFiles webservice to app server: "+endPointURL);
+					LOG.debug("calling copySearchIndexFiles webservice to app server: "+endPointURL);
 					try{
 						com.xpedx.axis.YIFWebServiceLocator locator=new com.xpedx.axis.YIFWebServiceLocator();
 						Yantrawebservice_PortType p= locator.getyantrawebservice(new URL(endPointURL.trim()));
@@ -285,7 +285,7 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 						SimpleXML response = SimpleXML.getInstance(p.copySearchIndexFiles(env, input));
 						
 						if("ApiSuccess".equals(response.getName())) {
-							LOG.info("Successfully copied the search index files to App Server at: "+endPointURL);
+							LOG.debug("Successfully copied the search index files to App Server at: "+endPointURL);
 						} else {
 							LOG.error("Error while copying search index files to App Server at: "+endPointURL);
 							LOG.error("Response Received: "+response);
@@ -317,8 +317,8 @@ public class StoreSearchIndexFilesAPI extends XpedxYIFCustomApi implements Xpedx
 			//SimpleXML output = QuickQuery.executeDBApi(env, "manageSearchIndexTrigger", new SimpleXML(inputDoc), SimpleXML.getInstance("(SearchIndexTrigger)"));
 			Document output = api.invoke(env, "manageSearchIndexTrigger", inputDoc.getDocument());
 			
-			LOG.info("Sucessfully activated search index");
-			LOG.info("Output: "+output);
+			LOG.debug("Sucessfully activated search index");
+			LOG.debug("Output: "+output);
 		} catch(Exception e){ 
 			LOG.error("Error while activating the search index", e);
 			e.printStackTrace();
