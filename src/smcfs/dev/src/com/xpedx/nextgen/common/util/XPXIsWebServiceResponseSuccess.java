@@ -45,7 +45,7 @@ public class XPXIsWebServiceResponseSuccess implements YCPDynamicConditionEx {
 			if(tranStatus != null && tranStatus.equalsIgnoreCase("F")){
 				if(orderEditFlag.equalsIgnoreCase("Y")){
 					// Order Edit Flow - Error logged in CENT and thrown to revert the Order changes made in sterling database.
-					log.info("Order Edit - Transaction has failed when trying to modify order in Legacy.");	
+					log.debug("Order Edit - Transaction has failed when trying to modify order in Legacy.");	
 					YFSException oeException = new YFSException();
 					oeException.setErrorDescription("Transaction has failed when trying to modify order in Legacy.");				
 					prepareErrorObject(oeException, "Order Edit", XPXLiterals.YFE_ERROR_CLASS, env, inputDoc);
@@ -55,12 +55,12 @@ public class XPXIsWebServiceResponseSuccess implements YCPDynamicConditionEx {
 					throw oeException;
 				} else {
 					// Order Place flow.
-					log.info("Order Place - Return false.");
+					log.debug("Order Place - Return false.");
 				return false; 
 				}
 			}
 		}
-		log.info("Return true as the transaction is success.");
+		log.debug("Return true as the transaction is success.");
 		return true;
 	}
 	
