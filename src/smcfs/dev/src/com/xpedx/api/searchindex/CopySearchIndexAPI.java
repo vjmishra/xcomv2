@@ -39,7 +39,7 @@ public class CopySearchIndexAPI extends XpedxYIFCustomApi implements XpedxConsta
 	 * @throws Exception
 	 */
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception {
-		LOG.info("Input recieved for CopySearchIndexAPI  :"+ SCXmlUtil.getString(inXML));
+		LOG.debug("Input recieved for CopySearchIndexAPI  :"+ SCXmlUtil.getString(inXML));
 		//String activePath = SearchIndexCleanUp.getActiveSearchIndexPath(null,env);
 		
 		SimpleXML output = SimpleXML.getInstance("(ApiSuccess)");
@@ -47,13 +47,13 @@ public class CopySearchIndexAPI extends XpedxYIFCustomApi implements XpedxConsta
 		YFCElement inXMLDocElement = inXMLDoc.getDocumentElement();
 
 		String searchIndexTriggerKey = inXMLDocElement.getAttribute("SearchIndexTriggerKey");
-		LOG.info("Search Index Trigger key: "+searchIndexTriggerKey);
+		LOG.debug("Search Index Trigger key: "+searchIndexTriggerKey);
 		String indexPath = inXMLDocElement.getAttribute("IndexPath");
-		LOG.info("Index Path: "+indexPath);
+		LOG.debug("Index Path: "+indexPath);
 		String baseName = inXMLDocElement.getAttribute("BaseName");
-		LOG.info("base Path: "+baseName);
+		LOG.debug("base Path: "+baseName);
 
-		LOG.info("Getting search index file from the database");
+		LOG.debug("Getting search index file from the database");
 		String searchIndexFilesContent = getFileContentsFromDB(env, searchIndexTriggerKey);
 		if (searchIndexFilesContent!=null) {
 			createSearchIndexDiectory(indexPath+"/"+"en_US");
@@ -109,13 +109,13 @@ public class CopySearchIndexAPI extends XpedxYIFCustomApi implements XpedxConsta
 				out.write(data,0,count);
 			}
 			out.close();
-			LOG.info("entry: " + entry.getName() + ", " + entry.getSize());
+			LOG.debug("entry: " + entry.getName() + ", " + entry.getSize());
 		}
 	}
 
 	private static void createSearchIndexDiectory(String directoryStructure) throws Exception {
 		if(!(new File(directoryStructure).mkdirs())){
-			LOG.info("Directory already exists");
+			LOG.debug("Directory already exists");
 		}
 	}
 }
