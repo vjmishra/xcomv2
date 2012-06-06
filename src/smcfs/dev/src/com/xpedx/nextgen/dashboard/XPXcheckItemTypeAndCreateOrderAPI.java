@@ -147,7 +147,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 		        log.debug("The input to getCustomerList for shipTo is: "+SCXmlUtil.getString(getCustomerListInputDoc));	
 		        env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
 		        getCustomerListOutputDoc = api.invoke(env,XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
-		        log.info("The output of getCustomerList for ShipTo is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
+		        log.debug("The output of getCustomerList for ShipTo is: "+SCXmlUtil.getString(getCustomerListOutputDoc));
 			 }
 		    Element customerElement = (Element) getCustomerListOutputDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 		    Element customerExtnElement = (Element) customerElement.getElementsByTagName("Extn").item(0);
@@ -165,7 +165,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 			Element orderLine = (Element)orderLineList.item(i);
 			
 			String lineStatus = orderLine.getAttribute("Status");
-			log.info("The status of the line in XPXCheckItemType is: "+lineStatus);
+			log.debug("The status of the line in XPXCheckItemType is: "+lineStatus);
 		    /***Added for CR # 2591 by Prasanth Kumar M.**************/
 		    if(!"Cancelled".equalsIgnoreCase(lineStatus))
 		    {
@@ -176,7 +176,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 			//orderLineType = (String)orderLineElementContents.get(XPXLiterals.A_LINE_TYPE);
 			//Changes done as per new Business rules
 			orderLineType = orderLineExtn.getAttribute(XPXLiterals.A_EXTN_LINE_TYPE);
-			log.info("The extn line type is: "+orderLineType);
+			log.debug("The extn line type is: "+orderLineType);
 			String extnOrderLinetotatal=orderLineExtn.getAttribute(XPXLiterals.A_EXTN_LINE_ORDERED_TOTAL);
 			double extnOrderLinetotatalVal=0;
 			if(extnOrderLinetotatal != null)
