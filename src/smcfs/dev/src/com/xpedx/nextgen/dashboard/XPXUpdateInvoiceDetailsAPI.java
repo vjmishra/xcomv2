@@ -59,7 +59,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 			
 			Element inputElement = inXML.getDocumentElement();	
 			if(inXML != null){
-				log.info("inXML in updateInvoice(): " + SCXmlUtil.getString(inputElement));
+				log.debug("inXML in updateInvoice(): " + SCXmlUtil.getString(inputElement));
 			}
 			String isB2BCustomer = inputElement.getAttribute("IsB2BCustomer");
 			if(YFCObject.isNull(isB2BCustomer) || YFCObject.isVoid(isB2BCustomer)){
@@ -154,7 +154,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 			invoiceDetailsDoc = api.invoke(env, "changeOrder", inputChangeOrderDoc);			
 		    // invoiceDetailsDoc = sendInvoiceDetailsToWebMethods(env, inXML, customer);
 			if(invoiceDetailsDoc != null){
-		    	log.info("invoiceDetailsDoc for B2B : " + SCXmlUtil.getString(invoiceDetailsDoc));
+		    	log.debug("invoiceDetailsDoc for B2B : " + SCXmlUtil.getString(invoiceDetailsDoc));
 			}
 		    
 			} else {
@@ -178,7 +178,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 				inputChangeOrderElement.appendChild(extnOrderElement);				
 				invoiceDetailsDoc = api.invoke(env, "changeOrder", inputChangeOrderDoc);
 				if(invoiceDetailsDoc != null){
-					log.info(" invoiceDetailsDoc for B2C = " + SCXmlUtil.getString(invoiceDetailsDoc));
+					log.debug(" invoiceDetailsDoc for B2C = " + SCXmlUtil.getString(invoiceDetailsDoc));
 				}
 			}
 			
@@ -331,19 +331,19 @@ public class XPXUpdateInvoiceDetailsAPI {
 				if(name.equals("Brand"))
 				{
 					brand = attributeElement.getAttribute("Value");
-					log.info("brand"+brand);
+					log.debug("brand"+brand);
 					itemMap.put("Brand", brand);
 				}
 			}
 	
 		}
-		log.info("itemmap size"+itemMap.size());
-		log.info("brand"+itemMap.get("Brand"));
+		log.debug("itemmap size"+itemMap.size());
+		log.debug("brand"+itemMap.get("Brand"));
 		Collection<String> c = itemMap.values();
 		Iterator<String> i = c.iterator();
 		while(i.hasNext())
 		{
-			log.info("brand"+i.next());
+			log.debug("brand"+i.next());
 		}
 		//invoiceLineElement.setAttribute("FSCCertCode", fscCertCode);
 		//invoiceLineElement.setAttribute("SFICertCode", sfiCertCode);
@@ -373,12 +373,12 @@ public class XPXUpdateInvoiceDetailsAPI {
 			// UNSPSC replacement.			
 			xpedxUNSPSC = SCXmlUtil.getXpathAttribute(itemElement, "./Extn/@ExtnUNSPSC");
 			if(!YFCObject.isNull(xpedxUNSPSC) && !YFCObject.isVoid(xpedxUNSPSC)) {
-				log.info("xpedxUNSPSC : " + xpedxUNSPSC);
+				log.debug("xpedxUNSPSC : " + xpedxUNSPSC);
 			}
 			if(!YFCObject.isNull(xpedxUNSPSC) && !YFCObject.isVoid(xpedxUNSPSC)){
 				customerUNSPSC = translateUnspscSterlingToCustomerInvoice(env,customerID,itemID,orgCode,xpedxUNSPSC);
 				if(!YFCObject.isNull(customerUNSPSC) && !YFCObject.isVoid(customerUNSPSC)) {
-					log.info("customerUNSPSC : " + customerUNSPSC);
+					log.debug("customerUNSPSC : " + customerUNSPSC);
 				}
 				if( !YFCObject.isNull(customerUNSPSC) && !YFCObject.isVoid(customerUNSPSC)){
 					replacedUNSPSC = customerUNSPSC;
@@ -387,12 +387,12 @@ public class XPXUpdateInvoiceDetailsAPI {
 				}
 			} 
 			if(!YFCObject.isNull(replacedUNSPSC) && !YFCObject.isVoid(replacedUNSPSC)) {
-				log.info("replacedUNSPSC : " + replacedUNSPSC);
+				log.debug("replacedUNSPSC : " + replacedUNSPSC);
 			}
 			invoiceLineElement.setAttribute("Unspsc", replacedUNSPSC);
 		}
 		if(invoiceLineElement != null){
-			log.info("invoiceLineElement: "+SCXmlUtil.getString(invoiceLineElement));
+			log.debug("invoiceLineElement: "+SCXmlUtil.getString(invoiceLineElement));
 		}
 	}
 	
@@ -478,8 +478,8 @@ public class XPXUpdateInvoiceDetailsAPI {
 					customerBuyerID = SCXmlUtil.getXpathAttribute(mSAPCustomerElement, "./Extn/@ExtnBuyerID");
 
 					if(!YFCObject.isNull(customerBuyerID) && !YFCObject.isVoid(customerBuyerID)) {
-						log.info("");
-						log.info("MSAP_customerBuyerID:" + customerBuyerID);
+						log.debug("");
+						log.debug("MSAP_customerBuyerID:" + customerBuyerID);
 					}
 					if(log.isDebugEnabled()){
 						log.debug("MSAP_customerBuyerID:" + customerBuyerID);
