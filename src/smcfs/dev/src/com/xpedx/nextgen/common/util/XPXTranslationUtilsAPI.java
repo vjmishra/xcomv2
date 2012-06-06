@@ -36,7 +36,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		String xpedxUnspsc = "";
 		api = YIFClientFactory.getInstance().getApi();
 		if(inputXML != null){
-			log.info("The inputXML to translateUomCustomerToSterlingForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+			log.debug("The inputXML to translateUomCustomerToSterlingForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
 		}
 		//get the customer id for the b2b order place
 		Element inputElement = inputXML.getDocumentElement();
@@ -60,7 +60,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		String orgCode = "";		
 		//get the customer id for the b2b order place
 		if(inputXML != null){
-			log.info("The inputXML to translateUnspscSterlingToCustomerForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+			log.debug("The inputXML to translateUnspscSterlingToCustomerForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
 		}
 		Element inputElement = inputXML.getDocumentElement();
 		String customerID = inputElement.getAttribute("CustomerID");
@@ -500,12 +500,12 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		}
 		
 		if(log.isDebugEnabled()){
-			log.debug("");
+	//		log.debug("");
 			log.debug("XPXTranslationUtilsAPI : buyerID = " + buyerID);
 		}
 		if(!YFCObject.isNull(buyerID) && !YFCObject.isVoid(buyerID)) {
-			log.info("");
-			log.info("XPXTranslationUtilsAPI : buyerID = " + buyerID);
+		//	log.debug("");
+			log.debug("XPXTranslationUtilsAPI : buyerID = " + buyerID);
 		}
 		
 		return buyerID;
@@ -538,12 +538,12 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 			}		
 		}
 		if(log.isDebugEnabled()){
-			log.debug("");
+			//log.debug("");
 			log.debug("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
 		}
 		if(!YFCObject.isNull(parentCustID) && !YFCObject.isVoid(parentCustID)) {
-			log.info("");
-			log.info("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
+		//	log.debug("");
+			log.debug("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
 		}
 		
 		return parentCustID;
