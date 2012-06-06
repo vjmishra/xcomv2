@@ -73,10 +73,10 @@ public class XPXFetchUpdatedOrderAmount implements YIFCustomApi{
 					extnOrderElem.setAttribute("ExtnWebConfNum", webConfNum);
 					
 					env.setApiTemplate("getOrderList", getOrderListTemplate);
-					log.info("Calling getOrderList with Input\n");
-					log.info("---------------------------------------------\n");
-					log.info(SCXmlUtil.getString(getOrderListDoc)+"\n");
-					log.info("---------------------------------------------\n");
+					log.debug("Calling getOrderList with Input\n");
+					log.debug("---------------------------------------------\n");
+					log.debug(SCXmlUtil.getString(getOrderListDoc)+"\n");
+					log.debug("---------------------------------------------\n");
 					Document outDoc = api.invoke(env, "getOrderList", getOrderListDoc);
 					env.clearApiTemplate("getOrderList");
 					int noOfFOs = 0;
