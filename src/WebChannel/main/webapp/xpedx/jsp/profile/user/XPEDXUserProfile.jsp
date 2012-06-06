@@ -1687,7 +1687,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<!-- ------------------------------------------------------------------------------------------------------------- -->
 													<!-- user Information Div --> 
 	<!-- ------------------------------------------------------------------------------------------------------------- -->
-
+	<%--Adding Proper Tabindex for Jira 3927 --%>
 	<div id="TabbedPanels1" class="TabbedPanelsContentGroup">
 	<div id="UserInformationsTab" class="TabbedPanelsContent">
 	<div>
@@ -1699,7 +1699,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr style="display: none;">
 			<td class="boldText textAlignLeft">&nbsp;&nbsp;<s:text
 				name="RB_title" />:</td>
-			<td><s:select tabindex="45" name="title"
+			<td><s:select tabindex="7" name="title"
 				disabled="%{#isDisabled}" list="%{getTitle()}"
 				value="%{#customercontact.getAttribute('Title')}" /></td>
 		</tr>
@@ -1708,19 +1708,19 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr id="userNameRow">
 			<td width="13%" valign="top" class="no-border-right-user">User Status:
 			</td>
-			
+			<s:set  name="tabidx" value ="%{8}" />
 			<td colspan="3" class="no-border-right-user">
-			<s:iterator value="getStatusList().keySet()" id="statusVal">
+			<s:iterator value="getStatusList().keySet()" id="statusVal" >
 				<s:set name="statusValue" value="value" />
 				<label>
 				 <%-- Fix for Jira 3048 --%>
 				    <s:if test="%{#disableSinceSelfApprover}">		
-					   <input type="radio" name="status" id='status' disabled = 'true' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
+					   <input tabindex="<s:property value="#tabidx"/>"  type="radio" name="status" id='status' disabled = 'true' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
 					   </input>	
 					   	<s:if test ="%{#statusVal == getContactStatus()}" ><s:hidden name="status" id='status' value='%{getContactStatus()}' ></s:hidden> </s:if>	        
 					</s:if>
 					<s:else>
-					  <input type="radio" name="status" id='status' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
+					  <input tabindex="<s:property value="#tabidx"/>"  type="radio" name="status" id='status' value='<s:property value="statusVal"/>' <s:if test ="%{#statusVal == getContactStatus()}" > checked="true"</s:if>>
 					  </input>
 					</s:else>
 				 <%-- END Fix for Jira 3048 --%>
@@ -1730,6 +1730,7 @@ a.underlink:hover { text-decoration: underline !important; }
 					<s:else>
 					  <s:property value="%{getStatusList().get(#statusVal)}" />
 					</s:else>
+					<s:set  name="tabidx" value ="%{#tabidx +1}" /> 
 				</label>
         	</s:iterator>
 			<div class="float-right"><span>Last Login: <s:property value="%{getExtnLastLoginDate()}"/> </span><span
@@ -1791,59 +1792,59 @@ a.underlink:hover { text-decoration: underline !important; }
 			<s:if test="%{!#disableSinceSelfApprover}">
 				<label
 				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
-				<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
+				<s:checkbox tabindex="11" name='buyerAdmin' id='buyerAdmin'
 				fieldValue="true" value='%{isInUserGroup("BUYER-ADMIN")}'/> Admin</label> 
 				<label
 				title="Authorizes submission of orders."> 
-				<s:checkbox	tabindex="85" name='buyerApprover' id='buyerApprover'
+				<s:checkbox	tabindex="13" name='buyerApprover' id='buyerApprover'
 				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true"/> Approver</label> 
 				<label
 				title="Buyer has the ability to submit orders."> 
-				<s:checkbox	tabindex="75" name='test' id='test' fieldValue="test123"
+				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" />Buyer</label>
 			</s:if>	
 			<s:else> 
 				<label
 				title="Responsible for overall administration of, and access to, accounts on the web site. Creates user profiles, assigns roles, assigns locations.">
-				<s:checkbox tabindex="80" name='buyerAdmin' id='buyerAdmin'
+				<s:checkbox tabindex="11" name='buyerAdmin' id='buyerAdmin'
 				fieldValue="true" value='%{isInUserGroup("BUYER-ADMIN")}' disabled="true"/> Admin</label> 
 				<s:hidden name="buyerAdmin" id='buyerAdmin' value='%{isInUserGroup("BUYER-ADMIN")}' ></s:hidden>
 				<label
 				title="Authorizes submission of orders."> 
-				<s:checkbox	tabindex="85" name='buyerApprover' id='buyerApprover'
+				<s:checkbox	tabindex="13" name='buyerApprover' id='buyerApprover'
 				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true" disabled="true"/> Approver</label> 
 				<s:hidden name="buyerApprover" id='buyerApprover' value='%{isInUserGroup("BUYER-APPROVER")}' ></s:hidden>
 				<label
 				title="Buyer has the ability to submit orders."> 
-				<s:checkbox	tabindex="75" name='test' id='test' fieldValue="test123"
+				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" disabled="true"/>Buyer</label>							
 			</s:else>
 			<s:if test='%{#estimator=="T"}'>
 		        	<label title="Estimator views available inventory and pricing.">
-					<s:checkbox tabindex="75" name='estimator' id='estimator' fieldValue="true" value="true" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
+					<s:checkbox tabindex="15" name='estimator' id='estimator' fieldValue="true" value="true" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
 			</s:if>
 			<s:else>
 			 		<label title="Estimator views available inventory and pricing.">
-					<s:checkbox tabindex="75" name='estimator' id='estimator' fieldValue="true" value="false" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
+					<s:checkbox tabindex="15" name='estimator' id='estimator' fieldValue="true" value="false" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
 			</s:else>
 			<s:if test='%{#viewInvoices=="Y"}'>
 				<label
 				title="Permitted to view invoices online."> 
-				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
+				<s:checkbox tabindex="16" name="viewInvoices" fieldValue="true" id="viewInvoices"
 				value="true" disabled='%{#checkBoxDisable || #isDisabled}'/> <p class="float-right">View Invoices</p></label> 
 			</s:if>
 			<s:else>
 			 	<label
 				title="Permitted to view invoices online."> 
-				<s:checkbox name="viewInvoices" fieldValue="true" id="viewInvoices"
+				<s:checkbox tabindex="16" name="viewInvoices" fieldValue="true" id="viewInvoices"
 				value="false" disabled='%{#checkBoxDisable || #isDisabled}'/> <p class="float-right">View Invoices</p></label> 
 			</s:else>
 			 	<label	title="Permitted to view prices."> 
-				<s:checkbox fieldValue="true" 
+				<s:checkbox tabindex="17" fieldValue="true" 
 				name="viewPrices" id="viewPrices"
 				value="%{isViewPrices()}" disabled='%{#checkBoxDisable || #isDisabled}'/> View Prices</label> 
 				<label
-				title="Permitted to view reports."> <s:checkbox
+				title="Permitted to view reports."> <s:checkbox tabindex="18"
 				name="viewReports" id="viewReports" fieldValue="true" 
 				value='%{isViewReports()}' disabled='%{#checkBoxDisable || #isDisabled}'/><p class="float-right"> View Reports</p></label></td>
 		</s:if>
@@ -1859,7 +1860,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		
 		<tr style="display: none;">
 			<td class="boldText textAlignLeft"><s:text name="RB_jobTitle" />:</td>
-			<td><s:textfield tabindex="60" name="jobTitle"
+			<td><s:textfield tabindex="19" name="jobTitle"
 				disabled="%{#isDisabled}"
 				value='%{#customercontact.getAttribute("JobTitle")}' /></td>
 		</tr>
@@ -1868,7 +1869,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="mandatory float-left">*</div>
 			First Name:</td>
 			<td width="31%" class="no-border-right-user"><s:textfield
-				tabindex="50" name="firstName" id="firstName" onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
+				tabindex="20" name="firstName" id="firstName" onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
 			    onmouseover="javascript:testFieldValueCheck(this, 'myAccount');" maxlength="20"
 				cssClass="x-input" cssStyle="width: 185px;"
 				disabled="%{#isDisabled}"
@@ -1877,7 +1878,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="mandatory float-left">*</div>
 			Last Name:</td>
 			<td width="37%" class="no-border-right-user"><s:textfield
-				tabindex="55" name="lastName" id="lastName"  onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
+				tabindex="21" name="lastName" id="lastName"  onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
 			    onmouseover="javascript:testFieldValueCheck(this, 'myAccount');" cssClass="x-input"
 				cssStyle="width: 185px;" maxlength="20" disabled="%{#isDisabled}"
 				value='%{#customercontact.getAttribute("LastName")}' /></td>
@@ -1902,7 +1903,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td width="31%" class="no-border-right-user">
 			<s:url id="ValidatePasswordURL" action="validatePassword"/>
 			<s:password
-				tabindex="10" name="userpassword" id="userpassword" onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
+				tabindex="22" name="userpassword" id="userpassword" onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
 			    onmouseover="javascript:testFieldValueCheck(this, 'myAccount');" 
 				cssClass="x-input" cssStyle="width: 185px;"
 				value="%{#maskedPasswordString}" showPassword="true" size="8"
@@ -1914,7 +1915,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="mandatory float-left">*</div>
 			Confirm Password:</td>
 			<td width="37%" class="no-border-right-user"><s:password
-				tabindex="15" name="confirmpassword" id="confirmpassword" onkeyup="" 
+				tabindex="23" name="confirmpassword" id="confirmpassword" onkeyup="" 
 			    cssClass="x-input" cssStyle="width: 185px;"
 				value="%{#maskedPasswordString}" showPassword="true" size="8"
 				maxlength="14" /></td>
@@ -1926,7 +1927,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<div class="mandatory float-left">*</div>
 			Security Question:</td>
 			<td colspan="3" class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
-				tabindex="20" name="secretQuestion" id="secretQuestion"
+				tabindex="24" name="secretQuestion" id="secretQuestion"
 				value="%{#userSecretQuestion}"
 				list="#orgQuestionList" cssClass="x-input" cssStyle="width: auto;"
 				onchange="javascript:document.myAccount.secretAnswer.value='';javascript:document.myAccount.confirmAnswer.value='';" />
@@ -1945,7 +1946,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td class="no-border-right-user">
 			<div class="mandatory float-left">*</div>
 			Confirm Answer:</td>
-			<td class="no-border-right-user"><s:password tabindex="30"
+			<td class="no-border-right-user"><s:password tabindex="26"
 				name='confirmAnswer' id="confirmAnswer" onkeyup="" 
 			    cssClass="x-input"
 				cssStyle="width: 185px;" value="%{#maskedAnswerString}"
@@ -1992,7 +1993,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			</ul>
 			</div>
 			</td>
-			<td class="no-border-right-user"><s:textfield tabindex="65" maxlength="500"
+			<td class="no-border-right-user"><s:textfield tabindex="27" maxlength="500"
 				name="emailId" cssClass="x-input" id="emailId" onkeyup="javascript:testFieldValueCheck(this, 'myAccount');" 
 			    onmouseover="javascript:testFieldValueCheck(this, 'myAccount');" 
 				cssStyle="width: 185px;" disabled="%{#isDisabled}"
@@ -2000,7 +2001,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<td class="no-border-right-user">
 			<div class="mandatory float-left">*</div>
 			Confirm Email Address:</td>
-			<td class="no-border-right-user"><s:textfield tabindex="65" maxlength="500"
+			<td class="no-border-right-user"><s:textfield tabindex="28" maxlength="500"
 				id="confirmEmailId" name="confirmEmailId" onkeyup="" 
 			    cssClass="x-input"
 				cssStyle="width: 185px;" disabled="%{#isDisabled}"
@@ -2041,7 +2042,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td class="no-border-right-user">Address Line 1:</td>
 			<td class="no-border-right-user" colspan="3"><s:textfield
-				name='addressLine1_new' id='addressLine1_new'
+				tabindex="29" name='addressLine1_new' id='addressLine1_new'
 				value='%{#personInfo.getAttribute("AddressLine1")}'
 				id='addressLine1_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
@@ -2049,7 +2050,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td class="no-border-right-user">Address Line 2:</td>
 			<td class="no-border-right-user" colspan="3"><s:textfield
-				name='addressLine2_new' id='addressLine2_new'
+				tabindex="30" name='addressLine2_new' id='addressLine2_new'
 				value='%{#personInfo.getAttribute("AddressLine2")}'
 				id='addressLine2_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
@@ -2057,7 +2058,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td class="no-border-right-user">Address Line 3:</td>
 			<td colspan="3" class="no-border-right-user"><s:textfield
-				name='addressLine3_new' id='addressLine3_new'
+				tabindex="31" name='addressLine3_new' id='addressLine3_new'
 				value='%{#personInfo.getAttribute("AddressLine3")}'
 				id='addressLine3_new' cssClass="x-input" cssStyle="width:270px;"
 				maxlength="35" /></td>
@@ -2065,22 +2066,22 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td class="no-border-right-user">City:</td>
 			<td class="no-border-right-user"><s:textfield name='city_new'
-				value='%{#personInfo.getAttribute("City")}' id='city_new'
+				tabindex="32" value='%{#personInfo.getAttribute("City")}' id='city_new'
 				cssClass="x-input" cssStyle="width:190px;" maxlength="20" /></td>
 			<td class="no-border-right-user">State / Province:</td>
 			<td class="no-border-right-user"><s:textfield name="state_new"
-				value="%{#personInfo.getAttribute('State')}" id="state_new"
+				tabindex="33" value="%{#personInfo.getAttribute('State')}" id="state_new"
 				cssClass="x-input" cssStyle="width: 190px;" maxlength="2" /></td>
 		</tr>
 		<tr>
 			<td class="no-border-right-user">Postal Code:</td>
 			<td class="no-border-right-user"><s:textfield name='zipCode_new'
-				value='%{#personInfo.getAttribute("ZipCode")}' id='zipCode_new'
+				tabindex="34" value='%{#personInfo.getAttribute("ZipCode")}' id='zipCode_new'
 				cssClass="x-input" cssStyle="width: 190px;" maxlength="10" /></td>
 			<td class="no-border-right-user">Country:</td>
 			<td class="no-border-right-user">
 			<s:select
-				tabindex="20" name="country_new" id="country_new"
+				tabindex="35" name="country_new" id="country_new"
 				emptyOption="true" value='%{#personInfo.getAttribute("Country")}'
 				list="%{getCountriesMap()}" headerKey="" headerValue="-Select Country-" cssClass="x-input" cssStyle="width: 190px;"/>
 			</td>
@@ -2088,14 +2089,14 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr>
 			<td class="no-border-right-user">Phone:</td>
 			<td class="no-border-right-user"><s:textfield
-				name='dayPhone_new' value='%{#personInfo.getAttribute("DayPhone")}'
+				tabindex="36" name='dayPhone_new' value='%{#personInfo.getAttribute("DayPhone")}'
 				id='dayPhone_new' cssClass="x-input phone-numeric" cssStyle="width: 190px;"
 				maxlength="10"/>
 				<div class="error" id="errorMsgFor_validPhoneNo" style="display : none">Please enter a valid 10 digit number.</div>
 				</td>
 			<td class="no-border-right-user">Fax:</td>
 			<td class="no-border-right-user"><s:textfield
-				name='dayFaxNo_new' value='%{#personInfo.getAttribute("DayFaxNo")}'
+				tabindex="37" name='dayFaxNo_new' value='%{#personInfo.getAttribute("DayFaxNo")}'
 				id='dayFaxNo_new' cssClass="x-input phone-numeric" cssStyle="width: 190px;"
 				maxlength="10"/>
 			<div class="error" id="errorMsgFor_validFaxNo" style="display : none">Please enter a valid 10 digit number.</div>	
@@ -2629,7 +2630,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<ul class="float-right">
 		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
 		<li class="float-right"><a class="green-ui-btn" href="javascript:void(0);"
-			onclick="javascript:callSave('myAccount', []);"  tabindex="12"><span>Save</span></a></li>
+			onclick="javascript:callSave('myAccount', []);"  tabindex="38"><span>Save</span></a></li>
 	</ul>
 	</div>
 	<div class="clearview">&nbsp;</div>
