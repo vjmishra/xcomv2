@@ -54,7 +54,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 		String orderType = "";
 		Document outDoc = null;
 		boolean isCancelEventTriggered = false;
-		log.info("ExtnOrderStatusUpdate_InputXML:" + SCXmlUtil.getString(inXML));
+		log.debug("ExtnOrderStatusUpdate_InputXML:" + SCXmlUtil.getString(inXML));
 		Element rootElement = inXML.getDocumentElement();		
 		if((rootElement.getOwnerDocument().getDocumentElement().getNodeName()).equalsIgnoreCase("OrderStatusChange")){
 			// For change order status.
@@ -84,17 +84,17 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 					orderStatusPrefix = "Partially";
 		}
 		
-		log.info("Updating the status of order = " + fOrderHeaderKey + " with "+orderStatusPrefix + " " +orderStatus);
+		log.debug("Updating the status of order = " + fOrderHeaderKey + " with "+orderStatusPrefix + " " +orderStatus);
 		
 		Element extnRootElement = SCXmlUtil.getChildElement(rootElement, "Extn");
 		if(extnRootElement!=null){
 			extnRootElement.setAttribute("ExtnOrderStatus", orderStatus);
 			extnRootElement.setAttribute("ExtnOrderStatusPrefix", orderStatusPrefix);
 			rootElement.setAttribute("Override", "Y");
-			log.info("Calling changeOrder with Input\n");
-			log.info("---------------------------------------------\n");
-			log.info(SCXmlUtil.getString(inXML)+"\n");
-			log.info("---------------------------------------------\n");
+			log.debug("Calling changeOrder with Input\n");
+			log.debug("---------------------------------------------\n");
+			log.debug(SCXmlUtil.getString(inXML)+"\n");
+			log.debug("---------------------------------------------\n");
 			outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", inXML); 
 		}
 		else{
@@ -106,14 +106,14 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			extnElementInCODoc.setAttribute("ExtnOrderStatus", orderStatus);
 			extnElementInCODoc.setAttribute("ExtnOrderStatusPrefix", orderStatusPrefix);
 				
-			log.info("Calling changeOrder with Input\n");
-			log.info("---------------------------------------------\n");
-			log.info(SCXmlUtil.getString(changeOrderDoc)+"\n");
-			log.info("---------------------------------------------\n");
+			log.debug("Calling changeOrder with Input\n");
+			log.debug("---------------------------------------------\n");
+			log.debug(SCXmlUtil.getString(changeOrderDoc)+"\n");
+			log.debug("---------------------------------------------\n");
 			outDoc = api.executeFlow(env, "XPXUpdateExOrderStatus", changeOrderDoc);
 		}
 		if(outDoc!=null)
-			log.info("O/P of changeOrder is \n"+SCXmlUtil.getString(outDoc));
+			log.debug("O/P of changeOrder is \n"+SCXmlUtil.getString(outDoc));
 		
 		/* If the fulfillment order status is canceled , update the customer order status.
 		 * OU - Line Process Code 'C' with quantity '0'. Only fulfillment order will  be Cancelled and the customer order status should be modified accordingly. */
@@ -127,7 +127,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			env.setApiTemplate("getOrderList", getOrderListTemplate);
 			
 			fOrderOutputDoc = api.invoke(env,"getOrderList", fOrderInputDoc);
-			log.info("Fulfillment order details = " + SCXmlUtil.getString(fOrderOutputDoc));
+			log.debug("Fulfillment order details = " + SCXmlUtil.getString(fOrderOutputDoc));
 			
 			// To clear API template for getOrderList
 			env.clearApiTemplate("getOrderList");
@@ -147,7 +147,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				env.setApiTemplate("getOrderList", getOrderListTemplate);
 				
 				cOrderOutputDoc = api.invoke(env,"getOrderList", cOrderInputDoc);
-				log.info("Customer order details = " + SCXmlUtil.getString(cOrderOutputDoc));
+				log.debug("Customer order details = " + SCXmlUtil.getString(cOrderOutputDoc));
 				
 				// To clear API template for getOrderList
 				env.clearApiTemplate("getOrderList");
@@ -172,10 +172,10 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				extnElementDoc.setAttribute("ExtnOrderStatus", orderStatus);
 				extnElementDoc.setAttribute("ExtnOrderStatusPrefix", orderStatusPrefix);
 					
-				log.info("Calling changeOrder with Input for updating Customer Order when FO is cancelled\n");
-				log.info("---------------------------------------------\n");
-				log.info(SCXmlUtil.getString(changeCustOrderDoc)+"\n");
-				log.info("---------------------------------------------\n");
+				log.debug("Calling changeOrder with Input for updating Customer Order when FO is cancelled\n");
+				log.debug("---------------------------------------------\n");
+				log.debug(SCXmlUtil.getString(changeCustOrderDoc)+"\n");
+				log.debug("---------------------------------------------\n");
 				outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", changeCustOrderDoc);
 			}
 		}
