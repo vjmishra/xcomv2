@@ -61,7 +61,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 				
 				YFCElement editOrdEle = YFCDocument.getDocumentFor(inXML).getDocumentElement();
 					
-				log.info("XPXEditChainedOrderAPI-InXML:"+editOrdEle.getString());
+				log.debug("XPXEditChainedOrderAPI-InXML:"+editOrdEle.getString());
 				
 				String ordType = null;
 				if(editOrdEle.hasAttribute("OrderType")) {
@@ -355,12 +355,12 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 						Document businessRuleOutputDoc = api.executeFlow(env, "XPXBusinessRuleValidationFOService", postToLegacyOrdEle.getOwnerDocument().getDocument());																		
 						updateWebHold(businessRuleOutputDoc,postToLegacyOrdEle);				
 							
-						log.info("XPXPostEditOrderToLegacy-InXML:"+postToLegacyOrdEle.getString());
+						log.debug("XPXPostEditOrderToLegacy-InXML:"+postToLegacyOrdEle.getString());
 						
 						Document editOrdMsgFromLegacy = XPXEditChainedOrderExAPI.api.executeFlow(env, "XPXPostEditOrderToLegacy", postToLegacyOrdEle.getOwnerDocument().getDocument());
 						if(editOrdMsgFromLegacy != null) {
 							
-							log.info("XPXPostEditOrderToLegacy-OutXML:"+YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getString());
+							log.debug("XPXPostEditOrderToLegacy-OutXML:"+YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getString());
 							
 							YFCElement editOrdMsgFromLegacyEle = YFCDocument.getDocumentFor(editOrdMsgFromLegacy).getDocumentElement();
 							YFCNodeList<YFCElement> nodeListEle = editOrdMsgFromLegacyEle.getElementsByTagName("TransactionStatus");
@@ -376,7 +376,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 								Document ordUpdateDoc = XPXEditChainedOrderExAPI.api.executeFlow(env, "XPXLegacyOrderUpdateService", editOrdMsgFromLegacy);
 								if(ordUpdateDoc != null) {
 									
-									log.info("XPXLegacyOrderUpdateService-OutXML:"+YFCDocument.getDocumentFor(ordUpdateDoc).getString());
+									log.debug("XPXLegacyOrderUpdateService-OutXML:"+YFCDocument.getDocumentFor(ordUpdateDoc).getString());
 									
 									YFCElement ordUpdateEle = YFCDocument.getDocumentFor(ordUpdateDoc).getDocumentElement();
 									YFCNodeList<YFCElement> _nodeListEle = ordUpdateEle.getElementsByTagName("TransactionStatus");
@@ -417,7 +417,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			else
 				editOrdEle.getOwnerDocument().getDocumentElement().setAttribute("TransactionMessage",env.getTxnObject("OrderEditTransactionFailure").toString());
 			
-			log.info("Order Edit Transaction failure XML : "+SCXmlUtil.getString(editOrdEle.getOwnerDocument().getDocument()));			
+			log.debug("Order Edit Transaction failure XML : "+SCXmlUtil.getString(editOrdEle.getOwnerDocument().getDocument()));			
 			/*End - Changes made by Mitesh Parikh for JIRA 3045*/
 			
 			return editOrdEle.getOwnerDocument().getDocument();
@@ -1913,7 +1913,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 		if(tempDoc != null) {
 			getOrdListOutDoc = YFCDocument.getDocumentFor(tempDoc);
 			
-			log.info("XPXEditChainedOrderAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:"+getOrdListOutDoc.getString());
+			log.debug("XPXEditChainedOrderAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:"+getOrdListOutDoc.getString());
 			
 		}
 		
