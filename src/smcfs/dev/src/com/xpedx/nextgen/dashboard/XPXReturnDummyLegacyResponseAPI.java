@@ -39,7 +39,7 @@ public class XPXReturnDummyLegacyResponseAPI implements YIFCustomApi{
                 {
                 filePath = props.getProperty(name);
                 }
-                log.info("Property Name is: " + name + " Value is: " + props.getProperty(name));
+                log.debug("Property Name is: " + name + " Value is: " + props.getProperty(name));
             }
 		}
 		  File file = new File(filePath);
