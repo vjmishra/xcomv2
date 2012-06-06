@@ -37,7 +37,7 @@ public class XPXInternalUserProfileMigrationService {
 	public Document isNewOrExistingUser(YFSEnvironment env, Document inXML)
 			throws Exception {
 
-		yfcLogCatalog.info("----- isNewOrExistingUser -----");
+		yfcLogCatalog.debug("----- isNewOrExistingUser -----");
 		int userCount = 0;
 
 		Document getUserListInput = null;
