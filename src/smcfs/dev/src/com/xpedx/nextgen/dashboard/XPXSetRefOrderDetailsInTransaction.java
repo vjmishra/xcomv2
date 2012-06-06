@@ -45,7 +45,7 @@ public class XPXSetRefOrderDetailsInTransaction implements YIFCustomApi
 	public Document setRefDetailsInTransation(YFSEnvironment env, Document inputXML)
 	{		
 		if(inputXML != null){
-			log.info("Input xml for setRefDetailsInTransation in XPXSetRefOrderDetailsInTransaction is :  " + SCXmlUtil.getString(inputXML));
+			log.debug("Input xml for setRefDetailsInTransation in XPXSetRefOrderDetailsInTransaction is :  " + SCXmlUtil.getString(inputXML));
 		}
 		NodeList xpxRefOrderHdrList = inputXML.getElementsByTagName("XPXRefOrderHdr");
 		Element xpxRefOrderHdrElement = (Element) xpxRefOrderHdrList.item(0);
