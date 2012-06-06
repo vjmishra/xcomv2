@@ -368,10 +368,10 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 				//}
 			}
 		} catch (NullPointerException cce) {
-			log.info(cce.getMessage());
+			log.debug(cce.getMessage());
 		}
 		catch (ArrayIndexOutOfBoundsException cce) {
-			log.info(cce.getMessage());
+			log.debug(cce.getMessage());
 		}
 		catch (Exception e) {
 			log.error("Exception while changing the OrderPrice in User Exit...\n");
