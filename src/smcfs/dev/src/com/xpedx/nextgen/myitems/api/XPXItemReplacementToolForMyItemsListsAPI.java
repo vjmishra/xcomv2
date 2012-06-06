@@ -72,7 +72,7 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 				|| SCUtil.isVoid(strReplaceLPC)){
 			throw new YFSException("LPC and ReplaceLPC attributes cannot be VOID.");
 		}
-		log.info("XPXItemReplacementToolForMyItemsListsAPI.replaceItem()--> Input XML" + SCXmlUtil.getString(inXML));
+		log.debug("XPXItemReplacementToolForMyItemsListsAPI.replaceItem()--> Input XML" + SCXmlUtil.getString(inXML));
 		Document docSuccess = null;
 		
 		ArrayList<Element> replacibleList = SCXmlUtil.getChildren(eleInput, "XPEDXMyItemsList");
@@ -108,11 +108,11 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 				}
 			}
 			
-			log.info("Item To Be Replaced:" + strReplaceLPC);
+			log.debug("Item To Be Replaced:" + strReplaceLPC);
 			if (YFCObject.isNull(replaceItemUOM) || YFCObject.isVoid(replaceItemUOM)) {
 				throw new Exception("Invalid Item: "+strReplaceLPC);
 			}
-			log.info("Item Unit Of Measure To Be Replaced:" + replaceItemUOM);
+			log.debug("Item Unit Of Measure To Be Replaced:" + replaceItemUOM);
 			
 			//2.  Prepare and invoke changeXPEDX_MyItemsDetails Service for each MyItemsItems
 			ArrayList<Element> listOfReplacibleMyItems = SCXmlUtil.getChildren(docMyItemsItems.getDocumentElement(), "XPEDXMyItemsItems");
@@ -132,7 +132,7 @@ public class XPXItemReplacementToolForMyItemsListsAPI  implements YIFCustomApi{
 			}
 		}
 	
-		log.info("XPXItemReplacementToolForMyItemsListsAPI.replaceItem()--> Output XML" + SCXmlUtil.getString(docSuccess));
+		log.debug("XPXItemReplacementToolForMyItemsListsAPI.replaceItem()--> Output XML" + SCXmlUtil.getString(docSuccess));
 		api = null;
 		if(SCUtil.isVoid(docSuccess)){
 			docSuccess = SCXmlUtil.createDocument("Failure");
