@@ -140,7 +140,7 @@ public class XPXBulkPasswordResetAgent extends YCPBaseAgent {
 		
 		customerContactKeyInLastCreatedMessage=(String) customerContactUserContactKeys.get(userKey);
 		
-		log.info("customerKeyInLastCreatedMessage"+ customerContactKeyInLastCreatedMessage);
+		log.debug("customerKeyInLastCreatedMessage"+ customerContactKeyInLastCreatedMessage);
 		Element expNextElement = inputCustomerContactDoc.createElement("Exp");
 		expNextElement.setAttribute("Name", "CustomerContactKey");
 		expNextElement.setAttribute("Value",customerContactKeyInLastCreatedMessage);
