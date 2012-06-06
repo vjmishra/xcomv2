@@ -413,12 +413,18 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 			  	currentAadd2ItemListIndex = allChildElements.length - 1;
 			  	
 			  //setArrayValue(currentAadd2ItemListIndex,listKey, 0);
-			  //Add the item into the list selected
-			  addItemsToList();
+			   //Add the item into the list selected
+			  	addItemsToList();
+			  	//Wait for 3 sec and then take the dialog off 
+				var task = new Ext.util.DelayedTask(function(){
+					Ext.Msg.hide();
+				});
+				task.delay(3000);
+			 
 			  
 			  //reloadMenu();
 			  // Removal of MIL dropdown list from header for performance improvement
-			  Ext.Msg.hide();
+			 // Ext.Msg.hide();
 	      },
 	      failure: function (response, request){
 	          document.body.style.cursor = 'default';
@@ -1621,7 +1627,7 @@ function SubmitActionWithValidation()
 
 				//Ext.Msg.wait("Adding item to list... Please wait.");
 				xpedx_working_start();
-                setTimeout(xpedx_working_stop, 3000);
+                setTimeout(xpedx_working_stop, 4000);
 				
 				document.OrderDetailsForm.orderLineItemNames.value 	= unescape(document.OrderDetailsForm.orderLineItemNames.value);
 				document.OrderDetailsForm.orderLineItemDesc.value 	= unescape(document.OrderDetailsForm.orderLineItemDesc.value);
