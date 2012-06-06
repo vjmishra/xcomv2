@@ -60,7 +60,7 @@ public class XPXPasswordPolicyCfgListService implements YIFCustomApi {
 			 */
 			if(inputXML != null)
 			{
-				log.info("Input XML for the getPasswordPolicyList is " + SCXmlUtil.getString(inputXML));
+				log.debug("Input XML for the getPasswordPolicyList is " + SCXmlUtil.getString(inputXML));
 			}
 			// invoke getPasswordPolicyDetails API
 			
