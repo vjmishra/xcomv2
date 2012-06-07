@@ -1815,7 +1815,17 @@
 				<Order OrderHeaderKey="" />
 			</Input>
 			<Template>
-					<Order Status="">
+					<Order ActualPricingDate="" AllAddressesVerified="" BillToID=""
+					BillToKey="" BuyerOrganizationCode="" CarrierServiceCode="" ChainType=""
+					Createprogid="" Createts="" Createuserid="" CustCustPONo=""
+					CustomerFirstName="" CustomerLastName="" CustomerPONo=""
+					CustomerPhoneNo="" CustomerZipCode="" DeliveryCode="" Division=""
+					DoNotConsolidate="" DraftOrderFlag="" EntryType="" HoldFlag=""
+					HoldReasonCode="" InvoiceComplete="" Modifyprogid="" Modifyts=""
+					Modifyuserid="" OrderComplete="" OrderDate="" OrderHeaderKey=""
+					OrderName="" OrderNo="" OrderType="" ReqDeliveryDate=""
+					SellerOrganizationCode="" ShipNode="" ShipToID="" ShipToKey=""
+					SourceType="" Status="">
 						<OrderHoldTypes>
 						<OrderHoldType HoldType="" LastHoldTypeDate=""
 							OrderAuditKey="" OrderHeaderKey="" OrderLineKey="" ReasonText=""
