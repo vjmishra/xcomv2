@@ -11,6 +11,7 @@
 				<Attribute ColumnName="LIST_NAME"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
 				<Attribute ColumnName="LIST_DESC"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
 				<Attribute ColumnName="CUSTOMER_ID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="CustomerID"/>		
+				<Attribute ColumnName="SHARE_CUSTOMER_ID"   DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="ShareCustomerID"/>		
 				<Attribute ColumnName="LIST_ORDER"  		DataType="Integer"  	DefaultValue="0" Description="" Nullable="False" XMLName="ListOrder"/>
 				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
 				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="SharePrivate"/>
