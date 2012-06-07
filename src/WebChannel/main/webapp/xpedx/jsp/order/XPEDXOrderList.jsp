@@ -762,7 +762,8 @@ function printPOs(customerPos) {
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
 			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
 				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">					
-					<s:textarea name="ReasonText" cols="69" rows="5" theme="simple"></s:textarea>
+					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple"></s:textarea>
+					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="ApprovalActionRequestUrl" value="orderList"/>
@@ -881,11 +882,27 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 	 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 	}
    function openNotePanelSetAction(actionValue){
-	 if(actionValue == "Accept")
+	 if(actionValue == "Accept"){
 	     document.forms["approval"].elements["ApprovalAction"].value = "1300";
-	 if(actionValue == "Reject")
-	     document.forms["approval"].elements["ApprovalAction"].value = "1200";		
-	//submit it
+	     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
+	 		document.getElementById("ReasonText").value="Accepted";
+	 	}
+	     else{
+	    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
+
+		 }	
+	 }
+	 if(actionValue == "Reject"){
+	     document.forms["approval"].elements["ApprovalAction"].value = "1200";
+	     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
+		 		document.getElementById("ReasonText").value="Rejected"
+		 }	
+	     else{
+	    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
+
+		 }	
+	 }		
+	//submit it	
 	 document.forms["approval"].submit();	
 	}
 	</script>
