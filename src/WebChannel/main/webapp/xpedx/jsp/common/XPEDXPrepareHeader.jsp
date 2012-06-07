@@ -688,7 +688,7 @@ var selectedShipCustomer = null;
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
-	<div id="ajax-assignedShipToCustomers"></div>
+	<div id="ajax-assignedShipToCustomers" style="width: 750px; height:520px;"></div>
 </div>
 <s:url id='toaURL' namespace='/common' action='xpedxGetTermsOfAccess' />
 <div class='x-hidden dialog-body ' id="termsOfAccessContent">
@@ -1542,15 +1542,15 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
  					}
  				}
  			},
- 			'autoDimensions' : false,
+ 			'autoDimensions' : true,
 
- 			'width' : '50%',
+ 			'width' : '54%',
 
- 			'scrolling' : 'auto',
+ 			'scrolling' : 'no',
 
- 			'autoscale' : true,
+ 			'autoscale' : false,
 
- 			'height' : '90%'
+ 			'height' : '95%'
 
  			});
         $("#shipToAnchor,#shipToAnchor1").fancybox({
