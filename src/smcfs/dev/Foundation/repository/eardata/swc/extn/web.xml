@@ -496,6 +496,24 @@
         <param-name>scui-stacktrace-resourceid</param-name>
         <param-value>/swc/error-stack-trace</param-value>
     </context-param>
+	<!--Session Manage Filter - Start 1650 -->
+	<context-param>
+	<param-name>defaultSfId</param-name>
+       <param-value>xpedx</param-value>
+	   </context-param>
+	<filter>
+	    <filter-name>SessionManageFilter</filter-name>
+	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionManageFilter</filter-class>
+		<init-param>
+	<param-name>excludeActions</param-name>
+	<param-value>login.action,home.action,gategorySubMenu.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action</param-value>
+    </init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionManageFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<!--Session Manage Filter - End 1650 -->
     <filter>
         <filter-name>UIFwk Impl Filter</filter-name>
         <filter-class>com.sterlingcommerce.ui.web.platform.filters.SCUIPlatformImplFilter</filter-class>
