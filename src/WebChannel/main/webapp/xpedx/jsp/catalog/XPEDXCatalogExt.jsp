@@ -1197,11 +1197,16 @@ function loadView()
 function processDetail(itemid, uom) {
 	var selView = document.getElementById("selectedView").value; 
 	var storeFrontId = "<s:property value='wCContext.storefrontId' />";
+	var guest = "<s:property value='#guestUser' />";
+	
 	// Begin - Changes made by Mitesh Parikh for 2422 JIRA
 	<s:set name="itemDtlBackPageURL" value="%{itemDtlBackPageURL}" scope="session"/>
 	<s:set name="productCompareBackPageURL" value="%{productCompareBackPageURL}" scope="session"/>
 	<s:set name='xpedxSwcContext' value="%{'/swc'}"/>
-	window.location.href = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;
+	if(guest=="true")
+		window.location.href = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&scGuestUser=Y" +"&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;		
+	else
+		window.location.href = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;		
 	/*commented for jira 2422 
 	<s:if test='%{#itemDtlBackPageURL == null || #itemDtlBackPageURL.trim().length() <= 0}'>	
 	</s:if>
