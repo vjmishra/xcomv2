@@ -577,7 +577,7 @@ public class XPEDXMyItemsUtils {
 				}
 				inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
 			}
-			log.info("Input XML: " + SCXmlUtil.getString(input));
+			log.debug("Input XML: " + SCXmlUtil.getString(input));
 			Object obj = WCMashupHelper.invokeMashup(
 					"XPEDXMyAllItemsDetails", input, wcContext
 							.getSCUIContext());
@@ -587,7 +587,7 @@ public class XPEDXMyItemsUtils {
 				outList.add(elem.getAttribute("ItemID"));
 			}
 			if (null != outputDoc) {
-				log.info("Output XML getXpedxEntitledItemDetails: " + SCXmlUtil.getString((Element) obj));
+				log.debug("Output XML getXpedxEntitledItemDetails: " + SCXmlUtil.getString((Element) obj));
 			}
 		} catch (Exception e) {
 			
@@ -626,13 +626,13 @@ public class XPEDXMyItemsUtils {
 				}
 				inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
 			}
-			log.info("Input XML: " + SCXmlUtil.getString(input));
+			log.debug("Input XML: " + SCXmlUtil.getString(input));
 			Object obj = WCMashupHelper.invokeMashup(
 					"XPEDXMyAllItemsDetails", input, wcContext
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
 			if (null != outputDoc) {
-				log.info("Output XML getXpedxEntitledItemDetails: " + SCXmlUtil.getString((Element) obj));
+				log.debug("Output XML getXpedxEntitledItemDetails: " + SCXmlUtil.getString((Element) obj));
 			}
 		} catch (Exception e) {
 			
