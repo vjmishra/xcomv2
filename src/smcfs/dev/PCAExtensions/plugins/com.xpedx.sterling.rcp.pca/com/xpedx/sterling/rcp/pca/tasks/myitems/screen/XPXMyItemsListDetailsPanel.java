@@ -536,7 +536,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 					}
 					
 					try {
-						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+						if(!YRCPlatformUI.equals(value,oldValue)){
 							element.setAttribute(IS_MODIFIED, "Y");
 						} else {
 							if(element.hasAttribute(IS_MODIFIED)){
@@ -570,7 +570,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 					}
 					
 					try {
-						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
+						if(!YRCPlatformUI.equals(value,oldValue)){
 							element.setAttribute(IS_MODIFIED, "Y");
 						} else {
 							if(element.hasAttribute(IS_MODIFIED)){

@@ -28,6 +28,7 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 	private String formId;
 	private String strCustomerPathPrefix = "";
 	private Element eleSaveList = null;
+	private String  oldCustomerID = " ";
 	/**
 	 * Constructor for the behavior class.
 	 */
@@ -53,8 +54,10 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 		}
 		else
 		{
-			//Element outXml = getTargetModel("XPXGetCustomerListService");
-			//String rootCustomerKey = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/CustomerList"), "CustomerKey");
+			if(getFieldValue("txtCustName")== " " || oldCustomerID.equalsIgnoreCase(getFieldValue("txtCustName")) ){
+				
+			}else{
+				oldCustomerID = getFieldValue("txtCustName");
 			String MasterCustomerID = getFieldValue("txtCustName");
 			YRCApiContext apiCtx = new YRCApiContext();
 			if(!YRCPlatformUI.isVoid(MasterCustomerID)) {
@@ -67,6 +70,7 @@ public class XPXGetCompleteChildCustomerTreeBehaviour  extends YRCBehavior {
 			}
 			apiCtx.setFormId(getFormId());
 			callApi(apiCtx);
+		}
 		}
 	}
 	
