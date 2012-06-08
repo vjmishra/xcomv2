@@ -2904,9 +2904,12 @@ function showSharedListForm(){
 										<s:set name='primaryInfo' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 										<s:set name='shortDesc' value='#primaryInfo.getAttribute("ShortDescription")'/>
 										<li> 
-										    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
+										    <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> 
 										    	<img src="<s:url value='%{#imageURL}' includeParams='none' />" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="<s:text name='%{#imageMainLabel}'/>" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-												<s:property value="%{#shortDesc}"/>
+												<!-- Added span for Jira 3931 -->
+												<span class="short-description">
+													<s:property value="%{#shortDesc}"/>
+												</span>
 												<br />
 												<br />
 												<br />
