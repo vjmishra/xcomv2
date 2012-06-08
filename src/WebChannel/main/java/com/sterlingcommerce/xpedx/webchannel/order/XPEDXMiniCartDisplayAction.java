@@ -70,7 +70,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
         try {
         	shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
         	customerStatus = shipToCustomer.getCustomerStatus();
-            log.info("inside MiniCartDisplayAction");
+            LOG.debug("inside MiniCartDisplayAction");
             XPEDXWCUtils.checkMultiStepCheckout();
             ArrayList<String> itemIdsInMinicart = getOrderDetails();
             //Start for Jira 3481
@@ -135,7 +135,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
 		if (orderHeaderKey==null || "".equals(orderHeaderKey)){
             return itemAndTotalList;
         }
-        log.info("orderHeaderKey-->"+orderHeaderKey);
+        LOG.debug("orderHeaderKey-->"+orderHeaderKey);
         try{
         	 Map<String, String> valueMap = new HashMap<String, String>();
         	 valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
@@ -156,7 +156,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
         	 {
         		 itemAndTotalList.add("0");
         	 }*/
-            log.info("getOrderDetails end");
+            LOG.debug("getOrderDetails end");
         } catch (Exception e) {
             e.printStackTrace();
         }		
@@ -165,7 +165,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
 	
     
     private ArrayList<String> getOrderDetails(){
-        log.info("inside getOrderDetails");
+        LOG.debug("inside getOrderDetails");
         
         orderHeaderKey = (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
         String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
@@ -178,7 +178,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
         if (orderHeaderKey==null || "".equals(orderHeaderKey)){
             return itemIds;
         }
-        log.info("orderHeaderKey-->"+orderHeaderKey);
+        LOG.debug("orderHeaderKey-->"+orderHeaderKey);
         try{
         	 majorLineElements=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("OrderLinesInContext");
         	 for(int i=0;i<majorLineElements.size();i++)
@@ -199,12 +199,12 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
             	for (int i = 0; i < length; i++) {
                     Element currNode = (Element) orderLines.item(i);
                     String lineKey = currNode.getAttribute("OrderLineKey");
-                    log.info("linekey-->"+lineKey);
+                    LOG.debug("linekey-->"+lineKey);
                     NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
                     if ( (bundleParentLines.getLength() == 0) &&
                          (!OrderHelper.isCancelledLine(currNode)) )
                     {
-                        log.info(lineKey+ " it's major line");
+                        LOG.debug(lineKey+ " it's major line");
                         if(majorLineElements.size() == maxElements)
                         {
                             // Already have accumulated the maximum number of line items to display.
@@ -224,12 +224,12 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
             	for (int i = length-1; i > -1; i--) {
                     Element currNode = (Element) orderLines.item(i);
                     String lineKey = currNode.getAttribute("OrderLineKey");
-                    log.info("linekey-->"+lineKey);
+                    LOG.debug("linekey-->"+lineKey);
                     NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
                     if ( (bundleParentLines.getLength() == 0) &&
                          (!OrderHelper.isCancelledLine(currNode)) )
                     {
-                        log.info(lineKey+ " it's major line");
+                        LOG.debug(lineKey+ " it's major line");
                         if(majorLineElements.size() == maxElements)
                         {
                             // Already have accumulated the maximum number of line items to display.
@@ -246,7 +246,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
                 }
             }*/
             
-            log.info("getOrderDetails end");
+            LOG.debug("getOrderDetails end");
             } catch (Exception e) {
             e.printStackTrace();
         }

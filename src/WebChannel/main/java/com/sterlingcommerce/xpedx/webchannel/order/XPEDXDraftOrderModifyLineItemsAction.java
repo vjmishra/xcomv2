@@ -163,7 +163,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	{
 		try
 		{
-			LOG.info("Calling processSpecialCharge");
+			LOG.debug("Calling processSpecialCharge");
 			UtilBean util=new UtilBean();
 			
 			Map<String, String> valueMap1 = new HashMap<String, String>();
@@ -234,7 +234,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 			}
 			if(inputDocument != null)
 			{
-				LOG.info("Input XML = "+SCXmlUtil.getString(inputDocument) );
+				LOG.debug("Input XML = "+SCXmlUtil.getString(inputDocument) );
 				WCMashupHelper.invokeMashup("xpedx_SpecialLinechangeOrder", inputDocument.getDocumentElement(), wcContext.getSCUIContext());
 			}
 		}

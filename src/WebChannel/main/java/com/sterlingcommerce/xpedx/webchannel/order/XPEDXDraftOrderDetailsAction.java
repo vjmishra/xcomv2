@@ -608,7 +608,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	{
 		try
 		{
-			LOG.info("Calling Change Order");
+			LOG.debug("Calling Change Order");
 			Map<String, String> valueMap1 = new HashMap<String, String>();
 			valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);
 			if("true".equals(isEditOrder)) {
@@ -704,7 +704,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					orderLineTranChange.setAttribute("TransactionalUOM",  orderLineTran.getAttribute("TransactionalUOM"));
 					
 				}
-				LOG.info("Input XML = "+SCXmlUtil.getString(inputDocument) );
+				LOG.debug("Input XML = "+SCXmlUtil.getString(inputDocument) );
 				setYFSEnvironmentVariables();
 				WCMashupHelper.invokeMashup("xpedx_me_changeOrderLineDetails", inputDocument.getDocumentElement(), wcContext.getSCUIContext());*/
 			//}

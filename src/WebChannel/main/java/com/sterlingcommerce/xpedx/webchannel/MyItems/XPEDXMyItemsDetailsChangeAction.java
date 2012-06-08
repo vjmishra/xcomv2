@@ -137,7 +137,7 @@ public class XPEDXMyItemsDetailsChangeAction extends WCMashupAction {
 					myitemsList.getDocumentElement().setAttribute("Desc", getListDesc());
 					Element output = (Element) WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(), getWCContext().getSCUIContext());
 					//Element tmp1 = prepareAndInvokeMashup("XPEDXMyItemsListChange");
-					LOG.info("Saved list destails..."+output.toString());
+					LOG.debug("Saved list destails..."+output.toString());
 				}
 			}
 			

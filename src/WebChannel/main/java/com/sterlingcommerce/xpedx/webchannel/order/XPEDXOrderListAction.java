@@ -578,7 +578,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	
 	protected void setXpedxChainedOrderMap(Document chainedOrderLineList) throws Exception{
 		if(null == chainedOrderLineList){
-			log.info("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
+			LOG.debug("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
 			return;
 		}
 		//get all the Orderlines from the document
@@ -680,7 +680,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	 */
 	/*protected void setXpedxChainedOrderMap(Document chainedOrderLineList) throws Exception{
 		if(null == chainedOrderLineList){
-			log.info("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
+			LOG.debug("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
 			return;
 		}
 		//get all the Orderlines from the document
