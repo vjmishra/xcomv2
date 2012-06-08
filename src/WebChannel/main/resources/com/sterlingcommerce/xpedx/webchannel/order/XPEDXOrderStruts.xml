@@ -380,6 +380,12 @@
 				<param name="actionName">orderList</param>
 				<param name="namespace">/order</param>
 			</result>
+			<result name="successWebConf" type="redirectAction">
+				<param name="actionName">orderDetail</param>
+				<param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="orderListReturnUrl">${orderListReturnUrl}</param>
+			</result>
 		</action>
 
 		<action name="xpedxAddSpecialItemToCart"

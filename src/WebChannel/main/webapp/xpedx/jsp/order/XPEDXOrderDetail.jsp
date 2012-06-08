@@ -1646,6 +1646,9 @@ function showSplitDiv(divId)
 				<s:hidden name="ApprovalActionRequestUrl" value="orderDetail"/>
 				<s:hidden name="#action.namespace" value="/order"/>
 				<s:hidden id="actionName" name="#action.name" value="approval"/>
+				<s:hidden id="orderListReturnUrl" name="orderListReturnUrl" value="%{orderListReturnUrl}" />
+				
+				<s:hidden id="returnWebConfUrl" name="returnWebConfUrl" value="true" />
 				<ul id="tool-bar" class="tool-bar-bottom">
 					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
 					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
