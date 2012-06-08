@@ -68,7 +68,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			getAllItemList();
 		} catch (Exception e) {
-			log.info(e);
+			log.debug(e);
 		}
 
 		return returnVal;

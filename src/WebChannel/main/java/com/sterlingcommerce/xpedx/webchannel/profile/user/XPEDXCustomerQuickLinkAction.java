@@ -39,11 +39,11 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 			String inputXml = SCXmlUtil.getString(outputElement);
 			LOG.debug("Input XML: " + inputXml);
 		} catch (XMLExceptionWrapper e) {			
-			LOG.info("Not able to retrieve Customer Quick Link:->"
+			LOG.debug("Not able to retrieve Customer Quick Link:->"
 					+ e.getMessage());
 			return ERROR;
 		} catch (CannotBuildInputException e) {
-			LOG.info("Not able to build input xml for Customer Quick Link:->"
+			LOG.debug("Not able to build input xml for Customer Quick Link:->"
 					+ e.getMessage());
 			return ERROR;
 		}
@@ -53,7 +53,7 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 		try {
 			quickLinkBean = getQuickLink(outputElement);
 		} catch (RuntimeException re) {
-			LOG.info("Not able to parse output xml for Customer Quick Link:->"
+			LOG.debug("Not able to parse output xml for Customer Quick Link:->"
 					+ re.getMessage());
 			if (getCreateSelected().equalsIgnoreCase("true")) 
 				return "createsuccess";

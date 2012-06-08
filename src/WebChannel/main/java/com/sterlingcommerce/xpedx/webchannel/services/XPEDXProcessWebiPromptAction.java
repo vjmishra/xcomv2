@@ -153,7 +153,7 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 }
 	
 	public String execute() {
-		log.info("++++++++++++++++++++++++++++++++++++++++++++++" +
+		LOG.debug("++++++++++++++++++++++++++++++++++++++++++++++" +
 				" In XPEDXProcessWebiPromptAction" + "++++++++++++++++++++++++++++++");
 		HttpSession session = request.getSession();
 		Map<String, String[]> map = request.getParameterMap();		
@@ -198,7 +198,7 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 				}
 			}
 		} catch (CannotBuildInputException e) {
-			LOG.info("Error Occured :->" + e.getMessage());
+			LOG.debug("Error Occured :->" + e.getMessage());
 			
 		}
 	
@@ -222,7 +222,7 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 			//Removed as per requirements
 			//|| prefix.equalsIgnoreCase("caln")
 			if (!prompt.isOptional() ) {
-				log.info("=====================It is mandatory prompt=====================" + promptName);
+				LOG.debug("=====================It is mandatory prompt=====================" + promptName);
 				if(paramStringArray == null) {
 					errorList.add(suffix + " is mandatory.");
 				} else {
@@ -244,18 +244,18 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 					String[] strSapId = request.getParameterValues("selectedCustId");
 					String temp[] = new String[1];
 					temp[0]= getCustomerNo(strSapId[0]);
-					log.info("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
+					LOG.debug("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
 										prompt.enterValues(temp);
 	
 				}else if(strLocType[0].equalsIgnoreCase("All")){
 					String array[] = (String[]) accountList.toArray(new String[accountList.size()]);  
 					for(int m=0; m<array.length; m++){
-						log.info("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
+						LOG.debug("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
 					}
 					prompt.enterValues(array);
 						
 				}else{
-					log.info("Entering null values for " + promptName);
+					LOG.debug("Entering null values for " + promptName);
 				}
 			}
 			
@@ -266,19 +266,19 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 					String[] strSapId = request.getParameterValues("selectedCustId");
 					String temp[] = new String[1];
 					temp[0]= geteditedCustomerNo(strSapId[0]) + " - " + getShipToSuffix(strSapId[0]);
-					log.info("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
+					LOG.debug("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
 					prompt.enterValues(temp);
 	
 				}else if(strLocType[0].equalsIgnoreCase("All")){
 					String array[] = (String[]) shipToList.toArray(new String[shipToList.size()]);  
 					for(int m=0; m<array.length; m++){
-						log.info("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
+						LOG.debug("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
 						}
 					prompt.enterValues(array);
 						
 				}
 				else{
-					log.info("Entering null values for " + promptName);
+					LOG.debug("Entering null values for " + promptName);
 				}
 			}
 			
@@ -290,19 +290,19 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 					String temp[] = new String[1];
 					//Fix to match Bill to cust id with the customer batch job. No need to send suffix, since we truncate it to 000 while migrating data
 					temp[0]= geteditedCustomerNo(strSapId[0]); //+ " - " + getShipToSuffix(strSapId[0]);
-					log.info("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
+					LOG.debug("****For Prompt " + promptName + ", Value Passed Is= " + temp[0]);
 					prompt.enterValues(temp);
 	
 				}else if(strLocType[0].equalsIgnoreCase("All")){
 					String array[] = (String[]) billToList.toArray(new String[billToList.size()]); 
 					for(int m=0; m<array.length; m++){
-						log.info("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
+						LOG.debug("**** When All Authorized, For Prompt " + promptName + " Value Passed Is= " + array[m]);
 						}
 					prompt.enterValues(array);
 						
 				}
 				else{
-					log.info("Entering null values for " + promptName);
+					LOG.debug("Entering null values for " + promptName);
 				}
 			}			
 			
@@ -310,14 +310,14 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 			if(errorList.size() == 0) {
 				if (paramStringArray != null && paramStringArray.length > 0 && paramStringArray[0] != null && !paramStringArray[0].equals("")) {
 					for(int m=0; m<paramStringArray.length; m++){
-						log.info("****For Prompt " + promptName + ", Value Passed Is= " + paramStringArray[m]);
+						LOG.debug("****For Prompt " + promptName + ", Value Passed Is= " + paramStringArray[m]);
 						}
 					prompt.enterValues(paramStringArray);
 				}
 				else {
  						if ( !prefix.equalsIgnoreCase("ddls") && suffix!=null)
  					{
- 							log.info("Entering null values for " + promptName);
+ 							LOG.debug("Entering null values for " + promptName);
  					}
 				}					
 			}				
@@ -336,7 +336,7 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 		}	else {
 			//Set the prompts and rerun the report
 			
-			log.info("Setting report prompts ************************************");
+			LOG.debug("Setting report prompts ************************************");
 			document.setPrompts();
 
 			//Set the token in case you rerun with new prompts

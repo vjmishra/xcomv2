@@ -124,7 +124,7 @@ public class XPEDXUserList extends UserList{
 		 }
 		 catch(Exception e)
 		 {
-			 log.info("error while validating user"+e.getMessage());
+			 LOG.debug("error while validating user"+e.getMessage());
 		 }
 		 return retVal;
 	 }

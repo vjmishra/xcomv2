@@ -52,7 +52,7 @@ public class XPEDXItemDetailsAction1 extends ItemDetailsAction{
 				}
 			}
 			catch (Exception ex) {
-				LOG.info("Not able to retrieve Customer Information:->"
+				log.debug("Not able to retrieve Customer Information:->"
 						+ ex.getMessage());
 				returnVal = "error";
 			}

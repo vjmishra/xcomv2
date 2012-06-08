@@ -811,7 +811,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					isPostLoginFileBuild = setGeneratedFileName(buildFileNameForPostLoginPage );
 				
 				}
-				log.info( msgFileInfo );
+				log.debug( msgFileInfo );
 			}
 			
 			goForDefault=false ;
@@ -890,7 +890,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 					isPostLoginFileBuild = setGeneratedFileName( buildFileNameForPostLoginPage );
 					
 				}
-				log.info( msgFileInfo );
+				log.debug( msgFileInfo );
 			}
 			msgFileInfo = msgFileInfo + " , " + " getGeneratedFileFullPath ()  : " + getGeneratedFileFullPath() ;
 			
@@ -1065,7 +1065,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		
 		} catch (Exception ex) {
 			massagedPromoFile = promoFileBeforeProcess;
-			log.info ("Error occured while massaging Promo file" + ex.getMessage() ) ;
+			log.debug ("Error occured while massaging Promo file" + ex.getMessage() ) ;
 		}
 		
 		return massagedPromoFile ;

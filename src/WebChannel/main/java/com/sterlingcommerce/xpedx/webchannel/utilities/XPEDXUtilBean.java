@@ -254,7 +254,7 @@ public class XPEDXUtilBean extends UtilBean {
 		     return  decimalStrippedQty ;
 		    
 	     } catch (Exception e) {
-	    	 	log.info("Exception in Stripping decimals in quantity",e);
+	    	 	log.debug("Exception in Stripping decimals in quantity",e);
 				return decimalStrippedQty ;
 			}
 	    }

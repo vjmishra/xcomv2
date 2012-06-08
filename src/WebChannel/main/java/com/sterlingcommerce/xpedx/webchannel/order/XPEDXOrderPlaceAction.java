@@ -234,7 +234,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				if(orderDetailDocument != null)
 				{
 					changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
-					//log.info("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
+					//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
 				}
 				
 				/*call the customized service XPXUpdateChainedOrder with the order XML which propagates the Fulfillment 
@@ -619,7 +619,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	
 	protected void setXpedxChainedOrderMap(Document chainedOrderLineList) throws Exception{
 		if(null == chainedOrderLineList){
-			log.info("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
+			LOG.debug("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
 			return;
 		}
 		//get all the Orderlines from the document
