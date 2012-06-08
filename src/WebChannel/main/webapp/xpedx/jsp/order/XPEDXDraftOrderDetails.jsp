@@ -1636,23 +1636,45 @@ $(document).ready(function(){
 		                                			<s:text name="%{#FieldValue}" />:
 		                                		</label>
 		                                		<s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
+													<%--Added if-else condn for giving border-color when CustomerPONo and CustomerLinePONo are blank - Jira 3966 --%>
+													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
 													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/>
+													</s:if>
+													<s:else>
+													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
+														cssClass="x-input bottom-mill-info-avail"
+														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
+														value="%{#orderLine.getAttribute(#FieldLabel)}"
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22"  />
+													</s:else>
 												</s:if>
 												<s:else>
-													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
+												<%--Added if-else condn for giving border-color when Line Acc# and PO# are blank - Jira 3966 --%>
+													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
+														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
+														cssClass="x-input bottom-mill-info-avail"
+														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
+														value="%{#lineExtn.getAttribute(#customLbl)}"
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" cssStyle="border-color:#FF0000"/>
+													</s:if>
+													<s:else>
+														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
 														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" />
+													
+													</s:else>
+													
 												</s:else>
 												<%-- Show error message against each required customer field --%>
 												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-							
-													<br/><span class="red">Required fields missing. Please review and try again.</span> <br/>
+													
+													<br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/>
 	
 												</s:if>
 												
@@ -2102,7 +2124,7 @@ var currentAadd2ItemList = new Object();
 	<s:if test='majorLineElements.size() > 0'>
 	    <s:if test="%{#_action.getCustStatus() != '30'}">
 	    <a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
-		</s:if>
+		</s:if> 
 	     <s:if test='#hasPendingChanges == "Y"'>
                    <a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
           </s:if>
