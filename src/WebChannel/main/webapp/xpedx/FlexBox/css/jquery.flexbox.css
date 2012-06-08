@@ -46,7 +46,6 @@
 	overflow:auto;
 }
 .ffb .content .row {
-	/*border-bottom:1px solid #828790;*/ /* Grid lines removed - JIRA 3645 */
 	color:#000;
 	height:20px;
 	clear:both;
