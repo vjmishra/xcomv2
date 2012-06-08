@@ -5788,7 +5788,7 @@ input, textarea, option, select{}
 .vertical-filter ul li ul.inner{display:block;}
 .vertical-filter ul li.close ul.inner{display:none;}
 
-.change-shipto-error { float:right;margin-top:35px;width:100%; }
+.change-shipto-error { float:right;margin-top:2px;width:100%; }
 
 /*End <link media="all" type="text/css" rel="stylesheet" href="../xpedx/css/global/swc.css" />
 */
