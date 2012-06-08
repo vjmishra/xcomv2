@@ -76,6 +76,17 @@ public class XPEDXOrderApprovalAction extends OrderListAction{
     private String orderListReturnUrl = "";
     private String webConfNumberValue;
     private String extnWebConfNumQryType;
+    // Added for Jira 3940
+    private String returnWebConfUrl;
+
+    public String getReturnWebConfUrl() {
+		return returnWebConfUrl;
+	}
+
+
+	public void setReturnWebConfUrl(String returnWebConfUrl) {
+		this.returnWebConfUrl = returnWebConfUrl;
+	}
 
     private static final String XPATH_RESOLVER_USER_ID ="/Page/API/Input/Order/OrderHoldType/@ResolverUserId";
     private static final String XPATH_RESOLVER_USER_ID_QRY_TYPE ="/Page/API/Input/Order/OrderHoldType/@ResolverUserIdQryType";
@@ -127,6 +138,11 @@ public class XPEDXOrderApprovalAction extends OrderListAction{
 			}
 		if(getApprovalActionRequestUrl()!=null && getApprovalActionRequestUrl().equals("orderList") && SUCCESS.equals(returnVal))
 			returnVal = returnVal+"OrderList";
+		// Added for Jira 3940 - to display webCOnfirmation page after approve or reject, when request is from Webconfirmation page
+		else if(getReturnWebConfUrl()!=null && ("true").equalsIgnoreCase(getReturnWebConfUrl())){
+			returnVal = returnVal+"WebConf";
+		}
+		
 		return  returnVal;
 	}
 	
