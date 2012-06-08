@@ -94,8 +94,8 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 	@SuppressWarnings("unchecked")
 	public String getCustomersForSalesRep() {
 		
-		LOG.info(":: Entering execute of XPEDXSalesRepLoginAction :: ");
-		LOG.info(":: Logged In User :: " + DisplayUserID);
+		LOG.debug(":: Entering execute of XPEDXSalesRepLoginAction :: ");
+		LOG.debug(":: Logged In User :: " + DisplayUserID);
 		Document doc=null;
 		String result = WCAction.SUCCESS;
 		LinkedHashMap<String, String> customersMapToSearch = new LinkedHashMap<String, String>();
@@ -124,7 +124,7 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
     						}
     					}
     					if(searchedMap.isEmpty()){// TODO: show on UI
-    						LOG.info("Search returned no results!!!");
+    						LOG.debug("Search returned no results!!!");
     					}
 					 }
 					wcContext.getSCUIContext().getRequest().setAttribute("SEARCHED_CUSTOMERS",  searchedMap);
@@ -153,8 +153,8 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 	}
 	
 	public String logoutSalesRep() {
-		LOG.info(":: Entering logoutSalesRep() ");
-		LOG.info(":: User is currently logged out...");
+		LOG.debug(":: Entering logoutSalesRep() ");
+		LOG.debug(":: User is currently logged out...");
 		if (request == null || response == null){
 			if ("PAGE".equalsIgnoreCase(getLogoutMethod())){
 				return WCAction.SUCCESS;

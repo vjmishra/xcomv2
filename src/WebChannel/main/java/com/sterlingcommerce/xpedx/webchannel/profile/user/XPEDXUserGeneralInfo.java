@@ -254,7 +254,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		 }
 		 catch(Exception e)
 		 {
-			 log.info("error while validating user"+e.getMessage());
+			 LOG.debug("error while validating user"+e.getMessage());
 		 }
 		 return retVal;
 	 }
@@ -340,10 +340,10 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			String inputXml = SCXmlUtil.getString(outputElement);
 			LOG.debug("Input XML: " + inputXml);
 		} catch (XMLExceptionWrapper e) {			
-			LOG.info("Not able to retrieve Customer Quick Link:->"
+			LOG.debug("Not able to retrieve Customer Quick Link:->"
 					+ e.getMessage());
 		} catch (CannotBuildInputException e) {
-			LOG.info("Not able to build input xml for Customer Quick Link:->"
+			LOG.debug("Not able to build input xml for Customer Quick Link:->"
 					+ e.getMessage());
 		}
 		
@@ -352,7 +352,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		try {
 			quickLinkBean = getQuickLink(outputElement);
 		} catch (RuntimeException re) {
-			LOG.info("Not able to parse output xml for Customer Quick Link:->"
+			LOG.debug("Not able to parse output xml for Customer Quick Link:->"
 					+ re.getMessage());			
 		}
 		
@@ -411,7 +411,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			try {
 				quickLinkBean = getQuickLink(contactElem);
 			} catch (RuntimeException re) {
-				LOG.info("Not able to parse output xml for Customer Quick Link:->"
+				LOG.debug("Not able to parse output xml for Customer Quick Link:->"
 						+ re.getMessage());			
 			}
 			

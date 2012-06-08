@@ -1009,7 +1009,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String logo = (String) wcContext.getWCAttribute("SF_THEME_LOGO",
 				WCAttributeScope.LOCAL_SESSION);
 		if (logo != null && logo.length() > 0) {
-			log.info((new StringBuilder()).append(
+			log.debug((new StringBuilder()).append(
 					"Found Logo URL in the context=").append(logo).toString());
 			setLogoURL(logo);
 			return;
@@ -1025,15 +1025,15 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			String themeLogoURL = (new StringBuilder()).append(
 					"/swc/images/logo/").append(getSFLogoDir())
 					.append("/logo-").append(theme).append(".gif").toString();
-			log.info((new StringBuilder()).append(
+			log.debug((new StringBuilder()).append(
 					"Checking for theme specific logo [").append(themeLogoURL)
 					.append("]").toString());
 			try {
 				java.net.URL url = servletCtx.getResource(themeLogoURL);
-				log.info((new StringBuilder()).append(
+				log.debug((new StringBuilder()).append(
 						"URL from servletContext=").append(url).toString());
 				if (url != null) {
-					log.info((new StringBuilder()).append(
+					log.debug((new StringBuilder()).append(
 							"Using theme based LogoURL [").append(url).append(
 							"]").toString());
 					logo = (new StringBuilder()).append(baseLogoURL).append(
@@ -1043,7 +1043,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				e.printStackTrace();
 			}
 		}
-		log.info((new StringBuilder()).append("Logo URL =[").append(logo)
+		log.debug((new StringBuilder()).append("Logo URL =[").append(logo)
 				.append("]").toString());
 		setLogoURL(logo);
 		wcContext.setWCAttribute("SF_THEME_LOGO", logo,
@@ -1130,7 +1130,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			setNumOfCatToDisplay(NO_CAT_TO_DISPLAY);
 		}
 
-		log.info("Currently Displayed number of Categories is *************"
+		log.debug("Currently Displayed number of Categories is *************"
 				+ numOfCatToDisplay);
 		return "success";
 	}

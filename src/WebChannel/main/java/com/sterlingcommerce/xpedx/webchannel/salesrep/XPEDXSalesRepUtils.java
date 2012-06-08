@@ -49,7 +49,7 @@ public class XPEDXSalesRepUtils {
 	 */
 	 //added an extra parameter doc in the method  for jira 3442
 	public void fetchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
-		LOG.info(":: Entering fetchCustomerForSalesRep of XPEDXSalesRepUtils :: ");
+		LOG.debug(":: Entering fetchCustomerForSalesRep of XPEDXSalesRepUtils :: ");
 		String networkId = request.getParameter("DisplayUserID");
 		if (YFCCommon.isVoid(networkId)){
 			return;
@@ -139,7 +139,7 @@ public class XPEDXSalesRepUtils {
 
 	//search the customers for sales rep - jira 3442
 	public LinkedHashMap<String, String> searchCustomerForSalesRep(HttpServletRequest request, IWCContext wcContext,Document doc) throws Exception{
-		LOG.info(":: searching Customer For SalesRep in XPEDXSalesRepUtils.searchCustomerForSalesRep :: ");
+		LOG.debug(":: searching Customer For SalesRep in XPEDXSalesRepUtils.searchCustomerForSalesRep :: ");
 		String networkId = request.getParameter("DisplayUserID");
 		if (YFCCommon.isVoid(networkId)){
 			return null;
@@ -228,7 +228,7 @@ public class XPEDXSalesRepUtils {
 		String selectedCustomer = request.getParameter("selectedCustomer");
 		// set the selected customer in the session
 		request.getSession(false).setAttribute("selectedCustomer", selectedCustomer);
-		LOG.info(" Selected Customer is:: " + selectedCustomer);
+		LOG.debug(" Selected Customer is:: " + selectedCustomer);
 		
 		String networkId = (String)wcContext.getSCUIContext().getRequest().getSession().getAttribute("DisplayUserID");
 		
@@ -251,7 +251,7 @@ public class XPEDXSalesRepUtils {
 		// Construct the UserId or the CustomerContact - Ex: SalesRepTest@CD-101-M-XPED-CC.com
 		//String loginId = salesRepId+"@"+selectedCustomer+".com";
 		String loginId;
-		LOG.info("--->loginId :: " + customerId);
+		LOG.debug("--->loginId :: " + customerId);
 		if(!YFCUtils.isVoid(customerId)){
 			loginId = employeeId+"@"+customerId+".com";
 			request.setAttribute("dum_username", loginId.trim());

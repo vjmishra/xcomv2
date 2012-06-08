@@ -68,7 +68,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 				shipToAddress = XPEDXWCUtils.getShipToAdress(defaultShipTo,
 						wcContext.getBuyerOrgCode());
 			} catch (Exception e) {
-				log.info(e.getMessage());
+				LOG.debug(e.getMessage());
 				log.debug("Error while getting the ship to Address");
 			}
 		} else {

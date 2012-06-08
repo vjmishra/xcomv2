@@ -113,7 +113,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 		Document inputDoc = prepareInputDoc(inputItems);
 		String inputXML = SCXmlUtil.getString(inputDoc);
-		log.info("getPriceAndAvailability: inputXML for P&A Webservice: "
+		log.debug("getPriceAndAvailability: inputXML for P&A Webservice: "
 				+ inputXML);
 		String displayErrorMsgToUser = "";
 		Document outputDoc = null;
@@ -144,7 +144,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			//Return Response valid and proceed further processing 			
 			pnaOutput = new XPEDXPriceAndAvailability();
 			String responseXML = SCXmlUtil.getString(outputDoc);
-			log.info("getPriceAndAvailability: response for P&A Webservice: " + responseXML);
+			log.debug("getPriceAndAvailability: response for P&A Webservice: " + responseXML);
 			
 			displayErrorMsgToUser = handlePandAWebServiceResponseSatuseses(outputDoc  , pnaOutput , displayErrorMsgToUser);
 						
@@ -211,7 +211,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			//Return Response valid and proceed further processing 			
 			pnaOutput = new XPEDXPriceAndAvailability();
 			//String responseXML = SCXmlUtil.getString(outputDoc);
-			log.info("getPriceAndAvailability: response for P&A Webservice: " + pnaXML);
+			log.debug("getPriceAndAvailability: response for P&A Webservice: " + pnaXML);
 			
 			//Use this for testing different scenarios
 			//outputDoc  = manipulateXML ( responseXML );
@@ -786,8 +786,8 @@ public class XPEDXPriceandAvailabilityUtil {
 				result = bdVal1.divide(bdVal2, DECIMAL_PRECISION_NEEDED, RoundingMode.HALF_UP);
 
 			} catch (Exception e) {
-				log.info("Error Occured For Divisor : " + bdVal1 + " , Dividor : " + bdVal2 );
-				log.info(e.getMessage() ,  e);
+				log.debug("Error Occured For Divisor : " + bdVal1 + " , Dividor : " + bdVal2 );
+				log.debug(e.getMessage() ,  e);
 				throw e;
 			}
 			

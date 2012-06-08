@@ -36,7 +36,7 @@ public class XPEDXGuestUserProvider extends WCGuestUserProvider {
 	        //get the storefront id from the IWCContextBuilder object  
 	        String sfId = builder.getStorefrontId();
 	        if(sfId == null) {
-	            log.info("Returning the guest user as specified by scui-guest-user parameter");
+	            log.debug("Returning the guest user as specified by scui-guest-user parameter");
 	            //get the default guest user specified by the value of param scui-guest-user
 	            return sCtx.getInitParameter(SCUIImplConstants.GUEST_USER_ATTR_NAME);
 	        }

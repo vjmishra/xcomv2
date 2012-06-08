@@ -70,7 +70,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			if (databaseLockException != null
 					&& databaseLockException.toString() != null
 					&& databaseLockException.toString().contains("YFC0101")) {
-				LOG.info("Databse is locked, hence continuing to "
+				LOG.debug("Databse is locked, hence continuing to "
 						+ "call draft order details............");
 				return "success";
 			}

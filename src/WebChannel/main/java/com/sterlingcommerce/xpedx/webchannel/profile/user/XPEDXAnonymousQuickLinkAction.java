@@ -41,11 +41,11 @@ public class XPEDXAnonymousQuickLinkAction extends WCMashupAction {
 			String inputXml = SCXmlUtil.getString(outputElement);
 			LOG.debug("Input XML: " + inputXml);	
 		} catch (XMLExceptionWrapper e) {
-			LOG.info("Not able to retrieve Quick Link for Anonymous user :->"
+			LOG.debug("Not able to retrieve Quick Link for Anonymous user :->"
 					+ e.getMessage());
 			return ERROR;
 		} catch (CannotBuildInputException e) {
-			LOG.info("Not able to build Quick Link for Anonymous user:->"
+			LOG.debug("Not able to build Quick Link for Anonymous user:->"
 					+ e.getMessage());
 			return ERROR;
 		}		

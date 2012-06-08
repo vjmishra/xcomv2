@@ -78,7 +78,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 				       	// Attempt logon.
 			    if(enterpriseSession == null) {
 			    	enterpriseSession = sessionMgr.logon(username, password, cms,auth);
-			    	log.info("++++++++++++ successfully logged in to BOE +++++++++++++++++++++");
+			    	LOG.debug("++++++++++++ successfully logged in to BOE +++++++++++++++++++++");
 					if (enterpriseSession != null) {
 					// Store the IEnterpriseSession object in the session.
 						session.setAttribute("CE_ENTERPRISESESSION",
@@ -124,7 +124,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 				String cuidBOE = obj.getCUID();
 				int idBOE = obj.getID();
 				String nameBOE = obj.getTitle();
-				log.info("Name From BOE@@@@@@@@@@@@@@@@@@@@@@@@@-----"+ nameBOE);
+				LOG.debug("Name From BOE@@@@@@@@@@@@@@@@@@@@@@@@@-----"+ nameBOE);
 				String kindBOE = obj.getKind();
 				String descBOE = obj.getDescription();
 
@@ -240,7 +240,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 			boolean test=stmt.execute(Query);
 			if(test==true)
 			{
-				log.info("Able To Query...");
+				LOG.debug("Able To Query...");
 				rs = stmt.getResultSet();
 				while(rs.next())
 				{
@@ -263,7 +263,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 			
 		}
 		catch (Exception e) {
-			log.info("Not able to connect to DEV Datasource:->" + e.getMessage());
+			LOG.debug("Not able to connect to DEV Datasource:->" + e.getMessage());
 			}
 		finally{
 			stmt.close();
@@ -345,7 +345,7 @@ public class XPEDXChangeReportingAction extends WCMashupAction {
 				}
 			}
 		}
-		log.info("Size Of Valid Report List After Comparision ="+vallist.size());
+		LOG.debug("Size Of Valid Report List After Comparision ="+vallist.size());
 		session.setAttribute("ValidReports", vallist);
 	}
 
