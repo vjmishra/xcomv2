@@ -287,6 +287,21 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 		
 		YRCXmlUtils.importElement(inputEle, lineEle);
 		
+		//InPut XML prepared for changeXPEDX_MyItemsList API
+		Element eleXPEDXMyItemsList = YRCXmlUtils.createDocument("XPEDXMyItemsList").getDocumentElement();
+		eleXPEDXMyItemsList.setAttribute("MyItemsListKey", strMILKey);
+		eleXPEDXMyItemsList.setAttribute("SharePrivate", "");
+		eleXPEDXMyItemsList.setAttribute("ShareAdminOnly", "");
+		Element XPEDXMyItemsListShareListelem = YRCXmlUtils.createChild(eleXPEDXMyItemsList, "XPEDXMyItemsListShareList");
+		XPEDXMyItemsListShareListelem.setAttribute("Reset","true");
+		
+		//changeXPEDX_MyItemsList API Called for removing the my items list from personal list when it got shared....
+		YRCApiContext apiCtx = new YRCApiContext();
+		String[] apinames = {"changeXPEDX_MyItemsList"};
+		apiCtx.setApiNames(apinames);
+		apiCtx.setInputXml(eleXPEDXMyItemsList.getOwnerDocument());
+		apiCtx.setFormId(getFormId());
+		callApi(apiCtx);
 	}
 
 	public HashMap<String, Element> getAssignedMap() {

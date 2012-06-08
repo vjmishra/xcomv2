@@ -24,6 +24,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 	private String formId;
 	private String strCustomerPathPrefix = "";
 	private Element eleSaveList = null;
+	private String  oldCustomerID = " ";
 	/**
 	 * Constructor for the behavior class.
 	 */
@@ -46,6 +47,11 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 		}
 		else
 		{
+			
+			if(getFieldValue("comboCustomers")== " " || oldCustomerID.equalsIgnoreCase(getFieldValue("comboCustomers")) ){
+				
+			}else{
+				oldCustomerID = getFieldValue("comboCustomers");
 			Element outXml = getTargetModel("SaveMyItemsList");
 			String selectedCustomer = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/XPEDXMyItemsList"), "CustomerID");
 
@@ -60,6 +66,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 			}
 			apiCtx.setFormId(getFormId());
 			callApi(apiCtx);
+			}
 		}
 	}
 	

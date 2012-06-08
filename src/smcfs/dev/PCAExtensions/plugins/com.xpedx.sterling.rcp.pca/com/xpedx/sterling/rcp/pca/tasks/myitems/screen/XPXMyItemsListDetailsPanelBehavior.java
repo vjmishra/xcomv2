@@ -51,6 +51,8 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private Element eleMyItemsList;
 	private Element outItemDetailXml;
 	private String updated = null;
+	private String itemShortDescription;
+	public static String baseUOM ;
 	/*public static final String ACTION_EDIT = "EDIT";
 	public static final String ACTION_DELETE = "DELETE";*/
 
@@ -162,7 +164,10 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 									.getChildElement(eleItemsList1,
 											"PrimaryInformation");
 							if (primaryInfoElem != null) {
-								itemDescList.put(itemID, primaryInfoElem.getAttribute("ShortDescription"));
+								itemShortDescription = primaryInfoElem
+								.getAttribute("ShortDescription");
+								itemDescList.put(itemID, primaryInfoElem
+										.getAttribute("ShortDescription"));
 							}
 						}
 						/* Removed unnecessary code STARTS */
@@ -213,15 +218,15 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 
 							Element eleItemsItemsList1 = YRCXmlUtils.getChildElement(this.eleMyItemsList, "XPEDXMyItemsItemsList");
 							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
-							/*for (Element eleItem : listItems1) {								
+							for (Element eleItem : listItems1) {								
 								String itemsId = eleItem.getAttribute("ItemId");
-								uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
-								String uomDesc = (String) masterUOMList.get(uomIds);
+								//uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
+								//String uomDesc = (String) masterUOMList.get(uomIds);
 								if(itemDescList!=null && itemDescList.containsKey(itemsId))
 									eleItem.setAttribute("Name", (String) itemDescList.get(itemsId));
-									eleItem.setAttribute("UnitOfMeasure",uomIds);
+							//		eleItem.setAttribute("UnitOfMeasure",uomIds);
 									}							
-							*/
+							
 						//} - Removed unnecessary code
 						
 						//moved here as we need to export correct Item details from YFS_Item
@@ -534,7 +539,14 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						}
 						
 						if(columnHeader.get(colHeader).equals("Description")){
-							eleMyItemsList.setAttribute("Name", nextLine[name]);
+							//Trying to fetch Items Detail from database not from IMPORT List
+							YRCApiContext ctx = new YRCApiContext();
+							ctx.setApiNames(new String[]{"getCompleteItemList"});
+							Document doc = YRCXmlUtils.createFromString("<Item  CallingOrganizationCode='xpedx' ItemID='"+nextLine[supNum]+"'  IsForOrdering='N'  />");
+							ctx.setInputXml(doc);
+							ctx.setFormId(getFormId());
+							callApi(ctx, page);
+							eleMyItemsList.setAttribute("Name", itemShortDescription);
 						}
 						
 /*						eleMyItemsList.setAttribute("ItemId", nextLine[1]);
@@ -702,6 +714,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 			
 		System.out.println("T0----he Table element is "+YRCXmlUtils.getString(eleTableItem));
 		Element uomElement = eleTableItem;
+		baseUOM = eleTableItem.getAttribute("UnitOfMeasure");
 		String currItemID = eleTableItem.getAttribute("ItemId");
 		//String currItemID = "2001020";
 	    Document docInput = YRCXmlUtils.createFromString("<Item SKU='"+currItemID+"' SKUType='LPC'/>");
