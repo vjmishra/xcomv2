@@ -281,12 +281,13 @@
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
 				 <div id="right-col-int" class="cat-landing" style="margin-top:0px;">
-				 <div align="left" style="padding-right: 75px;">
+				 <div align="left" style="padding-right: 72px;">
 				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow.gif" alt="" class="float-left" /> advertisement</div>
 				</div>
 			</div>
-				 <br/>
-				 <div align="center" style="padding-right: 15px;">
+			
+				 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
+				 </br>
 				<!-- Ad Juggler Tag Starts  -->
 				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
 				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
@@ -307,8 +308,7 @@
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>
 				<!-- Ad Juggler Tag Ends -->
-				 <br />
-				 
+	 
 			</div>
 			
 			
