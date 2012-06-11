@@ -4985,15 +4985,15 @@
     Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:31:49-05:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
-    CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
+    CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName="" CodeShortDescription="Dining Room Supplies"
     CodeSymbol="" CodeType="XPXCatBrowseCol"
     CodeValue="Dining Room Supplies"
     CommonCodeKey="20111118045549108024" Createprogid=".YEntityServlet"
     Createts="2011-11-18T04:55:49-05:00" Createuserid="admin"
-    DocumentType="" DocumentTypeSpecific="" Lockid="2"
+    DocumentType="" DocumentTypeSpecific="" Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:03:22-05:00"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-06-08T02:35:27-04:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Gauge,Environment,ListPrice"
