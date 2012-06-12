@@ -155,9 +155,9 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		
 		ArrayList<String> itemIdList = new ArrayList<String>();		
 		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
-		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
+			HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();  //JIRA 3935 changes done
 			Element orderLineElement = (Element)orderLineElemList.get(i);
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
 					"Item");
