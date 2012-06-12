@@ -892,7 +892,7 @@ public void CallReplacementServiceForCustomerName(String customerIdSelected){
 	e2.setAttribute("ItemId", itemID);
 	Element e3 = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsListShareList");
 	Element e4 = YRCXmlUtils.createChild(e3, "XPEDXMyItemsListShare");
-	e4.setAttribute("customerID", customerIdSelected);
+	e4.setAttribute("CustomerID", customerIdSelected);
 
 callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
 }
