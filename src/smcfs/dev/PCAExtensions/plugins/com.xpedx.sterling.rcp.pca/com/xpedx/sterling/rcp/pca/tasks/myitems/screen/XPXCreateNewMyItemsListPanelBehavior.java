@@ -259,6 +259,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 		Element lineEle = YRCXmlUtils.createFromString("<XPEDXMyItemsListShare CustomerID='"+strCustID+"'/>").getDocumentElement();
 		lineEle.setAttribute("CustomerPath", strCustPath);
 		if(!YRCPlatformUI.isVoid(strDivisionID))
+			strDivisionID = strDivisionID.concat("_M");
 			lineEle.setAttribute("DivisionID", strDivisionID);
 		
 		YRCXmlUtils.importElement(eleMILShareList, lineEle);
