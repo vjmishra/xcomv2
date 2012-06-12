@@ -405,7 +405,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		
 		ArrayList<String> itemIdList = new ArrayList<String>();		
 		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
-		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
+		
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
 			Element orderLineElement = (Element)orderLineElemList.get(i);
@@ -413,7 +413,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			if("C".equalsIgnoreCase(lineType) && "M".equalsIgnoreCase(lineType)) {
 				continue;
 			}
-			
+			HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>(); //Code changes for JIRA 3935
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
 					"Item");
 			String itemId = itemElement.getAttribute("ItemID");// orderline/item
