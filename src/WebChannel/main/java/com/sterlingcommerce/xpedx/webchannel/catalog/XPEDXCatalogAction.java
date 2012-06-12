@@ -452,7 +452,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String searchStringValue = valueMap.get("/SearchCatalogIndex/Terms/Term[" + 1 + "]/@Value");
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
-			if(searchStringValue.indexOf("*") == 0) 
+			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
@@ -473,8 +473,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 			Element term = SCXmlUtil.createChild(terms, "Term");
 			term.setAttribute("Condition", "SHOULD");
 			term.setAttribute("IndexFieldName", "customerNumberPlusPartNumber");
-			if(null != searchTerm && !("").equals(searchTerm) && searchTerm.indexOf("*") == 0)
-				searchTerm = searchTerm.substring(1, searchTerm.length());
+			if(null != searchTerm && !("").equals(searchTerm)) {
+				searchTerm = searchTerm.trim();
+				if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) {
+					searchTerm = searchTerm.substring(1, searchTerm.length());
+				}								
+			}				
 			term.setAttribute("Value", customerNumber + "|" + searchTerm);
 		}
 		setStockedItemFromSession();

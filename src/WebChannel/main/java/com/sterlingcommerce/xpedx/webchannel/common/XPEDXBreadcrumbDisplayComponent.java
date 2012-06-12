@@ -268,6 +268,9 @@ public class XPEDXBreadcrumbDisplayComponent
         name = TextUtils.htmlEncode(name);
         sb.append(name);
         toReturn = sb.toString();
+        if(!("").equals(toReturn) && (toReturn.indexOf("*") == 0 || toReturn.indexOf("?") == 0)) {
+        	toReturn = toReturn.substring(1, toReturn.length());
+        }
 
         return toReturn;
     }
