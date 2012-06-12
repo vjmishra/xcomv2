@@ -948,7 +948,9 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		Ext.fly('searchFieldName').dom.selectedIndex='0';
 		Ext.fly('searchFieldValue').dom.value='';
 		Ext.fly('FromDate').dom.value= Ext.fly('initialFromDateString').dom.value;
-		Ext.fly('shipToSearchFieldName').dom.value='';
+		//Ext.fly('shipToSearchFieldName').dom.value=''; Commented this, as it was clearing the shiptos, on click of clear button -Jira 3963
+		//Added For Jira 3963
+		document.getElementById("shipToSearchFieldName").selectedIndex='0';
 		Ext.fly('statusSearchFieldName').dom.selectedIndex='0';
 		Ext.fly('ToDate').dom.value= Ext.fly('initialToDateString').dom.value ;
 		document.getElementById("errorDateDiv").innerHTML = '';
