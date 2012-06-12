@@ -781,9 +781,9 @@ var prodCompData = [
     							<s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>
 							</s:else>
 
-							<s:set name='attrValuesString' value='%{#attrValuesString + #attrValueWithPostFix}'/>
+							<s:set name='attrValuesString' value='%{#attrValuesString.replaceAll("\'","") + #attrValueWithPostFix.replaceAll("\'","")}'/>
 							<s:if test="#attrValueCount.last == false ">
-							<s:set name='attrValuesString' value='%{#attrValuesString + #htmlBreak}'/>
+							<s:set name='attrValuesString' value='%{#attrValuesString.replaceAll("\'","") + #htmlBreak.replaceAll("\'","")}'/>
 
 							</s:if>
 							<s:if test="#attrValueCount.last == true "></s:if>
