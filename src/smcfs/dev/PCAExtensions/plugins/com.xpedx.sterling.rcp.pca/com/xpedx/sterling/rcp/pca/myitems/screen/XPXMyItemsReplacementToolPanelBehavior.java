@@ -383,19 +383,22 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	private void handleSearchApiCompletion(Element eleOutput) {
 		ArrayList<Element> listParentCustomers = null;
 		ArrayList myItemListKey = new ArrayList();
-		listParentCustomers = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");;		
-		if (!YRCPlatformUI.isVoid(listParentCustomers) ) {		
-		for (int y=0; y<listParentCustomers.size(); y++){
-		Element customerEle = (Element)listParentCustomers.get(y);
-		System.out.println("" + customerEle.getAttribute("MyItemsListKey"));
-		String listKeyValue=customerEle.getAttribute("MyItemsListKey");		
-		myItemListKey.add(listKeyValue);
-		Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
-		YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
+		listParentCustomers = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
+		if ((!YRCPlatformUI.isVoid(listParentCustomers))&& (listParentCustomers.size() > 0)) {		
+					for (int y=0; y<listParentCustomers.size(); y++){
+						Element customerEle = (Element)listParentCustomers.get(y);
+						System.out.println("" + customerEle.getAttribute("MyItemsListKey"));
+						String listKeyValue=customerEle.getAttribute("MyItemsListKey");		
+						myItemListKey.add(listKeyValue);
+						Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
+						YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
+					}
+					prepareInputXML(myItemListKey) ;
 		}
-		prepareInputXML(myItemListKey) ;
-
-	}
+			else{
+				YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
+			}
+	
 		ArrayList<Element> list = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
 		for (Element eleXPEDXMyItemsList : list) {
 			eleXPEDXMyItemsList.setAttribute("Replace", "Y");
@@ -408,6 +411,10 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
     	setFieldValue("DivisionID", "");
 		setFieldValue("txtLPC", "");
 		setFieldValue("txtReplaceLPC", "");
+		setFieldValue("MasterCustomerId", "");
+		setFieldValue("SAPId", "");
+		setFieldValue("ShipToId", "");
+		setFieldValue("BillToId", "");
     }
 
     public void proceed() {
