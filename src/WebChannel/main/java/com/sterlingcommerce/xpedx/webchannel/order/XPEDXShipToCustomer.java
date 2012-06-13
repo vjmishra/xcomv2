@@ -390,6 +390,7 @@ public String getShipToDivdeliveryInfo() {
 	private String ExtnSampleRoomEmailAddress;
 	private String AccountNumber;
 	private String ExtnShipToSuffix;
+	private XPEDXShipToCustomer defaultShipToCustomer;
 	
 	
 	public String getExtnShipToSuffix() {
@@ -431,5 +432,18 @@ public String getShipToDivdeliveryInfo() {
 	public void setExtnMaxOrderAmount(String extnMaxOrderAmount) {
 		this.extnMaxOrderAmount = extnMaxOrderAmount;
 	}
+	/**
+	 * @return the defaultShipToCustomer
+	 */
+	public XPEDXShipToCustomer getDefaultShipToCustomer() {
+		return defaultShipToCustomer;
+	}
+	/**
+	 * @param defaultShipToCustomer the defaultShipToCustomer to set
+	 */
+	public void setDefaultShipToCustomer(XPEDXShipToCustomer defaultShipToCustomer) {
+		this.defaultShipToCustomer = defaultShipToCustomer;
+	}
+	
 	//JIRA 3488 end
 }

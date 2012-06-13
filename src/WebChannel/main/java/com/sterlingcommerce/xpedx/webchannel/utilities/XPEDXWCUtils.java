@@ -5338,6 +5338,17 @@ public class XPEDXWCUtils {
 					}	
 				}
 				
+				if(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)== null || "true".equals(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)))
+				{
+					shipToCustomer.setDefaultShipToCustomer(shipToCustomer);
+					XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "false");
+					
+				}
+				else
+				{				
+					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT"));
+					XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
+				}
 				// end of performance for itemdetail.action
 				if(!YFCCommon.isVoid(parentElem))
 				{
