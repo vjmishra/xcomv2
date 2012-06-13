@@ -459,11 +459,13 @@ function showSharedListForm(){
 			}
 			 return true;
 		}	
-		
+
+		var addToCartFlag;
 		//Resets the Messages and calls the actual javascript function
 		function myAddItemToCart(itemId, id){
 			//Added isGlobal for Jira 3770
 			isGlobal = true;
+			addToCartFlag = true;
 			//Clear previous messages if any
 			clearPreviousDisplayMsg();
 			javascript:addItemToCart(itemId, id );
@@ -775,8 +777,9 @@ function showSharedListForm(){
 		}
 		
 		
-		
+		var addItemsWithQty;
 		function addToCart(){
+			addItemsWithQty = true;
 			isGlobal = false;
 			clearPreviousDisplayMsg();
 			
@@ -819,6 +822,7 @@ function showSharedListForm(){
 	                   url: URL,
 	                   form: 'formItemIds',
 	                   method: 'POST',
+	                   
 	                   success: function (response, request){
 	                	   var addedItems = new Array();
 	                	   var arrQty = new Array();
@@ -846,7 +850,7 @@ function showSharedListForm(){
 						  alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");	                   }
 	               });    
 	                } 
-				
+   	                
 				//END - Submit the form via ajax
 				
 				
@@ -957,13 +961,15 @@ function showSharedListForm(){
 			var uomCheck = false ;
 			for(var i = 0; i < arrItemID.length; i++)
 			{	
+				
+				validAddtoCartItemsFlag[i]=true;
 				divId='errorDiv_'+	arrQty[i].id;
 				var divVal=document.getElementById(divId);
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
 
-				if (priceCheck == true){
+				if (priceCheck == true && addItemsWithQty != true){
 					if(quantity == '0'|| quantity == '')
 					quantity = 1;
 				}
@@ -1006,7 +1012,7 @@ function showSharedListForm(){
 					}
 					var ordMul = totalQty % arrOrdMul[i].value;
 					isQuantityZero = false;
-					if(ordMul!= 0)
+					if(ordMul!= 0 && addItemsWithQty != true)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
@@ -1031,27 +1037,26 @@ function showSharedListForm(){
 						isAddToCart=false;
 					}
 					
-					
-					else if (arrOrdMul[i].value > 1 && priceCheck == true){
-						
-						if (priceCheck == true){
-							
-							divVal.setAttribute("class", "notice");
-							divVal.style.display = 'block';
-						}
-						else {
-							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
-							divVal.setAttribute("class", "notice");
-							divVal.style.display = 'block';
-							
-							}
-						
-						
-					}	
-					else{
+					else if(addItemsWithQty == true){
 						addToCartFlag = true;
-						validAddtoCartItemsFlag[i]=true;
-						if((arrOrdMul[i].value >1 && isAddToCart==false))
+						if(ordMul!= 0){
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.setAttribute("class", "error");
+							divVal.style.display = 'block';
+							document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+							document.getElementById("errorMsgTop").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+				            document.getElementById("errorMsgTop").style.display = "inline";
+							
+				            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+				            document.getElementById("errorMsgBottom").style.display = "inline";
+				            uomCheck = true;
+				            errorflag= false; validAddtoCartItemsFlag[i]=false;
+							isAddToCart=false;
+						}
+						else{
+							validAddtoCartItemsFlag[i]=true;
+						}
+						if(arrOrdMul[i].value > 1 && isAddToCart == true)
 						{
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 							divVal.setAttribute("class", "notice");
@@ -1065,6 +1070,22 @@ function showSharedListForm(){
 							
 						}
 					}
+					else if (arrOrdMul[i].value > 1 && priceCheck == true){
+						
+						if(priceCheck == true){
+						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) + " "+baseUOM[i].value;
+						divVal.setAttribute("class", "notice");
+						divVal.style.display = 'block';
+						}
+						else {
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
+							divVal.setAttribute("class", "notice");
+							divVal.style.display = 'block';
+							
+							}
+						
+						
+					}	
 				}	
 				
 			}
@@ -1178,7 +1199,7 @@ function showSharedListForm(){
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
 						//added for jira 3253
-						if (priceCheck == true){
+						if (priceCheck == true && addToCartFlag != true){
 							divVal.setAttribute("class", "error");
 							divVal.style.display = 'block';
 							}
@@ -1198,9 +1219,9 @@ function showSharedListForm(){
 					}
 					else if (arrOrdMul[i].value > 1 && priceCheck == true){
 						if (priceCheck == true){
-							
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
+							document.getElementById(arrQty[i].id).style.borderColor="";
 						}
 						else {
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
