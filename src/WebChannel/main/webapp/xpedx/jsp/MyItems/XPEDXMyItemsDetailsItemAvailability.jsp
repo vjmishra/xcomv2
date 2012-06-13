@@ -73,19 +73,30 @@
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
-			<td colspan="3" width="32%"><i><span>Availability</i></span></td>
-			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
-			<s:if test="%{#_action.getValidateOM() == 'true'}">
-			<s:if test="%{#_action.getCatagory() == 'Paper'}">
-			<td class="left" colspan="3" width="32%"><i><s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></i></td>
-			</s:if></s:if></s:if>
-			<s:else>
-			<td class="left" colspan="3" width="32%"><span>&nbsp;</span></td>
-			</s:else>
-			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
-			<td colspan="3" width="32%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
-			</s:if>
+			<!-- Section 1 : Availability -->
+			<td colspan="3" width="32%">
+				<i><span>Availability</span></i>
+			</td>
+
+			<!-- Section 2 : Bracket Pricing  -->
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"} &&
+				%{#_action.getValidateOM() == "true"} && %{#_action.getCatagory() == "Paper"} '> 
 			
+			<td class="left" colspan="3" width="32%">
+				<i><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></i>
+			</td>
+			</s:if>
+			<s:else>
+				<td class="left" colspan="3" width="32%"><span>&nbsp;</span></td>
+			</s:else>
+
+			<!-- Section 3 : My Price -->
+			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
+				<td colspan="3" width="32%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			</s:if>
+			<s:else>
+				<td class="left" colspan="3" width="32%"><span>&nbsp;</span></td>
+			</s:else>
 
 		</tr>
 		
