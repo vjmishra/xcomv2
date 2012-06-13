@@ -422,15 +422,15 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			}
 			else{
 				//defaultShipToCustomerId = XPEDXWCUtils.getDefaultShipTo();				
-				defualtShipToAddress=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+				defualtShipToAddress=((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).getDefaultShipToCustomer();
 			}
 			//JIRA 1878 END
 			
 			//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"true",WCAttributeScope.LOCAL_SESSION);
 			//Commenting to use new method to put in cache
 			//wcContext.getSCUIContext().getRequest().getSession().setAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
-			XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
-			XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+			//XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+			//XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
 			XPEDXWCUtils.removeObectFromCache("showSampleRequest");
 			resetOrganizationValuesForShipToCustomer();
 			boolean isCustomerSelectedIntoContext = XPEDXWCUtils
@@ -674,7 +674,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			selectedCustomerContactId = wcContext.getCustomerContactId();
 		String  contaxtCustomerContactID = wcContext.getCustomerContactId();
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
-		resetOrganizationValuesForShipToCustomer();
+		resetOrganizationValuesForShipToCustomer();	
 		if(contaxtCustomerContactID.equals(selectedCustomerContactId)){
 			
 			XPEDXWCUtils.setCurrentCustomerIntoContext(
@@ -694,11 +694,16 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		//setSampleRequestFlagInSession(); 
 		if (setSelectedAsDefault) {
 			try {
+				XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
 				setSelectedShipToAsDefault();
 			} catch (Exception e) {
 				log.error("Cannot set the customer as default. please try again later");
 				e.printStackTrace();
 			}
+		}
+		else
+		{
+			XPEDXWCUtils.setObectInCache("DEFAULT_SHIP_TO_OBJECT",((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).getDefaultShipToCustomer());
 		}
 			
 	}
