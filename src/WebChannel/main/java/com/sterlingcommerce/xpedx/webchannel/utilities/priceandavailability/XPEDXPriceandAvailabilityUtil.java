@@ -439,6 +439,12 @@ public class XPEDXPriceandAvailabilityUtil {
 		Element eleRoot = doc.getDocumentElement();
 		Element textNode = SCXmlUtil.createChild(eleRoot, tagName);
 		Text txt = doc.createTextNode(tagName);
+		/*Begin - Changes made for JIRA 3969*/
+		if(tagValue==null)
+		{
+			tagValue="";		
+		}
+		/*End - Changes made for JIRA 3969*/
 		txt.setTextContent(tagValue);
 		textNode.appendChild(txt);
 	}
