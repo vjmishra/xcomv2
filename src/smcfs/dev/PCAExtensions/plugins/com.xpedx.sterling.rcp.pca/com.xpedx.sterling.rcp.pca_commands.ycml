@@ -621,4 +621,12 @@
             <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowItemListDetailPanel">
+        <commands>
+            <command APIName="getXPEDX_MyItemsList_List" APIType="SERVICE" Name="getXPEDXMyItemsListDetail" URL="DEFAULT" inputNamespace="" outputNamespace="getXPEDX_MyItemsList_List_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
+        </namespaces>
+    </form>
 </forms>
