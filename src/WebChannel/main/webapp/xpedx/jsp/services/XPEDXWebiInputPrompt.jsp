@@ -92,12 +92,11 @@
 
 
 <script type="text/javascript"><!--
-
 <s:if test="getRenderReport() == 'true'">
 
 	var strEntry = '<s:property value="storageToken"/>';
 	var docId = '<s:property value="id"/>';
-	var strUrl = "<s:property value='#wcUtil.staticFileLocation' />/xpedx/jsp/reporting/viewers/cdz_adv/viewDocument.jsp?sEntry="+ strEntry +"&lang=en&id="+ docId +"&ViewType=H&sPageMode=QuickDisplay&sRefresh=yes&kind=Webi";
+	var strUrl = "/swc/xpedx/jsp/reporting/viewers/cdz_adv/viewDocument.jsp?sEntry="+ strEntry +"&lang=en&id="+ docId +"&ViewType=H&sPageMode=QuickDisplay&sRefresh=yes&kind=Webi";
 	//strUrl += "&timeOutx=100&zoom=100&sNewDoc=false&sApplyFormat=&iDPIndex=&bValidateSQL=false&nAction=&advPrompts=yes&bCreateDefaultReportBody=false&defaultRepTitle=Report%2BTitle";
 	//Added For Jira 2810
 	//window.open(strUrl,'','toolbar=0');
