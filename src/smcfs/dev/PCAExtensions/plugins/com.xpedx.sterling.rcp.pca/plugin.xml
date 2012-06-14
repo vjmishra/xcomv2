@@ -297,6 +297,10 @@
             description="Launches Alternate UOM List"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask"/>
         <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask"
+            description="Launches Alternate UOM List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask"/>
+        <SharedTask
             class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask"
             description="Launches Add New Item popup"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask"/>
