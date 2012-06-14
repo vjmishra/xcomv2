@@ -4618,6 +4618,7 @@ function toggleVisibility(divID)
 
 
 function deleteLine(orderHeaderKey, lineKey){
+	
 
     // alert(lineKey);
 
@@ -4635,7 +4636,7 @@ function deleteLine(orderHeaderKey, lineKey){
 
         },
 
-        method: 'GET',
+        method: 'POST',
 
         success: function (response, request){
 
