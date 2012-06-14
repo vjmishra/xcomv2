@@ -284,23 +284,26 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				for(int i=0; i<allItemID.size();i++) {
 					entlErrorList.add(allItemID.get(i));
 				}	
-						if(entlErrorList.size()> 1){
-							Iterator itr = entlErrorList.iterator();
-							String strVal="";
-							while(itr.hasNext())
-							{
-								erroMsg+= itr.next().toString()+",";
-
-							}
-							int lastIndex = erroMsg.lastIndexOf(",");
-							erroMsg = erroMsg.substring(0,lastIndex);
+				if(entlErrorList.size() == 0) {
+					erroMsg = "";
+					
+				} else {
+					if(entlErrorList.size()> 1){
+						Iterator itr = entlErrorList.iterator();
+						String strVal="";
+						while(itr.hasNext())
+						{
+							erroMsg+= itr.next().toString()+",";
 
 						}
-						else{
-							erroMsg=entlErrorList.get(0);
-						}
-						
-			
+						int lastIndex = erroMsg.lastIndexOf(",");
+						erroMsg = erroMsg.substring(0,lastIndex);
+
+					}
+					else{
+						erroMsg=entlErrorList.get(0);
+					}					
+				}
 		}
 		else{
 		for(int i=0;i<itemlist.size();i++){	
