@@ -49,21 +49,20 @@
 														</tr>
 														<tr>
 															<td width="27%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Username: </td>
-															<td width="42%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">																																
+															<td>																																
 																<xsl:choose>
 																	<xsl:when test="count(./Users/User) &gt; 0">
-																		<select size="7" style="width:100%;" multiple="multiple" >
-																			<option><b>user defined email address</b></option>	
+																		<select style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;" >
 																			<xsl:for-each select="Users/User">
 																			<option>
-																				<xsl:value-of select="./@UserId"/>
+																				<xsl:value-of select="@UserId"/>
 																			</option>
 																			</xsl:for-each>
 																		</select>
 																	</xsl:when>
 																	<xsl:otherwise>
-																		<select style="width:100%;" >
-																			<option><b>user defined email address</b></option>																				
+																		<select style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;" >
+																			<option><b>No UserName Available</b></option>																				
 																		</select>																		
 																	</xsl:otherwise>
 																</xsl:choose>																																																									
