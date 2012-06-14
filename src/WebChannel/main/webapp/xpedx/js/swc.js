@@ -4268,7 +4268,7 @@ function deleteLine(orderHeaderKey, lineKey){
 
         },
 
-        method: 'GET',
+        method: 'POST',
 
         success: function (response, request){
 
