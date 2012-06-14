@@ -560,17 +560,17 @@ function printPOs(customerPos) {
 								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />
 		
 							<td><s:set name='customerPO'
-								value='%{#parentOrder.getAttribute("CustomerPONo")}' /> <SCRIPT type="text/javascript">
+								value='#chainedOrder.getAttribute("CustomerPONo")' /> <SCRIPT type="text/javascript">
 								printPOs('<s:property value="#customerPO" escape='false'/>');
 								</SCRIPT></td>
 		
 							<td><s:property value='#orderDate' /> </td>
 							<%-- Fix for JIRA 2243 : Showing OrderedByName from customer order --%>
 							<td><s:property
-								value='#OrderExtn.getAttribute("ExtnOrderedByName")' /></td>
+								value='#chainedOrder.getAttribute("ExtnOrderedByName")' /></td>
 		
 							<td><s:property
-								value='#OrderExtn.getAttribute("ExtnShipToName")' /> <br />
+								value='#chainedOrder.getAttribute("ExtnShipToName")' /> <br />
 							<s:if test='%{#addressLine1!=null && #addressLine1.length()>0}'>
 								<s:property value='#addressLine1' />
 								<br />
@@ -697,7 +697,7 @@ function printPOs(customerPos) {
 										</s:a>
 									</s:else>
 				            	</td>
-			            		<td><s:set name='customerPO' value='%{#parentOrder.getAttribute("CustomerPONo")}'/>
+			            		<td><s:set name='customerPO' value='#chainedOrder.getAttribute("CustomerPONo")'/>
 									<SCRIPT type="text/javascript">
 									printPOs('<s:property value="#customerPO" escape='false'/>');
 									</SCRIPT>
@@ -705,9 +705,9 @@ function printPOs(customerPos) {
 	           	
 				            	<td><s:property value='#orderDate'/></td>
 				            	
-				            	<td><s:property value='#OrderExtn.getAttribute("ExtnOrderedByName")'/></td>
+				            	<td><s:property value='#chainedOrder.getAttribute("ExtnOrderedByName")'/></td>
 				            	
-				            	<td><s:property value='#OrderExtn.getAttribute("ExtnShipToName")'/></td>
+				            	<td><s:property value='#chainedOrder.getAttribute("ExtnShipToName")'/></td>
 				            	
 				            	<td>
 				            		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
