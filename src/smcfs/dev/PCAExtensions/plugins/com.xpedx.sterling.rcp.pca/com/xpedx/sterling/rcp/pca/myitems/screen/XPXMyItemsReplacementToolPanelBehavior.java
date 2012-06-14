@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,6 +51,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	public ArrayList arrListKey = new ArrayList();
 	public int numberOfCustomer;
 	public Element elemreplaceModel;
+	public String myItemsListKey;
 	public XPXMyItemsReplacementToolPanelBehavior(Composite ownerComposite, String formId) {
         super(ownerComposite, formId);
         this.page=(XPXMyItemsReplacementToolPanel) ownerComposite;
@@ -404,6 +406,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 			eleXPEDXMyItemsList.setAttribute("Replace", "Y");
 		}
 		setModel(eleOutput);
+		
 	}
 	
     public void reset() {
@@ -896,4 +899,11 @@ public void CallReplacementServiceForCustomerName(String customerIdSelected){
 
 callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
 }
+//ListName Link & List Desc Link Method
+public	void openMultipleEditors(Element eleTableItem)throws PartInitException {
+	
+	myItemsListKey = eleTableItem.getAttribute("MyItemsListKey");
+	Document docInput = YRCXmlUtils.createFromString("<XPEDXMyItemsList MyItemsListKey='"+myItemsListKey+"'/>")	;
+	YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask",docInput.getDocumentElement());
+	}
 }
