@@ -25,8 +25,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Element;
-
+import com.yantra.yfc.rcp.IYRCTableLinkProvider;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -752,11 +753,13 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
         colBindings[1].setAttributeBinding("Name");
         colBindings[1].setColumnBinding("Name");
         colBindings[1].setSortReqd(true);
+        colBindings[1].setLinkReqd(true);
 
         colBindings[2] = new YRCTblClmBindingData();
         colBindings[2].setAttributeBinding("@Desc");
         colBindings[2].setColumnBinding("Desc");
         colBindings[2].setSortReqd(true);
+        colBindings[2].setLinkReqd(true);
         
         colBindings[3] = new YRCTblClmBindingData();
         colBindings[3].setName("clmListType");
@@ -806,6 +809,23 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
         bindingData.setSortRequired(true);
         bindingData.setDefaultSort(false);;
         tblSearchResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, bindingData);
+        //List Name & List Description made as links
+        bindingData.setLinkProvider( new IYRCTableLinkProvider(){
+        	public String getLinkTheme(Object element, int columnIndex) {
+        			return "TableLink";
+        	   	}
+        	
+        	public void linkSelected(Object element, int columnIndex) {
+           		Element eleTableItem = (Element)element;
+           		try {
+					myBehavior.openMultipleEditors(eleTableItem);
+				} catch (PartInitException e) {
+		
+					e.printStackTrace();
+				}
+           	     return;
+           	}
+        });
     }
 
     public IYRCPanelHolder getPanelHolder() {
