@@ -710,6 +710,14 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				targetModel.setAttribute("ApproverProxyUserId", getFieldValue("comboAlterApprover"));
 				targetModel.setAttribute("SpendingLimit", getFieldValue("txtSpendingLimit"));
 				targetModel.setAttribute("SpendingLimitCurrency", getFieldValue("comboCurrencyType"));		
+				Element eleUser = YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/User");
+				//Contact person info added under user element to update values at user label
+				Element eleContactPersonInfo = YRCXmlUtils.createChild(eleUser, "ContactPersonInfo");
+				eleContactPersonInfo.setAttribute("EMailID", getFieldValue("txtEmailAddress"));
+				eleContactPersonInfo.setAttribute("DayFaxNo", getFieldValue("txtFaxNumber"));
+				eleContactPersonInfo.setAttribute("DayPhone", getFieldValue("txtPhone"));
+				eleContactPersonInfo.setAttribute("FirstName", getFieldValue("txtFirstName"));
+				eleContactPersonInfo.setAttribute("LastName", getFieldValue("txtLastName"));
 				YRCApiContext ctx = new YRCApiContext();
 				ctx.setApiName("manageCustomer");
 				ctx.setInputXml(createManageCustomerOutputXml(targetModel).getOwnerDocument());
