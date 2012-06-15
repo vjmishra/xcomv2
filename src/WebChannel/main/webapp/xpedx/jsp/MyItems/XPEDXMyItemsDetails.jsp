@@ -1354,6 +1354,7 @@ function showSharedListForm(){
 			var itemLineFlag = "false";
 			var itemsString = data;
 			var char = '\n';
+			var flagTestCloseWindow = "false";	
 			var itemLines = itemsString.split(char);
 			if(itemsString == "")
 			{
@@ -1372,7 +1373,11 @@ function showSharedListForm(){
 				var itemSku = null;
 				var jobId = "";
 				var itemLine = itemLines[i].split('\t');
-				
+				if(i == itemLines.length-1){
+					if(itemLine == ""){
+						break;
+					}
+				}
 				if(itemLine.length > 1 )
 				{
 					itemQty = itemLine[0];
@@ -1412,6 +1417,13 @@ function showSharedListForm(){
 					}
 					itemLine = itemLines[i].split(',');
 					
+					 if(i == itemLines.length-1){
+							if(itemLine == ""){
+								flagTestCloseWindow = "true";
+								
+							}
+						}
+					if(flagTestCloseWindow == "false"){ 
 					if(itemLine.length > 1 )
 					{
 						itemQty = itemLine[0];
@@ -1430,6 +1442,14 @@ function showSharedListForm(){
 				document.getElementById("qty").value= itemQty;
 				qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
 			}
+					if(flagTestCloseWindow == "true"){ 
+						$.fancybox.close();
+						
+						Ext.get('dlgCopyAndPasteText').dom.value = '';
+				
+					}
+						
+		   }
 		 }	
 			//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
 			//w.hide();
