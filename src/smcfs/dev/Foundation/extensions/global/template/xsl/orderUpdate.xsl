@@ -484,7 +484,11 @@
                      <xsl:attribute name="ExtnBackQtyBase">
                         <xsl:value-of select="normalize-space(BackOrderQtyInBase)" />
                      </xsl:attribute>
-
+                     
+                     <xsl:attribute name="ExtnCustLineAccNo">
+                        <xsl:value-of select="normalize-space(CustLineAccNumber)" />
+                     </xsl:attribute>
+                     
                      <xsl:attribute name="ExtnCustLineNo">
                         <xsl:value-of select="normalize-space(CustomerLineNumber)" />
                      </xsl:attribute>
