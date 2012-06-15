@@ -221,7 +221,11 @@ function quickAddCopyAndPaste(data){
 		var itemSku = null;
 		var jobId = "";
 		var itemLine = itemLines[i].split('\t');
-		
+		if(i == itemLines.length-1){
+			if(itemLine == ""){
+				break;
+			}
+		}
 		if(itemLine.length > 1 )
 		{
 			itemQty = itemLine[0];
@@ -232,7 +236,7 @@ function quickAddCopyAndPaste(data){
 		{
 			itemQty = itemLine[0];
 			itemSku = itemLine[1];
-			if(itemSku == "" || itemQty == ""){
+			if(itemSku == "" && itemQty == ""){
 				itemLineFlag = "true";
 				document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
 		        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
@@ -283,12 +287,14 @@ function quickAddCopyAndPaste(data){
 			}
 			itemSku = Ext.util.Format.trim(itemSku);
 			itemQty = Ext.util.Format.trim(itemQty);
-		
+			if(itemSku != null && itemSku != "null"){
+				
 			document.getElementById("qaProductID").value= itemSku;
 			document.getElementById("qaQuantity").value= itemQty;
 			//call metods for quick add 3349 by balkhi
 		  	addProductToQuickAddList(document.getElementById('quickAddButton'));
 			//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' ); 
+			}
 		}
 	}
 	
