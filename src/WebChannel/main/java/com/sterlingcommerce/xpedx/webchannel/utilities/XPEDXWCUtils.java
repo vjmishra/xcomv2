@@ -3618,14 +3618,18 @@ public class XPEDXWCUtils {
 		}
 		return itemSkuMap;
 	}
-	
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, HashMap<String, String>> getAllSkusForItemsList(IWCContext wcContext,ArrayList<String> itemIds) throws Exception {
+		return getAllSkusForItemsList(wcContext,itemIds,true);
+	}
+	@SuppressWarnings("unchecked")
+	public static HashMap<String, HashMap<String, String>> getAllSkusForItemsList(IWCContext wcContext,
+			ArrayList<String> itemIds, boolean isItemDetailsCall) throws Exception {
 		HashMap<String, String> skuMap = new LinkedHashMap<String, String>();
 		HashMap<String, HashMap<String, String>> itemSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
 		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
 		if(!SCUtil.isVoid(useCustSku) && (XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM.equalsIgnoreCase(useCustSku.trim())
-				|| XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM.equalsIgnoreCase(useCustSku.trim()))) {
+				|| XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM.equalsIgnoreCase(useCustSku.trim()))   && isItemDetailsCall == true) {
 			
 			Document itemDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(itemIds, wcContext.getCustomerId(),wcContext.getStorefrontId(), wcContext);
 			
