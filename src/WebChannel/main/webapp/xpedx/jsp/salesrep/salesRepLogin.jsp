@@ -72,6 +72,7 @@ function validateForm()
 		//eDiv.innerHTML = "<div style=\"color: #FF0000; font-size: 1.1em; text-align: left;\">Please enter username and password.</div>"
 	}
 	else {
+	document.salesRepForm.DisplayUserID.value=document.salesRepForm.DisplayUserID.value.toLowerCase(); //added for JIRA 3936
 		document.salesRepForm.submit();
 	}
     return rtn;

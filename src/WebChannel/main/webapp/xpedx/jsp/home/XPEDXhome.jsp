@@ -334,14 +334,18 @@
 
 		if (keycode == 13)
 	   	{
-			document.singForm.submit();
-	   		return false;
+			signIn();	//added for JIRA 3936
 	   	}
 		else{
 	   		return true;
 		}
 	}
-	
+	function signIn()//added for JIRA 3936
+	{
+		document.singForm.DisplayUserID.value=document.singForm.DisplayUserID.value.toLowerCase();
+		document.singForm.submit();
+   		return false;
+	}
     </script>
 
 </body>
