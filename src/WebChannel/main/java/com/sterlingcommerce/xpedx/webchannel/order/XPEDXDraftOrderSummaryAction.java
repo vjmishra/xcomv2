@@ -39,7 +39,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInput
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXPaymentMethodHelper;
-import com.sterlingcommerce.xpedx.webchannel.utilities.AlphanumericSorting;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
@@ -405,7 +405,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		
 		ArrayList<String> itemIdList = new ArrayList<String>();		
 		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
-		
+		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
 			Element orderLineElement = (Element)orderLineElemList.get(i);
@@ -413,7 +413,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			if("C".equalsIgnoreCase(lineType) && "M".equalsIgnoreCase(lineType)) {
 				continue;
 			}
-			HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>(); //Code changes for JIRA 3935
+			
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
 					"Item");
 			String itemId = itemElement.getAttribute("ItemID");// orderline/item
@@ -823,7 +823,7 @@ END of JIRA 3382*/
 			//Start for JIRA 3645 - Sorting 
 			String[] poListSplit = addnlPOList.split(",");
 			
-			Arrays.sort(poListSplit, new AlphanumericSorting());
+			Arrays.sort(poListSplit, new XPEDXAlphanumericSorting());
 			/*for (int i = 0; i < poListSplit.length; i++) {
 				addAddnlPoNumberList(poListSplit[i]);
 			}	*/
