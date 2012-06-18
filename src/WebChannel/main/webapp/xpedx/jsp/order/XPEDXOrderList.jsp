@@ -189,7 +189,7 @@ function printPOs(customerPos) {
 <!-- get the search result xml: getDocuments is an action method -->
 <s:set name='sdoc' value="outputDoc"/>
 <s:set name='desc' value="orderDesc"/>
-<s:set name="openOrder" value="%{'true'}"/>
+<s:set name="isOpenOrderListingPage" value="%{'false'}"/>
 </head>
 
 <body class="ext-gecko ext-gecko3" onLoad="setDateFields();hideSearchField(false);">
@@ -238,12 +238,10 @@ function printPOs(customerPos) {
                     namespace="/order" cssClass="myClass" method="post" validate="true">
                     <s:hidden name='#action.name' value='orderList'/>
                 	<s:hidden name='#action.namespace' value='/order'/>
-                	<%-- start of Fix : JIRA - 3123 --%>
                 	<s:if test='!#blankValue '> 
 	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
 	                	<s:hidden name='sourceTab' value="%{'Open'}"/>
-	                	<s:set name='openOrder' value="%{'true'}"/>
-	                	<%-- End of Fix : JIRA - 3123 --%>
+	                	<s:set name='isOpenOrderListingPage' value="%{'false'}"/>
                 	</s:if>
 <br/>
                 <div class="rounded-border top-section ">
@@ -272,16 +270,19 @@ function printPOs(customerPos) {
 													<td colspan="2"></td>
 												</tr>
 												<tr>
-												<%-- start of Fix : JIRA - 3123 --%>
+							<%-- start of Fix : JIRA - 3123 --%>
 	            									<s:if test='#blankValue '> 
 	            							<td>Order Status: </td>
 													<td>
 														<s:select cssClass=" " name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
-														<s:set name='openOrder' value="%{'false'}"/>
+														<s:set name='isOpenOrderListingPage' value="%{'false'}"/>														
 													</td>
 													<td colspan="2"></td>
 													
 							</s:if>
+							<s:else>
+													<s:set name='isOpenOrderListingPage' value="%{'true'}"/>														
+							</s:else>
 							<%-- End of Fix : JIRA - 3123 --%>
                         </tr>
                         <tr>
@@ -433,13 +434,9 @@ function printPOs(customerPos) {
 					<s:set name="chainedOrderList" value='xpedxChainedOrderListMap.get(#parentOrder.getAttribute("OrderHeaderKey"))'/>
 					<s:set name="temChainedOrder" value='#chainedOrderList.get(0)'/>
 					<s:set name="sourceTabVal" value="#_action.getSourceTab()"></s:set>
+					<s:set name="noOpenOrderFlag" value="#_action.getNoOpenOrderFlag()"></s:set>
 					
-					<%-- Fix for Jira 3123, Added openOrder == true to if condition --%>
-					<s:if test='#openOrder == "true" && #sourceTabVal != null && #temChainedOrder.getAttribute("Status") == #sourceTabVal '>
-						<s:set name='openOrder' value="%{'false'}"/>
-					</s:if>
-					<%-- End Fix for Jira 3123 --%>
-					
+									
 					<s:set name='customerOhk' value='#parentOrder.getAttribute("OrderHeaderKey")' />
 								
 					<%-- <tr <s:if test="#rowStatus.odd == true" >class="odd"</s:if> style="border-top: 1px solid #D7D7D7;">	 --%>		
@@ -837,11 +834,13 @@ function printPOs(customerPos) {
 	} 
 	setErrorMessage('<s:property value="#openOrder"/>',"divid");
 	*/
-	<%-- start of Fix : JIRA - 3123 --%>
 	
-	function setErrorMessage(flag)
+	function setErrorMessage(pageFlg, noOpenOrdrFlg )
 	{
-		if(flag == "true")
+		//JIRA-3904 changes.
+		
+	//	alert (" pageFlg : " + pageFlg + " , noOpenOrdrFlg : " + noOpenOrdrFlg)
+		if(pageFlg == "true" && noOpenOrdrFlg =="true")
 		{
 		//"Currently No Open Orders are Available.";
 		var dividtop=document.getElementById("open-orders-Msg-top");
@@ -865,9 +864,8 @@ function printPOs(customerPos) {
 		}
 	}
 	
-	setErrorMessage('<s:property value="#openOrder"/>');
+	setErrorMessage('<s:property value="#isOpenOrderListingPage"/>' , '<s:property value="#noOpenOrderFlag"/>');
 	
-	<%-- End of Fix : JIRA - 3123 --%>
 	</script>
 
 <script type="text/javascript">
@@ -893,7 +891,7 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		 }	
 	 }
 	 if(actionValue == "Reject"){
-	     document.forms["approval"].elements["ApprovalAction"].value = "1200";
+	     document.forms["approval"].elements["ApprovalAction"].value = "1200";		
 	     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 		 		document.getElementById("ReasonText").value="Rejected"
 		 }	
@@ -902,7 +900,7 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 
 		 }	
 	 }		
-	//submit it	
+	//submit it
 	 document.forms["approval"].submit();	
 	}
 	</script>
