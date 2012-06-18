@@ -465,8 +465,10 @@ public class XPEDXOrderUtils {
 	 * @throws Exception
 	 */
 	public static Document getXpedxEntitledItemDetails(ArrayList<String> itemIDList, String custID,
-			String callingOrgCode, IWCContext wcContext) throws Exception {
+			String callingOrgCode, IWCContext wcContext,String mashupId) throws Exception {
 		Document outputDoc = null;
+		if(mashupId == null || "".equals(mashupId))
+			mashupId="xpedxEntitledItemDetails";
 		if (YFCCommon.isVoid(itemIDList) || itemIDList.size() <=0) {
 			LOG.error("Atleast one ItemID is required to evaluate the xpedxMinimalItemDetails mashup. Return back to the caller");
 			return outputDoc;
@@ -476,7 +478,7 @@ public class XPEDXOrderUtils {
 		valueMap.put("/Item/@CallingOrganizationCode", callingOrgCode);
 		valueMap.put("/Item/CustomerInformation/@CustomerID", custID);
 
-		Element input = WCMashupHelper.getMashupInput("xpedxEntitledItemDetails", valueMap,
+		Element input = WCMashupHelper.getMashupInput(mashupId, valueMap,
 				wcContext.getSCUIContext());
 		Document inputDoc = input.getOwnerDocument();
 		NodeList inputNodeList = input.getElementsByTagName("Or");
@@ -488,12 +490,28 @@ public class XPEDXOrderUtils {
 			expElement.setAttribute("Value", itemIDList.get(i));
 			inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
 		}
-		Object obj = WCMashupHelper.invokeMashup("xpedxEntitledItemDetails", input,wcContext.getSCUIContext());
+		Object obj = WCMashupHelper.invokeMashup(mashupId, input,wcContext.getSCUIContext());
 		outputDoc = ((Element) obj).getOwnerDocument();
 		if (null != outputDoc) {
-			LOG.debug("Output XML getXpedxEntitledItemDetails: " + SCXmlUtil.getString((Element) obj));
+			LOG.debug("Output XML "+mashupId+": " + SCXmlUtil.getString((Element) obj));
 		}
 		return outputDoc;
+	}
+	
+	/**
+	 * Get only the entitled items 
+	 * @param itemIDList
+	 * @param custID
+	 * @param callingOrgCode
+	 * @param wcContext
+	 * @param mashupId
+	 * @return
+	 * @throws Exception
+	 */
+	public static Document getXpedxEntitledItemDetails(ArrayList<String> itemIDList, String custID,
+			String callingOrgCode, IWCContext wcContext) throws Exception {
+		
+		return getXpedxEntitledItemDetails(itemIDList,custID,callingOrgCode,wcContext,null);
 	}
 	
 	public static Document getXpedxAssociationlItemDetails(ArrayList<String> itemIDList, String custID,
