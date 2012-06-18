@@ -70,6 +70,10 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
 	
 	<script type="text/javascript">
+	//Added for JIRA 3926
+	function changeCase(){
+	document.getElementById('userName').value=document.getElementById('userName').value.toLowerCase();
+}
 	
 			function addNewUser(docDivId, ignoreDivIds)
 			{
@@ -135,6 +139,7 @@
 			    	document.getElementById("errorMsgFor_emailId").style.display = "inline";
 			        return false;
 			    }
+			    document.addNewUserForm.userName.value=document.addNewUserForm.userName.value.toLowerCase();//Added for JIRA 3926
 			    document.getElementById("addNewUserForm").submit();
 			    return true;
 			}
@@ -207,8 +212,8 @@
 			  				<tr>
 			  					<td class="no-border-right-user" colspan="2"><div class="mandatory float-left">*</div>Username:</td>
 			                    <td width="31%" class="no-border-right-user">
-			                    	<s:textfield tabindex="50" name="userName" id="userName" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');" 
-			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="50" cssClass="x-input" cssStyle="width: 185px;"/>                    
+			                    	<s:textfield tabindex="50" name="userName" id="userName" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');changeCase();" 
+			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="20" cssClass="x-input" cssStyle="width: 185px;"/>                    
 			                   </td>
 			  				</tr>
 						</table>

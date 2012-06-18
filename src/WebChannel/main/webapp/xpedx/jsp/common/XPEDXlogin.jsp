@@ -86,7 +86,8 @@ $('#signIn').hide();
 					<p><a class="underlink" href="<s:url action="forgotPwd" namespace="/home" />"><s:text name="login.forgotPwd"/></a></p>
 					
 					<div class="button-row">
-						<a href="javascript:(function(){document.singForm.submit();})();" 
+					<!-- added for JIRA 3936 -->
+						<a href="javascript:signIn()" 
 							class="green-ui-btn"><span>Sign In</span></a> 
 							<a href="javascript:(function(){document.homePageNewUserRegistration.submit();})();" class="underlink">Register</a>
 					</div>
