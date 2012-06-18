@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -169,7 +170,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			There is no need to change the order owner
 			*/
 			getItemUOMs();
-			
+			checkforEntitlement();
 			getAllItemSKUs();
 //			getAllItemList();
 			// BEGIN P&A Call: RUgrani
@@ -237,7 +238,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				setEditOrdersMap(orderHeaderKey);
 			}*/
-			checkforEntitlement();
+			
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception ex) {
 			if (ex != null && ex.toString() != null
@@ -257,7 +258,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		ArrayList<String> entlErrorList = new ArrayList<String>();
 		Document entitledItemsDoc;
 		try {
-			entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext,"xpedxEntitledCheckOnly");
 		
 		Iterator productIDIter = allItemIds.iterator();
 		ArrayList<Element> itemlist = new ArrayList<Element>(); 
@@ -307,8 +308,30 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		}
 		else{
 		for(int i=0;i<itemlist.size();i++){	
+			HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
+			Element itemElem=itemlist.get(i);
 			String itemId = itemlist.get(i).getAttribute("ItemID");
 			itemList.add(itemId);
+			//Added for performance issue 
+			if(itemElem!=null)
+			{
+				Element primeInfoElem = XMLUtilities.getElement(itemElem, "PrimaryInformation");
+				if(primeInfoElem!=null)
+				{
+					String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+					if(manufactureItem!=null && manufactureItem.length()>0)
+						itemSkuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+				}
+				Element extnElem = XMLUtilities.getElement(itemElem, "Extn");
+				if(extnElem!=null)
+				{
+					String mpcCode = extnElem.getAttribute("ExtnMpc");
+					if(mpcCode!=null && mpcCode.length()>0)
+						itemSkuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
+				}
+			}
+			skuMap.put(itemId, itemSkuMap);
+			//
 		}	
 			for(int i=0; i<allItemID.size();i++) {
 				
@@ -1637,37 +1660,46 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			setCustomerSku(useCustSku);
 		}
 		
-		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		
 		
 		try {
-			skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds);
+			HashMap<String, HashMap<String, String>> _skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds,false);
+		
+		
+			//Fetch all the items in Cart and get their respective SKUs
+			Document orderDoc = getOutputDocument();
+			Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
+					.getDocumentElement(), "OrderLines");
+			ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+			if(orderLineElemList==null || orderLineElemList.size()==0)
+				return;
+			//Get the customer extn fields
+			for (int i = 0; i < orderLineElemList.size(); i++) {
+				Element orderLineElement = (Element)orderLineElemList.get(i);
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
+						"Item");
+				String itemId = "";
+				if(itemElement!=null){
+					itemId = itemElement.getAttribute("ItemID");// orderline/item
+				
+					if(skuMap.containsKey(itemId))
+					{
+						HashMap<String,String> map=skuMap.get(itemId);
+						if(map != null && _skuMap.get(itemId) != null)
+							map.putAll(_skuMap.get(itemId));
+					}
+					else
+					{
+						skuMap.put(itemId,  _skuMap.get(itemId));
+						/*					
+						HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
+						skuMap.put(itemId, itemSkuMap);*/
+					}
+				}
+			}
 		}
 		catch (Exception ex){
 			LOG.debug(ex.getMessage());
-		}
-		
-		//Fetch all the items in Cart and get their respective SKUs
-		Document orderDoc = getOutputDocument();
-		Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
-				.getDocumentElement(), "OrderLines");
-		ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
-		if(orderLineElemList==null || orderLineElemList.size()==0)
-			return;
-		//Get the customer extn fields
-		for (int i = 0; i < orderLineElemList.size(); i++) {
-			Element orderLineElement = (Element)orderLineElemList.get(i);
-			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
-					"Item");
-			String itemId = "";
-			if(itemElement!=null){
-				itemId = itemElement.getAttribute("ItemID");// orderline/item
-			
-				if(skuMap.containsKey(itemId))
-					continue;
-				
-				HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-				skuMap.put(itemId, itemSkuMap);
-			}
 		}
 	}
 	
@@ -2077,7 +2109,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected ArrayList<Element> xpedxYouMightConsiderItems;
 	protected ArrayList<Element> xpedxPopularAccessoriesItems;
 	protected HashMap customerFieldsMap;
-	private HashMap<String, HashMap<String,String>> skuMap;
+	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;
 	protected String customerId;
 	protected String shipFromDivision;
