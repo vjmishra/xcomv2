@@ -46,8 +46,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        		orderLelement=outputMap.get(CHECKOUT_MINI_CART_MASHUP);
 	        		
 	        	//Added for Jira 3523
-	        		ArrayList<Element> itemList = new ArrayList<Element>();
-	        		itemList.add(orderLelement);
+	        		ArrayList<Element> itemList =SCXmlUtil.getElements(orderLelement,"OrderLines/OrderLine");
 	        		Iterator<Element> it=itemList.iterator();
 	        		while(it.hasNext())
 	        		{
