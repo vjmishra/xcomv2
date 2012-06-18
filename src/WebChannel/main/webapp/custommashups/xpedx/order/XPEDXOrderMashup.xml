@@ -1995,6 +1995,32 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedxEntitledCheckOnly' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getItemListForOrdering">
+			<Input>
+				<Item CallingOrganizationCode="" ShowFinalSupersededItemOnly="Y" IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y">
+					<CustomerInformation CustomerID="" />
+					<ComplexQuery>
+						<Or>
+							<!--  Exp Name="ItemID" Value="" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="" >
+					<Item ItemID="" ItemKey="" UnitOfMeasure="">
+						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation=""/>
+						<Extn ExtnMpc=""/>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	
 	<!-- BEGIN: XPEDXChangeOrderDetailsOnCancel  -->
 	<mashup id='xpedxChangeOrderDetailsOnCancel' transactional='true'
 		mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="get all the change order details for an order">
