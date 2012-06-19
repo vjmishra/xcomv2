@@ -781,7 +781,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 						//new requirement
 						HashSet<String> salesRepSetForUser = new HashSet<String>();
-						if(processCode.equalsIgnoreCase("A"))
+						if(processCode.equalsIgnoreCase("A")||processCode.equalsIgnoreCase("C"))
 						{
 							NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
 							if(nlSalesReps.getLength() != 0)
@@ -1133,12 +1133,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		//requirement change
 		boolean masterCustomerexists = false;
 		masterCustomerexists = checkForMasterCustomer(env, masterCustomerUser);
-		if(masterCustomerexists)
+		/*if(masterCustomerexists)
 		{
 			//then assign this user to the customer
 			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
-		}
-		else
+		}*/
+		if(!masterCustomerexists)
 		{
 			//create the master customer user and assign it to customer
 			//createMaterCustomer
