@@ -468,6 +468,8 @@
             <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
             <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
             <command APIName="XPXGetBothMyItemsList" APIType="SERVICE" Name="XPXGetBothMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetBothMyItemsList_output" version="ver77"/>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
+            <command APIName="getTeamList" APIType="API" Name="getTeamList" URL="DEFAULT" inputNamespace="" outputNamespace="getTeamList_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
@@ -477,6 +479,8 @@
             <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
             <namespace name="OrganizationList" templateName="OrganizationList" type="output"/>
             <namespace name="XPXGetBothMyItemsList_output" templateName="XPXGetBothMyItemsList_output" type="output"/>
+            <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList_output" type="output"/>
+            <namespace name="getTeamList_output" templateName="getTeamList_output" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.customerSearch.wizards.YCDCustomerSearchWizard">
