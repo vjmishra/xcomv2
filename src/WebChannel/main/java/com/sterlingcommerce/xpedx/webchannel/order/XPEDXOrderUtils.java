@@ -1772,7 +1772,8 @@ public class XPEDXOrderUtils {
 		   	 itemAndTotalList.add("0");
 		   	 itemAndTotalList.add(webContext.getDefaultCurrency());
 		   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-		   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
+		   	 XPEDXWCUtils.setObectInCache("OrderLinesInContext",new ArrayList<Element>());
+		   	 //refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
 		   	 return;
 		 }
 		if(isGetCompleteOrder == false) 
