@@ -106,7 +106,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
     {
         YRCApiContext context = new YRCApiContext();
         context.setApiNames(names);
-        context.setFormId("com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreen");
+        context.setFormId("com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel");
         context.setInputXmls(inputXmls);
         callApi(context);
     }
@@ -269,7 +269,32 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
         		if ( YRCPlatformUI.equals(apiname, "getListOfXPEDXMyItemsLists")) {
         			Document docOutput = ctx.getOutputXmls()[i];
 			    	Element eleOutput = docOutput.getDocumentElement();
-			    	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
+			    	
+			    	ArrayList<Element> listParentCustomers = null;
+					ArrayList myItemListKey = new ArrayList();
+					listParentCustomers = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
+					if ((!YRCPlatformUI.isVoid(listParentCustomers))&& (listParentCustomers.size() > 0)) {		
+								for (int y=0; y<listParentCustomers.size(); y++){
+									Element customerEle = (Element)listParentCustomers.get(y);
+									System.out.println("" + customerEle.getAttribute("MyItemsListKey"));
+									String listKeyValue=customerEle.getAttribute("MyItemsListKey");		
+									myItemListKey.add(listKeyValue);
+									Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
+									YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
+								}
+								prepareInputXML(myItemListKey) ;
+					}
+						else{
+							YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
+						}
+					//prepareInputXML(myItemListKey) ;
+			    //	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
+			     	}
+        		else if ( YRCPlatformUI.equals(apiname, "getCustomerContactList")) {
+        			Document docOutput = ctx.getOutputXmls()[i];
+			    	Element eleOutput = docOutput.getDocumentElement();
+			    	System.out.println("The user list is:" +YRCXmlUtils.getString(eleOutput));
+			    	CallPersonalListService(eleOutput);
 			     	}
 		    	else if(YRCPlatformUI.equals(apiname, "getPage")){
         			Document docOutput = ctx.getOutputXmls()[i];
@@ -400,7 +425,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 			else{
 				YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
 			}
-	
+		
 		ArrayList<Element> list = YRCXmlUtils.getChildren(eleOutput, "XPEDXMyItemsList");
 		for (Element eleXPEDXMyItemsList : list) {
 			eleXPEDXMyItemsList.setAttribute("Replace", "Y");
@@ -654,34 +679,83 @@ private void updateModelWithParentInfo(Element outXml) {
 }
 
 
-public void getParentCustomers() {
+public void getParentCustomers(String customerIdSelected) {
 	String BillToValue = getFieldValue("BillToId");
 	String ShipToValue = getFieldValue("ShipToId");
 	String SAPIdValue = getFieldValue("SAPId");
-	String MasterCustomerValue = getFieldValue("MasterCustomerId");
-	
+	String MasterCustomerValue = customerIdSelected;
 	String enterPriseKey=getEnterPriseKey();
 	
-	//selectedVal = "12-0000100185-000-M-XX-B";
 	if(BillToValue != null && BillToValue != ""){
+		//Set Input XML for Final View
+		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+        .getDocumentElement();
+
+		Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		setModel(elemreplaceModel);
 	Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+BillToValue+"' OrganizationCode='"+enterPriseKey+"'/>");
 	callApi("XPXGetParentCustomerListService" , docInput);
 	}
 	
 	if(ShipToValue != null && ShipToValue != ""){
+		//Set Input XML for Final View
+		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+        .getDocumentElement();
+
+		Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		setModel(elemreplaceModel);
 		Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+ShipToValue+"' OrganizationCode='"+enterPriseKey+"'/>");
 		callApi("XPXGetParentCustomerListService" , docInput);
 	}
 	if(SAPIdValue != null && SAPIdValue != ""){
+		//Set Input XML for Final View
+		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+        .getDocumentElement();
+
+		Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		setModel(elemreplaceModel);
 		Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+SAPIdValue+"' OrganizationCode='"+enterPriseKey+"'/>");
 		callApi("XPXGetParentCustomerListService" , docInput);
 	}
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
-		Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+MasterCustomerValue+"' OrganizationCode='"+enterPriseKey+"'/>");
-		callApi("XPXGetParentCustomerListService" , docInput);
+		//Set Input XML for Final View
+		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+        .getDocumentElement();
+
+		Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		setModel(elemreplaceModel);
+	//callApi("XPXGetParentCustomerListService" , docInput1);
+		Document docInput1 = YRCXmlUtils.createFromString("<Customer CustomerID='"+MasterCustomerValue+"' OrganizationCode='"+enterPriseKey+"'/>");
+	//Call APi getCustomerList-Docinput2-Input XML
+		Document docInput2 = YRCXmlUtils.createDocument("CustomerContact");
+		Element eleInput = docInput2.getDocumentElement();
+		Element eleChild1 = YRCXmlUtils.createChild(eleInput, "Customer");
+    	eleChild1.setAttribute("CustomerID", MasterCustomerValue);
+	//Call APIs
+    	String[] apiNames ={"XPXGetParentCustomerListService", "getCustomerContactList"};
+		Document[] docInputs={ docInput1,eleInput.getOwnerDocument()};
+		callApis(apiNames, docInputs);
+	
+		
 	}
 	
 	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
+		//Set Input XML for Final View
+		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+        .getDocumentElement();
+
+		Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+		setModel(elemreplaceModel);
 		CallReplacementServiceForDivision();	
 	}
 	
@@ -714,26 +788,28 @@ public void CallReplacementService(){
 callApi("getListOfXPEDXMyItemsLists",eleXPEDXMyItemsList.getOwnerDocument());
 }
 public void prepareInputXML(ArrayList arrListKey) {
-      elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+      /*elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
                 .getDocumentElement();
     
     Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
-    Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
-    
+    Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");*/
+	
+	Element eleXPEDXMyItemsList = getTargetModel("elemreplaceModel");
+	Element orElement = YRCXmlUtils.getXPathElement(elemreplaceModel, "/XpedxMilBothLst/ComplexQuery/Or");
     for ( int i=0; i<arrListKey.size();i++) {
           String listKey = (String) arrListKey.get(i);
           if (listKey != null && listKey != " ") {
-                Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+                Element attrName = YRCXmlUtils.createChild(orElement, "Exp");
                 attrName.setAttribute("Name", "MyItemsListKey");
                 attrName.setAttribute("Value", listKey);
-                attrOr.appendChild(attrName);
+                orElement.appendChild(attrName);
           }
 
     }
 
-    Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+   /* Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
     setModel(elemreplaceModel);
-    this.elemreplaceModel = elemreplaceModel;
+    this.elemreplaceModel = elemreplaceModel;*/
     getFirstPage();
     
    }
@@ -876,14 +952,19 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("MasterCustomerId",customerNameSelected);
 		}
-		CallReplacementServiceForCustomerName(customerIdSelected);
+		getParentCustomers(customerIdSelected);
 	}
-	
-	
-	
 	
 }
 public void CallReplacementServiceForCustomerName(String customerIdSelected){
+	//Set Input XML for Final View
+	elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
+    .getDocumentElement();
+
+	Element attrElemComplex = YRCXmlUtils.createChild(elemreplaceModel, "ComplexQuery");
+	Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+	Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+	setModel(elemreplaceModel);
 	Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");	
 	String itemID = getFieldValue("txtLPC");
 	String replaceItemID = getFieldValue("txtReplaceLPC");
@@ -902,8 +983,38 @@ callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
 //ListName Link & List Desc Link Method
 public	void openMultipleEditors(Element eleTableItem)throws PartInitException {
 	
+	System.out.println("T0----he Table element is "+YRCXmlUtils.getString(eleTableItem));
 	myItemsListKey = eleTableItem.getAttribute("MyItemsListKey");
 	Document docInput = YRCXmlUtils.createFromString("<XPEDXMyItemsList MyItemsListKey='"+myItemsListKey+"'/>")	;
 	YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask",docInput.getDocumentElement());
 	}
+public void CallPersonalListService(Element eleOutput){
+	
+		NodeList nodeCustContact=eleOutput.getElementsByTagName("CustomerContact");
+			/*for(int j=0;j<nodeCustContact.getLength();j++){
+				Element elementCust=(Element) nodeCustContact.item(j);
+				String customerID = elementCust.getAttribute("CustomerContactID");
+			}*/
+			
+			Element elemModel = YRCXmlUtils.createDocument("XPEDXMyItemsList")
+			.getDocumentElement();
+			elemModel.setAttribute("ReplaceWithLPC", getFieldValue("txtReplaceLPC"));
+			Element attrElemComplex = YRCXmlUtils.createChild(elemModel, "ComplexQuery");
+			Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+			for(int j=0;j<nodeCustContact.getLength();j++){
+				Element elementCust=(Element) nodeCustContact.item(j);
+				String customerContactID = elementCust.getAttribute("CustomerContactID");
+					Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+					attrName.setAttribute("Name", "SharePrivate");
+					attrName.setAttribute("Value", customerContactID);
+					attrOr.appendChild(attrName);
+			}
+			Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
+			Element elemXPEDXMyItemsItemsList = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsItemsList");
+			Element elemXPEDXMyItemsItems = YRCXmlUtils.createChild(elemXPEDXMyItemsItemsList, "XPEDXMyItemsItems");
+			elemXPEDXMyItemsItems.setAttribute("ItemId", getFieldValue("txtLPC"));
+			
+			//Call API for personal list
+			callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());		
+		}
 }
