@@ -989,25 +989,28 @@ public	void openMultipleEditors(Element eleTableItem)throws PartInitException {
 	YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask",docInput.getDocumentElement());
 	}
 public void CallPersonalListService(Element eleOutput){
-	
-		NodeList nodeCustContact=eleOutput.getElementsByTagName("CustomerContact");
-			/*for(int j=0;j<nodeCustContact.getLength();j++){
-				Element elementCust=(Element) nodeCustContact.item(j);
-				String customerID = elementCust.getAttribute("CustomerContactID");
-			}*/
-			
+	//Customer CONTACTS except dummy customers passed for retrieving personal list
+	NodeList nodeListCustContact=eleOutput.getElementsByTagName("CustomerContact");
 			Element elemModel = YRCXmlUtils.createDocument("XPEDXMyItemsList")
 			.getDocumentElement();
 			elemModel.setAttribute("ReplaceWithLPC", getFieldValue("txtReplaceLPC"));
 			Element attrElemComplex = YRCXmlUtils.createChild(elemModel, "ComplexQuery");
 			Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
-			for(int j=0;j<nodeCustContact.getLength();j++){
-				Element elementCust=(Element) nodeCustContact.item(j);
+			for(int j=0;j<nodeListCustContact.getLength();j++){
+				Element elementCust=(Element) nodeListCustContact.item(j);
 				String customerContactID = elementCust.getAttribute("CustomerContactID");
+				Element statusElement = YRCXmlUtils.getXPathElement(elementCust, "/CustomerContact/Extn");
+				String eSalesRep = statusElement.getAttribute("ExtnIsSalesRep");
+				if("Y".equalsIgnoreCase(eSalesRep)){
+					
+				}
+				else{
 					Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
 					attrName.setAttribute("Name", "SharePrivate");
 					attrName.setAttribute("Value", customerContactID);
-					attrOr.appendChild(attrName);
+					attrOr.appendChild(attrName);					
+				}
+					
 			}
 			Element attrName1 = YRCXmlUtils.createChild(attrOr, "Exp");
 			Element elemXPEDXMyItemsItemsList = YRCXmlUtils.createChild(elemModel, "XPEDXMyItemsItemsList");
@@ -1016,5 +1019,6 @@ public void CallPersonalListService(Element eleOutput){
 			
 			//Call API for personal list
 			callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());		
-		}
+		
+	}
 }
