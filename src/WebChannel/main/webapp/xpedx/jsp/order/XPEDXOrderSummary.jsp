@@ -844,7 +844,9 @@ from session . We have customer Contact Object in session .
 			<td class="center white text-right pricing-border table-header-bar-right" style="width:143px;"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
 
 			</tr>
-			</table>                          
+			</table>  
+			<%--jira 3788 --%>  
+				<s:set name="isOrderTBD" value="%{0}" />                      
 				<s:iterator value='majorLineElements' id='orderLine'
 				status="orderLine_1">
 				<s:set name='lineTotals'
@@ -1105,6 +1107,7 @@ from session . We have customer Contact Object in session .
 														<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 														<s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">	
 																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+																<s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
 														  </s:if>
 														  <s:else>
 																<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
@@ -1454,6 +1457,11 @@ from session . We have customer Contact Object in session .
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>
 			--%>
+			<%--jira 3788 --%>
+			<s:set name = "setTBD" value="%{false}"/>
+			<s:if test="%{#_action.getMajorLineElements().size() == #isOrderTBD}">
+				<s:set name = "setTBD" value="%{true}"/>
+			</s:if>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<div class="cart-sum-right">
 			<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
@@ -1468,7 +1476,7 @@ from session . We have customer Contact Object in session .
 							<s:else>
 								--%>								
 								<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
- 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp}">							    			       
+ 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp || #setTBD == true}">							    			       
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
@@ -1507,7 +1515,7 @@ from session . We have customer Contact Object in session .
 							<s:else>
 								--%>
 								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp}">
+	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp || #setTBD == true}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>
@@ -1542,7 +1550,7 @@ from session . We have customer Contact Object in session .
 							<s:else>
 								--%>
 								 <s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp}">
+		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
                                  </s:if>
                                  <s:else>

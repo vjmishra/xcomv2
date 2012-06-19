@@ -736,7 +736,7 @@ function showSplitDiv(divId)
 	    </table>
 	    </div>
 	    <!-- end table header -->
-	    
+	    <s:set name="isOrderTBD" value="%{0}" />
 	    <s:form action="orderAgain" namespace="/order" method="post"  id= "mainOrderForm" name='mainOrderForm'>
 			<s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
 			<s:hidden name="draft" value="%{#draftOrderFlag}"/>
@@ -917,7 +917,8 @@ function showSplitDiv(divId)
 						    			    <s:set name="theExtendedPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
 						    			    <s:if test="%{#myPriceValue == 'true'}">
 						    			       <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
-											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> 
+											    <s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
 											   </s:if>
                                             </s:if>
                                             <s:else>
@@ -1214,6 +1215,10 @@ function showSplitDiv(divId)
 				</div><!-- end box section - "div class="middle-section rounded-border rr-border"" -->
 			</s:iterator>
 		</s:form>
+	<s:set name = "setTBD" value="%{false}"/>
+	<s:if test="%{#_action.getMajorLineElements().size() == #isOrderTBD}">
+		<s:set name = "setTBD" value="%{true}"/>
+	</s:if>
 	
         <!-- begin bottom section -->
         <s:set name='subtotalWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("SubtotalWithoutTaxes"))'/>
@@ -1234,7 +1239,7 @@ function showSplitDiv(divId)
 						<th>Subtotal:</th>
 						<td> 	    			    
 					    	<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
- 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp}">	
+ 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp || #setTBD == true}">	
 								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                       	</s:if>
 	                       	<s:else>
@@ -1256,7 +1261,7 @@ function showSplitDiv(divId)
 						<th>Adjusted Subtotal:</th>
 						<td>
 								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp}">
+	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp || #setTBD == true}">
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                       		</s:if>
 	                      		<s:else>
@@ -1351,7 +1356,7 @@ function showSplitDiv(divId)
 						<th>Order Total (<s:property value='%{currencyCode}'/>):</th>
 						<td>
 							<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp}">
+		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                     	</s:if>
 	                        <s:else> 

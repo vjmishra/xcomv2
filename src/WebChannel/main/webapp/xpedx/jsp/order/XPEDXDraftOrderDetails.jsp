@@ -980,6 +980,8 @@ $(document).ready(function(){
 	
 	<%--<s:set name="subTotal" value='%{0.00}' /> --%>
 	<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
+	<%--jira 3788 --%>  
+	<s:set name="isOrderTBD" value="%{0}" />        
 	<s:iterator value='majorLineElements' id='orderLine' status="rowStatus"  >
 		<s:set name='lineTotals' value='#util.getElement(#orderLine, "LineOverallTotals")' />
 		<s:set name='item' value='#util.getElement(#orderLine, "Item")' />
@@ -1319,6 +1321,7 @@ $(document).ready(function(){
 														<s:else> --%>														  
 											 			  <s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">											 			  
 																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+																<s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
 														  </s:if>
 														  <s:else>
 														   		<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
@@ -1932,6 +1935,11 @@ var currentAadd2ItemList = new Object();
 
 </div>
 
+<s:set name = "setTBD" value="%{false}"/>
+	<s:if test="%{#_action.getMajorLineElements().size() == #isOrderTBD}">
+		<s:set name = "setTBD" value="%{true}"/>
+	</s:if>
+
 <s:set name="xutil" value="XMLUtils" /> <s:set
 	name='subtotalWithoutTaxes'
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("SubtotalWithoutTaxes"))' />
@@ -1972,7 +1980,7 @@ var currentAadd2ItemList = new Object();
 				<s:else>
 					--%>	
 					<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
- 			  		 <s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0 ">	
+ 			  		 <s:if test="%{(#extnOrderSubTotal == #priceWithCurrencyTemp) && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 			  		</s:if>						  
 				  	<s:else>
@@ -2011,7 +2019,7 @@ var currentAadd2ItemList = new Object();
 				<s:else>
 					--%>
 					<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-	 			  <s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0">
+	 			  <s:if test="%{(#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp) && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 				  </s:if>					
 					<s:else>
@@ -2043,7 +2051,7 @@ var currentAadd2ItemList = new Object();
 				<s:else>
 					--%>
 				<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-		 			  		 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp} && #displayPriceForUoms!=null && #displayPriceForUoms.size()>0">
+		 			  		 <s:if test="%{(#extnTotalOrderValue == #priceWithCurrencyTemp)  && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 					  		</s:if>						  
 						  <s:else>
