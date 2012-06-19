@@ -258,7 +258,7 @@ ul.checkboxTree li
 				    			<s:property value='%{#custPersonInfoElem.getAttribute("State")}'/>&nbsp;
 				    		</s:if> 
 				    		<s:if test="%{#custPersonInfoElem.getAttribute('ZipCode')!= ''}">
-				    			<s:property value='%{#custPersonInfoElem.getAttribute("ZipCode")}'/>&nbsp;
+				    			 <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#custPersonInfoElem.getAttribute('ZipCode'))"/>&nbsp;
 				    		</s:if>
 				    		<s:if test="%{#custPersonInfoElem.getAttribute('Country')!= ''}">
 				    			<s:property value='%{#custPersonInfoElem.getAttribute("Country")}'/>
