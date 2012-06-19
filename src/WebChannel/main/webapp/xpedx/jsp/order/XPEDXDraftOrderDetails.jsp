@@ -32,16 +32,6 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/ajaxValidation.js"></script>
-
-
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojo.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/dojoRequire.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/theme/theme-1/theme.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/catalogExt.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
--->
 
 <!-- carousel scripts js   -->
  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -50,22 +40,6 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js"></script>
 
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script>
-
--->
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree.js"></script>
--->
-
-<!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
--->
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 
 
@@ -956,16 +930,6 @@ $(document).ready(function(){
 <br/><div class="error" id="errorMsgTop" style="display:none;position:relative;margin-left:445px;" ></div>
 <div class="clear">&nbsp;</div>
 <!-- end item description -->
-
-<!--for selected items fieldset 
-<fieldset class="mil-edit-field">
-    <legend>For Selected Items:</legend>
-    <input class="forselected-input-edit" type="checkbox" id="selAll2" />
-    <a class="grey-ui-btn float-left" href="javascript:removeItems();"><span>Remove Items</span></a>
-</fieldset>
- end fieldset-->
-
-
 
 	<br />
 	
@@ -1965,17 +1929,7 @@ var currentAadd2ItemList = new Object();
 <br />
 
 <div>
-<!--for selected items fieldset
-<fieldset class="mil-edit-field">
-    <legend>For Selected Items:</legend>
-    <input class="forselected-input-edit" type="checkbox" id="selAll1"" />
-    <a class="grey-ui-btn float-left" href="javascript:removeItems();"><span>Remove Items</span></a>
-</fieldset>
-// end fieldset
 
-<ul id="tool-bar" class="tool-bar-bottom">
-    <li><a class="grey-ui-btn" href="javascript:update();"><span>Update Cart</span></a></li>
-</ul> -->
 </div>
 
 <s:set name="xutil" value="XMLUtils" /> <s:set
@@ -2250,21 +2204,7 @@ var currentAadd2ItemList = new Object();
 <!-- end container  -->
 
 <s:include value="XPEDXOrderTotalAdjustments.jsp" />
-<script type="text/javascript">
 
-//Removed to prevent hover
-
-/* 	Ext.onReady(function(){             	          		 
-        		  new Ext.ToolTip({        
-        			  	 target: 'tip_${orderHeaderKey}',
-					 anchor: 'right',
-					 html:	Ext.DomQuery.selectNode('.orderTotalAdjustmentLightBox').innerHTML,													
-					 autoHide: true,
-					 closable: true
-				});
-        		 	Ext.QuickTips.init();
-        		 }); */
-</script>
 
 <div style="display: none;">
 
@@ -2296,6 +2236,11 @@ var currentAadd2ItemList = new Object();
 			});
 		});
 		</script> 
+		<!--Adding below if condn for Jira 1601 - Error Msg For Replacement Item  -->
+		<s:if test="#altItemList.size() == 0">
+				<div class="error" style="margin-top:90px; margin-left:80px;">The replacement item is not available, please contact customer service.</div>
+		</s:if> 
+		<!--Fix End for Jira 1601 - Error Msg For Replacement Item  -->
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
 		<!--  hide in case of one item  -->
@@ -2445,16 +2390,7 @@ var currentAadd2ItemList = new Object();
 	
 </s:form>
 </div>
-<div class="hp-ad"><!-- iframe width="" height="" noresize
-	scrolling=No frameborder=0 marginheight=0 marginwidth=0
-	src="https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/52891/0/vh?z=xpedx&kw=&click="><script
-	language=JavaScript
-	src="https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/52891/0/vj?z=xpedx&kw=&click=&abr=$scriptiniframe"></script>
-<noscript><a
-	href="https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/52891/0/cc?z=xpedx"><img
-	src="https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/52891/0/vc?z=xpedx&kw=&click=&abr=$imginiframe"
-	width="" height="" border="0"></a></noscript>
-</iframe --></div>
+<div class="hp-ad"></div>
 <!-- END: XPEDX Panel for Replacement items -->
 
 <!-- CODE_END Replacement items - PN-->
@@ -2526,10 +2462,6 @@ var currentAadd2ItemList = new Object();
 	<ul id="tool-bar" class="tool-bar-bottom">
 		<li><a class="grey-ui-btn"
 			href="javascript:closeCopyPasteDialog()"><span>Cancel</span></a></li>
-<!-- 		<li style="float: right;"><a -->
-<!-- 			href="javascript:addItemsToQuickAddList()"><img -->
-<!-- 			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-add.gif" -->
-<!-- 			width="49" height="23" alt="Save" title="Save" /></a></li>			 -->
 			<li style="float: right;"><a href="#" onclick="javascript:addItemsToQuickAddList(); return false;" class="green-ui-btn" style="margin-left:5px;"><span>bb1Add to Quick List</span></a></li>
 	</ul>
 	</div> --%>
