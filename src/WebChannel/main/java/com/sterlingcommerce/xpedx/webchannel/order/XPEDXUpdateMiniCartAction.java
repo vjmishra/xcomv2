@@ -53,8 +53,8 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        			Element orderLineElem=it.next();						
 	        			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
 	        			String itemId = itemElement.getAttribute("ItemID");
-        				Element lineType=(Element)orderLineElem.getElementsByTagName("OrderLine").item(0);
-        				String linetype = lineType.getAttribute("LineType");
+        				//Element lineType=(Element)orderLineElem.getElementsByTagName("OrderLine").item(0);
+        				String linetype = orderLineElem.getAttribute("LineType");
         				//For Charge line, we will not be checking for entitlements.
         				if(!"M".equals(linetype) &&  !"C".equals(linetype) && !allItemID.contains(itemId))
         				{        				
