@@ -123,12 +123,18 @@ public class XPEDXWCUtils {
 	private static SecretKey sk = getSecretKey(sharedkey);	
 	private static byte[] sharedkeyfinal = sk.getEncoded();
 	private static String staticFileLocation = null;
+	private static String xpedxBuildKey =null;
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
 		staticFileLocation = staticFileLocation != null ? staticFileLocation.trim() : "/swc";
+	}
+	
+	static {
+		xpedxBuildKey = YFSSystem.getProperty("xpedxBuildKey");
+		xpedxBuildKey = xpedxBuildKey != null ? xpedxBuildKey.trim() : "";
 	}
 
 	public static String getImage(String DaysType) {
@@ -5978,6 +5984,16 @@ public class XPEDXWCUtils {
 		return staticFileLocation;
 	}
 	
+	
+	
+	public static String getXpedxBuildKey() {
+		return xpedxBuildKey;
+	}
+
+	public static void setXpedxBuildKey(String xpedxBuildKey) {
+		XPEDXWCUtils.xpedxBuildKey = xpedxBuildKey;
+	}
+
 	/**
 	 * extracts catalog main categories...
 	 * 
