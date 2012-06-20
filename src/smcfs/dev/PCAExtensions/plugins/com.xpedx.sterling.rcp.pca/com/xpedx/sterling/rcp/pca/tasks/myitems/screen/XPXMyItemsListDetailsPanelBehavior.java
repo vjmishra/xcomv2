@@ -220,6 +220,9 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
 							for (Element eleItem : listItems1) {								
 								String itemsId = eleItem.getAttribute("ItemId");
+								if(!eleItem.hasAttribute("ItemId")){
+									eleItem.setAttribute("ItemType", "99.00");
+								}
 								//uomIds = eleItemsList1.getAttribute("UnitOfMeasure");
 								//String uomDesc = (String) masterUOMList.get(uomIds);
 								if(itemDescList!=null && itemDescList.containsKey(itemsId))
@@ -522,6 +525,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						if(columnHeader.get(colHeader).equals("Supplier Part Number")){
 							
 							eleMyItemsList.setAttribute("ItemId", nextLine[supNum]);
+							eleMyItemsList.setAttribute("ItemType", "1.00");
 						}
 						if(columnHeader.get(colHeader).equals("Quantity")){
 							eleMyItemsList.setAttribute("Qty", nextLine[Qty]);
