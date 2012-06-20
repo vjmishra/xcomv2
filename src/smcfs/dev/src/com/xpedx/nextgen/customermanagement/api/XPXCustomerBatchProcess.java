@@ -384,7 +384,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 								if (sapUnchanged && !existingSAPName.equalsIgnoreCase(strSAPName)) {
                                     
 									isBuyerOrganization = updateOrganizationName (sapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"SAPName",isCustomerAvaiable,strSAPName);
-															
+									//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
+									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
+									//3740 -  Updating all Bill-to and Ship-to for SAPname Changes						
 									
 								}
 								// for JIRA 3740 End
@@ -406,14 +408,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 										createCustomerWithMasterSAPAccountNumber(env, masterSapCustomerId, strMSAPName, organizationCode, custElement);
 										isBuyerOrganization = updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId,masterSapAccountNumber,strMSAPName,"C",custElement,existingMSAPName,isAnExistingMSAP,null);
 									}
-								 }	
-									//JIRA 3740 - Start
-									//Modify MSAPName if Changed in input xml
-									if (masterSAPUnchanged && !existingMSAPName.equalsIgnoreCase(strMSAPName)) {
-										isBuyerOrganization = updateOrganizationName (masterSapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"ParentSAPName",isCustomerAvaiable,strMSAPName);
-		
-									}
-									//JIRA 3740 - End
+									
 									arrChildCustomerIds.add(sapCustomerId);
 									
 									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
@@ -509,10 +504,19 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									 * Below mentioned service just puts the xml in a Weblogic JMS which in turn forwards it to
 									 * 'XPXReportParentSAPChanges' service.
 									 */	
-									if(!masterSAPUnchanged){
+									
 									api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());	
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/	
+									
+								 }	
+									//JIRA 3740 - Start
+									//Modify MSAPName if Changed in input xml
+									if (masterSAPUnchanged && !existingMSAPName.equalsIgnoreCase(strMSAPName)) {
+										isBuyerOrganization = updateOrganizationName (masterSapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"ParentSAPName",isCustomerAvaiable,strMSAPName);
+		
 									}
+									//JIRA 3740 - End
+		
 	
 								}
 
