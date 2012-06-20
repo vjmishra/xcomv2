@@ -10,12 +10,23 @@
 	<entry key="sharePermissionLevel">XPEDXMyItemsListChange:/XPEDXMyItemsList/@SharePrivate</entry>
 	<entry key="shareAdminOnly">XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListChange:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@ShareAdminOnly</entry> <!--JIRA 3377 -->
 	
-	<entry key="name">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Name</entry>
-	<entry key="desc">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Desc</entry>
-	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate,XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@SharePrivate</entry>
-	<entry key="WCContext.customerId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@CustomerID</entry>
-	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createuserid,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Modifyuserid</entry>
-	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername</entry>
+	<entry key="name">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Name,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Name</entry>
+	<entry key="desc">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Desc,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Desc</entry>
+	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate,XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@SharePrivate,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@SharePrivate</entry>
+	<entry key="WCContext.customerId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@CustomerID,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@CustomerID</entry>
+	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createuserid,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Modifyuserid,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Modifyuserid,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Createuserid,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Createuserid</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Createusername,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Createusername</entry>
+	<entry key="orderLineItemIDs">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@ItemId</entry>
+	<entry key="orderLineItemNames">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Name</entry>
+	<entry key="orderLineItemDesc">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Desc</entry>
+	<entry key="orderLineQuantities">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Qty</entry>
+	<entry key="itemUOMs">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@UomId</entry>
+	<entry key="customerLinePONo">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@ItemPoNumber</entry>
+	<entry key="orderLineCustLineAccNo">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@JobId</entry>
+	<entry key="itemOrders">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@ItemOrder</entry>
+	<entry key="itemType">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@ItemType</entry>
+	<entry key="modifiedDate">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Modifyts</entry>
+	<entry key="modifiedDate">XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems/@Modifyts</entry>
 	
 	<!-- START - Copy list fields -->
 	<entry key="clFromListId">XPEDXMyItemsDetails:/XPEDXMyItemsItems/@MyItemsListKey</entry>

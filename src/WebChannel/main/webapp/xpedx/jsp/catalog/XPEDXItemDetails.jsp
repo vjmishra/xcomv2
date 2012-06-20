@@ -330,6 +330,50 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 		document.body.style.cursor = 'default';
 	}
 
+
+
+
+//Added for Jira 3920 - Merging create a new list and adding item into one call for Item detail page
+	function addItemToListnew(form){
+	
+		var idx = currentAadd2ItemListIndex;
+
+			var quantityValue = Ext.util.Format.trim(Ext.get('qtyBox').dom.value);	    			
+			form.dom.orderLineItemNames.value 	= document.OrderDetailsForm.orderLineItemNames.value;
+			form.dom.orderLineItemDesc.value 	= document.OrderDetailsForm.orderLineItemDesc.value;
+			
+			if (document.getElementById("itemUOMsSelect") == null){
+				form.dom.itemUOMs.value = "EACH";
+			} else {
+				form.dom.itemUOMs.value 	= document.getElementById("itemUOMsSelect").value;
+					
+			}
+			
+			if (document.getElementById("qtyBox")){
+				form.dom.orderLineQuantities.value = quantityValue;
+			}
+
+			//Job#
+			if (document.getElementById("Job")!=null){
+				form.dom.orderLineCustLineAccNo.value = document.getElementById("Job").value;
+			}
+
+			if(document.getElementById("customerPONo")!=null) 
+			{
+				form.dom.customerLinePONo.value=document.getElementById("customerPONo").value;
+			}
+			
+	       
+	        var itemCountValOfSelList = "0";//= document.getElementById("itemCount_"+currentAadd2ItemList.value);
+	        
+	        form.dom.orderLineItemOrders.value = Number(itemCountValOfSelList.value) + 1;
+		       
+		        var itemId = document.OrderDetailsForm.orderLineItemIDs.value;  
+		        form.dom.orderLineItemIDs.value = itemId;
+		        form.dom.fromItemDetail.value=true;
+	   
+	}
+	   	
 	function submitNewlistAddItem(xForm){
 		//Validate the form
 		try{
@@ -369,13 +413,15 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	    //Submit the data via ajax
 	    
 	    //Init vars
-	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />
+	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/xpedx/myItems" escapeAmp="false" />
 
 		var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
 	    url = ReplaceAll(url,"&amp;",'&');
 	    
 	    //Execute the call
 	    document.body.style.cursor = 'wait';
+	   	    
+	    addItemToListnew(form);
 	    $.fancybox.close();
 	  //Added For Jira 2903
 	  //Commented for 3475
@@ -386,45 +432,16 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	      form: xForm,
 	      method: 'POST',
 	      success: function (response, request){
-	          document.body.style.cursor = 'default';
-	          
-	          //Get the data
-	          var data = response.responseText;
-	          var listKey 	= getValueFromHTML(data, 'listKey" value="');
-	          var listName 	= getValueFromHTML(data, 'listName" value="');
-	          //Add the items to the list
-	          
-			  var newListRadio = createRadioElement('itemListRadio','itemListRadio', true, listKey, listName);
-			  document.getElementById('divAdd2ListRadio').appendChild(newListRadio);
-			  //setArrayValue(listKey, 0);
-			  
-			  //Create the hidden element for itemCount
-			  var hiddenInput = document.createElement('input');         
-			  hiddenInput.setAttribute('type', 'hidden');         
-			  hiddenInput.setAttribute('name', 'itemCount_'+listKey); 
-			  hiddenInput.setAttribute('id', 'itemCount_'+listKey);
-			  hiddenInput.setAttribute('value', '0'); 
-			  document.getElementById('divAdd2ListRadio').appendChild(hiddenInput);
-			  
-			  //Setting the list and its index in context before adding items
-			  currentAadd2ItemList = newListRadio;
-			  var allChildElements = $("div[id=divAdd2ListRadio] :radio");
-			  if(allChildElements!=null)
-			  	currentAadd2ItemListIndex = allChildElements.length - 1;
-			  	
-			  //setArrayValue(currentAadd2ItemListIndex,listKey, 0);
-			   //Add the item into the list selected
-			  	addItemsToList();
-			  	//Wait for 3 sec and then take the dialog off 
-				var task = new Ext.util.DelayedTask(function(){
-					Ext.Msg.hide();
-				});
-				task.delay(3000);
-			 
-			  
-			  //reloadMenu();
-			  // Removal of MIL dropdown list from header for performance improvement
-			 // Ext.Msg.hide();
+	    	 document.body.style.cursor = 'wait';	    	
+	          var myMessageDiv = document.getElementById("errorMsgForQty");	            
+	            myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
+	            myMessageDiv.style.display = "inline-block"; 
+	            myMessageDiv.setAttribute("class", "success");	           
+		  		/*Web Trends tag start*/ 
+		  		writeMetaTag("DCSext.w_x_list_additem","1");
+		  		/*Web Trends tag end*/
+		  		 document.body.style.cursor = 'default';
+	         
 	      },
 	      failure: function (response, request){
 	          document.body.style.cursor = 'default';

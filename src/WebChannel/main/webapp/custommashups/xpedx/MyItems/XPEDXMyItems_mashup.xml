@@ -159,6 +159,29 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='XPEDXMyItemsListCreateAndAddItem' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="createXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+				    <XPEDXMyItemsItemsList>
+				    <XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				    	Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
+				    	Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="">
+					</XPEDXMyItemsItems>
+					</XPEDXMyItemsItemsList>
+				</XPEDXMyItemsList>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" "/>
+			</Template>
+		</API>
+	</mashup>
+	
 	<mashup id ='XPEDXMyItemsListDelete' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="deleteXPEDX_MyItemsList">
