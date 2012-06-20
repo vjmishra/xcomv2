@@ -12,8 +12,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 /**
  * @author Nimesh K Bhate
  * To redirect user after session timeout to login page.
@@ -55,7 +53,11 @@ public class XPEDXSessionManageFilter implements Filter {
 				    return;
 				}
 				}
-				
+				if(req.getSession().getAttribute("loggedInFormattedCustomerIDMap") != null)
+				{
+					chain.doFilter(request, response);
+				    return;
+				}
 				 if(req.getSession().getAttribute("loggedInCustomerID") == null){
 					 resp.sendRedirect(redirectURL.toString());
 					 return;
