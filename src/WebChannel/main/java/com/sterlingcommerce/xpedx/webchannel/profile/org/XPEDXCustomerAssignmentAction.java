@@ -460,6 +460,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		//wcContext.getSCUIContext().getRequest().getSession().setAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"true");
 		XPEDXWCUtils.removeObectFromCache("showSampleRequest");
 		resetOrganizationValuesForShipToCustomer();
 		boolean isCustomerSelectedIntoContext = XPEDXWCUtils
