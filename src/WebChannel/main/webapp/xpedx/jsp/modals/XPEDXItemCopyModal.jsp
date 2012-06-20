@@ -58,7 +58,47 @@ function restrictMaxLength(Object, maxLen){
 	<textarea style="" rows="2" id="listDescHL" name="listDesc" value="" onkeyup="javascript:restrictTextareaMaxLength(this,255);" maxlength="250" title="Description"
 		class="x-input standard-textarea"></textarea>
 
-	<s:hidden name="listKey" value="new"></s:hidden>
+
+<s:set name='appFlowContext' value='#session.FlowContext' />
+<s:set name='isFlowInContext'
+	value='#util.isFlowInContext(#appFlowContext)' />
+<s:set name='orderHeaderKey' value='%{#appFlowContext.key}' />
+<s:hidden name="orderHeaderKey" value='%{#orderHeaderKey}' />
+			<s:hidden name="draft" value="%{#draftOrderFlag}" />
+			<s:hidden name='Currency' value='%{#currencyCode}' />
+			<s:hidden name='mode' value='%{#mode}' />
+			<s:hidden name='fullBackURL' value='%{#returnURL}' />
+			<s:hidden name="orderLineKeyForNote" id="orderLineKeyForNote"
+				value="" />
+
+			
+			<s:hidden name="selectedLineItem" value="1" />
+			<s:hidden name="orderLineKeys" value="1" />
+			<s:hidden name="orderLineItemOrders" value="" />
+			<s:hidden name="fromItemDetail" value="" />
+
+			<s:hidden name="orderLineItemIDs" value="%{#itemID}" />
+
+			<s:set name="shortDesc"
+				value='%{#utilMIL.formatEscapeCharacters(#xutil.getAttribute(#primaryInfoElem, "ShortDescription"))}' />
+			<s:set name="longDesc"
+				value='%{#utilMIL.formatEscapeCharacters(#xutil.getAttribute(#primaryInfoElem, "Description"))}' />
+
+			<s:hidden name="orderLineItemNames" value='%{#shortDesc}' />
+			<s:hidden name="orderLineItemDesc" value='%{#longDesc}' />
+
+			<s:hidden name="orderLineQuantities"
+				value="%{#xutil.getAttribute(#primaryInfoElem, 'MinOrderQuantity')}" />
+			<s:hidden name="orderLineCustLineAccNo" value=" " />
+			<s:hidden name="itemUOMs" value=" " />
+			<s:hidden name="sendToItemDetails" value="true" />
+
+			<s:hidden name="itemID" value="%{#itemID}" />
+			<s:hidden name="unitOfMeasure" value="%{#parameters.unitOfMeasure}" />
+			<s:hidden name="customerLinePONo" value="" />		
+
+
+	<s:hidden name="listKey" id="listKey" value="new"></s:hidden>
 	<s:hidden name="editMode" value="%{true}"></s:hidden>
 	<s:hidden name="itemCount" value="%{0}"></s:hidden>
 	<s:hidden id="clFromListId" name="clFromListId" value=""></s:hidden>

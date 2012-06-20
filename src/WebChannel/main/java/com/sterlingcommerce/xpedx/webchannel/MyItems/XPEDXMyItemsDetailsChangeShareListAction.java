@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.yantra.yfc.util.YFCDate;
+
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
@@ -68,6 +70,116 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 	private boolean newList;
 	private ArrayList<String> countCustomer;
 	
+	//Updated for JIRA 3920 - Ragini
+	private boolean fromItemDetail;
+	public boolean isFromItemDetail() {
+		return fromItemDetail;
+	}
+
+	public void setFromItemDetail(boolean fromItemDetail) {
+		this.fromItemDetail = fromItemDetail;
+	}
+
+	private String modifiedDate;
+	private String orderLineItemIDs;
+	private String orderLineItemOrders;
+	private String customerLinePONo;
+	private String orderLineCustLineAccNo;
+	private String orderLineQuantities;
+	private String itemUOMs;
+	private String orderLineItemNames;
+	private String orderLineItemDesc;
+	private String itemOrders;
+	private String itemType;
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public String getItemOrders() {
+		return itemOrders;
+	}
+
+	public void setItemOrders(String itemOrders) {
+		this.itemOrders = itemOrders;
+	}
+
+	public String getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(String modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public String getOrderLineItemIDs() {
+		return orderLineItemIDs;
+	}
+
+	public void setOrderLineItemIDs(String orderLineItemIDs) {
+		this.orderLineItemIDs = orderLineItemIDs;
+	}
+
+	public String getOrderLineItemOrders() {
+		return orderLineItemOrders;
+	}
+
+	public void setOrderLineItemOrders(String orderLineItemOrders) {
+		this.orderLineItemOrders = orderLineItemOrders;
+	}
+
+	public String getCustomerLinePONo() {
+		return customerLinePONo;
+	}
+
+	public void setCustomerLinePONo(String customerLinePONo) {
+		this.customerLinePONo = customerLinePONo;
+	}
+
+	public String getOrderLineCustLineAccNo() {
+		return orderLineCustLineAccNo;
+	}
+
+	public void setOrderLineCustLineAccNo(String orderLineCustLineAccNo) {
+		this.orderLineCustLineAccNo = orderLineCustLineAccNo;
+	}
+
+	public String getOrderLineQuantities() {
+		return orderLineQuantities;
+	}
+
+	public void setOrderLineQuantities(String orderLineQuantities) {
+		this.orderLineQuantities = orderLineQuantities;
+	}
+
+	public String getItemUOMs() {
+		return itemUOMs;
+	}
+
+	public void setItemUOMs(String itemUOMs) {
+		this.itemUOMs = itemUOMs;
+	}
+
+	public String getOrderLineItemNames() {
+		return orderLineItemNames;
+	}
+
+	public void setOrderLineItemNames(String orderLineItemNames) {
+		this.orderLineItemNames = orderLineItemNames;
+	}
+
+	public String getOrderLineItemDesc() {
+		return orderLineItemDesc;
+	}
+
+	public void setOrderLineItemDesc(String orderLineItemDesc) {
+		this.orderLineItemDesc = orderLineItemDesc;
+	}
+//End of Jira 3920
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public String execute() {
@@ -78,7 +190,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			newList = false;
 			//Check if this is a new list
 			LOG.info("Check 1: getListKey = " + getListKey());
-			if (getListKey().trim().equals("new")){
+			if (getListKey().trim().equals("new")&& !fromItemDetail){
 				newList = true;
 				setName(getListName());
 				setDesc(getListDesc());
@@ -88,6 +200,21 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				LOG.info("Check 1 - Done: getListKey = " + getListKey());
 			}
+			//Added for Jira 3920 - Merging CreateNew list and add Item in list call for item detail page
+			else if(getListKey().trim().contains("new") && fromItemDetail){
+				
+				newList = true;
+				setName(getListName());
+				setDesc(getListDesc());
+				setSharePrivate(getSharePermissionLevel());
+				setShareAdminOnly(shareAdminOnly); //JIRA 3377
+				setItemOrders("1");
+				YFCDate modifiedYFCDate = new YFCDate();
+				modifiedDate = modifiedYFCDate.getString();
+				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
+				setListKey(res1.getAttribute("MyItemsListKey")) ;
+				LOG.info("Check 1 - Done: getListKey = " + getListKey());
+			}//end of Jira 3920
 			/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
 			
 			 Map<String ,Integer> customerIDCountMap=new HashMap<String ,Integer>();
@@ -339,6 +466,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		/*Web Trends tag end */
 		if(clAjax && newList)
 			return "copy";
+		else if(newList && fromItemDetail){
+			return SUCCESS;
+		}
 		return SUCCESS;
 	}
 	
