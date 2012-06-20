@@ -84,8 +84,6 @@ public class ErrorLogger {
 							
 							StringBuffer logString = new StringBuffer(xpxErrorElem.getAttribute("TargetSystem"));
 							logString.append("|");
-							logString.append("ExceptionID="+randomNumber);						
-							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("SourceSystem"));
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("TransType"));
@@ -96,8 +94,9 @@ public class ErrorLogger {
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("ErrorClass"));
 							logString.append("|");
-							logString.append(errorObj.getException());											
-							yfcLogCatlog.error(logString.toString());						
+							logString.append("ExceptionID="+randomNumber);
+							logString.append(" "+errorObj.getException());											
+							yfcLogCatlog.error(logString.toString());
 						}
 					}
 				}
