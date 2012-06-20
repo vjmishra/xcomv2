@@ -28,7 +28,7 @@ import com.yantra.yfs.japi.YFSException;
 import com.xpedx.constants.XpedxConstants;
 /*
  * input xml
- * <CustomerList>
+ * <CustomerList >
 	<Customer 
 		EnvironmentId="" CompanyCode="" ProcessCode="" CustomerDivision="" LegacyCustomerNumber="" 
 		SuffixType="" ShipToSuffix="" BillToSuffix="" CustomerOrderBranch="" ShipFromBranch=""
