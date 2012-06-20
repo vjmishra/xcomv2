@@ -874,7 +874,7 @@ public void searchCustomer(){
 		return;
 	}
 	
-	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
+	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") && ((BillToValue == null && "".equalsIgnoreCase(BillToValue)))){
 		YRCPlatformUI.showError("Information", "Please enter a customer name");	
 		return;
 	}
