@@ -5214,7 +5214,8 @@ public class XPEDXWCUtils {
 	public static void setSAPCustomerExtnFieldsInCache()
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-		String defaultShipToChanged = (String)getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED);
+		
+		String defaultShipToChanged = (String)getObjectFromCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE);
 		try
 		{
 			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged)){
@@ -5224,7 +5225,8 @@ public class XPEDXWCUtils {
 				setObectInCache("customerFieldsSessionMap", customerFieldsMap);
 				setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP"));
 				// reset the flag once used
-				setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false");
+				setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
+				
 				//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 			}
 		}
