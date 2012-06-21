@@ -42,15 +42,15 @@
 <head>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- begin styles. These should be the only three styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header.css" />
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 <link rel="stylesheet" type="text/css"
-               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
 <![endif]-->
 <!--  End Styles -->
 
@@ -90,11 +90,11 @@
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 </head>
 <!-- END swc:head -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 <script>
 var priceCheck;
 function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor) {
@@ -934,7 +934,7 @@ function SubmitActionWithValidation()
 				value="#xutil.getAttribute(#primaryInfoElem, 'ImageLabel')" />
 			<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 			<s:if test='%{#imageURL=="/"}'>
-				<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
 			<s:set name="itemAssets"
 				value='#xutil.getChildElement(#itemElem,"AssetList")' />
@@ -946,7 +946,7 @@ function SubmitActionWithValidation()
 			<s:set name='pImg'
 				value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
 			<s:if test='%{#pImg=="/"}'>
-				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
 			<s:set name="itemDataSheets"
 				value='#catalogUtil.getAssetList(#itemAssets,"ITEM_DATA_SHEET")' />
@@ -1101,7 +1101,7 @@ function SubmitActionWithValidation()
 			
 			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
 			
-			<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="margin-right: 15px;margin-top: 0px;"> <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16"
+			<a href="javascript:window.print()"><span class="print-ico-xpedx underlink" style="margin-right: 15px;margin-top: 0px;"> <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16"
 			height="15" alt="Print Page" />Print Page</span>
 			</a>
 		</div>				
@@ -1158,7 +1158,7 @@ function SubmitActionWithValidation()
 			value="#xutil.getAttribute(#primaryInfoElem, 'ImageLabel')" /> <s:set
 			name='imageURL' value="#imageLocation + '/' + #imageId " />
 		<s:if test='%{#imageURL=="/"}'>
-				<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 		</s:if>
 		<s:set name="itemAssets"
 			value='#xutil.getChildElement(#itemElem,"AssetList")' /> <!--<s:set name="itemLargeImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_LRG_1")' />-->
@@ -1276,7 +1276,7 @@ function SubmitActionWithValidation()
 							value="#xutil.getAttribute(#itemAsset, 'Label')" />
 						<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 						<s:if test='%{#imageURL=="/"}'>
-							<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+							<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 						</s:if>
 						<!-- <img src="<s:url value='%{#imageURL}' includeParams='none' />"
 										alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" /> -->
@@ -1322,7 +1322,7 @@ function SubmitActionWithValidation()
 			<s:set name='imageMainURL'
 				value="#imageMainLocation + #imageMainId " />
 			<s:if test='%{#imageMainURL=="/"}'>
-				<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
 			<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>"
 				width="150" height="150" id="productImg1"
@@ -1333,9 +1333,9 @@ function SubmitActionWithValidation()
 		</s:else> <s:if
 			test='%{#hasItemLargeImages != null && #hasItemLargeImages == "true"}'>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox.js"></script>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils.js"></script>
 			<script>
         	Ext.ux.Lightbox.register('a.imageViewer', true); // true to show them as a set
         	</script>
@@ -2136,9 +2136,9 @@ o.value=""
 </script>
 
 <script type="text/javascript" 
-	src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric<s:property value='#wcUtil.xpedxBuildKey' />.js'> </script>
+	src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric.js'> </script>
 <script type="text/javascript" 
-	src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3<s:property value='#wcUtil.xpedxBuildKey' />.js'></script>
+	src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.maskedinput-1.3.js'></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.phone-numeric').numeric(false); 
@@ -2353,7 +2353,7 @@ function blockDiv()
 </div>        
 <!-- end of jira 2971 -->
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/validation.js"></script>
@@ -2376,18 +2376,18 @@ function blockDiv()
 
 -->
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten.js"></script>
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
 --><!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
 -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/XPEDXItemdetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/XPEDXItemdetails.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI.js"></script>
 
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 </body>
 </s:else>
