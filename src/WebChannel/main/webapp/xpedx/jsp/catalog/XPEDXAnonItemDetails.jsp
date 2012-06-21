@@ -33,7 +33,7 @@
 			<s:set name='pImg'
 				value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
 			<s:if test='%{#pImg=="/"}'>
-				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>			
 			<s:set name="itemDataSheets" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_DATA_SHEET")' />
 			<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' />
@@ -123,7 +123,7 @@
 			<s:set name='pImg'
 				value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
 			<s:if test='%{#pImg=="/"}'>
-				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
 			<s:set name="itemDataSheets"
 				value='#catalogUtil.getAssetList(#itemAssets,"ITEM_DATA_SHEET")' />
@@ -283,7 +283,7 @@
 		style="border-top: 1px solid #CCCCCC; padding-top: 20px;">
 		<li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
 		<li style="float: right;"><a href="javascript:submitSL();"> <img
-			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save.gif"
 			width="49" height="23" alt="Save" title="Save" /> </a></li>
 	</ul>
 
@@ -494,7 +494,7 @@
 			<s:set name='imageMainURL'
 				value="#imageMainLocation + '/' + #imageMainId " />
 			<s:if test='%{#imageMainURL=="/"}'>
-				<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
+				<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 			</s:if>
 			<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>"
 				width="150" height="150" id="productImg1"
@@ -505,9 +505,9 @@
 		</s:else> <s:if
 			test='%{#hasItemLargeImages != null && #hasItemLargeImages == "true"}'>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/component/lightbox.js"></script>
 			<script type="text/javascript"
-				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/commonutils.js"></script>
 			<script>
         	Ext.ux.Lightbox.register('a.imageViewer', true); // true to show them as a set
         	</script>
@@ -741,7 +741,7 @@
 		
 		</div>
 	</div>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <!-- BEGIN footer -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- END footer -->
