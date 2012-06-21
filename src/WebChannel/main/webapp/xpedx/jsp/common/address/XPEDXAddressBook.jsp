@@ -10,7 +10,7 @@ com.sterlingcommerce.webchannel.common.address.GetAddressBookAction.java.
 */
 %>
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/address/addressBook.js" ></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/address/addressBook<s:property value='#wcUtil.xpedxBuildKey' />.js" ></script>
 <script type="text/javascript" language="JavaScript">
 
 var <s:property value="addressArrayName"/> = new Array();
@@ -63,7 +63,7 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 
 </script>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/common/address/addressBook.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/common/address/addressBook<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 
 <s:if test="!addressBook.isEmpty()">
