@@ -52,14 +52,14 @@
 							value="#xutil.getAttribute(#itemAsset, 'Label')" />
 						<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 						<s:if test='%{#imageURL=="/"}'>
-						 <s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+						 <s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 					   </s:if>	
 					   <s:else>
 						<img src="<s:url value='%{#imageURL}' includeParams='none' />" alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" />
 						</s:else>
 		        	</s:if>
 		        	<s:else>
-		        		<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+		        		<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 		        		<img src="<s:url value='%{#imageIdBlank}'/>" width="52" height="50" align="left" />
 		        	</s:else>
 
@@ -146,14 +146,14 @@
 						value="#xutil.getAttribute(#itemAsset, 'Label')" />
 					<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 					<s:if test='%{#imageURL=="/"}'>
-						 <s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+						 <s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 					</s:if>	
 					<s:else>
 					<img src="<s:url value='%{#imageURL}' includeParams='none' />" 	alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" />
 					</s:else>
 				</s:if>
 				<s:else>
-					<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' /> <img src="<s:url value='%{#imageIdBlank}'/>" width="52" height="50" align="left" />
+					<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' /> <img src="<s:url value='%{#imageIdBlank}'/>" width="52" height="50" align="left" />
 				</s:else>
 				<div class="clearall"></div>
 				<div class="promo-txt">
@@ -236,14 +236,14 @@
 						value="#xutil.getAttribute(#itemAsset, 'Label')" />
 					<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
 					<s:if test='%{#imageURL=="/"}'>
-								<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+								<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 							</s:if>	
 					<s:else>
 					     <img src="<s:url value='%{#imageURL}' includeParams='none' />"	alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" />
 					</s:else>
 				</s:if>
 				<s:else>
-					<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+					<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 					<img src="<s:url value='%{#imageIdBlank}'/>"
 						width="52" height="50" align="left" />
 				</s:else>
@@ -338,7 +338,7 @@
 								alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" />
 						</s:if>
 						<s:else>
-							<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+							<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 							<img src="<s:url value='%{#imageIdBlank}'/>"
 								width="52" height="50" align="left" />
 						</s:else>
@@ -435,7 +435,7 @@
 											alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" />
 									</s:if>
 									<s:else>
-										<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+										<s:set name='imageIdBlank' value='%{"/xpedx/images/INF_150x150<s:property value='#wcUtil.xpedxBuildKey' />.jpg"}' />
 										<img src="<s:url value='%{#imageIdBlank}'/>"
 											width="52" height="50" align="left" />
 									</s:else>
