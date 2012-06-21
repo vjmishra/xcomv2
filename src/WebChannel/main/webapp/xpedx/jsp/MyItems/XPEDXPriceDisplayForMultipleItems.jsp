@@ -7,18 +7,25 @@
 
 <s:set name='_action' value='[0]' />
 <s:set name="lineNumber" value="%{1}" />
+<s:set name='itemOrderSeq' value="%{1}" />					
 <s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
 <s:hidden value = "%{#_action.isValidateOrderMul()}" id="shilpa21"></s:hidden>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
 					<s:set name='itemId' value='#item.getAttribute("ItemId")+"" ' />
-					<s:hidden id="itemOrder" name="itemOrder" value="%{#_action.getItemOrderMap().get(#itemId)}" /> 
-					<s:set name="itemOrder" value="%{#_action.getItemOrderMap().get(#itemId)}" />	
-					<s:set name="validateOrderMul111" value="%{#_action.getValidateCheck().get(#itemId)}" />
-					<s:set name="category" value="%{#_action.getCatMap().get(#itemId)}" />
-					<s:hidden id="validateOrderMul111" name="validateOrderMul" value="%{#_action.getValidateCheck().get(#itemId)}" />
+					<s:set name='tmpItemOrder' value='%{#_action.getItemOrderMap().get(#itemId+":"+#itemOrderSeq)}' />
+					<s:if test='%{#tmpItemOrder==null}'>
+						<s:hidden id="itemOrder" name="itemOrder" value="%{#tmpItemOrder}"/>
+					</s:if>
+					<s:else>
+						<s:hidden id="itemOrder" name="itemOrder" value="%{#tmpItemOrder.substring(#tmpItemOrder.indexOf(':'))}" /> 
+					</s:else>
+					<s:set name="itemOrder" value='%{#_action.getItemOrderMap().get(#itemId+":"+#itemOrderSeq)}' />	
+					<s:set name="validateOrderMul111" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
+					<s:set name="category" value="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq)}" />
+					<s:hidden id="validateOrderMul111" name="validateOrderMul" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
 								<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
-						 <div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:none; background-color:#fafafa;"</s:else> >   
+								<div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:none; background-color:#fafafa;"</s:else> >   
                             <!-- end prefs  -->
                           
                            
@@ -53,6 +60,7 @@
 <s:else>
 		<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 </s:else>
+
 <s:if test='%{priceHoverMap!=null && priceHoverMap.get(#jsonKey)!=null}' >
 	<s:set name="itemPriceInfo" value='priceHoverMap.get(#jsonKey)' />
 	<s:set name="displayPriceForUoms" value='%{#itemPriceInfo.getDisplayPriceForUoms()}' />
@@ -85,8 +93,8 @@
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<s:if test="%{#_action.getValidateCheck().get(#itemId) != true}">
-			<s:if test="%{#_action.getCatMap().get(#itemId) == 'Paper'}" >
+			<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
+			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
 			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if></s:if></i></td>
 			
 			<s:else>
@@ -197,8 +205,8 @@
 				</s:div>
 
 			</td>
-			<s:if test="%{#_action.getValidateCheck().get(#itemId) != true}">
-			<s:if test="%{#_action.getCatMap().get(#itemId) == 'Paper'}" >
+			<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
+			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
 			<td colspan="3" width="33%" valign="top">
 			<%--	Using CustomerContactBean object from session
 			<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -246,7 +254,7 @@
 			<td colspan="3" width="33%" valign="top"><span></span></td>
 			</s:else>
 </s:if>
-<s:if test="%{#_action.getValidateCheck().get(#itemId) != true}">
+<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
 			<td colspan="3" width="28%" valign="top">
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -356,4 +364,5 @@
                        
                         </div>
 					<s:set name="lineNumber" value="%{#lineNumber+1}" />
+					<s:set name='itemOrderSeq' value='%{#itemOrderSeq + 1}' />
 					</s:iterator>

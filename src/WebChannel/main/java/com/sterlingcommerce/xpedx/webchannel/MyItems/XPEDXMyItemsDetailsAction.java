@@ -1104,7 +1104,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String id = item.getAttribute("MyItemsKey");
 				String itemId = item.getAttribute("ItemId");
 				itemIDList.add(itemId);
-				itemOrderMap.put(itemId, itemOrder.get(i));
+				itemOrderMap.put(itemId+":"+(i+1), itemOrder.get(i));
 				String itemUom = enteredUOMs.get(i);
 				String orderMultiple = (String)orderMulMap.get(itemId);
 				uoms = (Map) itemCon.get(itemId);
@@ -1123,7 +1123,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				
 				if(OM!= 0){
 					validateOrderMul = true;
-					validateCheck.put(itemId,validateOrderMul);
+					validateCheck.put(itemId+":"+(i+1),validateOrderMul);
 				}
 				
 				boolean addThisItem = checkAllItems;
@@ -1211,7 +1211,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								}
 						}
 						catagory = currentCategoryName;
-						catMap.put(itemID,catagory);
+						catMap.put(itemID+":"+(i+1),catagory);
 					}
 					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true,null,false,null);
 				}
