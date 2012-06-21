@@ -7,7 +7,7 @@
 <html>
 <head>
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <meta name="DCSext.w_x_ord_shov_edit" content="1" />
 <!-- Web Trends tag end  -->
 <s:set name='_action' value='[0]' />
