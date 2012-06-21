@@ -247,6 +247,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		{					  
 			String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11";
 			XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
+			if(searchTerm.trim().length() == 1 && (searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0)) {
+				searchTerm = "";
+			}
 		}
 		else
 		{
