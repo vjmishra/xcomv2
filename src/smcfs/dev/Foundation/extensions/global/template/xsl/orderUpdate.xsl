@@ -343,7 +343,7 @@
                   <xsl:value-of select="normalize-space(//BillToState)" />
                </xsl:attribute>
 
-               <xsl:attribute name="Zip">
+               <xsl:attribute name="ZipCode">
                   <xsl:value-of select="normalize-space(//BillToZIP)" />
                </xsl:attribute>
 
@@ -451,8 +451,8 @@
                      </xsl:attribute>
 
                      <xsl:attribute name="ExtnPriceOverrideFlag">
-			<xsl:choose>
-				<xsl:when test="((normalize-space(PriceOverrideFlag)='P') or (normalize-space(PriceOverrideFlag)='p'))">
+					<xsl:choose>
+				<xsl:when test="((normalize-space(PriceOverrideFlag)='P') or (normalize-space(PriceOverrideFlag)='p')) or normalize-space(LineType) = 'M'">
 					<xsl:value-of select="'Y'" />
 				</xsl:when>
 				<xsl:otherwise>
