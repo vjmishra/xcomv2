@@ -46,8 +46,8 @@
 }
 #tips-container {
 	width: 75px; 
-	float: right;	
-	margin-top: 3px;
+	float: left:10px;	
+	margin-top: 0px;
 }
 
 
@@ -1716,10 +1716,10 @@ inStoreIcon {
     background: url("../../images/icons/22x22_header_search.png") no-repeat scroll 0 0 transparent;
     border: medium none;
     cursor: pointer;
-    height: 22px;
+    height: 23px;
     margin-left: 0px;
     position: relative;
-    top: -2px;
+    top: -3px; /* jira 3826 */
     width: 22px;
 }
 .checkboxtxt {

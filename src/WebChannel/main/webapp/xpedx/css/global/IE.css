@@ -117,8 +117,9 @@ input#newSearch_searchTerm {
 }
 
 .searchbox-1 .searchButton {
-    top: -2px;
+    top: 0px; /* jira 3826 */
     margin-left: 3px;
+    height: 30px;
 }
 
 div div.searchbox-1 input {
@@ -134,7 +135,4 @@ div div.searchbox-1.auth input {
 
 .return-request div.middle-section table td.ie-fix-td {
 	padding-top: 7px !important; 
-}
-#tips-container {
-	margin-top: 4px;	
 }
