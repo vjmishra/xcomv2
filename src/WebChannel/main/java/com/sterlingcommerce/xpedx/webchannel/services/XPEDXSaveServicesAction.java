@@ -326,7 +326,15 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String extnECsr1EmailID = "";
 			String extnECsr2EmailID = "";
 			String sapCustomerKey = "";
+			/**
+			 * JIRA 3756 -Flag added .
+			 */
+			boolean checkCCGFlag = false;
+			boolean checkCCPFlag = false;
 			
+			/**
+			 * JIRA 3756 -End
+			 */
 			
 			// Getting ship to address and customer details
 
@@ -556,6 +564,36 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String toEmailPaper = getPaperorGeneralPaperEmail(paperPSObj);
 			String sampleServiceRequest = "";
 			
+			/*JIRA 3756 -Start Check empty condition in toEmail address .
+			 * If toEmail is empty then ccEamil should be toEmail .
+			 * 
+			 * */
+			if((toEmailGen == null || toEmailGen == "") && (toEmailPaper == null || toEmailPaper == "") && (ccEMail!=null && ccEMail.trim().length() > 0)){
+				if((toEmailGen == null || toEmailGen == "") && (paperFSObj.equalsIgnoreCase("facilitySupplies"))){
+					toEmailGen = ccEMail;
+				}
+				if((toEmailPaper == null || toEmailPaper == "") && (paperPSObj.equalsIgnoreCase("PaperSupplies"))){
+					toEmailPaper = ccEMail;
+				}
+				ccEMail = "";
+			}else
+			if((toEmailGen == null || toEmailGen == "") && (toEmailPaper != null && toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
+				if(paperFSObj.equalsIgnoreCase("facilitySupplies")){
+				toEmailGen = ccEMail;
+				checkCCGFlag = true;
+				}
+				
+			}else if((toEmailGen != null && toEmailGen.trim().length() > 0 ) && (toEmailPaper == null || toEmailPaper == "") && (ccEMail!=null && ccEMail.trim().length() > 0)){
+				if(paperPSObj.equalsIgnoreCase("PaperSupplies")){
+				toEmailPaper = ccEMail;
+				checkCCPFlag = true;
+				}
+			}
+			/**
+			 * JIRA 3756 -End.
+			 * 
+			 */
+			
 			/**
 			 JIRA 3160 -End
 			 */
@@ -568,6 +606,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 					// Creating input xml to send an email
 					Document outputDoc = null;
 					sampleServiceRequest = "SampleServiceRequest";
+					if(checkCCGFlag){
+						ccEMail = "";
+					}
 					Element input = createInputXMLForGeneral(customerEmail, toEmailGen,ccEMail,generalList,sampleServiceRequest);
 					String inputXml = SCXmlUtil.getString(input);
 					LOG.debug("XPEDXSaveServicesAction() Input XML: " + inputXml);
@@ -579,11 +620,13 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 						LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));  //Jira 3554 Changes done
 					}
 				}
-				if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){
-					
+				if(	toEmailPaper != null && toEmailPaper.trim().length() > 0){					
 				// Creating input xml to send an email
 				Document outputDoc1 = null;
-				sampleServiceRequest = "SampleServiceRequestPaper";				
+				sampleServiceRequest = "SampleServiceRequestPaper";	
+				if(checkCCPFlag){
+					ccEMail = "";
+				}
 				Element input = createInputXMLForGeneral(customerEmail, toEmailPaper,ccEMail,paperList,sampleServiceRequest);
 				String inputXml = SCXmlUtil.getString(input);
 				LOG.debug("XPEDXSaveServicesAction() Input XML : " + inputXml);
@@ -601,12 +644,16 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			if(toEmailGen != null && toEmailGen.trim().length() > 0){
 				toMailaddres = toEmailGen;
 				sampleServiceRequest = "SampleServiceRequest";
-				
+				if(checkCCGFlag){
+					ccEMail = "";
+				}
 				
 			}else if(toEmailPaper != null && toEmailPaper.trim().length() > 0){
 				toMailaddres = toEmailPaper;
 				sampleServiceRequest = "SampleServiceRequestPaper";				
-				
+				if(checkCCPFlag){
+					ccEMail = "";
+				}
 				
 			}
 			// Creating input xml to send an email
