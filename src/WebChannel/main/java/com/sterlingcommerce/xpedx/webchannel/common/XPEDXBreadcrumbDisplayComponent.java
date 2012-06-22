@@ -67,6 +67,8 @@ public class XPEDXBreadcrumbDisplayComponent
                String disp = this.getBreadcrumbDisplay(i, bcl, null, false);
             	// String disp = this.getBreadcrumbDisplay(i, bcl, "Catalog", false);
             	 /* changed for using Catalog as the root element */
+               if(disp.indexOf("*") == 0 || disp.indexOf("?") == 0)
+            	   disp = disp.substring(1, disp.length());
                 sb.append(disp);
 
                 // If the breadcrumb is configured to be removable
