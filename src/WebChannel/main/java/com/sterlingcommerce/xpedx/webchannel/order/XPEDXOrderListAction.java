@@ -609,6 +609,15 @@ public class XPEDXOrderListAction extends OrderListAction {
 			String orderStatus = order.getAttribute("Status"); //SCXmlUtil.getAttribute(order, "Status");
 			if("Customer".equals(orderType))
 			{
+				//To get The latest hold order 
+				if(xpedxParentOrderListMap.get(extnWebConfNum) != null)
+				{
+					Element oldOrder=xpedxParentOrderListMap.get(extnWebConfNum);
+					if(oldOrder.getAttribute("HoldType") != null &&
+							 XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(oldOrder.getAttribute("HoldType")))
+						continue;
+				}
+				//Ends
 				xpedxParentOrderListMap.put(extnWebConfNum, order);
 				continue;
 			}
