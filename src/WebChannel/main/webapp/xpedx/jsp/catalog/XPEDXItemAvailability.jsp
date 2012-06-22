@@ -27,7 +27,7 @@
 
 
 	<tbody>
-		<tr class="my-headings" style="border-top: 0px none; background:url('/swc/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
+		<tr class="my-headings" style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td colspan="3"><span><i>Availability</i></span></td>
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
 			<td colspan="3" class="left">
