@@ -39,6 +39,7 @@ import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.ui.backend.util.Util;
@@ -465,6 +466,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			
 			if (!YFCCommon.isVoid(addnlPOList)){
 				String[] poListSplit = addnlPOList.split(",");
+				Arrays.sort(poListSplit, new XPEDXAlphanumericSorting());//Added for JIRA 3645
 				for (int i = 0; i < poListSplit.length; i++) {
 					if(poListSplit[i]!= null && poListSplit[i].trim().length()>0)
 						POList.put(poListSplit[i], poListSplit[i]);
