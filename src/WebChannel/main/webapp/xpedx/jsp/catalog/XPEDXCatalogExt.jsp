@@ -299,7 +299,7 @@
 				</script>
 			</s:else>
 		</s:else>
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 		
 		<!-- Ad Juggler Tag Ends -->
 			
