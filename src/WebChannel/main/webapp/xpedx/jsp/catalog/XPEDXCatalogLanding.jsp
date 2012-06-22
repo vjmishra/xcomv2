@@ -314,7 +314,7 @@
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />'; aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw='<s:property value="%{#prependTestString}" /><s:property value="%{#sanitizedCategoryName}" />';
 				aj_pv = true; aj_click = ''; </script>
-				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:if>
 				<s:else>
 				<script type="text/javascript" language="JavaScript">
@@ -322,7 +322,7 @@
 				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />';  aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
-				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>
 				<!-- Ad Juggler Tag Ends -->
 	 
