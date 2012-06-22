@@ -352,10 +352,14 @@ public class XPEDXExtendedOrderDetailAction extends
 						.trim().equals(holdTypeForApproval)) {
 					String holdstatus = orderholdtypeelem.getAttribute(
 							OrderConstants.STATUS).trim();
-					this.approvalHoldStatus = holdstatus;
-					this.resolverUserID = orderholdtypeelem
-							.getAttribute(OrderConstants.RESOLVER_USER_ID);
-					return true;
+					if(holdstatus.equalsIgnoreCase("1100"))
+					{
+						this.approvalHoldStatus = holdstatus;
+						this.resolverUserID = orderholdtypeelem
+								.getAttribute(OrderConstants.RESOLVER_USER_ID);
+						return true;
+						
+					}					
 				}
 			}
 		}
