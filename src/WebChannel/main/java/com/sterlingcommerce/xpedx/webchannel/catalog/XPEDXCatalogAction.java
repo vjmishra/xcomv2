@@ -250,6 +250,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(searchTerm.trim().length() == 1 && (searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0)) {
 				searchTerm = "";
 			}
+			if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) 
+				searchTerm = searchTerm.substring(1, searchTerm.length());
 		}
 		else
 		{
@@ -452,6 +454,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 			throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
 		
+		/*
+		 * Following line of code replaces the search term from leading astrix by blank
+		 * It also splits the search term by space and add as a must attribute in search
+		 * term
+		 * 
+		 */
 		String searchStringValue = valueMap.get("/SearchCatalogIndex/Terms/Term[" + 1 + "]/@Value");
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
@@ -470,19 +478,56 @@ public class XPEDXCatalogAction extends CatalogAction {
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
 				"Terms");
-		if (elements != null && elements.size() > 0
-				&& customerNumber != null && customerNumber.trim().length() > 0) {
-			Element terms = elements.get(TERMS_NODE);			
-			Element term = SCXmlUtil.createChild(terms, "Term");
-			term.setAttribute("Condition", "SHOULD");
-			term.setAttribute("IndexFieldName", "customerNumberPlusPartNumber");
-			if(null != searchTerm && !("").equals(searchTerm)) {
-				searchTerm = searchTerm.trim();
-				if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) {
-					searchTerm = searchTerm.substring(1, searchTerm.length());
-				}								
-			}				
-			term.setAttribute("Value", customerNumber + "|" + searchTerm);
+		boolean flag = false;
+		List<Element> termListEle = null;
+		if (elements != null && elements.size() > 0) {				
+			Element terms = elements.get(TERMS_NODE);	
+			termListEle = SCXmlUtil.getChildrenList(terms);
+			for(Element termEle : termListEle) {
+				String termValue = termEle.getAttribute("Value");
+				/*
+				 * Following if block checks if there is only one search term in terms 
+				 * and if this search term is * then it sets the flag
+				 * this flag is lateron checked in code and it removes the complete Terms
+				 * from mashupinput
+				 * 
+				 */
+				if(termValue.trim().length() == 1 && (termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) && termListEle != null && termListEle.size() == 1) {
+					flag = true;
+				}
+				/*
+				 * Following line of code checks if there are multiple terms
+				 * and one of the search term is only * then it removes only term 
+				 * which contains * attribute
+				 */
+				if (termValue.trim().length() == 1 && (termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) && termListEle != null && termListEle.size() > 1) {
+					termListEle.remove(termEle);
+				}
+				/*
+				 * Following code replaces all the * in leading to blank
+				 * 
+				 * 
+				 */
+				if(termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) {
+					termValue = termValue.substring(1, termValue.length());
+					termEle.setAttribute("Value", termValue);
+				}
+			}
+			if (customerNumber != null && customerNumber.trim().length() > 0) {
+				Element term = SCXmlUtil.createChild(terms, "Term");
+				term.setAttribute("Condition", "SHOULD");
+				term.setAttribute("IndexFieldName", "customerNumberPlusPartNumber");
+				if(null != searchTerm && !("").equals(searchTerm)) {
+					searchTerm = searchTerm.trim();
+					if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) {
+						searchTerm = searchTerm.substring(1, searchTerm.length());
+					}								
+				}				
+				term.setAttribute("Value", customerNumber + "|" + searchTerm);
+			}
+		}
+		if (flag) {
+			SCXmlUtil.removeNode(elements.get(0));
 		}
 		setStockedItemFromSession();
 		if (isStockedItem) {
