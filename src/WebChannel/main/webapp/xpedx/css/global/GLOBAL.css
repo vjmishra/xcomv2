@@ -7952,8 +7952,17 @@ height: 235px;
 }
 .apply-ship-to-btn
 {
-text-align:center;
-margin-left:35%;	
+ color: #FFFFFF;
+ display: block;
+ float: left;
+ font: bold 12px Arial,Helvetica,sans-serif;
+ height: 14px;
+ margin-right: 0;
+ padding-right: 18px;
+ text-decoration: none;
+ margin-top:0px;
+ text-align:center;
+ margin-left:370px;	
 }
 .ship-to-list
 {
