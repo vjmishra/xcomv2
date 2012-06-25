@@ -239,10 +239,11 @@ function validateOrderMultiple()
 	var arrOrdMul = new Array();
 	var baseUOM = new Array();
 	var retVal=true;
-	arrQty = document.getElementsByName("orderLineQuantities");
-	arrUOM = document.getElementsByName("UOMconversion");
-	arrItemID = document.getElementsByName("orderLineItemIDs");
-	arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
+	arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];
+	arrUOM = document.getElementById("OrderDetailsForm").elements["UOMconversion"];
+	//arrItemID = document.getElementsByName("orderLineItemIDs");
+	arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+	arrOrdMul =  document.getElementById("OrderDetailsForm").elements["orderLineOrderMultiple"];
 	baseUOM = document.getElementsByName("BaseUOMs");
 	for(var i = 0; i < arrItemID.length; i++)
 	{
