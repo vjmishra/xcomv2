@@ -951,7 +951,7 @@ function showSharedListForm(){
 			var baseUOM = new Array();
 			arrQty = document.getElementsByName("qtys");
 				arrUOM = document.getElementsByName("UOMconversion");
-				arrItemID = document.getElementsByName("orderLineItemIDs");
+				arrItemID = document.getElementById("formItemIds").elements["orderLineItemIDs"];
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			
@@ -1109,8 +1109,6 @@ function showSharedListForm(){
 // Function End - Jira 3770
 		function validateOrderMultiple(isOnlyOneItem,listId)
 		{
-			
-			
 			var arrQty = new Array();
 			var arrUOM = new Array();
 			var arrItemID = new Array();
@@ -1128,7 +1126,7 @@ function showSharedListForm(){
 			{	
 				arrQty = document.getElementsByName("qtys");
 				arrUOM = document.getElementsByName("UOMconversion");
-				arrItemID = document.getElementsByName("orderLineItemIDs");
+				arrItemID = document.getElementById("formItemIds").elements["orderLineItemIDs"];
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			}
