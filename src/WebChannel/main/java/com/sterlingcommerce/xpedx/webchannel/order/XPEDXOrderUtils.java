@@ -1696,8 +1696,13 @@ public class XPEDXOrderUtils {
 		{
 			String orderBranch = orderElement.getAttribute("ExtnOrderDivision");
 			String legacyOrderNum = orderElement.getAttribute("ExtnLegacyOrderNo");
-			String generationNum = orderElement.getAttribute("ExtnGenerationNo");
-			return getFormattedOrderNumber(orderBranch,legacyOrderNum,generationNum);
+			if(legacyOrderNum !=null && legacyOrderNum.length() >0)
+			{
+				String generationNum = orderElement.getAttribute("ExtnGenerationNo");
+				return getFormattedOrderNumber(orderBranch,legacyOrderNum,generationNum);
+			}
+			else
+				return "";
 		}
 		return sb.toString().replaceAll("_M","");
 	}
