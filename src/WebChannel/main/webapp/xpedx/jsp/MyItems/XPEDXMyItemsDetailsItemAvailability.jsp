@@ -9,7 +9,7 @@
     This is to avoid a defect in Struts that's creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <!-- Web Trends tag start -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!-- Web Trends tag end  -->
 
 <table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0">
@@ -71,7 +71,7 @@
 <s:set name='currency' value='#priceCurrencyCode'/>
 								
 <tbody>
-		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
+		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<!-- Section 1 : Availability -->
 			<td colspan="3" width="32%">

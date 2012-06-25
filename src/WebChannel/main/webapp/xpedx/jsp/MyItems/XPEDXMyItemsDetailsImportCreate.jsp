@@ -11,8 +11,8 @@
         <swc:head />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><s:property value="wCContext.storefrontId" /> - <s:text name='Items' /></title>
-        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
-        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/advancedSearch.css"/>
+        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+        <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/advancedSearch<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
         <script type="text/javascript">
   				 var attrPickerActions  = new Array(3);
 				 attrPickerActions[0] = '<s:url action="attributemanagement-getattributeConfiguration" namespace="/catalog" escapeAmp="false" includeParams="none" />';
@@ -20,12 +20,12 @@
 				 attrPickerActions[2] = '<s:url action="attributemanagement-getAttributeGroupListForGroup" namespace="/catalog" escapeAmp="false" includeParams="none" />';
                
        </script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/advancedSearch.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/swcxmltreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/sbctreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/itemattrtreeloader.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attrtreepanel.js"></script>
-        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attributeutils.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/advancedSearch<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/swcxmltreeloader<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/sbctreeloader<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/itemattrtreeloader<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attrtreepanel<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+        <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sbc/picker/attributeutils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
         <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs�. 
 		    This is to avoid a defect in Struts that�s creating contention under load. 
 		    The explicit call style will also help the performance in evaluating Struts� OGNL statements. --%>

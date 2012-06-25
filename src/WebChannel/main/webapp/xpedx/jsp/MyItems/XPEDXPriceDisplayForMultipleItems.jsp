@@ -88,7 +88,7 @@
 <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 <s:set name='currency' value='#priceCurrencyCode'/>
 <tbody>
-		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray.gif') repeat-x scroll left center;">
+		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>
