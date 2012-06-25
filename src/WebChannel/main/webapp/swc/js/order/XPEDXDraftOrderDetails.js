@@ -254,9 +254,10 @@ function validateOrderMultiple()
 		if(arrQty[i].value == '' || arrQty[i].value ==0)
 		{
 			//qtyElement.style.borderColor = "#FF0000"
-			divIdError.innerHTML='Please enter a valid quantity and try again.';
-			divIdError.setAttribute("class", "error");
-			
+			if(divIdError != null){
+				divIdError.innerHTML='Please enter a valid quantity and try again.';
+				divIdError.setAttribute("class", "error");
+			}
 			retVal=false;
 			zeroError=true;
 			noError=false;
@@ -277,16 +278,20 @@ function validateOrderMultiple()
 			}		
 		if(ordMul != 0 && zeroError == false)
 		{			
-			divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
-			divIdError.style.display = "inline-block"; 
-			divIdError.setAttribute("class", "error");
+			if(divIdError != null){
+				divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+				divIdError.style.display = "inline-block"; 
+				divIdError.setAttribute("class", "error");
+			}
 			retVal=false;
 			noError=false;
 		}
 		if(arrOrdMul[i].value > 1 && noError==true) {
-			divIdError.innerHTML ="Must be ordered in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
-			divIdError.style.display = "inline-block"; 
-			divIdError.setAttribute("class", "notice");			
+			if(divIdError != null){
+				divIdError.innerHTML ="Must be ordered in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
+				divIdError.style.display = "inline-block"; 
+				divIdError.setAttribute("class", "notice");	
+			}
 		}
 	}
 	return retVal;
@@ -300,7 +305,9 @@ function resetQuantityErrorMessage()
 	{
 		var divId='errorDiv_'+	arrQty[i].id;
 		var divVal=document.getElementById(divId);
-		divVal.innerHTML='';
+		if(divVal != null){
+			divVal.innerHTML='';
+		}
 	}
 }
 
