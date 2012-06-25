@@ -210,6 +210,11 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsGetShareList_binding.xml</param>
         <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetShareList.jsp</result>
 	</action>
+	<action name="XPEDXMyItemsDetailsChangeShareListForItemDetail" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
+		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
+	</action>	
 	
 	<action name="XPEDXMyItemsDetailsChangeShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
 		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
