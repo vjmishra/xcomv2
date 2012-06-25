@@ -18,7 +18,7 @@
 		<!-- 
         <a href="../modals/video-tour.html" id="video-tour"><img class="img-padding-hp" src="<s:property value='assetURL'/>" alt="Video Tour" width="90" height="81" align="left" border="none" /></a>
          -->
-        <a href="../modals/video-tour.html" id="video-tour"><img class="img-padding-hp" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/anon-video-tour-launch.gif" alt="Video Tour" width="90" height="81" align="left" border="none" /></a>
+        <a href="../modals/video-tour.html" id="video-tour"><img class="img-padding-hp" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/anon-video-tour-launch<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="Video Tour" width="90" height="81" align="left" border="none" /></a>
         <p>Get a brief introduction to our B2B commerce site and services.</p>
         <br />
         <a href="javascript:takeTheTour('www.google.com');" id="video-tour2" class="grey-ui-btn"><span>Take the Tour »</span></a>
