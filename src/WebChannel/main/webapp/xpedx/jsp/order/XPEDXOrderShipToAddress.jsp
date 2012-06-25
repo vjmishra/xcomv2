@@ -32,10 +32,10 @@
 		<s:property value="wCContext.storefrontId" /> - <s:text name="ShipToAddress" />
 	</s:else>
 	</title>
-	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/order-address.css" />
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order.js" ></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/verifyAddress.js" ></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAddress.js" ></script>
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/order-address<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order<s:property value='#wcUtil.xpedxBuildKey' />.js" ></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/verifyAddress<s:property value='#wcUtil.xpedxBuildKey' />.js" ></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAddress<s:property value='#wcUtil.xpedxBuildKey' />.js" ></script>
 </head>
 <body>
 

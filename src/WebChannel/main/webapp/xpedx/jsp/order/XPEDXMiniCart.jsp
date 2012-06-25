@@ -10,7 +10,7 @@
 <s:bean name="com.sterlingcommerce.webchannel.utilities.UtilBean" id="util" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil'
 	id='priceUtil' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' /> <!-- added for 2769jira -->

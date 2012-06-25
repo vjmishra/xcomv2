@@ -7,10 +7,10 @@
 <s:set name='_action' value='[0]' />
 
 <link media="all" type="text/css" rel="stylesheet"
-	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/draft-order-list.css" />
+	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/draft-order-list<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/draftOrderList.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/draftOrderList<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript">
 function loadCartDetails(){
 	document.doddForm.OrderHeaderKey.value = document.doddForm.draftOrders.value;

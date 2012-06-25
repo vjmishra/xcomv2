@@ -5,7 +5,7 @@
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/order-list.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/order-list<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs’. 
 
@@ -69,7 +69,7 @@
 	            		<s:set name="chainedOrderListSize" value='#chainedOrderList.size()'/>
 	            		<s:if test='xpedxChainedOrderListMap.containsKey(#parentOrder.getAttribute("OrderHeaderKey")) && #chainedOrderListSize > 1'>
 	                    <td rowspan="1">
-	                        <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/XPEDX-linked-arrow-closed.gif" onclick="javascript:linkedRowToggle('<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>');"/>
+	                        <img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/XPEDX-linked-arrow-closed<s:property value='#wcUtil.xpedxBuildKey' />.gif" onclick="javascript:linkedRowToggle('<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>');"/>
 	            			Split Order
 	            		</td>
 						<td></td>
