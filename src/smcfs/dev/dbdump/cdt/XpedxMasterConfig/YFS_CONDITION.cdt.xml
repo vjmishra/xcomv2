@@ -1122,6 +1122,16 @@
     GroupId="XPX" Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-08-26T15:04:39-04:00" Modifyuserid="ngmc"
     OwnerKey="DEFAULT" OwnerType="" ProcessTypeKey="GENERAL" SeqNo="0" Type="STATIC"/>
+<Condition ConditionID="Usertype is not INTERNAL"
+    ConditionKey="20120619082717945449"
+    ConditionName="Usertype is not INTERNAL"
+    ConditionType="PROCESS_MODELLING"
+    ConditionValue="Usertype &lt;> 'INTERNAL'"
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-06-19T08:27:17-04:00" Createuserid="admin"
+    GroupId="XPX" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-06-19T08:27:17-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" OwnerType="" ProcessTypeKey="GENERAL" SeqNo="0" Type="STATIC"/>
 <Condition ConditionID="DEFAULT_PORTAL" ConditionKey="DEFAULT_PORTAL"
     ConditionName="Is Shipment confirmed through Console?"
     ConditionType="PROCESS_MODELLING"
