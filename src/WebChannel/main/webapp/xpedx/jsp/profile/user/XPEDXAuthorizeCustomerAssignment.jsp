@@ -80,10 +80,10 @@
 	                        <td align="right" valign="top" class="no-border-right-user padding0">
 		                    	<div class="float-left padding-left0" style="" align="center">
 		                    		<a href='javascript:moveCustomers("customersTwo","customersOne")'>
-		                    			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-remove.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
+		                    			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-remove<s:property value='#wcUtil.xpedxBuildKey' />.jpg" alt="Remove" width="88" height="23" border="0" align="right" class=" padding-right2"  />	                    		
 	                    			</a>
 		                    		<a href='javascript:moveCustomers("customersOne","customersTwo")'>
-										<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
+										<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/bu-add<s:property value='#wcUtil.xpedxBuildKey' />.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" />
 		                    		</a>
 		                    	</div>
 		                    </td>

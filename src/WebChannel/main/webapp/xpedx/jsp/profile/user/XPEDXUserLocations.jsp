@@ -34,7 +34,7 @@
 </script>
 
 <script type="text/javascript"
-	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script>
+	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <s:set name='_action' value='[0]'/>
 <s:set name='wcContext' value="wCContext" />
