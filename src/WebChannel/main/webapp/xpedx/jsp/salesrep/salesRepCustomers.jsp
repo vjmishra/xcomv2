@@ -22,15 +22,15 @@
  <title>Sales Representative Search</title> 
 <%-- <title> <s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.SEARCH.GENERIC.TABITLE"/></title> --%>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/SpryTooltip.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/lib.js">
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/lib<s:property value='#wcUtil.xpedxBuildKey' />.js">
 </script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTooltip.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <style>
 div a.underlink { text-decoration: none; }

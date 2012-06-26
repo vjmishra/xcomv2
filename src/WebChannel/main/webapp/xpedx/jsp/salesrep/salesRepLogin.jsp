@@ -19,12 +19,12 @@
 <!-- styles 
 <link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
 -->
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/lib.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/SpryTooltip.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/lib<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style.css" />
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript">
 
 function clearFields(field){
