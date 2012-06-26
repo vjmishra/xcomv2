@@ -591,7 +591,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					if(linePriceInfoElem != null)
 					{
 						orderListLineElem.setAttribute("UnitPrice", linePriceInfoElem.getAttribute("UnitPrice"));
-						orderListLineElem.setAttribute("IsPriceLocked", linePriceInfoElem.getAttribute("IsPriceLocked"));
+						orderListLineElem.setAttribute("IsPriceLocked", "N");
 						
 					}
 					isPriceLockList.add(linePriceInfoElem);
