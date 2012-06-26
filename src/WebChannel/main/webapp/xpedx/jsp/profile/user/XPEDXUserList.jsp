@@ -44,8 +44,8 @@
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable.js"></script>
     <link media="all" type="text/css" rel="stylesheet"
-    	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account.css" />
-    <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/userList.js'/>"></script>
+    	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/my-account<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+    <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/user/userList<s:property value='#wcUtil.xpedxBuildKey' />.js'/>"></script>
     <SCRIPT type="text/javascript">
     function callAjaxForSorting(url,divId)
 {
@@ -121,7 +121,7 @@
      a.underlink:hover { text-decoration: underline !important; } 
      div#fancybox-content { height: 540px !important; }
      </style> 
-     <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>      	 
+     <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>      	 
 </head>
 <body>
     <s:set name='hasAccessToEdit' value="#_action.getIsChildCustomer()" />
