@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
     This is to avoid a defect in Struts that?s creating contention under load. 
     The explicit call style will also help the performance in evaluating Struts? OGNL statements. --%>
@@ -66,7 +66,7 @@ function loadDataOnStart() {
 
 		var deleteLink = document.createElement('a');
 		var imageIcon = document.createElement('img');
-		imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/icon_delete.gif');
+		imageIcon.setAttribute('src','<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/icon_delete<s:property value='#wcUtil.xpedxBuildKey' />.gif');
 		imageIcon.setAttribute('alt','delete');
 		imageIcon.setAttribute('width','16');
 		imageIcon.setAttribute('height','16');
