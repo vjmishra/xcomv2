@@ -61,7 +61,7 @@
 			}
 			table {
 				
-				width: 80%;
+				
 				font-size: 12px;
 				border-collapse: collapse;
 			}
@@ -207,6 +207,8 @@
 				width: 82%;
 			}
 			
+			
+			
 
 	    </STYLE>
 
@@ -223,6 +225,7 @@
 		<xsl:variable name="IsOrderSplit" >
 			<xsl:value-of select="Order/@IsOrderSplit" />
 		</xsl:variable>
+		
 		<xsl:variable name="maxDelim" select="'-M'"/>
 		<xsl:variable name="accDelim" select="'-A'"/>	
 		
@@ -244,20 +247,20 @@
 		<xsl:variable name="brandLogo" >
 			<xsl:value-of select="Order/@BrandLogo" />
 		</xsl:variable>	
-
-	<xsl:template match="/">
+		
+    <xsl:template match="/">
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
-			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
+			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma" align="left" >
 			
-			<table width="90%" border="0" align="left" cellpadding="0" cellspacing="0" style="margin:1px;">
+			<table  width="60%" border="0" halign="left" cellpadding="0" cellspacing="0" style="margin-left:5px">
 				<tr>	
 					<td >
 						<table width="100%" border="0" >
 							<tr>
 								<td >
 								</td>
-								<td width="75%">
+								<td width="100%">
 								<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
 								</td>
 							</tr>
@@ -265,23 +268,40 @@
 					    
 					</td>
 				</tr>
+				<tr>
+					<td>
+					&#160;
+					</td>
+					</tr>
+					
+					
 				
 			<tr align="right">
-					<td colspan="1" style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
+					<td colspan="1" rowspan="1" style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
 					<table width="100%" border="0" cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-bottom:none;">
 					<tr>
 					<td width="100%">
-					<a href="{$storeFrontURL}">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com. 
+					<xsl:choose>
+					<xsl:when test = 'Order/@EnvironmentID="STAGING"' >
+					<a href="https://stg.xpedx.com/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:when>
+					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"' >
+					<a href="http://172.20.137.37:8001/swc/home/home.action?scFlag=Y">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:when>
+					<xsl:otherwise>
+					<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:otherwise>
+					</xsl:choose>
 					</td>
 					</tr>
 					<tr>
 					<td width="100%">
-					This is a courtesy notification that an order has been placed or changed at <xsl:value-of select="Order/@SellerOrganizationCode"/>.com. Thank you for your business!
+					This is a courtesy notification that an order has been placed or changed at <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. Thank you for your business!
 					</td>
-									</tr>
-						</table>
+					</tr>
+					</table>
 										
-			<table width="110%"  cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-top:none;">														
+			<table width="100%"  cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-top:none;">														
 				<thead>
 					<tr>
 						<th colspan="2"> Order Information: </th>
@@ -712,19 +732,24 @@
 				 </tr>
 
 						</table>
+						<tr>
+					<td>
+					&#160;
+					</td>
+					</tr>
 						
 						</td></tr>
 					<tr align="right"><td>
-					<table width="70%" border="0" align="" cellpadding="1" cellspacing="1" >
+					<table width="100%" border="0" align="" cellpadding="1" cellspacing="1" style="margin-left:5px;border-collapse:inherit;text-align:left;" >
 					<tr>
 					<td style="text-wrap:7.5in;width:720px;">
-					This document merely confirms your order, it is not an acceptance of your order.Additional Fees may apply to accepted orders. 
+					This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
 					Please do not reply to this email.This mailbox is not monitored and you will not receive a response.
 						</td>
 				</tr>
 			</table></td></tr>
 			
-						</table>
+	</table>
 						
 			</BODY>
 		</HTML>
