@@ -26,6 +26,7 @@ import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.xpedx.nextgen.common.util.XPXUtils;
@@ -88,6 +89,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		int orderLength = orderNodeList.getLength();
 		if (orderLength != 0) {
 			Element orderElement = (Element) orderNodeList.item(0);
+			String readEnv = YFSSystem.getProperty("environment");
+			orderElement.setAttribute("EnvironmentID", readEnv);
 			if(orderLength >2)
 				orderElement.setAttribute("IsOrderSplit", "Y");
 			else
