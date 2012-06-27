@@ -213,7 +213,7 @@
 			  					<td class="no-border-right-user" colspan="2"><div class="mandatory float-left">*</div>Username:</td>
 			                    <td width="31%" class="no-border-right-user">
 			                    	<s:textfield tabindex="50" name="userName" id="userName" onkeyup="javascript:testFieldValueCheck(this, 'addNewUserForm');changeCase();" 
-			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="50" cssClass="x-input" cssStyle="width: 185px;"/>                    
+			                    	onmouseover="javascript:testFieldValueCheck(this, 'addNewUserForm');" maxlength="40" cssClass="x-input" cssStyle="width: 245px;"/> <!-- Jira 3971 -->                  
 			                   </td>
 			  				</tr>
 						</table>
