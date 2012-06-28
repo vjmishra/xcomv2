@@ -169,6 +169,7 @@
 	 <%--end of jira 3438 changes - sales rep emailID display --%>
 	<s:set name='isOrderOnApprovalHoldStatus' value='%{#_action.isOrderOnApprovalHoldStatus()}'/>
 	<s:set name='isOrderOnNeedsAttentionHold' value='%{#_action.isOrderOnNeedsAttentionHold()}'/>
+	<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
 	<s:set name='resolverUserID' value='%{#_action.getResolverUserID()}'/>
 	<s:if test="#isOrderOnApprovalHoldStatus">
 		 	<%-- <s:set name='usersInfoMap' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUsersInfoMap(#resolverUserID, #storeFrontId)'/>
@@ -359,7 +360,7 @@
 												<s:if test='#isOrderOnApprovalHoldStatus'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/>  <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" /></span>													
 												</s:if>
-												<s:elseif test='#isOrderOnNeedsAttentionHold'>
+												<s:elseif test='%{#isOrderOnNeedsAttentionHold || #isCSRReview}'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" /></span>													
 												</s:elseif>
 											</s:if>
