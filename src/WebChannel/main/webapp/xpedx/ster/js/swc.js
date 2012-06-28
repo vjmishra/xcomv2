@@ -4248,7 +4248,8 @@ function deleteLine(orderHeaderKey, lineKey){
 
         success: function (response, request){
 
-            refreshMiniCartLink();
+        	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
+        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
 
         },
 
