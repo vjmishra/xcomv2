@@ -553,24 +553,23 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		return false;
 	}
 	
+	// modified for jira 4092 to Check if the current order has CSR Review hold or not
 	public boolean isOrderOnNeedsAttentionHold() {
-		String holdTypeForApproval = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
-		if (holdTypeForApproval != null) {
-			Element orderholdtypeselem = SCXmlUtils.getInstance()
-					.getChildElement(this.confirmDraftOrderElem,
-							OrderConstants.ORDER_HOLD_TYPES);
-			ArrayList<Element> orderholdtypeelemlist = SCXmlUtils.getInstance()
-					.getChildren(orderholdtypeselem,
-							OrderConstants.ORDER_HOLD_TYPE);
-			for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter
-					.hasNext();) {
-				Element orderholdtypeelem = (Element) iter.next();
-				if ((orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE))
-						.trim().equals(holdTypeForApproval) && orderholdtypeelem.getAttribute(
-								OrderConstants.STATUS).trim().equalsIgnoreCase("1100")) {
+		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
+		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
+		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
+		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;
+		
+		Element orderholdtypeselem = SCXmlUtil.getChildElement(this.confirmDraftOrderElem, OrderConstants.ORDER_HOLD_TYPES);
+		ArrayList<Element> orderholdtypeelemlist = SCXmlUtil.getElements(orderholdtypeselem, OrderConstants.ORDER_HOLD_TYPE);
+		for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter.hasNext();) {
+			Element orderholdtypeelem = (Element) iter.next();
+			String orderHoldType = orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE);
+			if ((orderholdtypeelem.getAttribute(OrderConstants.STATUS).equals(openHoldStatus))
+					&& (orderHoldType.equals(holdTypeNeedsAttention)
+							|| orderHoldType.equals(holdTypeLegacyCnclOrd) 
+							|| orderHoldType.equals(holdTypeOrderException)))
 					return true;
-				}
-			}
 		}
 		return false;
 	}
