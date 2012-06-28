@@ -1233,9 +1233,10 @@ var selectedShipCustomer = null;
     function validate(e){
   	  if (e.keyCode == 13) {  
   	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
-  	  	while(searchRes.indexOf("\"")!= -1){
+  	  /*	while(searchRes.indexOf("\"")!= -1){
   	  	searchRes = searchRes.replace("\"", "");    	  
-  	 	}
+  	 	}*/
+  	 	//alert(searchRes);
   	  	/*while(searchRes.indexOf("*")!= -1){
    	  		searchRes = searchRes.replace("*", " ");    	  
    	 	}*/
@@ -1245,9 +1246,7 @@ var selectedShipCustomer = null;
   function validateVal(e){
 	    
 	 	var searchText = document.getElementById("newSearch_searchTerm").value;
-	 	while(searchText.indexOf("\"")!= -1){
-    	 	searchText = searchText.replace("\"", "");    	  
-	 	}
+	 	
 	 	/*while(searchText.indexOf("*")!= -1){
     	 	searchText = searchText.replace("*", " ");    	  
 	 	}*/

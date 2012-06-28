@@ -83,9 +83,7 @@ function toggleCost(id)
 function validateQuote(e){
   if (e.keyCode == 13) {  
 	var searchVal = document.getElementById("search_searchTerm").value;
-	while(searchVal.indexOf("\"")!= -1){
-		searchVal = searchVal.replace("\"", "");    	  
-	}
+	
 	Ext.fly('search_searchTerm').dom.value=searchVal;
   }
 }

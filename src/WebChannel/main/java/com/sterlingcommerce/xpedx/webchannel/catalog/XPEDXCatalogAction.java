@@ -243,6 +243,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
 		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		
+		/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+		//searchTerm="11\" W x 20\" L x 31\" H";
+		if(searchTerm!=null && searchTerm.contains("\"")){
+			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
+		}
+		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{					  
 			String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11";
@@ -463,6 +470,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String searchStringValue = valueMap.get("/SearchCatalogIndex/Terms/Term[" + 1 + "]/@Value");
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+			if(searchStringValue.contains("\"")){
+				searchStringValue= searchStringValue.replaceAll("\"", "\\\\u0022");
+			}
+			/*End of changes 3464*/
 			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			String searchStringTokenList[] = searchStringValue.split(" ");
@@ -512,6 +524,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 					termValue = termValue.substring(1, termValue.length());
 					termEle.setAttribute("Value", termValue);
 				}
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/	
+				if(termValue!=null && termValue.contains("\"")){
+					termValue= termValue.replaceAll("\"", "\\\\u0022");
+					termEle.setAttribute("Value", termValue);
+				}
+				/*End of changes 3464*/	
 			}
 			if (customerNumber != null && customerNumber.trim().length() > 0) {
 				Element term = SCXmlUtil.createChild(terms, "Term");
@@ -522,7 +540,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 					if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) {
 						searchTerm = searchTerm.substring(1, searchTerm.length());
 					}								
-				}				
+				}
+					/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+				if(searchTerm!=null && searchTerm.contains("\"")){
+				searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
+				}	
+				/*end of 3464*/			
 				term.setAttribute("Value", customerNumber + "|" + searchTerm);
 			}
 		}
