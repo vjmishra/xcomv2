@@ -122,7 +122,15 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String primaryApprovalEmailId;
 	private String proxyApprovalEmailId;
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
-	
+	protected boolean isCSRReview = false;
+	public boolean isCSRReview() {
+		return isCSRReview;
+	}
+
+	public void setCSRReview(boolean isCSRReview) {
+		this.isCSRReview = isCSRReview;
+	}
+
 	public String getPrimaryApprovalEmailId() {
 		return primaryApprovalEmailId;
 	}
@@ -636,6 +644,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			//put the Order element in the xpedxChainedOrderListMap. The key will be the "OrderLine/ChainedFromOrderHeaderKey"
 			String chainedFromOHK = SCXmlUtil.getAttribute(orderLine, "ChainedFromOrderHeaderKey");
 			String orderHeaderKey = SCXmlUtil.getAttribute(order, "OrderHeaderKey");
+			//added for jira 4092 - display of Submitted CSR reviewing in the order confirmation page
+			Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
+			String legacyOrderNumber = orderExtn.getAttribute("ExtnLegacyOrderNo");
+			String headerStatusCode = orderExtn.getAttribute("ExtnHeaderStatusCode");
+			if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode && !"".equals(headerStatusCode.trim()) && !headerStatusCode.equals("M0000"))) {
+				isCSRReview = true;
+			}
+			//end of jira 4092
 			if(!alreadyAddedOrders.contains(orderHeaderKey)){
 				if(xpedxChainedOrderListMap.containsKey(chainedFromOHK)){
 					ArrayList<Element> orderList = (ArrayList<Element>) xpedxChainedOrderListMap.get(chainedFromOHK);
