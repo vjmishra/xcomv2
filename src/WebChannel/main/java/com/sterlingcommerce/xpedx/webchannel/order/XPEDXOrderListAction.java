@@ -585,7 +585,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 			return;
 		}
 		//get all the Orderlines from the document
-		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName(rootElementName);
+		//modified for jira 4068
+		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName("XPEDXOrderSearchListView");
 		int length = nlOrderList.getLength();
 		ArrayList chainedOrders = new ArrayList();
 		ArrayList<String> alreadyAddedOrders = new ArrayList<String>();
@@ -667,7 +668,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 	{
 		Map<String,Map> outputMap=new LinkedHashMap<String, Map>();
 		Map<String,String> customerOrderMap=new LinkedHashMap<String, String>();
-		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName(rootElementName);
+		//modified for jira 4068
+		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName("XPEDXOrderSearchListView");
 		Element orderElem=null;
 		for(int i=0;i<nlOrderList.getLength();i++){
 			orderElem = (Element) nlOrderList.item(i);
