@@ -1459,10 +1459,18 @@ function showSharedListForm(){
 			    Ext.MessageBox.hide();
 			});
 			task.delay(5000);
+			//document.getElementById('formItemIds').command.value = 'export_list'; 
+			//document.getElementById('formItemIds').submit();
 			
-			document.getElementById('formItemIds').command.value = 'export_list'; 
-			document.getElementById('formItemIds').submit();
-
+			var formItemIds = document.getElementById("formItemIds");
+			<s:url id='exportList' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			</s:url>
+			if (formItemIds){
+				formItemIds.action = "<s:property value='%{exportList}' escape='false'/>";
+				formItemIds.command.value = 'export_list';			
+				formItemIds.submit();
+			}
+			
 			//-- Web Trends tag start --
 			writeMetaTag('DCSext.w_x_list_export', '1');
 			//-- Web Trends tag end --
