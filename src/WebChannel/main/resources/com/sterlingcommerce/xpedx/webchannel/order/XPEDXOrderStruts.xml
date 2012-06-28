@@ -724,7 +724,7 @@
             <param name="mashups">deleteLineForMiniCart</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success" type="redirectAction">
-                <param name="actionName">miniCartDisplay</param>
+                <param name="actionName">XPEDXMiniCartLinkDisplay</param>
             </result>
         </action>
         

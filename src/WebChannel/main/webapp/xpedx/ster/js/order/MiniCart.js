@@ -210,7 +210,8 @@ function deleteLine(orderHeaderKey, lineKey){
         },
         method: 'GET',
         success: function (response, request){
-            refreshMiniCartLink();
+        	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
+        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
         },
         failure: function (response, request){
             alert(document.miniCartForm.miniCartGeneralAJAXError.value);
