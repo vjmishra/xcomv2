@@ -1132,6 +1132,17 @@
     GroupId="XPX" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-06-19T08:27:17-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" OwnerType="" ProcessTypeKey="GENERAL" SeqNo="0" Type="STATIC"/>
+<Condition ConditionID="UserType is Internal?"
+    ConditionKey="201206290149171076304"
+    ConditionName="UserType is Internal?"
+    ConditionType="PROCESS_MODELLING"
+    ConditionValue="com.xpedx.nextgen.common.util.XPXIsInternalUser"
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-06-29T01:49:17-04:00" Createuserid="admin"
+    GroupId="XPX" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-06-29T01:49:17-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" OwnerType="" ProcessTypeKey="GENERAL"
+    ReturnType="boolean" SeqNo="0" Type="DYNAMIC"/>
 <Condition ConditionID="DEFAULT_PORTAL" ConditionKey="DEFAULT_PORTAL"
     ConditionName="Is Shipment confirmed through Console?"
     ConditionType="PROCESS_MODELLING"
