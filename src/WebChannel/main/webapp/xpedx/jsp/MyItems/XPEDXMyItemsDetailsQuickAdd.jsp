@@ -39,13 +39,13 @@
 				<td class="col-item" style="width: 110px; padding: 0px;">
 					<s:if test='%{isItemValid == true}'>
 						<s:set name='uomList' value='%{#_action.getDisplayItemUOMsMap(wCContext.customerId, itemId, wCContext.storefrontId)}'/>
-						<s:select 
+						<s:select cssStyle="width:110px;"
 		                   	id="siUom_%{#uId}"  
 		                   	name="uoms"
 		                   	listKey="key"   
 		                   	listValue="value"
 		                   	list="#uomList" 
-		                   	value="itemUomId"
+		                   	value='%{#_action.getRequestedDefaultUOM()}'
 			            />
 		            </s:if>
 		            <s:else>
