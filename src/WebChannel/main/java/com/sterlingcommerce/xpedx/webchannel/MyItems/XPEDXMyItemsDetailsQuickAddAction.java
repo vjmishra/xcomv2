@@ -14,6 +14,7 @@ import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -78,7 +79,32 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 	private boolean isItemValid = false;
 	private String validateItemId = "";
 	protected Map displayItemUOMsMap;
+	protected Map itemUOMsMap;
+	public String orderMultiple;
+	public String requestedDefaultUOM = null;
+	private Map <String,String>defaultShowUOMMap;
 	
+	public Map<String, String> getDefaultShowUOMMap() {
+		return defaultShowUOMMap;
+	}
+
+	public void setDefaultShowUOMMap(Map<String, String> defaultShowUOMMap) {
+		this.defaultShowUOMMap = defaultShowUOMMap;
+	}
+	
+	
+	public String getRequestedDefaultUOM() {
+		return requestedDefaultUOM;
+	}
+	public void setRequestedDefaultUOM(String requestedDefaultUOM) {
+		this.requestedDefaultUOM = requestedDefaultUOM;
+	}
+	public String getOrderMultiple() {
+		return orderMultiple;
+	}
+	public void setOrderMultiple(String orderMultiple) {
+		this.orderMultiple = orderMultiple;
+	}
 	//-- Web Trends tag start --
 	private boolean addToListMetaTag = false;
 	
@@ -145,10 +171,18 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 	public Map<String,String> getUOMList(String customerId, String itemID, String organizationCode){
 		Map<String,String> uoms = null;
 		try {
+			//Added for Jira 4023
 			//Map containing UOMCode as key and ConvFactor as value
+			String msapOrderMultipleFlag = "";
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+				msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+				}
 			uoms = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID, organizationCode);
 			//displayItemUOMsMap = new HashMap();
+			itemUOMsMap = uoms;
 			displayItemUOMsMap = uoms;
+			orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(itemID);
 			/*for (Iterator it = uoms.keySet().iterator(); it.hasNext();){
 				String uomDesc = (String) it.next();
 				Object o = uoms.get(uomDesc);
@@ -161,7 +195,92 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 				}
 				
 			}*/
-			for (Iterator it = uoms.keySet().iterator(); it.hasNext();) {
+			
+			//Added for Jira 4023
+			double minFractUOM = 0.00;
+	    	double maxFractUOM = 0.00;
+	    	String lowestUOM = "";
+	    	String highestUOM = "";
+	    	String minUOMsDesc = "";
+	    	String maxUOMsDesc = "";
+	    	String defaultConvUOM = "";
+			String defaultUOM = "";
+			String defaultUOMCode = "";
+			//String orderMultiple = "";
+			defaultShowUOMMap = new HashMap<String,String>();
+	    	
+			if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
+				
+				Iterator<String> iterator = itemUOMsMap.keySet().iterator();
+				while(iterator.hasNext()) {
+						String uomCode = iterator.next();
+						String convFactor = (String) itemUOMsMap.get(uomCode);
+						if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(convFactor))
+							{
+								
+							
+								if(convFactor.toString() == orderMultiple){
+									minFractUOM = 1;
+									lowestUOM = uomCode;
+									minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+									
+									
+								}
+								else {
+									double conversion = getConversion(convFactor, orderMultiple);
+									if (conversion != -1 && uomCode != null
+											&& uomCode.length() > 0) {
+										if(conversion <= 1 && conversion >= minFractUOM){
+											minFractUOM = conversion;
+											lowestUOM = uomCode;
+											minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+											
+											
+										}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
+											maxFractUOM = conversion;
+											highestUOM = uomCode;
+											maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+											
+										
+										}
+									}
+								}
+							}
+						
+						long convFac = Math.round(Double.parseDouble(convFactor));
+						if(1 == convFac) {
+							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));
+						}
+						else {
+							//--FXD-- Adding space between UOM Description & Conversion factor
+							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)+" ("+convFac+")" );
+						}
+				}
+				if(minFractUOM == 1.0 && minFractUOM != 0.0){
+					defaultConvUOM = lowestUOM;
+					defaultUOM = minUOMsDesc;
+					defaultUOMCode = lowestUOM;
+					
+				}else if(maxFractUOM > 1.0){
+					defaultConvUOM = highestUOM;
+					defaultUOM = maxUOMsDesc;
+					lowestUOM = highestUOM;
+				}else{
+					
+					defaultConvUOM = lowestUOM;
+					defaultUOM = minUOMsDesc;
+					defaultUOMCode = lowestUOM;
+					
+				}
+				
+			}
+			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			
+			if(requestedDefaultUOM == null && defaultShowUOMMap!=null && !defaultShowUOMMap.isEmpty()){
+				requestedDefaultUOM = (String)defaultShowUOMMap.keySet().iterator().next();
+			}
+			//End for Jira 4023
+			/*for(Iterator it = uoms.keySet().iterator(); it.hasNext();) {
 				String uomCode = (String) it.next();
 				String convFact = (String)uoms.get(uomCode);
 				double convFac = Double.parseDouble(convFact);
@@ -175,7 +294,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 							+ " (" + convFact + ")");
 				}
 				
-			}
+			}*/
 			
 			//Sample test data for lack of real data
 			/*
@@ -191,6 +310,20 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		return uoms;
 	}
 	
+	//Added for Jira 4023
+	private int getConversion(String convFactor, String orderMultiple) {
+		if (convFactor != null && convFactor.length() > 0
+				&& orderMultiple != null && orderMultiple.length() > 0) {
+			double convFactorD = Double.parseDouble(convFactor);
+			double orderMultipleD = Double.parseDouble(orderMultiple);
+			double factor = (convFactorD / orderMultipleD);
+			if (Math.abs(factor) == factor) {
+				return (int) Math.abs(factor);
+			}
+		}
+		return -1;
+	}
+	//End for Jira 4023
 	private void validateItemForXPEDX() {
 		try {
 			
@@ -868,10 +1001,6 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 
 	public void setListDesc(String listDesc) {
 		this.listDesc = listDesc;
-	}
-	
-	public Map getDisplayItemUOMsMap() {
-		return displayItemUOMsMap;
 	}
 	
 	public Map getDisplayItemUOMsMap(String customerId, String itemID, String organizationCode) {
