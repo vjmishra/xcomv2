@@ -4250,6 +4250,7 @@ function deleteLine(orderHeaderKey, lineKey){
 
         	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
         	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
+        	$('#cluetip').hide();
 
         },
 
