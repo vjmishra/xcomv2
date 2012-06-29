@@ -19,22 +19,18 @@ public class XPXIsInternalUser implements YCPDynamicConditionEx {
 	@Override
 	public boolean evaluateCondition(YFSEnvironment arg0, String arg1,
 			Map arg2, Document inputDoc) {
-		
-		System.out.println("Hello I am in evaluateCondition");
 				
 		Element orderElement = inputDoc.getDocumentElement();
-		System.out.println("orderElement -----"+SCXmlUtil.getString(orderElement));
 		String userType = orderElement.getAttribute("Usertype");
-		System.out.println("userType ------------"+userType);
 		String extnUserType = null;
 		ArrayList<Element> userElements=SCXmlUtil.getElements(orderElement, "Extn");
-		System.out.println("UserElements ---------"+userElements.size());
 		if(userElements != null && userElements.size() > 0)
 		{
 			extnUserType=userElements.get(0).getAttribute("ExtnUserType");
 		}			
 		// Source Indicator has been checked for B2B (Source Indicator == 2)
 		if((userType != null && userType.equals("INTERNAL")) || (extnUserType != null && extnUserType.equals("INTERNAL"))){		
+			//Added to for debugging the log if the API call is being redirected here for INTERNAL USER creation
 			System.out.println("Inside usertype and extnusertype ");
 			return true;			
 		}
