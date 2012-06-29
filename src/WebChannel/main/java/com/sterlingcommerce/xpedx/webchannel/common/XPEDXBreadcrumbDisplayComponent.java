@@ -66,9 +66,7 @@ public class XPEDXBreadcrumbDisplayComponent
                 // The link for the breadcrum itself
                String disp = this.getBreadcrumbDisplay(i, bcl, null, false);
             	// String disp = this.getBreadcrumbDisplay(i, bcl, "Catalog", false);
-            	 /* changed for using Catalog as the root element */
-               if(disp.indexOf("*") == 0 || disp.indexOf("?") == 0)
-            	   disp = disp.substring(1, disp.length());
+            	 /* changed for using Catalog as the root element */               
                 sb.append(disp);
 
                 // If the breadcrumb is configured to be removable
@@ -203,6 +201,9 @@ public class XPEDXBreadcrumbDisplayComponent
         }
 
         name = TextUtils.htmlEncode(name);
+        if(name.indexOf("*") == 0 || name.indexOf("?") == 0)
+        	name = name.substring(1, name.length());
+
         sb.append("<a href='").append(url);
         sb.append("' tabindex='").append(this.tag.startTabIndex!=null?(""+this.tabindex++):"");
         sb.append("'>").append(name).append("</a>");
