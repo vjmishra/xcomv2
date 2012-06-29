@@ -302,7 +302,8 @@ function setTotalPrice(val){
 
 $('#po_combo_input').attr("maxlength","22");
 $('#po_combo_input').attr("name","po_combo_input");
-$('#po_combo_input').attr("value","<s:property value='custmerPONumber'/>");
+<%--Fix For Jira 4083. Added escape= false --%>
+$('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='false' />");
 	});
 	</s:if>
 
