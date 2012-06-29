@@ -5657,6 +5657,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					throw new Exception("Attribute LineProcessCode Cannot be NULL or Void!");
 				}
 				YFCElement rootOrdLineTranQtyEle = rootOrdLineEle.getChildElement("OrderLineTranQuantity");
+				String orderedQuantity = rootOrdLineTranQtyEle.getAttribute("OrderedQty");
 				YFCElement rootOrdLineExtnEle = rootOrdLineEle.getChildElement("Extn");
 				if (rootOrdLineTranQtyEle != null && rootOrdLineExtnEle != null) {
 					if (rootOrdLineExtnEle.hasAttribute("ExtnWebLineNumber")) {
@@ -5682,8 +5683,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								if (noBoSplit.equalsIgnoreCase("Y")) {
 									rootEle.setAttribute("FillAndKill", "Y");
 									Float fReqShipOrdQty = Float.parseFloat(reqShipOrdQty);
+									Float fOrderedQuantity = Float.parseFloat(orderedQuantity);
 									rootOrdLineTranQtyEle.setAttribute("OrderedQty", fReqShipOrdQty.toString());
-									rootOrdLineEle.setAttribute("LineProcessCode", "D");
+									if(fOrderedQuantity > fReqShipOrdQty){ 
+								        rootOrdLineEle.setAttribute("LineProcessCode", "D"); 
+									} 
 								}
 							}
 						}
