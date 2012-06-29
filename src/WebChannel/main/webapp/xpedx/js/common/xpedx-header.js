@@ -4641,8 +4641,8 @@ function deleteLine(orderHeaderKey, lineKey){
         success: function (response, request){
 
         	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
-        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);
-
+        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);        	
+        	$('#cluetip').hide();
         },
 
         failure: function (response, request){
