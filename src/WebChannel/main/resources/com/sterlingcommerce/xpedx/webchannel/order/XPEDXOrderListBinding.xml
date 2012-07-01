@@ -2,16 +2,16 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <comment>Binding entries for order list action.</comment>
-  <entry key="pageNumber.toString()">XPEDXOrderList:/Page/@PageNumber,XPEDXOrderLineList:/Page/@PageNumber</entry>
-  <entry key="pageSetToken">XPEDXOrderList:/Page/@PageSetToken,XPEDXOrderLineList:/Page/@PageSetToken</entry>
-  <entry key="WCContext.storefrontId">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@EnterpriseCode, XPEDXCustomerOrderList:/Order/@EnterpriseCode,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@EnterpriseCode</entry>
+  <entry key="pageNumber.toString()">XPEDXOrderList:/Page/@PageNumber,XPEDXOrderLineList:/Page/@PageNumber,XPEDXEditableOrderList:/Page/@PageNumber,XPEDXEditableOrderLineList:/Page/@PageNumber</entry>
+  <entry key="pageSetToken">XPEDXOrderList:/Page/@PageSetToken,XPEDXOrderLineList:/Page/@PageSetToken,XPEDXEditableOrderList:/Page/@PageSetToken,XPEDXEditableOrderLineList:/Page/@PageSetToken</entry>
+  <entry key="WCContext.storefrontId">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@EnterpriseCode, XPEDXCustomerOrderList:/Order/@EnterpriseCode,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@EnterpriseCode,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@EnterpriseCode,XPEDXEditableOrderLineList:/Page/API/Input/XPEDXEditableOrderLineListView/@EnterpriseCode</entry>
   <entry key="orderByAttribute">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/OrderBy/Attribute/@Name,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/OrderBy/Attribute/@Name</entry>
   <entry key="orderDesc">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/OrderBy/Attribute/@Desc,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/OrderBy/Attribute/@Desc</entry>
   <entry key="modifyTSFrom">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@FromModifyts,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@FromModifyts</entry>
   <entry key="modifyTSTo">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ToModifyts,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ToModifyts</entry>
   <entry key="modifyTSQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ModifytsQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ModifytsQryType</entry> 
-  <entry key="recordPerPage">XPEDXOrderList:/Page/@PageSize,XPEDXOrderLineList:/Page/@PageSize</entry>
-  <entry key="productIdValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ItemID,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ItemID</entry>
+  <entry key="recordPerPage">XPEDXOrderList:/Page/@PageSize,XPEDXOrderLineList:/Page/@PageSize,XPEDXEditableOrderList:/Page/@PageSize,XPEDXEditableOrderLineList:/Page/@PageSize</entry>
+  <entry key="productIdValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ItemID,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ItemID,XPEDXEditableOrderLineList:/Page/API/Input/XPEDXEditableOrderLineListView/@ItemID,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@ItemID</entry>
   <entry key="productIdQueryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ItemIDQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ItemIDQryType</entry>
   <entry key="orderNameValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@OrderName,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@OrderName</entry>
   <entry key="orderNameQueryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@OrderNameQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@OrderNameQryType</entry> 
@@ -30,7 +30,7 @@
   -->
   <entry key="statusSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnOrderStatus,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnOrderStatus</entry>
   <entry key="statusSearchQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnOrderStatusQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnOrderStatusQryType</entry> 
-  <entry key="purchaseOrderNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONo,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerPONo</entry>
+  <entry key="purchaseOrderNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONo,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerPONo,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@CustomerPONo</entry>
   <entry key="purchaseOrderNumberQueryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONoQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerPONoQryType</entry>  
   <entry key="holdSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@HoldType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@HoldType</entry>   
   <entry key="holdStatusSearch">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@Status,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@Status</entry>    
@@ -41,7 +41,7 @@
   <entry key="orderTypeQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@OrderTypeQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@OrderTypeQryType</entry>
   <entry key="accountSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@BillToID,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@BillToID</entry>
   <entry key="shipToSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ShipToID,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ShipToID</entry>
-  <entry key="webConfNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnWebConfNum,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnWebConfNum</entry>
+  <entry key="webConfNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnWebConfNum,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnWebConfNum,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@ExtnWebConfNum</entry>
   <entry key="legacyProductNumValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnLegacyOrderNo,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnLegacyOrderNo</entry> 
   <entry key="extnWebConfNumQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnWebConfNumQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnWebConfNumQryType</entry> 
   <entry key="extnLegacyOrderNoQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnLegacyOrderNoQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnLegacyOrderNoQryType</entry>
