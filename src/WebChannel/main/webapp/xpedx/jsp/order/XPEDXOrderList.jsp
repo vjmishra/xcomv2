@@ -102,6 +102,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
+    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -126,7 +127,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
     <s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
-    
+    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -157,6 +158,7 @@ function printPOs(customerPos) {
     <s:param name="PurchaseOrderNumberValue" value="PurchaseOrderNumberSearchValue"/>
     <s:param name="statusSearchFieldName" value="StatusSearchFieldNameValue"/>
     <s:param name="holdSearchFieldName" value="HoldStatusSearch"/>
+    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
 </s:url>
 <s:url id="returnUrl" action="orderList">
     <s:param name="orderByAttribute" value="orderByAttribute"/>
@@ -168,6 +170,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
+    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -189,7 +192,7 @@ function printPOs(customerPos) {
 <!-- get the search result xml: getDocuments is an action method -->
 <s:set name='sdoc' value="outputDoc"/>
 <s:set name='desc' value="orderDesc"/>
-<s:set name="isOpenOrderListingPage" value="%{'false'}"/>
+<s:set name="openOrder" value="%{'true'}"/>
 </head>
 
 <body class="ext-gecko ext-gecko3" onLoad="setDateFields();hideSearchField(false);">
@@ -238,10 +241,11 @@ function printPOs(customerPos) {
                     namespace="/order" cssClass="myClass" method="post" validate="true">
                     <s:hidden name='#action.name' value='orderList'/>
                 	<s:hidden name='#action.namespace' value='/order'/>
-                	<s:if test='!#blankValue '> 
+                	<%-- start of Fix : JIRA - 3123 --%>
+                	<s:if test='!#blankValue'> 
 	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
-	                	<s:hidden name='sourceTab' value="%{'Open'}"/>
-	                	<s:set name='isOpenOrderListingPage' value="%{'false'}"/>
+	                	<s:set name='openOrder' value="%{'true'}"/>
+	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
 <br/>
                 <div class="rounded-border top-section ">
@@ -270,19 +274,16 @@ function printPOs(customerPos) {
 													<td colspan="2"></td>
 												</tr>
 												<tr>
-							<%-- start of Fix : JIRA - 3123 --%>
-	            									<s:if test='#blankValue '> 
+												<%-- start of Fix : JIRA - 3123 --%>
+	            									<s:if test='#blankValue'> 
 	            							<td>Order Status: </td>
 													<td>
 														<s:select cssClass=" " name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
-														<s:set name='isOpenOrderListingPage' value="%{'false'}"/>														
+														<s:set name='openOrder' value="%{'false'}"/>
 													</td>
 													<td colspan="2"></td>
 													
 							</s:if>
-							<s:else>
-													<s:set name='isOpenOrderListingPage' value="%{'true'}"/>														
-							</s:else>
 							<%-- End of Fix : JIRA - 3123 --%>
                         </tr>
                         <tr>
@@ -433,10 +434,20 @@ function printPOs(customerPos) {
 					<s:if test="legacyOrderNumber==''"><s:set name='legacyOrderNumber' value="BlankValue" /></s:if>
 					<s:set name="chainedOrderList" value='xpedxChainedOrderListMap.get(#parentOrder.getAttribute("OrderHeaderKey"))'/>
 					<s:set name="temChainedOrder" value='#chainedOrderList.get(0)'/>
-					<s:set name="sourceTabVal" value="#_action.getSourceTab()"></s:set>
-					<s:set name="noOpenOrderFlag" value="#_action.getNoOpenOrderFlag()"></s:set>
+					<s:set name="orderListExists" value="#_action.getOrderListExist()"></s:set>
 					
-									
+					<%-- Fix for Jira 3123, Added openOrder == true to if condition --%>
+					<%--<s:if test='#openOrder == "true" && #sourceTabVal != null && #temChainedOrder.getAttribute("Status") == #sourceTabVal '>
+						<s:property value='#temChainedOrder.getAttribute("Status")'/>.
+						<s:property value='#sourceTabVal'/>.
+						<s:set name='openOrder' value="%{'false'}"/>
+					</s:if>--%>
+					<s:if test='#_action.getXpedxSelectedHeaderTab()== "AddToExistingOrder" && #orderListExists != null && #orderListExists == "true"'>
+						<s:set name='openOrder' value="%{'false'}"/>
+					</s:if>
+					
+					<%-- End Fix for Jira 3123 --%>
+					
 					<s:set name='customerOhk' value='#parentOrder.getAttribute("OrderHeaderKey")' />
 								
 					<%-- <tr <s:if test="#rowStatus.odd == true" >class="odd"</s:if> style="border-top: 1px solid #D7D7D7;">	 --%>		
@@ -834,22 +845,20 @@ function printPOs(customerPos) {
 	} 
 	setErrorMessage('<s:property value="#openOrder"/>',"divid");
 	*/
+	<%-- start of Fix : JIRA - 3123 --%>
 	
-	function setErrorMessage(pageFlg, noOpenOrdrFlg )
+	function setErrorMessage(flag)
 	{
-		//JIRA-3904 changes.
-		
-	//	alert (" pageFlg : " + pageFlg + " , noOpenOrdrFlg : " + noOpenOrdrFlg)
-		if(pageFlg == "true" && noOpenOrdrFlg =="true")
+		if(flag == "true")
 		{
 		//"Currently No Open Orders are Available.";
 		var dividtop=document.getElementById("open-orders-Msg-top");
 		dividtop.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
 		dividtop.style.display = "inline"; 
 		
-		var dividbottom=document.getElementById("open-orders-Msg-bottom");
-		dividbottom.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
-		dividbottom.style.display = "inline"; 
+		//var dividbottom=document.getElementById("open-orders-Msg-bottom");
+		//dividbottom.innerHTML="<s:text name='MSG.SWC.ORDR.OM.INFO.NOOPENORDERS' />";
+		//dividbottom.style.display = "inline"; 
 		}
 		else
 		{
@@ -864,8 +873,9 @@ function printPOs(customerPos) {
 		}
 	}
 	
-	setErrorMessage('<s:property value="#isOpenOrderListingPage"/>' , '<s:property value="#noOpenOrderFlag"/>');
+	setErrorMessage('<s:property value="#openOrder"/>');
 	
+	<%-- End of Fix : JIRA - 3123 --%>
 	</script>
 
 <script type="text/javascript">

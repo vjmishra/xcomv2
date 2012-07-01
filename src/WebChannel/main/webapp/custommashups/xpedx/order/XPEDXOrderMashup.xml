@@ -3055,6 +3055,70 @@
 				</Order>
         	</Template>
     	</API>    
-    </mashup> 
+    </mashup>
     
-</mashups>       
+    <mashup id='XPEDXEditableOrderList' transactional='true' mashuptype='XAPI'
+		endpoint='CONFIRMED_ORDER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXGetEditableOrderListViewService" IsFlow="Y">
+						<Input>
+							<XPEDXEditableOrderListView DocumentType="0001"
+								EnterpriseCode="">								
+							</XPEDXEditableOrderListView>
+						</Input>
+						<Template>
+							<XPEDXEditableOrderListViewList>
+ 								 <XPEDXEditableOrderListView ExtnWebConfNum="" /> 
+  							</XPEDXEditableOrderListViewList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='XPEDXEditableOrderLineList' transactional='true' mashuptype='XAPI'
+		endpoint='CONFIRMED_ORDER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="3" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXGetEditableOrderLineListViewService" IsFlow="Y">
+						<Input>
+							<XPEDXEditableOrderLineListView DocumentType="0001"
+								EnterpriseCode="" >
+							</XPEDXEditableOrderLineListView>
+						</Input>
+						<Template>
+							<XPEDXEditableOrderLineListViewList>
+ 								 <XPEDXEditableOrderLineListView ExtnWebConfNum="" /> 
+  							</XPEDXEditableOrderLineListViewList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
+    
+</mashups>

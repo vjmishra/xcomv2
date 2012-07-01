@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,6 @@ import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.OrderListAction;
 import com.sterlingcommerce.webchannel.utilities.WCDataDeFormatHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
@@ -42,8 +42,6 @@ import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.core.YFSSystem;
 
-import java.util.LinkedList;
-
 /**
  * @author rugrani
  *
@@ -57,9 +55,6 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private static final String CSR_REVIEWING_STATUS = "1100.0100_CSRReview";
 	private static final String REJECTED_STATUS = "1100.0100_Rejected";
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
-	
-	public   String noOpenOrderFlag  = "false";
-	
 	private boolean isPendingApprovalOrdersSearch = false;
 	private boolean isCSRReviewingOrdersSearch = false;
 	private boolean isRejectedOrdersSearch = false;
@@ -138,23 +133,52 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 
 		String result = "success";
-		if("ProductIdValue".equals(getSearchFieldName()))
+		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
         {
-			rootElementName="XPEDXOrderSearchLineListView";
-			MASHUP_NAME="XPEDXOrderLineList";
+			if("ProductIdValue".equals(getSearchFieldName()))
+	        {
+				rootElementName="XPEDXEditableOrderLineListView";
+				MASHUP_NAME="XPEDXEditableOrderLineList";
+	        
+	        } else if("LegacyOrderNumberValue".equals(getSearchFieldName())){
+	        	rootElementName="XPEDXOrderSearchListView";
+				MASHUP_NAME="XPEDXOrderList";
+	        
+	        } else {
+	        	rootElementName="XPEDXEditableOrderListView";
+	    		MASHUP_NAME="XPEDXEditableOrderList";
+	    		
+	        }
+        
+        } else {
+        	if("ProductIdValue".equals(getSearchFieldName()))
+	        {
+				rootElementName="XPEDXOrderSearchLineListView";
+				MASHUP_NAME="XPEDXOrderLineList";
+	        
+	        }    	
+        	
         }
-        String messageType = getMessageType();
+		
+		String messageType = getMessageType();
         if(messageType != null && messageType.equals("OrderListWidget"))
         {
-            setOrderByAttribute("Modifyts");
+        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+            {    	        
+        		setOrderByAttribute("Modifyts");
+            }
             setPageNumber(ORDER_WIDGET_PAGE_NUMBER);
             setRecordPerPage(ORDER_WIDGET_RECORD_PER_PAGE);
         } else
         {
-        	if(getOrderByAttribute() == null || getOrderByAttribute().trim().length()==0)
-        		setOrderByAttribute("OrderDate");
+        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+            {    	        
+        		if(getOrderByAttribute() == null || getOrderByAttribute().trim().length()==0)
+            		setOrderByAttribute("OrderDate");
+            }
             setRecordPerPage(ORDER_LIST_RECORD_PER_PAGE);
         }
+        
         try
         {
         	//getAssignedCustomerListForLoggedInUser();
@@ -193,11 +217,11 @@ public class XPEDXOrderListAction extends OrderListAction {
         		getStatusList();
         	}  */     	
         	getStatusList();
-        	if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        	/*if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
         		if (getSourceTab() != null && getSourceTab().equals("Open")) {
         			//setStatusSearchFieldName("1100.5250");        			
         		}        		
-        	}
+        	}*/
         	
         	if(!YFCCommon.isVoid(getStatusSearchFieldName()))
         	{
@@ -242,6 +266,9 @@ public class XPEDXOrderListAction extends OrderListAction {
 				//Prepare the Customer Order Document and create the customer info map
 				customerOrderDoc = populateCustomerOrderList(chainedOrderFromKeylist);
 			}*/
+			if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+				customerOrderDoc=orderList;
+			}
 			parseCustomerDoc(customerOrderDoc);
 
 			
@@ -512,11 +539,14 @@ public class XPEDXOrderListAction extends OrderListAction {
 		Document outputDoc = null;
 
 		if (null == extnWebConfList || extnWebConfList.isEmpty()) {
+			setOrderListExist("false");
 			log
 					.debug("getXpedxChainedOrderLineList: Atleast one order header key is required. Use getOrderLineList API to get all the orderlines");
 			return outputDoc;
+		} else {
+			setOrderListExist("true");
 		}
-
+		
 		Element input = WCMashupHelper.getMashupInput("xpedxChainedOrderList",
 				getWCContext().getSCUIContext());
 		String inputXml = SCXmlUtil.getString(input);
@@ -586,8 +616,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		//get all the Orderlines from the document
 		//modified for jira 4068
-		NodeList nlOrderList = chainedOrderLineList.getElementsByTagName("XPEDXOrderSearchListView");
-		int length = nlOrderList.getLength();
+		NodeList nlOrderList=chainedOrderLineList.getElementsByTagName("XPEDXOrderSearchListView");
+        int length = nlOrderList.getLength();
 		ArrayList chainedOrders = new ArrayList();
 		ArrayList<String> alreadyAddedOrders = new ArrayList<String>();
 		Element order = null;
@@ -599,7 +629,6 @@ public class XPEDXOrderListAction extends OrderListAction {
 			//order = XMLUtilities.getElement(orderLine, "Order");
 			//put the Order element in the xpedxChainedOrderListMap. The key will be the "OrderLine/ChainedFromOrderHeaderKey"
 			String orderType=order.getAttribute("OrderType");//SCXmlUtil.getXpathAttribute(order, "//Order/@OrderType");
-			
 			//ArrayList<Element> orderExtnList=SCXmlUtil.getElements(order, "Extn");
 			String extnWebConfNum="";
 			/*if(orderExtnList != null && orderExtnList.size() >0)
@@ -614,8 +643,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 				if(xpedxParentOrderListMap.get(extnWebConfNum) != null)
 				{
 					Element oldOrder=xpedxParentOrderListMap.get(extnWebConfNum);
-					if(oldOrder.getAttribute("HoldType") != null &&
-							 XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(oldOrder.getAttribute("HoldType")))
+					if(oldOrder.getAttribute("HoldType") != null &&	XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(oldOrder.getAttribute("HoldType")))
 						continue;
 				}
 				//Ends
@@ -813,8 +841,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 	}
 	
 	protected void manipulateInputs(Map mashupInputs)
-    {
-        Element orderListInput = (Element)mashupInputs.get(MASHUP_NAME);
+    {		
+		Element orderListInput = (Element)mashupInputs.get(MASHUP_NAME);
         YFCElement yorderListInput = YFCDocument.getDocumentFor(orderListInput.getOwnerDocument()).getDocumentElement();
         YFCElement apiElement = yorderListInput.getChildElement("API");
         YFCElement inpElement = apiElement.getChildElement("Input");
@@ -842,33 +870,134 @@ public class XPEDXOrderListAction extends OrderListAction {
         	if(SCUtil.isVoid(getShipToSearchFieldName()))//to enable the search functionality removed the buyerorgcode from the input instead passing the shiptoid
             	orderElem.setAttribute("ShipToID", wcContext.getCustomerId());
         }
-        
-        //AddToExistingOrders : Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
+        //Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
         if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
-        	getOpenOrderStatusComplexQry(orderElem, complexQueryElement);
+        	if("LegacyOrderNumberValue".equals(getSearchFieldName())){
+        		if(complexQueryElement == null)
+    			{
+    				complexQueryElement = orderElem.createChild("ComplexQuery");
+    			}
+    			/*YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+    			YFCElement extnElement = orderElem;
+    			extnElement.setAttribute("ExtnOrderLockFlag", "N");*/
+        		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+			    				
+			    YFCElement expElementPlaced = complexQueryOrElement.createChild("Exp");
+			    expElementPlaced.setAttribute("Name", "ExtnOrderStatus");
+			    expElementPlaced.setAttribute("Value","1100.0100");
+				complexQueryOrElement.appendChild((YFCNode)expElementPlaced);
+				
+				YFCElement expElementPA = complexQueryOrElement.createChild("Exp");
+			    expElementPA.setAttribute("Name", "ExtnOrderStatus");
+			    expElementPA.setAttribute("Value","1100.5150");
+				complexQueryOrElement.appendChild((YFCNode)expElementPA);			    
+				
+			    YFCElement expElementOpen = complexQueryOrElement.createChild("Exp");
+			    expElementOpen.setAttribute("Name", "ExtnOrderStatus");
+			    expElementOpen.setAttribute("Value","1100.5250");
+				complexQueryOrElement.appendChild((YFCNode)expElementOpen);
+				
+				YFCElement expElementCHold = complexQueryOrElement.createChild("Exp");
+				expElementCHold.setAttribute("Name", "ExtnOrderStatus");
+				expElementCHold.setAttribute("Value","1100.5350");
+				complexQueryOrElement.appendChild((YFCNode)expElementCHold);
+				
+				YFCElement expElementSHold = complexQueryOrElement.createChild("Exp");
+			    expElementSHold.setAttribute("Name", "ExtnOrderStatus");
+			    expElementSHold.setAttribute("Value","1100.5400");
+				complexQueryOrElement.appendChild((YFCNode)expElementSHold);
+				
+			    YFCElement expElementWHold = complexQueryOrElement.createChild("Exp");
+			    expElementWHold.setAttribute("Name", "ExtnOrderStatus");
+			    expElementWHold.setAttribute("Value","1100.5450");
+				complexQueryOrElement.appendChild((YFCNode)expElementWHold);
+				
+        		complexQueryElement.setAttribute("Operator", "AND");
+	        
+	        } else {
+	        	YFCElement isHoldType_submittedCSRReview = orderElem;
+	        	isHoldType_submittedCSRReview.setAttribute("IsHoldTypeSbmtCSRReview", "N");
+	        	isHoldType_submittedCSRReview.setAttribute("IsHoldTypeSbmtCSRReviewQryType", "EQ");	        	
+	        	
+	        }
+
+        	YFCElement isOrderLocked = orderElem;
+        	isOrderLocked.setAttribute("IsOrderLocked", "N");
+        	isOrderLocked.setAttribute("IsOrderLockedQryType", "EQ");
+        	//orderElem.setAttribute("ShipToID", wcContext.getCustomerId());
+    		/*//if (getSourceTab() != null && getSourceTab().equals("Open")) {
+        	YFCElement isHoldType_submittedCSRReview = orderElem;
+        	isHoldType_submittedCSRReview.setAttribute("IsHoldTypeEqSbmtCSRReview", "N");
+        	isHoldType_submittedCSRReview.setAttribute("IsHoldTypeEqSbmtCSRReviewQryType", "EQ");
+    		
+    			if(complexQueryElement == null)
+    			{
+    				complexQueryElement = orderElem.createChild("ComplexQuery");
+    			}
+    			YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+    			YFCElement extnElement = orderElem;
+    			extnElement.setAttribute("ExtnOrderLockFlag", "N");
+        		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+			    YFCElement expElementCreated = complexQueryOrElement.createChild("Exp");
+			    expElementCreated.setAttribute("Name", "ExtnOrderStatus");
+			    expElementCreated.setAttribute("Value","1100");
+				complexQueryOrElement.appendChild((YFCNode)expElementCreated);
+				
+			    YFCElement expElementPlaced = complexQueryOrElement.createChild("Exp");
+			    expElementPlaced.setAttribute("Name", "ExtnOrderStatus");
+			    expElementPlaced.setAttribute("Value","1100.0100");
+				complexQueryOrElement.appendChild((YFCNode)expElementPlaced);
+				
+				YFCElement expElementPA = complexQueryOrElement.createChild("Exp");
+			    expElementPA.setAttribute("Name", "ExtnOrderStatus");
+			    expElementPA.setAttribute("Value","1100.5150");
+				complexQueryOrElement.appendChild((YFCNode)expElementPA);			    
+				
+			    YFCElement expElementOpen = complexQueryOrElement.createChild("Exp");
+			    expElementOpen.setAttribute("Name", "ExtnOrderStatus");
+			    expElementOpen.setAttribute("Value","1100.5250");
+				complexQueryOrElement.appendChild((YFCNode)expElementOpen);
+				
+				YFCElement expElementCHold = complexQueryOrElement.createChild("Exp");
+				expElementCHold.setAttribute("Name", "ExtnOrderStatus");
+				expElementCHold.setAttribute("Value","1100.5350");
+				complexQueryOrElement.appendChild((YFCNode)expElementCHold);
+				
+				YFCElement expElementSHold = complexQueryOrElement.createChild("Exp");
+			    expElementSHold.setAttribute("Name", "ExtnOrderStatus");
+			    expElementSHold.setAttribute("Value","1100.5400");
+				complexQueryOrElement.appendChild((YFCNode)expElementSHold);
+				
+			    YFCElement expElementWHold = complexQueryOrElement.createChild("Exp");
+			    expElementWHold.setAttribute("Name", "ExtnOrderStatus");
+			    expElementWHold.setAttribute("Value","1100.5450");
+				complexQueryOrElement.appendChild((YFCNode)expElementWHold);*/
+				
+        		//complexQueryElement.setAttribute("Operator", "AND");			
+				
+    		//}   
+        } else {
+	        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch || isRejectedOrdersSearch) {
+	        	String holdTypeToSearch = null;
+	        	if(isPendingApprovalOrdersSearch)
+	        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
+	        	else if(isCSRReviewingOrdersSearch)
+	        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
+	        	else if(isRejectedOrdersSearch)
+	        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
+	        	if(!SCUtil.isVoid(holdTypeToSearch)) {
+	        		YFCElement holdTypeElement = orderElem;
+	        		holdTypeElement.setAttribute(XPXLiterals.A_HOLD_TYPE, holdTypeToSearch);
+	        		holdTypeElement.setAttribute("HoldTypeQryType", "FLIKE");
+	        		if(isRejectedOrdersSearch){
+	        			holdTypeElement.setAttribute("HoldStatus", "1200");
+	        		}else {
+	        			holdTypeElement.setAttribute("HoldStatus", "1100");
+	        		}
+	        	}        	
+	        }
         }
-        
-        //
-        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch || isRejectedOrdersSearch) {
-        	String holdTypeToSearch = null;
-        	if(isPendingApprovalOrdersSearch)
-        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
-        	else if(isCSRReviewingOrdersSearch)
-        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
-        	else if(isRejectedOrdersSearch)
-        		holdTypeToSearch = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
-        	if(!SCUtil.isVoid(holdTypeToSearch)) {
-        		YFCElement holdTypeElement = orderElem;
-        		holdTypeElement.setAttribute(XPXLiterals.A_HOLD_TYPE, holdTypeToSearch);
-        		holdTypeElement.setAttribute("HoldTypeQryType", "FLIKE");
-        		if(isRejectedOrdersSearch){
-        			holdTypeElement.setAttribute("HoldStatus", "1200");
-        		}else {
-        			holdTypeElement.setAttribute("HoldStatus", "1100");
-        		}
-        	}        	
-        }
-        
+	        
         if(!YFCCommon.isVoid(getSubmittedTSFrom()))
             orderElem.setAttribute("FromOrderDate", WCDataDeFormatHelper.getDeformattedDate(getWCContext().getSCUIContext(), getSubmittedTSFrom()));
         if(!YFCCommon.isVoid(getSubmittedTSTo()))
@@ -883,98 +1012,8 @@ public class XPEDXOrderListAction extends OrderListAction {
         	orderElem.setAttribute("ToOrderDate", startDateString);
         	orderElem.setAttribute("OrderDateQryType", "DATERANGE");
         }
+        
     }
-/**
- * AddToExistingOrders related query
- * OpenOrders are Orders having status Between 100-650 some of them are excluded.
- * 
- * Included Statuses : 100, 200, 240, 400, 500, 600, 650 
- * 			SUBMITTED 
- * 			SUBMITTED_PENDING_APPROVAL 
- *			SUBMITTED_REJECTED
- *			OPEN
- *			CUSTOMER_HOLD
- *			SYSTEM_HOLD 
- *			WEB_HOLD
- * 
- * Excluded Statuses :
- * 			BackOrder - 150
- * 			Canceled - 250
- * 			Submitted(CSR Reviewing) - 300
- * 			Direct From Manufacturer - 450
- * 
- * @param orderElem
- * @param complexQueryElement
- */
-	private void getOpenOrderStatusComplexQry(YFCElement orderElem,
-			YFCElement complexQueryElement) {
-		//Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
-    		if (getSourceTab() != null && getSourceTab().equals("Open")) {
-    			if(complexQueryElement == null)
-    			{
-    				complexQueryElement = orderElem.createChild("ComplexQuery");
-    			}
-    			
-    			log.debug ("getOpenOrderStatusComplexQry .. For 'add To Existing Order' Functionality");
-    			
-    			//Add Lock Condition (need to exclude orders in Lock status)
-    			YFCElement extnElement = orderElem;
-    			extnElement.setAttribute("ExtnOrderLockFlag", "N");
-        		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
-        		
-        		
-        		//1100
-        		YFCElement expElementCreated = complexQueryOrElement.createChild("Exp");
-			    expElementCreated.setAttribute("Name", "ExtnOrderStatus");
-			    expElementCreated.setAttribute("Value", XPEDXOrderConstants.ORDR_STATUS_NBR_1100);
-				complexQueryOrElement.appendChild((YFCNode)expElementCreated);
-				
-				//Submitted
-			    YFCElement expElementPlaced = complexQueryOrElement.createChild("Exp");
-			    expElementPlaced.setAttribute("Name", "ExtnOrderStatus");
-			    expElementPlaced.setAttribute("Value", XPEDXOrderConstants.ORDR_STATUS_NBR_SUBMITTED);
-				complexQueryOrElement.appendChild((YFCNode)expElementPlaced);
-				
-				//Submitted Pending Approval
-			    YFCElement expElementPendAprvl = complexQueryOrElement.createChild("Exp");
-			    expElementPendAprvl.setAttribute("Name", "ExtnOrderStatus");
-			    expElementPendAprvl.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_SUBMITTED_PENDING_APPROVAL);
-				complexQueryOrElement.appendChild((YFCNode)expElementPendAprvl);
-
-				
-				//Submitted Rejected
-			    YFCElement expElementSubRej = complexQueryOrElement.createChild("Exp");
-			    expElementSubRej.setAttribute("Name", "ExtnOrderStatus");
-			    expElementSubRej.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_SUBMITTED_REJECTED);
-				complexQueryOrElement.appendChild((YFCNode)expElementSubRej);
-			
-				//Open
-			    YFCElement expElementOpen = complexQueryOrElement.createChild("Exp");
-			    expElementOpen.setAttribute("Name", "ExtnOrderStatus");
-			    expElementOpen.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_OPEN);
-				complexQueryOrElement.appendChild((YFCNode)expElementOpen);
-				
-				
-				//CustHold
-				YFCElement expElementCuHold = complexQueryOrElement.createChild("Exp");
-				expElementCuHold.setAttribute("Name", "ExtnOrderStatus");
-				expElementCuHold.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_CUSTOMER_HOLD);
-				complexQueryOrElement.appendChild((YFCNode)expElementCuHold);
-				//SysHold
-				YFCElement expElementSysHold = complexQueryOrElement.createChild("Exp");
-				expElementSysHold.setAttribute("Name", "ExtnOrderStatus");
-				expElementSysHold.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_SYSTEM_HOLD);
-				complexQueryOrElement.appendChild((YFCNode)expElementSysHold);
-				//WebHold				
-			    YFCElement expElementLWebHold = complexQueryOrElement.createChild("Exp");
-			    expElementLWebHold.setAttribute("Name", "ExtnOrderStatus");
-			    expElementLWebHold.setAttribute("Value",XPEDXOrderConstants.ORDR_STATUS_NBR_WEB_HOLD );
-				complexQueryOrElement.appendChild((YFCNode)expElementLWebHold);
-			
-					
-        		complexQueryElement.setAttribute("Operator", "AND"); 	      			
-    		}   
-	}
 	
 	protected void populateOrderList()
     throws CannotBuildInputException, XMLExceptionWrapper
@@ -986,12 +1025,6 @@ public class XPEDXOrderListAction extends OrderListAction {
 	    Map mashupOutputs = invokeMashups(mashupInputs);
 	    outputDoc = (Element)mashupOutputs.get(MASHUP_NAME);
 	    pageSetToken=outputDoc.getAttribute("PageSetToken");
-	    
-	    //SetFlag for Open Orders JIRA-3904
-	    Map<String,String> mapStatuses = getAllWebConfNumStatusMap( outputDoc.getOwnerDocument() );
-	    
-	    validateAndSetEdiableOpenOrdersExistsFlag(mapStatuses);
-	    
 	}
 	
 	private Document populateCustomerOrderList(LinkedList chainedOrderFromKeylist) throws Exception {
@@ -1037,7 +1070,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
 		xpedxParentOrderListMap.clear();
-		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName(rootElementName);
+		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("XPEDXOrderSearchListView");
 		if(orderElems!=null && orderElems.getLength()>0)
 		{
 			for(int i=0;i<orderElems.getLength();i++){
@@ -1315,7 +1348,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	protected String initialFromDateString;
 	protected String initialToDateString;
 	//public String sourceTab;	
-	protected String sourceTab;
+	protected String orderListExist;
 	protected String xpedxSelectedHeaderTab;
 	//added for jira 3484
 	protected String primaryApproverID;
@@ -1351,15 +1384,13 @@ public class XPEDXOrderListAction extends OrderListAction {
 		this.xpedxSelectedHeaderTab = xpedxSelectedHeaderTab;
 	}
 
-	public String getSourceTab() {
-		if (sourceTab != null && !sourceTab.equals(""))
-			return sourceTab;
-		else
-			return "Open";
+	public String getOrderListExist() {
+		return orderListExist;
+		
 	}
 
-	public void setSourceTab(String sourceTab) {
-		this.sourceTab = sourceTab;
+	public void setOrderListExist(String orderListExist) {
+		this.orderListExist = orderListExist;
 	}
 
 	public String getInitialFromDateString() {
@@ -1483,24 +1514,6 @@ public String getRootElementName() {
 	}
 	*/
 	
-	/*public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
-	String resolverUserId=null;
-	if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
-		Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
-		ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
-		if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
-			for(int i=0; i<orderHoldTypeList.size();i++) {
-				Element orderHoldTypeElem = orderHoldTypeList.get(i);
-				String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
-				String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
-				if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
-					resolverUserId = orderHoldTypeElem.getAttribute("ResolverUserId");
-			}
-		}
-	}
-	return resolverUserId;
-	}*/
-	
 	public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
 		String resolverUserId=null;
 		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {		
@@ -1519,87 +1532,21 @@ public String getRootElementName() {
 		return resolverUserId;
 	}
 	
-
-	
-	
-	/**
-	 * @author reddypur  JIRA-3904
-	 * Take OrderList Output XML and generate WC and Status Map. 
-	 * 
-	 * @param orderListDoc
-	 * @return 
-	 */
-
-	private Map<String,String> getAllWebConfNumStatusMap(Document orderListDoc) {
-		
-		Map<String,String> webConfNumStatusMap = new HashMap<String, String>();
-		String wcNumber = "";
-		String ordrNumber = "";
-		String ordrStatus = "";
-		String ordrName = "";
-		
-		if(null == orderListDoc){
-			log.debug("orderListDoc is empty. Returning...");
-			return webConfNumStatusMap;
+	/*public String getResolverUserId(Element OrderElement, String holdTypeToCheck){
+		String resolverUserId=null;
+		if(OrderElement!=null && holdTypeToCheck!=null && holdTypeToCheck.trim().length()>0) {
+			Element orderHoldTypesElem = SCXmlUtil.getChildElement(OrderElement,"OrderHoldTypes");
+			ArrayList<Element> orderHoldTypeList = SCXmlUtil.getElements(orderHoldTypesElem, "OrderHoldType");
+			if(orderHoldTypeList!=null && orderHoldTypeList.size()>0) {
+				for(int i=0; i<orderHoldTypeList.size();i++) {
+					Element orderHoldTypeElem = orderHoldTypeList.get(i);
+					String holdType = SCXmlUtil.getAttribute(orderHoldTypeElem, "HoldType");
+					String holdTypeStatus = SCXmlUtil.getAttribute(orderHoldTypeElem, "Status");
+					if(holdType.equalsIgnoreCase(holdTypeToCheck) && holdTypeStatus.equalsIgnoreCase("1100"))
+						resolverUserId = orderHoldTypeElem.getAttribute("ResolverUserId");
+				}
+			}
 		}
-		NodeList nodeListOrders = orderListDoc.getElementsByTagName(rootElementName);
-		int totalOrdersFetched = nodeListOrders.getLength();
-		for(int orderCount = 0; orderCount < totalOrdersFetched; orderCount ++){
-			//Get each Order
-			Element orderElement = (Element) nodeListOrders.item(orderCount );
-	
-			wcNumber=orderElement.getAttribute("ExtnWebConfNum");
-			ordrNumber=orderElement.getAttribute("OrderNo");
-			ordrStatus=orderElement.getAttribute("Status");
-			ordrName = SCXmlUtil.getAttribute(orderElement, "OrderName");
-
-			log.debug("Order Status Details : " + wcNumber + " ,  ordrNumber " + ordrNumber + " , Order Status : " + ordrStatus + " , ordrName " +ordrName);
-			
-			if(!webConfNumStatusMap.containsKey(wcNumber) )
-				webConfNumStatusMap.put(wcNumber, ordrStatus);
-		}
-		
-		log.debug(" webConfNumStatusMap size " + webConfNumStatusMap.size());
-		return webConfNumStatusMap;
-	}
-	
-	/**
-	 * @author reddypur  JIRA-3904
-	 * This is first level of validation only.
-	 * Here NoOpenOrderFlag is set based on the order status(es), Further rules apply for editing order.
-	 *  
-	 * @param wcStatusMap
-	 */
-	public  void validateAndSetEdiableOpenOrdersExistsFlag(Map<String,String> wcStatusMap) {
-			
-		if ( wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0100_SUBMITTED) || 
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0200_SUBMITTED_PENDING_APPROVAL) ||
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0240_SUBMITTED_REJECTED) ||
-				//wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0300_SUBMITTED_CSR_REVIEWING) ||
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0400_OPEN) ||
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0500_CUSTOMER_HOLD) ||
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0600_SYSTEM_HOLD) ||
-				wcStatusMap.containsValue(XPEDXOrderConstants.ORDR_STATUS_TEXT_0650_WEB_HOLD)  ) {
-			
-			//Here OpenOrders are true means NoOpenOrdersFlag set to false;
-		    noOpenOrderFlag = "false";
-		}
-		else
-		{
-			    noOpenOrderFlag = "true";
-		}
-		log.debug("noOpenOrderFlag : " + noOpenOrderFlag);
-		
-	}
-	
-	
-	/**
-	 * Accessor method for flag.
-	 * 
-	 * @return
-	 */
-	public String getNoOpenOrderFlag() {
-		return noOpenOrderFlag;
-	}
-	
+		return resolverUserId;
+	}*/
 }
