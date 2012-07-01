@@ -1070,7 +1070,12 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
 		xpedxParentOrderListMap.clear();
-		NodeList orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("XPEDXOrderSearchListView");
+		NodeList orderElems=null;
+		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
+			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("XPEDXOrderSearchListView");
+		else
+			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName(rootElementName);
+		
 		if(orderElems!=null && orderElems.getLength()>0)
 		{
 			for(int i=0;i<orderElems.getLength();i++){
