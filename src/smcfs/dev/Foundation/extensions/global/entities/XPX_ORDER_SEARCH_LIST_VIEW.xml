@@ -141,7 +141,7 @@
 					Nullable="true" XMLName="City" />
 				<Attribute ColumnName="STATE" DataType="State"
 					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
-					Nullable="true" XMLName="State" />	
+					Nullable="true" XMLName="State" />
 				<Attribute ColumnName="ZIP_CODE" DataType="ZipCode"
 					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
 					Nullable="true" XMLName="ZipCode" />
@@ -154,6 +154,9 @@
 				<Attribute ColumnName="ORDER_STATUS" DataType="Text-15"
 					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
 					Nullable="true" XMLName="OrderStatus" />
+				<Attribute ColumnName="EXTN_ORDER_LOCK_FLAG" DataType="Text-1"
+					DefaultValue="'N'" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnOrderLockFlag" />
 			</Attributes>
 			<PrimaryKey Name="XPX_ODER_SARCH_PK">
 				<Attribute ColumnName="ORDER_HEADER_KEY" />
