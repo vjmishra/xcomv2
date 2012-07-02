@@ -679,15 +679,20 @@ private void updateModelWithParentInfo(Element outXml) {
 }
 
 
-public void getParentCustomers(String customerIdSelected) {
+public void getParentCustomers(String customerIdSelected, String customerValue) {
 	String BillToValue = getFieldValue("BillToId");
 	String ShipToValue = getFieldValue("ShipToId");
 	String SAPIdValue = getFieldValue("SAPId");
-	String MasterCustomerValue = customerIdSelected;
+	String MasterCustomerValue = getFieldValue("MasterCustomerId");
+	//String MasterCustomerValue = customerIdSelected;
 	String enterPriseKey=getEnterPriseKey();
 	
-	if(BillToValue != null && BillToValue != ""){
+	if(BillToValue != null && BillToValue != "" ){
 		//Set Input XML for Final View
+		if("B".equalsIgnoreCase(customerValue)){
+			BillToValue = customerIdSelected;
+		}
+		
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
 
@@ -700,6 +705,9 @@ public void getParentCustomers(String customerIdSelected) {
 	}
 	
 	if(ShipToValue != null && ShipToValue != ""){
+		if("S".equalsIgnoreCase(customerValue)){
+			ShipToValue = customerIdSelected;
+		}
 		//Set Input XML for Final View
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
@@ -712,6 +720,9 @@ public void getParentCustomers(String customerIdSelected) {
 		callApi("XPXGetParentCustomerListService" , docInput);
 	}
 	if(SAPIdValue != null && SAPIdValue != ""){
+		if("C".equalsIgnoreCase(customerValue)){
+			SAPIdValue = customerIdSelected;
+		}
 		//Set Input XML for Final View
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
@@ -724,6 +735,9 @@ public void getParentCustomers(String customerIdSelected) {
 		callApi("XPXGetParentCustomerListService" , docInput);
 	}
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
+		if("MC".equalsIgnoreCase(customerValue)){
+			MasterCustomerValue = customerIdSelected;
+		}
 		//Set Input XML for Final View
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
@@ -747,7 +761,7 @@ public void getParentCustomers(String customerIdSelected) {
 		
 	}
 	
-	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") || (BillToValue == null && BillToValue == "")){
+	if(MasterCustomerValue == "" && SAPIdValue == "" && ShipToValue == "" && BillToValue == ""){
 		//Set Input XML for Final View
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
@@ -896,7 +910,8 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("BillToId",customerNameSelected);
 		}
-		CallReplacementServiceForCustomerName(customerIdSelected);
+		//CallReplacementServiceForCustomerName(customerIdSelected);
+		getParentCustomers(customerIdSelected,"B");
 	}
 	
 	if(ShipToValue != null && ShipToValue != ""){
@@ -916,7 +931,8 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("ShipToId",customerNameSelected);
 		}
-		CallReplacementServiceForCustomerName(customerIdSelected);
+		//CallReplacementServiceForCustomerName(customerIdSelected);
+		getParentCustomers(customerIdSelected,"S");
 	}
 	if(SAPIdValue != null && SAPIdValue != ""){
 		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
@@ -934,7 +950,8 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("SAPId",customerNameSelected);
 		}
-		CallReplacementServiceForCustomerName(customerIdSelected);
+		//CallReplacementServiceForCustomerName(customerIdSelected);
+		getParentCustomers(customerIdSelected,"C");
 	}
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
 		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
@@ -952,11 +969,11 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("MasterCustomerId",customerNameSelected);
 		}
-		getParentCustomers(customerIdSelected);
+		getParentCustomers(customerIdSelected,"MC");
 	}
 	
 }
-public void CallReplacementServiceForCustomerName(String customerIdSelected){
+/*public void CallReplacementServiceForCustomerName(String customerIdSelected){
 	//Set Input XML for Final View
 	elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
     .getDocumentElement();
@@ -979,7 +996,7 @@ public void CallReplacementServiceForCustomerName(String customerIdSelected){
 	e4.setAttribute("CustomerID", customerIdSelected);
 
 callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
-}
+}*/
 //ListName Link & List Desc Link Method
 public	void openMultipleEditors(Element eleTableItem)throws PartInitException {
 	
