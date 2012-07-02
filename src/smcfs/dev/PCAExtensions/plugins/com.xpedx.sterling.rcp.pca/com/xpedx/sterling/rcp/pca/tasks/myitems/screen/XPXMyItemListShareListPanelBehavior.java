@@ -282,6 +282,7 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 			lineEle.setAttribute("MyItemsListShareKey", strMILShareKey);
 		
 		if(!YRCPlatformUI.isVoid(strDivisionID))
+			strDivisionID = strDivisionID.concat("_M");
 			lineEle.setAttribute("DivisionID", strDivisionID);
 		
 		
