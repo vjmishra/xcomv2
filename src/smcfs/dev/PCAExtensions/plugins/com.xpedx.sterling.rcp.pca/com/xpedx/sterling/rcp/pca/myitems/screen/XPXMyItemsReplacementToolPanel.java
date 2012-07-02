@@ -671,7 +671,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 				//myBehavior.search();
 				//Fetches the first page of search results
 				
-				myBehavior.getParentCustomers(myBehavior.getFieldValue("MasterCustomerId"));
+				myBehavior.getParentCustomers(myBehavior.getFieldValue("MasterCustomerId"), "");
 				//myBehavior.getFirstPage();
 				tblSearchResults.setFocus();
 			}
