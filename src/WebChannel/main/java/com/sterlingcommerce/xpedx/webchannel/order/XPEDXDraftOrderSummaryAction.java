@@ -405,9 +405,10 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		
 		ArrayList<String> itemIdList = new ArrayList<String>();		
 		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
-		HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
+		
 		//Get the customer extn fields
 		for (int i = 0; i < orderLineElemList.size(); i++) {
+			HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
 			Element orderLineElement = (Element)orderLineElemList.get(i);
 			String lineType=orderLineElement.getAttribute("LineType");
 			if("C".equalsIgnoreCase(lineType) && "M".equalsIgnoreCase(lineType)) {
