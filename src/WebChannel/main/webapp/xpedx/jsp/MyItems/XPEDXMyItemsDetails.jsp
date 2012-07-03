@@ -193,7 +193,7 @@ function showSharedListForm(){
 		/* Begin long desc. shortener */
 		$('.prodlist ul li, #prodlist ul li').each(function() {
 			var html = $(this).html();
-			var shortHTML = html.substring(0, 35);
+			var shortHTML = html.substring(0, 30);
 			if( html.length > shortHTML.length )
 			{
 				$(this).html(shortHTML);
