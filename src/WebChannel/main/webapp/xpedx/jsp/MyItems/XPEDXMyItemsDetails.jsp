@@ -3097,12 +3097,12 @@ function showSharedListForm(){
                 <div class="mil-desc-wrap">
                     <div class="mil-wrap-condensed-desc replacement-items" style="height:auto; max-height:59px;"><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
-								<s:property value="#name" />
+								<span class="short-description"><s:property value="#name" /></span>
 								</a>	
 							</s:if>
 							</div>
                     <div class="mil-attr-wrap">
-                        <ul class="mil-desc-attribute-list">                        
+                        <ul class="mil-desc-attribute-list prodlist">                        
 							<s:property value='#rdesc' escape='false'/>
 					    </ul>
 					    <%-- key contains the original itemId --%>
