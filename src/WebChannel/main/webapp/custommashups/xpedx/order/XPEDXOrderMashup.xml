@@ -1984,7 +1984,7 @@
 				<ItemList Currency="" >
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
-							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation=""/>
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>/>
 						<ComputedPrice UnitPrice=""/>
 						<AssetList>
 							<Asset/>					
@@ -2013,7 +2013,7 @@
 				<ItemList Currency="" >
 					<Item ItemID="" ItemKey="" UnitOfMeasure="">
 						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
-							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation=""/>
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>/>
 						<Extn ExtnMpc=""/>
 					</Item>
 				</ItemList>
