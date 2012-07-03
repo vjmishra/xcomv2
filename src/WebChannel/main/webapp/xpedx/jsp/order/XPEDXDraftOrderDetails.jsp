@@ -327,7 +327,7 @@ $(document).ready(function(){
 				
 				$('.prodlist ul li, #prodlist ul li').each(function() {
 					var html = $(this).html();
-					var shortHTML = html.substring(0, 35);
+					var shortHTML = html.substring(0, 30);
 					if( html.length > shortHTML.length )
 					{
 						$(this).html(shortHTML);
@@ -1442,7 +1442,7 @@ var currentAadd2ItemList = new Object();
 							<s:set name='info' value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")'/>
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<li> 
-							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
+							    <s:a href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
 							    	<span class="short-description"><s:property value="%{#shortDesc}"/></span>
 									<br />
 									<br />
