@@ -88,6 +88,32 @@ function toggleFields (str, el)
 	
 	return true;
 }
+
+	/* Begin long desc. shortener */
+$(document).ready(function(){
+	$(document).pngFix();
+	$('.prodlist ul li, #prodlist ul li').each(function() {
+		var html = $(this).html();
+		var shortHTML = html.substring(0, 35);
+		if( html.length > shortHTML.length )
+		{
+			$(this).html(shortHTML);
+			$(this).append('...');	
+			$(this).attr('title', html );
+		}
+	});
+$('.short-description').each(function() {
+	var html = $(this).html();
+	var shortHTML = html.substring(0, 90);
+	if( html.length > shortHTML.length )
+	{
+		$(this).html(shortHTML);
+		$(this).append('...');	
+		$(this).attr('title', html );
+	}
+});
+});
+
 </script>
 
 </head>
@@ -234,7 +260,7 @@ function toggleFields (str, el)
 							<td rowspan="2"> 					    <!-- begin right side comment box with label -->
 								    <div class="float-right return-comment-div">
 									    <div class="label"> <label for="">Comments: </label></div>
-									   	<s:textarea name="notes" cols="56" rows="3" id="textfield3"></s:textarea>
+									   	<s:textarea name="notes" cols="56" rows="3" id="textfield3" cssStyle="margin-left:100px"></s:textarea>
 								    </div>
 					    	<!-- end right side comment box with label --> 
 					    	</td>
@@ -311,7 +337,7 @@ function toggleFields (str, el)
 						</s:url> 
 						<s:a href="%{#detailURL}">	
 							<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-								<s:property value='#_action.getDescriptionForOrderLine(#orderLine)' escape="false"/>
+							<ul class="prodlist"><s:property value='#_action.getDescriptionForOrderLine(#orderLine)' escape="false"/></ul>
 							</s:if>
 						</s:a>
 						<!--  end long desc -->
