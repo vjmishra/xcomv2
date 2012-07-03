@@ -1,6 +1,7 @@
 package com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup;
 import java.awt.Color;
 import java.awt.font.TextAttribute;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.swt.events.MouseEvent;
@@ -30,6 +31,11 @@ public class XPXShowItemListDetailPanelBehaviour extends XPXPaginationBehavior{
 	private Element elePageInput;
 	private XPXShowItemListDetailPanel page;
 	public static  HashMap masterUOMList = new HashMap<String, String>();
+	public ArrayList itemList = new ArrayList();
+	private String itemShortDescription;
+	public  HashMap itemDescList = new HashMap<String, String>();
+	private Element outItemDetailXml;
+	private Element eleMyItemsList;
 	/**
 	 * Constructor for the behavior class. 
 	 * @param elePageInput 
@@ -70,15 +76,44 @@ public class XPXShowItemListDetailPanelBehaviour extends XPXPaginationBehavior{
 					if(YRCPlatformUI.equals(apiname, "getXPEDXMyItemsListDetail")){
 		     			Document docOutput = apiContext.getOutputXmls()[i];
 						if (docOutput != null) {
-							Element eleOutput = docOutput.getDocumentElement();
-							System.out.println("The API output is:" + YRCXmlUtils.getString(eleOutput));
-							setModel("XPEDXMyItemsListList",eleOutput);
+							outItemDetailXml = docOutput.getDocumentElement();
+							//For Retrieving Item short description
+							eleMyItemsList = YRCXmlUtils.getXPathElement(outItemDetailXml, "/XPEDXMyItemsListList/XPEDXMyItemsList");
+							updateModelWithUOMDesc(eleMyItemsList);	
+							System.out.println("The API output is:" + YRCXmlUtils.getString(outItemDetailXml));
+							
 						}
 		     		}
+					else if ("getCompleteItemList".equals(apiname)) {
+						Document docOutput = apiContext.getOutputXmls()[i];
+						if (docOutput != null) {
+							String itemID = null;
+							Element item = docOutput.getDocumentElement();
+							Element eleItemsList1 = YRCXmlUtils.getChildElement(item, "Item");
+							if (eleItemsList1 != null) {
+							itemID = eleItemsList1.getAttribute("ItemID");
+							Element primaryInfoElem = YRCXmlUtils.getChildElement(eleItemsList1,"PrimaryInformation");
+							if (primaryInfoElem != null) {
+								itemShortDescription = primaryInfoElem.getAttribute("ShortDescription");
+								itemDescList.put(itemID, primaryInfoElem.getAttribute("ShortDescription"));
+							}
+							}
+							//Time to set the description attribute from the hashmap in a loop
+							eleMyItemsList = YRCXmlUtils.getXPathElement(outItemDetailXml, "/XPEDXMyItemsListList/XPEDXMyItemsList");
+							Element eleItemsItemsList1 = YRCXmlUtils.getChildElement(eleMyItemsList, "XPEDXMyItemsItemsList");
+							ArrayList<Element> listItems1 = YRCXmlUtils.getChildren(eleItemsItemsList1, "XPEDXMyItemsItems");
+							for (Element eleItem : listItems1) {								
+								String itemsId = eleItem.getAttribute("ItemId");
+								if(itemDescList!=null && itemDescList.containsKey(itemsId))
+									eleItem.setAttribute("Name", (String) itemDescList.get(itemsId));
+							}
+							setModel("XPEDXMyItemsListList",outItemDetailXml);
+						}
+					}
 				}
 			}
 		}
-		//super.handleApiCompletion(apiContext);
+		
 	}
 
 	public void mouseDoubleClick(MouseEvent e, String string) {
@@ -129,15 +164,27 @@ public class XPXShowItemListDetailPanelBehaviour extends XPXPaginationBehavior{
 		this.srcModelName = srcModelName;
 	}
 	
-	/*public void getVal() {
-
-		String UOMId = getFieldValue("uomIDCombo");
-		Element eleUomList = YRCXmlUtils.createDocument("UOMList").getDocumentElement();
-		eleUomList.setAttribute("UOMID", UOMId);
-		eleUomList.setAttribute("UOMDesc", (String) masterUOMList.get(UOMId));
-        this.page.eleSelected = eleUomList;
-	}
-	*/
+	private void updateModelWithUOMDesc(Element outXml) {
+		Element eleItemsList = YRCXmlUtils.getChildElement(outXml, "XPEDXMyItemsItemsList");
+		ArrayList<Element> listItems = YRCXmlUtils.getChildren(eleItemsList, "XPEDXMyItemsItems");
+		for (Element eleItem : listItems) {
+			itemList.add(eleItem.getAttribute("ItemId"));
+		} 
+			setModel("getXPEDXMyItemsListDetail",outXml);
+		getCompleteItemListAPICall(itemList);
+}
+	
+	 private void getCompleteItemListAPICall(ArrayList itemList){
+			
+		 for(int i = 0 ; i < itemList.size();i++){
+			  YRCApiContext ctx = new YRCApiContext();
+				ctx.setApiNames(new String[]{"getCompleteItemList"});
+				Document doc = YRCXmlUtils.createFromString("<Item  CallingOrganizationCode='xpedx' ItemID='"+itemList.get(i)+"'  IsForOrdering='N'  />");
+				ctx.setInputXml(doc);
+				ctx.setFormId(getFormId());
+				callApi(ctx, page);
+		}
+	 }
 
 }
 

@@ -77,7 +77,7 @@ public class XPXShowItemListDetailPanel extends XPXPaginationComposite implement
         colBindings[0].setSortReqd(true);   
         
         colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("@Desc");
+        colBindings[1].setAttributeBinding("@Name");
         colBindings[1].setColumnBinding("Item Description");
         colBindings[1].setSortReqd(true);
         colBindings[1].setSortReqd(true);
