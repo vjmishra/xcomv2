@@ -327,7 +327,7 @@ $(document).ready(function(){
 				
 				$('.prodlist ul li, #prodlist ul li').each(function() {
 					var html = $(this).html();
-					var shortHTML = html.substring(0, 40);
+					var shortHTML = html.substring(0, 35);
 					if( html.length > shortHTML.length )
 					{
 						$(this).html(shortHTML);
@@ -1443,7 +1443,7 @@ var currentAadd2ItemList = new Object();
 							<s:set name='shortDesc' value='#info.getAttribute("ShortDescription")'/>
 							<li> 
 							    <s:a cssClass="short-description" href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')"> <img src="<s:url value='%{#imageIdBlank}'/>" title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>' width="91" height="94" alt="" /> <!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> --><br />
-							    	<s:property value="%{#shortDesc}"/>
+							    	<span class="short-description"><s:property value="%{#shortDesc}"/></span>
 									<br />
 									<br />
 									<br />
@@ -1483,22 +1483,6 @@ var currentAadd2ItemList = new Object();
 	  <%-- <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2> --%> <%-- key contains the original itemId --%>
 	  <h2><s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
 	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
-		<script type="text/javascript">
-		Ext.onReady(function(){		
-
-			/* Begin long desc. shortener */
-			$('.prodlist ul li, #prodlist ul li ').each(function() {
-				var html = $(this).html();
-				var shortHTML = html.substring(0, 25);
-				if( html.length > shortHTML.length )
-				{
-					$(this).html(shortHTML);
-					$(this).append('...');	
-					$(this).attr('title', html );
-				}
-			});
-		});
-		</script> 
 		<!--Adding below if condn for Jira 1601 - Error Msg For Replacement Item  -->
 		<s:if test="#altItemList.size() == 0">
 				<div class="error" style="margin-top:90px; margin-left:80px;">The replacement item is not available, please contact customer service.</div>
@@ -1565,16 +1549,13 @@ var currentAadd2ItemList = new Object();
                 <div class="mil-desc-wrap">
                     <div class="mil-wrap-condensed-desc item-short-desc" ><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
-									<s:property value="#name" />
+									<span class="short-description"><s:property value="#name" /></span>
 								</a>
 							</s:if> 
 							<%--<s:if test="%{#itemType != 99}"><a/></s:if> --%>
 					</div>
                     <div class="mil-attr-wrap">
-                        <ul class="prodlist">                        
-							<s:property value='#rdesc' escape='false'/>
-					    </ul>
-					    
+                          <ul class="prodlist"><s:property escape='false'  value='#rdesc'/></ul>
 					    <%-- key contains the original itemId --%>
 					    <!--  <s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> -->
 					    <%-- 
