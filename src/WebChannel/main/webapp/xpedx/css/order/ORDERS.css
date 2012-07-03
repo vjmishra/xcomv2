@@ -1081,6 +1081,7 @@ padding: 0;
     position: relative;
     left: 150px;
 }
+.item-short-desc a:hover { text-decoration:none; }
 .mil-container a:hover { text-decoration:none; }
 .mil-cart-bg { margin-top: 10px; }
 #breadcumbs-list-name{ margin-bottom:0px; }
