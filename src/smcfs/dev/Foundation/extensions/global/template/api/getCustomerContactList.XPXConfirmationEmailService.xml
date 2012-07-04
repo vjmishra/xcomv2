@@ -10,17 +10,7 @@
 <Customer>
 <!-- try -->
 <Extn/>
-<CustomerContactList>
-<CustomerContact>
-<User>
-<UserGroupLists>
-<UserGroupList UserGroupListKey="" UsergroupId="" UsergroupKey=""/>
-</UserGroupLists>
-</User>
-<Extn/>
-</CustomerContact>
 
-</CustomerContactList>
 <!-- try -->
 
 </Customer>
