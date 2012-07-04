@@ -172,17 +172,17 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			/*Changes done for order confirmation email - End*/
 			
 
-			Element customerElem = (Element) getCustomerContactElement
+			/*Element customerElem = (Element) getCustomerContactElement
 					.getElementsByTagName("Customer").item(0);
 
 			String strCustomerAdminEmailList = "";
-			/** Added by Arun Sekhar on 14-April-2011 for Email templates **/
-			/**
+			*//** Added by Arun Sekhar on 14-April-2011 for Email templates **//*
+			*//**
 			 * Check if this CustomerContactID corresponds to a Sales Rep If
 			 * 'Yes' (ExtnIsSalesRep=Y), it is assumes that it is a dummy user,
 			 * in which case, we don't need to consider its email ID in the 'To'
 			 * list
-			 */
+			 *//*
 			String isSalesRepFlag = SCXmlUtil.getXpathAttribute(
 					getCustomerContactElement, "./Extn/@ExtnIsSalesRep");
 
@@ -252,9 +252,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 				}// end for(int i=0;i<nlCustomerContactLen;i++){
 			}
-			/** ********************************************************* **/
+			*//** ********************************************************* **//*
 			customerDoc.getDocumentElement().setAttribute(
-					"strCustomerAdminEmailList", strCustomerAdminEmailList);
+					"strCustomerAdminEmailList", strCustomerAdminEmailList);*/
 
 			// Make the additional email addresses chosen in Order as comma
 			// separated
@@ -845,7 +845,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			}
 		}		
 		//temp added by ritesh to test.
-		yfcLogCatalog.debug(" salesRepEmail " + salesRepEmail);
+		yfcLogCatalog.info(" salesRepEmail " + salesRepEmail);
 		if(salesRepEmail != null )
 		{
 			inputDocument.getDocumentElement().setAttribute("salesRepEmail", salesRepEmail);
