@@ -120,10 +120,10 @@
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110427125438131458" PasswordRuleDefnKey="20110420182610130848"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2011-04-27T12:54:37-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-10-07T13:54:30-04:00"
-    Modifyuserid="ngmc"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;NumDaysValid&quot; Value=&quot;150&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    Createts="2011-04-27T12:54:37-04:00" Createuserid="admin" Lockid="1"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-07-05T01:47:23-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;NumDaysValid&quot; Value=&quot;999999&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110427125438131459" PasswordRuleDefnKey="20110420182845130851"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"

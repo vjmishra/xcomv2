@@ -4251,6 +4251,22 @@
     IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-04-12T02:34:23-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-07-05T02:12:58-04:00" Createuserid="admin"
+    FlowGroupName="XPXOrderUtilsGroup" FlowKey="201207050212581157170"
+    FlowName="XPXGetEditableOrderListViewService" FlowType="00"
+    GraphUIKey="201207050213071157173" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2012-07-05T02:14:41-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-07-05T02:16:10-04:00" Createuserid="admin"
+    FlowGroupName="XPXOrderUtilsGroup" FlowKey="201207050216101157184"
+    FlowName="XPXGetEditableOrderLineListViewService" FlowType="00"
+    GraphUIKey="201207050216171157187" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2012-07-05T02:22:00-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
