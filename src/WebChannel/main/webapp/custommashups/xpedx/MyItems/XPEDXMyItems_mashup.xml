@@ -169,7 +169,7 @@
 				    <XPEDXMyItemsItemsList>
 				    <XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 				    	Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
-				    	Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="">
+				    	Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="" ItemType="1">
 					</XPEDXMyItemsItems>
 					</XPEDXMyItemsItemsList>
 				</XPEDXMyItemsList>
