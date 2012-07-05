@@ -92,7 +92,7 @@
 	<entry key="estimator">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator</entry>
 	<entry key="stockCheckWebservice">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnStockCheckWS</entry>
 	<entry key="punchoutUsers">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPunchOutUser</entry>
-	<entry key="#parameters.defaultShipTo">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnDefaultShipTo</entry>
+	<entry key="defaultShipTo">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnDefaultShipTo</entry>
 	<entry key="#parameters.networkID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnUserNetworkID</entry>
 	<entry key="#parameters.employeeID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEmployeeID</entry>
 	<entry key="#parameters.txtMaxOrderAmt">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnMaxOrderAmount</entry>
