@@ -1809,6 +1809,8 @@ public class XPEDXOrderUtils {
 	   	 }
 	   	 catch(Exception e)
 	   	 {
+	   		 System.out.println("+++++++ Got exception while refreshing mini cart ++++++++++++");
+	   		 e.printStackTrace();
 	   		 log.info("Error while adding currency for minicart");
 	   	 }
 	   	 
@@ -1904,6 +1906,7 @@ public class XPEDXOrderUtils {
 	            log.info("getOrderDetails end");
 			}
         } catch (Exception e) {
+        	System.out.println("++++++++ Got exception while refreshing mini cart display +++++++++++++");
             e.printStackTrace();
         }
 	}
