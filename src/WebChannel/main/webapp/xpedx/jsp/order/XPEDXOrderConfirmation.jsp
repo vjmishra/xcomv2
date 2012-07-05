@@ -325,9 +325,11 @@
 														  <s:param name="orderHeaderKey" value='#chainedOrder.getAttribute("OrderHeaderKey")'/>
 														  <s:param name="orderListReturnUrl" value='#returnUrl'/>  
 														</s:url>
+														<%-- Added Condition - isPendingOrderCheckReq For Jira 4109 --%>
+														<s:set name="isPendingOrderCheckReq" value='%{true}' />  
 														<s:if test='%{#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")==""}'>
 <%-- 															<s:a href="%{chainedOrderDetailsURL}" cssClass="underlink"> --%>
-															In progress
+															In progress  
 <%-- 															</s:a> --%>
 														</s:if>
 														<s:else>
@@ -356,11 +358,15 @@
                                 <tr>
                                     <td valign="top" align="left"><b>Order Status:</b></td>
                                     <td valign="top" align="left"><p>
+                                    
                                     		<s:if test="#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold">
-												<s:if test='#isOrderOnApprovalHoldStatus'>
+                                    			<s:set name="xpedxChainedOrderListMap" value='xpedxChainedOrderListMap'/>
+		                                    	<s:set name="chainedOrderList" value='#xpedxChainedOrderListMap.get(#orderHeaderKey)'/>
+		                                    	<s:set name="chainedOrderListSize" value='#chainedOrderList.size()'/>
+												<s:if test='#isOrderOnApprovalHoldStatus && #chainedOrderListSize==0'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/>  <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" /></span>													
 												</s:if>
-												<s:elseif test='%{#isOrderOnNeedsAttentionHold || #isCSRReview}'>
+												<s:elseif test='%{(#isOrderOnNeedsAttentionHold && #chainedOrderListSize==0) || #isCSRReview}'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" /></span>													
 												</s:elseif>
 											</s:if>

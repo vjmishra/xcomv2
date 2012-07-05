@@ -637,6 +637,8 @@ function printPOs(customerPos) {
 								<s:else>
 									<s:if test='%{#status != "Cancelled"}'>
 											<s:property value="#parentOrder.getAttribute('Status')" />
+											 <%-- Added Check For Jira 4109 --%>
+											<s:if test='%{#chainedOrderListSize==null || #chainedOrderListSize==0}'>	
 											<s:if test='#isPendingApproval && !#isOrderRejected'>
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 												<br/>
@@ -654,7 +656,7 @@ function printPOs(customerPos) {
 											<s:elseif test='#isOnCSRReviewHold'> 
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
 											</s:elseif>
-										
+										</s:if>
 									</s:if>
 									<s:else>
 										<s:property value='#chainedOrder.getAttribute("Status")' />
