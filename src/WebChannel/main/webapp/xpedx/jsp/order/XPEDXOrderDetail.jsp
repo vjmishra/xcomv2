@@ -510,7 +510,8 @@ function showSplitDiv(divId)
                 	<!-- begin content w/border -->
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
-                        
+			<%-- Added Condition - isPendingOrderCheckReq For Jira 4109 --%>
+                <s:set name="isPendingOrderCheckReq" value='%{true}' />        
                         <s:if test='#orderType != "Customer" ' > 
                         <!-- <div id="OD-on-line" style="width:120px"> -->
                         	<s:if test="#xpedxLegacyOrderNumber != ''">
@@ -519,6 +520,7 @@ function showSplitDiv(divId)
                        		</s:if>
                        		<s:else>
                        			<legend> In Progress</legend>
+                       			<s:set name="isPendingOrderCheckReq" value='%{false}' />
                        		</s:else>
                        		
                         </s:if>
@@ -580,6 +582,7 @@ function showSplitDiv(divId)
                                   	</s:if>
                                   	<s:else>
                                   		In Progress
+                                  		<s:set name="isPendingOrderCheckReq" value='%{false}' /> 
                                   	</s:else> 
                                   	
                                   	
@@ -626,13 +629,13 @@ function showSplitDiv(divId)
                         			<s:else>
                         			  <s:property value='#xutil.getAttribute(#orderDetail,"Status")'/>
                         			  <s:if test='%{#status != "Cancelled"}'>
-                        				<s:if test='%{#isOrderOnApprovalHold && !#isOrderOnRejectionHold }'>
+                        				<s:if test='%{#isOrderOnApprovalHold && !#isOrderOnRejectionHold && #isPendingOrderCheckReq}'>
                         					(Pending Approval)
                         				</s:if>
-                        				<s:elseif test="%{#isOrderOnApprovalHold && #isOrderOnRejectionHold }">
+                        				<s:elseif test="%{#isOrderOnRejectionHold && #isPendingOrderCheckReq}">
                         					(Rejected)
                         				</s:elseif>  
-                        				<s:elseif test="%{#isOrderOnCSRReviewHold}">
+                        				<s:elseif test="%{#isOrderOnCSRReviewHold && && #isPendingOrderCheckReq}">
                         					(CSR Reviewing)
                         				</s:elseif>                        				                        				
                         			  </s:if>
