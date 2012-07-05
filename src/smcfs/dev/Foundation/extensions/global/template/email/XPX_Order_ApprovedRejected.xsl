@@ -59,8 +59,7 @@
 				font-size: 12px;
 			}
 			table {
-				border-spacing: 0px;
-				width: 80%;
+				border-collapse: collapse;
 				font-size: 12px;
 			}
 			table.price {
@@ -229,14 +228,14 @@
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 			
-			<table width="90%" border="0" align="center" cellpadding="1" cellspacing="1">
+			<table width="60%" border="0" align="left" cellpadding="1" cellspacing="1" style="margin-left:5px">
 				<tr>	
 					<td >
 						<table width="100%" border="0" >
 							<tr>
 								<td >
 								</td>
-								<td width="75%">
+								<td width="100%">
 								<img src="{$brandLogo}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
 								</td>
 							</tr>
@@ -249,15 +248,21 @@
 					<td style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
 					<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 0px 20px 20px;">
 					<tr>
-					
-					
 					<td>
-					Your order has been rejected.If you have any questions, please contact your order approver.Click here to review on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com. 
+					Your order has been rejected. If you have any questions, please contact your order approver. <xsl:choose><xsl:when test = 'Order/@EnvironmentID="STAGING"' ><a href="https://stg.xpedx.com/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:when>
+					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"' >
+					<a href="http://172.20.137.37:8001/swc/home/home.action?scFlag=Y">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:when>
+					<xsl:otherwise>
+					<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
+					</xsl:otherwise>
+					</xsl:choose> 
 					
 												</td>
 									</tr>
 						</table>	
-						<table width="500%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
+						<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
 						<thead>
 					<tr>
 						
@@ -355,29 +360,29 @@
 					</tr><!-- End intentionally blank row. -->
 					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnShipComplete ="C"' >	
 						Ship Order Complete
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 					    ,
 					    </xsl:if>
 						</xsl:if>						
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
-						
-					    Will Call
-					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWillCall!="N"' >					
+						Will Call
+					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
 						,
 						</xsl:if>					    					
 						</xsl:if>
 						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
 						Rush Order
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+						,
 						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >		
-								<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
-								,							
-						  </xsl:if>
-						  Order Placed on Hold
-						</xsl:if>						
-						 </td>					
+						</xsl:if>
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+						Order Placed on Hold
+						</xsl:if>
+						
+						 </td>			
 						
 						</tr>
 					<tr> 
@@ -405,7 +410,7 @@
 				</tr>
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table class="price" >
+				<table class="price" width="100%">
 			<thead>
 				<th> </th>
 
@@ -570,54 +575,77 @@
 					</tr>
 					<tr>
 					<td >
-					<table class="order-total" align="right">
+								<table class="order-total" align="right">
 						<tr>
 
 				<td>Subtotal:</td>
-				<td>$<xsl:value-of select="Order/Extn/@ExtnOrderSubTotal"/></td>
+				<td>
+				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnOrderSubTotal,"$#,###,###,###.00")'></xsl:value-of></td>
+				</td>
 			</tr>
 			<tr>
 				<td> Order Total Adjustments:</td>
-				<td>$<xsl:value-of select="Order/Extn/@ExtnTotOrderAdjustments"/></td>
-
+				<td>
+				<td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrderAdjustments,"$#,###,###,###.00")'/></td>
+				</td>
 			</tr>
 			<tr>
-				<td>Adjusted Subtotal:</td>
-				 <td>$<xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"#.00")'/></td>
+			<td>Adjusted Subtotal:</td>
+				 <td>
+				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"$#,###,###,###.00")'/></td>
+				 </td>
 			 </tr>
 			<tr>
-				<td>Tax</td>
-              <xsl:choose><xsl:when test="Order/Extn/@ExtnOrderTax !='0.00'"> 															
-				
-				<td><span class="tbd">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></span></td>
-				</xsl:when><xsl:otherwise>
-				<td><span class="tbd">To be determined</span></td>
-				</xsl:otherwise></xsl:choose>
-				</tr>
+				<td>Tax:</td>
+				<xsl:choose>
+	              	<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
+	              		<td>
+		              	<td class="align-right">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></td>	
+		              	</td>						
+					</xsl:when>
+					<xsl:otherwise>
+						<td>
+						<td class="align-right"><span class="tbd">To be determined</span></td>
+						</td>
+					</xsl:otherwise>
+				</xsl:choose>
+			</tr>
 			<tr>
-				<td> Shipping and Handling</td>
-				<xsl:choose>$<xsl:when test="Order/Extn/@ExtnTotalOrderFreight !='0.00'"> 															
-															
-				<td><span class="tbd"><xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></span></td>
-				</xsl:when><xsl:otherwise>
-				<td><span class="tbd">To be determined</span></td>
+				<td> Shipping and Handling:</td>
+				<xsl:choose>
+					<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
+						<td>												
+						<td class="align-right">$<xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></td>
+						</td>
+					</xsl:when>
+				<xsl:otherwise>
+					<td>
+					<td class="align-right"><span class="tbd">To be determined</span></td>
+					</td>
 				</xsl:otherwise></xsl:choose>
-				</tr>
+			</tr>
 
 			<tr class="last">
 				<td> Order Total (USD):</td>
-				 <td>$<xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"#.00")'/></td>
+				<td>
+				 <td class="align-right"><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,###.00")'/></td>
+				 </td>
+			
 				 </tr>
 
 						</table>
-						
+						<tr>
+					<td>
+					&#160;
+					</td>
+					</tr>
 						</td></tr>
 						<tr align="right"><td>
-						<table width="70%" border="0" align="" cellpadding="1" cellspacing="1">
+						<table width="100%" border="0" align="" cellpadding="1" cellspacing="1" style="margin-left:5px;border-collapse:inherit;text-align:left;" >
 				<tr>
-					<td>
-					This document merely confirms your order, it is not an acceptance of your order.Additional Fees may apply to accepted orders. 
-					Please do not reply to this email.<br>This mailbox is not monitored and you will not receive a response</br>
+					<td style="text-wrap:7.5in;width:720px;">
+					This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
+					Please do not reply to this email. This mailbox is not monitored and you will not receive a response.
 						</td>
 				</tr>
 			</table></td></tr>
