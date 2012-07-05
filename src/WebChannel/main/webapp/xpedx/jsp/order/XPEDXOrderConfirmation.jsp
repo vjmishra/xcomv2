@@ -360,7 +360,7 @@
                                 <tr>
                                     <td valign="top" align="left"><b>Order Status:</b></td>
                                     <td valign="top" align="left"><p>
-                                    		<s:if test="#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold">
+                                    		<s:if test="#isPendingOrderCheckReq && (#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold)">
                                     			<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> 
 												<s:if test='#isOrderOnApprovalHoldStatus && #isPendingOrderCheckReq'>
 													 <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" />													
