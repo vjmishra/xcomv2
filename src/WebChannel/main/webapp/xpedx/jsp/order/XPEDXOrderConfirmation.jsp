@@ -314,6 +314,7 @@
                                 </tr>
                                 
                                 <tr>
+                                	<s:set name="isPendingOrderCheckReq" value='%{true}' />  
                                     <td valign="top" align="left"><b>Order #:</b></td>
 									<td valign="top" align="left">
 	                                    <s:if test='#isDraftOrder'>
@@ -326,7 +327,7 @@
 														  <s:param name="orderListReturnUrl" value='#returnUrl'/>  
 														</s:url>
 														<%-- Added Condition - isPendingOrderCheckReq For Jira 4109 --%>
-														<s:set name="isPendingOrderCheckReq" value='%{true}' />  
+														
 														<s:if test='%{#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")==""}'>
 <%-- 															<s:a href="%{chainedOrderDetailsURL}" cssClass="underlink"> --%>
 															In progress
@@ -360,12 +361,14 @@
                                     <td valign="top" align="left"><b>Order Status:</b></td>
                                     <td valign="top" align="left"><p>
                                     		<s:if test="#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold">
+                                    			<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> 
 												<s:if test='#isOrderOnApprovalHoldStatus && #isPendingOrderCheckReq'>
-													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/>  <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" /></span>													
+													 <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" />													
 												</s:if>
-												<s:elseif test='%{(#isOrderOnNeedsAttentionHold && #isPendingOrderCheckReq )|| #isCSRReview}'>
-													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" /></span>													
+												<s:elseif test='%{#isOrderOnNeedsAttentionHold || #isCSRReview}'>
+													<s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" />													
 												</s:elseif>
+												</span>
 											</s:if>
 											<s:else>
 													<span><s:property value="#conOrder.getAttribute('Status')"/></span>
