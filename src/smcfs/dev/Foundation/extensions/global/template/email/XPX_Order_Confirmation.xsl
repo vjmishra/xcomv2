@@ -421,25 +421,24 @@
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
 						<xsl:if test = 'Order/Extn/@ExtnShipComplete ="C"' >	
 						Ship Order Complete
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 					    ,
 					    </xsl:if>
 						</xsl:if>						
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
-						
-					    Will Call
-					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWillCall!="N"' >					
+						Will Call
+					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
 						,
 						</xsl:if>					    					
 						</xsl:if>
 						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
 						Rush Order
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+						,
 						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >		
-								<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N"' >	
-								,							
-						  </xsl:if>
-						  Order Placed on Hold
+						</xsl:if>
+						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+						Order Placed on Hold
 						</xsl:if>
 						
 						 </td>
@@ -469,7 +468,7 @@
 				</tr>
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table class="price" >
+				<table class="price" width="100%">
 			<thead >
 				<th> </th>
 				<th> </th>
@@ -744,7 +743,7 @@
 					<tr>
 					<td style="text-wrap:7.5in;width:720px;">
 					This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
-					Please do not reply to this email.This mailbox is not monitored and you will not receive a response.
+					Please do not reply to this email. This mailbox is not monitored and you will not receive a response.
 						</td>
 				</tr>
 			</table></td></tr>
