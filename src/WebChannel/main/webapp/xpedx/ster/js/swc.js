@@ -4122,7 +4122,7 @@ function refreshMiniCartLink(forceRefresh)
 
         failure: function ( response, request ) {
 
-            alert(document.miniCartForm.miniCartDisplayError.value);
+            //alert(document.miniCartForm.miniCartDisplayError.value);
 
         }
 
@@ -4256,7 +4256,9 @@ function deleteLine(orderHeaderKey, lineKey){
 
         failure: function (response, request){
 
-            alert(document.miniCartForm.miniCartGeneralAJAXError.value);
+            //alert(document.miniCartForm.miniCartGeneralAJAXError.value);
+        	refreshMiniCartLink();
+        	$('#cluetip').hide();
 
         }
 
