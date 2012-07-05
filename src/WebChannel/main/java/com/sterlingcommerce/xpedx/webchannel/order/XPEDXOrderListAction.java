@@ -850,7 +850,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         YFCElement complexQueryElement =null;
         /* Including only the logged in ship to Id as This is causing the performance Issue -- Jagadeesh
          * Including all the assigned ship to only if assignedShipToSize is less than or equal to 30 -- Discussed with pawan on call  */
-        if(assignedShipToSize!=null && assignedShipToSize<=20) {
+        if(assignedShipToSize!=null && assignedShipToSize<=20 && SCUtil.isVoid(getShipToSearchFieldName())) {
         	complexQueryElement = orderElem.createChild("ComplexQuery");
     		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
     		Iterator<String> itr = shipToList.keySet().iterator();
@@ -858,7 +858,7 @@ public class XPEDXOrderListAction extends OrderListAction {
     			String key = (String) itr.next();
     			if(!key.equals(XPEDXConstants.DEFAULT_SELECT_SHIP_TO_LABEL)){
     			    YFCElement expElement = complexQueryOrElement.createChild("Exp");
-    				expElement.setAttribute("Name", "BuyerOrganizationCode");
+    				expElement.setAttribute("Name", "ShipToID");
     				expElement.setAttribute("Value", shipToList.get(key));
     				complexQueryOrElement.appendChild((YFCNode)expElement);
     			}
@@ -872,6 +872,10 @@ public class XPEDXOrderListAction extends OrderListAction {
         }
         //Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
         if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        	
+        	if(!SCUtil.isVoid(getShipToSearchFieldName()))//added for jira 4138
+            	orderElem.setAttribute("ShipToID", getShipToSearchFieldName());
+        	
         	if("LegacyOrderNumberValue".equals(getSearchFieldName())){
         		if(complexQueryElement == null)
     			{
