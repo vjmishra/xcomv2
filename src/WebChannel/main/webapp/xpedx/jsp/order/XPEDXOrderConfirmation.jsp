@@ -329,7 +329,8 @@
 														<s:set name="isPendingOrderCheckReq" value='%{true}' />  
 														<s:if test='%{#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")==""}'>
 <%-- 															<s:a href="%{chainedOrderDetailsURL}" cssClass="underlink"> --%>
-															In progress  
+															In progress
+															<s:set name="isPendingOrderCheckReq" value='%{false}' />  
 <%-- 															</s:a> --%>
 														</s:if>
 														<s:else>
@@ -358,15 +359,11 @@
                                 <tr>
                                     <td valign="top" align="left"><b>Order Status:</b></td>
                                     <td valign="top" align="left"><p>
-                                    
                                     		<s:if test="#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold">
-                                    			<s:set name="xpedxChainedOrderListMap" value='xpedxChainedOrderListMap'/>
-		                                    	<s:set name="chainedOrderList" value='#xpedxChainedOrderListMap.get(#orderHeaderKey)'/>
-		                                    	<s:set name="chainedOrderListSize" value='#chainedOrderList.size()'/>
-												<s:if test='#isOrderOnApprovalHoldStatus && #chainedOrderListSize==0'>
+												<s:if test='#isOrderOnApprovalHoldStatus && #isPendingOrderCheckReq'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/>  <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" /></span>													
 												</s:if>
-												<s:elseif test='%{(#isOrderOnNeedsAttentionHold && #chainedOrderListSize==0) || #isCSRReview}'>
+												<s:elseif test='%{(#isOrderOnNeedsAttentionHold && #isPendingOrderCheckReq )|| #isCSRReview}'>
 													<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" /></span>													
 												</s:elseif>
 											</s:if>
