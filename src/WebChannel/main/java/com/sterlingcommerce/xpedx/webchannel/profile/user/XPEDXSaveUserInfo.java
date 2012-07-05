@@ -108,7 +108,16 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String spendingLtCurrency;
 	private String currentSelTab;
 	private String userPwdToValidate;
+	public String defaultShipTo;
 	
+	public String getDefaultShipTo() {
+		return defaultShipTo;
+	}
+
+	public void setDefaultShipTo(String defaultShipTo) {
+		this.defaultShipTo = defaultShipTo;
+	}
+
 	/*Added for Jira 3902*/
 	private String loginId;
 	public String getLoginId() {
@@ -846,6 +855,14 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				Element input = WCMashupHelper.getMashupInput(
 						"xpedxSaveCustomerAssignments", valueMap, wcContext
 								.getSCUIContext());
+				if(operation.equals("Delete")){
+					for(int i =0;i<wList.size(); i++)
+					{
+						if(defaultShipTo.equals(wList.get(i))){
+							defaultShipTo = "";
+        				}
+        			}
+        		}
 				String inputXml = SCXmlUtil.getString(input);
 				LOG.debug("Input XML: " + inputXml);
 				Object obj = WCMashupHelper.invokeMashup(
