@@ -115,7 +115,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String currentSelTab;
 	private String userPwdToValidate;
 	public String defaultShipTo;
-	
+	private ArrayList<String> oldAssignCusts=new ArrayList<String>();
 	public String getDefaultShipTo() {
 		return defaultShipTo;
 	}
@@ -826,6 +826,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					}
 				}
 			}
+			oldAssignCusts.addAll(tmpOldAssCust);
 			Iterator<String> newIterator = tmpOldAssCust.iterator();
 			while(newIterator.hasNext()) {
 				String oldAssignedCustId= newIterator.next();
@@ -864,9 +865,15 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				if(operation.equals("Delete")){
 					try
 					{
-						if(getAllShipTos(wList).contains(defaultShipTo))
+						
+						if(!getAllShipTos(wList).contains(defaultShipTo))
 						{
 							defaultShipTo = "";
+							if(customerContactId.equals(wcContext.getLoggedInUserId()))
+							{
+								XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+								XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,"true" );
+							}
 						}
 					}
 					catch(Exception e)
@@ -902,31 +909,16 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		ISCUITransactionContext scuiTransactionContext = getWCContext().getSCUIContext().getTransactionContext(true);
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 		.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		for(int i=0;i<wList.size();i++ )
+		
+		for(int i=0;i<oldAssignCusts.size();i++ )
 		{
-			
-				Element shipToExp = inputDoc.createElement("Exp");
-				shipToExp.setAttribute("Name", "ShipToCustomerID");
-				shipToExp.setAttribute("Value", wList.get(i));
-				or.appendChild(shipToExp);
-				
-				Element billToExp = inputDoc.createElement("Exp");
-				billToExp.setAttribute("Name", "BillToCustomerID");
-				billToExp.setAttribute("Value", wList.get(i));
-				or.appendChild(billToExp);
-				
-				Element sapExp = inputDoc.createElement("Exp");
-				sapExp.setAttribute("Name", "SAPCustomerID");
-				sapExp.setAttribute("Value", wList.get(i));
-				or.appendChild(sapExp);
-				
-				Element msapExp = inputDoc.createElement("Exp");
-				msapExp.setAttribute("Name", "MSAPCustomerID");
-				msapExp.setAttribute("Value", wList.get(i));
-				or.appendChild(msapExp);
-			
-			complexQuery.appendChild(or);
-			inputDoc.getDocumentElement().appendChild(complexQuery);
+				if(wList.contains(oldAssignCusts.get(i).trim()))
+					continue;
+				createInput(inputDoc,oldAssignCusts.get(i),complexQuery,or);
+		}
+		for(int k=0;k<customers2.size();k++)
+		{
+			createInput(inputDoc,customers2.get(k),complexQuery,or);
 		}
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 		Document outputListDocument = api.executeFlow(env, "XPXCustomerHierarchyViewService",inputDoc);
@@ -939,7 +931,31 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		return shipToStr;
 	}
 	
+	private void createInput(Document inputDoc,String customerID,Element complexQuery,Element or)
+	{
+		Element shipToExp = inputDoc.createElement("Exp");
+		shipToExp.setAttribute("Name", "ShipToCustomerID");
+		shipToExp.setAttribute("Value", customerID);
+		or.appendChild(shipToExp);
+		
+		Element billToExp = inputDoc.createElement("Exp");
+		billToExp.setAttribute("Name", "BillToCustomerID");
+		billToExp.setAttribute("Value", customerID);
+		or.appendChild(billToExp);
+		
+		Element sapExp = inputDoc.createElement("Exp");
+		sapExp.setAttribute("Name", "SAPCustomerID");
+		sapExp.setAttribute("Value", customerID);
+		or.appendChild(sapExp);
+		
+		Element msapExp = inputDoc.createElement("Exp");
+		msapExp.setAttribute("Name", "MSAPCustomerID");
+		msapExp.setAttribute("Value", customerID);
+		or.appendChild(msapExp);
 	
+	    complexQuery.appendChild(or);
+	    inputDoc.getDocumentElement().appendChild(complexQuery);
+	}
 	/**
 	 * Setting some input XML attributes like User roles, Customer/User status
 	 * based on the request parameters
