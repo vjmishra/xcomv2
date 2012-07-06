@@ -11,12 +11,12 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.xpedx.constants.XpedxConstants;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
@@ -28,30 +28,6 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-
-import com.xpedx.constants.XpedxConstants;
-/*
- * input xml
- * <CustomerList>
-	<Customer 
-		EnvironmentId="" CompanyCode="" ProcessCode="" CustomerDivision="" LegacyCustomerNumber="" 
-		SuffixType="" ShipToSuffix="" BillToSuffix="" CustomerOrderBranch="" ShipFromBranch=""
-		CustomerStatus="" CustomerName="" BrandCode="" CustomerClass="" ServiceOptimizationCode=""
-		CurrencyCode="" InvoiceDistributionMethod="" NationalAccountNumber=""
-		SAPNumber="" SAPParentAccountNumber="" ShipComplete="" OrderUpdateFlag=""
-		CapsId="">	
-		<AddressList>
-			<Address AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode=""/>
-		</AddressList>
-		<SalesReps>
-			<SalesRep>
-				<EmployeeId>
-			</SalesRep>
-		</SalesReps>
-	</Customer>
-</CustomerList>
-
- */
 
 /**
  * @author mnayak-tw
@@ -462,7 +438,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 											String userName = userchildElem.getAttribute("Username");
 											String LoginId = userchildElem.getAttribute("Loginid");
 											String[] salesID = LoginId.split("@");
-											if(salesID[0]!=null && !salesID[0].isEmpty()&& StringUtils.isNumeric(salesID[0])){
+											if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
 												reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
 												reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
 												reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
@@ -3791,4 +3767,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		return m_Conn;
 	}
+	
+	/**
+	 * This operation will verfiy if Value is Integer
+	 * isInteger
+	 * @param i
+	 * @return
+	 */
+	public boolean isNumeric(String i)
+	{
+		try {
+			Integer.parseInt(i);
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+
 }	
