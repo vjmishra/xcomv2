@@ -36,10 +36,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String customerKey ;
 	private String customerContactID;
 	private Document docPOList;
+	public static String defaultShipTo;
 
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
 			Object inputObject,Element customerContactEle) {
+		
 		
 		super((Composite) userProfileInfoDetails, userProfileInfoDetails.getFormId(), inputObject);
 		this.page = userProfileInfoDetails;
@@ -107,7 +109,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
 		}
 		setModel("XPXCustomerContactIn", customerContactElement);
-		
+		defaultShipTo = getFieldValue("txtCustomerID");
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
 		//Commented for 3409		
