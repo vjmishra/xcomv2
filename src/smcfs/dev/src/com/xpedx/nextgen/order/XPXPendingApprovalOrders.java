@@ -225,6 +225,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					}
 				}
 			}
+			
+			String readEnv = YFSSystem.getProperty("environment");
+			inXML.getDocumentElement().setAttribute("EnvironmentID", readEnv);
 			String organizationCode = SCXmlUtil.getAttribute(order, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 
