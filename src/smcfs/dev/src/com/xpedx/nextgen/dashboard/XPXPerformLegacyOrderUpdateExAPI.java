@@ -1,6 +1,5 @@
 package com.xpedx.nextgen.dashboard;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,10 +26,8 @@ import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
-import com.yantra.yfs.japi.YFSException;
 
 /**
  * Description: Updates/Creates/Deletes an order in Sterling based on the Order
@@ -80,10 +77,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCDocument returnToLegacyDoc = null;
 		Exception APIException = null;
 		YFCElement cAndfOrderEle = null;
-		
-		//fOrderEle is having the complete Order XML, (it uses getOrderList API and store the complete Order XML from DB).
+		// Fulfillment Order Element.
 		YFCElement fOrderEle = null;
-		
+		// Customer Order Element.
 		YFCElement cOrderEle = null;
 		String headerProcessCode = null;
 		String isOrderPlaceFlag = null;
@@ -189,7 +185,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						}
 					} else {
 						if (headerProcessCode.equalsIgnoreCase("A")) {
-							this.getOrderExtendedPriceInfo(rootEle, null);
+							this.getOrderExtendedPriceInfo(rootEle);
 						}
 					}
 
@@ -197,11 +193,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if (!headerProcessCode.equalsIgnoreCase("A")) {
 						throw new Exception("Either Customer Order Or Fulfillment Order Not Exists!");
 					} else {
-						this.getOrderExtendedPriceInfo(rootEle, null);
+						this.getOrderExtendedPriceInfo(rootEle);
 					}
 				}
 			}
-
+			
+			// OPR Exception Scenario
 			String isOrderUpdate = rootEle.getAttribute("IsOrderUpdate");
 			if (!YFCObject.isNull(isOrderUpdate) && !YFCObject.isVoid(isOrderUpdate) && isOrderUpdate.equalsIgnoreCase("Y") && !headerProcessCode.equalsIgnoreCase("A")) {
 				if (!isOPRProcessed(fOrderEle)) {
@@ -1203,6 +1200,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					
 					YFCElement _fOrdExtnElem = _fOrderLineElem.createChild("Extn");
 					_fOrdExtnElem.setAttribute("ExtnWebLineNumber", webLineNo);
+					
+					// Reset the Price Information Of the Order To Zero.
+					resetPriceToZero(_fOrdExtnElem);
 					rootOrdLinesEle.appendChild(_fOrderLineElem);	
 				}
 			} else {
@@ -1432,77 +1432,49 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	}
 
 	private void setExtendedPriceInfo(YFSEnvironment env, YFCElement ordEle, boolean isCustOrder) throws Exception {
-
-		String legTotOrdAdj = null;
-
-		if (ordEle.hasAttribute("LegTotOrderAdjustments")) {
-			legTotOrdAdj = ordEle.getAttribute("LegTotOrderAdjustments");
-			if (YFCObject.isNull(legTotOrdAdj) || YFCObject.isVoid(legTotOrdAdj)) {
-				legTotOrdAdj = "0.0";
+		
+		String fillAndKill = "";
+		if (ordEle.hasAttribute("FillAndKill")) {
+			fillAndKill = ordEle.getAttribute("FillAndKill");
+			if (YFCObject.isNull(fillAndKill)) {
+				fillAndKill = "";
 			}
-		} else {
-			legTotOrdAdj = "0.0";
-		}
-
-		String ordSubTotal = null;
-		if (ordEle.hasAttribute("OrderSubTotal")) {
-			ordSubTotal = ordEle.getAttribute("OrderSubTotal");
-			if (YFCObject.isNull(ordSubTotal) || YFCObject.isVoid(ordSubTotal)) {
-				ordSubTotal = "0.0";
-			}
-		} else {
-			ordSubTotal = "0.0";
-		}
-
-		String totOrdValWithoutTax = null;
-		if (ordEle.hasAttribute("TotOrdValWithoutTaxes")) {
-			totOrdValWithoutTax = ordEle.getAttribute("TotOrdValWithoutTaxes");
-			if (YFCObject.isNull(totOrdValWithoutTax) || YFCObject.isVoid(totOrdValWithoutTax)) {
-				totOrdValWithoutTax = "0.0";
-			}
-		} else {
-			totOrdValWithoutTax = "0.0";
-		}
-
+		}								
+		
 		YFCElement ordExtnEle = ordEle.getChildElement("Extn");
 		if (ordExtnEle != null) {
-			if (isCustOrder) {
-				ordExtnEle.setAttribute("ExtnLegTotOrderAdjustments", legTotOrdAdj);
-				ordExtnEle.setAttribute("ExtnOrderSubTotal", ordSubTotal);
-				ordExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", totOrdValWithoutTax);
-			} else {
-				String extnTotOrdVal = null;
-				if (ordExtnEle.hasAttribute("ExtnTotalOrderValue")) {
-					extnTotOrdVal = ordExtnEle.getAttribute("ExtnTotalOrderValue");
-					if (YFCObject.isNull(extnTotOrdVal) || YFCObject.isVoid(extnTotOrdVal)) {
-						extnTotOrdVal = "0.0";
-					}
-				} else {
+	
+			String extnTotOrdVal = null;
+			if (ordExtnEle.hasAttribute("ExtnTotalOrderValue")) {
+				extnTotOrdVal = ordExtnEle.getAttribute("ExtnTotalOrderValue");
+				if (YFCObject.isNull(extnTotOrdVal) || YFCObject.isVoid(extnTotOrdVal)) {
 					extnTotOrdVal = "0.0";
 				}
+			} else {
+				extnTotOrdVal = "0.0";
+			}
 
-				String extnOrdTax = null;
-				if (ordExtnEle.hasAttribute("ExtnOrderTax")) {
-					extnOrdTax = ordExtnEle.getAttribute("ExtnOrderTax");
-					if (YFCObject.isNull(extnOrdTax) || YFCObject.isVoid(extnOrdTax)) {
-						extnOrdTax = "0.0";
-					}
-				} else {
+			String extnOrdTax = null;
+			if (ordExtnEle.hasAttribute("ExtnOrderTax")) {
+				extnOrdTax = ordExtnEle.getAttribute("ExtnOrderTax");
+				if (YFCObject.isNull(extnOrdTax) || YFCObject.isVoid(extnOrdTax)) {
 					extnOrdTax = "0.0";
 				}
+			} else {
+				extnOrdTax = "0.0";
+			}
 
-				String extnTotOrdFreight = null;
-				if (ordExtnEle.hasAttribute("ExtnTotalOrderFreight")) {
-					extnTotOrdFreight = ordExtnEle.getAttribute("ExtnTotalOrderFreight");
-					if (YFCObject.isNull(extnTotOrdFreight) || YFCObject.isVoid(extnTotOrdFreight)) {
-						extnTotOrdFreight = "0.0";
-					}
-				} else {
+			String extnTotOrdFreight = null;
+			if (ordExtnEle.hasAttribute("ExtnTotalOrderFreight")) {
+				extnTotOrdFreight = ordExtnEle.getAttribute("ExtnTotalOrderFreight");
+				if (YFCObject.isNull(extnTotOrdFreight) || YFCObject.isVoid(extnTotOrdFreight)) {
 					extnTotOrdFreight = "0.0";
 				}
-				double dExtnTotOrdValWithoutTax = Double.parseDouble(extnTotOrdVal) - (Double.parseDouble(extnOrdTax) + Double.parseDouble(extnTotOrdFreight));
-				ordExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", new Double(dExtnTotOrdValWithoutTax).toString());
+			} else {
+				extnTotOrdFreight = "0.0";
 			}
+			double dExtnTotOrdValWithoutTax = Double.parseDouble(extnTotOrdVal) - (Double.parseDouble(extnOrdTax) + Double.parseDouble(extnTotOrdFreight));
+			ordExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", new Double(dExtnTotOrdValWithoutTax).toString());
 		}
 
 		double extnOrdSubTotal = 0.0;
@@ -1512,84 +1484,58 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			YFCIterable<YFCElement> yfcItr = ordLinesEle.getChildren("OrderLine");			
 			while (yfcItr.hasNext()) {
 				YFCElement ordLineEle = (YFCElement) yfcItr.next();
-				String extPrice = null;
-				String lineProcessCode = null;
+				String lineProcessCode = "";
 				
 				// To retrieve Line Process Code.
-				if (!isCustOrder) {
-					if (ordLineEle.hasAttribute("LineProcessCode")) {
-						lineProcessCode = ordLineEle.getAttribute("LineProcessCode");
-						if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {							
-							break;
-						}
-					} else {
-						break;						
+				
+				if (ordLineEle.hasAttribute("LineProcessCode")) {
+					lineProcessCode = ordLineEle.getAttribute("LineProcessCode");
+					if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {							
+						lineProcessCode = "";
 					}
+				} else {
+					lineProcessCode = "";						
 				}
 				
-				if (ordLineEle.hasAttribute("ExtendedPrice")) {
-					extPrice = ordLineEle.getAttribute("ExtendedPrice");
-					if (YFCObject.isNull(extPrice) || YFCObject.isNull(extPrice)) {
-						extPrice = "0.0";
-					}
-				} else {
-					extPrice = "0.0";
-				}
-
-				String legOrdLineAdj = null;
-				if (ordLineEle.hasAttribute("LegOrderLineAdjustments")) {
-					legOrdLineAdj = ordLineEle.getAttribute("LegOrderLineAdjustments");
-					if (YFCObject.isNull(legOrdLineAdj) || YFCObject.isNull(legOrdLineAdj)) {
-						legOrdLineAdj = "0.0";
-					}
-				} else {
-					legOrdLineAdj = "0.0";
-				}
-
 				ordLineExtnEle = ordLineEle.getChildElement("Extn");
 				if (ordLineExtnEle != null) {
-					if (isCustOrder) {
-						ordLineExtnEle.setAttribute("ExtnExtendedPrice", extPrice);
-						ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", legOrdLineAdj);
-					} else {
-						String extnLineOrdTotal = null;
-						if (ordLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
-							extnLineOrdTotal = ordLineExtnEle.getAttribute("ExtnLineOrderedTotal");
-							if (YFCObject.isNull(extnLineOrdTotal) || YFCObject.isVoid(extnLineOrdTotal)) {
-								extnLineOrdTotal = "0.0";
-							}
-						} else {
+				
+					String extnLineOrdTotal = null;
+					if (ordLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
+						extnLineOrdTotal = ordLineExtnEle.getAttribute("ExtnLineOrderedTotal");
+						if (YFCObject.isNull(extnLineOrdTotal) || YFCObject.isVoid(extnLineOrdTotal)) {
 							extnLineOrdTotal = "0.0";
 						}
-						
-						// Add the line total to Order sub total if the line is not being cancelled.
-						if (!lineProcessCode.equalsIgnoreCase("D") && !lineProcessCode.equalsIgnoreCase("_D")) {
-							extnOrdSubTotal = extnOrdSubTotal + Double.parseDouble(extnLineOrdTotal);
-						}
+					} else {
+						extnLineOrdTotal = "0.0";
+					}
+					
+					// Add the line total to Order sub total if the line is not being cancelled.
+					if ((!lineProcessCode.equalsIgnoreCase("D") && !lineProcessCode.equalsIgnoreCase("_D")) || fillAndKill.equalsIgnoreCase("Y")) {
+						extnOrdSubTotal = extnOrdSubTotal + Double.parseDouble(extnLineOrdTotal);
+					}
 
-						String extnLegOrdLineAdj = null;
-						if (ordLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
-							extnLegOrdLineAdj = ordLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
-							if (YFCObject.isNull(extnLegOrdLineAdj) || YFCObject.isVoid(extnLegOrdLineAdj)) {
-								extnLegOrdLineAdj = "0.0";
-							}
-						} else {
+					String extnLegOrdLineAdj = null;
+					if (ordLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
+						extnLegOrdLineAdj = ordLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
+						if (YFCObject.isNull(extnLegOrdLineAdj) || YFCObject.isVoid(extnLegOrdLineAdj)) {
 							extnLegOrdLineAdj = "0.0";
 						}
-						ordLineExtnEle.setAttribute("ExtnExtendedPrice", new Double(Double.parseDouble(extnLineOrdTotal) + Double.parseDouble(extnLegOrdLineAdj)).toString());
+					} else {
+						extnLegOrdLineAdj = "0.0";
 					}
+					ordLineExtnEle.setAttribute("ExtnExtendedPrice", new Double(Double.parseDouble(extnLineOrdTotal) + Double.parseDouble(extnLegOrdLineAdj)).toString());
+					ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegOrdLineAdj);
 				}
 			}
 			
-			if (!isCustOrder) {	
-				if (ordExtnEle != null && ! new Double(extnOrdSubTotal).toString().equalsIgnoreCase("0.0")) {
-					ordExtnEle.setAttribute("ExtnOrderSubTotal", new Double(extnOrdSubTotal).toString());
-				}
-			} else {
-				if (ordExtnEle != null) {
-					ordExtnEle.setAttribute("ExtnLegacyOrderNo", "");
-					ordExtnEle.setAttribute("ExtnGenerationNo", "");
-				}
+			if (ordExtnEle != null && ! new Double(extnOrdSubTotal).toString().equalsIgnoreCase("0.0")) {
+				ordExtnEle.setAttribute("ExtnOrderSubTotal", new Double(extnOrdSubTotal).toString());
+			}
+			
+			if (isCustOrder && ordExtnEle != null) {	
+				ordExtnEle.setAttribute("ExtnLegacyOrderNo", "");
+				ordExtnEle.setAttribute("ExtnGenerationNo", "");
 			}
 		}
 	}
@@ -1974,7 +1920,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								chngcOrdStatusLineEle1.appendChild(chngcOrdStatusLineTranQtyEle1);
 								
 								if (rootEle.hasAttribute("FillAndKill")) {
-								fillAndKill = rootEle.getAttribute("FillAndKill");
+									fillAndKill = rootEle.getAttribute("FillAndKill");
 								}								
 								if (!YFCObject.isNull(fillAndKill) && !YFCObject.isVoid(fillAndKill) 
 										&& fillAndKill.equalsIgnoreCase("Y")) {
@@ -4439,7 +4385,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					}
 				} else {
 					// Stamp Extended Price Info
-					this.getOrderExtendedPriceInfo(rootEle, ordEle);
+					this.getOrderExtendedPriceInfo(rootEle);
 				}
 			} else {
 				throw new Exception("Attribute OrderType Not Available in OrderList Template!");
@@ -4448,192 +4394,67 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		return retOrdEle;
 	}
 
-	private void getOrderExtendedPriceInfo(YFCElement rootEle, YFCElement ordEle) throws Exception {
+	private void getOrderExtendedPriceInfo(YFCElement rootEle) throws Exception {
 
-		String ordHeaderKey = null;
-		String webConfNum = null;
-		String legacyOrdNum = null;
-		String genNo = null;
-		String rootOrdHeaderKey = null;
-		String extnWebConfNum = null;
-		String extnLegacyOrdNum = null;
-		String extnGenNo = null;
-
-		YFCElement extnEle = null;
-		YFCElement ordExtnEle = null;
-
-		if (ordEle != null) {
-			ordHeaderKey = ordEle.getAttribute("OrderHeaderKey");
-			if (YFCObject.isNull(ordHeaderKey) || YFCObject.isVoid(ordHeaderKey)) {
-				ordHeaderKey = "DUMMY";
-			}
-			ordExtnEle = ordEle.getChildElement("Extn");
-			if (ordExtnEle != null) {
-				if (ordExtnEle.hasAttribute("ExtnWebConfNum")) {
-					webConfNum = ordExtnEle.getAttribute("ExtnWebConfNum");
-					if (YFCObject.isNull(webConfNum) || YFCObject.isVoid(webConfNum)) {
-						throw new Exception("Attribute ExtnWebConfNum Cannot be NULL or Void!");
-					}
-				} else {
-					throw new Exception("Attribute ExtnWebConfNum Not Available in getOrderList Template!");
-				}
-
-				if (ordExtnEle.hasAttribute("ExtnLegacyOrderNo")) {
-					legacyOrdNum = ordExtnEle.getAttribute("ExtnLegacyOrderNo");
-					if (YFCObject.isNull(legacyOrdNum) || YFCObject.isVoid(legacyOrdNum)) {
-						legacyOrdNum = "DUMMY";
-					}
-				} else {
-					legacyOrdNum = "DUMMY";
-				}
-
-				if (ordExtnEle.hasAttribute("ExtnGenerationNo")) {
-					genNo = ordExtnEle.getAttribute("ExtnGenerationNo");
-					if (YFCObject.isNull(genNo) || YFCObject.isVoid(genNo)) {
-						genNo = "DUMMY";
-					}
-				} else {
-					genNo = "DUMMY";
-				}
-			}
-		}
-
-		rootOrdHeaderKey = rootEle.getAttribute("OrderHeaderKey");
-		if (YFCObject.isNull(rootOrdHeaderKey) || YFCObject.isVoid(rootOrdHeaderKey)) {
-			rootOrdHeaderKey = "DUMMY";
-		}
 		YFCElement rootExtnEle = rootEle.getChildElement("Extn");
-		if (rootExtnEle != null) {
-			if (rootExtnEle.hasAttribute("ExtnWebConfNum")) {
-				extnWebConfNum = rootExtnEle.getAttribute("ExtnWebConfNum");
-				if (YFCObject.isNull(extnWebConfNum) || YFCObject.isVoid(extnWebConfNum)) {
-					throw new Exception("Attribute ExtnWebConfNum Cannot be NULL or Void!");
-				}
-			} else {
-				throw new Exception("Attribute ExtnWebConfNum Not Available in Incoming Legacy Message!");
-			}
-
-			if (rootExtnEle.hasAttribute("ExtnLegacyOrderNo")) {
-				extnLegacyOrdNum = rootExtnEle.getAttribute("ExtnLegacyOrderNo");
-				if (YFCObject.isNull(extnLegacyOrdNum) || YFCObject.isVoid(extnLegacyOrdNum)) {
-					extnLegacyOrdNum = "DUMMY";
-				}
-			} else {
-				extnLegacyOrdNum = "DUMMY";
-			}
-
-			if (rootExtnEle.hasAttribute("ExtnGenerationNo")) {
-				extnGenNo = rootExtnEle.getAttribute("ExtnGenerationNo");
-				if (YFCObject.isNull(extnGenNo) || YFCObject.isVoid(extnGenNo)) {
-					extnGenNo = "DUMMY";
-				}
-			} else {
-				extnGenNo = "DUMMY";
-			}
-		}
-
-		boolean toBeChangedOrder = false;
-		if ((ordEle == null) || (ordHeaderKey.equalsIgnoreCase(rootOrdHeaderKey))
-				|| (webConfNum.equalsIgnoreCase(extnWebConfNum) && legacyOrdNum.equalsIgnoreCase(extnLegacyOrdNum) && genNo.equalsIgnoreCase(extnGenNo))) {
-			toBeChangedOrder = true;
-			extnEle = rootExtnEle;
-		} else {
-			extnEle = ordExtnEle;
-		}
 
 		String extnLegOrdTotAdj = null;
-		if (extnEle.hasAttribute("ExtnLegTotOrderAdjustments")) {
-			extnLegOrdTotAdj = extnEle.getAttribute("ExtnLegTotOrderAdjustments");
+		if (rootExtnEle.hasAttribute("ExtnLegTotOrderAdjustments")) {
+			extnLegOrdTotAdj = rootExtnEle.getAttribute("ExtnLegTotOrderAdjustments");
 			if (YFCObject.isNull(extnLegOrdTotAdj) || YFCObject.isVoid(extnLegOrdTotAdj)) {
 				extnLegOrdTotAdj = "0.0";
-				extnEle.setAttribute("ExtnLegTotOrderAdjustments", extnLegOrdTotAdj);
+				rootExtnEle.setAttribute("ExtnLegTotOrderAdjustments", extnLegOrdTotAdj);
 			}
 		} else {
 			extnLegOrdTotAdj = "0.0";
-			extnEle.setAttribute("ExtnLegTotOrderAdjustments", extnLegOrdTotAdj);
-		}
-		if (rootEle.hasAttribute("LegTotOrderAdjustments")) {
-			String _legOrdTotAdj = rootEle.getAttribute("LegTotOrderAdjustments");
-			if (YFCObject.isNull(_legOrdTotAdj) || YFCObject.isVoid(_legOrdTotAdj)) {
-				rootEle.setAttribute("LegTotOrderAdjustments", extnLegOrdTotAdj);
-			} else {
-				double _dLegOrdTotAdj = Double.parseDouble(_legOrdTotAdj);
-				double _dExtnLegOrdTotAdj = Double.parseDouble(extnLegOrdTotAdj);
-				_dLegOrdTotAdj = _dLegOrdTotAdj + _dExtnLegOrdTotAdj;
-				rootEle.setAttribute("LegTotOrderAdjustments", new Double(_dLegOrdTotAdj).toString());
-			}
-		} else {
-			rootEle.setAttribute("LegTotOrderAdjustments", extnLegOrdTotAdj);
-		}
+			rootExtnEle.setAttribute("ExtnLegTotOrderAdjustments", extnLegOrdTotAdj);
+		}		
 
 		String extnTotOrdFreight = null;
-		if (extnEle.hasAttribute("ExtnTotalOrderFreight")) {
-			extnTotOrdFreight = extnEle.getAttribute("ExtnTotalOrderFreight");
+		if (rootExtnEle.hasAttribute("ExtnTotalOrderFreight")) {
+			extnTotOrdFreight = rootExtnEle.getAttribute("ExtnTotalOrderFreight");
 			if (YFCObject.isNull(extnTotOrdFreight) || YFCObject.isVoid(extnTotOrdFreight)) {
 				extnTotOrdFreight = "0.0";
-				extnEle.setAttribute("ExtnTotalOrderFreight", extnTotOrdFreight);
+				rootExtnEle.setAttribute("ExtnTotalOrderFreight", extnTotOrdFreight);
 			}
 		} else {
 			extnTotOrdFreight = "0.0";
-			extnEle.setAttribute("ExtnTotalOrderFreight", extnTotOrdFreight);
+			rootExtnEle.setAttribute("ExtnTotalOrderFreight", extnTotOrdFreight);
 		}
 
 		String extnOrdTax = null;
-		if (extnEle.hasAttribute("ExtnOrderTax")) {
-			extnOrdTax = extnEle.getAttribute("ExtnOrderTax");
+		if (rootExtnEle.hasAttribute("ExtnOrderTax")) {
+			extnOrdTax = rootExtnEle.getAttribute("ExtnOrderTax");
 			if (YFCObject.isNull(extnOrdTax) || YFCObject.isVoid(extnOrdTax)) {
 				extnOrdTax = "0.0";
-				extnEle.setAttribute("ExtnOrderTax", extnOrdTax);
+				rootExtnEle.setAttribute("ExtnOrderTax", extnOrdTax);
 			}
 		} else {
 			extnOrdTax = "0.0";
-			extnEle.setAttribute("ExtnOrderTax", extnOrdTax);
+			rootExtnEle.setAttribute("ExtnOrderTax", extnOrdTax);
 		}
 		
 		String extnTotOrdValue = null;
-		if (extnEle.hasAttribute("ExtnTotalOrderValue")) {
-			extnTotOrdValue = extnEle.getAttribute("ExtnTotalOrderValue");
+		if (rootExtnEle.hasAttribute("ExtnTotalOrderValue")) {
+			extnTotOrdValue = rootExtnEle.getAttribute("ExtnTotalOrderValue");
 			if (YFCObject.isNull(extnTotOrdValue) || YFCObject.isVoid(extnTotOrdValue)) {
 				extnTotOrdValue = "0.0";
-				extnEle.setAttribute("ExtnTotalOrderValue", extnTotOrdValue);
+				rootExtnEle.setAttribute("ExtnTotalOrderValue", extnTotOrdValue);
 			}
 		} else {
 			extnTotOrdValue = "0.0";
-			extnEle.setAttribute("ExtnTotalOrderValue", extnTotOrdValue);
+			rootExtnEle.setAttribute("ExtnTotalOrderValue", extnTotOrdValue);
 		}
+		
 		double dExtnOrdTotWithoutTax = Double.parseDouble(extnTotOrdValue) - (Double.parseDouble(extnOrdTax) + Double.parseDouble(extnTotOrdFreight));
+		rootExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", new Double(dExtnOrdTotWithoutTax).toString());
 
-		if (rootEle.hasAttribute("TotOrdValWithoutTaxes")) {
-			String _ordTotWithOutTax = rootEle.getAttribute("TotOrdValWithoutTaxes");
-			if (YFCObject.isNull(_ordTotWithOutTax) || YFCObject.isVoid(_ordTotWithOutTax)) {
-				rootEle.setAttribute("TotOrdValWithoutTaxes", new Double(dExtnOrdTotWithoutTax).toString());
-			} else {
-				double _dOrdTotWithOutTax = Double.parseDouble(_ordTotWithOutTax);
-				_dOrdTotWithOutTax = _dOrdTotWithOutTax + dExtnOrdTotWithoutTax;
-				rootEle.setAttribute("TotOrdValWithoutTaxes", new Double(_dOrdTotWithOutTax).toString());
-			}
-		} else {
-			rootEle.setAttribute("TotOrdValWithoutTaxes", new Double(dExtnOrdTotWithoutTax).toString());
-		}
-
-		String subOrdTot = this.getOrderLineExtendedPriceInfo(rootEle, ordEle, toBeChangedOrder);
-
-	if (rootEle.hasAttribute("OrderSubTotal")) {
-			String _subOrdTot = rootEle.getAttribute("OrderSubTotal");
-			if (YFCObject.isNull(_subOrdTot) || YFCObject.isVoid(_subOrdTot)) {
-				rootEle.setAttribute("OrderSubTotal", subOrdTot);
-			} else {
-				double _dSubOrdTot = Double.parseDouble(_subOrdTot);
-				double dSubOrdTot = Double.parseDouble(subOrdTot);
-				_dSubOrdTot = _dSubOrdTot + dSubOrdTot;
-				rootEle.setAttribute("OrderSubTotal", new Double(_dSubOrdTot).toString());
-			}
-		} else {
-			rootEle.setAttribute("OrderSubTotal", subOrdTot);
-		}
+		String subOrdTot = this.getOrderLineExtendedPriceInfo(rootEle);
+		rootExtnEle.setAttribute("ExtnOrderSubTotal", subOrdTot);
 	}
 
-	private String getOrderLineExtendedPriceInfo(YFCElement rootEle, YFCElement ordEle, boolean toBeChangedOrder) throws Exception {
+	private String getOrderLineExtendedPriceInfo(YFCElement rootEle) throws Exception {
+			
 		double dExtnOrdSubTotal = 0.0;
 		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
 		if (rootOrdLinesEle != null) {
@@ -4642,170 +4463,19 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				YFCElement rootOrdLineEle = (YFCElement) yfcItr.next();
 				YFCElement rootOrdLineExtnEle = rootOrdLineEle.getChildElement("Extn");
 				if (rootOrdLineExtnEle != null) {
-					if (toBeChangedOrder) {
-						String extnLegTotOrdLineAdj = null;
-						if (rootOrdLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
-							extnLegTotOrdLineAdj = rootOrdLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
-							if (YFCObject.isNull(extnLegTotOrdLineAdj) || YFCObject.isVoid(extnLegTotOrdLineAdj)) {
-								extnLegTotOrdLineAdj = "0.0";
-								rootOrdLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegTotOrdLineAdj);
-							}
-						} else {
+					
+					String extnLegTotOrdLineAdj = null;
+					if (rootOrdLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
+						extnLegTotOrdLineAdj = rootOrdLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
+						if (YFCObject.isNull(extnLegTotOrdLineAdj) || YFCObject.isVoid(extnLegTotOrdLineAdj)) {
 							extnLegTotOrdLineAdj = "0.0";
 							rootOrdLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegTotOrdLineAdj);
 						}
-						if (rootOrdLineEle.hasAttribute("LegOrderLineAdjustments")) {
-							String _legTotOrdLineAdj = rootOrdLineEle.getAttribute("LegOrderLineAdjustments");
-							if (YFCObject.isNull(_legTotOrdLineAdj) || YFCObject.isVoid(_legTotOrdLineAdj)) {
-								rootOrdLineEle.setAttribute("LegOrderLineAdjustments", extnLegTotOrdLineAdj);
-							} else {
-								double dLegTotOrdLineAdj = Double.parseDouble(_legTotOrdLineAdj);
-								double dExtnLegTotOrdLineAdj = Double.parseDouble(extnLegTotOrdLineAdj);
-								dLegTotOrdLineAdj = dLegTotOrdLineAdj + dExtnLegTotOrdLineAdj;
-								rootOrdLineEle.setAttribute("LegOrderLineAdjustments", new Double(dLegTotOrdLineAdj).toString());
-							}
-						} else {
-							rootOrdLineEle.setAttribute("LegOrderLineAdjustments", extnLegTotOrdLineAdj);
-						}
-
-						String extnLineOrdTot = null;
-						if (rootOrdLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
-							extnLineOrdTot = rootOrdLineExtnEle.getAttribute("ExtnLineOrderedTotal");
-							if (YFCObject.isNull(extnLineOrdTot) || YFCObject.isVoid(extnLineOrdTot)) {
-								extnLineOrdTot = "0.0";
-								rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineOrdTot);
-							}
-						} else {
-							extnLineOrdTot = "0.0";
-							rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineOrdTot);
-						}
-						if (rootOrdLineEle.hasAttribute("ExtendedPrice")) {
-							String extPrice = rootOrdLineEle.getAttribute("ExtendedPrice");
-							if (YFCObject.isNull(extPrice) || YFCObject.isVoid(extPrice)) {
-								rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj))).toString());
-							} else {
-								double dExtPrice = Double.parseDouble(extPrice);
-								dExtPrice = dExtPrice + Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj);
-								rootOrdLineEle.setAttribute("ExtendedPrice", dExtPrice);
-							}
-						} else {
-							rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj))).toString());
-						}
 					} else {
-						String extnWebLineNo = null;
-						if (rootOrdLineExtnEle.hasAttribute("ExtnWebLineNumber")) {
-							extnWebLineNo = rootOrdLineExtnEle.getAttribute("ExtnWebLineNumber");
-							if (YFCObject.isNull(extnWebLineNo) || YFCObject.isVoid(extnWebLineNo)) {
-								throw new Exception("Attribute ExtnWebLineNumber Cannot be NULL or Void!");
-							}
-						} else {
-							throw new Exception("Attribute ExtnWebLineNumber Not Available in Incoming Legacy Message!");
-						}
-
-						YFCElement _ordLineEle = this.getOrderLineForWebLineNo(extnWebLineNo, ordEle);
-						if (_ordLineEle != null) {
-							YFCElement _ordLineExtnEle = _ordLineEle.getChildElement("Extn");
-							if (_ordLineExtnEle != null) {
-								String legTotOrdLineAdj = null;
-								if (_ordLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
-									legTotOrdLineAdj = _ordLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
-									if (YFCObject.isNull(legTotOrdLineAdj) || YFCObject.isVoid(legTotOrdLineAdj)) {
-										legTotOrdLineAdj = "0.0";
-										_ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", legTotOrdLineAdj);
-									}
-								} else {
-									legTotOrdLineAdj = "0.0";
-									_ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", legTotOrdLineAdj);
-								}
-								if (rootOrdLineEle.hasAttribute("LegOrderLineAdjustments")) {
-									String _legTotOrdLineAdj = rootOrdLineEle.getAttribute("LegOrderLineAdjustments");
-									if (YFCObject.isNull(_legTotOrdLineAdj) || YFCObject.isVoid(_legTotOrdLineAdj)) {
-										rootOrdLineEle.setAttribute("LegOrderLineAdjustments", legTotOrdLineAdj);
-									} else {
-										double dLegTotOrdLineAdj = Double.parseDouble(_legTotOrdLineAdj);
-										double dExtnLegTotOrdLineAdj = Double.parseDouble(legTotOrdLineAdj);
-										dLegTotOrdLineAdj = dLegTotOrdLineAdj + dExtnLegTotOrdLineAdj;
-										rootOrdLineEle.setAttribute("LegOrderLineAdjustments", new Double(dLegTotOrdLineAdj).toString());
-									}
-								} else {
-									rootOrdLineEle.setAttribute("LegOrderLineAdjustments", legTotOrdLineAdj);
-								}
-
-								String lineOrdTot = null;
-								if (_ordLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
-									lineOrdTot = _ordLineExtnEle.getAttribute("ExtnLineOrderedTotal");
-									if (YFCObject.isNull(lineOrdTot) || YFCObject.isVoid(lineOrdTot)) {
-										lineOrdTot = "0.0";
-										_ordLineExtnEle.setAttribute("ExtnLineOrderedTotal", lineOrdTot);
-									}
-								} else {
-									lineOrdTot = "0.0";
-									_ordLineExtnEle.setAttribute("ExtnLineOrderedTotal", lineOrdTot);
-								}
-								if (rootOrdLineEle.hasAttribute("ExtendedPrice")) {
-									String extPrice = rootOrdLineEle.getAttribute("ExtendedPrice");
-									if (YFCObject.isNull(extPrice) || YFCObject.isVoid(extPrice)) {
-										rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(lineOrdTot) + Double.parseDouble(legTotOrdLineAdj))).toString());
-									} else {
-										double dExtPrice = Double.parseDouble(extPrice);
-										dExtPrice = dExtPrice + Double.parseDouble(lineOrdTot) + Double.parseDouble(legTotOrdLineAdj);
-										rootOrdLineEle.setAttribute("ExtendedPrice", dExtPrice);
-									}
-								} else {
-									rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(lineOrdTot) + Double.parseDouble(legTotOrdLineAdj))).toString());
-								}
-							}
-						} else {
-							String extnLegTotOrdLineAdj = null;
-							if (rootOrdLineExtnEle.hasAttribute("ExtnLegOrderLineAdjustments")) {
-								extnLegTotOrdLineAdj = rootOrdLineExtnEle.getAttribute("ExtnLegOrderLineAdjustments");
-								if (YFCObject.isNull(extnLegTotOrdLineAdj) || YFCObject.isVoid(extnLegTotOrdLineAdj)) {
-									extnLegTotOrdLineAdj = "0.0";
-									rootOrdLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegTotOrdLineAdj);
-								}
-							} else {
-								extnLegTotOrdLineAdj = "0.0";
-								rootOrdLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegTotOrdLineAdj);
-							}
-							if (rootOrdLineEle.hasAttribute("LegOrderLineAdjustments")) {
-								String _legTotOrdLineAdj = rootOrdLineEle.getAttribute("LegOrderLineAdjustments");
-								if (YFCObject.isNull(_legTotOrdLineAdj) || YFCObject.isVoid(_legTotOrdLineAdj)) {
-									rootOrdLineEle.setAttribute("LegOrderLineAdjustments", extnLegTotOrdLineAdj);
-								} else {
-									double dLegTotOrdLineAdj = Double.parseDouble(_legTotOrdLineAdj);
-									double dExtnLegTotOrdLineAdj = Double.parseDouble(extnLegTotOrdLineAdj);
-									dLegTotOrdLineAdj = dLegTotOrdLineAdj + dExtnLegTotOrdLineAdj;
-									rootOrdLineEle.setAttribute("LegOrderLineAdjustments", new Double(dLegTotOrdLineAdj).toString());
-								}
-							} else {
-								rootOrdLineEle.setAttribute("LegOrderLineAdjustments", extnLegTotOrdLineAdj);
-							}
-
-							String extnLineOrdTot = null;
-							if (rootOrdLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
-								extnLineOrdTot = rootOrdLineExtnEle.getAttribute("ExtnLineOrderedTotal");
-								if (YFCObject.isNull(extnLineOrdTot) || YFCObject.isVoid(extnLineOrdTot)) {
-									extnLineOrdTot = "0.0";
-									rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineOrdTot);
-								}
-							} else {
-								extnLineOrdTot = "0.0";
-								rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineOrdTot);
-							}
-							if (rootOrdLineEle.hasAttribute("ExtendedPrice")) {
-								String extPrice = rootOrdLineEle.getAttribute("ExtendedPrice");
-								if (YFCObject.isNull(extPrice) || YFCObject.isVoid(extPrice)) {
-									rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj))).toString());
-								} else {
-									double dExtPrice = Double.parseDouble(extPrice);
-									dExtPrice = dExtPrice + Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj);
-									rootOrdLineEle.setAttribute("ExtendedPrice", dExtPrice);
-								}
-							} else {
-								rootOrdLineEle.setAttribute("ExtendedPrice", new Double((Double.parseDouble(extnLineOrdTot) + Double.parseDouble(extnLegTotOrdLineAdj))).toString());
-							}
-						}
+						extnLegTotOrdLineAdj = "0.0";
+						rootOrdLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", extnLegTotOrdLineAdj);
 					}
+						
 					String extnLineOrdTotal = null;
 					if (rootOrdLineExtnEle.hasAttribute("ExtnLineOrderedTotal")) {
 						extnLineOrdTotal = rootOrdLineExtnEle.getAttribute("ExtnLineOrderedTotal");
@@ -4817,6 +4487,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						extnLineOrdTotal = "0.0";
 						rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineOrdTotal);
 					}
+					
+					// To Set Extended Price.
+					double dExtnExtendedPrice = Double.parseDouble(extnLineOrdTotal) + Double.parseDouble(extnLegTotOrdLineAdj);
+					rootOrdLineExtnEle.setAttribute("ExtnExtendedPrice", new Double(dExtnExtendedPrice).toString());
+				    // To Calculate Order Sub Total.
 					dExtnOrdSubTotal = dExtnOrdSubTotal + Double.parseDouble(extnLineOrdTotal);
 				}
 			}
@@ -5685,9 +5360,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									Float fReqShipOrdQty = Float.parseFloat(reqShipOrdQty);
 									Float fOrderedQuantity = Float.parseFloat(orderedQuantity);
 									rootOrdLineTranQtyEle.setAttribute("OrderedQty", fReqShipOrdQty.toString());
-									if(fOrderedQuantity > fReqShipOrdQty){ 
-								        rootOrdLineEle.setAttribute("LineProcessCode", "D"); 
-									} 
+									if (fOrderedQuantity > fReqShipOrdQty) {
+										rootOrdLineEle.setAttribute("LineProcessCode", "D");
+									}									
 								}
 							}
 						}
@@ -5975,10 +5650,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (ordLinesEle != null) {
 			YFCIterable<YFCElement> yfcItr = ordLinesEle.getChildren("OrderLine");
 			while (yfcItr.hasNext()) {
+				
 				YFCElement ordLineEle = (YFCElement) yfcItr.next();
-				String extPrice = null;
 				String webLineNo = null;
 				String orderLineTotal = null;
+				String orderLineAdj = null;
+				String orderLineExtPrice = null;
+				HashMap<String,String> lineInfoMap = new HashMap<String,String>();
 				
 				// To Retrieve WebLineNo
 				YFCElement ordLineExtnEle = ordLineEle.getChildElement("Extn");
@@ -5992,36 +5670,25 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					throw new Exception("OrderLine/Extn Element Not Available!");
 				}
 				
-				// To get the order line total for the customer order line.
-				orderLineTotal = getOrderLineTotalForWebLineNo(webLineNo, chngfOrderEle, cAndfOrderEle, headerProcessCode);
+				// To get the order line details(Order Line Total, Order Line Adjustment and Line Extended Price) for the customer order line.
+				lineInfoMap = getOrderLineDetailsForWebLineNo(webLineNo, chngfOrderEle, cAndfOrderEle, headerProcessCode);
+				orderLineTotal = lineInfoMap.get("OrderLineTotal");
 				if (YFCObject.isNull(orderLineTotal) || YFCObject.isVoid(orderLineTotal)) {					
 					orderLineTotal = "0.0";
 				}
-
-				if (ordLineEle.hasAttribute("ExtendedPrice")) {
-					extPrice = ordLineEle.getAttribute("ExtendedPrice");
-					if (YFCObject.isNull(extPrice) || YFCObject.isVoid(extPrice)) {
-						extPrice = "0.0";
-					}
-				} else {
-					extPrice = "0.0";
+				orderLineAdj = lineInfoMap.get("OrderLineAdj");
+				if (YFCObject.isNull(orderLineAdj) || YFCObject.isVoid(orderLineAdj)) {					
+					orderLineAdj = "0.0";
 				}
-
-				String legOrdLineAdj = null;
-				if (ordLineEle.hasAttribute("LegOrderLineAdjustments")) {
-					legOrdLineAdj = ordLineEle.getAttribute("LegOrderLineAdjustments");
-					if (YFCObject.isNull(legOrdLineAdj) || YFCObject.isVoid(legOrdLineAdj)) {
-						legOrdLineAdj = "0.0";
-					}
-				} else {
-					legOrdLineAdj = "0.0";
+				orderLineExtPrice = lineInfoMap.get("OrdLineExtPrice");
+				if (YFCObject.isNull(orderLineExtPrice) || YFCObject.isVoid(orderLineExtPrice)) {					
+					orderLineExtPrice = "0.0";
 				}
 
 				if (ordLineExtnEle != null) {
-						
-						ordLineExtnEle.setAttribute("ExtnLineOrderedTotal", orderLineTotal);
-						ordLineExtnEle.setAttribute("ExtnExtendedPrice", extPrice);
-						ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", legOrdLineAdj);
+					ordLineExtnEle.setAttribute("ExtnLineOrderedTotal", orderLineTotal);
+					ordLineExtnEle.setAttribute("ExtnExtendedPrice", orderLineExtPrice);
+					ordLineExtnEle.setAttribute("ExtnLegOrderLineAdjustments", orderLineAdj);
 				}
 			}
 					
@@ -6048,11 +5715,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	 * 
 	 */
 	
-	public String getOrderLineTotalForWebLineNo(String webLineNo, YFCElement chngfOrderEle, YFCElement cAndfOrderEle, String headerProcessCode) throws Exception {
+	public HashMap<String, String> getOrderLineDetailsForWebLineNo(String webLineNo, YFCElement chngfOrderEle, YFCElement cAndfOrderEle, String headerProcessCode) throws Exception {
 		
+		HashMap<String,String> lineInfoMap = new HashMap<String,String>();
 		String _webLineNo = null;
 		double ordLineTotalDB = 0.0;
 		double ordLineTotalLeg = 0.0;
+		double ordLineAdjDB = 0.0;
+		double ordLineAdjLeg = 0.0;
+		double ordLineExtPrice = 0.0;
 		String orderLineKey = "";
 		String _orderLineKey = "";
 		String lineProcessCode = null;
@@ -6078,11 +5749,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							lineProcessCode = orderLineElem.getAttribute("LineProcessCode");
 							if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {
 								lineProcessCode = "";
-								// throw new Exception("Attribute LineProcessCode Cannot be Null or Void!");
 							}
 						} else {
 							lineProcessCode = "";
-							// throw new Exception("Attribute LineProcessCode Not Available In The ChangeOrder XML! ");
 						}
 						
 						// To retrieve Order Line Key from XML sent by Legacy.
@@ -6103,17 +5772,25 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						
 						// Calculate order line total.
 						String extnLineOrdTotal = orderLineExtnElem.getAttribute("ExtnLineOrderedTotal");
-						if (!YFCObject.isNull(extnLineOrdTotal) && !YFCObject.isVoid(extnLineOrdTotal) ) {
+						if (!YFCObject.isNull(extnLineOrdTotal) && !YFCObject.isVoid(extnLineOrdTotal)) {
 							ordLineTotalLeg = ordLineTotalLeg + Double.parseDouble(extnLineOrdTotal);
 						}
+						
+						// Calculate order line Adjustment.
+						String extnOrderLineAdj = orderLineExtnElem.getAttribute("ExtnLegOrderLineAdjustments");
+						if (!YFCObject.isNull(extnLineOrdTotal) && !YFCObject.isVoid(extnLineOrdTotal)) {
+							ordLineAdjLeg = ordLineAdjLeg + Double.parseDouble(extnOrderLineAdj);
+						} else {
+							extnOrderLineAdj = "0.0";
+						}
+						break;
 					}					
-				} else {
-					throw new Exception("Attribute WebLineNo Not Available In The ChangeOrder XML! ");
-				}	
+				} 	
 			}
 		}
 		
 		// To get the line order total from the FO in database.
+		boolean isNewLine = true;
 		YFCIterable<YFCElement> yfcItr = cAndfOrderEle.getChildren("Order");
 		while (yfcItr.hasNext()) {
 			YFCElement ordEle = (YFCElement) yfcItr.next();
@@ -6140,7 +5817,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							}
 							
 							if (webLineNo.equalsIgnoreCase(_webLineNo)) {
-								
+								isNewLine = false;
 								// To retrieve order line key of the line stored in DB.
 								if(_orderLineElem.hasAttribute("OrderLineKey")){
 									_orderLineKey = _orderLineElem.getAttribute("OrderLineKey");
@@ -6152,6 +5829,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								}
 								
 								String extnLineOrdTotal = _orderLineExtnElem.getAttribute("ExtnLineOrderedTotal");
+								String extnLegTotalLineAdj = _orderLineExtnElem.getAttribute("ExtnLegOrderLineAdjustments");
 								
 								if (orderLineKey.equalsIgnoreCase(_orderLineKey) || lineProcessCode.equalsIgnoreCase("A")) {
 									// Header Process Code is compared instead of Line Process Code as Legacy might not send Line information to delete an Order.
@@ -6159,7 +5837,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 										ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg ;
 									}
 								} else {
-									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal) ;
+									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal);
+									ordLineAdjDB = ordLineAdjDB + Double.parseDouble(extnLegTotalLineAdj);
 								}
 							}
 						}
@@ -6168,14 +5847,25 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		}
 		
-		if (headerProcessCode.equalsIgnoreCase("A")) {
-			ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg ;
+		if (headerProcessCode.equalsIgnoreCase("A") || isNewLine) {
+			ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg;
+			ordLineAdjDB = ordLineAdjDB + ordLineAdjLeg;
 		}
+		
+		ordLineExtPrice = ordLineTotalDB + ordLineAdjDB;
+			
 		if(log.isDebugEnabled()){	
 			log.debug("");
-			log.debug("CustomerOrder OrderLineTotal For WebLineNo :" + webLineNo + " is " + ordLineTotalDB);
+			log.debug("WebLineNo:" + webLineNo);
+			log.debug("ordLineTotal:" + ordLineTotalDB);
+			log.debug("ordLineAdj:" + ordLineAdjDB);
+			log.debug("ordLineExtPrice:" + ordLineExtPrice);
 		}
-		return new Double(ordLineTotalDB).toString();
+		
+		lineInfoMap.put("OrderLineTotal", new Double(ordLineTotalDB).toString());
+		lineInfoMap.put("OrderLineAdj", new Double(ordLineAdjDB).toString());
+		lineInfoMap.put("OrdLineExtPrice", new Double(ordLineExtPrice).toString());
+		return lineInfoMap;
 	}
 	
 	private boolean hasOrderLines(YFCElement chngfOrderEle) {
@@ -6200,9 +5890,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			extnElement.removeAttribute("ExtnTotalOrderValue");
 		}
 	}
+	
+	private void resetPriceToZero(YFCElement fOrdExtnElem) {
+		fOrdExtnElem.setAttribute("ExtnLegOrderLineAdjustments", "0.0");
+		fOrdExtnElem.setAttribute("ExtnLineOrderedTotal", "0.0");
+		fOrdExtnElem.setAttribute("ExtnLineShippableTotal", "0.0");
+		fOrdExtnElem.setAttribute("ExtnExtendedPrice", "0.0");
+	}
 
 	public void setProperties(Properties _prop) throws Exception {
 		this._prop = _prop;
 	}
-
 }
