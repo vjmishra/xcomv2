@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -445,22 +446,50 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									YFCElement reportParentSAPChangeChildUserElement = null;
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 									
+									//3740 - Modified for SalesRep
+									YFCElement reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_SALES_REP);
+									YFCElement reportParentSAPChangeChildSalesUserElement = null;
+									
 									String existingMSAPId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
+									//3740 - Modified for Report Changes Start
+									Document userList = getUserList(env, existingMSAPId);
+									Element userListElem = userList.getDocumentElement();
+									NodeList userChildList = userListElem.getChildNodes();
+									StringBuffer formattedUserName;
+										for (int counter = 0; counter < userChildList.getLength(); counter++) {
+											formattedUserName = new StringBuffer();
+											Element userchildElem = (Element) userChildList.item(counter);
+											String userName = userchildElem.getAttribute("Username");
+											String LoginId = userchildElem.getAttribute("Loginid");
+											String[] salesID = LoginId.split("@");
+											if(salesID[0]!=null && !salesID[0].isEmpty()&& StringUtils.isNumeric(salesID[0])){
+												reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
+												reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
+												reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
+											}else{
+												reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+												reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append("-").append(LoginId).toString());
+												reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+											}
+									/*	}
+										//3740 - Modified for Report Changes End
+										
+										
 									Document ccDoc = getCustomerContactList(env, existingMSAPId);
 									Element ccElem = ccDoc.getDocumentElement();
 									NodeList childList = ccElem.getChildNodes();																		
 									for(int counter = 0; counter < childList.getLength(); counter ++) {
 										Element childElem =(Element)childList.item(counter); 
 										String userId = childElem.getAttribute("UserID");
-										/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
+										Begin - Changes made by Mitesh Parikh for JIRA 3002
 										reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
 										reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, userId);
 										reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
-										/*End - Changes made by Mitesh Parikh for JIRA 3002*/
+										End - Changes made by Mitesh Parikh for JIRA 3002
 										//arrUserList.add(userId);
-										ArrayList<String> arrUserAssgnList = new ArrayList<String>();
+*/										ArrayList<String> arrUserAssgnList = new ArrayList<String>();
 										
-										Document assgnDoc = getCustomerAssignmentList(env, userId);
+										Document assgnDoc = getCustomerAssignmentList(env, LoginId);
 										Element custAssgnElem = assgnDoc.getDocumentElement();
 										NodeList assgnNodeList = custAssgnElem.getElementsByTagName("Customer");
 										for(int counter1=0; counter1 < assgnNodeList.getLength(); counter1++) {
@@ -483,7 +512,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("IgnoreOrdering","Y");
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("Operation", "Delete");
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingMSAPId);
-												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", userId);
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", LoginId);
 												
 												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());												
 											}											
@@ -493,7 +522,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												&& retainAllCollection.size() == arrUserAssgnList.size()) {
 											//Move the login
 											log.info("Following logins have no assignments ---");
-											log.info("Login ID ---" + userId);
+											log.info("Login ID ---" + LoginId);
 											log.info("Old MSAP hierarchy ---" + existingMSAPId);
 											log.info("New MSAP hierarchy ---" + masterSapCustomerId);
 										}
@@ -504,7 +533,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									 * Below mentioned service just puts the xml in a Weblogic JMS which in turn forwards it to
 									 * 'XPXReportParentSAPChanges' service.
 									 */	
-									
+									//3740 - Modified for SalesRep in report
+									if(reportParentSAPChangeSalesUsersElement!=null){
+										reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeSalesUsersElement);	
+									}
+									//3740 - Modified for SalesRep in report End
 									api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());	
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/	
 									
@@ -981,6 +1014,34 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	}
 	
 
+	/**
+	 * Created method to fetch UserDetails based on existingMsapId
+	 * @param env
+	 * @param existingMSAPId
+	 * @return
+	 */
+	private Document getUserList(YFSEnvironment env, String existingMSAPId) {
+
+		Document getUserListInput = YFCDocument.createDocument("User").getDocument();
+		Element userHeaderElement = getUserListInput.getDocumentElement();
+		userHeaderElement.setAttribute("OrganizationKey", existingMSAPId);
+
+		Document getUserListOutput = null;
+		try {
+			String outputTemplate = "<UserList><User Username='' Loginid=''></User></UserList>";
+			env.setApiTemplate("getUserList", outputTemplate);
+			getUserListOutput = api.invoke(env, XPXLiterals.GET_USER_LIST_API,
+					getUserListInput);
+		} catch (YFSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return getUserListOutput;
+	}
 
 	//JIRA 3740 - Start
 	/**
