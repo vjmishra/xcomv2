@@ -189,6 +189,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		try {
 			YFCDate orderDate = new YFCDate();
 			orderPlaceDate = orderDate.getString();
+			Element isPendingApproval = null;
 			
 			//Commented this line as it is causing exception. Looks like the mashup is not defined.
 			if (isDraftOrder()) {
@@ -216,8 +217,19 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					return FAILURE;
 				}
 				
-				prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
-				
+				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
+				{
+					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+						if(isPendingApproval != null)
+						{
+							Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+							if(holdType != null)
+							{
+								orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdType, true));
+								
+							}
+						}
+				}
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				//get the order details
 				/*Map<String, String> valueMap = new HashMap<String, String>();
