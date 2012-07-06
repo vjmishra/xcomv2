@@ -530,8 +530,8 @@ $(function() {
 				}
 				},
 				'autoDimensions'	: false,
-				'width' 			: 800,
-				'height' 			: 410,
+				'width' 			: 740,
+				'height' 			: 370,
 				//XNGTP - JIRA- 489 
 				'onClosed' : function(){				
 			    	document.getElementById("showShipToLocationsDiv").innerHTML = '';
