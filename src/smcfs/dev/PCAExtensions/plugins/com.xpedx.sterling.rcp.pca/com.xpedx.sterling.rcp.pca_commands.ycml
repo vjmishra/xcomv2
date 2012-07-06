@@ -329,6 +329,7 @@
                 URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="multiApi" APIType="API" Name="multiApi" OutputTemplateName="multiApi" URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
@@ -336,6 +337,7 @@
             <namespace name="XPXGetImmediateChildCustomerListService" templateName="XPXGetImmediateChildCustomerListService" type="output"/>
             <namespace name="multiApi" templateName="multiApi" type="output"/>
             <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="XPXmanageCustomer" templateName="XPXmanageCustomer" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.enterpriseUserEntry.wizards.YCDEnterpriseUserEntryWizard">

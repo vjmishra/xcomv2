@@ -2,9 +2,13 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.util.ArrayList;
 
+import javax.xml.xpath.XPathConstants;
+
+import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -12,6 +16,7 @@ import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class CustomerAssignmentPanelBehavior extends YRCBehavior {
@@ -22,8 +27,11 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	String organizationCode;
 	Element multiAPIDocElement=null;
 	private String UserOrgCode;
+	private String customerContactID;
+	private String customerKey;
 	private Object inputObject;
 	private ArrayList assignedList;
+	private boolean extnDefaultShipTo = false;
 	public CustomerAssignmentPanelBehavior(
 			CustomerAssignmentPanel customerAssignmentPanel,
 			Object inputObject,Element customerContactEle) {
@@ -38,7 +46,8 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		organizationCode=(String)YRCXmlUtils.getAttribute(this.inputElement, "OrganizationCode");
 		Element userElement = YRCXmlUtils.getXPathElement(getModel("XPXCustomerContactIn"),"/CustomerContact/User");
 		UserOrgCode= (String)YRCXmlUtils.getAttribute(userElement, "OrganizationKey");
-		
+		customerContactID =(String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
+		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
 		initPage();
 	}
 
@@ -88,6 +97,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						}
 						page.resetTreeAssignedValues(assignedList);
 						setModel("XPXGetCustomerAssignmentList",outXml);
+						getCustomerAssignment();
 						
 					} else if ("getCustomerList".equals(apiname)) {
 						System.out.println("its inside the api call-->>");
@@ -97,6 +107,10 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						getChildList();    //--function used to set the values of child nodes in Tree structure
 					} else if ("multiApi".equals(apiname)) {
 						 getCustomerAssignmentsAfterUpdate();
+						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
+					}
+					  else if ("manageCustomer".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
 				}
@@ -128,10 +142,60 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	{
 		String[] apinames = {"getCustomerAssignmentList"};
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>")						
+				YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>"),
 		};
-		callApis(apinames, docInput);	
+		callApis(apinames, docInput);
 	
+	}
+	
+	public void callManageCustomer()
+	{
+		Element targetModel = getModel("XPXCustomerContactIn");
+		if(!YRCPlatformUI.isVoid(customerContactID)){
+		targetModel.setAttribute("CustomerContactID", customerContactID);		
+		if(extnDefaultShipTo){
+			extnDefaultShipTo = false;
+			Element eleExtn = YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/Extn");
+			eleExtn.setAttribute("ExtnDefaultShipTo","");
+		}
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setFormId(page.getFormId());
+		ctx.setApiName("manageCustomer");
+		ctx.setInputXml(createManageCustomerOutputXml(targetModel).getOwnerDocument());
+		if (!page.isDisposed())
+			callApi(ctx, page);
+		}
+	}
+	
+	public void getCustomerAssignment(){
+		String defaultShipTo = UserProfileInfoDetailsBehavior.defaultShipTo;
+		Element customerAssignment = getModel("XPXGetCustomerAssignmentList");
+		NodeList nodCustAssign=customerAssignment.getElementsByTagName("CustomerAssignment");
+		ArrayList assignedCustomerShipTo = new ArrayList();
+		for(int i=0;i<nodCustAssign.getLength();i++){
+			Element eleCust=(Element) nodCustAssign.item(i);
+			NodeList nodCustLists=eleCust.getElementsByTagName("Customer");			
+			for(int j=0;j<nodCustLists.getLength();j++){
+				Element eleGroup=(Element) nodCustLists.item(j);
+				String assignedShipTo = eleGroup.getAttribute("CustomerID");
+				assignedCustomerShipTo.add(assignedShipTo);
+			}
+		}
+		if(!YRCPlatformUI.isVoid(defaultShipTo)){
+			if (!(assignedCustomerShipTo.contains(defaultShipTo)) || YRCPlatformUI.isVoid(assignedCustomerShipTo)) {
+
+				extnDefaultShipTo = true;
+				callManageCustomer();
+			}
+		}
+	}
+	
+	private Element createManageCustomerOutputXml(Element results){
+		
+		Element targetDoc = YRCXmlUtils.createFromString("<Customer CustomerKey='" + customerKey + "'/>").getDocumentElement();
+		Element targetContactList = YRCXmlUtils.createChild(targetDoc, "CustomerContactList");
+		YRCXmlUtils.importElement(targetContactList, results);
+		return targetDoc;
 	}
 
 	public void getChildList(){
