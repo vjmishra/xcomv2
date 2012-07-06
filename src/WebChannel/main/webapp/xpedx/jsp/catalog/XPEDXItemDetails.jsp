@@ -764,10 +764,10 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         },
         failure: function (response, request){
 			Ext.MessageBox.hide(); 
-            var myDiv = document.getElementById("ajax-body-1");
-            myDiv.innerHTML = response.responseText;
-            DialogPanel.show('modalDialogPanel1');
-            svg_classhandlers_decoratePage();
+            //var myDiv = document.getElementById("ajax-body-1");
+            //myDiv.innerHTML = response.responseText;
+           // DialogPanel.show('modalDialogPanel1');
+           // svg_classhandlers_decoratePage();
              }
     });		
 }
