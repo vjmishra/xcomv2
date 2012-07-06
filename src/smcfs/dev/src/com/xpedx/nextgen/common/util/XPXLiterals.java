@@ -573,6 +573,8 @@ public class XPXLiterals {
 	public static final String A_TEAM_NAME = "XPXSalesRep";
 
 	public static final String A_USER_ID = "UserId";
+	
+	public static final String A_SALES_ID = "SalesId";
 
 	public static final String MANAGE_CUSTOMER_ASSIGNMENT_API = "manageCustomerAssignment";
 
@@ -629,6 +631,8 @@ public class XPXLiterals {
 	public static final String A_UOM_DESCRIPTION = "UomDescription";
 
 	public static final String E_USER = "User";
+	
+	public static final String E_SALES = "SalesRep";
 
 	public static final String A_EXTN_EMPLOYEE_ID = "ExtnEmployeeId";
 
@@ -764,6 +768,7 @@ public class XPXLiterals {
 	/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
 	public static final String A_CUSTOMER_RECORD_TYPE="CustomerRecordType";
 	public static final String A_USERS = "Users";
+	public static final String A_SALES_REP = "SalesRep";
 	public static final String OLD_SAP_PARENT_ACCOUNT_NO = "OldSAPParentAccountNumber";
 	public static final String OLD_SAP_PARENT_NAME = "OldSAPParentName";
 	public static final String NEW_SAP_PARENT_ACCOUNT_NO = "NewSAPParentAccountNumber";
