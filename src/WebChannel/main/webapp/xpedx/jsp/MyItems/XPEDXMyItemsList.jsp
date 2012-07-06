@@ -512,7 +512,10 @@
 	<p><strong>Name</strong>&nbsp;&nbsp;<input type="text" name="listName" id="listName" value="" maxlength="255" onkeyup="javascript:listNameCheck(this, 'dlgShareList');" onmouseover="javascript:listNameCheck(this, 'dlgShareList');"/></p>
 	<p style="word-wrap:break-word; width: 50px;"><strong>Description</strong>&nbsp;&nbsp;<input type="text" name="listDesc" id="listDesc" value="" maxlength="30"/></p>
 	
-
+	<%--for jira 4134 - sales rep Last Modified By display  --%>
+	 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
+	<%--end of jira 4134 changes - sales rep Last Modified By display --%>
+	
 	<s:hidden name="listKey" value="new"></s:hidden>
 	<s:hidden name="editMode" value="%{true}"></s:hidden>
 	<s:hidden name="itemCount" value="%{0}"></s:hidden>
@@ -1035,7 +1038,14 @@
 					<!--  removed bold text and the word items -->	
 				<p class="grey-mil" style="width:440px; word-wrap:break-word;"><s:property value="#desc" /></p>
 				</td> 
-				<td class="createdby-lastmod"><s:property value="#modifiedBy" /></td>
+				<%--For jira 4134 - sales rep Last Modified By display --%>
+				<s:if test="%{#isSalesRep}"> 
+					<td class="createdby-lastmod"> <s:property value='%{#session.loggedInUserName}'/></td>
+				</s:if>
+				<s:else>
+					<td class="createdby-lastmod"><s:property value="#modifiedBy" /></td>
+				</s:else>
+				<%--Fix End For jira 4134 - sales rep Last Modified By display--%>
 				<td class="createdby-lastmod"><s:property value='%{#util.formatDate(#lastMod, #wcContext, null, "MM/dd/yyyy")}' /></td>
 				<s:if test="%{#spShareAdminOnly != ''}">
 				<s:if test='%{#isUserAdmin == false && #spShareAdminOnly == "Y"}'>
