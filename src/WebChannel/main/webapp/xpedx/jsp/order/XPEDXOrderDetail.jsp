@@ -511,7 +511,10 @@ function showSplitDiv(divId)
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
 			<%-- Added Condition - isPendingOrderCheckReq For Jira 4109 --%>
-                <s:set name="isPendingOrderCheckReq" value='%{true}' />        
+			<s:set name="isPendingOrderCheckReq" value='%{true}' /> 
+			<s:if test='chainedFOMap.size() > 0'>
+                <s:set name="isPendingOrderCheckReq" value='%{false}' />
+            </s:if>       
                         <s:if test='#orderType != "Customer" ' > 
                         <!-- <div id="OD-on-line" style="width:120px"> -->
                         	<s:if test="#xpedxLegacyOrderNumber != ''">
@@ -519,8 +522,7 @@ function showSplitDiv(divId)
                         	<!-- </div> -->
                        		</s:if>
                        		<s:else>
-                       			<legend> In Progress</legend>
-                       			<s:set name="isPendingOrderCheckReq" value='%{false}' />
+                       			<legend> In Progress</legend>                       			
                        		</s:else>
                        		
                         </s:if>
@@ -581,8 +583,7 @@ function showSplitDiv(divId)
 							      	</s:else> 
                                   	</s:if>
                                   	<s:else>
-                                  		In Progress
-                                  		<s:set name="isPendingOrderCheckReq" value='%{false}' /> 
+                                  		In Progress 
                                   	</s:else> 
                                   	
                                   	

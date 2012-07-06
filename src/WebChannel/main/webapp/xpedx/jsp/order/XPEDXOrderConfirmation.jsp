@@ -319,7 +319,10 @@
 									<td valign="top" align="left">
 	                                    <s:if test='#isDraftOrder'>
 		                                    <s:set name="xpedxChainedOrderListMap" value='xpedxChainedOrderListMap'/>
-		                                    <s:set name="chainedOrderList" value='#xpedxChainedOrderListMap.get(#orderHeaderKey)'/>
+		                                    <s:set name="chainedOrderList" value='#xpedxChainedOrderListMap.get(#orderHeaderKey)'/>		                                   
+		                                    <s:if test='#chainedOrderList.size() > 0'>
+               									 <s:set name="isPendingOrderCheckReq" value='%{false}' />
+            								</s:if>
 		                                    <s:iterator value='#chainedOrderList' id='chainedOrder' status='iStatus'>
 			                						<s:set name='ChainedOrderExtn' value='#xutil.getChildElement(#chainedOrder,"Extn")'/>
 			                							<s:url id="chainedOrderDetailsURL" action="orderDetail" escapeAmp="false" >
@@ -330,8 +333,7 @@
 														
 														<s:if test='%{#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")==""}'>
 <%-- 															<s:a href="%{chainedOrderDetailsURL}" cssClass="underlink"> --%>
-															In progress
-															<s:set name="isPendingOrderCheckReq" value='%{false}' />  
+															In progress  
 <%-- 															</s:a> --%>
 														</s:if>
 														<s:else>
@@ -360,12 +362,13 @@
                                 <tr>
                                     <td valign="top" align="left"><b>Order Status:</b></td>
                                     <td valign="top" align="left"><p>
-                                    		<s:if test="#isPendingOrderCheckReq && (#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold)">
+                                    		<s:if test="((#isPendingOrderCheckReq && (#isOrderOnApprovalHoldStatus || #isOrderOnNeedsAttentionHold))
+                                    		              || #isCSRReview)">
                                     			<span class="attention"><s:property value="#conOrder.getAttribute('Status')"/> 
 												<s:if test='#isOrderOnApprovalHoldStatus && #isPendingOrderCheckReq'>
 													 <s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL" />													
 												</s:if>
-												<s:elseif test='%{#isOrderOnNeedsAttentionHold || #isCSRReview}'>
+												<s:elseif test='%{(#isOrderOnNeedsAttentionHold && #isPendingOrderCheckReq) || #isCSRReview}'>
 													<s:text name="MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW" />													
 												</s:elseif>
 												</span>
