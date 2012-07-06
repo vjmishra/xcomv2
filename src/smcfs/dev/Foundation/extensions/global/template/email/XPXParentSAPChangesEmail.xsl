@@ -80,31 +80,20 @@
 																	</xsl:choose>
 																</td></tr>
 																</xsl:for-each>
-																<tr><td>
-																	<xsl:when test="count(./Users/User) = 0"> 
-																		<xsl:text>No user</xsl:text>
-																	</xsl:when>
-														    </td></tr>
 														</tr>
 														<tr></tr>
-														 <tr>
-															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >SalesRep: </td>
- 															<xsl:for-each select="./SalesRep/Sales/@SalesId" >
+													 <tr>
+															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Sales Rep: </td>
+ 															<xsl:for-each select="./SalesReps/SalesRep/@SalesId" >
 															<tr><td></td><td width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
 																<xsl:value-of select="."/>																															
 																	<xsl:choose>
-																	 <xsl:when test="count(./SalesRep/Sales) &gt; 0"> 
+																	 <xsl:when test="count(./SalesReps/SalesRep) &gt; 0"> 
 																		<xsl:text></xsl:text>
 																	</xsl:when>
-															
 																	</xsl:choose>
 																</td></tr>
-															</xsl:for-each>
-															<tr><td>
-																  	<xsl:when test="count(./SalesRep/Sales) = 0">
-																		<xsl:text>No Sales Rep</xsl:text>
-																	</xsl:when>
-														    </td></tr>
+																</xsl:for-each>
 														</tr>
 														<br></br>	
 													</table>
