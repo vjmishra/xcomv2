@@ -447,7 +447,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 									
 									//3740 - Modified for SalesRep
-									YFCElement reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_SALES_REP);
+									YFCElement reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS);
 									YFCElement reportParentSAPChangeChildSalesUserElement = null;
 									
 									String existingMSAPId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
