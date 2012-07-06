@@ -15,9 +15,12 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.profile.user.UserProfileHelper;
@@ -28,6 +31,8 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXClientPasswordValidator;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult.ResultType;
 import com.yantra.yfc.dom.YFCDocument;
@@ -37,6 +42,7 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
  * @author vsriram
@@ -856,12 +862,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						"xpedxSaveCustomerAssignments", valueMap, wcContext
 								.getSCUIContext());
 				if(operation.equals("Delete")){
-					for(int i =0;i<wList.size(); i++)
+					try
 					{
-						if(defaultShipTo.equals(wList.get(i))){
+						if(getAllShipTos(wList).contains(defaultShipTo))
+						{
 							defaultShipTo = "";
-        				}
-        			}
+						}
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
         		}
 				String inputXml = SCXmlUtil.getString(input);
 				LOG.debug("Input XML: " + inputXml);
@@ -882,6 +893,53 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		}
 	}
 
+	private ArrayList<String> getAllShipTos(List<String> wList) throws Exception
+	{
+		ArrayList<String> shipToStr=new ArrayList<String>();
+		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierarchyView");
+		Element complexQuery = inputDoc.createElement("ComplexQuery");
+		Element or = inputDoc.createElement("Or");
+		ISCUITransactionContext scuiTransactionContext = getWCContext().getSCUIContext().getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+		.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		for(int i=0;i<wList.size();i++ )
+		{
+			
+				Element shipToExp = inputDoc.createElement("Exp");
+				shipToExp.setAttribute("Name", "ShipToCustomerID");
+				shipToExp.setAttribute("Value", wList.get(i));
+				or.appendChild(shipToExp);
+				
+				Element billToExp = inputDoc.createElement("Exp");
+				billToExp.setAttribute("Name", "BillToCustomerID");
+				billToExp.setAttribute("Value", wList.get(i));
+				or.appendChild(billToExp);
+				
+				Element sapExp = inputDoc.createElement("Exp");
+				sapExp.setAttribute("Name", "SAPCustomerID");
+				sapExp.setAttribute("Value", wList.get(i));
+				or.appendChild(sapExp);
+				
+				Element msapExp = inputDoc.createElement("Exp");
+				msapExp.setAttribute("Name", "MSAPCustomerID");
+				msapExp.setAttribute("Value", wList.get(i));
+				or.appendChild(msapExp);
+			
+			complexQuery.appendChild(or);
+			inputDoc.getDocumentElement().appendChild(complexQuery);
+		}
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document outputListDocument = api.executeFlow(env, "XPXCustomerHierarchyViewService",inputDoc);
+		Element custView = outputListDocument.getDocumentElement();
+		ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(custView, "XPXCustHierarchyView");
+		for(int j=0;j<xpxCustViewElems.size();j++)
+		{
+			shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
+		}
+		return shipToStr;
+	}
+	
+	
 	/**
 	 * Setting some input XML attributes like User roles, Customer/User status
 	 * based on the request parameters
