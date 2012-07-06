@@ -47,6 +47,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	{
 		
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+		Document changeOrderOutput = null;
 		boolean isApprovalReq = false;
 		String orderHeaderKey = inXML.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
 		if(orderHeaderKey == null || orderHeaderKey.trim().length() == 0)
@@ -103,12 +104,18 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				}
 				//end of jira 3484
 				if(approverOnHold!=null && approverOnHold.trim().length()>0) {
-					applyHoldTypeOnOrder(env,orderElem,approverOnHold);					
+					changeOrderOutput = applyHoldTypeOnOrder(env,orderElem,approverOnHold);					
 				}
 			}
 		}
-		return inXML;
-		
+		if(changeOrderOutput != null)	
+		{
+			return changeOrderOutput;
+		}
+		else
+		{
+			return inXML;
+		}
 	}
 	
 	public Double getSpendingLimit(YFSEnvironment env,Element orderElement) {
@@ -158,7 +165,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		return spendingLimit;
 	}
 	
-	public void applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
+	public Document applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
+		Document changeOrderOutput = null;
 		if(orderElement!=null && approver!=null) {
 			// Applying the Hold Type ORDER_LIMIT_APPROVAL on the order with one of the above approvers
 			Document changeOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
@@ -170,15 +178,19 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			holdType.setAttribute("Status", "1100");
 			holdType.setAttribute("ResolverUserId", approver);
 			holdTypes.appendChild(holdType);changeOrderInputElem.appendChild(holdTypes);
+			Document Template = SCXmlUtil.createFromString("<Order><OrderHoldTypes><OrderHoldType HoldType='' ReasonText='' ResolverUserId='' Status=''/></OrderHoldTypes></Order>");
+			env.setApiTemplate("changeOrder", Template);
 			//invoking the change Order to apply the hold type
 			try {
-				Document changeOrderOutput = api.invoke(env, "changeOrder", changeOrderInputDoc);
+				changeOrderOutput = api.invoke(env, "changeOrder", changeOrderInputDoc);
+				env.clearApiTemplate("changeOrder");
 			}
 			catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
 		}
+		return changeOrderOutput;
 	}
 	
 	/*
@@ -235,12 +247,14 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
 			String formattedOrderNo = getFormattedOrderNumber(orderExtn);
 			inXML.getDocumentElement().setAttribute("FormattedOrderNo",formattedOrderNo);
+			
 			Map<String,String> getUOMListMap = getUOMList(env);
 			
 			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(order, "OrderLines/OrderLine");
 			adduomDescription(orderLinesElem,getUOMListMap);
 			
 			//stamp the approval related URLs.
+			
 			String baseURL = YFSSystem.getProperty("baseURL");
 			String toApproveOrderURL = baseURL + "/order/approvalList.action?sfId="+ sellerOrgCode +"&scFlag=y"; //http://stg.xpedx.com/swc/order/approvalList.action?sfId=xpedx&scFlag=y 
 			String approvedOrderURL =  baseURL + "/order/orderList.action?sfId="+ sellerOrgCode + "&scFlag=Y" ;  
