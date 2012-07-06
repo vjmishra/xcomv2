@@ -75,6 +75,24 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return inXML;
 	}
 
+/*Updated for Jira 4093 - Getting email id of sales rep user login, from person Info table*/
+	private String getSalesRepEmailForPersonInfo(String contactAddressKey, YFSEnvironment env) throws Exception
+	{
+		String emailId="";
+		Document inputDoc = SCXmlUtil.createDocument("PersonInfo");
+		inputDoc.getDocumentElement().setAttribute("PersonInfoKey", contactAddressKey);		
+		Document obj=api.invoke(env, "getPersonInfoList", inputDoc);
+		
+		Element outputElement = obj.getDocumentElement();
+		System.out.println("XPXEmailHandler :getSalesRepEmailForPersonInfo(): *****************outputElement="+SCXmlUtil.getString(outputElement));
+		NodeList customerHierView = outputElement.getElementsByTagName("PersonInfo");
+		for(int j=0;j<customerHierView.getLength();j++) {
+			Element customerHierViewElem = (Element)customerHierView.item(j);
+			emailId = customerHierViewElem.getAttribute("EMailID");
+		}		
+		return emailId;
+	}
+/**/
 	public Document sendEmail(YFSEnvironment env, Document inXML) throws Exception {
 		
 		yfcLogCatalog.debug("XPXEmailHandlerAPI_InXML: "+ SCXmlUtil.getString(inXML));
@@ -144,11 +162,32 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		// Changes made on 18/02/2011 to handle if Customer Contact List
 		// Document is null.
 		if (getCCListDoc != null) {
+			 System.out.println("XPXEmailHandler : *****************getCCListDoc="+SCXmlUtil.getString(getCCListDoc));
 			Element getCustomerContactElement = (Element) getCCListDoc
 					.getElementsByTagName("CustomerContact").item(0);
+			String strToEmailid = "";
 			
-			String strToEmailid = getCustomerContactElement
-					.getAttribute("EmailID");
+			String isSalesRepFlag = SCXmlUtil.getXpathAttribute(
+					getCustomerContactElement, "./Extn/@ExtnIsSalesRep");
+			/*
+			 * JIRA 4093 Start -If sales rep flag is Y toemail will be yfs_person_info
+			 */
+			 System.out.println("XPXEmailHandler : *****************isSalesRepFlag="+isSalesRepFlag);
+			if("Y".equalsIgnoreCase(isSalesRepFlag)){
+			String personInfoKey = SCXmlUtil.getXpathAttribute(
+					getCustomerContactElement, "./User/@ContactaddressKey");
+			strToEmailid = getSalesRepEmailForPersonInfo(personInfoKey,env);
+			 System.out.println("XPXEmailHandler : *****************strToEmailid="+strToEmailid);
+			
+			}else{
+				strToEmailid = getCustomerContactElement
+				.getAttribute("EmailID");
+		
+			}
+		
+			/*
+			 * JIRA 4093 End -If sales rep flag is Y toemail will be yfs_person_info
+			 */
 			customerDoc.getDocumentElement().setAttribute("strToEmailid",
 					strToEmailid);
 
