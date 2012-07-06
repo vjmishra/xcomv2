@@ -272,9 +272,9 @@
 					</Awards>
 					<Extn ExtnDeliveryHoldTime="" ExtnDeliveryHoldDate="" ExtnOrderDivision="" ExtnGenerationNo=""
 						ExtnDeliveryHoldFlag="" ExtnRushOrderComments="" ExtnShipComplete=""
-						ExtnWillCall="" ExtnAttentionName="" ExtnHeaderComments=""
+						ExtnWillCall="" ExtnAttentionName="" ExtnHeaderComments="" ExtnCustomerNo="" ExtnBillToSuffix=""
 						ExtnAddnlEmailAddr="" ExtnCustomerDivision="" ExtnOrderedByName="" 
-						ExtnSourceType="" ExtnWebConfNum="" ExtnLegacyOrderNo=""
+						ExtnSourceType="" ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnBillToCustomerID=""
 						ExtnRushOrderFlag="" ExtnWebHoldFlag="" ExtnOrderSubTotal="" ExtnOrderCouponDiscount=""
 						ExtnOrderDiscount="" ExtnTotOrderAdjustments="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnLegTotOrderAdjustments="">
 						

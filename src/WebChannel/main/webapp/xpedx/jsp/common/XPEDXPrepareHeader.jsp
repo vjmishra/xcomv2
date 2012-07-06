@@ -1033,9 +1033,11 @@ var selectedShipCustomer = null;
     		}
     	return true;
     	}
+        var isApplyPreferredSelected = false;
 	function applyPreferred(defaultShipTo,url) {
 		if(defaultShipTo!='null' || defaultShipTo!= '') {
 			document.FormToPost.selectedCustomerId.value = defaultShipTo;
+			isApplyPreferredSelected = true;
 			saveShipToChanges(url);
 		}
 	}
@@ -1064,18 +1066,23 @@ var selectedShipCustomer = null;
    		}
         return;
    		 }     
-    function saveShipToChanges(url)
-    {
+    function saveShipToChanges(url)    
+    {  
     	var radioCustomer=document.getElementsByName("selectedShipTo");
 		var selected=false;
-		for(var i=0;i<radioCustomer.length;i++)
-		{
-			if(radioCustomer[i].checked == true)
-				selected=true;				
+		if (isApplyPreferredSelected == false) {
+			for(var i=0;i<radioCustomer.length;i++)
+			{
+				if(radioCustomer[i].checked == true)
+					selected=true;				
+			}
+		} else {
+			selected=true;
 		}
+		
     	if(selected == false){
             document.getElementById('errorText').innerHTML = "Please select a Ship-To.";
-            document.getElementById('errorText').setAttribute("class", "error");
+            document.getElementById('errorText').setAttribute("class", "error float-right");
         }        
         else{
     	//Added For Jira 2903
