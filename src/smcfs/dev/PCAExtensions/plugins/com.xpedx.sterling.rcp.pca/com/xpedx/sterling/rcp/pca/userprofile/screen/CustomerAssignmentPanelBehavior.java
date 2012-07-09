@@ -155,6 +155,9 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		targetModel.setAttribute("CustomerContactID", customerContactID);		
 		if(extnDefaultShipTo){
 			extnDefaultShipTo = false;
+			String shipTo = "";
+			Document docInput =
+					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='" + customerContactID + "'>" + "<Extn ExtnDefaultShipTo ='" + shipTo + "'/>" + "'/CustomerContact>");
 			Element eleExtn = YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/Extn");
 			eleExtn.setAttribute("ExtnDefaultShipTo","");
 		}
@@ -170,8 +173,10 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	public void getCustomerAssignment(){
 		String defaultShipTo = UserProfileInfoDetailsBehavior.defaultShipTo;
 		Element customerAssignment = getModel("XPXGetCustomerAssignmentList");
-		NodeList nodCustAssign=customerAssignment.getElementsByTagName("CustomerAssignment");
-		ArrayList assignedCustomerShipTo = new ArrayList();
+		int arraysize = 0;
+		arraysize = page.customerarray.size();
+		/*NodeList nodCustAssign=customerAssignment.getElementsByTagName("CustomerAssignment");
+		ArrayList assignedCustomerShipT8o = new ArrayList();
 		for(int i=0;i<nodCustAssign.getLength();i++){
 			Element eleCust=(Element) nodCustAssign.item(i);
 			NodeList nodCustLists=eleCust.getElementsByTagName("Customer");			
@@ -180,14 +185,29 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 				String assignedShipTo = eleGroup.getAttribute("CustomerID");
 				assignedCustomerShipTo.add(assignedShipTo);
 			}
+		}*/
+		ArrayList assignedShipto = new ArrayList() ;
+		for ( int i=0; i<arraysize;i++) {
+			String custId = (String) page.customerarray.get(i);
+			int indexOfChar = custId.indexOf("(");
+			int indexOfCharone = custId.indexOf(")");
+			custId = custId.substring(indexOfChar + 1, indexOfCharone);
+			assignedShipto.add(custId);
+		}
+		
+		for ( int i=0; i<assignedList.size();i++) {
+			
+			assignedShipto.add(assignedList.get(i));
+			
 		}
 		if(!YRCPlatformUI.isVoid(defaultShipTo)){
-			if (!(assignedCustomerShipTo.contains(defaultShipTo)) || YRCPlatformUI.isVoid(assignedCustomerShipTo)) {
+			if (!(assignedShipto.contains((defaultShipTo)) || YRCPlatformUI.isVoid(assignedShipto))) {
 
 				extnDefaultShipTo = true;
 				callManageCustomer();
 			}
 		}
+
 	}
 	
 	private Element createManageCustomerOutputXml(Element results){
@@ -229,6 +249,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		page.getTargetModelForUpdateAssignments();
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setApiName("multiApi");
+		
 		ctx.setInputXml(multiAPIDocElement.getOwnerDocument());
 		ctx.setFormId(page.getFormId());
 		ctx.setShowError(false);
