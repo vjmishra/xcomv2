@@ -169,6 +169,7 @@
 	 <%--end of jira 3438 changes - sales rep emailID display --%>
 	<s:set name='isOrderOnApprovalHoldStatus' value='%{#_action.isOrderOnApprovalHoldStatus()}'/>
 	<s:set name='isOrderOnNeedsAttentionHold' value='%{#_action.isOrderOnNeedsAttentionHold()}'/>
+	<s:set name='orderType' value='%{#_action.getOrderType()}'/>
 	<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
 	<s:set name='resolverUserID' value='%{#_action.getResolverUserID()}'/>
 	<s:if test="#isOrderOnApprovalHoldStatus">
@@ -317,7 +318,7 @@
                                 	<s:set name="isPendingOrderCheckReq" value='%{true}' />  
                                     <td valign="top" align="left"><b>Order #:</b></td>
 									<td valign="top" align="left">
-	                                    <s:if test='#isDraftOrder'>
+	                                    <s:if test='#orderType == "Customer"'>
 		                                    <s:set name="xpedxChainedOrderListMap" value='xpedxChainedOrderListMap'/>
 		                                    <s:set name="chainedOrderList" value='#xpedxChainedOrderListMap.get(#orderHeaderKey)'/>		                                   
 		                                    <s:if test='#chainedOrderList.size() > 0'>
