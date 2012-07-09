@@ -46,6 +46,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	private Button btnCancel;
 	Tree tree=null;
 	TreeItem localiItem=null;
+	ArrayList customerarray = new ArrayList();
 
 	public CustomerAssignmentPanel(Composite parent, int style,
 			Object inputObject, Element customerContactEle) {
@@ -149,6 +150,10 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	            if (event.detail == SWT.CHECK) {
 	                TreeItem item = (TreeItem) event.item;
 	                boolean checked = item.getChecked();
+	                item.getText();
+	                if(checked==true){
+	                	customerarray.add(item.getText());
+	                }
 	                checkItems(item, checked);     //--function used to check child nodes if parent is checked
 	                checkPath( item.getParentItem(), checked, false); //--function used to check parent if all its child are checked
 	            }
@@ -291,7 +296,6 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	}
 	//---function used to iterate through tree & find the function based on their qualification for Addition or deletion of node
 	private void iterateThroughChilds(TreeItem[] item, boolean isParentChecked) {
-		
 		for (TreeItem treeItem : item) {
 			
 			Element eleCust = (Element)treeItem.getData("data");
