@@ -206,6 +206,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					XPEDXWCUtils.removeObectFromCache("itemMap");
 					XPEDXOrderUtils.refreshMiniCart(getWCContext(),null,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 				}
+				setOrderType("Customer");
 			} else {//order update flow
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
