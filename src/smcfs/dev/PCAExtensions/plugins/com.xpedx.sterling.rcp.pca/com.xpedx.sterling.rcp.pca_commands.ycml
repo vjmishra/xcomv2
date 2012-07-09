@@ -187,8 +187,8 @@
             <command APIName="getCustomerAssignmentList" APIType="API" Name="getCustomerAssignmentList" URL="DEFAULT" inputNamespace="XPXGetCustomerAssignmentList_input"
                 outputNamespace="XPXGetCustomerAssignmentList" version=""/>
             <command APIName="searchCatalogIndex" APIType="API" Name="searchCatalogIndex" URL="DEFAULT" inputNamespace="XPXSearchCatalogIndex_input" outputNamespace="XPXSearchCatalogIndex" version=""/>
-            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version=""/>
-            <command APIName="getCustomerDetails" APIType="API" Name="getCustomerDetails" URL="DEFAULT" inputNamespace="getCustomerDetails_input" outputNamespace="getCustomerDetails_output" version=""/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
+            <command APIName="getCustomerDetails" APIType="API" Name="getCustomerDetails" URL="DEFAULT" inputNamespace="getCustomerDetails_input" outputNamespace="getCustomerDetails_output" version="ver77"/>
             <command APIName="requestPasswordReset" APIType="API" Name="requestPasswordReset" URL="DEFAULT" inputNamespace="" outputNamespace="" version=""/>
             <command APIName="XPXSendUserUpdateEmailService" APIType="SERVICE" Name="XPXSendUserUpdateEmailService" URL="DEFAULT" inputNamespace="XPXSendUserUpdateEmailService_input"
                 outputNamespace="XPXSendUserUpdateEmailService_output" version=""/>
@@ -226,7 +226,7 @@
     <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfShipToPanel">
         <commands>
             <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
-                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" postCommand="" preCommand="" version=""/>
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" postCommand="" preCommand="" version="ver77"/>
             <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version=""/>
             <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="XPXGetCustomerContactList_input"
                 outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
@@ -330,6 +330,8 @@
             <command APIName="multiApi" APIType="API" Name="multiApi" OutputTemplateName="multiApi" URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
             <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
+            <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
@@ -338,6 +340,7 @@
             <namespace name="multiApi" templateName="multiApi" type="output"/>
             <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
             <namespace name="XPXmanageCustomer" templateName="XPXmanageCustomer" type="output"/>
+            <namespace name="XPXGetListOfAssignedShipTosForAUserService_out" templateName="CustomerAssignmentList" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.enterpriseUserEntry.wizards.YCDEnterpriseUserEntryWizard">
@@ -630,11 +633,9 @@
     <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowItemListDetailPanel">
         <commands>
             <command APIName="getXPEDX_MyItemsList_List" APIType="SERVICE" Name="getXPEDXMyItemsListDetail" URL="DEFAULT" inputNamespace="" outputNamespace="getXPEDX_MyItemsList_List_output" version="ver77"/>
-            <command APIName="getCompleteItemList" APIType="API" Name="getCompleteItemList" URL="DEFAULT" inputNamespace="" outputNamespace="getCompleteItemList" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
-            <namespace name="getCompleteItemList" templateName="getCompleteItemList_output" type="output"/>
         </namespaces>
     </form>
 </forms>
