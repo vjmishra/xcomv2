@@ -152,19 +152,20 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	{
 		Element targetModel = getModel("XPXCustomerContactIn");
 		if(!YRCPlatformUI.isVoid(customerContactID)){
-		targetModel.setAttribute("CustomerContactID", customerContactID);		
-		if(extnDefaultShipTo){
+		targetModel.setAttribute("CustomerContactID", customerContactID);
+		String shipTo = "";
+		Document docInput =
+			YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='" + customerContactID + "'>" + "<Extn ExtnDefaultShipTo ='" + shipTo + "'/>" + "</CustomerContact>");;
+		Element inputXML = docInput.getDocumentElement();;
+		/*if(extnDefaultShipTo){
 			extnDefaultShipTo = false;
-			String shipTo = "";
-			Document docInput =
-					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='" + customerContactID + "'>" + "<Extn ExtnDefaultShipTo ='" + shipTo + "'/>" + "'/CustomerContact>");
-			Element eleExtn = YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/Extn");
+			Element eleExtn = YRCXmlUtils.getXPathElement(inputXML, "/CustomerContact/Extn");
 			eleExtn.setAttribute("ExtnDefaultShipTo","");
-		}
+		}*/
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(page.getFormId());
 		ctx.setApiName("manageCustomer");
-		ctx.setInputXml(createManageCustomerOutputXml(targetModel).getOwnerDocument());
+		ctx.setInputXml(createManageCustomerOutputXml(inputXML).getOwnerDocument());
 		if (!page.isDisposed())
 			callApi(ctx, page);
 		}
@@ -175,17 +176,6 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		Element customerAssignment = getModel("XPXGetCustomerAssignmentList");
 		int arraysize = 0;
 		arraysize = page.customerarray.size();
-		/*NodeList nodCustAssign=customerAssignment.getElementsByTagName("CustomerAssignment");
-		ArrayList assignedCustomerShipT8o = new ArrayList();
-		for(int i=0;i<nodCustAssign.getLength();i++){
-			Element eleCust=(Element) nodCustAssign.item(i);
-			NodeList nodCustLists=eleCust.getElementsByTagName("Customer");			
-			for(int j=0;j<nodCustLists.getLength();j++){
-				Element eleGroup=(Element) nodCustLists.item(j);
-				String assignedShipTo = eleGroup.getAttribute("CustomerID");
-				assignedCustomerShipTo.add(assignedShipTo);
-			}
-		}*/
 		ArrayList assignedShipto = new ArrayList() ;
 		for ( int i=0; i<arraysize;i++) {
 			String custId = (String) page.customerarray.get(i);
