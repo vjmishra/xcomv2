@@ -191,7 +191,7 @@
 	}
 
 	function updateSelectedAddress(customerID, organizationName,company,address,locid,city,state,zcode,country)
-	{
+	{		
 		var hdnOrganization = document.getElementById('selectedorganization');
 		var hdnCompany = document.getElementById('selectedcompany');
 		var hdnAddress = document.getElementById('selectedaddressList');
@@ -616,7 +616,7 @@ $(function() {
             <s:url id='showLocationUrlId' action='xpedxShowLocationsForReporting' ></s:url>
 		    <s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
       			
-            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' >
+            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' namespace='/xpedx/services' >
             </s:url>
 		    <s:hidden id="showShipToLocationUrl" name='showShipToLocationUrl' value='%{#showShipToLocationUrlId}' />
 		    <s:hidden id="selectedLocationType" name='selectedLocationType' value="All"/>

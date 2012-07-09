@@ -30,7 +30,7 @@
 <s:set name="assgnCustomers"
 	value="#wcUtil.getAssignedCustomers(#loggedInUser)" />
 <s:if test="#_action.isSearch()">
-	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomers" namespace="/common">
+	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomersForReporting" namespace="/common">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
@@ -105,7 +105,7 @@
 		<s:set name='firstName' value='#shipToAddress.firstName' />
 		<s:set name='middleName' value='#shipToAddress.middleName' />
 		<s:set name='lastName' value='#shipToAddress.lastName' />
-		<s:set name='city' value='#shipToAddress.city + ","' />
+		<s:set name='city' value='#shipToAddress.city' />
 		<s:set name='company' value='#shipToAddress.company' />
 		<s:set name='addressList' value='#shipToAddress.addressList' />
 		<s:set name='hTMLValue' value='#shipToAddress.hTMLValue' />
@@ -114,7 +114,7 @@
 		<s:set name='zipCode' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(zipCode)"/>
 		<s:set name='country' value='#shipToAddress.country' />
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
-		<s:set name='orgName' value="#shipToAddress.OrganizationName"/>	
+		<s:set name='orgName' value="#shipToAddress.organizationName"/>	
 		<li class="ship-to-list">
 		<table>
 			<tr>
