@@ -97,7 +97,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						}
 						page.resetTreeAssignedValues(assignedList);
 						setModel("XPXGetCustomerAssignmentList",outXml);
-						getCustomerAssignment();
+						getShipToID();
 						
 					} else if ("getCustomerList".equals(apiname)) {
 						System.out.println("its inside the api call-->>");
@@ -113,6 +113,11 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
+					  else if ("XPXGetListOfAssignedShipTosForAUserService".equals(apiname)) {
+							Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+							setModel("AssignedShipTos",outXml);
+							getCustomerAssignment();
+						}
 				}
 			}
 		}
@@ -148,6 +153,15 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	
 	}
 	
+	public void getShipToID(){
+		String[] apinames = {"XPXGetListOfAssignedShipTosForAUserService"};
+		Document[] docInput = {
+				YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='" + userID + "'/>"),
+		};
+		callApis(apinames, docInput);
+	}
+	
+	
 	public void callManageCustomer()
 	{
 		Element targetModel = getModel("XPXCustomerContactIn");
@@ -155,13 +169,8 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		targetModel.setAttribute("CustomerContactID", customerContactID);
 		String shipTo = "";
 		Document docInput =
-			YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='" + customerContactID + "'>" + "<Extn ExtnDefaultShipTo ='" + shipTo + "'/>" + "</CustomerContact>");;
-		Element inputXML = docInput.getDocumentElement();;
-		/*if(extnDefaultShipTo){
-			extnDefaultShipTo = false;
-			Element eleExtn = YRCXmlUtils.getXPathElement(inputXML, "/CustomerContact/Extn");
-			eleExtn.setAttribute("ExtnDefaultShipTo","");
-		}*/
+			YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='" + customerContactID + "'>" + "<Extn ExtnDefaultShipTo ='" + shipTo + "'/>" + "</CustomerContact>");
+		Element inputXML = docInput.getDocumentElement();
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(page.getFormId());
 		ctx.setApiName("manageCustomer");
@@ -173,25 +182,16 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	
 	public void getCustomerAssignment(){
 		String defaultShipTo = UserProfileInfoDetailsBehavior.defaultShipTo;
-		Element customerAssignment = getModel("XPXGetCustomerAssignmentList");
-		int arraysize = 0;
-		arraysize = page.customerarray.size();
-		ArrayList assignedShipto = new ArrayList() ;
-		for ( int i=0; i<arraysize;i++) {
-			String custId = (String) page.customerarray.get(i);
-			int indexOfChar = custId.indexOf("(");
-			int indexOfCharone = custId.indexOf(")");
-			custId = custId.substring(indexOfChar + 1, indexOfCharone);
-			assignedShipto.add(custId);
-		}
-		
-		for ( int i=0; i<assignedList.size();i++) {
-			
-			assignedShipto.add(assignedList.get(i));
-			
-		}
+		Element customerAssignment = getModel("AssignedShipTos");
+		NodeList nodCustAssign=customerAssignment.getElementsByTagName("XPXCustomerAssignmentView");
+		ArrayList assignedCustomerShipTo = new ArrayList();
+		for(int i=0;i<nodCustAssign.getLength();i++){
+			Element eleCust=(Element) nodCustAssign.item(i);
+				String assignedShipTo = eleCust.getAttribute("ShipToCustomerID");
+				assignedCustomerShipTo.add(assignedShipTo);
+			}
 		if(!YRCPlatformUI.isVoid(defaultShipTo)){
-			if (!(assignedShipto.contains((defaultShipTo)) || YRCPlatformUI.isVoid(assignedShipto))) {
+			if (!(assignedCustomerShipTo.contains((defaultShipTo)) || YRCPlatformUI.isVoid(assignedCustomerShipTo))) {
 
 				extnDefaultShipTo = true;
 				callManageCustomer();
