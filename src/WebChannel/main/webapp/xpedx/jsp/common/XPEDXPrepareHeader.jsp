@@ -677,7 +677,9 @@ var selectedShipCustomer = null;
 <s:url id='shipToForUserProfileSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForUserProfile' />
 <s:url id='shipToSearchForOrderList' namespace='/common'
-	action='xpedxSearchAssignedCustomersForOrderList' />	
+	action='xpedxSearchAssignedCustomersForOrderList' />
+<s:url id='shipToSearchForReporting' namespace='/common'
+	action='xpedxSearchAssignedCustomersForReporting' />	
 <s:url id='shipToSearchForUserProfile' namespace='/common'
 	action='xpedxSearchAssignedCustomersForUserProfile' />
 <s:url id='showLocationsDivForReportingSearch' namespace='/xpedx/services'
@@ -1611,7 +1613,7 @@ function searchShipToAddress(divId,url) {
 		if(divId == 'showShipToLocationsDiv' && searchText == '')
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
 		if(divId == 'showShipToLocationsDiv' && searchText != '')                                  
-   			url = '<s:property value="#shipToSearchForOrderList"/>';
+   			url = '<s:property value="#shipToSearchForReporting"/>';
 		if(url == null)
 			url = '<s:property value="%{searchURL}"/>';
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
