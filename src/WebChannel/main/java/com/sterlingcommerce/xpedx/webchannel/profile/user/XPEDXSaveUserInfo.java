@@ -830,6 +830,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			Iterator<String> newIterator = tmpOldAssCust.iterator();
 			while(newIterator.hasNext()) {
 				String oldAssignedCustId= newIterator.next();
+				
 				if(!customers2.contains(oldAssignedCustId.trim()))
 					newCustomers1.add(oldAssignedCustId.trim());
 			}
@@ -865,8 +866,14 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				if(operation.equals("Delete")){
 					try
 					{
+						ArrayList<String> listOfShipTo=getAllShipTos(wList);
+						if(listOfShipTo.size() == 0 ){
+							defaultShipTo = "";
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,"true" );
+						}
 						
-						if(!getAllShipTos(wList).contains(defaultShipTo))
+						if(!listOfShipTo.contains(defaultShipTo))
 						{
 							defaultShipTo = "";
 							if(customerContactId.equals(wcContext.getLoggedInUserId()))
@@ -909,17 +916,22 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		ISCUITransactionContext scuiTransactionContext = getWCContext().getSCUIContext().getTransactionContext(true);
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 		.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		
+		boolean isAPICall=false;
 		for(int i=0;i<oldAssignCusts.size();i++ )
 		{
 				if(wList.contains(oldAssignCusts.get(i).trim()))
 					continue;
 				createInput(inputDoc,oldAssignCusts.get(i),complexQuery,or);
+				isAPICall=true;
 		}
 		for(int k=0;k<customers2.size();k++)
 		{
 			createInput(inputDoc,customers2.get(k),complexQuery,or);
+			isAPICall=true;
 		}
+		if(!isAPICall)
+			return shipToStr;
+				
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 		Document outputListDocument = api.executeFlow(env, "XPXCustomerHierarchyViewService",inputDoc);
 		Element custView = outputListDocument.getDocumentElement();
