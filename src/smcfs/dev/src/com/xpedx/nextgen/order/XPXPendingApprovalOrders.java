@@ -62,20 +62,29 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 		// Template to the getOrderList Api
-		Document orderOutputTemplate = SCXmlUtil.createFromString("<OrderList TotalNumberOfRecords=''><Order><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order></OrderList>");
-		env.setApiTemplate("getOrderList",orderOutputTemplate);
-		Document orderOutputDoc = api.invoke(env, "getOrderList", inputOrderDoc);
-		env.clearApiTemplate("getOrderList");
-		Element orderElem = null;
+		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' ><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
+
+		env.setApiTemplate("getCompleteOrderDetails",orderOutputTemplate);
+		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
+		env.clearApiTemplate("getCompleteOrderDetails");
+		Element orderElem = orderOutputDoc.getDocumentElement();
 		Double spendingLimit = null;
-		if(orderOutputDoc!=null) {
+		/*if(orderOutputDoc!=null) {
+
 			if(SCXmlUtil.getIntAttribute(orderOutputDoc.getDocumentElement(), "TotalNumberOfRecords") >0) {
-				orderElem = SCXmlUtil.getChildElement(orderOutputDoc.getDocumentElement(),"Order");
+
+				orderElem = SCXmlUtil.getChildElement(orderOutputDoc.getDocumentElement(),"Order");*/
+
 				if(orderElem!=null) {
-					spendingLimit = getSpendingLimit(env,orderElem);
-				}				
-			}
-		}
+
+				spendingLimit = getSpendingLimit(env,orderElem);
+
+				} 
+
+			/*}
+
+		}*/
+
 		// checking if the order total is more than the spending limit
 		if(spendingLimit!=null && orderElem!=null && spendingLimit!=-1) {
 			Element extnElem = SCXmlUtil.getChildElement(orderElem,"Extn");
