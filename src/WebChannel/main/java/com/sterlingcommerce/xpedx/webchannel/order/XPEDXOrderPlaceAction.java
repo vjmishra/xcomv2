@@ -123,6 +123,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String proxyApprovalEmailId;
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	protected boolean isCSRReview = false;
+	private String orderType;
 	public boolean isCSRReview() {
 		return isCSRReview;
 	}
@@ -216,7 +217,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					log.error("OrderHeaderKey is empty. Cannot process OrderChange.");
 					return FAILURE;
 				}
-				
+				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
 				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
 				{
 					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
@@ -312,6 +313,10 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
 				parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey"); 
 			}
+			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
+			chainedOrderFromKeylist.add(orderHeaderKey);
+			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
+			setXpedxChainedOrderMap(chainedOrderLineListDoc);
 			isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
 			//added for jira 3484 for display of approvers EMailID
 			if(isOrderOnApprovalHoldStatus)
@@ -334,10 +339,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				}
 //end of jira 3484
 			}
-			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
-			chainedOrderFromKeylist.add(orderHeaderKey);
-			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
-			setXpedxChainedOrderMap(chainedOrderLineListDoc);
+			
 			return SUCCESS;
 		} catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
@@ -538,7 +540,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	// the approval-history link
 	public boolean isOrderOnApprovalHold() {
 		String holdTypeForApproval = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
-		if (holdTypeForApproval != null) {
+		ArrayList<Element> orderList =(ArrayList<Element> )xpedxChainedOrderListMap.get(orderHeaderKey);
+		if (holdTypeForApproval != null && (orderList ==null || orderList.size()==0)) {
 			Element orderholdtypeselem = SCXmlUtils.getInstance()
 					.getChildElement(this.confirmDraftOrderElem,
 							OrderConstants.ORDER_HOLD_TYPES);
@@ -579,7 +582,10 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
 		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
 		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;
-		
+		ArrayList<Element> orderList =(ArrayList<Element> )xpedxChainedOrderListMap.get(orderHeaderKey);
+		if ((orderList !=null && orderList.size()>0)) {
+			return false;
+		}
 		Element orderholdtypeselem = SCXmlUtil.getChildElement(this.confirmDraftOrderElem, OrderConstants.ORDER_HOLD_TYPES);
 		ArrayList<Element> orderholdtypeelemlist = SCXmlUtil.getElements(orderholdtypeselem, OrderConstants.ORDER_HOLD_TYPE);
 		for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter.hasNext();) {
@@ -689,4 +695,13 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public void setParentOrderHeaderKeyForFO(String parentOrderHeaderKeyForFO) {
 		this.parentOrderHeaderKeyForFO = parentOrderHeaderKeyForFO;
 	}
+
+	public String getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+	
 }
