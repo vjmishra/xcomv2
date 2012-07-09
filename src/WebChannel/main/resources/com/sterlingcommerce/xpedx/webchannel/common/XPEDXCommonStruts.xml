@@ -209,6 +209,14 @@
 			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomersForOrderList.jsp
 			</result>
 		</action>
+		<action name="xpedxSearchAssignedCustomersForReporting"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="searchShipToAddress">
+			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/services/XPEDXAssignedCustomersForReporting.jsp
+			</result>
+		</action>
 		<action name="xpedxSearchAssignedCustomersForUserProfile"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="searchShipToAddress">

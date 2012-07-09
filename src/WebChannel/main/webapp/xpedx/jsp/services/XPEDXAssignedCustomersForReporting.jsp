@@ -24,7 +24,7 @@
 <s:set name='_action' value='[0]' />
 <s:url id='targetURL' namespace='/common'
 	action='setCurrentCustomerIntoContext' />
-<s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
+
 <s:url id='setAsDefaultURL' namespace='/common'
 	action='setSelectedShipToAsDefault' />
 <s:set name="assgnCustomers"
@@ -72,7 +72,7 @@
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress('showShipToLocationsDiv');">&nbsp;</span>		
 	<!--	<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />  -->
-		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="%{searchTerm}" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'showShipToLocationsDiv','%{#searchURL}');" />	
+		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'showShipToLocationsDiv');" />	
 		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
 <div class="clearall">&nbsp;</div>
