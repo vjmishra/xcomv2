@@ -114,7 +114,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		for(int j=0;j<customerHierView.getLength();j++) {
 			Element customerHierViewElem = (Element)customerHierView.item(j);
 			String salesRepIdFromView="";
-			salesRepIdFromView = customerHierViewElem.getAttribute("SalesRepId");
+			salesRepIdFromView = customerHierViewElem.getAttribute("SalesRepID");
 			System.out.println("************getSalesRepEmailForSalesPro : salesRepIdFromView="+salesRepIdFromView);
 			if(salesRepId!=null && salesRepId.trim().length()>0 && salesRepId.equalsIgnoreCase(salesRepIdFromView)){
 				emailId = customerHierViewElem.getAttribute("EmailID");
@@ -244,7 +244,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					strToEmailid = personInfo.getAttribute("EmailID");
 				}
 			}
-			*/	
+			*/
+			System.out.println("strToEmailid -------------------+"+strToEmailid);
 			customerDoc.getDocumentElement().setAttribute("strToEmailid",
 					strToEmailid);
 
