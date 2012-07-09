@@ -444,7 +444,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
 											}else{
 												reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
-												reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append("-").append(LoginId).toString());
+												reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
 												reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
 											}
 									/*	}
