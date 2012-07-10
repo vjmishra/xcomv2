@@ -697,16 +697,18 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnUsrRolesHelpInfo.setText("User Roles Description");
 		btnUsrRolesHelpInfo.setVisible(true);
 		final String usrRoleHelpInfo=
-			 "Buyer : Has the ability to submit orders." + "\n" +
-			 "Approver : Authorizes submission of orders." + "\n"+
-			 "Estimator : Estimator views available inventory and pricing." + "\n" +
-			 "Stock Check : To check the stock."+"\n"+
-			 "Admin :     Responsible for overall administration of, and access to, accounts on " + "\n"+"\t"+
-			 "the web site. Creates user profiles, assigns roles, assigns locations."+"\n"+
-			 "View Invoices : Permitted to view invoices online." + "\n"+
-			 "ViewReports : Permitted to view reports." + "\n"	+
-			 "ViewPrices : Permitted to view prices." + "\n" +
-			 "Procurement User : Punch out user." +"\n";
+			 "Buyer:  Permission to use the site. Required for all users." + "\n"+
+			 "Approver:  Authorizes submission of orders."+"\n"+
+			 "Estimator:  Can view pricing and inventory availability. Cannot submit an order." + "\n"+
+			 "Stock Check:  Stock Check Web Service User for system integrations. (Does not" + "\n"+ "\t"+ 
+			 "      control inventory display for regular site user)." + "\n" +
+			 "Admin:  Permission to create user profiles, assign roles and ship to locations within" + "\n"+ 
+			 "               the account." +"\n"+
+			 "View Invoices:  Can view invoices online." + "\n"	+
+			 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+ 
+			 "        pricing)." + "\n"	+
+			 "View Prices:  Can view pricing." + "\n"+
+			 "Procurement User:  Punchout User (punchout integration customers only).";
 		//Providing Help icon for User Roles while updating profile. XNGTP-1185 -Fixed
 		btnUsrRolesHelpInfo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
