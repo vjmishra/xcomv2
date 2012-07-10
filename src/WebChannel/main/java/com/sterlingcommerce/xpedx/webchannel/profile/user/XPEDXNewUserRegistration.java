@@ -89,7 +89,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 			 * 
 			 * */
 			
-			setMailCCAddress(sbm.toString());   
+			//setMailCCAddress(sbm.toString());   
+			setMailCCAddress(sb.toString()); //JIRA 4087 -Change CC address to ebusiness@xpedx.com
 			setMailFromAddress(sb.toString());
 			
 			setMailSubject("NewUserInfo");
