@@ -65,7 +65,7 @@
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 
 <link media="all" type="text/css" rel="stylesheet"	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-order<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<%--<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-order<s:property value='#wcUtil.xpedxBuildKey' />.css" />--%>
 <%-- <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart.css" />--%>
 
 
