@@ -144,6 +144,11 @@ var priceCheck;
 			//Added For Jira 2903
 			//Commented for 3475
 			//Ext.Msg.wait("Processing...");
+			//Added if block for jira 3922
+			if(qty == null || qty == "null" || qty == "") {
+				var qty = document.getElementById('orderMultiple_'+itemId).value;
+				var selectedUom = document.getElementById('baseUOMItem_'+itemId).value;
+			}
 			Ext.Ajax.request({
 	            url: url,
 	            params: {
