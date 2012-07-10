@@ -105,8 +105,10 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 		reqUom = document.getElementById("selectedUOM").value;
 	}
 	if(Qty == null || Qty == "null" || Qty == "") {
-		Qty = "1";
-	}
+		
+		//Modifying for jira 3922
+		Qty = document.getElementById("OrderMultiple").value;
+		}
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
@@ -618,7 +620,8 @@ function validateOrderMultiple() {
 	resetQuantityErrorMessage();
 	var Qty = document.getElementById("qtyBox");
 	if(Qty.value == "" || Qty.value == null || Qty.value == '0'){
-		Qty.value = 1;
+	//Commented below for Jira 3922
+	//Qty.value = 1;
 	}
 	var UOM = document.getElementById("itemUOMsSelect");
 	var OrdMultiple = document.getElementById("OrderMultiple");
@@ -2311,7 +2314,9 @@ Ext.onReady(function(){
 		//added for jira 3253
 		updateUOMFields();
 		var requestedUom = document.getElementById("selectedUOM").value;
-		callPnA(requestedUom);
+		//Added For Jira 3922- baseUom that we will pass on initial load
+		var baseUom = '<s:property value="#unitOfMeasure" />';
+		callPnA(baseUom);
 	});
 
 function callPnA(requestedUom)
