@@ -545,7 +545,7 @@
             <param name="mashups">xpedx_checkout_changeOrderLineDetails</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
-            <result name="success" type="redirectAction">
+            <result name="success" type="chain">
                 <param name="actionName">LineLevelISPU</param>
                 <param name="namespace">/order</param>
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
@@ -606,8 +606,10 @@
             <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
             <param name="mashups">checkoutOrderForMiniCart</param>
             <param name="resourceId">/swc/order/guestShopping</param>
-            <result name="success" type="redirectAction">
+           <!-- <result name="success" type="redirectAction">-->
+            <result name="success" type="chain">
                 <param name="actionName">LineLevelISPU</param>
+                <param name="namespace">/order</param>
                 <param name="parse">true</param>
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
                 <param name="draft">Y</param>
@@ -704,8 +706,10 @@
                  <param name="orderHeaderKey">${orderHeaderKey}</param>
                  <param name="draft">${draft}</param>
             </result>
-            <result name="OrderSummary" type="redirectAction">
+           <!--  <result name="OrderSummary" type="redirectAction">  -->
+            	<result name="OrderSummary" type="chain">
                 <param name="actionName">OrderSummary</param>
+                <param name="namespace">/order</param>
                 <param name="parse">true</param>
                 <param name="OrderHeaderKey">${orderHeaderKey}</param>
                 <param name="draft">${draft}</param>
