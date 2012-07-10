@@ -687,11 +687,9 @@ true;"
 
 <script>	
 <%-- //IMPORTANT: The templates are optimized to reduce the space and # of lines in JS for performance reasons. Please maintain this in future. --%>
-
 <%-- //IMPORTANT: Removed redundant class="itemdiv" style from all Views (grid,normal,condensed) - JIRA 2798 --%>
 var itemWin;			
 var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{<xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
-
 function getNormalView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
@@ -699,6 +697,7 @@ return new Ext.XTemplate(
    '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
     '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
    '</div>',
+   '<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
   '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
    '<p class="ddesc">{name}</p></a>',
    '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
