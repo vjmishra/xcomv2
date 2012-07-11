@@ -2465,7 +2465,7 @@ function callAjaxForSorting(url,divId)
 					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
 						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
 					</s:url>												
-					<s:if test='#xpedxSelectedHeaderTab=="ServicesTab"'>
+					<s:if test='#xpedxSelectedHeaderTab=="ServicesTab" || #xpedxSelectedHeaderTab=="ToolsTab" '>
 		            	<li class="active">	
 		            	<s:a href="#" cssClass="active">Resources</s:a>
 		            </s:if>
