@@ -229,7 +229,10 @@ var priceCheck;
 		}
 		if(qty =="" || qty == 0 )
 		{
-			qty=1;
+			//Changed the qty to ordermultiple for Jira 3922. pnA wasnt coming when qty is bank and orderMul flag is N.
+			//qty=1;
+			var qty = document.getElementById('orderMultiple_'+itemId).value;
+			//alert("QTY in vaidateOrderMul===="+ qty);
 		}
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
