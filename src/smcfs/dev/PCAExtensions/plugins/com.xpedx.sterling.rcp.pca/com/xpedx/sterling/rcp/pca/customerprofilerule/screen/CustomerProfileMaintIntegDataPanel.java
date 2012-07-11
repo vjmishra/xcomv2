@@ -285,120 +285,6 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtPnAFlagComments");
 		txtPnAFlagComments.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		YRCTableBindingData tblShipCustsBindingData = new YRCTableBindingData();
-		YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[tblShipCustomers.getColumnCount()];
-
-		colBindings[0] = new YRCTblClmBindingData();
-		colBindings[0].setName("clmShipAddress");
-//		colBindings[0].setAttributeBinding(new StringBuffer().append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@AddressLine1;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@AddressLine2;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@AddressLine3;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@City;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@State;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@Country;")
-//				.append("CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo/@ZipCode").toString());
-//        colBindings[0].setColumnBinding("Address");
-//        colBindings[0].setKey("xpedx_address_key");
-        colBindings[0].setSortReqd(true);
-        colBindings[0].setLabelProvider(new IYRCTableColumnTextProvider(){
-
-			
-			public String getColumnText(Element eleData) {
-				Element elePersonInfo = (Element) YRCXPathUtils.evaluate(eleData, "CustomerAdditionalAddressList/CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo", XPathConstants.NODE);
-				if(!YRCPlatformUI.isVoid(elePersonInfo)){
-					Object[] data = new Object[7];
-					data[0] = elePersonInfo.getAttribute("AddressLine1");
-					data[1] = elePersonInfo.getAttribute("AddressLine2");
-					data[2] = elePersonInfo.getAttribute("AddressLine3");
-					data[3] = elePersonInfo.getAttribute("City");
-					data[4] = elePersonInfo.getAttribute("State");
-					data[5] = elePersonInfo.getAttribute("Country");
-					data[6] = elePersonInfo.getAttribute("ZipCode");
-					return YRCPlatformUI.getFormattedString("xpedx_address_key", data);
-					
-				} else {
-					return eleData.getAttribute("CustomerID");
-				}
-			}
-        	
-        });
-        
-		colBindings[1] = new YRCTblClmBindingData();
-		colBindings[1].setName("clmETradingID");
-        colBindings[1].setAttributeBinding("Extn/@ExtnETradingID");
-        colBindings[1].setColumnBinding("ETradingID");
-        colBindings[1].setTargetAttributeBinding("Customer/Extn/@ExtnETradingID");
-        
-		colBindings[2] = new YRCTblClmBindingData();
-		colBindings[2].setName("clmCustEmailAddress");
-        colBindings[2].setAttributeBinding("Extn/@ExtnEDIEmailAddress");
-        colBindings[2].setColumnBinding("Customer Email Addresss");
-        colBindings[2].setTargetAttributeBinding("Customer/Extn/@ExtnEDIEmailAddress");
-
-        IYRCCellModifier cellModifier = new IYRCCellModifier() {
-			protected boolean allowModify(String property, String value, Element element) {
-//				System.out.println("allowModify-->property:["+property+"]- value["+value+"]- element["+YRCXmlUtils.getString(element)+"]");
-				return true;
-			}
-
-			protected int allowModifiedValue(String property, String value, Element element) {
-				return IYRCCellModifier.MODIFY_OK;
-			}
-
-			protected String getModifiedValue(String property, String value, Element element) {
-				
-				Element eleExtn = YRCXmlUtils.getChildElement(element, "Extn");
-				if("Extn/@ExtnETradingID".equals(property)){
-					String oldValue = "";
-					if(eleExtn.hasAttribute(EXTN_ETRADING_ID_OLD_VALUE)){
-						oldValue = eleExtn.getAttribute(EXTN_ETRADING_ID_OLD_VALUE);
-					} else {
-						oldValue = eleExtn.getAttribute(EXTN_ETRADING_ID);
-						eleExtn.setAttribute(EXTN_ETRADING_ID_OLD_VALUE, oldValue);
-					}
-					
-					if(!YRCPlatformUI.equals(value,oldValue)){
-						element.setAttribute(IS_EXTN_ETRADING_ID_MODIFIED, "Y");
-					} else {
-						if(element.hasAttribute(IS_EXTN_ETRADING_ID_MODIFIED)){
-							element.removeAttribute(IS_EXTN_ETRADING_ID_MODIFIED);
-						}
-					}	
-				} else if ("Extn/@ExtnEDIEmailAddress".equals(property)){
-					String oldValue = "";
-					if(eleExtn.hasAttribute(EXTN_CUST_EMAIL_ADDRESS_OLD_VALUE)){
-						oldValue = eleExtn.getAttribute(EXTN_CUST_EMAIL_ADDRESS_OLD_VALUE);
-					} else {
-						oldValue = eleExtn.getAttribute(EXTN_CUST_EMAIL_ADDRESS);
-						eleExtn.setAttribute(EXTN_CUST_EMAIL_ADDRESS_OLD_VALUE, oldValue);
-					}
-					
-					if(!YRCPlatformUI.equals(value,oldValue)){
-						element.setAttribute(IS_EXTN_CUST_EMAIL_ADDRESS_MODIFIED, "Y");
-					} else {
-						if(element.hasAttribute(IS_EXTN_CUST_EMAIL_ADDRESS_MODIFIED)){
-							element.removeAttribute(IS_EXTN_CUST_EMAIL_ADDRESS_MODIFIED);
-						}
-					}
-				}
-//				System.out.println("getModifiedValue---->property:["+property+"]- value["+value+"]- element["+YRCXmlUtils.getString(element)+"]");
-				return value;
-			}
-
-
-		};
-		String[] editors = new String[tblShipCustomers.getColumnCount()];
-		editors[1] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[2] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		tblShipCustsBindingData.setCellTypes(editors);
-		tblShipCustsBindingData.setCellModifierRequired(true);
-		tblShipCustsBindingData.setCellModifier(cellModifier);
-        tblShipCustsBindingData.setSourceBinding("ShipToCustomerList:/CustomerList/Customer");
-        tblShipCustsBindingData.setTargetBinding("SaveCustomerList:/CustomerList");
-        tblShipCustsBindingData.setName("tblShipCustomers");
-        tblShipCustsBindingData.setTblClmBindings(colBindings);
-        tblShipCustsBindingData.setKeyNavigationRequired(true);
-        tblShipCustomers.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tblShipCustsBindingData);
         
 	}
 
@@ -473,7 +359,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 				HEIGHT = boundHeight;
 		}
 //		scrPnl.setMinSize(1000, HEIGHT+500);
-		 scrPnl.setMinSize(1000, 2000);
+		 scrPnl.setMinSize(1000, 1000);
 		if (isVScrollReqd
 				&& (selectedHeight < scrPnl.getOrigin().y || selectedHeight
 						+ selectedPanelHeight > scrPnl.getSize().y
@@ -876,41 +762,6 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtPnAFlagComments.setData("name", "txtPnAFlagComments");
         txtPnAFlagComments.setTextLimit(200);
 
-        GridData gridDataTblShipCustomers = new org.eclipse.swt.layout.GridData();
-        gridDataTblShipCustomers.horizontalSpan = 4;
-
-		tblShipCustomers = new Table(pnlB2BMaint, SWT.SINGLE | SWT.H_SCROLL 	| SWT.V_SCROLL);
-		
-		TableColumn clmCustAddress = new TableColumn(tblShipCustomers, SWT.NONE);
-		clmCustAddress.setWidth(130);
-		clmCustAddress.setText("Column 1");
-		
-		TableColumn clmETradingID = new TableColumn(tblShipCustomers, SWT.NONE);
-		clmETradingID.setWidth(130);
-		clmETradingID.setText("Column 2");
-
-		TableColumn clmCustEmailAddr = new TableColumn(tblShipCustomers, SWT.NONE);
-		clmCustEmailAddr.setWidth(130);
-		clmCustEmailAddr.setText("Column 3");
-		
-		
-		gridDataTblShipCustomers.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridDataTblShipCustomers.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridDataTblShipCustomers.grabExcessHorizontalSpace = true;
-//		gridDataTblShipCustomers.grabExcessVerticalSpace = true;
-		gridDataTblShipCustomers.heightHint = 900;
-		tblShipCustomers.setLayoutData(gridDataTblShipCustomers);
-		tblShipCustomers.setHeaderVisible(true);
-		tblShipCustomers.setLinesVisible(true);
-		
-		// HardCoded Values for the height to make up 
-		// for the requirement to increase the 
-		// column height.
-		tblShipCustomers.addListener(SWT.MeasureItem, new Listener() { 
-			  public void handleEvent(Event event) { 
-			     event.height = 20;
-			  }
-		});
 	}
 
 	private void createComposite() {
