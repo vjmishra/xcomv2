@@ -520,7 +520,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 								 }	
 									//JIRA 3740 - Start
 									//Modify MSAPName if Changed in input xml
-									if (!existingMSAPName.equalsIgnoreCase(strMSAPName)) {
+									if (masterSAPUnchanged && !existingMSAPName.equalsIgnoreCase(strMSAPName)) {
 										isBuyerOrganization = updateOrganizationName (masterSapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"ParentSAPName",isCustomerAvaiable,strMSAPName);
 										//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
 										//updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
