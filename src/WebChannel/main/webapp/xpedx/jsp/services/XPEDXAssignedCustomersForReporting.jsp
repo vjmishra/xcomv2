@@ -114,7 +114,7 @@
 		<s:set name='zipCode' value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(zipCode)"/>
 		<s:set name='country' value='#shipToAddress.country' />
 		<s:set name='locationID' value="#shipToAddress.LocationID"/>
-		<s:set name='orgName' value="#shipToAddress.organizationName"/>	
+		<s:set name='orgName' value="#shipToAddress.getOrganizationName()"/>
 		<li class="ship-to-list">
 		<table>
 			<tr>
@@ -154,10 +154,10 @@
 				</tr>
 			</s:if>
 			
-			<s:if test="#company!=''">
+			<s:if test="#orgName!=''">
 				<tr>
 					<td>&nbsp;</td>
-					<td style="padding-left: 15px"><s:property value='#company' /></td>
+					<td style="padding-left: 15px"><s:property value='#orgName' /></td>
 				</tr>
 			</s:if>
 			
