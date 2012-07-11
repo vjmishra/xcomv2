@@ -523,7 +523,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									if (!existingMSAPName.equalsIgnoreCase(strMSAPName)) {
 										isBuyerOrganization = updateOrganizationName (masterSapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"ParentSAPName",isCustomerAvaiable,strMSAPName);
 										//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
-										updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
+										//updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
 										//3740 -  Updating all Bill-to and Ship-to for SAPname Changes
 		
 									}
