@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.customerprofilerulevalidation.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -11,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant.CustomerProfileRuleID;
 import com.yantra.interop.japi.YIFApi;
@@ -95,10 +97,14 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 	public Document getCustomerRulesForOrder(YFSEnvironment env, Document inXML)
 			throws Exception {
 		log.beginTimer("getCustomerRulesForOrder");
-		Element orderElement = inXML.getDocumentElement();		
-		//String customerID = orderElement.getAttribute("BillToID");
+		Element orderElement = inXML.getDocumentElement();	
+		String customerIDs[] = null;
+		String custID = null;
+		//String customerID = orderElement.getAttribute("BillToID");..
 		String customerID = orderElement.getAttribute("BuyerOrganizationCode");
 		String enterpriseCode = orderElement.getAttribute("EnterpriseCode");
+		String billToId = orderElement.getAttribute("BillToID");
+		String sapId = orderElement.getAttribute("SAPCustomerID");
 		entryType = orderElement.getAttribute("EntryType");
 		YFCDocument customeListDoc = YFCDocument.createDocument("Customer");
 		YFCElement customerElement = customeListDoc.getDocumentElement();
@@ -106,7 +112,33 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 		customerElement.setAttribute("OrganizationCode", enterpriseCode);
 
 		HashMap<String, HashMap<String, String>> ruleMap = new HashMap<String, HashMap<String, String>>();
-		getCustomeProfileRules(env, customeListDoc.getDocument(), ruleMap, orderElement);
+		if((billToId != null && !billToId.trim().equals("")) && (sapId != null && !sapId.trim().equals(""))){
+			custID = billToId + ","+ sapId;
+			customerIDs = custID.split(",");
+			Document custContInputDoc = YFCDocument.createDocument("Customer").getDocument();
+			Element inputElement = custContInputDoc.getDocumentElement();
+			Element custElement = custContInputDoc.createElement("Customer");
+			custElement.setAttribute("OrganizationCode", enterpriseCode );
+			Element complexQuery = custContInputDoc.createElement("ComplexQuery");
+			
+			Element OrElem = custContInputDoc.createElement("Or"); 
+			
+			for(String contactId : customerIDs) {
+				Element exp = custContInputDoc.createElement("Exp");
+				exp.setAttribute("Name", "CustomerID");
+				exp.setAttribute("Value", contactId);
+				SCXmlUtil.importElement(OrElem, exp);
+			}
+			complexQuery.appendChild(OrElem);
+			inputElement.appendChild(complexQuery);
+			inputElement.appendChild(custElement);
+			
+			getCustomeProfileRulesParent(env, custContInputDoc, ruleMap, orderElement);
+		}
+		else
+		{
+			getCustomeProfileRules(env, customeListDoc.getDocument(), ruleMap, orderElement);
+		}
 		YFCDocument rulesDoc = YFCDocument.createDocument("Rules");
 		YFCElement rulesElement = rulesDoc.getDocumentElement();
 		if (ruleMap.size() > 0) {
@@ -128,6 +160,27 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 	}
 	
 	/* Gets Rule Ids of customer as well as Customer's Parent */
+	
+	private void getCustomeProfileRulesParent(YFSEnvironment env, Document custListXML,
+			HashMap<String, HashMap<String, String>> ruleMap, Element orderElement) throws Exception {
+		
+		Document outputCustListDoc = null;
+		   //Meaning it is not invoked in Order Place flow..need to update ship to customer profile details in environment object for non OP flow.
+			
+			  //These are calls for other customers in the hierarchy apart from the ShipTo 
+		      Document template = createTemplateForCustomerList();
+		      env.setApiTemplate("getCustomerList", template);
+		      outputCustListDoc = api.invoke(env, "getCustomerList",custListXML);
+		      env.clearApiTemplate("getCustomerList");
+		ArrayList<Element> customers=SCXmlUtil.getElements(outputCustListDoc.getDocumentElement(), "Customer");
+		for(int i=0;i<customers.size();i++)
+		{
+			saveRuleKeys(customers.get(i), ruleMap);
+		}
+		
+		return;
+	}
+	
 	private void getCustomeProfileRules(YFSEnvironment env, Document custListXML,
 			HashMap<String, HashMap<String, String>> ruleMap, Element orderElement) throws Exception {
 		
@@ -164,7 +217,7 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 		      env.clearApiTemplate("getCustomerList");
 		   }
 		}
-		Document parentCustListXML = saveRuleKeys(outputCustListDoc, ruleMap);
+		Document parentCustListXML = saveRuleKeys(outputCustListDoc.getDocumentElement(), ruleMap);
 		/*After Review , If customer has some rules no need to check for parents, This will help in suppressing some rules form parent
 		 * 
 		 */
@@ -230,15 +283,24 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 		return customeListTemplateDoc.getDocument();
 	}
 	/* Saves Rule IDs and param in a hashmap */
-	private Document saveRuleKeys(Document custListDoc,
+	private Document saveRuleKeys(Element custListDoc,
 			HashMap<String, HashMap<String, String>> ruleMap) {
 		Document parentCustListXML = null;
-		Element organizationElement = custListDoc.getDocumentElement();
-		NodeList customerList = organizationElement
-				.getElementsByTagName("Customer");
-		int custLength = customerList.getLength();
+		Element custElement =null;
+		Element organizationElement =custListDoc;
+		int custLength = 1;
+		NodeList customerList =null;
+		if( organizationElement !=null && organizationElement.getNodeName().equals("Customer"))
+			custElement=organizationElement;
+		else
+		{
+			customerList = organizationElement
+					.getElementsByTagName("Customer");
+			custLength = customerList.getLength();
+		}
 		if (custLength > 0) {
-			Element custElement = (Element) customerList.item(0);
+			if(custElement ==null)
+				custElement = (Element) customerList.item(0);
 			String parentCustomerKey = custElement
 					.getAttribute("ParentCustomerKey");
 			
