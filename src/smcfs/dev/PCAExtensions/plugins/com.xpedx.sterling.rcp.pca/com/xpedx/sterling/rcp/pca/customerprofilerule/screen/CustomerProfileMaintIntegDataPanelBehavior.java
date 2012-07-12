@@ -69,7 +69,9 @@ public class CustomerProfileMaintIntegDataPanelBehavior extends YRCBehavior {
 		eleUpdate.setAttribute("CustomerID", eleCustomerDtls.getAttribute("CustomerID"));
 		eleUpdate.setAttribute("OrganizationCode", eleCustomerDtls.getAttribute("OrganizationCode"));
 		
-		Element eleUpdateShipTosData = getTargetModel("SaveCustomerList");
+		//Commented for removing the eTradin table in B2B maintenance panel in Customer Integration Data Maintenance tab for reducing the API call
+		
+		/*Element eleUpdateShipTosData = getTargetModel("SaveCustomerList");
 		eleUpdateShipTosData.setAttribute("ApiName", "manageCustomer");
 		NodeList nlCustomer = eleUpdateShipTosData.getElementsByTagName("Customer");
 		for(int i=0;i<nlCustomer.getLength();i++){
@@ -89,11 +91,11 @@ public class CustomerProfileMaintIntegDataPanelBehavior extends YRCBehavior {
 				if(!YRCPlatformUI.isVoid(eleCustAddlAddrs))
 					eleCustomer.removeChild(eleCustAddlAddrs);
 			}
-		}
+		}*/
 		
 		YRCApiContext ctx = new YRCApiContext();
-		ctx.setApiNames(new String[]{COMMAND_MANAGE_CUSTOMER,COMMAND_MANAGE_MULTIPLE_CUSTOMERS});
-		Document[] docInput = {eleUpdate.getOwnerDocument(),eleUpdateShipTosData.getOwnerDocument()};
+		ctx.setApiNames(new String[]{COMMAND_MANAGE_CUSTOMER});
+		Document[] docInput = {eleUpdate.getOwnerDocument()};
 		ctx.setInputXmls(docInput);
 		ctx.setFormId(getFormId());
 //		ctx.setShowError(false);
