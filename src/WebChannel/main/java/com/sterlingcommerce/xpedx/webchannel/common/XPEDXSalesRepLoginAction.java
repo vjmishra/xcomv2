@@ -155,13 +155,8 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 	public String logoutSalesRep() {
 		LOG.debug(":: Entering logoutSalesRep() ");
 		LOG.debug(":: User is currently logged out...");
-		if (request == null || response == null){
-			if ("PAGE".equalsIgnoreCase(getLogoutMethod())){
-				return WCAction.SUCCESS;
-			}
-			else {
-				return WCAction.NONE;
-			}
+		if (request == null || response == null){			
+				return WCAction.SUCCESS;			
 		}
 		Cookie cookies [] = request.getCookies();
 		if (cookies != null)
@@ -174,12 +169,9 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 			}
 		}
 		request.getSession(false).invalidate();
-		if ("PAGE".equalsIgnoreCase(getLogoutMethod())){
+		
 			return WCAction.SUCCESS;
-		}
-		else {
-			return WCAction.NONE;
-		}
+		
 	}
 	
 	private void setRequiredAttrbutes(){
