@@ -2543,7 +2543,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API FlowName="XPXGetAllCustomerRules">
             <Input>
-                <Order BuyerOrganizationCode="" EnterpriseCode="" EntryType="">
+                <Order BuyerOrganizationCode="" EnterpriseCode="" EntryType="" BillToID="" SAPCustomerID="">
                 </Order>
             </Input>
             <Template>
