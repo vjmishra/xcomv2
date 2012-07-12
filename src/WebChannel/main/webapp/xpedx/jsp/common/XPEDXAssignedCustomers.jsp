@@ -215,7 +215,7 @@
 		<!-- preferred ship-to end -->
 		</div>		
 			<s:if test="%{defualtShipToAssigned.customerID.trim() != ''}">
-			<a id="apply-btn1" style="position:fixed;margin-top:-19px;" href="javascript:applyPreferred('<s:property value="#defaultShipTo"/>','<s:property value="%{targetURL}"/>')" class="green-ui-btn">
+			<a id="apply-btn1" style="position:absolute;margin-top:-19px;" href="javascript:applyPreferred('<s:property value="#defaultShipTo"/>','<s:property value="%{targetURL}"/>')" class="green-ui-btn">
 				<span class="apply-ship-to-btn">Apply Preferred</span></a>
 			</s:if>
     	</div>
