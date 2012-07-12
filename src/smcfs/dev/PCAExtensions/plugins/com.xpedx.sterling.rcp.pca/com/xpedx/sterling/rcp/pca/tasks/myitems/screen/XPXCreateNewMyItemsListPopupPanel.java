@@ -45,7 +45,11 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 	private Text txtListName;
 	private Label lblCustomerId;
 	private Text txtCustomerId;
-
+	private Label lblCustomerName;
+	private Label lblCustomerNumber;
+	private Text txtCustomerName;
+	private Text txtCustomerNumber;
+	private Text txtCustomerIDSelected;
 	private Composite pnlButtonHolder;
 	private Button btnSearchChildCustomers;
 	private Button btnCancel;
@@ -62,6 +66,7 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 	private Combo comboCustomers;
 	private YRCComboBindingData cbd;
 	private Button btnGetSharedList;
+	private Button btnReset;
 	Tree tree;
 	TreeItem localiItem=null;
 	private Composite pnlEntry;
@@ -184,11 +189,11 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		
 		GridData gdCustomerId = new GridData();
 		gdCustomerId.grabExcessHorizontalSpace = true;
-		gdCustomerId.horizontalSpan = 1;
+		gdCustomerId.horizontalSpan = 2;
 		gdCustomerId.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		
 		lblCustomerId = new Label(grpSearchFields, SWT.NONE);
-		lblCustomerId.setText("Customer_ID_Starts_With");
+		lblCustomerId.setText("Complete Master Customer Number");
 
 		txtCustomerId = new Text(grpSearchFields, SWT.BORDER);
 		txtCustomerId.setLayoutData(gdCustomerId);
@@ -196,9 +201,33 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		txtCustomerId.setData("name", "txtCustomerId");
 		txtCustomerId.setTextLimit(50);	
 		
+		lblCustomerNumber = new Label(grpSearchFields, SWT.NONE);
+		lblCustomerNumber.setText("Master Customer Number Starts With");
+
+		txtCustomerNumber = new Text(grpSearchFields, SWT.BORDER);
+		txtCustomerNumber.setLayoutData(gdCustomerId);
+		txtCustomerNumber.setData("yrc:customType", "Text");
+		txtCustomerNumber.setData("name", "txtCustomerNumber");
+		txtCustomerNumber.setTextLimit(50);
+		
+		lblCustomerName = new Label(grpSearchFields, SWT.NONE);
+		lblCustomerName.setText("Master Customer Name Starts With");
+		
+		txtCustomerName = new Text(grpSearchFields, SWT.BORDER);
+		txtCustomerName.setLayoutData(gdCustomerId);
+		txtCustomerName.setData("yrc:customType", "Text");
+		txtCustomerName.setData("name", "txtCustomerName");
+		txtCustomerName.setTextLimit(50);
+		
+		GridData gdSearchButton = new GridData();
+		gdSearchButton.grabExcessHorizontalSpace = false;
+		gdSearchButton.horizontalSpan = 3;
+		gdSearchButton.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
+		gdSearchButton.widthHint = 50;
+		
 		btnSearchChildCustomers = new Button(grpSearchFields, 0);
 		btnSearchChildCustomers.setText("Search");
-		btnSearchChildCustomers.setLayoutData(gdCustomerId);
+		btnSearchChildCustomers.setLayoutData(gdSearchButton);
 		btnSearchChildCustomers.setData("name", "btnSearchChildCustomers");
 		btnSearchChildCustomers.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -207,23 +236,56 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		});		
 		
 		lblCustomers = new Label(grpSearchFields, SWT.NONE);
-		lblCustomers.setText("Select_Customer");
+		lblCustomers.setText("Customer:");
 		lblCustomers.setData("name", "lblCustomers");
 
-		comboCustomers = new Combo(grpSearchFields, 8);
+		/*comboCustomers = new Combo(grpSearchFields, 8);
 		comboCustomers.setLayoutData(gdCustomerId);
 		comboCustomers.setTextLimit(50);
-		comboCustomers.setData("name", "comboCustomers");
-
+		comboCustomers.setData("name", "comboCustomers");*/
+		
+		txtCustomerIDSelected = new Text(grpSearchFields, SWT.BORDER);
+		txtCustomerIDSelected.setLayoutData(gdCustomerId);
+		txtCustomerIDSelected.setData("yrc:customType", "Text");
+		txtCustomerIDSelected.setData("name", "txtCustomerIDSelected");
+		txtCustomerIDSelected.setTextLimit(50);
+		txtCustomerIDSelected.setEditable(false);
+		
+		
+		GridData gdbtnSharedButton = new GridData();
+		gdbtnSharedButton.grabExcessHorizontalSpace = true;
+		gdbtnSharedButton.horizontalSpan = 2;
+		gdbtnSharedButton.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
+		gdbtnSharedButton.widthHint = 50;
+		
+		btnReset = new Button(grpSearchFields, 0);
+		btnReset.setText("Reset");
+		btnReset.setLayoutData(gdbtnSharedButton);
+		btnReset.setData("name", "btnReset");
+		btnReset.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				disposeTreeStructure();
+			}
+		});
+		
+		
+		
+		GridData gdbtnResetButton = new GridData();
+		gdbtnResetButton.grabExcessHorizontalSpace = false;
+		gdbtnResetButton.horizontalSpan = 1;
+		gdbtnResetButton.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
+		gdbtnResetButton.widthHint = 150;
+		
 		btnGetSharedList = new Button(grpSearchFields, 0);
 		btnGetSharedList.setText("Get_child_customers");
-		btnGetSharedList.setLayoutData(gdCustomerId);
+		btnGetSharedList.setLayoutData(gdbtnResetButton);
 		btnGetSharedList.setData("name", "btnGetSharedList");
 		btnGetSharedList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.getSharedList();
 			}
 		});
+
 		
 		GridLayout gridLayoutTree = new GridLayout();
 		gridLayoutTree.marginWidth = 1;
@@ -237,7 +299,17 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		pnlProfileInfo.setLayoutData(gridData);
 		pnlProfileInfo.setLayout(gridLayoutTree);
 		pnlProfileInfo.setData("name", "pnlProfileInfo");
+		
+		Label lblSearchCriteriaTitle = new Label(pnlProfileInfo, SWT.LEFT);
+		GridData lblSearchCriteriaTitlelayoutData = new GridData();
+		lblSearchCriteriaTitlelayoutData.verticalAlignment = 16777216;
+		lblSearchCriteriaTitlelayoutData.grabExcessHorizontalSpace = true;
+		lblSearchCriteriaTitle.setLayoutData(lblSearchCriteriaTitlelayoutData);
+		lblSearchCriteriaTitle.setText("MIL_Sharable_List");
+		
 		this.createTreeStructure(pnlProfileInfo); //-function to create tree structure
+		
+		
 		
 		createpnlButtonHolder();
 	}	
@@ -260,14 +332,29 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		tbd.setTargetBinding("SaveMyItemsList:/MyItemsList/@QryCustomerID");
 		txtCustomerId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		cbd = new YRCComboBindingData();
+		tbd = new YRCTextBindingData();
+		tbd.setName("txtCustomerName");
+		tbd.setTargetBinding("SaveMyItemsList:/MyItemsList/@QryCustomerID");
+		txtCustomerName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
+		tbd = new YRCTextBindingData();
+		tbd.setName("txtCustomerNumber");
+		tbd.setTargetBinding("SaveMyItemsList:/MyItemsList/@QryCustomerID");
+		txtCustomerNumber.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
+		tbd = new YRCTextBindingData();
+		tbd.setName("txtCustomerIDSelected");
+		tbd.setTargetBinding("SaveMyItemsList:/XPEDXMyItemsList/@CustomerID");
+		txtCustomerIDSelected.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
+		/*cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@CustomerID");
 		cbd.setDescriptionBinding("@CustomerID");
 		cbd.setListBinding("XPXGetCustomerListService:/CustomerList/Customer");
 //		cbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1Key");
 		cbd.setTargetBinding("SaveMyItemsList:/XPEDXMyItemsList/@CustomerID");
 		cbd.setName("comboCustomers");
-		comboCustomers.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);	
+		comboCustomers.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);	*/
 	}
 
 
@@ -390,12 +477,7 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 	private void createTreeStructure(Composite composite) {
 
 		
-		Label lblSearchCriteriaTitle = new Label(composite, SWT.LEFT);
-		GridData lblSearchCriteriaTitlelayoutData = new GridData();
-		lblSearchCriteriaTitlelayoutData.verticalAlignment = 16777216;
-		lblSearchCriteriaTitlelayoutData.grabExcessHorizontalSpace = true;
-		lblSearchCriteriaTitle.setLayoutData(lblSearchCriteriaTitlelayoutData);
-		lblSearchCriteriaTitle.setText("MIL_Sharable_List");
+
 		
 		tree = new Tree (composite, SWT.CHECK|SWT.NONE);
 		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -670,5 +752,15 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		Element eleExtn = YRCXmlUtils.getChildElement(eleSelectedCust, "Extn");
 		strDivisionID = eleExtn.getAttribute("ExtnShipFromBranch");
 		return strDivisionID;
+	}
+	private void disposeTreeStructure(){
+		tree.dispose();
+		txtCustomerIDSelected.setText("");         
+		txtCustomerId.setText("");
+		txtCustomerName.setText("");
+		txtCustomerNumber.setText("");
+		txtListName.setText("");
+		txtListDesc.setText("");
+		createTreeStructure(pnlProfileInfo);
 	}
 }

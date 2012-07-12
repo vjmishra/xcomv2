@@ -14,6 +14,7 @@ import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCSharedTaskOutput;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
@@ -38,20 +39,19 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 
 	/** Will be triggered on click of get Share List or getChilds */
 	public void getSharedList() {
-		if (YRCPlatformUI.isVoid(getFieldValue("comboCustomers"))) {
+		
+		if (YRCPlatformUI.isVoid(getFieldValue("txtCustomerIDSelected"))) {
 
-			YRCPlatformUI.showInformation("SELECT_CUSTOMER_FROM_LIST",
-					YRCPlatformUI
-							.getString("SELECT_CUSTOMER_FROM_LIST"));
+			YRCPlatformUI.showError("Message", "Please enter any one of the search fields and click Search button.");
 			getControl("txtCustomerId").setFocus();
 		}
 		else
 		{
 			
-			if(getFieldValue("comboCustomers")== " " || oldCustomerID.equalsIgnoreCase(getFieldValue("comboCustomers")) ){
+			if(getFieldValue("txtCustomerIDSelected")== " " || oldCustomerID.equalsIgnoreCase(getFieldValue("txtCustomerIDSelected")) ){
 				
 			}else{
-				oldCustomerID = getFieldValue("comboCustomers");
+				oldCustomerID = getFieldValue("txtCustomerIDSelected");
 			Element outXml = getTargetModel("SaveMyItemsList");
 			String selectedCustomer = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/XPEDXMyItemsList"), "CustomerID");
 
@@ -151,6 +151,9 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 					} else if ("XPXGetCustomerListService".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXGetCustomerListService",outXml);
+						Element CustomerElement = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer");
+						String customerIDSelected = CustomerElement.getAttribute("CustomerID");
+						setFieldValue("txtCustomerIDSelected", customerIDSelected);
 					}
 				}
 
@@ -195,7 +198,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 
 	/** Will be triggred on click of Create button from My Items List */
 	public void createMyItemsList() {
-		if (YRCPlatformUI.isVoid(getFieldValue("comboCustomers"))||YRCPlatformUI.isVoid(getFieldValue("txtListName"))) {
+		if (YRCPlatformUI.isVoid(getFieldValue("txtCustomerIDSelected"))||YRCPlatformUI.isVoid(getFieldValue("txtListName"))) {
 
 			YRCPlatformUI.showError("MANDATORY_MYITEMS_LIST_FIELDS",
 					YRCPlatformUI
@@ -270,19 +273,63 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 	{
 		String[] apinames = {"XPXGetCustomerListService"};
 		String customerId = getFieldValue("txtCustomerId");
-		if ("".equalsIgnoreCase(customerId)) {
-
-			YRCPlatformUI.showError("CUSTOMER_ID_STARTS_WITH",
-					YRCPlatformUI
-							.getString("CUSTOMER_ID_STARTS_WITH"));
+		String customerName = getFieldValue("txtCustomerName");
+		String customerNumber = getFieldValue("txtCustomerNumber");
+		if ("".equalsIgnoreCase(customerId) && "".equalsIgnoreCase(customerName) && "".equalsIgnoreCase(customerNumber)) {
+			YRCPlatformUI.showError("Message", "Please enter any one of the search fields and click Search button.");
 			getControl("txtCustomerId").setFocus();
 		}
-		else
+		/*else
 		{
 			Document[] docInput = {
 					YRCXmlUtils.createFromString("<Customer CustomerID='"+customerId+"' CustomerIDQryType='FLIKE'/>")										
 			};
 			callApis(apinames, docInput);			
+		}*/
+		if ((!"".equalsIgnoreCase(customerId)&&!"".equalsIgnoreCase(customerName))|| (!"".equalsIgnoreCase(customerId)&&!"".equalsIgnoreCase(customerNumber))||(!"".equalsIgnoreCase(customerName)&&!"".equalsIgnoreCase(customerNumber))) {
+			YRCPlatformUI.showError("Message", "Please enter data into only one of the three search fields.");
+			return;
+			}
+		if (!"".equalsIgnoreCase(customerId)) {
+			Document[] docInput = {
+					YRCXmlUtils.createFromString("<Customer CustomerID='"+customerId+"' CustomerIDQryType='FLIKE'/>")										
+			};
+			callApis(apinames, docInput);	
+		}
+		if (!"".equalsIgnoreCase(customerName)) {
+			Element elemModelCustomerName = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+			elemModelCustomerName.setAttribute("CallingOrganizationCode", "xpedx");
+			elemModelCustomerName.setAttribute("CustomerType", "01");
+			Element e1 = YRCXmlUtils.createChild(elemModelCustomerName, "BuyerOrganization");
+			e1.setAttribute("OrganizationName", customerName);
+			e1.setAttribute("OrganizationNameQryType", "FLIKE");
+			Element e2 = YRCXmlUtils.createChild(elemModelCustomerName, "Extn");
+			e2.setAttribute("ExtnSuffixType", "MC");
+			YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModelCustomerName);
+			Element eleUOMInfo = output.getOutput();
+			String customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+			setFieldValue("txtCustomerIDSelected", customerIdSelected);
+
+		}
+		if (!"".equalsIgnoreCase(customerNumber)) {
+			Element elemModelCustomerNumber = YRCXmlUtils.createDocument("Customer").getDocumentElement();
+			elemModelCustomerNumber.setAttribute("CallingOrganizationCode", "xpedx");
+			elemModelCustomerNumber.setAttribute("CustomerType", "01");
+			Element BuyerOrganizationElem = YRCXmlUtils.createChild(elemModelCustomerNumber, "BuyerOrganization");
+			Element complexQueryElem = YRCXmlUtils.createChild(BuyerOrganizationElem, "ComplexQuery");
+			complexQueryElem.setAttribute("Operation", "OR");
+			Element orElem = YRCXmlUtils.createChild(complexQueryElem, "Or");
+			Element ExpElem = YRCXmlUtils.createChild(orElem, "Exp");
+			ExpElem.setAttribute("Name", "OrganizationCode");
+			ExpElem.setAttribute("QryType", "LIKE");
+			ExpElem.setAttribute("Value", customerNumber);
+			Element ExtnElem = YRCXmlUtils.createChild(elemModelCustomerNumber, "Extn");
+			ExtnElem.setAttribute("ExtnSuffixType", "MC");
+			YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask",elemModelCustomerNumber);
+			Element eleUOMInfo = output.getOutput();
+			String customerIdSelected = eleUOMInfo.getAttribute("CustomerIdSelected");
+			setFieldValue("txtCustomerIDSelected", customerIdSelected);
+
 		}
 	}
 	
