@@ -106,6 +106,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	     {
 	         // cause of error should have been logged by the throwing method
 	         e.printStackTrace();
+	         System.out.println(" Add to Cart Undefined : " +e.getMessage());
 	         return ERROR;
 	     }
 		 return SUCCESS;
