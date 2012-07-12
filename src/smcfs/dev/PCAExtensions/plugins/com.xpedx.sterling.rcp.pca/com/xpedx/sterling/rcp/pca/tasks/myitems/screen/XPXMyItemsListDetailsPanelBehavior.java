@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private String updated = null;
 	private String itemShortDescription;
 	public static String baseUOM ;
+	private Element eleXpath;
 	/*public static final String ACTION_EDIT = "EDIT";
 	public static final String ACTION_DELETE = "DELETE";*/
 
@@ -487,6 +489,8 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		int UomDesc=0;
 		int name=0;
 		ArrayList columnHeader = new ArrayList();
+		//Geting the max of  sequence number
+		int maxValue = getMaxVaue();
 		try {
 			XPXCSVReader reader = new XPXCSVReader(new FileReader(filePath));
 			
@@ -520,6 +524,14 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 */					Element eleMyItemsList = YRCXmlUtils.createChild(docImport.getDocumentElement(), "XPEDXMyItemsItems");
 					for(int colHeader = 0 ; colHeader < columnHeader.size(); colHeader++){
 						
+						
+						//Import item sequencing code
+						if(colHeader == 0 ){					
+						maxValue = maxValue + 1;
+						String aString = Integer.toString(maxValue);
+						eleMyItemsList.setAttribute("ItemOrder", aString);
+						}
+						//Import item sequencing code
 						
 						//Populate the object
 						if(columnHeader.get(colHeader).equals("Supplier Part Number")){
@@ -738,6 +750,18 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		
 		saveChangesToMyItemsList();
 	}
+	
+	private int getMaxVaue() {
+		Element eleMyItemsList = getModel("getXPEDXMyItemsListDetail");
+		int[] nums = new int[1000000];
+		NodeList nlItems = eleMyItemsList.getElementsByTagName("XPEDXMyItemsItems");
+		for( int i=0; i<nlItems.getLength(); i++){
+	    	eleXpath = (Element)nlItems.item(i);
+	    	int aInt = Integer.parseInt(eleXpath.getAttribute("ItemOrder"));
+	    	nums[i] = aInt;
+		}
+		Arrays.sort(nums); 
+		return nums[nums.length-1];	}
 	
 
 }

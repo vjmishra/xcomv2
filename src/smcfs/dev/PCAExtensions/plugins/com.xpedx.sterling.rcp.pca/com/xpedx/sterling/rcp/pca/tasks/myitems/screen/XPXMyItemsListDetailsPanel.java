@@ -665,6 +665,9 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		bindingData.setCellModifierRequired(true);
 		bindingData.setCellModifier(cellModifier);
 		bindingData.setSortRequired(true);
+		bindingData.setDefaultSort(false);
+		
+		
         bindingData.setSourceBinding("getXPEDXMyItemsListDetail:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems");
         bindingData.setTargetBinding("SaveXPEDXMyItemsListDetail:/XPEDXMyItemsList/XPEDXMyItemsItemsList");
         bindingData.setName("tblItemsList");
