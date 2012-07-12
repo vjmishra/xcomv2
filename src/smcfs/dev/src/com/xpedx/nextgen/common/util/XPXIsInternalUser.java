@@ -30,8 +30,6 @@ public class XPXIsInternalUser implements YCPDynamicConditionEx {
 		}			
 		// Source Indicator has been checked for B2B (Source Indicator == 2)
 		if((userType != null && userType.equals("INTERNAL")) || (extnUserType != null && extnUserType.equals("INTERNAL"))){		
-			//Added to for debugging the log if the API call is being redirected here for INTERNAL USER creation
-			System.out.println("Inside usertype and extnusertype ");
 			return true;			
 		}
 		return false;
