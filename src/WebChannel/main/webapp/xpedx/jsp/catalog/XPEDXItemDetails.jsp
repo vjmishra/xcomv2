@@ -771,6 +771,16 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
             //myDiv.innerHTML = response.responseText;
            // DialogPanel.show('modalDialogPanel1');
            // svg_classhandlers_decoratePage();
+
+            var myMessageDiv = document.getElementById("errorMsgForQty");
+            if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+           	 myMessageDiv.innerHTML = "Error in adding item to the order." ;
+			 else
+				 myMessageDiv.innerHTML = "Error in adding item to the cart." ;	            
+            myMessageDiv.style.display = "inline-block"; 
+            myMessageDiv.setAttribute("class", "error");
+
+	           
              }
     });		
 }
