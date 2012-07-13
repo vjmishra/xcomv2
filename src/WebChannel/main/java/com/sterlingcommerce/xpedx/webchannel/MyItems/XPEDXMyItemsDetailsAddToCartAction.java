@@ -134,6 +134,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 		} catch (Exception dle) {
 			LOG.debug(dle.getStackTrace());
+			dle.printStackTrace();
 			return "error";
 		}
 
@@ -141,7 +142,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		}
-
+		System.out.println("Returning Null in XPEDXMyItemsDetailsAddToCartAction");
 		//return SUCCESS;
 		return null;
 	}
