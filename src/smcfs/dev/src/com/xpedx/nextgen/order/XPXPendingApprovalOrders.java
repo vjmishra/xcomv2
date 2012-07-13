@@ -13,6 +13,7 @@ import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
+import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -177,6 +178,15 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	public Document applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
 		Document changeOrderOutput = null;
 		if(orderElement!=null && approver!=null) {
+			String isEditOrder="";
+			if (env instanceof ClientVersionSupport) {
+				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
+				HashMap map  = clientVersionSupport.getClientProperties();
+				if (map != null) {
+					isEditOrder=(String) map.get("isEditOrderPendingOrderApproval");
+				}
+			}
+			
 			// Applying the Hold Type ORDER_LIMIT_APPROVAL on the order with one of the above approvers
 			Document changeOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
 			Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
@@ -186,17 +196,17 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			holdType.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
 			holdType.setAttribute("Status", "1100");
 			holdType.setAttribute("ResolverUserId", approver);
-			holdTypes.appendChild(holdType);changeOrderInputElem.appendChild(holdTypes);
-			Document Template = SCXmlUtil.createFromString("<Order><OrderHoldTypes><OrderHoldType HoldType='' ReasonText='' ResolverUserId='' Status=''/></OrderHoldTypes></Order>");
-			env.setApiTemplate("changeOrder", Template);
-			//invoking the change Order to apply the hold type
-			try {
-				changeOrderOutput = api.invoke(env, "changeOrder", changeOrderInputDoc);
-				env.clearApiTemplate("changeOrder");
-			}
-			catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+			holdTypes.appendChild(holdType);
+			changeOrderInputElem.appendChild(holdTypes);
+			if(isEditOrder == null || !"true".equals(isEditOrder )) {
+				//invoking the change Order to apply the hold type
+				try {
+					changeOrderOutput = api.invoke(env, "changeOrder", changeOrderInputDoc);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				return changeOrderInputDoc;
 			}
 		}
 		return changeOrderOutput;
