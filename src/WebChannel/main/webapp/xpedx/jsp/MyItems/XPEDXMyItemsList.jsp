@@ -1039,12 +1039,9 @@
 				<p class="grey-mil" style="width:440px; word-wrap:break-word;"><s:property value="#desc" /></p>
 				</td> 
 				<%--For jira 4134 - sales rep Last Modified By display --%>
-				<s:if test="%{#isSalesRep}"> 
-					<td class="createdby-lastmod"> <s:property value='%{#session.loggedInUserName}'/></td>
-				</s:if>
-				<s:else>
+				
 					<td class="createdby-lastmod"><s:property value="#modifiedBy" /></td>
-				</s:else>
+				
 				<%--Fix End For jira 4134 - sales rep Last Modified By display--%>
 				<td class="createdby-lastmod"><s:property value='%{#util.formatDate(#lastMod, #wcContext, null, "MM/dd/yyyy")}' /></td>
 				<s:if test="%{#spShareAdminOnly != ''}">
