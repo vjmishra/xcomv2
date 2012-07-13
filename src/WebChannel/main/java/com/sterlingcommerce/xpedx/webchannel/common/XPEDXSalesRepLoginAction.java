@@ -168,9 +168,8 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 				response.addCookie(cookies[i]);
 			}
 		}
-		request.setAttribute("SCUI_SKIP_ADDING_ADDITIONAL_PARAMETERS", "Y");
 		request.getSession(false).invalidate();
-		request.getSession().invalidate();
+		
 			return WCAction.SUCCESS;
 		
 	}
