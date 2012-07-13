@@ -153,8 +153,8 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 	}
 	
 	public String logoutSalesRep() {
-		LOG.debug(":: Entering logoutSalesRep() ");
-		LOG.debug(":: User is currently logged out...");
+		System.out.println(":: Entering logoutSalesRep() ");
+		System.out.println(":: User is currently logged out...");
 		if (request == null || response == null){			
 				return WCAction.SUCCESS;			
 		}
@@ -168,8 +168,9 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 				response.addCookie(cookies[i]);
 			}
 		}
+		request.setAttribute("SCUI_SKIP_ADDING_ADDITIONAL_PARAMETERS", "Y");
 		request.getSession(false).invalidate();
-		
+		request.getSession().invalidate();
 			return WCAction.SUCCESS;
 		
 	}
