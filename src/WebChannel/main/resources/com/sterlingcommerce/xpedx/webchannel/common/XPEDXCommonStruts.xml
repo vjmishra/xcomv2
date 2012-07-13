@@ -166,6 +166,9 @@
 			</result>
 		</action>
 			
+		<action name="salesReploginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
+        </action>
 			
 		<action name="salesRepLogin"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
@@ -176,7 +179,9 @@
 		<action name="salesrepLogout"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
 			method="logoutSalesRep">
-			<result name="success">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">salesReploginFullPage</param>				
+			</result>	
 		</action>
 		<action name="salesRepCustomerLogin"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepCustomerLoginAction">
