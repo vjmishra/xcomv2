@@ -394,44 +394,48 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         colBindings[0].setFilterReqd(false);
         colBindings[0].setTargetAttributeBinding("XPEDXMyItemsItems/@Checked");
         
-        colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("Name");
-        colBindings[1].setColumnBinding("Item Description");
-        colBindings[1].setTargetAttributeBinding("XPEDXMyItemsItems/@Name");
+        colBindings[1] = new YRCTblClmBindingData();        
+        colBindings[1].setAttributeBinding("ItemOrder"); 
+        colBindings[1].setColumnBinding("Sequence");     
+        colBindings[1].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
         colBindings[1].setSortReqd(true);
         
         colBindings[2] = new YRCTblClmBindingData();
-        colBindings[2].setAttributeBinding("ItemId");
-        colBindings[2].setColumnBinding("Item#");
+        colBindings[2].setAttributeBinding("Name");
+        colBindings[2].setColumnBinding("Item Description");
+        colBindings[2].setTargetAttributeBinding("XPEDXMyItemsItems/@Name");
         colBindings[2].setSortReqd(true);
-        colBindings[2].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemId");
         
         colBindings[3] = new YRCTblClmBindingData();
-        colBindings[3].setAttributeBinding(QTY);
-        colBindings[3].setColumnBinding("Quantity");
-        colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
+        colBindings[3].setAttributeBinding("ItemId");
+        colBindings[3].setColumnBinding("Item#");
+        colBindings[3].setSortReqd(true);
+        colBindings[3].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemId");
         
-        colBindings[4] = new YRCTblClmBindingData();        
-        colBindings[4].setAttributeBinding("UomDesc"); 
-        colBindings[4].setColumnBinding("UOM");
+        colBindings[4] = new YRCTblClmBindingData();
+        colBindings[4].setAttributeBinding(QTY);
+        colBindings[4].setColumnBinding("Quantity");
+        colBindings[4].setTargetAttributeBinding("XPEDXMyItemsItems/@Qty");
+        
+        colBindings[5] = new YRCTblClmBindingData();        
+        colBindings[5].setAttributeBinding("UomDesc"); 
+        colBindings[5].setColumnBinding("UOM");
        // colBindings[4].setTargetAttributeBinding("XPEDXMyItemsItems/@UomDesc");
-        colBindings[4].setLinkReqd(true);
+        colBindings[5].setLinkReqd(true);
         
-        colBindings[5] = new YRCTblClmBindingData(); 
-        colBindings[5].setAttributeBinding("ItemPoNumber");
-        colBindings[5].setColumnBinding("LinePo#"); 
-        colBindings[5].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemPoNumber");
-
-        colBindings[6] = new YRCTblClmBindingData();        
-        colBindings[6].setAttributeBinding("JobId"); 
-        colBindings[6].setColumnBinding("Line Account #");    
-        colBindings[6].setTargetAttributeBinding("XPEDXMyItemsItems/@JobId");
+        colBindings[6] = new YRCTblClmBindingData(); 
+        colBindings[6].setAttributeBinding("ItemPoNumber");
+        colBindings[6].setColumnBinding("LinePo#"); 
+        colBindings[6].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemPoNumber");
 
         colBindings[7] = new YRCTblClmBindingData();        
-        colBindings[7].setAttributeBinding("ItemOrder"); 
-        colBindings[7].setColumnBinding("Sequence");     
-        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@ItemOrder");
-        colBindings[7].setSortReqd(true);
+        colBindings[7].setAttributeBinding("JobId"); 
+        colBindings[7].setColumnBinding("Line Account #");    
+        colBindings[7].setTargetAttributeBinding("XPEDXMyItemsItems/@JobId");
+
+
+      //  colBindings[7].setServerSortAttribute("XPEDXMyItemsItems/@ItemOrder");
+      //  colBindings[7].setSortBinding("XPEDXMyItemsItems/@ItemOrder");
         
         
         /*colBindings[11] = new YRCTblClmBindingData();
@@ -656,16 +660,16 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
         
 		String[] editors = new String[tblItemsList.getColumnCount()];
 		editors[0] = YRCConstants.YRC_CHECK_BOX_CELL_EDITOR;
-		editors[3] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
-		editors[5] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[4] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		editors[6] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		editors[7] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
+		editors[1] = YRCConstants.YRC_TEXT_BOX_CELL_EDITOR;
 		
 		bindingData.setCellTypes(editors);
 		bindingData.setCellModifierRequired(true);
 		bindingData.setCellModifier(cellModifier);
 		bindingData.setSortRequired(true);
-		bindingData.setDefaultSort(false);
+		//bindingData.setDefaultSort(false);
 		
 		
         bindingData.setSourceBinding("getXPEDXMyItemsListDetail:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems");
@@ -739,6 +743,11 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		tblClmCheckbox.setWidth(50);//
 		tblClmCheckbox.setResizable(false);
 		
+		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
+		clmSequence.setText("Sequence");
+		clmSequence.setWidth(50);
+		clmSequence.setResizable(true);
+		
 		TableColumn clmProductDesc = new TableColumn(tblItemsList, SWT.NONE);
 		clmProductDesc.setText("Product_desc");
 		clmProductDesc.setWidth(150);
@@ -767,10 +776,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 		clmCustAccountField.setWidth(50);
 		clmCustAccountField.setResizable(true);
 
-		TableColumn clmSequence = new TableColumn(tblItemsList, SWT.NONE);
-		clmSequence.setText("Sequence");
-		clmSequence.setWidth(50);
-		clmSequence.setResizable(true);
+		
 		
 		/*TableColumn clmAction = new TableColumn(tblItemsList, SWT.NONE);
 		clmAction.setText("Action");
