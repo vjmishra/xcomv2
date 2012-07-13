@@ -28,6 +28,7 @@ import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -2555,4 +2556,42 @@ public class XPXUtils implements YIFCustomApi {
 	    }	
 	    return toReturn;	    
 	}
+	
+	public boolean checkIfOrderOnPendingHold(Document orderDocument) {
+		
+		YFCDocument yfcOrderDetailDoc = YFCDocument.getDocumentFor(orderDocument);
+			
+	    boolean isOrderOnHold = false;
+	    if (log.isDebugEnabled()) {
+	    	log.debug("XPXUtils_checkIfOrderOnPendingHold(): "+ yfcOrderDetailDoc.getString());   
+	    }
+	    
+	    YFCElement rootElem = yfcOrderDetailDoc.getDocumentElement();
+	    YFCElement orderHoldTypesElem = rootElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+	    if (orderHoldTypesElem != null) {
+	    	YFCNodeList orderHoldTypeList = orderHoldTypesElem.getElementsByTagName("OrderHoldType");
+ 		    
+	    	if(orderHoldTypeList.getLength() > 0)
+	        {			        
+	           for(int i=0; i<orderHoldTypeList.getLength();i++) 
+	           {
+	        	   Element orderHoldTypeElem = (Element)orderHoldTypeList.item(i);
+	        	   if (orderHoldTypeElem != null) {
+	        		   String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
+			    	   String holdStatus = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
+			    	   if(!YFCObject.isNull(holdType)&& holdType.equalsIgnoreCase("ORDER_LIMIT_APPROVAL") && !YFCObject.isNull(holdStatus) && holdStatus.equalsIgnoreCase(XPXLiterals.HOLD_CREATED_STATUS_ID)) {
+			    		   if (log.isDebugEnabled()) {
+			    			   log.debug("Order Is On Pending Approval Hold. No Chained Order Will Be Created");
+			    		   }
+			               isOrderOnHold = true;
+			               break;
+			            } 
+	        	   }
+	           }          
+	                
+	        }
+	    }
+	    return isOrderOnHold;
+	}
+	
 }
