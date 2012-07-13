@@ -513,10 +513,6 @@
                            <xsl:value-of select="normalize-space(CustomerProductCode)" />
                         </xsl:attribute>
 
-                        <xsl:attribute name="ManufacturerItem">
-                           <xsl:value-of select="normalize-space(ManufacturerProductCode)" />
-                        </xsl:attribute>
-
                         <xsl:attribute name="UnitOfMeasure">
                         <xsl:if test="((normalize-space(LineType))!='M')">
                            <xsl:value-of select="normalize-space(BaseUnitOfMeasure)" />
