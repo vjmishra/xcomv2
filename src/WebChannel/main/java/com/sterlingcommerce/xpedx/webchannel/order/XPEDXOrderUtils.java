@@ -494,7 +494,7 @@ public class XPEDXOrderUtils {
 		outputDoc = ((Element) obj).getOwnerDocument();
 		if (null != outputDoc) {
 			LOG.debug("Output XML "+mashupId+": " + SCXmlUtil.getString((Element) obj));
-		}
+			}
 		return outputDoc;
 	}
 	
@@ -1835,8 +1835,7 @@ public class XPEDXOrderUtils {
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
 	                    log.info("linekey-->"+lineKey);
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) &&
-	                         (!OrderHelper.isCancelledLine(currNode)) )
+	                    if ( (bundleParentLines.getLength() == 0) )
 	                    {	                        
 	                            // Haven't hit the max number yet, so go ahead and add it to the list.
 	                            majorLineElements.add(currNode);
@@ -1883,8 +1882,7 @@ public class XPEDXOrderUtils {
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
 	                    log.info("linekey-->"+lineKey);
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) &&
-	                         (!OrderHelper.isCancelledLine(currNode)) )
+	                    if ( (bundleParentLines.getLength() == 0))
 	                    {
 	                        log.info(lineKey+ " it's major line");
 	                        if(majorLineElements.size() == maxElements)
