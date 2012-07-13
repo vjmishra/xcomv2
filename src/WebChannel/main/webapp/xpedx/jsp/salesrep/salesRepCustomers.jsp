@@ -61,7 +61,7 @@ var data="false";
 <div id="container">
 
   <div class="searchbg">
-  <s:url id='logoutURL' namespace='/home' action='salesReploginFullPage'/>							  
+  <s:url id='logoutURL' namespace='/common' action='salesrepLogout'/>							  
   <div id="logout-text">
   <s:a href="%{#logoutURL}" >Sign Out</s:a>
   </div>
