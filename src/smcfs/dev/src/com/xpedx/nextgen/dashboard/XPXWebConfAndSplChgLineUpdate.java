@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -20,6 +21,7 @@ import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
+import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 import java.util.Collections;
@@ -121,6 +123,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		float minOrderTotal = 0;
 		float chargeAmount = 0;
 		float totalAmount = 0;
+		XPXUtils utilObj=null;
 			
 		String entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
 		
@@ -194,6 +197,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 			
 			if(totalAmount <minOrderTotal)
 			{
+				utilObj=new XPXUtils();				
 				//get the orderlines element
 				Element orderExtnElem=SCXmlUtil.getChildElement(inputDocRoot, "Extn");
 				double reTotalAmount=totalAmount+ new Float(chargeAmount);
@@ -218,6 +222,10 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 				specialElement.setAttribute("LineType", "M");
 				Element itemElement = changeOrderInputDoc.createElement("Item");
 				itemElement.setAttribute("ItemID", arg0.getProperty("ItemID"));
+				if(utilObj.checkIfOrderOnPendingHold(inputDocRoot.getOwnerDocument())){
+					if(YFSSystem.getProperty("ItemShortDesc") != null)
+						itemElement.setAttribute("ItemShortDesc", YFSSystem.getProperty("ItemShortDesc"));			
+				}
 				//itemElement.setAttribute("UnitOfMeasure", "EACH");
 									
 				Element extnElement = changeOrderInputDoc.createElement("Extn");
