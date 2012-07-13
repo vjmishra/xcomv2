@@ -19,6 +19,10 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
@@ -32,6 +36,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXPaymentMethodHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
@@ -221,16 +226,17 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
 				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
 				{
+					setYFSEnvironmentVariables(getWCContext());
 					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
-						if(isPendingApproval != null)
+					if(isPendingApproval != null)
+					{
+						Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+						if(holdType != null)
 						{
-							Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
-							if(holdType != null)
-							{
-								orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdType, true));
-								
-							}
+							orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdType, true));
+							
 						}
+					}
 				}
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				//get the order details
@@ -350,6 +356,20 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		}
 	}
 
+	public static void setYFSEnvironmentVariables(IWCContext wcContext) 
+	{
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("isEditOrderPendingOrderApproval", "true");
+			SCUIContext uictx = wcContext.getSCUIContext();
+			ISCUITransactionContext iSCUITransactionContext = uictx.getTransactionContext(true);
+			Object env = iSCUITransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			if (env instanceof ClientVersionSupport) {
+				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
+				clientVersionSupport.setClientProperties(map);
+			}
+			
+	}
+	
 	private void changeOutputDocToOrderUpdateDoc(Element outputDoc)
 	{
 		ArrayList<Element> outputOrderLineNodeList=SCXmlUtil.getElements(outputDoc,"OrderLines/OrderLine");
