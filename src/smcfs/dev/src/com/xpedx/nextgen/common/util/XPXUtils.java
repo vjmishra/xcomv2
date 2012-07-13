@@ -2575,7 +2575,7 @@ public class XPXUtils implements YIFCustomApi {
 	        {			        
 	           for(int i=0; i<orderHoldTypeList.getLength();i++) 
 	           {
-	        	   Element orderHoldTypeElem = (Element)orderHoldTypeList.item(i);
+	        	   YFCElement orderHoldTypeElem = (YFCElement)orderHoldTypeList.item(i);
 	        	   if (orderHoldTypeElem != null) {
 	        		   String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
 			    	   String holdStatus = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
