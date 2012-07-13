@@ -37,7 +37,17 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 	private String name				= ""; //This are for the create new list functionality
 	private String desc				= "";
 	private String sharePrivate		= "";
+	/*Updated for Jira 4134*/
+	private String salesreploggedInUserName;
 	
+	public String getSalesreploggedInUserName() {
+		return salesreploggedInUserName;
+	}
+
+	public void setSalesreploggedInUserName(String salesreploggedInUserName) {
+		this.salesreploggedInUserName = salesreploggedInUserName;
+	}
+//end of Jira 4134
 	private String[] customerPaths;
 	private String[] customerIds;
 	private String[] customerDivs;
@@ -196,7 +206,16 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setDesc(getListDesc());
 				setSharePrivate(getSharePermissionLevel());
 				setShareAdminOnly(shareAdminOnly); //JIRA 3377
-				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
+				
+				/*Updated for Jira 4134*/
+				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				Element res1;
+				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+					 res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateForSalesRep");
+				}else{
+					 res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
+				}				
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				LOG.info("Check 1 - Done: getListKey = " + getListKey());
 			}
