@@ -158,7 +158,22 @@
 			</Template>
 		</API>
 	</mashup>
-	
+<!-- Added for Jira 4134 - for sales rep -->	
+	<mashup id ='XPEDXMyItemsListCreateForSalesRep' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="createXPEDX_MyItemsList">
+			<Input>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" "/>
+			</Input>			
+			<Template>
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
+				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
+				    MyItemsListKey=" " Name=" "/>
+			</Template>
+		</API>
+	</mashup>
 	<mashup id ='XPEDXMyItemsListCreateAndAddItem' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="">
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="createXPEDX_MyItemsList">
