@@ -31,9 +31,11 @@ public class XPEDXLogoutAction extends Logout {
 		else {
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
 		}
-		String isSalesRep="";
-		isSalesRep=(String)getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
-		if( isSalesRep!= null && isSalesRep.equalsIgnoreCase("true")){
+		Boolean isSalesRep = null;
+		if(getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP")!=null){
+			isSalesRep=Boolean.valueOf((Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP"));
+		}
+		if( isSalesRep!= null && isSalesRep==true){
 			returnType="SalesRepUser";
 		}
 		if(custContRefKey!=null && custContRefKey.length()>0)
