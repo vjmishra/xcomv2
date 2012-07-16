@@ -1,6 +1,6 @@
 <CustomerList>
 <Customer CustomerKey='' CustomerID='' OrganizationCode=''>
-<Extn ExtnSuffixType='' ExtnShipFromBranch='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix=''/>
+<Extn ExtnSuffixType='' ExtnShipFromBranch='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix='' ExtnCustomerDivision='' ExtnEnvironmentCode=''/>
 <BuyerOrganization OrganizationCode='' OrganizationName=''/>
 </Customer>
 </CustomerList>
