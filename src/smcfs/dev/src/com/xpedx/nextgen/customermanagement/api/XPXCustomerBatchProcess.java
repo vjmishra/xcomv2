@@ -109,12 +109,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 			HashMap salesRepTeam = new HashMap();
 			arrChildCustomerIds=new ArrayList<String>();
-			String existingMSAPNumber = null;
+			//String existingMSAPNumber = null;
 			String existingMSAPName = null;
 			
 			//JIRA 3740 Start
-			String existingSAPNumber = null;
-			String existingSAPName = null;
+			//String existingSAPNumber = null;
+			//String existingSAPName = null;
 			Document documentXML = null;
 			boolean masterSAPUnchanged = false;
 			//JIRA 3740 End
@@ -333,11 +333,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							long startTime = System.currentTimeMillis();
 							Element custMSAPElement = getMSAPCustomerElement(env, customerID, organizationCode);
 							if(custMSAPElement!=null){
-							existingMSAPNumber = custMSAPElement.getAttribute("ExtnSAPParentAccNo");
+							String existingMSAPNumber = custMSAPElement.getAttribute("ExtnSAPParentAccNo");
 							existingMSAPName = custMSAPElement.getAttribute("ExtnSAPParentName");
 							//JIRA 3740 Start
-							existingSAPNumber = custMSAPElement.getAttribute("ExtnSAPNumber");
-							existingSAPName = custMSAPElement.getAttribute("ExtnSAPName");
+							String existingSAPNumber = custMSAPElement.getAttribute("ExtnSAPNumber");
+							String existingSAPName = custMSAPElement.getAttribute("ExtnSAPName");
 							sapUnchanged = existingSAPNumber.trim().equals(sapAccountNumber);
 							//JIRA 3740 End
 							masterSAPUnchanged=existingMSAPNumber.trim().equals(masterSapAccountNumber);												
