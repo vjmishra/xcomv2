@@ -217,7 +217,7 @@
 	</action>	
 	
 	<action name="XPEDXMyItemsDetailsChangeShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
-		<param name="mashups">XPEDXMyItemsDetailsChangeShareList,XPEDXMyItemsListCreateForSalesRep</param>
+		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
 		 <result name="copy" type="redirectAction">
