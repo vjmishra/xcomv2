@@ -3068,7 +3068,7 @@ function showSharedListForm(){
 						<s:url id='pImg' value='%{#_action.getImagePath(#altItemPrimaryInfo)}' />
 						
 						
-						<s:set name='ritemUomId' value='#altItem.getAttribute("UomId")' />
+						<s:set name='ritemUomId' value='#altItem.getAttribute("UnitOfMeasure")' />
 						<s:set name='ritemType' value='#altItem.getAttribute("ItemType")' />
 						
 						<s:url id='ritemDetailsLink' namespace="/catalog"
@@ -3110,7 +3110,7 @@ function showSharedListForm(){
 							</div>
                     <div class="mil-attr-wrap">
                         <ul class="mil-desc-attribute-list prodlist">                        
-							<s:property value='#rdesc' escape='false'/>
+						<a href='<s:property value="%{ritemDetailsLink}" />'>	 <s:property value='#rdesc' escape='false'/> </a>
 					    </ul>
 					    <%-- key contains the original itemId --%>
                        <%--  <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
