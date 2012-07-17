@@ -777,7 +777,7 @@ function showSharedListForm(){
 		}
 		//Added For Jira 3946
 		function setMsgOnAddItemsWithQtyToCart(response){
-			if(response.responseText.indexOf('Error while adding to XPEDXMyItemsAdd To Cart ') !== -1 )
+			if(response.responseText != null && response.responseText.indexOf('Error while adding to XPEDXMyItemsAdd To Cart ') !== -1 )
      	   {
      		   alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");
      	   }
