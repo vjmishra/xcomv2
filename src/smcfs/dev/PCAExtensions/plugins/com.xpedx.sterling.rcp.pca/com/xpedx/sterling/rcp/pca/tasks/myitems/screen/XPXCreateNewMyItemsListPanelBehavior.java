@@ -25,7 +25,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 	private String formId;
 	private String strCustomerPathPrefix = "";
 	private Element eleSaveList = null;
-	private String  oldCustomerID = " ";
+	public static String  oldCustomerID = " ";
 	/**
 	 * Constructor for the behavior class.
 	 */
@@ -215,6 +215,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 				YRCPlatformUI.showError("SHOULD_BE_SHARED_ATLEAST_TO_ONE_LOCATION_TITLE",
 						YRCPlatformUI.getString("SHOULD_BE_SHARED_ATLEAST_TO_ONE_LOCATION_MSG"));
 //				getControl("txtCustomerId").setFocus();
+				oldCustomerID = " ";
 			} else {
         	
 				String Createuserid=YRCPlatformUI.getUserElement().getAttribute("Loginid");//--XIRAId-1143
