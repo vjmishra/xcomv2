@@ -76,6 +76,7 @@ public class XPEDXOrderUtils {
 	public final static String CROSS_SELL_ITEMS_KEY = "CROSS-SELL";
 	public final static String UP_SELL_ITEMS_KEY = "UP-SELL";
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
+	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	
 	public static Document getXPEDXItemAssociation(String custID,
@@ -1372,8 +1373,10 @@ public class XPEDXOrderUtils {
 		HashMap<String, ArrayList<Element>> crosssellItemsMap = new HashMap<String, ArrayList<Element>>();
 		HashMap<String, ArrayList<Element>> upsellItemsMap = new HashMap<String, ArrayList<Element>>();
 		HashMap<String, ArrayList<Element>> itemExtnElemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> itemListElemsMap = new HashMap<String, ArrayList<Element>>();
 		
 		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
+		ArrayList<Element> itemElementList = new ArrayList<Element>();
 		
 		Document itemAssociationDoc = null;
 		//get the getXpedxAssociationlItemDetails
@@ -1391,6 +1394,7 @@ public class XPEDXOrderUtils {
 		int itemNodeListLength = nItemList.getLength();
 		for (int i = 0; i < itemNodeListLength; i++) {
 			Element itemElement = (Element)nItemList.item(i);
+			itemElementList.add(itemElement);
 			String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
 
 			ArrayList<Element> crossSellItemsList =  new ArrayList<Element>();
@@ -1659,11 +1663,19 @@ public class XPEDXOrderUtils {
 			}//end while loop
 		}
 		
+		if((upgradeMapKeySet!=null && upgradeMapKeySet.size()>0) || (complimentaryMapKeySet!=null && complimentaryMapKeySet.size()>0) 
+				|| (alternateMapKeySet!=null && alternateMapKeySet.size()>0)  || (replacementMapKeySet!=null && replacementMapKeySet.size()>0)) {
+			List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item");
+			itemElementList.addAll(itemDetailsList);
+		}
+		itemListElemsMap.put(ITEM_LIST_KEY, itemElementList);
+		
 		allAssociatedItemsMap.put(REPLACEMENT_ITEMS_KEY, replacementItemsMap);
 		allAssociatedItemsMap.put(ALTERNATE_ITEMS_KEY, alternateItemsMap);
 		allAssociatedItemsMap.put(COMPLEMENTARY_ITEMS_KEY, complimentaryItemsMap);
 		allAssociatedItemsMap.put(UPGRADE_ITEMS_KEY, upgradeItemsMap);
 		allAssociatedItemsMap.put(ITEM_EXTN_KEY, itemExtnElemsMap);
+		allAssociatedItemsMap.put(ITEM_LIST_KEY, itemListElemsMap);
 		
 		return allAssociatedItemsMap;
 	}

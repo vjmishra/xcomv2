@@ -886,6 +886,9 @@
 									</XPXItemExtn>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>								
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -1021,6 +1024,9 @@
 									</XPXItemExtn>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -1232,6 +1238,9 @@
 									</XPXItemExtn>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -1997,6 +2006,7 @@
 						<AssetList>
 							<Asset/>					
 						</AssetList>
+					<Extn ExtnMpc=""/>	
 					</Item>
 				</ItemList>
 			</Template>
@@ -2431,6 +2441,9 @@
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -2693,6 +2706,9 @@
 									</XPXItemExtn>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -2864,6 +2880,9 @@
 									</XPXItemExtn>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
@@ -2961,6 +2980,9 @@
 										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
 									</XPXItemExtnList>
 								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
 							</ItemDetails>
 							<KitLines NumberOfKitLines="">
 								<KitLine />
