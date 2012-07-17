@@ -48,8 +48,8 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
     private Boolean isValidPage = Boolean.FALSE;
     private Integer totalNumberOfPages = new Integer(1);
     protected Integer pageSize = 25;
-    protected String orderByAttribute ="Modifyts";
-    protected String orderDesc="Y";
+    protected String orderByAttribute ="ListName";//Changed from modifyTS to Listname for JIRA 2982
+    protected String orderDesc="N";//For Alphabetical sort for JIRA 2982
     private String modifyts;
     private String createUserId;
     private String modifyUserid;
