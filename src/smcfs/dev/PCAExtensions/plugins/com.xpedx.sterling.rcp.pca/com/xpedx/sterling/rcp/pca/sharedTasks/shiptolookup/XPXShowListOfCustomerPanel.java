@@ -61,18 +61,22 @@ public class XPXShowListOfCustomerPanel extends XPXPaginationComposite implement
         colBindings[0] = new YRCTblClmBindingData();
         colBindings[0].setAttributeBinding("CustomerID");
         colBindings[0].setColumnBinding("CustomerID");
-        colBindings[0].setSortReqd(true); 
+        colBindings[0].setSortReqd(true);
+        colBindings[0].setFilterReqd(true);
         
         colBindings[1] = new YRCTblClmBindingData();
         colBindings[1].setAttributeBinding("/BuyerOrganization/@OrganizationName");
         colBindings[1].setColumnBinding("Organization Name");
         colBindings[1].setSortReqd(true);
-        colBindings[1].setSortBinding("OrganizationName");
+        //Commented for JIRA 4002
+        /*colBindings[1].setSortBinding("OrganizationName");*/
+        colBindings[1].setFilterReqd(true);
         
         bindingData.setSortRequired(true);
         bindingData.setSourceBinding("CustomerList:/CustomerList/Customer");
         bindingData.setName("tblSearchResults");
         bindingData.setTblClmBindings(colBindings);
+        bindingData.setFilterReqd(true);
         tblResults.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, bindingData);
     }
     
