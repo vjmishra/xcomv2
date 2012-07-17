@@ -396,7 +396,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         gridData2.verticalIndent = 8;
         GridData gridData3 = new GridData();
         gridData3.horizontalAlignment = SWT.BEGINNING;
-        gridData3.widthHint = 200;
+        gridData3.widthHint = 300;
         gridData3.horizontalSpan = 2;
         
 		
