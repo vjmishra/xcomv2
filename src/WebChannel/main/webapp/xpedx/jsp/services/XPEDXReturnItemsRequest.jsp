@@ -337,7 +337,7 @@ $('.short-description').each(function() {
 						</s:url> 
 						<s:a href="%{#detailURL}">	
 							<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-							<ul class="prodlist" style="margin-left:-30px;"><s:property value='#_action.getDescriptionForOrderLine(#orderLine)' escape="false"/></ul>
+							<ul class="prodlist" style="margin-left:-30px;max-height:83px"><s:property value='#_action.getDescriptionForOrderLine(#orderLine)' escape="false"/></ul>
 							</s:if>
 						</s:a>
 						<!--  end long desc -->
