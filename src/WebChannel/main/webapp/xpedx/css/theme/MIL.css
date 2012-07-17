@@ -6078,6 +6078,7 @@ div#main.userProfile { min-height: 850px; }
 #prodlist li, .prodlist li {
 	width: ;
 	word-wrap: break-word;
+	cursor: pointer;
 }
 .dlgForm {
 	display: none;
