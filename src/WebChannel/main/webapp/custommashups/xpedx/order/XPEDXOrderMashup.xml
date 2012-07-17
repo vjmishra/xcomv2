@@ -1448,10 +1448,18 @@
 			<Template>
 				<OrganizationList>
 					<Organization OrganizationName="">
-						<CorporatePersonInfo AddressLine1=""
-							AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
-							AddressLine6="" City="" Country="" EMailID="" FirstName=""
-							LastName="" State="" ZipCode="" />
+						 <ContactPersonInfo AddressID="" AddressLine1=""
+                   			 AddressLine2="" AddressLine3="" AddressLine4=""
+                   			 AddressLine5="" AddressLine6="" AlternateEmailID=""
+                    		Beeper="" City="" Company="" Country="" DayFaxNo=""
+                    		DayPhone="" Department="" EMailID="" ErrorTxt=""
+                    		EveningFaxNo="" EveningPhone="" FirstName=""
+                    		HttpUrl="" IsCommercialAddress="" JobTitle=""
+                    		LastName="" Latitude="" Longitude="" MiddleName=""
+                    		MobilePhone="" OtherPhone="" PersonID=""
+                    		PersonInfoKey="" PreferredShipAddress="" State=""
+                    		Suffix="" TaxGeoCode="" Title="" UseCount=""
+                    		VerificationStatus="" ZipCode=""/>
 						<Extn/>
 					</Organization>
 				</OrganizationList>
@@ -2920,22 +2928,13 @@
 					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="">
 					<PersonInfoSoldTo />
 					<PersonInfoShipTo />
-					<PersonInfoBillTo />
-					<OverallTotals SubtotalWithoutTaxes=""
-						HeaderAdjustmentWithoutShipping="" HdrShippingTotal=""
-						HdrShippingBaseCharge="" AdjustedSubtotalWithoutTaxes="" GrandTax=""
-						GrandTotal="" HdrShippingCharges="" />
+					<PersonInfoBillTo />					
 					<HeaderCharges>
 						<HeaderCharge ChargeName="" IsShippingCharge=""
 							IsDiscount="" ChargeAmount="" IsManual="">
 							<PricingRule Description="" />
 						</HeaderCharge>
 					</HeaderCharges>
-					<PriceInfo Currency="" />
-					<Shipping HeaderShippingCharges="" />
-					<Modifications>
-						<Modification />
-					</Modifications>
 					<OrderLines TotalNumberOfRecords="">
 						<OrderLine OrderedQty="" ItemGroupCode=""
 							ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
@@ -2945,12 +2944,7 @@
 							<Modifications>
 								<Modification />
 							</Modifications>
-							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
-							<LineOverallTotals UnitPrice=""
-								DisplayUnitPrice="" KitUnitPrice="" LineAdjustments=""
-								DisplayLineAdjustments="" LineTotalWithoutTaxes=""
-								DisplayLineTotalWithoutTaxes="" />
-							<LinePriceInfo IsLinePriceForInformationOnly="" />
+							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />							
 							<LineCharges>
 								<LineCharge ChargeName="" IsShippingCharge=""
 									IsDiscount="" ChargeAmount="" IsManual="">
@@ -2971,7 +2965,6 @@
 							<KitLines NumberOfKitLines="">
 								<KitLine />
 							</KitLines>
-							<BundleParentLine OrderLineKey="" />
 							<PersonInfoShipTo />
 							<OrderDates>
 								<OrderDate DateTypeId="" CommittedDate="" />
@@ -2984,23 +2977,7 @@
 									AwardType="" DenialReason="" Description="" PosReasonCode=""
 									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
 									IsPromotionOnOrder="" />
-							</Awards>
-							<BundleOrderLineChargesAndAwards>
-								<Awards>
-									<Award AwardAmount="" AwardApplied="" AwardId=""
-										AwardKey="" AwardType="" ChargeCategory="" ChargeName=""
-										DenialReason="" Description="" IsPromotionOnOrder="Y"
-										PosReasonCode="" PromotionId="" PromotionKey="" />
-								</Awards>
-								<LineCharges>
-									<LineCharge ChargeAmount="" ChargeCategory=""
-										ChargeName="" ChargeNameKey="" ChargePerLine="" ChargePerUnit=""
-										InvoicedChargeAmount="" InvoicedChargePerLine=""
-										InvoicedChargePerUnit="" IsBillable="" IsDiscount="" IsManual=""
-										IsShippingCharge="" Reference="" RemainingChargeAmount=""
-										RemainingChargePerLine="" RemainingChargePerUnit="" />
-								</LineCharges>
-							</BundleOrderLineChargesAndAwards>
+							</Awards>							
 							<Extn />
 							<Instructions>
 								<Instruction InstructionText=""
@@ -3018,8 +2995,7 @@
 							FundsAvailable="" SuspendAnyMoreCharges="" TotalCharged=""
 							TotalAuthorized="" />
 					</PaymentMethods>
-					<ChargeTransactionDetails
-						RemainingAmountToAuth="" />
+					
 					<Promotions>
 						<Promotion Action="" DenialReason="" Description=""
 							PromotionApplied="" PromotionId="" PromotionKey="" PromotionType="">

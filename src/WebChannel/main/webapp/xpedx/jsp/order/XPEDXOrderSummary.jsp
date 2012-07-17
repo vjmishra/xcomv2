@@ -25,6 +25,7 @@
 <s:set name="shipComplY" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_Y"/>
 <s:set name="shipComplC" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_C"/>
 <s:set name="shipComplN" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SHIP_COMPLETE_N"/>
+<%--
 <s:set name="currentShipTo" value="#wcUtil.getShipToAdress(getWCContext().getCustomerId(),getWCContext().getStorefrontId())" />
 <%--for jira 3438 - sales rep emailID display --%>
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
@@ -325,6 +326,7 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='f
 	id='priceUtil' />
 <s:set name='wcContext' value="wCContext" />
 <s:set name="shipToCustomer" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")' />
+<s:set name="currentShipTo" value='#shipToCustomer' />
 <s:set name='shipFromDivision' value='%{#shipToCustomer.getExtnShipFromBranch()}' />
 <%--
  I don't see this ie getting used in this page . removing for performance issue.
@@ -367,7 +369,12 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='f
 <s:set name='storeFrontId'
 	value='%{#_action.getWCContext().getStorefrontId()}' />	
 <s:set name='shipFromDoc'
+	value='#_action.getShipFromDoc()' />	
+<s:if test='%{#shipFromDoc == null }'>
+<s:set name='shipFromDoc'
 	value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getShipFromAddress()' />
+</s:if>	
+
 <s:set name='shipFrom'
 	value='#util.getElement(#shipFromDoc, "OrganizationList/Organization/ContactPersonInfo ")' />
 	
