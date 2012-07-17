@@ -1,8 +1,6 @@
 package com.xpedx.nextgen.customermanagement.api;
 
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.xpedx.constants.XpedxConstants;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
@@ -25,9 +22,32 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
-import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+
+import com.xpedx.constants.XpedxConstants;
+/*
+ * input xml
+ * <CustomerList>
+	<Customer 
+		EnvironmentId="" CompanyCode="" ProcessCode="" CustomerDivision="" LegacyCustomerNumber="" 
+		SuffixType="" ShipToSuffix="" BillToSuffix="" CustomerOrderBranch="" ShipFromBranch=""
+		CustomerStatus="" CustomerName="" BrandCode="" CustomerClass="" ServiceOptimizationCode=""
+		CurrencyCode="" InvoiceDistributionMethod="" NationalAccountNumber=""
+		SAPNumber="" SAPParentAccountNumber="" ShipComplete="" OrderUpdateFlag=""
+		CapsId="">	
+		<AddressList>
+			<Address AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode=""/>
+		</AddressList>
+		<SalesReps>
+			<SalesRep>
+				<EmployeeId>
+			</SalesRep>
+		</SalesReps>
+	</Customer>
+</CustomerList>
+
+ */
 
 /**
  * @author mnayak-tw
@@ -97,6 +117,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			String legacyCustomerNumber = null;
 			String shipToSuffix = null;
 			String masterSapCustomerId = null;
+			String sapCustomerId = null;
 			String organizationCode = null;
 			String parentCustomerOrganizationCode = null;
 			String customerPOReqdFlag = null;
@@ -109,27 +130,15 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 			HashMap salesRepTeam = new HashMap();
 			arrChildCustomerIds=new ArrayList<String>();
-			//String existingMSAPNumber = null;
+			String existingMSAPNumber = null;
 			String existingMSAPName = null;
-			
-			//JIRA 3740 Start
-			//String existingSAPNumber = null;
-			//String existingSAPName = null;
-			Document documentXML = null;
-			boolean masterSAPUnchanged = false;
-			//JIRA 3740 End
-			
-			
+
 			api = YIFClientFactory.getInstance().getApi();
 			//populate the team name array list
 			Document outputCustomerDoc = null;
 			Element customerElement = inXML.getDocumentElement();
 			//get the organis=zation code from the common code list
-			
-			//JIRA 3740 Start - Added attribute to verify if need to execute BuyerOrganization changes
-			boolean isBuyerOrganization = false;
-			//JIRA 3740 End
-			
+
 			//String organizationCode = "xpedx";
 			//Ask question?
 			//get the input document
@@ -145,7 +154,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				{
 					//form the input xml
 					Element custElement = (Element)customerList.item(customerNo);
-					String sapCustomerId = null;
+
 					organizationCode = getOrganizationCode(env,custElement); 
 					log.debug("The organization code returned from the CommonCode list is: "+organizationCode);
 
@@ -261,11 +270,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 						//create Extn element
 						YFCElement extnElement = formExtnElement(custElement, inputCustomerDoc);
 						inputCustomerElement.appendChild(extnElement);
-						//JIRA 3740 Start
-						boolean sapUnchanged = false ;
-						
-						boolean isCustomerAvaiable = checkIsCustomerAvailableInSystem(env, customerID, organizationCode);
-						//JIRA 3740 End
+
 
 						//This method is temporarily used to hardcode the SAP ParentAccount Number until Customer Batch Feed gets fixed
 						if(processCode.equalsIgnoreCase("A"))
@@ -330,43 +335,15 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							}
 							/*Begin - Changes made by Mitesh Parikh for CR 2670*/	
 						} else if(processCode.equalsIgnoreCase("C")){					
+
 							long startTime = System.currentTimeMillis();
 							Element custMSAPElement = getMSAPCustomerElement(env, customerID, organizationCode);
-							if(custMSAPElement!=null){
-							String existingMSAPNumber = custMSAPElement.getAttribute("ExtnSAPParentAccNo");
+							existingMSAPNumber = custMSAPElement.getAttribute("ExtnSAPParentAccNo");
 							existingMSAPName = custMSAPElement.getAttribute("ExtnSAPParentName");
-							//JIRA 3740 Start
-							String existingSAPNumber = custMSAPElement.getAttribute("ExtnSAPNumber");
-							String existingSAPName = custMSAPElement.getAttribute("ExtnSAPName");
-							sapUnchanged = existingSAPNumber.trim().equals(sapAccountNumber);
-							//JIRA 3740 End
-							masterSAPUnchanged=existingMSAPNumber.trim().equals(masterSapAccountNumber);												
-							
-							
+							boolean masterSAPUnchanged=existingMSAPNumber.trim().equals(masterSapAccountNumber);												
+								
 							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
 							{
-								//JIRA 3740 Start
-								//Currently log to CENT if the SAP is different. We are not handling this case at the moment
-								if(!sapUnchanged) {
-									
-									YFSException exceptionMessage = new YFSException();
-									exceptionMessage.setErrorDescription("SAP account number is different than the existing one. No records will be updated");
-
-									prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);
-									return outputCustomerDoc;
-								}
-								//JIRA 3740 End
-								//Modify SAPName if Changed
-								//JIRA 3740 Start
-								if (sapUnchanged && !existingSAPName.equalsIgnoreCase(strSAPName)) {
-                                    
-									isBuyerOrganization = updateOrganizationName (sapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"SAPName",isCustomerAvaiable,strSAPName);
-									//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
-									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
-									//3740 -  Updating all Bill-to and Ship-to for SAPname Changes						
-									
-								}
-								// for JIRA 3740 End
 								if(!masterSAPUnchanged)
 								{
 									boolean isAnExistingMSAP=checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
@@ -379,16 +356,16 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 											manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
 											api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
 										}
-										isBuyerOrganization = updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName,"C",custElement,existingMSAPName,isAnExistingMSAP,null);
+										updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
 
 									} else {
 										createCustomerWithMasterSAPAccountNumber(env, masterSapCustomerId, strMSAPName, organizationCode, custElement);
-										isBuyerOrganization = updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId,masterSapAccountNumber,strMSAPName,"C",custElement,existingMSAPName,isAnExistingMSAP,null);
+										updateCustomerWithMSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapCustomerId, masterSapAccountNumber, strMSAPName, "C");
+
 									}
-									
 									arrChildCustomerIds.add(sapCustomerId);
 									
-									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
+									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName);
 									long endTime = System.currentTimeMillis();
 									log.info("Extra Time taken to process new code changes : ["+(endTime-startTime)+"]");
 
@@ -422,50 +399,22 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									YFCElement reportParentSAPChangeChildUserElement = null;
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 									
-									//3740 - Modified for SalesRep
-									YFCElement reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS);
-									YFCElement reportParentSAPChangeChildSalesUserElement = null;
-									
 									String existingMSAPId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
-									//3740 - Modified for Report Changes Start
-									Document userList = getUserList(env, existingMSAPId);
-									Element userListElem = userList.getDocumentElement();
-									NodeList userChildList = userListElem.getChildNodes();
-									StringBuffer formattedUserName;
-										for (int counter = 0; counter < userChildList.getLength(); counter++) {
-											formattedUserName = new StringBuffer();
-											Element userchildElem = (Element) userChildList.item(counter);
-											String userName = userchildElem.getAttribute("Username");
-											String LoginId = userchildElem.getAttribute("Loginid");
-											String[] salesID = LoginId.split("@");
-											if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
-												reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
-												reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
-												reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
-											}else{
-												reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
-												reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
-												reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
-											}
-									/*	}
-										//3740 - Modified for Report Changes End
-										
-										
 									Document ccDoc = getCustomerContactList(env, existingMSAPId);
 									Element ccElem = ccDoc.getDocumentElement();
 									NodeList childList = ccElem.getChildNodes();																		
 									for(int counter = 0; counter < childList.getLength(); counter ++) {
 										Element childElem =(Element)childList.item(counter); 
 										String userId = childElem.getAttribute("UserID");
-										Begin - Changes made by Mitesh Parikh for JIRA 3002
+										/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
 										reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
 										reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, userId);
 										reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
-										End - Changes made by Mitesh Parikh for JIRA 3002
+										/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 										//arrUserList.add(userId);
-*/										ArrayList<String> arrUserAssgnList = new ArrayList<String>();
+										ArrayList<String> arrUserAssgnList = new ArrayList<String>();
 										
-										Document assgnDoc = getCustomerAssignmentList(env, LoginId);
+										Document assgnDoc = getCustomerAssignmentList(env, userId);
 										Element custAssgnElem = assgnDoc.getDocumentElement();
 										NodeList assgnNodeList = custAssgnElem.getElementsByTagName("Customer");
 										for(int counter1=0; counter1 < assgnNodeList.getLength(); counter1++) {
@@ -488,7 +437,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("IgnoreOrdering","Y");
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("Operation", "Delete");
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingMSAPId);
-												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", LoginId);
+												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", userId);
 												
 												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());												
 											}											
@@ -498,7 +447,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												&& retainAllCollection.size() == arrUserAssgnList.size()) {
 											//Move the login
 											log.info("Following logins have no assignments ---");
-											log.info("Login ID ---" + LoginId);
+											log.info("Login ID ---" + userId);
 											log.info("Old MSAP hierarchy ---" + existingMSAPId);
 											log.info("New MSAP hierarchy ---" + masterSapCustomerId);
 										}
@@ -508,38 +457,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									/* Making an asynchronous call to a new service to report Parent SAP changes. 
 									 * Below mentioned service just puts the xml in a Weblogic JMS which in turn forwards it to
 									 * 'XPXReportParentSAPChanges' service.
-									 */	
-									//3740 - Modified for SalesRep in report
-									if(reportParentSAPChangeSalesUsersElement!=null){
-										reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeSalesUsersElement);	
-									}
-									//3740 - Modified for SalesRep in report End
+									 */									
 									api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());	
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/	
-									
-								 }	
-									//JIRA 3740 - Start
-									//Modify MSAPName if Changed in input xml
-									if (masterSAPUnchanged && !existingMSAPName.equalsIgnoreCase(strMSAPName)) {
-										isBuyerOrganization = updateOrganizationName (masterSapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"ParentSAPName",isCustomerAvaiable,strMSAPName);
-										//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
-										//updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName);
-										//3740 -  Updating all Bill-to and Ship-to for SAPname Changes
-		
-									}
-									//JIRA 3740 - End
-		
-	
 								}
-
-							
-							}else{
-								YFSException exceptionMessage = new YFSException();
-								exceptionMessage.setErrorDescription("MSAP account number is different than the existing one. No records in Database exist for this MSAP");
-
-								prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);
-								return outputCustomerDoc;
-							}
+							}						
 						}				
 						/*End - Changes made by Mitesh Parikh for CR 2670*/
 						//create XPEDXSalesRep element
@@ -758,13 +680,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							}
 						}
 
-						//JIRA 3740 - Start [Added Condition to Check if BuyerOrganization element already modified]
-						YFCElement buyerOrgElement = null;
-						//if(!isBuyerOrganization){
-						buyerOrgElement = formBUyerOrgElement(custElement, inputCustomerDoc,
-								inputCustomerElement, sapCustomerId, organizationCode,"CustomerName",isCustomerAvaiable,null);
+
+
+						YFCElement buyerOrgElement = formBUyerOrgElement(custElement, inputCustomerDoc,
+								inputCustomerElement, sapCustomerId, organizationCode);
 						inputCustomerElement.appendChild(buyerOrgElement);
-						//updateAddressbook(custElement,buyerOrgElement,inputCustomerDoc,suffixType,outputCustomerDoc,env);
+
 						//get the address element
 						NodeList addressList = custElement.getElementsByTagName("AddressList");
 						int addressListLength = addressList.getLength();
@@ -787,15 +708,14 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							buyerOrgElement.appendChild(contactAddressElement);
 
 						}
-						
+
+
+
 						log.debug("the input doc for manageCustomer formed is: "+ SCXmlUtil.getString(inputCustomerDoc.getDocument()));
 						//invoke manageCustomer
 
 						outputCustomerDoc = api.invoke(env, "manageCustomer", inputCustomerDoc.getDocument());
 
-						//}
-						//JIRA 3740 - End
-					
 						//Added:mnayak
 						//create a user at the MSAP level and assign the user to customer
 						//first time create it second time just assigning
@@ -806,7 +726,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 						//new requirement
 						HashSet<String> salesRepSetForUser = new HashSet<String>();
-						if(processCode.equalsIgnoreCase("A")||processCode.equalsIgnoreCase("C"))
+						if(processCode.equalsIgnoreCase("A"))
 						{
 							NodeList nlSalesReps = custElement.getElementsByTagName(XPXLiterals.E_SALES_REPS);
 							if(nlSalesReps.getLength() != 0)
@@ -952,26 +872,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					{
 						log.error("The processCode mentioned: "+processCode+""+" is invalid!!!");
 					}
-					
-					//3740 - Starts - Need to update MSAPName in all rows of yfs_customer table for concerned MSAP Root customer Key
-					if (processCode.equalsIgnoreCase("C") && isBuyerOrganization && masterSAPUnchanged && !existingMSAPName.equalsIgnoreCase(strMSAPName)) {
-						Connection connection = null;
-						Statement stmt = null;
-						try {
-							connection = getDBConnection(env, documentXML);
-							String rootCustomerKey = getCustomerKey(env, masterSapCustomerId, true);
-							String query = "Update yfs_customer set extn_sap_parent_name=" + "'" + strMSAPName + "'" + " where root_customer_key=" + "'" + rootCustomerKey + "'";
-							stmt = connection.createStatement();
-							stmt.execute(query);
-							connection.commit();
-						} catch (Exception exception) {
-							exception.printStackTrace();
-						} 
-
-					}
-				 //3740 - Ends	
 				}
-
 			}
 			return outputCustomerDoc;
 		}catch (NullPointerException ne) {
@@ -988,93 +889,6 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			throw e;
 		}			
 	}
-	
-
-	/**
-	 * Created method to fetch UserDetails based on existingMsapId
-	 * @param env
-	 * @param existingMSAPId
-	 * @return
-	 */
-	private Document getUserList(YFSEnvironment env, String existingMSAPId) {
-
-		Document getUserListInput = YFCDocument.createDocument("User").getDocument();
-		Element userHeaderElement = getUserListInput.getDocumentElement();
-		userHeaderElement.setAttribute("OrganizationKey", existingMSAPId);
-
-		Document getUserListOutput = null;
-		try {
-			String outputTemplate = "<UserList><User Username='' Loginid=''></User></UserList>";
-			env.setApiTemplate("getUserList", outputTemplate);
-			getUserListOutput = api.invoke(env, XPXLiterals.GET_USER_LIST_API,
-					getUserListInput);
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return getUserListOutput;
-	}
-
-	//JIRA 3740 - Start
-	/**
-	 *updateOrganizationName  - Operation is called to update MSAP and SAP name based on changees 
-	 * @param sapCustomerId
-	 * @param organizationCode
-	 * @param env
-	 * @param custElement
-	 * @param inputCustomerElement
-	 * @param masterSapCustomerId
-	 * @param sapName
-	 * @param isAnExistingMSAP
-	 * @param existingSAPName 
-	 * @return booleanValue
-	 */
-	private boolean updateOrganizationName (String sapCustomerId, String organizationCode, YFSEnvironment env, Element custElement, YFCElement inputCustomerElement, String masterSapCustomerId, String sapName, boolean isAnExistingMSAP, String existingSAPName) {
-		boolean returnData=true;
-		YFCDocument updateSAPNameInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
-		updateSAPNameInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
-		updateSAPNameInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION, "Modify");
-		updateSAPNameInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		updateSAPNameInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE, sapCustomerId);
-		YFCElement buyerOrgElement = formBUyerOrgElement(custElement, updateSAPNameInputDoc, inputCustomerElement, masterSapCustomerId, organizationCode, sapName,isAnExistingMSAP,sapCustomerId);
-		updateSAPNameInputDoc.getDocumentElement().appendChild(buyerOrgElement);
-		if(existingSAPName!=null && !sapName.equalsIgnoreCase("ParentSAPName")){
-		YFCElement extnElement = updateSAPNameInputDoc.createElement(XPXLiterals.E_EXTN);
-		extnElement.setAttribute("ExtnSAPName", existingSAPName);
-		updateSAPNameInputDoc.getDocumentElement().appendChild(extnElement);
-		}
-		if(existingSAPName!=null && !sapName.equalsIgnoreCase("SAPName")){
-			YFCElement extnElement = updateSAPNameInputDoc.createElement(XPXLiterals.E_EXTN);
-			extnElement.setAttribute("ExtnSAPParentName", existingSAPName);
-			updateSAPNameInputDoc.getDocumentElement().appendChild(extnElement);
-		}
-		log.info("updateMSAPnSAPName - update xml : " + SCXmlUtil.getString(updateSAPNameInputDoc.getDocument()));
-		try {
-			api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, updateSAPNameInputDoc.getDocument());
-
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			returnData = false;
-			e.printStackTrace();
-			
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			returnData = false;
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			returnData = false;
-			e.printStackTrace();
-		}
-		
-	  return returnData;	
-	}
-	//JIRA 3740 - End
 
 	/**@author asekhar-tw on 21-Jan-2011
 	 * This method prepares the error object with the exception details which in turn will be used to log into CENT
@@ -1207,12 +1021,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		//requirement change
 		boolean masterCustomerexists = false;
 		masterCustomerexists = checkForMasterCustomer(env, masterCustomerUser);
-		/*if(masterCustomerexists)
+		if(masterCustomerexists)
 		{
 			//then assign this user to the customer
 			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
-		}*/
-		if(!masterCustomerexists)
+		}
+		else
 		{
 			//create the master customer user and assign it to customer
 			//createMaterCustomer
@@ -1443,13 +1257,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		String customerAssignmentKey = "";
 		if(suffixType.equals("S"))
 		{
-			customerKey = getCustomerKey(env,customerID,false);
+			customerKey = getCustomerKey(env,customerID);
 			customerKeyList.add(customerKey);
 		}
 		else
 			if(suffixType.equals("B"))
 			{
-				customerKey = getCustomerKey(env, customerID,false);
+				customerKey = getCustomerKey(env, customerID);
 
 				populateCustomerKeyList(env,customerKey,customerKeyList);
 				customerKeyList.add(customerKey);
@@ -1507,8 +1321,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	}
 
 	//method to get the customer key
-	//3740 - Method Input is modified ,added attribute for deciding to get root ket or customer key
-	private String getCustomerKey(YFSEnvironment env, String customerID, boolean isRootKey) throws YFSException, RemoteException
+	private String getCustomerKey(YFSEnvironment env, String customerID) throws YFSException, RemoteException
 	{
 		String customerKey = "";
 		Document inputCustomerDoc = SCXmlUtil.createDocument("Customer");
@@ -1516,13 +1329,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		Document templateListDoc = SCXmlUtil.createDocument("CustomerList");
 		Element templateListElement = templateListDoc.getDocumentElement();
 		Element templateElement = templateListDoc.createElement("Customer");
-		//3740 - Added if condtion to fetch Root customer key or customer key
-		if(isRootKey){
-		templateElement.setAttribute("RootCustomerKey", "");	
-		}else{
 		templateElement.setAttribute("CustomerKey", "");
-		}
-		//3740 - End
 		templateListElement.appendChild(templateElement);
 		env.setApiTemplate("getCustomerList", templateListDoc);
 		Document customerListDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
@@ -1532,13 +1339,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		if(customerlength != 0)
 		{
 			Element customerElement = (Element)customerNodeList.item(0);
-			//3740 - Added if condtion to fetch Root customer key or customer key
-			if(isRootKey){
-			customerKey = customerElement.getAttribute("RootCustomerKey");	
-			}else{
 			customerKey = customerElement.getAttribute("CustomerKey");
-			}
-			//3740 End
+
 		}
 		return customerKey;
 	}
@@ -2969,11 +2771,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		inputCustomerElement.setAttribute(XPXLiterals.A_CUSTOMER_TYPE, "01");
 		inputCustomerElement.setAttribute(XPXLiterals.A_IGNORE_ORDERING, XPXLiterals.BOOLEAN_FLAG_Y);
 		inputCustomerElement.setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-		
-	/*	//JIRA 3740 - Start [Added as this will required if want to update BuyerOrganization element for new Organization]
-		inputCustomerElement.setAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE, organizationCode);
-		//JIRA 3740 - End
-*/
+
+
 		inputCustomerElement.setAttribute(XPXLiterals.A_OPERATION, XPXLiterals.MANAGE);
 
 		//Begin: CR 2277
@@ -2993,29 +2792,25 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		return inputCustomerElement;
 	}
 
-	//JIRA 3740 - Start
-	//Modified operation defination  - Added 4 attributes to operation those are String CustomerNameType,boolean isAnExistingMSAP, String sapCustomerId.
 	/**
 	 * This method forms the buyerorganization element for the input to manageCustomer api
-	 * @param env 
 	 * @param custElement
 	 * @param inputCustomerDoc
 	 * @param inputCustomerElement
-	 * @param sapCustomerId 
 	 * @param companyCode 
 	 * @param envtId 
 	 * @param sapAccountNumber2 
 	 * @return
 	 */
 	private YFCElement formBUyerOrgElement(Element custElement,
-			YFCDocument inputCustomerDoc, YFCElement inputCustomerElement, String sapAccountId, String strOrganizationCode,String CustomerNameType,boolean isAnExistingMSAP, String sapCustomerId) {
+			YFCDocument inputCustomerDoc, YFCElement inputCustomerElement, String sapAccountId, String strOrganizationCode) {
 		String customerID = null;
 		String parentOrgCode = null;
 
 		YFCElement buyerOrgElement = inputCustomerDoc.createElement("BuyerOrganization");
 		buyerOrgElement.setAttribute("IsBuyer", "Y");
 		buyerOrgElement.setAttribute("LocaleCode", "en_US_EST");
-		buyerOrgElement.setAttribute("OrganizationName", custElement.getAttribute(CustomerNameType));
+		buyerOrgElement.setAttribute("OrganizationName", custElement.getAttribute("CustomerName"));
 
 		String envtId = custElement.getAttribute(XPXLiterals.A_ENVIRONMENT_ID);
 		String companyCode = custElement.getAttribute(XPXLiterals.A_COMPANY_CODE);
@@ -3048,7 +2843,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		}
 
 		/********8Temporary****************/
-		String strCustomerName = custElement.getAttribute(CustomerNameType);
+		String strCustomerName = custElement.getAttribute("CustomerName");
 		if(strCustomerName == null || strCustomerName.trim().length() == 0)
 		{
 			buyerOrgElement.setAttribute("OrganizationName",customerID);
@@ -3058,27 +2853,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			buyerOrgElement.setAttribute("OrganizationName",strCustomerName);
 		}
 		/*********************************/
-		//JIRA 3740 - Start
-			if (!isAnExistingMSAP) {
-				buyerOrgElement.setAttribute("OrganizationCode", customerID);	
-			}else{
-				if(null == sapCustomerId){
-					buyerOrgElement.setAttribute("OrganizationCode", customerID);
-				}else{
-					buyerOrgElement.setAttribute("OrganizationCode", sapCustomerId);
-				}
-				
-			}
-		//JIRA 3740 - End	
-		if((null!=sapCustomerId && sapCustomerId.equalsIgnoreCase(parentOrgCode)) || (null!=customerID && customerID.equalsIgnoreCase(parentOrgCode))){
-			buyerOrgElement.setAttribute("ParentOrganizationCode", "");
-		}else{
+		buyerOrgElement.setAttribute("OrganizationCode", customerID);
 		buyerOrgElement.setAttribute("ParentOrganizationCode", parentOrgCode);
-		}
 		buyerOrgElement.setAttribute("PrimaryEnterpriseKey", strOrganizationCode);
 		return buyerOrgElement;
 	}
-     //JIRA 3740 End
+
 	/**
 	 * This method used to create a Extn element to the input to manageCustomer api
 	 * @param custElement
@@ -3488,10 +3268,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		Element templateExtnElement = templateListDoc.createElement(XPXLiterals.E_EXTN);
 		templateExtnElement.setAttribute("ExtnSAPParentAccNo", "");
 		templateExtnElement.setAttribute("ExtnSAPParentName", "");
-		//JIRA 3740 - Start
-		templateExtnElement.setAttribute("ExtnSAPNumber", "");
-		templateExtnElement.setAttribute("ExtnSAPName", "");
-		//JIRA 3740 - End
+
 		templateCustElement.appendChild(templateExtnElement);
 		templateListElement.appendChild(templateCustElement);
 
@@ -3509,30 +3286,15 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		return custElement;
 		
 	}	
-	//JIRA 3740 Modified
-	//Added four attribute to function and pass these attribute to formBUyerOrgElement operation for JIRA 3740 [custElement - Current element,existingMsapName,isAnExistingMSAP - isCustomeravaiable condtion,strSAPName - NewSAPName]
-	private boolean updateCustomerWithMSAPAccountNumber(YFSEnvironment env, String organizationCode, String customerId, String masterSapCustomerId, String newMSAPAccountNumber, String newMSAPName, String suffixType, Element custElement, String existingMsapName, boolean isAnExistingMSAP, String strSAPName)
+
+	private void updateCustomerWithMSAPAccountNumber(YFSEnvironment env, String organizationCode, String customerId, String masterSapCustomerId, String newMSAPAccountNumber, String newMSAPName, String suffixType)
 	{
-		boolean result = true;
 		YFCDocument updateMSAPCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
 		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, customerId);
 		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Modify");
-		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-/*		//JIRA 3740 - Start
-		//Added Code for Updating ParentSAPName for JIRA 3740//
-		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE, customerId);
-		//Added Code for Updating ParentSAPName for JIRA 3740//
-		if (!newMSAPName.equalsIgnoreCase(existingMsapName) && suffixType.equals("C")) {
-			String companyCode = custElement.getAttribute(XPXLiterals.A_COMPANY_CODE);
-			String envtId = custElement.getAttribute(XPXLiterals.A_ENVIRONMENT_ID);
-			YFCElement inputCustomerElement = formCustomerElement(customerId, updateMSAPCustomerInputDoc, organizationCode, envtId, companyCode, custElement);
-			YFCElement buyerOrgElement = formBUyerOrgElement(custElement, updateMSAPCustomerInputDoc, inputCustomerElement, masterSapCustomerId, organizationCode, "ParentSAPName",isAnExistingMSAP,masterSapCustomerId);
-			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(buyerOrgElement);
-		
-			}
-		//Completed Code for Updating ParentSAPName for JIRA 3909//
-		//JIRA 3740 - End
-*/		if(suffixType.equals("C"))
+		updateMSAPCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);		
+
+		if(suffixType.equals("C"))
 		{
 			YFCElement parentCustomerElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_PARENT_CUSTOMER);
 			parentCustomerElement.setAttribute("CustomerID", masterSapCustomerId);
@@ -3543,12 +3305,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			YFCElement extnElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_EXTN);
 			extnElement.setAttribute("ExtnSAPParentAccNo", newMSAPAccountNumber);
 			extnElement.setAttribute("ExtnSAPParentName",  newMSAPName);
-			if(null!=strSAPName){
-			extnElement.setAttribute("ExtnSAPName",  strSAPName);	
-			}
 			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(extnElement);
-		}
-		
+		}		
 
 		log.info("updateSAPCustomerWithMSAPAccountNumber - update xml : "+SCXmlUtil.getString(updateMSAPCustomerInputDoc.getDocument()));
 		try {
@@ -3556,14 +3314,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
-			result = false;
 			e.printStackTrace();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			result = false;
 			e.printStackTrace();
 		}
-		return result;
+
 	}
 
 
@@ -3667,26 +3423,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 	}
 
-	//JIRA 3740 - Start [Modified operations defination added four attribute custElement - Current element,existingMsapName,isAnExistingMSAP - isCustomeravaiable condtion,strSAPName - NewSAPName]
-	private void updateAllBillToandShipToWithMasterSAPAccountNumber(YFSEnvironment env, String organizationCode, String sapCustomerId, String newMSAPAccountNumber, String newMSAPName,Element custElement , String existingSAPName, boolean isAnExistingMSAP, String strSAPName) throws RemoteException
+
+	private void updateAllBillToandShipToWithMasterSAPAccountNumber(YFSEnvironment env, String organizationCode, String sapCustomerId, String newMSAPAccountNumber, String newMSAPName) throws RemoteException
 	{
 		long updateBillShipsStartTime=System.currentTimeMillis();
-		String sapCustomerKey= getCustomerKey(env, sapCustomerId,false);
-		getBillToList(env, sapCustomerKey, organizationCode, newMSAPAccountNumber, newMSAPName,custElement,existingSAPName,isAnExistingMSAP,strSAPName);
+		String sapCustomerKey= getCustomerKey(env, sapCustomerId);
+		getBillToList(env, sapCustomerKey, organizationCode, newMSAPAccountNumber, newMSAPName);
 		long updateBillShipsEndTime=System.currentTimeMillis();
 		log.info("Extra Time taken to update ALL billTos and shipTos : ["+(updateBillShipsEndTime-updateBillShipsStartTime)+"]");
 	}
-	//JIRA 3740 - End
+
 	/**
 	 * Method to get all the bill to  from the level customer has logged in.
 	 * @param env
 	 * @param customerKey
-	 * @param isAnExistingMSAP 
-	 * @param strSAPName 
 	 * @throws RemoteException
 	 */
-	//JIRA 3740 - Start [Modified operations defination added four attribute custElement - Current element,existingMsapName,isAnExistingMSAP - isCustomeravaiable condtion,strSAPName - NewSAPName
-	private void getBillToList(YFSEnvironment env, String customerKey, String organizationCode, String newMSAPAccountNumber, String newMSAPName,Element custElement , String existingSAPName, boolean isAnExistingMSAP, String strSAPName) throws RemoteException {
+	private void getBillToList(YFSEnvironment env, String customerKey, String organizationCode, String newMSAPAccountNumber, String newMSAPName) throws RemoteException {
 		//form the input customer xml
 		Document inputCustomerDoc = YFCDocument.createDocument("Customer").getDocument();
 		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
@@ -3695,27 +3448,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		extnElement.setAttribute("ExtnSuffixTypeQryType", "LIKE");
 		extnElement.setAttribute("ExtnSuffixType", "B");
 		inputCustomerElement.appendChild(extnElement);
-		System.out.println("getCustomerList - Extn Template : "+SCXmlUtil.getString(inputCustomerDoc));
 		//get bill to customer list
 		Document billtoListDoc = api.invoke(env, "getCustomerList", inputCustomerDoc);
 		NodeList btNodeList = billtoListDoc.getElementsByTagName("Customer");
 		int billtoLength = btNodeList.getLength();
 		if(billtoLength != 0)
 		{
-			getShipToList(env, btNodeList, organizationCode, newMSAPAccountNumber, newMSAPName,custElement,existingSAPName,isAnExistingMSAP,strSAPName);
+			getShipToList(env, btNodeList, organizationCode, newMSAPAccountNumber, newMSAPName);
 		}
 	}
-	//JIRA 3740 - End
+
 	/**
 	 * Method to get all the ship to for the bill to
 	 * @param env
 	 * @param btNodeList
-	 * @param isAnExistingMSAP 
-	 * @param strSAPName 
 	 * @throws RemoteException
 	 */
-	//JIRA 3740 - Start [Modified operations defination added four attribute custElement - Current element,existingMsapName,isAnExistingMSAP - isCustomeravaiable condtion,strSAPName - NewSAPName
-	private void getShipToList(YFSEnvironment env, NodeList btNodeList, String organizationCode, String newMSAPAccountNumber, String newMSAPName,Element custElement,String existingSAPName, boolean isAnExistingMSAP, String strSAPName) throws RemoteException 
+	private void getShipToList(YFSEnvironment env, NodeList btNodeList, String organizationCode, String newMSAPAccountNumber, String newMSAPName) throws RemoteException 
 	{
 		int billtoLength = btNodeList.getLength();
 		for(int Counter = 0;Counter < billtoLength;Counter++)
@@ -3723,7 +3472,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			Element btElement = (Element)btNodeList.item(Counter);
 			String billToCustomerID = btElement.getAttribute("CustomerID");
 			arrChildCustomerIds.add(billToCustomerID);
-			updateCustomerWithMSAPAccountNumber(env, organizationCode, billToCustomerID, "", newMSAPAccountNumber, newMSAPName, "B",custElement,existingSAPName,isAnExistingMSAP,strSAPName);
+			updateCustomerWithMSAPAccountNumber(env, organizationCode, billToCustomerID, "", newMSAPAccountNumber, newMSAPName, "B");
 
 			//get the shipto list
 			Document inputShipToDoc = YFCDocument.createDocument("Customer").getDocument();
@@ -3743,44 +3492,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					Element stElement = (Element)stNodeList.item(sCounter);
 					String shipToCustomerID =  stElement.getAttribute("CustomerID");
 					arrChildCustomerIds.add(shipToCustomerID);
-					updateCustomerWithMSAPAccountNumber(env, organizationCode, shipToCustomerID, "", newMSAPAccountNumber, newMSAPName, "S",custElement,existingSAPName,isAnExistingMSAP,strSAPName);					
+					updateCustomerWithMSAPAccountNumber(env, organizationCode, shipToCustomerID, "", newMSAPAccountNumber, newMSAPName, "S");					
 				}				
 			}
-		}
-	}
-	//JIRA 3740 - End
-	
-	
-	private Connection getDBConnection(YFSEnvironment env,Document inputXML)
-	{
-		Connection m_Conn=null;
-		try{
-			YFSConnectionHolder connHolder     = (YFSConnectionHolder)env;
-			m_Conn= connHolder.getDBConnection();
-		}
-		catch(Exception e){
-
-			log.error("Exception: " + e.getStackTrace());
-//			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
-
-		}
-
-		return m_Conn;
-	}
-	
-	/**
-	 * This operation will verfiy if Value is Integer
-	 * isInteger
-	 * @param i
-	 * @return
-	 */
-	public boolean isNumeric(String i)
-	{
-		try {
-			Integer.parseInt(i);
-			return true;
-		} catch (NumberFormatException nfe) {
-			return false;
 		}
 	}
 
