@@ -256,20 +256,34 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		//Added for JIRA 3523
 		String item = "";
 		ArrayList<String> entlErrorList = new ArrayList<String>();
-		Document entitledItemsDoc;
+		//Document entitledItemsDoc;
 		try {
-			entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext,"xpedxEntitledCheckOnly");
+			// Removing call to getXpedxEntitledItemDetails for performance fix. JIRA 4020
+			//entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext,"xpedxEntitledCheckOnly");
 		
 		Iterator productIDIter = allItemIds.iterator();
 		ArrayList<Element> itemlist = new ArrayList<Element>(); 
 		allItemID = new ArrayList<String>();
 		
 		Iterator<Element> it=getMajorLineElements().iterator();
+		int lineCount = 0;
+		String firstItem = "";
+		String firstItemCategoryPath = "";
+		String OrganizationCodeForFirstItem = "";
 		while(it.hasNext())
 		{
-			Element orderLineElem=it.next();						
+			lineCount++;
+			Element orderLineElem=it.next();			
 			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
+			Element itemDetailEle = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");
 			String itemId = itemElement.getAttribute("ItemID");
+			if ( lineCount == 1) {
+				Element catlistEle = SCXmlUtil.getChildElement(itemDetailEle, "CategoryList");
+				Element catElement = (Element)catlistEle.getElementsByTagName("Category").item(0);			
+				firstItemCategoryPath = catElement.getAttribute("CategoryPath");
+				OrganizationCodeForFirstItem = catElement.getAttribute("OrganizationCode");
+				firstItem = itemId;
+			}
 			String lineType=orderLineElem.getAttribute("LineType");
 			if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
 			{
@@ -277,8 +291,13 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				allItemID.add(itemId);
 			}
 		}
-		if(entitledItemsDoc!=null) {
-			 itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+		if(!("").equals(firstItem) && !("").equals(OrganizationCodeForFirstItem) && !("").equals(firstItemCategoryPath)) {
+			setAdjCatTwoShortDesc(XPEDXWCUtils.getCatTwoDescFromItemIdForpath(firstItem, OrganizationCodeForFirstItem, firstItemCategoryPath));
+		}
+		
+		if(entitledItemEleList != null) {
+			 //itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
+			 itemlist  = entitledItemEleList;
 		}
 		
 		if(itemlist.size() == 0){
@@ -1239,6 +1258,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}
 			}
+			HashMap<String,ArrayList<Element>> itemEleListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.ITEM_LIST_KEY);
+			if(itemEleListMap != null && !itemEleListMap.isEmpty()) {
+				ArrayList<Element> itemEleList = itemEleListMap.get(XPEDXOrderUtils.ITEM_LIST_KEY);
+				setEntitledItemEleList (itemEleList);
+			}
+			
 		}
 	}
 	
@@ -2111,6 +2136,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected HashMap customerFieldsMap;
 	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;
+	private String adjCatTwoShortDesc = "";
 	protected String customerId;
 	protected String shipFromDivision;
 	protected String organizationCode;
@@ -2137,9 +2163,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.erroMsg = erroMsg;
 	}
 
-	
 
+	public String getAdjCatTwoShortDesc() {
+		return adjCatTwoShortDesc;
+	}
 
+	public void setAdjCatTwoShortDesc(String adjCatTwoShortDesc) {
+		this.adjCatTwoShortDesc = adjCatTwoShortDesc;
+	}
 
 	public ArrayList<String> itemList = new ArrayList<String>();
 	
@@ -2189,6 +2220,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	//JIRA 3488 end
 
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+	protected ArrayList<Element> entitledItemEleList = new ArrayList<Element>();
 	
 	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	String lastModifiedDateString = "";
@@ -2218,6 +2250,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setCustStatus(String custStatus) {
 		this.custStatus = custStatus;
 	}
+	
+	public ArrayList<Element> getEntitledItemEleList() {
+		return entitledItemEleList;
+	}
+
+
+	public void setEntitledItemEleList(ArrayList<Element> entitledItemEleList) {
+		this.entitledItemEleList = entitledItemEleList;
+	}
+
 	protected Document changeOrderOutputDoc=null;
 	protected String isDeleteOrder="false";
 	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";

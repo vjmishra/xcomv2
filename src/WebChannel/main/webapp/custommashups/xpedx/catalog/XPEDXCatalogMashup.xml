@@ -726,8 +726,9 @@
 			</Input>
 			<Template>
 				<ItemList Currency="" >
-					<Item ItemID=""  UnitOfMeasure="">
-					<PrimaryInformation ImageID=""/>
+					<Item ItemID=""  UnitOfMeasure="" ItemKey="">
+					<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>
 					<AssociationTypeList>
 						<AssociationType CodeShortDescription="" Type="">
 						 <AssociationList>
@@ -742,6 +743,7 @@
 						  </AssociationList>
 						</AssociationType>
 					</AssociationTypeList>
+					<Extn ExtnMpc=""/>
 					</Item>
 				</ItemList>
 			</Template>

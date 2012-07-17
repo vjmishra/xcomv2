@@ -733,18 +733,8 @@ $(document).ready(function(){
 	<div class="ad-margin">
 		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
 		<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
-				<s:iterator value='majorLineElements' id='orderLine' status="rowStatus">
-				<s:set name='item' value='#util.getElement(#orderLine, "Item")' />
-				<s:if test="%{#rowStatus.index == 0}">				
-				 <s:set name="ItemID1" value='#item.getAttribute("ItemID")' />
-					 <s:if test="#ItemID1 != null" >
-							<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemId(#ItemID1,wCContext.storefrontId)" />
-								<s:if test="#cat2Val != null" >
-								<s:set name='ad_keyword' value='#cat2Val' />
-					 </s:if>
-					</s:if>	
-				</s:if>
-				</s:iterator>
+
+		<s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
 				
 		<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/  -->
 		
