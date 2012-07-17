@@ -762,5 +762,6 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		txtListName.setText("");
 		txtListDesc.setText("");
 		createTreeStructure(pnlProfileInfo);
+		XPXCreateNewMyItemsListPanelBehavior.oldCustomerID = " ";
 	}
 }
