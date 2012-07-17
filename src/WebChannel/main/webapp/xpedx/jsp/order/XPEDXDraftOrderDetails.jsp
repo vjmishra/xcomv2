@@ -1555,7 +1555,7 @@ var currentAadd2ItemList = new Object();
 							<%--<s:if test="%{#itemType != 99}"><a/></s:if> --%>
 					</div>
                     <div class="mil-attr-wrap">
-                          <ul class="prodlist"><s:property escape='false'  value='#rdesc'/></ul>
+                          <ul class="prodlist"><a href='<s:property value="%{ritemDetailsLink}" />'><s:property escape='false'  value='#rdesc'/></a></ul>
 					    <%-- key contains the original itemId --%>
 					    <!--  <s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> -->
 					    <%-- 
