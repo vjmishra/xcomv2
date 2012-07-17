@@ -202,6 +202,8 @@
             <param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
             <param name="draft">${draft}</param>
         </result>
+        <result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
+		</result>
 	</action>
 	              
 	<action name="XPEDXMyItemsDetailsGetShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetShareListAction">
