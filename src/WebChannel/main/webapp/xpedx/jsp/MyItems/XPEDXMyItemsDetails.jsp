@@ -775,7 +775,33 @@ function showSharedListForm(){
 	       	document.body.style.cursor = 'default';
 	
 		}
-		
+		//Added For Jira 3946
+		function setMsgOnAddItemsWithQtyToCart(response){
+			if(response.responseText.indexOf('Error while adding to XPEDXMyItemsAdd To Cart ') !== -1 )
+     	   {
+     		   alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");
+     	   }
+     	   else
+     	   {
+         	   var addedItems = new Array();
+         	   var arrQty = new Array();
+         	   addedItems = document.getElementsByName("enteredProductIDs");
+    				arrQty = document.getElementsByName("qtys");
+    				for(var i = 0; i < addedItems.length; i++){
+    					//alert("arrQty[i].value= "+ arrQty[i].value);
+    					if(validAddtoCartItemsFlag[i]== true ){
+    					divId='errorDiv_'+ arrQty[i].id;
+    					var divVal=document.getElementById(divId);
+    					divVal.innerHTML = "Item has been added to cart." ;
+						  divVal.style.display = "inline-block"; 
+						  divVal.setAttribute("style", "margin-right:5px;float:right;");
+						  divVal.setAttribute("class", "success");
+    					}
+    				}
+    			 Ext.MessageBox.hide();
+               	 refreshMiniCartLink();
+     	   }
+		}
 		
 		var addItemsWithQty;
 		function addToCart(){
@@ -822,32 +848,13 @@ function showSharedListForm(){
 	                   url: URL,
 	                   form: 'formItemIds',
 	                   method: 'POST',
-	                   
+	                   //Fix for Jira 3946
 	                   success: function (response, request){
-	                	   var addedItems = new Array();
-	                	   var arrQty = new Array();
-	                	   addedItems = document.getElementsByName("enteredProductIDs");
-	           				arrQty = document.getElementsByName("qtys");
-	           				for(var i = 0; i < addedItems.length; i++){
-	           					//alert("arrQty[i].value= "+ arrQty[i].value);
-	           					if(validAddtoCartItemsFlag[i]== true ){
-	           					divId='errorDiv_'+ arrQty[i].id;
-	           					var divVal=document.getElementById(divId);
-	           					divVal.innerHTML = "Item has been added to cart." ;
-								  divVal.style.display = "inline-block"; 
-								  divVal.setAttribute("style", "margin-right:5px;float:right;");
-								  divVal.setAttribute("class", "success");
-	           					}
-	           				}
-	           				
-
-	                      Ext.MessageBox.hide();
-	                      refreshMiniCartLink();
-	                     		 
+	                	   setMsgOnAddItemsWithQtyToCart(response);  
 	                   },
 	                   failure: function (response, request){
-						  Ext.MessageBox.hide();
-						  alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");	                   }
+	                	   setMsgOnAddItemsWithQtyToCart(response);
+	                	}
 	               });    
 	                } 
    	                
