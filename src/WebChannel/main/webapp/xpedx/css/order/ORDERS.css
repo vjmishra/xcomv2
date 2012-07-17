@@ -153,6 +153,8 @@ ul.prodlist {
     overflow: hidden;
     margin-top: 10px;
 }
+ul.prodlist a:hover { text-decoration:none; }
+
 div#replacementItemBody ul.mil-desc-attribute-list
 {
 height:auto;	
