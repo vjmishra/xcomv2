@@ -77,7 +77,17 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isCustomerPOMandatory="false";
 	String lastModifiedUserId = "";
 	XPEDXShipToCustomer shipToCustomer;
-//added for 2769
+	private Document shipFromDoc;
+	
+	public Document getShipFromDoc() {
+		return shipFromDoc;
+	}
+
+	public void setShipFromDoc(Document shipFromDoc) {
+		this.shipFromDoc = shipFromDoc;
+	}
+
+	//added for 2769
 	protected YFCDate lastModifiedDate = new YFCDate();
 	protected String lastModifiedDateString = "";
 	//added for jira 2885
@@ -489,7 +499,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
 				Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
 				Document outputDoc = ((Element) obj).getOwnerDocument();
-				
+				setShipFromDoc(outputDoc);
 				if(YFCCommon.isVoid(outputDoc)){
 					LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". Cannot set Delivery Cut off time");
 					return;
