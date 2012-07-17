@@ -74,9 +74,9 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 	private Text txtDivisionID = null;
 	
 	private Label lblMasterCustomer = null;
-	private Label lblCustomer = null;
+	/*private Label lblCustomer = null;
 	private Label lblBillToCustomer = null;
-	private Label lblShipToCustomer = null;
+	private Label lblShipToCustomer = null;*/
 	private Combo cmbMasterCustomer;
 	private Combo cmbCustomer;
 	private Combo cmbBillToCustomer;
@@ -89,9 +89,9 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 	public Combo cmbEnterprise;
 	private Label lblEnterprise;
 	private Button getParents=null;
-	private Text BillToId = null;
+	/*private Text BillToId = null;
 	private Text ShipToId = null;
-	private Text SAPId = null;
+	private Text SAPId = null;*/
 	private Text MasterCustomerId = null;
 	private Composite pnlDivisions; 
 		
@@ -450,8 +450,8 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		MasterCustomerId.setLayoutData(gdLPC4);
 		MasterCustomerId.setData("name", "MasterCustomerId");
 		
-		lblCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
-		lblCustomer.setText("SAP_Customer");
+		/*lblCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
+		lblCustomer.setText("SAP_Customer");*/
 		/*cmbCustomer = new Combo(grpSrchByCustomersFields, SWT.DROP_DOWN);
 		cmbCustomer.setData("name", "cmbCustomer");
 		cmbCustomer.setLayoutData(cmbCustomerslayoutData);
@@ -473,16 +473,16 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 				}
 			}
 		});*/
-		SAPId = new Text(grpSrchByCustomersFields, SWT.BORDER);
+		/*SAPId = new Text(grpSrchByCustomersFields, SWT.BORDER);
 		GridData gdLPC3 = new GridData();
 		gdLPC3.grabExcessHorizontalSpace = true;
 		gdLPC3.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		SAPId.setLayoutData(gdLPC3);
-		SAPId.setData("name", "SAPId");
+		SAPId.setData("name", "SAPId");*/
 		
 
-		lblBillToCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
-		lblBillToCustomer.setText("Bill_To_Customer");
+		/*lblBillToCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
+		lblBillToCustomer.setText("Bill_To_Customer");*/
 		/*cmbBillToCustomer = new Combo(grpSrchByCustomersFields, SWT.DROP_DOWN);
 		cmbBillToCustomer.setLayoutData(cmbCustomerslayoutData);
 		cmbBillToCustomer.addModifyListener(new ModifyListener(){
@@ -503,25 +503,25 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 			}
 		});*/
 		
-		BillToId = new Text(grpSrchByCustomersFields, SWT.BORDER);
+		/*BillToId = new Text(grpSrchByCustomersFields, SWT.BORDER);
 		GridData gdLPC1 = new GridData();
 		gdLPC1.grabExcessHorizontalSpace = true;
 		gdLPC1.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		BillToId.setLayoutData(gdLPC1);
 		BillToId.setData("name", "BillToId");
-
+*/
 		
-		lblShipToCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
-		lblShipToCustomer.setText("Ship_To_Customer");
+		/*lblShipToCustomer = new Label(grpSrchByCustomersFields,SWT.NONE);
+		lblShipToCustomer.setText("Ship_To_Customer");*/
 		/*cmbShipToCustomer = new Combo(grpSrchByCustomersFields, SWT.DROP_DOWN);
 		cmbShipToCustomer.setLayoutData(cmbCustomerslayoutData);*/
 		
-		ShipToId = new Text(grpSrchByCustomersFields, SWT.BORDER);
+		/*ShipToId = new Text(grpSrchByCustomersFields, SWT.BORDER);
 		GridData gdLPC2 = new GridData();
 		gdLPC2.grabExcessHorizontalSpace = true;
 		gdLPC2.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		ShipToId.setLayoutData(gdLPC2);
-		ShipToId.setData("name", "ShipToId");
+		ShipToId.setData("name", "ShipToId");*/
 		
 		createButtonComposite();
 	}

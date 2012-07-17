@@ -285,7 +285,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 								prepareInputXML(myItemListKey) ;
 					}
 						else{
-							YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
+							//YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
 						}
 					//prepareInputXML(myItemListKey) ;
 			    //	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
@@ -440,9 +440,9 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 		setFieldValue("txtLPC", "");
 		setFieldValue("txtReplaceLPC", "");
 		setFieldValue("MasterCustomerId", "");
-		setFieldValue("SAPId", "");
+		/*setFieldValue("SAPId", "");
 		setFieldValue("ShipToId", "");
-		setFieldValue("BillToId", "");
+		setFieldValue("BillToId", "");*/
     }
 
     public void proceed() {
@@ -680,14 +680,14 @@ private void updateModelWithParentInfo(Element outXml) {
 
 
 public void getParentCustomers(String customerIdSelected, String customerValue) {
-	String BillToValue = getFieldValue("BillToId");
+/*	String BillToValue = getFieldValue("BillToId");
 	String ShipToValue = getFieldValue("ShipToId");
-	String SAPIdValue = getFieldValue("SAPId");
+	String SAPIdValue = getFieldValue("SAPId");*/
 	String MasterCustomerValue = getFieldValue("MasterCustomerId");
 	//String MasterCustomerValue = customerIdSelected;
 	String enterPriseKey=getEnterPriseKey();
 	
-	if(BillToValue != null && BillToValue != "" ){
+/*	if(BillToValue != null && BillToValue != "" ){
 		//Set Input XML for Final View
 		if("B".equalsIgnoreCase(customerValue)){
 			BillToValue = customerIdSelected;
@@ -733,7 +733,7 @@ public void getParentCustomers(String customerIdSelected, String customerValue) 
 		setModel(elemreplaceModel);
 		Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+SAPIdValue+"' OrganizationCode='"+enterPriseKey+"'/>");
 		callApi("XPXGetParentCustomerListService" , docInput);
-	}
+	}*/
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
 		if("MC".equalsIgnoreCase(customerValue)){
 			MasterCustomerValue = customerIdSelected;
@@ -761,7 +761,7 @@ public void getParentCustomers(String customerIdSelected, String customerValue) 
 		
 	}
 	
-	if(MasterCustomerValue == "" && SAPIdValue == "" && ShipToValue == "" && BillToValue == ""){
+	if(MasterCustomerValue == "" /*&& SAPIdValue == "" && ShipToValue == "" && BillToValue == ""*/){
 		//Set Input XML for Final View
 		elemreplaceModel = YRCXmlUtils.createDocument("XpedxMilBothLst")
         .getDocumentElement();
@@ -859,9 +859,9 @@ public void CallReplacementServiceForDivision(){
     	callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());
 }
 public void searchCustomer(){
-	String BillToValue = getFieldValue("BillToId");
+/*	String BillToValue = getFieldValue("BillToId");
 	String ShipToValue = getFieldValue("ShipToId");
-	String SAPIdValue = getFieldValue("SAPId");
+	String SAPIdValue = getFieldValue("SAPId");*/
 	String MasterCustomerValue = getFieldValue("MasterCustomerId");
 	String enterPriseKey=getEnterPriseKey();
 	String customerIdSelected =  null;
@@ -888,12 +888,12 @@ public void searchCustomer(){
 		return;
 	}
 	
-	if((MasterCustomerValue == null || MasterCustomerValue == "") && (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") && ((BillToValue == null && "".equalsIgnoreCase(BillToValue)))){
-		YRCPlatformUI.showError("Information", "Please enter a customer name");	
+	if((MasterCustomerValue == null || MasterCustomerValue == "") /*&& (SAPIdValue == null || SAPIdValue == "") && (ShipToValue == null || ShipToValue == "") && ((BillToValue == null && "".equalsIgnoreCase(BillToValue)))*/){
+		YRCPlatformUI.showError("Information", "Please enter the master customer name");	
 		return;
 	}
 	
-	if(BillToValue != null && BillToValue != ""){
+	/*if(BillToValue != null && BillToValue != ""){
 		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
 		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
 		elemModel.setAttribute("CustomerType", "01");
@@ -952,7 +952,7 @@ public void searchCustomer(){
 		}
 		//CallReplacementServiceForCustomerName(customerIdSelected);
 		getParentCustomers(customerIdSelected,"C");
-	}
+	}*/
 	if(MasterCustomerValue != null && MasterCustomerValue != ""){
 		Element elemModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
 		elemModel.setAttribute("CallingOrganizationCode", enterPriseKey);
