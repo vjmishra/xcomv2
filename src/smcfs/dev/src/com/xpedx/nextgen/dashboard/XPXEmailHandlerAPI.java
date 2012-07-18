@@ -77,12 +77,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return inXML;
 	}
 
-	public static String getCustomerID(String customerId, YFSEnvironment env) throws Exception{
+	public static Map<String, String> getCustomerID(String customerId, YFSEnvironment env) throws Exception{
+		System.out.println("getCustomerID ++++++++++++++++++++++"+customerId);
 		String msapId="";
-		if(customerId == null ) {
-			return msapId;
-		}
-		String AttributeToQry = "ShipToCustomerID";
+		String biltoId = "";
+		Map<String,String> customerIDMAP = new HashMap<String,String>();
 		
 			Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
 			inputDoc.getDocumentElement().setAttribute("ShipToCustomerID", customerId);
@@ -94,10 +93,22 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
 			for(int j=0;j<customerHierView.getLength();j++) {
 				Element customerHierViewElem = (Element)customerHierView.item(j);
+				System.out.println("************customerHierViewElem : outputDoc="+SCXmlUtil.getString(customerHierViewElem));
+				
 				msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
+				biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
+				
+				if(msapId!=null && !msapId.trim().equals("")){
+					customerIDMAP.put("MSAPCustomerID",msapId);
+				}
+				if(biltoId!=null && !biltoId.trim().equals("")){
+					customerIDMAP.put("BillToCustomerID",biltoId);
+				}
+				
 			}	
+			System.out.println("customerIDMAP ++++++++++++++++++++"+customerIDMAP.size());
 			System.out.println("************getCustomerID : msapId="+msapId);
-		return msapId;
+		return customerIDMAP;
 	}
 	
 	private String getSalesRepEmailForSalesPro(String msapCustomerID, YFSEnvironment env, String salesRepId) throws Exception
@@ -203,23 +214,44 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			/*
 			 * JIRA 4093 Start -If sales rep flag is Y toemail will be yfs_person_info
 			 */
+			/*
+			 * JIRA -4093 Start
+			 * Get billtoid and msapcustomerid from XPX_Cust_Hierarchy_View
+			 */
+			
+			String buyerOrgCode = "";	
+			String msapCustomerId = "";
+			String billtoID = "";
+			YFCDocument inDoc = YFCDocument.getDocumentFor(inputElement.getOwnerDocument());
+			YFCElement rootElem = inDoc.getDocumentElement();
+			if(rootElem!=null){
+				buyerOrgCode = rootElem.getAttribute("BuyerOrganizationCode");			
+				Map<String,String>getCustIDMap = getCustomerID(buyerOrgCode,env);
+				if(getCustIDMap.size() >0){
+					billtoID = getCustIDMap.get("BillToCustomerID");
+					msapCustomerId = getCustIDMap.get("MSAPCustomerID");
+					System.out.println("billtoID ++++++++++++++++"+billtoID);
+					System.out.println("msapCustomerId ++++++++++++++++"+msapCustomerId);
+					
+				}
+			}
+			/*
+			 * JIRA -4093 End
+			 * Get billtoid and msapcustomerid from XPX_Cust_Hierarchy_View
+			 */
+			
 			System.out.println("************sendEmail : isSalesRepFlag="+isSalesRepFlag);
 			if("Y".equalsIgnoreCase(isSalesRepFlag)){
-				String buyerOrgCode = "";	
-				String msapCustomerId = "";
-				YFCDocument inDoc = YFCDocument.getDocumentFor(inputElement.getOwnerDocument());
-				YFCElement rootElem = inDoc.getDocumentElement();
 				String salesRepId="";
 				String customerContactId="";
 				if(rootElem!=null){
-					buyerOrgCode = rootElem.getAttribute("BuyerOrganizationCode");
 					customerContactId = rootElem.getAttribute("CustomerContactID");
 					System.out.println("************sendEmail : customerContactId="+customerContactId);
 					if(customerContactId!=null && customerContactId.trim().length()>0){
 						salesRepId = customerContactId.substring(0, customerContactId.indexOf('@'));
 					}
 				}
-				msapCustomerId = getCustomerID(buyerOrgCode,env);
+				//msapCustomerId = getCustomerID(buyerOrgCode,env);
 				strToEmailid = getSalesRepEmailForSalesPro(msapCustomerId,env,salesRepId);
 			
 			}else{
@@ -258,7 +290,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			try
 			{
 				
-				setCSREmails(env,customerDoc);
+				setCSREmails(env,customerDoc,billtoID);
 				getSalesRepEmail(env, customerDoc);
 				
 			}catch(Exception  ex)
@@ -849,10 +881,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return orderListDoc;
 	}
 	
-	public Document setCSREmails(YFSEnvironment env, Document customerDoc)
+	public Document setCSREmails(YFSEnvironment env, Document customerDoc,String billToId)
 			throws ParserConfigurationException, FactoryConfigurationError,
 			YFSException, RemoteException, YIFClientCreationException {
- 
+		
 		api = YIFClientFactory.getInstance().getApi();
 		
 //		if(api == null){
@@ -866,10 +898,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		YFCDocument docCustomer = YFCDocument.createDocument("Customer");
 		YFCElement inputDocElement = docCustomer.getDocumentElement();
 		
-		inputDocElement.setAttribute("CustomerID", customerDoc.getDocumentElement()
-				.getAttribute("BillToID"));			
+		inputDocElement.setAttribute("CustomerID",billToId); //JIRA 4093 -Changes done
 		
-		String billToId = customerDoc.getDocumentElement().getAttribute("BillToID");
+		//String billToId = customerDoc.getDocumentElement().getAttribute("BillToID");
 		
 		
 		if(billToId != null && !billToId.equalsIgnoreCase(""))
@@ -882,6 +913,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			Document custListDoc = api.getCustomerList(env,docCustomer.getDocument());
 			yfcLogCatalog.debug("api getCustomerList outdoc "
 					+ SCXmlUtil.getString(custListDoc));
+			System.out.println("SCXmlUtil.getString(custListDoc) +++++++serCSREmails++++++"+SCXmlUtil.getString(custListDoc));
 			env.clearApiTemplate("getCustomerList");
 	
 			// get the email ids to be sent in to and cc list ends here
