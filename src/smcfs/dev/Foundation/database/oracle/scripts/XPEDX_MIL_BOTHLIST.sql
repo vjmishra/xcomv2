@@ -1,8 +1,6 @@
 CREATE OR REPLACE FORCE VIEW "NG"."XPEDX_MIL_BOTHLIST" ("MY_ITEMS_LIST_KEY", "CUSTOMER_ID", "LIST_NAME", "LIST_DESC", "CREATEUSERNAME", "CREATEUSERID", "MODIFYUSERID", "SHARE_ADMIN_ONLY", "SHARE_PRIVATE", "MODIFYTS", "LIST_ORDER", "CUSTOMER_KEY", "PARENT_CUSTOMER_KEY", "ROOT_CUSTOMER_KEY", "EXTN_SUFFIX_TYPE", "EXTN_CUSTOMER_DIVISION", "ORGANIZATION_NAME", "ORGANIZATION_CODE", "SHARE_CUSTOMER_ID", "MSAPNAME", "TOTALITEMS")
 AS
-SELECT 
-    /* +Use_NL(yfs_customer) USE_NL(yfs_organization) */
-    DISTINCT mil.my_items_list_key,
+  SELECT DISTINCT mil.my_items_list_key,
     mil.customer_id,
     mil.list_name,
     mil.list_desc,
@@ -33,9 +31,9 @@ SELECT
   INNER JOIN yfs_customer cust
   ON (mil.customer_id) = trim(cust.customer_id)
   INNER JOIN yfs_customer msapcust
-  ON cust.root_customer_key = trim(msapcust.customer_key)
+  ON TRIM (cust.root_customer_key) = TRIM (msapcust.customer_key)
   INNER JOIN yfs_organization msaporg
-  ON msapcust.customer_id = msaporg.organization_key
+  ON TRIM (msapcust.customer_id) = TRIM (msaporg.organization_key)
   LEFT OUTER JOIN xpedx_my_items_list_share mils
   ON mil.my_items_list_key = mils.my_items_list_key
   LEFT OUTER JOIN yfs_organization org
