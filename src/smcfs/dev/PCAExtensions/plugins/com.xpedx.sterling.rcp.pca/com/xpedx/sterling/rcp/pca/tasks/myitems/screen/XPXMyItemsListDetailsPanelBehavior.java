@@ -66,11 +66,36 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
         inpuElement = (Element) inputObject;
         myItemsListKey = inpuElement.getAttribute("MyItemsListKey");
         loadItemsList();
+        String customerID = inpuElement.getAttribute("CustomerID");
+        String sharePrivate = inpuElement.getAttribute("SharePrivate");
+        String createUserName = inpuElement.getAttribute("Createusername");
+        getMasterCustomerId(customerID,sharePrivate,createUserName);
         String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomerName");
-        setFieldValue("txtCustName", custName);
+        /*setFieldValue("txtCustName", custName);*/
         setControlEditable("clmCustAccountField", true);
-       }
+        }
     
+	public void getMasterCustomerId(String customerID, String sharePrivate, String createUserName){
+		if(YRCPlatformUI.isVoid(sharePrivate)){
+        	setFieldValue("txtListType", "Shared");
+		}
+        else {
+				String personalListType = createUserName.concat("(").concat(sharePrivate).concat(")");
+				setFieldValue("txtListType", personalListType);
+		}
+		Document docInput = YRCXmlUtils.createFromString("<Customer CustomerID='"+customerID+"' OrganizationCode='xpedx'/>");
+		String apiName = "XPXGetParentCustomerListService" ;
+		
+		YRCApiContext context = new YRCApiContext();
+        context.setApiName(apiName);
+        context.setFormId(getFormId());
+        context.setInputXml(docInput);
+       /* if(!YRCPlatformUI.isVoid(strUserDataKey)){
+        	context.setUserData(strUserDataKey, strUserData);
+        }*/
+        callApi(context);
+	}
+	
 	public void loadItemsList() {
 		//Load the ItemUOM from cache
 		String enterpriseKey = (String)YRCPlatformUI.getUserElement().getAttribute("EnterpriseCode");
@@ -120,8 +145,10 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 							}
 						}
 					} //  JIRA 1155 - Code Ends
+					
 					if ("getXPEDXMyItemsListDetail".equals(apiname)) {
 						this.outItemDetailXml = ctx.getOutputXmls()[i].getDocumentElement();
+						setModel("XPEDXMyItemsList", outItemDetailXml);
 						this.eleMyItemsList = YRCXmlUtils.getXPathElement(outItemDetailXml, "/XPEDXMyItemsListList/XPEDXMyItemsList");
 						updateModelWithUOMDesc(eleMyItemsList);										
 												
@@ -141,6 +168,11 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						
 						loadItemsList();
 					}
+					else if ("XPXGetParentCustomerListService".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						updateModelWithParentInfo(outXml);						
+						
+					}	
 					else if ("getCompleteItemList".equals(apiname)) {
 						//Commented unnecessary code below
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
@@ -309,6 +341,26 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		
 	}
 
+	private void updateModelWithParentInfo(Element outXml){
+		NodeList customerList = outXml.getElementsByTagName("Customer");
+		String masterCustomerID = null;
+		String organizationName = null;
+		for(int i=0;i<customerList.getLength();i++){
+			Element eleCust=(Element) customerList.item(i);
+				String customerID = eleCust.getAttribute("CustomerID");
+				organizationName = eleCust.getAttribute("OrganizationName");
+				String delimiter = "-";
+				if(!YRCPlatformUI.isVoid(customerID)){
+					String temp[] = customerID.split(delimiter);
+					if(temp[2].equalsIgnoreCase("M")){
+						masterCustomerID = temp[1];
+					}
+				}	
+			}
+		String customerName = organizationName+ "(" + masterCustomerID +")";
+		setFieldValue("txtCustName", customerName);
+	}
+	
 	private void updateModelWithUOMDesc(Element outXml) {
 //		Element eleMyItemsList = YRCXmlUtils.getXPathElement(outXml, "/XPEDXMyItemsListList/XPEDXMyItemsList");
 //		//JIRA 1155 - Code Starts to Add UOMDesc
@@ -323,7 +375,6 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 		} 
 			setModel("getXPEDXMyItemsListDetail",outXml);
 		//JIRA 1137 - Code Ends 	
-	
 		getCompleteItemListAPICall(itemList);
 }
 	
