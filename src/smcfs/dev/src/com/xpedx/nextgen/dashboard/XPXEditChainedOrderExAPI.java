@@ -279,6 +279,7 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 						}
 					}
 					if(chngfOrdEle != null) {
+						validateWebHoldFlag(chngfOrdEle, buyerOrgCustEle);	
 						if(ordType.equalsIgnoreCase("Customer")) {
 							if(fOrderEle == null) {
 								if(chngfOrdEle.hasAttribute("OrderHeaderKey")) {
@@ -324,7 +325,8 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 				if(chngfOrdersArray[i].equalsIgnoreCase("AA")) {
 					chngfOrdEle = (YFCElement)chngfOrders.get("AA");
 					if(chngfOrdEle != null) {
-							Map<String, YFCElement> retDocMap = processOrderEditA(env, chngfOrdEle, fOrderEle, cOrderEle, buyerOrgCustEle);
+						validateWebHoldFlag(chngfOrdEle, buyerOrgCustEle);
+						Map<String, YFCElement> retDocMap = processOrderEditA(env, chngfOrdEle, fOrderEle, cOrderEle, buyerOrgCustEle);
 						if(retDocMap != null) {
 							if(retDocMap.size() > 0) {
 								YFCElement foDocEle = (YFCElement)retDocMap.get("FO");
@@ -729,18 +731,29 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 				}
 			}
 		}
-		YFCElement chngfOrdExtnEle = chngfOrdEle.getChildElement("Extn");
-		if(chngfOrdExtnEle != null) {
-			YFCNodeList<YFCElement> instructionList = chngfOrdEle.getElementsByTagName("Instruction");
-			Iterator<YFCElement> itr = instructionList.iterator();
-			while(itr.hasNext()) {
+		YFCElement chngfOrdLinesEle = chngfOrdEle.getChildElement("OrderLines");
+		if(chngfOrdLinesEle != null) {
+			YFCIterable<YFCElement> yfcItr = chngfOrdLinesEle.getChildren("OrderLine");
+			while(yfcItr.hasNext()) {
+				YFCElement fOrdLineEle = (YFCElement)yfcItr.next();
+				String lpc = fOrdLineEle.getAttribute("LineProcessCode");
+				if(lpc.equalsIgnoreCase("A")){
+				YFCElement chngfOrdExtnEle = chngfOrdEle.getChildElement("Extn");
+				if(chngfOrdExtnEle != null) {
+				YFCNodeList<YFCElement> instructionList = fOrdLineEle.getElementsByTagName("Instruction");
+				Iterator<YFCElement> itr = instructionList.iterator();
+				while(itr.hasNext()) {
 				YFCElement instructionEle = (YFCElement) itr.next();
 				if(instructionEle.hasAttribute("InstructionType")) {
 					String instType = instructionEle.getAttribute("InstructionType");
 					if(!YFCObject.isNull(instType) && !YFCObject.isVoid(instType)) {
-						if(instType.equalsIgnoreCase("HEADER") || instType.equalsIgnoreCase("LINE")) {
+						if(instType.equalsIgnoreCase("LINE")) {
+							
 							chngfOrdExtnEle.setAttribute("ExtnWebHoldFlag", "Y");
 							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Edit Order Message Had Order/Line Instructions of InstructionType-HEADER/LINE!");
+							if(log.isDebugEnabled()){
+							log.debug("IN EDIT CHAINED ORDER");
+							}
 							break;
 						}
 					}
@@ -774,12 +787,16 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 							} else {
 								chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Order Is On Web Hold For Unknown Reason");
 							}
+							}
+						  }
 						}
 					}
 				}
-			}
-		}
-	}
+	       }
+	    }
+    }
+}
+	
 	
 	private void prepareErrorObject(Exception e, String transType, String errorClass, YFSEnvironment env, Document inXML) {
 		
