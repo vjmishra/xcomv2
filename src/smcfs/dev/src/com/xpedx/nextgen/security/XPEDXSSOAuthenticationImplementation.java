@@ -93,7 +93,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String ldapAuthIsActiveDir = YFSSystem.getProperty(LDAP_AUTH_IS_ACTIVE_DIR);
 		String ldapAuthIsRequired = YFSSystem.getProperty(LDAP_AUTH_IS_REQUIRED);
 		String isSWCReq = request.getParameter("isSWCReq");
-		System.out.println("+++ Is from WebChannel getUserData +++ " + isSWCReq);
+		
 		//start of jira 3393 condition
 		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
 			request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
@@ -123,14 +123,14 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		}
 		
 		
-
+		if(LOG.isDebugEnabled()){
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-		LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
-
+		LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+		}
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
 		env.put(Context.PROVIDER_URL, ldapServerURL);
@@ -146,7 +146,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 //JIRA 3852 starts
 		else
 		{
-	System.out.println("COM Logging"); // Vijay commetned to check the log as it was not coming in log.debug
+	
 			
 				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
@@ -173,14 +173,14 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				}
 
 
-
+				if(LOG.isDebugEnabled()){
 				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
 				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-				LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
-
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+				}
 		        Hashtable<String, String> env = new Hashtable<String, String>();
 		        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
 				env.put(Context.PROVIDER_URL, ldapServerURL);
@@ -298,11 +298,11 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String userName = null;
 		String SRemailID = null;
 		String password = getPassword(request);
-		System.out.println(" paassword given is -- " + password);
+		
 		String isSWCReq = request.getParameter("isSWCReq");
-		System.out.println("+++ Is from WebChannel isInternal +++ " + isSWCReq);
+		
 		String contextPath = request.getContextPath();
-		System.out.println("Context path for SWC is --" + contextPath);
+		
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
 		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
@@ -376,7 +376,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			isInternal = false;
 		}else{
 			if((userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())) && ((!"".equalsIgnoreCase(password)) && password!= null)){
-				System.out.println("password is coming as ");
+				
 				if (request.getSession(false) != null){
 					request.getSession(false).setAttribute("IS_SALES_REP","true");
 					request.getSession(false).setAttribute("loggedInUserName",userName);
@@ -392,7 +392,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 					}
 				isInternal = true;
 			}else {
-				System.out.println("INternal user is false");
+		
 				isInternal = false;
 			}
 			

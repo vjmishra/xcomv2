@@ -31,7 +31,7 @@ public class XPEDXShipToCustomer {
 		FirstName = firstName;
 	}
 	public String getMiddleName() {
-		//System.out.println("*************->MiddleName="+MiddleName);
+		
 		return MiddleName;
 	}
 	public void setMiddleName(String middleName) {

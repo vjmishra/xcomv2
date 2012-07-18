@@ -291,7 +291,7 @@ public class XPEDXUtilBean extends UtilBean {
 					  
 			//Format only Qty before decimal '.' then append decimal part.
 			String formattedNonDecimalPart  = formatQtyForCommasWithoutDecimals(nonDecimalQtyPart) ;
-			//System.out.println("formattedNonDecimalPart " + formattedNonDecimalPart);
+			
 			
 			return formattedNonDecimalPart + onlyDecimalQtyPart;
 		}

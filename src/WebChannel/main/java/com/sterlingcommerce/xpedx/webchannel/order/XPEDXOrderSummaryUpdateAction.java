@@ -84,7 +84,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	{
 		try
 		{
-			LOG.info("Calling Change Order to update extn fields");
+			
 			Map<String,Element> orderLineMap=new HashMap<String,Element>();
 			Map<String,Element> orderHeaderMap=new HashMap<String,Element>();
 			HashMap<String, String> valueMap = new HashMap<String, String>();
@@ -109,7 +109,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				
 				String changeOrderXML=changeOrderElem.getAttribute("ResponseXML");
 				Document inputDocument=SCXmlUtil.createFromString(changeOrderXML);
-				LOG.info("Input XML = "+SCXmlUtil.getString(inputDocument) );
+				
 				XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
 				WCMashupHelper.invokeMashup("xpedx_draftOrderSummaryUpdateExtnFields", inputDocument.getDocumentElement(), wcContext.getSCUIContext());
 			}

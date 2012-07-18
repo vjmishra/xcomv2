@@ -1830,15 +1830,18 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 				"xpedx-PreferredCatalogOptions", valueMap, wcContext
 						.getSCUIContext());
 		String inputXml = SCXmlUtil.getString(input);
-		//System.out.println("Input XML: " + inputXml);
+		if(LOG.isDebugEnabled()){
+		LOG.debug("Input XML: " + inputXml);
+		}
 		Object obj = WCMashupHelper.invokeMashup(
 				"xpedx-PreferredCatalogOptions", input, wcContext
 						.getSCUIContext());
 		if(obj != null){
 			oXML = ((Element) obj).getOwnerDocument().getDocumentElement();
 			if (null != oXML) {
+				if(LOG.isDebugEnabled()){
 				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));			
-			//System.out.println("Output XML: " + SCXmlUtils.getString(oXML));
+				}
 			Element cList = XMLUtilities
 				.getChildElementByName(oXML, "CategoryList");
 			if (cList == null) {

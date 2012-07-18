@@ -332,9 +332,11 @@ public class XPEDXFileManager implements Serializable{
 	 * @param message
 	 */
 	private static void logMessage(String message) {
-		if(DEBUG_TRACE == true )
-			System.out.println( message );
-		
+		if(DEBUG_TRACE == true ){
+		if(LOG.isDebugEnabled()){
+		LOG.debug( message );
+		}
+		}
 	}
 	
 	/**
@@ -348,11 +350,13 @@ public class XPEDXFileManager implements Serializable{
 		//String fileName ="D:\\xpedx\\htmls\\promotions\\Catalog_Promo.html";
 		try {
 			copyDirectory(remotePath, destDir, false);
-			System.out.println("copied directory");
+			if(LOG.isDebugEnabled()){
+			LOG.debug("copied directory");
+			}
 			//checkFile(fileName, destDir,false);
-			//System.out.println("copied files");
+			
 		} catch (Exception e) {
-			System.out.println("Exception");
+			LOG.error("Exception");
 			e.printStackTrace();
 		}
 	}

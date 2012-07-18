@@ -271,7 +271,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	   /* End - Changes made for 2422 JIRA */
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
-			log.info("Error in Init Method", exception);
+			
 			log.error("Error in Init Method", exception);
 		}
 	}
@@ -442,7 +442,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if (!isLayoutDefined) {
 				columnList = getListOfColumns(XPEDX_DEFAULT_TYPE_COLUMN);
 			}
-			log.info("setColumnListForUI: " + columnList.toString());
+			if(log.isDebugEnabled()){
+			log.debug("setColumnListForUI: " + columnList.toString());
+			}
 		} catch (CannotBuildInputException e) {
 			LOG
 					.error("Error Getting Column Names from the DB for product type.... "
@@ -649,7 +651,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}	
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
-			log.info("Error while refeshing catalog cache in method newSearch", exception);
+			
 			log.error("Error while refeshing catalog cache in method newSearch", exception);
 		}	
 		return SUCCESS;
@@ -748,7 +750,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} else {
 			setAttributeListForUI();
 			if (isCategoryLanding || displayAllCategories.equalsIgnoreCase("true")) {
-				log.info("Search for Category Domain. Need to show the asset widget for Category Images");
+				if(log.isDebugEnabled()){
+				log.debug("Search for Category Domain. Need to show the asset widget for Category Images");
+				}
 				return setCategoryDomainAssetList();
 			}
 			if (wcContext.isGuestUser())
@@ -761,7 +765,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
-			log.info("Error while refeshing catalog cache in method navigate", exception);
+			
 			log.error("Error while refeshing catalog cache in method navigate", exception);
 		}
 		return SUCCESS;
@@ -797,7 +801,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}			
 		}
 		catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.error(e.getMessage());
 			// TODO: handle exception
 		}
 		if(itemIDList.size()>0) {

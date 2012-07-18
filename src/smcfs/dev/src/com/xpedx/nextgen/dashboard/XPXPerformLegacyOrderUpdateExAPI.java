@@ -91,9 +91,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement rootEle = yfcDoc.getDocumentElement();
 
 		try {
-
-			log.info("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
+			}
 			// Retrieve the header process code from the input doc.
 			if (rootEle.hasAttribute("HeaderProcessCode")) {
 				headerProcessCode = rootEle.getAttribute("HeaderProcessCode");
@@ -1354,8 +1354,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 		if (chngcOrdStatusEle0.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))
 				&& !YFCObject.isVoid(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))) {
-
-			log.info("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle0.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle0.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle0.getOwnerDocument().getDocument());
 			if (tempDoc == null) {
 				throw new Exception("Service XPXChangeOrderStatus Failed!");
@@ -1365,11 +1366,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (chngcOrderEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle.getAttribute("OrderHeaderKey"))) {
 			
 			filterAttributes(chngcOrderEle, true);
-
-			log.info("XPXChangeOrder_CO-InXML:" + chngcOrderEle.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrder_CO-InXML:" + chngcOrderEle.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
-				log.info("XPXChangeOrderCO[Output]:" + SCXmlUtil.getString(tempDoc));
+				if(log.isDebugEnabled()){
+				log.debug("XPXChangeOrderCO[Output]:" + SCXmlUtil.getString(tempDoc));
+				}
 				cOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
 			} else {
 				throw new Exception("Service XPXChangeOrder Failed!");
@@ -1381,8 +1385,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (isChngOrdReq) {
 			setInstructionKeys(chngfOrderEle, fOrderEle);			
 			filterAttributes(chngfOrderEle, false);
-			
-			log.info("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngfOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				fOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
@@ -1397,8 +1402,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (chngcOrdStatusEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle.getAttribute("OrderHeaderKey"))
 				&& !YFCObject.isVoid(chngcOrdStatusEle.getAttribute("OrderHeaderKey"))) {
 
-			
-			log.info("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle.getOwnerDocument().getDocument());
 			if (tempDoc == null) {
 				throw new Exception("Service XPXChangeOrderStatus Failed!");
@@ -1407,8 +1413,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 		if (chngcOrdStatusEle1.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle1.getAttribute("OrderHeaderKey"))
 				&& !YFCObject.isVoid(chngcOrdStatusEle1.getAttribute("OrderHeaderKey"))) {
-
-			log.info("XPXChangeOrderStatus_CO[LPC:D]-InXML:" + chngcOrdStatusEle1.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrderStatus_CO[LPC:D]-InXML:" + chngcOrdStatusEle1.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle1.getOwnerDocument().getDocument());
 			if (tempDoc == null) {
 				throw new Exception("Service XPXChangeOrderStatus Failed!");
@@ -1418,8 +1425,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (chngcOrderEle1.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle1.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle1.getAttribute("OrderHeaderKey"))) {
 			
 			filterAttributes(chngcOrderEle1, true);
-
-			log.info("XPXChangeOrder_CO[LPC:D]-InXML:" + chngcOrderEle1.getString());
+			if(log.isDebugEnabled()){
+			log.debug("XPXChangeOrder_CO[LPC:D]-InXML:" + chngcOrderEle1.getString());
+			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle1.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				cOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
@@ -2562,8 +2570,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement chngcOrdEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
 
 		this.filterAttributes(chngcOrdEle, true);
-
-		log.info("XPXChangeOrder_CO-InXML:" + chngcOrdEle.getString());
+		if(log.isDebugEnabled()){
+		log.debug("XPXChangeOrder_CO-InXML:" + chngcOrdEle.getString());
+		}
 		// Change order call to update the customer order.
 		tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrdEle.getOwnerDocument().getDocument());
 		if (tempDoc != null) {
@@ -2953,8 +2962,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 
 			if (isChngCOStatusReq) {
-
-				log.info("XPXChangeOrderStatus_CO-InXML:" + chngCOStatusInXML.getString());
+				if(log.isDebugEnabled()){
+				log.debug("XPXChangeOrderStatus_CO-InXML:" + chngCOStatusInXML.getString());
+				}
 				XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngCOStatusInXML.getDocument());
 			}
 		} else {
@@ -3048,8 +3058,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 
 		filterAttributes(rootEle, true);
-
-		log.info("XPXCreateOrder_CO-InXML:" + rootEle.getString());
+		if(log.isDebugEnabled()){
+		log.debug("XPXCreateOrder_CO-InXML:" + rootEle.getString());
+		}
 		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXCreateOrder", rootEle.getOwnerDocument().getDocument());
 		if (tempDoc != null) {
 			return YFCDocument.getDocumentFor(tempDoc);
@@ -3637,9 +3648,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 
 		filterAttributes(rootEle, false);
-
-		log.info("XPXCreateOrder_FO-InXML:" + rootEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXCreateOrder_FO-InXML:" + rootEle.getString());
+		}
 		// To create fulfillment order.
 		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXCreateOrder", rootEle.getOwnerDocument().getDocument());
 		if (tempDoc != null) {
@@ -3756,9 +3767,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				throw new Exception("Attribute OrderType Not Available in OrderList Template!");
 			}
 		}
-
-		log.info("ChangeCOStatus-InXML:" + chngcOrdStatusEle.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("ChangeCOStatus-InXML:" + chngcOrdStatusEle.getString());
+		}
 		// To call changeOrderStatus API.
 		Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle.getOwnerDocument().getDocument());
 		if (tempDoc != null) {
@@ -3771,9 +3782,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		while (itr.hasNext()) {
 			String chngfOrdStatusStr = (String) itr.next();
 			YFCElement chngfOrdStatusEle = YFCDocument.getDocumentFor(chngfOrdStatusStr).getDocumentElement();
-
-			log.info("ChangeFOStatus-InXML:" + chngfOrdStatusEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("ChangeFOStatus-InXML:" + chngfOrdStatusEle.getString());
+			}
 			// To call changeOrderStatus API.
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngfOrdStatusEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
@@ -3787,9 +3798,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		while (itr.hasNext()) {
 			String chngfOrdStatusStr = (String) itr.next();
 			YFCElement chngfOrdStatusEle = YFCDocument.getDocumentFor(chngfOrdStatusStr).getDocumentElement();
-
-			log.info("ChangeFOStatus-InXML:" + chngfOrdStatusEle.getString());
-			
+			if(log.isDebugEnabled()){
+			log.debug("ChangeFOStatus-InXML:" + chngfOrdStatusEle.getString());
+			}
 			// To call changeOrderStatus API.
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngfOrdStatusEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
@@ -4847,17 +4858,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement extnEle = getOrdListInDoc.createElement("Extn");
 		ordListInEle.appendChild(extnEle);
 		extnEle.setAttribute("ExtnWebConfNum", extnWebConfNum);
-
-		log.info("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-InXML:" + getOrdListInDoc.getString());
-		
+		if(log.isDebugEnabled()){
+		log.debug("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-InXML:" + getOrdListInDoc.getString());
+		}
 
 		YFCDocument getOrdListOutDoc = null;
 		Document tempDoc = api.executeFlow(env, "XPXGetOrderListForLegacyOrderUpdateEx", getOrdListInDoc.getDocument());
 		if (tempDoc != null) {
 			getOrdListOutDoc = YFCDocument.getDocumentFor(tempDoc);
-
-		log.info("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:" + getOrdListOutDoc.getString());
-			
+		if(log.isDebugEnabled()){
+		log.debug("XPXPerformLegacyOrderUpdateAPI.getCustomerOrderAndFulfillmentOrderList()-OutXML:" + getOrdListOutDoc.getString());
+		}	
 
 		}
 

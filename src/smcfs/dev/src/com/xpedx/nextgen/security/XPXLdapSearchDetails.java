@@ -112,7 +112,7 @@ public class XPXLdapSearchDetails implements YIFCustomApi {
 			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
 			LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
 			// LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
-			LOG.info("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+			LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
 		}
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
@@ -122,8 +122,9 @@ public class XPXLdapSearchDetails implements YIFCustomApi {
 		env.put(Context.SECURITY_CREDENTIALS, password.trim());
 		
 		_dirContext = new InitialDirContext(env);
-		LOG.info("Created a new InitialDirContext");
-
+		if(LOG.isDebugEnabled()){
+		LOG.debug("Created a new InitialDirContext");
+		}
 	}
 
 	public String getPropertyValue(String propertyName) {

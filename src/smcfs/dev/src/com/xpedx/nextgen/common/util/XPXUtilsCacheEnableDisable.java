@@ -64,7 +64,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 
 			log.debug("inXML"+SCXmlUtil.getString(inXML));
-			//System.out.println("inXML"+SCXmlUtil.getString(inXML));
+			
 
 			//String feedName = inXML.getDocumentElement().getAttribute("FeedName");
 			//	String cacheType=_properties.getProperty("CacheType");
@@ -72,7 +72,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 			if(strRoot.equals("SOF")){
 				feedName =_properties.getProperty("FeedName");
 				log.debug("feedName::"+feedName);
-				//System.out.println("Feed Name is "+feedName);
+				
 			}
 
 
@@ -83,7 +83,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 			cachedGroup.setAttribute("Name", "Database");
 			modifyCacheInput.getDocumentElement().appendChild(cachedGroup);
 
-			//System.out.println("strRoot is::"+strRoot);
+		
 
 
 			if(strRoot!=null && (strRoot.equals("SOF")||strRoot.equals("EOFCustomer")||strRoot.equals("EOFDivision")|| strRoot.equals("EOFEntitlement")||strRoot.equals("EOFPriceBook")||strRoot.equals("EOFUom"))){	
@@ -205,8 +205,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					}
 				}
 
-				//	System.out.println("The modifyCache input is: "+SCXmlUtil.getString(modifyCacheInput));
-				log.debug("The modifyCache input is: "
+								log.debug("The modifyCache input is: "
 						+ SCXmlUtil.getString(modifyCacheInput));
 				api.invoke(env,"modifyCache",modifyCacheInput);
 

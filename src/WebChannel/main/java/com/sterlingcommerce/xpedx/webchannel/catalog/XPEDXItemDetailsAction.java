@@ -95,7 +95,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				try{
 					getRelatedItems(); // Lets use the same method used for the My Items List action
 				}catch (Exception ex){
-					LOG.info("getRelatedItems retrival failed : " + ex.getMessage());
+					LOG.error("getRelatedItems retrival failed : " + ex.getMessage());
 				}
 				getExtnItemDetails();
 				getItemUOMs();
@@ -988,7 +988,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		/*Element outputEl = prepareAndInvokeMashup("xpedxItemCustXRef");
 		Element custXrefEle = XMLUtilities.getElement(outputEl,"XPXItemcustXref");
 		SCXmlUtil.getString(outputEl);
-		System.out.println(SCXmlUtil.getString(custXrefEle));*/		
+		*/		
 		//custPartNumber = SCXmlUtil.getAttribute(custXrefEle,"CustomerItemNumber");
                 //Fetching the MPC from the Item details - refer method prepareXpedxItemAssociationMap
 		//MPC = SCXmlUtil.getAttribute(custXrefEle, "MPC");

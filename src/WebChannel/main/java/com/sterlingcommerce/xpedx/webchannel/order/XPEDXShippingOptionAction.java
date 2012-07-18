@@ -64,7 +64,9 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 			try {
 				shpCustomer = XPEDXWCUtils.getShipToAdress(wcContext
 						.getCustomerId(), wcContext.getStorefrontId());
-				//System.out.println(shpCustomer.getFirstName());
+				if(log.isDebugEnabled()){
+				log.debug(shpCustomer.getFirstName());
+				}
 				List arrAddress = shpCustomer.getAddressList();
 				String sAddr = "AddressLine";
 				if (arrAddress != null && arrAddress.size() > 0) {
@@ -150,8 +152,9 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 			eleElement.setAttribute("Title", "");
 			eleElement.setAttribute("ZipCode", shipToAddress.getXpedxSTZip());
 			documentElement.appendChild(eleElement);
-			System.out
-					.println("shipToAddress" + shipToAddress.getXpedxSTName());
+			if(log.isDebugEnabled()){
+		     log.debug("shipToAddress" + shipToAddress.getXpedxSTName());
+			}
 		}
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());

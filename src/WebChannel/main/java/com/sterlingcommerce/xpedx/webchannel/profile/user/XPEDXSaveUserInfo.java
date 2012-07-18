@@ -568,7 +568,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			}
 		} catch (YFCException passexp) {
 			// This exception is put here to handle the password validation exceptions.
-			//System.out.println("GOT EXCEPTION");
+			if(log.isDebugEnabled()){
+			log.debug("GOT EXCEPTION");
+			}
 			pwdValidationResultMap = new HashMap<String, String>();
 			pwdValidationResultMap.put(((YFCException) passexp).getAttribute("ErrorCode"), ((YFCException) passexp).getAttribute("ErrorDescription"));
 			setPwdValidationResultMap(pwdValidationResultMap);
@@ -1818,7 +1820,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		Document templateEmailDoc = YFCDocument.createDocument("UserUpdateEmail")
 		.getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
-		System.out.println(""+SCXmlUtil.getString(templateElement));
+		if(log.isDebugEnabled()){
+		log.debug(""+SCXmlUtil.getString(templateElement));
+		}
 		Element emailElement = templateEmailDoc.createElement("UserUpdateEmail");
 		emailElement.setAttribute("BrandName", strEnterpriseCode);
 		emailElement.setAttribute("EntryType", entryType);
@@ -1837,7 +1841,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		if (null != outputDoc) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
-		System.out.println("SCXmlUtil.getString((Element) obj)"+SCXmlUtil.getString((Element) obj));
+		if(LOG.isDebugEnabled()){
+		LOG.debug("SCXmlUtil.getString((Element) obj)"+SCXmlUtil.getString((Element) obj));
+		}
 		
 	}
 	//Start - Jira 3262 

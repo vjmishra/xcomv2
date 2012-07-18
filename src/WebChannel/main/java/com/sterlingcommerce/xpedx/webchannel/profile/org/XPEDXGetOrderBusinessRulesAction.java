@@ -55,7 +55,9 @@ public class XPEDXGetOrderBusinessRulesAction extends WCMashupAction {
 	public String execute() {
 		try {
 			outputDoc = (Element) prepareAndInvokeMashup("xpedx-cust-GetOrderBusinessRules");
-		//System.out.println("getCustomerDetails Output" + SCXmlUtils.getString(outputDoc));
+			if(log.isDebugEnabled()){
+		    log.debug("getCustomerDetails Output" + SCXmlUtils.getString(outputDoc));
+			}
 		} catch (Exception ex) {
 			log.error(ex);
 		}

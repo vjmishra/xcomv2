@@ -69,8 +69,9 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public String execute() {
 		try {
 			outputDoc = (Element) prepareAndInvokeMashup("xpedx_getCustMaintenance");
-		//System.out.println("getCustomerDetails Output" + SCXmlUtils.getString(outputDoc));
-			
+			if(log.isDebugEnabled()){
+		    log.debug("getCustomerDetails Output" + SCXmlUtils.getString(outputDoc));
+			}
 			//added for 2769
 			String lastModifiedDateStr = outputDoc.getAttribute("Modifyts");
 			if(lastModifiedDateStr!=null){
@@ -86,7 +87,9 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 
 		try {
 			empNameDoc = (Element) prepareAndInvokeMashup("xpedx-cust-GetEmployeeNames");
-		//System.out.println("GetEmployeeNames Output" + SCXmlUtils.getString(empNameDoc));
+			if(log.isDebugEnabled()){
+		    log.debug("GetEmployeeNames Output" + SCXmlUtils.getString(empNameDoc));
+			}
 		} catch (Exception ex) {
 			log.error(ex);
 		}
@@ -142,7 +145,9 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 			}
 			empList.add(SalesRepID);
 		}
-		//System.out.println("eList:" + empList.toString());
+		if(log.isDebugEnabled()){
+		log.debug("eList:" + empList.toString());
+		}
 	}
 
 	protected void setCustAddressToDisp(){

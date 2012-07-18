@@ -660,24 +660,24 @@ public class XPEDXExtendedOrderDetailAction extends
 	/*public boolean isEditableCustomerOrder() {
 		boolean result = true;
 		boolean resultForCustomer = false;
-     System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER");
+     
 		if (xpedxPaymentMethodHelper.isPresentOtherPaymentGroupMethod()) {
-			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 1");
+			
 			return false;
 		}
 		if (!isSupportedFunction(false)) {
-			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 2");
+			
 			return false;
 		}
 
 		if (SCXmlUtils.getInstance().getAttribute(elementOrder,
 				"MaxOrderStatus").equals(OrderConstants.ORDER_CANCEL_STATUS)) {
-			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 3");
+			
 			return false;
 		}
 
 		if (isOrderOnDuplicateOrderHold()) {
-			System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 4");
+			
 			return false;
 		}
 		//Condition to check if order is locked then user will not be able to see edit order and cancel order button
@@ -690,7 +690,7 @@ public class XPEDXExtendedOrderDetailAction extends
 			String OrderType=elementOrder.getAttribute("OrderType");
 			if("Y".equals(extnOrderLockFlag) && !"Customer".equals(OrderType))
 			{
-				System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE! 5");
+				
 				return false;
 			}
 		}
@@ -711,21 +711,20 @@ public class XPEDXExtendedOrderDetailAction extends
 		//for jira 2248 - for cancel button in system hold status
 		String  maxOrderStatus=SCXmlUtils.getInstance().getAttribute(elementOrder,
         "MaxOrderStatus");
-		System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, MAX ORDER STATUS IS: " + maxOrderStatus);
+		
         if (result && (maxOrderStatus.equals("1100.0100"))) // Placed
         {
-        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, MAX ORDER STATUS IS: " + maxOrderStatus);
-        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING TRUE!");
+        	
         		return true;
         }
         else                 
         {
-        	System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING FALSE!");
+        	
         	return false;
         }
         //end of jira 2378
 		
-		//System.out.println("INSIDE XPEDXExtendedOrderDetail.isEditableCustomerOrder, IS A CUSTOMER ORDER, ALL GOOD! RETURNING RESULT! " + result);
+		
 		//	 return result;
 	} */	
 	

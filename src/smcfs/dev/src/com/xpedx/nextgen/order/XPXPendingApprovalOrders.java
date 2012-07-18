@@ -219,7 +219,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	 */
 	
 	public Document invoekApprovalOrderEmailForContact(YFSEnvironment env,Document inXML) throws Exception {
-		System.out.println("invoekApprovalOrderEmailForContact");
+		
 		
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		String resolverUserIds[] = null;
@@ -320,7 +320,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				if(outputDoc!=null) {
 					
 					SCXmlUtil.importElement(order, outputDoc.getDocumentElement());//(inXML, outputDoc.getDocumentElement());
-					System.out.println("SCXmlUtil.getString(order) -----"+SCXmlUtil.getString(order));
+					
 					addEmailIDToElement(order);
 					//order.appendChild(outputDoc.getDocumentElement());// Appends the CustomerContacList Element to the Order and returns the order Document
 				}
@@ -332,7 +332,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				appendDummyContactList(inXML);
 			}
 		}
-		System.out.println("SCXmlUtil.getString(inXML) -----"+SCXmlUtil.getString(inXML));		
+				
 		return inXML;		
 	}
 	

@@ -61,7 +61,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 				Element OutputDoc1 = prepareAndInvokeMashup("XPEDX-GetUserPreferredCategory");
 				Element customerContactElem = XMLUtilities.getChildElementByName(OutputDoc1, "CustomerContact");
 				Element ExtnElem = XMLUtilities.getChildElementByName(customerContactElem, "Extn");
-				//System.out.println(SCXmlUtils.getString(ExtnElem));
+				
 				userPrefCategory = SCXmlUtils.getAttribute(ExtnElem, "ExtnPrefCatalog");
 				if(userPrefCategory.length()<1||userPrefCategory.equalsIgnoreCase("None"))
 				{
@@ -71,7 +71,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 							.getStorefrontId(), customerExtnInfoMashUp);
 					Element customerElem = outputDoc2.getDocumentElement();
 					Element customerOrganizationExtnEle = XMLUtilities.getElement(customerElem, "Extn");
-					//System.out.println(SCXmlUtils.getString(customerOrganizationExtnEle));
+					
 					custPrefCategory = SCXmlUtils.getAttribute(customerOrganizationExtnEle, "ExtnCustomerClass");
 					if(custPrefCategory.length()<1)
 					{
@@ -114,12 +114,15 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 					return;
 				}
 
-	        }	        //System.out.println("Main Categories " + SCXmlUtils.getString(outDoc));
+	        }
+	        if(log.isDebugEnabled()){
+	        log.debug("Main Categories " + SCXmlUtils.getString(outDoc));
+	        }
 	        if(outDoc == null){
 	            log.error("Exception in reading the Categories  ");
 	        }
 	        this.mainCatsDoc = outDoc.getDocumentElement();
-//	        //System.out.println("Document Element"+SCXmlUtils.getString(mainCatsDoc));
+
 	        this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "CategoryPath",getPrefCategoryPath());
 	        if(this.prefCategoryElem==null)
 		       {
@@ -151,16 +154,20 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 		    	  }
 			        
 		       }
-//	        //System.out.println(SCXmlUtils.getString(prefCategoryElem));
+	     if(log.isDebugEnabled()){
+         log.debug(SCXmlUtils.getString(prefCategoryElem));
+	     }
 	}
 	private void getPrefCategoryPathToDisplay()
 	{
 		try
 		{
 			Element outputDoc3 = prepareAndInvokeMashup("XPEDX-getPrefCategoryPath");
-//			//System.out.println(SCXmlUtils.getString(outputDoc3));
+			 if(log.isDebugEnabled()){
+              log.debug(SCXmlUtils.getString(outputDoc3));
+			 }
 			Element firstChildElem = (Element) outputDoc3.getFirstChild();
-//			//System.out.println(SCXmlUtils.getString(firstChildElem));
+
 			Element categoryElem = firstChildElem;
 			prefCategoryPath = SCXmlUtils.getAttribute(categoryElem, "CategoryPath");
 			organizationCode = SCXmlUtils.getAttribute(categoryElem, "OrganizationCode");

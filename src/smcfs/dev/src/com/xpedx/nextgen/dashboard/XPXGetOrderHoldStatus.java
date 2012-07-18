@@ -37,9 +37,9 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 	{
 
 		try{
-			
-			log.info("The input to XPXGetOrderHoldStatus is: "+SCXmlUtil.getString(docConfirmDraftOrderXml));
-
+			if(log.isDebugEnabled()){
+			log.debug("The input to XPXGetOrderHoldStatus is: "+SCXmlUtil.getString(docConfirmDraftOrderXml));
+			}
 			NodeList nlOrdHoldTypes = docConfirmDraftOrderXml.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_HOLD_TYPES);
 			if(nlOrdHoldTypes!=null && nlOrdHoldTypes.getLength()==0){
 				String orderHeaderKey = docConfirmDraftOrderXml.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
@@ -64,7 +64,7 @@ public class XPXGetOrderHoldStatus  implements YIFCustomApi {
 
 		}
 		catch(Exception e){
-			log.info("Error while executing getOrderHoldStatus  "+e.getMessage() );
+			log.error("Error while executing getOrderHoldStatus  "+e.getMessage() );
 
 		}
 
