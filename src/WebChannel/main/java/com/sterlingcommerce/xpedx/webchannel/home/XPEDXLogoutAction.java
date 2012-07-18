@@ -38,6 +38,8 @@ public class XPEDXLogoutAction extends Logout {
 		if( isSalesRep!= null && isSalesRep==true){
 			returnType="SalesRepUser";
 		}
+
+		System.out.println(":: *******************XPEDXLogoutAction:returnType= "+returnType);
 		if(custContRefKey!=null && custContRefKey.length()>0)
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_REF_ATTR, custContRefKey);
 		
