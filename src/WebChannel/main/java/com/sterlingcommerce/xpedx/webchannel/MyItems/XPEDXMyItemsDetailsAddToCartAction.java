@@ -507,7 +507,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			throws CannotBuildInputException {
 		Element input = mashupInputs.get(MASHUP_DO_ADD_ORDER_LINES);
 		if(input!=null && addingSingleItem) {
-			System.out.println(SCXmlUtil.getString(input));
+		
 			Element transactionalElem = input.getOwnerDocument().createElement("OrderLineTranQuantity");
 			transactionalElem.setAttribute("TransactionalUOM", requestedUOM);
 			requestedQty = StringUtils.replace(requestedQty, ".00", "");
@@ -518,7 +518,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		}
 		Element input1 = mashupInputs.get(MASHUP_DO_GET_COMPLETE_ITEM_LIST);
 		if(input1!=null && addingSingleItem) {
-			System.out.println(SCXmlUtil.getString(input1));
+		
 		}
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);
@@ -555,7 +555,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		}
 		/*
 		if(input!=null && addingSingleItem) {
-			System.out.println(SCXmlUtil.getString(input));
+		
 			Element transactionalElem = input.getOwnerDocument().createElement("OrderLineTranQuantity");
 			transactionalElem.setAttribute("TransactionalUOM", requestedUOM);
 			requestedQty = StringUtils.replace(requestedQty, ".00", "");
@@ -566,7 +566,9 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		}*/
 		Element input1 = mashupInputs.get(MASHUP_DO_GET_COMPLETE_ITEM_LIST);
 		if(input1!=null && addingSingleItem) {
-			System.out.println(SCXmlUtil.getString(input1));
+			if(LOG.isDebugEnabled()){
+			LOG.debug(SCXmlUtil.getString(input1));
+			}
 		}
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);

@@ -550,9 +550,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					exp.setAttribute("Value", userId);
 					SCXmlUtil.importElement(OrElem, exp);
 				}
-				System.out.println(SCXmlUtil.getString(input));
+				
 				Element output =(Element) WCMashupHelper.invokeMashup("xpedxGetContactUserName", input, getWCContext().getSCUIContext());
-				System.out.println(SCXmlUtil.getString(output));
+			
 				if(output!=null){
 					for(String listKey : listModifiedByMap.keySet()) {
 						String modifyBy = listModifiedByMap.get(listKey);

@@ -287,7 +287,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			e.printStackTrace();
 		}
 		long endTime=System.currentTimeMillis();
-		System.out.println("Time taken in milliseconds in XPEDXDraftOrderSummaryAction class : "+(endTime-startTime));
+		if(LOG.isDebugEnabled()){
+		LOG.debug("Time taken in milliseconds in XPEDXDraftOrderSummaryAction class : "+(endTime-startTime));
+		}
 		return "success";
 	
 	}

@@ -791,7 +791,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						"getCustomerList", inputCustomerDoc.getDocumentElement(), customerListTemplate
 								.getDocumentElement(), wcContext.getSCUIContext());
 				//Document customerList = api.invoke(env, "getCustomerList", inputCustomerDoc);
-				//System.out.println("customerList"+SCXmlUtil.getString(customerList));
+				
 				//env.clearApiTemplate("getCustomerList");
 				if(customerList!=null){
 					YFCNodeList customerNodeList = customerList.getElementsByTagName("Customer");
