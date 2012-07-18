@@ -127,8 +127,9 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		Double price = 0.0;
 		for (int i = 0; i < iTotItmList; i++) {
 			eleItemDetails = (Element) nlItemDetails.item(i);
-			System.out
-					.println(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"));
+			if(log.isDebugEnabled()){
+			log.debug(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"));
+			}
 			sItmIds[i] = SCXmlUtil.getAttribute(eleItemDetails, "ItemID");
 			sUoms[i] = SCXmlUtil.getAttribute(eleItemDetails, "UnitOfMeasure");
 			/*String listPrice = SCXmlUtil.getXpathAttribute(eleItemDetails,
@@ -227,7 +228,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna
 					.getItems());
 			if (pnaHoverMap.containsKey(sItmIds[i])) {
-				// System.out.println(pnaHoverMap.get(sItmIds[i]));
+				// 
 				JSONObject json = pnaHoverMap.get(sItmIds[i]);
 				sArrimmediate[i] = json.get("Immediate").toString();
 				sArrNextDay[i] = json.get("NextDay").toString();

@@ -79,11 +79,11 @@ public class XPEDXContactAction extends WCMashupAction {
 				Element custParntEle = XMLUtilities.getElement(customerElement, "ParentCustomer");
 				Element CustExtnParntEle=XMLUtilities.getElement(custParntEle,"Extn");
 				String custCSR1UserId = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR");
-				//System.out.println("custCSR1UserId"+custCSR1UserId);
+				
 				
 				String custCSR2UserId = SCXmlUtil.getAttribute(custExtnEle, "ExtnECSR2");
 				
-				//System.out.println("custCSR2UserId"+custCSR2UserId);
+			
 				/*if(custCSR1UserId!=null && custCSR1UserId.trim().length() > 0)
 				{
 					csr1UserEle = XPEDXWCUtils.getUserInfo(custCSR1UserId, getWCContext()
@@ -100,19 +100,18 @@ public class XPEDXContactAction extends WCMashupAction {
 				String custCSR1UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR1Key");
 				String custCSR2UserKey = SCXmlUtil.getAttribute(CustExtnParntEle, "ExtnECSR2Key");
 				
-				/*System.out.println("custCSR1UserKey"+custCSR1UserKey);
-				System.out.println("custCSR2UserKey"+custCSR2UserKey);*/
+				
 				
 				if(custCSR1UserKey!=null && custCSR1UserKey.trim().length()>0) {
 					 csr1CustServEle = getUserPersonInfo(custCSR1UserKey, null);
 					 getDivisionInfo = false;
-				/*System.out.println("csr1CustServEle"+SCXmlUtil.getString(csr1CustServEle))	;*/ 
+				
 					 
 				}					
 				if(custCSR2UserKey!=null && custCSR2UserKey.trim().length()>0) {
 					csr2CustServEle = getUserPersonInfo(custCSR2UserKey, null);
 					getDivisionInfo = false;
-					//System.out.println("csr2CustServEle"+SCXmlUtil.getString(csr2CustServEle))	;
+					
 				}	
 				if(getDivisionInfo) {
 					Document organizationDetails = null;

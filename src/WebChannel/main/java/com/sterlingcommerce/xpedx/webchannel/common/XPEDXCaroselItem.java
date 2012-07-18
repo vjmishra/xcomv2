@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.common;
  * @author reddypur
  *
  */
+import org.apache.log4j.Logger;
 public class XPEDXCaroselItem {
 	//Sample Image File : https://content.ipaper.com/ProductImages/I2130545_small.jpg
 	
@@ -12,6 +13,7 @@ public class XPEDXCaroselItem {
 	public static final String CONTENT_SERVER  = "https://content.ipaper.com";
 	public static final String CONTENT_LOCATION = CONTENT_SERVER + "/ProductImages/";
 	public static final String IMAGE_NOTON_FILE  = "/swc/xpedx/images/INF_150x150.jpg";
+	private static final Logger log = Logger.getLogger(XPEDXCaroselItem.class);
 	
 	//Attributes
 	String carouselItemId = "";
@@ -75,7 +77,9 @@ public class XPEDXCaroselItem {
 	
 	public static void main (String args[]) {
 		String commaQty = "1,234,323" ;
-		System.out.println("stripCommas(commaQty) : " + stripCommas(commaQty) );
+		if(log.isDebugEnabled()){
+		log.debug("stripCommas(commaQty) : " + stripCommas(commaQty) );
+		}
 	}
 
 	public static String stripCommas(String commaQty) {

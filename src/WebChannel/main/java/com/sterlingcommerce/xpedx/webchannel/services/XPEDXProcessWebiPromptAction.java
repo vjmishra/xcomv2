@@ -106,7 +106,7 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 		String suffix = custDetails[1];
 		String regex = "^0*";
 		String newsuffix = suffix.replaceAll(regex,"");
-		//System.out.println("Edited NewSuffix**************"+ newsuffix);
+		
 		return newsuffix;
 	}
 	public String getShipToSuffix(String customerID) {
@@ -121,8 +121,9 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 	Document allAssignedCustomerDoc = null;
 	
 	if (null == userId) {
-		//System.out.println("getAllLocationsDoc: customerID is a required field. Returning a empty Document");
+		if(log.isDebugEnabled()){
 		log.debug("getAllLocationsDoc: customerID is a required field. Returning a empty Document");
+		}
 		return allAssignedCustomerDoc;
 	}
 	
@@ -136,18 +137,20 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 			"xpedx-getCustomerAssignments", valueMap, wSCUIContext);
 	
 	String inputXml = SCXmlUtil.getString(input);
-	
+	if(log.isDebugEnabled()){
 	log.debug("getAllLocationsDoc: Input XML: " + inputXml);
-	//System.out.println("getAllLocationsDoc: Input XML: " + inputXml);
+	}
+	
 	
 	Object obj = WCMashupHelper.invokeMashup("xpedx-getCustomerAssignments",
 			input, wSCUIContext);
 	allAssignedCustomerDoc = ((Element) obj).getOwnerDocument();
 	
 	if (null != allAssignedCustomerDoc) {
+		if(log.isDebugEnabled()){
 		log.debug("getAllLocationsDoc: Output XML: "	+ SCXmlUtil.getString((Element) obj));
+		}
 		
-		//System.out.println("Output document ----  " + SCXmlUtil.getString((Element) obj));
 	}
 	return allAssignedCustomerDoc;
 }
@@ -324,7 +327,9 @@ public class XPEDXProcessWebiPromptAction extends WCMashupAction {
 		}
 
 		if (errorList.size() > 0) {
-			System.out.println(".............error list greater than 0............................");
+			if(log.isDebugEnabled()){
+			log.debug(".............error list greater than 0............................");
+			}
 			setRndrReport("false");
 			Iterator<String> iterator = errorList.iterator();
 			while(iterator.hasNext())

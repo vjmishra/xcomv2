@@ -153,8 +153,10 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 	}
 	
 	public String logoutSalesRep() {
-		System.out.println(":: Entering logoutSalesRep() ");
-		System.out.println(":: User is currently logged out...");
+		if(LOG.isDebugEnabled()){
+		LOG.debug(":: Entering logoutSalesRep() ");
+		LOG.debug(":: User is currently logged out...");
+		}
 		if (request == null || response == null){
 			if ("PAGE".equalsIgnoreCase(getLogoutMethod())){
 				return WCAction.SUCCESS;

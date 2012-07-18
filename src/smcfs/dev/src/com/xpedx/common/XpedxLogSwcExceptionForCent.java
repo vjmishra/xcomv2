@@ -52,7 +52,7 @@ import java.sql.*;
 			/** try-catch block added by Anil Agarwal on 17-feb-2012 for CENT tool logging **/
 			try{
 								
-				//System.out.println(""+SCXmlUtil.getString(inXML));
+			
 				throw new Exception(SCXmlUtil.getString(inXML));
 				
 		        }	       

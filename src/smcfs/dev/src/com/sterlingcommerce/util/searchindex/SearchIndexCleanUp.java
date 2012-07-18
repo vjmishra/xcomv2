@@ -61,7 +61,9 @@ public class SearchIndexCleanUp {
 	    String[] list = dir.list(filter);
 	    File file;
 	    if (list.length == 0) {
-	    	logger.info("No zip files in the directory: "+directory);
+	    	if(logger.isDebugEnabled()){
+	    	logger.debug("No zip files in the directory: "+directory);
+	    	}
 	    	return;
 	    }
 	    for (int i = 0; i < list.length; i++) {

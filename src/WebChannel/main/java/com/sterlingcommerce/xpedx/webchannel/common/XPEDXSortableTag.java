@@ -13,7 +13,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public class XPEDXSortableTag  extends ComponentTagSupport
 {
-
+	private static final Logger LOG = Logger.getLogger(XPEDXSortableTag.class);
     public XPEDXSortableTag()
     {
         m_fieldname = null;
@@ -28,7 +28,7 @@ public class XPEDXSortableTag  extends ComponentTagSupport
         }
         catch(ClassCastException e)
         {
-            System.out.println("Unexpected SortControlComponent type found in request."+ e);
+            LOG.error("Unexpected SortControlComponent type found in request."+ e);
         }
         return new XPEDXSortableComponent(valueStack, sortControl);
     }

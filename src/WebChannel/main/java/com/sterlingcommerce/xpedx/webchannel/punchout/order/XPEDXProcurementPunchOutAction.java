@@ -310,15 +310,17 @@ public class XPEDXProcurementPunchOutAction extends WCMashupAction
         replaceChars = SCXmlUtils.getXpathAttribute(CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
 
         Element output = prepareAndInvokeMashup(GET_PUNCH_OUT_ORDER_MESSAGE_CXML_MASHUP);
-        //System.out.println("***************************PUNCHOUT CART OUTPUT***************************");
-        System.out.println(SCXmlUtils.getString(output));
-        //System.out.println("***************************PUNCHOUT CART OUTPUT***************************");
+        if(LOG.isDebugEnabled()){
+        LOG.debug("***************************PUNCHOUT CART OUTPUT***************************");
+        LOG.debug(SCXmlUtils.getString(output));
+        LOG.debug("***************************PUNCHOUT CART OUTPUT***************************");
+        }
         punchOutOrderMessage = WCIntegrationXMLUtils.AttachDocType(output.getOwnerDocument());
         
         removeUnacceptableCharacters();
-        
-        System.out.println(SCXmlUtils.getString(output));
-        
+        if(LOG.isDebugEnabled()){
+        LOG.debug(SCXmlUtils.getString(output));
+        }
         LOG.debug("Punch Out Order Message : " + punchOutOrderMessage);
         
 
@@ -377,17 +379,20 @@ public class XPEDXProcurementPunchOutAction extends WCMashupAction
 //        Object output = WCMashupHelper.invokeMashup(GET_PUNCH_OUT_ORDER_MESSAGE_CXML_MASHUP, input, wSCUIContext);
 //        output.toString();
         Element output = prepareAndInvokeMashup(GET_PUNCH_OUT_ORDER_MESSAGE_CXML_MASHUP);
-        //System.out.println("***************************PUNCHOUT CART OUTPUT***************************");
-        System.out.println(SCXmlUtils.getString(output));
-        //System.out.println("***************************PUNCHOUT CART OUTPUT***************************");
+        if(LOG.isDebugEnabled()){
+        LOG.debug("***************************PUNCHOUT CART OUTPUT***************************");
+        LOG.debug(SCXmlUtils.getString(output));
+        LOG.debug("***************************PUNCHOUT CART OUTPUT***************************");
+        }
         //punchOutOrderMessage = WCIntegrationXMLUtils.AttachDocType(output.getOwnerDocument());
         punchOutOrderMessage = SCXmlUtil.getString(output);
         
         removeUnacceptableCharacters();
-        
-        //System.out.println(SCXmlUtils.getString(output));
-        
+        if(LOG.isDebugEnabled()){
+        LOG.debug(SCXmlUtils.getString(output));
+     
         LOG.debug("Punch Out Order Message : " + punchOutOrderMessage);
+        }
         
 
     }
@@ -472,10 +477,11 @@ public class XPEDXProcurementPunchOutAction extends WCMashupAction
                 Document punchOutOrderInputDocument = punchOutOrderInput.getOwnerDocument();
                 Node nodeToImport = punchOutOrderInputDocument.importNode(sourceOrderForAribaPunchout, true);
                 punchOutOrderInput.appendChild(nodeToImport);
-                //System.out.println("***************************PUNCHOUT CART INPUT***************************");
-                //System.out.println(SCXmlUtils.getString(punchOutOrderInput));
-                //System.out.println("***************************PUNCHOUT CART INPUT***************************");
-
+                if(LOG.isDebugEnabled()){
+                LOG.debug("***************************PUNCHOUT CART INPUT***************************");
+                LOG.debug(SCXmlUtils.getString(punchOutOrderInput));
+                LOG.debug("***************************PUNCHOUT CART INPUT***************************");
+                }
             }
         }
         catch(Exception e)

@@ -42,19 +42,23 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 	 */
 	public Document sendBuyerAdded(YFSEnvironment env, Document inXML)
 			throws Exception {
-		yfcLogCatalog.info("entering sendBuyerAdded :: ");
-		yfcLogCatalog.info(" inXML  :: " + SCXmlUtil.getString(inXML));
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug("entering sendBuyerAdded :: ");
+		yfcLogCatalog.debug(" inXML  :: " + SCXmlUtil.getString(inXML));
+		}
 		Element UserUpdateEmail = (Element) inXML.getElementsByTagName(
 				"UserUpdateEmail").item(0);
 
 		String strCustomerContactID = UserUpdateEmail
 				.getAttribute("CustomerContactID");
-		yfcLogCatalog.info(" strCustomerContactID :: " + strCustomerContactID);
-
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug(" strCustomerContactID :: " + strCustomerContactID);
+		}
 		Document getCCListOutDoc = getCCList(env, strCustomerContactID);
-		yfcLogCatalog.info(" getCCListOutDoc  :: "
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug(" getCCListOutDoc  :: "
 				+ SCXmlUtil.getString(getCCListOutDoc));
-
+		}
 		Element hdrCustomerContactElem = (Element) getCCListOutDoc
 				.getElementsByTagName("CustomerContact").item(0);
 
@@ -64,9 +68,9 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 				.getElementsByTagName("CustomerContact");
 
 		int nlCustomerContactLen = nlCustomerContact.getLength();
-
-		yfcLogCatalog.info(" nlCustomerContactLen :: " + nlCustomerContactLen);
-
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug(" nlCustomerContactLen :: " + nlCustomerContactLen);
+		}
 		// attributes to be stamped on inXML
 		String strAccountNumber = "";
 		String strFirstName = "";
@@ -98,17 +102,19 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 
 			for (int j = 0; j < nlUserGroupListLen; j++) {
 				tempUserGroupList = (Element) nlUserGroupList.item(j);
-
-				yfcLogCatalog.info(" tempUserGroupList :: "
+				if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug(" tempUserGroupList :: "
 						+ SCXmlUtil.getString(tempUserGroupList));
+				}
 				strUsergroupKey = tempUserGroupList
 						.getAttribute("UsergroupKey");
 
 				if (strUsergroupKey.equalsIgnoreCase(BUYER_ADMIN)) {
 					bAdminEmailAdr = tempCustomerContactElem
 							.getAttribute("EmailID");
-					yfcLogCatalog.info(" bAdminEmailAdr :: " + bAdminEmailAdr);
-
+					if(yfcLogCatalog.isDebugEnabled()){
+					yfcLogCatalog.debug(" bAdminEmailAdr :: " + bAdminEmailAdr);
+					}
 					// update strcEmailAddress
 
 					if (strToEmailAddress.isEmpty()) {
@@ -125,14 +131,15 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 
 		}
 
-		// yfcLogCatalog.info(" getCCListOutDoc :: " +
+		
 		// SCXmlUtil.getString(getCCListOutDoc));
-		yfcLogCatalog.info(" strcEmailAddress :: " + strcEmailAddress);
-		yfcLogCatalog.info(" strAccountNumber :: " + strAccountNumber);
-		yfcLogCatalog.info(" strFirstName :: " + strFirstName);
-		yfcLogCatalog.info(" strLastName :: " + strLastName);
-		yfcLogCatalog.info(" strToEmailAddress :: " + strToEmailAddress);
-
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug(" strcEmailAddress :: " + strcEmailAddress);
+		yfcLogCatalog.debug(" strAccountNumber :: " + strAccountNumber);
+		yfcLogCatalog.debug(" strFirstName :: " + strFirstName);
+		yfcLogCatalog.debug(" strLastName :: " + strLastName);
+		yfcLogCatalog.debug(" strToEmailAddress :: " + strToEmailAddress);
+		}
 		if (strBrandName.isEmpty()) {
 			UserUpdateEmail.setAttribute("BrandName", "xpedx");
 		}
@@ -165,12 +172,16 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 
 		inXML.getDocumentElement().setAttribute("SellerOrganizationCode",
 				sellerOrgCode);
-		yfcLogCatalog.info("inXML after stamping SellerOrganizationCode: "
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug("inXML after stamping SellerOrganizationCode: "
 				+ SCXmlUtil.getString(inXML));
+		}
 		XPXUtils utilObj = new XPXUtils();
 		inXML = utilObj.stampBrandLogo(env, inXML);
-		yfcLogCatalog.info("inXML after stamping BrandLogo: "
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug("inXML after stamping BrandLogo: "
 				+ SCXmlUtil.getString(inXML));
+		}
 		/*****************************************************/
 
 		return inXML;
@@ -202,9 +213,10 @@ public class XPXSendBuyerAddedAPI implements YIFCustomApi {
 		elemCustomerContact.setAttribute("CustomerContactID",
 				strCustomerContactID);
 		getCCListInDoc.appendChild(elemCustomerContact);
-
-		yfcLogCatalog.info(" getCCListInDoc :: "
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug(" getCCListInDoc :: "
 				+ SCXmlUtil.getString(getCCListInDoc));
+		}
 		env.setApiTemplate("getCustomerContactList",
 				getCustomerContactListTemplate);
 

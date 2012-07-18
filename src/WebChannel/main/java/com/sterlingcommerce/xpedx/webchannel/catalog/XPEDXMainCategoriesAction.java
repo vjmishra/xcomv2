@@ -47,7 +47,7 @@ public class XPEDXMainCategoriesAction  extends WCMashupAction{
 			}
 
         }
-        //System.out.println("Main Categories " + SCXmlUtils.getString(outDoc));
+        
         if(outDoc == null){
             log.error("Exception in reading the Categories  ");
             return ERROR;

@@ -46,7 +46,9 @@ public class XPXMarkedOrderStatusAPI implements YIFCustomApi {
 		String sOrderHeaderKey="";
 		if(inXML != null)
 		{
-			log.info("The input XML for getOrderDetails is : " + SCXmlUtil.getString(inXML));
+			if(log.isDebugEnabled()){
+			log.debug("The input XML for getOrderDetails is : " + SCXmlUtil.getString(inXML));
+			}
 		}
 		// create and set output template for the customer list API
 		String sTemplate ="<Order> <OrderLines><OrderLine></OrderLine></OrderLines><PersonInfoShipTo></PersonInfoShipTo></Order>";

@@ -148,7 +148,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 			       
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			//outDoc = builder.parse(new InputSource(new StringReader(xmlString)));
-			System.out.print("STOP HERE");
+			
 			*/
 			setSfId(getWCContext().getStorefrontId());
 			/*Commented for Performance issue. JIRA 3589*/
@@ -173,14 +173,17 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 				parsePageInfo(document.getDocumentElement(), true);
 				List<String> shipTos = parseForShiptoIds(document);
 				shipTosSize = shipTos.size();
-			 //	System.out.println(SCXmlUtil.getString(document));
-				
+				if(LOG.isDebugEnabled()){
+			  	LOG.debug(SCXmlUtil.getString(document));
+				}
 			if(shipTosSize>0){							
 				Element custElem = null;
 				Element custElem1 = null;
 				Element temp = null;
 				Document createdDoc = SCXmlUtil.createDocument("XPXCustHierarchyViewList");
-				System.out.println(SCXmlUtil.getString(custElem));
+				if(LOG.isDebugEnabled()){
+				LOG.debug(SCXmlUtil.getString(custElem));
+				}
 				for(int i=0;i<shipTosSize;i++)
 				{					
 					NodeList customerNodeList=document.getElementsByTagName("XPXCustHierarchyView");
@@ -198,14 +201,21 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 							else {
 								custElem1 = custElem;
 							} 
-						//System.out.println(SCXmlUtil.getString(custElem1));
+					    if(LOG.isDebugEnabled()){
+						LOG.debug(SCXmlUtil.getString(custElem1));
+					    }
 						}
 					}
 				}
 				SCXmlUtil.importElement(createdDoc.getDocumentElement(), custElem1);
-				//System.out.println(SCXmlUtil.getString(createdDoc));
+				if(LOG.isDebugEnabled()){
+				LOG.debug(SCXmlUtil.getString(createdDoc));
+				}
 				outDoc = createdDoc;
-				//System.out.println(SCXmlUtil.getString(outDoc));
+				
+				if(LOG.isDebugEnabled()){
+					LOG.debug(SCXmlUtil.getString(outDoc));
+				}
 				
 			}else{// if no shipTos are there under the selected Bill To
 				
@@ -217,7 +227,10 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 					createdElemChild.setAttribute("TotalNumberOfRecords", "0");
 					SCXmlUtil.importElement(createdElem, createdElemChild);
 					SCXmlUtil.importElement(createdDoc.getDocumentElement(), createdElem);
-					System.out.println(SCXmlUtil.getString(createdDoc));
+					
+					if(LOG.isDebugEnabled()){
+						LOG.debug(SCXmlUtil.getString(createdDoc));
+					}
 					outDoc = createdDoc;				
 			}
 			setCustomerInformationMaps();
@@ -244,7 +257,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 					SCXmlUtil.importElement(createdElem, createdElemChild);
 					SCXmlUtil.importElement(createdDoc.getDocumentElement(), createdElem);					
 					outDoc = createdDoc;
-					System.out.println(SCXmlUtil.getString(outDoc));
+					
 				} */
 			}				
 			else {
@@ -367,7 +380,9 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 			Document customerInfoDoc = null;
 			try {
 				customerInfoDoc = XPEDXWCUtils.getCustomerDetails(customerIdList, wcContext.getStorefrontId(), "xpedx-customer-getCustomListInformationForMILShareList");
-				//System.out.println(SCXmlUtil.getString(customerInfoDoc));
+				if(LOG.isDebugEnabled()){
+					LOG.debug(SCXmlUtil.getString(customerInfoDoc));
+				}
 				if(customerInfoDoc!=null){
 					if(custSuffixType!=null && custSuffixType.trim().length()>0 && custSuffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)) {
 						Document createdDoc = SCXmlUtil.createDocument("CustomerList");
@@ -398,7 +413,7 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 							if(CustomerIdNew!= null && !CustomerIdNew.trim().equalsIgnoreCase(customerId)){								
 								if(custSuffixType!=null && custSuffixType.trim().length()>0 && custSuffixType.equalsIgnoreCase(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE)) {									
 									SCXmlUtil.importElement(createdElem1, customer);
-								//	System.out.println(SCXmlUtil.getString(customer));  
+								
 								/*	Element createdElemCustomerList = createdDoc.createElement("CustomerList");
 									createdElem.appendChild(createdElemCustomerList);
 									//createdElemCustomerList.setAttribute("TotalNumberOfRecords", String.valueOf(totalShipsTos));
@@ -413,8 +428,10 @@ public class XPEDXMyItemsDetailsGetShareListAction extends WCMashupAction {
 						
 						SCXmlUtil.importElement(createdElem, createdElem1);						
 						SCXmlUtil.importElement(createdDoc.getDocumentElement(), createdElem);
-						//System.out.println(SCXmlUtil.getString(createdElem));  
-						//System.out.println(SCXmlUtil.getString(createdDoc));
+						if(LOG.isDebugEnabled()){
+						LOG.debug(SCXmlUtil.getString(createdElem));  
+						LOG.debug(SCXmlUtil.getString(createdDoc));
+						}
 						outDoc = createdDoc;
 					}
 					displayCustomerMap = XPEDXWCUtils.custFullAddresses(customerInfoDoc);

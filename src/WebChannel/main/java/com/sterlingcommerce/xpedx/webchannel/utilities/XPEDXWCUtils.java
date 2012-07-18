@@ -552,7 +552,9 @@ public class XPEDXWCUtils {
 			} catch (Exception e) {
 				log.error("Error in getting Single contact : ", e);
 			}
-			log.info(" loggedInCustomerID : " + loggedInCustomerID + " viewPriceFlag : " + viewPricesFlag + " and viewReportsFlag : " + viewReportsFlag);
+			if(log.isDebugEnabled()){
+			log.debug(" loggedInCustomerID : " + loggedInCustomerID + " viewPriceFlag : " + viewPricesFlag + " and viewReportsFlag : " + viewReportsFlag);
+			}
 		}
 	}
 
@@ -631,11 +633,11 @@ public class XPEDXWCUtils {
 						"//Customer/ParentCustomer/@CustomerID");
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
-				log
-						.info("getParentCustomer: Exception while getting parent customer returning null");
-			}
+							}
 		}
-		log.info("Returning =" + billToID);
+		if(log.isDebugEnabled()){
+		log.debug("Returning =" + billToID);
+		}
 		return billToID;
 
 	}
@@ -711,7 +713,7 @@ public class XPEDXWCUtils {
 				output = ((Element) obj).getOwnerDocument();
 			}
 		} catch (CannotBuildInputException e) {
-			log.info(e.getMessage());
+			log.error(e.getMessage());
 		}
 		return output;
 	}
@@ -751,7 +753,7 @@ public class XPEDXWCUtils {
 							.debug("*********Default shipto assigned for this user***************="
 									+ defaultAssignedShipTo);
 				} catch (Exception ex) {
-					log.info(ex.getMessage());
+					log.error(ex.getMessage());
 				}
 			}
 		}
@@ -832,7 +834,7 @@ public class XPEDXWCUtils {
 						.debug("*********Default shipto assigned for this user***************="
 								+ defaultAssignedShipTo);
 			} catch (Exception ex) {
-				log.info(ex.getMessage());
+				log.error(ex.getMessage());
 			}
 			return defaultAssignedShipTo;
 		}
@@ -889,7 +891,7 @@ public class XPEDXWCUtils {
 			log.debug("B2BViewFromDB=" + b2bViewFromDB);
 		} catch (Exception ex) {
 			b2bViewFromDB = "papergrid-view";
-			log.info(ex.getMessage());
+			log.error(ex.getMessage());
 		}
 		return b2bViewFromDB;
 	}
@@ -992,7 +994,7 @@ public class XPEDXWCUtils {
 			log.debug("********* terms of access for this user***************="
 					+ toaFlag);
 		} catch (Exception ex) {
-			log.info(ex.getMessage());
+			log.error(ex.getMessage());
 		}
 
 		return toaFlag;
@@ -1024,7 +1026,7 @@ public class XPEDXWCUtils {
 				Element wElement = outputDoc.getDocumentElement();
 				return wElement;
 			} catch (Exception ex) {
-				log.info(ex.getMessage());
+				log.error(ex.getMessage());
 			}
 		}
 		return null;
@@ -1054,7 +1056,7 @@ public class XPEDXWCUtils {
 				addCustomerContactInToMap(output,customerContactMap);
 				return customerContactMap;
 			} catch (Exception ex) {
-				log.info(ex.getMessage());
+				log.error(ex.getMessage());
 			}
 		}
 		return null;
@@ -1764,9 +1766,7 @@ public class XPEDXWCUtils {
 					Element itemEl = XMLUtilities.getElement(promItemoutputEl,
 							"Item");
 					String inputXml = SCXmlUtil.getString(itemEl);
-//					System.out
-//							.println("+++++++++++++++++++++ input xml +++++++++++++++++++++++++"
-//									+ inputXml);
+
 					if (itemEl != null) {
 						promotionItems.add(itemEl);
 					}
@@ -1995,7 +1995,7 @@ public class XPEDXWCUtils {
 	public static String getFormattedUOMCode(String UOMCode) throws XPathExpressionException, XMLExceptionWrapper,CannotBuildInputException {
 		String UOMDesc;
 		String [] theCodeParts;
-//		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode PASSED IN = " + UOMCode);
+
 	    if(UOMCode != null){
 		  theCodeParts = UOMCode.split("_");
 	      UOMCode = theCodeParts[1];
@@ -2003,7 +2003,7 @@ public class XPEDXWCUtils {
 	    else{
 	    	getUOMDescription(UOMCode);
 	    }
-//		System.out.println("INSIDE XPEDXUtils.getFormattedUOMCode, UOMCode = " + UOMCode);
+
 		return UOMCode;
 	}	
 	
@@ -2483,27 +2483,35 @@ public class XPEDXWCUtils {
 			String storeFrontID) throws CannotBuildInputException {
 		String canRequestSample = "N";
 		if (YFCCommon.isVoid(customerID)) {
-			log.info("customerID cannot be null. "
+			if(log.isDebugEnabled()){
+			log.debug("customerID cannot be null. "
 					+ "Returning back to the caller");
+			}
 			return canRequestSample;
 		}
 		if (YFCCommon.isVoid(storeFrontID)) {
-			log.info("storeFrontID cannot be null. "
+			if(log.isDebugEnabled()){
+			log.debug("storeFrontID cannot be null. "
 					+ "Returning back to the caller");
+			}
 			return canRequestSample;
 		}
 		Document CustDetails = getCustomerDetails(customerID, storeFrontID, extnFieldsInformationMashUp);
 		if (YFCCommon.isVoid(CustDetails)) {
-			log.info("The customer info is NULL. Response from "
+			if(log.isDebugEnabled()){
+			log.debug("The customer info is NULL. Response from "
 					+ "DB seems to be corrupted. Returning back to the caller");
+			}
 			return canRequestSample;
 		}
 		// get the ExtnSampleRequest
 		canRequestSample = SCXmlUtil.getXpathAttribute(CustDetails
 				.getDocumentElement(), "/Customer/Extn/@ExtnSampleRequestFlag");
 		if (YFCCommon.isVoid(canRequestSample)) {
-			log.info("No canRequestSample defined for customer " + customerID
+			if(log.isDebugEnabled()){
+			log.debug("No canRequestSample defined for customer " + customerID
 					+ ". Returning back to the caller.");
+			}
 			return canRequestSample;
 		}
 		log.debug("ExtnSampleRequest for customer " + customerID + " is: "
@@ -2515,19 +2523,25 @@ public class XPEDXWCUtils {
 			String storeFrontID) throws CannotBuildInputException {
 		String customerSuffixType = "";
 		if (YFCCommon.isVoid(customerID)) {
-			log.info("customerID cannot be null. "
+			if(log.isDebugEnabled()){
+			log.debug("customerID cannot be null. "
 					+ "Returning back to the caller");
+			}
 			return customerSuffixType;
 		}
 		if (YFCCommon.isVoid(storeFrontID)) {
-			log.info("storeFrontID cannot be null. "
+			if(log.isDebugEnabled()){
+			log.debug("storeFrontID cannot be null. "
 					+ "Returning back to the caller");
+			}
 			return customerSuffixType;
 		}
 		Document CustDetails = getCustomerDetails(customerID, storeFrontID, extnFieldsInformationMashUp);
 		if (YFCCommon.isVoid(CustDetails)) {
-			log.info("The customer info is NULL. Response from "
+			if(log.isDebugEnabled()){
+			log.debug("The customer info is NULL. Response from "
 					+ "DB seems to be corrupted. Returning back to the caller");
+			}
 			return customerSuffixType;
 		}
 		// get the ExtnSampleRequest
@@ -2586,7 +2600,7 @@ public class XPEDXWCUtils {
 			log.debug("*********User XPath for Customer: ***************="
 					+ userXPath);
 		} catch (Exception ex) {
-			log.info(ex.getMessage());
+			log.error(ex.getMessage());
 		}
 		return userXPath;
 	}
@@ -2637,7 +2651,7 @@ public class XPEDXWCUtils {
 						"//Customer/Extn/@ExtnUserEmailTemplate");
 					
 		} catch (Exception ex) {
-			log.info(ex.getMessage());
+			log.error(ex.getMessage());
 		}
 		return ociFields;
 	}
@@ -2653,20 +2667,26 @@ public class XPEDXWCUtils {
 			defualtShipToAssigned = new XPEDXShipToCustomer();
 		}
 		if(CustomerDetails == null) {
-			log.info("Customer Element should not be null so returning null ship to customer");
+			if(log.isDebugEnabled()){
+			log.debug("Customer Element should not be null so returning null ship to customer");
+			}
 			return defualtShipToAssigned;
 		}
 		else {
 			Element customerDefaultShipToAddressElem = SCXmlUtil.getElementByAttribute(CustomerDetails, "CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
 			Element element = null;
 			if(customerDefaultShipToAddressElem == null) {
-				log.info("No default ship to address found in the customer additional addresses so retunring the first address in the customer additional address list");
+				if(log.isDebugEnabled()){
+				log.debug("No default ship to address found in the customer additional addresses so retunring the first address in the customer additional address list");
+				}
 			 	NodeList customerAddtnlAddressList = SCXmlUtil.getXpathNodes(CustomerDetails, "CustomerAdditionalAddressList/CustomerAdditionalAddress");
 			 	if(customerAddtnlAddressList.getLength()>0) {				 	
 				 	element= (Element) customerAddtnlAddressList.item(0);
 			 	}
 			 	else {
-			 		log.info("customer does not have any additional addresses so retunring empty address");
+			 		if(log.isDebugEnabled()){
+			 		log.debug("customer does not have any additional addresses so retunring empty address");
+			 		}
 					return defualtShipToAssigned;
 			 	}
 			}
@@ -4750,7 +4770,7 @@ public class XPEDXWCUtils {
 						cat = st.nextToken();
 				}
 			}
-			//System.out.println("***************&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&***************************" + cat);
+			
 			if(null != cat)
 			{
 				/*Added for performance filter.action - getting the category desc on basis of category id*/
@@ -5147,13 +5167,9 @@ public class XPEDXWCUtils {
 		 String originalQty = "ABCefgHIJklmNOPqrsTUVwxy" ;
 		 String commaFmtQty =  commaSeparatedStringFmt( originalQty );
 		 
-		 System.out.println(" originalQtyStr : " + originalQty );
-		 System.out.println(" Fmt Qty : " + commaFmtQty );
-		 System.out.println(" Fmt Qty Size : " + commaFmtQty.length() );
-		 
-		 System.out.println("\n Fmt Qty Size : " + originalQty.split("", 3) );*/
+		 */
 		
-//		System.out.println(trimItemDescription("<ul><li>11 x 17</li><li>21.1M</li><li>W/C/P</li><li>Smooth</li><li>Straight</li><li>3 Part</li><li>3/Set, 2505/Ctn</li></ul>"));
+
 		 
 		 
 	}	
@@ -5184,12 +5200,12 @@ public class XPEDXWCUtils {
 			}
 			catch (CannotBuildInputException e)
 			{
-				System.out.println(" Error in building input for mashup :"+mashupId+"  ::: "+e.getMessage());
+				log.error(" Error in building input for mashup :"+mashupId+"  ::: "+e.getMessage());
 				//return custInfoMap;
 			}
 			catch(Exception e)
 			{
-				System.out.println(" Error in invoking mashup "+mashupId+"  ::: "+e.getMessage());
+				log.error(" Error in invoking mashup "+mashupId+"  ::: "+e.getMessage());
 			}
 		}
 		else

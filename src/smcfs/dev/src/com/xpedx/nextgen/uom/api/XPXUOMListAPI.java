@@ -616,7 +616,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
 		Document document=MCFDOMDocFromXMLString.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile2.xml");
 		//Element ele = SCXmlUtil.get
 		java.util.List<Element> XpxItemcustXrefList =  XPXUtils.getElements(document.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber=2001015]");
-		System.out.println("Arraylist size : "+XpxItemcustXrefList.size());
+		
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -489,7 +489,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			if(csrEmailID != null && csrEmailID.trim().length() > 0 && saleRepEmail!=null && saleRepEmail.trim().length() > 0){
 				ccEMail = csrEmailID + XPEDXConstants.EMAILIDSEPARATOR +saleRepEmail;
 			}else if(saleRepEmail != null && saleRepEmail.trim().length() > 0){
-				System.out.println("ccEMail"+ccEMail);				
+				if(log.isDebugEnabled()){
+				log.debug("ccEMail"+ccEMail);
+				}
 				ccEMail = saleRepEmail;				
 			}else if(csrEmailID != null && csrEmailID.trim().length() > 0){
 				ccEMail = csrEmailID;				
@@ -707,7 +709,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		{
 			if(envId!=null && envId.trim().length()>0 && !custDivison.contains("_")){
 				outputDoc = XPEDXWCUtils.getOrganizationDetails(custDivison+"_"+envId);
-				System.out.println(""+SCXmlUtil.getString(outputDoc));
+				if(log.isDebugEnabled()){
+				log.debug(""+SCXmlUtil.getString(outputDoc));
+				}
 				
 			}else{
 				outputDoc = XPEDXWCUtils.getOrganizationDetails(custDivison);
@@ -925,10 +929,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			}
 		}
 		templateElement.appendChild(emailElement);
-		
-		log.info("*************************EMAIL INFO START**************************************");
-		log.info(SCXmlUtil.getString(emailElement));
-		log.info("*************************EMAIL INFO END**************************************");
+		if(log.isDebugEnabled()){
+		log.debug("*************************EMAIL INFO START**************************************");
+		log.debug(SCXmlUtil.getString(emailElement));
+		log.debug("*************************EMAIL INFO END**************************************");
+		}
 
 		return templateElement;
 	}
@@ -1048,8 +1053,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			sampleRequestElement.setAttribute("Qty", "");
 			emailElement.appendChild(sampleRequestElement);
 		} else if(generalPaper.size()>0){
-			System.out.println(generalPaper);
-			
+		    if(log.isDebugEnabled()){
+			log.debug(generalPaper);
+		    }
 			//Iterator<String> bothList = generalPaper.iterator();
 			
 			int i = 1;
@@ -1064,17 +1070,17 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				if (i == 2) {
 					sampleRequestElement.setAttribute("Mfg", generalPaper.get(j).toString());
 					
-					//System.out.println("Mfg"+bothList.next());
+					
 				}
 				if (i == 3) {
 					sampleRequestElement.setAttribute("ItemNumber", generalPaper.get(j).toString());
 					
-					//System.out.println("ItemNumber"+bothList.next());
+					
 				}
 				if (i == 4) {
 					sampleRequestElement.setAttribute("Description", generalPaper.get(j).toString());
 					
-					//System.out.println("Description"+bothList.next());
+					
 				}
 				if (i == 5) {
 					sampleRequestElement.setAttribute("Qty", generalPaper.get(j).toString());
@@ -1088,10 +1094,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			}
 			
 		templateElement.appendChild(emailElement);
-		
-		log.info("*************************EMAIL INFO START**************************************");
-		log.info(SCXmlUtil.getString(emailElement));
-		log.info("*************************EMAIL INFO END**************************************");
+		if(log.isDebugEnabled()){
+		log.debug("*************************EMAIL INFO START**************************************");
+		log.debug(SCXmlUtil.getString(emailElement));
+		log.debug("*************************EMAIL INFO END**************************************");
+		}
 
 		return templateElement;
 	}

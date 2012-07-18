@@ -401,7 +401,9 @@ public String getSharePermissionLevel() {
 		try {
 			//Added For Jira 3197 - Invaid Import condition
 			if(!(getFilename().endsWith(".csv"))){
-				System.out.println("ERROR...");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("ERROR...");
+				}
 				//csvVar= true;
 				setErrorMsg("InvalidImport");
 				editMode = true;

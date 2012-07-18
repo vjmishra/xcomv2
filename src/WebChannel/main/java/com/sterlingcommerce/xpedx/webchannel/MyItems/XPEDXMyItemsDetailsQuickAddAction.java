@@ -727,7 +727,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		}
 		
 		if(input!=null) {
-			System.out.println(SCXmlUtil.getString(input));
+			
 		}
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);

@@ -114,7 +114,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        }
 	        catch(Exception e)
 	        {
-	        	System.out.println("+++++++ Got exception while delete / update ++++++");
+	        	
 	        	e.printStackTrace();
 	            LOG.error(e);
 	            return ERROR;

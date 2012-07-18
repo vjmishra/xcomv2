@@ -199,7 +199,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			
 			newList = false;
 			//Check if this is a new list
-			LOG.info("Check 1: getListKey = " + getListKey());
+			if(LOG.isDebugEnabled()){
+			LOG.debug("Check 1: getListKey = " + getListKey());
+			}
 			if (getListKey().trim().equals("new")&& !fromItemDetail){
 				newList = true;
 				setName(getListName());
@@ -217,7 +219,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					 res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
 				}				
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
-				LOG.info("Check 1 - Done: getListKey = " + getListKey());
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 1 - Done: getListKey = " + getListKey());
+				}
 			}
 			//Added for Jira 3920 - Merging CreateNew list and add Item in list call for item detail page
 			else if(getListKey().trim().contains("new") && fromItemDetail){
@@ -232,7 +236,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				modifiedDate = modifiedYFCDate.getString();
 				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
-				LOG.info("Check 1 - Done: getListKey = " + getListKey());
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 1 - Done: getListKey = " + getListKey());
+				}
 			}//end of Jira 3920
 			/* JIRA-3745  WC - MIL - Lists of Lists List Count is not Accurate  */
 			
@@ -289,8 +295,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			 }
 			//1 - Erase all the list
 			Element result = null;
-			
-			LOG.info("Check 2: Deleting the old data");
+			if(LOG.isDebugEnabled()){
+			LOG.debug("Check 2: Deleting the old data");
+			}
 			if (!newList){
 				if(customerIds != null && customerIds.length>0)
 				{
@@ -301,12 +308,16 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					setSharePrivate(getSharePermissionLevel());
 				}
 				result = prepareAndInvokeMashup(MASHUPID_DELETE_SHARE_LIST_ITEMS);
-				LOG.info("Check 2: Deleting the old data - Done");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 2: Deleting the old data - Done");
+				}
 			}
 			
 			if (result != null || newList){
 			//1.5 Sync for deletes
-				LOG.info("Check 3: Sync for delete");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 3: Sync for delete");
+				}
 				if (sslNames == null){
 					sslNames 	= new String[0];
 					sslValues 	= new String[0];
@@ -332,13 +343,17 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 							finalSSLCDivs 	= (String[])ArrayUtils.remove(finalSSLCDivs, newIdx);
 						}
 					}
-					LOG.info("Check 3: Sync for delete - Done");
+					if(LOG.isDebugEnabled()){
+					LOG.debug("Check 3: Sync for delete - Done");
+					}
 				} catch (Exception e) {
 					LOG.error(e.getStackTrace());
 				}
 			try {
 				//1.6 Sync for additions
-				LOG.info("Check 4: Sync for additions");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 4: Sync for additions");
+				}
 				if (customerIds == null) {
 					customerIds = ArrayUtils.EMPTY_STRING_ARRAY;
 				}
@@ -352,7 +367,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					}
 
 				}
-				LOG.info("Check 4: Sync for additions - Done");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 4: Sync for additions - Done");
+				}
 			} catch (Exception e) {
 				LOG.error(e.toString());
 			}
@@ -363,7 +380,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				if (getSharePermissionLevel().trim().length() > 0){
 					finalSSLNames = ArrayUtils.EMPTY_STRING_ARRAY;
 					setShareAdminOnly("N");
-					LOG.info("Check 5: Cleaning up selection. Shared permission level: " + getSharePermissionLevel());
+					if(LOG.isDebugEnabled()){
+					LOG.debug("Check 5: Cleaning up selection. Shared permission level: " + getSharePermissionLevel());
+					}
 				}
 				
 				for (int i = 0; i < finalSSLNames.length; i++) {
@@ -372,9 +391,13 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					setCustomerDiv(finalSSLCDivs[i]);
 					
 					if (getCustomerId().trim().length()== 0){ continue; }
-					LOG.info("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath());
+					if(LOG.isDebugEnabled()){
+					LOG.debug("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath());
+					}
 					out = prepareAndInvokeMashups();
-					LOG.info("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath() + " - Done!");
+					if(LOG.isDebugEnabled()){
+					LOG.debug("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath() + " - Done!");
+					}
 					itemsAdded = true;
 					if (out.get("XPEDXMyItemsDetailsChangeShareList") != null){
 						outDoc = (Document)out.get("XPEDXMyItemsDetailsChangeShareList").getOwnerDocument();
@@ -395,8 +418,10 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			*/
 			//Copy the items from the other list if specify
 			try {
-				LOG.info("Check 8: Copy the items from the other list if specify");
-				LOG.info("Check 8: getClFromListId  = '" + getClFromListId() + "'");
+				if(LOG.isDebugEnabled()){
+				LOG.debug("Check 8: Copy the items from the other list if specify");
+				LOG.debug("Check 8: getClFromListId  = '" + getClFromListId() + "'");
+				}
 				if (getClFromListId().trim().length() > 0){
 					//1 - Get all the items from this list
 					Element elAllItems = prepareAndInvokeMashup("XPEDXMyItemsDetails");
@@ -477,8 +502,9 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			LOG.error(e.getStackTrace());
 			return ERROR;
 		}
-		
-		LOG.info("Check 9: All done!");
+		if(LOG.isDebugEnabled()){
+		LOG.debug("Check 9: All done!");
+		}
 		/*Web Trends tag start */
 		request.getSession().setAttribute("metatagName","DCSext.w_x_sharelist");
 		request.getSession().setAttribute("metatagValue","1");

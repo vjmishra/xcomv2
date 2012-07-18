@@ -278,7 +278,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			{
 				//LineStatusCode
 				String lineStatusCodeCode = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/PriceAndAvailability/Items/Item/LineStatusCode");
-				System.out.println( " \nlineStatusCodeCode  : " + lineStatusCodeCode );
+			
 
 				if(YFCCommon.isVoid(lineStatusCodeCode) || !lineStatusCodeCode.equalsIgnoreCase("00")){
 					displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR  ; 
@@ -305,7 +305,9 @@ public class XPEDXPriceandAvailabilityUtil {
 	static Document getPandADummyAutoResponse (String inputXML) {
 		
 		String legacyProdCode = StringUtils.substringBetween(inputXML, "<LegacyProductCode>", "</LegacyProductCode>")	;
-		System.out.println( "inputXML : " + PANDA_WS_AUTO_RESPONSE + " : \n" +  inputXML);
+		if(log.isDebugEnabled()){
+		log.debug( "inputXML : " + PANDA_WS_AUTO_RESPONSE + " : \n" +  inputXML);
+		}
 		StringBuffer sb =  new StringBuffer();
 		
 		sb.append("<?xml version='1.0' encoding='utf-8'?>" );
@@ -431,7 +433,9 @@ public class XPEDXPriceandAvailabilityUtil {
 			inputNodeListElemt.appendChild(returnDoc.importNode(itemElement,
 					true));
 		}
-		System.out.println(SCXmlUtil.getString(returnDoc));
+		if(log.isDebugEnabled()){
+		log.debug(SCXmlUtil.getString(returnDoc));
+		}
 		return returnDoc;
 	}
 
@@ -863,7 +867,9 @@ public class XPEDXPriceandAvailabilityUtil {
 				{
 					SCXmlUtil.getString(itemEle);
 					String itemId = SCXmlUtil.getAttribute(itemEle, "ItemID");
-					System.out.print("itemId " + itemId);
+					if(log.isDebugEnabled()){
+					log.debug("itemId " + itemId);
+					}
 					Element primaryInfoEle = SCXmlUtil.getChildElement(itemEle,
 							"PrimaryInformation");
 					Element itemExtnEle = SCXmlUtil.getChildElement(itemEle, "Extn");
@@ -1235,9 +1241,9 @@ public class XPEDXPriceandAvailabilityUtil {
 	 * main function for quick / simple testing / Utility
 	 */
 	  public static void main(String[] args) {
-
-			System.out.println(" Test : testHandlePandAWebServiceResponseSatuseses " );		
-			
+		    if(log.isDebugEnabled()){
+			log.debug(" Test : testHandlePandAWebServiceResponseSatuseses " );		
+		    }
 			String actuialErrorMsgToUser = null;
 			XPEDXPriceAndAvailability pna = new XPEDXPriceAndAvailability();	
 			
@@ -1245,11 +1251,15 @@ public class XPEDXPriceandAvailabilityUtil {
 			
 			Document newDoc = testClass.manipulatePnAResponseXML ( null );
 			String newXmlDoc = SCXmlUtils.getString( newDoc );
-			System.out.println(" newXmlDoc " + newXmlDoc );
+			if(log.isDebugEnabled()){
+			log.debug(" newXmlDoc " + newXmlDoc );
+			}
 			
 			XPEDXPriceandAvailabilityUtil.handlePandAWebServiceResponseSatuseses(newDoc, pna, actuialErrorMsgToUser );
 			actuialErrorMsgToUser = pna.getStatusVerboseMsg();
-			System.out.println(" actuialErrorMsgToUser " + actuialErrorMsgToUser );		
+			if(log.isDebugEnabled()){
+			log.debug(" actuialErrorMsgToUser " + actuialErrorMsgToUser );	
+			}
 	}
 	  
 	public static ArrayList<Element> getOrderItemDetailsElement(Element orderEl) {

@@ -58,12 +58,13 @@ public class XPEDXDynamicPromotions extends WCAction {
 		String wcPropertiesFile = "xpedx_webchannel.properties";
 		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
 		
-		System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		
 		// get the relative path for the html page
 		XPEDX_MARKETING_PROMOTIONS_FILES_PATH = YFSSystem.getProperty(XPEDXConstants.DYN_PROMO_SHARED_PATH_PROP);
-		System.out.println(" XPEDX_MARKETING_PROMOTIONS_FILES_PATH  : " + XPEDX_MARKETING_PROMOTIONS_FILES_PATH );
-		System.out.println(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		
+		if(log.isDebugEnabled()){
+		log.debug(" XPEDX_MARKETING_PROMOTIONS_FILES_PATH  : " + XPEDX_MARKETING_PROMOTIONS_FILES_PATH );
+		log.debug(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		}
 		if (YFCCommon.isVoid(XPEDX_MARKETING_PROMOTIONS_FILES_PATH)){
 			log.error("This " + XPEDXConstants.DYN_PROMO_SHARED_PATH_PROP + " property is missing.");
 			XPEDX_MARKETING_PROMOTIONS_FILES_PATH = "";
@@ -88,15 +89,17 @@ public class XPEDXDynamicPromotions extends WCAction {
 			String storeFrontId = wcContext.getStorefrontId();
 			if (! YFCCommon.isVoid(storeFrontId) && "signinpage".equals(getCallerPage())){
 				//promoHtml = storeFrontId + "_" + promoHtml; 
-				//System.out.println(" OLD File Name : " + promoHtml);
-				promoHtml = "test2_" + storeFrontId + "_" + promoHtml; 
 				
-				System.out.println(" NEW File Name (Test purpose modified) :" + promoHtml );
+				promoHtml = "test2_" + storeFrontId + "_" + promoHtml; 
+				if(log.isDebugEnabled()){
+					log.debug(" NEW File Name (Test purpose modified) :" + promoHtml );
+				}
 			}
 			String defaultPromoHtml = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + promoHtml;
 			isFileExists = XPEDXFileManager.checkFile(defaultPromoHtml, this.wcContext, false);
-			System.out.println ( "-PREV--  FileName : " + defaultPromoHtml + " , isFileExists : " + isFileExists );
-			
+			if(log.isDebugEnabled()){
+				log.debug ( "-PREV--  FileName : " + defaultPromoHtml + " , isFileExists : " + isFileExists );
+			}
 			if (defaultPromoHtml.contains(":")){
 				defaultPromoHtml = defaultPromoHtml.substring(defaultPromoHtml.indexOf(PATH_SEPARATOR), defaultPromoHtml.length());
 			}		
@@ -191,7 +194,9 @@ public class XPEDXDynamicPromotions extends WCAction {
 		boolean isFileExists = false;
 		try {
 			isFileExists =  XPEDXFileManager.checkFile(fileName, this.wcContext, false);
-			System.out.println ( "-PREV- FileName (doesFileExists) : " + fileName  + "   - isFileExists : " + isFileExists );
+			if(log.isDebugEnabled()){
+				log.debug ( "-PREV- FileName (doesFileExists) : " + fileName  + "   - isFileExists : " + isFileExists );
+			}
 			return isFileExists;
 			// get the absolute path of the html file
 			//String testFileName = this.wcContext.getSCUIContext().getServletContext().getRealPath(fileName);
@@ -267,8 +272,10 @@ public class XPEDXDynamicPromotions extends WCAction {
 	 * @param promoHtml of type String
 	 */
 	private void setInRequest(String promoHtml) {
-		System.out.println( "-PREV- HTML_PAGE_FILE_PATH  --> " + XPEDX_MARKETING_PROMOTIONS_FILES_PATH );
-		System.out.println( "-PREV- setInRequest : promoHtml  --> " + promoHtml );
+		if(log.isDebugEnabled()){
+			log.debug( "-PREV- HTML_PAGE_FILE_PATH  --> " + XPEDX_MARKETING_PROMOTIONS_FILES_PATH );
+			log.debug( "-PREV- setInRequest : promoHtml  --> " + promoHtml );
+		}
 		wcContext.setWCAttribute(XPEDXConstants.REQUEST_ATTR_PROMO_PAGE_URL, promoHtml, WCAttributeScope.REQUEST);
 	}
 
