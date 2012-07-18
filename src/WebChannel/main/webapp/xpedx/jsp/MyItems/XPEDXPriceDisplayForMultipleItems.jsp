@@ -26,6 +26,8 @@
 					<s:hidden id="validateOrderMul111" name="validateOrderMul" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
 								<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 								<div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:none; background-color:#fafafa;"</s:else> >   
+                                <%--Fix For Jira 4144 --%>
+                                <s:set name="itemKEY" value='#id' />
                             <!-- end prefs  -->
                           
                            
@@ -52,7 +54,7 @@
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
-</s:if>
+	</s:if>
 
 <s:if test='#itemOrder == null' >
 		<s:set name="jsonKey" value='%{#itemId}' />
