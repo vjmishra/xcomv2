@@ -431,11 +431,41 @@ public class XPXGetCompleteChildCustomerTree extends Composite implements IYRCCo
 	        	
 	            if (event.detail == SWT.CHECK) {
 	                TreeItem item = (TreeItem) event.item;
+	                TreeItem item1=null;
+	                TreeItem item2 = null ;
+	                TreeItem item3 = null; 
 	                boolean checked = item.getChecked();
-	                item.getText();
+	                     
 	                if(checked==true){
-	                	customerarray.add(item.getText());
+	                	 item.getText();
+	                	 customerarray.add(item.getText());
+	                	 if(item.getParentItem()!=null){
+	                		 item1 = item.getParentItem();
+	                		 if(!customerarray.contains(item1.getText())){
+	                		 customerarray.add(item1.getText());
+	                		 }
+	                	 }
+	 	                if(item1 != null && item1.getParentItem()!=null){
+	 	                	item2 = item1.getParentItem();
+	                		 if(!customerarray.contains(item2.getText())){
+
+	 	                	customerarray.add(item2.getText());
+	                		 }
+	 	                }
+	 	                if(item2 != null && item2.getParentItem()!=null){
+	 	                 item3 = item2.getParentItem();
+                		 if(!customerarray.contains(item3.getText())){
+
+	 	                 customerarray.add(item3.getText());
+                		 }
+	 	                } 
+	                	
+	                	
+	                	
+	                	
+	                	//customerarray.add(item3.getText());
 	                }
+	                
 	               // checkItems(item, checked);     //--function used to check child nodes if parent is checked
 	               // checkPath( item.getParentItem(), checked, false); //--function used to check parent if all its child are checked
 	            }
