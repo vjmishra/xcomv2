@@ -451,6 +451,7 @@
                 outputNamespace="XPXGetItemUOMMasterList_output" version="ver77"/>
             <command APIName="getCompleteItemList" APIType="API" Name="getCompleteItemList" URL="DEFAULT" inputNamespace="" outputNamespace="getCompleteItemList"/>
             <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetSKUDetailsService_output" version="ver77"/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
@@ -459,6 +460,7 @@
             <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
             <namespace name="getCompleteItemList" templateName="getCompleteItemList_output" type="output"/>
             <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+            <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel">
