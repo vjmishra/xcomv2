@@ -51,6 +51,14 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	private boolean isCustomerActive = false;
 	private ArrayList<String> arrChildCustomerIds = null;
 
+	/**** Start of  Modified Code for Jira 4132*****/
+
+	private String masterSapAccountNumber = null; 
+	private String sapAccountNumber = null;
+	private String masterSapCustomerId = null;
+	
+	/*** End of Modified Code for JIra 4132 *******/
+	
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		/*try 
@@ -96,7 +104,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			String customerID = null;
 			String legacyCustomerNumber = null;
 			String shipToSuffix = null;
-			String masterSapCustomerId = null;
+		//	String masterSapCustomerId = null;
 			String organizationCode = null;
 			String parentCustomerOrganizationCode = null;
 			String customerPOReqdFlag = null;
@@ -153,8 +161,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
 					String shipFrom = custElement.getAttribute(XPXLiterals.A_SHIP_FROM_BRANCH);
 					/************Added as per new logic*****************************************/
-					String masterSapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
+					/*
+					 * Commented code for JIra 4132
+					 * String masterSapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
 					String sapAccountNumber = custElement.getAttribute(XPXLiterals.A_SAP_NUMBER);
+					*/
+					
+					/***Start of Modified Code for JIra 4132 ********/
+					  masterSapAccountNumber  = custElement.getAttribute(XPXLiterals.A_SAP_PARENT_ACCOUNT_NO);
+					  sapAccountNumber = custElement.getAttribute(XPXLiterals.A_SAP_NUMBER);
+					 /****End of Modified Code for JIra 4132 ********/
+					 
 					String brandCode = custElement.getAttribute(XPXLiterals.A_BRAND_CODE);
 
 					//sayan added to obtain the MSAP and SAP names START
@@ -1192,7 +1209,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		String customerName ="";
 		String masterCustomerId = "";
 		//get the root customer key
+		
+	
+		/**** start of  Modified code for JIra 4132 *********/
+		if(!masterSapAccountNumber.equals(sapAccountNumber)){
+			
+			masterCustomerId = masterSapCustomerId;
+			rootCustomerKey = getRootCustomerKey(env, masterCustomerId);
+		
+		}
+		
+		else{
 		rootCustomerKey = getRootCustomerKey(env, customerID);
+		}
+		
+		/*******End of Modified code for JIra 4132 **********/
 		//get the customer name
 		MSAPList = getCustomerNameForMSAP(env,rootCustomerKey);
 		customerName = MSAPList.get(0);
@@ -1207,11 +1238,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		//requirement change
 		boolean masterCustomerexists = false;
 		masterCustomerexists = checkForMasterCustomer(env, masterCustomerUser);
-		/*if(masterCustomerexists)
-		{
+		
 			//then assign this user to the customer
-			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
-		}*/
+			//assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
+		
 		if(!masterCustomerexists)
 		{
 			//create the master customer user and assign it to customer
