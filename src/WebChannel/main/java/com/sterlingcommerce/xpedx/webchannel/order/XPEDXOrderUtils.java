@@ -1855,7 +1855,9 @@ public class XPEDXOrderUtils {
 	            	for (int i = 0; i < length; i++) {
 	            		Element currNode = (Element) orderLines.item(i);
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    log.info("linekey-->"+lineKey);
+	                    if(log.isDebugEnabled()){
+	                    log.debug("linekey-->"+lineKey);
+	                    }
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
 	                    if ( (bundleParentLines.getLength() == 0) )
 	                    {	                        
@@ -1877,12 +1879,16 @@ public class XPEDXOrderUtils {
 	            	for (int i = 0; i < length; i++) {
 	            		Element currNode = (Element) orderLines.item(i);
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    log.info("linekey-->"+lineKey);
+	                    if(log.isDebugEnabled()){
+		                    log.debug("linekey-->"+lineKey);
+	                    }
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
 	                    if ( (bundleParentLines.getLength() == 0) &&
 	                         (!OrderHelper.isCancelledLine(currNode)) )
 	                    {
-	                        log.info(lineKey+ " it's major line");
+	                    	if(log.isDebugEnabled()){
+	    	                    log.debug(lineKey+ " it's major line");
+	                    	}
 	                        if(majorLineElements.size() == maxElements)
 	                        {
 	                            // Already have accumulated the maximum number of line items to display.
@@ -1902,11 +1908,13 @@ public class XPEDXOrderUtils {
 	            	for (int i = length-1; i > -1; i--) {
 	                    Element currNode = (Element) orderLines.item(i);
 	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    log.info("linekey-->"+lineKey);
+	                    if(log.isDebugEnabled()){
+		                    log.debug("linekey-->"+lineKey);
+	                    }
 	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
 	                    if ( (bundleParentLines.getLength() == 0))
 	                    {
-	                        log.info(lineKey+ " it's major line");
+	                        
 	                        if(majorLineElements.size() == maxElements)
 	                        {
 	                            // Already have accumulated the maximum number of line items to display.
@@ -1923,7 +1931,7 @@ public class XPEDXOrderUtils {
 	                }
 	            }
 	            XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
-	            log.info("getOrderDetails end");
+	            
 			}
         } catch (Exception e) {
         	log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
