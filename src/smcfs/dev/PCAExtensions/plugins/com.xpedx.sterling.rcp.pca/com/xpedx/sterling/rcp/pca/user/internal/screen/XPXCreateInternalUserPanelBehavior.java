@@ -79,6 +79,35 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
     	String[] apinames = null;
 		Document[] docInput = null;
 		if (!YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(page.getPageInput(),"UserKey"))||!YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(inputElement,"UserKey"))) {
+			//Added for JIRA 4147
+			Element userDetails = getModel("User_Details");
+			Element personInfoInputxml = YRCXmlUtils.getXPathElement(userDetails, "/User/ContactPersonInfo");
+			Element contactPersonInfo =  YRCXmlUtils.getXPathElement(inputElement, "/User/ContactPersonInfo");
+			if(!YRCPlatformUI.isVoid(personInfoInputxml)){
+				contactPersonInfo.setAttribute("AddressLine4",personInfoInputxml.getAttribute("AddressLine4"));
+				contactPersonInfo.setAttribute("AddressLine5",personInfoInputxml.getAttribute("AddressLine5"));
+				contactPersonInfo.setAttribute("AddressLine6",personInfoInputxml.getAttribute("AddressLine6"));
+				contactPersonInfo.setAttribute("AlternateEmailID",personInfoInputxml.getAttribute("AlternateEmailID"));
+				contactPersonInfo.setAttribute("Beeper",personInfoInputxml.getAttribute("Beeper"));
+				contactPersonInfo.setAttribute("DayFaxNo",personInfoInputxml.getAttribute("DayFaxNo"));
+				contactPersonInfo.setAttribute("Department",personInfoInputxml.getAttribute("Department"));
+				contactPersonInfo.setAttribute("ErrorTxt",personInfoInputxml.getAttribute("ErrorTxt"));
+				contactPersonInfo.setAttribute("EveningFaxNo",personInfoInputxml.getAttribute("EveningFaxNo"));
+				contactPersonInfo.setAttribute("EveningPhone",personInfoInputxml.getAttribute("EveningPhone"));
+				contactPersonInfo.setAttribute("FirstName",personInfoInputxml.getAttribute("FirstName"));
+				contactPersonInfo.setAttribute("HttpUrl",personInfoInputxml.getAttribute("HttpUrl"));
+				contactPersonInfo.setAttribute("JobTitle",personInfoInputxml.getAttribute("JobTitle"));
+				contactPersonInfo.setAttribute("LastName",personInfoInputxml.getAttribute("LastName"));
+				contactPersonInfo.setAttribute("MiddleName",personInfoInputxml.getAttribute("MiddleName"));
+				contactPersonInfo.setAttribute("MobilePhone",personInfoInputxml.getAttribute("MobilePhone"));
+				contactPersonInfo.setAttribute("OtherPhone",personInfoInputxml.getAttribute("OtherPhone"));
+				contactPersonInfo.setAttribute("PersonID",personInfoInputxml.getAttribute("PersonID"));
+				contactPersonInfo.setAttribute("PreferredShipAddress",personInfoInputxml.getAttribute("PreferredShipAddress"));
+				contactPersonInfo.setAttribute("Suffix",personInfoInputxml.getAttribute("Suffix"));
+				contactPersonInfo.setAttribute("Title",personInfoInputxml.getAttribute("Title"));
+				contactPersonInfo.setAttribute("UseCount",personInfoInputxml.getAttribute("UseCount"));
+				contactPersonInfo.setAttribute("VerificationStatus",personInfoInputxml.getAttribute("VerificationStatus"));				
+			}
 			Element groupListsElement = YRCXmlUtils.getChildElement(inputElement, "UserGroupLists");
 			groupListsElement.setAttribute("Reset", "Y");
 			ArrayList<Element> listOfAssignedGroups = YRCXmlUtils.getChildren(groupListsElement, "UserGroupList");
