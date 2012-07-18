@@ -1068,7 +1068,9 @@ public class XPEDXOrderUtils {
 	        for(int i = 0; i < ruleElems.size(); i++)
 	        {
 	            String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
-	            System.out.println("RuleID:::"+ruleId);
+	            if(log.isDebugEnabled()){
+	            log.debug("RuleID:::"+ruleId);
+	            }
 	            if("RequiredCustomerLineAccountNo".equalsIgnoreCase(ruleId))
 	                requiredCustFields.add("ExtnCustLineAccNo");
 	            else
@@ -1205,7 +1207,9 @@ public class XPEDXOrderUtils {
 				//billToKey = SCXmlUtil.getXpathAttribute(billToAddressElement, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");				
 				billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails, "//BuyerOrganization/BillingPersonInfo");
 				billToKey = SCXmlUtil.getAttribute(billToAddressElement, "PersonInfoKey");
-				System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, billToKey = " +  billToKey);
+				if(log.isDebugEnabled()){
+		            log.debug("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, billToKey = " +  billToKey);
+				}
 			}
 			if(billToKey != null && billToKey.trim().length()>0) {
 				valueMap.put("/Order/@BillToKey", billToKey);
@@ -1215,17 +1219,23 @@ public class XPEDXOrderUtils {
 //		Element shipToCustAddress = SCXmlUtil.getElementByAttribute(customerDetails.getDocumentElement(),"CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultShipTo", "Y");
 				
 		List<Element> theShipToList = XMLUtilities.getElements(customerDetails.getDocumentElement(),"//Customer/CustomerAdditionalAddressList");
-		System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, theShipToList XML = " +  SCXmlUtil.getString(theShipToList.get(0)));
+		if(log.isDebugEnabled()){
+            log.debug("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, theShipToList XML = " +  SCXmlUtil.getString(theShipToList.get(0)));
+		}
 		
 		List<Element> shipToCustAddress = XMLUtilities.getElements (theShipToList.get(0),"//CustomerAdditionalAddress[@IsDefaultShipTo='Y']/PersonInfo");
-		System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToCustAddress XML = " +  SCXmlUtil.getString(shipToCustAddress.get(0)));		
+		if(log.isDebugEnabled()){
+            log.debug("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToCustAddress XML = " +  SCXmlUtil.getString(shipToCustAddress.get(0)));	
+		}
 						
 								 
 		if(shipToCustAddress!=null) {
 			//String shipToKey = SCXmlUtil.getXpathAttribute(shipToCustAddress, "//CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
 			String shipToKey = SCXmlUtil.getAttribute(shipToCustAddress.get(0), "PersonInfoKey");
 			if(shipToKey!=null && shipToKey.trim().length()>0)
-				System.out.println("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToKey IS NOT NULL = " +  shipToKey);
+				if(log.isDebugEnabled()){
+		            log.debug("INSIDE XPEDXOrderUtils.createNewDraftOrderOnBehalfOf, shipToKey IS NOT NULL = " +  shipToKey);
+				}
 				valueMap.put("/Order/@ShipToKey", shipToKey);
 		}
 		String defaultCarrierServiceCode = BusinessRuleUtil.getBusinessRule(
@@ -1821,9 +1831,9 @@ public class XPEDXOrderUtils {
 	   	 }
 	   	 catch(Exception e)
 	   	 {
-	   		 System.out.println("+++++++ Got exception while refreshing mini cart ++++++++++++");
+	   		 
 	   		 e.printStackTrace();
-	   		 log.info("Error while adding currency for minicart");
+	   		 log.error("Error while adding currency for minicart");
 	   	 }
 	   	 
 	   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
@@ -1916,7 +1926,7 @@ public class XPEDXOrderUtils {
 	            log.info("getOrderDetails end");
 			}
         } catch (Exception e) {
-        	System.out.println("++++++++ Got exception while refreshing mini cart display +++++++++++++");
+        	log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
             e.printStackTrace();
         }
 	}

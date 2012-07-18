@@ -71,29 +71,37 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		try {
 			api.executeFlow(env, "XPXSendOrderConfirmationEmailService", inXML);
 		} catch (Exception e) {
-			yfcLogCatalog.debug("Exception caught in processOrdConfEmail");
+			yfcLogCatalog.error("Exception caught in processOrdConfEmail");
 			// To add the component of handle failure scenario
 		}
 		return inXML;
 	}
 
 	public static Map<String, String> getCustomerID(String customerId, YFSEnvironment env) throws Exception{
-		System.out.println("getCustomerID ++++++++++++++++++++++"+customerId);
+		if(yfcLogCatalog.isDebugEnabled()){
+		yfcLogCatalog.debug("getCustomerID ++++++++++++++++++++++"+customerId);
+		}
 		String msapId="";
 		String biltoId = "";
 		Map<String,String> customerIDMAP = new HashMap<String,String>();
 		
 			Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
 			inputDoc.getDocumentElement().setAttribute("ShipToCustomerID", customerId);
-			System.out.println("************getCustomerID : inputDoc="+SCXmlUtil.getString(inputDoc));
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************getCustomerID : inputDoc="+SCXmlUtil.getString(inputDoc));
+			}
 			Document obj=api.executeFlow(env, "XPXCustomerHierarchyViewService", inputDoc);
 			
 			Element outputElement = obj.getDocumentElement();
-			System.out.println("************getCustomerID : outputElement="+SCXmlUtil.getString(outputElement));
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************getCustomerID : outputElement="+SCXmlUtil.getString(outputElement));
+			}
 			NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
 			for(int j=0;j<customerHierView.getLength();j++) {
 				Element customerHierViewElem = (Element)customerHierView.item(j);
-				System.out.println("************customerHierViewElem : outputDoc="+SCXmlUtil.getString(customerHierViewElem));
+				if(yfcLogCatalog.isDebugEnabled()){
+					yfcLogCatalog.debug("************customerHierViewElem : outputDoc="+SCXmlUtil.getString(customerHierViewElem));
+				}
 				
 				msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
 				biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
@@ -106,30 +114,42 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				}
 				
 			}	
-			System.out.println("customerIDMAP ++++++++++++++++++++"+customerIDMAP.size());
-			System.out.println("************getCustomerID : msapId="+msapId);
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("customerIDMAP ++++++++++++++++++++"+customerIDMAP.size());
+			}
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************getCustomerID : msapId="+msapId);
+			}
 		return customerIDMAP;
 	}
 	
 	private String getSalesRepEmailForSalesPro(String msapCustomerID, YFSEnvironment env, String salesRepId) throws Exception
 	{
 		String emailId="";
-		System.out.println("************getSalesRepEmailForSalesPro : salesRepId="+salesRepId);
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("************getSalesRepEmailForSalesPro : salesRepId="+salesRepId);
+		}
 		Document inputDoc = SCXmlUtil.createDocument("XPXSalesRepCustomers");
 		inputDoc.getDocumentElement().setAttribute("CustomerID", msapCustomerID);		
 		Document obj=api.executeFlow(env, "XPXGetSRCustomersListService", inputDoc);
 		
 		Element outputElement = obj.getDocumentElement();
-		System.out.println("************getSalesRepEmailForSalesPro :outputElement="+SCXmlUtil.getString(outputElement));
+		if(yfcLogCatalog.isDebugEnabled()){
+			yfcLogCatalog.debug("************getSalesRepEmailForSalesPro :outputElement="+SCXmlUtil.getString(outputElement));
+		}
 		NodeList customerHierView = outputElement.getElementsByTagName("XPXSalesRepCustomers");
 		for(int j=0;j<customerHierView.getLength();j++) {
 			Element customerHierViewElem = (Element)customerHierView.item(j);
 			String salesRepIdFromView="";
 			salesRepIdFromView = customerHierViewElem.getAttribute("SalesRepID");
-			System.out.println("************getSalesRepEmailForSalesPro : salesRepIdFromView="+salesRepIdFromView);
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************getSalesRepEmailForSalesPro : salesRepIdFromView="+salesRepIdFromView);
+			}
 			if(salesRepId!=null && salesRepId.trim().length()>0 && salesRepId.equalsIgnoreCase(salesRepIdFromView)){
 				emailId = customerHierViewElem.getAttribute("EmailID");
-				System.out.println("************getSalesRepEmailForSalesPro : emailId="+emailId);
+				if(yfcLogCatalog.isDebugEnabled()){
+					yfcLogCatalog.debug("************getSalesRepEmailForSalesPro : emailId="+emailId);
+				}
 			}
 		}		
 		return emailId;
@@ -204,7 +224,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		// Changes made on 18/02/2011 to handle if Customer Contact List
 		// Document is null.
 		if (getCCListDoc != null) {
-			System.out.println("************sendEmail : getCCListDoc="+SCXmlUtil.getString(getCCListDoc));
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************sendEmail : getCCListDoc="+SCXmlUtil.getString(getCCListDoc));
+			}
 			Element getCustomerContactElement = (Element) getCCListDoc
 					.getElementsByTagName("CustomerContact").item(0);
 			String strToEmailid = "";
@@ -230,8 +252,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				if(getCustIDMap.size() >0){
 					billtoID = getCustIDMap.get("BillToCustomerID");
 					msapCustomerId = getCustIDMap.get("MSAPCustomerID");
-					System.out.println("billtoID ++++++++++++++++"+billtoID);
-					System.out.println("msapCustomerId ++++++++++++++++"+msapCustomerId);
+					if(yfcLogCatalog.isDebugEnabled()){
+						yfcLogCatalog.debug("billtoID ++++++++++++++++"+billtoID);
+						yfcLogCatalog.debug("msapCustomerId ++++++++++++++++"+msapCustomerId);
+					}
 					
 				}
 			}
@@ -240,13 +264,17 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			 * Get billtoid and msapcustomerid from XPX_Cust_Hierarchy_View
 			 */
 			
-			System.out.println("************sendEmail : isSalesRepFlag="+isSalesRepFlag);
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("************sendEmail : isSalesRepFlag="+isSalesRepFlag);
+			}
 			if("Y".equalsIgnoreCase(isSalesRepFlag)){
 				String salesRepId="";
 				String customerContactId="";
 				if(rootElem!=null){
 					customerContactId = rootElem.getAttribute("CustomerContactID");
-					System.out.println("************sendEmail : customerContactId="+customerContactId);
+					if(yfcLogCatalog.isDebugEnabled()){
+						yfcLogCatalog.debug("************sendEmail : customerContactId="+customerContactId);
+					}
 					if(customerContactId!=null && customerContactId.trim().length()>0){
 						salesRepId = customerContactId.substring(0, customerContactId.indexOf('@'));
 					}
@@ -277,7 +305,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				}
 			}
 			*/
-			System.out.println("strToEmailid -------------------+"+strToEmailid);
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("strToEmailid -------------------+"+strToEmailid);
+			}
 			customerDoc.getDocumentElement().setAttribute("strToEmailid",
 					strToEmailid);
 
@@ -913,7 +943,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			Document custListDoc = api.getCustomerList(env,docCustomer.getDocument());
 			yfcLogCatalog.debug("api getCustomerList outdoc "
 					+ SCXmlUtil.getString(custListDoc));
-			System.out.println("SCXmlUtil.getString(custListDoc) +++++++serCSREmails++++++"+SCXmlUtil.getString(custListDoc));
+			if(yfcLogCatalog.isDebugEnabled()){
+				yfcLogCatalog.debug("SCXmlUtil.getString(custListDoc) +++++++serCSREmails++++++"+SCXmlUtil.getString(custListDoc));
+			}
 			env.clearApiTemplate("getCustomerList");
 	
 			// get the email ids to be sent in to and cc list ends here
