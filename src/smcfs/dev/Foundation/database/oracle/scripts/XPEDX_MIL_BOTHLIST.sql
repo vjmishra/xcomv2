@@ -1,6 +1,8 @@
 CREATE OR REPLACE FORCE VIEW "NG"."XPEDX_MIL_BOTHLIST" ("MY_ITEMS_LIST_KEY", "CUSTOMER_ID", "LIST_NAME", "LIST_DESC", "CREATEUSERNAME", "CREATEUSERID", "MODIFYUSERID", "SHARE_ADMIN_ONLY", "SHARE_PRIVATE", "MODIFYTS", "LIST_ORDER", "CUSTOMER_KEY", "PARENT_CUSTOMER_KEY", "ROOT_CUSTOMER_KEY", "EXTN_SUFFIX_TYPE", "EXTN_CUSTOMER_DIVISION", "ORGANIZATION_NAME", "ORGANIZATION_CODE", "SHARE_CUSTOMER_ID", "MSAPNAME", "TOTALITEMS")
 AS
- SELECT /* +Use_NL(yfs_customer) USE_NL(yfs_organization) */ DISTINCT mil.my_items_list_key,
+SELECT 
+    /* +Use_NL(yfs_customer) USE_NL(yfs_organization) */
+    DISTINCT mil.my_items_list_key,
     mil.customer_id,
     mil.list_name,
     mil.list_desc,
@@ -37,4 +39,4 @@ AS
   LEFT OUTER JOIN xpedx_my_items_list_share mils
   ON mil.my_items_list_key = mils.my_items_list_key
   LEFT OUTER JOIN yfs_organization org
-  ON mils.division_id = org.organization_code;
+  ON TRIM (mils.division_id) =trim(org.organization_code);
