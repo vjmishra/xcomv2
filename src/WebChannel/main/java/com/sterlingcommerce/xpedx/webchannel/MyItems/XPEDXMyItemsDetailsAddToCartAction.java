@@ -142,7 +142,6 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		}
-		System.out.println("Returning Null in XPEDXMyItemsDetailsAddToCartAction");
 		//return SUCCESS;
 		return null;
 	}
