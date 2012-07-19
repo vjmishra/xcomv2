@@ -41,7 +41,9 @@
 							</s:if>
 						</li>
 					</ul>
-					<s:if test='%{#suffixType =="S" }'>
+					
+			</s:iterator>
+			<s:if test='%{#suffixType =="S" }'>
 						<s:url id="paginatedShipTo" namespace="/profile/org" action="xpedxShowLocations">
 								<s:param name="pageNumber" value="'{0}'"/>
 								<s:param name="pageSetToken" value="%{pageSetToken}"/>
@@ -52,7 +54,6 @@
 							<s:set name="ajaxDivID" value="%{'billTo_'+shownCustomerId}"/>
 			 				<xpedx:pagectl currentPage="%{pageNumber}"  divId="%{#ajaxDivID}" lastPage="%{totalNumberOfPages}" urlSpec="%{#paginatedShipTo}" isAjax="true" />
  				</s:if>
-			</s:iterator>
 		</s:iterator>
 </body>
 </html>
