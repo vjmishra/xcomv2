@@ -131,7 +131,7 @@ public class XPEDXShowLocations extends WCAction {
 	public String generateRamdomId() {
 		return UUID.randomUUID().toString().replace("-", "_");
 	}
-	protected Integer pageSize = 1;
+	protected Integer pageSize = 15;
 	
 	public String getPaginatedCustomerList()
 	{
