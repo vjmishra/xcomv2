@@ -238,12 +238,15 @@
                 <param name="success">${success}</param>
 			</result>
 		</action>
-		<action name="xpedxShowLocations" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXShowLocations">
+		<action name="xpedxShowLocations" method="getPaginatedCustomerList" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXShowLocations">
 			<param name="mashups">xpedx-customer-showLocations</param>
 			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXShowLocations_binding.xml</param>
 			<result name="success">/xpedx/jsp/profile/org/XPEDXShowLocations.jsp</result>
+			<result name="page">/xpedx/jsp/profile/org/XPEDXShowLocationsList.jsp</result>
+			
 		</action>
+		
 		<!--  ENDS - Customer-User Profile Changes - adsouza -->
 	</package>
 	
