@@ -73,7 +73,16 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 	private ArrayList<String> createUserIdList = new ArrayList<String>();
 	private boolean customerPOFlag = false;
 	private boolean jobIdFlag = false;
-	
+	/*Added for Jira 4134*/
+	private String createUserName;
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+		/*End Added for Jira 4134*/
 	private String itemCount = "";
 	private String editMode = "";
 	private boolean isItemValid = false;
@@ -670,6 +679,13 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 					counter++;
 					orders.add(counter+"");
 					listKeyAsList.add(listKey);
+						/*Added for Jira 4134*/
+					String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+						String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+						createUserName=salesreploggedInUserName;
+					}
+						/*End Added for Jira 4134*/					
 					createUserNameList.add(wcContext.getLoggedInUserName());
 					createUserIdList.add(wcContext.getLoggedInUserId());
 				}

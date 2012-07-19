@@ -111,7 +111,7 @@
 				<XPEDXMyItemsListList>
 					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
     				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " CreateUserName="">
     					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
     				</XPEDXMyItemsList>
 				</XPEDXMyItemsListList>			
@@ -615,7 +615,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="changeXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " Createusername="">
 					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
 						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
@@ -663,7 +663,7 @@
 				<XPEDXMyItemsListList>
 					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
     				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-    				MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " Createusername=" ">
     				</XPEDXMyItemsList>
 				</XPEDXMyItemsListList>			
 			</Template>
