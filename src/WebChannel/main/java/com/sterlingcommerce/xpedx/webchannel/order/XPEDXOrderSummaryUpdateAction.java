@@ -181,7 +181,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			map.put("isPriceLocking", "true");
 			//Commenting PnA call since pna is not required on Submit Order Action.
 			//map.put("isPnACall", "true");
-			map.put("isDiscountCalculate", "true");
+			map.put("isDiscountCalculate", "false");
 			XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(), map);
 		}
 	}
