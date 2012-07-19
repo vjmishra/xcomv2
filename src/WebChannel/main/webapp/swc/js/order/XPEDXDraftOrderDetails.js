@@ -232,19 +232,90 @@ function update()
 
 function validateOrderMultiple()
 {
+var retVal=true;
 	 resetQuantityErrorMessage();
-	var arrQty = new Array();
-	var arrUOM = new Array();
-	var arrItemID = new Array();
-	var arrOrdMul = new Array();
-	var baseUOM = new Array();
-	var retVal=true;
-	arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];
-	arrUOM = document.getElementById("OrderDetailsForm").elements["UOMconversion"];
-	//arrItemID = document.getElementsByName("orderLineItemIDs");
-	arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
-	arrOrdMul =  document.getElementById("OrderDetailsForm").elements["orderLineOrderMultiple"];
-	baseUOM = document.getElementsByName("BaseUOMs");
+	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
+	//alert(orderLinesCount);
+	//If there is only one item 
+	if(orderLinesCount==1){		
+		var arrQty ;
+		var arrUOM;
+		var arrItemID ;
+		var arrOrdMul;
+		var baseUOM ;
+		var zeroError=false;
+		var noError = true;
+	
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];
+		arrUOM = document.getElementById("OrderDetailsForm").elements["UOMconversion"];
+		//arrItemID = document.getElementsByName("orderLineItemIDs");
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		arrOrdMul =  document.getElementById("OrderDetailsForm").elements["orderLineOrderMultiple"];
+		baseUOM = document.getElementById("OrderDetailsForm").elements["BaseUOMs"];
+		var divId='errorDiv_'+	arrQty.id;
+		var divIdError=document.getElementById(divId);
+		var qtyElement =  document.getElementById(arrQty.id);
+		//alert("arrQty.value="+arrQty.value);
+		if(arrQty.value == '' || arrQty.value ==0)
+		{
+			//qtyElement.style.borderColor = "#FF0000"
+			if(divIdError != null){
+				divIdError.innerHTML='Please enter a valid quantity and try again.';
+				divIdError.setAttribute("class", "error");
+			}
+			retVal=false;
+			zeroError=true;
+			noError=false;
+		}else
+		{
+			qtyElement.style.borderColor = "";
+		}
+		if(arrOrdMul.value == 0 || arrOrdMul.value == null || arrOrdMul.value == undefined)
+		{
+			arrOrdMul.value=1;
+		}
+		
+		var totalQty = arrUOM.value * arrQty.value;		
+		var ordMul = totalQty % arrOrdMul.value;
+	//	alert("ordMul="+ordMul);
+	//	alert("zeroError="+zeroError);
+	//	alert("divIdError="+divIdError);
+		if(ordMul=="NaN"|| ordMul==NaN)
+			{
+			    ordMul= 0
+			}		
+		if(ordMul != 0 && zeroError == false)
+		{			
+			if(divIdError != null){
+				divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul.value) +" "+baseUOM.value;
+				divIdError.style.display = "inline-block"; 
+				divIdError.setAttribute("class", "error");
+			}
+			retVal=false;
+			noError=false;
+		}
+	//	alert("arrOrdMul.value="+arrOrdMul.value);
+		if(arrOrdMul.value > 1 && noError==true) {
+			if(divIdError != null){
+				divIdError.innerHTML ="Must be ordered in units of " +addComma(arrOrdMul.value) +" "+baseUOM.value;
+				divIdError.style.display = "inline-block"; 
+				divIdError.setAttribute("class", "notice");	
+			}
+		}
+	}
+	//else if more than one item
+	else{
+		var arrQty = new Array();
+		var arrUOM = new Array();
+		var arrItemID = new Array();
+		var arrOrdMul = new Array();
+		var baseUOM = new Array();		
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];
+		arrUOM = document.getElementById("OrderDetailsForm").elements["UOMconversion"];
+		//arrItemID = document.getElementsByName("orderLineItemIDs");
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		arrOrdMul =  document.getElementById("OrderDetailsForm").elements["orderLineOrderMultiple"];
+		baseUOM = document.getElementsByName("BaseUOMs");
 	for(var i = 0; i < arrItemID.length; i++)
 	{
 		var zeroError=false;
@@ -295,6 +366,7 @@ function validateOrderMultiple()
 			}
 		}
 	}
+}//end of else
 	return retVal;
 }
 
