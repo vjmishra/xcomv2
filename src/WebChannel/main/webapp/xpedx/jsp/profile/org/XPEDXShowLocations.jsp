@@ -28,7 +28,7 @@
             collapseAllButton: '',
             expandAllButton: ''
         });
-    });*/
+    });*/	
 //-->
 </script>
 
@@ -76,89 +76,24 @@ div#fancybox-content
 <div class="share-modal1 xpedx-light-box" style="border-left:solid 0px; border-right:solid 0px; height:auto;">
 <s:form name="locatoinsForm" id="locatoinsForm" namespace="/profile/org" action="getShipToBillToInfo">
 	<s:hidden name='orgCode' value="%{#_action.getWCContext().getStorefrontId()}" />
+	<input type="hidden" name="sapCustomerID" value="<s:property value='shownCustomerId' />" />
 	    <h2 style="color:#000;">Change Location</h2>
 		<br /> 
 		<div class="radio-container">
-		<s:iterator id="msapAndSapMap" value="msapAndSapCustomersMap">
-			<s:set name="key" value='key' />
-			<s:set name='sapCustomers' value='value' />
-			<s:property value="%{#_action.getBuyrOrgName()}"/><br />
-			
-			<s:iterator id="sapCustomer" value="#sapCustomers" status="sapCustomerStatus">
-				<s:set name="sapCustomerId" value="#sapCustomer" />
-				<s:set name="sapCustomerDisplay" value="#displayChildCustomersMap.get(#sapCustomer)" />
-				<ul id="collapseAllButtonsTree">
-					<li>
-					<s:if test="%{#shownCustomerId == #sapCustomerId}">
-						<input type="radio" id="Tree" name="customerId" value="<s:property value='#sapCustomerId' />" checked="checked" />
-					</s:if>
-					<s:else>
-						<input type="radio" id="Tree" name="customerId" value="<s:property value='#sapCustomerId' />" />
-					</s:else>
-					<s:property value="%{#displayChildCustomersMap.get(<s:property value='#sapCustomerId' />)}"/>
-					<label>Account: </label><s:property value="#sapCustomerDisplay"/>
-				<s:set name="billToCustomers" value="sapAndBillToCustomersMap.get(#sapCustomerId)" />
-				<s:iterator id="billToCusotmer" value="#billToCustomers">
-					<s:set name="billToCusotmerId" value="#billToCusotmer" />
-					<s:set name="billToCusotmerDisplay" value="displayChildCustomersMap.get(#billToCusotmerId)" />
-					<ul class="indent-tree">
-						<li>
-						<s:if test="%{#shownCustomerId == #billToCusotmerId}">
-							<input type="radio" name="customerId" value="<s:property value='#billToCusotmerId' />" checked="checked" />
-						</s:if>
-						<s:else>
-							<input type="radio" name="customerId" value="<s:property value='#billToCusotmerId' />" />
-						</s:else>
-						<s:property value="#billToCusotmerDisplay"/>
-						<s:set name="shipToCustomers" value="%{#billToAndShipToCustomersMap.get(#billToCusotmerId)}" />
-						<s:iterator value="#shipToCustomers" id="shipToCustomer" status="shipToIndex">
-							<s:set name="shipToCustomerId" value="#shipToCustomer" />
-							<s:set name="shipToCusotmerDisplay" value="displayChildCustomersMap.get(#shipToCustomerId)" />
- 							<ul class="indent-tree-act">	
- 								<s:if test="#shipToIndex.first">
-									<li>
-										<s:if test="%{#shownCustomerId == #shipToCustomerId}">
-											<input type="radio" id="Tree" name="customerId" value="<s:property value='#shipToCustomerId' />" checked="checked" />
-										</s:if>
-										<s:else>
-											<input type="radio" id="Tree" name="customerId" value="<s:property value='#shipToCustomerId' />" />
-										</s:else>
-										<s:property value="#shipToCusotmerDisplay"/>
-									</li>
-							</s:if>
-							<s:elseif test="#shipToIndex.last">
-									<li>
-										<s:if test="%{#shownCustomerId == #shipToCustomerId}">
-											<input type="radio" id="Tree" name="customerId" value="<s:property value='#shipToCustomerId' />" checked="checked" />
-										</s:if>
-										<s:else>
-											<input type="radio" id="Tree" name="customerId" value="<s:property value='#shipToCustomerId' />" />
-										</s:else>
-										<s:property value="#shipToCusotmerDisplay"/>
-									</li>
-							</s:elseif>
-							<s:else>
-									<li>
-										<s:if test="%{#shownCustomerId == #shipToCustomerId}">
-											<input type="radio" name="customerId" value="<s:property value='#shipToCustomerId' />" checked="checked" />
-										</s:if>
-										<s:else>
-											<input type="radio" name="customerId" value="<s:property value='#shipToCustomerId' />" />
-										</s:else>
-										<s:property value="#shipToCusotmerDisplay"/>
-									</li>	
-							</s:else>
-							</ul>						
-						</s:iterator>
-						</li>
-					</ul>
-				</s:iterator>
+		<s:property value="%{#_action.getBuyrOrgName()}"/><br />
+			<ul id="">
+				<li>
+					<input type="button" class="icon-minus" style="vertical-align:middle;" onclick="getChildCustomerList(this,'<s:property value="shownCustomerId"/>','C', 'sapCustomerDiv') " />
+					<input type="radio" id="Tree" name="customerId" value="<s:property value='shownCustomerId' />" checked="checked" /> 
+					<label>Account</strong>:</label><s:property value="sapCustomerDisplay"/>
+					<div  id="sapCustomerDiv">
+					
+						<s:include value="/xpedx/jsp/profile/org/XPEDXShowLocationsList.jsp"/>
+					</div>
+				
 				</li>
-				</ul>
-			</s:iterator>
-		</s:iterator>
+			</ul>
 		</div>
-		
 		<div style="" class="clearview"> 
 			<div>
 	            <ul class="float-right">
