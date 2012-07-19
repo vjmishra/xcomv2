@@ -1,4 +1,4 @@
-ï»¿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
@@ -814,7 +814,7 @@ var selectedShipCustomer = null;
 	}
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
-				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-Toâ€¦"){
+				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To…"){
 						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
 						document.getElementById("errorText").setAttribute("class", "error");
 				}
@@ -857,10 +857,16 @@ var selectedShipCustomer = null;
     	//Ext.Msg.wait("Processing..."); 
     	var x = document.getElementById('ajax-assignedShipToCustomers');
         url = ReplaceAll(url,"&amp;",'&');
+        "<s:url id='homeAction' action='home' namespace='/home' />";
+        var logoutURL="<s:property value='%{#homeAction}' />";
+        logoutURL = ReplaceAll(url,"&amp;",'&')+"sfId=xpedx";
     	Ext.Ajax.request({
             url :url,
             method: 'POST',
             success: function (response, request){
+    		if(response.responseText.indexOf('Search Catalog...')!=-1 || response.responseText.indexOf('undefined')!=-1){
+    		window.location=logoutURL;
+    		}
 	        	document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
 	        	Ext.Msg.hide();
        		},
@@ -1660,7 +1666,7 @@ function searchShipToAddress(divId,url) {
 		if(searchText==''|| searchText==null)
 */
 		/* JIRA 3331 if search text is blank then all ship tos should be shown
-		if(searchText==''|| searchText==null || searchText=='Search Ship-Toâ€¦')
+		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
