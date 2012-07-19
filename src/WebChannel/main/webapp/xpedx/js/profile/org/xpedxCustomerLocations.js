@@ -1,14 +1,17 @@
 function showLocations() {
 	var url = document.getElementById("showLocationsUrl").value;
 	var customerId = document.getElementById("customerId").value;
+	var sapCustomerID=document.getElementById("sapCustomerID").value;
+	if(sapCustomerID == null || sapCustomerID == undefined || sapCustomerID.length == 0 )
+		sapCustomerID=customerId;
 	var organizationCode = document.getElementById("organizationCode").value;
 	if(url!=null) {
 		Ext.Msg.wait("Getting the Locations.... Please Wait..."); 
 		Ext.Ajax.request({
 		    url: url,
 		    params: {
-				shownCustomerId: customerId,
-				organizationCode: organizationCode
+				shownCustomerId: sapCustomerID,
+				organizationCode: organizationCode,
 				},
 		    method: 'POST',
 			success: function (response, request){
@@ -25,10 +28,10 @@ function showLocations() {
 					
 					document.getElementById('showLocationsDiv').innerHTML = responseText;
 					
-				     $('#collapseAllButtonsTree').checkboxTree({
+				     /*$('#collapseAllButtonsTree').checkboxTree({
 		            collapseAllButton: '',
 		            expandAllButton: ''
-				     });
+				     });*/
 				     
 				     /*	<!-- This not recognizing the for IE -->	 
 				      var x = document.getElementById('showLocationsDiv').getElementsByTagName("script");   
