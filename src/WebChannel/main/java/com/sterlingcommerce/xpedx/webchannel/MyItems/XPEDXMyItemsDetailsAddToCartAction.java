@@ -76,7 +76,9 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 
 	@Override
 	public String execute() {
+		long startTime=System.currentTimeMillis();
 		try {
+			
 			// If a currency wasn't passed, use the effective currency.
 			if (currency == null) {
 				currency = getWCContext().getEffectiveCurrency();
@@ -112,7 +114,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
+						long changeOrderStartTime=System.currentTimeMillis();
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
+						long changeOrderEndTime=System.currentTimeMillis();
+						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
+						
 					} catch (Exception dle) {
 						if (dle != null && dle.toString() != null
 								&& dle.toString().contains("YFC0101")) {
@@ -142,6 +148,8 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		}
+		long endTime=System.currentTimeMillis();
+		System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction class : "+(endTime-startTime));
 		//return SUCCESS;
 		return null;
 	}
@@ -167,7 +175,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		try {
 			// call the draftOrderGetCompleteItemList mashup once for each
 			// product ID in the list
+			long changeOrderStartTime=System.currentTimeMillis();
 			Document entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(enteredProductIDs, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			long changeOrderEndTime=System.currentTimeMillis();
+			System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for getItemListForOrdering : "+(changeOrderEndTime-changeOrderStartTime));
 			Iterator productIDIter = enteredProductIDs.iterator();
 			while (productIDIter.hasNext()) {
 				productID = (String) productIDIter.next();
