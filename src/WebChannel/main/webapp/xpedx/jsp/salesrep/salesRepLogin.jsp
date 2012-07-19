@@ -185,7 +185,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 
 </head>
 
-<body onload="clearFields();">
+<body onload="clearFields();loadWindow();">
 <div id="container">
 <div id="login">
 <div>
