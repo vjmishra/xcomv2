@@ -65,12 +65,12 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
         page =(XPXMyItemsListDetailsPanel)ownerComposite;
         inpuElement = (Element) inputObject;
         myItemsListKey = inpuElement.getAttribute("MyItemsListKey");
-        loadItemsList();
         String customerID = inpuElement.getAttribute("CustomerID");
         String sharePrivate = inpuElement.getAttribute("SharePrivate");
         String createUserName = inpuElement.getAttribute("Createusername");
         getMasterCustomerId(customerID,sharePrivate,createUserName);
-        String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomerName");
+        loadItemsList();
+        /*String custName = XPXMyItemsSearchListScreen.getMyBehavior().getFieldValue("txtCustomerName");*/
         /*setFieldValue("txtCustName", custName);*/
         setControlEditable("clmCustAccountField", true);
         }
@@ -90,9 +90,6 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
         context.setApiName(apiName);
         context.setFormId(getFormId());
         context.setInputXml(docInput);
-       /* if(!YRCPlatformUI.isVoid(strUserDataKey)){
-        	context.setUserData(strUserDataKey, strUserData);
-        }*/
         callApi(context);
 	}
 	
