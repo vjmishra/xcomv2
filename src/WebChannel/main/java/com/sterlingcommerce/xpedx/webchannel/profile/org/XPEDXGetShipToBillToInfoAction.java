@@ -25,6 +25,7 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 	private final static Logger log = Logger.getLogger(XPEDXGetShipToBillToInfoAction.class);
 
 	private String customerId;
+	private String sapCustomerID;
 	private String orgCode;
 	private String suffixType;
 	private Element csr1UserEle = null;
@@ -168,12 +169,15 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 					}
 					Element docEle = organizationDetails.getDocumentElement();
 					Element orgEle = SCXmlUtil.getChildElement(docEle, "Organization");
-					Element extnEle = SCXmlUtil.getChildElement(orgEle,"Extn");
-					String extnDivisionContact = extnEle.getAttribute("ExtnDivisionContact");
-					
-					if(extnDivisionContact != null && extnDivisionContact.trim().length()>0) {
-						csr1UserEle = getUserPersonInfo(null, extnDivisionContact);
-					}					
+					if(orgEle != null)
+					{
+						Element extnEle = SCXmlUtil.getChildElement(orgEle,"Extn");
+						String extnDivisionContact = extnEle.getAttribute("ExtnDivisionContact");
+						
+						if(extnDivisionContact != null && extnDivisionContact.trim().length()>0) {
+							csr1UserEle = getUserPersonInfo(null, extnDivisionContact);
+						}	
+					}
 				}
 				Element custAddtnlAddresses = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "CustomerAdditionalAddressList");
 				billToAddress = SCXmlUtil.getElementByAttribute(custAddtnlAddresses, "CustomerAdditionalAddress", "IsDefaultBillTo", "Y");
@@ -471,4 +475,13 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 	public void setFax1FormatChange(String fax1FormatChange) {
 		Fax1FormatChange = fax1FormatChange;
 	}
+
+	public String getSapCustomerID() {
+		return sapCustomerID;
+	}
+
+	public void setSapCustomerID(String sapCustomerID) {
+		this.sapCustomerID = sapCustomerID;
+	}
+	
 }
