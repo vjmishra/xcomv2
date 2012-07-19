@@ -11,6 +11,7 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCDate;
 
 @SuppressWarnings("serial")
@@ -63,6 +64,16 @@ public class XPEDXMyItemsDetailsChangeAction extends WCMashupAction {
 	private String[] customFieldCustomerPONos;
 	private String[] customFieldCustomerLinePONos;
 	private String modifiedDate;
+	private String modifyuserid; //ADDED FOR JIRA 4134
+
+	public String getModifyuserid() {
+		return modifyuserid;
+	}
+
+	public void setModifyuserid(String modifyuserid) {
+		this.modifyuserid = modifyuserid;
+	}
+	//end of jira 4134
 
 	@Override
 	public String execute() {
@@ -135,6 +146,15 @@ public class XPEDXMyItemsDetailsChangeAction extends WCMashupAction {
 					myitemsList.getDocumentElement().setAttribute("MyItemsListKey", getListKey2());
 					myitemsList.getDocumentElement().setAttribute("Name", getListName());
 					myitemsList.getDocumentElement().setAttribute("Desc", getListDesc());
+					//added for jira 4134
+					String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+						String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+						myitemsList.getDocumentElement().setAttribute("Createusername",salesreploggedInUserName);
+					} else {
+						myitemsList.getDocumentElement().setAttribute("Createusername",getModifyuserid());					
+					}
+					//end of jira 4134
 					Element output = (Element) WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(), getWCContext().getSCUIContext());
 					//Element tmp1 = prepareAndInvokeMashup("XPEDXMyItemsListChange");
 					LOG.debug("Saved list destails..."+output.toString());

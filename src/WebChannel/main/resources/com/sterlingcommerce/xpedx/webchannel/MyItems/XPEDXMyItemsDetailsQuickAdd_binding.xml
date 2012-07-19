@@ -49,6 +49,7 @@
 	<entry key="listKeyAsList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@MyItemsListKey</entry>
 	<entry key="createUserIdList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@Createuserid</entry>
 	<entry key="createUserNameList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@Createusername</entry>
+	<entry key="createUserName">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/@Createusername</entry>
 	<!-- END - For adding all product into the list -->
 	
 </properties>

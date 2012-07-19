@@ -622,10 +622,15 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				
 				List<Element> itemLists = SCXmlUtil.getElements(outDoc.getDocumentElement(), "/Output/XPEDXLandingMILList/XPEDXLandingMIL");
 				setListOfItems(itemLists);
+					/*Added for Jira 4134*/
+				String modifyUsername="";
+				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				
+								
 				for(Element elem : itemLists){
 					//List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
-					String modifyUserId = elem.getAttribute("UserName");
+					String modifyUserId = elem.getAttribute("CreateUserName"); //modified for jira 4134
 					this.modifyUserid=elem.getAttribute("Modifyuserid");
 					this.createUserId=elem.getAttribute("Createuserid");
 					this.modifyts=elem.getAttribute("Modifyts");
@@ -644,9 +649,20 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						itemCount=splited[0];
 
                     
-                    }
+                    }					
 					listSizeMap.put(listKey, itemCount);
-					listModifiedByMap.put(listKey, modifyUserId);
+					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+						listModifiedByMap.put(listKey, modifyUserId);
+					}
+					else{
+						if(YFCUtils.isVoid(this.modifyUserid)){
+							listModifiedByMap.put(listKey, modifyUserId);
+						}
+						else{						
+								modifyUsername=XPEDXWCUtils.getLoginUserName(this.modifyUserid);						
+								listModifiedByMap.put(listKey, modifyUsername);
+						}
+					}
 				}
 			
 			
@@ -663,14 +679,19 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				for(Element elem : tmpList){
 					List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
-					String modifyUserId = elem.getAttribute("Modifyuserid");
+					String modifyUserId = elem.getAttribute("Createusername");//modified for jira 4134
 					String listKey = elem.getAttribute("MyItemsListKey");
 					if(items != null && items.size()>0){
 						Element itemElem=items.get(0);
 						itemCount=itemElem.getAttribute("TotalNumberOfRecords");
 					}
 					listSizeMap.put(elem.getAttribute("MyItemsListKey"), itemCount);
-					listModifiedByMap.put(listKey, modifyUserId);
+					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+						listModifiedByMap.put(listKey, modifyUserId);
+					}
+					else{
+						listModifiedByMap.put(listKey, modifyUserId);
+					}
 				}
 			}
 			
