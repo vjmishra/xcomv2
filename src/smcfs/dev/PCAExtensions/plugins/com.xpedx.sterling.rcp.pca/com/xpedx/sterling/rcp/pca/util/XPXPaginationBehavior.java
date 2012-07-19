@@ -213,7 +213,18 @@ public abstract class XPXPaginationBehavior extends YRCBehavior {
 		}
 		else
 		{
-			getXpxPaginationData().setPageNumber("1");
+			String previousPageNumber = XPXMyItemsSearchListScreenBehavior.TempPageNumber;
+			if (previousPageNumber != null){
+				if("1".equalsIgnoreCase("previousPageNumber") || "-1".equalsIgnoreCase("previousPageNumber")){
+					getXpxPaginationData().setPageNumber("1");	
+				}
+				else{
+					getXpxPaginationData().setPageNumber(previousPageNumber);
+				}
+			}
+			else{
+				getXpxPaginationData().setPageNumber("1");
+			}
 		}
 		search();
 	}
