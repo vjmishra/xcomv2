@@ -648,6 +648,46 @@ var selectedShipCustomer = null;
 			document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
 		}
 	</script>	
+	<script>
+	function getChildCustomerList(btn,customerId,suffixtype, divId){
+		
+           <s:url id='ChildCustomerList' namespace='/profile/org' action='xpedxShowLocations'></s:url> 
+          
+           var url = "<s:property value='#ChildCustomerList'/>";
+           url = ReplaceAll(url,"&amp;",'&');
+           url=url+"&shownCustomerSuffixType="+suffixtype+"&shownCustomerId="+customerId;
+           var clsName=btn.className;
+           if(clsName !=null && clsName !=undefined && clsName.indexOf('icon-plus') != -1)
+           {
+        	   btn.className='icon-minus';
+         
+           var x = document.getElementById(divId);
+           x.innerHTML = "Loading data... please wait!";          
+           //Execute the call
+           document.body.style.cursor = 'wait';
+                 Ext.Ajax.request({
+                   url: url,
+                   method: 'POST',
+                   success: function (response, request){
+                       document.body.style.cursor = 'default';
+                       x.innerHTML = response.responseText;
+                   },
+                   failure: function (response, request){
+                       var x = document.getElementById(divId);
+                       x.innerHTML = "";
+                       alert('Unable to load the share locations. Please try again.');
+                       document.body.style.cursor = 'default';                                                  
+                   }
+               }); 
+           }
+           else
+           {
+        	   btn.className='icon-plus';
+        	   document.getElementById(divId).innerHTML='';
+           }
+       	document.body.style.cursor = 'default';
+	}
+</script>
 <%--This is to setup reference to the action object so we can make calls to 
     action methods explicitly in JSP's.
     This is to avoid a defect in Struts that's creating contention under load.
