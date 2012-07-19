@@ -220,6 +220,7 @@ ul.checkboxTree li
         			<s:hidden name="customerId" id="customerId" value="%{#sdoc.getAttribute('CustomerID')}" />
         			<s:hidden name="OrgCode" id="OrgCode" value="%{#sdoc.getAttribute('OrganizationCode')}" />
         			<s:hidden name="organizationCode" id="organizationCode" value="%{#sdoc.getAttribute('OrganizationCode')}" />
+        			<s:hidden name="sapCustomerID" id="sapCustomerID" value='%{#_action.getSapCustomerID()}' />
        	 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="form">
         	 		<tr>
 					    <td width="13%" class="no-border-right">Attention:
