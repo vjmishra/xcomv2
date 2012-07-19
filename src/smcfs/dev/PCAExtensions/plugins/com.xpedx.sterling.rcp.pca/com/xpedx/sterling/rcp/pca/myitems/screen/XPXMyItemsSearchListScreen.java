@@ -727,7 +727,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 						myBehavior.delete(element);
 						//myBehavior.search();
 						YRCPlatformUI.showInformation("TITLE_KEY_Successfully_Deleted", "MSG_KEY_Deleted_My_Items_List_Successfully", element.getAttribute("Name"));
-						myBehavior.getFirstPage();
+					//	myBehavior.getFirstPage();
 					}
 				}
 				

@@ -318,6 +318,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		Element eleInput = docInput.getDocumentElement();
 		eleInput.setAttribute("MyItemsListKey", element.getAttribute("MyItemsListKey"));
 		callApi(COMMAND_DELETE_MY_ITEMS_LIST, docInput);
+		getFirstPage();
 	}
 	
 	public void edit(Element element) throws PartInitException {
