@@ -206,6 +206,7 @@ ul.checkboxTree li
   	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
   	<s:form name="custInfoForm" id="custInfoForm" action="xpedxSaveCustInfo" method="post">
   	<s:hidden name="customerId" id="customerId" value='%{#sdoc.getAttribute("CustomerID")}' />
+  	<s:hidden name="sapCustomerID" id="sapCustomerID" value='%{#_action.getSapCustomerID()}' />
      <s:hidden name='organizationCode' id='organizationCode' value='%{#sdoc.getAttribute("OrganizationCode")}' />
   <div class="container">
       <div id="mid-col-mil">
@@ -503,6 +504,7 @@ function changeTableCssClass(){
 	}
 }
 </script>
+
     <!-- end main  -->
   
 <!-- end container  -->
