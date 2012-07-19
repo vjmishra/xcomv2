@@ -1148,6 +1148,34 @@
 			</Template>
 		</API>
 	</mashup>
+	
+	
+	<mashup id ='xpedx-getPaginatedAssignedShipTosView-Profile' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+			<API Name="getPage">
+			<Input>
+			<Page PageNumber="" PageSize=""
+                    PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
+                    <PreviousPage PageNumber="" />
+					<API Name="XPXCustomerHierarchyViewService" IsFlow="Y">
+					<Input>
+					</Input>
+					<Template>
+					</Template>
+		</API>
+		</Page>
+			</Input>
+			<Template>
+                <Page GeneratedOn="" IsFirstPage="" IsLastPage=""
+                    IsValidPage="" PageNumber="" PageSetToken=""
+                    TotalNumberOfPages="">
+                    <Output />
+                </Page>
+            </Template>
+   		</API>
+	</mashup>
+
+
 	<mashup id='xpedxGetAllChilds' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER' description="xpedx Customer Assignment">
 		<classInformation
