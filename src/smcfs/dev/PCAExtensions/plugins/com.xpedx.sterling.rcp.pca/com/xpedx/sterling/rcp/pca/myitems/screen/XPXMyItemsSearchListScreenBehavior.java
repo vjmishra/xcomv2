@@ -68,7 +68,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	public String customerName;
 	public Document BothList;
 	public int count =1;
-	
+	public static String TempPageNumber;
 	public XPXMyItemsSearchListScreenBehavior(Composite ownerComposite, String formId, Object inputObject) {
        super(ownerComposite, formId,inputObject);
         this.page = (XPXMyItemsSearchListScreen)getOwnerForm();
@@ -155,6 +155,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         			
         			Document docOutput = ctx.getOutputXmls()[i];
 					eleOutput = docOutput.getDocumentElement();
+					TempPageNumber = eleOutput.getAttribute("PageNumber");
 					if (eleOutput != null) {
 						//Get the repeating elements and set their Action attribute
 						NodeList listMyItemsList = (NodeList) YRCXPathUtils
