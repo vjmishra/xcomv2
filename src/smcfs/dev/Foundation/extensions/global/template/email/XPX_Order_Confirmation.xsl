@@ -330,7 +330,7 @@
 								</tr>
 								<tr>
 									<td class="widthLeft">Ordered By: </td>
-									<td class="widthRight"><xsl:value-of select="Order/@Createuserid"/> </td>
+									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/> </td>
 								</tr>	
 						 	</table>
 						 	
