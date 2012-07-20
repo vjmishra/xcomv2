@@ -859,19 +859,24 @@ var selectedShipCustomer = null;
         url = ReplaceAll(url,"&amp;",'&');
         "<s:url id='homeAction' action='home' namespace='/home' />";
         var logoutURL="<s:property value='%{#homeAction}' />";
-        logoutURL = ReplaceAll(url,"&amp;",'&')+"sfId=xpedx";
+        logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
             method: 'POST',
             success: function (response, request){
-    		if(response.responseText.indexOf('Search Catalog...')!=-1 || response.responseText.indexOf('undefined')!=-1){
+			if(response.responseText.indexOf('Search Catalog...')!=-1 || response.responseText.indexOf('undefined')!=-1 || response.responseText == undefined){
     		window.location=logoutURL;
     		}
 	        	document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
 	        	Ext.Msg.hide();
        		},
        		failure: function (response, request){
-       			document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
+       			if(response.responseText == undefined){
+            		window.location=logoutURL;
+            		}
+           		else{
+       				document.getElementById('ajax-assignedShipToCustomers').innerHTML = response.responseText;
+           		}
        			Ext.Msg.hide();
              }
         });     
