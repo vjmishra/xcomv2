@@ -178,6 +178,7 @@ function quickAddCopyAndPaste(data){
 	var itemsString = data;
 	var char = '\n';
 	var itemLines = itemsString.split(char);
+	var checklength=itemLines.length;//jira 4128
 	if(itemsString == "")
 	{
 		document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
@@ -199,7 +200,17 @@ function quickAddCopyAndPaste(data){
 			if(itemLine == ""){
 				break;
 			}
+		}//jira4128 start
+		if(checklength > 20)
+		{
+			
+			itemLineFlag = "true";
+			alert( "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT20' />");
+			break;
+			//document.getElementById("errorMsgCopyBottom").innerHTML = "You can only add 20 items per copy/paste." ;
+	        //document.getElementById("errorMsgCopyBottom").style.display = "inline";
 		}
+		//jira4128 stop
 		if(itemLine.length > 1 )
 		{
 			itemQty = itemLine[0];
@@ -358,7 +369,7 @@ $(document).ready(function(){
 
 <div style="display:none;">
 <div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px;">
-<h2>Copy and Paste</h2>
+<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <small>Limit is 20 items per copy/paste</small> </h2>
 <%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
