@@ -227,6 +227,9 @@ public class XPEDXShowLocations extends WCAction {
 				.getDocumentElement();
 		YFCElement complexQueryElement = inputCustomerDocument
 		.createElement("ComplexQuery");
+		YFCElement sort = inputCustomerDocument.createElement("OrderBy");
+		YFCElement attribute = inputCustomerDocument.createElement("Attribute");
+		sort.appendChild(attribute);
 		
 		YFCElement orElement = inputCustomerDocument
 		.createElement("Or");
@@ -238,6 +241,9 @@ public class XPEDXShowLocations extends WCAction {
 			expElement.setAttribute("Name", "BillToCustomerID");
 			expElement.setAttribute("Value", shownCustomerId);
 			expElement.setAttribute("QryType", "FLIKE");
+			attribute.setAttribute("Name", "ShipToCustomerID");
+			attribute.setAttribute("Desc", "N");
+			sort.appendChild(attribute);
 			orElement.appendChild(expElement);
 		}
 		if(suffixType.equals(XPEDXConstants.SAP_CUSTOMER_SUFFIX_TYPE))
@@ -245,9 +251,13 @@ public class XPEDXShowLocations extends WCAction {
 			expElement.setAttribute("Name", "SAPCustomerID");
 			expElement.setAttribute("Value", shownCustomerId);
 			expElement.setAttribute("QryType", "FLIKE");
+			attribute.setAttribute("Name", "BillToCustomerID");
+			attribute.setAttribute("Desc", "N");
+			sort.appendChild(attribute);
 			orElement.appendChild(expElement);
 		}
 		inputCustomerElement.appendChild(complexQueryElement);
+		inputCustomerElement.appendChild(sort);
 		Element outputCustomerElement =null;
 		if(isGetPageAPI)
 		{
