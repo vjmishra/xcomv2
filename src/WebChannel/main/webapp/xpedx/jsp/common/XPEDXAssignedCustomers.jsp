@@ -63,8 +63,14 @@
 <body>
 <%--	Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments --%>
 <s:if test="%{assignedShipToCount == 0 && comingFromSearch == 'false'}">
-<!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator.</div> -->
-<div align="center"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.CONTACTADMIN" /> </div> 
+<div class="xpedx-light-box" id="change-ship-to">
+<div class="ship-to-header"> 
+<h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
+</div>
+<br /><br /><br /><br />
+<div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.CONTACTADMIN" /> </div> <br /><br />
+<div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.HELPDESK" /> </div> 
+<a class="green-ui-btn" style="position:relative;margin-top:270px;margin-right: 15px;float:right;" href="/swc/home/logout.action?sfId=xpedx&amp;scFlag=Y"><span>Sign Out</span></a>
 </s:if>
 <s:else>
  <!-- modal window container -->
