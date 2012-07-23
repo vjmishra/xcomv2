@@ -685,6 +685,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 						String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
 						createUserName=salesreploggedInUserName;
 					}
+					else{
+						createUserName = wcContext.getLoggedInUserName();	
+					}
 						/*End Added for Jira 4134*/					
 					createUserNameList.add(wcContext.getLoggedInUserName());
 					createUserIdList.add(wcContext.getLoggedInUserId());
