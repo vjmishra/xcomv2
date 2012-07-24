@@ -651,6 +651,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
                     
                     }					
 					listSizeMap.put(listKey, itemCount);
+					//modified for jira 4134
 					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 						listModifiedByMap.put(listKey, modifyUserId);
 					}
@@ -659,10 +660,14 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 							listModifiedByMap.put(listKey, modifyUserId);
 						}
 						else{						
-								modifyUsername=XPEDXWCUtils.getLoginUserName(this.modifyUserid);						
-								listModifiedByMap.put(listKey, modifyUsername);
+								if(this.modifyUserid.contains("-M-XPED-CC.com"))
+									listModifiedByMap.put(listKey, modifyUserId);
+								else{
+									modifyUsername=XPEDXWCUtils.getLoginUserName(this.modifyUserid);					
+									listModifiedByMap.put(listKey, modifyUsername);
+								}
 						}
-					}
+					}//end of jira 4134
 				}
 			
 			
