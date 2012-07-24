@@ -3008,7 +3008,9 @@ function showSharedListForm(){
 		 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
          <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
          <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-		 <div class="last-modified-div">Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> </div> 
+		 <div class="last-modified-div">
+		 		Last modified by <s:property value= "%{#_action.getLastModifiedUserId()}"/> on <s:property value="#lastModifiedDateString"/> 
+		 </div> 
 	</div>
  </div>
     <!-- end main  -->
