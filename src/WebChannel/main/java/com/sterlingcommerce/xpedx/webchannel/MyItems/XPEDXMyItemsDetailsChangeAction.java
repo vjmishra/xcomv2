@@ -152,7 +152,7 @@ public class XPEDXMyItemsDetailsChangeAction extends WCMashupAction {
 						String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
 						myitemsList.getDocumentElement().setAttribute("Createusername",salesreploggedInUserName);
 					} else {
-						myitemsList.getDocumentElement().setAttribute("Createusername",getModifyuserid());					
+						myitemsList.getDocumentElement().setAttribute("Createusername",getWCContext().getLoggedInUserName());	
 					}
 					//end of jira 4134
 					Element output = (Element) WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(), getWCContext().getSCUIContext());
