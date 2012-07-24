@@ -20,28 +20,37 @@
 				<s:set name="sapCustomerId" value="#sapCustomer" />
 				<s:set name="sapCustomerDisplay" value="#displayChildCustomersMap.get(#sapCustomer)" />
 				<s:set name="suffixType" value="suffixTypeMap.get(#sapCustomerId)" />
+				 
 					<s:if test='%{#suffixType =="B" }'>
-						<ul class="indent-tree">
+						<ul class="indent-tree" style="padding-left: 20px; margin-bottom:5px; position: relative; display: block;">
 					</s:if>
 					<s:else>
-						<ul class="indent-tree-act">
+						<ul class="indent-tree-act" style="padding-left: 30px; margin-bottom:5px; position: relative; display: block;">
 					</s:else>
+					<div>
 						<li>	
 							<s:if test='%{#suffixType =="B" }'>
-								<input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getChildCustomerList(this,'<s:property value="#sapCustomerId"/>','<s:property value="#suffixType"/>', 'billTo_<s:property value="%{#sapCustomerId}"/>') " />
+							<table>
+								<tr>
+								<td><input type="button" class="icon-plus" style="vertical-align:middle;" onclick="getChildCustomerList(this,'<s:property value="#sapCustomerId"/>','<s:property value="#suffixType"/>', 'billTo_<s:property value="%{#sapCustomerId}"/>') " /></td>
+								<td><div>
 								<input type="radio" name="customerId" value="<s:property value='#sapCustomerId' />" />
 							</s:if>
 							<s:else>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerId" value="<s:property value='#sapCustomerId' />" />
+								<input type="radio" name="customerId" value="<s:property value='#sapCustomerId' />" />
 							</s:else>
+							
 							<s:property value="#displayChildCustomersMap.get(#sapCustomerId)"/>
+							</div></td>
+							</tr>
+							</table>
 							<s:if test='%{#suffixType =="B" }'>
 								<div id="billTo_<s:property value='%{#sapCustomerId}'/>">
 								</div>
 							</s:if>
 						</li>
+						</div>
 					</ul>
-					
 			</s:iterator>
 			<s:if test='%{#suffixType =="S" }'>
 						<s:url id="paginatedShipTo" namespace="/profile/org" action="xpedxShowLocations">
