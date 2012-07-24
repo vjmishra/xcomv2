@@ -2458,7 +2458,7 @@ public class XPXUtils implements YIFCustomApi {
 			Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 			"ResetPwdEmailSubject");
 				resetSubject.setAttribute("Subject", resetSubString);
-			String notificationiSubString = storeFrontId + ".com" + " Password ";			
+			String notificationiSubString = storeFrontId + ".com" + " Password Changed Notification";			
 			
 			String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
 			
@@ -2468,7 +2468,15 @@ public class XPXUtils implements YIFCustomApi {
 			Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 				"NotificationPwdEmailSubject");
 				notificationSubject.setAttribute("Subject", notificationiSubString);
-		
+				
+				String readEnv = YFSSystem.getProperty("environment");
+				if(readEnv!=null)
+				{
+				Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				"NotificationENV");
+				notificationEnvironment.setAttribute("environment", readEnv);
+				}
+			
 			String imageName = getLogoImageName(env,storeFrontId);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 			
@@ -2521,7 +2529,7 @@ public class XPXUtils implements YIFCustomApi {
 			log.error("XPXUtils:getAdditionalAttributes" + e.getMessage());
 
 		}
-
+        System.out.println("SCXmlUtil.getString(inputDocument) ---------------"+SCXmlUtil.getString(inputDocument));
 		if(log.isDebugEnabled()){
 			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}

@@ -89,12 +89,23 @@
 	</HEAD>
 </xsl:template>
 
+<xsl:variable name="subjectLINE">    
+		<xsl:value-of select="/User/NotificationPwdEmailSubject/@Subject"/>
+	</xsl:variable> 
+
+<xsl:variable name="envName">    
+		<xsl:value-of select="/User/NotificationENV/@environment"/>
+	</xsl:variable> 
+
+
 <xsl:template name="StandardClosingMessage">
 	<xsl:param name="Brand"></xsl:param>
 	<xsl:param name="BrandPhoneNumber">877 269-1784</xsl:param>
 	<xsl:param name="AdditionalClosing" />
+		<xsl:if test="(contains($subjectLINE,'Password Changed Notification'))">
+				Your Password has been changed.
+		</xsl:if>
 	If we may be of further assistance, please contact us via e-mail at 
-
 	<xsl:element name="a">
 		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>.com</xsl:attribute>
 		ebusiness@<xsl:value-of select="$Brand"/>.com
@@ -125,13 +136,13 @@
 	<table width="700" border="0" align="left" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
 		  <tr>
 		    <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-		<p>Dear <xsl:value-of select="@Username"/>,</p>
+		<p>Dear <xsl:value-of select="/User/ContactPersonInfo/@EMailID"/>,</p>
 		<xsl:if test="/User/User/@RequestId">
 		<p>
 		You are receiving this notification because we recently received a password reset request for your account. <br/><br/>
 		To reset your password, click on the following link: <br/>
 			<a><xsl:attribute name="href">
-			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
+			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
 			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /></a><br/><br/>
@@ -140,15 +151,12 @@
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
 		<p>
-		Your account was recently created.
+			Your username ID was recently created for <a><xsl:attribute name="href">http://www.<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
+			<xsl:attribute name="target">_blank</xsl:attribute>
+			http://www.<xsl:value-of select="$Brand"/>.com/order</a>.Please update your password after you sign in by clicking on ‘My Profile’ under the Admin tab.
 		</p>
 		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
 		<p>Your initial password is: <b><xsl:value-of select="/User/User/@GeneratedPassword" /></b></p>
-		<p>
-			Please reset your password the next time you sign into <a><xsl:attribute name="href">http://www.<xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
-			<xsl:attribute name="target">_blank</xsl:attribute>
-			http://www.<xsl:value-of select="$Brand"/>.com/order</a>.
-		</p>
 		</xsl:if>
 		    	<p>
 		<xsl:call-template name="StandardClosingMessage"><xsl:with-param name="Brand" select="$Brand"/><xsl:with-param name="BrandPhoneNumber" select="$BrandPhoneNumber"/></xsl:call-template>
@@ -165,4 +173,3 @@
 	</xsl:template>
 
 </xsl:stylesheet>
-
