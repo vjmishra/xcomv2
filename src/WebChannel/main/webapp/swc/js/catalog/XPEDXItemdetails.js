@@ -22,6 +22,11 @@ function itemDetailValidateAndAddToCart(itemId) {
 	return true;
 }*/
 
+function updatePandAfromLink(){
+	var UOMelement = document.getElementById("itemUOMsSelect");
+	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;	
+	callPnAfromLink(uomvalue);
+}
 function updatePandA() {
 	/*var UOMelement = document.getElementById("itemUOMsSelect");
 	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;
