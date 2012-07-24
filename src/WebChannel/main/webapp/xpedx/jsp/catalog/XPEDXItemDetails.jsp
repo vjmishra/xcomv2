@@ -132,6 +132,57 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 		}
 	});
 }
+
+function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor){			
+	document.getElementById("displayPricesDiv").innerHTML = "";
+	if(itemId == null || itemId == "null" || itemId == "") {
+		return;
+	}
+	if(reqUom == null || reqUom == "null" || reqUom == "") {
+		reqUom = document.getElementById("selectedUOM").value;
+	}
+	var Qty=document.getElementById("qtyBox").value;
+	//Quantity validation
+	if(Qty =='' || Qty=='0')
+	{
+		document.getElementById("qtyBox").style.borderColor="#FF0000";
+		document.getElementById("qtyBox").focus();
+		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+  		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+  		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+		document.getElementById("Qty_Check_Flag").value = true;
+		document.getElementById("qtyBox").value = "";
+	    return;
+	}	
+	priceCheck = true;
+	var Category = document.getElementById("catagory").value;
+	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
+	var validationSuccess = validateOrderMultiple();
+	if(validationSuccess==false){
+		return;
+	}		
+	else{
+	Ext.Msg.wait("Processing...");
+	Ext.Ajax.request({
+       	url:url,
+        params: {
+			itemID 	: itemId,
+	       	requestedUOM : reqUom,
+	       	pnaRequestedQty	: Qty,
+	       	baseUOM	: baseUom,
+	       	prodMweight : prodMweight,
+	       	pricingUOMConvFactor : pricingUOMConvFactor,
+	       	validateOrderMul : validationSuccess,
+	       	Category : Category
+		},      	
+	   	success: function (response, request){
+			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
+			setPandAData();
+			Ext.Msg.hide();
+		}
+	});
+}
+}
 </script>
 <script type="text/javascript">
 	$(function() {
@@ -614,6 +665,7 @@ function resetQuantityErrorMessage()
 		var divId='errorMsgForQty';
 		var divVal=document.getElementById(divId);
 		divVal.innerHTML='';
+		document.getElementById("qtyBox").style.bordercolor="";
 
 }
 function validateOrderMultiple() {
@@ -1474,7 +1526,7 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:if>
 				<div class="orderbtns">
-					<a href="javascript:updatePandA()">My Price & Availability</a>
+					<a href="javascript:updatePandAfromLink()">My Price & Availability</a>
 				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
 					<s:a
@@ -2337,6 +2389,14 @@ function callPnA(requestedUom)
 	var prodMweight = '<s:property value="#prodMweight" />';
 	var pricingUOMConvFactor = '<s:property value="#pricingUOMConvFactor" />';
 	pandaByAjax(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
+}
+function callPnAfromLink(requestedUom){
+	var itemId = '<s:property value="#itemID" />';
+	var Quantity = document.getElementById("qtyBox").value;
+	var baseUom = '<s:property value="#unitOfMeasure" />';
+	var prodMweight = '<s:property value="#prodMweight" />';
+	var pricingUOMConvFactor = '<s:property value="#pricingUOMConvFactor" />';
+	pandaByAjaxFromLink(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
 }
 
 function blockDiv()
