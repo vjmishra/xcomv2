@@ -43,10 +43,6 @@
 <!-- STUFF YOU NEED FOR BEAUTYTIPS -->
 
 
-<!--[if IE]>
-<script src="../other_libs/excanvas_r3/excanvas.js" type="text/javascript" charset="utf-8"></script>
-<![endif]-->
-
 
 <s:hidden name="uomDescriptionURL" value='%{#uomDescriptionURL}'/>
 <!-- /STUFF -->
