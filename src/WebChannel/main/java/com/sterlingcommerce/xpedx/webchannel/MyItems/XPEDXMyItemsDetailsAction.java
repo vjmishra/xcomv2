@@ -48,6 +48,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 
@@ -895,8 +896,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void setLastModifiedListInfo() throws CannotBuildInputException {
+	private void setLastModifiedListInfo() throws CannotBuildInputException, XPathExpressionException, XMLExceptionWrapper {
 		String createUserIDStr = "";
+		String createUserID = "";
 		String modifyUserIdStr = "";
 		String lastModifiedDateStr = "";
 		Document outputDoc=null;
@@ -917,9 +919,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		
 			Element xpedxMyItemsListElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "XPEDXMyItemsList");
 			if(xpedxMyItemsListElement!=null){
-				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
+				//modified to display lastModifiedBy
+				//modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
+				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Createusername");
 				if(YFCUtils.isVoid(modifyUserIdStr)){
-					createUserIDStr = xpedxMyItemsListElement.getAttribute("Createuserid");
+					createUserID = xpedxMyItemsListElement.getAttribute("Createuserid");
+					createUserIDStr = XPEDXWCUtils.getLoginUserName(createUserID);
 					setLastModifiedUserId(createUserIDStr);
 				}else{
 					setLastModifiedUserId(modifyUserIdStr);
