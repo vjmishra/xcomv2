@@ -5,7 +5,7 @@ Status="">
 ExtnEnvtId="" ExtnGenerationNo="" ExtnHeaderStatusCode="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" ExtnOrdStatCom="" 
 ExtnOrderCode="" ExtnOrderDivision="" ExtnOrderSpecialCharges="" ExtnOrderTax="" ExtnShipComplete="" ExtnShipToName="" 
 ExtnShipToSuffix="" ExtnSourceType="" ExtnSystemIdentifier="" ExtnTotalOrderFreight="" ExtnTotalOrderValue="" 
-ExtnTotalShipValue="" ExtnWebConfNum="" ExtnWebHoldFlag="" ExtnWebHoldReason="" ExtnWillCall=""/>
+ExtnTotalShipValue="" ExtnWebConfNum="" ExtnWebHoldFlag="" ExtnWebHoldReason="" ExtnWillCall="" ExtnOrigEnvironmentCode="" />
 <PriceInfo Currency=""/>
 <OrderLines>
 <OrderLine CustomerLinePONo="" CustomerPONo="" LineType="" OrderedQty="" ShipNode="">
