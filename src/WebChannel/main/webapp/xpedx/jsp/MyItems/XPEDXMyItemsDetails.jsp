@@ -980,7 +980,10 @@ function showSharedListForm(){
 					if(quantity == '0'|| quantity == '')
 					quantity = 1;
 				}
-				
+				if(arrUOM[i].value == "")
+				{
+					arrUOM[i].value = 1;
+				}
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
 				//alert("isGlobal==="+ isGlobal);
 				if(isGlobal == true){
@@ -1152,6 +1155,10 @@ function showSharedListForm(){
 				if (priceCheck == true){
 					if(quantity == '0'|| quantity == '')
 					quantity = 1;
+				}
+				if(arrUOM[i].value == "")
+				{
+					arrUOM[i].value = 1;
 				}
 				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
