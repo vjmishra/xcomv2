@@ -192,7 +192,7 @@
 													<tr>
 														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Ordered By:</td>
 														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-															<xsl:value-of select="Order/@Createuserid"/>
+															<xsl:value-of select="Order/Extn/@ExtnOrderedByName"/>
 														</td>
 														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">Postal Code:</td>
 														<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
