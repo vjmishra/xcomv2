@@ -902,8 +902,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		String modifyUserIdStr = "";
 		String lastModifiedDateStr = "";
 		Document outputDoc=null;
-		if(modifyts == null || modifyts.trim().length()==0)
-		{
+		/*if(modifyts == null || modifyts.trim().length()==0) commented for jira 4134
+		{*/
 			Element input = WCMashupHelper.getMashupInput(
 					"XPEDXMyItemsList_ListInfo", getWCContext()
 							.getSCUIContext());
@@ -933,9 +933,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				setLastModifiedDateString(lastModifiedDateStr);
 				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
 			}
-		}
-		else
-		{
+			/*commented for jira 4134 since it was displaying wrong username and last modified date in the MIL NON edit page
+			 }else
+				{
 			if(YFCUtils.isVoid(modifyUserid)){
 				createUserIDStr = createUserId;
 				setLastModifiedUserId(createUserIDStr);
@@ -946,7 +946,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			setLastModifiedDateString(lastModifiedDateStr);
 			setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
 		}
-		
+		*/
 	}
 	public String getJsonStringForMap(HashMap map){
 		String jsonString = "";
