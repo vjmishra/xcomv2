@@ -390,8 +390,11 @@ public String getShipToDivdeliveryInfo() {
 	private String ExtnSampleRoomEmailAddress;
 	private String AccountNumber;
 	private String ExtnShipToSuffix;
+	private String rootCustomerKey;
+	private String customerKey;
+	private String buyerOrganizationCode;
 	private XPEDXShipToCustomer defaultShipToCustomer;
-	
+	private String extnAllowDirectOrderFlag;
 	
 	public String getExtnShipToSuffix() {
 		return ExtnShipToSuffix;
@@ -443,6 +446,30 @@ public String getShipToDivdeliveryInfo() {
 	 */
 	public void setDefaultShipToCustomer(XPEDXShipToCustomer defaultShipToCustomer) {
 		this.defaultShipToCustomer = defaultShipToCustomer;
+	}
+	public String getRootCustomerKey() {
+		return rootCustomerKey;
+	}
+	public void setRootCustomerKey(String rootCustomerKey) {
+		this.rootCustomerKey = rootCustomerKey;
+	}
+	public String getCustomerKey() {
+		return customerKey;
+	}
+	public void setCustomerKey(String customerKey) {
+		this.customerKey = customerKey;
+	}
+	public String getBuyerOrganizationCode() {
+		return buyerOrganizationCode;
+	}
+	public void setBuyerOrganizationCode(String buyerOrganizationCode) {
+		this.buyerOrganizationCode = buyerOrganizationCode;
+	}
+	public String getExtnAllowDirectOrderFlag() {
+		return extnAllowDirectOrderFlag;
+	}
+	public void setExtnAllowDirectOrderFlag(String extnAllowDirectOrderFlag) {
+		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 	}
 	
 	//JIRA 3488 end

@@ -3897,7 +3897,7 @@ public class XPEDXWCUtils {
 				if (xpxItemEnvCode.trim().equalsIgnoreCase(envCode.trim())) {
 					inventoryChk = xpxItemExtnElem
 							.getAttribute("InventoryIndicator");
-					if (inventoryChk.equalsIgnoreCase("W"))
+					if (inventoryChk.equalsIgnoreCase("W") || inventoryChk.equalsIgnoreCase("I"))
 						inventoryCheckForItemsMap.put(itemID, "Y");
 					else
 						inventoryCheckForItemsMap.put(itemID, "N");
@@ -3951,7 +3951,8 @@ public class XPEDXWCUtils {
 					String division = xpxExtnElem.getAttribute("XPXDivision");
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
-						inventoryIndicator = xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W")?"Y":"N";	
+						inventoryIndicator = xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ||
+												xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ?"Y":"N";	
 						break;
 					}
 				}
@@ -5315,6 +5316,9 @@ public class XPEDXWCUtils {
 				Element parentElem = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "ParentCustomer");
 				XPEDXWCUtils.getShipToAddressOfCustomer(customerOrganizationEle,shipToCustomer);
+				shipToCustomer.setRootCustomerKey(customerOrganizationEle.getAttribute("RootCustomerKey"));
+				shipToCustomer.setCustomerKey(customerOrganizationEle.getAttribute("CustomerKey"));
+				shipToCustomer.setExtnAllowDirectOrderFlag(customerOrganizationEle.getAttribute("ExtnAllowDirectOrderFlag"));
 				shipToCustomer.setCustomerStatus(customerOrganizationEle.getAttribute("Status"));
 				shipToCustomer.setExtnCustomerClass(extnElement.getAttribute("ExtnCustomerClass"));
 				shipToCustomer.setExtnShipFromBranch(extnElement.getAttribute("ExtnShipFromBranch"));
@@ -5381,6 +5385,8 @@ public class XPEDXWCUtils {
 				if(!YFCCommon.isVoid(parentElem))
 				{
 					billToCustomer.setParentCustomerKey(parentElem.getAttribute("ParentCustomerKey")); //Jira 3162 done Changes
+					billToCustomer.setBuyerOrganizationCode(parentElem.getAttribute("BuyerOrganizationCode"));
+					shipToCustomer.setParentCustomerKey(parentElem.getAttribute("CustomerKey"));
 					Element parentExtnElem = SCXmlUtil.getChildElement(parentElem, "Extn");
 					billToCustomer.setExtnCurrencyCode(parentExtnElem.getAttribute("ExtnCurrencyCode"));
 					billToCustomer.setExtnCustomerDivision(parentExtnElem.getAttribute("ExtnCustomerDivision"));
@@ -5456,6 +5462,7 @@ public class XPEDXWCUtils {
 			if(contactElem!=null) {
 				String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
 				String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
+				String spendingLimit = SCXmlUtil.getAttribute(contactElem, "SpendingLimit");
 				String customerContactID = SCXmlUtil.getAttribute(contactElem, "CustomerContactID");
 				String msapEmailID = SCXmlUtil.getAttribute(contactElem, "EmailID");
 				String welcomeLocaleId = SCXmlUtil.getXpathAttribute(contactElem, "//CustomerContact/User/@Localecode");
@@ -5544,7 +5551,7 @@ public class XPEDXWCUtils {
 							viewReportFlag, viewPricesFlag,
 							newusergroupkey, defaultShipTo,
 							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt);//added maxOrderAmt for JIRA 3488 
+							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit);//added maxOrderAmt for JIRA 3488 
 			}
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;
