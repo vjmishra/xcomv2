@@ -229,6 +229,15 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 					
 				}
 				myitemsList.getDocumentElement().setAttribute("MyItemsListKey",getListKey());
+				//added for jira 4134
+				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+					String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+					myitemsList.getDocumentElement().setAttribute("Createusername",salesreploggedInUserName);
+				} else {
+					myitemsList.getDocumentElement().setAttribute("Createusername",getWCContext().getLoggedInUserName());	
+				}
+				//end of jira 4134
 				WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(),getWCContext().getSCUIContext());
 			}
 			//Display the row number which was not imported

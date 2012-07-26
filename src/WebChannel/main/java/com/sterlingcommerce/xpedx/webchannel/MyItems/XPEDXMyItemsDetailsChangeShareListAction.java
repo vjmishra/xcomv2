@@ -234,7 +234,16 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setItemOrders("1");
 				YFCDate modifiedYFCDate = new YFCDate();
 				modifiedDate = modifiedYFCDate.getString();
-				Element res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
+				/*Updated for Jira 4134*/
+				Element res1;
+				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+					res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItemForSalesRep");
+				}else{
+					res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
+				}
+				//end of 4134
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				if(LOG.isDebugEnabled()){
 				LOG.debug("Check 1 - Done: getListKey = " + getListKey());
