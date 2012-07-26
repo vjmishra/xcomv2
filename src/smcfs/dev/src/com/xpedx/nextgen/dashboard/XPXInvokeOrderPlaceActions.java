@@ -80,7 +80,8 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		   // To Retrieve ShipTo Customer Information.
 		   if (webOrder) {
 			   setOPOrderDetailsFromEnv(env,rootElem);
-			   getCustomerProfileDetailsDoc = getCustomerProfileDocFromEnv(env);
+			   // Commenting the code as extn Atrributes needs to be analyzed before picking it up from txn object.
+			   // getCustomerProfileDetailsDoc = getCustomerProfileDocFromEnv(env);
 		   }
 		   
 		   if (getCustomerProfileDetailsDoc == null) {
@@ -95,6 +96,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				   env.setTxnObject("ShipToCustomerProfile", getCustomerProfileDetailsDoc);				   
 			   }
 		   } else {
+			   // Do not Remove This Code as it will be required when we get the ShipToCustomerProfileDoc from transaction.
 			   env.setTxnObject("ShipToCustomerProfile", getCustomerProfileDetailsDoc);
 		   }
 		   
@@ -624,6 +626,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					String rushOrderFlag = null;
 					String webHoldFlag = null;
 					String orderedByName = null;
+					String shipNode = null;
 					
 					// Remove The Details From Environment As It is No Longer Required In The Environment.
 					envVariablesmap.remove("OPOrderDetailsMap");
@@ -634,6 +637,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					// Order Atrributes.
 					custPONum = (String) orderDetailsMap.get("CustomerPONo");
 					reqDeliveryDate = (String) orderDetailsMap.get("ReqDeliveryDate");
+					shipNode = (String) orderDetailsMap.get("ShipNode");
 					
 					if (!YFCObject.isNull(custPONum)) {
 						rootElem.setAttribute("CustomerPONo", custPONum);
@@ -642,11 +646,20 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					if (!YFCObject.isNull(reqDeliveryDate)) {
 						rootElem.setAttribute("ReqDeliveryDate", reqDeliveryDate);
 					}
+					if (!YFCObject.isNull(shipNode)) {
+						rootElem.setAttribute("ShipNode", shipNode);
+					}
 					
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
 					if (!YFCObject.isNull(headerComments) && rootElem.getChildElement("Instructions") == null) {
 						YFCElement instructionsElem = rootElem.createChild("Instructions");
+						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
+						instructionElem.setAttribute("InstructionType", "HEADER");
+						instructionElem.setAttribute("InstructionText", headerComments);
+					} else if (!YFCObject.isNull(headerComments)) {
+						// Instructions Element Is Already Created In The Document.
+						YFCElement instructionsElem = rootElem.getChildElement("Instructions");
 						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
 						instructionElem.setAttribute("InstructionType", "HEADER");
 						instructionElem.setAttribute("InstructionText", headerComments);

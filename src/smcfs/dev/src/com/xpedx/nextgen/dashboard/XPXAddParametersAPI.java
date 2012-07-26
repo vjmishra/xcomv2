@@ -150,7 +150,7 @@ public class XPXAddParametersAPI implements YIFCustomApi {
 			
 			// To Get ShipToSuffix, Environment Code And Comp Code From Buyer Organization Code.
 			String[] splitArrayOnBuyerOrgCode =  buyerOrgCode.split("-");
-			if (splitArrayOnBuyerOrgCode.length == 5) {
+			if (splitArrayOnBuyerOrgCode.length >= 5) {
 				shipToSuffix = splitArrayOnBuyerOrgCode[2];
 				envtCode = splitArrayOnBuyerOrgCode[3];
 				compCode = splitArrayOnBuyerOrgCode[4];
