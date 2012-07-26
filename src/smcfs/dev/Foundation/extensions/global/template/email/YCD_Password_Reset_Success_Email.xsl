@@ -93,17 +93,14 @@
 		<xsl:value-of select="/User/NotificationPwdEmailSubject/@Subject"/>
 	</xsl:variable> 
 
-<xsl:variable name="envName">    
-		<xsl:value-of select="/User/NotificationENV/@environment"/>
-	</xsl:variable> 
 
 
 <xsl:template name="StandardClosingMessage">
 	<xsl:param name="Brand"></xsl:param>
 	<xsl:param name="BrandPhoneNumber">877 269-1784</xsl:param>
 	<xsl:param name="AdditionalClosing" />
-		<xsl:if test="(contains($subjectLINE,'Password Changed Notification'))">
-				Your Password has been changed.
+		<xsl:if test="(contains($subjectLINE,'User Password Change Notification'))">
+				<xsl:text>Your password has been changed.&#160;</xsl:text>
 		</xsl:if>
 	If we may be of further assistance, please contact us via e-mail at 
 	<xsl:element name="a">
@@ -113,6 +110,10 @@
 	or by calling <xsl:value-of select="$BrandPhoneNumber"/>. 
 	<xsl:copy-of select="$AdditionalClosing" />
 </xsl:template>
+
+<xsl:variable name="envName">    
+		<xsl:value-of select="/User/NotificationENV/@environment"/>
+	</xsl:variable> 
 
 	<xsl:variable name="imageURL">    
 		<xsl:value-of select="/User/BrandImageURL/@URL"/>
@@ -142,7 +143,7 @@
 		You are receiving this notification because we recently received a password reset request for your account. <br/><br/>
 		To reset your password, click on the following link: <br/>
 			<a><xsl:attribute name="href">
-			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
+			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>.<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
 			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /></a><br/><br/>
@@ -151,9 +152,9 @@
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
 		<p>
-			Your username ID was recently created for <a><xsl:attribute name="href">http://www.<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
+			Your username ID was recently created for <a><xsl:attribute name="href"><xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			http://www.<xsl:value-of select="$Brand"/>.com/order</a>.Please update your password after you sign in by clicking on ‘My Profile’ under the Admin tab.
+			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</a>.<xsl:text>&#160;&#160;Please update your password after you sign in by clicking on ‘My Profile’ under the Admin tab.</xsl:text>
 		</p>
 		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
 		<p>Your initial password is: <b><xsl:value-of select="/User/User/@GeneratedPassword" /></b></p>
@@ -166,7 +167,7 @@
 		Thank you for your business!
 		</p>
 		<p>
-		Please do not reply to this email. This mailbox is not monitored and you will not receive a response.
+		Please do not reply to this email.<xsl:text>&#160;&#160;This mailbox is not monitored and you will not receive a response.</xsl:text>
     	</p>
 			<p/>
 		</td></tr></table>
