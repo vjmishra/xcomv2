@@ -2459,17 +2459,44 @@ public class XPXUtils implements YIFCustomApi {
 			Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 			"ResetPwdEmailSubject");
 				resetSubject.setAttribute("Subject", resetSubString);
-			String notificationiSubString = storeFrontId + ".com" + " Password ";			
+			String notificationiSubString="";
 			
+			String requestID =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@RequestId");
 			String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
 			
-			if(genPwd != null && !genPwd.equalsIgnoreCase("")){
+			if(requestID!=null && !requestID.equalsIgnoreCase(""))
+			{
+				notificationiSubString=storeFrontId + ".com" + " Password Reset Request Notification ";
+			}
+		    if(genPwd != null && !genPwd.equalsIgnoreCase("")){
 				notificationiSubString = storeFrontId + ".com" + " User Creation Notification";
+			}
+			else
+			{
+				notificationiSubString=storeFrontId + ".com" + " User Password Change Notification ";
 			}
 			Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 				"NotificationPwdEmailSubject");
 				notificationSubject.setAttribute("Subject", notificationiSubString);
-		
+				
+				String readENV = YFSSystem.getProperty("environment");
+				
+				if(readENV!=null){
+				Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				"NotificationENV");
+				if(readENV.trim().equalsIgnoreCase("DEVELOPMENT")){
+								notificationEnvironment.setAttribute("environment", "dev.");
+							
+						}else if(readENV.trim().equalsIgnoreCase("STAGING")){
+							notificationEnvironment.setAttribute("environment", "stg.");
+							
+						}			
+						else
+						{
+							notificationEnvironment.setAttribute("environment","");
+						}
+				}
+			
 			String imageName = getLogoImageName(env,storeFrontId);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 			
