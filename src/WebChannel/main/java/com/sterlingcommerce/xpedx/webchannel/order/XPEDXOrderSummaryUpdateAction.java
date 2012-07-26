@@ -124,6 +124,8 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					changeOrderInput.getAttribute("CustomerPONo"));
 			orderPlaceTransactionObjMap.put("ReqDeliveryDate", 
 					changeOrderInput.getAttribute("ReqDeliveryDate"));
+			orderPlaceTransactionObjMap.put("ShipNode", 
+					changeOrderInput.getAttribute("ShipNode"));
 			Element orderExtnElement=(Element)changeOrderInput.getElementsByTagName("Extn").item(0);
 			if(orderExtnElement != null )
 			{
