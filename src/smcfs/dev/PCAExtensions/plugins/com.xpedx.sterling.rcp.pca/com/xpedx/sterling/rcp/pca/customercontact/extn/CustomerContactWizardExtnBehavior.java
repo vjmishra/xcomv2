@@ -172,6 +172,20 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
     	// TODO Validation required for the following controls.
 		if("btnConfirm".equals(fieldName))
 		{
+			//Added for JIRA 4160
+			if(!YRCPlatformUI.isVoid(getFieldValue("txtLoginid")))
+			{
+				String logInID = getFieldValue("txtLoginid");
+				boolean upperFound = false;
+				for (char c : logInID.toCharArray()) {
+				    if (Character.isUpperCase(c)) {
+				        upperFound = true;
+				        YRCPlatformUI.showInformation("Error!", "Please enter login ID in lower case");
+				        return null;
+				        }
+				    }
+				 
+			}
 			Element eleUserGroupLists = getModel("getUserGroupList_output");
 			List userGroupLst = YRCXmlUtils.getChildren(eleUserGroupLists,
 					"UserGroup");
