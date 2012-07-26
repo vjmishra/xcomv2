@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.core.context.WCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.OrderHelper;
@@ -81,6 +82,13 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
         return SUCCESS;
     
     }
+	
+	public String checkSessionTimeout(){
+		 if(getWCContext().getLoggedInUserId()==null){
+			 return "timeout";
+		 }
+		return null ;
+	}
 	//Added this method for Jira 3481
 	public void getOrderMultipleFromSession( ArrayList<String> itemIds)
 	{ 	Object itemMapObj = XPEDXWCUtils.getObjectFromCache("itemMap");

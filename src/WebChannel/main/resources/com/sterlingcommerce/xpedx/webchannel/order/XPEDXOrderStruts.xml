@@ -567,6 +567,10 @@
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>
         </action>
+        <!-- action to check for timeout for JIRA 1650-->
+        <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
+        <result name="timeout">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+        </action>
 
 		<!-- action for draft order delete line item -->
         <action name="draftOrderDeleteLineItems" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDeleteLineItemAction">

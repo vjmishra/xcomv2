@@ -2034,6 +2034,7 @@ function callAjaxForSorting(url,divId)
 	//Added hideMiniCrt() for Jira 3727
 	function hideMiniCrt()
 	{
+ 		checkSessionTimeout();
 		var miniCartDiv=document.getElementById("mini-cart");
 		if(miniCartDiv != null && miniCartDiv != undefined)
 		{
@@ -2046,6 +2047,31 @@ function callAjaxForSorting(url,divId)
 			}
 		}
 	}
+	//check for timeout for JIRA 1650 
+function checkSessionTimeout(){
+	<s:url id='homeAction' action='home' namespace='/home' />;
+    var logoutURL="<s:property value='#homeAction' />";
+    logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
+	<s:url id='checkSesseionTimeoutURL'  namespace='/order'  action='checkSessionTimeoutForCart.action' ></s:url>
+     var checkSesseionTimeoutURL="<s:property value='#checkSesseionTimeoutURL' />";
+     checkSesseionTimeoutURL = ReplaceAll(checkSesseionTimeoutURL,"&amp;",'&');
+ 	Ext.Ajax.request({
+         url :checkSesseionTimeoutURL,
+         method: 'POST',
+         success: function (response, request){
+ 		if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+		window.location=logoutURL;
+		}
+ 		
+ 		
+    		},
+    		failure: function (response, request){
+    			if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+    			window.location=logoutURL;
+    			}
+          }
+     });  
+}
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
