@@ -13,6 +13,7 @@ import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.log.YFCLogCategoryFactory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -25,19 +26,15 @@ import com.yantra.yfs.japi.YFSException;
  */
 public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 
-	/** API object. */
 	private static YIFApi api = null;
-	private static ISCILogger log = null;
-	static{
-		log = new YFCLogCategoryFactory().getLogger(XPXCreateFulfillmentOrderAPI.class.getCanonicalName());
-	}
+	private static YFCLogCategory log;
 	private Properties _properties = null;
-	public static final String createOrderTemplate = "global/template/api/createOrder.XPXLegacyOrderCreationService.xml";
 	
-	
-	public void setProperties(Properties properties) throws Exception {
-		_properties = properties;
+	static {
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	}
+	
+	public static final String createOrderTemplate = "global/template/api/createOrder.XPXLegacyOrderCreationService.xml";
 	
 	/**
 	 * Expects Fulfillment Order's Create XML.
@@ -50,19 +47,18 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		
 		// check if the Environment/Input document passed is null, throw exception
 		if (env == null) {
-			// Throw new YFSException with the description
 			throw new YFSException("YFSEnvironment cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
 		}
 		if (inXML == null) {
-			// Throw new YFSException with the description
 			throw new YFSException("Input XML document cannot be null or invalid to XPXCreateFulfillmentOrderAPI.invoke()");
 		}
 		
 		api = YIFClientFactory.getInstance().getApi();
-		
 		setProgressYFSEnvironmentVariables(env);
 		
-		log.debug("XPXCreateFulfillmentOrderAPI.invoke()--> Input XML" + SCXmlUtil.getString(inXML));
+		if (log.isDebugEnabled()) {
+			log.debug("XPXCreateFulfillmentOrderAPI-InXML" + SCXmlUtil.getString(inXML));
+		}
 		// Set createOrder API Output Template
 		env.setApiTemplate(XPXLiterals.CREATE_ORDER_API, createOrderTemplate);
 		
@@ -72,33 +68,17 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		// Clear createOrder Template
 		env.clearApiTemplate(XPXLiterals.CREATE_ORDER_API);
 		
-		//Copying the Fulfillment OHK to a transaction object to handle ProcessCode="D" scenario in OPResponse flow
-		String fulfillmentOHK = docCreateOrderOutput.getDocumentElement().getAttribute("OrderHeaderKey");
-		env.setTxnObject("FOKEY", fulfillmentOHK);
-		env.setTxnObject("FulFillmentOrderDetails", docCreateOrderOutput);
-		
 		// Post the Create Order input to Legacy via Web Methods Interface
 		// In case of failure ignore the Exception and proceed with next steps.
-		try{
+		try {
 			api.executeFlow(env, XPXLiterals.SERVICE_POST_LEGACY_ORDER_CREATE, docCreateOrderOutput);
 		} catch (Exception e) {
-			log.error("XPXCreateFulfillmentOrderAPI.invoke()--> Unable to Process POST XML to Legacy", e);
-			
-			
-		      com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
-			
-		      errorObject.setTransType("OP");
-		      errorObject.setErrorClass("Application");
-		      errorObject.setInputDoc(docCreateOrderOutput);
-		      		      
-		      errorObject.setException(e);
-		
-		      ErrorLogger.log(errorObject, env);
-		
+			log.info("XPXCreateFulfillmentOrderAPI - Exception occured on posting XML to Legacy");
+			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);
             return inXML;
 		}
 		
-		log.debug("XPXCreateFulfillmentOrderAPI.invoke()--> Output XML" + SCXmlUtil.getString(inXML));
+		log.info("XPXCreateFulfillmentOrderAPI-OutXML:" + SCXmlUtil.getString(inXML));
 		return  inXML;
 	}
 	
@@ -120,4 +100,21 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		}
 	}
 	
+	/**
+	 * This method prepares the error object with the exception details which in
+	 * turn will be used to log into CENT
+	 */
+	private void prepareErrorObject(Exception e, String transType, String errorClass, YFSEnvironment env, Document inXML) {
+		com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
+		errorObject.setTransType(transType);
+		errorObject.setErrorClass(errorClass);
+		errorObject.setInputDoc(inXML);
+		errorObject.setException(e);
+		errorObject.setExceptionMessage(e.getMessage());
+		ErrorLogger.log(errorObject, env);
+	}
+	
+	public void setProperties(Properties properties) throws Exception {
+		_properties = properties;
+	}
 }

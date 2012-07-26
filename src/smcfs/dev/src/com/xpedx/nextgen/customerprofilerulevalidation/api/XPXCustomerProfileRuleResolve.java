@@ -15,48 +15,45 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXCustomerProfileRuleResolve {
+	
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
 	String changeOrderTemplate = "global/template/api/changeOrder.XPXRulesHoldResolve.xml";
-	public void setProperties(Properties arg0) throws Exception {
-		// TODO Auto-generated method stub
-	}
+	
 	static {
-		try 
-		{
+		try {
 			log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 			api = YIFClientFactory.getInstance().getApi();
-		} catch (YIFClientCreationException e1) {
-			
+		} catch (YIFClientCreationException e1) {	
 			e1.printStackTrace();
-		}
-		
+		}	
 	}
+	
 	/**
 	 * @param env
 	 * @param inXML
 	 * @return
 	 * @throws Exception
 	 */
-	public Document invokeXPXCustomerProfileRuleResolve(YFSEnvironment env,
-			Document inXML) throws Exception {
-		log.beginTimer("XPXCustomerProfileRuleResolve.invokeXPXCustomerProfileRuleResolve");
+	public Document invokeXPXCustomerProfileRuleResolve(YFSEnvironment env, Document inXML) throws Exception {
+		
+		boolean orderConfirmationFlow = false;
 		boolean updateWebHoldFlag = false;
+		boolean orderOnHold = false;
 		Document changeOrderOutputDoc = null;
 		
-		updateWebHoldFlag = Boolean
-		.parseBoolean(SCXmlUtil
-				.getXpathAttribute(
-						inXML.getDocumentElement(),
-						"/Order/Extn/@ExtnWebHoldFlag='"
-								+ "Y"
-								+ "'"));
+		if (log.isDebugEnabled()) {
+			log.debug("XPXCustomerProfileRuleResolve-InXML:" + SCXmlUtil.getString(inXML));
+		}
 		
-		boolean orderOnHold = Boolean
-				.parseBoolean(SCXmlUtil
-						.getXpathAttribute(
-								inXML.getDocumentElement(),
-								"/Order/OrderHoldTypes/OrderHoldType[@HoldType='"
+		Element rootElem = inXML.getDocumentElement();
+		if (rootElem.hasAttribute("OrderConfirmationFlow")) {
+			orderConfirmationFlow = true;
+		}
+		
+		updateWebHoldFlag = Boolean.parseBoolean(SCXmlUtil.getXpathAttribute(rootElem,"/Order/Extn/@ExtnWebHoldFlag='"+ "Y"+ "'"));
+		
+		orderOnHold = Boolean.parseBoolean(SCXmlUtil.getXpathAttribute(rootElem,"/Order/OrderHoldTypes/OrderHoldType[@HoldType='"
 										+ XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_TYPE
 										+ "']/@Status='"
 										+ XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_ACTIVE_STATUS
@@ -65,13 +62,16 @@ public class XPXCustomerProfileRuleResolve {
 		if (orderOnHold) {			
 			changeOrderOutputDoc = callChangeOrder(env,inXML,updateWebHoldFlag,true);
 			return changeOrderOutputDoc;
-		}else if (updateWebHoldFlag){
-			changeOrderOutputDoc = callChangeOrder(env,inXML,updateWebHoldFlag,false);
-			return changeOrderOutputDoc;
+		} else if (updateWebHoldFlag) {
+			if (orderConfirmationFlow) {
+				// Web Hold Flag Will Be Updated In The Later Part Of OP Flow In Service XPXCreateChainedOrderService.
+				return inXML;
+			} else {
+				changeOrderOutputDoc = callChangeOrder(env,inXML,updateWebHoldFlag,false);
+				return changeOrderOutputDoc;
+			}
 		}
-		log.endTimer("XPXCustomerProfileRuleResolve.invokeXPXCustomerProfileRuleResolve");
 		
-		log.debug("The output returned from changeOrder of XPXCustomerProfileRuleResolve is:"+SCXmlUtil.getString(changeOrderOutputDoc));
 		return inXML;
 	}
 
@@ -79,26 +79,17 @@ public class XPXCustomerProfileRuleResolve {
 			boolean updateWebHoldFlag, boolean updateNeedAttentionHold)
 			throws Exception {
 
-		Document changeOrderDoc = YFCDocument.createDocument("Order")
-				.getDocument();
+		Document changeOrderDoc = YFCDocument.createDocument("Order").getDocument();
 		Element changeOrderElement = changeOrderDoc.getDocumentElement();
-		String orderHeaderKey = inXML.getDocumentElement().getAttribute(
-				"OrderHeaderKey");
+		String orderHeaderKey = inXML.getDocumentElement().getAttribute("OrderHeaderKey");
 		changeOrderElement.setAttribute("OrderHeaderKey", orderHeaderKey);
-		if (updateNeedAttentionHold) {
-			
-			Element orderHoldTypesElement = SCXmlUtil.createChild(
-					changeOrderElement, "OrderHoldTypes");
-			Element orderHoldTypeElement = SCXmlUtil.createChild(
-					orderHoldTypesElement, "OrderHoldType");
-			orderHoldTypeElement.setAttribute("HoldType",
-					XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_TYPE);
-			orderHoldTypeElement.setAttribute("ReasonText",
-					XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_DESC);
-			orderHoldTypeElement
-					.setAttribute(
-							"Status",
-							XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_INACTIVE_STATUS);
+		
+		if (updateNeedAttentionHold) {	
+			Element orderHoldTypesElement = SCXmlUtil.createChild(changeOrderElement, "OrderHoldTypes");
+			Element orderHoldTypeElement = SCXmlUtil.createChild(orderHoldTypesElement, "OrderHoldType");
+			orderHoldTypeElement.setAttribute("HoldType", XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_TYPE);
+			orderHoldTypeElement.setAttribute("ReasonText", XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_DESC);
+			orderHoldTypeElement.setAttribute("Status", XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_INACTIVE_STATUS);
 		}
 		if (updateWebHoldFlag) {
 			Element extnElement = SCXmlUtil.createChild(changeOrderElement,
@@ -107,12 +98,13 @@ public class XPXCustomerProfileRuleResolve {
 		}
 		
 		env.setApiTemplate(XPXLiterals.CHANGE_ORDER_API, changeOrderTemplate);
-		Document changeOrderOutputDoc = api.invoke(env, "changeOrder",
-				changeOrderDoc);
+		Document changeOrderOutputDoc = api.invoke(env, "changeOrder",changeOrderDoc);
 		env.clearApiTemplate(XPXLiterals.CHANGE_ORDER_API);
 		
-		
 		return changeOrderOutputDoc;
-
+	}
+	
+	public void setProperties(Properties arg0) throws Exception {
+		// TODO Auto-generated method stub
 	}
 }

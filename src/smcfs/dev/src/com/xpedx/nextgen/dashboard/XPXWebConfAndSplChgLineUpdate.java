@@ -15,6 +15,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -37,12 +38,9 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 	
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-		try 
-		{
+		try {
 			api = YIFClientFactory.getInstance().getApi();
-		}
-		catch (YIFClientCreationException e1) {
-
+		} catch (YIFClientCreationException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -55,33 +53,23 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		String orderHeaderKey = null;
 		String enterpriseCode = null;
 		
-		orderHeaderKey = inputXML.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
+		Element rootElem = inputXML.getDocumentElement();
 		
-		buyerOrganizationCode = inputXML.getDocumentElement().getAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE);
+		orderHeaderKey = rootElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
+		buyerOrganizationCode = rootElem.getAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE);
+		enterpriseCode = rootElem.getAttribute(XPXLiterals.A_ENTERPRISE_CODE);
 		
-		enterpriseCode = inputXML.getDocumentElement().getAttribute(XPXLiterals.A_ENTERPRISE_CODE);
-		
-		if(buyerOrganizationCode!=null || buyerOrganizationCode.trim().length()!=0)
-		{						
+		if (!YFCObject.isNull(buyerOrganizationCode) && !YFCObject.isVoid(buyerOrganizationCode)) {
 			String[] splitArrayOnBuyerOrgCode =  buyerOrganizationCode.split("-");
-            
-            for(int i=0; i<splitArrayOnBuyerOrgCode.length; i++)
-            {
-           	 
-           	    if(i==3)
-           	    {
-           		envtCode = splitArrayOnBuyerOrgCode[i];
-           		log.debug("The envt code is: "+envtCode);
-           	    }         	
-           	 
-            }
+			if (splitArrayOnBuyerOrgCode.length > 2) {
+				envtCode = splitArrayOnBuyerOrgCode[3];
+			} else {
+				envtCode="";
+			}
 		}
 		
-		webConfirmationNumber = generateWebConfirmationNumber(orderHeaderKey,envtCode, inputXML.getDocumentElement());
-		if(!webConfirmationNumber.isEmpty())	
-		{
-			env.setTxnObject("WebConfirmationNumber", webConfirmationNumber);
-		}
+		// Generate Web confirmation Number
+		webConfirmationNumber = generateWebConfirmationNumber(orderHeaderKey, envtCode, rootElem);
 		
 		ArrayList<String> customerDetailsList = getCustomerList(env, buyerOrganizationCode,enterpriseCode);
 		
@@ -407,7 +395,7 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		return 	customerArrayList;
 	}
 
-	public String generateWebConfirmationNumber(String orderHeaderKey, String envtCode, Element inputDocRoot) {
+	public String generateWebConfirmationNumber(String orderHeaderKey, String envtCode, Element rootElem) {
 
 		String webConfirmationNumber = "";
 		String uniqueSequence = "";
@@ -416,23 +404,24 @@ public class XPXWebConfAndSplChgLineUpdate implements YIFCustomApi
 		String day = "";
 		String entryType= "";
 		int uniqueSequenceLength = 7;
-		int orderHeaderKeylength = orderHeaderKey.trim().length();
+		int orderHeaderKeylength = 0;
+		
+		if (!YFCObject.isNull(orderHeaderKey)) {
+			orderHeaderKeylength = orderHeaderKey.trim().length();
+		}
 		
 		YFCDate currentSystemDate = new YFCDate();
 		String currentSystemDateString = currentSystemDate.toString();
-		log.debug("The current systemDate is : "+currentSystemDateString);
 		year = currentSystemDateString.substring(2,4);
 		month = currentSystemDateString.substring(4,6);
 		day = currentSystemDateString.substring(6,8);
 		
-		if (orderHeaderKey != null && orderHeaderKeylength != 0 
-				&& orderHeaderKeylength > 8)
-		{
+		if (orderHeaderKeylength > 8) {
 			int startIndex = orderHeaderKeylength-uniqueSequenceLength;
 			uniqueSequence = orderHeaderKey.substring(startIndex);
 		}	
 
-		entryType = inputDocRoot.getAttribute(XPXLiterals.A_ENTRY_TYPE);
+		entryType = rootElem.getAttribute(XPXLiterals.A_ENTRY_TYPE);
 		log.debug("Entry type = " + entryType);
 		/* Changes made to fix issue 926 
 		IF order is placed from B2B,WEB or COM  Environment ID is Changed to constant('E') */

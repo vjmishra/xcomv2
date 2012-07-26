@@ -25,6 +25,7 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.util.YFCUtils;
+import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
@@ -2458,7 +2459,7 @@ public class XPXUtils implements YIFCustomApi {
 			Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 			"ResetPwdEmailSubject");
 				resetSubject.setAttribute("Subject", resetSubString);
-			String notificationiSubString = storeFrontId + ".com" + " Password Changed Notification";			
+			String notificationiSubString = storeFrontId + ".com" + " Password ";			
 			
 			String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
 			
@@ -2468,15 +2469,7 @@ public class XPXUtils implements YIFCustomApi {
 			Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 				"NotificationPwdEmailSubject");
 				notificationSubject.setAttribute("Subject", notificationiSubString);
-				
-				String readEnv = YFSSystem.getProperty("environment");
-				if(readEnv!=null)
-				{
-				Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"NotificationENV");
-				notificationEnvironment.setAttribute("environment", readEnv);
-				}
-			
+		
 			String imageName = getLogoImageName(env,storeFrontId);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 			
@@ -2529,7 +2522,7 @@ public class XPXUtils implements YIFCustomApi {
 			log.error("XPXUtils:getAdditionalAttributes" + e.getMessage());
 
 		}
-        System.out.println("SCXmlUtil.getString(inputDocument) ---------------"+SCXmlUtil.getString(inputDocument));
+
 		if(log.isDebugEnabled()){
 			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
@@ -2577,13 +2570,9 @@ public class XPXUtils implements YIFCustomApi {
 	    YFCElement rootElem = yfcOrderDetailDoc.getDocumentElement();
 	    YFCElement orderHoldTypesElem = rootElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
 	    if (orderHoldTypesElem != null) {
-	    	YFCNodeList orderHoldTypeList = orderHoldTypesElem.getElementsByTagName("OrderHoldType");
- 		    
-	    	if(orderHoldTypeList.getLength() > 0)
-	        {			        
-	           for(int i=0; i<orderHoldTypeList.getLength();i++) 
-	           {
-	        	   YFCElement orderHoldTypeElem = (YFCElement)orderHoldTypeList.item(i);
+	    	YFCIterable<YFCElement> holdTypeItr = orderHoldTypesElem.getChildren("OrderHoldType");
+	    	while (holdTypeItr.hasNext()) {
+	        	   YFCElement orderHoldTypeElem = holdTypeItr.next();
 	        	   if (orderHoldTypeElem != null) {
 	        		   String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
 			    	   String holdStatus = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
@@ -2595,11 +2584,9 @@ public class XPXUtils implements YIFCustomApi {
 			               break;
 			            } 
 	        	   }
-	           }          
-	                
-	        }
+	           
+	    	}
 	    }
 	    return isOrderOnHold;
-	}
-	
+	}	
 }
