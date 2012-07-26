@@ -351,7 +351,7 @@
 					</tr>
 					<tr>
 						<td> Ordered By: </td>
-						 <td><xsl:value-of select="Order/@Createuserid"/></td>
+						 <td><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/></td>
 						 
 					</tr>	
 					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
