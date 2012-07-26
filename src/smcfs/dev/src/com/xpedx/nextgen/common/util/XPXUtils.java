@@ -2471,7 +2471,7 @@ public class XPXUtils implements YIFCustomApi {
 		    if(genPwd != null && !genPwd.equalsIgnoreCase("")){
 				notificationiSubString = storeFrontId + ".com" + " User Creation Notification";
 			}
-			else
+		    if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
 			{
 				notificationiSubString=storeFrontId + ".com" + " User Password Change Notification ";
 			}
