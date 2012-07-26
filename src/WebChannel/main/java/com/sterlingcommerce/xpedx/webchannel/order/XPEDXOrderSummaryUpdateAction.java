@@ -59,7 +59,18 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			Element outElement = null;
 			
 			if(isDraftOrder){
-				outElement = prepareAndInvokeMashup(SAVE_ORDER_SUMMARY_MASHUP);
+				//outElement = prepareAndInvokeMashup(SAVE_ORDER_SUMMARY_MASHUP);
+				Set<String> mashupList = new HashSet<String> ();
+				/*<Order OrderHeaderKey="" ="" ReqDeliveryDate="" Override="Y" CustomerContactID="">
+				<Extn ExtnDeliveryHoldFlag="" =""
+					="" ="" =""
+					="" ="" =""
+					="" ="" ="" =""/>*/	
+		        mashupList.add(SAVE_ORDER_SUMMARY_MASHUP);
+				Map<String,Element> mashupInputs = prepareMashupInputs(mashupList);
+				Element changeOrderInput=mashupInputs.get(SAVE_ORDER_SUMMARY_MASHUP);
+				setOrderPlaceTransactionObjMap(changeOrderInput);
+				setInventoryIndicatorMap();
 				
 			}	else {
 				outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
@@ -74,10 +85,74 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception e) {
 			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+			XPEDXWCUtils.removeObectFromCache("ORDER_PLACE_CHNAGE_ORDER_DOC_MAP");
+			XPEDXWCUtils.removeObectFromCache("INVENTORY_INDICATOR_MAP");
 			LOG.error(e.getMessage(), e);
 			return "error";
 		}
 		return "success";
+	}
+	private void setInventoryIndicatorMap()
+	{
+		Map<String,String> inventoryIndicator=new HashMap<String,String>();
+		if(orderLineKeyLists != null)
+		{
+			for(int i=0;i<orderLineKeyLists.size();i++ )
+			{
+				String orderLineKey=(String)orderLineKeyLists.get(i);
+				if(inventoryInds != null)
+				{
+					
+					if(inventoryInds.contains(orderLineKeyLists.get(i)))
+						inventoryIndicator.put(orderLineKey, "DIRECT");
+					else
+						inventoryIndicator.put(orderLineKey, "STOCK");
+				}
+				else
+					inventoryIndicator.put(orderLineKey, "STOCK");
+			}
+		}
+		XPEDXWCUtils.setObectInCache("INVENTORY_INDICATOR_MAP", inventoryIndicator);
+	}
+	private void setOrderPlaceTransactionObjMap(Element changeOrderInput )
+	{
+
+		Map orderPlaceTransactionObjMap=new HashMap();
+		if(changeOrderInput != null)
+		{
+			orderPlaceTransactionObjMap.put("CustomerPONo", 
+					changeOrderInput.getAttribute("CustomerPONo"));
+			orderPlaceTransactionObjMap.put("ReqDeliveryDate", 
+					changeOrderInput.getAttribute("ReqDeliveryDate"));
+			Element orderExtnElement=(Element)changeOrderInput.getElementsByTagName("Extn").item(0);
+			if(orderExtnElement != null )
+			{
+				orderPlaceTransactionObjMap.put("ExtnDeliveryHoldFlag", 
+						orderExtnElement.getAttribute("ExtnDeliveryHoldFlag"));
+				orderPlaceTransactionObjMap.put("ExtnRushOrderComments", 
+						orderExtnElement.getAttribute("ExtnRushOrderComments"));
+				orderPlaceTransactionObjMap.put("ExtnShipComplete", 
+						orderExtnElement.getAttribute("ExtnShipComplete"));
+				orderPlaceTransactionObjMap.put("ExtnWillCall", 
+						orderExtnElement.getAttribute("ExtnWillCall"));
+				orderPlaceTransactionObjMap.put("ExtnDeliveryHoldDate", 
+						orderExtnElement.getAttribute("ExtnDeliveryHoldDate"));
+				orderPlaceTransactionObjMap.put("ExtnDeliveryHoldTime", 
+						orderExtnElement.getAttribute("ExtnDeliveryHoldTime"));
+				orderPlaceTransactionObjMap.put("ExtnAttentionName", 
+						orderExtnElement.getAttribute("ExtnAttentionName"));
+				orderPlaceTransactionObjMap.put("ExtnHeaderComments", SpecialInstructions);
+				orderPlaceTransactionObjMap.put("ExtnAddnlEmailAddr", 
+						orderExtnElement.getAttribute("ExtnAddnlEmailAddr"));
+				orderPlaceTransactionObjMap.put("ExtnRushOrderFlag", 
+						orderExtnElement.getAttribute("ExtnRushOrderFlag"));
+				orderPlaceTransactionObjMap.put("ExtnWebHoldFlag", 
+						orderExtnElement.getAttribute("ExtnWebHoldFlag"));
+				orderPlaceTransactionObjMap.put("ExtnOrderedByName", 
+						orderExtnElement.getAttribute("ExtnOrderedByName"));
+			}
+		}
+		XPEDXWCUtils.setObectInCache("ORDER_PLACE_CHNAGE_ORDER_DOC_MAP", orderPlaceTransactionObjMap);
 	}
 	
 	/*private void callChangeOrder()
@@ -759,6 +834,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private String extnWebHoldFlag;
 	private String rushOrdrFlag="N";
 	private String orderedByName;
+	private ArrayList<String> inventoryInds;
 	
 	public ArrayList getOrderLineKeyLists() {
 		return orderLineKeyLists;
@@ -1057,4 +1133,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	public void setOrderedByName(String orderedByName) {
 		this.orderedByName = orderedByName;
 	}
+
+	public ArrayList<String> getInventoryInds() {
+		return inventoryInds;
+	}
+
+	public void setInventoryInds(ArrayList<String> inventoryInds) {
+		this.inventoryInds = inventoryInds;
+	}
+
 }
