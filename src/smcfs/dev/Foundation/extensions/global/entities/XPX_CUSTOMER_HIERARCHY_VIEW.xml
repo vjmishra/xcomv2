@@ -6,6 +6,8 @@
 			EntityType="VIEW" Prefix="XPX" TableName="XPX_CUST_HIERARCHY_VIEW" View="true"
 			TableType="TRANSACTION" XMLName="XPXCustHierarchyView">
 			<Attributes>
+				<Attribute ColumnName="EXTN_SHIP_FROM_BRANCH" DataType="OrgCode"
+					Description="EXTN_SHIP_FROM_BRANCH" Nullable="true" XMLName="ExtnCustomerDivision" />
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" DataType="CustomerId"
 					Description="The Ship to Customer ID" Nullable="false" XMLName="ShipToCustomerID" />
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_NAME" DataType="Text-240"
