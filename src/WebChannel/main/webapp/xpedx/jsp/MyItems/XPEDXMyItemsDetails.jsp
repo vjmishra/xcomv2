@@ -950,6 +950,154 @@ function showSharedListForm(){
 		//// Function Start - Jira 3770
 		var isAddToCart=true;
 		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
+			var itemCount = "<s:property value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size()'/>";
+			//Adding this if block If MIL has 1 item
+			if(itemCount == 1){
+				isAddToCart=true;
+				var arrQty;
+				var arrUOM;
+				var arrItemID;
+				var arrOrdMul;
+				var baseUOM;
+				arrQty = document.getElementById("formItemIds").elements["qtys"];
+				arrUOM = document.getElementById("formItemIds").elements["UOMconversion"];
+				arrItemID = document.getElementById("formItemIds").elements["orderLineItemIDs"];
+				arrOrdMul = document.getElementById("formItemIds").elements["orderLineOrderMultiple"];
+				baseUOM = document.getElementById("formItemIds").elements["baseUOM"];
+				
+			errorflag=true;
+			addToCartFlag=false;
+			var isQuantityZero = true;
+			var uomCheck = false ;
+						
+			validAddtoCartItemsFlag[0]=true;
+			divId='errorDiv_'+	arrQty.id;
+			var divVal=document.getElementById(divId);
+
+			var quantity = arrQty.value;
+			quantity = ReplaceAll(quantity,",","");
+
+			if (priceCheck == true && addItemsWithQty != true){
+				if(quantity == '0'|| quantity == '')
+				quantity = 1;
+			}
+			
+			//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
+			//alert("isGlobal==="+ isGlobal);
+			if(isGlobal == true){
+				
+				if(quantity == '0' || quantity== '' ){
+						//Display Generic Message at Header level first then Update Line Level message.
+					
+					/* divVal.innerHTML='Qty Should be greater than 0'; */
+						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						document.getElementById(arrQty.id).style.borderColor="#FF0000";
+					}
+				isQuantityZero = false;
+			}
+			if((quantity == '0' || quantity== '' ) )
+			{  validAddtoCartItemsFlag[0]=false;
+				if((arrOrdMul.value!=null || arrOrdMul.value!='') && arrOrdMul.value>1)
+				{
+					
+					//alert("WE are in if block of quantity == '0'");
+					//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+					divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) + " "+baseUOM.value;
+					divVal.setAttribute("class", "notice");
+					divVal.style.display = 'block';
+					//document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+					errorflag= false;						
+				}
+			}
+			
+			else if(quantity>0){
+				var totalQty = arrUOM.value * quantity;
+				if(arrOrdMul.value == undefined || arrOrdMul.value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul.value == null)
+				{
+					arrOrdMul.value=1;
+				}
+				var ordMul = totalQty % arrOrdMul.value;
+				isQuantityZero = false;
+				if(ordMul!= 0 && addItemsWithQty != true)
+				{
+					//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
+					//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
+					//added for jira 3253
+					if (priceCheck == true){
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						}
+					else {
+					divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
+					divVal.setAttribute("class", "error");
+					divVal.style.display = 'block';
+					document.getElementById(arrQty.id).style.borderColor="#FF0000";
+					document.getElementById("errorMsgTop").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+		            document.getElementById("errorMsgTop").style.display = "inline";
+					
+		            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+		            document.getElementById("errorMsgBottom").style.display = "inline";
+		            uomCheck = true;
+					}
+					errorflag= false; validAddtoCartItemsFlag[0]=false;
+					isAddToCart=false;
+				}
+				
+				else if(addItemsWithQty == true){
+					addToCartFlag = true;
+					if(ordMul!= 0){
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						document.getElementById(arrQty.id).style.borderColor="#FF0000";
+						document.getElementById("errorMsgTop").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgTop").style.display = "inline";
+						
+			            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
+			            document.getElementById("errorMsgBottom").style.display = "inline";
+			            uomCheck = true;
+			            errorflag= false; validAddtoCartItemsFlag[0]=false;
+						isAddToCart=false;
+					}
+					else{
+						validAddtoCartItemsFlag[0]=true;
+					}
+					if(arrOrdMul.value > 1 && isAddToCart == true)
+					{
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
+						divVal.setAttribute("class", "notice");
+						divVal.style.display = 'block';
+					}
+					else if(arrOrdMul.value >1 && ordMul == 0)
+					{
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
+						divVal.setAttribute("class", "notice");
+						divVal.style.display = 'block';
+						
+					}
+				}
+				else if (arrOrdMul.value > 1 && priceCheck == true){
+					
+					if(priceCheck == true){
+					divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) + " "+baseUOM.value;
+					divVal.setAttribute("class", "notice");
+					divVal.style.display = 'block';
+					}
+					else {
+						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
+						divVal.setAttribute("class", "notice");
+						divVal.style.display = 'block';
+						
+						}
+					
+					
+				}	
+			}
+		}// End of If block
+			else{
+			
 			isAddToCart=true;
 			var arrQty = new Array();
 			var arrUOM = new Array();
@@ -1096,6 +1244,8 @@ function showSharedListForm(){
 				}	
 				
 			}
+			
+			} // End of else . This else is for if itemCount==1	
 			if(uomCheck == true)
 			{
 				errorflag= false;
