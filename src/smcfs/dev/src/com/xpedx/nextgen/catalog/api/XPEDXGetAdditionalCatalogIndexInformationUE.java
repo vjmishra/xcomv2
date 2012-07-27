@@ -168,7 +168,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 		String templateXML = "<ItemList><Item><Extn><XPXItemExtnList><XPXItemExtn "
 				+ "InventoryIndicator='' XPXDivision=''></XPXItemExtn>"
 				+ "</XPXItemExtnList></Extn></Item>" + "</ItemList>";
-		mEnvironment.setApiTemplate("getCompleteItemList", SCXmlUtil
+		mEnvironment.setApiTemplate("getItemList", SCXmlUtil
 				.createFromString(templateXML));
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 		Document outputListDocument = api.invoke(mEnvironment,
