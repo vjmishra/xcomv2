@@ -429,7 +429,11 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				specialLineElem.setAttribute("ValidateItem", "N");
 				specialLineElem.setAttribute("LineType", "M");
 				YFCElement itemElement = specialLineElem.createChild("Item");
-				itemElement.setAttribute("ItemID", arg0.getProperty("ItemID"));
+				String itemID = arg0.getProperty("ItemID");
+				if (YFCObject.isNull(itemID) || YFCObject.isVoid(itemID)) {
+					itemID = "/05";
+				}
+				itemElement.setAttribute("ItemID", itemID);
 				
 				// Special Line Instruction Is Required Only When Order Has A Hold. In Other Case MAX Will Be Updating It Through OU Updates.
 				if (utilObj.checkIfOrderOnPendingHold(rootDoc)) {
@@ -446,7 +450,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				specialLineExtnElem.setAttribute("ExtnAdjUOMUnitPrice", new Float(chargeAmount).toString());
 				specialLineExtnElem.setAttribute("ExtnAdjUnitPrice", new Float(chargeAmount).toString());		
 				specialLineExtnElem.setAttribute("ExtnPriceOverrideFlag", "Y"); 
-				
+				specialLineExtnElem.setAttribute("ExtnLineType", "STOCK");
 				long uniqueSequenceNo = CallDBSequence.getNextDBSequenceNo(env, XPXLiterals.WEB_LINE_SEQUENCE);
 				webLineNumber = generateWebLineNumberForSpecialCharge(entryType, uniqueSequenceNo,envtCode);
 				specialLineExtnElem.setAttribute(XPXLiterals.A_WEB_LINE_NUMBER, webLineNumber);
