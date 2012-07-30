@@ -86,8 +86,13 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 		
 
 
-			if(strRoot!=null && (strRoot.equals("SOF")||strRoot.equals("EOFCustomer")||strRoot.equals("EOFDivision")|| strRoot.equals("EOFEntitlement")||strRoot.equals("EOFPriceBook")||strRoot.equals("EOFUom"))){	
-				if ((feedName!=null &&feedName.equalsIgnoreCase("Customer"))||strRoot.equals("EOFCustomer")) {
+			//if(strRoot!=null && (strRoot.equals("SOF")||strRoot.equals("EOFCustomer")||strRoot.equals("EOFDivision")|| strRoot.equals("EOFEntitlement")||strRoot.equals("EOFPriceBook")||strRoot.equals("EOFUom"))){
+			/***** Modified code for Jira 4143 *********/
+			if(strRoot!=null && (strRoot.equals("SOF")||strRoot.equals("EOFDivision")|| strRoot.equals("EOFEntitlement")||strRoot.equals("EOFPriceBook")|| strRoot.equals("EOFUom"))){	
+				
+				/***commented code for JIra 4143   ******/
+			
+/*				if ((feedName!=null &&feedName.equalsIgnoreCase("Customer"))||strRoot.equals("EOFCustomer")) {
 					
 					String customerFeedCachedObjects = _properties   
 					.getProperty("CustomerFeedCachedObjectsList");
@@ -110,7 +115,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						cachedGroup.appendChild(cachedObject);
 					}
 
-				}
+				}*/
 
 				if ((feedName!=null &&feedName.equalsIgnoreCase("Division"))||strRoot.equals("EOFDivision") ) {
 				
@@ -155,8 +160,16 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					}
 				}
 
-				else if ((feedName!=null &&feedName.equalsIgnoreCase("PriceBook"))||strRoot.equals("EOFPriceBook")) {
-					String PriceBookFeedCachedObjects = _properties
+				//else if ((feedName!=null &&feedName.equalsIgnoreCase("PriceBook"))||strRoot.equals("EOFPriceBook")) {
+					
+					/****Modified code for Jira 4143 ***********/
+					else if ((feedName!=null &&feedName.equalsIgnoreCase("PriceBook"))&& strRoot.equals("EOFPriceBook")) {
+						
+						deletePriceListLine(env);
+						
+						
+						/*******Commented code for Jira 4143 *********/
+					/*String PriceBookFeedCachedObjects = _properties
 					.getProperty("PriceBookFeedCachedObjectsList");
 					String[] cachedObjectsList = PriceBookFeedCachedObjects
 					.split(",");
@@ -179,7 +192,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 						deletePriceListLine(env);
 
-					}
+					}*/
 
 				}	
 
