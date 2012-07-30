@@ -454,16 +454,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 											Element userchildElem = (Element) userChildList.item(counter);
 											String userName = userchildElem.getAttribute("Username");
 											String LoginId = userchildElem.getAttribute("Loginid");
-											String[] salesID = LoginId.split("@");
-											if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
-												reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
-												reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
-												reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
-											}else{
-												reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
-												reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
-												reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
-											}
+											
 									/*	}
 										//3740 - Modified for Report Changes End
 										
@@ -507,7 +498,19 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingMSAPId);
 												manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", LoginId);
 												
-												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());												
+												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());
+												//3740 - Start - Report will Show Only User which have assignment removed
+												String[] salesID = LoginId.split("@");
+												if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
+													reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
+													reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
+													reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
+												}else{
+													reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+													reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
+													reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+												}
+												//3740 - End - 
 											}											
 										} 
 										
