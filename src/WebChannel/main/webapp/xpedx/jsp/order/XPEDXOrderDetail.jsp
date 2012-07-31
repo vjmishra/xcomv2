@@ -221,7 +221,7 @@ function showSplitDiv(divId)
 		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
-			 		document.getElementById("ReasonText").value="Accepted";
+			 		document.getElementById("ReasonText").value="Empty";
 			 	}
 			    else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
@@ -230,7 +230,7 @@ function showSplitDiv(divId)
 		 if(actionValue == "Reject"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
-			 		document.getElementById("ReasonText").value="Rejected";
+			 		document.getElementById("ReasonText").value="Empty";
 			 	}
 			     else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
@@ -705,10 +705,24 @@ function showSplitDiv(divId)
                         <s:if test='#xpedxReqDeliveryDate != ""'>
                         	Estimated Delivery Date: <s:property value="%{#util.formatDate(#xpedxReqDeliveryDate, #wcContext)}"/> <br/><br/>
                         </s:if>
-							<s:if test='#xpedxExtnHeaderComments != "" && #xpedxHeaderInstructionType == "HEADER"'>
+                       <%--
+                       JIRA 3999 Start-Approved/Reject comments will be display in UI
+                        --%>
+                       	<s:if test='#xpedxExtnHeaderComments != "" && #xpedxHeaderInstructionType == "HEADER"'>
 	                        	<p>Comments: <s:property value='#xpedxExtnHeaderComments' /> </p> <br/>
 	                        </s:if>
-                        Order placed<s:if test='#xpedxOrderedByName!=""' > by <s:property value='#xpedxOrderedByName' /></s:if> 
+	                        <s:if test='#_action.getPendingHoldStatus() != "" && #_action.getPendingHoldStatus() == "1300" && #_action.getReasonText() != "Empty"' >
+	                        	<p>Approved Comments: <s:property value='#_action.getReasonText()' /> </p> <br/>
+	                        </s:if>
+	                         <s:if test='#_action.getPendingHoldStatus() != "" && #_action.getPendingHoldStatus() == "1200" && #_action.getReasonText() != "Empty"'>
+	                        	<p>Rejected Comments: <s:property value='#_action.getReasonText()' /> </p> <br/>
+	                        </s:if>
+	                        <%--
+                              JIRA 3999 End-Approved/Reject comments will be display in UI
+                             --%>
+                      
+	                      
+	                      Order placed<s:if test='#xpedxOrderedByName!=""' > by <s:property value='#xpedxOrderedByName' /></s:if> 
 		                    <s:if test='#xpedxOrderDate!=""' > on  <s:property value='#xpedxOrderDate' /></s:if> 
 <%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - begin --%>
 		                     <%-- Added CT For Jira 3431 --%>
@@ -1648,7 +1662,7 @@ function showSplitDiv(divId)
 <!-- 			<p>Enter comments or instructions for the order owner:</p> -->
 			<s:form id="approval" name="approval" action="approvalAction" namespace="/order" validate="true" method="post">
 <%-- 				<span><s:text name="Approval/Rejection.Notes"/></span> --%>
-				<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple"></s:textarea>
+				<%--Start 3999 Changes Start --%><s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 				<s:hidden name="ReasonText" id="ReasonText" value="" />				
 				<s:hidden name="OrderHeaderKey" value="" />
 				<s:hidden name="ApprovalAction" value=""/>
