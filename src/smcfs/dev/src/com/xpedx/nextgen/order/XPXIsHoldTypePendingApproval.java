@@ -20,9 +20,13 @@ public class XPXIsHoldTypePendingApproval implements YCPDynamicConditionEx {
 		if(!SCUtil.isVoid(pendingApprovalHoldType) && !SCUtil.isVoid(doc)) {
 			Element orderHoldType = doc.getDocumentElement();
 			String holdTypeOnOrder = orderHoldType.getAttribute(XPXLiterals.A_HOLD_TYPE);
-			if(!SCUtil.isVoid(holdTypeOnOrder)) {
-				if(SCUtil.equals(holdTypeOnOrder, pendingApprovalHoldType))
-					isHoldTypeApproval = true;
+			String holdStatusOnOrder = orderHoldType.getAttribute(XPXLiterals.A_STATUS);
+			if(!"1300".equals(holdStatusOnOrder)) //Order Approved Email won't be sent on changeOrder API call as its a part of Order Approval Service now.
+			{
+				if(!SCUtil.isVoid(holdTypeOnOrder)) {
+					if(SCUtil.equals(holdTypeOnOrder, pendingApprovalHoldType))
+						isHoldTypeApproval = true;
+				}
 			}
 		}
 		return isHoldTypeApproval;
