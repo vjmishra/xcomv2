@@ -245,7 +245,7 @@
 		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
-			 		document.getElementById("ReasonText").value="Accepted";
+			 		document.getElementById("ReasonText").value="Empty"; 
 			 	}
 			    else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
@@ -254,7 +254,7 @@
 		 if(actionValue == "Reject"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
-			 		document.getElementById("ReasonText").value="Rejected";
+			 		document.getElementById("ReasonText").value="Empty";
 			 	}
 			    else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
@@ -609,8 +609,8 @@
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>	 -->			    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
-				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple"></s:textarea>
+				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
+					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
