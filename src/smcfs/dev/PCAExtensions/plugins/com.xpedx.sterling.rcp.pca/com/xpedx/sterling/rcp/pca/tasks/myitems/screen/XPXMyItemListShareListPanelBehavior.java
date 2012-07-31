@@ -2,8 +2,11 @@ package com.xpedx.sterling.rcp.pca.tasks.myitems.screen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TreeItem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,6 +29,7 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 	private HashMap<String, Element> assignedMap;
 	private String strCustomerPathPrefix = "";
 	public ArrayList parentcustomer = new ArrayList();
+	public static HashSet divisionHashSet= new HashSet();
 	public XPXMyItemListShareListPanelBehavior(
 			XPXMyItemListShareListPanel myItemListShareListPanel,
 			Element inputElement) {
@@ -200,6 +204,20 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 						this.getCustomerAssignmentsAfterUpdate();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
+					//Called for JIRA 4157
+					else if ("XPXCustomerHierarchyViewService".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						NodeList XPXCustHierarchyViewNodeList = outXml.getElementsByTagName("XPXCustHierarchyView");
+						if (XPXCustHierarchyViewNodeList != null&& XPXCustHierarchyViewNodeList.getLength() > 0) {
+							for (int k = 0; k < XPXCustHierarchyViewNodeList.getLength(); k++) {
+								Element eleMyItemsList = (Element) XPXCustHierarchyViewNodeList.item(k);
+								String strDivisionID = eleMyItemsList.getAttribute("ExtnCustomerDivision");
+								if (strDivisionID != ""){
+								divisionHashSet.add(strDivisionID);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -238,6 +256,9 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 	
 	public void getChildList(){
 		Element childCustomerList = getModel("XPXGetImmediateChildCustomerListService");
+		String strMasterCustomerID = YRCXmlUtils.getAttributeValue(childCustomerList, "/CustomerList/Customer/@CustomerID");
+		//Called for JIRA 4157
+		getDivisionSet(strMasterCustomerID);
 		Element customerElement = YRCXmlUtils.getChildElement(childCustomerList, "Customer");
 		ArrayList<Element> arrlst=new ArrayList<Element>();
 		arrlst.add(customerElement);
@@ -280,12 +301,24 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 		
 		if(!YRCPlatformUI.isVoid(strMILShareKey))
 			lineEle.setAttribute("MyItemsListShareKey", strMILShareKey);
-		
-		if(!YRCPlatformUI.isVoid(strDivisionID))
+		//Called for JIRA 4157
+		if(!YRCPlatformUI.isVoid(strDivisionID)){
 			strDivisionID = strDivisionID.concat("_M");
 			lineEle.setAttribute("DivisionID", strDivisionID);
-		
-		
+		}
+		else{
+			int divisionHashSetsize = divisionHashSet.size(); 
+			if (divisionHashSetsize == 1){
+				ArrayList<String> customerIDs = new ArrayList<String>();
+				customerIDs.addAll(divisionHashSet);
+				String strMasterDivisionID =customerIDs.get(0);
+					if(!YRCPlatformUI.isVoid(strMasterDivisionID))
+						strMasterDivisionID = strMasterDivisionID.concat("_M");
+					lineEle.setAttribute("DivisionID", strMasterDivisionID);
+					divisionHashSet = new HashSet();
+			}
+		}
+			
 		YRCXmlUtils.importElement(inputEle, lineEle);
 		
 		//InPut XML prepared for changeXPEDX_MyItemsList API
@@ -312,5 +345,25 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 	public String getCustomerPathPrefix() {
 		return strCustomerPathPrefix;
 	}
+	//Called for JIRA 4157
+	private void getDivisionSet(String strMasterCustomerID) {
+		
+		if(strMasterCustomerID != null ){
+			Element XPXCustHierarchyViewelem = YRCXmlUtils.createDocument("XPXCustHierarchyView").getDocumentElement();
+			XPXCustHierarchyViewelem.setAttribute("MSAPCustomerID", strMasterCustomerID);
+			callApi("XPXCustomerHierarchyViewService",XPXCustHierarchyViewelem.getOwnerDocument());
+		}
+	}
+	 void callApi(String name, Document inputXml){
+	    	callApi(name, inputXml, null, null); 
+	    }
+	    void callApi(String name, Document inputXml, String strUserDataKey, String strUserData)
+	    {
+	        YRCApiContext context = new YRCApiContext();
+	        context.setApiName(name);
+	        context.setFormId(getFormId());
+	        context.setInputXml(inputXml);
+	        callApi(context);
+	    }
 
 }

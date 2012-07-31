@@ -1,6 +1,9 @@
 package com.xpedx.sterling.rcp.pca.tasks.myitems.screen;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
@@ -15,6 +18,7 @@ import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCSharedTaskOutput;
+import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
@@ -26,6 +30,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 	private String strCustomerPathPrefix = "";
 	private Element eleSaveList = null;
 	public static String  oldCustomerID = " ";
+	public static HashSet divisionHashSet= new HashSet();
 	/**
 	 * Constructor for the behavior class.
 	 */
@@ -103,6 +108,8 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 						String strCustomerID = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@CustomerID");
 						String strOrgCode = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/@OrganizationCode");
 						String strSuffixType = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/Extn/@ExtnSuffixType");
+						//Called for JIRA 4157
+						getDivisionSet(strCustomerID,strSuffixType);
 						if(YRCPlatformUI.isVoid(strSuffixType) || !"MC".equals(strSuffixType)){
 							YRCApiContext apiCtx = new YRCApiContext();
 							String cmdName = "XPXGetParentCustomerListService";
@@ -154,6 +161,21 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 						Element CustomerElement = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer");
 						String customerIDSelected = CustomerElement.getAttribute("CustomerID");
 						setFieldValue("txtCustomerIDSelected", customerIDSelected);
+					}
+					//Called for JIRA 4157
+					else if ("XPXCustomerHierarchyViewService".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						NodeList XPXCustHierarchyViewNodeList = outXml.getElementsByTagName("XPXCustHierarchyView");
+						if (XPXCustHierarchyViewNodeList != null
+								&& XPXCustHierarchyViewNodeList.getLength() > 0) {
+							for (int k = 0; k < XPXCustHierarchyViewNodeList.getLength(); k++) {
+								Element eleMyItemsList = (Element) XPXCustHierarchyViewNodeList.item(k);
+								String strDivisionID = eleMyItemsList.getAttribute("ExtnCustomerDivision");
+								if (strDivisionID != ""){
+								divisionHashSet.add(strDivisionID);
+								}
+							}
+						}
 					}
 				}
 
@@ -262,11 +284,24 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 		
 		Element lineEle = YRCXmlUtils.createFromString("<XPEDXMyItemsListShare CustomerID='"+strCustID+"'/>").getDocumentElement();
 		lineEle.setAttribute("CustomerPath", strCustPath);
+		//Called for JIRA 4157
 		if(!YRCPlatformUI.isVoid(strDivisionID))
 			strDivisionID = strDivisionID.concat("_M");
 			lineEle.setAttribute("DivisionID", strDivisionID);
-		
-		YRCXmlUtils.importElement(eleMILShareList, lineEle);
+			
+			YRCXmlUtils.importElement(eleMILShareList, lineEle);
+			Element XPEDXMyItemsListShareelem = YRCXmlUtils.getChildElement(eleMILShareList, "XPEDXMyItemsListShare");
+			//Binding Division ID if shared at Master or Customer level
+			int divisionHashSetsize = divisionHashSet.size(); 
+			if (divisionHashSetsize == 1){
+				ArrayList<String> customerIDs = new ArrayList<String>();
+				customerIDs.addAll(divisionHashSet);
+				String strMasterDivisionID =customerIDs.get(0);
+					if(!YRCPlatformUI.isVoid(strMasterDivisionID))
+						strMasterDivisionID = strMasterDivisionID.concat("_M");
+					XPEDXMyItemsListShareelem.setAttribute("DivisionID", strMasterDivisionID);
+					divisionHashSet = new HashSet();
+			}
 	}
 	
 	/** Search for given Customer Id for which MIL is being created. **/
@@ -337,4 +372,36 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 	public String getCustomerPathPrefix() {
 		return strCustomerPathPrefix;
 	}
+	//Called for JIRA 4157
+	private void getDivisionSet(String strCustomerID, String strSuffixType) {
+		if(strCustomerID != null && strSuffixType != null){
+			Element XPXCustHierarchyViewelem = YRCXmlUtils.createDocument("XPXCustHierarchyView").getDocumentElement();
+			if("S".equalsIgnoreCase(strSuffixType)){
+				XPXCustHierarchyViewelem.setAttribute("ShipToCustomerID",strCustomerID);	
+			}
+			if("B".equalsIgnoreCase(strSuffixType)){
+				XPXCustHierarchyViewelem.setAttribute("BillToCustomerID", strCustomerID);
+			}
+			if("C".equalsIgnoreCase(strSuffixType)){
+				XPXCustHierarchyViewelem.setAttribute("SAPCustomerID", strCustomerID);
+			}
+			if("MC".equalsIgnoreCase(strSuffixType)){
+				XPXCustHierarchyViewelem.setAttribute("MSAPCustomerID", strCustomerID);
+			}
+			callApi("XPXCustomerHierarchyViewService",XPXCustHierarchyViewelem.getOwnerDocument());
+		}
+		
+		
+	}
+    void callApi(String name, Document inputXml){
+    	callApi(name, inputXml, null, null); 
+    }
+    void callApi(String name, Document inputXml, String strUserDataKey, String strUserData)
+    {
+        YRCApiContext context = new YRCApiContext();
+        context.setApiName(name);
+        context.setFormId(getFormId());
+        context.setInputXml(inputXml);
+        callApi(context);
+    }
 }
