@@ -241,12 +241,12 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 			
 			//Get the binding value for ExtnCustomerDivision
 			String customerDivsionStr[]=null;
-			String customerDivision=YRCXmlUtils.getAttributeValue(eleInput, "/Customer/Extn/@ExtnCustomerDivision");
+			String customerDivision=YRCXmlUtils.getAttributeValue(eleInput, "/Customer/Extn/@ExtnShipFromBranch");
 			if(!YRCPlatformUI.isVoid(customerDivision)){
 				customerDivsionStr=customerDivision.split("_");
 				if (!YRCPlatformUI.isVoid(customerDivsionStr[0])) {
 					YRCXmlUtils.setAttributeValue(eleInput,
-							"/Customer/Extn/@ExtnCustomerDivision",
+							"/Customer/Extn/@ExtnShipFromBranch",
 							customerDivsionStr[0]);
 				}
 				if (!YRCPlatformUI.isVoid(customerDivsionStr[1])) {
@@ -289,7 +289,7 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 			bindingData.setName("extn_exn_comboDivision");
 			bindingData.setListBinding("Extn_DivisionList:/OrganizationList/Organization");
 			bindingData.setSourceBinding("");
-			bindingData.setTargetBinding("getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision");
+			bindingData.setTargetBinding("getCustomerList_input:/Customer/Extn/@ExtnShipFromBranch");
 			bindingData.setDescriptionBinding("OrganizationCode;OrganizationName");
 			bindingData.setKey("xpedx_DivisionList_ExtnCustomerDivsion");	
 			return bindingData;
