@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
@@ -316,9 +318,44 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	
 	protected void setOrderSummaryFlagValues() {
 		try {
+			String holdTypeForApproval = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
+			
 			Element orderElem = getOrderElementFromOutputDocument();
 			Element extnElem = XMLUtilities.getChildElementByName(orderElem,
 					"Extn");
+			
+			/*
+			 * CR 3999 Start-ReasonText will be dispaly in UI
+			 */
+			
+			Element orderHoldTypesElem = XMLUtilities.getChildElementByName(orderElem,
+			"OrderHoldTypes");			
+			
+			ArrayList<Element> orderholdtypeelemlist = SCXmlUtils.getInstance().getChildren(orderHoldTypesElem,OrderConstants.ORDER_HOLD_TYPE);
+			if(orderholdtypeelemlist.size() >0){
+			for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter.hasNext();) {
+				Element orderholdtypeelem = (Element) iter.next();
+				if ((orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE))
+						.trim().equals(holdTypeForApproval)) {
+					String holdstatus = orderholdtypeelem.getAttribute(
+							OrderConstants.STATUS).trim();
+					if(holdstatus.equalsIgnoreCase(OrderConstants.REJECT_HOLD_STATUS) || holdstatus.equalsIgnoreCase(OrderConstants.RESOLVE_HOLD_STATUS))
+					{ //REJECT_HOLD_STATUS
+						pendingHoldStatus = holdstatus;
+						 reasonText = orderholdtypeelem.getAttribute("ReasonText");
+						
+					}
+					
+				}
+			  
+			}}
+			
+			/*
+			 * CR 3999 End -ReasonText will be display in UI
+			 */
+			/*orderHearderPendComments.put("pendinStatus", pendinStatus);
+			orderHearderPendComments.put("reasonText",reasonText);
+	*/
 			String dhFlag = SCXmlUtils.getAttribute(extnElem,
 					"ExtnDeliveryHoldFlag");
 			String wcFlag = SCXmlUtils.getAttribute(extnElem, "ExtnWillCall");
@@ -682,6 +719,33 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean shipComplete = false;
 	protected boolean isFOCreated = false;
 	protected boolean isCSRReview = false;
+	/*
+	JIRA 3999 Start -Set and Get method for pending hold status and reson text
+	*/
+	
+	protected String reasonText = "";
+	protected String pendingHoldStatus = "";
+	
+	public String getPendingHoldStatus() {
+		return pendingHoldStatus;
+	}
+
+	public void setPendingHoldStatus(String pendingHoldStatus) {
+		this.pendingHoldStatus = pendingHoldStatus;
+	}
+
+	public String getReasonText() {
+		return reasonText;
+	}
+
+	public void setReasonText(String reasonText) {
+		this.reasonText = reasonText;
+	}
+	/*
+	JIRA 3999 End -Set and Get method for pending hold status and reson text
+	*/
+	
+
 	protected String userKey = "";
 	protected String headerComment = "";
 	private HashMap<String, HashMap<String,String>> skuMap;
