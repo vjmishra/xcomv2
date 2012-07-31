@@ -294,13 +294,11 @@
 					</td>
 					</tr>
 					<tr>
+					
 					<td colspan="2">
-					<xsl:when test = 'Order/Input/OrderHoldType/@ReasonText="Empty"' >
-					<span class="bold">Rejected Comments:&#160;</span>					
-					</xsl:when>
-					<xsl:otherwise>
+					<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
 					<span class="bold">Rejected Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
-					</xsl:otherwise>
+					</xsl:if>
 					</td>
 					</tr>
 					</table>
