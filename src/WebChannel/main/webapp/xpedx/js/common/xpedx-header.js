@@ -17518,6 +17518,22 @@ function restrictTextareaMaxLength(Object, maxLen){
  return true;
  
 }
+/*CR 3999 Start -Done the changes*/
+function restrictTextareaMaxLengthAlert(Object, maxLen){
+	 var txtTextArea = Object.value;
+	 
+	 if( txtTextArea.length > maxLen ) {
+	//Commented for 3105	 
+	 var txtTruckTextArea = txtTextArea.substring(0, maxLen);
+	 Object.value = txtTruckTextArea;
+	 return false;
+	 }
+	 
+	 return true;
+	 
+	}
+/*CR 3999 End*/
+ */
 //added for jira 3241
 
 function doGetCaretPosition (ctrl) {
