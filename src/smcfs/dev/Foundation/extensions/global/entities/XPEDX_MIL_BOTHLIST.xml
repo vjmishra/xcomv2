@@ -7,6 +7,7 @@
 				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="Createuserid"/>
 				<Attribute ColumnName="CREATEUSERNAME" 		DataType="Text-60" 		DefaultValue="' '" Description="Creating User Name" XMLName="Createusername"/>
 				<Attribute ColumnName="MODIFYUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID" XMLName="Modifyuserid"/>
+				<Attribute ColumnName="MODIFYUSERNAME" DataType="Text-60" 	DefaultValue="' '" Description="Modifying User Name" Nullable="true" XMLName="ModifyUserName"/>
 				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	DataType="Key" 	Description="" Nullable="False" XMLName="MyItemsListKey"/>
 				<Attribute ColumnName="LIST_NAME"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
 				<Attribute ColumnName="LIST_DESC"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
