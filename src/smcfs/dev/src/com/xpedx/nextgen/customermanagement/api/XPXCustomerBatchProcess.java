@@ -1215,22 +1215,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		
 	
 		/**** start of  Modified code for JIra 4132 *********/
-		if(!masterSapAccountNumber.equals(sapAccountNumber)){
+		//if(!masterSapAccountNumber.equals(sapAccountNumber)){
 			
 			masterCustomerId = masterSapCustomerId;
 			rootCustomerKey = getRootCustomerKey(env, masterCustomerId);
-		
-		}
-		
-		else{
-		rootCustomerKey = getRootCustomerKey(env, customerID);
-		}
+		//	}
+
+		/*	commented for jira 3914
+		 * else{ rootCustomerKey = getRootCustomerKey(env, customerID);	}*/
+
 		
 		/*******End of Modified code for JIra 4132 **********/
 		//get the customer name
-		MSAPList = getCustomerNameForMSAP(env,rootCustomerKey);
+		/* commented for jira 3914 *****
+			MSAPList = getCustomerNameForMSAP(env,rootCustomerKey);
 		customerName = MSAPList.get(0);
 		masterCustomerId = MSAPList.get(1);
+		 ***/
 		//String masterCustomerUser = "MasterUser"+"@"+customerName+".com";
 		/* changes made on 15/02/2011 
 		 *  Master customer user has been formed with master customer id and not with customer name.
@@ -1239,19 +1240,16 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		//check if the mastercustomer user already exists
 		//requirement change
-		boolean masterCustomerexists = false;
-		masterCustomerexists = checkForMasterCustomer(env, masterCustomerUser);
+		//boolean masterCustomerexists = false;
+		//masterCustomerexists = checkForMasterCustomer(env, masterCustomerUser);
 		
-			//then assign this user to the customer
-			//assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
-		
-		if(!masterCustomerexists)
-		{
-			//create the master customer user and assign it to customer
-			//createMaterCustomer
+		/******Modified for JIra 3914 ******/
+/*		if(masterCustomerexists){
+			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
+		}else{*/
 			createMasterCustomer(env, masterCustomerUser,rootCustomerKey,customerID);
 			assignMasterCustomerUserToCustomer(env, customerID,masterCustomerUser, suffixType,masterCustomerId);
-		}
+		//}
 
 	}
 
@@ -1340,7 +1338,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		Element inputAssignmentElement = inputAssignmentDoc.getDocumentElement();
 		inputAssignmentElement.setAttribute("CustomerID", customerID);
 		inputAssignmentElement.setAttribute("UserId", masterCustomerUser);
-		inputAssignmentElement.setAttribute("Operation", "Create");
+		//inputAssignmentElement.setAttribute("Operation", "Create");
 		if(suffixType.equals("B"))
 		{
 			//inputAssignmentElement.setAttribute("OrganizationCode", customerID);
@@ -1354,7 +1352,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		}*/
 			log.debug("inputAssignmentDoc"+SCXmlUtil.getString(inputAssignmentDoc));
-			api.invoke(env, "manageCustomerAssignment", inputAssignmentDoc);
+		
+			Document outputCustAssignDoc =api.invoke(env,"getCustomerAssignmentList",inputAssignmentDoc);
+
+			NodeList custAssignList = outputCustAssignDoc.getElementsByTagName("CustomerAssignment");
+		//	System.out.println("CustomerAssignmentOutputdoc"+SCXmlUtil.getString(outputCustAssignDoc));
+			int custAssglngt =custAssignList.getLength();
+			try{
+				if(custAssglngt==0){
+					inputAssignmentElement.setAttribute("Operation", "Create");
+					api.invoke(env, "manageCustomerAssignment", inputAssignmentDoc);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 
 	}
