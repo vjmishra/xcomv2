@@ -17533,7 +17533,7 @@ function restrictTextareaMaxLengthAlert(Object, maxLen){
 	 
 	}
 /*CR 3999 End*/
- */
+ 
 //added for jira 3241
 
 function doGetCaretPosition (ctrl) {
