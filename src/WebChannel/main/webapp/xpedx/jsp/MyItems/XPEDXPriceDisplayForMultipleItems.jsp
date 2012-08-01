@@ -9,7 +9,6 @@
 <s:set name="lineNumber" value="%{1}" />
 <s:set name='itemOrderSeq' value="%{1}" />					
 <s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
-<s:hidden value = "%{#_action.isValidateOrderMul()}" id="shilpa21"></s:hidden>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
 					<s:set name='itemId' value='#item.getAttribute("ItemId")+"" ' />
@@ -100,7 +99,7 @@
 			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if></s:if></i></td>
 			
 			<s:else>
-			<td class="left" colspan="3"><span>&nbsp;</span></td>
+			<td class="left" colspan="3" width="34%"><span>&nbsp;</span></td>
 			</s:else>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<td colspan="3" width="34%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
@@ -266,6 +265,19 @@
 				<s:div id="myPrice_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="break" value="false"></s:set>
+				
+				<s:if test='%{#lineStatusCodeMsg != ""}'>
+					<tbody class="mil-priceDiv-visibility" style="valign:right;">		<tr>
+								<td width="40%" class="left"><b>My Price:</b></td>
+								<td class="left" width="60%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
+							</tr>
+								<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+							<tr>
+								<td class="right"><b>Extended Price: </b></td>
+								<td class="left" width="39%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> </td>
+							</tr></tbody>
+				</s:if>
+				<s:else>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					<s:set name="bracketPriceForUOM" value="bracketPrice" />
 					<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -307,6 +319,7 @@
 						</s:else>
 												
 					</s:iterator>
+					</s:else>
 					
 				</table>
 				</s:div>
@@ -318,52 +331,35 @@
 		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 			<td colspan="10"></td>
 		</tr>
-
 </tbody>
-						
+<s:if test='%{#lineStatusCodeMsg != ""}'>
+	<tbody><tr><td>&nbsp;</td><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
+	</tbody>
+</s:if>						
 </s:if>
 <s:else>
 
 <tbody>
 		<tr >
 			<td width="100%">
-			<h5 align="center"><b><font color="red">Your request could not be completed at this time, please try again.</font></b></h5>
+			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+			</s:if>		
+			<s:else>
+				<h5 align="center"><b><font color="red">Your request could not be completed at this time, please try again.</font></b></h5>
+			</s:else>
 			</td>
 		</tr>
 		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 			<td></td>
 		</tr>
-</tbody>
-
-</s:else>
-
-<s:else>
-
-<tbody>
-<%-- start of jira 2885 --%>
-<tr >
-	<td width="100%">
-		<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
-				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
-		</s:if>		
-    		<s:if test='%{#lineStatusCodeMsg != null}'>
-				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
-		</s:if>
-	</td>
-</tr>	    				
-<%-- end of jira 2885 --%>
-<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
+		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 	<td></td>
 </tr>
-		
-		
 </tbody>
-
 </s:else>
-
 </table>
                         	</s:if>
-                       
                         </div>
 					<s:set name="lineNumber" value="%{#lineNumber+1}" />
 					<s:set name='itemOrderSeq' value='%{#itemOrderSeq + 1}' />

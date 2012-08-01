@@ -182,14 +182,26 @@
 			<s:if test="displayPriceForUoms.size()>0" >
 				<TABLE  width="100%">
 				<s:set name="break" value="false"></s:set>
+				<s:if test='%{#lineStatusCodeMsg != null}'>
+				<tbody class="mil-priceDiv-visibility" style="valign:right;">
+				<tr>
+					<td width="auto" class="left" colspan="3"><b>My Price:</b></td>
+					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
+				</tr>
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+				<tr>
+					<td width="auto" class="left" colspan="3"><strong>Extended Price:</strong></td>
+					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD'/> </span> </td>
+				</tr>
+				</tbody>
+				</s:if>	
+				<s:else>
 				<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 				<s:set name="bracketUOMDesc" value="bracketUOM" />
 				<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
-				
-				<s:if test="#disUOMStatus.last">				
-
+				<s:if test="#disUOMStatus.last">	
 				<TR>
 					<td class="left" width="50%"><strong>Extended Price:</strong></td>
 					<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp}">
@@ -219,9 +231,9 @@
 						</s:else>
 					</TR>
 				</s:if>
-				</s:else>							
+				</s:else>				
 				</s:iterator>			
-				
+				</s:else>	
 				</TABLE>
 				</s:if>
 				</s:if>
@@ -229,8 +241,11 @@
 			</s:if>
 		</tr>	
 		
-
-
+</tbody>
+<s:if test='%{#lineStatusCodeMsg != ""}'>
+	<tbody><tr><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
+	</tbody>
+</s:if>	
 </s:if>
 <s:else>
 		<tr >
@@ -241,16 +256,16 @@
 </s:else>
 </s:if>
 <s:else>
-<%-- start of jira 2885 --%>
+<%-- start of jira 2885 --%><tbody>
 <tr >
 	<td width="100%">
 			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 			</s:if>		
     	
-    			<s:if test='%{#lineStatusCodeMsg != null}'>
+    		<%--	<s:if test='%{#lineStatusCodeMsg != null}'>
 				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
-			</s:if>
+			</s:if> --%>
 	</td>
 </tr>	
 <%-- end of jira 2885 --%>    

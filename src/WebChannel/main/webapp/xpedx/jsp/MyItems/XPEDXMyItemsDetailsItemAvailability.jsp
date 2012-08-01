@@ -257,6 +257,18 @@
 				<s:div id="myPrice_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="break" value="false"></s:set>
+				<s:if test='%{#lineStatusCodeMsg != null}'><tbody class="mil-priceDiv-visibility" style="valign:right;">
+				<tr>
+					<td width="40%" class="left"><b>My Price:</b></td>
+					<td class="left" width="60%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
+				</tr>
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+				<tr>
+					<td class="right"><b>Extended Price: </b></td>
+					<td class="left" width="39%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> </td>
+				</tr></tbody>
+				</s:if>
+				<s:else>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					<s:set name="bracketPriceForUOM" value="bracketPrice" />
 					<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -295,10 +307,9 @@
 								</s:else></td>
 							</tr>
 						</s:if>
-						</s:else>
-												
+						</s:else>				
 					</s:iterator>
-					
+					</s:else>
 				</table>
 				</s:div>
 				</s:if>
@@ -311,7 +322,10 @@
 		</tr>
 
 </tbody>
-						
+<s:if test='%{#lineStatusCodeMsg != ""}'>
+	<tbody><tr><td>&nbsp;</td><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
+</tbody>
+</s:if>							
 </s:if>
 <s:else>
 
@@ -337,9 +351,9 @@
 		<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 		</s:if>		
-    		<s:if test='%{#lineStatusCodeMsg != null}'>
+    	<%-- <s:if test='%{#lineStatusCodeMsg != null}'>
 				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
-		</s:if>
+		</s:if>--%>
 	</td>
 </tr>	    				
 <%-- end of jira 2885 --%>

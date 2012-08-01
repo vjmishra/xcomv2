@@ -98,8 +98,19 @@
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-					<s:if test="displayPriceForUoms.size()>0" >
-					
+				<s:if test="%{#lineStatusCodeMsg != ''}">
+				<tr>
+					<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
+					<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span></td>
+				</tr>
+					<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+				<tr>
+					<td class="bold">Extended Price (<s:property value='priceCurrencyCode'/>):</td>
+					<td >
+						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+					</td></tr>
+				</s:if>
+					<s:elseif test="displayPriceForUoms.size()>0" >
 						<s:iterator value='displayUOMs'	id='disUOM' status='disUOMStatus'>
 							
 							<s:set name="unitPriceForUOM" value='%{displayPriceForUoms.get(#disUOMStatus.index)}' />
@@ -154,7 +165,7 @@
 							
 							
 						</s:iterator>			
-					</s:if>
+					</s:elseif>
 				</s:if>
 
 				<tr>
