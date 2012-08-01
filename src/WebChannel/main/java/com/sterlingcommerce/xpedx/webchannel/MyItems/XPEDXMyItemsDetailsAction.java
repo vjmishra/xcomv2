@@ -1102,6 +1102,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// 1 - Construct the input array for the call
 			listOfItemsFromsession = (ArrayList) XPEDXWCUtils.getObjectFromCache("listOfItemsMap");
 			ArrayList<String> itemIDList=new ArrayList<String>();
+			if(listOfItemsFromsession != null) {
 			for (int i = 0; i < listOfItemsFromsession.size(); i++) {
 				Element item = (Element) listOfItemsFromsession.get(i);
 
@@ -1155,7 +1156,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 					cntSel =cntSel +1;
 				}
-
+			}
 			}
 			
 			/*Added if loop for Webtrends : for setting a flag to check if "Update Preice and Availability button is hit */
@@ -1219,6 +1220,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						catMap.put(itemID+":"+(i+1),catagory);
 					}
 					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true,null,false,null);
+					//added for jira 2885 \ 4094
+					items = pna.getItems();
+						if (items != null) {
+							if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
+								pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
+								setIsPnAAvailable("false");
+							}
+						}
 				}
 			} else {
 				LOG.warn("No items selected for PNA... bypassing the call.");
@@ -2169,7 +2178,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
 							pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 							if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
-								setIsPnAAvailable("false");
+								setIsPnAAvailable("true"); //jira 4094 to display Availability and MyPrice and Extended Price
 							}
 						}
 						//end of jira 2885			

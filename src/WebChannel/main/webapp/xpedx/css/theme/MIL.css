@@ -5461,6 +5461,11 @@ table.mil-my-price-availability {
 }
 table.mil-my-price-availability td {
     padding: 1px;
+    width: auto;
+}
+tbody.mil-priceDiv-visibility{
+float:right;
+width:auto;
 }
 .mil-checkbox-wrap {
     float: left;
