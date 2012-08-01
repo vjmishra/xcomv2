@@ -96,13 +96,13 @@
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
 			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
-			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if></s:if></i></td>
-			
+			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if>
 			<s:else>
-			<td class="left" colspan="3" width="34%"><span>&nbsp;</span></td>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</s:else>
+			</s:if></i></td>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<td colspan="3" width="34%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
+			<td colspan="3" align="center" width="34%"><i><span> Price (<s:property value='%{priceCurrencyCode}'/>)</i></span></td>
 			</s:if>
 
 		</tr>
@@ -267,13 +267,14 @@
 				<s:set name="break" value="false"></s:set>
 				
 				<s:if test='%{#lineStatusCodeMsg != ""}'>
-					<tbody class="mil-priceDiv-visibility" style="valign:right;">		<tr>
-								<td width="40%" class="left"><b>My Price:</b></td>
+					<tbody class="mil-priceDiv-visibility" style="valign:top;">		
+							<tr>
+								<td width="40%" class="left">My Price:</td>
 								<td class="left" width="60%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
 							</tr>
 								<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 							<tr>
-								<td class="right"><b>Extended Price: </b></td>
+								<td class="left">Extended Price:</td>
 								<td class="left" width="39%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> </td>
 							</tr></tbody>
 				</s:if>
@@ -283,10 +284,11 @@
 					<s:set name="bracketUOMDesc" value="bracketUOM" />
 					<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 					<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
+					
 						<s:if test="#disUOMStatus.last">
 						<tr>
-							<td><strong>Extended Price: </strong></td>
-							<td class="left" width="55%">
+							<td width="35%" style="float:left;"><strong>Extended Price: </strong>&nbsp;</td>
+							<td class="left" width="50%">
 							<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
 								<s:set name="isMyPriceZero" value="%{'true'}" />
 								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>   
@@ -304,8 +306,8 @@
 						<s:else>
 						<s:if test="%{#break == false}">
 							<tr>
-								<td width="35%"><strong><s:if test="#disUOMStatus.first">My Price:</s:if></strong></td>
-								<td class="left" width="65%">
+								<td width="35%" style="float:left;"><strong><s:if test="#disUOMStatus.first">My Price: </s:if></strong>&nbsp;</td>
+								<td class="left" width="50%">
 								<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
 										<s:set name="isMyPriceZero" value="%{'true'}" />
 										<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
