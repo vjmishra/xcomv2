@@ -257,7 +257,7 @@
 				<s:div id="myPrice_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != null}'><tbody class="mil-priceDiv-visibility" style="valign:right;">
+				<s:if test='%{#lineStatusCodeMsg != ""}'><tbody class="mil-priceDiv-visibility" style="valign:right;">
 				<tr>
 					<td width="40%" class="left"><b>My Price:</b></td>
 					<td class="left" width="60%"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
