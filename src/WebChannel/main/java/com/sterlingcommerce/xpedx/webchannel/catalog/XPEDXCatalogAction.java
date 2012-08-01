@@ -572,13 +572,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 				} else {
 					terms = SCXmlUtil.createChild(mashupInput, "Terms");
 				}
-				Element filters = SCXmlUtil.createChild((Element) terms
+				/*Element filters = SCXmlUtil.createChild((Element) terms
 						.getParentNode(), "Filters");
 				Element filter = SCXmlUtil.createChild(filters, "Filter");
 				filter.setAttribute("IndexFieldName",
 						"showStockedItems");
 				filter.setAttribute("Type", "Normal");
-				filter.setAttribute("Value", shipFromDivision);
+				filter.setAttribute("Value", shipFromDivision); */
+				
+				Element term = SCXmlUtil.createChild(terms, "Term");
+				term.setAttribute("Condition", "MUST");
+				term.setAttribute("IndexFieldName", "showStockedItems");
+				term.setAttribute("Value", shipFromDivision);
 			}
 		}
 	}
