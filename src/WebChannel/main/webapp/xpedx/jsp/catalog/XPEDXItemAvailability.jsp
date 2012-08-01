@@ -182,7 +182,7 @@
 			<s:if test="displayPriceForUoms.size()>0" >
 				<TABLE  width="100%">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != null}'>
+				<s:if test='%{#lineStatusCodeMsg != ""}'>
 				<tbody class="mil-priceDiv-visibility" style="valign:right;">
 				<tr>
 					<td width="auto" class="left" colspan="3"><b>My Price:</b></td>
