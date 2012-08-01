@@ -81,7 +81,7 @@
 																</td></tr>
 																</xsl:for-each>
 														</tr>
-														<tr></tr>
+														<tr><td></td></tr><tr><td></td></tr>
 													   <tr>
 															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Sales Rep: </td>
  															<xsl:for-each select="./SalesReps/SalesRep/@SalesId" >
