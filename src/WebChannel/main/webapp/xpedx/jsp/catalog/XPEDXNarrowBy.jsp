@@ -33,6 +33,10 @@ function setStockItemFlag()
 	{
 		document.getElementById('stockedItem').value = true;
 	}
+	if(document.getElementById('stockedItemChkBtm').value == 'true')
+	{
+		document.getElementById('stockedItem').value = true;
+	}
 }
 </script>
 
