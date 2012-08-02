@@ -386,7 +386,7 @@
                      
                     <s:if test="#isGuestUser == false">	
                      <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
-                     <select id="stockedItemChkBtm" name="stockedItemChkBtm" value="#checkedval" onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
+                     <select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
 							<option value="false">All Items</option>
 							<s:if test='#checkedval'>
 								<option value="true" selected="selected">Normally Stocked</option>
@@ -939,7 +939,7 @@ var ct = Ext.get('item-box-inner');
                     	 </select>
                      <s:if test="#isGuestUser == false">	
                      <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
-                     <select id="stockedItemChk" name="stockedItemChk" value="#checkedval" onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
+                     <select id="stockedItemChk" name="stockedItemChk" onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
 							<option value="false" selected>All Items</option>
 							<s:if test='#checkedval'>
 								<option value="true" selected="selected">Normally Stocked</option>
