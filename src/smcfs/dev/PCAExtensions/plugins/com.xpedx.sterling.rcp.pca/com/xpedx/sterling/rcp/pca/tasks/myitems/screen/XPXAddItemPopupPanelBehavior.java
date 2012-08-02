@@ -194,6 +194,13 @@ public class XPXAddItemPopupPanelBehavior extends YRCBehavior {
 		Document[] docInput = {YRCXmlUtils.createDocument("XPEDXMyItemsList")};
 		Element eleMyItemList = docInput[0].getDocumentElement();
 		eleMyItemList.setAttribute("MyItemsListKey", inputEle.getAttribute("MyItemsListKey"));
+		String strCreatedByUsername = YRCPlatformUI.getUserElement().getAttribute("Username");
+		String strModifyuserid = YRCPlatformUI.getUserElement().getAttribute("Loginid");
+		if(!YRCPlatformUI.isVoid(strCreatedByUsername))
+		{
+			eleMyItemList.setAttribute("ModifyUserName", strCreatedByUsername);
+			eleMyItemList.setAttribute("Modifyuserid", strModifyuserid);
+		}
 		Element ItemInfoEle=getModel("itemInfo");
 		if(!YRCPlatformUI.isVoid(ItemInfoEle)){
 			YRCXmlUtils.getString(ItemInfoEle);

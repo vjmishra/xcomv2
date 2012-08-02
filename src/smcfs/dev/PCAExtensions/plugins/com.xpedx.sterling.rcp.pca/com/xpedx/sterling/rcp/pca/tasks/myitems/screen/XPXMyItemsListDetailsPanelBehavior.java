@@ -313,6 +313,7 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 						updated = "removed";
 						this.page.showResultMessage("Items Removed !!", updated);
 						loadItemsList();
+						saveChangesToMyItemsList();
 					}	
 					
 					
@@ -425,9 +426,17 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private Document createUpdateXPEDXMyItemsListInput(Element eleUpdateMyItemsListData) {
 		
 		Element updateXPEDXMyItemsListInput = YRCXmlUtils.createDocument("XPEDXMyItemsItemsList").getDocumentElement();
+		String strCreatedByUsername = YRCPlatformUI.getUserElement().getAttribute("Username");
+		String strModifyuserid = YRCPlatformUI.getUserElement().getAttribute("Loginid");
 		updateXPEDXMyItemsListInput.setAttribute("MyItemsListKey", myItemsListKey);
 		updateXPEDXMyItemsListInput.setAttribute("Name", eleUpdateMyItemsListData.getAttribute("Name"));
 		updateXPEDXMyItemsListInput.setAttribute("Desc", eleUpdateMyItemsListData.getAttribute("Desc"));
+		if(!YRCPlatformUI.isVoid(strCreatedByUsername))
+		{
+			updateXPEDXMyItemsListInput.setAttribute("ModifyUserName", strCreatedByUsername);
+			updateXPEDXMyItemsListInput.setAttribute("Modifyuserid", strModifyuserid);
+			
+		}
 		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
 		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
 		
@@ -652,6 +661,13 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 			Document[] docInput = {YRCXmlUtils.createDocument("XPEDXMyItemsList")};
 			Element eleMyItemList = docInput[0].getDocumentElement();
 			eleMyItemList.setAttribute("MyItemsListKey", eleMyItemsList.getAttribute("MyItemsListKey"));
+			String strCreatedByUsername = YRCPlatformUI.getUserElement().getAttribute("Username");
+			String strModifyuserid = YRCPlatformUI.getUserElement().getAttribute("Loginid");
+			if(!YRCPlatformUI.isVoid(strCreatedByUsername))
+			{
+				eleMyItemList.setAttribute("ModifyUserName", strCreatedByUsername);
+				eleMyItemList.setAttribute("Modifyuserid", strModifyuserid);
+			}
 			YRCXmlUtils.importElement(eleMyItemList, docImport.getDocumentElement());
 			
 			callApis(apinames, docInput);
