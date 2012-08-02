@@ -940,7 +940,7 @@ var ct = Ext.get('item-box-inner');
                      <s:if test="#isGuestUser == false">	
                      <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
                      <select id="stockedItemChk" name="stockedItemChk" onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
-							<option value="false" selected>All Items</option>
+							<option value="false">All Items</option>
 							<s:if test='#checkedval'>
 								<option value="true" selected="selected">Normally Stocked</option>
 							</s:if>							
