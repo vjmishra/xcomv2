@@ -491,9 +491,17 @@ public class XPXMyItemsListDetailsPanelBehavior extends YRCBehavior {
 	private Document cancelUpdateXPEDXMyItemsListInput(Element eleUpdateMyItemsListData) {
 		
 		Element updateXPEDXMyItemsListInput = YRCXmlUtils.createDocument("XPEDXMyItemsItemsList").getDocumentElement();
+		String strCreatedByUsername = YRCPlatformUI.getUserElement().getAttribute("Username");
+		String strModifyuserid = YRCPlatformUI.getUserElement().getAttribute("Loginid");
 		updateXPEDXMyItemsListInput.setAttribute("MyItemsListKey", myItemsListKey);
 		updateXPEDXMyItemsListInput.setAttribute("Name", eleUpdateMyItemsListData.getAttribute("Name"));
 		updateXPEDXMyItemsListInput.setAttribute("Desc", eleUpdateMyItemsListData.getAttribute("Desc"));
+		if(!YRCPlatformUI.isVoid(strCreatedByUsername))
+		{
+			updateXPEDXMyItemsListInput.setAttribute("ModifyUserName", strCreatedByUsername);
+			updateXPEDXMyItemsListInput.setAttribute("Modifyuserid", strModifyuserid);
+			
+		}
 		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
 		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
 		for(int i=0;i<nlItems.getLength();i++){
