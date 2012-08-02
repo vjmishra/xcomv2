@@ -54,7 +54,7 @@ public class XPXOrderApprovalService implements YIFCustomApi
 			if (log.isDebugEnabled()) {
 				log.debug("XPXOrderApprovalService-OutXML: "+SCXmlUtil.getString(rulesEngineOutDoc));
 			}
-			//return rulesEngineOutDoc;
+			return rulesEngineOutDoc;
 					
 		} catch (YFSException ye) {
 			// TODO Auto-generated catch block
