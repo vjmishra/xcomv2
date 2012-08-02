@@ -253,6 +253,7 @@ public class XPXCreateNewMyItemsListPanelBehavior  extends YRCBehavior {
 				eleSaveList.setAttribute("Createusername", strCreatedByUsername);
 				eleSaveList.setAttribute("Createprogid", strProgid);
 				eleSaveList.setAttribute("Modifyuserid",Createuserid);
+				eleSaveList.setAttribute("ModifyUserName", strCreatedByUsername);
 				eleSaveList.setAttribute("Modifyprogid", strProgid);
 				
 				YRCXmlUtils.getString(eleSaveList);
