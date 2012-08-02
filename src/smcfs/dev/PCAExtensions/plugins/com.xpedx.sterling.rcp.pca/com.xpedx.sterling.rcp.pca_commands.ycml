@@ -438,6 +438,7 @@
             <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="changeXPEDX_MyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="changeXPEDX_MyItemsList_output" version="ver77"/>
             <command APIName="XPXCustomerHierarchyViewService" APIType="SERVICE" Name="XPXCustomerHierarchyViewService" URL="DEFAULT" inputNamespace=""
                 outputNamespace="XPXCustomerHierarchyViewService_output" version="ver77"/>
+            <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="updateXPEDXMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="changeXPEDX_MyItemsList_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
