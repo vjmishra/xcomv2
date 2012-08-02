@@ -1,6 +1,8 @@
 package com.xpedx.sterling.rcp.pca.tasks.myitems.screen;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor;
 import com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -21,7 +24,9 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 
 	private XPXMyItemListShareListPanel page;
+	private static final String IS_MODIFIED = "isModified";
 	String organizationCode;
+	public boolean updateAssignFlag = false;
 	Element multiAPIDocElement=null;
 	// Renamed UserOrgCode to milOrgCode
 	private String strMILKey;
@@ -201,7 +206,8 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 					
 					
 					else if ("multiApi".equals(apiname)) {
-						this.getCustomerAssignmentsAfterUpdate();
+						updateAssignFlag = true;
+						updateMyitemsList();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
 					//Called for JIRA 4157
@@ -217,6 +223,12 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 								}
 							}
 						}
+					}
+					else if ("updateXPEDXMyItemsList".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						Element eleMyItemsList = YRCXmlUtils.getXPathElement(outXml, "/XPEDXMyItemsList");
+						setModel("getXPEDXMyItemsListDetail",eleMyItemsList);
+						this.getCustomerAssignmentsAfterUpdate();
 					}
 				}
 			}
@@ -238,6 +250,69 @@ public class XPXMyItemListShareListPanelBehavior extends YRCBehavior {
 		
 		super.handleApiCompletion(ctx);
 		
+	}
+	
+	public void updateMyitemsList(){
+		if(updateAssignFlag && !YRCPlatformUI.isVoid(strMILKey)){
+			Element eleUpdateMyItemsListData = getModel("XPEDXMyItemsList");
+			eleUpdateMyItemsListData.setAttribute("MyItemsListKey", strMILKey);
+			NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
+			for(int i=0;i<nlItems.getLength();i++){
+				Element eleItemData =(Element)nlItems.item(i);
+				if(!(eleItemData.hasAttribute(IS_MODIFIED))){
+					eleItemData.getParentNode().removeChild(eleItemData);
+					i--;
+				} 
+			}
+			YRCApiContext ctx = new YRCApiContext();
+			ctx.setApiNames(new String[]{"updateXPEDXMyItemsList"});
+			Document[] docInput = {createUpdateXPEDXMyItemsListInput(eleUpdateMyItemsListData)};
+			ctx.setInputXmls(docInput);
+			ctx.setFormId(getFormId());
+
+			callApi(ctx, page);
+			((XPXManageMyItemsListEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+		}
+		
+	}
+	
+	private Document createUpdateXPEDXMyItemsListInput(Element eleUpdateMyItemsListData) {
+		
+		Element updateXPEDXMyItemsListInput = YRCXmlUtils.createDocument("XPEDXMyItemsItemsList").getDocumentElement();
+		String strCreatedByUsername = YRCPlatformUI.getUserElement().getAttribute("Username");
+		String strModifyuserid = YRCPlatformUI.getUserElement().getAttribute("Loginid");
+		updateXPEDXMyItemsListInput.setAttribute("MyItemsListKey", strMILKey);
+		updateXPEDXMyItemsListInput.setAttribute("Name", eleUpdateMyItemsListData.getAttribute("Name"));
+		updateXPEDXMyItemsListInput.setAttribute("Desc", eleUpdateMyItemsListData.getAttribute("Desc"));
+		if(!YRCPlatformUI.isVoid(strCreatedByUsername))
+		{
+			updateXPEDXMyItemsListInput.setAttribute("ModifyUserName", strCreatedByUsername);
+			updateXPEDXMyItemsListInput.setAttribute("Modifyuserid", strModifyuserid);
+			
+		}
+		Element xPEDXMyItemsItemsList = YRCXmlUtils.createChild(updateXPEDXMyItemsListInput, "XPEDXMyItemsItemsList");
+		NodeList nlItems = eleUpdateMyItemsListData.getElementsByTagName("XPEDXMyItemsItems");
+		
+			//System.out.println("The file is not updated");
+			Calendar currentDate = Calendar.getInstance();
+			SimpleDateFormat formatter=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			String dateNow = formatter.format(currentDate.getTime());
+			updateXPEDXMyItemsListInput.setAttribute("Modifyts", dateNow);
+		
+		for(int i=0;i<nlItems.getLength();i++){
+			
+			Element tempElement =(Element)nlItems.item(i);
+			Element xPEDXMyItemsItems= YRCXmlUtils.createChild(xPEDXMyItemsItemsList, "XPEDXMyItemsItems");
+			xPEDXMyItemsItems.setAttribute("MyItemsKey", tempElement.getAttribute("MyItemsKey"));
+			xPEDXMyItemsItems.setAttribute("MyItemsListKey", strMILKey);
+			xPEDXMyItemsItems.setAttribute("Qty", tempElement.getAttribute("Qty"));
+			xPEDXMyItemsItems.setAttribute("ItemPoNumber",tempElement.getAttribute("ItemPoNumber"));
+			xPEDXMyItemsItems.setAttribute("JobId",tempElement.getAttribute("JobId"));
+			xPEDXMyItemsItems.setAttribute("UomId",tempElement.getAttribute("UomId"));
+			xPEDXMyItemsItems.setAttribute("ItemOrder",tempElement.getAttribute("ItemOrder"));
+			
+		}
+		return updateXPEDXMyItemsListInput.getOwnerDocument();
 	}
 	
 	private void getCustomerAssignmentsAfterUpdate()
