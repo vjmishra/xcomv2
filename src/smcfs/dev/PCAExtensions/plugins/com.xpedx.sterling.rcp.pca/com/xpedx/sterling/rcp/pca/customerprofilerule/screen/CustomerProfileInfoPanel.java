@@ -1720,13 +1720,14 @@ public class CustomerProfileInfoPanel extends Composite implements
 //		divisionReturn=divisionReturntmp+"("+divisionCode1+")";
 		divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
 		}
-		else if("txtCustomerDivision".equals(controlName)){
+		else if("txtCustomerDivision".equals(controlName)){  //updated code for JIRA 4192 to show only division number
 			 divisioncode = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnCustomerDivision");
 			 environmentVariable=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnEnvironmentCode");
-			String divisionCode1=divisioncode+"_"+environmentVariable;
-			divisionReturntmp=XPXUtils.divisionMap.get(divisionCode1);
-			
-			divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
+			//String divisionCode1=divisioncode+"_"+environmentVariable;
+			 String divisionCode1=divisioncode;
+			//divisionReturntmp=XPXUtils.divisionMap.get(divisionCode1);
+			divisionReturn = divisionCode1;
+			//divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
 //		    divisionReturn=divisionReturntmp+"("+divisionCode1+")";
 		}
 		
