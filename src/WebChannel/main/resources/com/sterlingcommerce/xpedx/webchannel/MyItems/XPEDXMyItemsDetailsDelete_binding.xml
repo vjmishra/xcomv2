@@ -3,4 +3,10 @@
 <properties>
 	<comment>Binding entries for deleting My Items List action</comment>
 	<entry key="key">XPEDXMyItemsDetailsDelete:/XPEDXMyItemsItems/@MyItemsKey</entry>
+	<entry key="WCContext.loggedInUserId">XPEDXMyItemsDetailsDelete:/XPEDXMyItemsItems/@Modifyuserid</entry>
+	<entry key="modifiedDate">XPEDXMyItemsDetailsDelete:/XPEDXMyItemsItems/@Modifyts</entry>
+	<entry key="listKey">XPEDXMyItemsListChange:/XPEDXMyItemsList/@MyItemsListKey</entry>
+	<entry key="modifiedDate">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Modifyts</entry>
+	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListChange:/XPEDXMyItemsList/@Modifyuserid</entry>
+	<entry key="modifyUserName">XPEDXMyItemsListChange:/XPEDXMyItemsList/@ModifyUserName</entry>
 </properties>

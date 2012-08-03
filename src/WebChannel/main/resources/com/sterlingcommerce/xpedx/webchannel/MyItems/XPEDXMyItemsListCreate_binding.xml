@@ -7,5 +7,5 @@
 	<entry key="sharePrivate">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@SharePrivate</entry>
 	<entry key="WCContext.customerId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@CustomerID</entry>
 	<entry key="WCContext.loggedInUserId">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createuserid</entry>
-	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Createusername,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@ModifyUserName</entry>
 </properties>

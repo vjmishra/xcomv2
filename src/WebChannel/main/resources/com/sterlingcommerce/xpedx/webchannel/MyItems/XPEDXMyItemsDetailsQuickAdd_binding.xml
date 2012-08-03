@@ -15,7 +15,7 @@
 	<entry key="uomId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@UomId</entry>
 	<entry key="purchaseOrder">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemPoNumber</entry>
 	<entry key="WCContext.loggedInUserId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createuserid</entry>
-	<entry key="WCContext.loggedInUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createusername</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ModifyUserName</entry>
 	<entry key="WCContext.storefrontId">XPEDXMyItemsListValidateItem:/Item/@CallingOrganizationCode, XPEDXMyItemsListGetMPC:/Item/@CallingOrganizationCode, xpedx-customer-getExtnFieldsForCustomerPart:/Customer/@OrganizationCode</entry>
 	<!-- END - For adding product into the list -->
 	
@@ -48,8 +48,8 @@
 	<entry key="orderedPurchaseOrders">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@ItemPoNumber</entry>
 	<entry key="listKeyAsList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@MyItemsListKey</entry>
 	<entry key="createUserIdList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@Createuserid</entry>
-	<entry key="createUserNameList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@Createusername</entry>
-	<entry key="createUserName">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/@Createusername</entry>
+	<entry key="createUserNameList">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[]/@ModifyUserName</entry>
+	<entry key="createUserName">XPEDXMyItemsQuickAddMulti:/XPEDXMyItemsList/@ModifyUserName</entry>
 	<!-- END - For adding all product into the list -->
 	
 </properties>

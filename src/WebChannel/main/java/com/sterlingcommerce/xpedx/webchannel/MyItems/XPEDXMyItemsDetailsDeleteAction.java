@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.yantra.yfc.util.YFCDate;
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsDetailsDeleteAction extends WCMashupAction {
@@ -17,7 +18,9 @@ public class XPEDXMyItemsDetailsDeleteAction extends WCMashupAction {
 	private String[] itemKeys;
 	private String[] itemIdFNs;
 	private String key = "";
+	private String modifiedDate;
 	private boolean editMode = false;
+	private String modifyUserName;
 	
 	public String[] getItemKeys() {
 		return itemKeys;
@@ -56,11 +59,16 @@ public class XPEDXMyItemsDetailsDeleteAction extends WCMashupAction {
 	@Override
 	@SuppressWarnings("unused")
 	public String execute() {
+		YFCDate modifiedYFCDate = new YFCDate();
+		modifiedDate = modifiedYFCDate.getString();
+		modifyUserName	 = getWCContext().getLoggedInUserName();
 		try {
-			Map<String, Element> out;
+			 Element out;
+			 Element updateListEle;
 			for (int i = 0; i < itemKeys.length; i++) {
 				setKey(itemKeys[i]);
-				out = prepareAndInvokeMashups();
+				out = prepareAndInvokeMashup("XPEDXMyItemsDetailsDelete");
+				updateListEle = prepareAndInvokeMashup("XPEDXMyItemsListChange");
 			}
 			
 		} catch (Exception e) {
@@ -112,6 +120,22 @@ public class XPEDXMyItemsDetailsDeleteAction extends WCMashupAction {
 
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
+	}
+
+	public String getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(String modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public String getModifyUserName() {
+		return modifyUserName;
+	}
+
+	public void setModifyUserName(String modifyUserName) {
+		this.modifyUserName = modifyUserName;
 	}
 
 }

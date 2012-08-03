@@ -630,7 +630,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				for(Element elem : itemLists){
 					//List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
-					String modifyUserId = elem.getAttribute("CreateUserName"); //modified for jira 4134
+					String modifyUserId = elem.getAttribute("ModifyUserName"); //modified for jira 4169
 					this.modifyUserid=elem.getAttribute("Modifyuserid");
 					this.createUserId=elem.getAttribute("Createuserid");
 					this.modifyts=elem.getAttribute("Modifyts");
@@ -684,7 +684,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				for(Element elem : tmpList){
 					List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
-					String modifyUserId = elem.getAttribute("Createusername");//modified for jira 4134
+					String modifyUserId = elem.getAttribute("ModifyUserName");//modified for jira 4169
 					String listKey = elem.getAttribute("MyItemsListKey");
 					if(items != null && items.size()>0){
 						Element itemElem=items.get(0);
@@ -1216,7 +1216,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	}
 
 
-	public HashMap<String, String> getListModifiedByMap() {
+	public HashMap<String, String> getListModifiedByMap() {				
 		return listModifiedByMap;
 	}
 
