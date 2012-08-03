@@ -302,14 +302,14 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 								.setAttributeValue(
 										eleInput,
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnStockCheckWS",
-										("Y".equals(checked))?"T":"F" );
+										("Y".equals(checked))?"Y":"N" );
 					}
 					if (userGroupId.equalsIgnoreCase("VIEW-INVOICES")) {
 						YRCXmlUtils
 								.setAttributeValue(
 										eleInput,
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewInvoices",
-										("Y".equals(checked))?"T":"F" );
+										("Y".equals(checked))?"Y":"N" );
 					}
 					if (userGroupId.equalsIgnoreCase("VIEW-PRICES")) {
 						YRCXmlUtils
@@ -330,7 +330,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 								.setAttributeValue(
 										eleInput,
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator",
-										("Y".equals(checked))?"T":"F" );
+										("Y".equals(checked))?"Y":"N" );
 					}
 					
 				}
