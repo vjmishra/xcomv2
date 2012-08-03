@@ -70,7 +70,7 @@
 <br /><br /><br /><br />
 <div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.CONTACTADMIN" /> </div> <br /><br />
 <div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.HELPDESK" /> </div> 
-<a class="green-ui-btn" style="position:relative;margin-top:325px;margin-right: 15px;float:right;" href="/swc/home/logout.action?sfId=xpedx&amp;scFlag=Y"><span>Sign Out</span></a><%--Changes made for JIRA 3835 --%>
+<a class="green-ui-btn" style="position:relative;margin-top:270px;margin-right: 15px;float:right;" href="/swc/home/logout.action?sfId=xpedx&amp;scFlag=Y"><span>Sign Out</span></a>
 </s:if>
 <s:else>
  <!-- modal window container -->
