@@ -73,12 +73,13 @@
 }
 
 #fancybox-content {
-	width: 0;
-	height: 0;
+	width: auto;
+	height: auto;
 	padding: 0;
+	padding-bottom: 5.6%;
 	outline: none;
 	position: relative;
-	overflow: hidden;
+	overflow: visible;	
 	z-index: 1102;
 	border: 0px solid #fff;
 }
