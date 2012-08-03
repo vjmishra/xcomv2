@@ -488,6 +488,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 											
 											Collection intersection = CollectionUtils.intersection(arrUserAssgnList, arrChildCustomerIds);
 											Iterator iterCustId = intersection.iterator();
+											//Added for 3740 so that login id not added duplicate in report for multiple customer assignments
+											int counterVar = 0;
+											//End 3740
 											while(iterCustId.hasNext()){
 												String assgnCustId = (String) iterCustId.next();
 
@@ -500,6 +503,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 												
 												api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());
 												//3740 - Start - Report will Show Only User which have assignment removed
+												if(counterVar == 0){
 												String[] salesID = LoginId.split("@");
 												if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
 													reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
@@ -510,6 +514,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 													reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
 													reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
 												}
+											}	
+												
+											counterVar++;	
 												//3740 - End - 
 											}											
 										} 
