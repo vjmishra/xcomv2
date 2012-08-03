@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XPEDXMyItemsListList>
     <XPEDXMyItemsList Createuserid="" Createusername="" Desc="" Modifyts="" MyItemsListKey=""
-    Name="" ShareAdminOnly="" Modifyuserid="" SharePrivate="">
+    Name="" ShareAdminOnly="" Modifyuserid="" SharePrivate="" ModifyUserName="">
     <XPEDXMyItemsItemsList TotalNumberOfRecords="">
     <XPEDXMyItemsItems AvailabilityId="" />
     </XPEDXMyItemsItemsList>

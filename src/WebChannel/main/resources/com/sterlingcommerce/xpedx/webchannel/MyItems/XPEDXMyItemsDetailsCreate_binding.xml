@@ -13,7 +13,7 @@
 	<entry key="uomId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@UomId</entry>
 	<entry key="purchaseOrder">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ItemPoNumber</entry>
 	<entry key="WCContext.loggedInUserId">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createuserid</entry>
-	<entry key="WCContext.loggedInUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createusername</entry>
+	<entry key="WCContext.loggedInUserName">XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@Createusername,XPEDXMyItemsDetailsCreate:/XPEDXMyItemsItems/@ModifyUserName</entry>
 	
 	<entry key="WCContext.customerId">draftOrderGetCustomerLineFields:/Customer/@CustomerID</entry>	
 	<entry key="WCContext.storefrontId">draftOrderGetCustomerLineFields:/Customer/@OrganizationCode</entry>

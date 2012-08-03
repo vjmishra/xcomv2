@@ -477,7 +477,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 						myItemItems.setAttribute("ItemType", clItemType);
 						myItemItems.setAttribute("UomId", clUomId);
 						myItemItems.setAttribute("Createuserid", clUserId);
-						myItemItems.setAttribute("Createusername", clUserName);
+						myItemItems.setAttribute("ModifyUserName", clUserName);
 						myItemItems.setAttribute("ItemPoNumber", clItemPO);
 						//End - Setting all the values into the my items element.
 						

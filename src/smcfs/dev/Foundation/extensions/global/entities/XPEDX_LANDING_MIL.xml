@@ -99,6 +99,13 @@
 	    Description="Modifying User ID" 
 	    Nullable="true" 
 	    XMLName="Modifyuserid"
+	   />
+	   <Attribute ColumnName="MODIFYUSERNAME" 
+	    DataType="UserId"
+	    DefaultValue="' '"
+	    Description="Modifying User Name" 
+	    Nullable="true" 
+	    XMLName="ModifyUserName"
 	   />         
         </Attributes>
         <PrimaryKey Name="XPX_LNDG_MIL_PK">

@@ -921,7 +921,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(xpedxMyItemsListElement!=null){
 				//modified to display lastModifiedBy
 				//modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
-				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Createusername");
+				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("ModifyUserName");
 				if(YFCUtils.isVoid(modifyUserIdStr)){
 					createUserID = xpedxMyItemsListElement.getAttribute("Createuserid");
 					createUserIDStr = XPEDXWCUtils.getLoginUserName(createUserID);

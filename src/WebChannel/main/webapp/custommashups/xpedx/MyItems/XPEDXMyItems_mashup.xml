@@ -81,7 +81,7 @@
 						<XPEDXLandingMILList>
 							<XPEDXLandingMil NumberOFItems="" MyItemsListKey=""
 								UserName="" CustomerID="" ListDesc="" ListName=""
-								CreateUserName="" ShareAdminOnly="" SharePrivate="" Modifyts="">
+								CreateUserName="" ShareAdminOnly="" SharePrivate="" Modifyts="" ModifyUserName="">
 							</XPEDXLandingMil>
 							</XPEDXLandingMILList>
 						</Template>
@@ -111,7 +111,7 @@
 				<XPEDXMyItemsListList>
 					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
     				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " CreateUserName="">
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " CreateUserName="" ModifyUserName=" ">
     					<XPEDXMyItemsItems  TotalNumberOfRecords="" />
     				</XPEDXMyItemsList>
 				</XPEDXMyItemsListList>			
@@ -130,7 +130,7 @@
 				</XPEDXMyItemsItems>
 			</Input>			
 			<Template>
-				<XPEDXMyItemsItemsList Createprogid=" " Createuserid=" " Createusername=" " 
+				<XPEDXMyItemsItemsList Createprogid=" " Createuserid=" " Createusername=" " ModifyUserName=" "
 				CustomerID=" " Desc=" " ListOrder=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
 				Modifyuserid=" " MyItemsListKey=" " Name=" " ShareAdminOnly=" " SharePrivate=" ">
 					<XPEDXMyItemsItems TotalNumberOfRecords="" AvailabilityId=" " Createprogid=" " Createuserid=" "
@@ -149,12 +149,12 @@
 			<Input>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" " ShareAdminOnly=" "/>
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" " ModifyUserName=" "/>
 			</Input>			
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" "/>
+				    MyItemsListKey=" " Name=" " ModifyUserName=" "/>
 			</Template>
 		</API>
 	</mashup>
@@ -165,12 +165,12 @@
 			<Input>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" " ShareAdminOnly=" "/>
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" " ModifyUserName=" "/>
 			</Input>			
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" "/>
+				    MyItemsListKey=" " Name=" " ModifyUserName=" "/>
 			</Template>
 		</API>
 	</mashup>
@@ -180,7 +180,7 @@
 			<Input>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" " ShareAdminOnly=" ">
+				    MyItemsListKey=" " Name=" " ShareAdminOnly=" " ModifyUserName=" ">
 				    <XPEDXMyItemsItemsList>
 				    <XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 				    	Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
@@ -192,7 +192,7 @@
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" "/>
+				    MyItemsListKey=" " Name=" " ModifyUserName= " "/>
 			</Template>
 		</API>
 	</mashup>
@@ -240,12 +240,12 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="changeXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" "/>
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " ModifyUserName= " "/>
 			</Input>			
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-				    MyItemsListKey=" " Name=" "/>
+				    MyItemsListKey=" " Name=" " ModifyUserName= " "/>
 			</Template>
 		</API>
 	</mashup>
@@ -256,7 +256,7 @@
 			<Input>
 				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 				    Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
-				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="">
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="" ModifyUserName="">
 				</XPEDXMyItemsItems>
 			</Input>			
 			<Template>
@@ -272,7 +272,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="deleteXPEDX_MyItemsDetails">
 			<Input>
-				<XPEDXMyItemsItems MyItemsKey=" ">
+				<XPEDXMyItemsItems MyItemsKey=" " Modifyts=" " Modifyuserid=" ">
 				</XPEDXMyItemsItems>
 			</Input>			
 			<Template>
@@ -639,7 +639,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="changeXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " Createusername="">
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " Createusername="" ModifyUserName="">
 					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
 						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
@@ -687,7 +687,7 @@
 				<XPEDXMyItemsListList>
 					<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
     				Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
-    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " Createusername=" ">
+    				MyItemsListKey=" " Name=" " ShareAdminOnly=" " Createusername=" " ModifyUserName=" ">
     				</XPEDXMyItemsList>
 				</XPEDXMyItemsListList>			
 			</Template>
