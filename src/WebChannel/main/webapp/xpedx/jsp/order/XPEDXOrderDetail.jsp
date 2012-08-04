@@ -1250,6 +1250,7 @@ function showSplitDiv(divId)
 		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 		<s:set name='shippingCharges' value='#util.formatPriceWithCurrencySymbol(#wcContext,#,#overallTotals.getAttribute("HdrShippingTotal"))'/>
 		<s:set name='shippableOrderPrice' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderDetailExtn.getAttribute("ExtnTotalShipValue"))'/>
+		
 		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 			<div class="cart-sum-right">
 				<table cellspacing="0"  align="right">
@@ -1278,14 +1279,18 @@ function showSplitDiv(divId)
 					<tr>
 						<th>Adjusted Subtotal:</th>
 						<td>
-								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+						<s:if test='%{#_action.getMaxOrderStatusValue()== "Y"}'>
+								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />	 			  				
 	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp || #setTBD == true}">
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                       		</s:if>
 	                      		<s:else>
 	                		    		&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 	                			</s:else>					
-							
+						</s:if>
+						<s:else>
+							<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /></span>
+						</s:else>	
 						</td>
 					</tr>
 					<s:if test="#orderType == 'DIRECT_ORDER'">
