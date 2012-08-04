@@ -915,7 +915,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		return calculatedOrderedQuantity;
 	}
 	
-	private String getMaxOrderStatusValue(){
+	public String getMaxOrderStatusValue(){
 		String maxOrderStatus = SCXmlUtil.getAttribute(getElementOrder(),"MaxOrderStatus");
 		if (maxOrderStatus.equals("1100.5700") || // INVOICED
 		    maxOrderStatus.equals("1100.5950") || // INVOICE ONLY
