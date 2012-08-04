@@ -330,7 +330,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 								.setAttributeValue(
 										eleInput,
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator",
-										("Y".equals(checked))?"Y":"N" );
+										("Y".equals(checked))?"T":"F" );
 					}
 					
 				}

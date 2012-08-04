@@ -1467,8 +1467,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkProcurementUser.setData("YRCButtonBindingDefination", chkBoxBindingData);
 		
 		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setCheckedBinding("T");
+		chkBoxBindingData.setUnCheckedBinding("F");
 		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnEstimator");
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnEstimator");
 		chkBoxBindingData.setName("chkEstimator");
