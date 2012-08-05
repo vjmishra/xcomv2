@@ -1378,12 +1378,23 @@ function showSplitDiv(divId)
 					<tr class="order-total">
 						<th>Order Total (<s:property value='%{currencyCode}'/>):</th>
 						<td>
-							<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
+							<s:if test='%{#_action.getMaxOrderStatusValue()== "Y"}'>
+								<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
+							</s:if>
+							<s:else>
+								<s:set name='extnTotalOrderValue' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
+							</s:else>
+							
+		 			  		<s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                     	</s:if>
 	                        <s:else> 
-	                        	 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
+	                        	<s:if test='%{#_action.getMaxOrderStatusValue()== "Y"}'>
+	                        	 	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
+	                        	 </s:if>
+	                        	 <s:else>
+	                        	 	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
+	                        	 </s:else>	
 	                		</s:else>			
 						</td>
 					</tr>
