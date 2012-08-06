@@ -545,7 +545,7 @@
             <param name="mashups">xpedx_checkout_changeOrderLineDetails</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
-            <result name="success" type="chain">
+            <result name="success" type="redirectAction">
                 <param name="actionName">LineLevelISPU</param>
                 <param name="namespace">/order</param>
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
