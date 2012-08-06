@@ -1800,22 +1800,22 @@ product list page: catalogExt.jsp
 	padding:5px 0 4px 0;
 }
 .swc-ext .x-window-tc {
-	background:transparent url(../../../ext/resources/images/default/window/top-bottom.png) repeat-x 0 0;
+	/*background:transparent url(../../../ext/resources/images/default/window/top-bottom.png) repeat-x 0 0;*/
 	overflow:hidden;/*zoom:1;*/
 }
 .swc-ext .x-window-tl {
-	background: transparent url( ../../../ext/resources/images/default/window/left-corners.png ) no-repeat 0 0;
+	/*background: transparent url( ../../../ext/resources/images/default/window/left-corners.png ) no-repeat 0 0;*/
 	padding-left: 6px;
 	/*zoom: 1;*/
   z-index: 1;
 	position: relative;
 }
 .swc-ext .x-window-tr {
-	background: transparent url( ../../../ext/resources/images/default/window/right-corners.png ) no-repeat right 0;
+	/*background: transparent url( ../../../ext/resources/images/default/window/right-corners.png ) no-repeat right 0;*/
 	padding-right: 6px;
 }
 .swc-ext .x-window-bc {
-	background: transparent url( ../../../ext/resources/images/default/window/top-bottom.png ) repeat-x 0 bottom;/*zoom: 1;*/
+	/*background: transparent url( ../../../ext/resources/images/default/window/top-bottom.png ) repeat-x 0 bottom;/*zoom: 1;*/
 }
 .swc-ext .x-window-bc .x-window-footer {
 	padding-bottom: 6px;
@@ -1824,11 +1824,11 @@ product list page: catalogExt.jsp
 	line-height: 0;
 }
 .swc-ext .x-window-bl {
-	background: transparent url( ../../../ext/resources/images/default/window/left-corners.png ) no-repeat 0 bottom;
+	/*background: transparent url( ../../../ext/resources/images/default/window/left-corners.png ) no-repeat 0 bottom;*/
 	padding-left: 6px;/*zoom: 1;*/
 }
 .swc-ext .x-window-br {
-	background: transparent url( ../../../ext/resources/images/default/window/right-corners.png ) no-repeat right bottom;
+	/*background: transparent url( ../../../ext/resources/images/default/window/right-corners.png ) no-repeat right bottom;*/
 	padding-right: 6px;/*zoom: 1;*/
 }
 .swc-ext .x-window-mc {
@@ -1839,11 +1839,11 @@ product list page: catalogExt.jsp
 	background: #dfe8f6;
 }
 .swc-ext .x-window-ml {
-	background: transparent url( ../../../ext/resources/images/default/window/left-right.png ) repeat-y 0 0;
+	/*background: transparent url( ../../../ext/resources/images/default/window/left-right.png ) repeat-y 0 0;*/
 	padding-left: 6px;/*zoom: 1;*/
 }
 .swc-ext .x-window-mr {
-	background: transparent url( ../../../ext/resources/images/default/window/left-right.png ) repeat-y right 0;
+	/*background: transparent url( ../../../ext/resources/images/default/window/left-right.png ) repeat-y right 0;*/
 	padding-right: 6px;/*zoom: 1;*/
 }
 /******  Following Ext style is for product comparison page **********************/
