@@ -254,17 +254,27 @@
                <xsl:value-of select="normalize-space(//OrderSpecialCharges)" />
             </xsl:attribute>
 
-            <xsl:attribute name="ExtnTotalOrderFreight">
-               <xsl:value-of select="normalize-space(//TotalOrderFreight)" />
-            </xsl:attribute>
+            <xsl:attribute name="ExtnTotalOrderFreight"> 
+            <xsl:choose> 
+                    <xsl:when test="((normalize-space(//OrderStatus) = 900) or (normalize-space(//OrderStatus) = 910) or normalize-space(//OrderStatus) = 950)"> 
+                                           <xsl:value-of select="normalize-space(//TotalOrderFreight)" /> 
+                                </xsl:when> 
+                                <xsl:otherwise>0.0</xsl:otherwise> 
+                                </xsl:choose> 
+            </xsl:attribute> 
 
             <xsl:attribute name="ExtnOrdStatCom">
                <xsl:value-of select="normalize-space(//OrderStatusComment)" />
             </xsl:attribute>
 
-            <xsl:attribute name="ExtnOrderTax">
-               <xsl:value-of select="normalize-space(//OrderTax)" />
-            </xsl:attribute>
+           <xsl:attribute name="ExtnOrderTax"> 
+               <xsl:choose> 
+                                        <xsl:when test="((normalize-space(//OrderStatus) = 900) or (normalize-space(//OrderStatus) = 910) or normalize-space(//OrderStatus) = 950)"> 
+                                           <xsl:value-of select="normalize-space(//OrderTax)" /> 
+                                        </xsl:when> 
+                                        <xsl:otherwise>0.0</xsl:otherwise> 
+                                </xsl:choose>               
+            </xsl:attribute> 
 
             <xsl:attribute name="ExtnSourceType">
                <xsl:value-of select="normalize-space(//OrderSource)" />
