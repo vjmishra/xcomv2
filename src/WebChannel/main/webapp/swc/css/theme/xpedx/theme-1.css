@@ -1026,17 +1026,17 @@ Item detail page:
 }
 
 .swc-ext .x-window-tc {
-	background: transparent
+	/*background: transparent
 		url(../../../ext/resources/images/default/window/top-bottom.png)
-		repeat-x 0 0;
+		repeat-x 0 0;*/
 	overflow: hidden;
 	zoom: 1;
 }
 
 .swc-ext .x-window-tl {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/left-corners.png )
-		no-repeat 0 0;
+		no-repeat 0 0;*/
 	padding-left: 6px;
 	zoom: 1;
 	z-index: 1;
@@ -1044,16 +1044,16 @@ Item detail page:
 }
 
 .swc-ext .x-window-tr {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/right-corners.png )
-		no-repeat right 0;
+		no-repeat right 0;*/
 	padding-right: 6px;
 }
 
 .swc-ext .x-window-bc {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/top-bottom.png )
-		repeat-x 0 bottom;
+		repeat-x 0 bottom;*/
 	zoom: 1;
 }
 
@@ -1065,17 +1065,17 @@ Item detail page:
 }
 
 .swc-ext .x-window-bl {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/left-corners.png )
-		no-repeat 0 bottom;
+		no-repeat 0 bottom;*/
 	padding-left: 6px;
 	zoom: 1;
 }
 
 .swc-ext .x-window-br {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/right-corners.png )
-		no-repeat right bottom;
+		no-repeat right bottom;*/
 	padding-right: 6px;
 	zoom: 1;
 }
@@ -1089,17 +1089,17 @@ Item detail page:
 }
 
 .swc-ext .x-window-ml {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/left-right.png )
-		repeat-y 0 0;
+		repeat-y 0 0;*/
 	padding-left: 6px;
 	zoom: 1;
 }
 
 .swc-ext .x-window-mr {
-	background: transparent
+	/*background: transparent
 		url( ../../../ext/resources/images/default/window/left-right.png )
-		repeat-y right 0;
+		repeat-y right 0;*/
 	padding-right: 6px;
 	zoom: 1;
 }
