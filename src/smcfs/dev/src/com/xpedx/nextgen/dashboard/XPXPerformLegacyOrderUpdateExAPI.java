@@ -1338,9 +1338,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			// Fulfillment Order
 			setExtendedPriceInfo(env, chngfOrderEle, false);
 			// Customer Order.
+			/* Both The Change Order Document Needs To Be Checked As There Can be Change Order Call For Customer Order Twice 
+			 * When Request From Legacy Has Line Process Codes C And D 
+			 * */
 			if (chngcOrderEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle.getAttribute("OrderHeaderKey"))) {
 				setExtendedPriceInfoCO(chngcOrderEle, chngfOrderEle, cAndfOrderEle,"C");
-			} else {
+			} 
+			if (chngcOrderEle1.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrderEle1.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(chngcOrderEle1.getAttribute("OrderHeaderKey"))) {
 				setExtendedPriceInfoCO(chngcOrderEle1, chngfOrderEle, cAndfOrderEle,"C");
 			}
 		} else {
@@ -1426,7 +1430,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			
 			filterAttributes(chngcOrderEle1, true);
 			if(log.isDebugEnabled()){
-			log.debug("XPXChangeOrder_CO[LPC:D]-InXML:" + chngcOrderEle1.getString());
+				log.debug("XPXChangeOrder_CO[LPC:D]-InXML:" + chngcOrderEle1.getString());
 			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle1.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
@@ -1868,6 +1872,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								YFCElement chngcOrdLineExtnEle1 = chngcOrdLineEle1.getChildElement("Extn");
 								if (chngcOrdLineExtnEle1 != null) {
 									chngcOrdLineExtnEle1.setAttribute("ExtnLegacyLineNumber", "");
+									chngcOrdLineExtnEle1.removeAttribute("ExtnUnitPrice");
 								}
 
 								// To get the ordered quantity from the customer
@@ -5789,11 +5794,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						
 						// Calculate order line Adjustment.
 						String extnOrderLineAdj = orderLineExtnElem.getAttribute("ExtnLegOrderLineAdjustments");
-						if (!YFCObject.isNull(extnLineOrdTotal) && !YFCObject.isVoid(extnLineOrdTotal)) {
+						if (!YFCObject.isNull(extnOrderLineAdj) && !YFCObject.isVoid(extnOrderLineAdj)) {
 							ordLineAdjLeg = ordLineAdjLeg + Double.parseDouble(extnOrderLineAdj);
-						} else {
-							extnOrderLineAdj = "0.0";
-						}
+						} 
 						break;
 					}					
 				} 	
@@ -5801,7 +5804,6 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 		
 		// To get the line order total from the FO in database.
-		boolean isNewLine = true;
 		YFCIterable<YFCElement> yfcItr = cAndfOrderEle.getChildren("Order");
 		while (yfcItr.hasNext()) {
 			YFCElement ordEle = (YFCElement) yfcItr.next();
@@ -5813,7 +5815,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					throw new Exception("Attribute OrderType Cannot be NULL or Void!");
 				}
 				
-				if (!ordType.equalsIgnoreCase("Customer")) {
+				if (!ordType.equalsIgnoreCase("Customer") && !isCancelledOrder(ordEle)) {
 					YFCElement _orderLinesElem = (YFCElement) ordEle.getChildElement("OrderLines");
 					YFCIterable<YFCElement> _yfcItr = _orderLinesElem.getChildren("OrderLine");
 					while (_yfcItr.hasNext()) {
@@ -5828,9 +5830,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							}
 							
 							if (webLineNo.equalsIgnoreCase(_webLineNo)) {
-								isNewLine = false;
 								// To retrieve order line key of the line stored in DB.
-								if(_orderLineElem.hasAttribute("OrderLineKey")){
+								if(_orderLineElem.hasAttribute("OrderLineKey")) {
 									_orderLineKey = _orderLineElem.getAttribute("OrderLineKey");
 									if (YFCObject.isNull(_orderLineKey) || YFCObject.isVoid(_orderLineKey)) {
 										throw new Exception("Attribute OrderLineKey Cannot be Null or Void!");
@@ -5842,10 +5843,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								String extnLineOrdTotal = _orderLineExtnElem.getAttribute("ExtnLineOrderedTotal");
 								String extnLegTotalLineAdj = _orderLineExtnElem.getAttribute("ExtnLegOrderLineAdjustments");
 								
-								if (orderLineKey.equalsIgnoreCase(_orderLineKey) || lineProcessCode.equalsIgnoreCase("A")) {
+								if (orderLineKey.equalsIgnoreCase(_orderLineKey) || (lineProcessCode.equalsIgnoreCase("A") && headerProcessCode.equalsIgnoreCase("C"))) {
 									// Header Process Code is compared instead of Line Process Code as Legacy might not send Line information to delete an Order.
 									if (!headerProcessCode.equalsIgnoreCase("D")) {
-										ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg ;
+										ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg;
+										ordLineAdjDB = ordLineAdjDB + ordLineAdjLeg;
 									}
 								} else {
 									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal);
@@ -5858,7 +5860,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		}
 		
-		if (headerProcessCode.equalsIgnoreCase("A") || isNewLine) {
+		if (headerProcessCode.equalsIgnoreCase("A")) {
 			ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg;
 			ordLineAdjDB = ordLineAdjDB + ordLineAdjLeg;
 		}
