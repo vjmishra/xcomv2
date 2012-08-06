@@ -59,10 +59,17 @@ public class XPEDXMyItemsDetailsDeleteAction extends WCMashupAction {
 	@Override
 	@SuppressWarnings("unused")
 	public String execute() {
-		YFCDate modifiedYFCDate = new YFCDate();
-		modifiedDate = modifiedYFCDate.getString();
-		modifyUserName	 = getWCContext().getLoggedInUserName();
 		try {
+			YFCDate modifiedYFCDate = new YFCDate();
+			modifiedDate = modifiedYFCDate.getString();
+			String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+				String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+				modifyUserName = salesreploggedInUserName;
+			} else {
+				modifyUserName	 = getWCContext().getLoggedInUserName();
+			}
+			
 			 Element out;
 			 Element updateListEle;
 			for (int i = 0; i < itemKeys.length; i++) {
