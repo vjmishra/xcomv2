@@ -303,10 +303,8 @@ function showSplitDiv(divId)
  --%>
  <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="createuserkey" value='userKey' />
-<s:set name='extnInvoicedDate' value='#OrderExtn.getAttribute("ExtnInvoicedDate")' />
 <s:set name='extnInvoiceNo' value='#OrderExtn.getAttribute("ExtnInvoiceNo")' />
 <s:set name='extnInvoiceNo' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getInvoiceNoWithoutDate(#extnInvoiceNo)' />
-<s:set name='extnInvoicedDate' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUnformattedDate("yyyy-MM-dd", #extnInvoicedDate)' />
 <s:set name='xpedxAttentionName' value='#OrderExtn.getAttribute("ExtnAttentionName")' />
 <s:set name='xpedxRushOrderComments' value='#OrderExtn.getAttribute("ExtnRushOrderComments")' />
 <s:set name='xpedxExtnDeliveryHoldDate' value='#OrderExtn.getAttribute("ExtnDeliveryHoldDate")' />
