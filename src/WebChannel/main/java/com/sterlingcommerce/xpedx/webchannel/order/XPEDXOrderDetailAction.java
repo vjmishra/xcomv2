@@ -373,12 +373,13 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			if (/*"Y".equals(shipCmpl) || */"C".equals(shipCmpl))
 				shipComplete = true;
 			String extnInvoiceNo = extnElem.getAttribute("ExtnInvoiceNo");
+			String extnInvoicedDate = XPEDXWCUtils.getDateFromInvoiceNo(extnInvoiceNo);
 			if (extnInvoiceNo != null && extnInvoiceNo.trim().length() > 0) {
 				extnInvoiceNo = XPEDXWCUtils.getInvoiceNoWithoutDate(extnInvoiceNo);
 				encInvoiceNo = XPEDXWCUtils.encrypt(extnInvoiceNo);
 				encInvoiceNo = URLEncoder.encode(encInvoiceNo);
 			}
-			String extnInvoicedDate = extnElem.getAttribute("ExtnInvoicedDate");
+			/*String extnInvoicedDate = extnElem.getAttribute("ExtnInvoicedDate");
 			if (extnInvoicedDate != null && extnInvoicedDate.trim().length() > 0 && extnInvoicedDate!="") {
 				//Start -Date format change to YYYYMMDD
 			SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd");
@@ -402,7 +403,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			SimpleDateFormat sdfDestination = new SimpleDateFormat("yyyyMMdd");
 
 			extnInvoicedDate  = sdfDestination.format(date);
-			}
+			} */
 			//End -Date format change to YYYYMMDD
 			
 			
@@ -461,6 +462,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						.getAttribute("ExtnLegacyOrderNo");
 				String status = order.getAttribute("Status");
 				String extnInvoiceNumber = orderExtn.getAttribute("ExtnInvoiceNo");
+				String extnInvoiceDate = XPEDXWCUtils.getDateFromInvoiceNo(extnInvoiceNumber);
 				String encInvoiceNumber = "";
 				
 				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode
@@ -477,11 +479,11 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						LOG.error("Error encrypting invoice no " + e);
 					}
 				}
-				String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");				
+				//String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");				
 				if(extnInvoiceDate != null && extnInvoiceDate.trim().length() > 0) {
 					try {						
-						String inputFormat = "yyyy-MM-dd";
-						extnInvoiceDate = XPEDXWCUtils.getUnformattedDate(inputFormat, extnInvoiceDate);									
+						//String inputFormat = "yyyy-MM-dd";
+						//extnInvoiceDate = XPEDXWCUtils.getUnformattedDate(inputFormat, extnInvoiceDate);									
 						extnInvoiceDate = XPEDXWCUtils.encrypt(extnInvoiceDate);
 						extnInvoiceDate = URLEncoder.encode(extnInvoiceDate);
 					} catch (Exception e) {

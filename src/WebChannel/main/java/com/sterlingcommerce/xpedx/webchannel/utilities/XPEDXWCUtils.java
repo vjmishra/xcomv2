@@ -5113,6 +5113,10 @@ public class XPEDXWCUtils {
 		return invoiceNo.substring(9, invoiceNo.length());
 	}
 	
+	public static String getDateFromInvoiceNo(String invoiceNo) {
+		return invoiceNo.substring(0, 8);
+	}
+	
 	public static String getUnformattedDate(String inputFormat, String date) {
 		String outputFormat = "yyyyMMdd";
 		YDate yDate = new YDate(date, inputFormat, true);
