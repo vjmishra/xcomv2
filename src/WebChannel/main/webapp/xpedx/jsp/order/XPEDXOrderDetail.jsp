@@ -126,13 +126,13 @@ var urlParams = {};
 })();
 
 $(document).ready(function(){
-	$(document).pngFix();
-	$('#split-order').click(function(){
-		var offset = $(this).offset();
-		/* $('#split-order-overlay').css({ top: offset.top+25 }); */         
-		$('#split-order-overlay').toggle();
-		return false;
-	});
+					//$(document).pngFix(); //Removed the pngFix libraries for XNGTP-3895
+	               $('#split-order').click(function() {
+	               var offset = $(this).offset();
+	               /* $('#split-order-overlay').css({ top: offset.top+25 }); */        
+	               $('#split-order-overlay').toggle();
+	               return false;
+	               });
 	$('#popup-window-close').click(function(){
 		$('#split-order-overlay').toggle();
 		return false;
@@ -1098,7 +1098,7 @@ function showSplitDiv(divId)
 					    			<td>
 					    			<script type="text/javascript">
 											$(document).ready(function(){
-												$(document).pngFix();
+											//$(document).pngFix(); //Removed the pngFix libraries for XNGTP-3895
 												$('#split-order_<s:property value="#orderLineKey" />').click(function(){
 														var offset = $(this).offset();
 														/* $('#split-order-overlay_<s:property value="#orderLineKey" />').css({ top: offset.top+25 });        */  
@@ -1701,11 +1701,9 @@ function displayLineAdjustments(panelId, lineKey) {
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/approval<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/email<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/orderAdjustment<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jQuery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.cycle.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
