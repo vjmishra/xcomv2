@@ -107,6 +107,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							YFCElement orderLineEle = orderLinesEle.getChildElement("OrderLine");
 							if (orderLineEle != null) {
 								rootEle.setAttribute("HeaderProcessCode", "C");
+								headerProcessCode = "C";
 							} 
 						}
 					}
