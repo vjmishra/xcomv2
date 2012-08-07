@@ -353,7 +353,8 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='f
 	value='#util.getElement(#sdoc, "Order/PersonInfoBillTo")' />
 <s:set name='priceInfo'
 	value='#util.getElement(#sdoc, "Order/PriceInfo")' />
-<s:set name='currencyCode' value='#priceInfo.getAttribute("Currency")' />
+	<%--Retrieving Default Currency from context - for JIRA 4183 --%>
+<s:set name='currencyCode' value='%{#_action.getWCContext().getDefaultCurrency()}' />
 <s:set name='overallTotals'
 	value='#util.getElement(#sdoc, "Order/OverallTotals")' />
 <s:set name='orderLines'
