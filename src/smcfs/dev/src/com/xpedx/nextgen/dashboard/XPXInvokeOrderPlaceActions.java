@@ -653,7 +653,24 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					if (!YFCObject.isNull(shipNode)) {
 						rootElem.setAttribute("ShipNode", shipNode);
 					}
-					
+					//Order Hold Type element
+					if(envVariablesmap.get("ApplyHoldonOrderDoc")!=null)
+					{
+						Element orderHoldTypesElement=(Element)envVariablesmap.get("ApplyHoldonOrderDoc");
+						if(orderHoldTypesElement!=null){
+							Document orderHoldTypesDoc=SCXmlUtil.createFromString(SCXmlUtil.getString(orderHoldTypesElement));
+							YFCDocument yfsOrderHoldTypesDoc= YFCDocument.getDocumentFor(orderHoldTypesDoc);
+							YFCElement existingOrderHldTypesElem=rootElem.getChildElement("OrderHoldTypes");
+							if(existingOrderHldTypesElem !=null)
+							{
+								YFCElement orderHldTypeElem=yfsOrderHoldTypesDoc.getDocumentElement().getChildElement("OrderHoldType");
+								existingOrderHldTypesElem.appendChild(existingOrderHldTypesElem.importNode(orderHldTypeElem));								
+								
+							}else {
+								rootElem.appendChild(rootElem.importNode(yfsOrderHoldTypesDoc.getDocumentElement()));
+							}
+						}
+					}
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
 					if (!YFCObject.isNull(headerComments) && rootElem.getChildElement("Instructions") == null) {
