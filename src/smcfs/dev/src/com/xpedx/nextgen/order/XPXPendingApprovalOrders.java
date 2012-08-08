@@ -78,7 +78,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 				if(orderElem!=null) {
 
-				spendingLimit = getSpendingLimit(env,orderElem);
+				spendingLimit = getSpendingLimit(env,orderElem,inXML.getDocumentElement().getAttribute("CustomerContactID"));
 
 				} 
 
@@ -128,9 +128,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		}
 	}
 	
-	public Double getSpendingLimit(YFSEnvironment env,Element orderElement) {
+	public Double getSpendingLimit(YFSEnvironment env,Element orderElement,String customerContactId) {
 		Double spendingLimit = new Double(-1);
-		String customerContactId = orderElement.getAttribute("CustomerContactID");
+		//String customerContactId = orderElement.getAttribute("CustomerContactID");
 		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
 		if(customerContactId!=null && customerContactId.trim().length()>0 && organizationCode!=null && organizationCode.trim().length()>0 ) {
 			//creating the document to get the customer contacts spending limit 
@@ -176,29 +176,30 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	}
 	
 	public Document applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
-		Document changeOrderOutput = null;
+		//Document changeOrderOutput = null;
+		Document changeOrderDoc = null;
 		if(orderElement!=null && approver!=null) {
-			String isEditOrder="";
+			/*String isEditOrder="";
 			if (env instanceof ClientVersionSupport) {
 				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
 				HashMap map  = clientVersionSupport.getClientProperties();
 				if (map != null) {
 					isEditOrder=(String) map.get("isEditOrderPendingOrderApproval");
 				}
-			}
+			}*/
 			
 			// Applying the Hold Type ORDER_LIMIT_APPROVAL on the order with one of the above approvers
-			Document changeOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
-			Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
+			changeOrderDoc = YFCDocument.createDocument("Order").getDocument();
+			Element changeOrderInputElem = changeOrderDoc.getDocumentElement();
 			changeOrderInputElem.setAttribute("OrderHeaderKey", orderElement.getAttribute("OrderHeaderKey"));
-			Element holdTypes = changeOrderInputDoc.createElement("OrderHoldTypes");
-			Element holdType = changeOrderInputDoc.createElement("OrderHoldType");
+			Element holdTypes = changeOrderDoc.createElement("OrderHoldTypes");
+			Element holdType = changeOrderDoc.createElement("OrderHoldType");
 			holdType.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
 			holdType.setAttribute("Status", "1100");
 			holdType.setAttribute("ResolverUserId", approver);
 			holdTypes.appendChild(holdType);
 			changeOrderInputElem.appendChild(holdTypes);
-			if(isEditOrder == null || !"true".equals(isEditOrder )) {
+			/*if(isEditOrder == null || !"true".equals(isEditOrder )) {
 				//invoking the change Order to apply the hold type
 				try {
 					changeOrderOutput = api.invoke(env, "changeOrder", changeOrderInputDoc);
@@ -207,9 +208,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				}
 			} else {
 				return changeOrderInputDoc;
-			}
+			}*/
 		}
-		return changeOrderOutput;
+		return changeOrderDoc;
+		//return changeOrderOutput;
 	}
 	
 	/*
