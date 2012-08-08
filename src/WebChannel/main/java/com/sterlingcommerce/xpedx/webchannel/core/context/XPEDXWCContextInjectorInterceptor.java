@@ -38,7 +38,7 @@ public class XPEDXWCContextInjectorInterceptor  extends WCContextInjectorInterce
        catch(Exception ex)
        {
     	   
-    	   log.error("Exception while trying to inject IWCContext into the action's value stack", ex);
+    	   log.error("Exception while trying to inject IWCContext into the action's value stack.Inserting logs in to cent logs", ex);
     	   logException(invocation,ex);
          //inject IWCContext into action
            
