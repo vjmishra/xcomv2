@@ -156,19 +156,44 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	}
 	public Document sendEmail(YFSEnvironment env, Document inXML) throws Exception {
 		
-		yfcLogCatalog.debug("XPXEmailHandlerAPI_InXML: "+ SCXmlUtil.getString(inXML));
+		yfcLogCatalog.debug("XPXEmailHandlerAPI-InXML: "+ SCXmlUtil.getString(inXML));
+		
 		Document customerDoc= null;
+		String strOrderType = null;
 		api = YIFClientFactory.getInstance().getApi();
 		
 		Element inputElement = inXML.getDocumentElement();
-		
-		
+		// To Get The List Of All Orders. ie., CO And FO.
 		Document orderListOutput = formInputToGetCustomerOrder(env, inputElement);
-
-		NodeList orderNodeList = orderListOutput.getDocumentElement().getElementsByTagName("Order");
-		int orderLength = orderNodeList.getLength();
+		NodeList orderList = orderListOutput.getDocumentElement().getElementsByTagName("Order");
+		int orderLength = orderList.getLength();
+		for (int counter = 0; counter < orderLength; counter++) {
+			Element orderElement = (Element) orderList.item(counter);
+			strOrderType = orderElement.getAttribute("OrderType");
+			if (!YFCObject.isNull(strOrderType) && strOrderType.equalsIgnoreCase("Customer")) {
+				// Customer Order.
+				NodeList orderLineList = orderElement.getElementsByTagName("OrderLine");
+				int orderLineLength = orderLineList.getLength();
+				for (int lineCount = 0; lineCount < orderLineLength; lineCount++) {
+						String shipLineTotal = null;
+						Element orderLineEle = (Element) orderLineList.item(lineCount);
+						String extnWebLineNumber = SCXmlUtil.getXpathAttribute(orderLineEle,"./Extn/@ExtnWebLineNumber");
+						if(!YFCObject.isNull(extnWebLineNumber)) {
+							shipLineTotal = getShipLinePriceForWebLineNo(extnWebLineNumber, orderList);
+						}
+						NodeList extnEleList = orderLineEle.getElementsByTagName("Extn");
+						int extnEleCOLength = extnEleList.getLength();
+						if (extnEleCOLength > 0) {
+							Element extnElem = (Element) extnEleList.item(0);
+							extnElem.setAttribute("ExtnTotalOfShippableTotals", shipLineTotal);							
+						}
+					}		
+				}
+			}
+		
+		
 		if (orderLength != 0) {
-			Element orderElement = (Element) orderNodeList.item(0);
+			Element orderElement = (Element) orderList.item(0);
 			String readEnv = YFSSystem.getProperty("environment");
 			orderElement.setAttribute("EnvironmentID", readEnv);
 			if(orderLength >2)
@@ -499,6 +524,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		return customerDoc;
 	}
 
+	
 	/**
 	 * 
 	 * @param env
@@ -993,6 +1019,31 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		}
 		return customerDoc;
 	}
+	
+	private String getShipLinePriceForWebLineNo(String extnWebLineNumber,NodeList orderList) {
+		// TODO Auto-generated method stub
+		String strOrderType;
+		double totalOfShippingLineTotals = 0.0;
+		int orderLength = orderList.getLength();
+			for(int orderListCount = 0; orderListCount < orderLength; orderListCount++){
+				Element orderElement = (Element) orderList.item(orderListCount);
+				strOrderType = orderElement.getAttribute("OrderType");
+			    if (!strOrderType.equalsIgnoreCase("Customer")) {
+			    	 NodeList orderLineListFO = orderElement.getElementsByTagName("OrderLine");
+					 int orderLineLengthFO = orderLineListFO.getLength();
+					 for (int orderLineCount = 0; orderLineCount < orderLineLengthFO; orderLineCount++) {
+						Element orderLineEleFO = (Element) orderLineListFO.item(orderLineCount);
+					    String extnWebLineNumberFO = SCXmlUtil.getXpathAttribute(orderLineEleFO,"./Extn/@ExtnWebLineNumber");
+						String extnLineShippingTotal =  SCXmlUtil.getXpathAttribute(orderLineEleFO,"./Extn/@ExtnLineShippableTotal");
+						if(!YFCObject.isNull(extnLineShippingTotal) && !YFCObject.isVoid(extnLineShippingTotal) && extnWebLineNumberFO != null && extnWebLineNumber.equalsIgnoreCase(extnWebLineNumberFO)) {
+							totalOfShippingLineTotals = totalOfShippingLineTotals  + Double.parseDouble(extnLineShippingTotal);
+						}
+					}		
+			    }      	
+		   }
+	  return Double.toString(totalOfShippingLineTotals);
+	}
+
 	
 	public Document getSalesRepEmail(YFSEnvironment env,
 			Document inputDocument) throws YFSException, RemoteException, YIFClientCreationException
