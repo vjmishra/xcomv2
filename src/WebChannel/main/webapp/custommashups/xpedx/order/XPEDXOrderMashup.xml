@@ -2580,7 +2580,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API FlowName="XPXIsPendingApprovalOrder">
             <Input>
-                <Order OrderHeaderKey=""/>
+                <Order OrderHeaderKey="" CustomerContactID=""/>
             </Input>
             <Template>
                 <Order />
