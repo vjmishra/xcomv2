@@ -147,7 +147,15 @@ $(document).ready(function(){
 			return false;
 	});
 		
-	
+	$("#adjustmentsLightBox").fancybox({
+		'titleShow'			: false,
+		'transitionIn'		: 'fade',
+		'transitionOut'		: 'fade',
+		'titlePosition' : 'inside',
+		'transitionIn' : 'none',
+		'transitionOut' : 'none',
+		//added for clearing the copycart name and copycartdescription fields							
+	});
 
 /* 	$('.short-description').each(function(){
         $(this).shorten({noblock: true, width:($(this).width() - 15)});
@@ -1441,10 +1449,11 @@ function showSplitDiv(divId)
 		 <!-- end bottom section -->
 		</div>
     </div>
+    <s:include value="XPEDXOrderTotalAdjustments.jsp" />
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </div>
 
-<s:include value="XPEDXOrderTotalAdjustments.jsp" />
+
 <script type="text/javascript">
 /* 	Ext.onReady(function(){             	          		 
         		  new Ext.ToolTip({        
@@ -1649,10 +1658,12 @@ function showSplitDiv(divId)
         </s:form>
 </swc:dialogPanel>
 <s:include value='XPEDXOrderLineTotalAdjustments.jsp' />
-<swc:dialogPanel title='' isModal="true" id="adjustmentsLightBox">
-	<div class="adjustment-body"></div>
-</swc:dialogPanel>
-
+<div style="display: none;">
+<div id="adjustmentsLightBox1"  style="width:600px;height:200px;overflow:auto;">
+	<div class="adjustment-body" id='adjustment-body'></div>
+</div>
+</div>
+<a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 <s:if test ="#_action.approvalAllowed()" >
 	<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
 			

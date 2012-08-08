@@ -112,7 +112,7 @@
 	</td>
 </tr>
 </table>
-<div class="padding-left3"><a href="javascript:DialogPanel.hide('adjustmentsLightBox')" class="submitBtnBg1"><s:text name="Done" /></a>
+<div class="padding-left3"><a href="javascript:$.fancybox.close();" class="submitBtnBg1"><s:text name="Done" /></a>
 </div>
 </div>
 
