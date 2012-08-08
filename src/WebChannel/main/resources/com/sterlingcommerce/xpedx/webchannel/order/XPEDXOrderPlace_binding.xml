@@ -21,6 +21,6 @@
 	<entry key="currency">subItemDetails:/Item/@Currency</entry>
 	<entry key="skipBOMValidationsValue">me_validateItemForOrdering:/Order/@SkipBOMValidations</entry>
 	<entry key="orderPlaceDate">xpedx_me_changeOrderDate:/Order/@OrderDate</entry>
-
+	<entry key="customerContactID">XPXIsPendingApprovalOrder:/Order/@CustomerContactID</entry>
 </properties>
 
