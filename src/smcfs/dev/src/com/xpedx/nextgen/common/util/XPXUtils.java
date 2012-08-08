@@ -2096,58 +2096,37 @@ public class XPXUtils implements YIFCustomApi {
 		}
 	}
 
-	/**
-	 * Added by Arun Sekhar on 14-April-2011 for Email templates
-	 * 
-	 * @throws Exception
-	 **/
-	public Document stampBrandLogo(YFSEnvironment env, Document inputDocument)
-			throws Exception {
+	public Document stampBrandLogo(YFSEnvironment env, Document inputDocument) {
 
-		String _imageName = null;
-		String brandLogo = null;
-		String imagesRootFolder = null;
+			String _imageName = "";
+			String brandLogo = "";
+			String imagesRootFolder = "";
 
-		try {
 			imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-			/**
-			 * In case, value form the property file is not retrieve by any
-			 * chance or there is no entry in the customer_overrides.properties,
-			 * the property will be retrieved form the SDF
-			 **/
-			if (imagesRootFolder == null
-					|| imagesRootFolder.trim().length() <= 0) {
-				imagesRootFolder = _properties
-						.getProperty("IMAGES_ROOT_FOLDER");
+			if (null == imagesRootFolder || imagesRootFolder.trim().length() <= 0) {
+				imagesRootFolder = _properties.getProperty("IMAGES_ROOT_FOLDER");
 			}
-			log.debug("imagesRootFolder: " + imagesRootFolder);
+			if (log.isDebugEnabled()) {
+				log.debug("imagesRootFolder: " + imagesRootFolder);
+			}
+		
+			String sellerOrgCode = inputDocument.getDocumentElement().getAttribute("SellerOrganizationCode");
 
-			String sellerOrgCode = inputDocument.getDocumentElement()
-					.getAttribute("SellerOrganizationCode");
-
-			if (null == sellerOrgCode) {
-				throw new NullPointerException();
-			} else {
+			if (null != sellerOrgCode && null != imagesRootFolder) {
 				_imageName = getLogoImageName(env, sellerOrgCode);
+				brandLogo = imagesRootFolder.concat(_imageName);
+				if (log.isDebugEnabled()) {
+					log.debug("brandLogo: " + brandLogo);
+				}
+				inputDocument.getDocumentElement().setAttribute("BrandLogo",brandLogo);
 			}
-			brandLogo = imagesRootFolder.concat(_imageName);
-			log.debug("brandLogo: " + brandLogo);
-
-			inputDocument.getDocumentElement().setAttribute("BrandLogo",
-					brandLogo);
-		} catch (NullPointerException ne) {
-			log.error("NullPointerException: " + ne.getStackTrace());
-			prepareErrorObject(ne, XPXLiterals.USER_UPDATE_EMAIL,
-					XPXLiterals.NE_ERROR_CLASS, env, inputDocument);
-			throw ne;
-		}
 
 		return inputDocument;
 	}
 
 	public String getLogoImageName(YFSEnvironment env, String sellerOrgCode) {
 
-		String _imageName = null;
+		String _imageName = "";
 
 		/**
 		 * Comment added by Arun Sekhar on 26-April-2011
