@@ -128,6 +128,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	protected boolean isCSRReview = false;
 	private String orderType;
 	XPEDXShipToCustomer shipToCustomer;
+	private String customerContactID;
 	public boolean isCSRReview() {
 		return isCSRReview;
 	}
@@ -195,13 +196,26 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			YFCDate orderDate = new YFCDate();
 			orderPlaceDate = orderDate.getString();
 			Element isPendingApproval = null;
-			
+			customerContactID=wcContext.getLoggedInUserId();
 			//Commented this line as it is causing exception. Looks like the mashup is not defined.
 			if (isDraftOrder()) {
 //				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
 				Document shipToCustomerDoc=createCustomerDocument();
-				prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
-				setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc);
+				isPendingApproval=prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+				if(isPendingApproval != null)
+				{
+					Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+					if(holdType != null)
+					{
+						//applyHoldOnOrder=true;//orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdType, true));
+						setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc, holdType);
+					
+					} else {
+						setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc, null);
+						
+					}
+				}
+				//setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc);
 				confirmDraftOrderElem = prepareAndInvokeMashup(CONFIRM_DRAFT_ORDER_MASHUP_ID);
 				String cartInContextOrderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 				if (confirmDraftOrderElem != null&& orderHeaderKey.equals(cartInContextOrderHeaderKey)) {
@@ -227,14 +241,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
 				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
 				{
-					setYFSEnvironmentVariables(getWCContext());
+					//setYFSEnvironmentVariables(getWCContext());
 					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
 					if(isPendingApproval != null)
 					{
-						Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
-						if(holdType != null)
+						Element holdTypes = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+						if(holdTypes != null)
 						{
-							orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdType, true));
+							orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdTypes, true));
 							
 						}
 					}
@@ -395,10 +409,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		}
 		return customerListDoc;
 	}
-	public void setOrderPlaceYFSEnvironmentVariables(IWCContext wcContext,Document customerListDoc) 
+	public void setOrderPlaceYFSEnvironmentVariables(IWCContext wcContext,Document customerListDoc, Element orderHoldTypeElement ) 
 	{
 			Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
 			HashMap map = new HashMap<String, String>();
+			if(orderHoldTypeElement!=null){
+				map.put("ApplyHoldonOrderDoc",orderHoldTypeElement);
+				
+			}
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 			if(xpedxCustomerContactInfoBean != null)
 			{
@@ -577,7 +595,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			retVal.add(""+chargeAmount);
 			return retVal;
 	}
-	public static void setYFSEnvironmentVariables(IWCContext wcContext) 
+	/*public static void setYFSEnvironmentVariables(IWCContext wcContext) 
 	{
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("isEditOrderPendingOrderApproval", "true");
@@ -590,7 +608,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			}
 			
 	}
-	
+	*/
 	private void changeOutputDocToOrderUpdateDoc(Element outputDoc)
 	{
 		ArrayList<Element> outputOrderLineNodeList=SCXmlUtil.getElements(outputDoc,"OrderLines/OrderLine");
@@ -945,5 +963,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public void setOrderType(String orderType) {
 		this.orderType = orderType;
 	}
+
+	public String getCustomerContactID() {
+		return customerContactID;
+	}
+
+	public void setCustomerContactID(String customerContactID) {
+		this.customerContactID = customerContactID;
+	}
+	
 	
 }
