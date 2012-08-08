@@ -4,6 +4,6 @@
 <struts>
     <include file="sic_struts.xml"/>
     <include file="scuiimpl_struts.xml"/>
-    <include file="swc_struts.xml"/>
+    <include file="XPEDXswc_struts.xml"/>
     <include file="XPEDXStruts.xml"/>
 </struts>
