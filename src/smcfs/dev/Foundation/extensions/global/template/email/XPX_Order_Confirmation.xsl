@@ -474,6 +474,7 @@
 				<th> </th>
 				<th> </th>
 				<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
+				<th class="right" >Shippable Price (USD)</th> <!-- The currency code on this line is dynamic.-->
 				<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
                 </thead>
 			<xsl:for-each select="Order/OrderLines/OrderLine">						  
@@ -499,6 +500,13 @@
 					<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
 					<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
 					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,###.00000")'/></xsl:otherwise>
+					</xsl:choose>
+					 </td>
+					<td class="align-right">
+					<xsl:choose>
+					<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span class="tbd">Call for price</span></xsl:when>
+					<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span class="tbd">Call for price</span></xsl:when>
+					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,###.00000")'/></xsl:otherwise>
 					</xsl:choose>
 					 </td>
 					<td class="align-right">
@@ -641,7 +649,7 @@
                     </xsl:if>
 				</tr>
 				<tr>
-				<td colspan="5" style="border-bottom:1px solid #ccc;" >
+				<td colspan="6" style="border-bottom:1px solid #ccc;" >
 				</td>
 				</tr>
 				
