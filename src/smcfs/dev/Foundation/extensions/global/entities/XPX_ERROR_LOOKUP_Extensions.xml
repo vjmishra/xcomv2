@@ -21,6 +21,18 @@
 					DefaultValue="' '" Description="Modifying Program ID" />
 				<Attribute ColumnName="LOCKID" DataType="Lockid"
 					DefaultValue="0" Description="Lock ID" />
+					<!-- Created for New Enhancement (PSR Task22) -->
+					
+				<Attribute ColumnName="STARTDOWNTIME" DataType="TimeStamp"
+					DefaultValue="" Description="Start Down time" />
+
+				<Attribute ColumnName="ENDDOWNTIME" DataType="TimeStamp"
+					DefaultValue="" Description="End Down time" />
+
+				<Attribute ColumnName="ERROR_NOTIFICATION" DataType="Flag"
+					DefaultValue="'N'" Description=" " Nullable="true" Size=""
+					XMLName="ErrorNotification" />
+				
 					<!-- Primary key -->
 				<Attribute ColumnName="ERROR_LOOKUP_KEY" DataType="Key"
 					DefaultValue="' '" Description="Primary Key for the Table"
