@@ -341,6 +341,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	private void addEmailIDToElement(Element orderElement)
 	{
 		String orderCustomerContactId=orderElement.getAttribute("CustomerContactID");
+		Element orderElemExtn = SCXmlUtil.getChildElement(orderElement,"Extn"); //CR 4054
 		ArrayList<Element> customerContactsList=SCXmlUtil.getElements(orderElement, "CustomerContactList/CustomerContact");
 		String toEmailID="";
 		String ccEmailId="";
@@ -368,6 +369,28 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			customerContact.setAttribute("ToEmailID", toEmailID);
 			customerContact.setAttribute("CCEmailID", ccEmailId);
 		}
+		/*
+		 * CR 4054 Changes start
+		 * */
+		String addtionalEmailAdd = orderElemExtn.getAttribute("ExtnAddnlEmailAddr");
+		
+		if(addtionalEmailAdd!=null && addtionalEmailAdd.trim().length() > 0){
+			if (addtionalEmailAdd.indexOf(";") != -1) {
+
+				addtionalEmailAdd = addtionalEmailAdd.replaceAll(";", ",");
+				if(addtionalEmailAdd.substring(addtionalEmailAdd.length()-1).equals(","))
+				{
+					addtionalEmailAdd = addtionalEmailAdd.substring(0,
+							addtionalEmailAdd.length() - 1);
+				}
+
+			}
+			orderElemExtn.setAttribute("ExtnAddnlEmailAddr",
+					addtionalEmailAdd);
+		}
+		/**
+		 * CR 4054 Changes end
+		 */
 	}
 	private void adduomDescription(ArrayList<Element> orderLinesElement,Map<String,String> uomDesriptionMap)
 	{
