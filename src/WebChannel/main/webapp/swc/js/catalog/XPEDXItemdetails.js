@@ -21,11 +21,17 @@ function itemDetailValidateAndAddToCart(itemId) {
 	}
 	return true;
 }*/
-
+var myMask;
 function updatePandAfromLink(){
+	//added for jira 3974
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
 	var UOMelement = document.getElementById("itemUOMsSelect");
 	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;	
 	callPnAfromLink(uomvalue);
+	Ext.Msg.hide();
+	myMask.hide();
 }
 function updatePandA() {
 	/*var UOMelement = document.getElementById("itemUOMsSelect");
