@@ -136,6 +136,8 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor){			
 	document.getElementById("displayPricesDiv").innerHTML = "";
 	if(itemId == null || itemId == "null" || itemId == "") {
+		Ext.Msg.hide();
+	        myMask.hide();
 		return;
 	}
 	if(reqUom == null || reqUom == "null" || reqUom == "") {
@@ -152,6 +154,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
   		document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
+		Ext.Msg.hide();
+	    	myMask.hide();
 	    return;
 	}	
 	priceCheck = true;
@@ -159,10 +163,12 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
 	var validationSuccess = validateOrderMultiple();
 	if(validationSuccess==false){
+		Ext.Msg.hide();
+	    	myMask.hide();
 		return;
 	}		
 	else{
-	Ext.Msg.wait("Processing...");
+	//Ext.Msg.wait("Processing...");
 	Ext.Ajax.request({
        	url:url,
         params: {
@@ -178,7 +184,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
-			Ext.Msg.hide();
+			//Ext.Msg.hide();
 		}
 	});
 }
@@ -621,9 +627,12 @@ var isUserAdmin = <s:property value="#isUserAdmin"/>;
 
 
 <script type="text/javascript">
+var myMask;
 function addItemToCart(data)
-{	
-	
+{	//added for jira 3974
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
 	var Qty=document.getElementById("qtyBox").value;
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
@@ -635,6 +644,8 @@ function addItemToCart(data)
   		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
+		Ext.Msg.hide();
+	    	myMask.hide();
 	    return;
 	}
 	var validationSuccess = validateOrderMultiple();
@@ -739,12 +750,16 @@ function validateOrderMultiple() {
 	}
 	return true;
 }
-
+var myMask;
 function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO)
 {
+	//added for jira 3974
+	 var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
     //Ext.Msg.wait("Adding item to cart...Please wait!");
-    xpedx_working_start();
-    setTimeout(xpedx_working_stop, 3000);
+  /* xpedx_working_start();
+    setTimeout(xpedx_working_stop, 3000);*/
     var baseUOM;
     if(document.getElementById("baseUnitOfMeasure")!=null
 			&&  document.getElementById("baseUnitOfMeasure")!=undefined){
@@ -799,7 +814,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 				writeMetaTag(tag,content,4);
               }
 			//-- WebTrends tag end -
-		    Ext.MessageBox.hide(); 
+		    //Ext.MessageBox.hide(); 
 		    refreshMiniCartLink();
             //var myDiv = document.getElementById("ajax-body-1");	            
             //myDiv.innerHTML = 'The product has been successfully added to the cart';	            
@@ -814,8 +829,8 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 				 myMessageDiv.innerHTML = "Item has been added to cart." ;	            
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
-		    
-			 
+             Ext.Msg.hide();
+             myMask.hide();	 
         },
         failure: function (response, request){
 			Ext.MessageBox.hide(); 
@@ -831,8 +846,8 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 				 myMessageDiv.innerHTML = "Error in adding item to the cart." ;	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
-
-	           
+            Ext.Msg.hide();
+    	    myMask.hide();  
              }
     });		
 }
@@ -1681,7 +1696,13 @@ function SubmitActionWithValidation()
 		}
 		
 		//This function is called to add the item in an existing list/new list from Select a WishList window.
+		var myMask;
 		function addItemsToList(){
+			//added for jira 3974
+			var waitMsg = Ext.Msg.wait("Processing...");
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+			myMask.show();
+			alert("in addItemsToList");
 			//alert('currentAadd2ItemListIndex '+currentAadd2ItemListIndex);
 			//alert('currentAadd2ItemList '+currentAadd2ItemList);
 			var idx = currentAadd2ItemListIndex;
@@ -1708,8 +1729,8 @@ function SubmitActionWithValidation()
 				}*/
 
 				//Ext.Msg.wait("Adding item to list... Please wait.");
-				xpedx_working_start();
-                setTimeout(xpedx_working_stop, 4000);
+				//xpedx_working_start(); for jira 3974
+                //setTimeout(xpedx_working_stop, 4000); for jira 3974
 				
 				document.OrderDetailsForm.orderLineItemNames.value 	= unescape(document.OrderDetailsForm.orderLineItemNames.value);
 				document.OrderDetailsForm.orderLineItemDesc.value 	= unescape(document.OrderDetailsForm.orderLineItemDesc.value);
@@ -1757,13 +1778,14 @@ function SubmitActionWithValidation()
 		          		method: 'POST',
 		          		success: function (response, request){
 		              		document.body.style.cursor = 'default';
-		              		Ext.Msg.hide();
+		              		//Ext.Msg.hide();
 					  		//reloadMenu();
 							// Removal of MIL dropdown list from header for performance improvement
 					  		itemCountValOfSelList.value = itemCountValOfSelList.value + 1;
 					  		//alert("Successfully added item "+itemId+ " to the selected list.");
 					  		
-					  		var myMessageDiv = document.getElementById("errorMsgForQty");	            
+					  		var myMessageDiv = document.getElementById("errorMsgForQty");
+					  		alert("in success");
 				            myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
 				            myMessageDiv.style.display = "inline-block"; 
 				            myMessageDiv.setAttribute("class", "success");
@@ -1776,7 +1798,7 @@ function SubmitActionWithValidation()
 		          		},
 		          		failure: function (response, request){
 		              		document.body.style.cursor = 'default';
-		              		Ext.Msg.hide();
+		              		//Ext.Msg.hide();
 		              		//alert("Error adding item to the list. Please try again later.");
 		              		var myMessageDiv = document.getElementById("errorMsgForQty");
 		              		//Start fix for 3104
@@ -1790,16 +1812,18 @@ function SubmitActionWithValidation()
 		        }
 		        else{
 		      		alert("Maximum number of element in a list can only be 200..\n Please try again with removing some items or create a new list.");
-		      		Ext.Msg.hide();
 		        }
-		        Ext.Msg.hide();
+		        
 		        document.body.style.cursor = 'default';
 		        $.fancybox.close();
+		        Ext.Msg.hide();
+	            	myMask.hide();
 				}
 		    	else{
 		    		//alert('Please select a Wish List to add the item');
 		    		/*Start- Jira 3104  */
-		    		
+		    		Ext.Msg.hide();
+	            		myMask.hide();
 		    		alert('Please select a list or create a new list.');
 		    		
 		    		/*End- Jira 3104  */

@@ -136,3 +136,60 @@ div div.searchbox-1.auth input {
 .return-request div.middle-section table td.ie-fix-td {
 	padding-top: 7px !important; 
 }
+/*For Progress Bar*/
+.x-progress-wrap{border:1px solid;overflow:hidden;}
+.x-progress-inner{height:18px;background:repeat-x;position:relative;}
+.x-progress-bar{height:18px;float:left;width:0;background:repeat-x left center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;}
+.x-progress-text{padding:1px 5px;overflow:hidden;position:absolute;left:0;text-align:center;}
+.x-progress-text-back{line-height:16px;}
+.ext-ie .x-progress-text-back{line-height:15px;}
+.x-dlg-mask{background-color:#CCCCCC;}
+.x-window-plain .x-window-mc{background-color:#E6E6E6;border:1px solid #7d7d7d;}
+.x-window-plain .x-window-body{border:1px solid #7d7d7d; background-color:#E6E6E6;}
+.x-window-mc{border-color:#E6E6E6;font:normal 11px Arial, Helvetica, sans-serif;background-color:#E6E6E6;}
+.x-window-dlg .ext-mb-text, .x-window-dlg .x-window-header-text{font-size:12px;}
+.x-window-dlg .ext-mb-textarea{font:normal 12px Arial, Helvetica, sans-serif;}
+.x-window-dlg .x-msg-box-wait{background-image:url(../images/default/grid/loading.gif);}
+.x-window-dlg .ext-mb-info{background-image:url(../images/default/window/icon-info.gif);}
+.x-window-dlg .ext-mb-warning{background-image:url(../images/default/window/icon-warning.gif);}
+.x-window-dlg .ext-mb-question{background-image:url(../images/default/window/icon-question.gif);}
+.x-window-dlg .ext-mb-error{background-image:url(../images/default/window/icon-error.gif);}
+body.x-body-masked .x-window-plain .x-window-mc {
+    background-color: #E6E6E6;
+    border: 1px solid #7D7D7D;
+}
+#preloader, .preloader {
+    background: url("../../images/xpedx_preloader.gif") no-repeat scroll 0 0 transparent;
+    font-size: 0;
+    height: 11px;
+    width: 160px;
+}
+.x-window-dlg .preloader.ext-mb-icon {
+    margin-left: -5px;
+    margin-top: 25px;
+    width: 160px;
+}
+.x-progress-inner {
+    background-color: #FFFFFF;
+}
+.x-progress-wrap {
+    border-color: #E6E6E6;
+}
+body.x-body-masked .x-window-plain .x-window-mc {
+    background-color: #E6E6E6;
+    border: 1px solid #7D7D7D;
+}
+.x-window-mr {
+    border: 1px solid #7D7D7D !important;
+    padding-right: 0 !important;
+}
+.x-progress-bar {
+    background-color: #7D7D7D;
+    border-bottom-color: #7D7D7D;
+    border-right-color: #7D7D7D;
+    border-top-color: #7D7D7D;
+}
+.ext-el-mask {
+    background-color: #333333;
+}
+/*End of Progress Bar CSS classes*/

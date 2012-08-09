@@ -4616,9 +4616,12 @@ function toggleVisibility(divID)
 }
 
 
-
+var myMask;
 function deleteLine(orderHeaderKey, lineKey){
-	
+	//added for jira 3974
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
 
     // alert(lineKey);
 
@@ -4639,9 +4642,10 @@ function deleteLine(orderHeaderKey, lineKey){
         method: 'POST',
 
         success: function (response, request){
-
         	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
-        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);        	
+        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);    
+        	Ext.Msg.hide();
+        	myMask.hide();
         	$('#cluetip').hide();
         },
 
@@ -4649,6 +4653,8 @@ function deleteLine(orderHeaderKey, lineKey){
 
             //alert(document.miniCartForm.miniCartGeneralAJAXError.value);
         	refreshMiniCartLink();
+        	Ext.Msg.hide();
+        	myMask.hide();
         	$('#cluetip').hide();
 
         }
