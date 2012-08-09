@@ -244,6 +244,8 @@
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = '';
+	            		Ext.Msg.hide();
+				myMask.hide();
 	            		//-- Web Trends tag start --
 	            		writeWebtrendTag(responseText);
 	            		//-- Web Trends tag end --
