@@ -24,11 +24,11 @@
 					<!-- Created for New Enhancement (PSR Task22) -->
 					
 				<Attribute ColumnName="STARTDOWNTIME" DataType="TimeStamp"
-					DefaultValue="" Description="Start Down time" />
+					DefaultValue="sysdate" Description="Start Down time" />
 
 				<Attribute ColumnName="ENDDOWNTIME" DataType="TimeStamp"
-					DefaultValue="" Description="End Down time" />
-
+					DefaultValue="sysdate" Description="End Down time" />
+					
 				<Attribute ColumnName="ERROR_NOTIFICATION" DataType="Flag"
 					DefaultValue="'N'" Description=" " Nullable="true" Size=""
 					XMLName="ErrorNotification" />
