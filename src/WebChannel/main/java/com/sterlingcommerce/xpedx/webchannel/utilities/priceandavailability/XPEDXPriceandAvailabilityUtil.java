@@ -137,6 +137,10 @@ public class XPEDXPriceandAvailabilityUtil {
 		if(null == outputDoc){
 			
 			log.error("PnA did not respond or it sent a Empty xml back.");		
+			//added for jira 3974 : error message for delayed PnA response
+			displayErrorMsgToUser = "Your request has timed out. Please try again.";
+			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
+			//end of jira 3974
 			return pnaOutput;
 			
 		} else {	
