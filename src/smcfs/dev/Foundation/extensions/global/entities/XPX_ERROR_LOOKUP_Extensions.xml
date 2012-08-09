@@ -29,9 +29,9 @@
 				<Attribute ColumnName="ENDDOWNTIME" DataType="TimeStamp"
 					DefaultValue="sysdate" Description="End Down time" />
 					
-				<Attribute ColumnName="ERROR_NOTIFICATION" DataType="Flag"
-					DefaultValue="'N'" Description=" " Nullable="true" Size=""
-					XMLName="ErrorNotification" />
+				<Attribute ColumnName="DOWNTIME_NOTIFICATION" DataType="Text-254"
+					DefaultValue="" Description="Notifies Downtime"
+					Nullable="true" XMLName="DowntimeNotification" />
 				
 					<!-- Primary key -->
 				<Attribute ColumnName="ERROR_LOOKUP_KEY" DataType="Key"
