@@ -46,15 +46,21 @@
 			
 		}
 	}
-	
+	var myMask;
 	function addItemToCart(itemId,uid) {
+		//added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 
 		 //commented for jira 3253 resetQuantityError(uid);
 		//reset the Qty box- Jira 3197- MIL Messaging
 		document.getElementById('qtys_'+uid).style.borderColor="";
 		 if(validateOrderMultiple(true,uid) == false)
 		 {
-					return;
+		 	Ext.Msg.hide();
+		        myMask.hide();
+			return;
 		 }
 		var qty = document.getElementById('QTY_'+uid).value;
 		var uom = document.getElementById('UOM_'+uid).value;
@@ -103,8 +109,9 @@
 					var responseText = response.responseText;
 					if(responseText.indexOf("Error")>-1)
 					{
+						Ext.Msg.hide();
+						myMask.hide();
 						alert("Error Adding the Item to the cart. Please try again later");
-						Ext.MessageBox.hide(); 
 					}
 					else
 					{
@@ -129,19 +136,21 @@
 						divVal.setAttribute("style", "margin-right:5px;float:right;");
 						divVal.setAttribute("class", "success");
 				       		 //end of addition 3253
+						Ext.Msg.hide();
+						myMask.hide();
 						//JQuery Popup: 3 sec popup dispaly. 
 						// commented for 3105
 						//$.jqDialog.notify("Item successfully added to cart", 3);
-						if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+					/*	if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
 						{
 							$.jqDialog.notify("Item successfully added to order", 3);
 						}
 						else{
 							$.jqDialog.notify("Item successfully added to cart", 3);
-						}
+						} commented for jira 3974*/
 						
 						//End- fix for 3105
-						Ext.MessageBox.hide(); 
+						//Ext.MessageBox.hide(); 
 						//alert("Successfully added item "+itemId+" with quantity "+qty+" to the cart");
 						//-- Web Trends tag start --
 						var tag = "WT.si_n,WT.tx_cartid,WT.si_x,DCSext.w_x_ord_ac";
@@ -151,7 +160,9 @@
 					}	
 				},
 				failure: function (response, request){
-				    Ext.MessageBox.hide(); 
+				    //Ext.MessageBox.hide(); 
+					Ext.Msg.hide();
+					myMask.hide();
 				    alert("Error Adding the Item to the cart. Please try again later");
 				}
 			});
@@ -194,7 +205,12 @@
 		
 	}
 	//-- Web Trends tag end --
+	var myMask;
 	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM) {
+		//added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 		if(itemId == null || itemId =="") {
 			alert("Item ID cannot be null to make a PnA call");
 		}
@@ -218,7 +234,7 @@
 						document.getElementById('availabilityRow_'+myItemsKey).innerHTML='';
 						document.getElementById('availabilityRow_'+myItemsKey).innerHTML=responseText;
 						availabilityRow.style.display = '';
-						Ext.MessageBox.hide(); 
+						//Ext.MessageBox.hide(); 
 	            	}
 	            	else
 	            	{
@@ -232,7 +248,7 @@
 	            		writeWebtrendTag(responseText);
 	            		//-- Web Trends tag end --
 	            		
-	            		Ext.MessageBox.hide(); 
+	            		//Ext.MessageBox.hide(); 
 	            	}	
 	            },
 	        	failure: function (response, request){
@@ -250,6 +266,8 @@
 	        		'<td></td></tr></tbody>';
 					//document.getElementById('availabilityRow_'+myItemsKey).innerHTML=responseText;
 					document.getElementById('availabilityRow_'+myItemsKey).style.display = '';
+					Ext.Msg.hide();
+					myMask.hide();
 	                //alert('Failure');
 	            },
 	        });
