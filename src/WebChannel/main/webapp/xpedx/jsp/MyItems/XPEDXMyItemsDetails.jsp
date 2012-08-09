@@ -375,8 +375,6 @@ function showSharedListForm(){
         		var uom = document.getElementById('UOM_'+myItemsKey).value;
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
-    		Ext.Msg.hide();
-            	myMask.hide();
      	}
 		
 		function importItems(msgImportMyItemsError){
