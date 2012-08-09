@@ -520,9 +520,9 @@
 					<xsl:otherwise>
 					<td class="right"> </td>
 					<td class="left"></td>
-					<td class="right">
-					 </td>
-					 <td class="align-right">
+					<td class="right"></td>
+					<td class="right"></td>
+					<td class="align-right">
 					 <xsl:choose>
 					<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 					<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
