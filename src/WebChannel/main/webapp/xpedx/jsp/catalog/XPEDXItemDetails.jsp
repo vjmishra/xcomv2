@@ -1702,7 +1702,6 @@ function SubmitActionWithValidation()
 			var waitMsg = Ext.Msg.wait("Processing...");
 			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 			myMask.show();
-			alert("in addItemsToList");
 			//alert('currentAadd2ItemListIndex '+currentAadd2ItemListIndex);
 			//alert('currentAadd2ItemList '+currentAadd2ItemList);
 			var idx = currentAadd2ItemListIndex;
@@ -1785,12 +1784,9 @@ function SubmitActionWithValidation()
 					  		//alert("Successfully added item "+itemId+ " to the selected list.");
 					  		
 					  		var myMessageDiv = document.getElementById("errorMsgForQty");
-					  		alert("in success");
 				            myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
 				            myMessageDiv.style.display = "inline-block"; 
 				            myMessageDiv.setAttribute("class", "success");
-
-					  		
 					  		/*Web Trends tag start*/ 
 					  		writeMetaTag("DCSext.w_x_list_additem","1");
 					  		/*Web Trends tag end*/
