@@ -348,8 +348,13 @@ function showSharedListForm(){
      %>
      //-->
      var priceCheck;
+     var myMask;
      	function checkAvailability(itemId,myItemsKey) {
      		priceCheck = true;
+     		//added for jira 3974
+     		var waitMsg = Ext.Msg.wait("Processing...");
+     		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+     		myMask.show();
      		clearPreviousDisplayMsg()
      		
      		var validateOM ; 
@@ -370,6 +375,8 @@ function showSharedListForm(){
         		var uom = document.getElementById('UOM_'+myItemsKey).value;
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
+    		Ext.Msg.hide();
+            	myMask.hide();
      	}
 		
 		function importItems(msgImportMyItemsError){
@@ -461,8 +468,13 @@ function showSharedListForm(){
 		}	
 
 		var addToCartFlag;
+		var myMask;
 		//Resets the Messages and calls the actual javascript function
 		function myAddItemToCart(itemId, id){
+			//added for jira 3974
+			var waitMsg = Ext.Msg.wait("Processing...");
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+			myMask.show();
 			//Added isGlobal for Jira 3770
 			isGlobal = true;
 			addToCartFlag = true;
@@ -798,13 +810,17 @@ function showSharedListForm(){
 						  divVal.setAttribute("class", "success");
     					}
     				}
-    			 Ext.MessageBox.hide();
                	 refreshMiniCartLink();
      	   }
 		}
 		
 		var addItemsWithQty;
+		var myMask;
 		function addToCart(){
+			//added for jira 3974
+			var waitMsg = Ext.Msg.wait("Processing...");
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+			myMask.show();
 			addItemsWithQty = true;
 			isGlobal = false;
 			clearPreviousDisplayMsg();
@@ -814,8 +830,12 @@ function showSharedListForm(){
 			 {	
 				 //Added displayMsgHdrLevelForLineLevelError() here for displaying error msg when Add Item with Qty To cart
 				 //displayMsgHdrLevelForLineLevelError ();
-				 if(addToCartFlag == false)
-					return;
+				 if(addToCartFlag == false){
+				 Ext.Msg.hide();
+			         myMask.hide();
+			         return;
+				 }
+					
 			 }
 			var formItemIds 	= document.getElementById("formItemIds");
 			//var selCart 		= document.getElementById("draftOrders");
@@ -851,9 +871,13 @@ function showSharedListForm(){
 	                   //Fix for Jira 3946
 	                   success: function (response, request){
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
+	                	    Ext.Msg.hide();
+				    myMask.hide();
 	                   },
 	                   failure: function (response, request){
 	                	   setMsgOnAddItemsWithQtyToCart(response);
+	                	   Ext.Msg.hide();
+			   	   myMask.hide();
 	                	}
 	               });    
 	                } 
@@ -862,6 +886,8 @@ function showSharedListForm(){
 				
 				
 			} else {
+				Ext.Msg.hide();
+	            		myMask.hide();
 				alert("There is a problem in this page. Form formItemIds is missing.");
 			}
 		}
@@ -994,6 +1020,8 @@ function showSharedListForm(){
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						document.getElementById(arrQty.id).style.borderColor="#FF0000";
+						Ext.Msg.hide();
+						myMask.hide();
 					}
 				isQuantityZero = false;
 			}
@@ -1040,6 +1068,8 @@ function showSharedListForm(){
 		            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
 		            document.getElementById("errorMsgBottom").style.display = "inline";
 		            uomCheck = true;
+		            Ext.Msg.hide();
+			    myMask.hide();
 					}
 					errorflag= false; validAddtoCartItemsFlag[0]=false;
 					isAddToCart=false;
@@ -1060,6 +1090,8 @@ function showSharedListForm(){
 			            uomCheck = true;
 			            errorflag= false; validAddtoCartItemsFlag[0]=false;
 						isAddToCart=false;
+						Ext.Msg.hide();
+						myMask.hide();
 					}
 					else{
 						validAddtoCartItemsFlag[0]=true;
@@ -1396,11 +1428,13 @@ function showSharedListForm(){
 			if(isQuantityZero == true)
 			{
 				document.getElementById("errorMsgTop").innerHTML = "No items with quantity defined. Please review the list and try again." ;
-	            document.getElementById("errorMsgTop").style.display = "inline";
+	            		document.getElementById("errorMsgTop").style.display = "inline";
 	            
-	            document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
-	            document.getElementById("errorMsgBottom").style.display = "inline";
+	            		document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
+	            		document.getElementById("errorMsgBottom").style.display = "inline";
 				errorflag= false;
+				Ext.Msg.hide();
+            			myMask.hide();
 			}
 			return errorflag;
 		}
@@ -1686,8 +1720,12 @@ function showSharedListForm(){
 			
 		}
 		
-		
+		var myMask;
 		function updateSelectedPAA(){
+			//added for jira 3974
+			var waitMsg = Ext.Msg.wait("Processing...");
+			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+			myMask.show();
 			priceCheck = true;
 			var checkboxes = Ext.query('input[id*=checkItemKeys]');
 			var nLineSelected = 0;
@@ -1747,11 +1785,12 @@ function showSharedListForm(){
 		            		assignAvailablity();
 		            		availabilityRow.innerHTML='';
 		            		availabilityRow.style.display = '';
-		              
-	                      Ext.MessageBox.hide();
+	                     		Ext.Msg.hide();
+				        myMask.hide();
 	                   },
-	                   failure: function (response, request){
-						  Ext.MessageBox.hide();
+	                   failure: function (response, request){						
+						  Ext.Msg.hide();
+				          	  myMask.hide();
 						  alert("Your request could not be completed at this time, please try again.");	                   }
 	               });     
 				
@@ -1761,10 +1800,12 @@ function showSharedListForm(){
 				//var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
 				var msgSelectItemFirst = "<s:text name='MSG.SWC.MIL.NOITEMSELECT.ERROR.SELECTFORPNA' />";
 				document.getElementById("errorMsgTop").innerHTML = msgSelectItemFirst ;
-                document.getElementById("errorMsgTop").style.display = "inline";
+                		document.getElementById("errorMsgTop").style.display = "inline";
 
 				document.getElementById("errorMsgBottom").innerHTML = msgSelectItemFirst ;
-                document.getElementById("errorMsgBottom").style.display = "inline";
+                		document.getElementById("errorMsgBottom").style.display = "inline";
+                		Ext.Msg.hide();
+	            		myMask.hide();
 				
 				//Ext.MessageBox.alert('Alert','Please select at least one item for Price Check.');
 			}

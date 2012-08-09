@@ -3138,7 +3138,7 @@ a.x-menu-item {
 }
 .x-panel-btns {
     overflow: hidden;
-    padding: 5px;
+    padding: 0px;
 }
 .x-panel-btns-right .x-panel-fbar {
     clear: none;
@@ -3378,12 +3378,12 @@ a.x-menu-item {
     background: none repeat-x scroll 0 0 transparent;
     overflow: hidden;
 }
-.x-window-tl {
+/*.x-window-tl {
     background: none no-repeat scroll 0 0 transparent;
     padding-left: 6px;
     position: relative;
     z-index: 1;
-}
+} 3974*/
 .x-window-tr {
     background: none no-repeat scroll right 0 transparent;
     padding-right: 6px;
@@ -3391,7 +3391,7 @@ a.x-menu-item {
 .x-window-bc {
     background: none repeat-x scroll 0 bottom transparent;
 }
-.x-window-bc .x-window-footer {
+/*.x-window-bc .x-window-footer {
     font-size: 0;
     line-height: 0;
     padding-bottom: 6px;
@@ -3400,10 +3400,10 @@ a.x-menu-item {
     background: none no-repeat scroll 0 bottom transparent;
     padding-left: 6px;
 }
-.x-window-br {
+/*.x-window-br {
     background: none no-repeat scroll right bottom transparent;
     padding-right: 6px;
-}
+}3974*/
 .x-window-mc {
     border: 1px solid;
     margin: 0;
@@ -3411,7 +3411,7 @@ a.x-menu-item {
 }
 .x-window-ml {
     background: none repeat-y scroll 0 0 transparent;
-    padding-left: 6px;
+    padding-left: 0px;
 }
 .x-window-mr {
     background: none repeat-y scroll right 0 transparent;
@@ -3453,6 +3453,7 @@ a.x-menu-item {
 }
 .x-window-body {
     background: none repeat scroll 0 0 transparent;
+    background-color: #E6E6E6;
 }
 .x-panel-ghost .x-window-tl {
     border-bottom: 1px solid;
@@ -3502,6 +3503,7 @@ body.ext-ie6.x-body-masked .x-window select {
 .x-window-plain .x-window-body {
     background: none repeat scroll 0 0 transparent !important;
     border: 1px solid;
+    background-color: #E6E6E6;
 }
 .x-html-editor-wrap {
     border: 1px solid;
@@ -4007,6 +4009,7 @@ body.ext-ie6.x-body-masked .x-window select {
     border: 0 none !important;
     overflow: hidden !important;
     padding: 5px 10px;
+    background-color: #E6E6E6;
 }
 .x-window-dlg .x-window-mc {
     border: 0 none !important;
@@ -4049,7 +4052,7 @@ body.ext-ie6.x-body-masked .x-window select {
     overflow: auto;
 }
 .ext-el-mask {
-    background-color: #CCCCCC;
+    background-color: #333333;
 }
 .ext-el-mask-msg {
     background-color: #C3DAF9;
@@ -4088,15 +4091,15 @@ body.ext-ie6.x-body-masked .x-window select {
 .x-ie-shadow {
     background-color: #777777;
 }
-.x-shadow .xsmc {
+/*.x-shadow .xsmc {
     background-image: url("/swc/xpedx/images/default/shadow-c.png");
-}
-.x-shadow .xsml, .x-shadow .xsmr {
+} 3974*/
+/*.x-shadow .xsml, .x-shadow .xsmr {
     background-image: url("/swc/xpedx/images/default/shadow-lr.png");
 }
 .x-shadow .xstl, .x-shadow .xstc, .x-shadow .xstr, .x-shadow .xsbl, .x-shadow .xsbc, .x-shadow .xsbr {
     background-image: url("/swc/xpedx/css/images/common/shadow.png");
-}
+}3974 */
 .loading-indicator {
     background-image: url("../images/default/grid/loading.gif");
     font-size: 11px;
@@ -5184,10 +5187,11 @@ a.x-menu-item {
     border-color: #A3BAE9 #DFE8F6 #DFE8F6 #A3BAE9;
 }
 .x-window-plain .x-window-body {
-    border-color: #DFE8F6 #A3BAE9 #A3BAE9 #DFE8F6;
+    border-color: 1px solid #7D7D7D;
+    background-color:#E6E6E6;
 }
 body.x-body-masked .x-window-plain .x-window-mc {
-    background-color: #CCD9E8;
+    background-color: #E6E6E6;
 }
 .x-html-editor-wrap {
     background-color: #FFFFFF;
@@ -5251,18 +5255,18 @@ body.x-body-masked .x-window-plain .x-window-mc {
     background-image: url("../images/default/layout/mini-top.gif");
 }
 .x-progress-wrap {
-    border-color: #6593CF;
+    border-color: #E6E6E6;
 }
 .x-progress-inner {
-    background-color: #E0E8F3;
-    /*background-image: url("../images/default/qtip/bg.gif");*/
+    background-color: #FFFFFF;
+    background-image: url("../images/default/qtip/bg.gif");
 }
 .x-progress-bar {
-    background-color: #9CBFEE;
-    /*background-image: url("../images/default/progress/progress-bg.gif");*/
-    border-bottom-color: #7FA9E4;
-    border-right-color: #7FA9E4;
-    border-top-color: #D1E4FD;
+    background-color: #7D7D7D;
+    background-image: url("../images/default/progress/progress-bg.gif");
+    border-bottom-color: #7D7D7D;
+    border-right-color: #7D7D7D;
+    border-top-color: #7D7D7D;
 }
 .x-progress-text {
     color: #FFFFFF;
@@ -5270,7 +5274,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
     font-weight: bold;
 }
 .x-progress-text-back {
-    color: #396095;
+    color: #E6E6E6;
 }
 .x-list-header {
     background-color: #F9F9F9;
