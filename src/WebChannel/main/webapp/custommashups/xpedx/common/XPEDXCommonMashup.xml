@@ -543,6 +543,31 @@
 			</API>
 	</mashup>
 	
+<!-- Mashup For Kubra jira 4146 -->
+	<mashup id ='xpedx-getCusotmerByCustomerPath' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+				<API FlowName="XPXCustomerHierarchyViewService">
+						<Input>
+							<XPXCustHierarchyView ShipToCustomerID="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" >
+								<ComplexQuery>
+									<Or>
+									</Or>
+								</ComplexQuery>
+								<OrderBy>
+									<Attribute Desc="N" Name="" />
+								</OrderBy>
+							</XPXCustHierarchyView>
+						</Input>
+				        <Template>
+			        		<XPXCustHierarchyViewList TotalNumberOfRecords="" >
+			        			<XPXCustHierarchyView />
+			        		</XPXCustHierarchyViewList>	        				
+						</Template>
+				</API>
+	</mashup>
+<!-- Mashup End For Kubra jira 4146 -->
+		
 	<mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
 		<classInformation

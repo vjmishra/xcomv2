@@ -63,6 +63,15 @@
 				<param name="customerId">${#parameters.customerId }</param>
 			</result>
 		</action>
+		<!--Start For Jira 4146 - On Remove, we call this action  -->
+			<action name="removeCustomersFromAuthorize" method="removeAuthorize"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
+			<param name="mashups">xpedxSaveCustomerAssignments</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXPaginateCustomerLocations.jsp</result>
+		</action>
+		<!-- End For Jira 4146 - On Remove, we call this action  -->
+		
 		
 		<!-- Customer Logo Customization Starts : Manoj Kodagali -->
 		
