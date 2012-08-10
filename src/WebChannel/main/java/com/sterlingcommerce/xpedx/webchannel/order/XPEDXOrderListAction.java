@@ -65,7 +65,16 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private String MASHUP_NAME="XPEDXOrderList";
 	private String rootElementName="XPEDXOrderSearchListView";
 	private String pageSetToken;	
+	private String isCSRReview = "N";
 	
+	public String getIsCSRReview() {
+		return isCSRReview;
+	}
+
+	public void setIsCSRReview(String isCSRReview) {
+		this.isCSRReview = isCSRReview;
+	}
+
 	public String getPageSetToken() {
 		return pageSetToken;
 	}
@@ -635,6 +644,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 			{*/
 				extnWebConfNum=order.getAttribute("ExtnWebConfNum");
 			//}
+			
 			String orderHeaderKey = SCXmlUtil.getAttribute(order, "OrderHeaderKey");
 			String orderStatus = order.getAttribute("Status"); //SCXmlUtil.getAttribute(order, "Status");
 			if("Customer".equals(orderType))
@@ -649,6 +659,13 @@ public class XPEDXOrderListAction extends OrderListAction {
 				//Ends
 				xpedxParentOrderListMap.put(extnWebConfNum, order);
 				continue;
+			}
+			String headerStatusCode = order.getAttribute("ExtnHeaderStatusCode");
+			String legacyOrderNumber = order.getAttribute("ExtnLegacyOrderNo");
+			if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode
+					  && !"".equals(headerStatusCode.trim()) && !headerStatusCode.equals("M0000"))) {
+				isCSRReview = "Y";
+				order.setAttribute("isCSRReview", isCSRReview);
 			}
 			String chainedFromOHK =customerOrderMap.get(extnWebConfNum);
 			//xpedxChainedOrderListMap should have customer OHK as key, fullfillment orders as value
@@ -683,6 +700,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 					else{
 						orderList.add(order);
 						xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
+						
 					}
 					
 				}
