@@ -30,8 +30,8 @@ function updatePandAfromLink(){
 	var UOMelement = document.getElementById("itemUOMsSelect");
 	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;	
 	callPnAfromLink(uomvalue);
-	Ext.Msg.hide();
-	myMask.hide();
+	//Ext.Msg.hide();
+	//myMask.hide();
 }
 function updatePandA() {
 	/*var UOMelement = document.getElementById("itemUOMsSelect");
