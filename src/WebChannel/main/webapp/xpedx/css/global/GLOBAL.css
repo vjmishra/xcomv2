@@ -8831,7 +8831,7 @@ q:before,q:after{content:'';}
 .x-color-palette a:hover, .x-color-palette a.x-color-palette-sel{border:1px solid;}
 .x-color-palette em{display:block;border:1px solid;}
 .x-color-palette em span{cursor:pointer;display:block;height:10px;line-height:10px;width:10px;}
-.x-ie-shadow{display:none;position:absolute;overflow:hidden;left:0;top:0;zoom:1;}
+/*.x-ie-shadow{display:none;position:absolute;overflow:hidden;left:0;top:0;zoom:1;}3974*/
 .x-shadow{display:none;position:absolute;overflow:hidden;left:0;top:0;}
 .x-shadow *{overflow:hidden;}
 .x-shadow *{padding:0;border:0;margin:0;clear:none;zoom:1;}
@@ -9770,8 +9770,8 @@ body.ext-ie6.x-body-masked .x-window select{visibility:visible;}
 .x-color-palette a{border-color:#fff;}
 .x-color-palette a:hover, .x-color-palette a.x-color-palette-sel{border-color:#8bb8f3;background-color:#deecfd;}
 .x-color-palette em{border-color:#aca899;}
-.x-ie-shadow{background-color:#777;}
-/*.x-shadow .xsmc{background-image:url(/swc/xpedx/images/default/shadow-c.png);} 3974 */
+/*.x-ie-shadow{background-color:#777;}
+.x-shadow .xsmc{background-image:url(/swc/xpedx/images/default/shadow-c.png);} 3974 */
 /*.x-shadow .xsml, .x-shadow .xsmr{background-image:url(/swc/xpedx/images/default/shadow-lr.png);} 
 .x-shadow .xstl, .x-shadow .xstc, .x-shadow .xstr, .x-shadow .xsbl, .x-shadow .xsbc, .x-shadow .xsbr{background-image:url(/swc/xpedx/css/images/common/shadow.png);} 3974 */
 .loading-indicator{font-size:11px;background-image:url(../images/default/grid/loading.gif);}
