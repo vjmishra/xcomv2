@@ -100,6 +100,8 @@
           			Nullable="false" XMLName="SAPSAPNumber" />	
 				<Attribute ColumnName="MSAP_SAP_NUMBER" DataType="AccountNo" DefaultValue="' '" Description="SAP Parent Account Number"  
           			Nullable="false" XMLName="MSAPSAPNumber" />	
+				<Attribute ColumnName="CUSTOMER_PATH" DataType="CustomerId" DefaultValue="' '" Description="Exact path of customer"  
+          			Nullable="false" XMLName="CustomerPath" />	
 				
 			</Attributes>
 			<PrimaryKey Name="XPX_CUST_H_PK">

@@ -11,10 +11,12 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -81,6 +83,7 @@ import com.yantra.yfc.date.YDate;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCConfigurator;
@@ -2978,19 +2981,27 @@ public class XPEDXWCUtils {
 								.getDocumentElement(), template
 								.getDocumentElement(), wSCUIContext);
 				
-				YFCIterable<YFCElement> iteartor = yfcElement.getChildren();
+				YFCNodeList<YFCElement> nodelist = yfcElement.getElementsByTagName("Customer");
 				YFCElement custElement = null;
-				while (iteartor.hasNext()) {
-					custElement = iteartor.next();
+				for(int i=0; i<CustomerId.size();i++)
+				{
+				for (int j=0;j<nodelist.getLength();j++) {
+					custElement = nodelist.item(j);
 					if (custElement != null) {
 						String customerID = custElement.getAttribute("CustomerID");
+						String testid = CustomerId.get(i);
 							if(customerID!=null) {
-								
+							if(customerID.equals(testid))
+							{
 								String custFullAddr = "";
+								
 								String tempCustDisplayId= null;//for keeping only name and ID jira 3244  
 								String custSuffixType = custElement.getChildElement("Extn").getAttribute("ExtnSuffixType");
 									String custDisplayId = customerID;
 									String loggedInCustomerID = null;
+									String MSapCustId = null;
+									String SapCustId = null;									
+									
 									if(isCustomerSelectedIntoConext(context))
 										loggedInCustomerID = getLoggedInCustomerFromSession(context);
 									else
@@ -3004,7 +3015,8 @@ public class XPEDXWCUtils {
 											HashMap<String, String> map = custInfoMap.get(key);
 											if (custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE)))
 											{
-												custDisplayId = map.get("SAPParentAccNo");
+												tempCustDisplayId = map.get("SAPParentAccNo");
+												custDisplayId = "Master:"+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ tempCustDisplayId;
 											}
 											else if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE)))
 											{
@@ -3014,7 +3026,7 @@ public class XPEDXWCUtils {
 													custDisplayId = formatBillToShipToCustomer(customerID);
 													if(appendBillToShipTo)// This is for Authorize locations
 														//changed Ship-To : by balkhi jira 3244
-														custDisplayId = "Ship-To: "+custDisplayId;
+														custDisplayId = "Ship-To:"+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+custDisplayId;
 													//custDisplayId = "Ship-To - "+custDisplayId;
 												}
 												else
@@ -3023,7 +3035,7 @@ public class XPEDXWCUtils {
 													//special display criteria for share modal
 													if(appendBillToShipTo)// This is for Authorize locations
 														//changed Ship-To : by balkhi 3244
-														custDisplayId = "Ship-To: "+custDisplayId;
+														custDisplayId = "Ship-To:"+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+custDisplayId;
 													//custDisplayId = "Ship-To - "+custDisplayId;
 												}
 											}
@@ -3035,14 +3047,14 @@ public class XPEDXWCUtils {
 													//added by balkhi 27th Feb 2012 3244 reopen
 													custDisplayId = shareformatBillToShipToCustomer(customerID,true);
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Bill-To: "+custDisplayId;
+														custDisplayId = "Bill-To:"+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+custDisplayId;
 												}
 												else
 												{
 													custDisplayId = shareformatBillToShipToCustomer(customerID,true);
 													//special display criteria for share modal
 													if(appendBillToShipTo)// This is for Authorize locations
-														custDisplayId = "Bill-To: "+custDisplayId;
+														custDisplayId = "Bill-To:"+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+custDisplayId;
 												}
 											}
 											else {
@@ -3051,8 +3063,9 @@ public class XPEDXWCUtils {
 													custDisplayId = customerID;
 												}
 												if(appendBillToShipTo)// This is for Authorize locations
-													custDisplayId = "Account: "+custDisplayId;
+													custDisplayId = "Customer: "+ "&nbsp;&nbsp;&nbsp;"+ custDisplayId;
 													//added by balkhi 27th Feb 2012 3244 reopen
+												//Changing the name to Customer - Account - 4146 - Kubra
 											}
 										}
 									}		
@@ -3115,6 +3128,10 @@ public class XPEDXWCUtils {
 											}
 									}
 								customerHashMap.put(customerID, custFullAddr);
+									break;
+							}
+								
+							}
 							}
 						}
 					}
@@ -4355,7 +4372,7 @@ public class XPEDXWCUtils {
 		//valueMap.put("/Page/API/Input/XPXCustView/@"+AttributeToQry, CustomerID);
 		valueMap.put("/Page/API/Input/XPXCustView/@RootCustomerKey", rootCustomerKey);
 		valueMap.put("/Page/API/Input/XPXCustView/@UserID", userID);
-		valueMap.put("/Page/API/Input/XPXCustView/OrderBy/Attribute/@Name", "CustomerID");
+		valueMap.put("/Page/API/Input/XPXCustView/OrderBy/Attribute/@Name", "CustomerPath");
 		try {
 //			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAssignedShipTosView-MIL", valueMap, wcContext);
 //			Object obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAssignedShipTosView-MIL", input, wcContext.getSCUIContext());
