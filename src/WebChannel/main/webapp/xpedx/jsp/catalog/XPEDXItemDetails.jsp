@@ -184,7 +184,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
-			//Ext.Msg.hide();
+			Ext.Msg.hide();
+			myMask.hide();
 		}
 	});
 }
