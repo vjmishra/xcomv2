@@ -161,13 +161,13 @@ q:before, q:after {
     line-height: 10px;
     width: 10px;
 }
-.x-ie-shadow {
+/*.x-ie-shadow {
     display: none;
     left: 0;
     overflow: hidden;
     position: absolute;
     top: 0;
-}
+}*/
 .x-shadow {
     display: none;
     left: 0;
@@ -4088,10 +4088,10 @@ body.ext-ie6.x-body-masked .x-window select {
 .x-color-palette em {
     border-color: #ACA899;
 }
-.x-ie-shadow {
+/*.x-ie-shadow {
     background-color: #777777;
 }
-/*.x-shadow .xsmc {
+.x-shadow .xsmc {
     background-image: url("/swc/xpedx/images/default/shadow-c.png");
 } 3974*/
 /*.x-shadow .xsml, .x-shadow .xsmr {
