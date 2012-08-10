@@ -630,8 +630,8 @@ function printPOs(customerPos) {
 								<s:set name="isOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold(#parentOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
-								
-								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"}'>
+								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"  || 
+												#chainedOrder.getAttribute("isCSRReview") == "Y" }'>
 												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
 								<s:else>
