@@ -70,7 +70,8 @@
 					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Flag" />
 				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD3_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
 					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Label" />
-
+				<Attribute ColumnName="CUSTOMER_PATH" DataType="CustomerId" DefaultValue="' '" Description="Exact path of customer"  
+          			Nullable="false" XMLName="CustomerPath" />	
 			</Attributes>
 			<PrimaryKey Name="XPX_CUST_PK">
 				<Attribute ColumnName="CUSTOMER_ID" />

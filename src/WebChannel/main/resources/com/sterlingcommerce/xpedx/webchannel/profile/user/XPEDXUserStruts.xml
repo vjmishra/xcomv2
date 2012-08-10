@@ -145,6 +145,14 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp
 			</result>
 		</action>
+		<!-- Start Added For Jira 4146 - On Add we call this action -->
+		<action name="addCustomersToAuthorize" method="getCustomersForAuthorize"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerLocations.jsp</result>
+		</action>
+		<!-- End Added For Jira - On Add we call this action  -->
+		
 		<action name="paginatedCustomerLocations" method="getPaginatedCustomersInHierarchy"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
 			<param name="mashups">xpedxCustomerAssignment</param>
