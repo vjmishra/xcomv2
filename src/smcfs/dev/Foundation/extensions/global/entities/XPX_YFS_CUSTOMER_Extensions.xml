@@ -144,7 +144,7 @@
           XMLGroup="Extn" 
           />
           <Attribute ColumnName="EXTN_SAP_NAME" 
-          DataType="Text-50"
+          DataType="Text-100"
           DefaultValue="' '" 
           Description="SAPName"  
           Nullable="false" 
