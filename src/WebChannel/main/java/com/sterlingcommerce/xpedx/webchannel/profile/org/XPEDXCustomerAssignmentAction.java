@@ -2,15 +2,18 @@ package com.sterlingcommerce.xpedx.webchannel.profile.org;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -26,6 +29,7 @@ import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFa
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -36,6 +40,8 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -46,6 +52,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private static final long serialVersionUID = 4203292437195126816L;
 	private List<String> customers1 = new ArrayList<String>();
 	private List<String> customers2 = new ArrayList<String>();
+	private List<String> shipToStr = new ArrayList<String>();
 	private String customerContactId = "";
 	private String customerId = "";
 	private String selectedCurrentCustomer = "";
@@ -72,9 +79,66 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private Integer totalNumberOfPages = new Integer(1);
     private String divId = "ajax-assignedShipToCustomers" ;
     private List<String> alreadySelectedCustomers;
+    private String rootCustomerKey;
+   //Added custId for Jira 4146
+    private String custID = "";
+    private String existingCustId="";
+    private String addToavailable="";
+    private String removeFromavailable="";
+    
+   
+    public String getAddToavailable() {
+		return addToavailable;
+	}
+
+	public void setAddToavailable(String addToavailable) {
+		this.addToavailable = addToavailable;
+	}
+
+	public String getRemoveFromavailable() {
+		return removeFromavailable;
+	}
+
+	public void setRemoveFromavailable(String removeFromavailable) {
+		this.removeFromavailable = removeFromavailable;
+	}
+
+	public String getExistingCustId() {
+		return existingCustId;
+	}
+
+	public void setExistingCustId(String existingCustId) {
+		this.existingCustId = existingCustId;
+	}
+
+	public String getCustID() {
+		return custID;
+	}
+
+	public void setCustID(String custID) {
+		this.custID = custID;
+	}
+	
+	public String getRootCustomerKey() {
+		return rootCustomerKey;
+	}
+
+	public void setRootCustomerKey(String rootCustomerKey) {
+		this.rootCustomerKey = rootCustomerKey;
+	}
+
     
     public boolean shipToResult=true;
     private String pageSetToken;	
+	
+    public List<String> getShipToStr() {
+		return shipToStr;
+	}
+
+	public void setShipToStr(List<String> shipToStr) {
+		this.shipToStr = shipToStr;
+	}
+
 	
 	public String getPageSetToken() {
 		return pageSetToken;
@@ -239,11 +303,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	public String getPaginatedCustomersInHierarchy() {
 		//Element outElem = null;
-		Document document = null;
+		
 		String msapCustomerId = null;
 		Element customerEle=null;
 		Element customerListEle=null;
-		Set<String> custIds = new HashSet<String>();
+		
 		Document contactListDoc=null;
 		 Element contactEle =null;
 		if (XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
@@ -274,7 +338,35 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		document = XPEDXWCUtils.getPaginatedCustomers(customerEle.getAttribute("RootCustomerKey"),getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
+		rootCustomerKey=customerEle.getAttribute("RootCustomerKey");
+		populateAvailableLocation();
+		if (customerContactId == null
+				|| customerContactId.trim().length() == 0) {
+			customerContactId = getWCContext().getLoggedInUserId();
+		}
+		List<String> assignedCustomerList = XPEDXWCUtils.getAssignedCustomers(customerContactId);
+		//Put your mashup code here- Kubra 4146
+		try {
+			customers2 = getCustomersByPath(assignedCustomerList);
+			XPEDXWCUtils.setObectInCache("customers2List",customers2);
+			} catch (Exception e) {
+				e.printStackTrace();
+		}
+		//Put your mashup code here- Kubra 4146
+		
+		/*for (String customer : assignedCustomerList) {
+			if (!customers2.contains(customer)) {
+				customers2.add(customer);
+			}
+		}*/
+		listSize = customers1.size() + customers2.size() + 2;
+		return SUCCESS;
+	}
+	
+	private void populateAvailableLocation()
+	{
+		LinkedHashSet<String> custIds = new LinkedHashSet<String>();
+		Document document = XPEDXWCUtils.getPaginatedCustomers(rootCustomerKey,getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
 		if(document!=null) {		
 			Element customerHierarchyElem = SCXmlUtil.getChildElement(document.getDocumentElement(), "Output");
 			try {
@@ -294,20 +386,94 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			}
 			customers1.addAll(custIds);
 		}
-		if (customerContactId == null
-				|| customerContactId.trim().length() == 0) {
-			customerContactId = getWCContext().getLoggedInUserId();
-		}
-		List<String> assignedCustomerList = XPEDXWCUtils.getAssignedCustomers(customerContactId);
-		for (String customer : assignedCustomerList) {
-			if (!customers2.contains(customer)) {
-				customers2.add(customer);
+		
 			}
+// Jira 4146 -- Method added when Add button is clicked
+	public String getCustomersForAuthorize() 
+	{
+	
+		String newcustomers = custID;
+		String[] arrayIds1 = newcustomers.split(",");
+		List<String> newcustomersList = new ArrayList<String>(Arrays.asList(arrayIds1));
+		String existingcustomers = existingCustId;
+		String[] arrayIds2 = existingcustomers.split(",");
+		List<String> existingcustomersList = new ArrayList<String>(Arrays.asList(arrayIds2));
+		existingcustomersList.addAll(newcustomersList);
+		
+		try {
+			customers2 = getCustomersByPath(existingcustomersList);
+			} catch (Exception e) {
+				e.printStackTrace();
 		}
 		listSize = customers1.size() + customers2.size() + 2;
 		return SUCCESS;
+		
 	}
+	
+	private List<String> getCustomersByPath(List<String> wList) throws Exception
+	{
+		
+		HashMap<String,String> valueMap = new HashMap<String, String>();
+		valueMap.put("/XPXCustHierarchyView/OrderBy/Attribute/@Name", "CustomerPath");
+		
+		Element input = WCMashupHelper.getMashupInput("xpedx-getCusotmerByCustomerPath",valueMap, wcContext);
+		Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
+		Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
+		for(int i=0;i <wList.size(); i++) {
+			createInput(wList.get(i),complexQuery,OrElem);
+		}
+		complexQuery.appendChild(OrElem);
+		input.appendChild(complexQuery);
+		Object obj = WCMashupHelper.invokeMashup("xpedx-getCusotmerByCustomerPath", input, wcContext.getSCUIContext());
+		
+		Document outputDoc = ((Element) obj).getOwnerDocument();
+		Element wElement = outputDoc.getDocumentElement();
+		
+		if (null != outputDoc) {
+			ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(wElement, "XPXCustHierarchyView");
+			for(int j=0;j<xpxCustViewElems.size();j++)
+			{
+				if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
+					}
+				
+				} // end for  j=0 for loop
+		}
+		
+		return shipToStr;
+		
+	}
+	private void createInput(String customerID,Element complexQuery, Element or)
+	{
+		Element shipToExp = SCXmlUtil.createChild(or, "Exp");
+		shipToExp.setAttribute("Name", "ShipToCustomerID");
+		shipToExp.setAttribute("Value", customerID);
+		
+		Element billToExp = SCXmlUtil.createChild(or, "Exp");
+		billToExp.setAttribute("Name", "BillToCustomerID");
+		billToExp.setAttribute("Value", customerID);
+		or.appendChild(billToExp);
 
+		Element sapExp = SCXmlUtil.createChild(or, "Exp");
+		sapExp.setAttribute("Name", "SAPCustomerID");
+		sapExp.setAttribute("Value", customerID);
+		or.appendChild(sapExp);
+		
+		Element msapExp = SCXmlUtil.createChild(or, "Exp");
+		msapExp.setAttribute("Name", "MSAPCustomerID");
+		msapExp.setAttribute("Value", customerID);
+		or.appendChild(msapExp);
+		
+		complexQuery.appendChild(or);
+	}
+	
+//End Jira 4146
 	private void minusFromAvaialbleCustomers() {
 		Iterator<String> iterator = customers1.iterator();
 		while (iterator.hasNext()) {
@@ -577,7 +743,135 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		saveChanges(customers1, "Delete");
 		return SUCCESS;
 	}
+public String removeAuthorize()
+{
+	//removeFromavailable -- Opern =Create
+	// addToavailable -- Opern = Delete
+	//String customersForAuthorizedLoc = custID;
+	//String[] arrayIds = customersForAuthorizedLoc.split(",");
+	//List<String> columnList = new ArrayList<String>(Arrays.asList(arrayIds));
+	if (customerContactId == null
+			|| customerContactId.trim().length() == 0) {
+		customerContactId = getWCContext().getLoggedInUserId();
+	}
+	//saveChanges(columnList,"Delete");
+	//populateAvailableLocation();
+	//saveChanges(columnList,"Create");
+	String addToavailable1 = addToavailable;
+	String[] addToavailablearrayIds = addToavailable1.split(",");
+	Map<String, String> resultsMap1 = new HashMap<String, String>(); 
+	
+	String removeFromavailable1 = removeFromavailable;
+	String[] removeFromavailableIds = removeFromavailable1.split(",");
+	Map<String, String> resultsMap2 = new HashMap<String, String>(); 
+	
+	if(addToavailable != null && addToavailable.trim().length() >0){
+		for (int i=0; i<addToavailablearrayIds.length; i++) {
+			if(removeFromavailable != null && removeFromavailable.trim().length() >0 ){
+				if(!removeFromavailable.contains(addToavailablearrayIds[i]))
+	    		 resultsMap1.put(addToavailablearrayIds[i],"Delete" );
+				} //End of If block - removeFromavailable != null
+			//else part -if removeFromavailable is null
+			else
+				resultsMap1.put(addToavailablearrayIds[i],"Delete" );
+		}
+	}	
+		
+	if(removeFromavailable != null && removeFromavailable.trim().length() >0){
+	for (int i=0; i<removeFromavailableIds.length; i++) {  
+		if(addToavailable != null && addToavailable.trim().length() >0 ){
+			if(!addToavailable.contains(removeFromavailableIds[i]))
+			  resultsMap1.put(removeFromavailableIds[i],"Create" );
+		}//End of If block - addToavailable != null
+		//else part -if addToavailable is null
+		else
+			resultsMap1.put(removeFromavailableIds[i],"Create" );
+		}
+	}
+	
+	saveChanges(resultsMap1);
+	
+	populateAvailableLocation();
+	
+	if(addToavailable != null && addToavailable.trim().length() >0){
+		for (int i=0; i<addToavailablearrayIds.length; i++) {
+			if(removeFromavailable != null && removeFromavailable.trim().length() >0 ){
+				if(!removeFromavailable.contains(addToavailablearrayIds[i]))
+	    		 resultsMap2.put(addToavailablearrayIds[i],"Create" );
+				} //End of If block - removeFromavailable != null
+			//else part -if removeFromavailable is null
+			else
+				resultsMap2.put(addToavailablearrayIds[i],"Create" );
+		}
+	}	
+		
+	if(removeFromavailable != null && removeFromavailable.trim().length() >0){
+	for (int i=0; i<removeFromavailableIds.length; i++) {  
+		if(addToavailable != null && addToavailable.trim().length() >0 ){
+			if(!addToavailable.contains(removeFromavailableIds[i]))
+			  resultsMap2.put(removeFromavailableIds[i],"Delete" );
+		}//End of If block - addToavailable != null
+		//else part -if addToavailable is null
+		else
+			resultsMap2.put(removeFromavailableIds[i],"Delete" );
+		}
+	}
 
+	/*if(addToavailable != null && addToavailable.trim().length() >0){
+		for (int i=0; i<addToavailablearrayIds.length; i++) {
+			resultsMap2.put(addToavailablearrayIds[i],"Create" );
+   		 }
+	 }
+		
+	if(removeFromavailable != null && removeFromavailable.trim().length() >0){
+		for (int i=0; i<removeFromavailableIds.length; i++) {   
+				resultsMap2.put(removeFromavailableIds[i],"Delete" );
+			}
+		}*/
+	saveChanges(resultsMap2);
+	
+	
+	return SUCCESS;
+}
+
+private void saveChanges(Map<String, String> resultsMap) {
+	Set<String> keySet =  resultsMap.keySet();
+	Iterator<String> iter = keySet.iterator();
+	List<String> cIds=new ArrayList<String>();
+	while (iter.hasNext())
+     {
+         String o = iter.next();
+         cIds.add(o);
+     }
+	for (int index = 0; index < cIds.size(); index++) {
+		try {
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/CustomerAssignment/@CustomerID", cIds.get(index));
+			valueMap.put("/CustomerAssignment/@OrganizationCode",
+					getWCContext().getBuyerOrgCode());
+			valueMap.put("/CustomerAssignment/@UserId", customerContactId);
+			valueMap.put("/CustomerAssignment/@Operation", resultsMap.get(cIds.get(index)));
+			Element input = WCMashupHelper.getMashupInput(
+					"xpedxSaveCustomerAssignments", valueMap, wcContext
+							.getSCUIContext());
+			String inputXml = SCXmlUtil.getString(input);
+			LOG.debug("Input XML: " + inputXml);
+			Object obj = WCMashupHelper.invokeMashup(
+					"xpedxSaveCustomerAssignments", input, wcContext
+							.getSCUIContext());
+			Document outputDoc = null;
+			if (obj != null) {
+				outputDoc = ((Element) obj).getOwnerDocument();
+				if (null != outputDoc) {
+					String outputXml = SCXmlUtil.getString((Element) obj);
+					LOG.debug("Output XML: " + outputXml);
+				}
+			}
+		} catch (Exception ex) {
+			log.debug("Record already exists");
+		}
+	}
+}
 	private void saveChanges(List<String> wList, String operation) {
 		for (int index = 0; index < wList.size(); index++) {
 			try {

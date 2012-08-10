@@ -13,7 +13,7 @@
 									<s:set name='currentCustIdKey' value='key'/>
 			    					<s:set name='currentCustIdValue' value='value'/>
 		                			<option value='<s:property value="#currentCustIdKey"/>'>
-										<s:property value='#currentCustIdValue'/>
+										<s:property escape='false' value='#currentCustIdValue'/>
 									</option>								
 								</s:iterator>
 							</select>
