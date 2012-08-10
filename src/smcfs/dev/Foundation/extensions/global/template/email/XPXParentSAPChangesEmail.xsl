@@ -47,45 +47,34 @@
 														<tr>
 															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" height="10"></td>
 														</tr>
-														<!-- <tr>
-															<td width="27%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Username: </td>
-															<td>																																
-																<xsl:choose>
-																	<xsl:when test="count(./Users/User) &gt; 0">
-																		<select style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;" >
-																			<xsl:for-each select="Users/User">
-																			<option>
-																				<xsl:value-of select="@UserId"/>
-																			</option>
-																			</xsl:for-each>
-																		</select>
-																	</xsl:when>
-																	<xsl:otherwise>
-																		<select style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;" >
-																			<option><b>No UserName Available</b></option>																				
-																		</select>																		
-																	</xsl:otherwise>
-																</xsl:choose>																																																									
-															</td>
-														</tr> -->
-														<tr>
+															<tr>
 															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Username: </td>
  															<xsl:for-each select="./Users/User/@UserId" >
-															<tr><td></td><td width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
+															<tr><td></td><td valign="top" width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
 																<xsl:value-of select="."/>																															
 																	<xsl:choose>
 																	 <xsl:when test="count(./Users/User) &gt; 0"> 
 																		<xsl:text></xsl:text>
 																	</xsl:when>
-																	</xsl:choose>
+																	<xsl:otherwise>continue</xsl:otherwise>
+																</xsl:choose>
 																</td></tr>
 																</xsl:for-each>
+																<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px">
+																<xsl:choose>
+																<xsl:when test="count(./Users/User) = 0">
+																<xsl:text>No User Assigned</xsl:text>
+																</xsl:when>
+															</xsl:choose>
+																</td>
 														</tr>
-														<tr><td></td></tr><tr><td></td></tr>
+														<tr>
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" height="10"></td>
+														</tr>
 													   <tr>
 															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Sales Rep: </td>
  															<xsl:for-each select="./SalesReps/SalesRep/@SalesId" >
-															<tr><td></td><td width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
+ 															<tr><td></td><td valign="top" width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
 																<xsl:value-of select="."/>																															
 																	<xsl:choose>
 																	 <xsl:when test="count(./SalesReps/SalesRep) &gt; 0"> 
@@ -94,6 +83,13 @@
 																	</xsl:choose>
 																</td></tr>
 																</xsl:for-each>
+																<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px">
+																<xsl:choose>
+																<xsl:when test="count(./SalesReps/SalesRep) = 0">
+																<xsl:text>No SalesRep Assigned</xsl:text>
+																</xsl:when>
+															</xsl:choose>
+																</td>
 														</tr>
 														<br></br>	
 													</table>
