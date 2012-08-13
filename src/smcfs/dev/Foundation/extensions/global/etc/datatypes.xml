@@ -45,6 +45,7 @@
         Size="10" Type="NUMBER">
         <UIType Size="7" UITableSize="7"/>
     </DataType>
+			<DataType Name="Text-40" Size="40" Type="NVARCHAR"/>
 		    <DataType Name="Text-55" Size="55" Type="NVARCHAR"/>
 			<DataType Name="Text-60" Size="60" Type="NVARCHAR"/>
 	<DataType Name="DivisionNo" Size="1800" Type="NCHAR" />
