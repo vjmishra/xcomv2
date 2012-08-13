@@ -653,7 +653,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 	/****End of Code Changed for Promotions JIra 2599 *******/
 		
 
-	}	
+	}
+		//Webrtends	tag start
+		setStockedItemFromSession();				
+		if(isStockedItem){
+		 setsearchMetaTag(true);
+		}
+		//Webrtends	tag End
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
