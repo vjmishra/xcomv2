@@ -391,6 +391,7 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		btnCreate.setData("name", "btnCreate");
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				XPXCreateNewMyItemsListPanelBehavior.oldCustomerID = " ";
 				myBehavior.createMyItemsList();
 			}
 		});
@@ -402,6 +403,7 @@ public class XPXCreateNewMyItemsListPopupPanel extends Composite implements IYRC
 		btnCancel.setData("name", "btnCancel");
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				XPXCreateNewMyItemsListPanelBehavior.oldCustomerID = " ";
 				getParent().getShell().close();
 			}
 		});
