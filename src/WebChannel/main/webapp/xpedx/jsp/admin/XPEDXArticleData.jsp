@@ -11,14 +11,14 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='dateUtilBean'/>
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='util' />
-<!-- Webtrends Tag starts -->
-<Meta name="WT.ti" Content='<s:text name="tools.newsmaintenance.title" />'>
-<!-- Webtrends Tag stops --> 
+
 
 <%-- <title><s:text name="tools.newsmaintenance.title" /></title> --%>
 <title><s:property value="wCContext.storefrontId" /> -  <s:text name='MSG.SWC.NEWSARTL.LISTALL.GENERIC.TABTITLE' /> </title>
 
-
+<!-- Webtrends Tag starts -->
+<Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> -  <s:text name="MSG.SWC.NEWSARTL.LISTALL.GENERIC.TABTITLE" />'>
+<!-- Webtrends Tag stops --> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 

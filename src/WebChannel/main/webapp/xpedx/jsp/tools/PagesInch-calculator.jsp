@@ -10,7 +10,9 @@
 <head>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content="Pages/Inch Calculator">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.pagesinchcalculator.title" />'>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.pagesinchcalculator.title" />'>
+
 <meta content='IE=9' http-equiv='X-UA-Compatible' />
 <!-- Webtrend tag stops --> 
 <!-- styles -->

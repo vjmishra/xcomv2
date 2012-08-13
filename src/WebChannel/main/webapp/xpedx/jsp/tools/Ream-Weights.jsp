@@ -67,7 +67,9 @@
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.reamweight.title" /></title>
 
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content="Ream Weight Calculator">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.reamweight.title" />'>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.reamweight.title" />'>
+
 <!-- Webtrend tag stops --> 
 
 </head>
