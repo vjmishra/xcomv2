@@ -74,7 +74,7 @@
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></title>
 <!--Webtrends tag starts-->
-<meta name="WT.ti" Content='<s:text name="tools.title" />'>
+<meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" />'>
 <!--Webtrends tag stops-->
 </head>
 

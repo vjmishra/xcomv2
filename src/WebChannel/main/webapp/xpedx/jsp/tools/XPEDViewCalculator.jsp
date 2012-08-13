@@ -85,7 +85,8 @@
 
 <title><s:property value="wCContext.storefrontId" /> - Imposition Calculator</title>
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content="xpedx/Imposition Calculater">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - Imposition Calculator'>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - Imposition Calculator'>
 <!-- Webtrend tag stops --> 
 </head>
 <!-- Web trend tag start -->

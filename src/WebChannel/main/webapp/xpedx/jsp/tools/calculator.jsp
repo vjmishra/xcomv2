@@ -66,7 +66,8 @@
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.papercalculator.title" /></title>
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content="Paper Calculator">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.papercalculator.title" />'>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.papercalculator.title" />'>
 <!-- Webtrend tag stops --> 
 </head>
 <body class="ext-gecko ext-gecko3">

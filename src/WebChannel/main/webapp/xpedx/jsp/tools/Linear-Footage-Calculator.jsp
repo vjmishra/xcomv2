@@ -10,7 +10,9 @@
 <head>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content="Linear Footage">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.linearfootagecalculator.title" />'>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.linearfootagecalculator.title" />'>
+
 <!-- Webtrend tag stops --> 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />

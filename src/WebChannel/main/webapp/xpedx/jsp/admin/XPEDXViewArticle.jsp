@@ -14,7 +14,8 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!--Web trends tag start  -->
 <meta name="DCSext.w_x_news_fa" content="1" />
-<meta name="WT.ti" content="View Article">
+
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.NEWSARTL.PREVIEW.GENERIC.TABTITLE" />'>
 <!--Web trends tag end  -->
  
 <!-- begin styles. -->

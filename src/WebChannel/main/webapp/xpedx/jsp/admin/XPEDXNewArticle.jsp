@@ -14,14 +14,14 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!--Web trends tag start  -->
 <meta name="DCSext.w_x_news_add" content="1" />
-<meta name="WT.ti" content="xpedx/News Maintenance">
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.NEWSARTL.CREATE.GENERIC.PGTITLE" />'>
 <!--Web trends tag end  -->
 
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='dateUtilBean'/>
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='util' />
 
 <%-- <title><s:property value="wCContext.storefrontId" /> - News Maintenance</title> --%>
-<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.TABTITLE' /> </title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.PGTITLE' /> </title>
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

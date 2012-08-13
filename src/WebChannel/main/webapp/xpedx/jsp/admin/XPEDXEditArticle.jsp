@@ -13,7 +13,7 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!--Web trends tag start  -->
 <meta name="DCSext.w_x_news_edit" content="1" />
-<Meta name="WT.ti" Content="News Maintenance">
+<Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.NEWSARTL.EDIT.GENERIC.TABTITLE" />'>
 <!--Web trends tag end  -->
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='dateUtilBean'/>
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils' id='util' />
