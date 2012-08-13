@@ -1,4 +1,4 @@
 <XPXErrorLookupList TotalNumberOfRecords="">
   <XPXErrorLookup CommMethod="" ErrorClass="" ErrorLookupKey="" 
-  QueueName="" SourceSystem="" TargetSystem="" TransType="" /> 
+  QueueName="" SourceSystem="" TargetSystem="" TransType="" StartDownTime="" EndDownTime="" DownTimeNotification="" /> 
 </XPXErrorLookupList>

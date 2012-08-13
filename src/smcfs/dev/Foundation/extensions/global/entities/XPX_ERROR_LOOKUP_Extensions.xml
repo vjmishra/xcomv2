@@ -24,14 +24,14 @@
 					<!-- Created for New Enhancement (PSR Task22) -->
 					
 				<Attribute ColumnName="STARTDOWNTIME" DataType="TimeStamp"
-					DefaultValue="sysdate" Description="Start Down time" XMLName="Startdowntime" />
+					DefaultValue="sysdate" Description="Start Planned Down time" XMLName="StartDownTime" />
 
 				<Attribute ColumnName="ENDDOWNTIME" DataType="TimeStamp"
-					DefaultValue="sysdate" Description="End Down time" XMLName="Endtdowntime" />
+					DefaultValue="sysdate" Description="End Planned Down time" XMLName="EndDownTime" />
 					
 				<Attribute ColumnName="DOWNTIME_NOTIFICATION" DataType="Text-254"
-					DefaultValue="" Description="Notifies Downtime"
-					Nullable="true" XMLName="DowntimeNotification" />
+					DefaultValue="" Description="Notifies Planned Downtime"
+					Nullable="true" XMLName="DownTimeNotification" />
 				
 					<!-- Primary key -->
 				<Attribute ColumnName="ERROR_LOOKUP_KEY" DataType="Key"

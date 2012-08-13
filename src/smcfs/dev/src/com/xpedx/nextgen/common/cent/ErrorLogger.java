@@ -3,6 +3,7 @@ package com.xpedx.nextgen.common.cent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import org.w3c.dom.Document;
@@ -18,6 +19,8 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class ErrorLogger {
+
+	
 
 	/**
 	 * Instance of YIFApi used to invoke Yantra APIs or services.
@@ -88,7 +91,7 @@ public class ErrorLogger {
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("TransType"));
 							logString.append("|");						
-							logString.append(checkDateTimeCommMethod(xpxErrorElem.getAttribute("CommMethod")));
+							logString.append(checkDateTimeCommMethod(xpxErrorElem.getAttribute("CommMethod"),xpxErrorElem.getAttribute("StartDownTime"),xpxErrorElem.getAttribute("EndDownTime"),xpxErrorElem.getAttribute("DownTimeNotification")));
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("QueueName"));
 							logString.append("|");
@@ -117,16 +120,23 @@ public class ErrorLogger {
 		}
 	}
     
-	private static String checkDateTimeCommMethod(String theCommMethodVal) {
+
+
+	private static String checkDateTimeCommMethod(String theCommMethodVal,String startDownTime , String endDownTime , String downtimeNotification) {
 		
 		String commMethod = theCommMethodVal;
 		try {
 			Calendar calendar = Calendar.getInstance();
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			String dateNow = dateFormat.format(calendar.getTime());
+			Date nowdate = new Date();
+			Date startoutage = dateFormat.parse(startDownTime);
+			Date endoutage = dateFormat.parse(endDownTime);
 			int theHour = calendar.get(calendar.HOUR_OF_DAY) ;
-			
-			if(commMethod != null && commMethod.equalsIgnoreCase("P1")) {
+			if(startoutage!=null && (startoutage.after(nowdate)&& endoutage.after(nowdate))) {
+				// Execute Code of Block for Planned Downtime
+				commMethod=downtimeNotification;
+			} else {
+				// Execute Code of Block for UnPlanned Downtime
 				if(calendar.get(calendar.DAY_OF_WEEK) == 7) {
 					if(theHour >= 18 && theHour <= 23) {
 						commMethod = "P3";
