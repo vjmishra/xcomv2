@@ -36,7 +36,7 @@
           XMLName="ExtnShipComplete" XMLGroup="Extn" />
         <Attribute ColumnName="EXTN_WILL_CALL" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
           XMLName="ExtnWillCall" XMLGroup="Extn" />
-        <Attribute ColumnName="EXTN_ORDERED_BY_NAME" DataType="Text-256" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+        <Attribute ColumnName="EXTN_ORDERED_BY_NAME" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" Size="" 
           XMLName="ExtnOrderedByName" XMLGroup="Extn" />
         <Attribute ColumnName="EXTN_CURRENCY_CODE" DataType="Currency" DefaultValue="' '" Description=" " Nullable="true" Size="" 
           XMLName="ExtnCurrencyCode" XMLGroup="Extn" />
