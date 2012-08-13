@@ -419,7 +419,7 @@
 					</tr><!-- End intentionally blank row. -->
 					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
 						Ship Order Complete
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 					    ,
@@ -504,9 +504,10 @@
 					 </td>
 					<td class="align-right">
 					<xsl:choose>
-					<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span class="tbd">Call for price</span></xsl:when>
-					<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span class="tbd">Call for price</span></xsl:when>
-					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,###.00000")'/></xsl:otherwise>
+					<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+					<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00000"'><span class="tbd">To be determined</span></xsl:when>
+					<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span class="tbd">To be determined</span></xsl:when>
+					<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,###.00")'/></xsl:otherwise>
 					</xsl:choose>
 					 </td>
 					<td class="align-right">
