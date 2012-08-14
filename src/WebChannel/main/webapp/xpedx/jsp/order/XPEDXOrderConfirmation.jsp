@@ -33,6 +33,10 @@
 	<s:set name="metatagValue" value="<s:property value=null />" scope="session"/>
 </s:if>
   
+  <s:if test='%{#session.reorderMetaTag != null}'>		
+	<meta name ="DCSext.w_x_reorder" content="1" />
+	<s:set name="reorderMetaTag" value="<s:property value=null />" scope="session"/> 	
+</s:if>
   
   
 <!-- Webtrends Tag stops -->
