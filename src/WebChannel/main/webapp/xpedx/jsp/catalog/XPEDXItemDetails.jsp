@@ -1159,8 +1159,7 @@ function SubmitActionWithValidation()
 			<!-- Begin - Changes made by Mitesh Parikh for 2422 JIRA -->	
 			<script type="text/javascript">
 			function getbackPageUrl(){				
-				var backPageUrl = document.getElementById("backPageUrl").value;
-				window.location.href=backPageUrl;
+			window.history.go(-1);//Added for Back button issues for JIRA #4186
 			}
 			</script>
 			<s:if test= '%{#_action.getGoBackFlag() == "true"}'>
