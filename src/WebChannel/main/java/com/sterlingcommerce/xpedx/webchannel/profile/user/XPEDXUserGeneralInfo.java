@@ -661,11 +661,13 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			customerContact.add(contactElement);
 			Map<String,String> modifiedUserMap=XPEDXWCUtils.createModifyUserNameMap(customerContact);
 			String modifyFirstLastName=modifiedUserMap.get(modifyUserIdBy);
-			String name[]=modifyFirstLastName.split(", ");
-			if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
-				setContactFirstName(name[1]);
-			if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
-				setContactLastName(name[0]);
+			if(modifyFirstLastName!=null){
+				String name[]=modifyFirstLastName.split(", ");
+				if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
+					setContactFirstName(name[1]);
+				if(modifyFirstLastName !=null && modifyFirstLastName.length()>1)
+					setContactLastName(name[0]);
+			}
 		}
 			
 		lastModifiedDate = contactElement.getAttribute("Modifyts");
