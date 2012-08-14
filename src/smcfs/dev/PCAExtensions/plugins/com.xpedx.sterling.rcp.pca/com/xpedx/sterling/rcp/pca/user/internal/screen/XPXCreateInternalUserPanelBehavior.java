@@ -7,8 +7,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.user.internal.editor.XPXCreateUserEditor;
+import com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -22,6 +24,11 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 	private XPXCreateInternalUserPanel page;
 	private Element getUserGroupListOutXml;
 	private Element inputElement;
+	String employeeID = null;
+	String userKey;
+	String loginID;
+	boolean count = false;
+	ArrayList salesRepKey = new ArrayList();
 	
 	
 	public XPXCreateInternalUserPanelBehavior(Composite ownerComposite, String formId) {
@@ -228,6 +235,10 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 						inputElement.setAttribute("Usertype", XPXConstants.DEFAULT_CSR_USER_TYPE);
 						Element extnuser = YRCXmlUtils.getChildElement(inputElement,"Extn");
 						extnuser.setAttribute(XPXConstants.EXTN_USER_TYPE , XPXConstants.DEFAULT_CSR_USER_TYPE);
+						userKey = userdetail.getAttribute("UserKey");
+						loginID = userdetail.getAttribute("Loginid");
+						getSalesRepDetails();
+						
 
 						if("createUserHierarchy".equals(apiname))
 						{
@@ -268,6 +279,19 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 	    			eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
 	    			setModel("getTeamList_output",eleOutput);
 	    		}
+				//Added for Jira 4216
+				 else if("XPXGetSalesRepCustomersService".equals(apiname))
+		    		{
+		    			eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
+		    			setModel("getSalesRepDetails",eleOutput);
+		    			updateSalesRepDetails(eleOutput);
+		    		}
+				 else if("changeSalesRepDetails".equals(apiname))
+		    		{
+					 ((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+					 	eleOutput = ctx.getOutputXmls()[i].getDocumentElement();
+		    			((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
+		    		}
 		    	//--- function changed by sukumar-tw for New LDAP service to fetch user details-
 				else if("XPXLDAPSearchDetails".equals(apiname)){
 
@@ -323,7 +347,59 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
     	
     }
 
-	private void setControlState() {
+	// Added for Jira 4216
+   public void getSalesRepDetails()
+   {
+	   Element userDetails = getModel("User_Details");
+	   Element extnUser = YRCXmlUtils.getChildElement(userDetails, "Extn");
+	   employeeID = extnUser.getAttribute("ExtnEmployeeId");
+	   if (!YRCPlatformUI.isVoid(employeeID)) {
+			YRCApiContext apiCtx = new YRCApiContext();
+			String[] apinames = { "XPXGetSalesRepCustomersService" };
+			Document[] docInput = { YRCXmlUtils
+					.createFromString("<XPEDXSalesRep SalesRepId='" +employeeID+ "' />") };
+			apiCtx.setApiNames(apinames);
+			apiCtx.setInputXmls(docInput);
+			apiCtx.setFormId(getFormId());
+			callApi(apiCtx);
+		}
+   }
+   
+   public void updateSalesRepDetails(Element salesRepDetails){
+	   String salesUserKey = null;
+	   String networkID = null;
+	   String salesRPKey = null;
+	   if(salesRepDetails != null){
+		   
+		   NodeList salesRepList = salesRepDetails.getElementsByTagName("XPEDXSalesRep");
+		   for(int i=0; i<salesRepList.getLength(); i++){
+			   Element salesRep = (Element) salesRepList.item(i);
+			   networkID = salesRep.getAttribute("NetworkID");
+			   salesUserKey = salesRep.getAttribute("SalesUserKey");
+			   salesRPKey = salesRep.getAttribute("SalesRPKey");
+			   if((salesUserKey == null || salesUserKey == "") || (networkID == null || networkID == "")){
+				   salesRepKey.add(salesRPKey);
+				   count = true;
+			   }
+		   }
+		   if(count){
+			   Document doc = null;
+				for (int i = 0; i < salesRepKey.size(); i++) {
+					String temp = (String)salesRepKey.get(i);
+					doc = YRCXmlUtils.createFromString("<XPEDXSalesRep SalesRPKey='" + salesRepKey.get(i) + "'  SalesUserKey='" + userKey + "'  NetworkID='" + loginID + "'  />");
+					YRCApiContext apiCtx = new YRCApiContext();
+					apiCtx.setApiNames(new String[]{"changeSalesRepDetails"});
+					apiCtx.setInputXml(doc);
+					apiCtx.setFormId(getFormId());
+					callApi(apiCtx);
+				}
+					((XPXUserProfileEditor) YRCDesktopUI.getCurrentPart())
+							.showBusy(true);
+		   }
+	   }
+   }
+   //End for Jira 4216
+   private void setControlState() {
 		setControlEditable("txtNetworkId", false);
 		setFieldValue("btnUpdate", YRCPlatformUI.getString("Update"));
 	}
