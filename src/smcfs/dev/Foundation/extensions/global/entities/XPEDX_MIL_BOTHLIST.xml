@@ -19,6 +19,7 @@
 				<Attribute ColumnName="CUSTOMER_KEY"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="CustomerKey"/>
 				<Attribute ColumnName="PARENT_CUSTOMER_KEY"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="ParentCustomerKey"/>
 				<Attribute ColumnName="ROOT_CUSTOMER_KEY"  	DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="RootCustomerKey"/>
+				<Attribute ColumnName="EXTN_IS_SALES_REP"  	DataType="Text-1"  	DefaultValue="' '" Description="" Nullable="true" XMLName="ExtnIsSalesRep"/>
 				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="true" XMLName="ExtnCustomerDivision"
 				XMLGroup="Extn" />
 				<Attribute ColumnName="EXTN_SUFFIX_TYPE" DataType="Text-2" DefaultValue="' '" Description="ShipTo or BillTo"  Nullable="true" XMLName="ExtnSuffixType" XMLGroup="Extn"/>
