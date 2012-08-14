@@ -62,7 +62,9 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<!-- Web Trends tag start -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<!-- Web Trends tag end  -->
 <script type="text/javascript">
 $(function() {
 	$(".datepicker").datepicker({
@@ -243,6 +245,9 @@ function showSplitDiv(divId)
 			     else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
 				}	
+		   //-- Web Trends tag start --
+				writeMetaTag('DCSext.w_x_ord_reject','1');
+				//-- Web Trends tag End --	
 		 }
 		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 			//submit it
@@ -422,7 +427,7 @@ function showSplitDiv(divId)
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="orderdetails.title" /> <s:property value='%{webConfirmationNumber}'/></title>
 <!-- Webtrend tag start -->
-<meta name="WT.ti" content='<s:text name="orderdetails.title" /> <s:property value="%{webConfirmationNumber}"/>' />
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="orderdetails.title" /> <s:property value="%{webConfirmationNumber}"/>' />
 <!-- Webtrend tag end -->
 </head>
 <!-- END swc:head -->

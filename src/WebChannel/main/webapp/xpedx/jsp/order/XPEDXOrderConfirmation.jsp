@@ -15,15 +15,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
+<meta name="DCSext.w_x_po" content="1">
 <%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
 <!-- Webtrends Tag starts -->
 <s:if test="%{deliveryMetaTag}">
-		<META Name="DCSext.w_x_hold" Content="1"> 		
+		<meta name="DCSext.w_x_hold" content="1"> 		
 </s:if>
 <s:if test='%{willCallFlag == "true"}'>
- <META Name="DCSext.w_x_ord_willcall" Content="1">
+ <meta name="DCSext.w_x_ord_willcall" content="1">
  </s:if>
  
  <s:if test='%{#session.rushOrderFlag != null}'>		
@@ -32,9 +33,7 @@
 	<s:set name="metatagValue" value="<s:property value=null />" scope="session"/>
 </s:if>
   
-  <s:if test='%{poNumberSaveNeeded == "true"}'>
-	<META Name="DCSext.w_x_po" Content="1">
-	</s:if>
+  
   
 <!-- Webtrends Tag stops -->
 <!-- styles -->

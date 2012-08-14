@@ -61,6 +61,9 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions.js"></script>
 
+<!-- Web Trends tag start -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<!-- Web Trends tag end  -->
 
 
 
@@ -212,7 +215,7 @@
 
 <s:set name='_action' value='[0]'/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
+	<meta name="WT.ti" content='<s:text name="approvallist.title" />' />
 	<title><s:text name="approvallist.title" /></title>
 
 	<s:url id="approvalListPaginationURL" action="approvalList">
@@ -258,7 +261,10 @@
 			 	}
 			    else{
 			    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
-				}		
+				}
+		   		//-- Web Trends tag start --
+				writeMetaTag('DCSext.w_x_ord_reject','1');
+				//-- Web Trends tag End --		
 		 }    	
 	     //submit it
 		 document.forms["approval"].submit();

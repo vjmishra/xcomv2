@@ -2075,11 +2075,13 @@ function checkSessionTimeout(){
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
-	<s:set name="userGroupKeyList" value ="%{#xpedxCustomerContactInfoBean.getUsergroupKeyList()}"/>	
-	<s:iterator value="#userGroupKeyList" id='userGroupKey' >
+	<s:if test='%{#session.firstTimeFlag == null}'>
+		<s:set name="userGroupKeyList" value ="%{#xpedxCustomerContactInfoBean.getUsergroupKeyList()}"/>	
+		<s:iterator value="#userGroupKeyList" id='userGroupKey' >
            <meta name="DCSext.w_ut" content='<s:property value="userGroupKey"/>' />
-    </s:iterator>
-		
+   		 </s:iterator>
+		<s:set name="firstTimeFlag" value="N" scope="session"/> 
+	</s:if>	
 </s:if>
 <!-- WebTrends tag end -->
 <style>
