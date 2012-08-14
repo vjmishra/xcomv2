@@ -518,6 +518,10 @@
             <command APIName="getTeamList" APIType="API" Name="getTeamList" URL="DEFAULT" outputNamespace="getTeamList" version=""/>
             <command APIName="XPXLDAPSearchDetails" APIType="SERVICE" Name="XPXLDAPSearchDetails" URL="DEFAULT" inputNamespace="XPXLDAPSearchDetails_input"
                 outputNamespace="XPXLDAPSearchDetails_output" version=""/>
+            <command APIName="XPXGetSalesRepCustomersService" APIType="SERVICE" Name="XPXGetSalesRepCustomersService" URL="DEFAULT" inputNamespace="getSalesRepDetails_input"
+                outputNamespace="getSalesRepDetails_output" version="ver77"/>
+            <command APIName="changeSalesRepDetails" APIType="SERVICE" Name="changeSalesRepDetails" URL="DEFAULT" inputNamespace="changeSalesRepDetails_input"
+                outputNamespace="changeSalesRepDetails_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getUserHierarchy" templateName="getUserHierarchy_output" type="output"/>
