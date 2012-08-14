@@ -27,6 +27,9 @@
  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+ <!-- Web Trends tag start -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<!-- Web Trends tag end  -->
  <%--
  <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.1.js"></script>
@@ -911,6 +914,9 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 	    	 document.getElementById("ReasonText").value=document.getElementById("ReasonText1").value;
 
 		 }	
+	   //-- Web Trends tag start --
+			writeMetaTag('DCSext.w_x_ord_reject','1');
+			//-- Web Trends tag End --	
 	 }		
 	//submit it
 	 document.forms["approval"].submit();	

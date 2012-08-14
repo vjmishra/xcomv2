@@ -70,7 +70,7 @@
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='MSG.SWC.ORDR.WEBCONFERROR.GENERIC.TABTITLE' /> </title>
 <!-- Start of Webtrends -->
- <Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - Order Confirmation: Error'>
+ <Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.WEBCONFERROR.GENERIC.TABTITLE" /> '>
 <!-- End of webtrends -->
 </head>
 <body class="ext-gecko ext-gecko3">
