@@ -11,6 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
+<Meta name="DCSext.w_x_req_s" Content="1">
 
 <!-- styles -->
 
