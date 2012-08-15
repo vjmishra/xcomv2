@@ -5939,6 +5939,11 @@ public class XPEDXWCUtils {
 	{
 		IWCContext wcContext =WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String backPageURL=(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString();
+		
+		if(append!=null && append.contains("#")){
+			append= append.replaceAll("#","%23");
+		}
+		
 		if(append != null && !"".equals(append))
 		{
 			//String splited[]=backPageURL.split("&scFlag=Y");				
