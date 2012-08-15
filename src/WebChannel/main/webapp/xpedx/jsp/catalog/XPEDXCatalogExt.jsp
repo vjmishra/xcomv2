@@ -682,7 +682,7 @@ function addItemsToList(idx, itemId, name, desc, qty, uom){
 	<form id="productListForm" name="productListForm"
 		onsubmit="return 
 true;"
-		action="/swc/catalog/prodCompare.action?sfId=xpedx&amp;_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&amp;scFlag=Y"
+		action="/swc/catalog/prodCompare.action?sfId=xpedx&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"
 		method="post"><!-- END wctheme.form.ftl --> <!-- start Ext list component -->		
 
 <script>	
