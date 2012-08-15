@@ -412,25 +412,51 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	private List<String> getCustomersByPath(List<String> wList) throws Exception
 	{
+		String pageNumber="1";
+		String pageSize ="5000";
 		
 		HashMap<String,String> valueMap = new HashMap<String, String>();
-		valueMap.put("/XPXCustHierarchyView/OrderBy/Attribute/@Name", "CustomerPath");
+		valueMap.put("/Page/@PageNumber", pageNumber);
+		valueMap.put("/Page/@PageSize", pageSize);
+		
+		YFCDocument inputCustomerDocument = YFCDocument
+		.createDocument("XPXCustHierarchyView");
+		YFCElement inputCustomerElement = inputCustomerDocument
+				.getDocumentElement();
+		YFCElement complexQueryElement = inputCustomerDocument
+		.createElement("ComplexQuery");
+		YFCElement sort = inputCustomerDocument.createElement("OrderBy");
+		YFCElement attribute = inputCustomerDocument.createElement("Attribute");
+		attribute.setAttribute("Name", "CustomerPath");
+		attribute.setAttribute("Desc", "N");
+		sort.appendChild(attribute);
+		
+		YFCElement orElement = inputCustomerDocument
+		.createElement("Or");
+		
+		for(int i=0;i <wList.size(); i++) {
+			createInput(wList.get(i),complexQueryElement,orElement);
+		}
+		
+		complexQueryElement.appendChild(orElement);
+		inputCustomerElement.appendChild(complexQueryElement);
+		inputCustomerElement.appendChild(sort);		
 		
 		Element input = WCMashupHelper.getMashupInput("xpedx-getCusotmerByCustomerPath",valueMap, wcContext);
-		Element complexQuery = SCXmlUtil.getChildElement(input, "ComplexQuery");
-		Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
-		for(int i=0;i <wList.size(); i++) {
-			createInput(wList.get(i),complexQuery,OrElem);
-		}
-		complexQuery.appendChild(OrElem);
-		input.appendChild(complexQuery);
+		
+		
+		Element pageElement=(Element)input.getElementsByTagName("Input").item(0);
+		pageElement.appendChild(input.getOwnerDocument().importNode(inputCustomerDocument.getDocument().getDocumentElement(), true));
+		
+		
 		Object obj = WCMashupHelper.invokeMashup("xpedx-getCusotmerByCustomerPath", input, wcContext.getSCUIContext());
 		
 		Document outputDoc = ((Element) obj).getOwnerDocument();
-		Element wElement = outputDoc.getDocumentElement();
+				
+		Element outputCustomerElement = (Element)outputDoc.getElementsByTagName("XPXCustHierarchyViewList").item(0);
 		
-		if (null != outputDoc) {
-			ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(wElement, "XPXCustHierarchyView");
+		if (null != outputCustomerElement) {
+			ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(outputCustomerElement, "XPXCustHierarchyView");
 			for(int j=0;j<xpxCustViewElems.size();j++)
 			{
 				if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
@@ -449,23 +475,23 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		return shipToStr;
 		
 	}
-	private void createInput(String customerID,Element complexQuery, Element or)
+	private void createInput(String customerID,YFCElement complexQuery, YFCElement or)
 	{
-		Element shipToExp = SCXmlUtil.createChild(or, "Exp");
+		YFCElement shipToExp = or.createChild("Exp");
 		shipToExp.setAttribute("Name", "ShipToCustomerID");
 		shipToExp.setAttribute("Value", customerID);
 		
-		Element billToExp = SCXmlUtil.createChild(or, "Exp");
+		YFCElement billToExp = or.createChild("Exp");
 		billToExp.setAttribute("Name", "BillToCustomerID");
 		billToExp.setAttribute("Value", customerID);
 		or.appendChild(billToExp);
 
-		Element sapExp = SCXmlUtil.createChild(or, "Exp");
+		YFCElement sapExp = or.createChild("Exp");
 		sapExp.setAttribute("Name", "SAPCustomerID");
 		sapExp.setAttribute("Value", customerID);
 		or.appendChild(sapExp);
 		
-		Element msapExp = SCXmlUtil.createChild(or, "Exp");
+		YFCElement msapExp = or.createChild("Exp");
 		msapExp.setAttribute("Name", "MSAPCustomerID");
 		msapExp.setAttribute("Value", customerID);
 		or.appendChild(msapExp);

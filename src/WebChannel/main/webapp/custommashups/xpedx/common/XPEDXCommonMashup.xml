@@ -547,24 +547,27 @@
 	<mashup id ='xpedx-getCusotmerByCustomerPath' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-				<API FlowName="XPXCustomerHierarchyViewService">
-						<Input>
-							<XPXCustHierarchyView ShipToCustomerID="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" >
-								<ComplexQuery>
-									<Or>
-									</Or>
-								</ComplexQuery>
-								<OrderBy>
-									<Attribute Desc="N" Name="" />
-								</OrderBy>
-							</XPXCustHierarchyView>
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize=""
+	            	PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
+	                <PreviousPage PageNumber="" />
+					<API Name="XPXCustomerHierarchyViewService" IsFlow="Y">
+						<Input>					
 						</Input>
-				        <Template>
-			        		<XPXCustHierarchyViewList TotalNumberOfRecords="" >
-			        			<XPXCustHierarchyView />
-			        		</XPXCustHierarchyViewList>	        				
+						<Template>
 						</Template>
-				</API>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+	        	<Page GeneratedOn="" IsFirstPage="" IsLastPage=""
+	            	IsValidPage="" PageNumber="" PageSetToken=""
+	                TotalNumberOfPages="">
+	                	<Output />
+				</Page>
+			</Template>
+		</API>
 	</mashup>
 <!-- Mashup End For Kubra jira 4146 -->
 		
