@@ -445,10 +445,12 @@ public class XPEDXWCUtils {
 			String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 				String salesreploggedInUserName = (String)wcContext.getSCUIContext().getSession().getAttribute("loggedInUserName");
-				valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@Createusername", salesreploggedInUserName);
+				//valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@Createusername", salesreploggedInUserName);
+				valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@ModifyUserName", salesreploggedInUserName);//jira 4221
 			}else{
 				String loggedInUserName= wcContext.getLoggedInUserName();
-				valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@Createusername", loggedInUserName);
+				//valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@Createusername", loggedInUserName);
+				valueMap.put("/XPEDXMyItemsItems/XPEDXMyItemsList/@ModifyUserName", loggedInUserName);//jira 4221
 			}
 			//end of jira 4134
 			Element input = WCMashupHelper.getMashupInput("XPEDXMyItemsDetailsCreate", valueMap, wcContext.getSCUIContext());
