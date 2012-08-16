@@ -14,7 +14,7 @@
 
 	<s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta content='IE=9' http-equiv='X-UA-Compatible' />       
+	<meta content='IE=8' http-equiv='X-UA-Compatible' />       
 	<%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
