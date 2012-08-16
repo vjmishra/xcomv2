@@ -1,0 +1,748 @@
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<project name="commonwar">
+	
+	<condition property="nowars2" value="true">
+		<equals arg1="${nowars}" arg2="true" casesensitive="false" trim="true"/>
+	</condition>
+
+	<property environment="env" />
+
+	<property file="properties/sandbox.cfg" prefix="sandbox" />
+	<property name="installdir" location="${sandbox.INSTALL_DIR}" />
+	<property name="dir.external" location="${installdir}/external_deployments" />
+	<property name="platformdata" location="${installdir}/repository/eardata/platform" />
+	<property name="configdata" location="${installdir}/repository/eardata/config" />
+	<!-- this contains module ui jars -->
+
+	<taskdef name="dynclasspath" classname="com.yantra.tools.ant.ClassPathHelper" />
+	<taskdef name="sciforeach" classname="com.yantra.tools.ant.ForEach" />
+	<taskdef name="listFiles" classname="com.yantra.tools.ant.ListFiles" />
+	<taskdef name="sciregexpproperty" classname="com.yantra.tools.ant.RegExpProperty" />
+	<taskdef name="wlxmlgen" classname="com.yantra.tools.ant.taskdefs.WebLogicXmlGenerator" />	
+
+	<import file="precompileWARCommonUtils.xml" />
+	
+	<path id="project.classpath">
+		<pathelement location="${installdir}/jar/woodstock.jar" />
+		<fileset dir="${installdir}/jar">
+			<include name="platform/**/*.jar" />
+			<include name="log4j/**/*.jar" />
+		</fileset>
+		<fileset dir="${installdir}">
+			<include name="*.jar" />
+			<include name="ant/*.jar" />
+			<include name="jasper/**/*.jar" />
+		</fileset>
+		<fileset dir="${installdir}/dbjar">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+		<!-- 
+		<fileset dir="${installdir}/noapp/lib">
+			<include name="javax.servlet.jar" />
+		</fileset>
+		-->
+		<fileset dir="${installdir}/jar">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="project.noapploader.classpath">
+		<pathelement location="${installdir}/jar/bootstrapper.jar" />
+	</path>
+
+
+	<!-- =========================================================================== -->
+
+	<target name="create-wars" unless="nowars2" description="This is the main entry-point to the commonwar utility. EAR and WAR scripts invoke this target.">
+		<delete dir="${uijartmpdir}" />
+		<mkdir dir="${uijartmpdir}" />
+		<condition property="warfile-target" value="-make-multiple-warfiles" else="-make-single-warfiles">
+			<isset property="warfiles" />
+		</condition>
+		<antcall target="${warfile-target}" />
+
+	</target>
+
+	<!-- =========================================================================== -->
+
+
+	<target name="-make-single-warfiles">
+		<condition property="wardest" value="${warname}" else="${package}">
+			<isset property="warname" />
+		</condition>
+		<property name="warfile" value="${tmpdir}/${wardest}.war" />
+		<condition property="package.exists" value="true">
+			<available file="${installdir}/repository/eardata/${package}/war" />
+		</condition>
+		<fail unless="package.exists" message="The -Dpackage=${package} does not point to a valid ear data repository" />
+		<create-war package.attr="${package}" packagecontents.attr="${package},platform" warfile.attr="${warfile}" />
+	</target>
+
+
+	<!-- =========================================================================== -->
+
+	<target name="-make-multiple-warfiles">
+		<sciforeach list="${warfiles}" propertyName="packagename" targetName="-make-war" />
+	</target>
+
+	<target name="-make-war">
+
+		<condition property="wardest" value="${warname}" else="${packagename}">
+			<isset property="warname" />
+		</condition>
+
+		<property name="warfile" value="${tmpdir}/${wardest}.war" />
+
+		<!-- go to the build.properties to get the components of this war -->
+		<loadproperties srcFile="${installdir}/bin/build.properties">
+			<filterchain>
+				<tokenfilter>
+					<containsstring contains="${packagename}" />
+				</tokenfilter>
+				<replacestring from="${packagename}.war" to="this.package.contents" />
+			</filterchain>
+		</loadproperties>
+		<echo message="this.package.contents=${this.package.contents}" />
+		<create-war package.attr="${packagename}" packagecontents.attr="${this.package.contents}" warfile.attr="${warfile}" />
+
+	</target>
+
+	<!-- =========================================================================== -->
+	<!-- everything eventually comes here... 									     -->
+	<!-- =========================================================================== -->
+
+	<macrodef name="create-war">
+
+		<attribute name="warfile.attr" />
+		<attribute name="package.attr" />
+		<attribute name="packagecontents.attr" />
+
+		<sequential>
+			<echo message="Creating warfile @{warfile.attr} for package @{package.attr} using contents @{packagecontents.attr}" />
+
+			<createwarlayout package="@{package.attr}" packagecontents="@{packagecontents.attr}" wartmpdir="${tmpdir}/build@{package.attr}" />
+			
+			<wlxmlgen contextroot="@{package.attr}" outputfilepath="${wartmpdir}/WEB-INF/weblogic.xml" extensionfilepath="${installdir}/extensions/@{package.attr}/weblogic.xml" />
+
+			<antcall target="precompile-war" />
+
+
+			<mkdir dir="${wartmpdir}/WEB-INF" />
+			<mkdir dir="${wartmpdir}/WEB-INF/lib" />
+			<listFiles dir="${wartmpdir}/WEB-INF/lib" prop="@{package.attr}.ui.classpath" isWar="true" isEar="false" />
+			<antcall target="move-ui-libs" />
+			
+			<condition property="war.@{package.attr}.ui.classpath" else="${@{package.attr}.ui.classpath}" value=" ">
+				<and>
+					<isset property="support.multi.war"/>
+					<equals arg1="support.multi.war" arg2="true"/>
+				</and>
+			</condition>
+	
+			<war destfile="@{warfile.attr}" webxml="${tmpdir}/build@{package.attr}/WEB-INF/web.xml">
+				<manifest>
+					<attribute name="Class-Path" value="${deployment.manifest.classpath} ${ear.basename}wsbe.jar ${war.@{package.attr}.ui.classpath}" />
+				</manifest>
+				<fileset dir="${tmpdir}/build@{package.attr}">
+					<exclude name="WEB-INF/web.xml" />
+					<exclude name="WEB-INF/classes/swc_struts.xml" />
+				</fileset>
+			</war>
+		</sequential>
+	</macrodef>
+	<!-- ================================= 
+          target: move-ui-libs              
+         ================================= -->
+	<target name="move-ui-libs" unless="require.struts.workaround" if="uijartmpdir">
+		<move todir="${uijartmpdir}">
+			<fileset dir="${wartmpdir}/WEB-INF/lib" includes="*.jar" />
+		</move>
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<macrodef name="createwarlayout">
+		<attribute name="package" />
+		<attribute name="packagecontents" />
+		<attribute name="wartmpdir" />
+		<sequential>
+			<property name="wartmpdir" value="@{wartmpdir}" />
+			<property name="package.repos.name" value="@{package}" />
+			<condition property="include.platform" value="true">
+				<contains string="@{packagecontents}" substring="platform" casesensitive="false" />
+			</condition>
+
+			<sciregexpproperty propertyName="first.package" inputString="@{packagecontents}" regexp="([a-zA-Z]*),.*" replacementString="$1" />
+			<sciforeach list="@{packagecontents}" propertyName="packagedata.name" targetName="-call-layout-data-target" />
+
+			<antcall target="-remove-tester-from-war" />
+			<antcall target="-iconjar"/>
+			<move file="${wartmpdir}/yantraiconsbe.jar" todir="${wartmpdir}/yfscommon" />
+
+		</sequential>
+	</macrodef>
+
+	<!-- =========================================================================== -->
+
+	<target name="-call-layout-data-target">
+		<condition property="layout-target" value="-layout-nothing">
+			<not>
+				<available file="${installdir}/repository/eardata/${packagedata.name}/war" />
+			</not>
+		</condition>
+		<condition property="layout-target" value="-layout-platformdata" else="-layout-packagedata">
+			<equals arg1="${packagedata.name}" arg2="platform" casesensitive="false" trim="true" />
+		</condition>
+
+		<antcall target="${layout-target}" />
+		
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-layout-nothing" />
+
+	<target name="-layout-packagedata">
+
+		<property name="packagedata.dir" value="${installdir}/repository/eardata/${packagedata.name}" />
+		<property name="extndata.dir" value="${packagedata.dir}/extn" />
+
+		<antcall target="-mergewars" />
+
+		<!-- antcall target="-iconjar" / -->
+		<antcall target="-ui-extn" />
+
+		<!-- move file="${wartmpdir}/yantraiconsbe.jar" todir="${wartmpdir}/yfscommon" / -->
+		<move file="${wartmpdir}/yfsextnui.jar" todir="${wartmpdir}/yfscommon" />
+		<copy todir="${wartmpdir}/yfscommon" flatten="true">
+			<fileset dir="${installdir}/resources">
+				<include name="*bundle*.properties" />
+			</fileset>
+		</copy>
+		<mkdir dir="${wartmpdir}/yfscommon/extn" />
+		<copy todir="${wartmpdir}/yfscommon/extn" flatten="true">
+			<fileset dir="${installdir}/resources">
+				<include name="extn/*bundle*.properties" />
+			</fileset>
+		</copy>
+		<mkdir dir="${wartmpdir}/extn" />
+		<copy todir="${wartmpdir}/extn" flatten="true">
+			<fileset dir="${installdir}/resources">
+				<include name="extn/*bundle*.properties" />
+			</fileset>
+		</copy>
+		<jar jarfile="${wartmpdir}/yfscommon/yantrabundles.jar">
+			<zipfileset dir="${wartmpdir}/yfscommon" includes="*jarlist.txt" />
+			<zipfileset dir="${wartmpdir}/yfscommon" includes="*bundle*.properties" />
+			<zipfileset dir="${wartmpdir}/extn" includes="*bundle*.properties" />
+		</jar>
+		<copy todir="${wartmpdir}/yfscommon" flatten="true">
+			<fileset dir="${wartmpdir}">
+				<include name="extn/yfscommon/**.jar" />
+				<include name="extn/yfscommon/jarlist.txt" />
+			</fileset>
+		</copy>
+		
+		<mkdir dir="${wartmpdir}/WEB-INF/lib" />
+		<antcall target="-layout-webinf-libs" />
+		<mkdir dir="${wartmpdir}/WEB-INF/classes" />
+
+		<condition property="generatewebxml" value="true">
+			<equals arg1="${first.package}" arg2="${packagedata.name}" trim="true" />
+		</condition>
+		<antcall target="-createwebxml" />						
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-copy-extn-weblogicxml" if="extnweblogicxml.exists">
+		<copy file="${installdir}/extensions/${packagedata.name}/weblogic.xml" tofile="${wartmpdir}/WEB-INF/weblogic.xml" overwrite="true" />
+	</target>
+
+	<target name="-layout-platformdata" if="include.platform">
+
+		<copy todir="${wartmpdir}">
+			<fileset dir="${platformdata}/war" />
+			<fileset dir="${configdata}/war" />
+			<!-- adding it here as platform is always called -->
+		</copy>
+
+		<copy todir="${wartmpdir}/WEB-INF/">
+			<fileset dir="${platformdata}/descriptors/${appserver}/WAR/WEB-INF/" />
+		</copy>
+
+		<antcall target="-copy-extn-weblogicxml" />
+				
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-mergewars">
+
+		<mkdir dir="${wartmpdir}" />
+		<mkdir dir="${extndata.dir}" />
+
+		<copy todir="${wartmpdir}" overwrite="true">
+			<fileset dir="${packagedata.dir}/war" />
+		</copy>
+
+		<copy todir="${wartmpdir}" overwrite="true">
+			<fileset dir="${extndata.dir}" />
+		</copy>
+
+		<!-- TD 177865 -->
+		<sciforeach propertyName="extnwebdir" targetName="-mergeextn.web">
+			<dirset dir="${installdir}/extensions">
+				<include name="global/webpages" />
+				<include name="${packagedata.name}/webpages" />
+			</dirset>
+		</sciforeach>
+		<sciforeach propertyName="extnbundle" targetName="-mergeextn.bundles">
+			<fileset dir="${installdir}/extensions" includes="global/resources/**/*bundle*" />
+		</sciforeach>
+		<sciforeach propertyName="extnbundle" targetName="-mergeextn.bundles">
+			<fileset dir="${installdir}/extensions" includes="*/resources/**/*bundle*" excludes="global/**/*" />
+		</sciforeach>
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-layout-webinf-libs" if="include.classpathlibs">
+		<copy todir="${wartmpdir}/WEB-INF/lib">
+			<fileset dir="${libtmp}" />
+		</copy>
+	</target>
+
+	<target name="-remove-tester-from-war" unless="devmode">
+		<delete dir="${wartmpdir}/yfsadmin" />
+		<delete dir="${wartmpdir}/yfshttpapi" />
+		<delete dir="${wartmpdir}/WEB-INF/classes/swc_struts.xml" />
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-mergeextn.web">
+		<mkdir dir="${wartmpdir}/extn" />
+		<copy todir="${wartmpdir}/extn" overwrite="true">
+			<fileset dir="${installdir}/extensions/${extnwebdir}" includes="**/*" excludes="extn/**"/>
+		</copy>
+		<condition property="extnDir.present" value="true">
+			<available file="${installdir}/extensions/${extnwebdir}/extn" type="dir"/>
+		</condition>
+		<antcall target="copyExtnDir" />
+	</target>
+
+	<target name="copyExtnDir" if="extnDir.present">
+		<copy todir="${wartmpdir}/extn" overwrite="true">
+			<fileset dir="${installdir}/extensions/${extnwebdir}/extn" includes="**/*"/>
+		</copy>
+	</target>
+
+	<target name="-mergeextn.bundles">
+		<mkdir dir="${wartmpdir}/yfscommon/extn" />
+		<copy todir="${wartmpdir}/yfscommon/extn" file="${installdir}/extensions/${extnbundle}" />
+		<mkdir dir="${wartmpdir}/extn" />
+		<copy todir="${wartmpdir}/extn" file="${installdir}/extensions/${extnbundle}" />
+	</target>
+
+	<target name="-iconjar">
+		<jar destfile="${wartmpdir}/yantraiconsbe.jar">
+			<zipfileset dir="${wartmpdir}">
+				<include name="console/icons/**/" />
+				<include name="yfcicons/**" />
+				<include name="skins/*/console/icons/**/" />
+				<include name="skins/*/yfcicons/**" />
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="-ui-extn" description="Creates UI Extensibility jar">
+		<delete dir="${wartmpdir}/uiextnjar" />
+		<mkdir dir="${wartmpdir}/uiextnjar" />
+		<sciforeach propertyName="extnuijar" targetName="-mergeextn.uijar">
+			<fileset dir="${installdir}/extensions">
+				<include name="*/uijars/**/*.jar" />
+				<include name="*/uijars/**/*.zip" />
+			</fileset>
+		</sciforeach>
+		<!-- TD 177865  <sciforeach propertyName="extnuidir" targetName="-mergeextn.web">
+			<dirset dir="${installdir}/extensions" includes="*/webpages" excludes="global/webpages" />
+		</sciforeach> -->
+		<jar jarfile="${wartmpdir}/yfsextnui.jar" basedir="${wartmpdir}/uiextnjar" />
+		<delete dir="${wartmpdir}/uiextnjar" />
+	</target>
+
+	<target name="-mergeextn.uijar">
+		<unzip src="${installdir}/extensions/${extnuijar}" dest="${wartmpdir}/uiextnjar" />
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-createwebxml" if="generatewebxml">
+		<property file="${packagedata.dir}/build.properties" prefix="webprop" />
+		<property name="webprop.module" value="__NONE__" />
+
+		<java classname="com.sterlingcommerce.woodstock.noapp.NoAppLoader" newenvironment="yes" failonerror="true" fork="true" classpathref="project.noapploader.classpath">
+			<env key="VENDORJARS" value="" />
+			<env key="CLASSPATH" value="" />
+			<sysproperty key="vendor" value="shell" />
+			<sysproperty key="vendorFile" value="${installdir}/properties/servers.properties" />
+			<arg value="-class" />
+			<arg value="com.yantra.tools.mdm.WebXMLMerger" />
+			<arg value="-f" />
+			<arg value="${installdir}/properties/APPDynamicclasspath.cfg" />
+			<arg value="-invokeargs" />
+			<arg value="-WEBPACKAGE" />
+			<arg value="${webprop.module}" />
+			<arg value="-OUT" />
+			<arg value="${extndata.dir}/web.xml.sample" />
+			<arg value="-BC" />
+			<arg value="Y" />
+			<arg value="-EXTN" />
+			<arg value="${extndata.dir}/customweb.xml" />
+			<arg value="-STRUTS_PROPERTIES_OUT" />
+			<arg value="${extndata.dir}/struts.properties.sample" />
+			<arg value="-STRUTS_CONFIG_OUT" />
+			<arg value="${extndata.dir}/struts.xml.sample" />
+			<arg value="-DEVMODE"/>
+			<arg value="${devmode}"/>
+			<arg value="-SERVLETSPEC"/>
+			<arg value="${servletspec}"/>
+		</java>
+
+		<condition property="extnwebxml.exists">
+			<available file="${extndata.dir}/web.xml" />
+		</condition>
+
+		<antcall target="-copy-sample-webxml" />
+		<antcall target="-copy-extn-webxml" />
+
+		<!-- Adding below lines to create/copy struts.xml and struts.properties -->
+		<condition property="strutsxml.exists">
+			<and>
+				<available file="${extndata.dir}/struts.xml.sample" />
+				<not>
+					<available file="${extndata.dir}/struts.xml" />
+				</not>
+			</and>
+		</condition>
+		
+		<condition property="extnstrutsxml.exists">
+			<available file="${extndata.dir}/struts.xml" />
+		</condition>
+
+		<condition property="strutsproperties.exists">
+			<and>
+				<available file="${extndata.dir}/struts.properties.sample" />
+				<not>
+					<available file="${extndata.dir}/struts.properties" />
+				</not>
+			</and>
+		</condition>
+
+		<condition property="extnstrutsproperties.exists">
+			<available file="${extndata.dir}/struts.properties" />
+		</condition>
+
+		<condition property="extnweblogicxml.exists">
+			<available file="${installdir}/extensions/${packagedata.name}/weblogic.xml" />
+		</condition>
+
+		<antcall target="-copy-sample-strutsxml" />
+		<antcall target="-copy-extn-strutsxml" />
+		<antcall target="-copy-sample-strutsproperties" />
+		<antcall target="-copy-extn-strutsproperties" />
+		<antcall target="-copy-extn-weblogicxml" />
+		
+	</target>
+	
+
+	<target name="-copy-extn-webxml" if="extnwebxml.exists">
+		<copy file="${extndata.dir}/web.xml" tofile="${wartmpdir}/WEB-INF/web.xml" overwrite="true" />
+	</target>
+	<target name="-copy-sample-webxml" unless="extnwebxml.exists">
+		<copy file="${extndata.dir}/web.xml.sample" tofile="${wartmpdir}/WEB-INF/web.xml" overwrite="true" />
+	</target>
+
+	<target name="-copy-extn-strutsxml" if="extnstrutsxml.exists">
+		<copy file="${extndata.dir}/struts.xml" tofile="${wartmpdir}/WEB-INF/classes/struts.xml" overwrite="true" />
+	</target>
+
+	<target name="-copy-sample-strutsxml" if="strutsxml.exists">
+		<copy file="${extndata.dir}/struts.xml.sample" tofile="${wartmpdir}/WEB-INF/classes/struts.xml" overwrite="true" />
+	</target>
+
+	<target name="-copy-extn-strutsproperties" if="extnstrutsproperties.exists">
+		<copy file="${extndata.dir}/struts.properties" tofile="${wartmpdir}/WEB-INF/classes/struts.properties" overwrite="true" />
+	</target>
+
+	<target name="-copy-sample-strutsproperties" if="strutsproperties.exists">
+		<copy file="${extndata.dir}/struts.properties.sample" tofile="${wartmpdir}/WEB-INF/classes/struts.properties" overwrite="true" />
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<!-- These set of targets are used to invoke a given target on every
+	     layout file present in the eardata directories -->
+	<target name="-checklayoutfiles">
+		<condition property="layout.platform.exists">
+			<available file="${platformdata}/layout.xml" />
+		</condition>
+		<condition property="layout.package.exists">
+			<and>
+				<not>
+					<equals arg1="platform" arg2="${package.repos.name}" />
+				</not>
+				<available file="${packagedata}/layout.xml" />
+			</and>
+		</condition>
+		<condition property="layout.extn.exists">
+			<available file="${extndata.dir}/layout.xml" />
+		</condition>
+	</target>
+	<target name="-invokeonplatform" if="layout.platform.exists">
+		<ant antfile="${platformdata}/layout.xml" target="${target}" inheritall="true" inheritrefs="true">
+			<property name="dir.libs.copyto" value="${dir.libs.copytobase}/platform" />
+		</ant>
+	</target>
+	<target name="-invokeonpackage" if="layout.package.exists">
+		<ant antfile="${packagedata}/layout.xml" target="${target}" inheritall="true" inheritrefs="true">
+			<property name="dir.libs.copyto" value="${dir.libs.copytobase}/${package.repos.name}" />
+		</ant>
+	</target>
+	<target name="-invokeonextn" if="layout.extn.exists">
+		<ant antfile="${extndata.dir}/layout.xml" target="${target}" inheritall="true" inheritrefs="true">
+			<property name="dir.libs.copyto" value="${dir.libs.copytobase}/extn" />
+		</ant>
+	</target>
+	<target name="-invokelayout" depends="-checklayoutfiles,-invokeonplatform,-invokeonpackage,-invokeonextn" />
+
+	<!-- =========================================================================== -->
+
+	<macrodef name="copyalllibs">
+		<attribute name="todir" />
+		<attribute name="path.property" />
+		<element implicit="true" name="filter" optional="true" />
+		<sequential>
+			<mkdir dir="@{todir}" />
+			<!-- why we need this?   maybe here for war ? variable wartmpdir is not working for this purpose
+			<mkdir dir="${wartmpdir}/libs" />
+			<mkdir dir="${wartmpdir}/libs/platform" />
+			<mkdir dir="${wartmpdir}/libs/${package.repos.name}" />
+			<mkdir dir="${wartmpdir}/libs/extn" />
+			-->
+			<echo message="==== Copying all lib files ====" />
+
+			<!-- Assumes all env.CLASSPATH references are in relation to the install dir. -->
+			<dynclasspath includesproperty="@{path.property}.fsincludes" pathproperty="@{path.property}.astext" basedir="${sandbox.INSTALL_DIR}">
+				<filter />
+			</dynclasspath>
+			<path id="@{path.property}">
+				<path path="${@{path.property}.astext}" />
+			</path>
+			<!--
+			<pathconvert property="@{path.property}.fsincludes" pathsep=",">
+				<path path="${env.CLASSPATH}" id="@{path.property}" />
+				<map from="${sandbox.INSTALL_DIR}${file.separator}" to=""/>
+			</pathconvert>
+			-->
+			<mkdir dir="@{todir}" />
+			<copy todir="@{todir}" flatten="true">
+				<fileset dir="${sandbox.INSTALL_DIR}" includes="${@{path.property}.fsincludes}">
+					<type type="file" />
+				</fileset>
+			</copy>
+			<echo message="==== Copied all lib files to @{todir} ====" />
+		</sequential>
+	</macrodef>
+
+	<!-- =========================================================================== -->
+
+	<target name="prep-classpath-libs">
+
+		<mkdir dir="${propstmp}" />
+
+		<createavailableproperties outputfile="${propstmp}/sci_availableproperties.txt" />
+
+		<condition property="libexclude.pattern" value=".*jnpserver.jar" else="">
+			<equals arg1="${appserver}" arg2="jboss" />
+		</condition>
+
+		<copyalllibs todir="${libtmp}" path.property="manifest.class.path">
+			<exclude pattern="${libexclude.pattern}" />
+		</copyalllibs>
+
+		<copy todir="${propstmp}">
+			<fileset dir="properties">
+				<include name="security.properties" />
+			</fileset>
+		</copy>
+
+		<condition property="passphrase-target" value="-add-passphrase" else="-skip-add-passphrase">
+			<and>
+				<isset property="passphrase" />
+			</and>
+		</condition>
+
+		<antcall target="${passphrase-target}" />
+
+		<replace file="${propstmp}/security.properties" token="J2EEAppServer=NOAPP" value="J2EEAppServer=${appserver}" />
+
+		<jar destfile="${libtmp}/properties.jar">
+
+			<fileset dir="${installdir}/properties" excludes="*.in,backups/*,security.properties,*.*.200*" />
+
+			<fileset dir="${propstmp}" includes="*" />
+		</jar>
+
+		<pathconvert property="manifest.classpath" pathsep=" ">
+			<path refid="manifest.class.path" />
+			<mapper type="flatten" />
+		</pathconvert>
+
+		<pathconvert property="webservices.build.classpath" pathsep=":">
+			<path refid="manifest.class.path" />
+		</pathconvert>
+
+		<property name="deployment.manifest.classpath" value="properties.jar ${manifest.classpath}" />
+
+	</target>
+
+	<target name="-skip-add-passphrase" />
+
+	<target name="-add-passphrase">
+		<echo file="${propstmp}/security.properties" append="true">${line.separator}passphrase=${passphrase}${line.separator}</echo>
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<!-- Creates sci_availableproperties.txt, listing all non-standard property files -->
+	<macrodef name="createavailableproperties">
+		<attribute name="outputfile" />
+		<attribute name="dir" default="${installdir}/properties" />
+		<sequential>
+			<pathconvert property="availprops.output" pathsep="${line.separator}">
+				<path>
+					<fileset dir="@{dir}">
+						<include name="*ext" />
+					</fileset>
+				</path>
+				<chainedmapper>
+					<mapper type="flatten" />
+				</chainedmapper>
+			</pathconvert>
+			<echo message="${availprops.output}" file="@{outputfile}" />
+		</sequential>
+	</macrodef>
+
+	<!-- =========================================================================== -->
+
+	<macrodef name="finishwar">
+		<sequential>
+			<echo message="==== Begin war.finish ====" />
+			<antcall target="-invokelayout">
+				<param name="target" value="war.finish" />
+			</antcall>
+			<echo message="==== Finished war.finish ====" />
+		</sequential>
+	</macrodef>
+
+	<!-- =========================================================================== -->
+
+	<macrodef name="checkfile">
+		<attribute name="file" />
+		<attribute name="type" />
+		<sequential>
+			<fail message="@{type} does not exist: ${@{file}}">
+				<condition>
+					<not>
+						<available file="${@{file}}" type="@{type}" />
+					</not>
+				</condition>
+			</fail>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="checkproperty" description="fails if given property is not set">
+		<attribute name="property" description="property to test" />
+		<sequential>
+			<echo message="Checking property: @{property}" level="verbose" />
+			<fail message="Missing required property: @{property}">
+				<condition>
+					<or>
+						<not>
+							<isset property="@{property}" />
+						</not>
+						<equals arg1="${@{property}}" arg2="" trim="true" />
+					</or>
+				</condition>
+			</fail>
+		</sequential>
+	</macrodef>
+
+	<!-- =========================================================================== -->
+
+	<target name="clean">
+		<delete dir="${dir.external}" />
+		<delete dir="${tmpdir}" />
+		<mkdir dir="${tmpdir}" />
+	</target>
+
+	<!-- =========================================================================== -->
+
+	<target name="-initialize" depends="clean,-validate-appserver,-validate-warfiles">
+
+		<mkdir dir="${dir.external}" />
+
+		<antcall target="webservice.utils.validate-setup" />
+
+	</target>
+
+	<target name="-validate-warfiles" if="warfiles">
+		<sciforeach list="${warfiles}" propertyName="packagename" targetName="-validate-war" />
+	</target>
+
+	<target name="-validate-war">
+		<echo message="Validating warfile ${packagename}" />
+		<property name="tocompare" value="${this.package.contents}" />
+		<loadproperties srcFile="${installdir}/bin/build.properties">
+			<filterchain>
+				<tokenfilter>
+					<containsstring contains="${packagename}" />
+				</tokenfilter>
+				<replacestring from="${packagename}.war" to="this.package.contents" />
+			</filterchain>
+		</loadproperties>
+		<condition property="war.validation.failed" value="true">
+			<equals arg1="${tocompare}" arg2="${this.package.contents}" />
+		</condition>
+		<fail if="war.validation.failed" message="Validation of  ${packagename} failed for -Dwarfiles=${warfiles}.  Verify ${packagename}.war is defined in INSTALL/bin/build.properties." />
+	</target>
+
+	<target name="-validate-appserver" unless="noapp">
+		<condition property="valid.appserver" value="true">
+			<or>
+				<equals arg1="${appserver}" arg2="weblogic" casesensitive="false" trim="true" />
+				<equals arg1="${appserver}" arg2="websphere" casesensitive="false" trim="true" />
+				<equals arg1="${appserver}" arg2="jboss" casesensitive="false" trim="true" />
+			</or>
+		</condition>
+
+		<fail Message="You should pass -Dappserver=&lt;weblogic|websphere|jboss&gt; in order to use this target" unless="valid.appserver" />
+
+		<condition property="weblogic.version" value="10" else="9">
+			<and>
+				<equals arg1="${appserver}" arg2="weblogic" />
+				<isset property="wls-10" />
+				<equals arg1="${wls-10}" arg2="true" casesensitive="false" trim="true" />
+			</and>
+		</condition>
+
+		<condition property="appserver.build.platform" value="weblogic ${weblogic.version}" else="${appserver}">
+			<equals arg1="${appserver}" arg2="weblogic" />
+		</condition>
+
+	</target>
+
+</project>
