@@ -1036,9 +1036,18 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				} else {
 					//Added for 3689
 					String[] afterDecimalStringArr = strUnitPrice.replace(".", ",").split(",");
-					String afterDecimalString = afterDecimalStringArr[1];
-					if((strUnitPrice != null || strUnitPrice != "") && afterDecimalString.length() ==1){
-						strUnitPrice = strUnitPrice.concat("0");
+					
+					//Added for Jira 4219
+					if(afterDecimalStringArr != null && afterDecimalStringArr.length>1)
+					{
+						String afterDecimalString = afterDecimalStringArr[1];
+						if((strUnitPrice != null || strUnitPrice != "") && afterDecimalString.length() ==1){
+							strUnitPrice = strUnitPrice.concat("0");
+						}
+					}
+					else
+					{
+						strUnitPrice = strUnitPrice.concat(".00");
 					}
 					setFieldValue("stxtUnitPrice", strUnitPrice);
 				}
