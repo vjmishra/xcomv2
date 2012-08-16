@@ -570,10 +570,8 @@ function printPOs(customerPos) {
 							<s:set name="orderDate"
 								value='%{#dateUtilBean.formatDate(#parentOrder.getAttribute("OrderDate"),wCContext)}' />
 		
-							<td><s:set name='customerPO'
-								value='#chainedOrder.getAttribute("CustomerPONo")' /> <SCRIPT type="text/javascript">
-								printPOs('<s:property value="#customerPO" escape='false'/>');
-								</SCRIPT></td>
+							<td><s:property
+								value='#chainedOrder.getAttribute("CustomerPONo")' /></td>
 		
 							<td><s:property value='#orderDate' /> </td>
 							<%-- Fix for JIRA 2243 : Showing OrderedByName from customer order --%>
@@ -710,10 +708,7 @@ function printPOs(customerPos) {
 										</s:a>
 									</s:else>
 				            	</td>
-			            		<td><s:set name='customerPO' value='#chainedOrder.getAttribute("CustomerPONo")'/>
-									<SCRIPT type="text/javascript">
-									printPOs('<s:property value="#customerPO" escape='false'/>');
-									</SCRIPT>
+			            		<td><s:property value='#chainedOrder.getAttribute("CustomerPONo")'/>
 	                          	</td>
 	           	
 				            	<td><s:property value='#orderDate'/></td>
