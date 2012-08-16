@@ -101,6 +101,18 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 	private String orderLineItemDesc;
 	private String itemOrders;
 	private String itemType;
+	//for jira 4221
+	private String loggedInUserName;
+	private String loggedInUserID;
+	
+	public String getLoggedInUserID() {
+		return loggedInUserID;
+	}
+
+	public void setLoggedInUserID(String loggedInUserID) {
+		this.loggedInUserID = loggedInUserID;
+	}
+
 	public String getItemType() {
 		return itemType;
 	}
@@ -196,7 +208,18 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		try {
 			boolean itemsAdded = false;
 			Map<String, Element> out;
-			
+			//added for jira 4221
+			loggedInUserID = wcContext.getLoggedInUserId();			
+			String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true"))
+			{
+				loggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+			}
+			else
+			{
+				loggedInUserName = wcContext.getLoggedInUserName();
+			}
+			//end of jira 4221
 			newList = false;
 			//Check if this is a new list
 			if(LOG.isDebugEnabled()){
@@ -210,7 +233,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				setShareAdminOnly(shareAdminOnly); //JIRA 3377
 				
 				/*Updated for Jira 4134*/
-				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				//String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 				Element res1;
 				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
@@ -236,7 +259,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				modifiedDate = modifiedYFCDate.getString();
 				/*Updated for Jira 4134*/
 				Element res1;
-				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				//String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
 					res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItemForSalesRep");
@@ -403,18 +426,32 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					if(LOG.isDebugEnabled()){
 					LOG.debug("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath());
 					}
-					out = prepareAndInvokeMashups();
+					//out = prepareAndInvokeMashups();
+					/*Updated for Jira 4134*/
+					Element outElem;
+					//String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+						salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+						outElem=prepareAndInvokeMashup("XPEDXMyItemsDetailsChangeShareListForSalesPro");
+					}else{
+						outElem = prepareAndInvokeMashup("XPEDXMyItemsDetailsChangeShareList");
+					}				
+					
 					if(LOG.isDebugEnabled()){
 					LOG.debug("Check 6: Saving data: CustomerID = " + getCustomerId() + ", Customer path = " + getCustomerPath() + " - Done!");
 					}
 					itemsAdded = true;
-					if (out.get("XPEDXMyItemsDetailsChangeShareList") != null){
+					/*if (out.get("XPEDXMyItemsDetailsChangeShareList") != null){
 						outDoc = (Document)out.get("XPEDXMyItemsDetailsChangeShareList").getOwnerDocument();
+					}*/
+					//for jira 4221 for updating the lastModifiedby in change sharelist
+					if (outElem != null){
+						outDoc = outElem.getOwnerDocument();
 					} else {
 						LOG.error("No document as result");
 						return ERROR;
 					}
-					
+					//end of jira 4221
 				}
 			}
 			
@@ -499,6 +536,8 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					myitemsList.getDocumentElement().setAttribute("SharePrivate",sharePermissionLevel);
 					myitemsList.getDocumentElement().setAttribute("ShareAdminOnly", shareAdminOnly);
 					myitemsList.getDocumentElement().setAttribute("MyItemsListKey",listKey);
+					myitemsList.getDocumentElement().setAttribute("ModifyUserName",loggedInUserName);
+					myitemsList.getDocumentElement().setAttribute("Modifyuserid",loggedInUserID);
 					WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(),getWCContext().getSCUIContext());
 					
 				}
