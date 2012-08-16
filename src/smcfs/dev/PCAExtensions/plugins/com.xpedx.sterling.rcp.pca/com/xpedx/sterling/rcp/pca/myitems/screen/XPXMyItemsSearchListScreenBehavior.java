@@ -179,6 +179,16 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 								}
 								else{
 									eleMyItemsList.setAttribute("ListType", "Shared");
+									}
+								//Added for jira 4220
+								String isCreatedSalesRep = eleMyItemsList.getAttribute("CREATEDIsSalesRep");
+								String isModifiedSalesRep = eleMyItemsList.getAttribute("MODIFIEDIsSalesRep");
+								if("Y".equalsIgnoreCase(isCreatedSalesRep)){
+									eleMyItemsList.setAttribute("Createuserid", CreateUserName);
+								}
+								if("Y".equalsIgnoreCase(isModifiedSalesRep)){
+									String modifyUserName = eleMyItemsList.getAttribute("ModifyUserName");
+									eleMyItemsList.setAttribute("Modifyuserid", modifyUserName);
 								}
 							}
 						}
