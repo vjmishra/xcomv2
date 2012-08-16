@@ -147,12 +147,12 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="createXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" " Createusername=" "
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
 				    MyItemsListKey=" " Name=" " ShareAdminOnly=" " ModifyUserName=" "/>
 			</Input>			
 			<Template>
-				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" " Createusername=" "
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
 				    MyItemsListKey=" " Name=" " ModifyUserName=" "/>
 			</Template>
@@ -163,12 +163,12 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="createXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" " Createusername=" "
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
 				    MyItemsListKey=" " Name=" " ShareAdminOnly=" " ModifyUserName=" "/>
 			</Input>			
 			<Template>
-				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" " Createusername=" "
+				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
 				    Desc=" " Lockid=" " Modifyprogid=" " Modifyts=" " Modifyuserid=" "
 				    MyItemsListKey=" " Name=" " ModifyUserName=" "/>
 			</Template>
@@ -240,7 +240,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="changeXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " ModifyUserName= " " Createuserid=" "/>
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " ModifyUserName= " "/>
 			</Input>			
 			<Template>
 				<XPEDXMyItemsList Createprogid=" " Createuserid=" " CustomerID=" "
@@ -254,7 +254,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="createXPEDX_MyItemsDetails">
 			<Input>
-				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
+				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" " Createusername=""
 				    Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" " 
 				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " UomId=" " ItemOrder=" " ItemId=" "  ItemPoNumber="" ModifyUserName="">
 				</XPEDXMyItemsItems>
@@ -262,7 +262,7 @@
 			<Template>
 				<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 				    Desc=" " ItemCustomField1=" " ItemCustomField2=" " ItemCustomField3=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
-				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" " ItemId=" "  ItemPoNumber="">
+				    Modifyuserid=" " MyItemsKey=" " MyItemsListKey=" " Name=" " Qty=" " UomId=" " ItemId=" "  ItemPoNumber="" Createusername="">
 				</XPEDXMyItemsItems>
 			</Template>
 		</API>
@@ -502,31 +502,11 @@
 				<XPEDXMyItemsListShare 
 				    MyItemsListShareKey=" "
 				    CustomerPath=" " 
-				    MyItemsListKey=" " ModifyUserName=""
-				    Createusername="" Modifyuserid="" Createuserid=""
+				    MyItemsListKey=" " 
 				/>
             </Template>
         </API>
     </mashup>
-    <!-- for jira 4221 sales Pro -->
-    <mashup id='XPEDXMyItemsDetailsChangeShareListForSalesPro' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
-        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-        <API FlowName="createXPEDX_MyItemsDetailsShareList">
-            <Input>
-				<XPEDXMyItemsListShare CustomerPath=" " MyItemsListKey=" " ModifyUserName="" Modifyuserid=""/>
-            </Input>
-            
-            <Template>
-				<XPEDXMyItemsListShare 
-				    MyItemsListShareKey=" "
-				    CustomerPath=" " 
-				    MyItemsListKey=" "  ModifyUserName=""
-				    Createusername="" Modifyuserid="" Createuserid=""
-				/>
-            </Template>
-        </API>
-    </mashup>
-    <!-- end of jira 4221 for sales pro -->
     
     <mashup id='XPEDXMyItemsDetailsGetSavedShareList' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Add order lines to the order">
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
@@ -552,7 +532,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API FlowName="changeXPEDX_MyItemsList">
             <Input>
-				<XPEDXMyItemsList MyItemsListKey=" " SharePrivate="" ShareAdminOnly="" ModifyUserName="" Modifyuserid="">
+				<XPEDXMyItemsList MyItemsListKey=" " SharePrivate="" ShareAdminOnly="">
 					<XPEDXMyItemsListShareList Reset="true" /> 
 				</XPEDXMyItemsList>
             </Input>
@@ -659,7 +639,7 @@
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="changeXPEDX_MyItemsList">
 			<Input>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " ModifyUserName="">
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" " Createusername="" ModifyUserName="">
 					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
 						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
@@ -669,7 +649,7 @@
 				</XPEDXMyItemsList>
 			</Input>			
 			<Template>
-				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" ">
+				<XPEDXMyItemsList MyItemsListKey=" " Modifyts=" " CreateUserName="">
 					<XPEDXMyItemsItemsList MyItemsListKey=" " Modifyts=" " Modifyuserid=" ">
 						<XPEDXMyItemsItems AvailabilityId=" " Createprogid=" " Createuserid=" "
 						    Desc=" " JobId=" " Lockid=" " Modifyprogid=" " Modifyts=" "
