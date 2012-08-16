@@ -656,7 +656,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		
 		colBindings11[2] = new YRCTblClmBindingData();
 		colBindings11[2].setName("clmLastModUser");
-		colBindings11[2].setAttributeBinding("@ModifyUserName");
+		colBindings11[2].setAttributeBinding("@Modifyuserid");
         colBindings11[2].setColumnBinding("Last_Modified_User");
         colBindings11[2].setSortReqd(true);
         colBindings11[2].setFilterReqd(true);
@@ -670,7 +670,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		
 		colBindings11[4] = new YRCTblClmBindingData();
 		colBindings11[4].setName("clmCreatedBy");
-		colBindings11[4].setAttributeBinding("@Createusername");
+		colBindings11[4].setAttributeBinding("@Createuserid");
         colBindings11[4].setColumnBinding("Created_By");
         colBindings11[4].setSortReqd(true);
         colBindings11[4].setFilterReqd(true);
