@@ -1414,9 +1414,10 @@ from session . We have customer Contact Object in session .
 		value="XPEDXAllAdjustments.jsp" />
 		
 	<div class="cart-summary">
-			<div class="cart-sum-left" style="width:300px">
-				<fieldset id="coupon-field" style="width:18.9em;"	><legend>Coupon Code</legend>
-				<s:if test='isCouponEntryAllowed && draftOrder'>
+			 <!--Commenting for BR1. Will be required for BR2. SO do not delete
+			 <div class="cart-sum-left" style="width:300px">
+				<fieldset id="coupon-field" style="width:0em;"	> <legend>Coupon Code</legend>-->
+			<!-- 	<s:if test='isCouponEntryAllowed && draftOrder'>
 					<s:set name='addCouponStartTabIndex' value='800' />
 					<div><s:hidden name='currency'
 						value='%{#currencyCode}' /> <s:set name='renderAddCouponError'
@@ -1428,18 +1429,18 @@ from session . We have customer Contact Object in session .
 					 <div id="msgForCouponCode" style="display: none;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
 			
 					</div>
-				</s:if>
-					<input id='couponID' name='couponID' type="text" /> <a class="grey-ui-btn" style="float: right;" href="javascript:setCustomerPONumber();addCoupon('<s:property value="%{#addCouponUrlId}"/>')"><span>Apply</span></a>
-			
+				</s:if><!--
+					 <input id='couponID' name='couponID' type="text" /> <a class="grey-ui-btn" style="float: right;" href="javascript:setCustomerPONumber();addCoupon('<s:property value="%{#addCouponUrlId}"/>')"><span>Apply</span></a>
+			 
 				</fieldset>
-			</div>
+			</div>-->
 			<!--  Added div for Jira 3465 - Delivery Information on Checkout Screen -->
 			<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
 			<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
 			<div align="center" >
 			<table align="left">
   				<tr>
-    			<td class="second-cell" width="250px" style="text-align:left;display:block">
+    			<td class="second-cell" width="400px" style="text-align:left;display:block">
     			<label  class="block-label bold " for="comments ">Delivery Information:</label>
 				<s:property value="deliveryInfo"/></td>
    				</tr>
