@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.IWCContextAware;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
@@ -53,7 +52,7 @@ public class XPEDXWCContextInjectorInterceptor  extends WCContextInjectorInterce
         IWCContext builder = WCContextHelper.getBuilder(request, response);
         IWCContextAware action = (IWCContextAware) invocation.getAction();
         action.setWCContext((IWCContext) builder);
-        XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
+        XPEDXWCUtils.logExceptionIntoCent(ex);
         response.sendRedirect("/swc/xpedx/jsp/common/XPEDXGeneralSystemError.jsp");
     }
 }
