@@ -824,9 +824,18 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				//Set itemMap MAP again in session
 				XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 				//set a itemsUOMMap in Session for ConvFactor
-				XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getListOfItems(), wcContext.getStorefrontId()));
+				try
+				{
+					XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getListOfItems(), wcContext.getStorefrontId()));
+				}
+				catch(Exception e)
+				{
+					LOG.error("Exception while setting UOM in to object");
+				}
 			}
-
+			
+			validateItemUOM();
+			
 			/*
 			 * This is set in the method setItemDocAndInventoryMap() and the item extn elements are set in the Map xpedxItemIDToItemExtnMap
 			 * getAlternativeItems();
@@ -856,9 +865,41 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			XPEDXWCUtils.setObectInCache("itemConUOM", getItemIdConVUOMMap());
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
+			XPEDXWCUtils.logExceptionIntoCent(e);
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+	
+	private void validateItemUOM()
+	{
+		NodeList items=outDoc.getElementsByTagName("XPEDXMyItemsItems");
+		for(int i=0;i<items.getLength();i++)
+		{
+			Element item=(Element)items.item(i);
+			if(item != null)
+			{
+				if(itemIdsUOMsDescMap != null)
+				{
+					Map<String,String> actualUOMList=itemIdsUOMsDescMap.get(item.getAttribute("ItemId"));
+					Set<String> uomiDs=actualUOMList.keySet();
+					boolean isUOMAvaliable=false;
+					for(String uomId :uomiDs)
+					{
+						
+						if(uomId != null && uomId.contains(item.getAttribute("UomId")))
+						{
+							isUOMAvaliable=true;
+						}
+					}
+					if(!isUOMAvaliable)
+					{
+						item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public String pricecheck(){
