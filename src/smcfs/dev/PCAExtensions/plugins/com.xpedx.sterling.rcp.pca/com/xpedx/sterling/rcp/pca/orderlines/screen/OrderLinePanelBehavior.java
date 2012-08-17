@@ -780,9 +780,17 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 										.getTextContent();
 								//Added for jira 3869
 								String[] afterDecimalStringArr = extendedPrice.replace(".", ",").split(",");
-								String afterDecimalString = afterDecimalStringArr[1];
-								if((extendedPrice != null || extendedPrice != "") && afterDecimalString.length() ==1){
-									extendedPrice = extendedPrice.concat("0");
+								//Added for Jira 4219
+								if(afterDecimalStringArr != null && afterDecimalStringArr.length>1)
+								{
+									String afterDecimalString = afterDecimalStringArr[1];
+									if((extendedPrice != null || extendedPrice != "") && afterDecimalString.length() ==1){
+										extendedPrice = extendedPrice.concat("0");
+									}
+								}
+								
+								else{
+									extendedPrice = extendedPrice.concat(".00");
 								}
 								setFieldValue("txtExtnPrice", extendedPrice);
 								Element elePricingUOM = YRCXmlUtils
