@@ -6,6 +6,8 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -5958,6 +5960,18 @@ public class XPEDXWCUtils {
 		{
 			wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);
 		}
+	}
+	
+	 public static void logExceptionIntoCent(Throwable ex)
+	 {
+		 String statckTrace=getStackTrace(ex);
+		 logExceptionIntoCent(statckTrace);
+	 }
+	public static String getStackTrace(Throwable aThrowable) {
+	    final Writer result = new java.io.StringWriter();
+	    final PrintWriter printWriter = new PrintWriter(result);
+	    aThrowable.printStackTrace(printWriter);
+	    return result.toString();
 	}
    //end of jira 2422 changes
    public static void logExceptionIntoCent(String ExceptionMsg)
