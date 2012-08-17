@@ -463,13 +463,22 @@ public class XPEDXCatalogAction extends CatalogAction {
 			throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
 		
+		Set<String> keySet = valueMap.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		String searchStringValue = "";
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			if (key.contains("Terms/Term") && key.contains("Value"))
+				searchStringValue = searchStringValue + " " + valueMap.get(key);
+		}
+		
 		/*
 		 * Following line of code replaces the search term from leading astrix by blank
 		 * It also splits the search term by space and add as a must attribute in search
 		 * term
 		 * 
 		 */
-		String searchStringValue = valueMap.get("/SearchCatalogIndex/Terms/Term[" + 1 + "]/@Value");
+
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
 				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
