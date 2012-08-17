@@ -1217,6 +1217,8 @@ function showSharedListForm(){
 			            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
 			            document.getElementById("errorMsgBottom").style.display = "inline";
 			            uomCheck = true;
+			            Ext.Msg.hide();
+				    	myMask.hide();
 						}
 						errorflag= false; validAddtoCartItemsFlag[i]=false;
 						isAddToCart=false;
@@ -1237,6 +1239,8 @@ function showSharedListForm(){
 				            uomCheck = true;
 				            errorflag= false; validAddtoCartItemsFlag[i]=false;
 							isAddToCart=false;
+							Ext.Msg.hide();
+					    		myMask.hide();
 						}
 						else{
 							validAddtoCartItemsFlag[i]=true;
@@ -1399,6 +1403,8 @@ function showSharedListForm(){
 			            document.getElementById("errorMsgBottom").innerHTML = "An error has occured with one or more of your items. Please review the list and try again." ;
 			            document.getElementById("errorMsgBottom").style.display = "inline";
 			            uomCheck = true;
+			            Ext.Msg.hide();
+				    myMask.hide();
 						}
 						errorflag= false;
 					}
