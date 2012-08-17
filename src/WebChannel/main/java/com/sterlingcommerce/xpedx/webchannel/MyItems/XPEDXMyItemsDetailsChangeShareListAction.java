@@ -920,5 +920,14 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 
 	public void setClAjax(boolean clAjax) {
 		this.clAjax = clAjax;
+	}
+	public String getLoggedInUserName() {
+		return loggedInUserName;
+	}
+
+	public void setLoggedInUserName(String loggedInUserName) {
+		this.loggedInUserName = loggedInUserName;
 	}	
+	
+	
 }
