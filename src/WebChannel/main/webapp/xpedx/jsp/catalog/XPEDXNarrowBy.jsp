@@ -228,10 +228,15 @@ function showViewAllDialog(attr)
 	DialogPanel.show("viewAll" + attr.value );
     svg_classhandlers_decoratePage();
 }
+var myMask;
 function setDefaultSearchText()
 {
 	if( document.getElementById("search_searchTerm").value=="Search Within Results..."){
 		document.getElementById("search_searchTerm").value="";
 	}
+	//added for jira 3974
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
 }
 </script>
