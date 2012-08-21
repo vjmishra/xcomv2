@@ -652,7 +652,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
                     }					
 					listSizeMap.put(listKey, itemCount);
 					//modified for jira 4134
-					if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+					/*if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 						listModifiedByMap.put(listKey, modifyUserId);
 					}
 					else{
@@ -667,7 +667,8 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 									listModifiedByMap.put(listKey, modifyUsername);
 								}
 						}
-					}//end of jira 4134
+					}//end of jira 4134*/
+					listModifiedByMap.put(listKey, modifyUserId);
 				}
 			
 			
