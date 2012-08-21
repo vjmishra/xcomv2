@@ -456,9 +456,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				
 				//Remove the UOM code
 				try {
-					if(itemListEntitled.contains(tmpItemId)){
+					//if(itemListEntitled.contains(tmpItemId)){ // commented for Jira 4162
 						uomId = uomId.substring(2, uomId.trim().length());
-					}
+					//}
 				} catch (Exception e) {
 				}
 				
