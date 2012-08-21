@@ -287,45 +287,63 @@
 						<td> Web Confirmation: </td>
 
 						<td> <xsl:value-of select="Order/Extn/@ExtnWebConfNum"/>
-						 </td>
-						 <td rowspan="5">
-						 <xsl:if test="(contains($shipToID,$maxDelim))">					
-						
-								<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
-								</xsl:if>
-								<xsl:if test="$shipToName!=''">
-								<BR/>
-								<xsl:value-of select="$shipToName" />
-								</xsl:if>
-								<xsl:if test='Order/Extn/@ExtnAttentionName!=""'>
-								<BR/>
-								<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
-								</xsl:if>
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
-								<BR/>
-								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-								,
-								</xsl:if>
-						       </xsl:if>
-						       <xsl:if test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-						       <BR/>
-								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
-								<xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-								,
-								</xsl:if>
-						       </xsl:if>
-						      <xsl:if test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-						      <BR/>
-								<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
-								</xsl:if>
-								<xsl:if test = 'Order/PersonInfoShipTo/@City!="" or Order/PersonInfoShipTo/@State or Order/PersonInfoShipTo/@ZipCode or Order/PersonInfoShipTo/@Country' >
-					       <BR/>
-						    <xsl:value-of select="Order/PersonInfoShipTo/@City"/>, <xsl:value-of select="Order/PersonInfoShipTo/@State"/>,<xsl:value-of select="translate(Order/PersonInfoShipTo/@ZipCode, '&#x20;&#x9;&#xD;&#xA;','')"/>,<xsl:value-of select="Order/PersonInfoShipTo/@Country"/> 
-						    
-						</xsl:if>
-								
-											 </td>
+						</td>
+						<td rowspan="5">
+							<xsl:choose>
+							<xsl:when test="(contains($shipToID,$maxDelim))">
+							<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test="$shipToName!=''">
+							<xsl:value-of select="$shipToName" />
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test='Order/Extn/@ExtnAttentionName!=""'>
+							<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test = 'Order/PersonInfoShipTo/@City!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@State!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@State"/>&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@ZipCode!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@ZipCode"/>&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@Country!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
+							</xsl:if>								
+						</td>
 					</tr>
 					<tr>
 						<td> Order #: </td>
@@ -362,7 +380,7 @@
 					</tr><!-- End intentionally blank row. -->
 					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
 						Ship Order Complete
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 					    ,
@@ -514,10 +532,10 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
 						
-					<xsl:if test = 'Extn/@CustomerLinePONo!=""' >					
+					<xsl:if test = '@CustomerPONo!=""' >					
 					
-					<td class="right"> Line PO#:</td>
-					<td class="left"><xsl:value-of select="Extn/@CustomerLinePONo"/></td>
+					<td class="right"> Line PO#:&#160;</td>
+					<td class="left"><xsl:value-of select="@CustomerPONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -530,8 +548,8 @@
 				<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right" valign="top"> Cust Acct Line #:</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
+					<td class="right" valign="top"> Cust Acct Line #:&#160;</td>
+					<td class="left" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
