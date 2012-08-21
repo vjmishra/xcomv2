@@ -600,10 +600,10 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
 						
-					<xsl:if test = '@CustomerLinePONo!=""' >					
+					<xsl:if test = '@CustomerPONo!=""' >					
 					
 					<td class="right"> Line PO#:&#160;</td>
-					<td class="left"><xsl:value-of select="@CustomerLinePONo"/></td>
+					<td class="left"><xsl:value-of select="@CustomerPONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>

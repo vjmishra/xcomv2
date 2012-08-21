@@ -422,7 +422,7 @@
 					</tr><!-- End intentionally blank row. -->
 					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete!="N"' >	
+						<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
 						Ship Order Complete
 						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 					    ,
@@ -600,10 +600,10 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
 						
-					<xsl:if test = '@CustomerLinePONo!=""' >					
+					<xsl:if test = '@CustomerPONo!=""' >					
 					
 					<td class="right"> Line PO#:&#160;</td>
-					<td class="left"><xsl:value-of select="@CustomerLinePONo"/></td>
+					<td class="left"><xsl:value-of select="@CustomerPONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
