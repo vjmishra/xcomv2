@@ -1194,6 +1194,16 @@ public class XPEDXOrderUtils {
 		Document customerDetails = XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(), wcContext.getStorefrontId(),"xpedx-customer-getCustomerAndParentAddressInformation");
 		String billToCustomerID = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/ParentCustomer/@CustomerID");
 		String shipCompleteFlag = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/Extn/@ExtnShipComplete");
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if(shipToCustomer != null)
+		{
+			valueMap.put("/Order/Extn/@ExtnShipToName", shipToCustomer.getExtnCustomerName());
+			XPEDXShipToCustomer billToCustomer=shipToCustomer.getBillTo();
+			if(billToCustomer != null )
+			{
+				valueMap.put("/Order/Extn/@ExtnBillToName", billToCustomer.getExtnCustomerName());
+			}
+		}
 		if(billToCustomerID !=null && billToCustomerID.trim().length()>0) {
 			String billToKey;
 			//Document billToCustomerDetails = XPEDXWCUtils.getCustomerDetails(billToCustomerID, wcContext.getStorefrontId(), "xpedx-customer-getCustomerAddressInfo");
