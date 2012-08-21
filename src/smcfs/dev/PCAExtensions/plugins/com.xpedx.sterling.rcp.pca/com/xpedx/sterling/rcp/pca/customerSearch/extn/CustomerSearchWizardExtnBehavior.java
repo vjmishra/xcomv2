@@ -231,6 +231,9 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 		if (cxt.getApiName().equalsIgnoreCase("getCustomerList")) {
 			
 			String customerIdOrName=getFieldValue("extn_customerIdOrName");
+			String newTxtUserID = getFieldValue("txtUserID");
+			String newtxtEmailID = getFieldValue("txtEmailID");
+			String newtxtDayPhone = getFieldValue("txtDayPhone");
 			Element eleInput = cxt.getInputXml().getDocumentElement();
 			
 			//eleInput.setAttribute("CustomerID","");
@@ -238,6 +241,15 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 			//YRCXmlUtils.setAttributeValue(eleInput, "/Customer/Extn/@ExtnBrandCode", selectedBrandCode);
 			eleInput.removeAttribute("CustomerID");
 			eleInput.removeAttribute("ExtnBrandCode");
+			//Added for JIRA 4247
+			if(YRCPlatformUI.isVoid(customerIdOrName)){
+				NodeList buyerOrgElems = eleInput.getElementsByTagName("BuyerOrganization");
+				if(buyerOrgElems!=null && buyerOrgElems.getLength()>0)
+				{
+					Node buyerOrgElem = buyerOrgElems.item(0);
+					eleInput.removeChild(buyerOrgElem);
+				}
+			}
 			
 			//Get the binding value for ExtnCustomerDivision
 			String customerDivsionStr[]=null;
@@ -274,6 +286,22 @@ public class CustomerSearchWizardExtnBehavior extends YRCWizardExtensionBehavior
 										+ "' QryType='LIKE'/></Or></ComplexQuery></BuyerOrganization>")
 						.getDocumentElement();
 				YRCXmlUtils.importElement(eleInput, buyerOrgElement);
+			}
+			//Added for JIRA 4247
+			if (YRCPlatformUI.isVoid(newTxtUserID) ) {
+				Element CustomerElement = YRCXmlUtils.getXPathElement(eleInput, "/Customer/CustomerContactList/CustomerContact");
+				if(CustomerElement!=null)
+				{
+					CustomerElement.removeAttribute("UserID");
+				}
+			}
+			//Added for JIRA 4247
+			if (YRCPlatformUI.isVoid(newtxtDayPhone)) {
+				Element CustomerElement = YRCXmlUtils.getXPathElement(eleInput, "/Customer/CustomerContactList/CustomerContact");
+				if(CustomerElement!=null)
+				{
+					CustomerElement.removeAttribute("DayPhone");
+				}
 			}
 			cxt.setInputXml(eleInput.getOwnerDocument());
 		}
