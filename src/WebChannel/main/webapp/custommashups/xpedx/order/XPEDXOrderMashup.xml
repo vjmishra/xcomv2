@@ -2273,6 +2273,7 @@
 			<Template>
 				<Order OrderHeaderKey="" OrderName="" DraftOrderFlag="">
    					 <Extn ExtnOrderDesc="" ExtnLegacyOrderNo="" ExtnTotalOrderValue="" ExtnWebConfNum="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal=""/>
+    				 <PriceInfo Currency=""/>
     				 <OrderLines>
         				<OrderLine OrderLineKey="" OrderedQty="" LineType="" ValidateItem="">
         					<Item ItemID="" />
@@ -2949,6 +2950,7 @@
 					<PersonInfoSoldTo />
 					<PersonInfoShipTo />
 					<PersonInfoBillTo />					
+					<PriceInfo Currency="" />
 					<HeaderCharges>
 						<HeaderCharge ChargeName="" IsShippingCharge=""
 							IsDiscount="" ChargeAmount="" IsManual="">
