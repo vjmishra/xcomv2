@@ -351,6 +351,7 @@ function showSharedListForm(){
      var myMask;
      	function checkAvailability(itemId,myItemsKey) {
      		priceCheck = true;
+     		addToCartFlag = false;
      		//added for jira 3974
      		var waitMsg = Ext.Msg.wait("Processing...");
      		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -1333,7 +1334,7 @@ function showSharedListForm(){
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
 
-				if (priceCheck == true){
+				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined){
 					if(quantity == '0'|| quantity == '')
 					quantity = 1;
 				}
@@ -1731,6 +1732,7 @@ function showSharedListForm(){
 			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 			myMask.show();
 			priceCheck = true;
+			addToCartFlag = false;
 			var checkboxes = Ext.query('input[id*=checkItemKeys]');
 			var nLineSelected = 0;
 			
