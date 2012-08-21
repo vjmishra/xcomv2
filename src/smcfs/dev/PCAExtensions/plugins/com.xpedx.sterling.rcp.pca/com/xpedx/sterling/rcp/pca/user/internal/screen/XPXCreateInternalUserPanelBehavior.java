@@ -229,17 +229,12 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 			    		Element input = YRCXmlUtils.createDocument("User").getDocumentElement();
 						input.setAttribute("Loginid", inputElement.getAttribute("Loginid"));
 						getUserDetails(input);
-						Element userdetail = getModel("User_Details");
 						YRCPlatformUI.showInformation("Success","Success");
 						//Created to assign extn_user_type field as INTERNAL when the user is modified
 						inputElement.setAttribute("Usertype", XPXConstants.DEFAULT_CSR_USER_TYPE);
 						Element extnuser = YRCXmlUtils.getChildElement(inputElement,"Extn");
 						extnuser.setAttribute(XPXConstants.EXTN_USER_TYPE , XPXConstants.DEFAULT_CSR_USER_TYPE);
-						userKey = userdetail.getAttribute("UserKey");
-						loginID = userdetail.getAttribute("Loginid");
-						getSalesRepDetails();
 						
-
 						if("createUserHierarchy".equals(apiname))
 						{
 							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), false);
@@ -250,6 +245,12 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 		    		
 		    		XPXCreateUserEditor part = (XPXCreateUserEditor)YRCDesktopUI.getCurrentPart();
 		    		part.getTitleKey("TITLE_Modify_User", eleOutput.getAttribute("Username"));
+		    		Element userdetail = getModel("User_Details");
+		    		if(userdetail !=null && userdetail.getAttribute("UserKey")!=null){
+						userKey = userdetail.getAttribute("UserKey");
+						loginID = userdetail.getAttribute("Loginid");
+						getSalesRepDetails();
+					}
 		    						
 		    	} else if (apiname.equals("getUserGroupList")) {
 		    		Element checkElement = getModel("User_Details");
@@ -283,7 +284,6 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 				 else if("XPXGetSalesRepCustomersService".equals(apiname))
 		    		{
 		    			eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
-		    			setModel("getSalesRepDetails",eleOutput);
 		    			updateSalesRepDetails(eleOutput);
 		    		}
 				 else if("changeSalesRepDetails".equals(apiname))
@@ -351,18 +351,21 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
    public void getSalesRepDetails()
    {
 	   Element userDetails = getModel("User_Details");
-	   Element extnUser = YRCXmlUtils.getChildElement(userDetails, "Extn");
-	   employeeID = extnUser.getAttribute("ExtnEmployeeId");
-	   if (!YRCPlatformUI.isVoid(employeeID)) {
-			YRCApiContext apiCtx = new YRCApiContext();
-			String[] apinames = { "XPXGetSalesRepCustomersService" };
-			Document[] docInput = { YRCXmlUtils
-					.createFromString("<XPEDXSalesRep SalesRepId='" +employeeID+ "' />") };
-			apiCtx.setApiNames(apinames);
-			apiCtx.setInputXmls(docInput);
-			apiCtx.setFormId(getFormId());
-			callApi(apiCtx);
-		}
+	   if (userDetails != null) {
+			Element extnUser = YRCXmlUtils.getChildElement(userDetails, "Extn");
+			employeeID = extnUser.getAttribute("ExtnEmployeeId");
+			if (!YRCPlatformUI.isVoid(employeeID)) {
+				YRCApiContext apiCtx = new YRCApiContext();
+				String[] apinames = { "XPXGetSalesRepCustomersService" };
+				Document[] docInput = { YRCXmlUtils
+						.createFromString("<XPEDXSalesRep SalesRepId='"
+								+ employeeID + "' />") };
+				apiCtx.setApiNames(apinames);
+				apiCtx.setInputXmls(docInput);
+				apiCtx.setFormId(getFormId());
+				callApi(apiCtx);
+			}
+	   }
    }
    
    public void updateSalesRepDetails(Element salesRepDetails){
@@ -385,7 +388,6 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 		   if(count){
 			   Document doc = null;
 				for (int i = 0; i < salesRepKey.size(); i++) {
-					String temp = (String)salesRepKey.get(i);
 					doc = YRCXmlUtils.createFromString("<XPEDXSalesRep SalesRPKey='" + salesRepKey.get(i) + "'  SalesUserKey='" + userKey + "'  NetworkID='" + loginID + "'  />");
 					YRCApiContext apiCtx = new YRCApiContext();
 					apiCtx.setApiNames(new String[]{"changeSalesRepDetails"});
