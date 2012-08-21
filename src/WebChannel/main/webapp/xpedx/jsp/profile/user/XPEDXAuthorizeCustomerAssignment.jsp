@@ -25,8 +25,13 @@
   	}
     
   //Start - Modified the two methods for Jira 4146 
+  var myMask;
     function moveCustomersonAdd(fromLocation, toLocation )
 	{
+    	//added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 		var lboFrom = document.getElementById(fromLocation);
 		var lboTo = document.getElementById(toLocation);
 		var len = lboFrom.options.length;
@@ -71,19 +76,29 @@
 			},
 			success: function (response, request){
 			document.getElementById("customers2_div").innerHTML = response.responseText;
+			Ext.Msg.hide();
+			myMask.hide();
+			},
+			failure: function (response, request){
+				Ext.Msg.hide();
+				myMask.hide();
 			}
 	});
 	}
 		
     
     
-    
+    var myMask;
     function moveCustomersOnRemove(fromLocation, toLocation )
 	{
 		var lboFrom = document.getElementById(fromLocation);
 		var lboTo = document.getElementById(toLocation);
 		var len = lboFrom.options.length;
 		var custID;
+		//added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 		for ( var i=0; i < lboFrom.options.length; i++ )
 		{
 			if ((lboFrom.options[i].selected == true ) )
@@ -116,6 +131,12 @@
 			url: url,
 			success: function (response, request){
 			document.getElementById("customers1_div").innerHTML = response.responseText;
+			Ext.Msg.hide();
+			myMask.hide();
+			},
+			failure: function (response, request){
+				Ext.Msg.hide();
+				myMask.hide();
 			}
 	}); 
 	}

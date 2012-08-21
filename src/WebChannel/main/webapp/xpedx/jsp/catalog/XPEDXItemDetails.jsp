@@ -1787,6 +1787,8 @@ function SubmitActionWithValidation()
 				            myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
 				            myMessageDiv.style.display = "inline-block"; 
 				            myMessageDiv.setAttribute("class", "success");
+				            Ext.Msg.hide();
+				            myMask.hide();
 					  		/*Web Trends tag start*/ 
 					  		writeMetaTag("DCSext.w_x_list_additem","1");
 					  		/*Web Trends tag end*/
@@ -1802,6 +1804,8 @@ function SubmitActionWithValidation()
 		              		//End fix for 3104
 				            myMessageDiv.style.display = "inline-block"; 
 				            myMessageDiv.setAttribute("class", "notice");
+				            Ext.Msg.hide();
+				            myMask.hide();
 
 		          		}
 		       		});
@@ -1812,8 +1816,6 @@ function SubmitActionWithValidation()
 		        
 		        document.body.style.cursor = 'default';
 		        $.fancybox.close();
-		        Ext.Msg.hide();
-	            	myMask.hide();
 				}
 		    	else{
 		    		//alert('Please select a Wish List to add the item');

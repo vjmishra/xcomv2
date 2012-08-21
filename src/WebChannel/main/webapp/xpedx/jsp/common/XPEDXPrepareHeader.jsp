@@ -1306,7 +1306,12 @@ var selectedShipCustomer = null;
   	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
   	}
   }	
+	var myMask;
   function validateVal(e){
+	//added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 	    
 	 	var searchText = document.getElementById("newSearch_searchTerm").value;
 	 	
