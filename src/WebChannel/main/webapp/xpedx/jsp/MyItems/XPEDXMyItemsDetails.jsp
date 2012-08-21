@@ -1334,7 +1334,7 @@ function showSharedListForm(){
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
 
-				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined){
+				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined)){
 					if(quantity == '0'|| quantity == '')
 					quantity = 1;
 				}
