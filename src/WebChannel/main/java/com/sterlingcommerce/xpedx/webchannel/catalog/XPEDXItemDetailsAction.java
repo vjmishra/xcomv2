@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -732,7 +733,30 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			List<Element> listConv = SCXmlUtil.getChildrenList(alternateUomList);
 			if (listConv != null) {
 				//2964 start
-			Collections.sort(listConv,new XpedxSortUOMListByConvFactor());
+			Collections.sort(listConv,new Comparator<Element>() {
+				public int compare(Element elem, Element elem1) {		
+					double fromQuantity =0;
+					double fromQuantity1 = 0;SCXmlUtil.getString(elem);
+					if(!YFCUtils.isVoid(elem.getAttribute("Quantity"))){
+						 
+						fromQuantity = Double.valueOf(elem.getAttribute("Quantity"));	
+					}
+					
+					if(!YFCUtils.isVoid(elem1.getAttribute("Quantity"))){
+						 
+						fromQuantity1 = Double.valueOf(elem1.getAttribute("Quantity"));
+						
+					}
+					if(fromQuantity >fromQuantity1){
+						return 1;
+					}
+					else if(fromQuantity < fromQuantity1){
+						return -1;
+					}
+					else 
+						return 0;
+					}
+			});
 			
 			NodeList alternateUoms = alternateUomList.getChildNodes();
 			//int alternateUomLenght = alternateUoms.getLength();
