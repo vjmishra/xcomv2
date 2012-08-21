@@ -382,8 +382,13 @@
 
 
 	//Added for removing double quote from the search srting. Jira # 2415
+	var myMask;
 	 function validateDQuote(e){
 	   	  if (e.keyCode == 13) {  
+	   	  //added for jira 3974
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
 	   	 	var searchValue = document.getElementById("search_searchTerm").value;
 	   	 	while(searchValue.indexOf("\"")!= -1){
 	       	 	 searchValue = searchValue.replace("\"", "");    	  
