@@ -458,7 +458,7 @@
 											</td>
 						<xsl:choose><xsl:when test='@LineType!="M"'> 															
 							
-					<td class="right"> Ordered Qty:</td>
+					<td class="right"> Ordered Qty:&#160;</td>
 					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
 					<xsl:if test='$viewPricesFlag ="Y"'>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>/<xsl:value-of select="Extn/@ExtnPricingUOMDescription"/> 
@@ -489,7 +489,7 @@
 								
 						<xsl:if test = 'Extn/@ExtnReqShipOrdQty!=""' >	
 					
-					<td class="right"> Shippable Qty:</td>
+					<td class="right"> Shippable Qty:&#160;</td>
 					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
 					<td class="right"></td>
 					<td class="right"></td>
@@ -502,7 +502,7 @@
 					<xsl:if test = '@LineType!="M"' >					
 						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!=""' >	
 					
-					<td class="right"> Backorder Qty:</td>
+					<td class="right"> Backorder Qty:&#160;</td>
 					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
