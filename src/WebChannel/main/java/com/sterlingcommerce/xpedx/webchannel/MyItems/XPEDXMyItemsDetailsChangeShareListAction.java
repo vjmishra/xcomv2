@@ -10,14 +10,20 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts2.components.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCDate;
+import java.util.Set;
 
 
 @SuppressWarnings("serial")
@@ -201,13 +207,161 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		this.orderLineItemDesc = orderLineItemDesc;
 	}
 //End of Jira 3920
+	//Added for JIRA 4158
+	public  Map<String,String> getDivisionMap() 
+	{
+		Map<String,String> divisionMap = new HashMap<String,String>();
+		//Map which holds complete hierarchy in tree format starting from saps->billtos->shiptos
+		Map<String,Map<String,Map<String,String>>> sapIds = new HashMap<String,Map<String,Map<String,String>>>();
+		//getting customer hierarchy for MSAP customer
+		String AttributeToQry = "MSAPCustomerID";
+		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
+		String customerID=(String)wcContext.getSCUIContext()
+			.getSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_ID);
+		inputDoc.getDocumentElement().setAttribute(AttributeToQry, customerID);	
+		Object obj = WCMashupHelper.invokeMashup("xpedx-getAssignedShipTos-View", inputDoc.getDocumentElement(), wcContext.getSCUIContext());
+		Element outputElement = ((Element)obj);
+		NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
+		for(int j=0;j<customerHierView.getLength();j++) 
+		{
+			Element customerHierViewElem = (Element)customerHierView.item(j);
+			String extnShipFromBranch = customerHierViewElem.getAttribute("ExtnCustomerDivision");
+			String shipToCustomerID = customerHierViewElem.getAttribute("ShipToCustomerID");			
+			String billToCustomerID = customerHierViewElem.getAttribute("BillToCustomerID");
+			
+			String sapCustomerID = customerHierViewElem.getAttribute("SAPCustomerID");
+			Set<String> sapIdSet=sapIds.keySet() ;
+			//if already sap exist get the sap and add the bilto in it.
+			if(sapIdSet != null && sapIdSet.contains(sapCustomerID))
+			{
+				Map<String,Map<String,String>>  billTos =sapIds.get(sapCustomerID);
+				if(billTos != null)
+				{
+					Set<String> billToSet=billTos.keySet();
+					//check if billto alreaady exist get the shipt to and add the ship to in it
+					if(billToSet != null && billToSet.contains(billToCustomerID))
+					{
+						Map<String,String>  shipTos =billTos.get(billToCustomerID);
+						shipTos.put(shipToCustomerID, extnShipFromBranch);
+					}
+					else
+					{
+						//create new buillto object if not already
+						Map<String,String> shipTos = new HashMap<String,String>();
+						shipTos.put(shipToCustomerID, extnShipFromBranch);
+						billTos.put(billToCustomerID, shipTos);
+						sapIds.put(sapCustomerID, billTos);
+					}
+				}
+				else
+				{
+					// if there is no billto customer
+					billTos=new HashMap<String,Map<String,String>>();
+					Map<String,String> shipTos = new HashMap<String,String>();
+					shipTos.put(shipToCustomerID, extnShipFromBranch);
+					billTos.put(billToCustomerID, shipTos);
+					sapIds.put(sapCustomerID, billTos);
+				}
+					
+				
+			}
+			else
+			{
+				// if not already sap 
+				Map<String,Map<String,String>> billTos=new HashMap<String,Map<String,String>>();
+				Map<String,String> shipTos = new HashMap<String,String>();
+				shipTos.put(shipToCustomerID, extnShipFromBranch);
+				billTos.put(billToCustomerID, shipTos);
+				sapIds.put(sapCustomerID, billTos);
+			}
+		}
+		Set<String> msapSet=new HashSet<String>();
+		String msapCustomerId=(String)wcContext.getSCUIContext().getRequest().getSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_ID);
+		// validate the all ship to's  and add in map for all customers .
+		for(String sapId:sapIds.keySet())
+		{
+			Map<String,Map<String,String>> billtos=sapIds.get(sapId);
+			
+			Set<String> sapSet=new HashSet<String>();
+			for(String billTo :billtos.keySet())
+			{
+				
+				Map<String,String> shipTos=billtos.get(billTo);
+				Set<String> shipFromBranchs=new HashSet<String>(shipTos.values());
+				sapSet.addAll(shipFromBranchs);
+				
+					for(String shipTo:shipTos.keySet())
+					{
+						divisionMap.put(shipTo, shipTos.get(shipTo));
+					}
+					if(shipFromBranchs.size() >1)
+					{
+						divisionMap.put(billTo, "");
+					}
+					else if(shipFromBranchs.size() == 1)
+					{
+						for(String shipFromBranch :shipFromBranchs )
+						{
+							divisionMap.put(billTo, shipFromBranch);
+						}
+					}
+				
+			}
+			if(sapSet.size() ==1)
+			{
+				for(String shipFromBranch :sapSet )
+				{
+					divisionMap.put(sapId, shipFromBranch);
+				}
+			}
+			else
+			{
+				divisionMap.put(sapId, "");
+			}
+			msapSet.addAll(sapSet);
+		}
+		if(msapSet.size() ==1)
+		{
+			for(String shipFromBranch :msapSet )
+			{
+				divisionMap.put(msapCustomerId, shipFromBranch);
+			}
+		}
+		else
+		{
+			divisionMap.put(msapCustomerId, "");
+		}
+		return divisionMap;
+	}
 	
+	private Element createMyItemsList(String mashupName)
+		throws CannotBuildInputException, XMLExceptionWrapper
+	{
+		Set<String> mashupId=new HashSet<String>();
+		mashupId.add(mashupName);
+	    Map<String,Element> mashupInputs = prepareMashupInputs(mashupId);
+	    Element mashupInput=mashupInputs.get(mashupName);
+		if(getSharePermissionLevel() != null && getSharePermissionLevel().trim().length() >0)
+		{
+			Element milShareListElem=(Element)mashupInput.getElementsByTagName("XPEDXMyItemsListShareList").item(0);
+			if(milShareListElem == null)
+				milShareListElem=SCXmlUtil.createChild(mashupInput, "XPEDXMyItemsListShareList");
+			 Element milShareElem=SCXmlUtil.createChild(milShareListElem, "XPEDXMyItemsListShare");
+			    
+		    XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		    if(shipToCustomer != null)
+		    	milShareElem.setAttribute("DivisionID", shipToCustomer.getExtnShipFromBranch());
+		}
+		return invokeMashups(mashupInputs).get(mashupName);
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public String execute() {
 		try {
 			boolean itemsAdded = false;
 			Map<String, Element> out;
+			//added for Jira 4158
+			Map<String,String> divisionMap= getDivisionMap() ;
 			//added for jira 4221
 			loggedInUserID = wcContext.getLoggedInUserId();			
 			String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
@@ -237,9 +391,13 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				Element res1;
 				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
-					 res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateForSalesRep");
+					//Commented for Jira 4158
+					 //res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateForSalesRep");
+					res1=createMyItemsList("XPEDXMyItemsListCreateForSalesRep");
 				}else{
-					 res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
+				    //Commented for Jira 4158
+					 //res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreate");
+					res1=createMyItemsList("XPEDXMyItemsListCreate");
 				}				
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
 				if(LOG.isDebugEnabled()){
@@ -262,9 +420,11 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				//String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
 					salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
-					res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItemForSalesRep");
+					//res1=prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItemForSalesRep");
+					res1=createMyItemsList("XPEDXMyItemsListCreateAndAddItemForSalesRep");
 				}else{
-					res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
+					//res1 = prepareAndInvokeMashup("XPEDXMyItemsListCreateAndAddItem");
+					res1=createMyItemsList("XPEDXMyItemsListCreateAndAddItem");
 				}
 				//end of 4134
 				setListKey(res1.getAttribute("MyItemsListKey")) ;
@@ -331,15 +491,18 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			LOG.debug("Check 2: Deleting the old data");
 			}
 			if (!newList){
-				if(customerIds != null && customerIds.length>0)
-				{
-					setSharePrivate(" ");
-				}
-				else
+				if(getSharePermissionLevel() != null && getSharePermissionLevel().trim().length() >0)
 				{
 					setSharePrivate(getSharePermissionLevel());
+					result=createMyItemsList(MASHUPID_DELETE_SHARE_LIST_ITEMS);
+					customerIds=new String[0];
 				}
-				result = prepareAndInvokeMashup(MASHUPID_DELETE_SHARE_LIST_ITEMS);
+				else if(customerIds != null && customerIds.length>0)
+				{
+					setSharePrivate(" ");
+					result = prepareAndInvokeMashup(MASHUPID_DELETE_SHARE_LIST_ITEMS);
+				}
+				//result = prepareAndInvokeMashup(MASHUPID_DELETE_SHARE_LIST_ITEMS);
 				if(LOG.isDebugEnabled()){
 				LOG.debug("Check 2: Deleting the old data - Done");
 				}
@@ -420,7 +583,8 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				for (int i = 0; i < finalSSLNames.length; i++) {
 					setCustomerId(finalSSLNames[i]);
 					setCustomerPath(finalSSLValues[i]);
-					setCustomerDiv(finalSSLCDivs[i]);
+					//Added for Jira 4158
+					setCustomerDiv(divisionMap.get(finalSSLNames[i]));
 					
 					if (getCustomerId().trim().length()== 0){ continue; }
 					if(LOG.isDebugEnabled()){
