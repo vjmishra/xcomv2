@@ -127,7 +127,56 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			return inXML;
 		}
 	}
-	
+	/**
+	 * JIRA 4256 Start
+	 * @param env
+	 * @param orderElement
+	 * @return
+	 */
+	public String getViewPricesFlag(YFSEnvironment env,Element orderElement) {
+		//String customerContactId = orderElement.getAttribute("CustomerContactID");
+		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
+		String viewPriceFlag="";
+		String customerContactId=orderElement.getAttribute("CustomerContactID");
+		if(customerContactId!=null && customerContactId.trim().length()>0 && organizationCode!=null && organizationCode.trim().length()>0 ) {
+			//creating the document to get the customer contacts spending limit 
+			Document inputCustContactDoc = YFCDocument.createDocument("CustomerContact").getDocument();
+			Element inputCustContactElem = inputCustContactDoc.getDocumentElement();
+			inputCustContactElem.setAttribute("CustomerContactID", customerContactId);
+			inputCustContactElem.setAttribute("OrganizationCode", organizationCode);
+			//setting the Api template for the getCustomerContactList Api and invoking the api
+			Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact><Extn ExtnViewPricesFlag=''/></CustomerContact></CustomerContactList>");
+			env.setApiTemplate("getCustomerContactList",Template);
+			//invoking the api
+			Document outputDoc =null;
+			try {
+				outputDoc = api.invoke(env, "getCustomerContactList", inputCustContactDoc);
+				NodeList extnNodeList = outputDoc.getDocumentElement().getElementsByTagName("Extn");
+				if(extnNodeList!=null)
+				{
+					Element extnElem=(Element)outputDoc.getDocumentElement().getElementsByTagName("Extn").item(0);
+					if(extnElem!=null){
+						viewPriceFlag = extnElem.getAttribute("ExtnViewPricesFlag");
+					}
+				}
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			env.clearApiTemplate("getCustomerContactList");
+			
+		}
+		
+		return viewPriceFlag;
+	}
+	/**
+	 * JIRA 4256 End
+	 * @param env
+	 * @param orderElement
+	 * @param customerContactId
+	 * @return
+	 */
 	public Double getSpendingLimit(YFSEnvironment env,Element orderElement,String customerContactId) {
 		Double spendingLimit = new Double(-1);
 		//String customerContactId = orderElement.getAttribute("CustomerContactID");
@@ -238,6 +287,14 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		if(inXML!=null) {
 			
 			Element order = inXML.getDocumentElement();
+			/*JIRA 4256 Start
+			 * 
+			 */
+			String priceFlag = getViewPricesFlag(env,order);
+			order.setAttribute("viewPricesFlag",priceFlag);
+			/*
+			 * JIRA 4256 End
+			 */
 			XPXUtils utilObj = new XPXUtils();
 			inXML = utilObj.stampBrandLogo(env, inXML);
 			String customerContactOnOrder = SCXmlUtil.getAttribute(order, "CustomerContactID");
