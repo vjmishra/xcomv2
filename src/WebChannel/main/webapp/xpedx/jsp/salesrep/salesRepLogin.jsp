@@ -208,7 +208,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td width="66%">
-			<s:textfield id="DisplayUserID" name="DisplayUserID"  cssClass="x-input" tabindex="1"/>
+			<s:textfield id="DisplayUserID" name="DisplayUserID"  cssClass="x-input" tabindex="1" value=""/>
 		</td>	
 	</tr>
 	<tr>
