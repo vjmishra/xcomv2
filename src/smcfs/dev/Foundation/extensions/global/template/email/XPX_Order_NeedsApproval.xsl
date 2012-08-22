@@ -208,6 +208,10 @@
 			<xsl:value-of select="Order/Extn/@ExtnShipToName" />
 		</xsl:variable>
 		
+		<xsl:variable name="viewPricesFlag" >
+			<xsl:value-of select="Order/@viewPricesFlag" />
+		</xsl:variable>
+		
 		<xsl:variable name="urlPrefix" select="'https://www.'"/>	
 		<xsl:variable name="urlSuffix" select="'.com'"/>
 		
@@ -456,16 +460,20 @@
 							
 					<td class="right"> Ordered Qty:</td>
 					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+					<xsl:if test='$viewPricesFlag ="Y"'>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnUnitPrice"/>/<xsl:value-of select="Extn/@ExtnPricingUOMDescription"/> 
 					 </td>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
+					</xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
 					<td class="right"> </td>
 					<td class="left"></td>
 					<td class="right">
 					 </td>
+					 <xsl:if test='$viewPricesFlag ="Y"'>
 					<td class="right">$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></td>
+					</xsl:if>
 					
 					</xsl:otherwise>
 					</xsl:choose>
@@ -594,6 +602,7 @@
 					</tr>
 					<tr>
 					<td >
+					<xsl:if test='$viewPricesFlag ="Y"'>
 					<table class="order-total" align="right">
 						<tr>
 
@@ -653,6 +662,7 @@
 				 </tr>
 
 						</table>
+						</xsl:if>
 						<tr>
 					<td>
 					&#160;
