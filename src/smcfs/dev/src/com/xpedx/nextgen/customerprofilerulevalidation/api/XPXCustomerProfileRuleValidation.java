@@ -287,9 +287,9 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 				util.validateAcceptPriceOverRide(env,entry.getValue());
 				break;
 			/* Order Level */
-			case PreventAutoPlace:
+			/*case PreventAutoPlace:
 				util.validatePeventAutoPlace(env);
-				break;
+				break;*/
 			/* Order Level */
 			case HeaderCommentByCustomer:
 				util.validateHeaderCommentByCustomer(env);
@@ -302,9 +302,9 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 			case DuplicatePO:
 				util.validateDuplicatePO(env);
 				break;
-			case NonStandardShipMethod:
+			/*case NonStandardShipMethod:
 				util.validateNonStatndardShipMethod(env);
-				break;
+				break;*/
 			case CustomerSelectedShipComplete:
 				util.validateCustomerSelecteShipComplete(env);
 				lineRulesMap.put(entry.getKey(), entry.getValue());
