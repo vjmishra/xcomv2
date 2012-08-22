@@ -529,8 +529,8 @@
                         </xsl:if>
                         </xsl:attribute>
                         
-
-                        <xsl:if test="normalize-space(LineType) = 'M' or normalize-space(LineType) = 'C' or normalize-space(LineType) = 'T'  " >
+			<!-- Begin - Add a condition to ignore description update for Delete line for M & C type lines - Ramesh Iyer for JIRA 4254 -->  
+                        <xsl:if test="((normalize-space(LineType) = 'M' or normalize-space(LineType) = 'C' or normalize-space(LineType) = 'T') and (normalize-space(LineProcessCode) != 'D'))"  >
                         <xsl:attribute name="ItemDesc">
                            <xsl:value-of select="normalize-space(LineDescription)" />
                         </xsl:attribute>
@@ -541,6 +541,7 @@
                         </xsl:if>
                      </xsl:element>
                   </xsl:if>
+		  <!-- End - Ramesh Iyer for JIRA 4254-->  
 
 <!-- Item End -->
                   <xsl:if test="(((normalize-space(BaseUnitOfMeasure))!='') or ((normalize-space(UnitPrice))!=''))">
