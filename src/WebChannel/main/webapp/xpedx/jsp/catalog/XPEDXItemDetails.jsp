@@ -1375,7 +1375,8 @@ function SubmitActionWithValidation()
 	    	</s:iterator>
 		</s:if>
 		<s:if test='#itemID==null || #itemID==""' >
-		You are not entitled to view this item.
+		Item # <s:property value='%{#itemID}' /> is currently not valid. Please contact Customer Service.
+
 		</s:if>
 		</div>				
 					<br/>
