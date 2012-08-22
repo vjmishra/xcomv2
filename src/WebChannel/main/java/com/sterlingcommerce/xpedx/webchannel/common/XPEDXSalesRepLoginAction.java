@@ -20,6 +20,7 @@ import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.salesrep.XPEDXSalesRepUtils;
+import com.sun.faces.config.ConfigureListener.ServletContextAdapter;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 
 public class XPEDXSalesRepLoginAction extends WCAction implements ServletResponseAware {
@@ -97,7 +98,7 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 		LOG.debug(":: Entering execute of XPEDXSalesRepLoginAction :: ");
 		LOG.debug(":: Logged In User :: " + DisplayUserID);
 		Document doc=null;
-		String result = WCAction.SUCCESS;
+		String result = WCAction.ERROR;
 		LinkedHashMap<String, String> customersMapToSearch = new LinkedHashMap<String, String>();
 		setRequiredAttrbutes();
 		try {
@@ -145,7 +146,10 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 				parsePageInfo(doc.getDocumentElement(), true);
 				//end of changes for jira 3442
 			}
+			result =WCAction.SUCCESS;
 		} catch (Exception e) {
+			//added error message for jira 4198 - for LDAP password validation.
+			wcContext.getSCUIContext().getRequest().getSession().setAttribute("ERROR_MESSAGE", "Please enter a valid Username and Password.");
 			LOG.error("Error while retrieving the MSAP Customers for the Sales Rep: "+ e.getMessage(), e);
 			result = WCAction.ERROR;
 		}
@@ -255,7 +259,7 @@ public Document getPaginatedSalesRepCustomersDocument(IWCContext context) {
 		String customerContactId = context.getLoggedInUserId();
 		String pageNo = getPageNumber().toString();
 		String pageSize = getPageSize().toString();
-		Document outputElemDoc;
+		Document outputElemDoc = null;
 		Map<String,String> valueMap = new HashMap<String,String>();
 		valueMap.put("/Page/API/Input/XPXSalesRepCustomers/@UserID", customerContactId);
 		valueMap.put("/Page/@PageNumber",pageNo);
@@ -267,10 +271,14 @@ public Document getPaginatedSalesRepCustomersDocument(IWCContext context) {
 			input.setAttribute("PageSize", pageSize);
 			Element pageElement=(Element)input.getElementsByTagName("XPXSalesRepCustomers").item(0);
 			pageElement.setAttribute("UserID", customerContactId);
-
+			//added for jira 4198 - validation for invalid credentials for sales rep returns back to SalesPro login page
+			if(!(pageElement.getAttribute("UserID")).equalsIgnoreCase("guest_xpedx")){
+				
 			outputElem = (Element) WCMashupHelper.invokeMashup("XPXGetPaginatedSalesRepCustomersList",
 					input, context.getSCUIContext());
 			outputElemDoc = outputElem.getOwnerDocument();
+			
+			}//end of jira 4198
 		} catch (XMLExceptionWrapper e) {
 			LOG.error("Error getting the Customers Assigned to sales rep : "+e.getMessage());
 			return null;
