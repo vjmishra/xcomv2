@@ -1765,11 +1765,11 @@ function validateOrder()
 		if(divId != null)
 		{		
 			
-			divId.innerHTML="This account is no longer entitled to xpedx item # "+erroMsg+". Please delete it from your cart.";
+			divId.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
 		}
 		if(divId1 != null)
 		{
-			divId1.innerHTML="This account is no longer entitled to xpedx item # "+erroMsg+". Please delete it from your cart.";
+			divId1.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
 		}
 	}
 	
