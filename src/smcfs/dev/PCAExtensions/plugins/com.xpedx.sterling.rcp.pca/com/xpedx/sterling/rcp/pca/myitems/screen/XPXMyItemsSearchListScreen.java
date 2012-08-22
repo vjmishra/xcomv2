@@ -4,6 +4,8 @@ package com.xpedx.sterling.rcp.pca.myitems.screen;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -79,6 +81,9 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 	private Button radIsPersonal;
 	private Button radIsShared;
 	private int count=0;
+	private Combo comboOrderBy;
+	private Label lblOrderBy;
+	private Combo comboSortBy;
 	
 
 	public XPXMyItemsSearchListScreen(Composite parent, int style, Object inputObject) {
@@ -91,7 +96,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
         
                if (count == 0) {
 			count++;
-			myBehavior.callBothListService(count);
+		//	myBehavior.callBothListService(count);
 
 		}
        
@@ -300,10 +305,10 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		radIsBoth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				boolean isSelected = radIsBoth.getSelection();
-				System.out.println(isSelected);
+				/*System.out.println(isSelected);
 				if(isSelected == true){
 					myBehavior.callBothListService(count);
-				}
+				}*/
 			}
 			
 		});
@@ -316,9 +321,9 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 			public void widgetSelected(SelectionEvent e) {
 				boolean isSelected = radIsPersonal.getSelection();
 				System.out.println(isSelected);
-				if(isSelected == true){
+				/*if(isSelected == true){
 					myBehavior.selectCustomerContact();
-				}
+				}*/
 			}
 			
 		});
@@ -329,11 +334,11 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		radIsShared.setData("yrc:customType", "Label");
 		radIsShared.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				boolean isSelected = radIsShared.getSelection();
+			/*	boolean isSelected = radIsShared.getSelection();
 				System.out.println(isSelected);
 				if(isSelected == true){
 					myBehavior.CreateSharedList();
-				}
+				}*/
 			}
 		});
 		
@@ -365,6 +370,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		pnlButtonslayoutData.horizontalSpan = 2;
 		pnlButtons.setLayoutData(pnlButtonslayoutData);
 		pnlButtons.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "TaskComposite");
+		
 		GridLayout pnlButtonslayout = new GridLayout(6, false);
 		pnlButtonslayout.marginHeight = 2;
 		pnlButtonslayout.marginWidth = 0;
@@ -398,14 +404,34 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 				
 			}
 		});*/
-		btnCreate = new Button(pnlButtons, SWT.NONE);
+		
+		
+		lblOrderBy = new Label(pnlButtons, SWT.NONE);
+		lblOrderBy.setText("Sort By");
+		lblOrderBy.setData("name", "lblOrderBy");
+		
+		
+		comboOrderBy = new Combo(pnlButtons, SWT.NONE);
+		
+		comboSortBy = new Combo(pnlButtons, SWT.NONE);
+		
+		btnSearch = new Button(pnlButtons, SWT.NONE);
+		btnSearch.setText("Search");
+		btnSearch.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.getSelectedRadio();
+			//	tblSearchResults.setFocus();
+			}
+		});
+		
+		btnCreate = new Button(pnlButtons, SWT.RIGHT);
 		btnCreate.setText("Create_myitems");
 		btnCreate.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
 				myBehavior.create();
 			}
 		});
-		Button btnReplace = new Button(pnlButtons, SWT.NONE);
+		Button btnReplace = new Button(pnlButtons, SWT.RIGHT);
 		btnReplace.setText("Replacement_Tool");
 		btnReplace.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
@@ -413,24 +439,6 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 			}
 		});
 		
-		/*Button btnShiptoList = new Button(pnlButtons, SWT.NONE);
-		btnShiptoList.setText("Get Child Customers ");
-		btnShiptoList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
-				myBehavior.CreateSharedList();
-				
-			}
-		});
-		//Adding a button for getUserList
-		Button btnUserList = new Button(pnlButtons, SWT.NONE);
-		btnUserList.setText("Get Users List ");
-		btnUserList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
-				myBehavior.getCustomerKey();
-				
-			}
-		});
-	*/	
 	}
 	
 	private void createCmpstSearchResultsAndControls(){
@@ -620,6 +628,21 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		btnDivisionBindingDataB.setCheckedBinding("B");
 		radIsBoth.setData("YRCButtonBindingDefination",
 				btnDivisionBindingDataB);
+		
+		cbd = new YRCComboBindingData();
+        cbd.setCodeBinding("@OrderByValue");
+        cbd.setDescriptionBinding("@OrderByShortDescription");
+        cbd.setListBinding("OrderBy:/OrderBy");
+		cbd.setName("comboOrderBy");
+        comboOrderBy.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
+        
+        cbd = new YRCComboBindingData();
+        cbd.setCodeBinding("@SortByValue");
+        cbd.setDescriptionBinding("@SortByShortDescription");
+        cbd.setListBinding("SortBy:/SortBy");
+        cbd.setSourceBinding("SortByTarget:/SortByTarget/@SortByValue");
+		cbd.setName("comboSortBy");
+        comboSortBy.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
 	}
 	
 	private void setBindingMILList(){
@@ -640,7 +663,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		colBindings11[0].setAttributeBinding("@Name;@TotalItems");
 		colBindings11[0].setKey("My_Search_Item_List_Name_Key");
         colBindings11[0].setColumnBinding("List_Nm");
-        colBindings11[0].setSortReqd(true);
+        //colBindings11[0].setSortReqd(true);
         colBindings11[0].setSortBinding("@Name");
 		colBindings11[0].setLinkReqd(true);
 		colBindings11[0].setFilterReqd(true);
@@ -649,37 +672,37 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		colBindings11[1].setName("Description");
 		colBindings11[1].setAttributeBinding("@Desc");
 		colBindings11[1].setColumnBinding("Desc");
-        colBindings11[1].setSortReqd(true);
+        //colBindings11[1].setSortReqd(true);
         colBindings11[1].setSortBinding("@Desc");
 		colBindings11[1].setLinkReqd(true);
 		colBindings11[1].setFilterReqd(true);
 		
 		colBindings11[2] = new YRCTblClmBindingData();
 		colBindings11[2].setName("clmLastModUser");
-		colBindings11[2].setAttributeBinding("@Modifyuserid");
+		colBindings11[2].setAttributeBinding("@ModifyUserName");
         colBindings11[2].setColumnBinding("Last_Modified_User");
-        colBindings11[2].setSortReqd(true);
+        //colBindings11[2].setSortReqd(true);
         colBindings11[2].setFilterReqd(true);
         
         colBindings11[3] = new YRCTblClmBindingData();
 		colBindings11[3].setName("clmLastModDate");
 		colBindings11[3].setAttributeBinding("@Modifyts");
         colBindings11[3].setColumnBinding("Last_Modified_Date");
-        colBindings11[3].setSortReqd(true);
+       // colBindings11[3].setSortReqd(true);
         colBindings11[3].setFilterReqd(true);
 		
 		colBindings11[4] = new YRCTblClmBindingData();
 		colBindings11[4].setName("clmCreatedBy");
-		colBindings11[4].setAttributeBinding("@Createuserid");
+		colBindings11[4].setAttributeBinding("@Createusername");
         colBindings11[4].setColumnBinding("Created_By");
-        colBindings11[4].setSortReqd(true);
+      //  colBindings11[4].setSortReqd(true);
         colBindings11[4].setFilterReqd(true);
         
    		colBindings11[5] = new YRCTblClmBindingData();
 		colBindings11[5].setName("clmListType");
 		colBindings11[5].setAttributeBinding("@ListType");
         colBindings11[5].setColumnBinding("List_Type");
-        colBindings11[5].setSortReqd(true);
+        //colBindings11[5].setSortReqd(true);
         colBindings11[5].setFilterReqd(true);
         
         colBindings11[6] = new YRCTblClmBindingData();
@@ -755,6 +778,7 @@ public class XPXMyItemsSearchListScreen extends XPXPaginationComposite  implemen
 		tblResultsBinding1.setName("tblResultz");
         tblResultsBinding1.setTblClmBindings(colBindings11);
         tblResultsBinding1.setKeyNavigationRequired(true);
+        tblResultsBinding1.setDefaultSort(false);
         tblResultsBinding1.setLinkProvider( new IYRCTableLinkProvider(){
         	public String getLinkTheme(Object element, int columnIndex) {
         			return "TableLink";

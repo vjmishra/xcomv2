@@ -1,6 +1,7 @@
 package com.xpedx.sterling.rcp.pca.myitems.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 import javax.xml.xpath.XPathConstants;
 
@@ -69,6 +70,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 	public Document BothList;
 	public int count =1;
 	public static String TempPageNumber;
+	public static HashMap colName = new HashMap();
 	public XPXMyItemsSearchListScreenBehavior(Composite ownerComposite, String formId, Object inputObject) {
        super(ownerComposite, formId,inputObject);
         this.page = (XPXMyItemsSearchListScreen)getOwnerForm();
@@ -80,7 +82,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
         this.getXpxPaginationData().setPaginationStrategy(PAGINATION_STRATEGY_FOR_MIL_SEARCH);
         
 		
-		this.getXpxPaginationData().setSortColumn("Name");
+		
 		
 		YRCCommand command = YRCCommandRepository.getCommand((new StringBuilder()).append(getFormId()).append(COMMAND_GET_LIST_OF_MY_ITEMS_LISTS).toString());
 		this.getXpxPaginationData().setApiName(command.getCommandAPIName());//getXPEDX_MyItemsList_List_Hdr service
@@ -103,9 +105,59 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		apiCtx.setInputXmls(docInput);
 		apiCtx.setFormId(getFormId());*/
 		//callApi(apiCtx);
+		getOrderByCombo();
     }
-	
-	
+	//Added for JIRA 4082
+	public void getOrderByCombo(){
+			
+		
+		Element elemModel = YRCXmlUtils.createDocument("OrderBy").getDocumentElement();
+		
+		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "OrderBy");
+		attrElemComplex1.setAttribute("OrderByValue", "List Name");
+		attrElemComplex1.setAttribute("OrderByShortDescription", "List Name");
+
+		Element attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "OrderBy");;
+
+		attrElemComplex2.setAttribute("OrderByValue", "Description");
+		attrElemComplex2.setAttribute("OrderByShortDescription", "Description");
+
+		Element attrElemComplex3 = YRCXmlUtils.createChild(elemModel, "OrderBy");
+
+		attrElemComplex3.setAttribute("OrderByValue", "Last Modified By");
+		attrElemComplex3.setAttribute("OrderByShortDescription", "Last Modified By");
+		
+		Element attrElemComplex4 = YRCXmlUtils.createChild(elemModel, "OrderBy");
+		attrElemComplex4.setAttribute("OrderByValue", "Last Modified Date");
+		attrElemComplex4.setAttribute("OrderByShortDescription", "Last Modified Date");
+
+		Element attrElemComplex5 = YRCXmlUtils.createChild(elemModel, "OrderBy");;
+
+		attrElemComplex5.setAttribute("OrderByValue", "Created By");
+		attrElemComplex5.setAttribute("OrderByShortDescription", "Created By");
+
+		Element attrElemComplex6 = YRCXmlUtils.createChild(elemModel, "OrderBy");
+
+		attrElemComplex6.setAttribute("OrderByValue", "Type / Creator");
+		attrElemComplex6.setAttribute("OrderByShortDescription", "Type / Creator");
+							
+		setModel("OrderBy",elemModel);
+		
+		Element elem = YRCXmlUtils.createDocument("OrderBy").getDocumentElement();
+		
+		Element attrElemComplex7 = YRCXmlUtils.createChild(elem, "SortBy");
+		attrElemComplex7.setAttribute("SortByValue", "N");
+		attrElemComplex7.setAttribute("SortByShortDescription", "Ascending");
+
+		Element attrElemComplex8 = YRCXmlUtils.createChild(elem, "SortBy");;
+
+		attrElemComplex8.setAttribute("SortByValue", "Y");
+		attrElemComplex8.setAttribute("SortByShortDescription", "Descending");
+		
+		setModel("SortBy",elem);
+		getColumnName();
+		
+	}
 	@Override
 	public void handleApiCompletion(YRCApiContext ctx) {
 		
@@ -329,7 +381,8 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		Element eleInput = docInput.getDocumentElement();
 		eleInput.setAttribute("MyItemsListKey", element.getAttribute("MyItemsListKey"));
 		callApi(COMMAND_DELETE_MY_ITEMS_LIST, docInput);
-		getFirstPage();
+	//	getFirstPage();
+		getSelectedRadio();
 	}
 	
 	public void edit(Element element) throws PartInitException {
@@ -406,6 +459,44 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		
 	}
 
+	public void getSelectedRadio(){
+		String sharedSelect = getFieldValue("radIsShared");
+		String bothSelect = getFieldValue("radIsBoth");
+		String personalSelect = getFieldValue("radIsPersonal");
+	//	String colName = getFieldValue("comboOrderBy");
+		//Added for JIRA 4082
+		this.getXpxPaginationData().setSortColumn(colName.get(getFieldValue("comboOrderBy")).toString());
+		
+		this.getXpxPaginationData().setSortOrderDesc(getFieldValue("comboSortBy"));
+		BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
+		if(count==1){
+			bothSelect = "B";
+			
+			//BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
+			count++;
+		}
+		
+		//Condition for retrieving personal list
+		if("P".equalsIgnoreCase(personalSelect)){
+			selectCustomerContact()		;
+		       
+			}
+		//COndition for retrieving Both List
+			else if("B".equalsIgnoreCase(bothSelect)){
+				callBothListService(1);
+			}
+		
+		//Condition for retrieving shared list
+		else if("S".equalsIgnoreCase(sharedSelect)){
+		
+			CreateSharedList();	
+		}
+    	
+		
+	}
+	
+	
+	
 	public void callBothListService(int cnt) {
 		String customerKey = XPXUtils.getCustomerKey();
 		if(cnt ==1 || !YRCPlatformUI.isVoid(strRootCustomerKey)) {
@@ -433,4 +524,18 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		Element eleContactPersonInfo = output.getOutput();
 		callPersonalUserItemList(eleContactPersonInfo);
 	}
+	//Added for JIRA 4082
+	public HashMap getColumnName(){
+		
+		colName.put("List Name","Name");
+		colName.put("Description","Desc");
+		colName.put("Last Modified By","ModifyUserName");
+		colName.put("Last Modified Date","Modifyts");
+		colName.put("Created By","Createusername");
+		colName.put("Type / Creator","ListType");
+		
+		return colName;
+	}
+	
+	
 }
