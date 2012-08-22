@@ -48,6 +48,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.yantra.interop.japi.YIFClientCreationException;
+import com.yantra.util.YFCUtils;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSException;
 
