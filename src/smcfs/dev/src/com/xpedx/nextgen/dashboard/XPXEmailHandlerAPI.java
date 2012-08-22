@@ -258,6 +258,13 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			
 			String isSalesRepFlag = SCXmlUtil.getXpathAttribute(
 					getCustomerContactElement, "./Extn/@ExtnIsSalesRep");
+			
+			/*
+			 * Start Changes done for JIRA 4256
+			 */
+			String isPriceFlag = SCXmlUtil.getXpathAttribute(   
+					getCustomerContactElement, "./Extn/@ExtnViewPricesFlag");
+			
 			/*
 			 * JIRA 4093 Start -If sales rep flag is Y toemail will be yfs_person_info
 			 */
@@ -330,8 +337,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				}
 			}
 			*/
-			if(yfcLogCatalog.isDebugEnabled()){
-				yfcLogCatalog.debug("strToEmailid -------------------+"+strToEmailid);
+			if(isPriceFlag!=null && isPriceFlag.length() >0){
+			customerDoc.getDocumentElement().setAttribute("viewPricesFlag", isPriceFlag);
+			}else{
+				customerDoc.getDocumentElement().setAttribute("viewPricesFlag", "");
+				
 			}
 			customerDoc.getDocumentElement().setAttribute("strToEmailid",
 					strToEmailid);
