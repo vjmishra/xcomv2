@@ -1295,12 +1295,13 @@ var selectedShipCustomer = null;
 	// Added for removing the double quotes from an search term. Jira # 2415
 	var myMask;
     function validate(e){
-    	//added for jira 3974
+    	
+  	  if (e.keyCode == 13) {  
+  	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
+		//added for jira 3974
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();
-  	  if (e.keyCode == 13) {  
-  	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
   	  /*	while(searchRes.indexOf("\"")!= -1){
   	  	searchRes = searchRes.replace("\"", "");    	  
   	 	}*/
