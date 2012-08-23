@@ -555,13 +555,15 @@
 					<td class="right"> Shippable Qty:&#160;</td>
 					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
 					<td class="align-right">
-					<xsl:choose>
-					<xsl:when test='Extn/@ExtnUnitPrice =""'>
-					</xsl:when>
-					<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
-					</xsl:when>
-					<xsl:otherwise>per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/></xsl:otherwise>
-					</xsl:choose>
+					<xsl:if test='$viewPricesFlag ="Y"'>					
+						<xsl:choose>
+						<xsl:when test='Extn/@ExtnUnitPrice =""'>
+						</xsl:when>
+						<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
+						</xsl:when>
+						<xsl:otherwise>per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/></xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
 					</td>
 					<td class="right"></td>
 					    </xsl:if>
