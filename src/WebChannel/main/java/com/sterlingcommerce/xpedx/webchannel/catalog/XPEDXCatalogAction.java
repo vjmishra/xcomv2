@@ -639,7 +639,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		/****End of Code Changed for Promotions *******/
 
-
+		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
+			if (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) {
+				// for c1 categories-> show all the sub categories of C1 in the
+				// landing page
+				setCategoryDepth("1");// default value is 2; coming from struts
+				// file
+			}
+		}
 
 
 
@@ -662,7 +669,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 	/****Start of Code Changed for Promotions JIra 2599 *******/			
 			//code changed for performance
-			/*if(path.equals("/") && getFirstItem().trim()!=""){
+			if(path.equals("/") && getFirstItem().trim()!=""){
 				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
 				.getDocumentElement().getChildElement("ItemList")
 				.getFirstChild();
@@ -673,10 +680,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 						path = node.getFirstChild().getAttributes().get("CategoryPath");
 						categoryPath = path;
 					}
-				}*/
-				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
-				categoryPath = path;
-			//}
+				}
+				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				
+			}
 			
 	/****End of Code Changed for Promotions JIra 2599 *******/
 		
@@ -1112,7 +1119,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");       
-
+   
+		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
+			if (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) {
+				// for c1 categories-> show all the sub categories of C1 in the
+				// landing page
+				setCategoryDepth("1");// default value is 2; coming from struts
+				// file
+			}
+		}
 
 		/****End of Code Changed for Promotions JIra 2599 *******/
 		//Added for performance of filterAction
