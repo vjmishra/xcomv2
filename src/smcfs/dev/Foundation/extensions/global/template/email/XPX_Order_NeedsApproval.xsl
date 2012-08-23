@@ -59,8 +59,10 @@
 				font-size: 12px;
 			}
 			table {
-				border-collapse: collapse;
+				
+				
 				font-size: 12px;
+				border-collapse: collapse;
 			}
 			table.price {
 				border: 1px solid #ccc;
@@ -74,7 +76,9 @@
 				background-color: #003399;
 				color: white;
 				padding: 10px;
-				font-size: 11px;
+				font-size: 11px; 
+				margin:2px;
+
 			}
 			table.price tr.special-instructions td{
 				border-top: 1px solid #ccc;
@@ -101,7 +105,7 @@
 				padding-left: 20px;
 			}
 			div {
-				border: 1px solid #ccc;;
+				border: 1px solid #ccc;
 				padding: 5px;
 				border-radius: 5px;
 			}
@@ -188,7 +192,16 @@
 			tr.specialcharges td {
 				border-top: 1px solid #cccccc;
 			}
-					
+			.widthLeft {
+				width: 22%;
+			}
+			.widthRight {
+				width: 82%;
+			}
+			
+			
+			
+
 	    </STYLE>
 
 	</HEAD>
@@ -230,9 +243,9 @@
 	<xsl:template match="/">
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
-			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
+			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma" align="left" >
 			
-			<table width="60%" border="0" align="left" cellpadding="1" cellspacing="1" style="margin-left:5px">
+			<table  width="60%" border="0" halign="left" cellpadding="0" cellspacing="0" style="margin-left:5px">
 				<tr>	
 					<td >
 						<table width="100%" border="0" >
@@ -247,10 +260,17 @@
 					    
 					</td>
 				</tr>
+				<tr>
+					<td>
+					&#160;
+					</td>
+					</tr>
+					
+					
 				
-				<tr align="right">
-					<td style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
-					<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 0px 20px 20px;">
+			<tr align="right">
+					<td colspan="1" rowspan="1" style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
+					<table width="100%" border="0" cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-bottom:none;">
 					<tr>
 					
 					
@@ -265,117 +285,103 @@
 					</xsl:otherwise>
 					</xsl:choose> 
 					
-												</td>
-									</tr>
-						</table>	
-						<table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:0px 0px 0px 0px;">
-						<thead>
-					<tr>
-						
-						<th>  </th>
-						<th>  </th>
+					</td>
 					</tr>
-				</thead>
-						
-														
-						<thead>
+				</table>
+				<table width="100%"  cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-top:none;">
+					<thead>
 					<tr>
-						<th> Order Information: </th>
-
-						<th>  </th>
-						<th> Shipping Information: </th>
+						<th colspan="2"> Order Information: </th>
+						<th colspan="2"> Shipping Information: </th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td> Web Confirmation: </td>
-
-						<td> <xsl:value-of select="Order/Extn/@ExtnWebConfNum"/>
+						<td width="60%" colspan="2" style="vertical-align:top">	
+							<table>
+								<tr>
+									<td class="widthLeft">Web Confirmation: </td>
+									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnWebConfNum"/> </td>
+								</tr>
+								<tr>
+									<td class="widthLeft">Order #: </td>
+									<td class="widthRight">In Progress</td>
+								</tr>
+								<tr>
+									<td class="widthLeft">Order Status: </td>
+									<td class="widthRight"><xsl:value-of select="Order/@Status"/> </td>
+								</tr>
+								<tr>
+									<td class="widthLeft">PO #: </td>
+									<td class="widthRight"><xsl:value-of select="Order/@CustomerPONo"/> </td>
+								</tr>
+								<tr>
+									<td class="widthLeft">Ordered By: </td>
+									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/> </td>
+								</tr>	
+						 	</table>
+						 	
+						</td>	
+						
+						<td width="40%" colspan="2" style="vertical-align:top">
+					
+						<xsl:choose>
+						<xsl:when test="(contains($shipToID,$maxDelim))">
+						<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test="$shipToName!=''">
+						<xsl:value-of select="$shipToName" />
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test='Order/Extn/@ExtnAttentionName!=""'>
+						<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test = 'Order/PersonInfoShipTo/@City!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoShipTo/@State!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@State"/>&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoShipTo/@ZipCode!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@ZipCode"/>&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoShipTo/@Country!=""' >
+						<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
+						</xsl:if>
+					
 						</td>
-						<td rowspan="5">
-							<xsl:choose>
-							<xsl:when test="(contains($shipToID,$maxDelim))">
-							<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:choose>
-							<xsl:when test="$shipToName!=''">
-							<xsl:value-of select="$shipToName" />
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:choose>
-							<xsl:when test='Order/Extn/@ExtnAttentionName!=""'>
-							<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:choose>
-							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:choose>
-							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:choose>
-							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
-							<BR/>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-							</xsl:choose>
-							<xsl:if test = 'Order/PersonInfoShipTo/@City!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,&#160;
-							</xsl:if>
-							<xsl:if test = 'Order/PersonInfoShipTo/@State!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@State"/>&#160;
-							</xsl:if>
-							<xsl:if test = 'Order/PersonInfoShipTo/@ZipCode!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@ZipCode"/>&#160;
-							</xsl:if>
-							<xsl:if test = 'Order/PersonInfoShipTo/@Country!=""' >
-							<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
-							</xsl:if>								
-						</td>
-					</tr>
-					<tr>
-						<td> Order #: </td>
-
-						<td> In Progress </td>
-						
-						<!-- /if                          
-							 else if (address line 3 is not null)                          
-								<td> &lt;address line 3&gt; </td>
-						     /else                          -->
-					</tr>					
-					<tr>
-						<td> Order Status: </td>
-
-						<td> <xsl:value-of select="Order/@Status"/> </td>
-						
-					</tr>
-					<tr>
-
-						<td> PO #: </td>
-						<td> <xsl:value-of select="Order/@CustomerPONo"/> </td>
-						
-					</tr>
-					<tr>
-						<td> Ordered By: </td>
-						 <td><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/></td>
-						 
-					</tr>	
+					</tr>						
 					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
 						<td></td>
 						<td></td>
@@ -565,25 +571,26 @@
 				</tr>
 
 				<tr>
-				<xsl:if test = 'Item/@ItemID!=""' >					
+				<xsl:if test = 'Item/@ItemID!=""' >
 				
-					<td><span class="itemno">xpedx item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
+					<td><span class="itemno">xpedx item #: <xsl:value-of select="Item/@ItemID"/></span> </td>
 					</xsl:if>
 					<xsl:if test = '@LineType!="M"' >					
 						
 					<xsl:if test = 'Item/@ManufacturerItem!=""' >					
 				
-					<td class="right"> Mfg. Item #:</td>
+					<td class="right"> Mfg. Item #:&#160;</td>
 					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
 					</xsl:if>
 					<xsl:if test = 'Item/@CustomerItem!=""' >					
 				
-					<td class="right">My Item #:</td>
+					<td class="right">My Item #:&#160;</td>
 					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
                     </xsl:if>
                     </xsl:if>
 				</tr>
 				<!-- if (specialInstructions is not null) -->
+				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
 				<tr class="special-instructions"> 
 					<td colspan="5"> 
 						<table class="inner">
@@ -595,6 +602,7 @@
 						</table>
 					 </td>
 				</tr>
+				</xsl:if>
 							</tbody>
 			</xsl:for-each>
 			</table>

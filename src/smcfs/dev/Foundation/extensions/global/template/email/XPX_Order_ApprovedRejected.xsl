@@ -643,12 +643,12 @@
 						
 					<xsl:if test = 'Item/@ManufacturerItem!=""' >					
 				
-					<td class="right"> Mfg. Item #:</td>
+					<td class="right"> Mfg. Item #:&#160;</td>
 					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
 					</xsl:if>
 					<xsl:if test = 'Item/@CustomerItem!=""' >					
 				
-					<td class="right">My Item #:</td>
+					<td class="right">My Item #:&#160;</td>
 					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
                     </xsl:if>
                     </xsl:if>
