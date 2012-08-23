@@ -204,8 +204,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 	private void setStockedItemFromSession() {
 		if(getWCContext().getWCAttribute("StockedCheckbox",WCAttributeScope.SESSION)!=null) {
-			if(getWCContext().getWCAttribute("StockedCheckbox",WCAttributeScope.SESSION).toString().equalsIgnoreCase("true"))
+			if(getWCContext().getWCAttribute("StockedCheckbox",WCAttributeScope.SESSION).toString().equalsIgnoreCase("true")){
 				isStockedItem=true;
+			}
+			else{
+				isStockedItem=false;
+			}
 		}
 	}
 
@@ -252,7 +256,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{					  
-			String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11";
+			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
+			String appendStr="&searchTerm="+searchTerm;
 			XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
 			if(searchTerm.trim().length() == 1 && (searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0)) {
 				searchTerm = "";
@@ -490,12 +495,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
-			for (String searchStringToken : searchStringTokenList) {
-				if(!"".equals(searchStringToken.trim())) {
-					valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
-				valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
-				i++;
-				}			
+			if(searchStringTokenList.length >1)
+			{
+				for (String searchStringToken : searchStringTokenList) {
+					if(!"".equals(searchStringToken.trim())) {
+						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
+					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "SHOULD");
+					i++;
+					}			
+				}
+			}
+			else
+			{
+				for (String searchStringToken : searchStringTokenList) {
+					if(!"".equals(searchStringToken.trim())) {
+						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
+					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
+					i++;
+					}			
+				}
 			}
 		}					
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
