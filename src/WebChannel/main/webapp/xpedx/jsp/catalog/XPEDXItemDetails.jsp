@@ -1375,7 +1375,7 @@ function SubmitActionWithValidation()
 	    	</s:iterator>
 		</s:if>
 		<s:if test='#itemID==null || #itemID==""' >
-		Item # <s:property value='%{#itemID}' /> is currently not valid. Please contact Customer Service.
+		Item # <s:property value='%{itemID}' /> is currently not valid. Please contact Customer Service.
 
 		</s:if>
 		</div>				
