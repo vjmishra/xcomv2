@@ -488,30 +488,37 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 			protected String getModifiedValue(String property, String value, Element element) {
 				if("@Qty".equals(property)){
-					String oldValue = "0.00";
+					String oldValue;
 					if(element.hasAttribute(QTY_OLD_VALUE)){
 						oldValue = element.getAttribute(QTY_OLD_VALUE);
+						if(value.equalsIgnoreCase("0.0")){
+							value = "";
+						}
+							
 					}
 					else {
 						oldValue = element.getAttribute(QTY);
 						if ("".equalsIgnoreCase(element.getAttribute(QTY))
 								|| "null".equalsIgnoreCase(element
 										.getAttribute(QTY))) {
-							oldValue = "0.00";
 							element.setAttribute(QTY_OLD_VALUE, oldValue);
 							element.setAttribute(QTY, value);
 						} else {
 							element.setAttribute(QTY_OLD_VALUE, oldValue);
+							if(value.equalsIgnoreCase("0.0")){
+								value = "";
+							}
 						}
 					}
 					
 					try {
-						if(!YRCPlatformUI.equals(Double.valueOf(value),Double.valueOf(oldValue))){
-							element.setAttribute(IS_MODIFIED, "Y");
-						} else {
-							if(element.hasAttribute(IS_MODIFIED)){
-								element.removeAttribute(IS_MODIFIED);
-							}
+							if (!YRCPlatformUI.equals(value,
+									oldValue)) {
+								element.setAttribute(IS_MODIFIED, "Y");
+							} else {
+								if (element.hasAttribute(IS_MODIFIED)) {
+									element.removeAttribute(IS_MODIFIED);
+								}
 						}
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
