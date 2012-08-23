@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.dashboard;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 /**
  * Description: Updates/Creates/Deletes an order in Sterling based on the Order
@@ -1390,8 +1392,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (isChngOrdReq) {
 			setInstructionKeys(chngfOrderEle, fOrderEle);			
 			filterAttributes(chngfOrderEle, false);
+			
+			/* Multiple Change Orders Will Be Called When Line Process Code Has A And D As The Product Couldn't Chain The New Lines Between CO And FO. 
+			 * Below Method Can Be Removed When IBM Engineering Team Provides A Solution. */
+			
+			splitChangeOrdersForLPCAandD(env, chngfOrderEle);
+			
 			if(log.isDebugEnabled()){
-			log.debug("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
+				log.debug("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
 			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngfOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
@@ -5910,6 +5918,78 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		fOrdExtnElem.setAttribute("ExtnLineOrderedTotal", "0.0");
 		fOrdExtnElem.setAttribute("ExtnLineShippableTotal", "0.0");
 		fOrdExtnElem.setAttribute("ExtnExtendedPrice", "0.0");
+	}
+	
+	private void splitChangeOrdersForLPCAandD(YFSEnvironment env, YFCElement chngfOrderEle1) throws YFSException, RemoteException {
+		
+		boolean hasLineA = false;
+		boolean hasLineD = false;
+		// Check Whether The Request From Max Came With Line Process Code A And D.
+		YFCElement orderLinesElem1 = chngfOrderEle1.getChildElement("OrderLines");
+		if (orderLinesElem1 != null) {
+			YFCIterable<YFCElement> orderLineItr = orderLinesElem1.getChildren("OrderLine");
+			while (orderLineItr.hasNext()) {
+				YFCElement orderLineElem1 = orderLineItr.next();
+				if (orderLineElem1.hasAttribute("LineProcessCode")) {
+					String lineProcessCode = orderLineElem1.getAttribute("LineProcessCode");
+					if (!YFCObject.isNull(lineProcessCode) && lineProcessCode.equalsIgnoreCase("A")) {
+						hasLineA = true;
+					} else if (!YFCObject.isNull(lineProcessCode) && lineProcessCode.equalsIgnoreCase("D")) {
+						hasLineD = true;
+					} else {
+						// Do Nothing.
+					}
+				}
+				
+				if (hasLineA && hasLineD) {
+					break;
+				}
+			}
+			
+			if (hasLineA && hasLineD) {
+				
+				if (log.isDebugEnabled()) {
+					log.debug("Order Has Order Lines Of Line Process Code A And D.");
+				}
+				
+				// To Form Second Change Order InXML.
+				Document fOrderInXML2 = YFCDocument.createDocument().getDocument();
+				fOrderInXML2.appendChild(fOrderInXML2.importNode(chngfOrderEle1.getDOMNode(), true));
+				fOrderInXML2.renameNode(fOrderInXML2.getDocumentElement(), fOrderInXML2.getNamespaceURI(), "Order");
+				YFCElement fOrderInXMLEle2 = YFCDocument.getDocumentFor(fOrderInXML2).getDocumentElement();
+				
+				// To Remove Existing Order Lines In The Order.
+				YFCElement remEle2 = fOrderInXMLEle2.getChildElement("OrderLines");
+				if (remEle2 != null) {
+					fOrderInXMLEle2.removeChild(remEle2);
+				}
+
+				YFCElement orderLinesElem2 = fOrderInXMLEle2.createChild("OrderLines");
+				
+				YFCElement orderLinesElem1_ = chngfOrderEle1.getChildElement("OrderLines");
+				YFCIterable<YFCElement> orderLineItr_ = orderLinesElem1_.getChildren("OrderLine");
+				while (orderLineItr_.hasNext()) {
+					YFCElement orderLineElem1_ = orderLineItr_.next();
+					if (orderLineElem1_.hasAttribute("LineProcessCode")) {
+						String lineProcessCode_ = orderLineElem1_.getAttribute("LineProcessCode");
+						if (!YFCObject.isNull(lineProcessCode_) && lineProcessCode_.equalsIgnoreCase("D")) {
+							// Importing The Line To A New Order.
+							YFCElement delOrderLine = orderLinesElem2.getOwnerDocument().importNode(orderLineElem1_, true);
+							orderLinesElem2.appendChild(delOrderLine);
+							// Removing The Line From The Existing Document.
+							orderLinesElem1_.removeChild(orderLineElem1_);
+						} 
+					}
+				}
+				
+				if (log.isDebugEnabled()) {
+					log.debug("XPXChangeOrder_FO-InXML2:" + fOrderInXMLEle2.getString());
+				}
+				
+				// Call Change Order API To Cancel The Order Lines.
+				Document changeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", fOrderInXML2);	
+			}	
+		}
 	}
 
 	public void setProperties(Properties _prop) throws Exception {
