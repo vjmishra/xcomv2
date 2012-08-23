@@ -486,7 +486,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
-				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*//
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
 			if(searchStringValue.contains("\"")){
 				searchStringValue= searchStringValue.replaceAll("\"", "\\\\u0022");
 			}
