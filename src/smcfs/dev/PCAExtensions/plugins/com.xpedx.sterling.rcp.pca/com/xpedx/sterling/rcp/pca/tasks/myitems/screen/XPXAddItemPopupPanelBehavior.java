@@ -229,7 +229,7 @@ public class XPXAddItemPopupPanelBehavior extends YRCBehavior {
 		}
 		if(YRCPlatformUI.isVoid(getFieldValue("txtQuantity")))
 		{
-			eleMyItemsList.setAttribute("Qty","0.00");
+			eleMyItemsList.setAttribute("Qty","");
 		}
 		else
 		{
