@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.common.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -94,6 +95,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
 		  first execute service written for this populating rule id in XPX_RULE_DEFN table
 		 */
          String ruleID = customerElement.getAttribute("RuleID");
+         log.info("Rule ID "+ruleID);
  	     String workSheetName = customerElement.getAttribute("WorkSheetName");
  	     String suffixType = customerElement.getAttribute("suffixType"); 
       	 String orgnizationCode = "xpedx";
@@ -110,20 +112,21 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
             //Excel file has been stored in same package where java file exist as this is one time process
             //will not be called any time in future
             //TODO: Will Change location of file on basis on review comments. 
-         
+            
             InputStream in = XPXWebHoldFlagUpdate.class.getResourceAsStream(fileName);//new FileInputStream(fileName);
+            log.info("File Stream"+in.toString());
             try {
                 workbook = WorkbookFactory.create(in);
                 sheet = (HSSFSheet) workbook.getSheet(workSheetName);
                 int noOfRows = ((org.apache.poi.ss.usermodel.Sheet) sheet).getPhysicalNumberOfRows();
-
+                log.info("Number of excel rows are "+noOfRows);
                 /**
                  * Direct SQl query is used to make batch execution faster and as this is one time process so used direct SQl query   
                  */
                 connection = getDBConnection(env);
 	   	        String ruleQuery = "select rule_key from XPX_RULE_DEFN where rule_id = "+ "'" + ruleID + "'";
 	   	        ruleKey = returnQueryValue(ruleQuery,connection);
-	   	        
+	   	        log.info("Rule Key "+ruleKey);
                 String customerId = null;
                 String webHoldFlag  = null;
 
@@ -178,6 +181,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
                  }else{
                 	 customerIdCreation.append(shipTo);
                  }
+                 log.info("Customer ID "+customerIdCreation.toString());
     	         String customerKey = "	select * from yfs_customer where customer_id ="+ "'" + customerIdCreation.toString() + "'";
     	         customerRuleKey = returnQueryValue(customerKey,connection); 
     	         
@@ -210,9 +214,9 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
     	        }  
                     
                 }
-                
+                if(connection != null){
                 connection.close();
-
+                }
  
             } catch (InvalidFormatException e) {
             	e.printStackTrace();
@@ -292,7 +296,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
 			while (resultset.next()) {
 				return resultset.getString(1);
 			}
-			connection.commit();
+			//connection.commit();
 			resultset.close();
 			stmt.close();
 		} catch (Exception exception) {
