@@ -644,7 +644,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 	/****Start of Code Changed for Promotions JIra 2599 *******/			
 			//code changed for performance
-			if(path.equals("/") && getFirstItem().trim()!=""){
+			/*if(path.equals("/") && getFirstItem().trim()!=""){
 				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
 				.getDocumentElement().getChildElement("ItemList")
 				.getFirstChild();
@@ -655,9 +655,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 						path = node.getFirstChild().getAttributes().get("CategoryPath");
 						categoryPath = path;
 					}
-				}
-				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
-			}
+				}*/
+				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				categoryPath = path;
+			//}
 			
 	/****End of Code Changed for Promotions JIra 2599 *******/
 		
@@ -1087,17 +1088,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		
 				/***** Start of  Code changed for Promotions Jira 2599 ********/ 
-		/*List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
-		path = params.get("path");    */   
+		path = params.get("path");       
 
 
 		/****End of Code Changed for Promotions JIra 2599 *******/
 		//Added for performance of filterAction
-		Document catDoc = getOutDoc();
+		/*Document catDoc = getOutDoc();
 		if(catDoc!=null){
 			NodeList itemList = catDoc.getElementsByTagName("ItemList"); 
 			if(itemList != null) {
@@ -1107,7 +1108,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 					path=SCXmlUtil.getXpathAttribute(_categoryElem, "//ItemList/Item/CategoryList/Category/@CategoryPath");
 				}
 			}
-		}
+		}*/
 		// end of performance filterAction
 		
 
