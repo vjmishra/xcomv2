@@ -150,6 +150,10 @@ public class XPEDXConstants {
  		  System.out.print ("\n"+msg);
     }
     
+    // Added for JIRA 3895
+    public static final String TAIL_END = "...";
+    public static final String EMPTY_STRING = "";
+    
 	static{
 		
 		MASTER_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.master.customer.suffix");
