@@ -163,7 +163,9 @@ $(document).ready(function(){
         $(this).shorten({noblock: true, width:($(this).width() - 15)});
 	});  */
 	
-	
+	/*
+	Code block commented for JIRA - 3895. Truncation is handled in java(XPEDXOrderUtils.getFormattedShortDescription()). 
+	Tool tip is applied during the page rendering itself.
 	$('.short-description').each(function() {
 		var html = $(this).html();
 		var shortHTML = html.substring(0, 70);
@@ -174,13 +176,17 @@ $(document).ready(function(){
 			$(this).attr('title', html );
 		}
 	});
+	*/
 	
 	//We are displaying long description by reducing the size of the container, 
 	//It is different from other pages. This is to acoomidate spaces and capitals, special chars.
 	
+	/*
+	Code block commented for JIRA - 3895. Truncation and tool tip is handled in java(XPEDXOrderUtils.getFormattedLongDescription()).
 	$('.pin-height  ul li').each(function(){
         $(this).shorten({noblock: true, width:($(this).width() - 21)});
 	}); 
+	*/
 	
    	theParentConfNum = urlParams["parentOrderKey"];
 	theWebConfNum = urlParams["theWebConfNumber"];
@@ -836,18 +842,23 @@ function showSplitDiv(divId)
 			                    <s:param name='unitOfMeasure'><s:property value='#item.getAttribute("UnitOfMeasure")'/></s:param>
 			                    <s:param name='_r_url_' value='%{orderDetailsURL}'/>
 			                </s:url>
+			                
+			                 <!--
+			                Updated for JIRA - 3895 to handle truncation in java rather than in javascript
+			                Author - Muthukumar SM
+			                -->
 					    <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 			                <s:a href="%{#detailURL}" id="detailAnchor_%{#orderLineKey}" tabindex='%{#itemPanelStartTabIndex+#tabIndexCount}'>
-						    	<div class="short-description"><s:property value='#showDesc'/></div>
+						    	<div class="short-description" title="<s:property value='#showDesc'/>"><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
 								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedDescription(#unformatteddesc)' escape="false"/>
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc, #showDesc)' escape="false"/>
 								</s:if>
 						    </s:a>
 						    </s:if>
 						    <s:else>
-						    	<div class="short-description_M"><s:property value='#showDesc'/></div>
+						    	<div class="short-description_M" title="<s:property value='#showDesc'/>"><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
 								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedDescription(#unformatteddesc)' escape="false"/>
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc, #showDesc)' escape="false"/>
 								</s:if>
 						    </s:else>
 			    		</div>

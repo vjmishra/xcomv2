@@ -1721,6 +1721,116 @@ public class XPEDXOrderUtils {
 		}
 	}
 	
+	/**
+	 * This method truncates the ShortDescription 70 characters.
+	 * JIRA - 3895
+	 * @param shortDesc - Description that should be truncated
+	 * @return short Desc - Truncated short description
+	 */
+	public static String getFormattedShortDescription(String shortDesc){
+		int textLength = 70;
+		
+		
+		//Handle null values
+		if(shortDesc == null){
+			return XPEDXConstants.EMPTY_STRING;
+		}
+		
+		if(log != null && log.isDebugEnabled()){
+			log.debug("Unformatted Short Description"+shortDesc);
+		}
+		//Truncate the Short Description to 70 characters
+		if(shortDesc.length() > textLength){
+			shortDesc = shortDesc.substring(0, textLength);
+			shortDesc = shortDesc+XPEDXConstants.TAIL_END;
+		}
+		
+		if(log != null && log.isDebugEnabled()){
+			log.debug("Formatted Short Description"+shortDesc);
+		}
+		
+		return shortDesc;
+	}
+	
+	/**
+	 * This method truncates the Long Description in the WebConfirmation Detail page to 80% length of Short Description. 
+	 * It also applies tool tip to display the full text and restricts the number of bullets to 5.
+	 * JIRA - 3895
+	 * @param longDesc - Description to be truncated
+	 * @param shortDesc - Description whose length should be used to arrive at 80th percentile in space
+	 * @return longDesc - Truncated Long Description with tool tip
+	 */
+	public static String getFormattedLongDescription(String longDesc, String shortDesc){
+		String startLineIndicator = "<ul>";
+		String endLineIndicator = "</ul>";
+		String startRowIndicator = "<li>";
+		String startRowIndicatorToolTip = "<li title=\"#\">";
+		String endRowIndicator = "</li>";
+		String strTrunc = "";
+		int rowCounter = 0;
+		int maxBulletCounter = 5;
+		int shortDescContainerLength = 54;
+		
+		//Handle null values
+		if(longDesc == null){
+			return XPEDXConstants.EMPTY_STRING;
+		}
+		
+		if(shortDesc == null){
+			shortDesc = "";
+		}
+		
+		StringBuffer strformattedDescription = new StringBuffer(startLineIndicator);
+		int shortDescLength = shortDesc.length();
+		if(shortDescLength > shortDescContainerLength){
+			shortDescLength = shortDescContainerLength;
+		}
+		
+		int textLength = shortDescLength*4/5;
+		
+		//Split the Long Description based on <li> delimiter
+		String[] strArrDesc = longDesc.split(startRowIndicator);
+		
+		if(strArrDesc == null){
+			return longDesc;
+		}
+		
+		for(int index=0;index<strArrDesc.length;index++){
+			String strTmp = strArrDesc[index];
+			if(strTmp.equals(startLineIndicator)|| strTmp.equals(endLineIndicator)){
+				continue;
+			}
+			
+			//Restrict the Long Description bullet points to 5
+			if(rowCounter >= maxBulletCounter){
+				break;
+			}
+			rowCounter++;
+			if(strTmp.endsWith(endRowIndicator)){
+				strTmp = strTmp.substring(0, strTmp.indexOf(endRowIndicator));
+			}
+			
+			//Apply truncation and add tool tip
+			if(strTmp.length() > textLength){
+				strTrunc = strTmp.substring(0,textLength);
+				String toolTip = startRowIndicatorToolTip.replaceFirst("[#]", strTmp);
+				String newString = toolTip+strTrunc+XPEDXConstants.TAIL_END+endRowIndicator;
+				strformattedDescription.append(newString);
+			}else{
+				strformattedDescription.append(startRowIndicator+strTmp+endRowIndicator);
+			}
+		}
+		strformattedDescription.append(endLineIndicator);
+		String formattedDescription = strformattedDescription.toString();
+		
+		if(log != null && log.isDebugEnabled()){
+			log.debug("Unformatted Description"+longDesc);
+			log.debug("Formatted Description"+formattedDescription);
+		}
+		 
+		return formattedDescription;
+	}
+	
 	public static String getFormattedOrderNumber(Element orderElement)
 	{
 		StringBuffer sb = new StringBuffer();
