@@ -1789,6 +1789,7 @@ public class XPEDXOrderUtils {
 		int textLength = shortDescLength*4/5;
 		
 		//Split the Long Description based on <li> delimiter
+	if(longDesc.length()>0){
 		String[] strArrDesc = longDesc.split(startRowIndicator);
 		
 		if(strArrDesc == null){
@@ -1821,6 +1822,7 @@ public class XPEDXOrderUtils {
 			}
 		}
 		strformattedDescription.append(endLineIndicator);
+	}
 		String formattedDescription = strformattedDescription.toString();
 		
 		if(log != null && log.isDebugEnabled()){
