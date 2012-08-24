@@ -465,7 +465,15 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		String personalSelect = getFieldValue("radIsPersonal");
 	//	String colName = getFieldValue("comboOrderBy");
 		//Added for JIRA 4082
-		this.getXpxPaginationData().setSortColumn(colName.get(getFieldValue("comboOrderBy")).toString());
+		String columnName = getFieldValue("comboOrderBy");
+		//System.out.println(columnName.length());
+		if(columnName !=null && columnName !=" "){
+			this.getXpxPaginationData().setSortColumn(colName.get(getFieldValue("comboOrderBy")).toString());
+		}
+		else{
+			YRCPlatformUI.showError("Message", "Please select the Sort By");
+    		return;
+		}
 		
 		this.getXpxPaginationData().setSortOrderDesc(getFieldValue("comboSortBy"));
 		BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
