@@ -1,6 +1,8 @@
 package com.xpedx.nextgen.common.util;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -25,6 +27,8 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCConfigurator;
+import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 
@@ -41,6 +45,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
 
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
+	
 	
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -75,7 +80,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
 	 */
 	public Document invokeCustomerRuleProfile(YFSEnvironment env,Document inXML) throws Exception
 	{
-	 String fileName = "WebHold Settings as of 8-16-2012.xls";	
+	 String fileName = "WebHold.xls";	
 	 Element customerElement = inXML.getDocumentElement();
 	 createCustomerRuleProfile(fileName,customerElement,env);	
 	 return null;	
@@ -105,7 +110,7 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
       	 String customerRuleKey = null;
       	Connection connection = null;
         
-        System.out.println(fileName);
+     //   System.out.println(fileName);
         Workbook workbook = null;
         HSSFSheet sheet = null;
       //  try {
@@ -113,8 +118,15 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
             //will not be called any time in future
             //TODO: Will Change location of file on basis on review comments. 
             
-            InputStream in = XPXWebHoldFlagUpdate.class.getResourceAsStream(fileName);//new FileInputStream(fileName);
-            log.info("File Stream"+in.toString());
+            InputStream in;
+			try {
+				String name = YFSSystem.getProperty("webholdFlagUpdate.file");
+				System.out.println("webholdFlagUpdate.file "+name);
+				if(name==null || name.isEmpty()){
+					name ="/xpedx/sterling/Foundation/WebHold.xls";
+				}
+				in = new FileInputStream(new File(name));
+             log.info("File Stream"+in.toString());
             try {
                 workbook = WorkbookFactory.create(in);
                 sheet = (HSSFSheet) workbook.getSheet(workSheetName);
@@ -240,7 +252,10 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
             	e.printStackTrace();
             	log.error("Exception: " + e.getStackTrace());	
             }
- 
+	 } catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
        
     
 }
@@ -330,6 +345,23 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
 		}
 
 		return m_Conn;
+	}
+	
+	public static InputStream loadXPEDXSpecficPropertiesIntoYFS(String fileName) {
+		try {
+			File wFile = new File(fileName);
+			InputStream inputStream = null;
+			if (wFile.exists()) {
+				inputStream = new FileInputStream(wFile);
+			} else {
+				inputStream = YFSSystem.class.getResourceAsStream("/"
+						+ fileName);
+			}
+			return inputStream;
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		}
+		return null;
 	}
 
 }
