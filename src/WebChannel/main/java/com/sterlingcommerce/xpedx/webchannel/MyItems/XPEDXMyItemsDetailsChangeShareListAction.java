@@ -295,7 +295,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 				
 					for(String shipTo:shipTos.keySet())
 					{
-						divisionMap.put(shipTo, environmentCode+"_"+shipTos.get(shipTo));
+						divisionMap.put(shipTo, shipTos.get(shipTo)+"_"+environmentCode);
 					}
 					if(shipFromBranchs.size() >1)
 					{
@@ -305,7 +305,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 					{
 						for(String shipFromBranch :shipFromBranchs )
 						{
-							divisionMap.put(billTo, environmentCode+"_"+shipFromBranch);
+							divisionMap.put(billTo, shipFromBranch+"_"+environmentCode);
 						}
 					}
 				
@@ -314,7 +314,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			{
 				for(String shipFromBranch :sapSet )
 				{
-					divisionMap.put(sapId, environmentCode+"_"+shipFromBranch);
+					divisionMap.put(sapId, shipFromBranch+"_"+environmentCode);
 				}
 			}
 			else
@@ -327,7 +327,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		{
 			for(String shipFromBranch :msapSet )
 			{
-				divisionMap.put(msapCustomerId, environmentCode+"_"+shipFromBranch);
+				divisionMap.put(msapCustomerId, shipFromBranch+"_"+environmentCode);
 			}
 		}
 		else
@@ -353,7 +353,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 			    
 		    XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		    if(shipToCustomer != null)
-		    	milShareElem.setAttribute("DivisionID", shipToCustomer.getExtnEnvironmentCode()+"_"+shipToCustomer.getExtnShipFromBranch());
+		    	milShareElem.setAttribute("DivisionID",shipToCustomer.getExtnShipFromBranch()+"_"+shipToCustomer.getExtnEnvironmentCode());
 		}
 		return invokeMashups(mashupInputs).get(mashupName);
 	}
