@@ -37,7 +37,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	public void initPage() {
 		String[] apinames = {"XPXGetUserList","XPXGetCustomerListService","XPXGetParentCustomerListService"};
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<User Usertype='" + INTERNAL + "' />"),
+				createManageCustomerOutputXml().getOwnerDocument(),
 				YRCXmlUtils.createFromString("<Customer  CustomerKey='" + YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey") + "' />"),
 				YRCXmlUtils.createFromString("<Customer CustomerID='"+YRCXmlUtils.getAttribute(this.inputElement, "CustomerID")+"' OrganizationCode='"+YRCXmlUtils.getAttribute(this.inputElement, "OrganizationCode")+"'/>")
 		};
@@ -52,7 +52,16 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 		if (!page.isDisposed())
 			callApi(ctx, page);
 	}
-
+	// Added for JIRA 4267
+	private Element createManageCustomerOutputXml(){
+		Document docInput =
+			YRCXmlUtils.createFromString("<Extn ExtnUserType='" + INTERNAL + "' />");
+		Element inputXML = docInput.getDocumentElement();
+		Element targetDoc = YRCXmlUtils.createFromString("<User />").getDocumentElement();
+		/*Element targetUserList = YRCXmlUtils.createChild(targetDoc, "User");*/
+		YRCXmlUtils.importElement(targetDoc, inputXML);
+		return targetDoc;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -75,7 +84,6 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 					}
 					if ("XPXGetParentCustomerListService".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						System.out.println("*********"+YRCXmlUtils.getString(outXml));
 						updateModelWithParentInfo(outXml);
 					}						
 					if ("XPXGetUserList".equals(apiname)) {
