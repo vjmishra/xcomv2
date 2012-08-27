@@ -775,6 +775,8 @@ var selectedShipCustomer = null;
 		setNormallyStockedAjaxCall(isSelected);
 	}	
 	function setNormallyStockedAjaxCall(isSelected) {
+	// Added for Jira 4195
+		var searchTermString = document.getElementById("searchTermString").value;
 		Ext.Ajax.request({
       		url: '<s:property value="#setStockedCheckboxURL"/>',
       		params: {
@@ -782,7 +784,13 @@ var selectedShipCustomer = null;
           		},
       		method: 'POST',
       		success: function (response, request){
+if(searchTermString!=null && searchTermString.trim().length != 0){
+                  	  var searchTermSuffix = '&searchTerm='+searchTermString;
+            		  window.location.href=window.location.href+searchTermSuffix;  
+                    }
+                    else{
       			window.location.reload();      			
+			}
       		},
       		failure: function (response, request){
       		}

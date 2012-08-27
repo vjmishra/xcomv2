@@ -950,8 +950,8 @@ var ct = Ext.get('item-box-inner');
                      </select> 
                     </s:if>                   	 
 	</div>
-	
-	
+	<%--Added hidden parameter searchTermString for JIRA #4195 --%>
+	<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />
 	<p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
 	<s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
 		<s:property value="%{#pageNumber}"/>
