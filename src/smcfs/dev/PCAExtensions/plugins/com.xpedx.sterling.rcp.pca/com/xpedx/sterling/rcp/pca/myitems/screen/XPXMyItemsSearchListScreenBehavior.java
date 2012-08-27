@@ -400,6 +400,8 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask");
 		//getControl("radIsShared").setSelection(true);
 		Element elemModel = XPXUtils.getElemModel();
+		//Added for JIRA 4082 (Added for Sorting)
+		elemModel.removeAttribute("IgnoreOrdering");
 		elemSearchModel = elemModel;
 		isShared = true;
 		getFirstPage();
