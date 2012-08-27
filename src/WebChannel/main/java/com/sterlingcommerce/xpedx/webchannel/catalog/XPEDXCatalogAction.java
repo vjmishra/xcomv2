@@ -73,7 +73,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String msapOrderMultipleFlag = "";
 	private Map <String, List<Element>> PLLineMap;	
 	private String firstItem = "";
+//Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
+	private String searchString=null;
 	
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+	
+	//End of addition for JIRA #4195
 	/*Added for Jira 3624*/
 	private String theSpanNameValue;
 	private String sortDirection;
@@ -250,12 +261,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
 		//searchTerm="11\" W x 20\" L x 31\" H";
+		//Changes JIRA #4195 
+		if(searchString!=null&& !searchString.trim().equals("")){
+			searchTerm=	searchString;
+		}
+		//End of Changes JIRA #4195 
 		if(searchTerm!=null && searchTerm.contains("\"")){
 			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
 		}
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{					  
+			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
 			String appendStr="&searchTerm="+searchTerm;
 			XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
