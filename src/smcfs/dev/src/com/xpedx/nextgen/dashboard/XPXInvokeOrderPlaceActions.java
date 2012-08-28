@@ -461,7 +461,10 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 
 				setProgressYFSEnvironmentVariables(env);			
 			}
-		}	
+		}
+		if (log.isDebugEnabled()) {
+			log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation()-OutXML:" + rootElem.getString());
+		}
 	}
 	
 	/**
