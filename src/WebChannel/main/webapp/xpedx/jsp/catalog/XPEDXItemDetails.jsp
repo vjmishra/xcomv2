@@ -983,8 +983,9 @@ function SubmitActionWithValidation()
 		<s:param name='shipToBanner' value="%{'true'}" />
 	</s:action> 
 <!-- // header end -->
-        
-		<div class="container">
+   <s:set name="promoheight" value='%{promoheight}'></s:set>     
+		<div class="container" 
+			<s:if test='%{#promoheight!= null }'>style="height:<s:property value="%{#promoheight}"/>"</s:if>>
 		<s:set name="emailDialogTitle" scope="page"
 			value="#_action.getText('Email_Title')" />
 

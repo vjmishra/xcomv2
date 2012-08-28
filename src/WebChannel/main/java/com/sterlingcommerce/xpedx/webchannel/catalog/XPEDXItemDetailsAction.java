@@ -1937,7 +1937,61 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	// Added by anil end
 
 	String certFlag = null;
+	//Added for Jira 4272 - Start
+	String promoheight=null;
 	 
+	public String getPromoheight() {
+		promoheight="0";
+		int intpromoheight=0; 
+		int finalpromoHeight=0;
+		/*upgradeAssociatedItems.add("abv");
+		upSellAssociatedItems.add("bcd");
+		alternateAssociatedItems.add("ghi");
+		crossSellAssociatedItems.add("kkk");
+		complimentAssociatedItems.add("zzz");*/
+		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) || (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0)){
+			if(upgradeAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+upgradeAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+			if(upSellAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+upSellAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+			if(alternateAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+alternateAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+		}
+		if((crossSellAssociatedItems != null && crossSellAssociatedItems.size() > 0) || (complimentAssociatedItems != null && complimentAssociatedItems.size() > 0)){
+			if(complimentAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+complimentAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+			if(crossSellAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+crossSellAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+		} 
+		if(intpromoheight>0){
+			finalpromoHeight = intpromoheight * 210;		
+			promoheight = String.valueOf(finalpromoHeight)+"px";
+		}
+		else
+			promoheight=null;
+		
+		return promoheight;
+	}
+//end of Jira 4272
+	public void setPromoheight(String promoheight) {
+		this.promoheight = promoheight;
+	}
+
 	public String getCertFlag() {
 		return certFlag;
 	}
