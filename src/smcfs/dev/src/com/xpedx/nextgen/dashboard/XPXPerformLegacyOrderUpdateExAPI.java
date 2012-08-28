@@ -278,6 +278,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				isAPISuccess = true;
 
 			} else if (headerProcessCode.equalsIgnoreCase("C")) {
+				
+				/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+				boolean changeOrderTwiceFO = false;
+				/* End - Work Around Fix For IBM PMR 51483 005 000 */
 				this.setReqUOMPrice(env, rootEle);
 
 				// Build input document to call ChangeOrder API.
@@ -368,10 +372,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					processFOHold(rootEle, fOrderEle);
 				}
 
-				preparefOChange(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, chngcOrdStatusEle1, chngcOrderEle1, fOrderEle, cOrderEle);
+				changeOrderTwiceFO = preparefOChange(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, chngcOrdStatusEle1, chngcOrderEle1, fOrderEle, cOrderEle);
 				
 				// Updates customer and fulfillment order.
-				returnToLegacyDoc = updatefOrder(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, chngcOrdStatusEle1, chngcOrderEle1, cOrderEle, fOrderEle, cAndfOrderEle);
+				returnToLegacyDoc = updatefOrder(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, chngcOrdStatusEle1, chngcOrderEle1, cOrderEle, fOrderEle, cAndfOrderEle, changeOrderTwiceFO);
 				this.performOrderStatusChange(env, cAndfOrderEle, cOrderEle, fOrderEle, hdrStatusCode, "C");
 				isAPISuccess = true;
 
@@ -1331,7 +1335,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	}
 
 	private YFCDocument updatefOrder(YFSEnvironment env, YFCElement chngcOrderEle, YFCElement chngcOrdStatusEle0, YFCElement chngcOrdStatusEle, YFCElement chngfOrderEle,
-			YFCElement chngcOrdStatusEle1, YFCElement chngcOrderEle1, YFCElement cOrderEle, YFCElement fOrderEle, YFCElement cAndfOrderEle) throws Exception {
+			YFCElement chngcOrdStatusEle1, YFCElement chngcOrderEle1, YFCElement cOrderEle, YFCElement fOrderEle, YFCElement cAndfOrderEle, boolean changeOrderTwiceFO) throws Exception {
 
 		YFCDocument retDoc = null;
 		Document tempDoc = null;
@@ -1393,14 +1397,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			setInstructionKeys(chngfOrderEle, fOrderEle);			
 			filterAttributes(chngfOrderEle, false);
 			
-			/* Multiple Change Orders Will Be Called When Line Process Code Has A And D As The Product Couldn't Chain The New Lines Between CO And FO. 
-			 * Below Method Can Be Removed When IBM Engineering Team Provides A Solution. */
-			
-			splitChangeOrdersForLPCAandD(env, chngfOrderEle);
+			/* Start - Work Around Fix For IBM PMR 51483 005 000 - Multiple Change Orders Will Be Called When Line Process Code Has A And D As The Product Couldn't Chain The New Lines Between CO And FO. 
+			 * Below Method Can Be Removed When IBM Engineering Team Provides A Solution. 
+			 */ 
+			splitChangeOrdersForLPCAandD(env, chngfOrderEle, changeOrderTwiceFO);
+			/* End - Work Around Fix For IBM PMR 51483 005 000 */
 			
 			if(log.isDebugEnabled()){
 				log.debug("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
 			}
+			
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngfOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				fOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
@@ -1691,6 +1697,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		boolean hasLineA = false;
 		boolean hasLineC = false;
 		boolean hasLineD = false;
+		/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+		boolean changeOrderTwiceFO = false;
+		boolean hasPartialCancel = false;
+		/* End - Work Around Fix For IBM PMR 51483 005 000 */
 		String fillAndKill = null;
 
 		String fOrdHeaderKey = null;
@@ -1816,8 +1826,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								throw new Exception("ExtnWebLineNumber Does Not Exist in CO. Line Process Code Cannot be C!");
 							}
 
-							this.handleLineProcessCodeCandA(env, cOrdHeaderKey, webLineNo, cOrdLineKey, rootOrdLineEle, fOrderEle, cOrderEle, chngcOrdStatusEle0, chngcOrdStatusEle, chngcOrderEle0);
-
+							boolean hasLineCWithLessQty = this.handleLineProcessCodeCandA(env, cOrdHeaderKey, webLineNo, cOrdLineKey, rootOrdLineEle, fOrderEle, cOrderEle, chngcOrdStatusEle0, chngcOrdStatusEle, chngcOrderEle0);
+							/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+							if (hasLineCWithLessQty) {
+								hasPartialCancel = true;
+							}
+							/* End - Work Around Fix For IBM PMR 51483 005 000 */
+							
 							rootOrdLineEle.setAttribute("Action", "MODIFY");
 							rootOrdLineEle.setAttribute("IsNewLine", "N");
 							rootOrdLineEle.setAttribute("OrderLineKey", fOrdLineKey);
@@ -1884,14 +1899,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									chngcOrdLineExtnEle1.removeAttribute("ExtnUnitPrice");
 								}
 
-								// To get the ordered quantity from the customer
-								// order line.
+								// To get the ordered quantity from the customer order line.
 								String cOrdQty = this.getOrderedQtyOnOrderLine(webLineNo, cOrderEle);
 								if (YFCObject.isNull(cOrdQty) || YFCObject.isVoid(cOrdQty)) {
 									throw new Exception("ExtnWebLineNumber Does Not Exist in Customer Order!");
 								}
-								// To get the ordered quantity from the
-								// Fulfillment order line.
+								// To get the ordered quantity from the Fulfillment order line.
 								String fOrdQty = this.getOrderedQtyForWebLineNo(webLineNo, fOrderEle);
 								if (YFCObject.isNull(fOrdQty) || YFCObject.isVoid(fOrdQty)) {
 									throw new Exception("ExtnWebLineNumber Does Not Exist in Fulfillment Order!");
@@ -1980,13 +1993,18 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.debug("hasLineA:" + hasLineA);
 			log.debug("hasLineC:" + hasLineC);
 			log.debug("hasLineD:" + hasLineD);
-			log.debug("Boolean:" + (!hasLineA && !hasLineC && hasLineD));
 		}
+		
+		/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+		if ((hasLineA && hasLineD) || (hasLineA && hasPartialCancel)) {
+			changeOrderTwiceFO = true;
+		}
+		/* End - Work Around Fix For IBM PMR 51483 005 000 */
 
-		return (!hasLineA && !hasLineC && hasLineD);
+		return changeOrderTwiceFO;
 	}
 
-	private void handleLineProcessCodeCandA(YFSEnvironment env, String ordHeaderKey, String webLineNo, String cOrdLineKey, YFCElement rootOrdLineEle, YFCElement fOrderEle, YFCElement cOrderEle,
+	private boolean handleLineProcessCodeCandA(YFSEnvironment env, String ordHeaderKey, String webLineNo, String cOrdLineKey, YFCElement rootOrdLineEle, YFCElement fOrderEle, YFCElement cOrderEle,
 			YFCElement chngcOrdStatusEle0, YFCElement chngcOrdStatusEle, YFCElement chngcOrderEle0) throws Exception {
 
 		Float _ordLineQtyInXML = 0f;
@@ -1994,6 +2012,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Float _ordLineQtyInCO = 0f;
 		Float _ordLineQtyInFO = 0f;
 		boolean hasUOMChanged = false;
+		/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+		boolean hasLineCWithLessQty = false;
+		/* End - Work Around Fix For IBM PMR 51483 005 000 */
 
 		YFCElement chngcOrdStatusLinesEle0 = chngcOrdStatusEle0.getChildElement("OrderLines");
 		YFCElement chngcOrdStatusLinesEle = chngcOrdStatusEle.getChildElement("OrderLines");
@@ -2057,6 +2078,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.debug("_ordLineQtyInFO:" + _ordLineQtyInFO);
 			log.debug("hasUOMChanged:" + hasUOMChanged);
 		}
+		
+		/* Start - Work Around Fix For IBM PMR 51483 005 000 */
+		if ((_ordLineQtyInXML < _ordLineQtyInFO) || hasUOMChanged) {
+			hasLineCWithLessQty = true;
+		}
+		/* End - Work Around Fix For IBM PMR 51483 005 000 */
 
 		if (_unSchLineQtyInCO > 0) {
 			Float tempQty = _ordLineQtyInXML - _unSchLineQtyInCO;
@@ -2101,7 +2128,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					chngcOrdStatusLineTranQtyEle.setAttribute("TransactionalUOM", tuom);
 
 				} else {
-
+					
 					chngcOrderEle0.setAttribute("OrderHeaderKey", ordHeaderKey);
 					chngcOrderEle0.setAttribute("Override", "Y");
 					YFCElement chngcOrdLineEle0 = chngcOrdLinesEle0.getOwnerDocument().importNode(rootOrdLineEle, true);
@@ -2199,7 +2226,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				chngcOrdStatusLineTranQtyEle.setAttribute("Quantity", _ordLineQtyInXML - _ordLineQtyInFO);
 				chngcOrdStatusLineTranQtyEle.setAttribute("TransactionalUOM", tuom);
 			}
-
+			
 			chngcOrderEle0.setAttribute("OrderHeaderKey", ordHeaderKey);
 			chngcOrderEle0.setAttribute("Override", "Y");
 			YFCElement chngcOrdLineEle0 = chngcOrdLinesEle0.getOwnerDocument().importNode(rootOrdLineEle, true);
@@ -2238,7 +2265,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			chngcOrdStatusLineTranQtyEle.setAttribute("TransactionalUOM", tuom);
 			// Attribute has been removed as all the quantity needs to be increased in case of UOM conversion.
 			chngcOrdStatusLineTranQtyEle.removeAttribute("Quantity");
-		}	
+		}
+		
+		return hasLineCWithLessQty;
 	}
 	
 	
@@ -5920,76 +5949,51 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		fOrdExtnElem.setAttribute("ExtnExtendedPrice", "0.0");
 	}
 	
-	private void splitChangeOrdersForLPCAandD(YFSEnvironment env, YFCElement chngfOrderEle1) throws YFSException, RemoteException {
-		
-		boolean hasLineA = false;
-		boolean hasLineD = false;
-		// Check Whether The Request From Max Came With Line Process Code A And D.
-		YFCElement orderLinesElem1 = chngfOrderEle1.getChildElement("OrderLines");
-		if (orderLinesElem1 != null) {
-			YFCIterable<YFCElement> orderLineItr = orderLinesElem1.getChildren("OrderLine");
-			while (orderLineItr.hasNext()) {
-				YFCElement orderLineElem1 = orderLineItr.next();
-				if (orderLineElem1.hasAttribute("LineProcessCode")) {
-					String lineProcessCode = orderLineElem1.getAttribute("LineProcessCode");
-					if (!YFCObject.isNull(lineProcessCode) && lineProcessCode.equalsIgnoreCase("A")) {
-						hasLineA = true;
-					} else if (!YFCObject.isNull(lineProcessCode) && lineProcessCode.equalsIgnoreCase("D")) {
-						hasLineD = true;
-					} else {
-						// Do Nothing.
-					}
-				}
-				
-				if (hasLineA && hasLineD) {
-					break;
+	private void splitChangeOrdersForLPCAandD(YFSEnvironment env, YFCElement chngfOrderEle1, boolean changeOrderTwiceFO) throws YFSException, RemoteException {
+
+		if (changeOrderTwiceFO) {
+			
+			if (log.isDebugEnabled()) {
+				log.debug("Order Has Order Lines Of Line Process Code 'A' And 'D' (or) 'A' With Reduced Qtys Of 'C'.");
+			}
+			
+			// To Form Second Change Order InXML.
+			Document fOrderInXML2 = YFCDocument.createDocument().getDocument();
+			fOrderInXML2.appendChild(fOrderInXML2.importNode(chngfOrderEle1.getDOMNode(), true));
+			fOrderInXML2.renameNode(fOrderInXML2.getDocumentElement(), fOrderInXML2.getNamespaceURI(), "Order");
+			YFCElement fOrderInXMLEle2 = YFCDocument.getDocumentFor(fOrderInXML2).getDocumentElement();
+			
+			// To Remove Existing Order Lines In The Order.
+			YFCElement remEle2 = fOrderInXMLEle2.getChildElement("OrderLines");
+			if (remEle2 != null) {
+				fOrderInXMLEle2.removeChild(remEle2);
+			}
+
+			YFCElement orderLinesElem2 = fOrderInXMLEle2.createChild("OrderLines");
+			
+			YFCElement orderLinesElem1_ = chngfOrderEle1.getChildElement("OrderLines");
+			YFCIterable<YFCElement> orderLineItr_ = orderLinesElem1_.getChildren("OrderLine");
+			while (orderLineItr_.hasNext()) {
+				YFCElement orderLineElem1_ = orderLineItr_.next();
+				if (orderLineElem1_.hasAttribute("LineProcessCode")) {
+					String lineProcessCode_ = orderLineElem1_.getAttribute("LineProcessCode");
+					if (!YFCObject.isNull(lineProcessCode_) && lineProcessCode_.equalsIgnoreCase("A")) {
+						// Importing The Line To A New Order.
+						YFCElement newOrderLine = orderLinesElem2.getOwnerDocument().importNode(orderLineElem1_, true);
+						orderLinesElem2.appendChild(newOrderLine);
+						// Removing The Line From The Existing Document.
+						orderLinesElem1_.removeChild(orderLineElem1_);
+					} 
 				}
 			}
 			
-			if (hasLineA && hasLineD) {
-				
-				if (log.isDebugEnabled()) {
-					log.debug("Order Has Order Lines Of Line Process Code A And D.");
-				}
-				
-				// To Form Second Change Order InXML.
-				Document fOrderInXML2 = YFCDocument.createDocument().getDocument();
-				fOrderInXML2.appendChild(fOrderInXML2.importNode(chngfOrderEle1.getDOMNode(), true));
-				fOrderInXML2.renameNode(fOrderInXML2.getDocumentElement(), fOrderInXML2.getNamespaceURI(), "Order");
-				YFCElement fOrderInXMLEle2 = YFCDocument.getDocumentFor(fOrderInXML2).getDocumentElement();
-				
-				// To Remove Existing Order Lines In The Order.
-				YFCElement remEle2 = fOrderInXMLEle2.getChildElement("OrderLines");
-				if (remEle2 != null) {
-					fOrderInXMLEle2.removeChild(remEle2);
-				}
-
-				YFCElement orderLinesElem2 = fOrderInXMLEle2.createChild("OrderLines");
-				
-				YFCElement orderLinesElem1_ = chngfOrderEle1.getChildElement("OrderLines");
-				YFCIterable<YFCElement> orderLineItr_ = orderLinesElem1_.getChildren("OrderLine");
-				while (orderLineItr_.hasNext()) {
-					YFCElement orderLineElem1_ = orderLineItr_.next();
-					if (orderLineElem1_.hasAttribute("LineProcessCode")) {
-						String lineProcessCode_ = orderLineElem1_.getAttribute("LineProcessCode");
-						if (!YFCObject.isNull(lineProcessCode_) && lineProcessCode_.equalsIgnoreCase("D")) {
-							// Importing The Line To A New Order.
-							YFCElement delOrderLine = orderLinesElem2.getOwnerDocument().importNode(orderLineElem1_, true);
-							orderLinesElem2.appendChild(delOrderLine);
-							// Removing The Line From The Existing Document.
-							orderLinesElem1_.removeChild(orderLineElem1_);
-						} 
-					}
-				}
-				
-				if (log.isDebugEnabled()) {
-					log.debug("XPXChangeOrder_FO-InXML2:" + fOrderInXMLEle2.getString());
-				}
-				
-				// Call Change Order API To Cancel The Order Lines.
-				Document changeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", fOrderInXML2);	
-			}	
-		}
+			if (log.isDebugEnabled()) {
+				log.debug("XPXChangeOrder_FO-InXML2:" + fOrderInXMLEle2.getString());
+			}
+			
+			// Call Change Order API To Cancel The Order Lines.
+			Document changeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", fOrderInXML2);	
+		}	
 	}
 
 	public void setProperties(Properties _prop) throws Exception {
