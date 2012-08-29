@@ -136,11 +136,6 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		attrElemComplex5.setAttribute("OrderByValue", "Created By");
 		attrElemComplex5.setAttribute("OrderByShortDescription", "Created By");
 
-		Element attrElemComplex6 = YRCXmlUtils.createChild(elemModel, "OrderBy");
-
-		attrElemComplex6.setAttribute("OrderByValue", "Type / Creator");
-		attrElemComplex6.setAttribute("OrderByShortDescription", "Type / Creator");
-							
 		setModel("OrderBy",elemModel);
 		
 		Element elem = YRCXmlUtils.createDocument("OrderBy").getDocumentElement();
@@ -542,7 +537,6 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		colName.put("Last Modified By","ModifyUserName");
 		colName.put("Last Modified Date","Modifyts");
 		colName.put("Created By","Createusername");
-		colName.put("Type / Creator","ListType");
 		
 		return colName;
 	}
