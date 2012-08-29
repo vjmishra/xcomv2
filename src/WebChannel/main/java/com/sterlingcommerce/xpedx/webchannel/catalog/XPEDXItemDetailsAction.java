@@ -1950,6 +1950,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		crossSellAssociatedItems.add("kkk");
 		complimentAssociatedItems.add("zzz");*/
 		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) || (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0)){
+			intpromoheight = Integer.valueOf(promoheight);
+			intpromoheight = intpromoheight+10;
+			promoheight=String.valueOf(intpromoheight);
 			if(upgradeAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
 				intpromoheight = intpromoheight+upgradeAssociatedItems.size();
@@ -1967,6 +1970,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 		}
 		if((crossSellAssociatedItems != null && crossSellAssociatedItems.size() > 0) || (complimentAssociatedItems != null && complimentAssociatedItems.size() > 0)){
+			intpromoheight = Integer.valueOf(promoheight);
+			intpromoheight = intpromoheight+10;
+			promoheight=String.valueOf(intpromoheight);
 			if(complimentAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
 				intpromoheight = intpromoheight+complimentAssociatedItems.size();
