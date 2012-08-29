@@ -512,26 +512,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
-			if(searchStringTokenList.length >1)
-			{
-				for (String searchStringToken : searchStringTokenList) {
-					if(!"".equals(searchStringToken.trim())) {
-						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
-					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "SHOULD");
-					i++;
-					}			
-				}
-			}
-			else
-			{
-				for (String searchStringToken : searchStringTokenList) {
-					if(!"".equals(searchStringToken.trim())) {
-						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
-					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
-					i++;
-					}			
-				}
-			}
+			for (String searchStringToken : searchStringTokenList) {
+				if(!"".equals(searchStringToken.trim())) {
+					valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
+				valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
+				i++;
+				}	
 		}					
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
