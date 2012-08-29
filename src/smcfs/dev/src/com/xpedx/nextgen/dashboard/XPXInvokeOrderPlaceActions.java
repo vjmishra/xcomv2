@@ -115,12 +115,15 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		   api.executeFlow(env, "XPXInvokeRulesEngineAndLegacyOrderCreationService", inputXML);
  
 		} catch (NullPointerException ne) {	
+			ne.printStackTrace();
 			prepareErrorObject(ne, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inputXML);
             return inputXML;
     	} catch (YFSException yfe) {
+    		yfe.printStackTrace();
     		prepareErrorObject(yfe, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inputXML);
     		return inputXML;
 		} catch(Exception e) {
+			e.printStackTrace();
 			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inputXML);
 	        return inputXML;
 		}
