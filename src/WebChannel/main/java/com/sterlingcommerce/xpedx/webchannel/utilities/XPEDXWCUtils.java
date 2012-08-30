@@ -4364,26 +4364,74 @@ public class XPEDXWCUtils {
 	}
 	
 //New function - to be used
+	public static void setYFSEnvironmentVariables(IWCContext wcContext,ArrayList<Element> assignedCustomers,ArrayList<Element> availableCustomers) 
+	{
+		
+			HashMap<String, ArrayList<Element>> map = new HashMap<String, ArrayList<Element>>();
+			map.put("assignedCustomers", assignedCustomers);
+			map.put("availableCustomers", availableCustomers);
+			XPEDXWCUtils.setYFSEnvironmentVariables(wcContext, map);
+	}
 	
-	public static Document getPaginatedCustomers(String rootCustomerKey,String userID, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext) {
+	public static Document getPaginatedCustomers(String rootCustomerKey,String userID, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext,
+			ArrayList<Element> assignedCustomers,ArrayList<Element> availableCustomers) {
 		Document outDoc = null;
+		Object obj = null;
 		//if page number and page size are not passed we take the default, pagenumber=1 and pageSize =25
 	
 		HashMap<String,String> valueMap = new HashMap<String, String>();
 		valueMap.put("/Page/@PageNumber", pageNumber);
 		valueMap.put("/Page/@PageSize", pageSize);
 		valueMap.put("/Page/@PageSetToken", pageSetToken);
-		//valueMap.put("/Page/API/Input/XPXCustView/@"+AttributeToQry, CustomerID);
+		/*//valueMap.put("/Page/API/Input/XPXCustView/@"+AttributeToQry, CustomerID);
 		valueMap.put("/Page/API/Input/XPXCustView/@RootCustomerKey", rootCustomerKey);
 		valueMap.put("/Page/API/Input/XPXCustView/@UserID", userID);
-		valueMap.put("/Page/API/Input/XPXCustView/OrderBy/Attribute/@Name", "CustomerPath");
+		valueMap.put("/Page/API/Input/XPXCustView/OrderBy/Attribute/@Name", "CustomerPath");*/
 		try {
 //			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAssignedShipTosView-MIL", valueMap, wcContext);
 //			Object obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAssignedShipTosView-MIL", input, wcContext.getSCUIContext());
+			//Kubra-28Aug - Jira 4146
+			/*if(newcustomersListFomSession!=null && newcustomersListFomSession.size()>0 ){
+				//System.out.println("newcustomersListFomSession********************"+newcustomersListFomSession.size());
+				
+				Element custViewElement=(Element)input.getElementsByTagName("XPXCustView").item(0);
+				if(custViewElement != null)
+				{
+					Element complexQuery =SCXmlUtil.createChild(custViewElement, "ComplexQuery") ;
+					Element OrElem = SCXmlUtil.createChild(complexQuery, "Or");
+					for(int i=0;i <newcustomersListFomSession.size(); i++) {
+						Element exp = SCXmlUtil.createChild(OrElem, "Exp");
+						exp.setAttribute("Name", "CustomerID");
+						exp.setAttribute("QryType", "NE");
+						exp.setAttribute("Value", newcustomersListFomSession.get(i));
+						OrElem.appendChild(exp);
+					}
+				}
+		        
+			}*/
 			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAvailableLocations", valueMap, wcContext);
-			Object obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAvailableLocations", input, wcContext.getSCUIContext());
+			/*List<String> newcustomersListFomSession= (List<String>)XPEDXWCUtils.getObjectFromCache("newcustomersList");
+			List<String> newcustomersListFomSession1= (List<String>)XPEDXWCUtils.getObjectFromCache("newcustomersList1");
+			*/
+			setYFSEnvironmentVariables(wcContext,assignedCustomers,availableCustomers);
+			obj = WCMashupHelper.invokeMashup("xpedx-getPaginatedAvailableLocations", input, wcContext.getSCUIContext());
+			//Element ele1=(Element)outDoc.getElementsByTagName("XPXCustView").item(0);
 			if(obj!= null)
 				outDoc = ((Element)obj).getOwnerDocument();
+			
+			/*Element ele2= (Element) outDoc.getDocumentElement();
+			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(ele2, "/Output/XPXCustViewList/XPXCustView");
+			if(assignedCustElems!= null && assignedCustElems.size()>0) {
+				for(int i=0;i<assignedCustElems.size();i++) {
+					Element customer = assignedCustElems.get(i);
+					String customerID = SCXmlUtil.getAttribute(customer, "CustomerID");
+					if(newcustomersListFomSession!= null && newcustomersListFomSession.contains(customerID))
+						SCXmlUtil.removeNode(customer);
+						//ele2.removeChild(customer);
+				}
+			}*/
+			
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
