@@ -22,6 +22,7 @@ import com.sterlingcommerce.webchannel.order.OrderAgainAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 
@@ -31,6 +32,7 @@ import com.yantra.yfc.dom.YFCDocument;
  */
 public class XPEDXOrderAgainAction extends OrderAgainAction {
 	/*Added  for Webtrends Start:   */
+	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
 	private boolean reorderMetaTag = false;
 	
 	public boolean isReorderMetaTag() {
@@ -55,18 +57,58 @@ public class XPEDXOrderAgainAction extends OrderAgainAction {
 		String result = "success";
         try
         {
-            evalFormattedOrderName();
-            if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))
+        	evalFormattedOrderName();
+        	Map<String, String> valueMap = new HashMap<String, String>();
+        	valueMap.put("/Order/@OrderHeaderKey", getOrderHeaderKey());
+			
+			Element input;
+			Element orderElem = null;
+			
+			input = WCMashupHelper.getMashupInput("XPEDXReOrderGetOrderList",
+					valueMap, wcContext.getSCUIContext());
+			Object obj1 = WCMashupHelper.invokeMashup("XPEDXReOrderGetOrderList",
+						input, wcContext.getSCUIContext());
+			Document outputDoc = ((Element) obj1).getOwnerDocument();
+			Element orderElelement=XPEDXOrderUtils.createNewDraftOrderOnBehalfOf(wcContext, getFormattedOrderName(), "");
+			String orderHeaderKey=orderElelement.getAttribute("OrderHeaderKey");
+			setOrderHeaderKey(orderHeaderKey);
+			valueMap = new HashMap<String, String>();
+        	valueMap.put("/Order/@OrderHeaderKey", getOrderHeaderKey());
+			input = WCMashupHelper.getMashupInput("XPEDXReOrderChangeOrder",
+					valueMap, wcContext.getSCUIContext());
+			
+			
+			ArrayList<Element> orderLineList=SCXmlUtil.getElements(outputDoc.getDocumentElement(), "/Order/OrderLines/OrderLine");
+			Element orderLines=SCXmlUtil.createChild(input, "OrderLines");
+			for(Element orderLine:orderLineList)
+			{
+				if(!"M".equals(orderLine.getAttribute("LineType"))){
+					orderLine.setAttribute("OrderLineKey", "");
+					orderLines.appendChild(input.getOwnerDocument().importNode(orderLine, true));
+				}
+			}
+			
+			obj1 = WCMashupHelper.invokeMashup("XPEDXReOrderChangeOrder",
+					input, wcContext.getSCUIContext());
+			
+			Element elementCopiedOrder= ((Element) obj1);
+			Document elementCopiedOrderDoc=elementCopiedOrder.getOwnerDocument();
+			getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ,elementCopiedOrderDoc);
+           /* if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))
             	customerId = XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext);
             else
             	customerId = wcContext.getCustomerId();
-            org.w3c.dom.Element elementCopiedOrder = prepareAndInvokeMashup("xpedxOrderAgain");
+            org.w3c.dom.Element elementCopiedOrder = prepareAndInvokeMashup("xpedxOrderAgain");*/
             if(null != elementCopiedOrder)
             {
                 log.debug((new StringBuilder()).append("Copy order Output XML \n").append(SCXmlUtils.getString(elementCopiedOrder)).toString());
                 setOrderHeaderKey(SCXmlUtils.getAttribute(elementCopiedOrder, "OrderHeaderKey"));
-                CommerceContextHelper.overrideCartInContext(getWCContext(), getOrderHeaderKey());
-                removeOrderLinesForReOrder(elementCopiedOrder);
+                CommerceContextHelper.flushCartInContextCache(getWCContext());
+				XPEDXWCUtils.removeObectFromCache("OrderHeaderInContext");
+				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
+				XPEDXWCUtils.removeObectFromCache("itemMap");
+				XPEDXOrderUtils.refreshMiniCart(getWCContext(),elementCopiedOrder,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+                //removeOrderLinesForReOrder(elementCopiedOrder);
             }
          // Webtrends meta tag starts here
     		HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
