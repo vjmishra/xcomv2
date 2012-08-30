@@ -1944,15 +1944,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		promoheight="0";
 		int intpromoheight=0; 
 		int finalpromoHeight=0;
+		boolean uMightFlag=false;
+		boolean populareAccFlag=false;
 		/*upgradeAssociatedItems.add("abv");
 		upSellAssociatedItems.add("bcd");
 		alternateAssociatedItems.add("ghi");
 		crossSellAssociatedItems.add("kkk");
 		complimentAssociatedItems.add("zzz");*/
 		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) || (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0)){
-			intpromoheight = Integer.valueOf(promoheight);
-			intpromoheight = intpromoheight+20;
-			promoheight=String.valueOf(intpromoheight);
+			uMightFlag=true;
 			if(upgradeAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
 				intpromoheight = intpromoheight+upgradeAssociatedItems.size();
@@ -1970,9 +1970,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 		}
 		if((crossSellAssociatedItems != null && crossSellAssociatedItems.size() > 0) || (complimentAssociatedItems != null && complimentAssociatedItems.size() > 0)){
-			intpromoheight = Integer.valueOf(promoheight);
-			intpromoheight = intpromoheight+20;
-			promoheight=String.valueOf(intpromoheight);
+			populareAccFlag=true;
 			if(complimentAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
 				intpromoheight = intpromoheight+complimentAssociatedItems.size();
@@ -1986,6 +1984,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		} 
 		if(intpromoheight>0){
 			finalpromoHeight = intpromoheight * 210;		
+			if(uMightFlag){
+				finalpromoHeight = finalpromoHeight+20;
+			}
+			if(populareAccFlag){
+				finalpromoHeight = finalpromoHeight+20;
+			}			
 			promoheight = String.valueOf(finalpromoHeight)+"px";
 		}
 		else
