@@ -144,8 +144,8 @@
 
 	
     <s:set name='_action' value='[0]' />
-	<s:set name='customers1' value='#_action.getCustomers1()' />
-	<s:set name='customers2' value='#_action.getCustomers2()' />
+	<s:set name='customers1' value='#_action.getAvailableLocationMap()' />
+	<s:set name='customers2' value='#_action.getAuthorizedLocationMap()' />
 	<s:set name='shipToStr' value='#_action.shipToStr()' />
 	<s:set name='listSize' value='#_action.getListSize()' />
 	<s:set name='userelement' value="getUser()" />
@@ -177,7 +177,7 @@
                     <div id="customers2_div">
 						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
                       <select name="customers2" id="customersTwo" multiple="multiple" size="%{listSize}" style=" min-width:735px; height:150px;">
-							<s:iterator value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@custFullAddresses(#customers2,wCContext.storefrontId,"true","true")'>
+							<s:iterator value='#customers2'>
 								<s:set name='currentCustIdKey' value='key'/>
 		    					<s:set name='currentCustIdValue' value='value'/>
 	                			<option value='<s:property value="#currentCustIdKey"/>'>
@@ -229,7 +229,7 @@
 					<div id="customers1_div">
 						<div style="overflow:auto;border: 1px solid #CCCCCC;"> 
 	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}"> 
-								<s:iterator value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@custFullAddresses(#customers1,wCContext.storefrontId,"true","true")'>
+								<s:iterator value='#customers1'>
 									<s:set name='currentCustIdKey' value='key'/>
 			    					<s:set name='currentCustIdValue' value='value'/>
 		                			<option value='<s:property value="#currentCustIdKey"/>'>
