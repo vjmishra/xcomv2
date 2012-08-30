@@ -3121,5 +3121,103 @@
 			</Template>
 		</API>
 	</mashup>
-    
+	<mashup id='XPEDXReOrderGetOrderList' transactional='true' mashuptype='XAPI'
+		endpoint='CONFIRMED_ORDER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getOrderList">
+			<Input>
+				<Order OrderHeaderKey=""/>
+			</Input>
+			<Template>
+				<OrderList>
+					<Order >
+						<PriceInfo Currency="" />
+						<OrderLines>
+        					<OrderLine   CarrierServiceCode=""  DeliveryCode="" DeliveryMethod="" ItemGroupCode="" KitCode="" KitQty="" LineType=""  OrderLineKey="" OrderedQty="" ReqDeliveryDate="" ReqShipDate="" ShipToID="" ShipToKey="" ShipTogetherNo="" ShipmentConsolidationGroupId="" SourceFromOrganization="" SplitQty="" Status="" StatusQuantity="" SubLineNo="" SubstituteItemID="" SubstituteItemUOM="" Timezone="" TranDiscrepancyQty="" isHistory="">
+
+        						<Item 
+	        						ISBN="" IsReturnable="" ItemDesc="" 
+	        						ItemID="" ItemShortDesc="" ItemWeight="" ItemWeightUOM="" ManufacturerItem="" ManufacturerItemDesc="" 
+	        						ManufacturerName="" ProductClass="" ProductLine="" 
+	        						 UPCCode="" 
+	        						UnitCost="" UnitOfMeasure="">
+ 								 </Item>
+            			 		<OrderLineTranQuantity OrderedQty=""  TransactionalUOM="" />
+        			 	    </OrderLine>
+        			 	  </OrderLines>
+					</Order>
+				</OrderList>
+			</Template>
+		</API>
+	</mashup>
+    <mashup id='XPEDXReOrderChangeOrder' transactional='true' mashuptype='XAPI'
+		endpoint='CONFIRMED_ORDER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="changeOrder">
+			<Input>
+				<Order/>
+			</Input>
+			<Template>
+				<Order OrderHeaderKey="" OrderNo="" OrderName="" OrderType="" EntryType="" EnterpriseCode=""
+					DraftOrderFlag="" Modifyts="" Modifyprogid="" Modifyuserid="" Createts="" Createuserid="" CustomerContactID=""
+					BillToID="" BuyerOrganizationCode="" HasPendingChanges=""
+					AuthorizedClient="">
+					<PriceInfo Currency="" />
+					<OrderLines TotalNumberOfRecords="">
+						<OrderLine OrderedQty="" ItemGroupCode=""
+							ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
+							MinLineStatus="" MaxLineStatus="" OpenQty="" Status=""
+							IsBundleParent="" PrimeLineNo="" SubLineNo="" CustomerPONo=""
+							CustomerLinePONo="" LineType="">
+							<Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />
+							<ItemDetails ItemID="">
+								<PrimaryInformation />
+								<AlternateUOMList>
+									<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""	UnitOfMeasure="" />
+								</AlternateUOMList>
+								<Extn>
+									<XPXItemExtnList>
+										<XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision="">
+									</XPXItemExtn>
+									</XPXItemExtnList>
+								</Extn>
+								<CategoryList>
+								  	<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" /> 
+								</CategoryList>
+							</ItemDetails>
+							<KitLines NumberOfKitLines="">
+								<KitLine />
+							</KitLines>
+							<Awards>
+								<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+									AwardType="" DenialReason="" Description="" PosReasonCode=""
+									PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+									IsPromotionOnOrder="" />
+							</Awards>							
+							<Extn />
+							<Instructions>
+								<Instruction InstructionText=""
+									InstructionDetailKey="" />
+							</Instructions>
+							<OrderLineTranQuantity TransactionalUOM=""
+								OrderedQty="" />
+						</OrderLine>
+					</OrderLines>
+					<Awards>
+						<Award AwardAmount="" AwardApplied="" AwardId="" AwardKey=""
+							AwardType="" DenialReason="" Description="" PosReasonCode=""
+							PromotionId="" PromotionKey="" ChargeCategory="" ChargeName=""
+							IsPromotionOnOrder="" />
+					</Awards>
+					<Extn>
+						<XPXUeAdditionalAttrXmlList>
+							<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>				   
+                </Order>
+			</Template>
+		</API>
+	</mashup>
 </mashups>
