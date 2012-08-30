@@ -189,6 +189,7 @@
 				<param name="namespace">/order</param>
 				<param name="orderHeaderKey">${orderHeaderKey}</param>
 				<param name="draft">Y</param>
+				<param name="isPNACallOnLoad">false</param>
 			</result>
 		</action>
 		<!-- END: ReOrder page: RUgrani -->
