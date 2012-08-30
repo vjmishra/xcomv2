@@ -754,13 +754,12 @@
                 <Page PageNumber="" PageSize=""
                     PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
                     <PreviousPage PageNumber="" />
-					<API Name="XPXCustomerViewService" IsFlow="Y">
+					<API Name="XPXAvailabaleLocationService" IsFlow="Y">
 						<Input>
-							<XPXCustView CustomerID="" RootCustomerKey="" UserID="" >
-								<OrderBy>
-									<Attribute Desc="N" Name="" />
-								</OrderBy>
-							</XPXCustView>
+							<CustomerList>
+								<Customer CustomerID="">
+								</Customer>
+							</CustomerList>
 						</Input>
 				        <Template>
 			        		<XPXCustViewList TotalNumberOfRecords="" >
@@ -778,5 +777,24 @@
                 </Page>
             </Template>
    		</API>
-	</mashup>  	
+	</mashup>
+	<!-- Added After a Service is created - 4146 -->  
+	<mashup id ='XPEDXgetAvailableLocFromService' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Available Customers">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>		 
+   				<API FlowName="XPXCustomerViewService">
+						<Input>
+							<XPXCustView CustomerID="" RootCustomerKey="" UserID="" >
+								<OrderBy>
+									<Attribute Desc="N" Name="" />
+								</OrderBy>
+							</XPXCustView>
+						</Input>
+				        <Template>
+			        		<XPXCustViewList TotalNumberOfRecords="" >
+			        			<XPXCustView />
+			        		</XPXCustViewList>	        				
+						</Template>
+				</API>
+	</mashup>  		
 </mashups>
