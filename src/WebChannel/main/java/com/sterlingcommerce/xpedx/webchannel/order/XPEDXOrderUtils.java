@@ -1760,7 +1760,7 @@ public class XPEDXOrderUtils {
 	 * @param shortDesc - Description whose length should be used to arrive at 80th percentile in space
 	 * @return longDesc - Truncated Long Description with tool tip
 	 */
-	public static String getFormattedLongDescription(String longDesc, String shortDesc){
+	public static String getFormattedLongDescription(String longDesc){
 		String startLineIndicator = "<ul>";
 		String endLineIndicator = "</ul>";
 		String startRowIndicator = "<li>";
@@ -1769,24 +1769,31 @@ public class XPEDXOrderUtils {
 		String strTrunc = "";
 		int rowCounter = 0;
 		int maxBulletCounter = 5;
-		int shortDescContainerLength = 54;
+		
+		//commented since the Long Description Length is fixed as 35 - JIRA 3895 update
+		//int shortDescContainerLength = 35;
 		
 		//Handle null values
 		if(longDesc == null){
 			return XPEDXConstants.EMPTY_STRING;
 		}
 		
-		if(shortDesc == null){
+		
+		// Commented since the Long Description length is fixed as 35 - JIRA 3895 update
+		/*if(shortDesc == null){
 			shortDesc = "";
-		}
+		}*/
 		
 		StringBuffer strformattedDescription = new StringBuffer(startLineIndicator);
-		int shortDescLength = shortDesc.length();
+		
+		//Commented since the Long Description length is fixed as 35 - JIRA 3895 update
+		/*int shortDescLength = shortDesc.length();
 		if(shortDescLength > shortDescContainerLength){
 			shortDescLength = shortDescContainerLength;
-		}
+		}*/
 		
-		int textLength = shortDescLength*4/5;
+		//JIRA 3895 update
+		int textLength = 35;
 		
 		//Split the Long Description based on <li> delimiter
 	if(longDesc.length()>0){
@@ -1807,6 +1814,12 @@ public class XPEDXOrderUtils {
 				break;
 			}
 			rowCounter++;
+			
+			//JIRA 3895 update
+			if(strTmp.endsWith(endLineIndicator)){
+				strTmp = strTmp.substring(0, strTmp.indexOf(endLineIndicator));
+			}
+			
 			if(strTmp.endsWith(endRowIndicator)){
 				strTmp = strTmp.substring(0, strTmp.indexOf(endRowIndicator));
 			}
@@ -1814,6 +1827,9 @@ public class XPEDXOrderUtils {
 			//Apply truncation and add tool tip
 			if(strTmp.length() > textLength){
 				strTrunc = strTmp.substring(0,textLength);
+				//JIRA 3895 update
+				strTmp = strTmp.replaceAll("\"", "&quot;");
+				
 				String toolTip = startRowIndicatorToolTip.replaceFirst("[#]", strTmp);
 				String newString = toolTip+strTrunc+XPEDXConstants.TAIL_END+endRowIndicator;
 				strformattedDescription.append(newString);
