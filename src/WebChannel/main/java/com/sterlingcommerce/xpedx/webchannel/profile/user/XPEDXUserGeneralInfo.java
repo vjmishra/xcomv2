@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -26,6 +27,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.profile.ProfileUtility;
@@ -42,6 +44,8 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.ui.backend.util.Util;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
@@ -319,6 +323,15 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		}else {
 			this.isChildCustomer = "TRUE";
 		}
+		try
+		{
+			putAllAvailableAndAuthorizeLocationTOCache(wcContext);
+		}
+		catch(Exception e)
+		{
+			log.error("Exception while Setting Authorized and available location in to cache");
+			//XPEDXWCUtils.logExceptionIntoCent(e);
+		}
 		//setQuickLinksForUser();		Performance Fix - Removed a mashup call for getCustomerQuickLink
 		return getUserDetails();
 	}
@@ -383,7 +396,159 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	
 			return quickLinkBean;
 	}
+	
+	public void putAllAvailableAndAuthorizeLocationTOCache(IWCContext wcContext) throws Exception{
+		Document outDoc = null;
+		Object obj = null;
+		//To get All Available Customers and keep it in Session
+		String rootCustomerKey = (String)wcContext.getWCAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);
+		HashMap<String,String> valueMap = new HashMap<String, String>();
+		valueMap.put("/XPXCustView/@RootCustomerKey", rootCustomerKey);
+		valueMap.put("/XPXCustView/@UserID", customerContactId);
+		Element input = WCMashupHelper.getMashupInput("XPEDXgetAvailableLocFromService", valueMap, wcContext);			
+		obj = WCMashupHelper.invokeMashup("XPEDXgetAvailableLocFromService", input, wcContext.getSCUIContext());
+		//Element ele1=(Element)outDoc.getElementsByTagName("XPXCustView").item(0);
+		if(obj!= null)
+			outDoc = ((Element)obj).getOwnerDocument();
+		
+		Element ele2= (Element) outDoc.getDocumentElement();
+		ArrayList<Element> availCustomerList = SCXmlUtil.getElements(ele2, "/XPXCustView");
+		ArrayList<String> availableCustomerList=new ArrayList<String>();
+		for(Element availCust:availCustomerList)
+		{
+			String customerID=availCust.getAttribute("CustomerID");
+			availableCustomerList.add(customerID);
+		}
+		ArrayList<String> assignedCustomerList = (ArrayList<String>)XPEDXWCUtils.getAssignedCustomers(customerContactId);
+		ArrayList<String> allCustomerList=new ArrayList<String>(availableCustomerList);
+		allCustomerList.addAll(assignedCustomerList);		
+		Map<String, String> authorizedFullAddrMap=XPEDXWCUtils.custFullAddresses(allCustomerList,wcContext.getStorefrontId(),true,true);
+		List<Element> customerMap=new ArrayList<Element>();		
+		for(Element availCust:availCustomerList)
+		{
+			String customerID=availCust.getAttribute("CustomerID");
+			String customerPath=availCust.getAttribute("CustomerPath");
+			createCustomerElement(customerMap,customerID,customerPath,authorizedFullAddrMap.get(customerID));
+		}
+		XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", customerMap);
+		
+		//To get All Authorized Customer
+		//Put your mashup code here- Kubra 4146
+		try {
+			List<String> customers2 = getCustomersByPath(assignedCustomerList,authorizedFullAddrMap);
+			} catch (Exception e) {
+				e.printStackTrace();
+		}
+	}
+	
+	private List<String> getCustomersByPath(ArrayList<String> wList,Map<String, String> customerFullAddr) throws Exception
+	{
+		List<Element> customerMap=new ArrayList<Element>();
+		List<String> shipToStr = new ArrayList<String>();
+		String pageNumber="1";
+		String pageSize ="10000";
+		
+		HashMap<String,String> valueMap = new HashMap<String, String>();
+		valueMap.put("/Page/@PageNumber", pageNumber);
+		valueMap.put("/Page/@PageSize", pageSize);
+		
+		YFCDocument inputCustomerDocument = YFCDocument
+		.createDocument("XPXCustHierarchyView");
+		YFCElement inputCustomerElement = inputCustomerDocument
+				.getDocumentElement();
+		YFCElement complexQueryElement = inputCustomerDocument
+		.createElement("ComplexQuery");
+		YFCElement sort = inputCustomerDocument.createElement("OrderBy");
+		YFCElement attribute = inputCustomerDocument.createElement("Attribute");
+		attribute.setAttribute("Name", "CustomerPath");
+		attribute.setAttribute("Desc", "N");
+		sort.appendChild(attribute);
+		
+		YFCElement orElement = inputCustomerDocument
+		.createElement("Or");
+		
+		for(String customerID :wList) {
+			createInput(customerID,complexQueryElement,orElement);
+		}
+		
+		complexQueryElement.appendChild(orElement);
+		inputCustomerElement.appendChild(complexQueryElement);
+		inputCustomerElement.appendChild(sort);		
+		
+		Element input = WCMashupHelper.getMashupInput("xpedx-getCusotmerByCustomerPath",valueMap, wcContext);
+		
+		
+		Element pageElement=(Element)input.getElementsByTagName("Input").item(0);
+		pageElement.appendChild(input.getOwnerDocument().importNode(inputCustomerDocument.getDocument().getDocumentElement(), true));
+		
+		
+		Object obj = WCMashupHelper.invokeMashup("xpedx-getCusotmerByCustomerPath", input, wcContext.getSCUIContext());
+		
+		Document outputDoc = ((Element) obj).getOwnerDocument();
+				
+		Element outputCustomerElement = (Element)outputDoc.getElementsByTagName("XPXCustHierarchyViewList").item(0);
+		
+		if (null != outputCustomerElement) {
+			ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(outputCustomerElement, "XPXCustHierarchyView");
+			for(int j=0;j<xpxCustViewElems.size();j++)
+			{
+				if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"));
+						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"));
+						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("SAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"));
+						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("BillToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")));
+					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"))){
+						shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
+						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")));
+					}
+				
+				} // end for  j=0 for loop
+		}
+		XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", customerMap);
+		return shipToStr;
+		
+	}
+	private void createCustomerElement(List<Element> customerList,String customerID,String customerPath,String customerFullAddress)
+	{
+		Element customerElemet=SCXmlUtil.createDocument("Customer").getDocumentElement();
+		customerElemet.setAttribute("CustomerID", customerID);
+		customerElemet.setAttribute("CustomerPath", customerPath);
+		customerElemet.setAttribute("CustomerAddress", customerFullAddress);
+		customerList.add(customerElemet);
+	}
+	
+	private void createInput(String customerID,YFCElement complexQuery, YFCElement or)
+	{
+		YFCElement shipToExp = or.createChild("Exp");
+		shipToExp.setAttribute("Name", "ShipToCustomerID");
+		shipToExp.setAttribute("Value", customerID);
+		
+		YFCElement billToExp = or.createChild("Exp");
+		billToExp.setAttribute("Name", "BillToCustomerID");
+		billToExp.setAttribute("Value", customerID);
+		or.appendChild(billToExp);
 
+		YFCElement sapExp = or.createChild("Exp");
+		sapExp.setAttribute("Name", "SAPCustomerID");
+		sapExp.setAttribute("Value", customerID);
+		or.appendChild(sapExp);
+		
+		YFCElement msapExp = or.createChild("Exp");
+		msapExp.setAttribute("Name", "MSAPCustomerID");
+		msapExp.setAttribute("Value", customerID);
+		or.appendChild(msapExp);
+		
+		complexQuery.appendChild(or);
+	}
+	
 	/**
 	 * Gets the Buyer User General Information, Buyer user Addresses, Buyer User
 	 * Phonebook, Buyer User Admin List
