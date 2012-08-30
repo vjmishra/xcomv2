@@ -75,6 +75,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String firstItem = "";
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
+//XNGTP-4264 Escaping Below words from search criteria.
+	private String luceneEscapeWords[]={"a", "and", "are", "as", "at", "be", "but", "by",
+			 "for", "if", "in", "into", "is", "it",
+			 "no", "not", "of", "on", "or", "s", "such",
+			 "t", "that", "the", "their", "then", "there", "these",
+			 "they", "this", "to", "was", "will", "with"
+};
 	
 	public String getSearchString() {
 		return searchString;
@@ -512,13 +519,19 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
+			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
+			List<String> specialWords=Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
-				if(!"".equals(searchStringToken.trim())) {
-					valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
-				valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
-				i++;
-				}			
-			}
+				if(!specialWords.contains(searchStringToken.trim().toLowerCase()))
+				{
+					if(!"".equals(searchStringToken.trim())) {
+						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
+					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
+					i++;
+					}
+				}
+			}	
+	
 		}					
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
