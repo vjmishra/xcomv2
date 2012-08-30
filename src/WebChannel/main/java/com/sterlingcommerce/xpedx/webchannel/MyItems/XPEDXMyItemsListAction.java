@@ -16,12 +16,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -415,11 +418,33 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				}
 				else
 				{
-					String customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
-					customerList = new String[] {getWCContext().getCustomerId()};
-					if(customerPathOfCurrentShipTo!=null)
-						customerList = customerPathOfCurrentShipTo.split("\\|");
+					//JIRA 4245 Start-Performance Issue
+					String sapCustomerID="";
+					String shipToCustomerID="";
+					String billToCutomerID="";
+					String msapCustomerID=(String)wcContext.getSCUIContext().getSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_ID);
 					
+					// = (String) wcContext.getSCUIContext().getSession().getAttribute("customerPathOfCurrentShipTo");
+					/*if(customerPathOfCurrentShipTo == null || customerPathOfCurrentShipTo.trim().equals("")){
+					customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
+					wcContext.getSCUIContext().getSession().setAttribute("customerPathOfCurrentShipTo", customerPathOfCurrentShipTo);
+					}*/
+					XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+					shipToCustomerID=shipToCustomer.getCustomerID();
+					if(shipToCustomer.getBillTo() != null)
+					{
+						billToCutomerID=shipToCustomer.getBillTo().getCustomerID();
+					}
+					XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+					Document sapCustomerDoc = (Document)XPEDXWCUtils.getObjectFromCache("sapCustExtnFields");
+					if(sapCustomerDoc != null)
+					{
+						sapCustomerID=sapCustomerDoc.getDocumentElement().getAttribute("CustomerID");
+					}
+					//JIRA 4245 End - Performance Issue
+					customerList = new String[] {shipToCustomerID,billToCutomerID,sapCustomerID,msapCustomerID};
+					/*if(customerPathOfCurrentShipTo!=null)
+						customerList = customerPathOfCurrentShipTo.split("\\|");		*/			
 					if(customerList!=null){
 							for (int i=0; i< customerList.length; i++) {// admin
 								String customerId = customerList[i];
