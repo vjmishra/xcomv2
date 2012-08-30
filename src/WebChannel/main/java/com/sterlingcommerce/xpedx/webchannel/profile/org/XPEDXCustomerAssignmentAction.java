@@ -4,9 +4,11 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -85,8 +87,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private String existingCustId="";
     private String addToavailable="";
     private String removeFromavailable="";
-    
-   
+    private LinkedHashMap<String, String> availableLocationMap=new LinkedHashMap<String, String>();
+    private LinkedHashMap<String, String> authorizedLocationMap=new LinkedHashMap<String, String>();
     public String getAddToavailable() {
 		return addToavailable;
 	}
@@ -302,71 +304,42 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	}
 	
 	public String getPaginatedCustomersInHierarchy() {
-		//Element outElem = null;
 		
-		String msapCustomerId = null;
-		Element customerEle=null;
-		Element customerListEle=null;
-		
-		Document contactListDoc=null;
-		 Element contactEle =null;
-		if (XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
-			msapCustomerId = XPEDXWCUtils.getLoggedInCustomerFromSession(getWCContext());
-		} else {
-			msapCustomerId = getWCContext().getCustomerId();
-		}
-		List<String> custIdList = new ArrayList<String>(Collections.singletonList(msapCustomerId));
-		try {
-			 customerListEle=XPEDXWCUtils.getCustomerListDetalis(custIdList ,getWCContext());
-			 customerEle=SCXmlUtil.getChildElement(customerListEle, "Customer");
-			  if(!SCUtil.isVoid(getWCContext().getSCUIContext().getRequest()
-						.getParameter("userId"))){
-				  setSelectedCurrentCustomer(getWCContext().getSCUIContext().getRequest()
-					.getParameter("userId"));
-			  }
-			  else if(!SCUtil.isVoid(getWCContext().getSCUIContext().getRequest()
-							.getParameter("customerContactId"))){
-				  setSelectedCurrentCustomer(getWCContext().getSCUIContext().getRequest()
-						.getParameter("customerContactId"));
-				  }
-				  else{
-					  contactListDoc=XPEDXWCUtils.getCustomerContactDetails(customerEle.getAttribute("CustomerID"));
-					   contactEle = SCXmlUtil.getChildElement(contactListDoc.getDocumentElement(), "CustomerContact");
-					   setSelectedCurrentCustomer(contactEle.getAttribute("CustomerContactID"));
-				  }
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		rootCustomerKey=customerEle.getAttribute("RootCustomerKey");
 		populateAvailableLocation();
-		if (customerContactId == null
-				|| customerContactId.trim().length() == 0) {
-			customerContactId = getWCContext().getLoggedInUserId();
-		}
-		List<String> assignedCustomerList = XPEDXWCUtils.getAssignedCustomers(customerContactId);
-		//Put your mashup code here- Kubra 4146
-		try {
-			customers2 = getCustomersByPath(assignedCustomerList);
-			XPEDXWCUtils.setObectInCache("customers2List",customers2);
-			} catch (Exception e) {
-				e.printStackTrace();
-		}
-		//Put your mashup code here- Kubra 4146
-		
-		/*for (String customer : assignedCustomerList) {
-			if (!customers2.contains(customer)) {
-				customers2.add(customer);
-			}
-		}*/
+		getSortedAssignedCustomer();
 		listSize = customers1.size() + customers2.size() + 2;
 		return SUCCESS;
+	}
+	private void getSortedAssignedCustomer()
+	{
+		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
+		Collections.sort(assignedCustomers,new Comparator<Element>() {
+			@Override
+			public int compare(Element elem, Element elem1) {		
+				//sort on PrimeLineNo
+				String customerPath1 = elem.getAttribute("CustomerPath"); 
+				String customerPath2 = elem1.getAttribute("CustomerPath");
+				
+				return 		customerPath1.compareTo(customerPath2);
+				
+			}
+		}); 
+		for(Element authorizeCustomer:assignedCustomers)
+		{
+			String customerID=authorizeCustomer.getAttribute("CustomerID");
+			String custFullAddress=authorizeCustomer.getAttribute("CustomerAddress");
+			authorizedLocationMap.put(customerID, custFullAddress);
+		}
+		
 	}
 	
 	private void populateAvailableLocation()
 	{
-		LinkedHashSet<String> custIds = new LinkedHashSet<String>();
-		Document document = XPEDXWCUtils.getPaginatedCustomers(rootCustomerKey,getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext());
+		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
+		ArrayList<Element> availableCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AVAILABLE_LOCATIONS");
+		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
+		Document document = XPEDXWCUtils.getPaginatedCustomers(rootCustomerKey,getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext(),
+				assignedCustomers,availableCustomers);
 		if(document!=null) {		
 			Element customerHierarchyElem = SCXmlUtil.getChildElement(document.getDocumentElement(), "Output");
 			try {
@@ -382,30 +355,48 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			for(int i=0; i<assignedCustElems.size(); i++) {
 				Element custElem = assignedCustElems.get(i);
 				String custId = SCXmlUtil.getAttribute(custElem, "CustomerID");
-				custIds.add(custId);
+				String fullAddress= SCXmlUtil.getAttribute(custElem, "CustomerAddress");
+				availableLocationMap.put(custId, fullAddress);
 			}
-			customers1.addAll(custIds);
 		}
 		
-			}
+	}
+	
+	
 // Jira 4146 -- Method added when Add button is clicked
 	public String getCustomersForAuthorize() 
 	{
-	
-		String newcustomers = custID;
+		String newcustomers = new String(custID);
 		String[] arrayIds1 = newcustomers.split(",");
-		List<String> newcustomersList = new ArrayList<String>(Arrays.asList(arrayIds1));
-		String existingcustomers = existingCustId;
-		String[] arrayIds2 = existingcustomers.split(",");
-		List<String> existingcustomersList = new ArrayList<String>(Arrays.asList(arrayIds2));
-		existingcustomersList.addAll(newcustomersList);
-		
-		try {
-			customers2 = getCustomersByPath(existingcustomersList);
-			} catch (Exception e) {
-				e.printStackTrace();
+		//List<String> newcustomersList = new ArrayList<String>(Arrays.asList(arrayIds1));
+		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
+		ArrayList<Element> availableCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AVAILABLE_LOCATIONS");		
+		ArrayList<Element> tempList=new ArrayList<Element>();
+		for(int i=0;i<arrayIds1.length;i++)
+		{
+			String newcustomer1=arrayIds1[i];
+			for(Element availableCustomer:availableCustomers)
+			{
+				String customerID=availableCustomer.getAttribute("CustomerID");
+				if(customerID.equals(newcustomer1))
+				{
+					tempList.add(availableCustomer);
+					break;
+				}
+			}
+			
 		}
-		listSize = customers1.size() + customers2.size() + 2;
+		for(Element availableCustomer:tempList)
+		{
+			assignedCustomers.add(availableCustomer);
+			availableCustomers.remove(availableCustomer);
+		}
+		XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", assignedCustomers);
+		XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", availableCustomers);
+		getSortedAssignedCustomer();
+		populateAvailableLocation();
+		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
+	
 		return SUCCESS;
 		
 	}
@@ -769,7 +760,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		saveChanges(customers1, "Delete");
 		return SUCCESS;
 	}
-public String removeAuthorize()
+	// Jira 4146 -- Method added when Remove button is clicked
+	public String removeAuthorize()
 {
 	//removeFromavailable -- Opern =Create
 	// addToavailable -- Opern = Delete
@@ -785,9 +777,46 @@ public String removeAuthorize()
 	//saveChanges(columnList,"Create");
 	String addToavailable1 = addToavailable;
 	String[] addToavailablearrayIds = addToavailable1.split(",");
-	Map<String, String> resultsMap1 = new HashMap<String, String>(); 
 	
-	String removeFromavailable1 = removeFromavailable;
+	List<String> newcustomersList = new ArrayList<String>(Arrays.asList(addToavailablearrayIds));
+	
+	ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
+	ArrayList<Element> availableCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AVAILABLE_LOCATIONS");
+	ArrayList<Element> tempList=new ArrayList<Element>();
+	for(String newcustomer: newcustomersList)
+	{
+		
+		for(Element assignedCustomer:assignedCustomers)
+		{
+			String customerID=assignedCustomer.getAttribute("CustomerID");
+			if(newcustomer!=null && newcustomer.equalsIgnoreCase(customerID))
+			{
+				tempList.add(assignedCustomer);
+				break;
+			}
+		}
+		
+	}
+	for(Element assignedCustomer:tempList)
+	{
+		availableCustomers.add(assignedCustomer);
+		assignedCustomers.remove(assignedCustomer);
+	}
+	XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", assignedCustomers);
+	XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", availableCustomers);
+	populateAvailableLocation();
+	getSortedAssignedCustomer();
+	/*// Set newcustomersList in session so that it is available while doing pagination - 4146
+	ArrayList<String> existingList=(ArrayList<String>)XPEDXWCUtils.getObjectFromCache("newcustomersList");
+	for(String customerId: newcustomersList)
+	{
+		existingList.remove(customerId);
+	}
+	XPEDXWCUtils.setObectInCache("newcustomersList",existingList);
+	
+	Map<String, String> resultsMap1 = new HashMap<String, String>(); */
+	
+	/*String removeFromavailable1 = removeFromavailable;
 	String[] removeFromavailableIds = removeFromavailable1.split(",");
 	Map<String, String> resultsMap2 = new HashMap<String, String>(); 
 	
@@ -842,7 +871,7 @@ public String removeAuthorize()
 			resultsMap2.put(removeFromavailableIds[i],"Delete" );
 		}
 	}
-
+*/
 	/*if(addToavailable != null && addToavailable.trim().length() >0){
 		for (int i=0; i<addToavailablearrayIds.length; i++) {
 			resultsMap2.put(addToavailablearrayIds[i],"Create" );
@@ -854,7 +883,7 @@ public String removeAuthorize()
 				resultsMap2.put(removeFromavailableIds[i],"Delete" );
 			}
 		}*/
-	saveChanges(resultsMap2);
+	//saveChanges(resultsMap2);
 	
 	
 	return SUCCESS;
@@ -1393,6 +1422,22 @@ private void saveChanges(Map<String, String> resultsMap) {
 
 	public void setComingFromSearch(String comingFromSearch) {
 		this.comingFromSearch = comingFromSearch;
+	}
+
+	public Map<String, String> getAvailableLocationMap() {
+		return availableLocationMap;
+	}
+
+	public void setAvailableLocationMap(LinkedHashMap<String, String> availableLocationMap) {
+		this.availableLocationMap = availableLocationMap;
+	}
+
+	public Map<String, String> getAuthorizedLocationMap() {
+		return authorizedLocationMap;
+	}
+
+	public void setAuthorizedLocationMap(LinkedHashMap<String, String> authorizedLocationMap) {
+		this.authorizedLocationMap = authorizedLocationMap;
 	}
 
 	
