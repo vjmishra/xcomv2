@@ -807,9 +807,13 @@ function showSplitDiv(divId)
 				<s:set name="myPriceValue" value="%{'false'}" />
 				<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) == #item.getAttribute("ItemID")'>
 					<s:set name='showDesc' value='#_action.getDescriptionForOrderLine(#orderLine)'/>
+					<!-- JIRA 3895 update -->
+					<s:set name='showDescLength' value='#_action.getDescriptionForOrderLine(#orderLine).length()'/>
 				</s:if>
 				<s:else>
 					<s:set name='showDesc' value='#_action.getShortDescriptionForOrderLine(#orderLine)'/>
+					<!-- JIRA 3895 update -->
+					<s:set name='showDescLength' value='#_action.getShortDescriptionForOrderLine(#orderLine).length()'/>
 				</s:else>
 				
 				<s:set name='unformatteddesc' value='#_action.getDescriptionForOrderLine(#orderLine)'/>
@@ -847,18 +851,23 @@ function showSplitDiv(divId)
 			                Updated for JIRA - 3895 to handle truncation in java rather than in javascript
 			                Author - Muthukumar SM
 			                -->
+			                
+			                <!-- 
+							Added if condition for the title attribute - JIRA 3895 update
+							Author - Muthukumar SM
+							-->
 					    <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 			                <s:a href="%{#detailURL}" id="detailAnchor_%{#orderLineKey}" tabindex='%{#itemPanelStartTabIndex+#tabIndexCount}'>
-						    	<div class="short-description" title="<s:property value='#showDesc'/>"><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
+						    	<div class="short-description" <s:if test='%{#showDescLength > 70}'>title="<s:property value='#showDesc'/>"</s:if>><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
 								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc, #showDesc)' escape="false"/>
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc)' escape="false"/>
 								</s:if>
 						    </s:a>
 						    </s:if>
 						    <s:else>
-						    	<div class="short-description_M" title="<s:property value='#showDesc'/>"><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
+						    	<div class="short-description_M" <s:if test='%{#showDescLength > 70}'>title="<s:property value='#showDesc'/>"</s:if>><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedShortDescription(#showDesc)'/></div>
 								<s:if test='#_action.getShortDescriptionForOrderLine(#orderLine) != #item.getAttribute("ItemID")'>
-									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc, #showDesc)' escape="false"/>
+									<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedLongDescription(#unformatteddesc)' escape="false"/>
 								</s:if>
 						    </s:else>
 			    		</div>
