@@ -6,8 +6,7 @@
 <%@ taglib prefix="xpedx" uri="xpedx" %>
 <s:set name='_action' value='[0]' />
 <s:set name='customers1' value='#_action.getAvailableLocationMap()' />
-Size:<s:property value="#customers1.keySet().size()" />
-					<div id="customers1_div">
+				<div id="customers1_div">
 						<div style="overflow:auto;border: 1px solid #CCCCCC;"> 
 	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}"> 
 								<s:iterator value='#customers1'>
