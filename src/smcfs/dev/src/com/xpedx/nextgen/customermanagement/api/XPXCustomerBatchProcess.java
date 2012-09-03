@@ -3603,9 +3603,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			YFCElement extnElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_EXTN);
 			extnElement.setAttribute("ExtnSAPParentAccNo", newMSAPAccountNumber);
 			extnElement.setAttribute("ExtnSAPParentName",  newMSAPName);
-			if(null!=strSAPName){
+	/*		if(null!=strSAPName){
 			extnElement.setAttribute("ExtnSAPName",  strSAPName);	
-			}
+			}*/
 			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(extnElement);
 		}
 		
