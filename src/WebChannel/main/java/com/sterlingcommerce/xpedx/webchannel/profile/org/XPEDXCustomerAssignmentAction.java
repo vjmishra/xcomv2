@@ -305,6 +305,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	public String getPaginatedCustomersInHierarchy() {
 		
+		XPEDXWCUtils.removeObectFromCache("SessionForUserProfile");
 		populateAvailableLocation();
 		getSortedAssignedCustomer();
 		listSize = customers1.size() + customers2.size() + 2;
@@ -315,13 +316,10 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
 		Collections.sort(assignedCustomers,new Comparator<Element>() {
 			@Override
-			public int compare(Element elem, Element elem1) {		
-				//sort on PrimeLineNo
+			public int compare(Element elem, Element elem1) {
 				String customerPath1 = elem.getAttribute("CustomerPath"); 
 				String customerPath2 = elem1.getAttribute("CustomerPath");
-				
-				return 		customerPath1.compareTo(customerPath2);
-				
+				return customerPath1.compareTo(customerPath2);
 			}
 		}); 
 		for(Element authorizeCustomer:assignedCustomers)

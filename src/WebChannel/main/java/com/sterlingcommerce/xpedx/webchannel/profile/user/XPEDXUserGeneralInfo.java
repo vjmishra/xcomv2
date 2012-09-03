@@ -266,6 +266,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	public String execute() {
 		boolean isCustomerIDFromContext = false;
+		XPEDXWCUtils.setObectInCache("SessionForUserProfile",true);
 		if (log.isDebugEnabled()) {
 			log.debug("customerContactID=" + customerContactId);
 		}
@@ -428,7 +429,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		{
 			String customerID=availCust.getAttribute("CustomerID");
 			String customerPath=availCust.getAttribute("CustomerPath");
-			createCustomerElement(customerMap,customerID,customerPath,authorizedFullAddrMap.get(customerID));
+			createCustomerElement(customerMap,customerID,customerPath,authorizedFullAddrMap.get(customerID),-1);
 		}
 		XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", customerMap);
 		
@@ -495,19 +496,19 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 				if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
 						shipToStr.add(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"));
 						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")));
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")),0);
 					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"))){
 						shipToStr.add(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"));
 						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("SAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")));
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")),1);
 					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"))){
 						shipToStr.add(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"));
 						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("BillToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")));
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")),2);
 					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"))){
 						shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
 						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")));
+								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")),-1);
 					}
 				
 				} // end for  j=0 for loop
@@ -516,10 +517,19 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		return shipToStr;
 		
 	}
-	private void createCustomerElement(List<Element> customerList,String customerID,String customerPath,String customerFullAddress)
+	private void createCustomerElement(List<Element> customerList,String customerID,String customerPath,String customerFullAddress,int index)
 	{
 		Element customerElemet=SCXmlUtil.createDocument("Customer").getDocumentElement();
 		customerElemet.setAttribute("CustomerID", customerID);
+		String customerPaths[]=customerPath.split("\\|");
+		StringBuilder tempString=new StringBuilder("");
+		for(int i=0;i<=index;i++)
+		{
+			tempString.append(customerPaths[i]);
+		}
+		if(index >-1)
+			customerPath=tempString.toString();
+		customerPath=customerPath.replaceAll("\\|", "");
 		customerElemet.setAttribute("CustomerPath", customerPath);
 		customerElemet.setAttribute("CustomerAddress", customerFullAddress);
 		customerList.add(customerElemet);
