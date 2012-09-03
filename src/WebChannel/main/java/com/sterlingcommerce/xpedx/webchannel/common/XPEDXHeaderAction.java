@@ -109,9 +109,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 */
 	public String execute() {		
 		try {
-			//Removing  from session -Jira 4146
-			/*XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
-			XPEDXWCUtils.removeObectFromCache("AVAILABLE_LOCATIONS");*/
+			//Removing  from AUTHORIZED_LOCATIONS and AVAILABLE_LOCATIONS session -Jira 4146
+			Boolean sessionForUserProfile=  (Boolean) XPEDXWCUtils.getObjectFromCache("SessionForUserProfile");
+			if(sessionForUserProfile == null || sessionForUserProfile != true)
+			{
+				XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
+				XPEDXWCUtils.removeObectFromCache("AVAILABLE_LOCATIONS");
+				
+			}
 			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {				
 				//get the builder object            
 		        IWCContextBuilder builder = WCContextHelper.getBuilder(wcContext.getSCUIContext().getRequest(), wcContext.getSCUIContext().getResponse());
