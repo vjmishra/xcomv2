@@ -84,10 +84,11 @@ public class XPEDXOrderAgainAction extends OrderAgainAction {
 			{
 				if(!"M".equals(orderLine.getAttribute("LineType"))){
 					orderLine.setAttribute("OrderLineKey", "");
+					orderLine.setAttribute("Action", "CREATE");
 					orderLines.appendChild(input.getOwnerDocument().importNode(orderLine, true));
 				}
 			}
-			
+			XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 			obj1 = WCMashupHelper.invokeMashup("XPEDXReOrderChangeOrder",
 					input, wcContext.getSCUIContext());
 			
