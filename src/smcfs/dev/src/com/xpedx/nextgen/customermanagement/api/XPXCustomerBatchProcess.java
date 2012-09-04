@@ -379,7 +379,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
                                     
 									isBuyerOrganization = updateOrganizationName (sapCustomerId,organizationCode,env,custElement,inputCustomerElement, masterSapCustomerId,"SAPName",isCustomerAvaiable,strSAPName,true);
 									//3740 - Updating all Bill-to and Ship-to with SAPNAme Changes
+									if(isBuyerOrganization){
 									updateAllBillToandShipToWithMasterSAPAccountNumber(env, organizationCode, sapCustomerId, masterSapAccountNumber, strMSAPName,custElement,existingMSAPName,false,strSAPName,masterSapCustomerId);
+									}
 									//3740 -  Updating all Bill-to and Ship-to for SAPname Changes						
 									
 								}
@@ -1393,7 +1395,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		int customerLength = customerNodeList.getLength();
 		if(customerLength != 0)
 		{
+			
 			Element customerElement = (Element)customerNodeList.item(0);
+			System.out.println("Details "+ SCXmlUtil.getString(customerElement));
 			String orgCode = SCXmlUtil.getXpathAttribute(customerElement, "./ParentCustomer/@CustomerID");
 			inputAssignmentElement.setAttribute("OrganizationCode", orgCode);
 		}
@@ -3603,9 +3607,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			YFCElement extnElement = updateMSAPCustomerInputDoc.createElement(XPXLiterals.E_EXTN);
 			extnElement.setAttribute("ExtnSAPParentAccNo", newMSAPAccountNumber);
 			extnElement.setAttribute("ExtnSAPParentName",  newMSAPName);
-	/*		if(null!=strSAPName){
+			if(null!=strSAPName){
 			extnElement.setAttribute("ExtnSAPName",  strSAPName);	
-			}*/
+			}
 			updateMSAPCustomerInputDoc.getDocumentElement().appendChild(extnElement);
 		}
 		
