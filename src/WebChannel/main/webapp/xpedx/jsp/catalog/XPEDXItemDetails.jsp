@@ -730,11 +730,15 @@ function validateOrderMultiple() {
 				      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
 	           		      myMessageDiv.style.display = "inline-block"; 
 	            		      myMessageDiv.setAttribute("class", "error");
+	            		      Ext.Msg.hide();
+	            		      myMask.hide();
 			}
 			else{	   
             myMessageDiv.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.NEWORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
+            Ext.Msg.hide();
+            myMask.hide();
 			}
 			return false;
 		}
