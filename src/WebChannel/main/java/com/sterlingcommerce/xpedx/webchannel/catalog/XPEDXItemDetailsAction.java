@@ -1983,14 +1983,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 		} 
 		if(intpromoheight>0){
-			finalpromoHeight = intpromoheight * 210;		
+			finalpromoHeight = intpromoheight * 230;		
 			if(uMightFlag){
 				finalpromoHeight = finalpromoHeight+20;
 			}
 			if(populareAccFlag){
 				finalpromoHeight = finalpromoHeight+20;
-			}			
-			promoheight = String.valueOf(finalpromoHeight)+"px";
+			}
+			if(finalpromoHeight > 460)
+				promoheight = String.valueOf(finalpromoHeight)+"px";
+			else
+				promoheight = "auto";
 		}
 		else
 			promoheight=null;
