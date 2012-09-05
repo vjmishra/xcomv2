@@ -232,7 +232,7 @@
 						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID=""
 						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone=""
 						EveningPhone="" MobilePhone="" UserID="" Status="" 
-						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
 						<User Activateflag="" Loginid="" 
 							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
 							Localecode="" Username="">
