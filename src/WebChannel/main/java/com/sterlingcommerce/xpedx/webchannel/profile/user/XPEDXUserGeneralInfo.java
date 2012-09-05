@@ -284,6 +284,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		}
 		if (customerContactId == null) {
 			customerContactId = getWCContext().getCustomerContactId();
+			
 		}
 		if (customerID == null) {
 			isCustomerIDFromContext = true;
@@ -600,6 +601,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
 			
+			
 			if(!customerContactId.equals(getWCContext().getCustomerContactId())){
 				//Fetch the Additional Email Addresses and PO list from XPX_CUSTOMERCONTACT_EXTN
 				Element xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, this.customerContactId);
@@ -807,7 +809,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			setSpendingLtCurrency((spendingCurrency==null)?"": spendingCurrency);
 			
 			addAvailbleCurrencies(spendingCurrency);
-			addAvailableApprovers();
+			addAvailableApprovers(customerContact);   //JIRA 4287 Performance Issue
 			setLastModifiedUser();
 			break;
 		}
@@ -855,9 +857,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/**
 	 * This method fetches all the available approvers for a selected customer
 	 */
-	private void addAvailableApprovers() {
-		
-		Element approverDocInput = SCXmlUtil.createDocument("CustomerContact").getDocumentElement();
+	private void addAvailableApprovers(NodeList custContactNodes) {
+		/*
+		 * JIRA 4287 Changes Start
+		 * Remove extra API call .
+		 */
+		/*Element approverDocInput = SCXmlUtil.createDocument("CustomerContact").getDocumentElement();
 		approverDocInput.setAttribute("OrganizationCode", wcContext.getStorefrontId());
 		String customerKey = XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext);
 		if(!YFCUtils.isVoid(customerKey)){
@@ -868,6 +873,10 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Object contactListObj = WCMashupHelper.invokeMashup("getXpedxApproversList", approverDocInput, wcContext.getSCUIContext());
 		Document contactListDoc = ((Element) contactListObj).getOwnerDocument();
 		NodeList custContactNodes = contactListDoc.getElementsByTagName("CustomerContact");
+		*/
+		/*
+		 * JIRA 4287 Changes End.
+		 */
 		NodeList userGroupListNodes;
 		Element custContactElement;
 		Element customerElement;
