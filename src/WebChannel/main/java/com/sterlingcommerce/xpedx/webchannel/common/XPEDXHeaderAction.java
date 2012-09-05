@@ -115,6 +115,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			{
 				XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
 				XPEDXWCUtils.removeObectFromCache("AVAILABLE_LOCATIONS");
+				XPEDXWCUtils.removeObectFromCache("CUSTOMER2");
 				
 			}
 			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {				
