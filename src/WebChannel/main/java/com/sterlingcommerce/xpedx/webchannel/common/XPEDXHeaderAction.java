@@ -239,7 +239,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 
 	private void handleChangeInContextForDefaultShipTo()
 			throws CannotBuildInputException {
-		
+		//modified for jira 4285 - passing the customerContactList details to set the terms of access
+		Document doc = null;
 		if (getWCContext().isGuestUser()){
 			return;
 		}
@@ -253,7 +254,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String changeShiptOinContext = (String)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT);
 		if(xpedxCustomerContactInfoBean == null || "true".equals(changeShiptOinContext) )
 		{
-			Document doc = XPEDXWCUtils.getCustomerContactDetails(msapId);
+			 doc = XPEDXWCUtils.getCustomerContactDetails(msapId);
 			xpedxCustomerContactInfoBean = XPEDXWCUtils.setXPEDXCustomerContactInfoBean(doc, wcContext);
 		}
 
@@ -290,21 +291,21 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				&& !XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())
 				&&  defaultAssignedShipTo!= null) {
 			XPEDXWCUtils.setCurrentCustomerIntoContext(defaultAssignedShipTo, getWCContext());
-			setTermsOfAccessInRequest();
+			setTermsOfAccessInRequest(doc);
 		} else {
 			if (!getWCContext().isGuestUser()
 					&& !XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
 				assignedShipTos = XPEDXWCUtils.getPaginatedAssignedCustomers(getWCContext());
 				if(assignedShipTos.size() == 1) {
 					XPEDXWCUtils.setCurrentCustomerIntoContext(assignedShipTos.get(0),getWCContext());
-					setTermsOfAccessInRequest();
+					setTermsOfAccessInRequest(doc);
 				}
 				else if(wcContext.getSCUIContext().getSession().getAttribute(
 						XPEDXWCUtils.LOGGED_IN_FORMATTED_CUSTOMER_ID_MAP) == null){
 					XPEDXWCUtils.getFormattedMasterCustomer(wcContext.getCustomerId(), wcContext.getStorefrontId());
-					setTermsOfAccessInRequest();
+					setTermsOfAccessInRequest(doc);
 				}
-			}
+			}//end of jira 4285
 		}
 	}
 	
@@ -592,7 +593,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		request.setAttribute("isTOAaccepted", toaFlag);
 	}*/
 	
-	private void setTermsOfAccessInRequest() {
+	private void setTermsOfAccessInRequest(Document doc) {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
@@ -619,7 +620,13 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		//JIRA 3487 start
 		String isSecuityQuestionset=null;
-		NodeList customerContactList=XPEDXWCUtils.getCustomerContactDetails(XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext)).getDocumentElement().getElementsByTagName("CustomerContact");
+		//modifed for jira 4285  - reducing 1 call for getCustomerContactList
+		NodeList customerContactList=null;
+		if(doc == null){
+		customerContactList=XPEDXWCUtils.getCustomerContactDetails(XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext)).getDocumentElement().getElementsByTagName("CustomerContact");
+		}
+		if(doc != null){
+		customerContactList=doc.getDocumentElement().getElementsByTagName("CustomerContact");
 		for(int i=0;i<customerContactList.getLength();i++)
 		{
 			Element _customerContactElem=(Element)customerContactList.item(i);
@@ -633,7 +640,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			}
 			
 		}
-		
+		}
+		//end of jira 4285
 		if (isSecuityQuestionset == null || (isSecuityQuestionset != null && isSecuityQuestionset.trim().length() == 0)) {
 			isSecuityQuestionset = "N";
 		}
