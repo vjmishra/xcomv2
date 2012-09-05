@@ -227,7 +227,7 @@
                     <td valign="top" class="no-border-right-user padding0">
 <!--                     <div class=" clearview">  -->
 					<div id="customers1_div">
-						<div style="overflow:auto;border: 1px solid #CCCCCC;"> 
+						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
 	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}"> 
 								<s:iterator value='#customers1'>
 									<s:set name='currentCustIdKey' value='key'/>

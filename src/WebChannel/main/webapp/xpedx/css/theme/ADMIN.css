@@ -537,7 +537,7 @@ a.grey-ui-btn:hover, a.green-ui-btn:hover {text-decoration: none; }
 div.fp-btn-container {margin-left:90px;     margin-top: 10px; }
 .width160 { width:160px; }
 a.orange-ui-btn:hover { text-decoration: none !important; }
-#customersOne { min-width:735px !important; height:95px !important; }
+#customersOne { min-width:735px !important; height:155px !important; }
 div#customers1_div div { width: 730px !important; }
 .change-shipto-error { float:right;margin-top:1px;width:100%; }
 /***************************End brian bridge changes ***********************************************/

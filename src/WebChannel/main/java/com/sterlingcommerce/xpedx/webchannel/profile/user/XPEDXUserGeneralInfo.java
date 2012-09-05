@@ -437,7 +437,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		//To get All Authorized Customer
 		//Put your mashup code here- Kubra 4146
 		try {
-			List<String> customers2 = getCustomersByPath(assignedCustomerList,authorizedFullAddrMap);
+			
+				List<String> customers2 = getCustomersByPath(assignedCustomerList,authorizedFullAddrMap);
+			
 			} catch (Exception e) {
 				e.printStackTrace();
 		}
@@ -445,76 +447,80 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	
 	private List<String> getCustomersByPath(ArrayList<String> wList,Map<String, String> customerFullAddr) throws Exception
 	{
+		
 		List<Element> customerMap=new ArrayList<Element>();
 		List<String> shipToStr = new ArrayList<String>();
-		String pageNumber="1";
-		String pageSize ="10000";
-		
-		HashMap<String,String> valueMap = new HashMap<String, String>();
-		valueMap.put("/Page/@PageNumber", pageNumber);
-		valueMap.put("/Page/@PageSize", pageSize);
-		
-		YFCDocument inputCustomerDocument = YFCDocument
-		.createDocument("XPXCustHierarchyView");
-		YFCElement inputCustomerElement = inputCustomerDocument
-				.getDocumentElement();
-		YFCElement complexQueryElement = inputCustomerDocument
-		.createElement("ComplexQuery");
-		YFCElement sort = inputCustomerDocument.createElement("OrderBy");
-		YFCElement attribute = inputCustomerDocument.createElement("Attribute");
-		attribute.setAttribute("Name", "CustomerPath");
-		attribute.setAttribute("Desc", "N");
-		sort.appendChild(attribute);
-		
-		YFCElement orElement = inputCustomerDocument
-		.createElement("Or");
-		
-		for(String customerID :wList) {
-			createInput(customerID,complexQueryElement,orElement);
-		}
-		
-		complexQueryElement.appendChild(orElement);
-		inputCustomerElement.appendChild(complexQueryElement);
-		inputCustomerElement.appendChild(sort);		
-		
-		Element input = WCMashupHelper.getMashupInput("xpedx-getCusotmerByCustomerPath",valueMap, wcContext);
-		
-		
-		Element pageElement=(Element)input.getElementsByTagName("Input").item(0);
-		pageElement.appendChild(input.getOwnerDocument().importNode(inputCustomerDocument.getDocument().getDocumentElement(), true));
-		
-		
-		Object obj = WCMashupHelper.invokeMashup("xpedx-getCusotmerByCustomerPath", input, wcContext.getSCUIContext());
-		
-		Document outputDoc = ((Element) obj).getOwnerDocument();
-				
-		Element outputCustomerElement = (Element)outputDoc.getElementsByTagName("XPXCustHierarchyViewList").item(0);
-		
-		if (null != outputCustomerElement) {
-			ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(outputCustomerElement, "XPXCustHierarchyView");
-			for(int j=0;j<xpxCustViewElems.size();j++)
-			{
-				if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
-						shipToStr.add(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"));
-						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")),0);
-					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"))){
-						shipToStr.add(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"));
-						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("SAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")),1);
-					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"))){
-						shipToStr.add(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"));
-						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("BillToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")),2);
-					}if(wList.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"))){
-						shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
-						createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
-								customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")),-1);
-					}
-				
-				} // end for  j=0 for loop
+		if(wList != null && wList.size()>0){
+			String pageNumber="1";
+			String pageSize ="10000";
+			
+			HashMap<String,String> valueMap = new HashMap<String, String>();
+			valueMap.put("/Page/@PageNumber", pageNumber);
+			valueMap.put("/Page/@PageSize", pageSize);
+			
+			YFCDocument inputCustomerDocument = YFCDocument
+			.createDocument("XPXCustHierarchyView");
+			YFCElement inputCustomerElement = inputCustomerDocument
+					.getDocumentElement();
+			YFCElement complexQueryElement = inputCustomerDocument
+			.createElement("ComplexQuery");
+			YFCElement sort = inputCustomerDocument.createElement("OrderBy");
+			YFCElement attribute = inputCustomerDocument.createElement("Attribute");
+			attribute.setAttribute("Name", "CustomerPath");
+			attribute.setAttribute("Desc", "N");
+			sort.appendChild(attribute);
+			
+			YFCElement orElement = inputCustomerDocument
+			.createElement("Or");
+			
+			for(String customerID :wList) {
+				createInput(customerID,complexQueryElement,orElement);
+			}
+			
+			complexQueryElement.appendChild(orElement);
+			inputCustomerElement.appendChild(complexQueryElement);
+			inputCustomerElement.appendChild(sort);		
+			
+			Element input = WCMashupHelper.getMashupInput("xpedx-getCusotmerByCustomerPath",valueMap, wcContext);
+			
+			
+			Element pageElement=(Element)input.getElementsByTagName("Input").item(0);
+			pageElement.appendChild(input.getOwnerDocument().importNode(inputCustomerDocument.getDocument().getDocumentElement(), true));
+			
+			
+			Object obj = WCMashupHelper.invokeMashup("xpedx-getCusotmerByCustomerPath", input, wcContext.getSCUIContext());
+			
+			Document outputDoc = ((Element) obj).getOwnerDocument();
+					
+			Element outputCustomerElement = (Element)outputDoc.getElementsByTagName("XPXCustHierarchyViewList").item(0);
+			
+			if (null != outputCustomerElement) {
+				ArrayList<Element> xpxCustViewElems=SCXmlUtil.getElements(outputCustomerElement, "XPXCustHierarchyView");
+				for(int j=0;j<xpxCustViewElems.size();j++)
+				{
+					if (wList.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"))) {
+							shipToStr.add(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"));
+							createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("MSAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+									customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("MSAPCustomerID")),0);
+						}if(wList.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"))){
+							shipToStr.add(xpxCustViewElems.get(j).getAttribute("SAPCustomerID"));
+							createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("SAPCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+									customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("SAPCustomerID")),1);
+						}if(wList.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"))){
+							shipToStr.add(xpxCustViewElems.get(j).getAttribute("BillToCustomerID"));
+							createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("BillToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+									customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("BillToCustomerID")),2);
+						}if(wList.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")) && !shipToStr.contains(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"))){
+							shipToStr.add(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"));
+							createCustomerElement(customerMap,xpxCustViewElems.get(j).getAttribute("ShipToCustomerID"),xpxCustViewElems.get(j).getAttribute("CustomerPath"),
+									customerFullAddr.get(xpxCustViewElems.get(j).getAttribute("ShipToCustomerID")),-1);
+						}
+					
+					} // end for  j=0 for loop
+			}
 		}
 		XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", customerMap);
+		XPEDXWCUtils.setObectInCache("CUSTOMER2", wList);
 		return shipToStr;
 		
 	}

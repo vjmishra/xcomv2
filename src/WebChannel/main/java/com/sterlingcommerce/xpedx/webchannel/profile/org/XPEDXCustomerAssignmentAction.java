@@ -74,7 +74,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String orderByAttribute = "ShipToCustomerID";
 	protected Integer pageNumber = 1;
 	//Updated from 25 to 6 for JIRA 2875
-	protected Integer pageSize = 6;
+	protected Integer pageSize = 10;
     private Boolean isFirstPage = Boolean.FALSE;
     private Boolean isLastPage = Boolean.FALSE;
     private Boolean isValidPage = Boolean.FALSE;
@@ -306,6 +306,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	public String getPaginatedCustomersInHierarchy() {
 		
 		XPEDXWCUtils.removeObectFromCache("SessionForUserProfile");
+		customers2=(List<String>)XPEDXWCUtils.getObjectFromCache("CUSTOMER2");
 		populateAvailableLocation();
 		getSortedAssignedCustomer();
 		listSize = customers1.size() + customers2.size() + 2;
@@ -350,11 +351,14 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			
 			Element viewListElem = SCXmlUtil.getChildElement(customerHierarchyElem, "XPXCustViewList");
 			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(viewListElem, "XPXCustView");
-			for(int i=0; i<assignedCustElems.size(); i++) {
-				Element custElem = assignedCustElems.get(i);
-				String custId = SCXmlUtil.getAttribute(custElem, "CustomerID");
-				String fullAddress= SCXmlUtil.getAttribute(custElem, "CustomerAddress");
-				availableLocationMap.put(custId, fullAddress);
+			if(assignedCustElems != null)
+			{
+				for(int i=0; i<assignedCustElems.size(); i++) {
+					Element custElem = assignedCustElems.get(i);
+					String custId = SCXmlUtil.getAttribute(custElem, "CustomerID");
+					String fullAddress= SCXmlUtil.getAttribute(custElem, "CustomerAddress");
+					availableLocationMap.put(custId, fullAddress);
+				}
 			}
 		}
 		
