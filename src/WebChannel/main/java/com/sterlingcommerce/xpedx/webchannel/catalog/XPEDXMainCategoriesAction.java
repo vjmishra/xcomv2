@@ -24,8 +24,9 @@ public class XPEDXMainCategoriesAction  extends WCMashupAction{
         //outDoc = CatalogContextHelper.getCategoryFromCache(wcContext, "1");
         if(outDoc==null){
             try {
-            	if (wcContext.isGuestUser()) { 
-            		Map<String, String> valueMap1 = new HashMap<String, String>();
+            	if (wcContext.isGuestUser()) {
+            		//Commented for Jira 4241 performance fix.
+            		/*Map<String, String> valueMap1 = new HashMap<String, String>();
             		valueMap1.put("/SearchCatalogIndex/@CallingOrganizationCode", getWCContext().getStorefrontId());
             		valueMap1.put("/SearchCatalogIndex/@OrganizationCode", "");
             		valueMap1.put("/SearchCatalogIndex/@CategoryDomain", "");
@@ -37,9 +38,10 @@ public class XPEDXMainCategoriesAction  extends WCMashupAction{
             		valueMap1, wcContext.getSCUIContext());
             		Object obj1 = WCMashupHelper.invokeMashup(SEARCH_CATALOG_INDEX_MASHUP_ID,
             		input1, wcContext.getSCUIContext());
-            		outDoc = ((Element) obj1).getOwnerDocument();
+            		outDoc = ((Element) obj1).getOwnerDocument();*/
             	} else {
             		outDoc = prepareAndInvokeMashup(SEARCH_CATALOG_INDEX_MASHUP_ID).getOwnerDocument();
+            		this.mainCatsDoc = outDoc.getDocumentElement();
             	}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -48,12 +50,11 @@ public class XPEDXMainCategoriesAction  extends WCMashupAction{
 
         }
         
-        if(outDoc == null){
+        if(!wcContext.isGuestUser() && outDoc == null){
             log.error("Exception in reading the Categories  ");
             return ERROR;
         }
-        this.mainCatsDoc = outDoc.getDocumentElement();
-        return SUCCESS;
+       return SUCCESS;
     }
 
 	public Element getMainCatsDoc()
