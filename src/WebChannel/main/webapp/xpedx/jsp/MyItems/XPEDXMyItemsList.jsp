@@ -932,7 +932,7 @@
 			</td>
 			<%-- <td class=" sortable" align="center" width="105"><span class="white">Last Modified By</span></td>--%>			
 			<td class="" align="center" style="width:250px;">
-			<swc:sortable fieldname="%{'UserName'}">
+			<swc:sortable fieldname="%{'ModifyUserName'}">
 				<span class="white">Last Modified By</span>
 				</swc:sortable>
 				</td>
