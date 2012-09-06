@@ -17,6 +17,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 
 public class ErrorLogger {
 
@@ -110,7 +111,7 @@ public class ErrorLogger {
 							|| errorObj.getErrorClass().equalsIgnoreCase("Unexpected / Invalid")
 							|| errorObj.getErrorClass().equalsIgnoreCase("Application") 
 							|| errorObj.getErrorClass().equalsIgnoreCase("EOF") 
-							|| errorObj.getErrorClass().equalsIgnoreCase("SOF")) {
+							|| errorObj.getErrorClass().equalsIgnoreCase("SOF")||errorObj.getErrorClass().equalsIgnoreCase(XPXLiterals.CUSTOMER_ERROR_CLASS)||errorObj.getErrorClass().equalsIgnoreCase(XPXLiterals.ITEM_ERROR_CLASS)) {
 						populateNotificationTable(errorObj, newEnv,randomNumber);
 					}
 				}

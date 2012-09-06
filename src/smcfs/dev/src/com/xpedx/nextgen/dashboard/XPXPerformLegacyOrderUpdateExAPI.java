@@ -49,6 +49,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	private Properties _prop;
 	private static YFCLogCategory log;
 	boolean centExempt=false;
+	boolean customerError=false;
+	boolean ItemError=false;
+	
 
 	static {
 
@@ -476,8 +479,23 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 			ex.printStackTrace();
 			APIException = ex;
+			
 			if(!centExempt){
-				prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
+				if(customerError)
+				{
+					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.CUSTOMER_ERROR_CLASS, env, inXML);
+					customerError = false;
+				}
+				else if(ItemError)
+				{
+					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.ITEM_ERROR_CLASS, env, inXML);	
+					ItemError = false;
+				}
+				else
+				{
+					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
+				}
+			
 			}
 			// Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(log.isDebugEnabled()){
@@ -1044,6 +1062,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
 					rootOrdLineExtnEle.setAttribute("ExtnLineType", extnLineType);
 				} else {
+					ItemError = true;
 					throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 				}
 		} else {
@@ -1118,6 +1137,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (!YFCObject.isNull(extnLineType) && !YFCObject.isVoid(extnLineType)) {
 				rootOrdLineExtnEle.setAttribute("ExtnLineType", extnLineType);
 			} else {
+				ItemError = true;
 				throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 			}
 
@@ -2345,7 +2365,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
-			centExempt = true;
+			customerError = true;
 			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
@@ -3350,6 +3370,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							if (log.isDebugEnabled()) {
 								log.debug("Item# "+itemID+" Doesn't Exist In Web/Xpedx.com");
 							}
+							ItemError = true;
 							throw new Exception("Item# "+itemID+" Doesn't Exist In Web.");
 						}
 					}
@@ -3476,6 +3497,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						if (log.isDebugEnabled()) {
 							log.debug("Item# "+itemId+" Doesn't Exist In Web/Xpedx.com");
 						}
+						ItemError = true;
 						throw new Exception("Item# "+itemId+" Doesn't Exist In Web.");
 					}
 				}
