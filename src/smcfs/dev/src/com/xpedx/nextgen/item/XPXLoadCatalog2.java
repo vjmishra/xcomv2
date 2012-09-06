@@ -151,7 +151,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						}
 						counter++;
 					}
+					if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
 					deleteAssetType(env,inXML,itemKey,strAssetType.toString());
+					}
 				}
 				//End for Jira 3155
 			}
