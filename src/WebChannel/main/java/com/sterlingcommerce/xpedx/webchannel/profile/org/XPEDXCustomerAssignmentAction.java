@@ -305,7 +305,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	public String getPaginatedCustomersInHierarchy() {
 		
-		
+		XPEDXWCUtils.removeObectFromCache("SessionForUserProfile");
 		customers2=(List<String>)XPEDXWCUtils.getObjectFromCache("CUSTOMER2");
 		populateAvailableLocation();
 		getSortedAssignedCustomer();
