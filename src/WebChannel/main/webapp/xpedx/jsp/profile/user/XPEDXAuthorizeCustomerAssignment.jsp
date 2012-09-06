@@ -175,7 +175,7 @@
                     </td>
                     <td class="no-border-right-user padding0"> 
                     <div id="customers2_div">
-						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
+						<div > 
                       <select name="customers2" id="customersTwo" multiple="multiple" size="%{listSize}" style=" min-width:735px; height:150px;">
 							<s:iterator value='#customers2'>
 								<s:set name='currentCustIdKey' value='key'/>
@@ -227,7 +227,7 @@
                     <td valign="top" class="no-border-right-user padding0">
 <!--                     <div class=" clearview">  -->
 					<div id="customers1_div">
-						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
+						<div style="overflow:auto;border: 1px solid #CCCCCC;">  
 	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}"> 
 								<s:iterator value='#customers1'>
 									<s:set name='currentCustIdKey' value='key'/>

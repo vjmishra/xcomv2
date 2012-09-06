@@ -74,7 +74,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String orderByAttribute = "ShipToCustomerID";
 	protected Integer pageNumber = 1;
 	//Updated from 25 to 6 for JIRA 2875
-	protected Integer pageSize = 10;
+	protected Integer pageSize = 6;
     private Boolean isFirstPage = Boolean.FALSE;
     private Boolean isLastPage = Boolean.FALSE;
     private Boolean isValidPage = Boolean.FALSE;
@@ -305,7 +305,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	public String getPaginatedCustomersInHierarchy() {
 		
-		XPEDXWCUtils.removeObectFromCache("SessionForUserProfile");
+		
 		customers2=(List<String>)XPEDXWCUtils.getObjectFromCache("CUSTOMER2");
 		populateAvailableLocation();
 		getSortedAssignedCustomer();
@@ -337,6 +337,10 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
 		ArrayList<Element> availableCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AVAILABLE_LOCATIONS");
 		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
+		if(availableCustomers != null && availableCustomers.size() <=pageSize && pageNumber >1)
+		{
+			pageNumber =1;
+		}
 		Document document = XPEDXWCUtils.getPaginatedCustomers(rootCustomerKey,getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext(),
 				assignedCustomers,availableCustomers);
 		if(document!=null) {		
@@ -395,8 +399,21 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		}
 		XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", assignedCustomers);
 		XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", availableCustomers);
-		getSortedAssignedCustomer();
-		populateAvailableLocation();
+		try
+		{
+			getSortedAssignedCustomer();
+		}catch(Exception e)
+		{
+			log.error("Exception while sorting "+e.getMessage());
+		}
+		try
+		{
+			populateAvailableLocation();
+		}catch(Exception e)
+		{
+			log.error("Exception while sorting "+e.getMessage());
+		}
+		
 		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
 	
 		return SUCCESS;
