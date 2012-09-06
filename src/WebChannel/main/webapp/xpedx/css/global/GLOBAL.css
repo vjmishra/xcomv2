@@ -5006,8 +5006,7 @@ ul#cart-actions.news-page li {
     text-decoration: none;
 }
 select#customersTwo {
-    height: 150px;
-    width: 730px;
+    min-width:735px !important; height:100px !important; 
 }
 select#customersOne {
     height: 150px;

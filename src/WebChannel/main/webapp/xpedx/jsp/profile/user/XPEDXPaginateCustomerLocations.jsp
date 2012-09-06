@@ -7,7 +7,7 @@
 <s:set name='_action' value='[0]' />
 <s:set name='customers1' value='#_action.getAvailableLocationMap()' />
 				<div id="customers1_div">
-						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
+						<div style="overflow:auto;border: 1px solid #CCCCCC;"> 
 	                      <select name="customers1" id="customersOne" multiple="multiple" size="%{listSize}"> 
 								<s:iterator value='#customers1'>
 									<s:set name='currentCustIdKey' value='key'/>
