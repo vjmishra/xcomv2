@@ -40,6 +40,8 @@ public class XPXLiterals {
 	public static final String E_ERROR_CLASS = "Unknown Error";
 	public static final String EOF_ERROR_CLASS = "EOF";
 	public static final String SOF_ERROR_CLASS = "SOF";
+	public static final String CUSTOMER_ERROR_CLASS = "Customer OU failure";
+	public static final String ITEM_ERROR_CLASS = "Item OU failure";
 	
 	public static final String EOF_ERROR_DESC = "This is an EOF message of the";
 	public static final String SOF_ERROR_DESC = "This is an SOF of the";
