@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 
 import org.apache.log4j.Logger;
@@ -420,6 +421,16 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						MANAGE_USER_MASHUP, userContactInput);
 				populateMashupInput(MANAGE_USER_MASHUP, valuemap,
 						userContactInput);
+				//added for 4284 - After Review
+				/*String bodyDataRefCQL=(String)getWCContext().getSCUIContext().getSession().getAttribute("bodyDataforCQL");
+			    if(bodyDataRefCQL!=null&&!bodyDataRefCQL.equals(getBodyData())){*/
+			    	Element Extn = (Element) (SCXmlUtils
+							.getElements(userContactInput,
+									"/CustomerContactList/CustomerContact/Extn")).get(0);
+					Element XPXQuickLinkList=SCXmlUtils.createChild(Extn, "XPXQuickLinkList");
+					AppendQuickLinkAttributes( XPXQuickLinkList);
+			  //  }
+			  //End for 4284 - After Review
 				if (UserProfileHelper.userIdExistsForCustomerContact(
 						this.customerContactId, wcContext.getSCUIContext()
 								.getRequest().getParameter("userName"),
@@ -528,7 +539,10 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								userContactInput);
 						invokeMashup(MANAGE_USER_MASHUP, userContactInput);
 					} else {
-						prepareAndInvokeMashup(MANAGE_USER_MASHUP);
+						
+//						prepareAndInvokeMashup(MANAGE_USER_MASHUP);
+						
+						invokeMashup(MANAGE_USER_MASHUP,userContactInput);
 					}
 				} else {
 					// New user being created for Existing Contact
@@ -1888,6 +1902,52 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			return false;
 		}
 		return true;
+	}
+	//AppendQuickLinkAttributes method added for 4284 - After Review
+	public void AppendQuickLinkAttributes(Element eleXPXQuickLinkList)
+	{
+		eleXPXQuickLinkList.setAttribute("Reset", "true");
+		
+		Element eleXPXQuickLink = null;
+		StringTokenizer st = new StringTokenizer(getBodyData(), "||");
+		int i = 1;
+		while (st.hasMoreTokens()) {
+			//From UserProfile1.jsp
+			String token = st.nextToken();
+			if(token.equals("*#?")) {
+				token = "";
+			}
+			
+			if (i == 1) {
+				eleXPXQuickLink =SCXmlUtils.createChild(eleXPXQuickLinkList, "XPXQuickLink");
+				eleXPXQuickLink.setAttribute("QuickLinkName", token);
+			}
+			
+			if (i == 2) 
+				eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
+			
+			if (i == 3) {
+				eleXPXQuickLink.setAttribute("ShowQuickLink", token);
+			}
+			if (i == 4) {
+				eleXPXQuickLink.setAttribute("URLOrder", token);
+				eleXPXQuickLinkList.appendChild(eleXPXQuickLink);
+			}
+			
+			i++;
+			
+			if (i == 5) {
+				i = 1;
+				
+			}			
+			
+		}
+		
+		
+		
+		
+//		return templateElement;
+	
 	}
 
 }
