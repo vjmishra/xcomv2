@@ -168,13 +168,11 @@
 			<param name="validationClass">com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXSaveUserInfoValidation</param>			
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXSaveUserInfoBinding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxCreateCustQL</param>
-				<param name="frmUserProfile1Flag">true</param>
+				<param name="actionName">xpedxUserProfile</param>
 				<param name="namespace">/profile/user</param>
 				<param name="parse">true</param>
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
-				<param name="bodyData">${bodyData}</param>
 				<param name="selectedTab">${selectedTab}</param>
 				<param name="success">${success}</param>
 				</result>
