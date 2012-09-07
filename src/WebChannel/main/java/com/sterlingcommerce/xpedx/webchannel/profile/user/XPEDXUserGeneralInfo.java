@@ -295,10 +295,11 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		if (YFCCommon.isVoid(inputCustomerID)) {
 			inputCustomerID = wcContext.getCustomerId();
 		}
-		if (inputCustomerID!=null && !(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID,
+		//Commented for jira 4297 performance fix.
+		/*if (inputCustomerID!=null && !(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID,
 				wcContext))) {
 			return ERROR;
-		}
+		}*/
 		try {
 			if ((!(ResourceAccessAuthorizer.getInstance().isAuthorized(
 					USER_LIST_RESOURCE_ID, getWCContext())))
