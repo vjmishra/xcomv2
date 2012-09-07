@@ -686,7 +686,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 	/****Start of Code Changed for Promotions JIra 2599 *******/			
 			//code changed for performance
-			if(path.equals("/") && getFirstItem().trim()!=""){
+			/*if(path.equals("/") && getFirstItem().trim()!=""){
 				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
 				.getDocumentElement().getChildElement("ItemList")
 				.getFirstChild();
@@ -697,10 +697,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 						path = node.getFirstChild().getAttributes().get("CategoryPath");
 						categoryPath = path;
 					}
-				}
-				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
-				
-			}
+				}*/
+				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				categoryPath = path;
+			//}
 			
 	/****End of Code Changed for Promotions JIra 2599 *******/
 		
@@ -1130,7 +1130,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		
 				/***** Start of  Code changed for Promotions Jira 2599 ********/ 
-		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+		/*List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
@@ -1144,7 +1144,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setCategoryDepth("1");// default value is 2; coming from struts
 				// file
 			}
-		}
+		} */
 
 		/****End of Code Changed for Promotions JIra 2599 *******/
 		//Added for performance of filterAction
