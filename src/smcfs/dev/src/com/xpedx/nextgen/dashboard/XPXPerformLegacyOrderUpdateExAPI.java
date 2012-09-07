@@ -479,23 +479,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 			ex.printStackTrace();
 			APIException = ex;
-			
 			if(!centExempt){
-				if(customerError)
-				{
+				if(customerError) {
 					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.CUSTOMER_ERROR_CLASS, env, inXML);
 					customerError = false;
-				}
-				else if(ItemError)
-				{
+				} else if(ItemError) {
 					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.ITEM_ERROR_CLASS, env, inXML);	
 					ItemError = false;
-				}
-				else
-				{
+				} else {
 					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 				}
-			
 			}
 			// Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(log.isDebugEnabled()){
@@ -1486,7 +1479,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (YFCObject.isNull(fillAndKill)) {
 				fillAndKill = "";
 			}
-		}								
+		}		
 		
 		YFCElement ordExtnEle = ordEle.getChildElement("Extn");
 		if (ordExtnEle != null) {
@@ -1532,9 +1525,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			while (yfcItr.hasNext()) {
 				YFCElement ordLineEle = (YFCElement) yfcItr.next();
 				String lineProcessCode = "";
+				String lineType = "";
 				
 				// To retrieve Line Process Code.
-				
 				if (ordLineEle.hasAttribute("LineProcessCode")) {
 					lineProcessCode = ordLineEle.getAttribute("LineProcessCode");
 					if (YFCObject.isNull(lineProcessCode) || YFCObject.isVoid(lineProcessCode)) {							
@@ -5427,6 +5420,33 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						if (ordStatus.equalsIgnoreCase("1100.5700")) {
 							if (YFCObject.isNull(noBoSplit) || YFCObject.isVoid(noBoSplit) || noBoSplit.equalsIgnoreCase("N")) {
 								// Back order Scenario
+								
+								// To Identify Line Type.
+								String lineType = "";
+								if (rootOrdLineEle.hasAttribute("LineType")) {
+									lineType = rootOrdLineEle.getAttribute("LineType");
+									if (YFCObject.isNull(lineType) || YFCObject.isVoid(lineType)) {							
+										lineType = "";
+									}
+								} else {
+									lineType = "";						
+								}
+								
+								// To Set Shippable Line Total As The Order Line Total.
+								if (!lineType.equalsIgnoreCase("M")) {
+									
+									String extnLineShippableTotal = null;
+									if (rootOrdLineExtnEle.hasAttribute("ExtnLineShippableTotal")) {
+										extnLineShippableTotal = rootOrdLineExtnEle.getAttribute("ExtnLineShippableTotal");
+										if (YFCObject.isNull(extnLineShippableTotal) || YFCObject.isVoid(extnLineShippableTotal)) {
+											extnLineShippableTotal = "0.0";
+										}
+									} else {
+										extnLineShippableTotal = "0.0";
+									}									
+									rootOrdLineExtnEle.setAttribute("ExtnLineOrderedTotal", extnLineShippableTotal);
+								}
+								
 								Float fReqShipOrdQty = Float.parseFloat(reqShipOrdQty);
 								rootOrdLineTranQtyEle.setAttribute("OrderedQty", fReqShipOrdQty.toString());
 							} else {
@@ -5550,6 +5570,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		String orderTax = null;
 		String _orderFreightCharge = null;
 		String orderFreightCharge = null;
+		
+		// Order Level Price Calculation.
 		
 		// To get the modified informations from legacy.
 		YFCElement orderExtnElement = chngfOrderEle.getChildElement("Extn");
@@ -5722,6 +5744,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			ordExtnEle.setAttribute("ExtnTotOrdValWithoutTaxes", new Double(cTotalOrderValueWithoutTax).toString());
 		}
 		
+		// Order Line Level Price Calculation.
 		YFCElement ordLinesEle = chngcOrderEle.getChildElement("OrderLines");
 		if (ordLinesEle != null) {
 			YFCIterable<YFCElement> yfcItr = ordLinesEle.getChildren("OrderLine");
@@ -5804,7 +5827,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		String _orderLineKey = "";
 		String lineProcessCode = null;
 				
-		// To get the line order total from the XML sent by Legacy.
+		// Order Line Total - Legacy.
 		YFCElement orderLinesElem = chngfOrderEle.getChildElement("OrderLines");
 		if (orderLinesElem != null) {
 			YFCIterable<YFCElement> yfcItr = orderLinesElem.getChildren("OrderLine");
@@ -5863,7 +5886,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		}
 		
-		// To get the line order total from the FO in database.
+		// Order Line Total - Database.
+		boolean lineExistInDB = false;
 		YFCIterable<YFCElement> yfcItr = cAndfOrderEle.getChildren("Order");
 		while (yfcItr.hasNext()) {
 			YFCElement ordEle = (YFCElement) yfcItr.next();
@@ -5890,6 +5914,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 							}
 							
 							if (webLineNo.equalsIgnoreCase(_webLineNo)) {
+								lineExistInDB = true;
 								// To retrieve order line key of the line stored in DB.
 								if(_orderLineElem.hasAttribute("OrderLineKey")) {
 									_orderLineKey = _orderLineElem.getAttribute("OrderLineKey");
@@ -5913,6 +5938,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									ordLineTotalDB = ordLineTotalDB + Double.parseDouble(extnLineOrdTotal);
 									ordLineAdjDB = ordLineAdjDB + Double.parseDouble(extnLegTotalLineAdj);
 								}
+								break;
 							}
 						}
 					}
@@ -5920,7 +5946,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 		}
 		
-		if (headerProcessCode.equalsIgnoreCase("A")) {
+		if (headerProcessCode.equalsIgnoreCase("A") || !lineExistInDB) {
 			ordLineTotalDB = ordLineTotalDB + ordLineTotalLeg;
 			ordLineAdjDB = ordLineAdjDB + ordLineAdjLeg;
 		}
