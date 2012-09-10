@@ -32,7 +32,10 @@ function checkOut()
     {
         return;
     }
-    document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
+    if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() != "")
+	{
+    	document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
+	}
     document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value; 
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
     document.OrderDetailsForm.action = document.getElementById('checkoutURL');
@@ -185,7 +188,8 @@ function resetQuantityErrorForQuckAdd()
 function update()
 {
 	document.OrderDetailsForm.isComingFromCheckout.value = "false";
-	if(document.getElementById('cartName_new').value.trim() == "")
+	
+	if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() == "")
 	{
 		//commented for 3098
 		//alert("Cart name can't be blank, please add a valid name for cart.");
@@ -214,7 +218,10 @@ function update()
 	    {
 	        return;
 	    }
-	    document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
+	    if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() != "")
+		{
+	    	document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
+		}
 	    document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value;
 	    document.OrderDetailsForm.modifyOrderLines.value = "true";
 	    document.OrderDetailsForm.action = document.getElementById('updateURL');
@@ -222,7 +229,10 @@ function update()
 	}
 	else
 	{
-		document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
+		if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() == "")
+		{
+			document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;			
+		}
 		document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value;
 		document.OrderDetailsForm.zeroOrderLines.value = "true";
 		document.OrderDetailsForm.action = document.getElementById('updateNoLinesURL');
