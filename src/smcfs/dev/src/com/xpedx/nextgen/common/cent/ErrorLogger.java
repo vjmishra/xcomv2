@@ -117,7 +117,20 @@ public class ErrorLogger {
 				}
 			}
 		} catch (Exception e) {
-			yfcLogCatlog.error(e.getMessage());
+            StringBuffer logString = new StringBuffer("UnknownTargetSystem");
+            logString.append("|");
+            logString.append("Sterling");
+            logString.append("|");
+            logString.append("UnknownTransType");
+            logString.append("|");                                     
+            logString.append("UnknownCommMethod");
+            logString.append("|");
+            logString.append("EDS xpedx-HQ-NG Test***NotForITCSUse***");
+            logString.append("|");
+            logString.append("UnknownErrorClass");
+            logString.append("|");
+            logString.append(e.getMessage());                                                                        
+            yfcLogCatlog.error(logString.toString());
 		}
 	}
     
