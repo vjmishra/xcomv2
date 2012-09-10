@@ -276,6 +276,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 				if(orderDetailDocument != null)
 				{
+					// Updated for Jira 4304
+					orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
 					changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
 					//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
 				}
