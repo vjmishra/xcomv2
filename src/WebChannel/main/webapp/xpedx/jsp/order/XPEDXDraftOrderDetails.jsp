@@ -830,6 +830,7 @@ $(document).ready(function(){
 <!-- List Item Description -->
 <div class="mil-edit-forms">
 
+<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<s:if test="#canChangeOrderName">
 		Name
 		<s:textfield name='cartName_new' id="cartName_new" size="35"
@@ -839,6 +840,8 @@ $(document).ready(function(){
 	<s:else>
 		<input type="hidden" name="cartName_new" id="cartName_new" onkeyup="javascript:maxNewLength(this,'35');" value="<s:property value='%{#orderDetails.getAttribute("OrderName")}' />" />
 	</s:else>
+</s:if>
+	
 	<br />
 	
 	
