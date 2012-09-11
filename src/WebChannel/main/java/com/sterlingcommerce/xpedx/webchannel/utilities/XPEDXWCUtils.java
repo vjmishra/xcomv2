@@ -1651,6 +1651,9 @@ public class XPEDXWCUtils {
 			shipToCustomer.setExtnCustomerDivision(customerDivision);
 			shipToCustomer.setExtnCurrencyCode(currencyCode);
 			shipToCustomer.setExtnIndustry(industry);
+			 //Added for JIRA 4306
+			shipToCustomer.setOrganizationName(SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
+			//Ended for JIRA 4306
 			setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 			/*wcContext.setWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,shipFromDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,customerDivision,WCAttributeScope.LOCAL_SESSION);
