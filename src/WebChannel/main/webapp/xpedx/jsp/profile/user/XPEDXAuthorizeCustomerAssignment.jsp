@@ -45,11 +45,13 @@
 				}else
 					existingCustId = temp;
 		}
+		var cntAuthorizeLocation = i;
 		for ( var i=0; i < lboFrom.options.length; i++ )
 		{
 			
 			if ((lboFrom.options[i].selected == true ) )
 			{
+				cntAuthorizeLocation = cntAuthorizeLocation +1;
 				strItemToAddText = lboFrom.options[i].text;
 				strItemToAddVal = lboFrom.options[i].value;
 				var temp = strItemToAddVal;
@@ -120,7 +122,10 @@
 				i--;
 			}
 		}
-		
+		if(i<6)
+			lboFrom.size=7;
+		else
+			lboFrom.size=i+2;
 		 var url = document.getElementById("saveURL").value; 
 		 var pageNum = document.getElementById("pageNum");
 		 var pageLength = document.getElementById("pageLength");
@@ -174,9 +179,9 @@
                       
                     </td>
                     <td class="no-border-right-user padding0"> 
-                    <div id="customers2_div">
-						<div style="width:730px; overflow:auto;border: 1px solid #CCCCCC;"> 
-                      <select name="customers2" id="customersTwo" multiple="multiple" size="%{listSize}" style=" min-width:735px; height:150px;">
+                   <div style="width:730px; overflow:auto;height: 120px;" id="customers2_div">
+                       
+                       <select size='<s:property value="#listSize" />' id="customersTwo" multiple="multiple" name="customers2" style="min-width:730px;">
 							<s:iterator value='#customers2'>
 								<s:set name='currentCustIdKey' value='key'/>
 		    					<s:set name='currentCustIdValue' value='value'/>
@@ -187,12 +192,12 @@
 								
 							</s:iterator>
 						</select>
+						</div>
 						
-						</div>
-						</div>
 					</td>
+					
                 </tr>
-                	<s:hidden name="buyAdmin" value='%{isCustomerAdmin}'/>
+               <s:hidden name="buyAdmin" value='%{isCustomerAdmin}'/>
                 <s:if test='%{isCustomerAdmin}'>            
 					<tr>
 	                    <td valign="top" class="no-border-right-user padding0">&nbsp;</td>
