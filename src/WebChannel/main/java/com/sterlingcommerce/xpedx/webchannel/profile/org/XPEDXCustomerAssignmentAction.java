@@ -83,12 +83,22 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private List<String> alreadySelectedCustomers;
     private String rootCustomerKey;
    //Added custId for Jira 4146
-    private String custID = "";
+    private int authListSize;   
+	private String custID = "";
     private String existingCustId="";
     private String addToavailable="";
     private String removeFromavailable="";
     private LinkedHashMap<String, String> availableLocationMap=new LinkedHashMap<String, String>();
     private LinkedHashMap<String, String> authorizedLocationMap=new LinkedHashMap<String, String>();
+    public int getAuthListSize() {
+		return authListSize;
+	}
+
+	public void setAuthListSize(int authListSize) {
+		this.authListSize = authListSize;
+	}
+
+
     public String getAddToavailable() {
 		return addToavailable;
 	}
@@ -415,7 +425,13 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		}
 		
 		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
-	
+		if(assignedCustomers.size()<7){
+			setAuthListSize(7);
+		}
+		else{
+			setAuthListSize(assignedCustomers.size() + 2);
+		}
+		
 		return SUCCESS;
 		
 	}
@@ -821,6 +837,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		availableCustomers.add(assignedCustomer);
 		assignedCustomers.remove(assignedCustomer);
 	}
+	setListSize(assignedCustomers.size());
 	XPEDXWCUtils.setObectInCache("AUTHORIZED_LOCATIONS", assignedCustomers);
 	XPEDXWCUtils.setObectInCache("AVAILABLE_LOCATIONS", availableCustomers);
 	populateAvailableLocation();
