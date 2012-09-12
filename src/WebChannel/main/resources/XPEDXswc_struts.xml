@@ -29,7 +29,7 @@
   <package name="wcDefault" extends="struts-default">
     <interceptors>
       <!-- WCContext injector interceptor definition -->
-			<interceptor name="wcContextInjector"
+      <interceptor name="wcContextInjector"
           class="com.sterlingcommerce.xpedx.webchannel.core.context.XPEDXWCContextInjectorInterceptor"/>
       <!-- Ognl stack modifier interceptor definition -->
       <interceptor name="ognlStackModifier"
@@ -113,7 +113,7 @@
     <interceptors>
       <!-- WCContext injector interceptor definition -->
       <interceptor name="wcContextInjector"
-          class="com.sterlingcommerce.xpedx.webchannel.core.context.XPEDXWCContextInjectorInterceptor"/>
+          class="com.sterlingcommerce.webchannel.core.context.WCContextInjectorInterceptor"/>
       <!-- Ognl stack modifier interceptor definition -->
       <interceptor name="ognlStackModifier"
           class="com.sterlingcommerce.webchannel.core.binding.OgnlStackModifierInterceptor"/>
