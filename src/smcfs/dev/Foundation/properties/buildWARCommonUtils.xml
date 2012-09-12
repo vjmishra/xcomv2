@@ -146,6 +146,7 @@
 				</manifest>
 				<fileset dir="${tmpdir}/build@{package.attr}">
 					<exclude name="WEB-INF/web.xml" />
+					<exclude name="WEB-INF/classes/swc_struts.xml" />
 				</fileset>
 			</war>
 		</sequential>
@@ -316,6 +317,7 @@
 	<target name="-remove-tester-from-war" unless="devmode">
 		<delete dir="${wartmpdir}/yfsadmin" />
 		<delete dir="${wartmpdir}/yfshttpapi" />
+		<delete dir="${wartmpdir}/WEB-INF/classes/swc_struts.xml" />
 	</target>
 
 	<!-- =========================================================================== -->
