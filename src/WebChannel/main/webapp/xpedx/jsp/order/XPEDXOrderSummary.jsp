@@ -582,9 +582,9 @@ from session . We have customer Contact Object in session .
 				<![endif]-->
 			<table class="address-block">
 				<tr><td><span class="bold">Bill-To: </span> <s:property value='orderBillToID'/></td> </tr>	
-				<s:if test="%{#currentShipTo.getOrganizationName()!='' && #currentShipTo.getOrganizationName()!= null}">
+				<s:if test="%{#currentShipTo.getBillTo().getOrganizationName()!='' && #currentShipTo.getBillTo().getOrganizationName()!= null}">
 				<tr>
-					<td width="100%"><s:property value='%{#currentShipTo.getOrganizationName()}' /></td>
+					<td width="100%"><s:property value='%{#currentShipTo.getBillTo().getOrganizationName()}' /></td>
 				</tr>
 				</s:if>	    
 				<tr><td><s:property value='%{#wcContext.getWCAttribute("BillToForOrderSummaryPage")}'/></td> </tr>
