@@ -2,6 +2,7 @@ package com.xpedx.nextgen.customermanagement.api;
 
 import java.rmi.RemoteException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -994,8 +995,15 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							String query = "Update yfs_customer set extn_sap_parent_name=" + "'" + strMSAPName + "'" + " where root_customer_key=" + "'" + rootCustomerKey + "'";
 							stmt = connection.createStatement();
 							stmt.execute(query);
+							stmt.close();
 							connection.commit();
+							if(connection!=null){
+								connection.close();
+							}
 						} catch (Exception exception) {
+							if(connection!=null){
+								connection.close();
+							}
 							exception.printStackTrace();
 						} 
 
@@ -3759,8 +3767,20 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			String query = "Update yfs_customer set root_customer_key=" + "'" + rootCustomerKey + "'" + " where parent_customer_key=" + "'" + sapCustomerKey + "'";
 			stmt = connection.createStatement();
 			stmt.execute(query);
+			stmt.close();
 			connection.commit();
+			if(connection!=null){
+				connection.close();
+			}
 		} catch (Exception exception) {
+			if(connection!=null){
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			exception.printStackTrace();
 		} 
 		
@@ -3853,7 +3873,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		Connection m_Conn=null;
 		try{
 			YFSConnectionHolder connHolder     = (YFSConnectionHolder)env;
-			m_Conn= connHolder.getDBConnection();
+			m_Conn = connHolder.getDBConnection();
+			log.info("Value of connection Class "+m_Conn.getClass().getName());
 		}
 		catch(Exception e){
 
