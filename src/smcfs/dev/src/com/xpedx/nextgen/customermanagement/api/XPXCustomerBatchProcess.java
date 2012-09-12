@@ -997,13 +997,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							stmt.execute(query);
 							stmt.close();
 							connection.commit();
-							if(connection!=null){
-								connection.close();
-							}
 						} catch (Exception exception) {
-							if(connection!=null){
-								connection.close();
-							}
 							exception.printStackTrace();
 						} 
 
@@ -3769,18 +3763,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			stmt.execute(query);
 			stmt.close();
 			connection.commit();
-			if(connection!=null){
-				connection.close();
-			}
 		} catch (Exception exception) {
-			if(connection!=null){
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 			exception.printStackTrace();
 		} 
 		
