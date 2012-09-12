@@ -1,9 +1,6 @@
 <SearchConfigurations>
 	<IndexSets>
-		<IndexSet Name="CatalogIndex">
-			<Locales>
-                <Locale LocaleCode="en_US"  AnalyzerClass="org.apache.lucene.analysis.WhitespaceAnalyzer"  />
-            </Locales>
+		<IndexSet Name="CatalogIndex">		
 			<Entities>
 				<Entity Name="Item">
 					<Attributes>
