@@ -1654,7 +1654,7 @@ public class XPEDXWCUtils {
 			 //Added for JIRA 4306
 			shipToCustomer.setOrganizationName(SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
 			//Ended for JIRA 4306
-			setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
+			
 			/*wcContext.setWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,shipFromDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,customerDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.INDUSTRY,industry,WCAttributeScope.LOCAL_SESSION);
@@ -1672,6 +1672,9 @@ public class XPEDXWCUtils {
 			if(billToCustomerID !=null && billToCustomerID.trim().length()>0) {
 				String billToKey;
 				Document billToCustomerDetails = XPEDXWCUtils.getCustomerDetails(billToCustomerID, wcContext.getStorefrontId(), "xpedx-customer-getCustomerAddressInfo");
+				//Additional change - JIRA 4306
+				shipToCustomer.getBillTo().setOrganizationName(SCXmlUtil.getXpathAttribute(billToCustomerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
+				//Additional change - JIRA 4306
 				Element billToAddressElement = SCXmlUtil.getElementByAttribute(billToCustomerDetails.getDocumentElement(),"CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultBillTo", "Y");
 				if(billToAddressElement==null) {
 					billToAddressElement = SCXmlUtil.getXpathElement(billToCustomerDetails.getDocumentElement(), "//Customer/BuyerOrganization/BillingPersonInfo");
@@ -1684,6 +1687,7 @@ public class XPEDXWCUtils {
 					documentElement.setAttribute("BillToKey", billToKey);
 				}
 			}
+			setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 			if(XPEDXWCUtils.isShipToAddressOveridden(wcContext)) {
 				setOverridenShipToAddress(documentElement,wcContext,customerDetails);
 				wcContext.getSCUIContext().getSession().removeAttribute(
