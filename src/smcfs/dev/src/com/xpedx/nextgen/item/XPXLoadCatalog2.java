@@ -4,6 +4,7 @@ package com.xpedx.nextgen.item;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -229,8 +230,20 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + "'" + strAssetType + "')";
 			stmt = connection.createStatement();
 			stmt.execute(query);
+			stmt.close();
 			connection.commit();
+			if(connection!=null){
+				connection.close();
+			}
 		} catch (Exception exception) {
+			if(connection!=null){
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			exception.printStackTrace();
 		}
 		
@@ -255,9 +268,22 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			while (resultSet.next()) {
 				return resultSet.getString(1);
 			}
+			resultSet.close();
+			stmt.close();
+			if(connection!=null){
+				connection.close();
+			}
 			//connection.commit();
 		} catch (Exception exception) {
-			exception.printStackTrace();
+			if(connection!=null){
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					log.error("YFSException: " + e.getStackTrace());
+				}
+			}
+			log.error("YFSException: " + exception.getStackTrace());
 		}
 		return itemId; 
 	}
