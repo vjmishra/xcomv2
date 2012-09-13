@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.core.YFCObject;
@@ -17,7 +18,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
-import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.yantra.yfs.japi.YFSException;
 
 public class ErrorLogger {
 
@@ -116,20 +117,32 @@ public class ErrorLogger {
 					}
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {			
             StringBuffer logString = new StringBuffer("UnknownTargetSystem");
             logString.append("|");
             logString.append("Sterling");
             logString.append("|");
-            logString.append("UnknownTransType");
+            logString.append(errorObj.getTransType());
             logString.append("|");                                     
             logString.append("UnknownCommMethod");
             logString.append("|");
             logString.append("EDS xpedx-HQ-NG Test***NotForITCSUse***");
+            logString.append("|");            
+            logString.append(errorObj.getErrorClass());
             logString.append("|");
-            logString.append("UnknownErrorClass");
+            logString.append("Original Exception: ");
+            logString.append(errorObj.getException());     
             logString.append("|");
-            logString.append(e.getMessage());                                                                        
+            logString.append("Exception caught while logging into Cent in ErrorLogger.log method: ");
+            if(e instanceof com.yantra.yfs.japi.YFSException) {
+            	YFSException yfe = (YFSException)e;            	
+            	logString.append(yfe.getErrorCode()).append(":").append(yfe.getErrorDescription()).append(":").append(yfe.getErrorUniqueId());
+            	
+            } else {
+            	logString.append(e);
+            	
+            }
             yfcLogCatlog.error(logString.toString());
 		}
 	}
@@ -163,9 +176,8 @@ public class ErrorLogger {
 		return commMethod;		
 	}
 	
-	public static void populateNotificationTable(Error errorObj,YFSEnvironment yfsEnv,String randomNumber) {
-		
-		try {
+	public static void populateNotificationTable(Error errorObj,YFSEnvironment yfsEnv,String randomNumber) throws Exception {		
+	
 			Document createErrorNotificatnInDoc = XmlUtils.createDocument("XPXErrorNotification");
 			Element xpxErrorNotifyRootElem = createErrorNotificatnInDoc.getDocumentElement();
 			String exceptionMessage = null;
@@ -203,10 +215,7 @@ public class ErrorLogger {
 				}
 				
 				xpxErrorNotifyRootElem.setAttribute("ExceptionID",randomNumber);
-				Document createErrorNotificatnOutputDoc = api.executeFlow(yfsEnv, "XPXCreateErrorNotificatnService",createErrorNotificatnInDoc);
+				api.executeFlow(yfsEnv, "XPXCreateErrorNotificatnService",createErrorNotificatnInDoc);
 			}
-		} catch (Exception e) {
-			yfcLogCatlog.error(e.getMessage());
-		}
 	}
 }
