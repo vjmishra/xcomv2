@@ -146,7 +146,7 @@
           			<tr>
           			<% if(null != request.getParameter("requestId")){%>
 						<td colspan="3" class="grey no-border-right-user"width= "75%" style="float:left; margin-right: 10px;">
-              			<a href="<s:url action="login" namespace="/common"/>">Click Here to Login</a></td> <%}%>
+              			<a href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>">Click Here to Login</a></td> <%}%>
               			
                		</tr>
 					<tr>
