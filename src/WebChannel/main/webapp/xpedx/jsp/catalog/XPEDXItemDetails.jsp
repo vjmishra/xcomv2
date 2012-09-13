@@ -1163,8 +1163,16 @@ function SubmitActionWithValidation()
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
 			<!-- Begin - Changes made by Mitesh Parikh for 2422 JIRA -->	
 			<script type="text/javascript">
-			function getbackPageUrl(){				
-			window.history.go(-1);//Added for Back button issues for JIRA #4186
+			function getbackPageUrl(){
+				//modified for jira 2421 - to get the selected view on click of back button
+				var backPageUrl = document.getElementById("backPageUrl").value;
+				if(backPageUrl != '' || backPageUrl!= null ){
+					window.location.href=backPageUrl;
+				}
+				{
+				else
+					window.history.go(-1);//Added for Back button issues for JIRA #4186
+				}
 			}
 			</script>
 			<s:if test= '%{#_action.getGoBackFlag() == "true"}'>
