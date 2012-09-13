@@ -571,12 +571,21 @@ function showSplitDiv(divId)
 						<s:else>
 							<td>
 							   <span class="boldText">Order #: </span> 
+							   	<s:set name="isFOMessageDisplay" value="%{false}" />
 							   		<s:if test='chainedFOMap.size() > 0'>
 							   			<s:if test='chainedFOMap.size() > 1'>
 							   				<a id="split-order" class="underlink" href="#">Split Orders</a> 
 							        		<img class="replacement-img" title="Your order required multiple orders to fulfill." src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_help.png">
+	              							<s:iterator value="chainedFOMap" >
+	              								<s:set name='chainedFOKey' value='key'/>
+												<s:set name='chainedFONo' value="value"/>
+												<s:if test='%{#chainedFONo != "In progress"}'>
+													<s:set name="isFOMessageDisplay" value="%{true}" />
+												</s:if>
+											</s:iterator>	
 	              						</s:if>
                         				<s:else>
+                        					
 	              							<s:iterator value="chainedFOMap" >
 												<s:set name='chainedFOKey' value='key'/>
 												<s:set name='chainedFONo' value="value"/>
@@ -591,12 +600,14 @@ function showSplitDiv(divId)
 													<s:a href="%{orderDetailsURL}">
 												  		<s:property value='#chainedFONo'/>
 													</s:a>
+													<s:set name="isFOMessageDisplay" value="%{true}" />
 												</s:else>															
 											</s:iterator> 
                         				</s:else> 
                         			<s:else>          		
 									   		<a class="underlink" href="#"> <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></a>
 									      	<s:set name="splitOrderCount" value="chainedOrderCountMap.get(#orderLineKey)"/>
+									      	<s:set name="isFOMessageDisplay" value="%{true}" />
 							      	</s:else> 
                                   	</s:if>
                                   	<s:else>
@@ -718,6 +729,13 @@ function showSplitDiv(divId)
                         <!-- end content-holding table -->
                         <div class="clearall">&nbsp;</div>
                         <br/><!-- blank line for george -->
+                        <!-- Start Jira 4303 - Kubra -->
+                         <s:if test='#isFOMessageDisplay  && #orderType == "Customer" '>
+							<div class="notice" id="msgForOrder" style="display : block;"> To see current fulfillment information, please go to the Order Detail page by clicking on the Order Number.&nbsp;<br/></div>
+						 </s:if>
+                         <!-- End Jira 4303 - Kubra -->
+                        
+                       
                         <div class="order-placed-by">
                         <s:if test='#xpedxReqDeliveryDate != ""'>
                         	Estimated Delivery Date: <s:property value="%{#util.formatDate(#xpedxReqDeliveryDate, #wcContext)}"/> <br/><br/>
