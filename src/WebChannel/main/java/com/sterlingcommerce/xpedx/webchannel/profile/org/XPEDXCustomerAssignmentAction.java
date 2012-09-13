@@ -325,6 +325,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private void getSortedAssignedCustomer()
 	{
 		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
+		if(assignedCustomers!=null){
 		Collections.sort(assignedCustomers,new Comparator<Element>() {
 			@Override
 			public int compare(Element elem, Element elem1) {
@@ -332,7 +333,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				String customerPath2 = elem1.getAttribute("CustomerPath");
 				return customerPath1.compareTo(customerPath2);
 			}
-		}); 
+		});
+		}
 		for(Element authorizeCustomer:assignedCustomers)
 		{
 			String customerID=authorizeCustomer.getAttribute("CustomerID");
@@ -346,10 +348,13 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	{
 		ArrayList<Element> assignedCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AUTHORIZED_LOCATIONS");
 		ArrayList<Element> availableCustomers=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("AVAILABLE_LOCATIONS");
-		listSize = availableCustomers.size() + assignedCustomers.size() + 2;
 		if(availableCustomers != null && availableCustomers.size() <=pageSize && pageNumber >1)
 		{
 			pageNumber =1;
+		}
+		if(availableCustomers != null)
+		{
+			listSize = availableCustomers.size() + assignedCustomers.size() + 2;
 		}
 		Document document = XPEDXWCUtils.getPaginatedCustomers(rootCustomerKey,getSelectedCurrentCustomer(), pageNumber.toString(), pageSize.toString(), pageSetToken, getWCContext(),
 				assignedCustomers,availableCustomers);
