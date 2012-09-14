@@ -890,7 +890,7 @@ function toggleThicknessSort()
   }
   else
   {
-   processSortByUpperTroy("ExtnThickness--A","sortUp","directionGaugeArrow");
+   processSortByUpperTroy("ExtnThickness--A","sortUp","directionThicknessArrow");
   }
 }
 
