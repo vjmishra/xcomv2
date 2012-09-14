@@ -868,6 +868,32 @@ function toggleGaugeSort()
   }
 }
 
+
+function toggleThicknessSort()
+{
+  theUrlValue=window.location.href;
+  var theQueryString=window.location.search;
+  if(theQueryString.indexOf("sortDirection") > -1)
+  {
+	  if(theQueryString.indexOf("sortDown") > -1)
+	  {
+		processSortByUpperTroy("ExtnThickness--D","sortDown","directionThicknessArrow");
+	  }
+	  else if(theQueryString.indexOf("sortUp" > -1))
+	  {
+		processSortByUpperTroy("ExtnThickness--A","sortUp","directionThicknessArrow");
+	  }
+	  else
+	  {
+	   processSortByUpperTroy("ExtnThickness--A","sortUp","directionThicknessArrow");
+	  }
+  }
+  else
+  {
+   processSortByUpperTroy("ExtnThickness--A","sortUp","directionGaugeArrow");
+  }
+}
+
 function toggleBasisSort()
 {
   theUrlValue=window.location.href;
