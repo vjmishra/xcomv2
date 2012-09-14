@@ -1168,9 +1168,9 @@ function SubmitActionWithValidation()
 				var backPageUrl = document.getElementById("backPageUrl").value;
 				if(backPageUrl != '' || backPageUrl!= null ){
 					window.location.href=backPageUrl;
-				}
-				{
+				}				
 				else
+				{
 					window.history.go(-1);//Added for Back button issues for JIRA #4186
 				}
 			}
