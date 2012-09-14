@@ -153,6 +153,7 @@
 	<s:set name='customers2' value='#_action.getAuthorizedLocationMap()' />
 	<s:set name='shipToStr' value='#_action.shipToStr()' />
 	<s:set name='listSize' value='#_action.getListSize()' />
+	<s:set name='authListSize' value='#_action.getAuthListSize()' />
 	<s:set name='userelement' value="getUser()" />
     <s:set name='user' value='#userelement' />
 	<s:set name='displayUserID' value='%{#user.getAttribute("DisplayUserID")}' />
@@ -179,9 +180,9 @@
                       
                     </td>
                     <td class="no-border-right-user padding0"> 
-                   <div style="width:730px; overflow:auto;height: 120px;" id="customers2_div">
+                  <div style="width:730px; overflow:auto;height: 120px;" id="customers2_div">
                        
-                       <select size='<s:property value="#listSize" />' id="customersTwo" multiple="multiple" name="customers2" style="min-width:730px;">
+                       <select size='<s:property value="#authListSize" />' id="customersTwo" multiple="multiple" name="customers2" style="min-width:730px;">
 							<s:iterator value='#customers2'>
 								<s:set name='currentCustIdKey' value='key'/>
 		    					<s:set name='currentCustIdValue' value='value'/>
