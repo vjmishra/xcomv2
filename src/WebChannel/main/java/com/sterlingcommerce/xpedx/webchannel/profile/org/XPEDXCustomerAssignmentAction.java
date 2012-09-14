@@ -91,9 +91,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     private LinkedHashMap<String, String> availableLocationMap=new LinkedHashMap<String, String>();
     private LinkedHashMap<String, String> authorizedLocationMap=new LinkedHashMap<String, String>();
     public int getAuthListSize() {
-    	if(authListSize<7){
-    		authListSize=7;
-    	}
+    	
 		return authListSize;
 	}
 

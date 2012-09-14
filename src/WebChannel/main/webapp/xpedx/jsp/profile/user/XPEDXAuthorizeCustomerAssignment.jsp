@@ -181,7 +181,15 @@
                     </td>
                     <td class="no-border-right-user padding0"> 
                   <div style="width:730px; overflow:auto;height: 120px;" id="customers2_div">
-                       
+                  
+                  
+                       <s:if test='#_action.getAuthorizedLocationMap().size() < 7'>
+                       		<s:set name='authListSize' value='7' />
+                       </s:if>
+                       <s:else>
+                       	<s:set name='authListSize' value='#_action.getAuthorizedLocationMap().size()' />
+                       </s:else>
+                     
                        <select size='<s:property value="#authListSize" />' id="customersTwo" multiple="multiple" name="customers2" style="min-width:730px;">
 							<s:iterator value='#customers2'>
 								<s:set name='currentCustIdKey' value='key'/>
