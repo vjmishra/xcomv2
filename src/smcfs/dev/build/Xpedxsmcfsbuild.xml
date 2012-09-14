@@ -77,13 +77,13 @@
 		<path refid="implementation.class.path" />
 	</path>
 
-	<target name="smcfsBuildWithoutCVSFetch"  depends="cleanFor_smcfsBuildWithoutCVSFetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
+	<target name="smcfsBuildWithoutCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithoutCVSFetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
 	
-	<target name="smcfsBuildWithCVSFetch"  depends="cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
+	<target name="smcfsBuildWithCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
 	
-	<target name="allButCDT"  depends="cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
+	<target name="allButCDT"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
 
-	<target name="all"  depends="cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, cdt_export, cdt_import, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
+	<target name="all"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, cdt_export, cdt_import, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
 	
 	<target name="test" depends="backup_EFrameSQLFiles"/>
 	
@@ -185,6 +185,11 @@
 		<echo message="completed dbverify ant target ..." />
 	</target>
 	
+	<!-- Deletes swc_cust.jar from two directories as SBC was not coming up because of them. This target should be removed once a permanent fix is provided -->
+	<target name="delete_SWCCustJAR" description="Temporary fix provided to solve SBC logging issue. To be removed once a permanent fix is made">
+        <delete file="${env.INSTALL_DIR}/jar/swc_cust/1_0/swc_cust.jar" />
+		<delete file="${env.INSTALL_DIR}/installed_data/swc/jars/swc_cust/1_0/swc_cust.jar" />
+	</target>
 	<!-- Cleans the custom code in INSTALL_DIR -->
 	<target name="cleanFor_smcfsBuildWithoutCVSFetch" description="Deletes directories" >
 		
@@ -963,4 +968,3 @@
     	</sequential>
     </macrodef>
 </project>
-
