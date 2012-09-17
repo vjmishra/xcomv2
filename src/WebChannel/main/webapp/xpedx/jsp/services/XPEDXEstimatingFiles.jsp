@@ -112,7 +112,7 @@ $("#various4").fancybox();
 			   </td>
 			   </div> 
 			   <td>
-			   		<s:if test="%{CatalogExp.size()} <= 0 ">
+			   		<s:if test="%{CatalogExp.size() <= 0 }">
 					   	<%-- <span>No Printable Catalogs & Estimating Files available </span> --%>
 					   	<span> <s:text name="MSG.SWC.MISC.ESTFS.ERROR.NOFILESAVAILABLE" /> </span>
 					 </s:if>
