@@ -116,7 +116,9 @@
 			<Attribute ColumnName="EXTN_IS_REPROCESSIBLE_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Used for determining if the order needs to be reprocessed by the reprocess agent " Nullable="false" Size="" XMLName="ExtnIsReprocessibleFlag" XMLGroup="Extn" />
 
 		  <Attribute ColumnName="EXTN_ORDER_LOCK_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Lock Flag - set to Lock whenever the Order is placed or edited in Sterling." Nullable="false" Size="" XMLName="ExtnOrderLockFlag" XMLGroup="Extn" />
-       	
+
+       	  <Attribute ColumnName="EXTN_OU_FAILURE_LOCK_FLAG" DataType="Flag" DefaultValue="'N'" Description="Lock Flag - set to Lock order if there is a OU failure." Nullable="false" Size="1" XMLName="ExtnOUFailureLockFlag" XMLGroup="Extn" />
+
        	  <Attribute ColumnName="EXTN_BILL_TO_CUSTOMER_ID" DataType="CustomerId"
 					Description="The Bill to Customer ID" Nullable="true" XMLName="ExtnBillToCustomerID"  XMLGroup="Extn"/>
        	
