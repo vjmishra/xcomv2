@@ -76,6 +76,12 @@
           Nullable="true" 
           XMLName="ExtnGauge"
           XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_THICKNESS" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnThickness"
+          XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_PLY" 
           DataType="Text-40"
 		  Description=" "  

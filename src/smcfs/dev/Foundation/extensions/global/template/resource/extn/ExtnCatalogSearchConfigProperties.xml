@@ -46,6 +46,9 @@
 						<Attribute IndexFieldName="Item.ExtnGauge"
 							XMLName="ExtnGauge" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnThickness"
+							XMLName="ExtnThickness" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
 						<Attribute IndexFieldName="Item.ExtnPly"
 							XMLName="ExtnPly" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
