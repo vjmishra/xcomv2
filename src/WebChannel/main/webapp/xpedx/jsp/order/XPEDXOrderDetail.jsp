@@ -348,6 +348,7 @@ function showSplitDiv(divId)
 </s:elseif>
 
 <s:set name='xpedxOrderDate' value='#xutil.getAttribute(#orderDetail,"OrderDate")' />
+<s:set name='extnOUFailureFlag' value='#OrderExtn.getAttribute("ExtnOUFailureLockFlag")' />
 
 <%-- jira3431 - showing timestamp and timezone on order detail and web confirmation details page for Web orders - begin --%>
 <s:set name='xpedxOrderDateTimezone' value=''/>
@@ -464,6 +465,10 @@ function showSplitDiv(divId)
                 </div>
                 <!-- end breadcrumb -->
                 <h5 align="center"><b><font color="red"><s:property value="#_action.getErrorMsg()"/></font></b></h5>
+                <s:if test='%{#extnOUFailureFlag == "Y"}'>
+                	<h5 align="center"><b><font color="red">Please contact your CSR for current information on this order.</font></b></h5>
+                </s:if>
+                
                 <!-- begin top section -->
                 <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>
@@ -500,16 +505,15 @@ function showSplitDiv(divId)
 					</s:if>
 				</s:if>
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
-				
 				<s:hidden name="test1" value='%{#test11}'/>
 				<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
+							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>				
 					<s:else>					
-						<s:if test="#_action.isEditableOrder()">
+						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>
 							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 						</s:if>					
 					</s:else>
@@ -1477,12 +1481,12 @@ function showSplitDiv(divId)
 			</s:if>
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
+							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
 							</s:if>
 					</s:if>		
 					<s:else>				
-						<s:if test="#_action.isEditableOrder()">			     
+						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>			     
 							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
 						</s:if>				
 					</s:else>
