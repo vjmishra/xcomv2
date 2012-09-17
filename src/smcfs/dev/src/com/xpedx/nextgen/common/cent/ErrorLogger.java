@@ -10,15 +10,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
-import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 
 public class ErrorLogger {
 
@@ -47,11 +48,12 @@ public class ErrorLogger {
 
 		   InXML to XPXGetErrorLookupListService :
 		   <XPXErrorLookup ErrorClass="Unknown Error" SourceSystem="Sterling" TransType="App"/>  */
+		String randomNumber = null;
 		try {
 			
 			Random random = new Random(); 
 			long fraction = (long)(1 * Math.abs(random.nextLong())); 
-			String randomNumber=""+fraction;
+			randomNumber=""+fraction;
 			String userID = yfsEnv.getUserId();
 			String progID = yfsEnv.getProgId();
 			
@@ -118,32 +120,48 @@ public class ErrorLogger {
 				}
 			}
 		}
-		catch (Exception e) {			
-            StringBuffer logString = new StringBuffer("UnknownTargetSystem");
-            logString.append("|");
-            logString.append("Sterling");
-            logString.append("|");
-            logString.append(errorObj.getTransType());
-            logString.append("|");                                     
-            logString.append("UnknownCommMethod");
-            logString.append("|");
-            logString.append("EDS xpedx-HQ-NG Test***NotForITCSUse***");
-            logString.append("|");            
-            logString.append(errorObj.getErrorClass());
-            logString.append("|");
-            logString.append("Original Exception: ");
-            logString.append(errorObj.getException());     
-            logString.append("|");
-            logString.append("Exception caught while logging into Cent in ErrorLogger.log method: ");
+		catch (Exception e) {	
+			String queue = YFSSystem.getProperty("centErrorQueue");
+            StringBuffer originalException = new StringBuffer("UnknownTargetSystem");
+            originalException.append("|");
+            originalException.append("Sterling");
+            originalException.append("|");
+            originalException.append(errorObj.getTransType());
+            originalException.append("|");                                     
+            originalException.append("UnknownCommMethod");
+            originalException.append("|");
+            originalException.append(queue);
+            originalException.append("|");            
+            originalException.append(errorObj.getErrorClass());
+            originalException.append("|");
+            originalException.append("Original Exception: ");
+            originalException.append(errorObj.getException()); 
+            originalException.append("ExceptionID = " + randomNumber);
+            yfcLogCatlog.error(originalException.toString());
+            
+            StringBuffer centException = new StringBuffer("UnknownTargetSystem");
+            centException.append("|");
+            centException.append("Sterling");
+            centException.append("|");
+            centException.append("UnknownTransType");
+            centException.append("|");                                     
+            centException.append("UnknownCommMethod");
+            centException.append("|");
+            centException.append(queue);
+            centException.append("|");            
+            centException.append("UnknownErrorClass");
+            centException.append("|");
+            centException.append("Exception caught while logging into Cent in ErrorLogger.log method: ");
             if(e instanceof com.yantra.yfs.japi.YFSException) {
-            	YFSException yfe = (YFSException)e;            	
-            	logString.append(yfe.getErrorCode()).append(":").append(yfe.getErrorDescription()).append(":").append(yfe.getErrorUniqueId());
+            	YFSException yfe = (YFSException)e;
+            	
+            	centException.append(yfe.getErrorCode()).append(":").append(yfe.getErrorDescription()).append(":").append(yfe.getErrorUniqueId());
             	
             } else {
-            	logString.append(e);
-            	
-            }
-            yfcLogCatlog.error(logString.toString());
+            	centException.append(e);
+            	 	
+            }  
+            yfcLogCatlog.error(centException.toString());
 		}
 	}
     
