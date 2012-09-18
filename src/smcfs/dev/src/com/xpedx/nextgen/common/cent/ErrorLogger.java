@@ -128,15 +128,16 @@ public class ErrorLogger {
             originalException.append("|");
             originalException.append(errorObj.getTransType());
             originalException.append("|");                                     
-            originalException.append("UnknownCommMethod");
+            originalException.append("P2");
             originalException.append("|");
             originalException.append(queue);
             originalException.append("|");            
             originalException.append(errorObj.getErrorClass());
             originalException.append("|");
+            originalException.append("ExceptionID = " + randomNumber);
+            originalException.append(" ");
             originalException.append("Original Exception: ");
             originalException.append(errorObj.getException()); 
-            originalException.append("ExceptionID = " + randomNumber);
             yfcLogCatlog.error(originalException.toString());
             
             StringBuffer centException = new StringBuffer("UnknownTargetSystem");
@@ -145,12 +146,14 @@ public class ErrorLogger {
             centException.append("|");
             centException.append("UnknownTransType");
             centException.append("|");                                     
-            centException.append("UnknownCommMethod");
+            centException.append("P2");
             centException.append("|");
             centException.append(queue);
             centException.append("|");            
             centException.append("UnknownErrorClass");
             centException.append("|");
+            centException.append("ExceptionID = " + randomNumber);
+            centException.append(" ");
             centException.append("Exception caught while logging into Cent in ErrorLogger.log method: ");
             if(e instanceof com.yantra.yfs.japi.YFSException) {
             	YFSException yfe = (YFSException)e;
