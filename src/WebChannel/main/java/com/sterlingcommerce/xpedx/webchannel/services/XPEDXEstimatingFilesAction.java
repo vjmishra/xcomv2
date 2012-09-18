@@ -36,8 +36,19 @@ public class XPEDXEstimatingFilesAction extends WCMashupAction {
 		try {
 			outputDoc=XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext().getStorefrontId());
 			String environmentCode = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/Customer/Extn/@ExtnEnvironmentCode");
-			pricingWareHouse = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/Customer/Extn/@ExtnPriceWarehouse");
-			if(!environmentCode.isEmpty() && !pricingWareHouse.isEmpty()) {
+			/*Start code for Jira 4315*/
+			String shipFromBranch = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/Customer/Extn/@ExtnShipFromBranch");
+			//pricingWareHouse = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/Customer/Extn/@ExtnPriceWarehouse");
+			if(environmentCode!=null && !environmentCode.isEmpty() && shipFromBranch!=null && !shipFromBranch.isEmpty()) {
+				Map<String, String> valueMap = new HashMap<String, String>();
+				valueMap.put("/Organization/@OrganizationCode", (shipFromBranch + "_" + environmentCode));
+				Element input = WCMashupHelper.getMashupInput("XPEDXgetPricingWarehouse", valueMap, getWCContext());
+				Element outputE2 = (Element)WCMashupHelper.invokeMashup("XPEDXgetPricingWarehouse", input, wcContext.getSCUIContext());
+				pricingWareHouse = SCXmlUtil.getXpathAttribute(outputE2, "/OrganizationList/Organization/Extn/@ExtnPriceWarehouse");
+			}			
+			/*End of code for Jira 4315*/
+			
+			if(environmentCode!=null && !environmentCode.isEmpty() && pricingWareHouse!=null && !pricingWareHouse.isEmpty()) {
 				Map<String, String> valueMap = new HashMap<String, String>();
 				valueMap.put("/Organization/@OrganizationCode", (pricingWareHouse + "_" + environmentCode));
 
