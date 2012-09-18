@@ -401,6 +401,21 @@
 			</Template>
 		</API>
 	</mashup>  
+	<mashup id ='XPEDXgetPricingWarehouse' transactional='true' mashuptype='XAPI' endpoint=''>
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getOrganizationList">
+			<Input>
+				<Organization OrganizationCode=""/>
+			</Input>			
+			<Template>				
+					<OrganizationList>
+						<Organization>
+							 <Extn ExtnPriceWarehouse=""/>
+						</Organization>
+				</OrganizationList>				
+			</Template>
+		</API>
+	</mashup>  
 	
 	<mashup id='getMasterCustomerFields' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Organization  mashup">
