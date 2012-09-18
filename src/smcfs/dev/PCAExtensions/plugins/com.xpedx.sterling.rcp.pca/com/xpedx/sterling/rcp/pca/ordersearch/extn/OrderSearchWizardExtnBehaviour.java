@@ -135,6 +135,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		sttsBindingData.setColumnBinding("S");
 		sttsBindingData.setAttributeBinding("Status");
 		sttsBindingData.setTooltipBinding("Status");
+		sttsBindingData.setSortReqd(true);
 		sttsBindingData.setLabelProvider(new IYRCTableColumnTextProvider(){
 //        	@Override
 			public String getColumnText(Element obj) {
@@ -184,7 +185,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		legacyBindingData.setName("extn_legacyOrderNo");
 		legacyBindingData.setColumnBinding("Legacy_Order_Number");
 		legacyBindingData.setAttributeBinding("Legacy_Order_Number");
-		
+		legacyBindingData.setSortReqd(true);
 		legacyBindingData.setLabelProvider(new IYRCTableColumnTextProvider(){
 			//        	@Override
 			public String getColumnText(Element obj) {
@@ -226,6 +227,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 		orderTotalBindingData.setColumnBinding("lbl_Order_total");
 		orderTotalBindingData.setAttributeBinding("Extn/@ExtnTotalOrderValue");		
 		orderTotalBindingData.setTooltipBinding("OrderTotal");
+		orderTotalBindingData.setSortReqd(true);
 		orderTotalBindingData.setLabelProvider(new IYRCTableColumnTextProvider(){
 //        	@Override
 			public String getColumnText(Element obj) {
