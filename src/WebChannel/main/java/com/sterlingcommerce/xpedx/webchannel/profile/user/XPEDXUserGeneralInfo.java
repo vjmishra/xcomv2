@@ -816,7 +816,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			setSpendingLtCurrency((spendingCurrency==null)?"": spendingCurrency);
 			
 			addAvailbleCurrencies(spendingCurrency);
-			addAvailableApprovers(customerContact);   //JIRA 4287 Performance Issue
+			addAvailableApprovers();
 			setLastModifiedUser();
 			break;
 		}
@@ -864,12 +864,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/**
 	 * This method fetches all the available approvers for a selected customer
 	 */
-	private void addAvailableApprovers(NodeList custContactNodes) {
-		/*
-		 * JIRA 4287 Changes Start
-		 * Remove extra API call .
-		 */
-		/*Element approverDocInput = SCXmlUtil.createDocument("CustomerContact").getDocumentElement();
+	private void addAvailableApprovers() {
+		
+		Element approverDocInput = SCXmlUtil.createDocument("CustomerContact").getDocumentElement();
 		approverDocInput.setAttribute("OrganizationCode", wcContext.getStorefrontId());
 		String customerKey = XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext);
 		if(!YFCUtils.isVoid(customerKey)){
@@ -880,10 +877,6 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Object contactListObj = WCMashupHelper.invokeMashup("getXpedxApproversList", approverDocInput, wcContext.getSCUIContext());
 		Document contactListDoc = ((Element) contactListObj).getOwnerDocument();
 		NodeList custContactNodes = contactListDoc.getElementsByTagName("CustomerContact");
-		*/
-		/*
-		 * JIRA 4287 Changes End.
-		 */
 		NodeList userGroupListNodes;
 		Element custContactElement;
 		Element customerElement;
