@@ -657,6 +657,7 @@
 			    		</s:if>
 			    		<s:else>
 			    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+			    			<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='' />
 			    		</s:else>			    	
     				</div>
     
