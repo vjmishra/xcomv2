@@ -5464,8 +5464,9 @@ public class XPEDXWCUtils {
 					
 				}
 				else
-				{				
-					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT"));
+				{		// Changes started for preferred ship-to location issue JIRA 4306		
+					shipToCustomer.setDefaultShipToCustomer(((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).getDefaultShipToCustomer());
+					//End of changes for preferred ship-to location issue JIRA 4306
 					XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
 				}
 				// end of performance for itemdetail.action
