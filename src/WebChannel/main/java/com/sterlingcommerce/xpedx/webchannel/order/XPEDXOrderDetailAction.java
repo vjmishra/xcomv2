@@ -83,8 +83,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				}
 				
 			} catch (CannotBuildInputException e) {
+				XPEDXWCUtils.logExceptionIntoCent(e); //JIRA 4289
 				LOG.error("Error while getting user key : "+ e);
 			} catch (Exception e) {
+				XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 				LOG.error("Error while getting user key : "+ e);
 			}
 		}
