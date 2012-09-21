@@ -148,7 +148,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				orderHeaderKey1 = XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 			 */
 		} catch (Exception e) {
-			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			return "error";
 		}
 		if (!getWCContext().isGuestUser()){
