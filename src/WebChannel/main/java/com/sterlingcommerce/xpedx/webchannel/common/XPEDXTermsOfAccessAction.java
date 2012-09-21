@@ -57,6 +57,7 @@ public class XPEDXTermsOfAccessAction extends WCMashupAction {
 		}
 		catch(Exception cbie)
 		{
+			XPEDXWCUtils.logExceptionIntoCent(cbie);  //JIRA 4289
 			log.error("Couldn't save user terms of access flag", cbie);
 			return "ERROR";
 		}
