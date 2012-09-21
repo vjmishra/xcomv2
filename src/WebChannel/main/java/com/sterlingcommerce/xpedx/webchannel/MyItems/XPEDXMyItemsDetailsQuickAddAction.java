@@ -713,6 +713,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 			
 		} catch (Exception e) {
 			LOG.error(e.toString());
+			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			return SUCCESS;
 		}
 		
