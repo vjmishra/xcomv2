@@ -142,6 +142,7 @@ public class XPEDXContactAction extends WCMashupAction {
 			}
 		}
 		catch (Exception e) {
+			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			return "error";
 		}
 		return "success";
