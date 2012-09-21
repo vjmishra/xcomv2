@@ -73,12 +73,18 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
     private Label lblSearchBy;
     private Label lblOrderType;
     private Label lblOrderStatus;
+    private Label lblTempLockFlag ;
+    private Label lblTempLockFlagText;
+    private Label lblpermanenetFlag;
+    private Label lblpermanenetFlagText;
     private Label lblWillCall;
     private Label lblAttention;
     private Label lblRushOrder;
     private Label lblWillCallText;
     private Label lblAttentionText;
     private Label lblRushOrderText;
+    private Label dummylbl;
+    private Label dummylbltxt;
     private Label lblCompany;
     private Label lblAccount;
     private Label lblSuffix;
@@ -598,25 +604,27 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
         pnlIconslayoutData.verticalAlignment = 4;
         pnlIconslayoutData.grabExcessHorizontalSpace = true;
         pnlIconslayoutData.horizontalSpan = 2;
+       
         pnlIcons.setLayoutData(pnlIconslayoutData);
-        GridLayout pnlIconslayout = new GridLayout(2, false);
+        GridLayout pnlIconslayout = new GridLayout(4, false);
         pnlIconslayout.horizontalSpacing = 2;
         pnlIconslayout.verticalSpacing = 2;
         pnlIconslayout.marginHeight = 0;
         pnlIconslayout.marginWidth = 0;
+        pnlIconslayout.numColumns = 4;
         pnlIcons.setLayout(pnlIconslayout);
-		
-		lblWillCall = new Label(pnlIcons, 16384);
-        GridData lblWillCalllayoutData = new GridData();
-        lblWillCalllayoutData.verticalAlignment = 1;
-        lblWillCall.setLayoutData(lblWillCalllayoutData);
-        lblWillCall.setImage(YRCPlatformUI.getImage("WillCall"));
+       
+        lblpermanenetFlag = new Label(pnlIcons, 16384);
+        GridData lblpermanenetFlagdata = new GridData();
+        lblpermanenetFlagdata.verticalAlignment = 1;
+        lblpermanenetFlag.setLayoutData(lblpermanenetFlagdata);
+        lblpermanenetFlag.setImage(YRCPlatformUI.getImage("extnOUFailureLockFlag"));
         
-        lblWillCallText = new Label(pnlIcons, 16384);
-        GridData lblWillCallTextlayoutData = new GridData();
-        lblWillCallTextlayoutData.verticalAlignment = 1;
-        lblWillCallText.setLayoutData(lblWillCallTextlayoutData);
-        lblWillCallText.setText("Will Call");
+        lblpermanenetFlagText = new Label(pnlIcons, 16384);
+        GridData lblpermanenetFlagTextData = new GridData();
+        lblpermanenetFlagTextData.verticalAlignment = 1;
+        lblpermanenetFlagText.setLayoutData(lblpermanenetFlagTextData);
+        lblpermanenetFlagText.setText("Can Only Edit Order in Max");
         
         lblAttention = new Label(pnlIcons, 16384);
         GridData lblAttentionlayoutData = new GridData();
@@ -629,6 +637,18 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
         lblAttentionTextlayoutData.verticalAlignment = 1;
         lblAttentionText.setLayoutData(lblAttentionTextlayoutData);
         lblAttentionText.setText("Attention");
+      
+        lblTempLockFlag = new Label(pnlIcons, 16384);
+        GridData lblTempLockFlagdata = new GridData();
+        lblTempLockFlagdata.verticalAlignment = 1;
+        lblTempLockFlag.setLayoutData(lblTempLockFlagdata);
+        lblTempLockFlag.setImage(YRCPlatformUI.getImage("orderLockFlag"));
+        
+        lblTempLockFlagText = new Label(pnlIcons, 16384);
+        GridData lblTempLockFlagTextData = new GridData();
+        lblTempLockFlagTextData.verticalAlignment = 1;
+        lblTempLockFlagText.setLayoutData(lblTempLockFlagTextData);
+        lblTempLockFlagText.setText("Locked temporarily in CC");
         
         lblRushOrder = new Label(pnlIcons, 16384);
         GridData lblRushOrderlayoutData = new GridData();
@@ -641,6 +661,36 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
         lblRushOrderTextlayoutData.verticalAlignment = 1;
         lblRushOrderText.setLayoutData(lblRushOrderTextlayoutData);
         lblRushOrderText.setText("Rush Order");
+        
+        dummylbl = new Label(pnlIcons, 16384);
+        GridData dummylblData = new GridData();
+        dummylblData.verticalAlignment = 1;
+        dummylbl.setLayoutData(dummylblData);
+        dummylbl.setImage(YRCPlatformUI.getImage("RushOrder"));
+        dummylbl.setVisible(false);
+        
+        dummylbltxt = new Label(pnlIcons, 16384);
+        GridData dummylbltxtData = new GridData();
+        dummylbltxtData.verticalAlignment = 1;
+        dummylbltxt.setLayoutData(dummylbltxtData);
+        dummylbltxt.setImage(YRCPlatformUI.getImage("RushOrder"));
+        dummylbltxt.setVisible(false);        
+        
+        
+		lblWillCall = new Label(pnlIcons, 16384);
+        GridData lblWillCalllayoutData = new GridData();
+        lblWillCalllayoutData.verticalAlignment = 1;
+        lblWillCall.setLayoutData(lblWillCalllayoutData);
+        lblWillCall.setImage(YRCPlatformUI.getImage("WillCall"));
+        
+        lblWillCallText = new Label(pnlIcons, 16384);
+        GridData lblWillCallTextlayoutData = new GridData();
+        lblWillCallTextlayoutData.verticalAlignment = 1;
+        lblWillCallText.setLayoutData(lblWillCallTextlayoutData);
+        lblWillCallText.setText("Will Call");
+        
+     
+     
 	}
 	
 	private void createCmpstSearchResultsAndControls(){
