@@ -787,6 +787,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
+			XPEDXWCUtils.logExceptionIntoCent(e);   //JIRA 4289
 			return ERROR;
 		}
 		
