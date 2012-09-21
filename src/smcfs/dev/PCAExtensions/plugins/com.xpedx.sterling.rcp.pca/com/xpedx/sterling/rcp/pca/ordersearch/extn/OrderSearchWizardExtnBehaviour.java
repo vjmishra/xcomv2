@@ -270,9 +270,19 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				boolean willCallFlag = false;
 				boolean rushOrderFlag = false;
 				boolean lockedOrder = false;
+				boolean extnOUFailureLockFlag = false;
+				boolean orderLockFlag = false;
 				Element inputEle = (Element) object;
 				Element eleWillCall = YRCXmlUtils.getChildElement(inputEle, "Extn");
 				Element eleHolds = YRCXmlUtils.getChildElement(inputEle, "OrderHoldTypes");
+				//Added for JIRA 4323. CHange to pemanane lock orders. For testing i have done it for WEbHOLD ordres
+				System.out.println("The extn fields are :"+ YRCXmlUtils.getString(eleWillCall));
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnOUFailureLockFlag"))){
+					extnOUFailureLockFlag = true;
+				}
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnOrderLockFlag"))){
+					orderLockFlag = true;
+				}
 				
 				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWillCall"))){
 					willCallFlag = true;
@@ -309,6 +319,13 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				}
 				else if(attribute.endsWith("Status")&& lockedOrder  ){
 					return "NeedsAttention";
+				}
+				//Added for JIRA 4323. CHange to pemanane lock orders. For testing i have done it for WEbHOLD ordres
+				else if(attribute.endsWith("Status")&& extnOUFailureLockFlag  ){
+					return "extnOUFailureLockFlag";
+				}
+				else if(attribute.endsWith("Status")&& orderLockFlag){
+					return "orderLockFlag";
 				}
 				//End- Added for 3391
 				else{

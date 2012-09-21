@@ -143,14 +143,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="YRCTargetBinding" value="Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -179,14 +178,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnShipToName"/>
                 <SetData name="YRCTargetBinding" value="/Order/Extn/@ExtnShipToName"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -216,33 +214,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@BillToID"/>
                 <SetData name="YRCTargetBinding" value="/Order/@BillToID"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="pnlOrderDate" attachType="AFTER"
-                    defaultValue="Needs_Attention" enabled="true"
-                    isAdvanced="false" name="extn_chkNeedsAttention"
-                    type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCUnCheckedValue" value="N"/>
-                <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@NeedsAttentionFlag"/>
-                <SetData name="YRCTargetBinding" value="/Order/@NeedsAttentionFlag"/>
-                <SetData name="yrc:customType" value="TaskWhiteComposite"/>
-                <SetData name="YRCCheckedValue" value="Y"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="Beginning"
-                    hColSpan="1" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -347,7 +325,7 @@
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -367,25 +345,6 @@
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
-                <Field attachTo="extn_chkNeedsAttention"
-                    attachType="BEFORE" defaultValue="Locked Orders"
-                    enabled="true" isAdvanced="false"
-                    name="extn_chkCSRReview" type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCUnCheckedValue" value="N"/>
-                <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@CsrReviewFlag"/>
-                <SetData name="YRCTargetBinding" value="/Order/@CsrReviewFlag"/>
-                <SetData name="yrc:customType" value="TaskWhiteComposite"/>
-                <SetData name="YRCCheckedValue" value="Y"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="Beginning"
-                    hColSpan="1" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
                 <Field attachTo="extn_lblStatus" attachType="AFTER"
                     enabled="true" isAdvanced="false"
                     name="extn_comboFromStatus" type="Combo"
@@ -395,11 +354,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@FromStatus"/>
-                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="YRCTargetBinding" value="/Order/@FromStatus"/>
+                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -417,11 +376,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@ToStatus"/>
-                <SetData name="YRCTargetBinding" value="/Order/@ToStatus"/>
                 <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
+                <SetData name="YRCTargetBinding" value="/Order/@ToStatus"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -527,104 +486,6 @@
                     vAlignment="Top" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
-                <Field attachTo="extn_txtCustomerPONo"
-                    attachType="AFTER" enabled="true" isAdvanced="false"
-                    name="extn_lblLockedOrderImage" type="Label"
-                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="NeedsAttention"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="End"
-                    hColSpan="1" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="extn_lblLockedOrderImage"
-                    attachType="AFTER"
-                    defaultValue="Locked Order/Needs Attention"
-                    enabled="true" isAdvanced="false"
-                    name="extn_lblLockedOrder" type="Label"
-                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="Label"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="Beginning"
-                    hColSpan="2" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="extn_lblLockedOrder" attachType="AFTER"
-                    defaultValue="Rush Order" enabled="true"
-                    isAdvanced="false" name="extn_lblRushOrder"
-                    type="Label" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="NONE"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="Label"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="Beginning"
-                    hColSpan="2" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="extn_lblRushOrder" attachType="BEFORE"
-                    enabled="true" isAdvanced="false"
-                    name="extn_lblRushOrderImage" type="Label"
-                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="RushOrder"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="End"
-                    hColSpan="1" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="extn_lblRushOrder" attachType="AFTER"
-                    defaultValue="Will Call" enabled="true"
-                    isAdvanced="false" name="extn_lblWillCall"
-                    type="Label" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="Label"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="Beginning"
-                    hColSpan="2" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
-                <Field attachTo="extn_lblWillCall" attachType="BEFORE"
-                    enabled="true" isAdvanced="false"
-                    name="extn_lblWillCallImage" type="Label"
-                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
-                    <styles>
-                        <style style="LEFT"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="yrc:customType" value="WillCall"/>
-                <LayoutData grabExcessHSpace="false"
-                    grabExcessVSpace="false" hAlignment="End"
-                    hColSpan="1" hIndent="0" heightHint="-1"
-                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
-            </NewField>
-            <NewField>
                 <Field attachTo="extn_lblWebConfirmationNo"
                     attachType="AFTER" enabled="true" isAdvanced="false"
                     name="extn_txtWebConfirmationNo" type="Text"
@@ -677,6 +538,239 @@
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
                     hColSpan="2" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_txtCustomerPONo"
+                    attachType="AFTER" enabled="true" isAdvanced="false"
+                    name="extn_Order_Status_Icon" type="Composite"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="NONE"/>
+                    </styles>
+                </Field>
+                <Layout horizontalSpacing="5"
+                    makeColumnsEqualWidth="false" marginHeight="5"
+                    marginWidth="5" numberOfColumns="5" verticalSpacing="5"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="5" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Order_Status_Icon"
+                    attachType="WITHIN" enabled="true"
+                    isAdvanced="false"
+                    name="extn_CanonlyEditOrderinMAX_icon" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="extnOUFailureLockFlag"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_CanonlyEditOrderinMAX_icon"
+                    attachType="AFTER"
+                    defaultValue="Can only Edit Order in MAX"
+                    enabled="true" isAdvanced="false"
+                    name="extn_CanonlyEditOrderinMAX_txt" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_CanonlyEditOrderinMAX_txt"
+                    attachType="AFTER" enabled="true" isAdvanced="false"
+                    name="extn_LockedtemporarilyinCC_icon" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="orderLockFlag"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_LockedtemporarilyinCC_icon"
+                    attachType="AFTER"
+                    defaultValue="Locked temporarily in CC"
+                    enabled="true" isAdvanced="false"
+                    name="extn_LockedtemporarilyinCC_txt" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="2" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Order_Status_Icon"
+                    attachType="AFTER" enabled="true" isAdvanced="false"
+                    name="extn_willCall_txt" type="Label" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_CanonlyEditOrderinMAX_txt"
+                    attachType="AFTER" enabled="true" isAdvanced="false"
+                    name="extn_test2" type="Text" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="READ_ONLY"/>
+                    </styles>
+                </Field>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="YRCTargetBinding" value=""/>
+                <SetData name="yrc:customType" value="Text"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_test2" attachType="AFTER"
+                    enabled="true" isAdvanced="false"
+                    name="extn_Need_Attention_ICON" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="NeedsAttention"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Need_Attention_ICON"
+                    attachType="AFTER" defaultValue="Needs Attention"
+                    enabled="true" isAdvanced="false"
+                    name="extn_Needs_Attention_Txt" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_LockedtemporarilyinCC_txt"
+                    attachType="AFTER" enabled="true" isAdvanced="false"
+                    name="extn_Rush_Order_ICON" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="RushOrder"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Rush_Order_ICON"
+                    attachType="AFTER" defaultValue="Rush Order"
+                    enabled="true" isAdvanced="false"
+                    name="extn_Rush_Order_Txt" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Rush_Order_Txt" attachType="AFTER"
+                    enabled="true" isAdvanced="false"
+                    name="extn_test_dummy" type="Text" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="YRCTargetBinding" value=""/>
+                <SetData name="yrc:customType" value="Text"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="3" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_test_dummy" attachType="AFTER"
+                    enabled="true" isAdvanced="false"
+                    name="extn_Will_Call_Icon" type="Label"
+                    visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="WillCall"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_Will_Call_Icon" attachType="AFTER"
+                    defaultValue="Will Call" enabled="true"
+                    isAdvanced="false" name="extn_Will_Call_Txt"
+                    type="Label" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCSourceBinding" value=""/>
+                <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
         </NewFields>
@@ -742,7 +836,7 @@
                 visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
                 <Layout horizontalSpacing="5"
                     makeColumnsEqualWidth="false" marginHeight="5"
-                    marginWidth="5" numberOfColumns="3" verticalSpacing="5"/>
+                    marginWidth="5" numberOfColumns="4" verticalSpacing="5"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="true" hAlignment="Fill"
                     hColSpan="1" hIndent="0" heightHint="-1"
@@ -1447,11 +1541,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CarrierServiceCode"/>
-                <SetData name="YRCListBinding" value="Extn_ShipMethods:/CarrierServiceList/CarrierService"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_ShipMethods:/CarrierServiceList/CarrierService"/>
                 <SetData name="YRCSourceBinding" value="OrderDetails:/Order/@CarrierServiceCode"/>
-                <SetData name="YRCTargetBinding" value="SaveOrder:/Order/@CarrierServiceCode"/>
                 <SetData name="YRCDescriptionBinding" value="CarrierServiceDesc"/>
+                <SetData name="YRCTargetBinding" value="SaveOrder:/Order/@CarrierServiceCode"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -1574,11 +1668,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="YRCListBinding" value="OrderCharges:/CommonCodeList/CommonCode"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="OrderCharges:/CommonCodeList/CommonCode"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
+                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3273,9 +3367,9 @@
                 </Field>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="Extn_BillToInfo:/PersonInfo/@AddressLine6"/>
+                <SetData name="YRCTargetBinding" value=""/>
                 <SetData
                     name="keycorrespondingtowhichvaluewillbedisplayed" value="xpedx_address_key"/>
-                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -3485,11 +3579,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="OrganizationCode"/>
-                <SetData name="YRCListBinding" value="Extn_DivisionList:/OrganizationList/Organization"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_DivisionList:/OrganizationList/Organization"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision"/>
                 <SetData name="YRCDescriptionBinding" value="OrganizationName"/>
+                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3505,11 +3599,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="@CustomerTypeCode"/>
-                <SetData name="YRCListBinding" value="Extn_CustomerTypes:/CustomerTypes/CustomerType"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_CustomerTypes:/CustomerTypes/CustomerType"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnSuffixType"/>
                 <SetData name="YRCDescriptionBinding" value="@CustomerTypeDesc"/>
+                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnSuffixType"/>
                 <SetData name="yrc:customType" value=""/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
