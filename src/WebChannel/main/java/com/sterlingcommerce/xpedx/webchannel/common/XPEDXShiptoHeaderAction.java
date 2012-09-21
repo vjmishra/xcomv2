@@ -60,6 +60,7 @@ public class XPEDXShiptoHeaderAction extends WCMashupAction {
 			}
 			
 		} catch (Exception e) {
+			XPEDXWCUtils.logExceptionIntoCent(e); //JIRA 4289
 			return "error";
 		}
 		
