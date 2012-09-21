@@ -253,7 +253,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			init();
 			return retVal;
 		} catch (Exception e) {			
-			XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			e.printStackTrace();
 		}
 		return "";
@@ -716,6 +716,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
 			log.error("Error while refeshing catalog cache in method newSearch", exception);
+			XPEDXWCUtils.logExceptionIntoCent(exception);  //JIRA 4289
+		        
+			
 		}	
 		return SUCCESS;
 	}
