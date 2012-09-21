@@ -865,7 +865,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			XPEDXWCUtils.setObectInCache("itemConUOM", getItemIdConVUOMMap());
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
-			XPEDXWCUtils.logExceptionIntoCent(e);
+			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			return ERROR;
 		}
 		return SUCCESS;
