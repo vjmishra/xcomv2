@@ -873,10 +873,47 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		if((YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Extn/@ExtnHeaderStatusCode")).equalsIgnoreCase("M0007")){
 			lblOrderLockFlag.setText(YRCPlatformUI.getString(""));
 		} else{
-			lblOrderLockFlag.setText(YRCPlatformUI.getString("Order_Lock_Lbl_Error"));
-		}
+			lblOrderLockFlag.setText(YRCPlatformUI.getString("Order_Lock_Lbl_Error"));		}
+		
+		
 		lblOrderLockFlag.setLayoutData(gridDataErrLbl);
 		lblOrderLockFlag.setData("yrc:customType", "RedText10");
+		}
+		//Added for CR 4323. The order must be locked if Order update is failing
+		if(getOrderLinesPanel().getPageBehavior().checkPermananentOrderLockFlag()){
+			lblOrderLockFlag = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+			if((YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Extn/@ExtnOUFailureLockFlag")).equalsIgnoreCase("Y")){
+				lblOrderLockFlag.setText(YRCPlatformUI.getString("Order_update_Lock_Lbl_Error"));
+			}
+			lblOrderLockFlag.setLayoutData(gridDataErrLbl);
+			lblOrderLockFlag.setData("yrc:customType", "RedText10");
+			if(pnlOrderLines.getPageBehavior().isReadOnlyPage()){
+				Control[] controls = new Control[]{
+						txtShipFromDiv,
+						txtCustPONo,
+						txtShipDate,
+						btnShipDateLookup,
+//						chkShipComplete,
+						chkAttentionLines,
+						comboShipComplete,
+						txtInternalComments,
+						txtHdrComments,
+						txtAttentionName,
+						txtWillCall,
+						compositeStatusHold,
+						chkOrderHoldFlag,
+						chkWebHoldFlag,
+						chkPreventAutoOrdPlace,
+						chkAcceptShipToZipCode,
+						chkAcceptNonStrdShipMethod,
+						chkAcceptNoNextBusinessDay,
+						chkAcceptReqDlvryDate,
+						chkAcceptShipComplete,	
+						chkAcceptDupCustPONo,
+						comboShipFromDiv,
+						txtCouponCode};
+				setControlsEnabled(controls, false);
+			}
 		}
 		
 		if(isReviewedByCSR()){
@@ -1514,7 +1551,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		txtCustPONo = new Text(pnlRoot, SWT.BORDER);
 		txtCustPONo.setLayoutData(gridData16);
 		txtCustPONo.setData("yrc:customType","Text");
-		//txtCustPONo.setData("name", "txtCustPONo");
+		txtCustPONo.setData("name", "txtCustPONo");
 		txtCustPONo.setTextLimit(22);
 		
 		//Fix for 3528

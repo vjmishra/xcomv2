@@ -30,4 +30,10 @@
     <ThemeEntry Name="NeedsAttention">
         <Image Path="/icons/Needs Attention.gif"/>
     </ThemeEntry>
+        <ThemeEntry Name="extnOUFailureLockFlag">
+        <Image Path="/icons/Can only Edit Order in MAX.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="orderLockFlag">
+        <Image Path="/icons/OrderLockFlagIcon.gif"/>
+    </ThemeEntry>
 </Theme>

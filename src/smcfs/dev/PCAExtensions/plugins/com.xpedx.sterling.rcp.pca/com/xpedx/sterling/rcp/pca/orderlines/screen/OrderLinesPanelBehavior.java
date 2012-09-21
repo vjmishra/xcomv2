@@ -1595,6 +1595,25 @@ private void preparePlaceOrderLineErrors() {
 			}
 		return false;
 	}
+	//Added for JIRA 4323
+	public boolean checkPermananentOrderLockFlag() 
+	{
+	
+		Element orginalOrderDetailsElem = getModel("OriginalOrder");
+		String extnOUFailureLockFlag = "",isDraftOrder,ordType,isOrderStatus;		
+		if (!YRCPlatformUI.isVoid(orginalOrderDetailsElem))
+			{
+			extnOUFailureLockFlag = YRCXmlUtils.getAttributeValue(orginalOrderDetailsElem, "Order/Extn/@ExtnOUFailureLockFlag");
+				if(extnOUFailureLockFlag.equalsIgnoreCase("Y"))
+					{ 
+					page.setAllButtonsEnabled(false);
+					readOnlyPage = true;
+						return true;
+					}
+			
+			}
+		return false;
+	}
 	
 	private Document validateTotalOrderAmountValue(String totalOrderAmount){
 		Document validationDoc = YRCXmlUtils.createDocument("Order");

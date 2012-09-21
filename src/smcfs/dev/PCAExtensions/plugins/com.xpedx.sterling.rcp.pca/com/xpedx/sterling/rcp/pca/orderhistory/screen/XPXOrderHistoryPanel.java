@@ -950,9 +950,18 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 				boolean willCallFlag = false;
 				boolean rushOrderFlag = false;
 				boolean needsAttention = false;
+				boolean extnOUFailureLockFlag = false;
+				boolean orderLockFlag = false;
 				Element eleTableItem = (Element)obj;
 				Element eleWillCall = YRCXmlUtils.getChildElement(eleTableItem, "Extn");
 				Element eleHolds = YRCXmlUtils.getChildElement(eleTableItem, "OrderHoldTypes");
+				//Added for JIRA 4323. CHange to pemanane lock orders. For testing i have done it for WEbHOLD ordres
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnOUFailureLockFlag"))){
+					extnOUFailureLockFlag = true;
+				}
+				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnOrderLockFlag"))){
+					orderLockFlag = true;
+				}
 				if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnWillCall"))){
 					willCallFlag = true;
 				}else if("Y".equalsIgnoreCase(eleWillCall.getAttribute("ExtnRushOrderFlag"))){
@@ -977,6 +986,13 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 				}
 				else if (needsAttention){
 					return "NeedsAttention";
+				}
+				//Added for JIRA 4323. CHange to pemanane lock orders. For testing i have done it for WEbHOLD ordres
+				else if(extnOUFailureLockFlag  ){
+					return "extnOUFailureLockFlag";
+				}
+				else if(orderLockFlag){
+					return "orderLockFlag";
 				}
 				else
 					return null;

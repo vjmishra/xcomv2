@@ -200,7 +200,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		sOrderLineKey = YRCXmlUtils.getAttribute(eleOrderLine, "OrderLineKey");
 		lineType = YRCXmlUtils.getAttribute(eleOrderLine, "LineType");
 		legacyOrderNumber = YRCXmlUtils.getAttributeValue(orderEle, "/Order/Extn/@ExtnLegacyOrderNo");		
-		
+		checkPermanentOrderLock();
 		if (!YRCPlatformUI.isVoid(sOrderLineKey))
 			newLine = false;
 		selectionAdapter = new SelectionAdapter() {
@@ -346,6 +346,54 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		myBehavior = new OrderLinePanelBehavior(this, FORM_ID, inputObject, eleOrderLine,elePandALineResponse, uOMList);
 		
 		updateNonBindedComponents();
+	}
+	private void checkPermanentOrderLock() {
+		if(pnlOrderLines.getPageBehavior().isReadOnlyPage()){
+			Control[] controls = new Control[]{
+					txtItemId,
+					btnLookupImg,
+					comboItemId,
+					txtCustItem,
+					txtCustomerItemId,
+					txtMfrItemId,
+					txtMpcItemId,
+					comboLineType,
+					txtCustLinePONo,
+					txtComment,
+					chkAcceptLineComments,
+					txtShipFromBranch,
+					txtCustLineSeq,
+					txtCustLine1,
+					txtCustLine2,
+					txtCustLine3,
+					txtQuantity,
+					txtOrderingUOM,
+					comboOrderingUOM,
+					stxtUnitPrice,
+					comboPricingUOM,
+					chkPriceOverride,
+					txtExtnPrice,
+					txtAdjAmount,
+					txtCustLineAccNo,
+					chkCustLineAcctNo,
+					chkCustLineSeqNo,
+					btnSplitLine,
+					txtOthrPrice,
+					txtShippableQtyLineTotal,
+					
+					txtShippableQtyinReqUOM,
+					txtOrderedQtyTotal,
+					txtLineTotal,
+					txtBackOrderedQryInReqUOM,
+					comboShipfrom
+					,txtOrginalLegacyItem,txtOriginalCustomerItem,txtOriginalOrderQuantity,txtOriginalRequiredUOM,txtOProductDescription,txtOrginalUnitPrice
+					,txtOriginalPriceUOM,txtOriginalLineTotal,txtOriginalTax,txtOriginalComments,txtOReqDeliveryDate,btnRemoveLine
+					
+			};
+			setControlsEnabled(controls, false);
+			
+		}
+		
 	}
 	/**function used to show-dispose of controls **/
 	private void getControlStatus(Control[] controls) {
