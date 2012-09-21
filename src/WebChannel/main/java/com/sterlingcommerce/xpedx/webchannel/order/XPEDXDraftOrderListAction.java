@@ -147,6 +147,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			}
 			processOutput(outputDoc);
 		} catch (Exception ex) {
+			XPEDXWCUtils.logExceptionIntoCent(ex);  //JIRA 4289
 			log.error(ex);
 		}				
 		return "success";
