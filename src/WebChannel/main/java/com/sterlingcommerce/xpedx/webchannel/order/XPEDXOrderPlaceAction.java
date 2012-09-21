@@ -368,7 +368,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		} catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
 			generatedErrorMessage = "There was an error processing your last request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
-			XPEDXWCUtils.logExceptionIntoCent(ex.getMessage());
+			XPEDXWCUtils.logExceptionIntoCent(ex);   //JIRA 4289
 			return FAILURE;
 		}
 	}
