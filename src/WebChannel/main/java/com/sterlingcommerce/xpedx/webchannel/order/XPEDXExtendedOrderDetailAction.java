@@ -177,7 +177,7 @@ public class XPEDXExtendedOrderDetailAction extends
 		} catch (Exception e) {
 			log.error("Error while getting order detail", e);
 			WCUtils.setErrorInContext(getWCContext(), e);
-
+			XPEDXWCUtils.logExceptionIntoCent(e); //JIRA 4289
 			result = ERROR;
 		}
 		
