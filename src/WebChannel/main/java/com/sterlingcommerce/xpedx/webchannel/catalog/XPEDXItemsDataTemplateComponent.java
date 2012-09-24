@@ -97,7 +97,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cForm = validate(b2cItemExtn.getAttribute("ExtnForm"));
 		String b2cCapacity = validate(b2cItemExtn.getAttribute("ExtnCapacity"));
 		String b2cModel = validate(b2cItemExtn.getAttribute("ExtnModel"));
-		//String b2cGuage = validate(b2cItemExtn.getAttribute("ExtnGauge"));
+		String b2cGuage = validate(b2cItemExtn.getAttribute("ExtnGauge"));
+		String b2cThickness = validate(b2cItemExtn.getAttribute("ExtnThickness"));
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
@@ -200,6 +201,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("ply: \"").append(TextUtils.htmlEncode(b2cPly)).append("\",");
 		sb.append("size: \"").append(TextUtils.htmlEncode(b2cSize)).append("\",");
 		sb.append("color: \"").append(TextUtils.htmlEncode(b2cColor)).append("\",");
+		sb.append("gauge: \"").append(TextUtils.htmlEncode(b2cGuage)).append("\",");
+		sb.append("thickness: \"").append(TextUtils.htmlEncode(b2cThickness)).append("\",");
 		sb.append("basis: \"").append(TextUtils.htmlEncode(b2cBasis)).append("\",");
 		sb.append("mwt: \"").append(TextUtils.htmlEncode(b2cMwt)).append("\",");
 		sb.append("vendorNumber: \"").append(TextUtils.htmlEncode(b2cVendorNumber)).append("\",");

@@ -815,7 +815,8 @@ return new Ext.XTemplate(
   <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname"><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></td>',</s:if>				                
   <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname"><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></td>',</s:if>			                    				  
-  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>			                    
+  <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>
+  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname"><a href="#" onclick="toggleThicknessSort();">Gauge<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
   <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
   <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
@@ -837,7 +838,8 @@ return new Ext.XTemplate(
       <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname">{material}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname">{ply}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname">{form}</td>',</s:if>
-      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname">{gauge}</td>',</s:if>   
+      <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname">{gauge}</td>',</s:if>  
+      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname">{thickness}</td>',</s:if>  
 	  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname">{vendorNumber}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname" style="margin-left:0px; padding: 2px 5px 25px 10px;">{cert}</td>',</s:if>
 	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname" style="width:120px;">{listprice}</td>',</s:if>
