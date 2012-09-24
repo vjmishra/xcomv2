@@ -24,9 +24,14 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.shared.dbclasses.PLT_User_Login_FailDBHome;
+import com.yantra.shared.dbi.PLT_User_Login_Fail;
+import com.yantra.shared.ycp.YFSContext;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
+import com.yantra.yfc.dblayer.PLTQueryBuilder;
+import com.yantra.yfc.dblayer.PLTQueryBuilderHelper;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -2536,6 +2541,25 @@ public class XPXUtils implements YIFCustomApi {
 		return inputDocument;
 	}
 	
+	public  void deleteFromPLTUserLoginFailAgent(YFSEnvironment env,Document inputDocument)throws Exception{
+		try{
+			String inputXML = SCXmlUtil.getString(inputDocument);
+			String user_key =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@UserKey");			
+			System.out.println("**********Input for reset password in delete is : "+inputXML);
+			System.out.println("******************************userkey="+user_key);
+			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
+			pltQryBuilder.setCurrentTable("PLT_USER_LOGIN_FAIL");
+			pltQryBuilder.appendString("USER_KEY", "=", user_key);
+			int loginFail = PLT_User_Login_FailDBHome.getInstance().deleteWithWhere((YFSContext)env, pltQryBuilder);
+			
+		}
+	
+	catch(Exception e){
+		log.error("Exception: " + e.getStackTrace());
+
+	}
+
+	}
 	public static XPath getXPathInstance()
 	{
 		synchronized (xPathFactory) {
