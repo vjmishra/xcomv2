@@ -34,7 +34,9 @@
     <DataType Name="varchar2-100" Size="100" Type="VARCHAR2"/>
     <DataType Name="varchar2-200" Size="200" Type="VARCHAR2"/>
     <DataType Name="varchar2-255" Size="255" Type="VARCHAR2"/>
+	<DataType Name="varchar2-500" Size="500" Type="VARCHAR2"/>
 	<DataType Name="varchar2-1000" Size="1000" Type="VARCHAR2"/>
+	<DataType Name="varchar2-2000" Size="2000" Type="VARCHAR2"/>
     <DataType Name="char-1" Size="1" Type="CHAR"/>
     <DataType DecimalDigits="5" Name="ConversionFactor" NegativeAllowed="false" Size="15" Type="NUMBER"/>
     <DataType DecimalDigits="5" Name="XPXUnitPrice" NegativeAllowed="false"
