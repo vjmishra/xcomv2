@@ -2,10 +2,6 @@ package com.xpedx.nextgen.item;
 
 //Ajit import java.util.HashMap;
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -25,11 +21,11 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
-import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
+import com.xpedx.nextgen.common.util.XPXCatalogDataProcessor;
 
 public class XPXLoadCatalog2 implements YIFCustomApi {
 
@@ -38,13 +34,13 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
 	private static String _RESPONSE_MSG_SERVICE = "xpedxSendItemFeedResponse";
-	
+
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception
 	{
 		Document outXML = null;
@@ -57,46 +53,69 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			eModifyCategoryItems.setAttribute("CallingOrganizationCode", _ORG_CODE);
 			if(inXML != null){
 				log.debug("Input to XPXLoadCatalog : " + SCXmlUtil.getString(inXML));
+				System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
 			}
 			Element eItemList = inXML.getDocumentElement();
-			
+
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
 				Element eItem = (Element)nlItems.item(i);
-				
+
 				ArrayList<HashMap<String, String>> alCategoryDtls = getCategoryAssociations(env, eItem);
-				
-				
+
+
 				//check if it's a delete operation;change the flow
 				String actionName = SCXmlUtil.getAttribute(eItem, "Action");
 				if(!YFCCommon.isVoid(actionName) && (actionName.equalsIgnoreCase("Delete"))){
-					
+
 					//delete the category association
 					Element eCategoryList = (Element)eItem.getElementsByTagName("CategoryList").item(0);
-					
+
 					eItem.removeChild(eCategoryList);
 					Element textNode = SCXmlUtil.createChild(eItem, "CategoryList");
 					Text txt = eItem.getOwnerDocument().createTextNode(null);
 					textNode.appendChild(txt);
-					
+
 					iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
 					if(log.isDebugEnabled()){
 						log.debug("modifyCategoryItem for delete operation :" + modifyCategoryItemsDoc.toString());
 					}
-					
+
 					api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
 					//delete the item
 					if(log.isDebugEnabled()){
 						log.debug("manageItem for delete operation :" + SCXmlUtil.getString(inXML));
 					}
-					
+
 					api.invoke(env, "manageItem", inXML);
 					//generate the response
 					outXML = generateResponse(env, inXML, "SUCCESS", null);
 					return outXML;
 				}
+
+				else if(!YFCCommon.isVoid(actionName) && (actionName.equalsIgnoreCase("Manage"))){
+
+					Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
 				
+					String strShortDesc = eExtnList.getAttribute("ExtnShortDescription");
+					String strDesc =eExtnList.getAttribute("ExtnDescription");
+					String strExtendedDesc = eExtnList.getAttribute("ExtnExtendedDesc");
+					strShortDesc =	XPXCatalogDataProcessor.preprocessCatalogData(strShortDesc);
+					strDesc = XPXCatalogDataProcessor.preprocessCatalogData(strDesc);
+					strExtendedDesc =XPXCatalogDataProcessor.preprocessCatalogData(strExtendedDesc);
+					
+					eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
+					eExtnList.setAttribute("ExtnDescription", strDesc);
+					eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+					
+				//	System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
+
+				}
+
+
+
+
 				//update the valid values for attributes
 				/*
 				NodeList nlAddnlAttrList = eItem.getElementsByTagName("AdditionalAttribute");
@@ -105,14 +124,14 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 					Element eAddnlAttr = (Element)nlAddnlAttrList.item(j);
 					String strName = eAddnlAttr.getAttribute("Name");
 					String strValue = eAddnlAttr.getAttribute("Value");
-					
+
 					updateValidValueForAttribute(env, strName, strValue);
 				}
-				*/
-				
+				 */
+
 				//update the modifyCategoryItem input and remove CategoryList element from the inXML
-			    iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
-				
+				iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
+
 				/* Ajit: Temporary Fix to truncate item shortdescription field START 
 
 				NodeList primInfoNL = eItem.getElementsByTagName("PrimaryInformation");
@@ -125,74 +144,47 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				}
 				primInfoEle.setAttribute("ShortDescription", trunShortDescription);
 				primInfoEle.setAttribute("ExtendedDescription", shortDescription);
-				
+
 				 Ajit: Temporary Fix to truncate item shortdescription field END */
 				if(log.isDebugEnabled()){
 					log.debug("Before Manage Item:" + eItem.getAttribute("ItemID") );
 				}
-				
-				//Added for Jira 3155
-				String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
-				
-				NodeList assetIdList = eItem.getElementsByTagName("Asset");
-				if(assetIdList != null)
-				{
-					StringBuffer strAssetType = new StringBuffer();
-					int counter = 0;
-					for(int j=0; j<assetIdList.getLength(); j++)
-					{
-						Element assetType = (Element)assetIdList.item(j);
-						String strAssetTypeVal = assetType.getAttribute("Type");
-						if(strAssetTypeVal != null)
-						{
-							strAssetType.append("'").append(strAssetTypeVal).append("'");
-							if(counter < assetIdList.getLength()-1){
-								strAssetType.append(",");
-							}
-						}
-						counter++;
-					}
-					if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
-					deleteAssetType(env,inXML,itemKey,strAssetType.toString());
-					}
-				}
-				//End for Jira 3155
 			}
-			
+
 			//create the item
-	
+
 			api.invoke(env, "manageItem", inXML);
 			if(log.isDebugEnabled()){
 				log.debug("Before Manage Item Successfull" );
 			}
 			//attach the item to the category tree
-			
+
 			if(log.isDebugEnabled()){
 				log.debug("modifyCategoryItem :" + modifyCategoryItemsDoc.toString());
 			}
 			if(iCat > 0)
 			{
-			api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
+				api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
 			}
 			if(log.isDebugEnabled()){
 				log.debug("Before Manage Item Successfull" );
 			}
 			//post a message to the response queue
 			outXML = generateResponse(env, inXML, "SUCCESS", null);
-			
+
 		}
-		
+
 		/**
 		 * catch block updated by Arun Sekhar for CENT tool
 		 * integration *
 		 */
-/*		catch(Exception ex)
+		/*		catch(Exception ex)
 		{
 			log.debug("Exception while loading Items",ex);
 			ex.printStackTrace();
 			outXML = generateResponse(env, inXML, "FAIL", ex);
 		}*/
-		
+
 		catch (RemoteException re) {
 			log.error("NullPointerException: " + re.getStackTrace());
 			prepareErrorObject(re, XPXLiterals.CD_ITEM_TRANS_TYPE,
@@ -220,51 +212,6 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}	
 		return outXML;
 	}
-	
-	private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey, String strAssetType) {
-		Connection connection = null;
-		Statement stmt = null;
-		Document documentXML = null;
-		try {
-			connection = getDBConnection(env, documentXML);
-			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + "'" + strAssetType + "')";
-			stmt = connection.createStatement();
-			stmt.execute(query);
-			stmt.close();
-			connection.commit();
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-		
-	}
-
-	/**
-	 * getItemId
-	 * @param env
-	 * @param inXML
-	 * @param itemId
-	 * @return
-	 */
-	private String getItemId(YFSEnvironment env, Document inXML,String itemId) {
-		Connection connection = null;
-		Statement stmt = null;
-		Document documentXML = null;
-		try {
-			connection = getDBConnection(env, documentXML);
-			String query = "select item_key from yfs_item where item_id = " + "'" + itemId + "'";
-			stmt = connection.createStatement();
-			ResultSet resultSet = stmt.executeQuery(query);
-			while (resultSet.next()) {
-				return resultSet.getString(1);
-			}
-			resultSet.close();
-			stmt.close();
-			//connection.commit();
-		} catch (Exception exception) {
-			log.error("YFSException: " + exception.getStackTrace());
-		}
-		return itemId; 
-	}
 
 	/**
 	 * Added by Arun Sekhar for CENT tool integration
@@ -281,7 +228,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		errorObject.setException(e);
 		ErrorLogger.log(errorObject, env);
 	}
-	
+
 	private Document generateResponse(YFSEnvironment env, Document inXML, String strStatus, Exception ex)
 	throws Exception
 	{
@@ -290,16 +237,16 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		YFCElement eItemResponse = responseDoc.getDocumentElement();
 		YFCElement eItemResultList = responseDoc.createElement("ItemResultList");
 		eItemResponse.appendChild(eItemResultList);
-		
+
 		YFCElement eItemResult = responseDoc.createElement("ItemResult");
 		eItemResultList.appendChild(eItemResult);
-		
+
 		YFCElement eErrorList = responseDoc.createElement("ErrorList");
 		eItemResult.appendChild(eErrorList);
-		
+
 		YFCElement eError = responseDoc.createElement("Error");
 		eErrorList.appendChild(eError);
-		
+
 		if("FAIL".equalsIgnoreCase(strStatus))
 		{
 			eItemResult.setAttribute("transactionSuccessful", "N");
@@ -311,10 +258,10 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		{
 			eItemResult.setAttribute("transactionSuccessful", "Y");
 		}
-		
+
 		eItemResult.setAttribute("ItemIdentifier", strCorrelationID);
-		
-		
+
+
 		/*if("".equals(_RESPONSE_MSG_SERVICE))
 		{
 			//log.debug("responseDoc:" + responseDoc);
@@ -328,21 +275,21 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}
 		return responseDoc.getDocument();
 	}
-	
-	
+
+
 	private String obtainCatalogMsgCorrelationID(Document inXML) 
 	{
 		// TODO Auto-generated method stub
 		Element eItemList = inXML.getDocumentElement();
 		NodeList nlItem = eItemList.getElementsByTagName("Item");
-		
+
 		Element eItem = (Element)nlItem.item(0);
 		String strItemID = eItem.getAttribute("ItemID");
-		
+
 		return strItemID;
 	}
 
-	
+
 	private int addItemToCategory(YFSEnvironment env, YFCDocument modifyCategoryItemsDoc, Element eItem, ArrayList <HashMap <String, String>> alCategoryAssociations)
 	throws Exception
 	{
@@ -351,13 +298,13 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}
 		int counter = 0;
 		YFCElement eModifyCategoryItems = modifyCategoryItemsDoc.getDocumentElement();
-		
+
 		Element eCategoryList = (Element)eItem.getElementsByTagName("CategoryList").item(0);
-		
+
 		String strItemID = eItem.getAttribute("ItemID");
 		String strUOM = eItem.getAttribute("UnitOfMeasure");
 		String strOrganizationCode = eItem.getAttribute("OrganizationCode");
-		
+
 		NodeList nlCategoryList = eItem.getElementsByTagName("Category");
 		for(int k=0; k<nlCategoryList.getLength();k++)
 		{
@@ -373,20 +320,20 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				YFCElement eCategoryToModify = modifyCategoryItemsDoc.createElement("Category");
 				eCategoryToModify.setAttribute("CategoryPath", strCatPath);
 				eCategoryToModify.setAttribute("OrganizationCode", strOrgCode);
-				
+
 				YFCElement eCategoryItemList = modifyCategoryItemsDoc.createElement("CategoryItemList");
-				
+
 				YFCElement eCategoryItem = modifyCategoryItemsDoc.createElement("CategoryItem");
 				eCategoryItem.setAttribute("Action", "Create");
 				eCategoryItem.setAttribute("ItemID", strItemID);
 				eCategoryItem.setAttribute("UnitOfMeasure", strUOM);
 				eCategoryItem.setAttribute("OrganizationCode", strOrganizationCode);
-				
+
 				eModifyCategoryItems.appendChild(eCategoryToModify);
 				eCategoryToModify.appendChild(eCategoryItemList);
 				eCategoryItemList.appendChild(eCategoryItem);
 			}
-			
+
 		}
 		if(log.isDebugEnabled()){
 			log.debug("Removing item.");
@@ -397,7 +344,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			String sMatched = hmCat.get("Matched");
 			String strCatPath = hmCat.get("CategoryPath");
 			String strOrgCode = hmCat.get("OrganizationCode");
-			
+
 			if("Y".equals(sMatched))
 			{
 				continue;
@@ -408,29 +355,29 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				YFCElement eCategoryToModify = modifyCategoryItemsDoc.createElement("Category");
 				eCategoryToModify.setAttribute("CategoryPath", strCatPath);
 				eCategoryToModify.setAttribute("OrganizationCode", strOrgCode);
-				
+
 				YFCElement eCategoryItemList = modifyCategoryItemsDoc.createElement("CategoryItemList");
-				
+
 				YFCElement eCategoryItem = modifyCategoryItemsDoc.createElement("CategoryItem");
 				eCategoryItem.setAttribute("Action", "Delete");
 				eCategoryItem.setAttribute("ItemID", strItemID);
 				eCategoryItem.setAttribute("UnitOfMeasure", strUOM);
 				eCategoryItem.setAttribute("OrganizationCode", strOrganizationCode);
-				
+
 				eModifyCategoryItems.appendChild(eCategoryToModify);
 				eCategoryToModify.appendChild(eCategoryItemList);
 				eCategoryItemList.appendChild(eCategoryItem);
 			}
-			
+
 		}
-		
+
 		if(null!=eCategoryList){
 			eItem.removeChild(eCategoryList);
 		}
 		return counter;
-		
+
 	}
-	
+
 	private boolean assocatedToCategory(String sCatPath, String sOrgCode, ArrayList <HashMap<String, String>>alCategoryAssociations)
 	{
 		boolean bAssociated = false;
@@ -439,7 +386,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			HashMap <String, String> hmCat = alCategoryAssociations.get(i);
 			String sCatPathAssociated = hmCat.get("CategoryPath");
 			String sOrgCodeAssociated = hmCat.get("OrganizationCode");
-			
+
 			if(sCatPathAssociated.equals(sCatPath) && sOrgCodeAssociated.equals(sOrgCode))
 			{
 				bAssociated = true;
@@ -452,93 +399,93 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}
 		return bAssociated;
 	}
-	
+
 	private void updateValidValueForAttribute(YFSEnvironment env, String sAttrName, String sItemAttrValue) throws Exception
 	{
-	
-		
 
-			YFCDocument manageAttributeIn = YFCDocument.createDocument("AttributeList");
-			YFCElement eAttributeListIn = manageAttributeIn.getDocumentElement();
-			YFCElement eManageAttributeIn = manageAttributeIn.createElement("Attribute");
-			eAttributeListIn.appendChild(eManageAttributeIn);
-			eManageAttributeIn.setAttribute("AttributeDomainID", "ItemAttribute");
-			eManageAttributeIn.setAttribute("AttributeGroupID", _ATTR_GROUP_ID);
-			eManageAttributeIn.setAttribute("AttributeID", sAttrName);
-			eManageAttributeIn.setAttribute("OrganizationCode", _ORG_CODE);
-			
-			
-			YFCElement eAttrAllowedValueList = manageAttributeIn.createElement("AttributeAllowedValueList");
-			eManageAttributeIn.appendChild(eAttrAllowedValueList);
-			
-			YFCElement eAttrAllowedValue = manageAttributeIn.createElement("AttributeAllowedValue");
-			eAttrAllowedValueList.appendChild(eAttrAllowedValue);
-			
-			eAttrAllowedValue.setAttribute("LongDescription", sItemAttrValue);
-			eAttrAllowedValue.setAttribute("ShortDescription", sItemAttrValue);
-			eAttrAllowedValue.setAttribute("Value", sItemAttrValue);
-			eAttrAllowedValue.setAttribute("Operation", "Manage");
-			
 
-				log.verbose("ManageAttribute :" + manageAttributeIn.getDocument());	
-				 
-				
-				YFCDocument manageAttrTemp = YFCDocument.createDocument("AttributeList");
-				YFCElement eAttrListTemp = manageAttrTemp.getDocumentElement();
-				YFCElement eAttrTemp = manageAttrTemp.createElement("Attribute");
-				eAttrTemp.setAttribute("AttributeID", "");
-				
-				eAttrListTemp.appendChild(eAttrTemp);
-				
-				env.setApiTemplate("manageAttribute", manageAttrTemp.getDocument());
-				api.invoke(env, "manageAttribute", manageAttributeIn.getDocument());
-				env.clearApiTemplate("manageAttribute");
-				
-				
+
+		YFCDocument manageAttributeIn = YFCDocument.createDocument("AttributeList");
+		YFCElement eAttributeListIn = manageAttributeIn.getDocumentElement();
+		YFCElement eManageAttributeIn = manageAttributeIn.createElement("Attribute");
+		eAttributeListIn.appendChild(eManageAttributeIn);
+		eManageAttributeIn.setAttribute("AttributeDomainID", "ItemAttribute");
+		eManageAttributeIn.setAttribute("AttributeGroupID", _ATTR_GROUP_ID);
+		eManageAttributeIn.setAttribute("AttributeID", sAttrName);
+		eManageAttributeIn.setAttribute("OrganizationCode", _ORG_CODE);
+
+
+		YFCElement eAttrAllowedValueList = manageAttributeIn.createElement("AttributeAllowedValueList");
+		eManageAttributeIn.appendChild(eAttrAllowedValueList);
+
+		YFCElement eAttrAllowedValue = manageAttributeIn.createElement("AttributeAllowedValue");
+		eAttrAllowedValueList.appendChild(eAttrAllowedValue);
+
+		eAttrAllowedValue.setAttribute("LongDescription", sItemAttrValue);
+		eAttrAllowedValue.setAttribute("ShortDescription", sItemAttrValue);
+		eAttrAllowedValue.setAttribute("Value", sItemAttrValue);
+		eAttrAllowedValue.setAttribute("Operation", "Manage");
+
+
+		log.verbose("ManageAttribute :" + manageAttributeIn.getDocument());	
+
+
+		YFCDocument manageAttrTemp = YFCDocument.createDocument("AttributeList");
+		YFCElement eAttrListTemp = manageAttrTemp.getDocumentElement();
+		YFCElement eAttrTemp = manageAttrTemp.createElement("Attribute");
+		eAttrTemp.setAttribute("AttributeID", "");
+
+		eAttrListTemp.appendChild(eAttrTemp);
+
+		env.setApiTemplate("manageAttribute", manageAttrTemp.getDocument());
+		api.invoke(env, "manageAttribute", manageAttributeIn.getDocument());
+		env.clearApiTemplate("manageAttribute");
+
+
 
 	}
-	
+
 	private ArrayList <HashMap<String, String>> getCategoryAssociations(YFSEnvironment env, Element eItem)
 	throws Exception
 	{
-		
+
 		String sItemID = eItem.getAttribute("ItemID");
 		String sUOM = eItem.getAttribute("UnitOfMeasure");
 		String sOrgCode = eItem.getAttribute("OrganizationCode");
-		
+
 		YFCDocument getItemListInDoc = YFCDocument.createDocument("Item");
 		YFCElement eItemIn = getItemListInDoc.getDocumentElement();
-		
+
 		eItemIn.setAttribute("ItemID", sItemID);
 		eItemIn.setAttribute("OrganizationCode", sOrgCode);
 		eItemIn.setAttribute("UnitOfMeasure", sUOM);
 		eItemIn.setAttribute("GetUnpublishedItems", "Y");
-		
+
 		YFCDocument getItemListTemplate = YFCDocument.createDocument("ItemList");
 		YFCElement eItemListTemplate = getItemListTemplate.getDocumentElement();
 		YFCElement eItemTemplate = getItemListTemplate.createElement("Item");
 		YFCElement eCategoryListTemplate = getItemListTemplate.createElement("CategoryList");
 		YFCElement eCategoryTemplate = getItemListTemplate.createElement("Category");
-		
+
 		eItemListTemplate.appendChild(eItemTemplate);
 		eItemTemplate.appendChild(eCategoryListTemplate);
 		eCategoryListTemplate.appendChild(eCategoryTemplate);
-		
+
 		eItemTemplate.setAttribute("ItemID", "");
 		eItemTemplate.setAttribute("UnitOfMeasure", "");
 		eItemTemplate.setAttribute("OrganizationCode", "");
-		
+
 		eCategoryTemplate.setAttribute("CategoryID", "");
 		eCategoryTemplate.setAttribute("CategoryPath", "");
 		eCategoryTemplate.setAttribute("OrganizationCode", "");
-		
+
 		env.setApiTemplate("getItemList", getItemListTemplate.getDocument());
 		Document itemListOutDoc = api.invoke(env, "getItemList", getItemListInDoc.getDocument());
 		if(log.isDebugEnabled()){
 			log.debug("getItemlist Output: \n"+SCXmlUtil.getString(itemListOutDoc));
 		}
 		env.clearApiTemplate("getItemList");
-		
+
 		Element eItemListOut = itemListOutDoc.getDocumentElement();
 		Element itemElement = SCXmlUtil.getChildElement(eItemListOut, "Item");
 		Element eCategoryList = SCXmlUtil.getChildElement(itemElement, "CategoryList");
@@ -551,35 +498,16 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				String sCategoryID = eCategory.getAttribute("CategoryID");
 				String sCategoryPath = eCategory.getAttribute("CategoryPath");
 				String sOrganizationCode = eCategory.getAttribute("OrganizationCode");
-				
+
 				HashMap <String, String> hmCategoryDtl = new HashMap();
 				hmCategoryDtl.put("CategoryID", sCategoryID);
 				hmCategoryDtl.put("CategoryPath", sCategoryPath);
 				hmCategoryDtl.put("OrganizationCode", sOrganizationCode);
 				alCategory.add(hmCategoryDtl);
-				
+
 			}
 		}
 		return alCategory;
 	}
-	
-	
-	private Connection getDBConnection(YFSEnvironment env,Document inputXML)
-	{
-		Connection m_Conn=null;
-		try{
-			YFSConnectionHolder connHolder     = (YFSConnectionHolder)env;
-			m_Conn= connHolder.getDBConnection();
-		}
-		catch(Exception e){
-
-			log.error("Exception: " + e.getStackTrace());
-//			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
-
-		}
-
-		return m_Conn;
-	}
-	
 
 }
