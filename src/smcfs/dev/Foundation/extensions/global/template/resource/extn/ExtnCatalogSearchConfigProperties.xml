@@ -58,6 +58,15 @@
 						<Attribute IndexFieldName="Item.ExtnCert"
 							XMLName="ExtnCert" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnShortDescription" 
+							XMLName="ExtnShortDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ExtnDescription" 
+							XMLName="ExtnDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ExtnExtendedDesc" 
+							XMLName="ExtnExtendedDesc" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>			
 					</Attributes>
 				</Entity>
 			</Entities>
