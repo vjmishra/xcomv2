@@ -2,9 +2,9 @@
 <Locations>
 	<Location id="Production" proxyServer="" proxyPort="" updateType="pull">
 		<Config Name="DEFAULT" 
-	        Protocol = "http"
-	        BaseUrl = "admin.xpedx.com"
-	        PortNumber  = "8003"
+	        Protocol = "https"
+	        BaseUrl = "smcfs.ipaper.com"
+	        PortNumber  = ""
 	        ApiUrl = "/smcfs/RcpServlet"
  	        CompressionEnabled="Y">
 		</Config>
