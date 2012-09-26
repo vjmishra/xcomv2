@@ -39,14 +39,23 @@ public class XPXCatalogDataProcessor {
         		"90#",
         		"90 lb",
         		"90 pounds",
-        		"64x21",
+        		"64x21\'",
         		"#9",
         		"number 9",
         		"5\'",
         		"5 foot",
         		"5\" 6\'x 4foot 7 inch",
-        		"60 pounds"
-        		
+        		"60 pounds",
+        		"5 #",
+        		"Y20esterday 20& and t20Oday",
+        		"5 \'",
+        		"Paper in",
+        		"5 ' abc",
+        		"2.75\" x 8.5\"",
+        		"&",
+        		"#",
+        		"\"Today\"",
+        		"\"20\""
         };
 		
 		for (String rawSearch : searches) {
