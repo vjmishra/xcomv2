@@ -5,8 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XPXCatalogDataProcessor {
+	final static Pattern xPattern = buildXPattern();
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		String[] searches = new String[] {
         		"m&c",
         		"5%",
@@ -39,24 +40,26 @@ public class XPXCatalogDataProcessor {
         		"90#",
         		"90 lb",
         		"90 pounds",
-        		"64x21\'",
+        		"64x21",
         		"#9",
         		"number 9",
         		"5\'",
         		"5 foot",
         		"5\" 6\'x 4foot 7 inch",
         		"60 pounds",
-        		"5 #",
-        		"Y20esterday 20& and t20Oday",
-        		"5 \'",
-        		"Paper in",
-        		"5 ' abc",
-        		"2.75\" x 8.5\"",
-        		"&",
-        		"#",
-        		"\"Today\"",
-        		"\"20\""
+        		"abcd 20'x12.54\" abcd",
+        		"abcd 20x12' abcd",
+        		"20'",
+        		"20'x",
+        		"60\"",
+        		"\"6\"",
+        		"2\"x2'x40\"",
+        		"6\"",
+        		"2\"x 4'"
+        		
+        		
         };
+		
 		
 		for (String rawSearch : searches) {
         	// TODO: insert the following where we receive the user's search query
@@ -65,16 +68,40 @@ public class XPXCatalogDataProcessor {
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
-	}
+	}*/
 	
-	//replaces symbols representing unit of measurement with corresponding canonical terms. Also replaces '&' as 'and' and '%' as 'percent'.
 	public static String preprocessCatalogData(String rawSearch) {
 		String search = rawSearch;
 		search = UnitInfo.preprocess(search);
 		search = SymbolInfo.preprocess(search);
+		search = preprocessXPatterns(search);
+		search = preprocessXPatterns(search);
 		return search;
 	}
 	
+	// builds a pattern that can recognize numbers and UOMS separated by 'x'.
+	private static Pattern buildXPattern() {
+		StringBuilder canonicals = new StringBuilder();
+		for (UnitInfo unitInfo : UnitInfo.all) {
+			canonicals.append("|"+unitInfo.canonical);
+		}
+		return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([Xx])([0-9"+canonicals.toString()+"]?)");
+	}
+	
+	//processes x patterns
+	private static String preprocessXPatterns(String rawText){
+		Matcher matcher = xPattern.matcher(rawText);
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
+			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
+			if (matcher.group(4).length() > 0)
+				sb.append(' ').append(matcher.group(4));
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
+		
+	}
 	/**
 	 * Represents a unit that may have multiple synonymous representations in text
 	 * <p>There are three attributes of a UnitInfo
@@ -127,8 +154,18 @@ public class XPXCatalogDataProcessor {
 			Matcher matcher = unitSymbolPattern.matcher(rawText);
 			StringBuffer sb = new StringBuffer();
 			while (matcher.find()) {
+				String matchString = matcher.group(1);
+				int index = rawText.indexOf(matchString);
+				index = index-1;
+				if(index > -1){
+					char quotesValue = rawText.charAt(index);
+					if(quotesValue == '"'){
+						matcher.appendTail(sb);
+						return sb.toString();
+					}
+				}
 				matcher.appendReplacement(sb, matcher.group(1) + toCanonical.get(matcher.group(3)));
-				// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
+				// handle cases where "x" imediately follows symbol such as in: 2.75"x 8.5"
 				if (matcher.group(4).length() > 0)
 					sb.append(' ').append(matcher.group(4));
 			}
@@ -145,6 +182,8 @@ public class XPXCatalogDataProcessor {
 			matcher.appendTail(sb);
 			return sb.toString();
 		}
+		
+		
 
 		// builds a pattern that can recognize unit symbol usages
 		private static Pattern buildUnitSymbolPattern() {
