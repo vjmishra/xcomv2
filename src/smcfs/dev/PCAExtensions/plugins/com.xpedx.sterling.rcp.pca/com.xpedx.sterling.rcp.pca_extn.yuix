@@ -143,13 +143,14 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
+                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="YRCTargetBinding" value="Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="3" hIndent="0" heightHint="-1"
+                    hColSpan="2" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -178,13 +179,14 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
+                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnShipToName"/>
                 <SetData name="YRCTargetBinding" value="/Order/Extn/@ExtnShipToName"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="3" hIndent="0" heightHint="-1"
+                    hColSpan="2" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -214,13 +216,33 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
+                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@BillToID"/>
                 <SetData name="YRCTargetBinding" value="/Order/@BillToID"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="3" hIndent="0" heightHint="-1"
+                    hColSpan="2" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="pnlOrderDate" attachType="AFTER"
+                    defaultValue="Needs_Attention" enabled="true"
+                    isAdvanced="false" name="extn_chkNeedsAttention"
+                    type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCUnCheckedValue" value="N"/>
+                <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@NeedsAttentionFlag"/>
+                <SetData name="YRCTargetBinding" value="/Order/@NeedsAttentionFlag"/>
+                <SetData name="yrc:customType" value="TaskWhiteComposite"/>
+                <SetData name="YRCCheckedValue" value="Y"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -325,7 +347,7 @@
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="3" hIndent="0" heightHint="-1"
+                    hColSpan="2" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -339,6 +361,25 @@
                 </Field>
                 <SetData name="YRCSourceBinding" value=""/>
                 <SetData name="yrc:customType" value="Label"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
+            <NewField>
+                <Field attachTo="extn_chkNeedsAttention"
+                    attachType="BEFORE" defaultValue="Locked Orders"
+                    enabled="true" isAdvanced="false"
+                    name="extn_chkCSRReview" type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCUnCheckedValue" value="N"/>
+                <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@CsrReviewFlag"/>
+                <SetData name="YRCTargetBinding" value="/Order/@CsrReviewFlag"/>
+                <SetData name="yrc:customType" value="TaskWhiteComposite"/>
+                <SetData name="YRCCheckedValue" value="Y"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
                     hColSpan="1" hIndent="0" heightHint="-1"
