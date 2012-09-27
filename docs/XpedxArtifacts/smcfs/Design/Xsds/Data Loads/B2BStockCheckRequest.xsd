@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="xpedxStockCheckWSRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SenderCredentials"/>
+        <xs:element ref="StockCheckRequests"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SenderCredentials">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="UserEmail"/>
+        <xs:element ref="UserPassword"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserEmail">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="UserPassword">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="StockCheckRequests">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="BuyerID"/>
+        <xs:element ref="StockCheckRequest"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuyerID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="StockCheckRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="eTradingPartnerID"/>
+        <xs:element ref="Items"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="eTradingPartnerID" >
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Items">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Item"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="IndexID"/>
+        <xs:element ref="xpedxPartNumber"/>
+        <xs:element ref="CustomerPartNumber" minOccurs="0"/>
+        <xs:element ref="Quantity" minOccurs="0"/>
+        <xs:element ref="UOM" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndexID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="xpedxPartNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerPartNumber">
+    <xs:simpleType>
+    <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Quantity">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="UOM">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>
