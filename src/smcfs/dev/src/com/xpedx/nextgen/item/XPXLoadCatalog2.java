@@ -97,7 +97,9 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				else if(!YFCCommon.isVoid(actionName) && (actionName.equalsIgnoreCase("Manage"))){
 
 					Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
-				
+					
+					if(eExtnList !=null){				
+
 					String strShortDesc = eExtnList.getAttribute("ExtnShortDescription");
 					String strDesc =eExtnList.getAttribute("ExtnDescription");
 					String strExtendedDesc = eExtnList.getAttribute("ExtnExtendedDesc");
@@ -108,6 +110,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 					eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
 					eExtnList.setAttribute("ExtnDescription", strDesc);
 					eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+
+					}
 					
 				//	System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
 
