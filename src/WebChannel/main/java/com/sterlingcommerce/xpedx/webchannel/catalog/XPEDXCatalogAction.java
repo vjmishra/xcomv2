@@ -45,6 +45,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXWarehouseLocation;
+import com.xpedx.nextgen.common.util.XPXCatalogDataProcessor;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
@@ -273,12 +274,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			searchTerm=	searchString;
 		}
 		//End of Changes JIRA #4195 
-		if(searchTerm!=null && searchTerm.contains("\"")){
+		/*if(searchTerm!=null && searchTerm.contains("\"")){
 			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
-		}
+		}*/
+		
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
-		{					  
+		{
+			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
 			String appendStr="&searchTerm="+searchTerm;
@@ -511,12 +514,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
 				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
-			if(searchStringValue.contains("\"")){
+			/*if(searchStringValue.contains("\"")){
 				searchStringValue= searchStringValue.replaceAll("\"", "\\\\u0022");
-			}
+			}*/
+			
+			
+			
 			/*End of changes 3464*/
 			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
+			
+			
+			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
+			
+			
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
@@ -570,12 +581,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 					termValue = termValue.substring(1, termValue.length());
 					termEle.setAttribute("Value", termValue);
 				}
-				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/	
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character	
 				if(termValue!=null && termValue.contains("\"")){
 					termValue= termValue.replaceAll("\"", "\\\\u0022");
 					termEle.setAttribute("Value", termValue);
 				}
-				/*End of changes 3464*/	
+				End of changes 3464*/	
+				
+				termValue = XPXCatalogDataProcessor.preprocessCatalogData(termValue);
+				termEle.setAttribute("Value", termValue);
+				
+				
 			}
 			if (customerNumber != null && customerNumber.trim().length() > 0) {
 				Element term = SCXmlUtil.createChild(terms, "Term");
@@ -588,10 +604,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 					}								
 				}
 					/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
-				if(searchTerm!=null && searchTerm.contains("\"")){
+				/*if(searchTerm!=null && searchTerm.contains("\"")){
 				searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
-				}	
+				}*/	
 				/*end of 3464*/			
+				
+				searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
+				
+				
 				term.setAttribute("Value", customerNumber + "|" + searchTerm);
 			}
 		}
