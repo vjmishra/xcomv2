@@ -173,7 +173,7 @@
 			
 
 			<!--Webtrands Start -->
-			<meta name="WT.ti" content="<s:property value='%{#parameters.cname}' />"/>
+			<meta name="WT.ti" content="<s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' />"/>
 			<!--Webtrands End -->
 		 	
 			<!-- Header promotion Start-->
@@ -407,10 +407,11 @@
                  <s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
 				 <s:property value="%{#pageNumber}"/>
 		 </s:if></span>
-                 <s:if test='searchMetaTag == true'>
-					<META Name="DCSext.w_x_ss" content="1">
+                 <s:if test="%{searchMetaTag == true}">
+                 	<s:if test="%{#checkedval1 == true}" ><META Name="DCSext.w_x_ss" content="1"></s:if>
+					
 					<META Name="WT.ossr" content="<s:property value='%{#numResult}' />">
-					<META Name="WT.oss" content="2">
+					<META Name="WT.oss" content="<s:property value='%{#_action.getSearchTerm()}' />">
 				</s:if>
  				<!-- Webtrend Meta Tag endt -->
  

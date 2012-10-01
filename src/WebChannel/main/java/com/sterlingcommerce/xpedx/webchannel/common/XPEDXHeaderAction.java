@@ -63,6 +63,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private List<String> assignedShipTos=new ArrayList<String>();
 	private Boolean shipToBanner = false;
 	private XPEDXShipToCustomer shipToAddress;
+	private String userTypeForWebtrend;
 	//Commenting since this is not required
 	//could not get key directly on jsp so added the code.
 	/*private String orderHeaderKey1 = null;
@@ -76,6 +77,35 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		this.orderHeaderKey1 = orderHeaderKey1;
 	}*/
 	
+	public String getUserTypeForWebtrend() {
+		String temp="";
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+		ArrayList<String> userType = new ArrayList<String>();
+		if(xpedxCustomerContactInfoBean!=null){
+			userType = xpedxCustomerContactInfoBean.getUsergroupKeyList();
+			for(int i=0; i<userType.size();i++){
+				temp = temp + userType.get(i);
+			}
+			if(temp.contains("ADMIN")){
+				userTypeForWebtrend = "Admin";
+			}else if(temp.contains("APPROVER")){
+				userTypeForWebtrend = "Approver";
+			}
+			else if(temp.contains("ESTIMATOR")){
+				userTypeForWebtrend = "Estimator";
+			}
+			else {
+				userTypeForWebtrend="Buyer";
+			}
+		}
+		return userTypeForWebtrend;
+	}
+
+	public void setUserTypeForWebtrend(String userTypeForWebtrend) {
+		
+		this.userTypeForWebtrend = userTypeForWebtrend;
+	}
+
 	public XPEDXHeaderAction() {
 		logoURL = null;
 		request = null;
@@ -111,6 +141,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		try {
 			//Removing  from AUTHORIZED_LOCATIONS and AVAILABLE_LOCATIONS session -Jira 4146
 			Boolean sessionForUserProfile=  (Boolean) XPEDXWCUtils.getObjectFromCache("SessionForUserProfile");
+			/*Start of webtrend tags*/
+			if(wcContext.getSCUIContext().getSession().getAttribute("firstTimeFlag")!=null){
+				wcContext.getSCUIContext().getSession().setAttribute("firstTimeFlag",null);
+			}
+			if(getWCContext().getWCAttribute("firstTimeFlag")!=null){
+				getWCContext().removeWCAttribute("firstTimeFlag",WCAttributeScope.LOCAL_SESSION);
+			}
+			/*End of webtrend tags*/	
 			if(sessionForUserProfile == null || sessionForUserProfile != true)
 			{
 				XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
@@ -649,6 +687,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		//JIRA 3487 end
 		//request.setAttribute("isTOAaccepted", toaFlag);
 		//isTOAaccepted=toaFlag;
+		getWCContext().setWCAttribute("firstTimeFlag", toaFlag, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("isTOAaccepted", toaFlag, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("addnlEmailAddrs", addnlEmailAddrs, WCAttributeScope.LOCAL_SESSION);
 		getWCContext().setWCAttribute("addnlPOList", addnlPOList, WCAttributeScope.LOCAL_SESSION);
