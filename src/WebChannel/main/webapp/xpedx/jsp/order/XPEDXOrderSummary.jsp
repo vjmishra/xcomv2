@@ -167,7 +167,8 @@ function setTotalPrice(val){
 		//Ext.Msg.wait("Processing...");
 		
 		setCustomerPONumber();
-	
+	var deliveryHoldCheck = '<s:property value="%{#_action.isDeliveryHold()}"/>';
+	var deliveryHoldFlag = document.getElementById("DeliveryHoldFlag");
     var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
 	//Special Instructions field validation
 	var OrderSummaryForm_rushOrdrFlagField =   document.getElementById("OrderSummaryForm_rushOrdrFlag"); 	
@@ -176,10 +177,15 @@ function setTotalPrice(val){
     //var usernameField = document.forgotPwdForm.UserId;
     var errorDiv = document.getElementById("errorMsg");
     var returnval = false;
-    
+
+    if(deliveryHoldCheck == "true" && (deliveryHoldFlag.checked == false) ){
+    	document.getElementById("customerHoldCheck").value = "true";
+    }
     errorDiv.innerHTML = "";
     splInstructionsField.style.borderColor="";
     errorDiv.style.display = "none";
+
+    
     
     if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
@@ -524,6 +530,7 @@ from session . We have customer Contact Object in session .
 	validate="true" name="OrderSummaryForm" id="OrderSummaryForm"
 	namespace="/order" method="POST">
 	<s:hidden name='fullBackURL' value='%{#returnURL}' />
+	<s:hidden name='customerHoldCheck' value='' id='customerHoldCheck'/>
 	<div class="container checkout"><!-- breadcrumb -->
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
 		<span class="page-title">Checkout</span>
@@ -634,7 +641,7 @@ from session . We have customer Contact Object in session .
 				<s:set name="delHDate"
 					value='#extnElem.getAttribute("ExtnDeliveryHoldDate")' />
 				<tr><td><s:checkbox cssClass="checkbox"
-						name='DeliveryHoldFlag' fieldValue="true"
+						name='DeliveryHoldFlag' fieldValue="true" id="DeliveryHoldFlag"
 						value="%{#_action.isDeliveryHold()}" /> 
 						<%--Changes for JIRA 3413 --%>
 						<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
