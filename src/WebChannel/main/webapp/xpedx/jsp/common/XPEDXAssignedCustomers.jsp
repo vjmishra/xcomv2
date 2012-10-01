@@ -101,18 +101,19 @@
 					<td width="33%" valign="top"><s:property
 						value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#currentShipTo.getCustomerID())" /></td>
 				</tr>
-				<s:if
-					test="%{currentShipTo.firstName!='' || currentShipTo.middleName!='' || currentShipTo.lastName!=''}">
-					<tr>
-						<td width="100%"><s:if test="%{#currentShipTo.firstName!='' && #currentShipTo.firstName!= null}">
-							<s:property value='%{#currentShipTo.firstName}' /> <s:property value=',' />
-							</s:if> <s:if test="%{#currentShipTo.middleName!='' && #currentShipTo.middleName!= null}">
-							<s:property value='%{#currentShipTo.middleName}' /> <s:property value=',' />
-							</s:if> <s:if test="%{#currentShipTo.lastName!='' && #currentShipTo.lastName!= null}">
-							<s:property value='%{#currentShipTo.lastName}' />
+				
+				<s:if test="%{#currentShipTo.firstName!='' || #currentShipTo.middleName!='' || #currentShipTo.lastName!=''}">
+				<tr>
+					<td width="100%"><s:if test="%{#currentShipTo.firstName!='' && #currentShipTo.firstName!= null}">
+							<s:property	value='%{#currentShipTo.firstName}' />
+						</s:if>
+						<s:if test="%{#currentShipTo.middleName!='' && #currentShipTo.middleName!= null}">
+							<s:property value='%{#currentShipTo.middleName}' /> </s:if>
+						<s:if test="%{#currentShipTo.lastName!='' && #currentShipTo.lastName!= null}">
+							<s:property	value='%{#currentShipTo.lastName}' />
 						</s:if></td>
-					</tr>
-				</s:if>
+				</tr>
+			</s:if>
 				<s:if test="%{#currentShipTo.getOrganizationName()!='' && #currentShipTo.getOrganizationName()!= null}">
 				<tr>
 					<td width="100%"><s:property value='%{#currentShipTo.getOrganizationName()}' /></td>
