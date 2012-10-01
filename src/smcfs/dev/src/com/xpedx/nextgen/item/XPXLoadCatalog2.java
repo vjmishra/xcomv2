@@ -96,24 +96,29 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 				else if(!YFCCommon.isVoid(actionName) && (actionName.equalsIgnoreCase("Manage"))){
 
-					Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
-					
-					if(eExtnList !=null){				
+				
+					Element ePrimaryList = (Element)eItem.getElementsByTagName("PrimaryInformation").item(0);
+					if(ePrimaryList!=null){
+						String strShortDesc = ePrimaryList.getAttribute("ShortDescription");
+						String strDesc =ePrimaryList.getAttribute("Description");
+						String strExtendedDesc = ePrimaryList.getAttribute("ExtendedDescription");
+						strShortDesc =	XPXCatalogDataProcessor.preprocessCatalogData(strShortDesc);
+						strDesc = XPXCatalogDataProcessor.preprocessCatalogData(strDesc);
+						strExtendedDesc =XPXCatalogDataProcessor.preprocessCatalogData(strExtendedDesc);
 
-					String strShortDesc = eExtnList.getAttribute("ExtnShortDescription");
-					String strDesc =eExtnList.getAttribute("ExtnDescription");
-					String strExtendedDesc = eExtnList.getAttribute("ExtnExtendedDesc");
-					strShortDesc =	XPXCatalogDataProcessor.preprocessCatalogData(strShortDesc);
-					strDesc = XPXCatalogDataProcessor.preprocessCatalogData(strDesc);
-					strExtendedDesc =XPXCatalogDataProcessor.preprocessCatalogData(strExtendedDesc);
-					
-					eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
-					eExtnList.setAttribute("ExtnDescription", strDesc);
-					eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+						Element eExtnList =(Element)eItem.getElementsByTagName("Extn").item(0);
 
+							if(eExtnList!=null){
+						eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
+						eExtnList.setAttribute("ExtnDescription", strDesc);
+						eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+							}
+						
 					}
-					
-				//	System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
+					//System.out.println(" Final xml"+SCXmlUtil.getString(inXML));
+
+				
+
 
 				}
 
