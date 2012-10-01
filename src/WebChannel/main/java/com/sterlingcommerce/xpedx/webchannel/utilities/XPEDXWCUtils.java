@@ -5457,18 +5457,7 @@ public class XPEDXWCUtils {
 					}	
 				}
 				
-				if(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)== null || "true".equals(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)))
-				{
-					shipToCustomer.setDefaultShipToCustomer(shipToCustomer);
-					XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "false");
-					
-				}
-				else
-				{		// Changes started for preferred ship-to location issue JIRA 4306		
-					shipToCustomer.setDefaultShipToCustomer(((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).getDefaultShipToCustomer());
-					//End of changes for preferred ship-to location issue JIRA 4306
-					XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
-				}
+				
 				// end of performance for itemdetail.action
 				if(!YFCCommon.isVoid(parentElem))
 				{
@@ -5491,6 +5480,19 @@ public class XPEDXWCUtils {
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
+				if(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)== null || "true".equals(XPEDXWCUtils.getObjectFromCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED)))
+				{
+					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer) shipToCustomer.clone()); //added for jira 4306
+					XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "false");
+					
+				}
+				else
+				{	
+					// Changes started for preferred ship-to location issue JIRA 4306
+					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT"));
+					//End of changes for preferred ship-to location issue JIRA 4306
+					XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
+				}
 			}
 		} catch (Exception ex) {
 			log.error("Unable to get logged in users Customer Profile. "
