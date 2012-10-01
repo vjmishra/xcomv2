@@ -2093,12 +2093,14 @@ function checkSessionTimeout(){
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
-	<s:if test='%{#session.firstTimeFlag == null}'>
-		<s:set name="userGroupKeyList" value ="%{#xpedxCustomerContactInfoBean.getUsergroupKeyList()}"/>	
-		<s:iterator value="#userGroupKeyList" id='userGroupKey' >
-           <meta name="DCSext.w_ut" content='<s:property value="userGroupKey"/>' />
-   		 </s:iterator>
-		<s:set name="firstTimeFlag" value="N" scope="session"/> 
+<s:set name="firstTimeFlag" value="%{wCContext.getWCAttribute('firstTimeFlag')}"/>
+	<s:if test='%{#firstTimeFlag != null}'>
+		<s:set name="userGroupKey" value ="%{#_action.getUserTypeForWebtrend()}"/>	
+		
+           		<meta name="DCSext.w_ut" content='<s:property value="#userGroupKey"/>' />
+          
+		<s:set name="firstTimeFlag" value="<s:property value=null />" scope="session"/> 
+		
 	</s:if>	
 </s:if>
 <!-- WebTrends tag end -->
@@ -2138,6 +2140,13 @@ function checkSessionTimeout(){
 </noscript>
 <!-- begin t1-header -->
 <!-- <div id="noassignedShipto" style="display:none;color:red;">There are no shipTo locations assigned for your profile, Please contact administrator..</div> commented for jira2881-->
+<!-- WebTrends tag start -->
+<s:if test='(#isGuestUser != true)'>
+	<s:if test="%{wCContext.getWCAttribute('lastLoginDate')==null || wCContext.getWCAttribute('lastLoginDate')==''}" >
+	<meta name="DCSext.w_x_ul" content='1' />
+	</s:if>
+</s:if>
+<!-- WebTrends tag End -->
 <s:if test='(#isGuestUser == true)'>
 <div class="t1-header commonHeader signOnHeader" id="headerContainer" >
 </s:if>

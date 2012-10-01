@@ -164,7 +164,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String getFirstItem() {
 		return firstItem;
 	}
-
+	/*Start for webtrend XBT-35 */
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+/*End of webtrend */
 	public Map<String, List<Element>> getPLLineMap() {
 		return PLLineMap;
 	}
@@ -684,9 +688,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				// file
 			}
 		}
-
-
-
+		//Webrtends	tag start
+		setsearchMetaTag(true);
+		//Webrtends	tag start
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		}
@@ -726,12 +730,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 
 	}
-		//Webrtends	tag start
+	
 		setStockedItemFromSession();				
-		if(isStockedItem){
-		 setsearchMetaTag(true);
-		}
-		//Webrtends	tag End
+	
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -796,6 +797,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	public String navigate() {
 		try{
+		/*Start of webtrend tags*/
+			setsearchMetaTag(false);
+		/*End of webtrend tags*/
 		init();	
 		if(draft!=null && !YFCCommon.isVoid(draft) && "N".equals(draft))
 		{
@@ -1183,7 +1187,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}*/
 		// end of performance filterAction
-		
+		/*Start of webtrend tags*/
+		setsearchMetaTag(true);
+		/*End of webtrend tags*/
 
 		if (ERROR.equals(returnString)) {
 			return returnString;

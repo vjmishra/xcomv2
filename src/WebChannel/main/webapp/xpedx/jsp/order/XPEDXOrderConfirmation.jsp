@@ -16,6 +16,8 @@
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <meta name="DCSext.w_x_po" content="1">
+<meta name="WT.si_n" content="ShoppingCart" />
+<META name="WT.si_x" Content="4">
 <%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
@@ -175,6 +177,21 @@
 	<s:set name='orderType' value='%{#_action.getOrderType()}'/>
 	<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
 	<s:set name='resolverUserID' value='%{#_action.getResolverUserID()}'/>
+	<%--For webtrends start --%>
+	
+	<s:set name='xpedxOrderDateTimezone' value=''/>
+	<s:if test='#orderDate.contains("-05")'>
+		<s:set name='xpedxOrderDateTimezone' value="%{'CT'}"/>
+	</s:if>
+	<s:if test='#orderDate.contains("-04")'>
+		<s:set name='xpedxOrderDateTimezone' value="%{'ET'}"/>
+	</s:if>
+	
+		<s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#orderDate, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')" />
+	<META NAME="WT.tx_it" CONTENT="<s:property value='#xpedxOrderTime'/>"/>	
+	
+	<%--End of webtrends --%>
+	
 	<s:if test="#isOrderOnApprovalHoldStatus">
 		 	<%-- <s:set name='usersInfoMap' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUsersInfoMap(#resolverUserID, #storeFrontId)'/>
 		 	<s:set name='userInfo' value='#usersInfoMap.get(#_action.getPrimaryApproverID())'/>	
@@ -344,6 +361,7 @@
 															<s:a href="%{chainedOrderDetailsURL}" cssClass="underlink">
 												  				<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn)'/>
 															</s:a>
+															<META NAME="WT.tx_i" CONTENT="<s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#ChainedOrderExtn)'/>"/>
 														</s:else>
 			                					</s:iterator>
 										</s:if>
@@ -360,7 +378,8 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td valign="top" align="left"><b>Order Date:</b></td>
+                                    <td valign="top" align="left"><b>Order Date:</b><META NAME="WT.tx_id" CONTENT="<s:property value='#util.formatDate(#orderDate, #scuicontext)'/>"/>
+                                    </td>
                                     <td valign="top" align="left"><s:property value='#util.formatDate(#orderDate, #scuicontext)'/></td>
                                 </tr>
                                 <tr>
