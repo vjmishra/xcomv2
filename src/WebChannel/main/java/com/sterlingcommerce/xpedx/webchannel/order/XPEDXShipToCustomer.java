@@ -15,7 +15,7 @@ import java.util.List;
  * @author mvummadi
  *
  */
-public class XPEDXShipToCustomer {
+public class XPEDXShipToCustomer implements Cloneable{
 
 	public String getShipToName() {
 		return ShipToName;
@@ -471,6 +471,133 @@ public String getShipToDivdeliveryInfo() {
 	public void setExtnAllowDirectOrderFlag(String extnAllowDirectOrderFlag) {
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 	}
-	
 	//JIRA 3488 end
+	
+	//added for jira 4306
+	public XPEDXShipToCustomer()
+	{
+		
+	}
+	public XPEDXShipToCustomer(String firstName, String middleName,
+			String lastName, String organizationName, String eMailID,
+			String city, String cityCode, String extnECsr1EMailID,
+			String extnECsr2EMailID, String parentCustomerKey, String company,
+			List<String> addressList, String customerID, String hTMLValue,
+			String state, String zipCode, String country, String dayPhone,
+			String shipToName, String locationID, String parentCustomerID,
+			String extnCustomerClass, String extnShipFromBranch,
+			String extnIndustry, String extnCurrencyCode,
+			String extnCustomerDivision, String extnCustomerName,
+			String extnEnvironmentCode, String extnCompanyCode,
+			String extnLegacyCustNumber, String extnUseCustSKU,
+			String extnSampleRequestFlag, String extnServiceOptCode,
+			String extnMinOrderAmount, String extnMinChargeAmount,
+			String extnCustOrderBranch, String extnOrigEnvironmentCode,
+			String extnShipComplete, String shipToOrgExtnMinOrderAmt,
+			String shipToOrgExtnSmallOrderFee,
+			String shipToOrgOrganizationName,
+			String shipToOrgCorporatePersonInfoState,
+			String shipToDivDeliveryCutOffTime, String shipToDivdeliveryInfo,
+			XPEDXShipToCustomer billTo, XPEDXOrgNodeDetailsBean organization,
+			String customerStatus, String extnUseOrderMulUOMFlag,
+			String extnPrimarySalesRep, String extnSampleRoomEmailAddress,
+			String accountNumber, String extnShipToSuffix,
+			String rootCustomerKey, String customerKey,
+			String buyerOrganizationCode,
+			XPEDXShipToCustomer defaultShipToCustomer,
+			String extnAllowDirectOrderFlag, String extnMaxOrderAmount) {
+		FirstName = firstName;
+		MiddleName = middleName;
+		LastName = lastName;
+		OrganizationName = organizationName;
+		EMailID = eMailID;
+		City = city;
+		CityCode = cityCode;
+		this.extnECsr1EMailID = extnECsr1EMailID;
+		this.extnECsr2EMailID = extnECsr2EMailID;
+		this.parentCustomerKey = parentCustomerKey;
+		Company = company;
+		this.addressList = addressList;
+		this.customerID = customerID;
+		this.hTMLValue = hTMLValue;
+		State = state;
+		ZipCode = zipCode;
+		Country = country;
+		DayPhone = dayPhone;
+		ShipToName = shipToName;
+		LocationID = locationID;
+		this.parentCustomerID = parentCustomerID;
+		this.extnCustomerClass = extnCustomerClass;
+		this.extnShipFromBranch = extnShipFromBranch;
+		this.extnIndustry = extnIndustry;
+		this.extnCurrencyCode = extnCurrencyCode;
+		this.extnCustomerDivision = extnCustomerDivision;
+		this.extnCustomerName = extnCustomerName;
+		this.extnEnvironmentCode = extnEnvironmentCode;
+		this.extnCompanyCode = extnCompanyCode;
+		this.extnLegacyCustNumber = extnLegacyCustNumber;
+		this.extnUseCustSKU = extnUseCustSKU;
+		this.extnSampleRequestFlag = extnSampleRequestFlag;
+		this.extnServiceOptCode = extnServiceOptCode;
+		this.extnMinOrderAmount = extnMinOrderAmount;
+		this.extnMinChargeAmount = extnMinChargeAmount;
+		this.extnCustOrderBranch = extnCustOrderBranch;
+		this.extnOrigEnvironmentCode = extnOrigEnvironmentCode;
+		this.extnShipComplete = extnShipComplete;
+		this.shipToOrgExtnMinOrderAmt = shipToOrgExtnMinOrderAmt;
+		this.shipToOrgExtnSmallOrderFee = shipToOrgExtnSmallOrderFee;
+		this.shipToOrgOrganizationName = shipToOrgOrganizationName;
+		this.shipToOrgCorporatePersonInfoState = shipToOrgCorporatePersonInfoState;
+		this.shipToDivDeliveryCutOffTime = shipToDivDeliveryCutOffTime;
+		this.shipToDivdeliveryInfo = shipToDivdeliveryInfo;
+		this.billTo = billTo;
+		this.organization = organization;
+		this.customerStatus = customerStatus;
+		ExtnUseOrderMulUOMFlag = extnUseOrderMulUOMFlag;
+		ExtnPrimarySalesRep = extnPrimarySalesRep;
+		ExtnSampleRoomEmailAddress = extnSampleRoomEmailAddress;
+		AccountNumber = accountNumber;
+		ExtnShipToSuffix = extnShipToSuffix;
+		this.rootCustomerKey = rootCustomerKey;
+		this.customerKey = customerKey;
+		this.buyerOrganizationCode = buyerOrganizationCode;
+		this.defaultShipToCustomer = defaultShipToCustomer;
+		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
+		this.extnMaxOrderAmount = extnMaxOrderAmount;
+	}
+	
+	public Object clone() throws CloneNotSupportedException
+	{
+		XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer(FirstName, MiddleName,
+				LastName, OrganizationName,EMailID,
+				City, CityCode, extnECsr1EMailID,
+				extnECsr2EMailID,  parentCustomerKey,  Company,
+				 addressList,  customerID,  hTMLValue,
+				 State,  ZipCode,  Country,  DayPhone,
+				 ShipToName,  LocationID,  parentCustomerID,
+				 extnCustomerClass,  extnShipFromBranch,
+				 extnIndustry,  extnCurrencyCode,
+				 extnCustomerDivision,  extnCustomerName,
+				 extnEnvironmentCode,  extnCompanyCode,
+				 extnLegacyCustNumber,  extnUseCustSKU,
+				 extnSampleRequestFlag,  extnServiceOptCode,
+				 extnMinOrderAmount,  extnMinChargeAmount,
+				 extnCustOrderBranch,  extnOrigEnvironmentCode,
+				 extnShipComplete,  shipToOrgExtnMinOrderAmt,
+				 shipToOrgExtnSmallOrderFee,
+				 shipToOrgOrganizationName,
+				 shipToOrgCorporatePersonInfoState,
+				 shipToDivDeliveryCutOffTime,  shipToDivdeliveryInfo,
+				 billTo,  organization,
+				 customerStatus,  ExtnUseOrderMulUOMFlag,
+				 ExtnPrimarySalesRep,  ExtnSampleRoomEmailAddress,
+				 AccountNumber,  ExtnShipToSuffix,
+				 rootCustomerKey,  customerKey,
+				 buyerOrganizationCode,
+				 defaultShipToCustomer,
+				extnAllowDirectOrderFlag,  extnMaxOrderAmount);
+		
+		return shipToCustomer;
+	}
+	//end for jira 4306
 }
