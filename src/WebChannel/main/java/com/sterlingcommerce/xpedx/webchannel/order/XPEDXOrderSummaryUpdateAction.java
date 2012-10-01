@@ -73,6 +73,9 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				setInventoryIndicatorMap();
 				
 			}	else {
+				if(customerHoldCheck != null && "true".equals(customerHoldCheck) ){
+					setExtnWebHoldFlag("Y");
+				}
 				outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				Document orderOutDoc = outElement.getOwnerDocument();
@@ -837,7 +840,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private String rushOrdrFlag="N";
 	private String orderedByName;
 	private ArrayList<String> inventoryInds;
+	private String customerHoldCheck;
 	
+	public String getCustomerHoldCheck() {
+		return customerHoldCheck;
+	}
+	public void setCustomerHoldCheck(String customerHoldCheck) {
+		this.customerHoldCheck = customerHoldCheck;
+	}
 	public ArrayList getOrderLineKeyLists() {
 		return orderLineKeyLists;
 	}
