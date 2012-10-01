@@ -1062,6 +1062,20 @@ private void saveChanges(Map<String, String> resultsMap) {
 	public void setCurrentCustomerIntoContext() throws CannotBuildInputException {
 		
 		String selectedCustomerContactId = getWCContext().getSCUIContext().getRequest().getParameter("selectedCustomerContactId");
+		//added for jira 4306
+		XPEDXShipToCustomer shipToCustomer=null;
+		try
+		{
+			shipToCustomer=(XPEDXShipToCustomer) ((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).clone();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if(!setSelectedAsDefault){
+			XPEDXWCUtils.setObectInCache("DEFAULT_SHIP_TO_OBJECT",shipToCustomer.getDefaultShipToCustomer());
+		}
+		//end for jira 4306
 		if(SCUtil.isVoid(selectedCustomerContactId))
 			selectedCustomerContactId = wcContext.getCustomerContactId();
 		String  contaxtCustomerContactID = wcContext.getCustomerContactId();
@@ -1092,12 +1106,7 @@ private void saveChanges(Map<String, String> resultsMap) {
 				log.error("Cannot set the customer as default. please try again later");
 				e.printStackTrace();
 			}
-		}
-		else
-		{
-			XPEDXWCUtils.setObectInCache("DEFAULT_SHIP_TO_OBJECT",((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).getDefaultShipToCustomer());
-		}
-			
+		}	
 	}
 
 	public void resetOrganizationValuesForShipToCustomer(){
