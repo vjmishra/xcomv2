@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
 	
-	/*public static void main(String[] args){
-		String[] searches = new String[] {
+	public static void main(String[] args){
+		/*String[] searches = new String[] {
         		"m&c",
         		"5%",
         		"5 percent",
@@ -55,20 +55,24 @@ public class XPXCatalogDataProcessor {
         		"\"6\"",
         		"2\"x2'x40\"",
         		"6\"",
-        		"2\"x 4'"
+        		"2\"x 4'",
+        		"1.50\"x2.25\""
         		
         		
-        };
+        };*/
+		
+		String[] searches = {"P&amp;G P &amp; G P&G P & G"};
 		
 		
 		for (String rawSearch : searches) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
-        	String search = preprocessCatalogData(rawSearch);
+			String search = preprocessCatalogData(rawSearch);
+        	
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
-	}*/
+	}
 	
 	public static String preprocessCatalogData(String rawSearch) {
 		String search = rawSearch;
@@ -239,7 +243,8 @@ public class XPXCatalogDataProcessor {
 		// TODO: add new non-unit symbols here
 		final public static SymbolInfo[] all = new SymbolInfo[] {
 			new SymbolInfo(true, "%", "percent", "pct"),
-			new SymbolInfo(false, "&", "and"),
+			new SymbolInfo(false, "&amp;", "and"),
+			new SymbolInfo(false, "&", "and")
 			//new SymbolInfo(false, "@", "at"),
 		};
 		
