@@ -143,14 +143,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="YRCTargetBinding" value="Order/Extn/@ExtnCustomerDivision"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -179,14 +178,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/Extn/@ExtnShipToName"/>
                 <SetData name="YRCTargetBinding" value="/Order/Extn/@ExtnShipToName"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -216,14 +214,13 @@
                         <style style="LEFT"/>
                     </styles>
                 </Field>
-                <SetData name="YRCExtnTextStyle" value="NONE"/>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@BillToID"/>
                 <SetData name="YRCTargetBinding" value="/Order/@BillToID"/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
@@ -347,7 +344,7 @@
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Fill"
-                    hColSpan="2" hIndent="0" heightHint="-1"
+                    hColSpan="3" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
             <NewField>
