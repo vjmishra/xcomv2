@@ -7,7 +7,10 @@
 
 <s:set name='_action' value='[0]' />
 <s:set name="lineNumber" value="%{1}" />
-<s:set name='itemOrderSeq' value="%{1}" />					
+<s:set name='itemOrderSeq' value="%{1}" />	
+<meta name="DCSext.w_x_sc" content="1"></meta>	
+<s:set name='webtrendTotalQty' value="#_action.buildwebtrendTagForAll()" />
+<meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />			
 <s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
@@ -196,10 +199,7 @@
 					<s:hidden name='pricingUom_%{#id}' value="%{#jsonPricingUOM}" />
 					<s:hidden name="avail_%{#id}" value='%{#jsonAvailability}' />
 				</table>
-						<!-- Web Trends tag start -->  
-						<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)' />"></meta>                          	
-                            	                          	
-                          <!-- Web Trends tag End -->			
+							
 						</s:if>
 						</s:if>
 					</s:if>
