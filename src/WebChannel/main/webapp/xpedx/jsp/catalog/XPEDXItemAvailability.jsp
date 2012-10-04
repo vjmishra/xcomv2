@@ -77,6 +77,7 @@
 					</s:if>
 					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
 					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotal)" />
+					<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='#xpedxutil.formatQuantityForCommas(#jsonTotal)' />"></meta>
 					
 						<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />-->
 					</td>

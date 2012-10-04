@@ -95,6 +95,9 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
+<!-- Web Trends tag start -->
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
+<!-- Web Trends tag end  -->
 <script>
 var priceCheck;
 function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor) {

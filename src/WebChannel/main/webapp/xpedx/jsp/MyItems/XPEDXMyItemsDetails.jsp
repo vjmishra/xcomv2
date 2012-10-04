@@ -1773,6 +1773,7 @@ function showSharedListForm(){
 
 		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
+		    writeMetaTag("DCSext.w_x_sc_count",cnt);
 			if (formItemIds){
 				
 				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
@@ -1793,6 +1794,10 @@ function showSharedListForm(){
 		            		availabilityRow.style.display = '';
 	                     		Ext.Msg.hide();
 				        myMask.hide();
+				      //-- Web Trends tag start --
+						//alert(responseText);
+			            writeWebtrendTag(responseText);
+			            //-- Web Trends tag end --
 	                   },
 	                   failure: function (response, request){						
 						  Ext.Msg.hide();
@@ -2612,7 +2617,7 @@ function showSharedListForm(){
                
                
                <s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
-             
+             	<s:set name="webtrendsItemTypeMap" value="%{#_action.getItemTypeMap()}" />
 				<s:iterator status="status" id="item"
 					value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
@@ -2638,6 +2643,8 @@ function showSharedListForm(){
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
 					<s:set name='desc' value='#YFSItmePrimaryInfo.getAttribute("Description")' />
 					<s:set name='name' value='#YFSItmePrimaryInfo.getAttribute("ShortDescription")' />
+					
+					<s:set name="webtrendsItemType" value="itemTypeMap.get(#itemId)" />
 					
 					<%-- <s:if test='%{#itemUOMsMap!=null}' >
 						<s:iterator value='#itemUOMsMap' status='uomIndex'>
@@ -2922,7 +2929,7 @@ function showSharedListForm(){
 							<s:if test='editMode != true'>
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
 							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
-                                <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
+                                <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
                                 onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability&nbsp;&nbsp;</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>

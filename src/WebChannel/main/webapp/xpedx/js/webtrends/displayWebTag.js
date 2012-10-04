@@ -68,3 +68,42 @@ function ReplaceAll(Source,stringToFind,stringToReplace){
 	        return temp;
 	}
 
+//-- Web Trends tag start --
+function writeWebtrendTag(responseText){
+	var variable1 = 'meta name=\"DCSext.w_x_sc\"' ;
+	var variable2 = 'meta name=\"DCSext.w_x_scr\"' ;
+	var variable3 = "content=";
+	var variable4 = "content=";
+	var try21 = responseText.indexOf(variable1);
+	if(try21=="-1")
+			return;
+	var try211 = responseText.indexOf(variable3);
+	var try22 = responseText.indexOf(variable2);
+	var try222 = responseText.lastIndexOf(variable4);
+	var try3 = responseText.substring(try21+10,try211-1);
+	
+	
+	var try4 = responseText.substring(try22+10,try222-1);
+	
+	var try5 = responseText.indexOf(try3);
+	var try51 = responseText.substring(try5+try3.length);
+	
+	var test1 = try51.indexOf("content=");
+	var test11 = try51.indexOf("></meta");
+	var test111 = try51.substring(test1+8,test11);		
+	
+	var test2 = try51.lastIndexOf("content=");
+	var test22 = try51.lastIndexOf("></meta");
+	var test222 = try51.substring(test2+8,test22);		
+	
+	tag = "DCSext.w_x_sc,DCSext.w_x_scr";
+	content = test111 + ","+test222;	
+	
+	content = ReplaceAll(content,"'","");
+	content= ReplaceAll(content,'"','');		
+			
+	writeMetaTag(tag,content,2);
+	
+}
+//-- Web Trends tag end --
+

@@ -42,16 +42,9 @@
 			<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />-->
 				<s:set name="jsonTotalQty" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotalQty)"/>	
 				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />
-					
-			<!-- Web Trends tag start -->
-			<s:if test='%{#session.isUpdatePA != null}'>	
-			<meta name ="DCSext.w_x_sc" content="1"/>	
-			<!-- 	<meta name ="DCSext.w_x_scr" content='<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />' />  -->
-			<meta name ="DCSext.w_x_scr" content='<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />' />
-				<s:set name="isUpdatePA" value="<s:property value=null />" scope="session"/> 							
-			</s:if>
-		<!-- Web Trends tag end -->		
-	
+				
+			<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='#xpedxutil.formatQuantityForCommas(#jsonTotalQty)' />"></meta>
+			
 			</strong></td>
 				<td width="114">&nbsp;<strong><s:property value='%{#jsonUOMDesc}' /></strong></td>
 			</tr>
