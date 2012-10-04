@@ -348,7 +348,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			//eleInput.setAttribute("BillToID",getFieldValue("extn_txtMasterCustomer")) ;
 			
 //			Remove DraftOrderFlag attribute which is being defaulted by product.
-			eleInput.removeAttribute("DraftOrderFlag");
+			//eleInput.removeAttribute("DraftOrderFlag");
+			eleInput.setAttribute("DraftOrderFlag","N");
 
 			eleInput.removeAttribute("OrderNo");
 			
