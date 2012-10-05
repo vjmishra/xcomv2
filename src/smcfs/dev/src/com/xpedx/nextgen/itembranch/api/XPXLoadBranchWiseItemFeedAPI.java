@@ -83,9 +83,10 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 		 * integration *
 		 */
 		Document docItemExtns = null;
+		Element eleWMItemBranchs = null;
 		try {
 			log.beginTimer("XPXLoadBranchWiseItemFeedAPI.invokeItemBranchLoad");
-			Element eleWMItemBranchs = inXML.getDocumentElement();
+			eleWMItemBranchs = inXML.getDocumentElement();
 			NodeList nlWMItemBranch = eleWMItemBranchs
 					.getElementsByTagName("ItemBranch");
 
@@ -116,16 +117,25 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 
 			log.endTimer("XPXLoadBranchWiseItemFeedAPI.invokeItemBranchLoad");
 		} catch (NullPointerException ne) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eleWMItemBranchs));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw ne;
 		} catch (YFSException yfe) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eleWMItemBranchs));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
 			throw yfe;
 		} catch (Exception e) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eleWMItemBranchs));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
 					XPXLiterals.E_ERROR_CLASS, env, inXML);

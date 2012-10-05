@@ -53,6 +53,7 @@ public class UploadUom implements YIFCustomApi {
 	public Document getUomUpload(YFSEnvironment env,Document inXML) throws Exception
     {
 		/** try-catch block added by Arun Sekhar on 01-Feb-2011 for CENT tool logging **/
+		Element UOMElement1 = null;
 		try{
 			int rSet = 0;
 			String finalQuery = null; 
@@ -61,7 +62,7 @@ public class UploadUom implements YIFCustomApi {
 	        {  
 	        	String uniqueSequenceNo=getUniqueSequenceNo(env); 
 	        	
-	        	Element UOMElement1 = (Element)UOMList.item(UOMNo);
+	        	UOMElement1 = (Element)UOMList.item(UOMNo);
 	        	String Uom=UOMElement1.getAttribute("Uom");
 	        	String UomDescription=UOMElement1.getAttribute("UomDescription");
 	        	
@@ -128,14 +129,23 @@ public class UploadUom implements YIFCustomApi {
 	        	}*/
 	        }	       
 		}catch (NullPointerException ne) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(UOMElement1));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());	
 			prepareErrorObject(ne, XPXLiterals.UOM_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
 			throw ne;
 		} catch (YFSException yfe) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(UOMElement1));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.UOM_B_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);	
 			throw yfe;
 		} catch (Exception e) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(UOMElement1));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.UOM_B_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 			throw e;

@@ -40,6 +40,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 	{
 		/**try-catch added by Arun.Sekhar on 21-Jan-2011
 		 */
+		Element eCategory = null;
 		try{
 			/** Modified from getApi() to getLocalApi() by Arun.Sekhar on 21-Jan-2011 for  logging
 			 */
@@ -56,7 +57,7 @@ public class XPXLoadCategory implements YIFCustomApi {
 			{
 				for(int j=0; j<nlCategoryList.getLength(); j++)
 				{
-					Element eCategory = (Element)nlCategoryList.item(j);
+					eCategory = (Element)nlCategoryList.item(j);
 					NodeList nlAddnlAttrList = eCategory.getElementsByTagName("AdditionalAttributeList");
 					if(nlAddnlAttrList != null && nlAddnlAttrList.getLength() > 0)
 					{
@@ -85,14 +86,23 @@ public class XPXLoadCategory implements YIFCustomApi {
 				inXML = api.invoke(env, "manageCategory", inXML);
 			}
 		}catch (NullPointerException ne) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eCategory));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());	
 			prepareErrorObject(ne, XPXLiterals.CAT_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw ne;
 		} catch (YFSException yfe) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eCategory));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.CAT_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);	
 			throw yfe;
 		} catch (Exception e) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eCategory));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.CAT_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 			throw e;
