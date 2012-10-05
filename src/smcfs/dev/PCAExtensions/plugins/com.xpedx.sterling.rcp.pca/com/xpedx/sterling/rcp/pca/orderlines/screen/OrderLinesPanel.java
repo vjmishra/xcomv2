@@ -69,6 +69,7 @@ public class OrderLinesPanel extends Composite implements IYRCComposite {
 	private YRCScrolledCompositeListener scrolledPnlforLinesLsnr;
 	private Link lnkAddLines;
 	private Button btnUpdateOrder;
+	private Button btnIsReviewed;
 	private Button btnConfirmOrder;
 	private Button btnPlaceOrder;
 	private Button btnMarkOrderComplete;
@@ -112,6 +113,12 @@ public class OrderLinesPanel extends Composite implements IYRCComposite {
 		bbd.setActionHandlerEnabled(true);
 		bbd.setActionId("com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderAction");
 		btnUpdateOrder.setData("YRCButtonBindingDefination", bbd);
+		
+		bbd = new YRCButtonBindingData();
+		bbd.setName("btnIsReviewed");
+		bbd.setActionHandlerEnabled(true);
+	//	bbd.setActionId("com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderAction");
+		btnIsReviewed.setData("YRCButtonBindingDefination", bbd);
 		
 		bbd = new YRCButtonBindingData();
 		bbd.setName("btnConfirmOrder");
@@ -217,6 +224,19 @@ public class OrderLinesPanel extends Composite implements IYRCComposite {
 		lnkAddLines.setData("yrc:customType", "Link");
 		lnkAddLines.setLayoutData(gridData6);
 		lnkAddLines.setData("name", "lnkAddLines");
+		
+		btnIsReviewed = new Button(MiscPnl, 0);
+		btnIsReviewed.setText("Remove Needs Attention");
+		btnIsReviewed.setLayoutData(gridData16);
+		btnIsReviewed.setData("name", "btnIsReviewed");
+		btnIsReviewed.setVisible(false);
+		//Addde button listner. The click of this button will change the hold status to 1300
+		btnIsReviewed.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.changeHoldStatus();
+			}
+		});
+		
 		btnUpdateOrder = new Button(MiscPnl, 0);
 		btnUpdateOrder.setText("Update_Order");
 		btnUpdateOrder.setLayoutData(gridData16);

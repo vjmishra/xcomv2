@@ -288,6 +288,7 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 						orderElementBeforeAddition = outXml;
 //						originalSalesOrderElement = YRCXmlUtils.getCopy(outXml);
 				       	setModel("OriginalOrder", orderElementBeforeAddition, false);
+ 	                    RemoveNeedsAttentionButtonVisibility(outXml);
 				       	if(XPXUtils.isFullFillmentOrder(outXml)){
 				       		setModel("placedOrderLineErrorMap",outXml);
 				       	}
@@ -1326,7 +1327,7 @@ private String getItemListAPIQuery(){
 		List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
 		for (Object objOrderHold : listOrderHold) {
 			Element eleOrderHold = (Element) objOrderHold;
-			if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))){
+			if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_ORD_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_LNE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEG_ERR_CODE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))){
 				returnFlag=true;
 			}
 		}
@@ -1667,6 +1668,68 @@ private void preparePlaceOrderLineErrors() {
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId("com.xpedx.sterling.rcp.pca.orderlines.wizard.XPXOrderLinesWizard");
 		ctx.setApiName("XPXSendCSREmailService");
+		ctx.setInputXml(inputDoc);
+		if (!page.isDisposed())
+			callApi(ctx, page);
+		}
+		}
+		
+	}
+	//Added for JIRA 4326, If the order has both Needs_Attention hold and permanenet hold then show the RemoveNeedsAttention Button
+	private void RemoveNeedsAttentionButtonVisibility(Element outXml) {
+			Element originalOrderEle= outXml;
+			String holdType = null;
+			String extnOUFailureLockFlag = "N";
+    		System.out.println("The order element is :" + YRCXmlUtils.getString(originalOrderEle));
+    		extnOUFailureLockFlag = YRCXmlUtils.getAttributeValue(originalOrderEle, "Order/Extn/@ExtnOUFailureLockFlag");
+    		
+    		Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(originalOrderEle, "OrderHoldTypes");
+    		List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
+    		
+    		for (Object objOrderHold : listOrderHold) {
+    			Element eleOrderHold = (Element) objOrderHold;
+    			if("NEEDS_ATTENTION".equals(eleOrderHold.getAttribute("HoldType")) && "1100".equals(eleOrderHold.getAttribute("Status"))){
+    				holdType=eleOrderHold.getAttribute("HoldType");
+    			}
+    		}
+    		if ("Y".equalsIgnoreCase(extnOUFailureLockFlag)&& "NEEDS_ATTENTION".equalsIgnoreCase(holdType)){
+    			setControlVisible("btnIsReviewed", true);
+    		}
+    		
+    	}
+	//Added for JIRA 4326. If the needs attention button clicked the hold status should be changed to 1300
+	public void changeHoldStatus() {
+		Element orderEle=getModel("OriginalOrder");
+		YRCXmlUtils.getString(orderEle);
+		if(!YRCPlatformUI.isVoid(orderEle)){
+		String webConfirmationNo=YRCXmlUtils.getAttributeValue(orderEle, "Order/Extn/@ExtnWebConfNum");
+		String holdType="";
+		if(!YRCPlatformUI.isVoid(webConfirmationNo)){
+		Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(orderEle, "OrderHoldTypes");
+		List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
+		
+		for (Object objOrderHold : listOrderHold) {
+			Element eleOrderHold = (Element) objOrderHold;
+			if("NEEDS_ATTENTION".equals(eleOrderHold.getAttribute("HoldType")) && "1100".equals(eleOrderHold.getAttribute("Status"))){
+				holdType=eleOrderHold.getAttribute("HoldType");
+			}
+		}
+		
+		 Element elemModel = YRCXmlUtils.createDocument("Order")
+			.getDocumentElement();
+		 elemModel.setAttribute("OrderHeaderKey", orderHeaderKey);
+		 elemModel.setAttribute("Override", "Y");
+	
+		 Element eleHoldTypes=YRCXmlUtils.createChild(elemModel, "OrderHoldTypes");
+		 Element eleHoldType=YRCXmlUtils.createChild(eleHoldTypes, "OrderHoldType");
+		 eleHoldType.setAttribute("HoldType", holdType);
+		 eleHoldType.setAttribute("Status", "1300");
+		
+		Document inputDoc=elemModel.getOwnerDocument();
+		YRCXmlUtils.getString(inputDoc);
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setFormId("com.xpedx.sterling.rcp.pca.orderlines.wizard.XPXOrderLinesWizard");
+		ctx.setApiName("changeOrder");
 		ctx.setInputXml(inputDoc);
 		if (!page.isDisposed())
 			callApi(ctx, page);
