@@ -1146,14 +1146,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		SCUIContext uictx = getWCContext().getSCUIContext();
 		Document outDoc = null;
 		// Commented for Performance - filter.action
-		outDoc = CatalogContextHelper.getCategoryFromCache(wcContext,
-				categoryDepth);
+		//outDoc = CatalogContextHelper.getCategoryFromCache(wcContext,
+			//	categoryDepth);
 		
 		
 		Element el1;
 		SCUILocalSession localSession = wcContext.getSCUIContext()
 				.getLocalSession();
-		//outDoc=(Document) localSession.getAttribute("categoryCache");
+		outDoc=(Document) localSession.getAttribute("categoryCache");
 		if (outDoc == null) {
 			try {
 				customerId = wcContext.getCustomerId();

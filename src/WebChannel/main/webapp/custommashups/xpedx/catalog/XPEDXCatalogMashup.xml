@@ -413,7 +413,7 @@
 					<CategoryDomain AttributeName="" CategoryDomain=""
 						Description="" IsClassification="" ShortDescription="" />
 					<CategoryList>
-						<Category CategoryPath="" Count="" Description=""
+						<Category CategoryID="" CategoryPath="" Count="" Description=""
 							SequenceNo="" ShortDescription="">
 							<ChildCategoryList>
 								<Category CategoryPath="" Count="" Description=""
@@ -455,7 +455,7 @@
 								</QuantityRangePriceList>
 							</ComputedPrice>
 							<CategoryList>
-						<Category CategoryPath="" Count="" Description=""
+						<Category CategoryID="" CategoryPath="" Count="" Description=""
 							SequenceNo="" ShortDescription="">
 							<ChildCategoryList>
 								<Category CategoryPath="" Count="" Description=""
@@ -574,7 +574,7 @@
 					</CategoryDomain>
 
 					<CategoryList>
-						<Category CategoryPath="" Description=""
+						<Category CategoryID="" CategoryPath="" Description=""
 							ShortDescription="" Count="">
 							<AssetList TotalNumberOfRecords="">
 								<Asset AssetID="" AssetKey="" ContentID=""
@@ -611,7 +611,7 @@
 					</CategoryDomain>
 
 					<CategoryList>
-						<Category CategoryPath="" Description=""
+						<Category CategoryID="" CategoryPath="" Description=""
 							ShortDescription="" Count="">
 							<AssetList TotalNumberOfRecords="">
 								<Asset AssetID='' AssetKey="" ContentID="" ContentLocation="" Description="" Label="" Type=""/>
@@ -909,7 +909,7 @@
 						<SortField IndexFieldName="" />
 					</SortFieldList>
 					<CategoryList>
-						<Category CategoryPath="" Count="" Description="" SequenceNo="" ShortDescription="">
+						<Category CategoryID="" CategoryPath="" Count="" Description="" SequenceNo="" ShortDescription="">
 							<AssetList TotalNumberOfRecords="">
 								<Asset AssetID="" ContentID="" ContentLocation="" Description="" Label="" Type="" />
 							</AssetList>
