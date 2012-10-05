@@ -92,6 +92,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	{
 		/**try-catch added bu Arun.Sekhar on 21-Jan-2011
 		 */
+		
+		Element custElement = null;
 		try{
 
 			//log.debug("inXML"+SCXmlUtil.getString(inXML));
@@ -153,7 +155,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 				for(int customerNo = 0;customerNo<customerListLength;customerNo++)
 				{
 					//form the input xml
-					Element custElement = (Element)customerList.item(customerNo);
+					custElement = (Element)customerList.item(customerNo);
 					String sapCustomerId = null;
 					organizationCode = getOrganizationCode(env,custElement); 
 					log.debug("The organization code returned from the CommonCode list is: "+organizationCode);
@@ -1008,14 +1010,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			}
 			return outputCustomerDoc;
 		}catch (NullPointerException ne) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(custElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());	
 			prepareErrorObject(ne, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw ne;
 		} catch (YFSException yfe) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(custElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);	
 			throw yfe;
 		} catch (Exception e) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(custElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 			throw e;

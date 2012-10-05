@@ -43,21 +43,33 @@ public class InvokeManageAttributeAPI {
 		try {
 			outXML = api.invoke(env, "manageAttribute", inXML);
 		} catch (RemoteException re) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inXML));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("NullPointerException: " + re.getStackTrace());
 			prepareErrorObject(re, XPXLiterals.ATTRB_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw re;
 		} catch (NullPointerException ne) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inXML));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, XPXLiterals.ATTRB_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw ne;
 		} catch (YFSException yfe) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inXML));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.ATTRB_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
 			throw yfe;
 		} catch (Exception e) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inXML));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.ATTRB_TRANS_TYPE,
 					XPXLiterals.E_ERROR_CLASS, env, inXML);

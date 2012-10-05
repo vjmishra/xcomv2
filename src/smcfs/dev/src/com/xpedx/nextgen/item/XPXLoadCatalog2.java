@@ -34,7 +34,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
 	private static String _RESPONSE_MSG_SERVICE = "xpedxSendItemFeedResponse";
-
+	Element eItem = null;
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
@@ -60,7 +60,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
-				Element eItem = (Element)nlItems.item(i);
+				eItem = (Element)nlItems.item(i);
 
 				ArrayList<HashMap<String, String>> alCategoryDtls = getCategoryAssociations(env, eItem);
 
@@ -195,24 +195,36 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}*/
 
 		catch (RemoteException re) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eItem));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + re.getStackTrace());
 			prepareErrorObject(re, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			outXML = generateResponse(env, inXML, "FAIL", re);
 			return outXML;
 		} catch (NullPointerException ne) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eItem));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			outXML = generateResponse(env, inXML, "FAIL", ne);
 			return outXML;
 		} catch (YFSException yfe) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eItem));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
 			outXML = generateResponse(env, inXML, "FAIL", yfe);
 			return outXML;
 		} catch (Exception e) {
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(eItem));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.E_ERROR_CLASS, env, inXML);

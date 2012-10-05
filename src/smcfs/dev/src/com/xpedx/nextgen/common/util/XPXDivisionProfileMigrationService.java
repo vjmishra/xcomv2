@@ -55,9 +55,9 @@ public class XPXDivisionProfileMigrationService {
 		Document getOrganizationListInput = null;
 		Document getOrganizationListOutput = null;
 		Document manageOrgHierarchyOutput = null;
-
+		Element inputElement =  null;
 		try {
-			Element inputElement = inXML.getDocumentElement();
+			inputElement = inXML.getDocumentElement();
 			orgCode = SCXmlUtil.getXpathAttribute(inputElement,
 					"./@OrganizationCode");
 
@@ -117,6 +117,9 @@ public class XPXDivisionProfileMigrationService {
 						.info("manageOrganizationHierarchy call successfully created the new Node...");
 			}
 		} catch (NullPointerException ne) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inputElement));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, XPXLiterals.DIVISION_PROFILE_MIGRATION,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
@@ -124,6 +127,9 @@ public class XPXDivisionProfileMigrationService {
 			/** Need to confirm if we need to throw or not **/
 			/* throw ne; */
 		} catch (YFSException yfe) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inputElement));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.DIVISION_PROFILE_MIGRATION,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
@@ -131,6 +137,9 @@ public class XPXDivisionProfileMigrationService {
 			/** Need to confirm if we need to throw or not **/
 			/* throw yfe; */
 		} catch (Exception e) {
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			yfcLogCatalog.error(SCXmlUtil.getString(inputElement));
+			yfcLogCatalog.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			yfcLogCatalog.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.DIVISION_PROFILE_MIGRATION,
 					XPXLiterals.E_ERROR_CLASS, env, inXML);

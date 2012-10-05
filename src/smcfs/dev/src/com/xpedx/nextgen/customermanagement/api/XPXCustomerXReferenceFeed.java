@@ -43,7 +43,7 @@ public class XPXCustomerXReferenceFeed implements YIFCustomApi  {
 	
 	private static YIFApi api = null;
 	private static YFCLogCategory log;
-	
+	Element inputElement = null;
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try 
@@ -76,7 +76,7 @@ public class XPXCustomerXReferenceFeed implements YIFCustomApi  {
 			//log.debug("In invokeCustomerXReferenceFeedProcess");
 			String xRefKey = "";
 			//api = YIFClientFactory.getInstance().getApi();
-			Element inputElement = inXML.getDocumentElement();
+			inputElement = inXML.getDocumentElement();
 			NodeList customerxRefNodeList = inXML.getElementsByTagName("CustomerXRef");
 			int customerLength = customerxRefNodeList.getLength();
 			if(customerLength>0)
@@ -110,19 +110,25 @@ public class XPXCustomerXReferenceFeed implements YIFCustomApi  {
 				}								
 			}
 		}catch (NullPointerException ne) {
-			log.debug("NullPointerException");
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(inputElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("NullPointerException: " + ne.getStackTrace());
 			prepareErrorObject(ne, XPXLiterals.CUST_XREF_B_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw ne;
 		} catch (YFSException yfe) {
-			log.debug("YFSException");
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(inputElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
 			prepareErrorObject(yfe, XPXLiterals.CUST_XREF_B_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
 			throw yfe;
 		} catch (Exception e) {
-			log.debug("Exception");
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
+			log.error(SCXmlUtil.getString(inputElement));
+			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("Exception: " + e.getStackTrace());
 			prepareErrorObject(e, XPXLiterals.CUST_XREF_B_TRANS_TYPE,
 					XPXLiterals.NE_ERROR_CLASS, env, inXML);
