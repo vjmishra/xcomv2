@@ -47,5 +47,8 @@ public class XPXConstants {
 	public static final String EXTN_USER_TYPE = "ExtnUserType";
 	public static final String NEEDS_ATTENTION="NEEDS_ATTENTION";
 	public static final String ORDER_IN_EXCEPTION_HOLD="ORDER_EXCEPTION_HOLD";
+	public static final String LEGACY_CNCL_ORD_HOLD="LEGACY_CNCL_ORD_HOLD";
+	public static final String LEGACY_CNCL_LNE_HOLD="LEGACY_CNCL_LNE_HOLD";
+	public static final String LEG_ERR_CODE_HOLD="LEG_ERR_CODE_HOLD";
 	
 }
