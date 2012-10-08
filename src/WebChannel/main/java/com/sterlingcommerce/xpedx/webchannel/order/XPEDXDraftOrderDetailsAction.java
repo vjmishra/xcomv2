@@ -414,7 +414,16 @@ public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) th
 		if(SCUtil.isVoid(selectedCustomerContactId))
 			selectedCustomerContactId = wcContext.getCustomerContactId();
 		String  contaxtCustomerContactID = wcContext.getCustomerContactId();
-		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+		// added for jira 4306
+		if("true".equals(isEditOrder)) {
+            XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+            XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "false");
+            }       
+		else{
+				XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+			}
+			//end of jira 4306
+		
 		resetOrganizationValuesForShipToCustomer();
 		if(contaxtCustomerContactID.equals(selectedCustomerContactId)){
 			
