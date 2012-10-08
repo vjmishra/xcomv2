@@ -121,6 +121,8 @@
 
        	  <Attribute ColumnName="EXTN_BILL_TO_CUSTOMER_ID" DataType="CustomerId"
 					Description="The Bill to Customer ID" Nullable="true" XMLName="ExtnBillToCustomerID"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_ORDHDR_FAILED_RULE_IDS" DataType="Text-500"
+					Description="Failed Busines Rule IDS at order header level" Nullable="true" XMLName="ExtnOrdHdrLevelFailedRuleID"  XMLGroup="Extn"/>		
        	
         </Attributes>		
       </Entity>
@@ -187,7 +189,8 @@
 			XMLName="ExtnLegOrderLineAdjustments" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_ADJ_UNIT_PRICE" DataType="Money" Description="OrderLine Adjustments" DefaultValue="0" Nullable="true"   
 			XMLName="ExtnAdjUnitPrice" XMLGroup="Extn" />		
-		  
+		  <Attribute ColumnName="EXTN_ORDLINE_FAILED_RULE_IDS" DataType="Text-500"
+					Description="Failed Busines Rule IDS at order line level" Nullable="true" XMLName="ExtnOrdLineLevelFailedRuleID"  XMLGroup="Extn"/>
         </Attributes>		
       </Entity>
 
