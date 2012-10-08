@@ -386,7 +386,6 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 		Element elemModel = YRCXmlUtils.createDocument("Order").getDocumentElement();
 		elemModel.setAttribute("BillToID", masterCustomer);
 		elemModel.setAttribute("ReadFromHistory","N");
-		elemModel.setAttribute("DraftOrderFlag","N");
 		Element customerOrderElem = YRCXmlUtils.createChild(elemModel, "customerOrder");
 		customerOrderElem.setAttribute("isCustomerOrderPage", "Y");
 		boolean isExtnChildCreated = false;
