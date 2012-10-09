@@ -17,7 +17,8 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <meta name="DCSext.w_x_po" content="1">
 <meta name="WT.si_n" content="ShoppingCart" />
-<META name="WT.si_x" Content="4">
+<meta name="WT.tx_e" content="p" />
+<META name="WT.si_x" Content="4" />
 <%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
@@ -39,7 +40,13 @@
 	<meta name ="DCSext.w_x_reorder" content="1" />
 	<s:set name="reorderMetaTag" value="<s:property value=null />" scope="session"/> 	
 </s:if>
-  
+ <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
+ <s:if test="%{#isSalesRep}"> 
+  	<meta name ="DCSext.w_x_Gen" content="SP" /> 
+  </s:if>
+  <s:else>
+  	<meta name ="DCSext.w_x_Gen" content="WC" />
+  </s:else>
   
 <!-- Webtrends Tag stops -->
 <!-- styles -->
@@ -187,7 +194,7 @@
 		<s:set name='xpedxOrderDateTimezone' value="%{'ET'}"/>
 	</s:if>
 	
-		<s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#orderDate, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')" />
+		<s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#orderDate, #scuicontext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')" />
 	<META NAME="WT.tx_it" CONTENT="<s:property value='#xpedxOrderTime'/>"/>	
 	
 	<%--End of webtrends --%>
@@ -331,6 +338,7 @@
                                     	<s:a href="%{orderDetailsURL}" cssClass="underlink">
                                     		<s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnWebConfNum")'/>
                                     	</s:a>
+                                    	<meta name="WT.tx_cartid" content="<s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnWebConfNum")'/>" />
                                     </td>
                                 </tr>
                                 
@@ -436,6 +444,8 @@
                                     </s:if>
                                     <s:else></s:else>
                                     </td>
+									<META NAME="DCSext.SO" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>"/>
+									
 
                                 </tr>
                             </tbody>    
