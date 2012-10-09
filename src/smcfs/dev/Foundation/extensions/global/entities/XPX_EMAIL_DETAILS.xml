@@ -14,7 +14,7 @@
 				<Attribute ColumnName="EMAIL_TYPE" DataType="varchar2-60"
 					DefaultValue=" " Description="Type of email being sent" XMLName="EmailType"/>
 				<Attribute ColumnName="EMAIL_XML" DataType="CLOB"
-					Description="The Input xml for the email" Nullable="true" XMLName="EmailXmlFile" />
+					Description="The Input xml for the email" Nullable="true" XMLName="EmailXML" />
 				<Attribute ColumnName="EMAIL_SUBJECT" DataType="varchar2-200"
 					DefaultValue=" " Description="The subject of the email" XMLName="EmailSubject" />
 				<Attribute ColumnName="EMAIL_ORG_CODE" DataType="varchar2-30"
