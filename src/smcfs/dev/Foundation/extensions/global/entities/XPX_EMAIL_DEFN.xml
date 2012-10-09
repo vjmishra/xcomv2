@@ -16,10 +16,10 @@
 					Nullable="false" DefaultValue=" "
 					Description="The To address for the email being sent" XMLName="EmailToXPath" />
 				<Attribute ColumnName="EMAIL_CC_XPATH" DataType="varchar2-255"
-					Nullable="false" DefaultValue=" "
+					Nullable="true" DefaultValue=" "
 					Description="The Cc address for the email being sent" XMLName="EmailCcXPath" />
 				<Attribute ColumnName="EMAIL_BCC_XPATH" DataType="varchar2-255"
-					Nullable="false" DefaultValue=" "
+					Nullable="true" DefaultValue=" "
 					Description="The Bcc address for the email being sent" XMLName="EmailBccXPath" />
 			</Attributes>
 			<PrimaryKey Name="EMAIL_TYPE_PK">
