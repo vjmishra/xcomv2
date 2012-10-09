@@ -5383,7 +5383,15 @@ public class XPEDXWCUtils {
 		XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer();
 		try {
 			IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-			
+			//added for jira 4306 - preffered shipto value was vanishing on click of edit order button
+			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if(!YFCCommon.isVoid(editedOrderHeaderKey))
+			{
+				XPEDXShipToCustomer defaultShipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+				shipToCustomer.setDefaultShipToCustomer(defaultShipToCustomer.getDefaultShipToCustomer());
+			}
+			setObectInCache("shipToCustomer", shipToCustomer);
+			//end of jira 4306
 			XPEDXShipToCustomer billToCustomer=new XPEDXShipToCustomer();
 			String customerId = wcContext.getCustomerId();
 			String organizationCode = wcContext.getStorefrontId();
@@ -5489,9 +5497,12 @@ public class XPEDXWCUtils {
 				else
 				{	
 					// Changes started for preferred ship-to location issue JIRA 4306
-					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT"));
+					if(XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT") != null)
+					{
+						shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT"));
+						XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
+					}
 					//End of changes for preferred ship-to location issue JIRA 4306
-					XPEDXWCUtils.removeObectFromCache("DEFAULT_SHIP_TO_OBJECT");
 				}
 			}
 		} catch (Exception ex) {
