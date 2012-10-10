@@ -10,7 +10,9 @@ import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
@@ -91,11 +93,11 @@ public class XPXCustomerProfileRuleResolve {
 			orderHoldTypeElement.setAttribute("ReasonText", XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_HOLD_DESC);
 			orderHoldTypeElement.setAttribute("Status", XPXCustomerProfileRuleConstant.NEEDS_ATTENTION_INACTIVE_STATUS);
 		}
-		if (updateWebHoldFlag) {
-			Element extnElement = SCXmlUtil.createChild(changeOrderElement,
-					"Extn");
+		Element extnElement = SCXmlUtil.createChild(changeOrderElement, "Extn");
+		if (updateWebHoldFlag) {			
 			extnElement.setAttribute("ExtnWebHoldFlag", "Y");
 		}
+		clearOrderRuleIDsInChangeOrderDoc(changeOrderElement, inXML);
 		
 		env.setApiTemplate(XPXLiterals.CHANGE_ORDER_API, changeOrderTemplate);
 		Document changeOrderOutputDoc = api.invoke(env, "changeOrder",changeOrderDoc);
@@ -107,4 +109,47 @@ public class XPXCustomerProfileRuleResolve {
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 	}
+	
+	//Added for JIRA 4321
+	private void clearOrderRuleIDsInChangeOrderDoc(Element changeOrderElement, Document inXML){
+		YFCDocument inXMLDoc= YFCDocument.getDocumentFor(inXML);
+		YFCElement inXMLOrderExtn= inXMLDoc.getDocumentElement().getChildElement("Extn");
+		if(inXMLOrderExtn!=null)
+		{
+			Element extnElement = (Element)changeOrderElement.getElementsByTagName("Extn").item(0);
+			extnElement.setAttribute("ExtnOrdHdrLevelFailedRuleID", "");			
+		}
+		
+		YFCElement inXMLOrderLines = inXMLDoc.getDocumentElement().getChildElement("OrderLines");
+		if(inXMLOrderLines!=null)
+		{
+			Element changeOrderLinesElement = SCXmlUtil.createChild(changeOrderElement, "OrderLines");
+			
+			YFCIterable<YFCElement> inXMLOrderLineItr = inXMLOrderLines.getChildren("OrderLine");
+			while (inXMLOrderLineItr.hasNext()) {
+				YFCElement inXMLOrderLine = inXMLOrderLineItr.next();
+				if (inXMLOrderLine != null) {
+					String lineType=inXMLOrderLine.getAttribute("LineType");
+					if(lineType==null || "".equals(lineType) || "M".equals(lineType) || "C".equals(lineType))
+					{
+						continue;
+					}
+					
+					Element changeOrderLineElement = SCXmlUtil.createChild(changeOrderLinesElement, "OrderLine");					
+					changeOrderLineElement.setAttribute("OrderLineKey", inXMLOrderLine.getAttribute("OrderLineKey"));
+					
+					YFCElement extnInXMLOrdLine = inXMLOrderLine.getChildElement("Extn");
+					if(extnInXMLOrdLine!=null)
+					{
+						Element extnChangeOrderLineElement = SCXmlUtil.createChild(changeOrderLineElement, "Extn");
+						extnChangeOrderLineElement.setAttribute("ExtnOrdLineLevelFailedRuleID", "");
+						changeOrderLineElement.appendChild(extnChangeOrderLineElement);						
+					}
+					changeOrderLinesElement.appendChild(changeOrderLineElement);			
+				}
+			}
+			changeOrderElement.appendChild(changeOrderLinesElement);
+			
+		}		
+	}	
 }
