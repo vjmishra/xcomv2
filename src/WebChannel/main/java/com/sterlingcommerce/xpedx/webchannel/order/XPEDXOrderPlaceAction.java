@@ -35,9 +35,12 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.client.ClientVersionSupport;
+import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
+import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
 public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
@@ -290,7 +293,30 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					
 					if(orderUpdateObj != null)
 					{
+						
 						Element orderUpdateElem=(Element)orderUpdateObj;
+						//Added for JIRA 4326 to get the FO holds because below getOrderLineList will be called for CO .and icase of FO editing there will not be any chained order so need to ge torder details
+						if(orderUpdateElem != null && !orderUpdateElem.getAttribute("OrderType").equals("Customer"))
+						{
+							Map<String, String> valueMap1 = new HashMap<String, String>();
+							valueMap1.put("/Order/@OrderHeaderKey", orderUpdateElem.getAttribute("OrderHeaderKey"));
+							try {
+								Element input1 = WCMashupHelper.getMashupInput("xpedxOrderEditOrderList",
+										valueMap1, wcContext.getSCUIContext());
+
+								Object obj1 = WCMashupHelper.invokeMashup(
+										"xpedxOrderEditOrderList", input1,
+										wcContext.getSCUIContext());
+
+								Document outputDoc1 = ((Element) obj1).getOwnerDocument();
+								isFOCSRReview(outputDoc1.getDocumentElement());
+
+							} catch (CannotBuildInputException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+							
 						if(orderUpdateElem.hasAttribute("TransactionMessage"))
 						{
 							String transactionMessage=orderUpdateElem.getAttribute("TransactionMessage");
@@ -931,6 +957,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode && !"".equals(headerStatusCode.trim()) && !headerStatusCode.equals("M0000"))) {
 				isCSRReview = true;
 			}
+			//Kubra Jira 4326
+			isFOCSRReview(order);
 			//end of jira 4092
 			if(!alreadyAddedOrders.contains(orderHeaderKey)){
 				if(xpedxChainedOrderListMap.containsKey(chainedFromOHK)){
@@ -950,6 +978,29 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		}
 	}
 
+	private void isFOCSRReview(Element order)
+	{
+		NodeList holdtypes =order.getElementsByTagName("OrderHoldType");//SCXmlUtil.getElements(order, "OrderHoldTypes/OrderHoldType");
+
+		
+		if(holdtypes != null )
+		{
+			for(int j=0;j<holdtypes.getLength();j++ )
+			{
+				Element orderHoldType=(Element)holdtypes.item(j);
+				String holdTypeName=orderHoldType.getAttribute("HoldType");
+				if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+						|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
+				{
+					isCSRReview = true;
+					break;
+				}
+			}
+		}
+	}
 	public String getParentOrderHeaderKeyForFO() {
 		return parentOrderHeaderKeyForFO;
 	}

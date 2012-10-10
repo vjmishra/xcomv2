@@ -425,7 +425,9 @@ function showSplitDiv(divId)
 <s:set name="isOrderOnRejectionHold" value="%{#_action.isOrderOnRejctionHold()}"/>
 
 <s:set name="isOrderOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold()}"/>
-<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>	
+<s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
+<s:set name="isFOCSRReview" value="%{#_action.isFOCSRReview()}"/>
+	
 <s:set name='grandTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("GrandTotal"))'/>
 <s:set name="status" value='#xutil.getAttribute(#orderDetail,"Status")'/>
 <s:set name="orderType" value='%{#xutil.getAttribute(#orderDetail, "OrderType")}' />
@@ -668,7 +670,7 @@ function showSplitDiv(divId)
                         				<s:elseif test="%{#isOrderOnRejectionHold && #isPendingOrderCheckReq}">
                         					(Rejected)
                         				</s:elseif>  
-                        				<s:elseif test="%{#isOrderOnCSRReviewHold && && #isPendingOrderCheckReq}">
+                        				<s:elseif test='%{(#isOrderOnCSRReviewHold && #isPendingOrderCheckReq) || (#orderType != "Customer"  && #isFOCSRReview) }'>
                         					(CSR Reviewing)
                         				</s:elseif>                        				                        				
                         			  </s:if>
@@ -1097,7 +1099,13 @@ function showSplitDiv(divId)
 												<s:set name='splitqty' value='#splitOrderAttributes.get(2)' />
 												<s:set name='splitqty' value='%{#strUtil.replace(#splitqty, ".00", "")}' />
 												<s:set name='splitqty' value="#xpedxUtilBean.formatQuantityForCommas(#splitqty)"/>
-												<s:property value='%{#splitOrderAttributes.get(3)}'/>: <s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>						    					
+												<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType != "Customer") || #isFOCSRReview}'>
+												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+												</s:if>
+												<s:else>
+												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+												</s:else>
+																		    					
 									    		<s:if test="%{#ViewInvoicesFlag}">	
 									    			<s:if test='chainedFOMap.size() > 1'>
 										    			<s:if test='%{#splitOrderAttributes.get(3) == "Invoiced"}'>		
