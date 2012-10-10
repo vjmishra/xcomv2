@@ -5385,10 +5385,12 @@ public class XPEDXWCUtils {
 			IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 			//added for jira 4306 - preffered shipto value was vanishing on click of edit order button
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
-			if(!YFCCommon.isVoid(editedOrderHeaderKey))
+			//added for jira 4306
+			if(!YFCCommon.isVoid(editedOrderHeaderKey) || XPEDXWCUtils.getObjectFromCache("EDIT_ORDER_FINISHED") != null)
 			{
 				XPEDXShipToCustomer defaultShipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 				shipToCustomer.setDefaultShipToCustomer(defaultShipToCustomer.getDefaultShipToCustomer());
+				XPEDXWCUtils.removeObectFromCache("EDIT_ORDER_FINISHED");//added for jira 4306
 			}
 			setObectInCache("shipToCustomer", shipToCustomer);
 			//end of jira 4306
@@ -6204,5 +6206,18 @@ public class XPEDXWCUtils {
 
 		return MainCategories;
 	}
-
+	//added for jira 4306
+	public static void resetEditedOrderShipTo(IWCContext wcContext)
+	{
+		String shipToBeforeEditOrder=(String)XPEDXWCUtils.getObjectFromCache("SHIPTO_BEFORE_EDIT_ORDER");
+		String customerContactId=(String)XPEDXWCUtils.getObjectFromCache("CUSTOMER_CONTACT_ID_BEFORE_EDIT_ORDER");
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
+		XPEDXWCUtils.setObectInCache("EDIT_ORDER_FINISHED", "true");
+		XPEDXWCUtils.removeObectFromCache("rulesDoc");
+		XPEDXWCUtils.removeObectFromCache("SHIPTO_BEFORE_EDIT_ORDER");
+		XPEDXWCUtils.removeObectFromCache("CUSTOMER_CONTACT_ID_BEFORE_EDIT_ORDER");
+		XPEDXWCUtils.removeObectFromCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE);
+		setCurrentCustomerIntoContext(shipToBeforeEditOrder,wcContext);
+	}
+	//end for jira 4306
 }
