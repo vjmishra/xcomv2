@@ -1506,15 +1506,39 @@ public String getRootElementName() {
 		String holdTypeNeedsAttention = XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION;
 		String holdTypeLegacyCnclOrd = XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD;
 		String holdTypeOrderException = XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD;
+		//Kubra Jira 4326
+		String holdTypeLegacyLine= XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD;
+		String holdTypeLegacyLineMcf = XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD;
+		
 		String openHoldStatus = OrderConstants.OPEN_HOLD_STATUS;	
 		
 				String orderHoldType = OrderElement.getAttribute(OrderConstants.HOLD_TYPE);
 				if ((OrderElement.getAttribute("HoldStatus").equals(openHoldStatus))
 					&& (orderHoldType.equals(holdTypeNeedsAttention)
 							|| orderHoldType.equals(holdTypeLegacyCnclOrd) 
-							|| orderHoldType.equals(holdTypeOrderException)))
+							|| orderHoldType.equals(holdTypeOrderException)
+							|| orderHoldType.equals(holdTypeLegacyLine)
+							|| orderHoldType.equals(holdTypeLegacyLineMcf)))
 					return true;		
 		return false;
+	}
+	
+	//4326 - Kubra
+	public boolean isFOCSRReviewHold (Element OrderElement) {
+	
+		String holdTypeName =OrderElement.getAttribute("HoldType");
+		if(!"Customer".equals(OrderElement.getAttribute("OrderType")) )
+		{
+			
+				if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+						|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
+						|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
+					return true;
+		}
+		return false;
+
 	}
 	
 	// Check if the current order has CSR Review hold or not

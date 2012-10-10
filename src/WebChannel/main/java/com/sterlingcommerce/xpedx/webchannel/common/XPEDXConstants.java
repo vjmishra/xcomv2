@@ -119,6 +119,8 @@ public class XPEDXConstants {
 	public static String HOLD_TYPE_FOR_NEEDS_ATTENTION = "NEEDS_ATTENTION";
 	public static String HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD = "LEGACY_CNCL_ORD_HOLD";
 	public static String HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD = "ORDER_EXCEPTION_HOLD";
+	public static String HOLD_TYPE_FOR_LEGACY_LINE_HOLD = "LEGACY_CNCL_LNE_HOLD";
+	public static String HOLD_TYPE_FOR_FATAL_ERR_HOLD = "LEG_ERR_CODE_HOLD";
 	public static String REQUIRE_CUSTOMER_PO_NO_RULE="RequireCustomerPO";
 	//Start Added for JIRA 3261
 	public static String MAIL_HOSTUSEREMAIL = "smtp.ipaper.com";

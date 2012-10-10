@@ -629,6 +629,7 @@ function printPOs(customerPos) {
 								 <s:set name="isOrderLegacyCnclOrd" value="%{#_action.isOrderOnHold(#parentOrder,'LEGACY_CNCL_ORD_HOLD')}" /> 
 								<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />  --%>
 								<s:set name="isOnCSRReviewHold" value="%{#_action.isOrderOnCSRReviewHold(#parentOrder)}" />
+								<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
 								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"  || 
@@ -637,8 +638,15 @@ function printPOs(customerPos) {
 								</s:if>
 								<s:else>
 									<s:if test='%{#status != "Cancelled"}'>
+									<!-- Added For Jira 4326 - Kubra For non split order Need to display FO Order Status Webhold -->
+										<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
+										<s:if test='#isFOOnCSRReviewHold'> 
+											<s:property value="#parentOrder.getAttribute('Status')" /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
+										</s:if>
+										<s:else>	
 											<s:property value="#parentOrder.getAttribute('Status')" />
-											 <%-- Added Check For Jira 4109 --%>
+										</s:else>
+											<%-- Added Check For Jira 4109 --%>
 											<s:if test='%{#chainedOrderListSize==null || #chainedOrderListSize==0}'>	
 											<s:if test='#isPendingApproval && !#isOrderRejected'>
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
@@ -654,15 +662,20 @@ function printPOs(customerPos) {
 											<s:elseif test='#isPendingApproval && #isOrderRejected'>
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 											</s:elseif>
-											<s:elseif test='#isOnCSRReviewHold'> 
-												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
+											<s:elseif test='#isOnCSRReviewHold && #isFOCSRReview'> 
+												<s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
 											</s:elseif>
 										</s:if>
 									</s:if>
 									<s:else>
-										<s:property value='#chainedOrder.getAttribute("Status")' />
+										<s:if test='#isFOOnCSRReviewHold'> 
+													<s:property value='#chainedOrder.getAttribute("Status")' /> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
+										</s:if>
+										<s:else>	
+											<s:property value='#chainedOrder.getAttribute("Status")' /> 
+										</s:else>
 									</s:else>
-								</s:else>								
+									</s:else>					
 								</td>
 		
 						</s:else>
@@ -734,7 +747,14 @@ function printPOs(customerPos) {
 													Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 									</s:if>
 									<s:else>
-					            		<s:property value='#chainedOrder.getAttribute("Status")'/>
+										<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
+										<s:if test='#isFOOnCSRReviewHold'> 
+											<s:property value='#chainedOrder.getAttribute("Status")'/> <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />                    				 			
+										</s:if>
+										<s:else>	
+											<s:property value='#chainedOrder.getAttribute("Status")'/>
+										</s:else>
+					            		
 					            	</s:else>
 				            	</td>
 				            </tr>

@@ -93,6 +93,9 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
+		//Added For Jira - 4326		
+		isCSRReviewHold();
+		
 		try{
 			getAllItemSKUs();
 		}
@@ -105,6 +108,34 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		return returnString;
 	}
 	
+	//Added this method for Jira 4326 - CSR Review For FO
+	private void isCSRReviewHold()
+	{
+		Element orderElement=getElementOrder();
+		//Kubra Jira 4326
+		NodeList holdtypes =orderElement.getElementsByTagName("OrderHoldType");
+		if(holdtypes != null && !"Customer".equals(orderElement.getAttribute("OrderType")) && !isCSRReview )
+		{
+			//4326 - Kubra
+			for(int i =0; i<holdtypes.getLength();i++)
+			{
+				Element holdType=(Element)holdtypes.item(i);
+				if(holdType != null )
+				{
+					String holdTypeName=holdType.getAttribute("HoldType");
+					if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
+							|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+							|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
+							|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
+							|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
+					{
+						isFOCSRReview = true;
+						break;
+					}
+				}	
+			}
+		}
+	}
 	private void getAllItemSKUs() throws CannotBuildInputException, XPathExpressionException
 	{
 		//Fetch all the extn fields from customer
@@ -469,7 +500,30 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				String extnInvoiceNumber = orderExtn.getAttribute("ExtnInvoiceNo");
 				String extnInvoiceDate = "";
 				String encInvoiceNumber = "";
-				
+				//Kubra - Jir 4326  Line Level CSRReviwing for Customer Order on FO
+
+				NodeList orderHoldTypesElem=orderLine.getElementsByTagName("OrderHoldType");
+				boolean isFOCSRReview=false;
+				if(orderHoldTypesElem != null)
+				{
+					for(int j=0;j<orderHoldTypesElem.getLength();j++ )
+					{
+						Element orderHoldType=(Element)orderHoldTypesElem.item(j);
+						if(orderHoldType != null)
+						{
+							String holdTypeName=orderHoldType.getAttribute("HoldType");
+							if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
+									|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+									|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
+									|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
+									|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
+							{
+								isFOCSRReview=true;
+								break;
+							}
+						}
+					}
+				}
 				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode
 						  && !"".equals(headerStatusCode.trim()) && !headerStatusCode.equals("M0000"))) {
 					isCSRReview = true;
@@ -541,6 +595,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				/*if(legacyOrderNumber == null || !legacyOrderNumber.equals("")){
 					legacyOrderNumber="In progress";
 				}*/
+				if(isFOCSRReview)
+					status=status+"(CSRReviewing)";
 				if(!"Cancelled".equals(orderLine.getAttribute("Status"))){
 					if (null != chainedOrderMap
 							&& chainedOrderMap.containsKey(chainedFromOrderLineKey)) {
@@ -729,6 +785,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean shipComplete = false;
 	protected boolean isFOCreated = false;
 	protected boolean isCSRReview = false;
+	protected boolean isFOCSRReview = false;
 	/*
 	JIRA 3999 Start -Set and Get method for pending hold status and reson text
 	*/
@@ -736,6 +793,14 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected String reasonText = "";
 	protected String pendingHoldStatus = "";
 	
+	public boolean isFOCSRReview() {
+		return isFOCSRReview;
+	}
+
+	public void setFOCSRReview(boolean isFOCSRReview) {
+		this.isFOCSRReview = isFOCSRReview;
+	}
+
 	public String getPendingHoldStatus() {
 		return pendingHoldStatus;
 	}

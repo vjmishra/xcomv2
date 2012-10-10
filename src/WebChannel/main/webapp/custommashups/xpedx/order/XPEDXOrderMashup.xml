@@ -1796,7 +1796,13 @@
 						<OrderLineTranQuantity OrderedQty="" />
 						<Order OrderNo="" OrderHeaderKey="" OrderDate="" Status="" ShipToID="">
 							<Extn ExtnWebConfNum="" ExtnLegacyOrderNo="" ExtnOrderDivision="" ExtnGenerationNo="" ExtnHeaderStatusCode="" ExtnInvoiceNo="" ExtnInvoicedDate=""/>
+							<OrderHoldTypes>
+								<OrderHoldType HoldType="" Status=""  OrderHeaderKey="" OrderLineKey="" />
+							</OrderHoldTypes>
 						</Order>
+						<OrderHoldTypes>
+							<OrderHoldType HoldType="" Status=""  OrderHeaderKey="" OrderLineKey="" />
+						</OrderHoldTypes>
 					</OrderLine>
 				</OrderLineList>
 			</Template>
@@ -3217,6 +3223,40 @@
 						</XPXUeAdditionalAttrXmlList>
 					</Extn>				   
                 </Order>
+			</Template>
+		</API>
+	</mashup>
+	
+	
+	<mashup id='xpedxOrderEditOrderList' transactional='true'
+		mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Count Pending Approval Orders">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getOrderList">
+			<Input>
+				<Order OrderHeaderKey="" />
+			</Input>
+			<Template>
+				<OrderList TotalNumberOfRecords="" TotalOrderList="">
+					<Order OrderHeaderKey="">
+						<OrderLines>
+							<OrderLine>
+								<OrderHoldTypes>
+									<OrderHoldType ReasonText="" ResolverUserId=""
+										HoldType="" Status="" StatusDescription="" Modifyuserid=""
+										LastHoldTypeDate="">
+									</OrderHoldType>
+								</OrderHoldTypes>
+							</OrderLine>
+						</OrderLines>
+						<OrderHoldTypes>
+							<OrderHoldType ReasonText="" ResolverUserId=""
+								HoldType="" Status="" StatusDescription="" Modifyuserid=""
+								LastHoldTypeDate="">
+							</OrderHoldType>
+						</OrderHoldTypes>
+					</Order>
+				</OrderList>
 			</Template>
 		</API>
 	</mashup>
