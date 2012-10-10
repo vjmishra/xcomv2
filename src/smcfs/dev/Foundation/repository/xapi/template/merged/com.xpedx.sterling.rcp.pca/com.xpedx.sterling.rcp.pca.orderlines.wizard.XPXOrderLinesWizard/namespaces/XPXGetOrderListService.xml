@@ -1,0 +1,111 @@
+<OrderList>
+<Order BillToID="" BuyerUserId="" CarrierServiceCode=""
+    CreatorOrganizationCode="" CustomerContactID="" CustomerFirstName=""
+    CustomerLastName="" CustomerPONo="" DisplayStatusDescription="" DocumentType=""
+    DraftOrderFlag="" EnterpriseCode="" EntryType="" 
+    ExchangeType="" HasPendingChanges=""
+    MaxOrderStatusDesc="" MultipleStatusesExist="" OrderDate="" PriceProgramKey="" 
+    OrderHeaderKey="" OrderName="" OrderNo="" OverallStatus="" ReqDeliveryDate="" 
+    ReturnOrderHeaderKeyForExchange="" ScacAndService=""
+    ScacAndServiceKey="" SellerOrganizationCode="" SortingType="" Status="" SupportLevel="" MaxOrderStatus="" MinOrderStatus="" 
+    ShipNode="" SourceType="" OrderType="" BuyerOrganizationCode="" >
+    <Extn>
+        <XPXDashboardOverrideList>
+            <XPXDashboardOverride OrderHeaderKey="" OrderLineKey="" OverrideFlag="" RuleId=""/>		
+        </XPXDashboardOverrideList>
+    </Extn>
+    <Promotions>
+        <Promotion DenialReason="" Description="" PromotionApplied=""
+            PromotionGroup="" PromotionId="" PromotionKey="" PromotionType="">
+            <Coupon CouponID="" CouponKey="" IsExclusive=""
+                OrganizationCode="" PricingRuleKey=""/>
+        </Promotion>
+    </Promotions>
+    <Instructions>
+        <Instruction/>
+    </Instructions>
+    <PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3=""
+        AddressLine4="" AddressLine5="" AddressLine6=""
+        AlternateEmailID="" Beeper="" City="" Company="" Country=""
+        DayFaxNo="" DayPhone="" Department="" EMailID="" EveningFaxNo=""
+        EveningPhone="" FirstName="" JobTitle="" LastName=""
+        MiddleName="" MobilePhone="" OtherPhone="" PersonID=""
+        PersonInfoKey="" State="" Suffix="" Title="" ZipCode=""/>
+    <PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3=""
+        AddressLine4="" AddressLine5="" AddressLine6=""
+        AlternateEmailID="" Beeper="" City="" Company="" Country=""
+        DayFaxNo="" DayPhone="" Department="" EMailID="" EveningFaxNo=""
+        EveningPhone="" FirstName="" JobTitle="" LastName=""
+        MiddleName="" MobilePhone="" OtherPhone="" PersonID=""
+        PersonInfoKey="" State="" Suffix="" Title="" ZipCode=""/>
+    <OverallTotals GrandTotal=""/>
+    <PriceInfo Currency=""/>
+    <OrderLines>
+        <OrderLine CarrierServiceCode="" ComponentShipped=""
+			CustomerLinePONo="" CustomerPONo="" 
+            ConfigurationKey="" CurrentWorkOrderKey="" DeliveryMethod=""
+            DisplayStatusDescription="" GiftFlag="" GiftWrap=""
+            IsBundleParent="" IsPriceLocked="" IsPriceMatched=""
+            ItemGroupCode="" KitCode="" KitQty="" LineType="" MaxLineStatus="" MaxLineStatusDesc=""
+            MinLineStatus="" MinLineStatusDesc="" MultipleStatusesExist="" OpenQty="" OrderHeaderKey="" 
+            OrderLineKey="" OrderedQty="" OriginalOrderedQty="" OverallStatus=""
+            PrimeLineNo="" ProductClass="" ReqShipDate="" ReqDeliveryDate="" ReshipParentLineKey=""
+            ReshippedQty="" ScacAndService="" ScacAndServiceKey=""
+            ShipNode="" ShipToID="" ShippedQuantity="" Status="" isHistory=""
+	        ShipToKey="" SubLineNo="">
+			<Extn/>
+            <OrderDates>
+                <OrderDate ActualDate="" CommittedDate="" DateTypeId=""
+                    ExpectedDate="" OrderHeaderKey="" OrderLineKey=""
+                    OrderReleaseKey="" RequestedDate=""/>
+            </OrderDates>
+            <Item AlternateItemID="" ItemID="" ItemImage=""
+                ItemShortDesc="" ReshipParentLineKey="" UnitOfMeasure="" CustomerItem="" ManufacturerItem="" />
+            <ItemDetails ItemID="">
+				<Extn />
+				<AlternateUOMList>
+		            <AlternateUOM Height="" HeightUOM="" IsOrderingUOM="" ItemKey="" ItemUOMKey="" Length="" LengthUOM="" Quantity="" UnitOfMeasure="" Weight="" WeightUOM="" Width="" WidthUOM=""/>
+		        </AlternateUOMList>
+		        <PrimaryInformation BundleFulfillmentMode=""
+		            ConfigurationKey="" ConfiguredModelKey="" 
+		            DefaultProductClass="" Description=""
+		            ExtendedDescription="" 
+				    IsConfigurable="" IsDeliveryAllowed="" IsPickupAllowed="" 
+				    IsPreConfigured="" IsShippingAllowed="" MaxOrderQuantity="" 
+				    MinOrderQuantity="" OrderingQuantityStrategy="" 
+				    ShortDescription=""/>
+            </ItemDetails>
+            <LineOverallTotals />
+            <LinePriceInfo BundleUnitPrice="" DisplayUnitPrice=""
+                IsPriceLocked="" UnitPrice="" PricingUOM=""/>
+            <OrderLineTranQuantity OrderedQty="" ShippedQuantity="" TransactionalUOM=""/>
+            <PersonInfoShipTo AddressLine1="" AddressLine2=""
+                AddressLine3="" AddressLine4="" AddressLine5=""
+                AddressLine6="" AlternateEmailID="" Beeper="" City=""
+                Company="" Country="" DayFaxNo="" DayPhone=""
+                Department="" EMailID="" EveningFaxNo="" EveningPhone=""
+                FirstName="" IsCommercialAddress="" JobTitle=""
+                LastName="" MiddleName="" MobilePhone="" OtherPhone=""
+                PersonID="" PersonInfoKey="" State="" Suffix=""
+                TaxGeoCode="" Title="" ZipCode=""/>
+            <OrderHoldTypes>
+                <OrderHoldType HoldType="" Status=""/>
+            </OrderHoldTypes>
+            <PersonInfoShipTo/>
+            <Instructions>
+                <Instruction/>
+            </Instructions>
+            <Awards>
+                <Award/>
+            </Awards>
+        </OrderLine>
+    </OrderLines>
+    <OrderHoldTypes>
+        <OrderHoldType HoldType="" Status=""/>
+    </OrderHoldTypes>
+    <OrderLineRelationships/>
+    <OrderStatuses>
+        <OrderStatus Status=""/>
+    </OrderStatuses>
+</Order>
+</OrderList>
