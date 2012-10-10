@@ -161,6 +161,10 @@
 	<s:set name='priceInfo' value='#xutil.getChildElement(#conOrder,"PriceInfo")'/>
 	<s:set name='ExtnInfo' value='#xutil.getChildElement(#conOrder,"Extn")'/>
 	<s:set name='ototal' value='#xutil.getAttribute(#ExtnInfo,"ExtnTotalOrderValue")'/>
+	<s:set name='stotal' value='#xutil.getAttribute(#ExtnInfo,"ExtnOrderSubTotal")'/>	
+	<s:set name='stotalwithAdjust' value='#xutil.getAttribute(#ExtnInfo,"ExtnLegTotOrderAdjustments")'/>
+	<s:set name='shippableOrderPrice' value='#xutil.getAttribute(#ExtnInfo,"ExtnTotalShipValue")'/>
+	<s:set name='totalOrderTax' value='#xutil.getAttribute(#ExtnInfo,"ExtnOrderTax")'/>
 	<s:set name='currencyCode' value='#xutil.getAttribute(#priceInfo,"Currency")'/>
 	<s:set name='orderDate' value='#xutil.getAttribute(#conOrder,"OrderDate")'/>
 	<s:set name='contactId' value='%{#_action.getWCContext().getCustomerContactId()}'/>
@@ -196,6 +200,7 @@
 	
 		<s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#orderDate, #scuicontext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')" />
 	<META NAME="WT.tx_it" CONTENT="<s:property value='#xpedxOrderTime'/>"/>	
+	<META NAME="WT.tx_s" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#stotal)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#stotalwithAdjust)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#shippableOrderPrice)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#totalOrderTax)'/>"/>	
 	
 	<%--End of webtrends --%>
 	
