@@ -225,6 +225,8 @@ public class XPXLiterals {
 	public static final String PAYMENT_APPROVAL_HOLD = "PAYMENT_APPROVAL";
 
 	public static final String NEEDS_ATTENTION_HOLD = "NEEDS_ATTENTION";
+	
+	public static final String LEG_ERR_CODE_HOLD = "LEG_ERR_CODE_HOLD";
 
 	public static final String A_EXTN_WILL_CALL_FLAG = "ExtnWillCall";
 
@@ -780,4 +782,9 @@ public class XPXLiterals {
 	public static final String SWC_ORDER_TRANS_TYPE = "Order";
 	public static final String MSAP_SUFFIX_TYPE = "MC";
 	
+	public static final String HOLD_REASON_LEGACY_ERROR_CODE = "Header Error Code Or Line Error Code Received From Legacy.";
+	public static final String NFE_M0000 = "M0000";
+	public static final String NFE_M0020 = "M0020";
+	public static final String NFE_M0036 = "M0036";
+	public static final String NFE_M0041 = "M0041";
 }
