@@ -2,9 +2,9 @@ package com.xpedx.nextgen.customerprofilerulevalidation.api;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,11 +13,11 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant.CustomerProfileRuleID;
+import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
-import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
@@ -353,6 +353,10 @@ public class XPXCustomerProfileRuleValidation implements YIFCustomApi {
 	
 	private void clearPreviousErrorElements(Document inXML) {
 		Element ele = inXML.getDocumentElement();
+		Element extnElement = SCXmlUtil.getChildElement(ele, "Extn");
+		if(extnElement!=null)
+			extnElement.setAttribute("ExtnOrdHdrLevelFailedRuleID","");
+		
 		NodeList nl = ele.getElementsByTagName("Error");
 		int length = nl.getLength();
 		if (length > 0) {
