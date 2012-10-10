@@ -6,7 +6,7 @@
 			TableName="XPX_EMAIL_DETAILS">
 			<Attributes>
 				<Attribute ColumnName="EMAIL_DETAILS_KEY" DataType="Key"
-					DefaultValue=" " Nullable="false" Description="Primary key" />
+					DefaultValue=" " Nullable="false" Description="Primary key" XMLName="EmailDetailsKey"/>
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
 					DefaultValue="sysdate" Description="Create TimeStamp" XMLName="Createts"/>
 				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
