@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
 
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -515,170 +516,213 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
         gridDataErrLbl1.verticalAlignment = SWT.FILL;		
         gridDataErrLbl1.horizontalSpan=2;
         gridDataErrLbl1.horizontalIndent=38;
-
-		String errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@ItemIDErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrItemId = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrItemId.setLayoutData(gridDataErrLbl1);
-			lblErrItemId.setData("yrc:customType", "RedText10");
-			lblErrItemId.setData("name", "lblErrItemId");
-		}
-
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@LineTypeErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrLineType = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrLineType.setLayoutData(gridDataErrLbl1);
-			lblErrLineType.setData("yrc:customType", "RedText10");
-			lblErrLineType.setData("name", "lblErrLineType");
-		}
-
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustomerLinePONoErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrCustPONo = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrCustPONo.setText(errorText);
-			lblErrCustPONo.setLayoutData(gridDataErrLbl1);
-			lblErrCustPONo.setData("name", "lblErrCustPONo");
-			lblErrCustPONo.setData("yrc:customType", "RedText10");
-		}
-
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@LineCommentsErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			chkAcceptLineComments = new Button(pnlError, SWT.CHECK);
-			chkAcceptLineComments.setText("");
-			chkAcceptLineComments.setVisible(true);
-			chkAcceptLineComments.setData("name", "chkAcceptLineComments");
-			chkAcceptLineComments.setData("yrc:customType", "Label");
-			chkAcceptLineComments.setLayoutData(gridDataChk);
-			Label lblErrAcceptLineComments = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrAcceptLineComments.setText("Accept Line Comments");
-			lblErrAcceptLineComments.setLayoutData(gridDataErrLbl);
-			lblErrAcceptLineComments.setData("yrc:customType", "RedText10");			
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustomerLineSeqNoErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-	        chkCustLineSeqNo = new Button(pnlError, SWT.CHECK);
-	        chkCustLineSeqNo.setText("");
-		    chkCustLineSeqNo.setVisible(true);
-	        chkCustLineSeqNo.setData("name", "chkCustLineSeqNo");
-	        chkCustLineSeqNo.setData("yrc:customType", "RedText10");
-	        chkCustLineSeqNo.setLayoutData(gridDataChk);			
-			lblErrCustLineSeqNo = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrCustLineSeqNo.setText(errorText);
-			lblErrCustLineSeqNo.setLayoutData(gridDataErrLbl);
-			lblErrCustLineSeqNo.setData("yrc:customType", "RedText10");
-		}
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustomerLineAcctNoErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-	        chkCustLineAcctNo = new Button(pnlError, SWT.CHECK);
-	        chkCustLineAcctNo.setText("");
-			chkCustLineAcctNo.setVisible(true);
-	        chkCustLineAcctNo.setData("name", "chkCustLineAcctNo");
-	        chkCustLineAcctNo.setData("yrc:customType", "RedText10");
-	        chkCustLineAcctNo.setLayoutData(gridDataChk);
+        
+        String errorCode = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Extn/@ExtnOrdLineLevelFailedRuleID");
+		        if(!YRCPlatformUI.isVoid(errorCode)){
+			        String errorText = null;
+			        if(errorCode.equals("ItemIDErrorText")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//String errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@ItemIDErrorText");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrItemId = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrItemId.setLayoutData(gridDataErrLbl1);
+							lblErrItemId.setData("yrc:customType", "RedText10");
+							lblErrItemId.setData("name", "lblErrItemId");
+						}
+			        }
 			
-			lblErrCustLineAcctNo = new Label(pnlError, SWT.HORIZONTAL);
-			lblErrCustLineAcctNo.setText(errorText);
-			lblErrCustLineAcctNo.setLayoutData(gridDataErrLbl);
-			lblErrCustLineAcctNo.setData("yrc:customType", "RedText10");
-		}
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustLine1ErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrCustLine1 = new Label(pnlError, SWT.BEGINNING);
-			lblErrCustLine1.setText(errorText);
-			lblErrCustLine1.setLayoutData(gridDataErrLbl1);
-			lblErrCustLine1.setData("yrc:customType", "RedText10");
-			lblErrCustLine1.setData("name", "lblErrCustLine1");
-		}
-
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustLine2ErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrCustLine2 = new Label(pnlError, SWT.BEGINNING);
-			lblErrCustLine2.setText(errorText);
-			lblErrCustLine2.setLayoutData(gridDataErrLbl1);
-			lblErrCustLine2.setData("yrc:customType", "RedText10");
-			lblErrCustLine2.setData("name", "lblErrCustLine2");
-		}
-
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@CustLine3ErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			lblErrCustLine3 = new Label(pnlError, SWT.BEGINNING);
-			lblErrCustLine3.setText(errorText);
-			lblErrCustLine3.setLayoutData(gridDataErrLbl1);
-			lblErrCustLine3.setData("yrc:customType", "RedText10");
-			lblErrCustLine3.setData("name", "lblErrCustLine3");
-		}
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@AllowBackOrderErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-		
-			chkAllowBackOrder = new Button(pnlError, SWT.CHECK);
-			chkAllowBackOrder.setText("");
-			//chkAllowBackOrder.setText("Items not available for next day shipment.");
-			chkAllowBackOrder.setVisible(true);
-			chkAllowBackOrder.setData("name", "chkAllowBackOrder");
-			chkAllowBackOrder.setData("yrc:customType", "RedText10");
-			chkAllowBackOrder.setLayoutData(gridDataChk);
-			lblAllowBackOrder = new Label(pnlError, SWT.HORIZONTAL);
-			lblAllowBackOrder.setText(errorText);
-			lblAllowBackOrder.setLayoutData(gridDataErrLbl);
-			lblAllowBackOrder.setData("yrc:customType", "RedText10");
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@PreventBackOrderErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-//	        chkPreventBackOrder = new Button(pnlError, SWT.CHECK);
-//			chkPreventBackOrder.setText("");
-//			//chkPreventBackOrder.setText("Prevent back orders.");
-//			chkPreventBackOrder.setVisible(true);
-//			chkPreventBackOrder.setData("name", "chkPreventBackOrder");
-//			chkPreventBackOrder.setData("yrc:customType", "RedText10");
-//			chkPreventBackOrder.setLayoutData(gridDataChk);
-			lblPreventBackOrder = new Label(pnlError, SWT.HORIZONTAL);
-			lblPreventBackOrder.setText(errorText);
-			lblPreventBackOrder.setLayoutData(gridDataErrLbl1);
-			lblPreventBackOrder.setData("yrc:customType", "RedText10");
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@AcceptPriceOverRideErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-//	        chkPreventBackOrder = new Button(pnlError, SWT.CHECK);
-//			chkPreventBackOrder.setText("");
-//			//chkPreventBackOrder.setText("Prevent back orders.");
-//			chkPreventBackOrder.setVisible(true);
-//			chkPreventBackOrder.setData("name", "chkPreventBackOrder");
-//			chkPreventBackOrder.setData("yrc:customType", "RedText10");
-//			chkPreventBackOrder.setLayoutData(gridDataChk);
-			Label lblPriceOverride = new Label(pnlError, SWT.HORIZONTAL);
-			lblPriceOverride.setText("Price beyond the allowed tolerance");
-			lblPriceOverride.setLayoutData(gridDataErrLbl1);
-			lblPriceOverride.setData("yrc:customType", "RedText10");
-		}
-				
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@PriceDiscrepencyErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-	        chkPriceDiscrepency = new Button(pnlError, SWT.CHECK);
-			chkPriceDiscrepency.setVisible(true);
-			chkPriceDiscrepency.setData("name", "chkPriceDiscrepency");
-			chkPriceDiscrepency.setData("yrc:customType", "Label");
-			chkPriceDiscrepency.setLayoutData(gridDataChk);
-			lblPriceDiscrepency = new Label(pnlError, SWT.HORIZONTAL);
-			lblPriceDiscrepency.setText(errorText);
-			lblPriceDiscrepency.setLayoutData(gridDataErrLbl);
-			lblPriceDiscrepency.setData("yrc:customType", "RedText10");
-			}
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@GrossTradingMarginErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-	        chkGTMVariance = new Button(pnlError, SWT.CHECK);
-	        chkGTMVariance.setVisible(true);
-	        chkGTMVariance.setData("name", "chkGTMVariance");
-	        chkGTMVariance.setData("yrc:customType", "Label");
-	        chkGTMVariance.setLayoutData(gridDataChk);
-			lblGTMVariance = new Label(pnlError, SWT.HORIZONTAL);
-			lblGTMVariance.setText("Gross Trading Margin beyond the tolerance");
-			lblGTMVariance.setLayoutData(gridDataErrLbl);
-			lblGTMVariance.setData("yrc:customType", "RedText10");
-			}		
+			        if(errorCode.equals("LineTypeErrorText")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				        //errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@LineTypeErrorText");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrLineType = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrLineType.setLayoutData(gridDataErrLbl1);
+							lblErrLineType.setData("yrc:customType", "RedText10");
+							lblErrLineType.setData("name", "lblErrLineType");
+						}
+			        }
+			        
+			        if(errorCode.equals("RequiredCustomerLinePO")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequiredCustomerLinePO");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrCustPONo = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrCustPONo.setText(errorText);
+							lblErrCustPONo.setLayoutData(gridDataErrLbl1);
+							lblErrCustPONo.setData("name", "lblErrCustPONo");
+							lblErrCustPONo.setData("yrc:customType", "RedText10");
+						}
+			        }
+			
+					if(errorCode.equals("LineCommentsByCustomer")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@LineCommentsByCustomer");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							chkAcceptLineComments = new Button(pnlError, SWT.CHECK);
+							chkAcceptLineComments.setText("");
+							chkAcceptLineComments.setVisible(true);
+							chkAcceptLineComments.setData("name", "chkAcceptLineComments");
+							chkAcceptLineComments.setData("yrc:customType", "Label");
+							chkAcceptLineComments.setLayoutData(gridDataChk);
+							Label lblErrAcceptLineComments = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrAcceptLineComments.setText("Accept Line Comments");
+							lblErrAcceptLineComments.setLayoutData(gridDataErrLbl);
+							lblErrAcceptLineComments.setData("yrc:customType", "RedText10");			
+						}
+					}
+					if(errorCode.equals("RequiredCustomerLineSequenceNo")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequiredCustomerLineSequenceNo");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+					        chkCustLineSeqNo = new Button(pnlError, SWT.CHECK);
+					        chkCustLineSeqNo.setText("");
+						    chkCustLineSeqNo.setVisible(true);
+					        chkCustLineSeqNo.setData("name", "chkCustLineSeqNo");
+					        chkCustLineSeqNo.setData("yrc:customType", "RedText10");
+					        chkCustLineSeqNo.setLayoutData(gridDataChk);			
+							lblErrCustLineSeqNo = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrCustLineSeqNo.setText(errorText);
+							lblErrCustLineSeqNo.setLayoutData(gridDataErrLbl);
+							lblErrCustLineSeqNo.setData("yrc:customType", "RedText10");
+						}
+					}
+					if(errorCode.equals("RequiredCustomerLineAccountNo")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequiredCustomerLineAccountNo");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+					        chkCustLineAcctNo = new Button(pnlError, SWT.CHECK);
+					        chkCustLineAcctNo.setText("");
+							chkCustLineAcctNo.setVisible(true);
+					        chkCustLineAcctNo.setData("name", "chkCustLineAcctNo");
+					        chkCustLineAcctNo.setData("yrc:customType", "RedText10");
+					        chkCustLineAcctNo.setLayoutData(gridDataChk);
+							
+							lblErrCustLineAcctNo = new Label(pnlError, SWT.HORIZONTAL);
+							lblErrCustLineAcctNo.setText(errorText);
+							lblErrCustLineAcctNo.setLayoutData(gridDataErrLbl);
+							lblErrCustLineAcctNo.setData("yrc:customType", "RedText10");
+						}
+					}
+					if(errorCode.equals("RequireCustomerLineField1")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+					//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequireCustomerLineField1");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrCustLine1 = new Label(pnlError, SWT.BEGINNING);
+							lblErrCustLine1.setText(errorText);
+							lblErrCustLine1.setLayoutData(gridDataErrLbl1);
+							lblErrCustLine1.setData("yrc:customType", "RedText10");
+							lblErrCustLine1.setData("name", "lblErrCustLine1");
+						}
+					}
+			
+					if(errorCode.equals("RequireCustomerLineField2")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequireCustomerLineField2");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrCustLine2 = new Label(pnlError, SWT.BEGINNING);
+							lblErrCustLine2.setText(errorText);
+							lblErrCustLine2.setLayoutData(gridDataErrLbl1);
+							lblErrCustLine2.setData("yrc:customType", "RedText10");
+							lblErrCustLine2.setData("name", "lblErrCustLine2");
+						}
+					}
+					if(errorCode.equals("RequireCustomerLineField3")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@RequireCustomerLineField3");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+							lblErrCustLine3 = new Label(pnlError, SWT.BEGINNING);
+							lblErrCustLine3.setText(errorText);
+							lblErrCustLine3.setLayoutData(gridDataErrLbl1);
+							lblErrCustLine3.setData("yrc:customType", "RedText10");
+							lblErrCustLine3.setData("name", "lblErrCustLine3");
+						}
+					}
+						if(errorCode.equals("ItemNotAvailableForNextDayShipment")){ 
+							errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+							//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@ItemNotAvailableForNextDayShipment");
+								if (!YRCPlatformUI.isVoid(errorText)) {
+								
+									chkAllowBackOrder = new Button(pnlError, SWT.CHECK);
+									chkAllowBackOrder.setText("");
+									//chkAllowBackOrder.setText("Items not available for next day shipment.");
+									chkAllowBackOrder.setVisible(true);
+									chkAllowBackOrder.setData("name", "chkAllowBackOrder");
+									chkAllowBackOrder.setData("yrc:customType", "RedText10");
+									chkAllowBackOrder.setLayoutData(gridDataChk);
+									lblAllowBackOrder = new Label(pnlError, SWT.HORIZONTAL);
+									lblAllowBackOrder.setText(errorText);
+									lblAllowBackOrder.setLayoutData(gridDataErrLbl);
+									lblAllowBackOrder.setData("yrc:customType", "RedText10");
+								}
+						}
+					
+					if(errorCode.equals("PreventBackOrder")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+					//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@PreventBackOrder");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+				//	        chkPreventBackOrder = new Button(pnlError, SWT.CHECK);
+				//			chkPreventBackOrder.setText("");
+				//			//chkPreventBackOrder.setText("Prevent back orders.");
+				//			chkPreventBackOrder.setVisible(true);
+				//			chkPreventBackOrder.setData("name", "chkPreventBackOrder");
+				//			chkPreventBackOrder.setData("yrc:customType", "RedText10");
+				//			chkPreventBackOrder.setLayoutData(gridDataChk);
+							lblPreventBackOrder = new Label(pnlError, SWT.HORIZONTAL);
+							lblPreventBackOrder.setText(errorText);
+							lblPreventBackOrder.setLayoutData(gridDataErrLbl1);
+							lblPreventBackOrder.setData("yrc:customType", "RedText10");
+						}
+					}
+					
+					if(errorCode.equals("AcceptPriceOverRide")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+					//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@AcceptPriceOverRide");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+				//	        chkPreventBackOrder = new Button(pnlError, SWT.CHECK);
+				//			chkPreventBackOrder.setText("");
+				//			//chkPreventBackOrder.setText("Prevent back orders.");
+				//			chkPreventBackOrder.setVisible(true);
+				//			chkPreventBackOrder.setData("name", "chkPreventBackOrder");
+				//			chkPreventBackOrder.setData("yrc:customType", "RedText10");
+				//			chkPreventBackOrder.setLayoutData(gridDataChk);
+							Label lblPriceOverride = new Label(pnlError, SWT.HORIZONTAL);
+							lblPriceOverride.setText("Price beyond the allowed tolerance");
+							lblPriceOverride.setLayoutData(gridDataErrLbl1);
+							lblPriceOverride.setData("yrc:customType", "RedText10");
+						}
+					}
+							
+					if(errorCode.equals("PriceDiscrepency")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+						//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@PriceDiscrepency");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+					        chkPriceDiscrepency = new Button(pnlError, SWT.CHECK);
+							chkPriceDiscrepency.setVisible(true);
+							chkPriceDiscrepency.setData("name", "chkPriceDiscrepency");
+							chkPriceDiscrepency.setData("yrc:customType", "Label");
+							chkPriceDiscrepency.setLayoutData(gridDataChk);
+							lblPriceDiscrepency = new Label(pnlError, SWT.HORIZONTAL);
+							lblPriceDiscrepency.setText(errorText);
+							lblPriceDiscrepency.setLayoutData(gridDataErrLbl);
+							lblPriceDiscrepency.setData("yrc:customType", "RedText10");
+							}
+					}
+					if(errorCode.equals("GrossTradingMargin")){ 
+						errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+					//errorText = YRCXmlUtils.getAttributeValue(eleOrderLine, "/OrderLine/Error/@GrossTradingMargin");
+						if (!YRCPlatformUI.isVoid(errorText)) {
+					        chkGTMVariance = new Button(pnlError, SWT.CHECK);
+					        chkGTMVariance.setVisible(true);
+					        chkGTMVariance.setData("name", "chkGTMVariance");
+					        chkGTMVariance.setData("yrc:customType", "Label");
+					        chkGTMVariance.setLayoutData(gridDataChk);
+							lblGTMVariance = new Label(pnlError, SWT.HORIZONTAL);
+							lblGTMVariance.setText("Gross Trading Margin beyond the tolerance");
+							lblGTMVariance.setLayoutData(gridDataErrLbl);
+							lblGTMVariance.setData("yrc:customType", "RedText10");
+							}
+					}
+				}
 				
 		lblErr = new Label(pnlError, SWT.NONE);
 		lblErr.setLayoutData(gridDataErrLbl1);
