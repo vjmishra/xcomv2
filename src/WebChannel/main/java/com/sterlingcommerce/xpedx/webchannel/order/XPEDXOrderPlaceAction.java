@@ -351,7 +351,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 					return FAILURE;
 				}
-				
+				XPEDXWCUtils.resetEditedOrderShipTo(wcContext); //added for jira 4306
 				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
 				if(YFCCommon.isVoid(generatedErrorMessage))
 				{

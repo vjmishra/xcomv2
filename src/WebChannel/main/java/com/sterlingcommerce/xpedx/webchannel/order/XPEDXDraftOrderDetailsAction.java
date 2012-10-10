@@ -409,7 +409,10 @@ public void resetOrganizationValuesForShipToCustomer(){
 }
 
 public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) throws CannotBuildInputException {
-		
+		//added for jira 4306	
+		XPEDXWCUtils.setObectInCache("SHIPTO_BEFORE_EDIT_ORDER",getWCContext().getCustomerId() );
+		XPEDXWCUtils.setObectInCache("CUSTOMER_CONTACT_ID_BEFORE_EDIT_ORDER",wcContext.getCustomerContactId());
+		//end for jira 4306
 		String selectedCustomerContactId = getWCContext().getSCUIContext().getRequest().getParameter("selectedCustomerContactId");
 		if(SCUtil.isVoid(selectedCustomerContactId))
 			selectedCustomerContactId = wcContext.getCustomerContactId();
@@ -424,17 +427,19 @@ public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) th
 			
 				getWCContext().getSCUIContext().getSession().removeAttribute(
 						XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN);
-			
-			changeCurrentCartOwner();
+			//added for jira 4306
+			if(!"true".equals(isEditOrder))
+				changeCurrentCartOwner();
 			
 		}
 		
+			/* commented for jira 4306 
 			try {
 				setSelectedShipToAsDefault(ordersBuyerOrganizationCode);
 			} catch (Exception e) {
 				LOG.error("Cannot set the customer as default. please try again later");
 				e.printStackTrace();
-			}
+			}*/
 		
 			
 	}
