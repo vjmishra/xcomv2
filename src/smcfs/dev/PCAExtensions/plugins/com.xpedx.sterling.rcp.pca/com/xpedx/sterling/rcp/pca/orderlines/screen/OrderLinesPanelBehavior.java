@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.ExtnAutoLoader;
 import com.xpedx.sterling.rcp.pca.util.IXPXCollapsibleCompositeListener;
 import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXCollapsibleCompositeHelper;
@@ -96,6 +97,7 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 		this.inputElement = ((YRCEditorInput)((YRCEditorInput) inputObject).getInputObject()).getXml();
 		this.inputObject = ((YRCEditorInput) inputObject).getInputObject();
 		inputObject = this.inputObject;
+		XPXCacheManager.getInstance().getRuleIDErrorCode(this);
 		init();
 		orderElementBeforeAddition = null;
 		isDraftOrder = true;
@@ -258,7 +260,7 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 						{
 							//Document docInput = YRCXmlUtils.createFromString("<Organization OrganizationCode='"+shipFromBranch+"_"+envCode+"' />");
 							//callApi("getOrganizationList", docInput);
-							String[] orderDetailApiNames = {"getOrganizationList","XPXGetOrderDetailsService"};
+							String[] orderDetailApiNames = {"getOrganizationList","XPXGetOrderListServiceCC"};
 					        Document[] docInput = {
 					        		YRCXmlUtils.createFromString("<Organization OrganizationCode='"+shipFromBranch+"_"+envCode+"' />"),
 									YRCXmlUtils.createFromString("<Order OrderHeaderKey='" + YRCXmlUtils.getAttribute(this.inputElement, "OrderHeaderKey") + "' />")
@@ -267,7 +269,7 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 						}
 						else
 						{
-							String[] orderDetailApiNames = {"XPXGetOrderDetailsService"};
+							String[] orderDetailApiNames = {"XPXGetOrderListServiceCC"};
 					        Document[] docInput = {
 									YRCXmlUtils.createFromString("<Order OrderHeaderKey='" + YRCXmlUtils.getAttribute(this.inputElement, "OrderHeaderKey") + "' />")
 							};
@@ -283,9 +285,11 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 							minChargeAmount = extnElem.getAttribute("ExtnSmallOrderFee");
 						}
 					}
-					else if ("XPXGetOrderDetailsService".equals(apiname)) {
+					else if ("XPXGetOrderListServiceCC".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						orderElementBeforeAddition = outXml;
+						
+						orderElementBeforeAddition = (Element)outXml.getElementsByTagName("Order").item(0);
+						
 //						originalSalesOrderElement = YRCXmlUtils.getCopy(outXml);
 				       	setModel("OriginalOrder", orderElementBeforeAddition, false);
  	                    RemoveNeedsAttentionButtonVisibility(outXml);
@@ -300,11 +304,8 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 				        else{
 				        	this.getXfrCircles();
 				        }
-						
-						
-						
-						
-					} else if("XPXGetTransferCirclesList".equals(apiname))
+					} 
+					else if("XPXGetTransferCirclesList".equals(apiname))
 					{
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						Element xferCirclesList = YRCXmlUtils.getXPathElement(outXml, "/OrganizationList/Organization/Extn/XPXXferCircleList");
@@ -501,6 +502,37 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 		}
 		super.handleApiCompletion(ctx);		
 	}
+	/*//Added for 4321
+	private Element addRuleIDError(Element orderdListXML){
+		Element eleOrder = (Element)orderdListXML.getElementsByTagName("Order").item(0);
+		Element orderHdrExtn = (Element)eleOrder.getElementsByTagName("Extn").item(0);
+		String HdrRuleID = orderHdrExtn.getAttribute("ExtnOrdHdrLevelFailedRuleID");
+		if(!YRCPlatformUI.isVoid(HdrRuleID)){
+			String ordHdrRuleDescription = XPXCacheManager.getsetRuleIDDescription(HdrRuleID);
+			Element extnError = YRCXmlUtils.createChild(eleOrder,"Error");
+			extnError.setAttribute(HdrRuleID, ordHdrRuleDescription);
+		}
+		Element orderLinesList = (Element)eleOrder.getElementsByTagName("OrderLines").item(0);
+		if(orderLinesList!=null){
+			NodeList orderLineList = orderLinesList.getElementsByTagName("OrderLine");
+			int orderLineListLength = orderLineList.getLength();
+			if(orderLineListLength>0){
+				for(int i=0;i<orderLineListLength;i++){
+					Element eleOrderLine = (Element)orderLineList.item(i);
+					Element orderLineExtn = (Element)eleOrderLine.getElementsByTagName("Extn").item(0);
+					String lineRuelID = orderLineExtn.getAttribute("ExtnOrdLineLevelFailedRuleID");
+					if(!YRCPlatformUI.isVoid(lineRuelID)){
+						String ordLineRuleDesc =  XPXCacheManager.getsetRuleIDDescription(lineRuelID);
+						Element extnLineError = YRCXmlUtils.createChild(eleOrderLine,"Error");
+						extnLineError.setAttribute(lineRuelID, ordLineRuleDesc);
+					}
+				}
+			}
+		}
+		System.out.println(YRCXmlUtils.getString(eleOrder));
+		return eleOrder;
+		
+	}*/
 	
 	private static Document getDummyOutPutDoc() {
 		Document returnDoc = null;

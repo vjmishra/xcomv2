@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -23,6 +24,7 @@ import com.yantra.yfc.rcp.internal.YRCApiCaller;
 public class XPXCacheManager {
 	
 	private HashMap xpxCache = new HashMap();
+	public static HashMap xpxRuleIDCache = new HashMap();
 	private static final String UOM_LIST_PREFIX = "UOM_LIST_";
 	private static final String DIV_LIST_PREFIX = "DIV_LIST_"; // JIRA 3622 - Performance Fix - Division Cache
 	
@@ -118,6 +120,24 @@ public class XPXCacheManager {
 		inBehavior.handleApiCompletion(ctx);
 	}
 // JIRA 3622 - Performance Fix - Division Cache Ends
+	
+	public void getRuleIDErrorCode(YRCBehavior inBehavior)
+	{
+		Element eleInput = YRCXmlUtils.createDocument("CommonCode").getDocumentElement();
+		eleInput.setAttribute("CodeType", "XPXRuleID");
+		eleInput.setAttribute("OrganizationCode", "xpedx");
+		String[] apinames = {"getCommonCodeList"};
+		Document[] docInput = {(eleInput.getOwnerDocument())};				
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setApiNames(apinames);
+		ctx.setInputXmls(docInput);
+        ctx.setFormId(CACHE_FORM_ID);
+		YRCApiCaller syncapiCaller= new YRCApiCaller(ctx,true);
+		syncapiCaller.invokeApi();
+		Document outputXml = ctx.getOutputXml();
+		addRuleIDDescription(outputXml);
+		inBehavior.handleApiCompletion(ctx);
+	}
 	public void getLineTypeList(String organizationCode, YRCBehavior inBehavior)
 	{
 		String key = LINE_TYPE_LIST_PREFIX+organizationCode;
@@ -224,11 +244,24 @@ public class XPXCacheManager {
 	// JIRA 3622 - Performance Fix - Division Cache Starts
 	public void addDivList(Document doc, String dataSecurityGroupID)
 	{
+		
 		String key = DIV_LIST_PREFIX+dataSecurityGroupID;
 		setObjectInCache(key, doc);
 		
 	}
 	// JIRA 3622 - Performance Fix - Division Cache Ends
+	public void addRuleIDDescription(Document commonCodeXML){
+		Element eleCommonCodeList = commonCodeXML.getDocumentElement();
+		NodeList eleCommonCode = eleCommonCodeList.getElementsByTagName("CommonCode");
+		int listLength = eleCommonCode.getLength();
+		for (int i=0;i<listLength; i++){
+			Element commonCode = (Element)eleCommonCode.item(i);
+			String RuleId = commonCode.getAttribute("CodeValue");
+			String shortDescription = commonCode.getAttribute("CodeShortDescription");
+			setRuleIDInCache(RuleId,shortDescription);
+		}
+		
+	}
 	public void addLineTypeList(Document doc, String orgCode)
 	{
 		String key = LINE_TYPE_LIST_PREFIX+orgCode;
@@ -236,6 +269,17 @@ public class XPXCacheManager {
 		
 	}
 	
+	public void setRuleIDInCache(String key, String value)
+	{
+		xpxRuleIDCache.put(key, value);
+	}
+	public static String getsetRuleIDDescription(String key){
+		String description = null;
+		if(xpxRuleIDCache.containsKey(key))
+		description = (String)xpxRuleIDCache.get(key);
+		return description; 
+		
+	}
 	public void addOrderChargesList(Document doc, String orgCode)
 	{
 		String key = ORDER_CHARGES_LIST_PREFIX+orgCode;

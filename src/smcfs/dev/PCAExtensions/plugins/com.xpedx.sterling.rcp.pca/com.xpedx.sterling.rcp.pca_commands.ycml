@@ -9,8 +9,8 @@
         <commands>
             <command APIName="getCommonCodeList" APIType="API" Name="XPXGetLineTypeList" URL="" inputNamespace="Input_XPXGetLineTypeList" outputNamespace="LineTypeList" postCommand="" preCommand=""/>
             <command APIName="getCommonCodeList" APIType="API" Name="XPXGetOrderChargesList" URL="" inputNamespace="Input_XPXGetOrderChargesList" outputNamespace="OrderCharges" postCommand="" preCommand=""/>
-            <command APIName="XPXGetOrderDetailsService" APIType="SERVICE" Name="XPXGetOrderDetailsService" URL="DEFAULT" inputNamespace="XPXGetOrderDetailsService_input"
-                outputNamespace="XPXGetOrderDetailsService_output" version=""/>
+            <command APIName="XPXGetOrderListServiceCC" APIType="SERVICE" Name="XPXGetOrderListServiceCC" URL="DEFAULT" inputNamespace="XPXGetOrderListServiceCC_input"
+                outputNamespace="XPXGetOrderListServiceCC_output" version="ver77"/>
             <command APIName="XPXChangeOrderDetailsService" APIType="SERVICE" Name="XPXChangeOrderDetailsService" URL="DEFAULT" inputNamespace="XPXChangeOrderDetailsService_input"
                 outputNamespace="XPXChangeOrderDetailsService_output" version=""/>
             <command APIName="XPXFetchUpdatedOrderAmount" APIType="SERVICE" Name="fetchUpdatedOrderTotal" URL="DEFAULT" inputNamespace="XPXFetchUpdatedOrderAmount_input"
@@ -42,8 +42,8 @@
         </commands>
         <namespaces>
             <namespace name="getSalesOrderDetailsWithAddressesAndOrderLines" templateName="getSalesOrderDetailsWithAddressesAndOrderLines" type="output"/>
-            <namespace name="XPXGetOrderDetailsService_output" templateName="XPXGetOrderDetailsService_output" type="output"/>
-            <namespace name="XPXGetOrderDetailsService_input" templateName="XPXGetOrderDetailsService_input" type="input"/>
+            <namespace name="XPXGetOrderListServiceCC_output" templateName="XPXGetOrderListService" type="output"/>
+            <namespace name="XPXGetOrderListServiceCC_input" templateName="XPXGetOrderListServiceCC_input" type="input"/>
             <namespace name="XPXChangeOrderDetailsService_output" templateName="XPXChangeOrderDetailsService_output" type="output"/>
             <namespace name="XPXChangeOrderDetailsService_input" templateName="XPXChangeOrderDetailsService_input" type="input"/>
             <namespace name="XPXFetchUpdatedOrderAmount_input" templateName="XPXFetchUpdatedOrderAmount_input" type="input"/>
@@ -575,12 +575,14 @@
                 postCommand="" preCommand=""/>
             <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="getOrganizationList_output" version=""/>
             <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="getCommonCodeList" URL="DEFAULT" inputNamespace="" outputNamespace="getCommonCodeList_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="Input_XPXGetLineTypeList" templateName="Input_XPXGetLineTypeList" type="input"/>
             <namespace name="LineTypeList" templateName="LineTypeList" type="output"/>
             <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
             <namespace name="getOrganizationList_output" templateName="getOrganizationList_output" type="output"/>
+            <namespace name="getCommonCodeList_output" templateName="getCommonCodeList_output" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementPanel">

@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.orderlines.screen.OrderLinesPanel;
+import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
@@ -681,7 +682,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		Composite pnlTrnsactionError = new Composite(pnlRoot,SWT.NONE);
 		pnlTrnsactionError.setBackgroundMode(SWT.INHERIT_NONE);
 		pnlTrnsactionError.setData(YRCConstants.YRC_CONTROL_NAME, "pnlTrnsactionError");
-		GridLayout pnlTrnsactionErrorLayout = new GridLayout(2,false);
+		GridLayout pnlTrnsactionErrorLayout = new GridLayout(3,false);
 		pnlTrnsactionErrorLayout.horizontalSpacing = 1;
 		pnlTrnsactionErrorLayout.verticalSpacing = 1;
 //		pnlTrnsactionErrorLayout.numColumns = 8;
@@ -707,6 +708,7 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		
 		GridData gridDataErrLbl = new GridData();
         gridDataErrLbl.horizontalAlignment = SWT.FILL;
+        gridDataErrLbl.horizontalSpan = 2;
         gridDataErrLbl.verticalAlignment = SWT.FILL;;
           
         gridDataErrLbl.grabExcessHorizontalSpace = true;
@@ -714,156 +716,181 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		GridData gridDataErrLbl1 = new GridData();
 		gridDataErrLbl1.horizontalAlignment = SWT.BEGINNING;
 		gridDataErrLbl1.verticalAlignment = SWT.FILL;;
-		gridDataErrLbl1.horizontalSpan = 2;
+		gridDataErrLbl1.horizontalSpan = 3;
 		gridDataErrLbl1.horizontalIndent=2;
 		gridDataErrLbl1.grabExcessHorizontalSpace = true;
         
-		String errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@CustomerPONoErrorText");
-//		errorText = "hello";
-		if (!YRCPlatformUI.isVoid(errorText)) {	
-	        chkAcceptDupCustPONo = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkAcceptDupCustPONo.setText("");
-			chkAcceptDupCustPONo.setVisible(true);
-			chkAcceptDupCustPONo.setData("name", "chkAcceptDupCustPONo");
-			chkAcceptDupCustPONo.setData("yrc:customType", "Label");
-			chkAcceptDupCustPONo.setLayoutData(gridDataChk);
-	               
-			lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrCustPONo.setText(errorText);
-			lblErrCustPONo.setLayoutData(gridDataErrLbl);
-			lblErrCustPONo.setData("yrc:customType", "RedText10");
-		}
-		
-		errorText =	YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@CustomerCommentsErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {	
-	        chkAcceptHeaderComments = new Button(pnlTrnsactionError, SWT.CHECK);
-	        chkAcceptHeaderComments.setText("");
-	        chkAcceptHeaderComments.setVisible(true);
-	        chkAcceptHeaderComments.setData("name", "chkAcceptWithoutComments");
-	        chkAcceptHeaderComments.setData("yrc:customType", "Label");
-	        chkAcceptHeaderComments.setLayoutData(gridDataChk);
-	        
-			lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrCustPONo.setText(errorText);
-			lblErrCustPONo.setLayoutData(gridDataErrLbl);
-			lblErrCustPONo.setData("yrc:customType", "RedText10");	        
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ReqCustomerPONoErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {	
-			lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrCustPONo.setText(errorText);
-			lblErrCustPONo.setLayoutData(gridDataErrLbl1);
-			lblErrCustPONo.setData("yrc:customType", "RedText10");
-		}		
-		
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@PreventAutoOrdPlacementErrorText");
-//		errorText = "chkPreventAutoOrdPlace";
-        if (!YRCPlatformUI.isVoid(errorText)) {
-		    chkPreventAutoOrdPlace = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkPreventAutoOrdPlace.setText("");
-			chkPreventAutoOrdPlace.setVisible(true);
-			chkPreventAutoOrdPlace.setData("name", "chkPreventAutoOrdPlace");
-			chkPreventAutoOrdPlace.setData("yrc:customType", "Label");
-			chkPreventAutoOrdPlace.setLayoutData(gridDataChk);
-			lblErrPreventAutoOrdPlace = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrPreventAutoOrdPlace.setText(errorText);
-			lblErrPreventAutoOrdPlace.setLayoutData(gridDataErrLbl);
-			lblErrPreventAutoOrdPlace.setData("yrc:customType", "RedText10");
-		}
-		
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ShipToZipCodeErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			chkAcceptShipToZipCode = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkAcceptShipToZipCode.setText("");
-			chkAcceptShipToZipCode.setVisible(true);
-			chkAcceptShipToZipCode.setData("name", "chkAcceptShipToZipCode");
-			chkAcceptShipToZipCode.setData("yrc:customType", "Label");
-			chkAcceptShipToZipCode.setLayoutData(gridDataChk);
-			lblErrAcceptShipToZipCode = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrAcceptShipToZipCode.setText(errorText);
-			lblErrAcceptShipToZipCode.setLayoutData(gridDataErrLbl);
-			lblErrAcceptShipToZipCode.setData("yrc:customType", "RedText10");
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ShipMethodErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-					
-			        chkAcceptNonStrdShipMethod = new Button(pnlTrnsactionError, SWT.CHECK);
-					chkAcceptNonStrdShipMethod.setText("");
-					chkAcceptNonStrdShipMethod.setVisible(true);
-					chkAcceptNonStrdShipMethod.setData("name", "chkAcceptNonStrdShipMethod");
-					chkAcceptNonStrdShipMethod.setData("yrc:customType", "Label");
-					chkAcceptNonStrdShipMethod.setLayoutData(gridDataChk);
-					lblErrAcceptNonStrdShipMethod = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-					lblErrAcceptNonStrdShipMethod.setText(errorText);
-					lblErrAcceptNonStrdShipMethod.setLayoutData(gridDataErrLbl);
-					lblErrAcceptNonStrdShipMethod.setData("yrc:customType", "RedText10");
+		String errorCode = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Extn/@ExtnOrdHdrLevelFailedRuleID");
+		String errorText = null;
+		if(!YRCPlatformUI.isVoid(errorCode)){
+			if(errorCode.equals("DuplicatePO")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				if (!YRCPlatformUI.isVoid(errorText)) {	
+			        chkAcceptDupCustPONo = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkAcceptDupCustPONo.setText("");
+					chkAcceptDupCustPONo.setVisible(true);
+					chkAcceptDupCustPONo.setData("name", "chkAcceptDupCustPONo");
+					chkAcceptDupCustPONo.setData("yrc:customType", "Label");
+					chkAcceptDupCustPONo.setLayoutData(gridDataChk);
+			               
+					lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrCustPONo.setText(errorText);
+					lblErrCustPONo.setLayoutData(gridDataErrLbl);
+					lblErrCustPONo.setData("yrc:customType", "RedText10");
 				}
-		
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@AcceptNoNextBusinessDayErrorText");
-        //errorText = "Testing.......";
-		if (!YRCPlatformUI.isVoid(errorText)) {
-		    chkAcceptNoNextBusinessDay = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkAcceptNoNextBusinessDay.setText("");
-			chkAcceptNoNextBusinessDay.setVisible(true);
-			chkAcceptNoNextBusinessDay.setData("name", "chkAcceptNoNextBusinessDay");
-			chkAcceptNoNextBusinessDay.setData("yrc:customType", "Label");
-			chkAcceptNoNextBusinessDay.setLayoutData(gridDataChk);
-			lblErrAcceptNoNextBusinessDay = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrAcceptNoNextBusinessDay.setText(errorText);
-			lblErrAcceptNoNextBusinessDay.setLayoutData(gridDataErrLbl);
-			lblErrAcceptNoNextBusinessDay.setData("yrc:customType", "RedText10");
+			}
+			if(errorCode.equals("HeaderCommentByCustomer")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText =	YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@HeaderCommentByCustomer");
+				if (!YRCPlatformUI.isVoid(errorText)) {	
+			        chkAcceptHeaderComments = new Button(pnlTrnsactionError, SWT.CHECK);
+			        chkAcceptHeaderComments.setText("");
+			        chkAcceptHeaderComments.setVisible(true);
+			        chkAcceptHeaderComments.setData("name", "chkAcceptWithoutComments");
+			        chkAcceptHeaderComments.setData("yrc:customType", "Label");
+			        chkAcceptHeaderComments.setLayoutData(gridDataChk);
+			        
+					lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrCustPONo.setText(errorText);
+					lblErrCustPONo.setLayoutData(gridDataErrLbl);
+					lblErrCustPONo.setData("yrc:customType", "RedText10");	        
+				}
+			}
+			if(errorCode.equals("RequireCustomerPO")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@RequireCustomerPO");
+				if (!YRCPlatformUI.isVoid(errorText)) {	
+					lblErrCustPONo = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrCustPONo.setText(errorText);
+					lblErrCustPONo.setLayoutData(gridDataErrLbl1);
+					lblErrCustPONo.setData("yrc:customType", "RedText10");
+				}
+			}
+			
+			if(errorCode.equals("PreventAutoPlace")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@PreventAutoPlace");
+		//		errorText = "chkPreventAutoOrdPlace";
+		        if (!YRCPlatformUI.isVoid(errorText)) {
+				    chkPreventAutoOrdPlace = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkPreventAutoOrdPlace.setText("");
+					chkPreventAutoOrdPlace.setVisible(true);
+					chkPreventAutoOrdPlace.setData("name", "chkPreventAutoOrdPlace");
+					chkPreventAutoOrdPlace.setData("yrc:customType", "Label");
+					chkPreventAutoOrdPlace.setLayoutData(gridDataChk);
+					lblErrPreventAutoOrdPlace = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrPreventAutoOrdPlace.setText(errorText);
+					lblErrPreventAutoOrdPlace.setLayoutData(gridDataErrLbl);
+					lblErrPreventAutoOrdPlace.setData("yrc:customType", "RedText10");
+				}
+			}
+			
+	        if(errorCode.equals("ValidShiptoZipCode")){ 
+					errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ValidShiptoZipCode");
+				if (!YRCPlatformUI.isVoid(errorText)) {
+					chkAcceptShipToZipCode = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkAcceptShipToZipCode.setText("");
+					chkAcceptShipToZipCode.setVisible(true);
+					chkAcceptShipToZipCode.setData("name", "chkAcceptShipToZipCode");
+					chkAcceptShipToZipCode.setData("yrc:customType", "Label");
+					chkAcceptShipToZipCode.setLayoutData(gridDataChk);
+					lblErrAcceptShipToZipCode = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrAcceptShipToZipCode.setText(errorText);
+					lblErrAcceptShipToZipCode.setLayoutData(gridDataErrLbl);
+					lblErrAcceptShipToZipCode.setData("yrc:customType", "RedText10");
+				}
+	        }
+			if(errorCode.equals("NonStandardShipMethod")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@NonStandardShipMethod");
+				if (!YRCPlatformUI.isVoid(errorText)) {
+							
+					        chkAcceptNonStrdShipMethod = new Button(pnlTrnsactionError, SWT.CHECK);
+							chkAcceptNonStrdShipMethod.setText("");
+							chkAcceptNonStrdShipMethod.setVisible(true);
+							chkAcceptNonStrdShipMethod.setData("name", "chkAcceptNonStrdShipMethod");
+							chkAcceptNonStrdShipMethod.setData("yrc:customType", "Label");
+							chkAcceptNonStrdShipMethod.setLayoutData(gridDataChk);
+							lblErrAcceptNonStrdShipMethod = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+							lblErrAcceptNonStrdShipMethod.setText(errorText);
+							lblErrAcceptNonStrdShipMethod.setLayoutData(gridDataErrLbl);
+							lblErrAcceptNonStrdShipMethod.setData("yrc:customType", "RedText10");
+						}
+			}
+			
+			if(errorCode.equals("ShipDateNotNextBusinessDay")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ShipDateNotNextBusinessDay");
+		        //errorText = "Testing.......";
+				if (!YRCPlatformUI.isVoid(errorText)) {
+				    chkAcceptNoNextBusinessDay = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkAcceptNoNextBusinessDay.setText("");
+					chkAcceptNoNextBusinessDay.setVisible(true);
+					chkAcceptNoNextBusinessDay.setData("name", "chkAcceptNoNextBusinessDay");
+					chkAcceptNoNextBusinessDay.setData("yrc:customType", "Label");
+					chkAcceptNoNextBusinessDay.setLayoutData(gridDataChk);
+					lblErrAcceptNoNextBusinessDay = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrAcceptNoNextBusinessDay.setText(errorText);
+					/*gridDataErrLbl.horizontalSpan = 2;*/
+					lblErrAcceptNoNextBusinessDay.setLayoutData(gridDataErrLbl);
+					lblErrAcceptNoNextBusinessDay.setData("yrc:customType", "RedText10");
+				}
+			}
+			errorText = null;
+			if(errorCode.equals("AllDeliveryDatesDoNotMatch")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@AllDeliveryDatesDoNotMatch");
+				//errorText = "Testing.......";
+				if (!YRCPlatformUI.isVoid(errorText)) {
+					chkAcceptReqDlvryDate = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkAcceptReqDlvryDate.setText("");
+					chkAcceptReqDlvryDate.setVisible(true);
+					chkAcceptReqDlvryDate.setData("name", "chkAcceptReqDlvryDate");
+					chkAcceptReqDlvryDate.setData("yrc:customType", "Label");
+					chkAcceptReqDlvryDate.setLayoutData(gridDataChk);
+					lblErrAcceptReqDlvryDate = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrAcceptReqDlvryDate.setText(errorText);
+					lblErrAcceptReqDlvryDate.setLayoutData(gridDataErrLbl);
+					lblErrAcceptReqDlvryDate.setData("yrc:customType", "RedText10");
+				}
+			}
+					
+			if(errorCode.equals("CustomerSelectedShipComplete")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@CustomerSelectedShipComplete");
+				//errorText = "Testing.......";
+				if (!YRCPlatformUI.isVoid(errorText)) {
+					chkAcceptShipComplete = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkAcceptShipComplete.setText("");
+					chkAcceptShipComplete.setVisible(true);
+					chkAcceptShipComplete.setData("name", "chkAcceptShipComplete");
+					chkAcceptShipComplete.setData("yrc:customType", "Label");
+					chkAcceptShipComplete.setLayoutData(gridDataChk);
+					lblErrShipComplete = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblErrShipComplete.setText(errorText);
+					lblErrShipComplete.setLayoutData(gridDataErrLbl);
+					lblErrShipComplete.setData("yrc:customType", "RedText10");
+				}
+			}
+			if(errorCode.equals("PreventBackOrder")){ 
+				errorText = XPXCacheManager.getsetRuleIDDescription(errorCode);
+				//errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@PreventBackOrder");
+				if (!YRCPlatformUI.isVoid(errorText)) {
+			        chkPreventBackOrder = new Button(pnlTrnsactionError, SWT.CHECK);
+					chkPreventBackOrder.setText("");
+					chkPreventBackOrder.setVisible(true);
+					chkPreventBackOrder.setData("name", "chkPreventBackOrder");
+					chkPreventBackOrder.setData("yrc:customType", "InvalidData");
+					chkPreventBackOrder.setLayoutData(gridDataChk);
+					lblPreventBackOrder = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
+					lblPreventBackOrder.setText("preventive order error");
+					lblPreventBackOrder.setLayoutData(gridDataErrLbl);
+					lblPreventBackOrder.setData("yrc:customType", "RedText10");
+				}
+			}
 		}
-		errorText = null;
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ReqDeliveryDateErrorText");
-		//errorText = "Testing.......";
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			chkAcceptReqDlvryDate = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkAcceptReqDlvryDate.setText("");
-			chkAcceptReqDlvryDate.setVisible(true);
-			chkAcceptReqDlvryDate.setData("name", "chkAcceptReqDlvryDate");
-			chkAcceptReqDlvryDate.setData("yrc:customType", "Label");
-			chkAcceptReqDlvryDate.setLayoutData(gridDataChk);
-			lblErrAcceptReqDlvryDate = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrAcceptReqDlvryDate.setText(errorText);
-			lblErrAcceptReqDlvryDate.setLayoutData(gridDataErrLbl);
-			lblErrAcceptReqDlvryDate.setData("yrc:customType", "RedText10");
-		}
-		
-				
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@ShipCompleteErrorText");
-		//errorText = "Testing.......";
-		if (!YRCPlatformUI.isVoid(errorText)) {
-			chkAcceptShipComplete = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkAcceptShipComplete.setText("");
-			chkAcceptShipComplete.setVisible(true);
-			chkAcceptShipComplete.setData("name", "chkAcceptShipComplete");
-			chkAcceptShipComplete.setData("yrc:customType", "Label");
-			chkAcceptShipComplete.setLayoutData(gridDataChk);
-			lblErrShipComplete = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblErrShipComplete.setText(errorText);
-			lblErrShipComplete.setLayoutData(gridDataErrLbl);
-			lblErrShipComplete.setData("yrc:customType", "RedText10");
-		}
-		
-		errorText = YRCXmlUtils.getAttributeValue(eleOrderDetails, "/Order/Error/@PreventBackOrderErrorText");
-		if (!YRCPlatformUI.isVoid(errorText)) {
-	        chkPreventBackOrder = new Button(pnlTrnsactionError, SWT.CHECK);
-			chkPreventBackOrder.setText("");
-			chkPreventBackOrder.setVisible(true);
-			chkPreventBackOrder.setData("name", "chkPreventBackOrder");
-			chkPreventBackOrder.setData("yrc:customType", "InvalidData");
-			chkPreventBackOrder.setLayoutData(gridDataChk);
-			lblPreventBackOrder = new Label(pnlTrnsactionError, SWT.HORIZONTAL);
-			lblPreventBackOrder.setText("preventive order error");
-			lblPreventBackOrder.setLayoutData(gridDataErrLbl);
-			lblPreventBackOrder.setData("yrc:customType", "RedText10");
-		}	
+			
 		
 		//chekcing checkOrderLockFlag() & setting Error lable message @Order header level.  # part of CR changes (2582)
 		if(getOrderLinesPanel().getPageBehavior().checkOrderLockFlag())
