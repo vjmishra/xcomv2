@@ -6,12 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.Vector;
 import java.util.Map.Entry;
-
-import javax.swing.text.DefaultEditorKit.CutAction;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,7 +49,7 @@ public class XPXCustomerProfileRuleUtil {
 	public void setOrderXML(Document orderXML) {
 		this.orderXML = orderXML;
 	}
-
+	
 	public XPXCustomerProfileRuleUtil(Document orderXML,HashMap<String, HashMap<String, String>> ruleMap) throws Exception {
 		api = YIFClientFactory.getInstance().getApi();
 		setOrderXML(orderXML);
@@ -74,7 +71,7 @@ public class XPXCustomerProfileRuleUtil {
 	private void setFirstOrderlineCheck(boolean firstOrderlineCheck) {
 		this.firstOrderlineCheck = firstOrderlineCheck;
 	}
-
+	
 	/* Order level P &A call */
 	public void validateAcceptPriceOverRide(YFSEnvironment env, HashMap<String, String> paramMap)
 			throws Exception {
@@ -668,16 +665,25 @@ public class XPXCustomerProfileRuleUtil {
 	/* Order Line Validations ends */
 	private void addErrorMsgToOrder(YFSEnvironment env, String name,
 			String ruleID) throws Exception {
+		
 		Document inXML = getOrderXML();
+		Element extnElement = SCXmlUtil.getChildElement(inXML.getDocumentElement(), "Extn");
+		if(extnElement!=null)
+			extnElement.setAttribute("ExtnOrdHdrLevelFailedRuleID", ruleID);
+		
 		String errorMsg = getCommonCodeForRuleId(env, ruleID);
 		if(orderLevelErrorElement == null)
 		 orderLevelErrorElement = SCXmlUtil.getChildElement(inXML.getDocumentElement(),"Error", true);
-		orderLevelErrorElement.setAttribute(name, errorMsg);		
+		orderLevelErrorElement.setAttribute(name, errorMsg);
 	}
 
 	private void addErrorMsgToOrderLine(YFSEnvironment env, Element ele,
 			String errorCode, String ruleID) throws Exception {
 		//Element errorEle = SCXmlUtil.createChild(ele, "Error");
+		Element extnLineElement = SCXmlUtil.getChildElement(ele, "Extn");
+		if(extnLineElement!=null)
+			extnLineElement.setAttribute("ExtnOrdLineLevelFailedRuleID", ruleID);
+		
 		String errorMsg = getCommonCodeForRuleId(env, ruleID);
 		if(orderLineLevelErrorElement == null)
 			orderLineLevelErrorElement = SCXmlUtil.getChildElement(ele,"Error", true);
@@ -725,6 +731,10 @@ public class XPXCustomerProfileRuleUtil {
 			for (int counter = 0; counter < length; counter++) {
 				orderLineLevelErrorElement=null;
 				Element ele = (Element) nodList.item(counter);
+				Element extnLineElement = SCXmlUtil.getChildElement(ele, "Extn");
+				if(extnLineElement!=null)
+					extnLineElement.setAttribute("ExtnOrdLineLevelFailedRuleID", "");
+				
 				if(XPXCustomerProfileRuleConstant.CHARGE_TYPE.equals(ele.getAttribute("LineType"))){
 					continue;
 				}
