@@ -193,7 +193,6 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					{
 						YFSException exceptionMessage = new YFSException();
 						exceptionMessage.setErrorDescription("There is no SAP/MSAP name/number, hence no record will be created!!!");
-
 						prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);	
 
 						return outputCustomerDoc;
@@ -371,7 +370,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									
 									YFSException exceptionMessage = new YFSException();
 									exceptionMessage.setErrorDescription("SAP account number is different than the existing one. No records will be updated");
-
+									log.info("----- SAP Number Cannot be Changed for Customer ID - Start ------"); 
+									log.info("Customer ID - " + customerID); 
+									log.info("Processed XML - " + inXML); 
+									log.info("----- SAP Number Cannot be Changed for Customer ID - End ------");
 									prepareErrorObject(exceptionMessage, XPXLiterals.CUST_B_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inXML);
 									return outputCustomerDoc;
 								}
@@ -1097,7 +1099,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			extnElement.setAttribute("ExtnSAPParentName", existingSAPName);
 			updateSAPNameInputDoc.getDocumentElement().appendChild(extnElement);
 		}
-		log.info("updateMSAPnSAPName - update xml : " + SCXmlUtil.getString(updateSAPNameInputDoc.getDocument()));
+		log.debug("updateMSAPnSAPName - update xml : " + SCXmlUtil.getString(updateSAPNameInputDoc.getDocument()));
 		try {
 			api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, updateSAPNameInputDoc.getDocument());
 
@@ -1503,7 +1505,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 			inputElement.appendChild(customerAssignmentElement);
 
 		}
-		log.info("The input to delete assignments multiApi is: "+SCXmlUtil.getString(multiApiDoc));
+		log.debug("The input to delete assignments multiApi is: "+SCXmlUtil.getString(multiApiDoc));
 		api.invoke(env, "multiApi", multiApiDoc);
 	}
 	//this method is to delete all the customer assignments for a customer
@@ -3572,13 +3574,13 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		templateCustElement.appendChild(templateExtnElement);
 		templateListElement.appendChild(templateCustElement);
 
-		log.info("getMSAPCustomerElement - Extn Template : "+SCXmlUtil.getString(templateListDoc));
+		log.debug("getMSAPCustomerElement - Extn Template : "+SCXmlUtil.getString(templateListDoc));
 
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, templateListDoc);
 		Document getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc.getDocument());
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
-		log.info("getMSAPCustomerElement - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
+		log.debug("getMSAPCustomerElement - Output Document : "+SCXmlUtil.getString(getCustomerListOutputDoc));
 
 		NodeList customerList = getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_EXTN);
 		Element custElement = (Element)customerList.item(0);
