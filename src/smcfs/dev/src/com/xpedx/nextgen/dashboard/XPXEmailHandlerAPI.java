@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,8 +17,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
-
+import com.xpedx.nextgen.common.util.XPXEmailUtil;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -31,7 +30,6 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-import com.xpedx.nextgen.common.util.XPXUtils;
 
 public class XPXEmailHandlerAPI implements YIFCustomApi {
 
@@ -216,7 +214,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		    customerDivision = inputExtnElement
 				.getAttribute("ExtnCustomerDivision");
 		    if(customerDivision != null) {
-		    customerDivision = customerDivision.substring(0, customerDivision.length() - 2);
+		    	customerDivision = customerDivision.substring(0, customerDivision.length() - 2);
 		    }
 		}   
 		/*************************************************************************************/
@@ -531,6 +529,17 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			
 			yfcLogCatalog.debug("XPXEmailHandlerAPI_OutXML:"+ SCXmlUtil.getString(customerDoc));
 		} // End of if loop if Customer Contact list doc is empty.
+		
+		/*XBT-73 : Begin - Sending email through Java Mail API now*/
+		String emailOrgCode=(inputElement.getAttribute("SellerOrganizationCode")!=null?inputElement.getAttribute("SellerOrganizationCode"):"");
+		String inputXML=SCXmlUtil.getString(customerDoc);
+        String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
+        String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+        StringBuffer emailSubject = new StringBuffer(emailOrgCode);
+        emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
+        XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode);
+        /*XBT-73 : End - Sending email through Java Mail API now*/
+
 		return customerDoc;
 	}
 
