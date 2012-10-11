@@ -25,7 +25,6 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.shared.dbclasses.PLT_User_Login_FailDBHome;
-import com.yantra.shared.dbi.PLT_User_Login_Fail;
 import com.yantra.shared.ycp.YFSContext;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
@@ -34,7 +33,6 @@ import com.yantra.yfc.dblayer.PLTQueryBuilder;
 import com.yantra.yfc.dblayer.PLTQueryBuilderHelper;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -2431,46 +2429,52 @@ public class XPXUtils implements YIFCustomApi {
 		String storeFrontId = SCXmlUtil.getAttribute(
 				inputDocument.getDocumentElement(), "EnterpriseCode");
 		StringBuffer sb = new StringBuffer();
+		
 		try{
-			
-		if(storeFrontId!=null && storeFrontId.length()>0)
-		{
-			String userName = YFSSystem.getProperty("fromAddress.username");
-			String suffix = YFSSystem.getProperty("fromAddress.suffix");
-			sb.append(userName).append("@").append(storeFrontId).append(suffix);
-			
-			String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
-			Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-			"ResetPwdEmailSubject");
-				resetSubject.setAttribute("Subject", resetSubString);
-			String notificationiSubString="";
-			
-			String requestID =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@RequestId");
-			String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
-			
-			if(requestID!=null && !requestID.equalsIgnoreCase(""))
+			String emailSubject="";
+			String emailType="";
+			if(storeFrontId!=null && storeFrontId.length()>0)
 			{
-				notificationiSubString=storeFrontId + ".com" + " Password Reset Request Notification ";
-			}
-		    if(genPwd != null && !genPwd.equalsIgnoreCase("")){
-				notificationiSubString = storeFrontId + ".com" + " User Creation Notification";
-			}
-		    if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
-			{
-				notificationiSubString=storeFrontId + ".com" + " User Password Change Notification ";
-			}
-			Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"NotificationPwdEmailSubject");
-				notificationSubject.setAttribute("Subject", notificationiSubString);
+				String userName = YFSSystem.getProperty("fromAddress.username");
+				String suffix = YFSSystem.getProperty("fromAddress.suffix");
+				sb.append(userName).append("@").append(storeFrontId).append(suffix);
 				
-				String readENV = YFSSystem.getProperty("environment");
+				String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
+				Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				"ResetPwdEmailSubject");
+					resetSubject.setAttribute("Subject", resetSubString);				
 				
-				if(readENV!=null){
-				Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"NotificationENV");
-				if(readENV.trim().equalsIgnoreCase("DEVELOPMENT")){
-								notificationEnvironment.setAttribute("environment", "dev.");
-							
+				String requestID =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@RequestId");
+				String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
+				
+				if(requestID!=null && !requestID.equalsIgnoreCase(""))
+				{
+					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
+					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";				
+				}
+				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
+			    {
+					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
+					emailSubject = storeFrontId + ".com" + " User Creation Notification";		    	
+				}
+				else if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
+				{
+					emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
+					emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
+				}
+				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+					"NotificationPwdEmailSubject");
+					notificationSubject.setAttribute("Subject", emailSubject);
+					
+					String readENV = YFSSystem.getProperty("environment");
+					
+					if(readENV!=null)
+					{
+						Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+						"NotificationENV");
+						if(readENV.trim().equalsIgnoreCase("DEVELOPMENT")){
+							notificationEnvironment.setAttribute("environment", "dev.");
+									
 						}else if(readENV.trim().equalsIgnoreCase("STAGING")){
 							notificationEnvironment.setAttribute("environment", "stg.");
 							
@@ -2479,55 +2483,61 @@ public class XPXUtils implements YIFCustomApi {
 						{
 							notificationEnvironment.setAttribute("environment","");
 						}
+					}
+				
+				String imageName = getLogoImageName(env,storeFrontId);
+				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+				
+				/**
+				 * In case, value form the property file is not retrieve by any
+				 * chance or there is no entry in the customer_overrides.properties,
+				 * the property will be retrieved form the SDF
+				 **/
+				if (imagesRootFolder == null
+						|| imagesRootFolder.trim().length() <= 0) {
+					imagesRootFolder = _properties
+							.getProperty("IMAGES_ROOT_FOLDER");
 				}
-			
-			String imageName = getLogoImageName(env,storeFrontId);
-			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-			
-			/**
-			 * In case, value form the property file is not retrieve by any
-			 * chance or there is no entry in the customer_overrides.properties,
-			 * the property will be retrieved form the SDF
-			 **/
-			if (imagesRootFolder == null
-					|| imagesRootFolder.trim().length() <= 0) {
-				imagesRootFolder = _properties
-						.getProperty("IMAGES_ROOT_FOLDER");
+				log.debug("imagesRootFolder: " + imagesRootFolder);
+	
+				String url = imagesRootFolder + imageName;
+				Element brandImageUrl = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+					"BrandImageURL");
+				brandImageUrl.setAttribute("URL",url);
+				
 			}
-			log.debug("imagesRootFolder: " + imagesRootFolder);
-
-			String url = imagesRootFolder + imageName;
-			Element brandImageUrl = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"BrandImageURL");
-			brandImageUrl.setAttribute("URL",url);
 			
-		}
-		
-		Element fromAddrElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"FromAddr");
-		fromAddrElem.setAttribute("Email", sb.toString());
-		
-		// fetching the server and port details for the email template.
-		String url = null;
-		String ipaddress = YFSSystem.getProperty("ipaddress");
-		String portno = YFSSystem.getProperty("portnumber");
-		String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
-		
-		if(!YFCUtils.isVoid(resetPasswordUrl)){
-			resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
-			Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-			"URLInfo");			
-			urlElem.setAttribute("URL", resetPasswordUrl);
-		} else {
-					if(!(YFCUtils.isVoid(ipaddress)) && !(YFCUtils.isVoid(portno))){
-						url = "http://" +ipaddress+":"+portno+"/swc/home/resetPassword.action?";
-					}
-					if(!YFCUtils.isVoid(url)){
-						Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-						"URLInfo");			
-						urlElem.setAttribute("URL", url);
-					}
-		}
+			Element fromAddrElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+					"FromAddr");
+			fromAddrElem.setAttribute("Email", sb.toString());
+			
+			// fetching the server and port details for the email template.
+			String url = null;
+			String ipaddress = YFSSystem.getProperty("ipaddress");
+			String portno = YFSSystem.getProperty("portnumber");
+			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
+			
+			if(!YFCUtils.isVoid(resetPasswordUrl)){
+				resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
+				Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				"URLInfo");			
+				urlElem.setAttribute("URL", resetPasswordUrl);
+			} else {
+				if(!(YFCUtils.isVoid(ipaddress)) && !(YFCUtils.isVoid(portno))){
+					url = "http://" +ipaddress+":"+portno+"/swc/home/resetPassword.action?";
+				}
+				if(!YFCUtils.isVoid(url)){
+					Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+					"URLInfo");			
+					urlElem.setAttribute("URL", url);
+				}
+			}
+			
+			/*XBT-73 : Begin - Sending email through Java Mail API now*/
+			String emailXML=SCXmlUtil.getString(inputDocument);	
+	        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject, sb.toString(), storeFrontId);
+	        /*XBT-73 : End - Sending email through Java Mail API now*/
+
 		}catch(Exception e){
 			e.printStackTrace();
 			log.error("XPXUtils:getAdditionalAttributes" + e.getMessage());
