@@ -684,6 +684,15 @@
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-01-12T10:27:04-05:00" Modifyuserid="admin"
     ServerKey="2010091021183455464" TransactionKey="CATALOG_INDEX_BUILD"/>
+<AgentCriteria AgentCriteriaId="SEND_EMAIL_TRANSACTION_ID"
+    AgentCriteriaKey="201210100207242449508"
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2012-10-10T02:07:24-04:00" Createuserid="admin"
+    FlowKey="201210100207232449497" Lockid="0"
+    MessageXml="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;Attributes>&#xa;    &lt;Attribute DisplayName=&quot;Action&quot; Name=&quot;Action&quot; Value=&quot;Get&quot;/>&#xa;&lt;/Attributes>&#xa;"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2012-10-10T02:07:24-04:00" Modifyuserid="admin"
+    ServerKey="201210100203522449462" TransactionKey="201210100150542449305"/>
 <AgentCriteria AgentCriteriaId="ACCEPT_WAVE"
     AgentCriteriaKey="ACCEPT_WAVE" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:58-04:00" Createuserid="SYSTEM"

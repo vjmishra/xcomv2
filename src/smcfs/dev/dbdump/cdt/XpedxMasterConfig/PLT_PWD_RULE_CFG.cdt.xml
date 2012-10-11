@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PLT_PWD_RULE_CFGList TableName="PLT_PWD_RULE_CFG">
 <PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2010-09-21T20:42:55-04:00" Createuserid="admin" Lockid="1"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-15T10:43:14-04:00"
-    Modifyuserid="ng"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;ResetType&quot; Value=&quot;Email&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;60&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    Createts="2010-09-21T20:42:55-04:00" Createuserid="admin" Lockid="2"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-09-05T07:42:14-04:00"
+    Modifyuserid="admin"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;ResetType&quot; Value=&quot;Email&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;1440&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="2010092120425558489" PasswordRuleDefnKey="2010092120055658444"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
@@ -113,13 +113,6 @@
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110427125438131457" PasswordRuleDefnKey="20110420182435130847"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2011-04-27T12:54:37-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-04-27T12:54:37-04:00"
-    Modifyuserid="ng"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;EntriesToStore&quot; Value=&quot;5&quot;/>&#xa;&lt;/ParamList>&#xa;"
-    PasswordPolicyKey="2010092120425558488"
-    PasswordRuleCfgKey="20110427125438131458" PasswordRuleDefnKey="20110420182610130848"/>
-<PasswordRuleCfg Createprogid=".YEntityServlet"
     Createts="2011-04-27T12:54:37-04:00" Createuserid="admin" Lockid="1"
     Modifyprogid=".YEntityServlet" Modifyts="2012-07-05T01:47:23-04:00"
     Modifyuserid="admin"
@@ -141,10 +134,10 @@
     PasswordPolicyKey="20110609145102144556"
     PasswordRuleCfgKey="20110609145102144557" PasswordRuleDefnKey="20110609144745144555"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2011-07-14T18:05:29-04:00" Createuserid="admin" Lockid="3"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-05-02T06:12:42-04:00"
+    Createts="2011-07-14T18:05:29-04:00" Createuserid="admin" Lockid="4"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-08-17T01:27:07-04:00"
     Modifyuserid="admin"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;10&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;30&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MaxFailedLogins&quot; Value=&quot;5&quot;/>&#xa;    &lt;Param Name=&quot;CheckIntervalMinutes&quot; Value=&quot;30&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="2010092120425558488"
     PasswordRuleCfgKey="20110714180530160349" PasswordRuleDefnKey="20110420183007130852"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
@@ -161,13 +154,6 @@
     Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;MinLength&quot; Value=&quot;8&quot;/>&#xa;    &lt;Param Name=&quot;MaxLength&quot; Value=&quot;50&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="20120517150035505539"
     PasswordRuleCfgKey="20120517150931505682" PasswordRuleDefnKey="20110420182435130847"/>
-<PasswordRuleCfg Createprogid=".YEntityServlet"
-    Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
-    Modifyuserid="admin"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;EntriesToStore&quot; Value=&quot;5&quot;/>&#xa;&lt;/ParamList>&#xa;"
-    PasswordPolicyKey="20120517150035505539"
-    PasswordRuleCfgKey="20120517150931505683" PasswordRuleDefnKey="20110420182610130848"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"
     Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
     Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"

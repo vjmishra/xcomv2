@@ -369,6 +369,12 @@
     ServerKey="20120406083453123672"
     ServerName="XPXOrderStatusEmailServer" ServerType="00" Terminate="N"
     TransportTypeKey="WLJMS" WaitTime="1"/>
+<Server Createprogid=".YEntityServlet"
+    Createts="2012-10-10T02:03:52-04:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-10-10T02:03:52-04:00"
+    Modifyuserid="admin" MonitorStartTime="1"
+    ServerKey="201210100203522449462" ServerName="EmailAgentServer"
+    ServerType="01" Terminate="N" TransportTypeKey="JMS" WaitTime="1"/>
 <Server Createprogid="XMLMigrator" Createts="2011-07-14T14:37:57-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:57-04:00" Modifyuserid="SYSTEM"
