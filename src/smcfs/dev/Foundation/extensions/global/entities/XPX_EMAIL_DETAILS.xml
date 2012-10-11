@@ -27,7 +27,7 @@
 					Size="2" DefaultValue=" "
 					Description="The count of emails being retried in case of failure."
 					XMLName="EmailRetryCount" />
-				<Attribute ColumnName="EMAIL_ERROR_MESSAGE" DataType="ErrorString"
+				<Attribute ColumnName="EMAIL_ERROR_MESSAGE" DataType="CLOB"
 					DefaultValue=" " Description="The error message in case of any failure"
 					Nullable="true" XMLName="EmailErrorMessage" />
 
