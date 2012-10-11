@@ -99,6 +99,13 @@
     Createuserid="admin" GroupName="CustomCommonCode" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-05-27T16:42:10-04:00"
     Modifyuserid="ng" SystemDefinedCode="N"/>
+<BaseCommonCode BaseCommonCodeKey="201209140200272104586"
+    CodeLength="20" CodeLongDescription="Xpedx Status"
+    CodeShortDescription="Xpedx Status" CodeType="XpedxStatus"
+    Createprogid=".YEntityServlet" Createts="2012-09-14T02:00:27-04:00"
+    Createuserid="admin" GroupName="CustomCommonCode" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-09-14T02:00:27-04:00"
+    Modifyuserid="admin" SystemDefinedCode="N"/>
 <BaseCommonCode BaseCommonCodeKey="APPOINTMENT_STATUS" CodeLength="40"
     CodeLongDescription="Appointment Status"
     CodeShortDescription="Appointment_Status"

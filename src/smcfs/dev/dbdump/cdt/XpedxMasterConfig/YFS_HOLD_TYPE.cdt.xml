@@ -49,4 +49,15 @@
     HoldTypeKey="20110818174857172447" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-08-18T17:48:56-04:00"
     Modifyuserid="ngmc" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
+<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
+    CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
+    Createprogid=".YEntityServlet" Createts="2012-10-10T02:51:03-04:00"
+    Createuserid="admin" DocumentType="0001" HoldLevel="ORDER"
+    HoldType="LEG_ERR_CODE_HOLD"
+    HoldTypeDescription="Legacy Error Code Hold"
+    HoldTypeKey="201210100251032449532" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2012-10-10T02:51:03-04:00"
+    Modifyuserid="admin" OrganizationCode="xpedx"
+    ProcessTransactionId="" RejectTransactionId=""/>
 </YFS_HOLD_TYPEList>

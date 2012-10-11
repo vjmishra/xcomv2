@@ -155,9 +155,9 @@
 <DocumentTemplate Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:32-04:00" Createuserid="SYSTEM"
     DocumentParamsKey="0001" DocumentTemplateKey="CHAINED_ORD_UP.0001"
-    Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2011-07-15T10:44:11-04:00" Modifyuserid="ng"
-    TemplateType="ChainedOrderUpwardPropagationTemplate" TemplateXML="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;OrderLine>&#xa;    &lt;Extn ExtnReqUOMUnitPrice=&quot;&quot; ExtnUnitPrice=&quot;&quot;/>&#xa;&lt;/OrderLine>&#xa;"/>
+    Lockid="1" Modifyprogid=".YCPDocumentTypesAPI"
+    Modifyts="2012-08-10T07:39:28-04:00" Modifyuserid="admin"
+    TemplateType="ChainedOrderUpwardPropagationTemplate" TemplateXML="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;OrderLine>&#xa;    &lt;Extn ExtnReqUOMUnitPrice=&quot;&quot;/>&#xa;&lt;/OrderLine>&#xa;"/>
 <DocumentTemplate Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:32-04:00" Createuserid="SYSTEM"
     DocumentParamsKey="0007" DocumentTemplateKey="CHAINED_ORD_UP.0007"
