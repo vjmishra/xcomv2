@@ -1,14 +1,20 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXNewUserRegistration extends WCMashupAction{
 	/**
@@ -115,10 +121,26 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				//JIRA 3261 End-Code Commentd as per JIRA Requirement
 				*/
 				appendedCSREmailIDs = newUserEmail;
-				log.debug("XPEDXNewUserRegistration Before Mashup -Email wassucessfull send to "+appendedCSREmailIDs+ "," +newUserEmail);
-				prepareAndInvokeMashup("XPEDXSendNewUserInfoToCSR");	
 				
-				}catch (Exception e) {
+				/*XBT-73 : Begin - Sending email through Java Mail API now*/
+				Set mashupId=new HashSet();
+				mashupId.add("XPEDXSendNewUserInfoToCSR");
+			    
+				Map mashupInputs = prepareMashupInputs(mashupId);
+			    Element inputXmlFromMashup =(Element)mashupInputs.get("XPEDXSendNewUserInfoToCSR");
+			    Element newUserElement=(Element)inputXmlFromMashup.getElementsByTagName("NewUser").item(0);
+			    newUserElement.setAttribute("CCEmailId", getMailCCAddress());
+			    newUserElement.setAttribute("ToEmailId", appendedCSREmailIDs);
+			    String emailXML=SCXmlUtil.getString(newUserElement);
+		        String emailType=XPXEmailUtil.NEW_USER_REGISTRATION_EMAIL_TYPE;
+		        String emailFrom=getMailFromAddress();
+		        ISCUITransactionContext scuiTransactionContext = getWCContext().getSCUIContext().getTransactionContext(true);
+				YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+				String emailSubject = getMailSubject();
+		        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject.toString(), emailFrom, storeFrontId);
+		        /*XBT-73 : End - Sending email through Java Mail API now*/				
+				
+			}catch (Exception e) {
 				e.printStackTrace();
 				log.error("Couldn't send the Mail to CSR"+e.getMessage());
 				return ERROR;
