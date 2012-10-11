@@ -189,6 +189,10 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			setPandAData();
 			Ext.Msg.hide();
 			myMask.hide();
+			//-- Web Trends tag start --
+			var responseText = response.responseText;
+			writeWebtrendTag(responseText);
+			//-- Web Trends tag end --
 		}
 	});
 }

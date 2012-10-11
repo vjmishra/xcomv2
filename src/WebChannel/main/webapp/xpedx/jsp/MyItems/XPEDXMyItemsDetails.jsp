@@ -2643,8 +2643,12 @@ function showSharedListForm(){
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
 					<s:set name='desc' value='#YFSItmePrimaryInfo.getAttribute("Description")' />
 					<s:set name='name' value='#YFSItmePrimaryInfo.getAttribute("ShortDescription")' />
-					
-					<s:set name="webtrendsItemType" value="itemTypeMap.get(#itemId)" />
+					<s:if test='%{#webtrendsItemTypeMap!=null}' >
+						<s:set name="webtrendsItemType" value='%{#webtrendsItemTypeMap.get(#itemId)}' />
+					</s:if>
+					<s:else>
+						<s:set name="webtrendsItemType" value='' />
+					</s:else>
 					
 					<%-- <s:if test='%{#itemUOMsMap!=null}' >
 						<s:iterator value='#itemUOMsMap' status='uomIndex'>
@@ -3042,7 +3046,7 @@ function showSharedListForm(){
 							<legend>For Selected Items:</legend>
 							<input class="forselected-input" type="checkbox" id="selAll2"/>
 							<%-- <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
-							<a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
+							<a class="grey-ui-btn float-left" href="javascript:javascript:writeMetaTag('DCSext.w_x_sc_itemtype','<s:property value="#webtrendsItemType"/>');myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
 						</fieldset>
 
 						<ul id="tool-bar" class="tool-bar-bottom" style="width:403px; float:left; padding-top:5px; margin-left:9px;">
