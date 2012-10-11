@@ -282,7 +282,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	
 	private String retrieveEmailIds(Element emailXMLElement, String emailXPath) throws Exception {
 		StringBuffer emailIdBuf=new StringBuffer("");
-		if(emailXPath==null|| "".equals(emailXPath)){
+		if(emailXPath==null || "".equals(emailXPath)){
 			return emailIdBuf.toString();
 		}
 			
