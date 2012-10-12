@@ -315,9 +315,14 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				
 				}
 			}
-		}			
+		}
 		
-		return emailIdBuf.toString();	
+		String emailIds=emailIdBuf.toString();
+		if (emailIds.indexOf(";") > -1) {
+			emailIds = emailIds.replace(";", ",");
+		}
+		
+		return emailIds;
 	}
 	
 	private void populateEmailDefnMap(YFSEnvironment env, YIFApi api) throws YFSException, RemoteException
