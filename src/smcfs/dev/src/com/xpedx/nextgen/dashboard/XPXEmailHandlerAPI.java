@@ -1128,7 +1128,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					if (contactPersonInfoLength > 1) {
 						for (int counter = 1; counter < salesRepLength ; counter++) {
 							Element contactPersonInfo1 = (Element) nodeList1.item(counter);
-							if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EmailID") != null)
+							if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EMailID") != null)
 								//salesRepEmail = salesRepEmail + ";"+contactPersonInfo1.getAttribute("EmailID");
 								/*Make the changes on 10/10/2011 start */
 								salesRepEmail = salesRepEmail + ";"+SCXmlUtil.getXpathAttribute(
