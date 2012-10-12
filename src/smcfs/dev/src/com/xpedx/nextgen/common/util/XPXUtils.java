@@ -2421,8 +2421,6 @@ public class XPXUtils implements YIFCustomApi {
 	public Document getAdditionalAttributes(YFSEnvironment env,
 			Document inputDocument) throws Exception {
 		
-		log.debug("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
-		
 		if(log.isDebugEnabled()){
 			log.debug("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
@@ -2545,9 +2543,9 @@ public class XPXUtils implements YIFCustomApi {
 		}
 
 		if(log.isDebugEnabled()){
-			log.debug("getAdditionalAttributes End Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
+			log.debug("End - getAdditionalAttributes method - Email was sent successfully : "+SCXmlUtil.getString(inputDocument) );
 		}
-		log.debug("getAdditionalAttributes End Method - Email was sucessfull send : "+SCXmlUtil.getString(inputDocument) );
+		
 		return inputDocument;
 	}
 	
