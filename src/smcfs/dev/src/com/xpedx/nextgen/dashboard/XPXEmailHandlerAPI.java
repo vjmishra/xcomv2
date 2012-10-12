@@ -354,7 +354,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			{
 				
 				setCSREmails(env,customerDoc,billtoID);
-				getSalesRepEmail(env, customerDoc);
+				getSalesRepEmail(env, customerDoc,billtoID);
 				
 			}catch(Exception  ex)
 			{
@@ -1065,7 +1065,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	
 	public Document getSalesRepEmail(YFSEnvironment env,
-			Document inputDocument) throws YFSException, RemoteException, YIFClientCreationException
+			Document inputDocument, String billToId) throws YFSException, RemoteException, YIFClientCreationException
 	{
 		api = YIFClientFactory.getInstance().getApi();
 		yfcLogCatalog.debug("getSalesRepEmail " +  SCXmlUtil.getString(inputDocument));
@@ -1074,10 +1074,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		YFCDocument inputDoc = YFCDocument.createDocument("Customer");
 		YFCElement element = inputDoc.getDocumentElement();
 		String parentCustomerKey = inputDocument.getDocumentElement().getAttribute("parentCustomerKey");
-		yfcLogCatalog.debug("parentCustomerKey " +parentCustomerKey);
-		if(parentCustomerKey != null && !parentCustomerKey.equalsIgnoreCase(""))
+		yfcLogCatalog.debug("billToId: "+ billToId);
+		
+		if(billToId != null && !billToId.equalsIgnoreCase(""))
 		{
-			element.setAttribute("CustomerKey", parentCustomerKey);
+			element.setAttribute("CustomerID",billToId);
 			yfcLogCatalog.debug(" inputDoc.getDocument() " + inputDoc.getDocument());
 			env.setApiTemplate("getCustomerList", getSalesRepListTemplate);
 			yfcLogCatalog.debug("getSalesRepEmail before Invoke.. " +  SCXmlUtil.getString(inputDoc.getDocument()));
