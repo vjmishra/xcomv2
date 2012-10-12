@@ -142,6 +142,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			}
 			
 			sendEmail(emailFromAddress, emailToAddresses, emailCCAddresses, emailBCCAddresses, emailSubject, htmlMailContent, smtpHost);
+			
 			if (log.isDebugEnabled()) {
 				log.debug(emailType+" sent successfully. Email Details Key is: "+emailDetailsElement.getAttribute("EmailDetailsKey"));
 			}
@@ -156,7 +157,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			Document emailExceptionDoc = SCXmlUtil.createFromString("<XPXEmailDetails/>");
 			Element emailExceptionEle = emailExceptionDoc.getDocumentElement();
 			String emailDetailsKey=emailDetailsElement.getAttribute("EmailDetailsKey");
-			String emailRetryCount = emailDetailsElement.getAttribute("EmailRetryCount");
+			String emailRetryCount=emailDetailsElement.getAttribute("EmailRetryCount");
 			
 			emailExceptionEle.setAttribute("EmailDetailsKey", emailDetailsKey);			
 			int intRetryCount = Integer.parseInt(emailRetryCount);
@@ -167,7 +168,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 					SendFailedException sfe = (SendFailedException)e;
 					emailExceptionEle.setAttribute("EmailRetryCount", "-1");
 					
-					errorString=new StringBuffer("SendFailedException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. ");
+					errorString=new StringBuffer();
 					errorString.append("SendFailedException message is : "+sfe.getMessage());
 					errorString.append(" Valid Sent Addresses are : "+sfe.getValidSentAddresses());
 					errorString.append(" Valid Unsent Addresses are : "+sfe.getValidUnsentAddresses());
@@ -188,12 +189,19 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 					errorString.append("MessagingException message is : "+msgEx.getMessage());
 					emailExceptionEle.setAttribute("EmailErrorMessage", errorString.toString());
 					log.error("MessagingException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorString.toString()+". Email Details Key is :["+emailDetailsKey+"]");
-				}
+				}				
 				
-				
-			} else if (e instanceof AddressException && (YFCObject.isNull(emailToAddresses) || YFCObject.isVoid(emailToAddresses))){
+			} else if (e instanceof AddressException){
 				AddressException adrEx=(AddressException)e;
-				String erroMessage="Mandatory parameter - 'To Address' is either void or null. AddressException message is : "+adrEx.getMessage();
+				String erroMessage="";
+				if (YFCObject.isNull(emailToAddresses) || YFCObject.isVoid(emailToAddresses))
+				{
+					erroMessage="Mandatory parameter - 'To Address' is either void or null. AddressException message is : "+adrEx.getMessage();
+					
+				} else {
+					erroMessage=adrEx.getMessage();
+					
+				}
 				emailExceptionEle.setAttribute("EmailRetryCount", "-1");
 				
 				emailExceptionEle.setAttribute("EmailErrorMessage", erroMessage);
@@ -278,6 +286,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		emailMessage.setContent(content,"text/html");
 		emailSession.setDebug(true);
 		Transport.send(emailMessage);
+			
 	}
 	
 	private String retrieveEmailIds(Element emailXMLElement, String emailXPath) throws Exception {
