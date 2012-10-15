@@ -1712,10 +1712,11 @@ private void preparePlaceOrderLineErrors() {
 			Element originalOrderEle= outXml;
 			String holdType = null;
 			String extnOUFailureLockFlag = "N";
-    		System.out.println("The order element is :" + YRCXmlUtils.getString(originalOrderEle));
-    		extnOUFailureLockFlag = YRCXmlUtils.getAttributeValue(originalOrderEle, "Order/Extn/@ExtnOUFailureLockFlag");
+    		//System.out.println("The order element is :" + YRCXmlUtils.getString(originalOrderEle));
+    		extnOUFailureLockFlag = YRCXmlUtils.getAttributeValue(outXml, "OrderList/Order/Extn/@ExtnOUFailureLockFlag");
     		
-    		Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(originalOrderEle, "OrderHoldTypes");
+    		Element eleOrderHoldTypes = YRCXmlUtils.getXPathElement(originalOrderEle, "OrderList/Order/OrderHoldTypes"); 
+    	//	System.out.println(YRCXmlUtils.getString(eleOrderHoldTypes));
     		List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
     		
     		for (Object objOrderHold : listOrderHold) {
@@ -1744,6 +1745,7 @@ private void preparePlaceOrderLineErrors() {
 			Element eleOrderHold = (Element) objOrderHold;
 			if("NEEDS_ATTENTION".equals(eleOrderHold.getAttribute("HoldType")) && "1100".equals(eleOrderHold.getAttribute("Status"))){
 				holdType=eleOrderHold.getAttribute("HoldType");
+				setControlEditable("btnIsReviewed", false);
 			}
 		}
 		
