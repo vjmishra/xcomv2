@@ -204,6 +204,7 @@ public class OrderLinesPanel extends Composite implements IYRCComposite {
 		gridData16.horizontalSpan = 1;
 		gridData16.horizontalIndent = 0;
 		gridData16.verticalAlignment = 2;
+		gridData16.widthHint = 150;
 		GridLayout gridLayout4 = new GridLayout();
 		gridLayout4.numColumns = 7;
 		gridLayout4.horizontalSpacing = 2;
