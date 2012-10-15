@@ -1745,7 +1745,7 @@ private void preparePlaceOrderLineErrors() {
 			Element eleOrderHold = (Element) objOrderHold;
 			if("NEEDS_ATTENTION".equals(eleOrderHold.getAttribute("HoldType")) && "1100".equals(eleOrderHold.getAttribute("Status"))){
 				holdType=eleOrderHold.getAttribute("HoldType");
-				setControlEditable("btnIsReviewed", false);
+				setControlVisible("btnIsReviewed", false);
 			}
 		}
 		
