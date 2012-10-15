@@ -325,7 +325,7 @@
 								</tr>
 								<tr>
 									<td class="widthLeft">Order #: </td>
-									<td class="widthRight"><xsl:value-of select="Order/@OrderNo"/></td>
+									<td class="widthRight"><xsl:value-of select="Order/@FormattedOrderNo"/></td>
 								</tr>
 								<tr>
 									<td class="widthLeft">Order Status: </td>
