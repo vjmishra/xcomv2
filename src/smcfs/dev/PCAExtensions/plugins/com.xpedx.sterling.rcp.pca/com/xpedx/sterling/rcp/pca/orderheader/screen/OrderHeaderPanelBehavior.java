@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor;
 import com.xpedx.sterling.rcp.pca.util.TripleDES;
+import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -319,6 +320,12 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 					String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (Pending Approval)";				
 					YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
 				}
+			//Condition added for JIRA 4326
+			if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_ORD_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_LNE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEG_ERR_CODE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.NEEDS_ATTENTION.equals(eleOrderHold.getAttribute("HoldType"))){
+				String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (CSR Reviewing)";	
+				YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
+				
+			}
 			}
 		}
 	
