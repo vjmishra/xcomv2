@@ -23,6 +23,7 @@ public class XPXEmailUtil {
     
     public static final String ORDER_CONFIRMATION_EMAIL_SUBJECT=".com Order Submitted Notification";
     
+    public static final String EMAIL_TRANSPORT_PROTOCOL="mail.transport.protocol";
     public static final String SMTP_EMAIL_HOST="mail.smtp.host";
     public static final int SMTP_SUCCESS_RETURN_CODE=250;
     
