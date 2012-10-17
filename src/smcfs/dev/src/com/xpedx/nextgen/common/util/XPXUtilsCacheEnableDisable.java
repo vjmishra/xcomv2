@@ -201,6 +201,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 					.getProperty("UomFeedCachedObjectsList");
 					String[] cachedObjectsList = PriceBookFeedCachedObjects
 					.split(",");
+					log.debug("Printing PriceBookFeedCachedObjects "+PriceBookFeedCachedObjects);
 					for (String cachedObjectProperty : cachedObjectsList) {
 						Element cachedObject = modifyCacheInput
 						.createElement("CachedObject");
