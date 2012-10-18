@@ -94,6 +94,9 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			else if(temp.contains("ESTIMATOR")){
 				userTypeForWebtrend = "Estimator";
 			}
+			else if(isEstimator()){
+				userTypeForWebtrend = "Estimator";
+			}
 			else {
 				userTypeForWebtrend="Buyer";
 			}
