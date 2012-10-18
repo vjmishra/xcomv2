@@ -1,22 +1,22 @@
 <OrderList>
 <Order BillToID="" CustomerContactID="" CustomerPONo="" EntryType="" HeaderProcessCode="" OrderDate="" ReqDeliveryDate="" ShipNode="" 
-Status="">
+Status="" MinOrderStatus="" OrderHeaderKey="" >
 <Extn ExtnAttentionName="" ExtnBillToName="" ExtnBillToSuffix="" ExtnCompanyId="" ExtnCustomerDivision="" ExtnCustomerNo="" ExtnDeliveryHoldFlag=""
 ExtnEnvtId="" ExtnGenerationNo="" ExtnHeaderStatusCode="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" ExtnOrdStatCom="" 
 ExtnOrderCode="" ExtnOrderDivision="" ExtnOrderSpecialCharges="" ExtnOrderTax="" ExtnShipComplete="" ExtnShipToName="" 
 ExtnShipToSuffix="" ExtnSourceType="" ExtnSystemIdentifier="" ExtnTotalOrderFreight="" ExtnTotalOrderValue="" 
-ExtnTotalShipValue="" ExtnWebConfNum="" ExtnWebHoldFlag="" ExtnWebHoldReason="" ExtnWillCall="" ExtnOrigEnvironmentCode="" />
+ExtnTotalShipValue="" ExtnWebConfNum="" ExtnWebHoldFlag="" ExtnWebHoldReason="" ExtnWillCall="" ExtnOrigEnvironmentCode="" ExtnOrderedByName="" ExtnOrderLockFlag=""/>
 <PriceInfo Currency=""/>
 <OrderLines>
 <OrderLine CustomerLinePONo="" CustomerPONo="" LineType="" OrderedQty="" ShipNode="">
 <Extn ExtnBackQtyBase="" ExtnBaseOrderedQty="" ExtnCustLineAccNo="" ExtnCustLineField1="" ExtnCustLineField2="" 
 ExtnCustLineField3="" ExtnLegacyLineNumber="" ExtnLineDescription="" ExtnLineOrderedTotal="" ExtnLineShippableTotal="" 
 ExtnLineStatusCode="" ExtnPriceOverrideFlag="" ExtnPricingUOM="" ExtnReqBackOrdQty="" ExtnReqShipOrdQty="" ExtnShipQtyBase="" 
-ExtnUnitPrice="" ExtnWebLineNumber="" ExtnAdjUnitPrice=""/>
+ExtnUnitPrice="" ExtnWebLineNumber="" ExtnAdjUnitPrice="" ExtnAdjDollarAmt=""/>
 <Item CustomerItem="" ItemID="" ItemShortDesc="" UnitOfMeasure=""/>
 <OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
 <Instructions>
-<Instruction InstructionText=""/>
+<Instruction InstructionType="" InstructionText=""/>
 </Instructions>
 <LineCharges>
 <LineCharge ChargeAmount=""/>
@@ -29,7 +29,7 @@ ExtnUnitPrice="" ExtnWebLineNumber="" ExtnAdjUnitPrice=""/>
 <PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>
 <PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>
 <Instructions>
-<Instruction InstructionText=""/>
+<Instruction InstructionType="" InstructionText="" />
 </Instructions>
 </Order>
 </OrderList>
