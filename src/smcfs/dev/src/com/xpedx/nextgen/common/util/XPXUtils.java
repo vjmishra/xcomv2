@@ -2430,7 +2430,7 @@ public class XPXUtils implements YIFCustomApi {
 		
 		try{
 			String emailSubject="";
-			String emailType="";
+			//String emailType="";
 			if(storeFrontId!=null && storeFrontId.length()>0)
 			{
 				String userName = YFSSystem.getProperty("fromAddress.username");
@@ -2447,17 +2447,17 @@ public class XPXUtils implements YIFCustomApi {
 				
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
-					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
+					//emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
 					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";				
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
-					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
+					//emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
 					emailSubject = storeFrontId + ".com" + " User Creation Notification";		    	
 				}
 				else if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
 				{
-					emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
+					//emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
 					emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
 				}
 				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
@@ -2531,10 +2531,10 @@ public class XPXUtils implements YIFCustomApi {
 				}
 			}
 			
-			/*XBT-73 : Begin - Sending email through Java Mail API now*/
+			/*XBT-73 : Begin - Sending email through Java Mail API now
 			String emailXML=SCXmlUtil.getString(inputDocument);	
 	        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject, sb.toString(), storeFrontId);
-	        /*XBT-73 : End - Sending email through Java Mail API now*/
+	        XBT-73 : End - Sending email through Java Mail API now*/
 
 		}catch(Exception e){
 			e.printStackTrace();
