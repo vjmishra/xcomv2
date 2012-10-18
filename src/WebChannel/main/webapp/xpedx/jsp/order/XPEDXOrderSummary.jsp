@@ -203,6 +203,7 @@ function setTotalPrice(val){
         return returnval;	
        }
     else{
+    	writewebtrendTagForQty();
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
@@ -211,6 +212,12 @@ function setTotalPrice(val){
     }
     return returnval;
 }
+
+	function writewebtrendTagForQty(){
+		var val = document.getElementById('webtrend_allqty').value;
+		writeMetaTag("WT.tx_u",val);
+
+	}
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRSUMMARY.GENERIC.TABTITLE" /></title>
 
@@ -862,7 +869,8 @@ from session . We have customer Contact Object in session .
 			</tr>
 			</table>  
 			<%--jira 3788 --%>  
-				<s:set name="isOrderTBD" value="%{0}" />                      
+				<s:set name="isOrderTBD" value="%{0}" />   
+				<s:set name='webtrend_orderqty' value=''/>                   
 				<s:iterator value='majorLineElements' id='orderLine'
 				status="orderLine_1">
 				<s:set name='lineTotals'
@@ -1055,6 +1063,14 @@ from session . We have customer Contact Object in session .
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 									<s:set name="bracketUOMDesc" value="bracketUOM" />
 									
+					 				<s:if test='#webtrend_orderqty == null' >
+										<s:set name='webtrend_orderqty' value=''/>
+										<s:set name='webtrend_orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
+									</s:if>
+									<s:else>
+										<s:set name='webtrend_orderqty' value='%{#webtrend_orderqty + ";" + #lineTran.getAttribute("OrderedQty")}' />
+									</s:else>
+									
 									<s:if test='%{!#disUOMStatus.last}' >
 									
 									<s:if test='%{#disUOMStatus.first}' >
@@ -1181,7 +1197,15 @@ from session . We have customer Contact Object in session .
 					 			</s:iterator>
 					 		</s:if>
 					 		<s:else>
-					 			<!-- PnA is not available -->
+					 			<!-- PnA is not available -->	
+					 			
+					 				<s:if test='#webtrend_orderqty == null' >
+										<s:set name='webtrend_orderqty' value=''/>
+										<s:set name='webtrend_orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
+									</s:if>
+									<s:else>
+										<s:set name='webtrend_orderqty' value='%{#webtrend_orderqty + ";" + #lineTran.getAttribute("OrderedQty")}' />
+									</s:else>
 					 			<tr>
 											<td class="text-right padding-right-0">
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
@@ -1392,6 +1416,7 @@ from session . We have customer Contact Object in session .
 					</s:if>
 					--%>
 			</s:iterator>
+			<s:hidden name="webtrend_allqty" id="webtrend_allqty" value="%{#webtrend_orderqty}" />
 			<!-- majorLineElements -->
 <!-- 	end new ui	 -->
 <s:set name="xutil" value="xMLUtils" /> <s:set

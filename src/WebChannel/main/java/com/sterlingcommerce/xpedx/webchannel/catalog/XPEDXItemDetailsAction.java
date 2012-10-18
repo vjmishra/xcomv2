@@ -552,6 +552,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		if(itemExtnElement == null) {
 			String orderMul = "1";
 			setIsStocked("N");
+			//Added for webtrends 
+			itemType="Mfg";
+			
 			if(SCUtil.isVoid(orderMul))
 				orderMul="1";
 			setOrderMultiple(orderMul);
@@ -566,6 +569,18 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			if (shipFromDivision.equalsIgnoreCase(div)) {
 				String orderMul = itemExtnElement.getAttribute("OrderMultiple");
 				setIsStocked(itemExtnElement.getAttribute("InventoryIndicator"));
+				
+				/*start of webtrends */
+				String inventoryIndicator = itemExtnElement.getAttribute("InventoryIndicator");				
+				if (inventoryIndicator.equalsIgnoreCase("W")){
+					itemType = "Stocked";
+				}
+				else if (inventoryIndicator.equalsIgnoreCase("I")){
+					itemType="InDirect";
+				}else if (inventoryIndicator.equalsIgnoreCase("") || inventoryIndicator.equalsIgnoreCase("M")){
+					itemType="Mill";
+				}
+				/*End of webtrends */
 				if(SCUtil.isVoid(orderMul))
 					orderMul="1";
 				setOrderMultiple(orderMul);
@@ -580,7 +595,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 		//set a itemsUOMMap in Session for ConvFactor
 		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
-	
+		//Added for webtrends -XBT-35
+		XPEDXWCUtils.setObectInCache("itemType",itemType);
 	}
 	
 	private void getAllItemList() throws Exception {
@@ -2055,7 +2071,19 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public String Category;
 
 	public String catagory;
+	
+	//Added for webtrends- Start
+	private String itemType="";
+	
 
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+	//Added for webtrends -End
 	public String getCatagory() {
 		return catagory;
 	}
