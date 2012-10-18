@@ -6,6 +6,17 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 public class XPEDXResetPendingOrderAction extends ResetPendingOrderAction {	
 	
+	protected String resetWithError = "N"; //added for XBT-109
+
+	public String getResetWithError() {
+		return resetWithError;
+	}
+
+	public void setResetWithError(String resetWithError) {
+		this.resetWithError = resetWithError;
+	}
+//end of XBT-109
+
 	public String execute()
 	{
 		//added for jira 4306
