@@ -482,7 +482,12 @@
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
 			<result name="success">/xpedx/jsp/order/XPEDXOrderConfirmation.jsp
 			</result>
-			<result name="failure">/xpedx/jsp/order/XPEDXOrderFailure.jsp</result>
+			<!-- <result name="failure">/xpedx/jsp/order/Failure.jsp</result>  XBT-109-->
+			<result name="failure" type="redirectAction">
+				<param name="actionName">XPEDXResetPendingOrder</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="resetWithError">Y</param>
+			</result>
 		</action>
 		<action name="draftOrderMakeCartInContext"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
@@ -689,6 +694,7 @@
                 <param name="actionName">orderDetail</param>
                 <param name="namespace">/order</param>
                 <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="resetWithError">${resetWithError}</param>
             </result>
         </action>
 		
