@@ -939,27 +939,31 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				.getNamedItem("CustomerUnit");
 			}
 			String customerUnit = customerUnitNode.getTextContent();
-			Node ConvFactorNode = XpxItemcustXrefAttributes.getNamedItem("ConvFactor");
-			String ConvFactor = ConvFactorNode.getTextContent();
-			
-			if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
-				wUOMsToConversionFactors.clear();
-				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
-				return;
-			}
-			// Null check added.
-			if (useOrderMulUOMFlag != null && useOrderMulUOMFlag.equals("Y")) {
-				int conversion = getConversion(ConvFactor, orderMultiple);
-				if (conversion != -1 && customerUnit != null
-						&& customerUnit.length() > 0) {
-					if (currentConversion == 0
-							|| (currentConversion != 0 && conversion < currentConversion)) {
-						lowestConvUOM = customerUnit;
-						currentConversion = conversion;
+			//XBT-121 -Added not null condition
+			if(customerUnit != null && customerUnit.trim().length() >0)
+			{
+				Node ConvFactorNode = XpxItemcustXrefAttributes.getNamedItem("ConvFactor");
+				String ConvFactor = ConvFactorNode.getTextContent();
+				
+				if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
+					wUOMsToConversionFactors.clear();
+					wUOMsToConversionFactors.put(customerUnit, ConvFactor);
+					return;
+				}
+				// Null check added.
+				if (useOrderMulUOMFlag != null && useOrderMulUOMFlag.equals("Y")) {
+					int conversion = getConversion(ConvFactor, orderMultiple);
+					if (conversion != -1 && customerUnit != null
+							&& customerUnit.length() > 0) {
+						if (currentConversion == 0
+								|| (currentConversion != 0 && conversion < currentConversion)) {
+							lowestConvUOM = customerUnit;
+							currentConversion = conversion;
+						}
 					}
 				}
+				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
 			}
-			wUOMsToConversionFactors.put(customerUnit, ConvFactor);
 		}
 	}
 	
