@@ -61,7 +61,9 @@
 
 <!-- END head-calls.php -->
 <title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
-
+<meta name="DCSext.w_x_sc_count" content="1"/>
+<meta name="DCSext.w_x_itemtype" content="<s:property value='%{#session.itemType}' />" />
+<s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
 <s:set name='myParam' value='{"itemID"}' />
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
 <s:url id='addToCartURL' namespace='/order' action='addToCart'
@@ -132,6 +134,10 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
 			Ext.Msg.hide();
+			//-- Web Trends tag start --
+			var responseText = response.responseText;
+			writeWebtrendTag(responseText);
+			//-- Web Trends tag end --
 		}
 	});
 }

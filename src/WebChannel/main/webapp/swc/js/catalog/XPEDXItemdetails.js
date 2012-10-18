@@ -23,6 +23,12 @@ function itemDetailValidateAndAddToCart(itemId) {
 }*/
 var myMask;
 function updatePandAfromLink(){
+	/*Web Trends tag start*/ 
+	if(document.getElementById("webtrendItemType")!=null){
+		var itemType=document.getElementById("webtrendItemType").value;	
+		writeMetaTag("DCSext.w_x_itemtype",itemType);
+	}	
+		/*Web Trends tag end*/
 	//added for jira 3974
 	var waitMsg = Ext.Msg.wait("Processing...");
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});

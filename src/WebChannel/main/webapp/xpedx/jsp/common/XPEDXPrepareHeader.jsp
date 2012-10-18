@@ -2097,7 +2097,7 @@ function checkSessionTimeout(){
 	<s:if test='%{#firstTimeFlag != null}'>
 		<s:set name="userGroupKey" value ="%{#_action.getUserTypeForWebtrend()}"/>	
 		
-           		<meta name="DCSext.w_ut" content='<s:property value="#userGroupKey"/>' />
+           		<meta name="DCSext.w_x_ut" content='<s:property value="#userGroupKey"/>' />
           
 		<s:set name="firstTimeFlag" value="<s:property value=null />" scope="session"/> 
 		

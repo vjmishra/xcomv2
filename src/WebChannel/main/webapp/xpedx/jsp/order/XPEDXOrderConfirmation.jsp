@@ -449,7 +449,7 @@
                                     </s:if>
                                     <s:else></s:else>
                                     </td>
-									<META NAME="DCSext.SO" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>"/>
+									<META NAME="DCSext.SO_total" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>"/>
 									
 
                                 </tr>
