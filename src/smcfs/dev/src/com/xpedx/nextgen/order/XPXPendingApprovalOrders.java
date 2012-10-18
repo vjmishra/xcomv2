@@ -1,7 +1,10 @@
 package com.xpedx.nextgen.order;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -13,16 +16,17 @@ import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
-import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 public class XPXPendingApprovalOrders implements YIFCustomApi{
 	
@@ -284,6 +288,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			return inXML;
 		}
 		
+		if (log.isDebugEnabled()) {
+			log.debug("Inside XPXPendingApprovalOrders.invoekApprovalOrderEmailForContact - Input XML : "+SCXmlUtil.getString(inXML) );
+		
+		}
 		if(inXML!=null) {
 			
 			Element order = inXML.getDocumentElement();
@@ -299,8 +307,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			inXML = utilObj.stampBrandLogo(env, inXML);
 			String customerContactOnOrder = SCXmlUtil.getAttribute(order, "CustomerContactID");
 			Element inputElem = SCXmlUtil.getChildElement(order, "Input");
+			Element orderHoldTypeElem =null;
 			if (inputElem != null) {
-				Element orderHoldTypeElem = SCXmlUtil.getChildElement(inputElem, "OrderHoldType");
+				orderHoldTypeElem = SCXmlUtil.getChildElement(inputElem, "OrderHoldType");
 				if (orderHoldTypeElem != null) {
 					String resolverUserId = null;
 					String delimiter = ",";
@@ -321,10 +330,12 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			String organizationCode = SCXmlUtil.getAttribute(order, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 
-			
-			Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
-			String formattedOrderNo = getFormattedOrderNumber(orderExtn);
-			inXML.getDocumentElement().setAttribute("FormattedOrderNo",formattedOrderNo);
+			if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(orderHoldTypeElem.getAttribute("Status")))
+			{
+				Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
+				String formattedOrderNo = getFormattedOrderNumber(orderExtn,env);
+				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedOrderNo);
+			}
 			
 			Map<String,String> getUOMListMap = getUOMList(env);
 			
@@ -537,38 +548,84 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		SCXmlUtil.importElement(order, dummy.getDocumentElement());
 	}
 
-	public static String getFormattedOrderNumber(Element orderElement)
-	{
-		StringBuffer sb = new StringBuffer();
-		if(orderElement!=null)
-		{
-			String legacyOrderNum = orderElement.getAttribute("ExtnLegacyOrderNo");
-			String orderBranch = orderElement.getAttribute("ExtnOrderDivision");
-			String generationNum = orderElement.getAttribute("ExtnGenerationNo");
-			
-			
-			
-			if(orderBranch!=null && orderBranch.length()>0)
-			{
-				sb.append(orderBranch);
-			}
-			if(legacyOrderNum!=null && legacyOrderNum.length()>0)
-			{				
-				sb.append(legacyOrderNum);				
-			}
-			if(generationNum!=null && generationNum.length()>0)
-			{
-				if(generationNum.trim().length()==1)
-				{
-					generationNum="0"+generationNum;
-				}				
-				sb.append(generationNum);
+	public static String getFormattedOrderNumber(Element orderElement,
+			YFSEnvironment env) throws YFSException, RemoteException {
+		HashSet<String> orderHashset = new HashSet<String>();
+		String orderNo = "";
+		if (orderElement != null) {
+			String extnWebConfNum = orderElement.getAttribute("ExtnWebConfNum");
+			if (!YFCObject.isVoid(extnWebConfNum)) {
+				Document inputOrderDoc = SCXmlUtil.createDocument("Order");
+				Element inputOrderElement = inputOrderDoc.getDocumentElement();
+				Element extnElement = inputOrderDoc.createElement("Extn");
+				extnElement.setAttribute("ExtnWebConfNum", extnWebConfNum);
+				inputOrderElement.appendChild(extnElement);
+				Document getOrderListTemplate = SCXmlUtil
+						.createFromString("<OrderList><Order OrderHeaderKey='' OrderType=''><Extn ExtnLegacyOrderNo='' ExtnCustomerDivision='' ExtnOrderDivision='' ExtnGenerationNo='' /></Order></OrderList>");
+				env.setApiTemplate("getOrderList", getOrderListTemplate);
+				if (log.isDebugEnabled()) {
+					log.debug("Inside XPXPendingApprovalOrders.getFormattedOrderNumber() - getOrderList_InXML : "+SCXmlUtil.getString(inputOrderDoc));				
+				}
+				Document orderListDoc = api.invoke(env, "getOrderList",
+						inputOrderDoc);
+				if (log.isDebugEnabled()) {
+					log.debug("Inside XPXPendingApprovalOrders.getFormattedOrderNumber() - getOrderList_OutXML : "+SCXmlUtil.getString(orderListDoc));				
+				}
 				
+				env.clearApiTemplate("getOrderList");
+				Element rootElement = orderListDoc.getDocumentElement();
+				NodeList orderNodeList = rootElement
+						.getElementsByTagName("Order");
+				int orderNodeListLength = orderNodeList.getLength();
+				for (int order = 0; order < orderNodeListLength; order++) {
+					Element orderEle = (Element) orderNodeList.item(order);
+					String orderType = orderEle.getAttribute("OrderType");
+					if (YFCObject.isVoid(orderType)
+							&& !orderType.equalsIgnoreCase("Customer")) {
+						if(orderEle.getElementsByTagName("Extn")!=null)
+						{
+							Element extnElementFO = (Element) orderEle
+									.getElementsByTagName("Extn").item(0);
+							String legacyOrderNum = extnElementFO
+									.getAttribute("ExtnLegacyOrderNo");
+							String customerDivision = extnElementFO
+									.getAttribute("ExtnCustomerDivision");
+							String extnGenerationNo = extnElementFO
+									.getAttribute("ExtnGenerationNo");
+							if (null != customerDivision && !"".equalsIgnoreCase(customerDivision.trim()) && 
+								null != legacyOrderNum   && !"".equalsIgnoreCase(legacyOrderNum.trim())   && 
+								null != extnGenerationNo && !"".equalsIgnoreCase(extnGenerationNo.trim())) 
+							{
+								orderHashset.add(orderNo.concat(customerDivision)
+										.concat("-").concat(legacyOrderNum).concat(
+												"-").concat(extnGenerationNo));							
+							}
+						}
+					}
+				}
 			}
 		}
-		//as per data the order number which come from legacy will not contain any -,_ or any character .
-		return sb.toString().replaceAll("_M","");
-	}
-
-	
+		
+		if (orderHashset.isEmpty()) {
+			orderNo = "In Progress";
+		
+		}else
+		{
+			if (orderHashset != null && orderHashset.size() > 0) {
+				int i=1;
+				Iterator<String> orderNos=orderHashset.iterator();
+				while(orderNos.hasNext()){
+					if(i==orderHashset.size()) {
+						orderNo=orderNo+orderNos.next();
+						
+					}else {
+						orderNo=orderNo+orderNos.next()+",";
+					}
+					++i;					
+				}
+			}
+		}		
+		return orderNo;
+		
+	}	
 }
