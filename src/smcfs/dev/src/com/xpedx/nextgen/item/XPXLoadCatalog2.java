@@ -2,6 +2,10 @@ package com.xpedx.nextgen.item;
 
 //Ajit import java.util.HashMap;
 import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -21,6 +25,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfc.log.YFCLogCategory;
@@ -158,6 +163,34 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				if(log.isDebugEnabled()){
 					log.debug("Before Manage Item:" + eItem.getAttribute("ItemID") );
 				}
+
+
+				//Added for Jira 3155
+				String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
+				
+				NodeList assetIdList = eItem.getElementsByTagName("Asset");
+				if(assetIdList != null)
+				{
+					StringBuffer strAssetType = new StringBuffer();
+					int counter = 0;
+					for(int j=0; j<assetIdList.getLength(); j++)
+					{
+						Element assetType = (Element)assetIdList.item(j);
+						String strAssetTypeVal = assetType.getAttribute("Type");
+						if(strAssetTypeVal != null)
+						{
+							strAssetType.append("'").append(strAssetTypeVal).append("'");
+							if(counter < assetIdList.getLength()-1){
+								strAssetType.append(",");
+							}
+						}
+						counter++;
+					}
+					if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
+					deleteAssetType(env,inXML,itemKey,strAssetType.toString());
+					}
+				}
+				//End for Jira 3155
 			}
 
 			//create the item
@@ -232,6 +265,54 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			return outXML;
 		}	
 		return outXML;
+	}
+
+private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey, String strAssetType) {
+	/* Added code for Jira 3155 ***/
+		Connection connection = null;
+		Statement stmt = null;
+		Document documentXML = null;
+		try {
+			connection = getDBConnection(env, documentXML);
+			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + "'" + strAssetType + "')";
+			stmt = connection.createStatement();
+			stmt.execute(query);
+			stmt.close();
+			connection.commit();
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * getItemId
+	 * @param env
+	 * @param inXML
+	 * @param itemId
+	 * @return
+	 */
+	private String getItemId(YFSEnvironment env, Document inXML,String itemId) {
+		
+		/*** Added code for JIra 3155 ****/
+		Connection connection = null;
+		Statement stmt = null;
+		Document documentXML = null;
+		try {
+			connection = getDBConnection(env, documentXML);
+			String query = "select item_key from yfs_item where item_id = " + "'" + itemId + "'";
+			stmt = connection.createStatement();
+			ResultSet resultSet = stmt.executeQuery(query);
+			while (resultSet.next()) {
+				return resultSet.getString(1);
+			}
+			resultSet.close();
+			stmt.close();
+			//connection.commit();
+		} catch (Exception exception) {
+			log.error("YFSException: " + exception.getStackTrace());
+		}
+		return itemId; 
 	}
 
 	/**
@@ -529,6 +610,22 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			}
 		}
 		return alCategory;
+	}
+	private Connection getDBConnection(YFSEnvironment env,Document inputXML)
+	{
+		Connection m_Conn=null;
+		try{
+			YFSConnectionHolder connHolder     = (YFSConnectionHolder)env;
+			m_Conn= connHolder.getDBConnection();
+		}
+		catch(Exception e){
+
+			log.error("Exception: " + e.getStackTrace());
+//			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
+
+		}
+
+		return m_Conn;
 	}
 
 }
