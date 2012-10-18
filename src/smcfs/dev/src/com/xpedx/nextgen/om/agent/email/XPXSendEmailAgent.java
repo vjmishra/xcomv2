@@ -14,8 +14,10 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
@@ -279,7 +281,26 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	private static void sendEmail(YFSEnvironment env, YIFApi api, String from, String to, String cc, 
 								  String bcc, String subject, String content, String smtpHost, Element emailDetailsElement) throws Exception
 	{		
-		SMTPTransport transport=null;
+		Properties properties = new Properties();
+		properties.put("mail.smtp.host", smtpHost);
+		Session emailSession = Session.getDefaultInstance(properties);
+		
+		Message emailMessage = new MimeMessage(emailSession);
+		emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+		if(cc!=null && cc.length()>0)
+			emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+		
+		if(bcc!=null && bcc.length()>0)
+			emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(bcc));
+		
+		emailMessage.setFrom(new InternetAddress(from));
+		emailMessage.setSubject(subject);
+		emailMessage.setContent(content,"text/html");
+		emailSession.setDebug(true);
+		Transport.send(emailMessage);
+		
+		
+		/*SMTPTransport transport=null;
 		try{
 			Properties properties = new Properties();
 			properties.put(XPXEmailUtil.EMAIL_TRANSPORT_PROTOCOL, "smtp");
@@ -347,7 +368,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	        if(transport!=null && transport.isConnected()){
 	        	transport.close(); 
 	        }
-		}
+		}*/
 		
 	}
 	
