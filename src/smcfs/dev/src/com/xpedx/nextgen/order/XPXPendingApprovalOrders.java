@@ -333,8 +333,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(orderHoldTypeElem.getAttribute("Status")))
 			{
 				Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
-				String formattedOrderNo = getFormattedOrderNumber(orderExtn,env);
-				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedOrderNo);
+				String formattedLegacyOrderNo = getLegacyOrderNumber(orderExtn,env);
+				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedLegacyOrderNo);
 			}
 			
 			Map<String,String> getUOMListMap = getUOMList(env);
@@ -548,10 +548,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		SCXmlUtil.importElement(order, dummy.getDocumentElement());
 	}
 
-	public static String getFormattedOrderNumber(Element orderElement,
+	public static String getLegacyOrderNumber(Element orderElement,
 			YFSEnvironment env) throws YFSException, RemoteException {
 		HashSet<String> orderHashset = new HashSet<String>();
-		String orderNo = "";
+		String orderNos = "";
 		if (orderElement != null) {
 			String extnWebConfNum = orderElement.getAttribute("ExtnWebConfNum");
 			if (!YFCObject.isVoid(extnWebConfNum)) {
@@ -588,17 +588,16 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 									.getElementsByTagName("Extn").item(0);
 							String legacyOrderNum = extnElementFO
 									.getAttribute("ExtnLegacyOrderNo");
-							String customerDivision = extnElementFO
-									.getAttribute("ExtnCustomerDivision");
-							String extnGenerationNo = extnElementFO
+							String orderBranch = extnElementFO
+									.getAttribute("ExtnOrderDivision");
+							String generationNum = extnElementFO
 									.getAttribute("ExtnGenerationNo");
-							if (null != customerDivision && !"".equalsIgnoreCase(customerDivision.trim()) && 
+							if (null != orderBranch && !"".equalsIgnoreCase(orderBranch.trim()) && 
 								null != legacyOrderNum   && !"".equalsIgnoreCase(legacyOrderNum.trim())   && 
-								null != extnGenerationNo && !"".equalsIgnoreCase(extnGenerationNo.trim())) 
+								null != generationNum && !"".equalsIgnoreCase(generationNum.trim())) 
 							{
-								orderHashset.add(orderNo.concat(customerDivision)
-										.concat("-").concat(legacyOrderNum).concat(
-												"-").concat(extnGenerationNo));							
+								String orderNbr=XPXUtils.getFormattedOrderNumber(orderBranch, legacyOrderNum, generationNum);
+								orderHashset.add(orderNbr);							
 							}
 						}
 					}
@@ -607,25 +606,25 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		}
 		
 		if (orderHashset.isEmpty()) {
-			orderNo = "In Progress";
+			orderNos = "In Progress";
 		
 		}else
 		{
 			if (orderHashset != null && orderHashset.size() > 0) {
 				int i=1;
-				Iterator<String> orderNos=orderHashset.iterator();
-				while(orderNos.hasNext()){
+				Iterator<String> orderItr=orderHashset.iterator();
+				while(orderItr.hasNext()){
 					if(i==orderHashset.size()) {
-						orderNo=orderNo+orderNos.next();
+						orderNos=orderNos+orderItr.next();
 						
 					}else {
-						orderNo=orderNo+orderNos.next()+",";
+						orderNos=orderNos+orderItr.next()+",";
 					}
 					++i;					
 				}
 			}
 		}		
-		return orderNo;
+		return orderNos;
 		
 	}	
 }
