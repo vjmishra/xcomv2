@@ -1850,10 +1850,26 @@ a.underlink:hover { text-decoration: underline !important; }
 		</s:if>
 		<s:else><td colspan="3" class="no-border-right-user">			
 			<s:if test='%{isInUserGroup("BUYER-USER")}'>Buyer </s:if>
-			<s:if test='%{#estimator=="T"}'>Estimator </s:if>
-			<s:if test='%{#viewInvoices=="Y"}'>View Invoices </s:if>
-			<s:if test='%{isViewPrices()}'> View Prices </s:if>
-			<s:if test='%{isViewReports()}'>View Reports </s:if>		
+			<s:if test='%{isInUserGroup("BUYER-APPROVER")}'>
+			Approver 
+			<s:hidden name="buyerApprover" id='buyerApprover' value='%{isInUserGroup("BUYER-APPROVER")}' ></s:hidden>
+			</s:if>
+			<s:if test='%{#estimator=="T"}'>
+			Estimator 
+			<s:hidden name='estimator' value='%{true}' />
+			</s:if>
+			<s:if test='%{#viewInvoices=="Y"}'>
+			View Invoices 
+			<s:hidden name='viewInvoices' value='%{true}' />
+			</s:if>
+			<s:if test='%{isViewPrices()}'> 
+			View Prices 
+			<s:hidden name='viewPrices' value='%{true}' />
+			</s:if>
+			<s:if test='%{isViewReports()}'>
+			View Reports 
+			<s:hidden name='viewReports' value='%{true}' />
+			</s:if>		
 		 </td> </s:else>
 		</tr>
 		
