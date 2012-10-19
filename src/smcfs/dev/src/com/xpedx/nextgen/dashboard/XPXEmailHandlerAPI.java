@@ -42,7 +42,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	String getUserListTemplate = "global/template/api/getUserListTemplate.xml";
 	/** Added by Arun Sekhar on 13-April-2011 for Email templates **/
 	String orderNo = "";
-	String customerDivision = "";
+	String orderBranch = "";
 	private static YFCLogCategory yfcLogCatalog;
 
 	static {
@@ -210,10 +210,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		{
 		    Element inputExtnElement = (Element) customerDoc.getDocumentElement().getElementsByTagName(
 				"Extn").item(0);
-		    customerDivision = inputExtnElement
-				.getAttribute("ExtnCustomerDivision");
-		    if(customerDivision != null) {
-		    	customerDivision = customerDivision.substring(0, customerDivision.length() - 2);
+		    orderBranch = inputExtnElement
+				.getAttribute("ExtnOrderDivision");
+		    if(orderBranch != null && orderBranch.length()>2) {
+		    	orderBranch = orderBranch.substring(0, orderBranch.length() - 2);
 		    }
 		}   
 		/*************************************************************************************/
@@ -713,14 +713,14 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			}
 			/*****************************************************************/
 			/************* Added by Arun Sekhar on 13-April-2011 *************/
-			if (null != customerDivision
-					&& !"".equalsIgnoreCase(customerDivision.trim())
+			if (null != orderBranch
+					&& !"".equalsIgnoreCase(orderBranch.trim())
 					&& null != legacyOrderNo
 					&& !"".equalsIgnoreCase(legacyOrderNo.trim())
 					&& null != extnGenerationNo
 					&& !"".equalsIgnoreCase(extnGenerationNo.trim())) {
 
-					hs.add(orderNo.concat(customerDivision).concat("-")
+					hs.add(orderNo.concat(orderBranch).concat("-")
 
 					.concat(legacyOrderNo).concat("-")
 

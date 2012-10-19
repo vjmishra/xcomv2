@@ -2626,5 +2626,35 @@ public class XPXUtils implements YIFCustomApi {
 	    	}
 	    }
 	    return isOrderOnHold;
-	}	
+	}
+	
+	public static String getFormattedOrderNumber(String orderBranch, String legacyOrderNum, String generationNum)
+	{
+		StringBuffer sb = new StringBuffer();			
+			
+		if(orderBranch!=null && orderBranch.length()>0)
+		{
+			if(orderBranch.length()>2) {
+		    	orderBranch = orderBranch.substring(0, orderBranch.length() - 2);
+		    }
+			sb.append(orderBranch);
+			sb.append("-");
+		}
+		if(legacyOrderNum!=null && legacyOrderNum.length()>0)
+		{
+			sb.append(legacyOrderNum);				
+			sb.append("-");
+		}
+		if(generationNum!=null && generationNum.length()>0)
+		{
+			if(generationNum.trim().length()==1)
+			{
+				generationNum="0"+generationNum;
+			}				
+			sb.append(generationNum);
+			
+		}
+		
+		return sb.toString();
+	}
 }
