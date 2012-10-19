@@ -39,27 +39,27 @@ public class XPXISHoldTypeNeedsAttentionCondition implements
 		boolean isOrderOnNeedsAttentionHold = false;
 		YFCDocument yfcOrderDetailDoc = YFCDocument.getDocumentFor(getOrderDetailsOutput);
 		YFCElement rootElem = yfcOrderDetailDoc.getDocumentElement();
-		YFCElement orderHoldTypesElem = rootElem
-				.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+		YFCElement orderHoldTypesElem = rootElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
 		if (orderHoldTypesElem != null) {
 			YFCIterable<YFCElement> holdTypeItr = orderHoldTypesElem.getChildren(XPXLiterals.E_ORDER_HOLD_TYPE);
-			while (holdTypeItr.hasNext()) {
-				YFCElement orderHoldTypeElem = holdTypeItr.next();
-				if (orderHoldTypeElem != null) {
-					String holdType = orderHoldTypeElem
-							.getAttribute(XPXLiterals.A_HOLD_TYPE);
-					String status = orderHoldTypeElem
-							.getAttribute(XPXLiterals.A_STATUS);
-
-					if ((holdType.equalsIgnoreCase(XPXLiterals.NEEDS_ATTENTION_HOLD)  && 
-						 status.equalsIgnoreCase(XPXLiterals.HOLD_CREATED_STATUS_ID)) || 
-						(rootElem.getAttribute(XPXLiterals.A_HAS_ERROR).equalsIgnoreCase(XPXLiterals.BOOLEAN_FLAG_Y))) 
-					{
-						log.debug("The order is on hold or has an error---No chained order will be created");
-						isOrderOnNeedsAttentionHold = true;
-						break;
+			if(holdTypeItr!=null)
+			{
+				while (holdTypeItr.hasNext()) {
+					YFCElement orderHoldTypeElem = holdTypeItr.next();
+					if (orderHoldTypeElem != null) {
+						String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
+						String status = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
+						
+						if ((null!=holdType && holdType.equalsIgnoreCase(XPXLiterals.NEEDS_ATTENTION_HOLD) && 
+							 null!=status && status.equalsIgnoreCase(XPXLiterals.HOLD_CREATED_STATUS_ID))  || 
+							(null!=rootElem.getAttribute(XPXLiterals.A_HAS_ERROR) && rootElem.getAttribute(XPXLiterals.A_HAS_ERROR).equalsIgnoreCase(XPXLiterals.BOOLEAN_FLAG_Y))) 
+						{
+							log.debug("The order is on hold or has an error---No chained order will be created");
+							isOrderOnNeedsAttentionHold = true;
+							break;
+						}
+	
 					}
-
 				}
 			}
 
