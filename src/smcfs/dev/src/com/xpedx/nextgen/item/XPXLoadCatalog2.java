@@ -274,7 +274,7 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey,
 		Document documentXML = null;
 		try {
 			connection = getDBConnection(env, documentXML);
-			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + "'" + strAssetType + "')";
+			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + strAssetType + ")";
 			stmt = connection.createStatement();
 			stmt.execute(query);
 			stmt.close();
