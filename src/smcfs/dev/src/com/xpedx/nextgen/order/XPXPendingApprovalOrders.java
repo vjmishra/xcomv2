@@ -580,8 +580,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				for (int order = 0; order < orderNodeListLength; order++) {
 					Element orderEle = (Element) orderNodeList.item(order);
 					String orderType = orderEle.getAttribute("OrderType");
-					if (YFCObject.isVoid(orderType)
-							&& !orderType.equalsIgnoreCase("Customer")) {
+					if (!YFCObject.isVoid(orderType) && !orderType.equalsIgnoreCase("Customer")) {
 						if(orderEle.getElementsByTagName("Extn")!=null)
 						{
 							Element extnElementFO = (Element) orderEle
