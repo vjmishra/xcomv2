@@ -471,7 +471,7 @@ function showSplitDiv(divId)
                 	<h5 align="center"><b><font color="red">Please contact your CSR for current information on this order.</font></b></h5>
                 </s:if>
                  <s:if test='#_action.getResetWithError() == "Y"'>
-                	<h5 align="center"><b><font color="red">Unable to apply changes to your order– please try again later or contact customer service.</font></b></h5>
+                	<h5 align="center"><b><font color="red">Unable to apply changes to your order. Please try again later or contact customer service.</font></b></h5>
                 </s:if>
                 <!-- begin top section -->
                 <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
