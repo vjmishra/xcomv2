@@ -16,6 +16,7 @@ import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.ycp.japi.util.YCPBaseAgent;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.log.YFCLogUtil;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -112,7 +113,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		
 		docTemplate = SCXmlUtil
 				.createFromString(new StringBuffer()
-						.append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode=''>")
+						.append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode=''><Extn ExtnWebConfNum='' />")
 						.append("<OrderHoldTypes><OrderHoldType HoldType='' Status=''/></OrderHoldTypes></Order></OrderList>")
 						.toString());
 		if(log.isDebugEnabled()){
@@ -155,7 +156,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 	private List getProcessOrderList(Document docOrderList) {
 		List listOrders = SCXmlUtil.getChildrenList(docOrderList
 				.getDocumentElement());
-
+		String  extnWebConfNum  = "";
 		List listOfJobs = new ArrayList();
 		for (Object objOrder : listOrders) {
 			Element eleOrder = (Element) objOrder;
@@ -164,29 +165,38 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 					.append( " Order document[eleOrder] is ")
 					.append( YFCLogUtil.toString(eleOrder)).toString());
 			}
-
-			// Get List of Holds with NEEDS_ATTENTION hold in 1100(Created)
-			// Status..
-			NodeList nlOrderHoldType = SCXmlUtil
-					.getXpathNodes(
-							eleOrder,
-							"./OrderHoldTypes/OrderHoldType[@HoldType='NEEDS_ATTENTION' and @Status='1100']");
-
-			if(log.isDebugEnabled()){
-				log.debug((new StringBuilder())
-					.append( " No. of ./OrderHoldTypes/OrderHoldType are ")
-					.append( nlOrderHoldType.getLength()).toString());
-			}
+			if(eleOrder.getElementsByTagName("Extn")!=null)
+			{
+				Element extnElement = (Element)eleOrder.getElementsByTagName("Extn").item(0);
+			    if(extnElement != null)
+			    {
+					extnWebConfNum =  extnElement.getAttribute("ExtnWebConfNum");    
+					// Get List of Holds with NEEDS_ATTENTION hold in 1100(Created)
+					// Status..
+					
+					if(!YFCObject.isVoid(extnWebConfNum))
+					{
+						NodeList nlOrderHoldType = SCXmlUtil.getXpathNodes(eleOrder,"./OrderHoldTypes/OrderHoldType[@HoldType='NEEDS_ATTENTION' and @Status='1100']");						
 			
-			//If count of active NEEDS_ATTENTION hold is zero, then add to listOfJobs to process.
-			if (nlOrderHoldType.getLength() == 0) {
-				// Create a Order XML Document
-				Document docOrderNew = SCXmlUtil.createDocument("Order");
-				docOrderNew.getDocumentElement().setAttribute("FromRetryAgent", "Y");
-				SCXmlUtil.mergeAttributes(eleOrder, docOrderNew .getDocumentElement(), false);
-
-				// Add the Order to listOfJobs to be processed
-				listOfJobs.add(docOrderNew);
+						if(log.isDebugEnabled()){
+							log.debug((new StringBuilder()).append( " No. of ./OrderHoldTypes/OrderHoldType are ").append( nlOrderHoldType.getLength()).toString());
+						}
+						
+						//If count of active NEEDS_ATTENTION hold is zero, then add to listOfJobs to process.
+						if (nlOrderHoldType.getLength() == 0) {
+							// Create a Order XML Document
+							Document docOrderNew = SCXmlUtil.createDocument("Order");
+							docOrderNew.getDocumentElement().setAttribute("FromRetryAgent", "Y");
+							
+							SCXmlUtil.mergeAttributes(eleOrder, docOrderNew .getDocumentElement(), false);
+			
+							// Add the Order to listOfJobs to be processed
+							
+							listOfJobs.add(docOrderNew);
+						}
+					}
+			    
+			    }
 			}
 		}
 		return listOfJobs;
