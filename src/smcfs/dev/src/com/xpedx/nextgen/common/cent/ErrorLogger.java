@@ -54,7 +54,13 @@ public class ErrorLogger {
 			Random random = new Random(); 
 			long fraction = (long)(1 * Math.abs(random.nextLong())); 
 			randomNumber=""+fraction;
-			String userID = yfsEnv.getUserId();
+			
+			String userID=null;
+			if(errorObj.getTransType().equalsIgnoreCase(XPXLiterals.OU_TRANS_TYPE))
+				userID="admin";
+			else
+				userID=yfsEnv.getUserId();
+			
 			String progID = yfsEnv.getProgId();
 			
 			YFCDocument envDoc = YFCDocument.createDocument("YFSEnvironment");	
