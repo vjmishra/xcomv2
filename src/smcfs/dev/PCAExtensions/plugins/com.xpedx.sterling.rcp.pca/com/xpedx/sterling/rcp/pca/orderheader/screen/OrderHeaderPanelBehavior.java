@@ -322,12 +322,12 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 				}
 			//Condition added for JIRA 4326
 			if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_ORD_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_LNE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEG_ERR_CODE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.NEEDS_ATTENTION.equals(eleOrderHold.getAttribute("HoldType"))){
-				String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (CSR Reviewing)";	
-				YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
-				
-			}
+					String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (CSR Reviewing)";
+					YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
+					break;				
 			}
 		}
+	}
 	
 	public void viewOriginal()
     {
