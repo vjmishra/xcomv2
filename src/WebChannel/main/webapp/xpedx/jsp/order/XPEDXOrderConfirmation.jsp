@@ -343,7 +343,7 @@
                                     	<s:a href="%{orderDetailsURL}" cssClass="underlink">
                                     		<s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnWebConfNum")'/>
                                     	</s:a>
-                                    	<meta name="WT.tx_cartid" content="<s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnWebConfNum")'/>" />
+                                    	<meta name="WT.tx_Confid" content="<s:property value='#xutil.getAttribute(#ExtnInfo,"ExtnWebConfNum")'/>" />
                                     </td>
                                 </tr>
                                 
@@ -449,7 +449,7 @@
                                     </s:if>
                                     <s:else></s:else>
                                     </td>
-									<META NAME="DCSext.SO_total" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>"/>
+									<META NAME="DCSext.w_x_SO_Total" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#ototal)'/>"/>
 									
 
                                 </tr>
