@@ -235,15 +235,22 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			String createUserIDStr = "";
 			String modifyUserIdStr = "";
 			String lastModifiedDateStr = "";
-			
-			modifyUserIdStr = getOrderElementFromOutputDocument().getAttribute("Modifyuserid");
-			if(YFCUtils.isVoid(modifyUserIdStr)){
-				createUserIDStr = getOrderElementFromOutputDocument().getAttribute("Createuserid");
-				setLastModifiedUserId(createUserIDStr);
-			}else{
-				setLastModifiedUserId(modifyUserIdStr);
+			//added for XBT-146
+			String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+				 salesreploggedInUserName = (String)wcContext.getSCUIContext().getSession().getAttribute("loggedInUserName");
 			}
+			else{
+				modifyUserIdStr = getOrderElementFromOutputDocument().getAttribute("Modifyuserid");
+				if(YFCUtils.isVoid(modifyUserIdStr)){
+					createUserIDStr = getOrderElementFromOutputDocument().getAttribute("Createuserid");
+					setLastModifiedUserId(createUserIDStr);
+				}else{
+					setLastModifiedUserId(modifyUserIdStr);
+				}
 			//added for 2769
+			}
+			//end of XBT-146
 			lastModifiedDateStr = getOrderElementFromOutputDocument().getAttribute("Modifyts");
 			if(lastModifiedDateStr !=null){
 				setLastModifiedDateString(lastModifiedDateStr);
@@ -1266,7 +1273,18 @@ END of JIRA 3382*/
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
 	private String itemDtlBackPageURL="";
+	//XBT-146
+	private String salesreploggedInUserName;
 	
+	public String getSalesreploggedInUserName() {
+		return salesreploggedInUserName;
+	}
+
+	public void setSalesreploggedInUserName(String salesreploggedInUserName) {
+		this.salesreploggedInUserName = salesreploggedInUserName;
+	}
+	//end of XBT-146
+
 	public String getDeliveryInfo() {
 		return deliveryInfo;
 	}
