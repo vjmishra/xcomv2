@@ -1486,3 +1486,17 @@ div.wc-btn-bar a.grey-ui-btn { float:right; }
 div.wc-btn-bar a.float-left { float:left; }
 div.wc-table-header td { border: 0px; padding: 10px 5px; background-color:#039;}
 #QuickAddTable td input { width: 92%; }
+
+.salesProNotice {
+	border: 1px solid #EE4000;
+	color: #EE4000;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	margin-left: 90px;
+    	margin-right: 10px;
+    	text-align: left;
+    	width:60%;
+    	font-weight:bold;
+}
