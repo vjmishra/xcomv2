@@ -349,7 +349,7 @@ ul.checkboxTree li
           <tr>
             <td>Line Account #: </td>
             <td valign="top" >
-            	<s:textfield id='CustLineAccNoLabel' readonly="%{!#_action.IsCustLineAccNoFlag()}" cssClass="input-details-cart  x-input" tabindex="12"
+            	<s:textfield id='CustLineAccNoLabel' readonly="true" cssClass="input-details-cart  x-input" tabindex="12"
 					maxlength="25" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="25" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </td>
           </tr>
