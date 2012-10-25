@@ -150,7 +150,7 @@
 				<Order OrderHeaderKey="" OrderNo="" OrderName="" CustomerPONo="" EntryType="" EnterpriseCode=""
 					OptimizationType="" CarrierServiceCode="" Modifyts="" Createts=""
 					DraftOrderFlag="" HasPendingChanges="" AuthorizedClient=""
-					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="">
+					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="" Createuserid="" Modifyuserid="">
 					<PersonInfoSoldTo />
 					<PersonInfoShipTo />
 					<PersonInfoBillTo />
@@ -2399,7 +2399,7 @@
                 <Order OrderHeaderKey="" OrderNo="" OrderName="" CustomerPONo="" EntryType="" EnterpriseCode=""
 					OptimizationType="" CarrierServiceCode="" Modifyts="" Createts=""
 					DraftOrderFlag="" HasPendingChanges="" AuthorizedClient=""
-					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="">
+					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="" Modifyuserid="" Createuserid="">
 					<PersonInfoSoldTo />
 					<PersonInfoShipTo />
 					<PersonInfoBillTo />
@@ -2952,7 +2952,7 @@
     			<Order OrderHeaderKey="" OrderNo="" OrderName="" CustomerPONo="" EntryType="" EnterpriseCode=""
 					OptimizationType="" CarrierServiceCode="" Modifyts="" Createts=""
 					DraftOrderFlag="" HasPendingChanges="" AuthorizedClient=""
-					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID="">
+					BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID=""  Modifyuserid="" Createuserid="">
 					<PersonInfoSoldTo />
 					<PersonInfoShipTo />
 					<PersonInfoBillTo />					
