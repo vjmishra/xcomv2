@@ -1731,10 +1731,13 @@ private void preparePlaceOrderLineErrors() {
     		
     		//Element referenceElement = getModel("OrderDetails");
     		String OrderStatus = YRCXmlUtils.getAttributeValue(outXml, "OrderList/Order/@MaxOrderStatus");
-    		Double f = Double.valueOf(OrderStatus);
-    		Double webhld = 1100.5450;
-    		if( f > webhld  ){
-    			YRCXmlUtils.getXPathElement(outXml, "OrderList/Order/Extn").setAttribute("ExtnWebHoldFlag","N");
+    		
+    		if(OrderStatus!= null && !("".equalsIgnoreCase(OrderStatus))){
+    			Double f = Double.valueOf(OrderStatus);
+	    		Double webhld = 1100.5450;
+	    		if( f > webhld  ){
+	    			YRCXmlUtils.getXPathElement(outXml, "OrderList/Order/Extn").setAttribute("ExtnWebHoldFlag","N");
+	    		}
     		}
     		
     	}
