@@ -811,6 +811,25 @@
                     hColSpan="1" hIndent="0" heightHint="-1"
                     vAlignment="Center" vColSpan="1" widthHint="-1"/>
             </NewField>
+            <NewField>
+                <Field attachTo="extn_chkNeedsAttention"
+                    attachType="AFTER" defaultValue="Web Orders"
+                    enabled="true" isAdvanced="false"
+                    name="extn_chkWebOrders" type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    <styles>
+                        <style style="LEFT"/>
+                    </styles>
+                </Field>
+                <SetData name="YRCUnCheckedValue" value="N"/>
+                <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@EntryType"/>
+                <SetData name="YRCTargetBinding" value="/Order/@EntryType"/>
+                <SetData name="yrc:customType" value="TaskWhiteComposite"/>
+                <SetData name="YRCCheckedValue" value="Y"/>
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Center" vColSpan="1" widthHint="-1"/>
+            </NewField>
         </NewFields>
         <ExistingFields>
             <ExistingField attachTo="" attachType="" enabled="true"
