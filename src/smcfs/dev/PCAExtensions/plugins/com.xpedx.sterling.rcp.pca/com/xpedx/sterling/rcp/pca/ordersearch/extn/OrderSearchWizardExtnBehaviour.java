@@ -418,6 +418,16 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			//Added for JIRA 3038
 			Element eleExtn = YRCXmlUtils.getChildElement(eleInput, "Extn", true);
 			//Element eleExtn = YRCXmlUtils.getXPathElement(eleInput, "/Order/Extn");
+			String chkEntryType = getFieldValue("extn_chkWebOrders");
+			
+			if("Y".equalsIgnoreCase(chkEntryType) && !YRCPlatformUI.isVoid(eleInput)){
+				eleInput.setAttribute("EntryType", "Web");
+				eleInput.setAttribute("EntryTypeQryType", "EQ");
+			}
+			else{
+				eleInput.setAttribute("EntryType","");
+			}
+			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
 					
 				eleExtn.setAttribute("FromExtnOrderStatus",eleInput.getAttribute("FromStatus"));
