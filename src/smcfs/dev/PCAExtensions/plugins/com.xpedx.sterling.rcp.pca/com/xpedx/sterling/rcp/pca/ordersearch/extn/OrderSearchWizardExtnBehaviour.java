@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.ExtnAutoLoader;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -420,12 +421,15 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			//Element eleExtn = YRCXmlUtils.getXPathElement(eleInput, "/Order/Extn");
 			String chkEntryType = getFieldValue("extn_chkWebOrders");
 			
-			if("Y".equalsIgnoreCase(chkEntryType) && !YRCPlatformUI.isVoid(eleInput)){
-				eleInput.setAttribute("EntryType", "Web");
-				eleInput.setAttribute("EntryTypeQryType", "EQ");
+			if("Y".equalsIgnoreCase(chkEntryType) && !YRCPlatformUI.isVoid(eleExtn)){
+				eleExtn.setAttribute("ExtnSourceType", "3");
+				eleExtn.setAttribute("ExtnSourceQryType", "EQ");
 			}
 			else{
-				eleInput.setAttribute("EntryType","");
+				eleExtn.setAttribute("ExtnSourceType","3");
+				eleExtn.setAttribute("ExtnSourceTypeQryType", "NE");
+				eleExtn.setAttribute("ExtnWebConfNum", "M");
+				eleExtn.setAttribute("ExtnWebConfNumQryType", "LIKE");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
@@ -529,12 +533,26 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 	 }
 	 public void postSetModel(String arg0) {
 		System.out.println(arg0);
+		Element sourceModel = getModel("SearchCriteria"); 
+		
+		if(sourceModel != null){
+			Element extn = (Element)sourceModel.getElementsByTagName("Extn").item(0);
+			if(extn == null){
+				YRCXmlUtils.createChild(sourceModel, "Extn");
+				Element extnElem = (Element)sourceModel.getElementsByTagName("Extn").item(0);
+				extnElem.setAttribute("ExtnSourceType","Y");
+			}
+			else{
+				extn.setAttribute("ExtnSourceType","Y");
+			}
+		}
 		// TODO Auto-generated method stub
 		super.postSetModel(arg0);
 	}
 	 
 	@Override
 	public void handleApiCompletion(YRCApiContext apiContext) {
+		String temp = null;
 //		Setting Extn_StatusList extension model.
 		if(apiContext.getApiName().equals("XPXGetStatusList")){
 			Document docOutput = apiContext.getOutputXml();
