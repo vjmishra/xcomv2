@@ -392,11 +392,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@FromStatus"/>
-                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="YRCTargetBinding" value="/Order/@FromStatus"/>
+                <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -414,11 +414,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCListBinding" value="Extn_StatusList:/CommonCodeList/CommonCode"/>
+                <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="SearchCriteria:Order/@ToStatus"/>
-                <SetData name="YRCTargetBinding" value="/Order/@ToStatus"/>
                 <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
+                <SetData name="YRCTargetBinding" value="/Order/@ToStatus"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -814,9 +814,9 @@
             <NewField>
                 <Field attachTo="extn_chkNeedsAttention"
                     attachType="AFTER"
-                    defaultValue="Display Web Order Only" enabled="true"
-                    isAdvanced="false" name="extn_chkWebOrders"
-                    type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
+                    defaultValue="Display Web Orders Only"
+                    enabled="true" isAdvanced="false"
+                    name="extn_chkWebOrders" type="Check" visible="true" wizardPageId="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizardpages.YCDOrderSearchandList">
                     <styles>
                         <style style="LEFT"/>
                     </styles>
@@ -1599,11 +1599,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CarrierServiceCode"/>
-                <SetData name="YRCListBinding" value="Extn_ShipMethods:/CarrierServiceList/CarrierService"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_ShipMethods:/CarrierServiceList/CarrierService"/>
                 <SetData name="YRCSourceBinding" value="OrderDetails:/Order/@CarrierServiceCode"/>
-                <SetData name="YRCTargetBinding" value="SaveOrder:/Order/@CarrierServiceCode"/>
                 <SetData name="YRCDescriptionBinding" value="CarrierServiceDesc"/>
+                <SetData name="YRCTargetBinding" value="SaveOrder:/Order/@CarrierServiceCode"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -1726,11 +1726,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="CodeValue"/>
-                <SetData name="YRCListBinding" value="OrderCharges:/CommonCodeList/CommonCode"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="OrderCharges:/CommonCodeList/CommonCode"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="YRCDescriptionBinding" value="CodeShortDescription"/>
+                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3425,9 +3425,9 @@
                 </Field>
                 <SetData name="isMandatory" value="false"/>
                 <SetData name="YRCSourceBinding" value="Extn_BillToInfo:/PersonInfo/@AddressLine6"/>
+                <SetData name="YRCTargetBinding" value=""/>
                 <SetData
                     name="keycorrespondingtowhichvaluewillbedisplayed" value="xpedx_address_key"/>
-                <SetData name="YRCTargetBinding" value=""/>
                 <SetData name="yrc:customType" value="Text"/>
                 <LayoutData grabExcessHSpace="true"
                     grabExcessVSpace="false" hAlignment="Fill"
@@ -3637,11 +3637,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="OrganizationCode"/>
-                <SetData name="YRCListBinding" value="Extn_DivisionList:/OrganizationList/Organization"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_DivisionList:/OrganizationList/Organization"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision"/>
                 <SetData name="YRCDescriptionBinding" value="OrganizationName"/>
+                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnCustomerDivision"/>
                 <SetData name="yrc:customType" value="Combo"/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
@@ -3657,11 +3657,11 @@
                     </styles>
                 </Field>
                 <SetData name="YRCCodeBinding" value="@CustomerTypeCode"/>
-                <SetData name="YRCListBinding" value="Extn_CustomerTypes:/CustomerTypes/CustomerType"/>
                 <SetData name="isMandatory" value="false"/>
+                <SetData name="YRCListBinding" value="Extn_CustomerTypes:/CustomerTypes/CustomerType"/>
                 <SetData name="YRCSourceBinding" value=""/>
-                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnSuffixType"/>
                 <SetData name="YRCDescriptionBinding" value="@CustomerTypeDesc"/>
+                <SetData name="YRCTargetBinding" value="getCustomerList_input:/Customer/Extn/@ExtnSuffixType"/>
                 <SetData name="yrc:customType" value=""/>
                 <LayoutData grabExcessHSpace="false"
                     grabExcessVSpace="false" hAlignment="Beginning"
