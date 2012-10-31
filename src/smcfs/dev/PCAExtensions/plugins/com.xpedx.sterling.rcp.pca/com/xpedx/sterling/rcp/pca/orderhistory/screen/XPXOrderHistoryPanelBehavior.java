@@ -255,7 +255,19 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
         {
             elemModel.setAttribute("EnterpriseKey", defaultOrgCode);
         }
-        setModel("SearchCriteria", elemModel);
+        if(elemModel!=null){
+        	Element extn = (Element)elemModel.getElementsByTagName("Extn").item(0);
+			if(extn == null){
+				YRCXmlUtils.createChild(elemModel, "Extn");
+				Element extnElem = (Element)elemModel.getElementsByTagName("Extn").item(0);
+				extnElem.setAttribute("ExtnSourceType","Y");
+			}
+			else{
+				extn.setAttribute("ExtnSourceType","Y");
+			}
+        }
+        
+        setModel("SearchCriteria", elemModel);        
     }
 
 	public void mouseDoubleClick(MouseEvent e, String ctrlName) {
@@ -398,9 +410,9 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 			attrElemComplex5.setAttribute("ItemID", getFieldValue("txtSearchBy"));
 		}
 					//Condition For Order Search By
+		attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
+		isExtnChildCreated = true;
 		if((getFieldValue("cmbSearchBy")!= null) && (getFieldValue("cmbSearchBy").equalsIgnoreCase("WebConf")|| getFieldValue("cmbSearchBy").equalsIgnoreCase("OrdNum"))){
-			attrElemComplex2 = YRCXmlUtils.createChild(elemModel, "Extn");
-			isExtnChildCreated = true;
 			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
 			attrElemComplex2.setAttribute("Division", "12_M");
 			attrElemComplex2.setAttribute("ShipToID", "");*/
@@ -412,6 +424,7 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 			}
 			
 		}
+		String displayWebOrders = getFieldValue("chkDisplayWebOrders");
 		if(getFieldValue("txtSuffix")!= null || getFieldValue("txtCompany")!= null || getFieldValue("txtShipFrom")!= null || getFieldValue("txtAccount")!= null){
             if(isExtnChildCreated){
                   attrElemComplex2.setAttribute("ExtnShipToSuffix", getFieldValue("txtSuffix"));
@@ -436,6 +449,14 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
                   attrElemComplex2.setAttribute("ExtnLegacyOrderTypeQryType", "NE");
 
 			}
+            if(displayWebOrders.equalsIgnoreCase("Y")){
+            	attrElemComplex2.setAttribute("ExtnSourceType", "3");
+                attrElemComplex2.setAttribute("ExtnSourceQryType", "EQ");
+            }
+            else{
+            	attrElemComplex2.setAttribute("ExtnSourceType","3");
+                attrElemComplex2.setAttribute("ExtnSourceTypeQryType", "NE");
+            }
 			isExtnChildCreated = false;
 			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
 			attrElemComplex2.setAttribute("Division", "12_M");

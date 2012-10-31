@@ -4,6 +4,7 @@
  */
 package com.xpedx.sterling.rcp.pca.orderhistory.screen;
 
+import java.awt.Checkbox;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -115,6 +116,8 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
     private Label lblToDate;
     private Text txtToDate;
     private Button btnToDateCalendar;
+    private Button chkDisplayWebOrders;
+    private Label lblDisplayWebOrders;
     
 	YRCButtonBindingData chkBoxBindingData = null;
 
@@ -547,7 +550,7 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		pnlSearchlayoutData.grabExcessHorizontalSpace = true;
 		pnlSearchlayoutData.horizontalSpan = 4;
 		pnlSearch.setLayoutData(pnlSearchlayoutData);
-		GridLayout pnlSearchlayout = new GridLayout(4, false);
+		GridLayout pnlSearchlayout = new GridLayout(4, true);
 		pnlSearchlayout.marginHeight = 2;
 		pnlSearchlayout.marginWidth = 0;
 		pnlSearch.setLayout(pnlSearchlayout);
@@ -563,14 +566,29 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
 		txtClearButton.setData("name", "txtClearButton");
 		txtClearButton.setVisible(false);
 		
-		txtSearchButton = new Text(pnlSearch, SWT.BORDER);
+	/*	txtSearchButton = new Text(pnlSearch, SWT.BORDER);
 		GridData txtSearchButtonlayoutData = new GridData();
 		txtSearchButtonlayoutData.horizontalAlignment = 4;
 		txtSearchButtonlayoutData.grabExcessHorizontalSpace = true;
 		txtSearchButton.setLayoutData(txtSearchButtonlayoutData);
 		txtSearchButton.setData("name", "txtSearchButton");
-		txtSearchButton.setVisible(false);
+		txtSearchButton.setVisible(false);*/
 		
+		chkDisplayWebOrders = new Button(pnlSearch, SWT.CHECK);
+		chkDisplayWebOrders.setText("Display Web Orders Only");
+		GridData chkDisplayWebOrderslayoutData = new GridData();
+		chkDisplayWebOrderslayoutData.horizontalAlignment = 1;
+		chkDisplayWebOrders.setLayoutData(chkDisplayWebOrderslayoutData);
+		chkDisplayWebOrders.setData("name", "chkDisplayWebOrders");
+		chkDisplayWebOrders.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "Button");
+		
+		/*lblDisplayWebOrders = new Label(pnlSearch, SWT.PUSH);
+		lblDisplayWebOrders.setText("Display Web Orders Only");
+		GridData lblDisplayWebOrderslayoutData = new GridData();
+		lblDisplayWebOrderslayoutData.horizontalAlignment = 4;
+		lblDisplayWebOrders.setLayoutData(lblDisplayWebOrderslayoutData);
+		lblDisplayWebOrders.setData("name", "lblDisplayWebOrders");
+		lblDisplayWebOrders.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "Label");*/
 		
 		btnClear = new Button(pnlSearch, SWT.PUSH);
 		btnClear.setData("name","btnClear");
@@ -975,6 +993,14 @@ public class XPXOrderHistoryPanel extends XPXPaginationComposite  implements IYR
         tbd = new YRCTextBindingData();
         tbd.setName("txtShipFrom");
         txtShipFrom.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,tbd);
+        
+        chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setSourceBinding("SearchCriteria:/XPXRefOrderHdr/Extn/@ExtnSourceType");
+		chkBoxBindingData.setTargetBinding("SearchCriteria:/XPXRefOrderHdr/Extn/@ExtnSourceType");
+		chkBoxBindingData.setName("chkDisplayWebOrders");
+		chkDisplayWebOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);
                
     }
 	

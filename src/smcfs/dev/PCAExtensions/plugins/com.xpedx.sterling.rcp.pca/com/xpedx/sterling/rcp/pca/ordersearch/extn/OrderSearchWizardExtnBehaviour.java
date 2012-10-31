@@ -428,8 +428,6 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			else{
 				eleExtn.setAttribute("ExtnSourceType","3");
 				eleExtn.setAttribute("ExtnSourceTypeQryType", "NE");
-				eleExtn.setAttribute("ExtnWebConfNum", "M");
-				eleExtn.setAttribute("ExtnWebConfNumQryType", "LIKE");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
