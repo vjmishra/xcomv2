@@ -9,6 +9,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
 <%
   		request.setAttribute("isMergedCSSJS","true");
@@ -481,10 +482,11 @@ function showSharedListForm(){
 			clearPreviousDisplayMsg();
 			javascript:addItemToCart(itemId, id );
 		}
-		
+		var isAdd2List=false;
 		function add2List(){
 			var itemCount = "<s:property value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size()'/>";
 			var itemCountNum = Number(itemCount);
+			var storeFront='<s:property value="wCContext.storefrontId" />';
 			if(itemCount<=200){
 				if((itemCountNum+document.getElementById('qaTable').rows.length)<=200){
 					//Added For Jira 3197
@@ -505,8 +507,15 @@ function showSharedListForm(){
 						//Added for JIRA 3642
 						formItemIds.itemCount.value=itemCount; 
 						
-						Ext.get("btnQLAdd2Cart").dom.disabled = true;
+						formItemIds.action="/swc/xpedx/myItems/XPEDXMyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
 						formItemIds.submit();
+                        if(!isAdd2List && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent))
+
+                        {
+                                isAdd2List =true;
+                                add2List();
+                        }
+                       
 						
 					} else {
 						alert("There is a problem in this page. Form formAdd2List is missing.");
