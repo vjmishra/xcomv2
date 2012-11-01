@@ -454,8 +454,7 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
                 attrElemComplex2.setAttribute("ExtnSourceQryType", "EQ");
             }
             else{
-            	attrElemComplex2.setAttribute("ExtnSourceType","3");
-                attrElemComplex2.setAttribute("ExtnSourceTypeQryType", "NE");
+            	attrElemComplex2.setAttribute("ExtnSourceType","");
             }
 			isExtnChildCreated = false;
 			/*attrElemComplex2.setAttribute("MasterCustomer", "CD-0000163615-M-XPED-CC");
