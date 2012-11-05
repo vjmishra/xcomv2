@@ -402,7 +402,7 @@ public abstract class XPXPaginationBehavior extends YRCBehavior {
 		Extnelem.setAttribute("ExtnWebHoldFlag", "");
 		Extnelem.setAttribute("ExtnWebHoldReason", "");
 		Extnelem.setAttribute("ExtnWillCall", "");
-		
+		Extnelem.setAttribute("ExtnOUFailureLockFlag", "");
 		Element PriceInfoelem = YRCXmlUtils.createChild(Orderelem, "PriceInfo");
 		PriceInfoelem.setAttribute("Currency", "");
 		PriceInfoelem.setAttribute("EnterpriseCurrency", "");

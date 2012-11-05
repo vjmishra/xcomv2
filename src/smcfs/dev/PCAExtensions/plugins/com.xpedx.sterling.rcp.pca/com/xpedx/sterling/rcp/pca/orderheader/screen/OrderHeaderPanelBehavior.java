@@ -317,17 +317,25 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 		for (Object objOrderHold : listOrderHold) {
 			Element eleOrderHold = (Element) objOrderHold;
 			if("ORDER_LIMIT_APPROVAL".equals(eleOrderHold.getAttribute("HoldType"))){
+				//Condition added for JIRA XBT192
+				if("1200".equals(eleOrderHold.getAttribute("Status"))){
+					String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (Rejected)";				
+					YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
+				}
+				else{
 					String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (Pending Approval)";				
 					YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
 				}
+					
+				}
 			//Condition added for JIRA 4326
 			if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_ORD_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_LNE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEG_ERR_CODE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.NEEDS_ATTENTION.equals(eleOrderHold.getAttribute("HoldType"))){
-					String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (CSR Reviewing)";
-					YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
-					break;				
+				String status = YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (CSR Reviewing)";	
+				YRCXmlUtils.getXPathElement(referenceElement, "/Order").setAttribute("Status", status);
+				
+			}
 			}
 		}
-	}
 	
 	public void viewOriginal()
     {
