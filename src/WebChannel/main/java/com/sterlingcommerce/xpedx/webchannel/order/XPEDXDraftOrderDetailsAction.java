@@ -156,13 +156,21 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			String modifyUserIdStr = "";
 			String lastModifiedDateStr = "";
 			
-			modifyUserIdStr = getOrderElementFromOutputDocument().getAttribute("Modifyuserid");
-			if(YFCUtils.isVoid(modifyUserIdStr)){
-				createUserIDStr = getOrderElementFromOutputDocument().getAttribute("Createuserid");
-				setLastModifiedUserId(createUserIDStr);
-			}else{
-				setLastModifiedUserId(modifyUserIdStr);
+			//added for XBT-146
+			String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+				 salesreploggedInUserName = (String)wcContext.getSCUIContext().getSession().getAttribute("loggedInUserName");
 			}
+			else{
+				modifyUserIdStr = getOrderElementFromOutputDocument().getAttribute("Modifyuserid");
+				if(YFCUtils.isVoid(modifyUserIdStr)){
+					createUserIDStr = getOrderElementFromOutputDocument().getAttribute("Createuserid");
+					setLastModifiedUserId(createUserIDStr);
+				}else{
+					setLastModifiedUserId(modifyUserIdStr);
+				}
+			}
+			//end of XBT-146 changes
 			lastModifiedDateStr = getOrderElementFromOutputDocument().getAttribute("Modifyts");
 			setLastModifiedDateString(lastModifiedDateStr);
 			/*
@@ -2247,7 +2255,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
+	private String salesreploggedInUserName; //added for XBT-146
 	
+	public String getSalesreploggedInUserName() {
+		return salesreploggedInUserName;
+	}
+
+	public void setSalesreploggedInUserName(String salesreploggedInUserName) {
+		this.salesreploggedInUserName = salesreploggedInUserName;
+	}
+
 	public String custStatus;
 	public String getCustStatus() {
 		return custStatus;

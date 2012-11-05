@@ -168,7 +168,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				//Added for Jira 3155
 				String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
 				
-				NodeList assetIdList = eItem.getElementsByTagName("Asset");
+				/*NodeList assetIdList = eItem.getElementsByTagName("Asset");
 				if(assetIdList != null)
 				{
 					StringBuffer strAssetType = new StringBuffer();
@@ -185,11 +185,13 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 							}
 						}
 						counter++;
-					}
-					if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
-					deleteAssetType(env,inXML,itemKey,strAssetType.toString());
-					}
-				}
+					}*/
+					//if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
+				    if(itemKey != null){
+					deleteAssetType(env,inXML,itemKey);
+				    }
+		/*			}
+				}*/
 				//End for Jira 3155
 			}
 
@@ -267,14 +269,14 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		return outXML;
 	}
 
-private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey, String strAssetType) {
+private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey) {
 	/* Added code for Jira 3155 ***/
 		Connection connection = null;
 		Statement stmt = null;
 		Document documentXML = null;
 		try {
 			connection = getDBConnection(env, documentXML);
-			String query = "delete from yfs_asset where item_key = " + "'" + itemKey + "'"+" and type in (" + strAssetType + ")";
+			String query = "delete from yfs_asset where PARENT_KEY = " + "'" + itemKey + "'";
 			stmt = connection.createStatement();
 			stmt.execute(query);
 			stmt.close();

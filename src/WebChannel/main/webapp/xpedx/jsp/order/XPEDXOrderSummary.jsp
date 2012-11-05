@@ -1632,19 +1632,28 @@ from session . We have customer Contact Object in session .
 		<!-- <div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div> -->
 		<div id="requiredCustomerPOErrorDiv" style="display: none;  float: right; margin-right: 28px; margin-top: 5px;" class="error" >PO #: is required field</div>
 		<!--Added for 3098  -->
-		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div>
+		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div><br/>
+		<s:if test="%{#isSalesRep}">
+			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order. To change the Ship-To click on the 'Change' link next to the Ship-To address.</div>
+		</s:if>
   
 <!-- class="container" -->
 		
 		
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
-<s:set name='lastModifiedUserId' value="lastModifiedUserId" />
+<s:set name='lastModifiedUserId' value="#_action.getLastModifiedUserId()" />
 <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
 <div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
      <!--   Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/>  -->
     
-    Last modified  <s:if test="#modifiedBy!=''"> by </s:if> <s:property value="#modifiedBy"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/> 
+    Last modified by 
+    <s:if test="%{#isSalesRep}">
+    	<s:property value="#_action.getSalesreploggedInUserName()"/>
+    </s:if>
+    <s:else>
+        <s:property value="#modifiedBy"/> 
+    </s:else> on <s:property value="#_action.getLastModifiedDateToDisplay()"/> 
     
 </div>
 

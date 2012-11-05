@@ -990,7 +990,8 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCustLineAcct.setText("");
 		txtCustLineAcct.setLayoutData(gridData2);
 		txtCustLineAcct.setTextLimit(500);
-		txtCustLineAcct.setData("name", "txtCustLineAcct");		
+		txtCustLineAcct.setData("name", "txtCustLineAcct");
+		txtCustLineAcct.setVisible(false);
 
 		if(!("C".equals(suffixType))){
 		chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);

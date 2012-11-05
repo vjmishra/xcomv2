@@ -348,10 +348,16 @@ ul.checkboxTree li
           <s:if test="(#_action.IsCustLineAccNoFlag())">  
           <tr>
             <td>Line Account #: </td>
+            <s:if test='%{#extnElem.getAttribute("ExtnCustLineAccLbl") != null && #extnElem.getAttribute("ExtnCustLineAccLbl") != ""}'>
             <td valign="top" >
-            	<s:textfield id='CustLineAccNoLabel' readonly="%{!#_action.IsCustLineAccNoFlag()}" cssClass="input-details-cart  x-input" tabindex="12"
-					maxlength="25" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="25" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
+            <s:hidden id='CustLineAccNoLabel' name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
+            	<s:property value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </td>
+            </s:if>
+            <s:else>
+            <td valign="top" >
+            <s:text name="Line Account #"/>
+            </s:else>
           </tr>
           </s:if>
             <s:else>

@@ -84,11 +84,15 @@ var data="false";
   <s:param name="DisplayUserID" value="%{#_action.getNetworkId()}"/>
   </s:url>
  <div id="search"> 
-<div id="listOfCustomers" class="search-pagination-bottom">
+<div id="listOfCustomers">
+<table width="100%"><tr><td style="width:70%;">
+<div class="salesProNotice" style="width:auto;"> Please ensure correct Ship-To has been selected once you are logged in. You can view / change Ship-To by clicking on customer name on top right corner.</div></td>
+ <td style="width:40%;"><div class="search-pagination-bottom">
   <span>
       <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
       <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#salesRepCustomersPaginated}" isAjax="False" divId="listOfCustomers" showFirstAndLast="False" showMyUserFormat="true" />
   </span>
+</div></td></tr></table>
 </div>
 <div> </div>
  <%-- end of jira 3442 pagination--%>

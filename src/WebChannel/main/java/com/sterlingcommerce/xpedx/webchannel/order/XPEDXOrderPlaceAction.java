@@ -132,16 +132,6 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String orderType;
 	XPEDXShipToCustomer shipToCustomer;
 	private String customerContactID;
-	//Added for webtrend - XBT-35 - Start
-	protected String noOfLines; 
-	public String getNoOfLines() {
-		return noOfLines;
-	}
-
-	public void setNoOfLines(String noOfLines) {
-		this.noOfLines = noOfLines;
-	}
-	//Added for webtrend - XBT-35 - End
 	public boolean isCSRReview() {
 		return isCSRReview;
 	}
@@ -945,11 +935,6 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			LOG.debug("setXpedxChainedOrderMap: Empty chainedOrderLineList.... No chained orders");
 			return;
 		}
-		//Added for webtrends - XBT-35 Start
-		Element webtrendsOrderLineList = chainedOrderLineList.getDocumentElement();
-		if(webtrendsOrderLineList!=null){
-			noOfLines = webtrendsOrderLineList.getAttribute("TotalLineList");
-		}//End of XBT-35
 		//get all the Orderlines from the document
 		NodeList nlOrderLineList = chainedOrderLineList.getElementsByTagName("OrderLine");
 		int length = nlOrderLineList.getLength();

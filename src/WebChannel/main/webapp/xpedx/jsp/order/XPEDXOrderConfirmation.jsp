@@ -157,7 +157,6 @@
 	<s:set name='scuicontext' value="wCContext" />
 	<s:set name='showCurrencySymbol' value='%{true}' />
 	<s:set name='conOrder' value="confirmDraftOrderElem" />
-	<s:set name='cntLines' value="noOfLines" />
 	<s:set name='overallTotals' value='#xutil.getChildElement(#conOrder,"OverallTotals")'/>
 	<s:set name='priceInfo' value='#xutil.getChildElement(#conOrder,"PriceInfo")'/>
 	<s:set name='ExtnInfo' value='#xutil.getChildElement(#conOrder,"Extn")'/>
@@ -202,7 +201,7 @@
 		<s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#orderDate, #scuicontext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')" />
 	<META NAME="WT.tx_it" CONTENT="<s:property value='#xpedxOrderTime'/>"/>	
 	<META NAME="WT.tx_s" CONTENT="<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#stotal)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#stotalwithAdjust)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#shippableOrderPrice)'/>;<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currencyCode,#totalOrderTax)'/>"/>	
-	<meta name="DCSext.w_x_Lines" content="<s:property value='%{#cntLines}'/>" />
+	
 	<%--End of webtrends --%>
 	
 	<s:if test="#isOrderOnApprovalHoldStatus">

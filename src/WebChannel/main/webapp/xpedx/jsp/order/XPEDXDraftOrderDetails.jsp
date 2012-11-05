@@ -1384,12 +1384,19 @@ var currentAadd2ItemList = new Object();
 <div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
 </div>
+<s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
 <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
 <div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
-    Last modified by <s:property value="#modifiedBy"/> on <s:property value="#lastModifiedDateString"/> 
+    Last modified by 
+    <s:if test="%{#isSalesRep}">
+    	<s:property value="#_action.getSalesreploggedInUserName()"/>
+    </s:if>
+    <s:else>
+    	<s:property value="#modifiedBy"/>
+    </s:else> on <s:property value="#lastModifiedDateString"/> 
 </div>
 </div>
 
