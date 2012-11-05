@@ -28,16 +28,16 @@
 </s:if>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
+
+<!-- javascript -->
+					
+<s:if test="#isGuestUser == true">
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+</s:if>
 <!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	
-<!-- javascript -->
-					
-<s:if test="#isGuestUser == true">
-	
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-</s:if>
 
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
@@ -318,7 +318,9 @@
 					<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
 						<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
 						tabindex="1002" type="text" onkeydown="javascript:validateQuote(event)" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
+						
 						<button type="submit" class="searchButton"  tabindex="1003" title="Search" onclick="javascript:setDefaultSearchText();"></button>
+						
 						<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
 						<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
 					</div>	
