@@ -1729,6 +1729,17 @@ private void preparePlaceOrderLineErrors() {
     			setControlVisible("btnIsReviewed", true);
     		}
     		
+    		//Element referenceElement = getModel("OrderDetails");
+    		String OrderStatus = YRCXmlUtils.getAttributeValue(outXml, "OrderList/Order/@MaxOrderStatus");
+    		
+    		if(OrderStatus!= null && !("".equalsIgnoreCase(OrderStatus))){
+    			Double f = Double.valueOf(OrderStatus);
+	    		Double webhld = 1100.5450;
+	    		if( f > webhld  ){
+	    			YRCXmlUtils.getXPathElement(outXml, "OrderList/Order/Extn").setAttribute("ExtnWebHoldFlag","N");
+	    		}
+    		}
+    		
     	}
 	//Added for JIRA 4326. If the needs attention button clicked the hold status should be changed to 1300
 	public void changeHoldStatus() {
