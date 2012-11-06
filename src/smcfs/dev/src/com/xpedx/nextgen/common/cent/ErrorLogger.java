@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.common.cent;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -77,6 +78,7 @@ public class ErrorLogger {
 				xpxErrorLookupRootElem.setAttribute("ErrorClass", errorObj.getErrorClass());
 				xpxErrorLookupRootElem.setAttribute("SourceSystem", "Sterling");
 				xpxErrorLookupRootElem.setAttribute("TransType", errorObj.getTransType());
+				Exception e = errorObj.getException();
 				
 				Document getErrorLookupOutputDoc = api.executeFlow(yfsEnv,"XPXGetErrorLookupListService", getErrorLookupInDoc);
 				Element outputRootElement = getErrorLookupOutputDoc.getDocumentElement();
@@ -103,7 +105,20 @@ public class ErrorLogger {
 							logString.append("|");						
 							logString.append(checkDateTimeCommMethod(xpxErrorElem.getAttribute("CommMethod"),xpxErrorElem.getAttribute("StartDownTime"),xpxErrorElem.getAttribute("EndDownTime"),xpxErrorElem.getAttribute("DownTimeNotification")));
 							logString.append("|");
-							logString.append(xpxErrorElem.getAttribute("QueueName"));
+							if(e instanceof com.yantra.yfs.japi.YFSException) {
+				            	YFSException yfe = (YFSException)e;
+								String errorCode = yfe.getErrorCode();
+								if((XPXLiterals.CD_ITEM_TRANS_TYPE).equalsIgnoreCase(xpxErrorElem.getAttribute("TransType")) && "ORA-12899".equalsIgnoreCase(errorCode)){
+									String queueName = "xpedx eBusiness Data Quality ***NotForITCSUse***";
+									logString.append(queueName);
+								}
+								else{
+									logString.append(xpxErrorElem.getAttribute("QueueName"));
+								}
+							}
+							else{
+								logString.append(xpxErrorElem.getAttribute("QueueName"));
+							}
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("ErrorClass"));
 							logString.append("|");
