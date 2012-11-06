@@ -210,10 +210,10 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 					}
 					if(extnOrderStatus != null && extnOrderStatus != "")
 					{
-						eleOrderList.setAttribute("Status", (String) statusList
-							.get(extnOrderStatus));
+					
 						//Added for JIRA XBT192 
 						//Condition added for JIRA 4326
+						//eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
 						Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(eleOrderList, "OrderHoldTypes");
 						List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
 						boolean exitHold = false;
