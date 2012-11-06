@@ -901,7 +901,7 @@ public class XPEDXOrderUtils {
 			if (custLineNoLbl != null && custLineNoLbl.trim().length() > 0)
 				customerFieldsMap.put("CustLineAccNo", custLineNoLbl);
 			else
-				customerFieldsMap.put("CustLineAccNo", "Line Account#");
+				customerFieldsMap.put("CustLineAccNo", "Line Account #");
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//customerFieldsMap.put("CustLineAccNo", "Line Account#");
 		}
@@ -1625,7 +1625,20 @@ public class XPEDXOrderUtils {
 						continue;
 					replacementItemsElementList.add(itemDetailsList.get(0));
 				}
+				/*
+				 * Commented by Muthu for JIRA - 160
 				replacementItemsMap.put(itemID, replacementItemsElementList);
+				*/
+				
+				/*
+				 * Added by Muthu for JIRA - 160
+				 * If the List is empty then add null instead of empty List since the JSP is checking for null condition
+				 */
+				if(replacementItemsElementList.size() == 0){
+					replacementItemsMap.put(itemID, null);
+				}else{
+					replacementItemsMap.put(itemID, replacementItemsElementList);
+				}
 			}//end while loop
 		}
 		
