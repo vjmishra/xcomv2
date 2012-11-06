@@ -2346,7 +2346,9 @@ function checkSessionTimeout(){
 								<s:property value='addressline'/><br/>
 							</s:if>
 							<s:else>
+								<s:if test="%{#addressline.trim() != ''}">
 								<s:property value='addressline'/><br/>
+								</s:if>
 							</s:else>
 					    </s:iterator>
 					    <s:if test="{#defualtShipTAddress.getCityCode()!=''}">
@@ -2767,7 +2769,9 @@ function checkSessionTimeout(){
 		       </span>
 		       <s:property   value='LoggerInUserCustomerName' />, 
 		       <s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline'>
+		       	<s:if test="%{#addressline.trim() != ''}">		       	
 		          <s:property value="addressline" />, 
+		       	</s:if>		           
 		       </s:iterator>
 		       <s:property value="#defualtShipTAddress.getCity()" />,
 		       <s:property value="#defualtShipTAddress.getState()" />

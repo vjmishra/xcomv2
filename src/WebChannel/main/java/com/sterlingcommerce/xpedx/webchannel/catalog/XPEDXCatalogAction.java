@@ -623,6 +623,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			SCXmlUtil.removeNode(elements.get(0));
 		}
 		setStockedItemFromSession();
+		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (isStockedItem) {
 			if(shipToCustomer== null){
 				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
