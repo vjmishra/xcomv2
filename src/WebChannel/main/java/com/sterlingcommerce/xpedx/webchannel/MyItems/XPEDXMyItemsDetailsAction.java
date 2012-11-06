@@ -1366,7 +1366,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				getCustomerFieldsMap().put("CustLineAccNo", custLineNoLbl);
 			} else {
 				getCustomerFieldsMap().put("CustLineAccNo",
-						"Line Account#");
+						"Line Account #");
 			}
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");

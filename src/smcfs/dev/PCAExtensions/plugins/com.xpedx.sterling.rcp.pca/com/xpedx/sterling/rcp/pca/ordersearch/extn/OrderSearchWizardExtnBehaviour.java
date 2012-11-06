@@ -426,10 +426,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				eleExtn.setAttribute("ExtnSourceQryType", "EQ");
 			}
 			else{
-				eleExtn.setAttribute("ExtnSourceType","3");
-				eleExtn.setAttribute("ExtnSourceTypeQryType", "NE");
-				eleExtn.setAttribute("ExtnWebConfNum", "M");
-				eleExtn.setAttribute("ExtnWebConfNumQryType", "LIKE");
+				eleExtn.setAttribute("ExtnSourceType","");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
