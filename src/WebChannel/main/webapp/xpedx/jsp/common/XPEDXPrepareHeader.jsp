@@ -2185,7 +2185,7 @@ function checkSessionTimeout(){
 		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
 	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;" style="top:-4px;margin-left: 3px;height: 20px;"></button>
 	     <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		</div> 
