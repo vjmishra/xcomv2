@@ -232,7 +232,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		sb.append("\",");
 		
-		sb.append("uomdisplay: \"<div class=\'uom-select\'><select name='itemUomList' id='itemUomList_")
+		sb.append("uomdisplay: \"<div class=\'uom-select\'><select onclick='javascript:this.focus();'").append(" name='itemUomList' id='itemUomList_")
 			.append(itemID).append("'>");
 		for (Iterator<Map.Entry <String, String>> iterator = itemUOMList.entrySet().iterator(); iterator.hasNext();) {
 			Map.Entry  pair = (Map.Entry ) iterator.next();
