@@ -676,6 +676,9 @@ function showSplitDiv(divId)
                         					(CSR Reviewing)
                         				</s:elseif>                        				                        				
                         			  </s:if>
+                        			  <s:elseif test='%{(#orderType != "Customer"  && #isFOCSRReview) }'>
+                        			  	(CSR Reviewing)
+                        			  </s:elseif>
                         			</s:else>                        				
 					 					<s:if test="%{#ViewInvoicesFlag}">                        				
 		                        			<s:if test='%{#status == "Invoiced"}'>	                        				 
