@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.ExtnAutoLoader;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -430,10 +431,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				eleExtn.setAttribute("ExtnSourceQryType", "EQ");
 			}
 			else{
-				eleExtn.setAttribute("ExtnSourceType","3");
-				eleExtn.setAttribute("ExtnSourceTypeQryType", "NE");
-				eleExtn.setAttribute("ExtnWebConfNum", "M");
-				eleExtn.setAttribute("ExtnWebConfNumQryType", "LIKE");
+				eleExtn.setAttribute("ExtnSourceType","");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
