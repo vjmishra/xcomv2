@@ -1430,7 +1430,11 @@
 			</Input>
 			<Template>
 				<Order OrderHeaderKey="">
-					<Extn/>
+					<Extn>
+						<XPXUeAdditionalAttrXmlList>
+							<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>	
 					<OrderLines TotalNumberOfRecords="">
 						<OrderLine OrderLineKey="">
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
