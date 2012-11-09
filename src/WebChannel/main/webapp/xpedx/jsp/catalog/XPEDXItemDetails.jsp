@@ -66,7 +66,7 @@
 <s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
 <s:set name='myParam' value='{"itemID"}' />
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
-<s:url id='addToCartURL' namespace='/order' action='addToCart'
+<s:url id='addToCartURL' namespace='/catalog' action='addToCartAndAvailablity'
 	includeParams="none" />
 <s:url id='imgViewerURL' namespace='/catalog' action='itemImageViewer' />
 <s:set name='appFlowContext' value='#session.FlowContext' />
@@ -799,6 +799,8 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         // end testing
         method: 'GET',
         success: function (response, request){
+	    	 document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
+	    	 setPandAData();
               
            // DialogPanel.toggleDialogVisibility('addToCart');	  
          //-- WebTrends tag start --

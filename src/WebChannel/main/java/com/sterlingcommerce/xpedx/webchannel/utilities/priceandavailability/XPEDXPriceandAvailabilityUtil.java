@@ -105,27 +105,41 @@ public class XPEDXPriceandAvailabilityUtil {
 	 */
 	public static XPEDXPriceAndAvailability getPriceAndAvailability(
 			ArrayList<XPEDXItem> inputItems) {
+		return getPriceAndAvailability(inputItems,"false");
+	}
+	
+	public static XPEDXPriceAndAvailability getPriceAndAvailability(
+			ArrayList<XPEDXItem> inputItems , String isOrderData) {
 		XPEDXPriceAndAvailability pnaOutput = new XPEDXPriceAndAvailability();
 		if (null == inputItems || inputItems.size() <= 0) {
 			log.debug("getPriceAndAvailability(): Item list is empty... Cannot call the service...");
 			return pnaOutput;
 		}
-		
-		Document inputDoc = prepareInputDoc(inputItems);
-		String inputXML = SCXmlUtil.getString(inputDoc);
-		log.debug("getPriceAndAvailability: inputXML for P&A Webservice: "
-				+ inputXML);
+		Document inputDoc =null;
+		String inputXML=null;
+		if(!"true".equals(isOrderData))
+		{
+			 inputDoc = prepareInputDoc(inputItems);
+			 inputXML = SCXmlUtil.getString(inputDoc);
+			log.debug("getPriceAndAvailability: inputXML for P&A Webservice: "
+					+ inputXML);
+		}
 		String displayErrorMsgToUser = "";
 		Document outputDoc = null;
 		
 		// TODO: Call the actual service
 		try{
-					if( PANDA_WS_MODE == PANDA_WS_AUTO_RESPONSE ){		//In case Auto it takes legacy number from input and sends the response
+					 if("true".equals(isOrderData))
+					{
+							outputDoc =(Document)XPEDXWCUtils.getObjectFromCache("PNA_RESPONSE_FOR_ITEM");
+							XPEDXWCUtils.removeObectFromCache("PNA_RESPONSE_FOR_ITEM");
+					}
+					 else if( PANDA_WS_MODE == PANDA_WS_AUTO_RESPONSE ){		//In case Auto it takes legacy number from input and sends the response
 							outputDoc = getPandADummyAutoResponse(  inputXML );	
 					}
 					else if( PANDA_WS_MODE == PANDA_WS_DUMMY_RESPONSE  ){	//Response based on DummyXML
 							outputDoc = getDummyOutPutDoc( ); 
-					}
+					}					
 					else { //Makes real P&A Call needed for Prod environment
 						outputDoc = XPEDXCallPnAService(inputDoc);
 					}

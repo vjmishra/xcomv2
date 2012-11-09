@@ -1,14 +1,29 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.comergent.appservices.configuredItem.XMLUtils;
+import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
+import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
+import com.yantra.yfc.core.YFCIterable;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXAddToCartAction extends AddToCartAction {
@@ -81,8 +96,48 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         	
 		         if(YFCCommon.isVoid(errorText) && !YFCCommon.isVoid(productID))
 		         	{
-		
 		         		Element changeOrderOutput = performChangeOrder();
+		         		
+			         		String maxLineNum = null;
+			         		String responseXML = null;
+				        	ArrayList<String> lineNumberList = new ArrayList<String>();
+			         		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutput, "Extn");
+			         		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+			         		if(additionalAttrXml != null){
+				         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
+				         		Document attrXml =SCXmlUtil.createFromString(responseXML);
+								Element priceAvailXml = attrXml.getDocumentElement();
+				         		
+								Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
+								Document doc  = itemPrice.getOwnerDocument();
+								YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
+								
+								if (rootEle.hasChildNodes()) {
+									YFCElement lineItem =  rootEle.getChildElement("Items");
+									YFCIterable<YFCElement> yfcItr = (YFCIterable) lineItem.getChildren("Item");
+									while (yfcItr.hasNext()) {
+										YFCElement lineElem = (YFCElement) yfcItr.next();
+										YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
+										lineElem.getLastChild();
+										String str = lineNumberElem.getNodeValue();
+										lineNumberList.add(str);
+									}
+									
+									maxLineNum = Collections.max(lineNumberList);
+									yfcItr = (YFCIterable) lineItem.getChildren("Item");
+									while (yfcItr.hasNext()) {
+										YFCElement lineElem = (YFCElement) yfcItr.next();
+										YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
+										lineElem.getLastChild();
+										String str = lineStatusCodeElem.getNodeValue();
+										if(!str.equals(maxLineNum)){
+											lineItem.removeChild(lineElem);
+											}
+										}
+									
+									}
+								XPEDXWCUtils.setObectInCache("PNA_RESPONSE_FOR_ITEM",doc) ;
+			         		}
 		         		changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
 		         		 if(YFCCommon.isVoid(editedOrderHeaderKey))
 		        		 {
