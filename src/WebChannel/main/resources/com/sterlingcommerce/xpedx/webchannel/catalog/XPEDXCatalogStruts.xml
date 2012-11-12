@@ -25,12 +25,12 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXAddToCartBinding.xml</param>
 			<param name="mashups">xpedx_me_addToCartAddOrderLines</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
-			<param name="isOrderData">true</param>
 			<result name="success" type="redirectAction">
 				<param name="actionName">xpedxItemDetailsPandA</param>
 				<param name="namespace">/catalog</param>
 				<param name="isOrderData">true</param>
 				<param name="validateOrderMul">true</param>
+				<param name="itemID">${productID}</param>
 			</result>
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 		</action>

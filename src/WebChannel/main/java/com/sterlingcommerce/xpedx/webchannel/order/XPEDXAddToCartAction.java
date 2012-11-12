@@ -96,48 +96,80 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         	
 		         if(YFCCommon.isVoid(errorText) && !YFCCommon.isVoid(productID))
 		         	{
+		
 		         		Element changeOrderOutput = performChangeOrder();
-		         		
-			         		String maxLineNum = null;
-			         		String responseXML = null;
-				        	ArrayList<String> lineNumberList = new ArrayList<String>();
-			         		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutput, "Extn");
-			         		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
-			         		if(additionalAttrXml != null){
-				         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
-				         		Document attrXml =SCXmlUtil.createFromString(responseXML);
-								Element priceAvailXml = attrXml.getDocumentElement();
-				         		
-								Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
-								Document doc  = itemPrice.getOwnerDocument();
-								YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
-								
-								if (rootEle.hasChildNodes()) {
-									YFCElement lineItem =  rootEle.getChildElement("Items");
-									YFCIterable<YFCElement> yfcItr = (YFCIterable) lineItem.getChildren("Item");
-									while (yfcItr.hasNext()) {
-										YFCElement lineElem = (YFCElement) yfcItr.next();
-										YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
-										lineElem.getLastChild();
-										String str = lineNumberElem.getNodeValue();
-										lineNumberList.add(str);
-									}
+		         			try
+		         			{
+				         		Integer maxItemLineNum = null;
+				         		Integer maxLineNum = null;
+				         		String responseXML = null;
+				         		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutput, "Extn");
+				         		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+				         		if(additionalAttrXml != null){
+					         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
+					         		Document attrXml =SCXmlUtil.createFromString(responseXML);
+									Element priceAvailXml = attrXml.getDocumentElement();
+					         		
+									Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
+									Document doc  = itemPrice.getOwnerDocument();
+									YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
 									
-									maxLineNum = Collections.max(lineNumberList);
-									yfcItr = (YFCIterable) lineItem.getChildren("Item");
-									while (yfcItr.hasNext()) {
-										YFCElement lineElem = (YFCElement) yfcItr.next();
-										YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
-										lineElem.getLastChild();
-										String str = lineStatusCodeElem.getNodeValue();
-										if(!str.equals(maxLineNum)){
-											lineItem.removeChild(lineElem);
+									if (rootEle.hasChildNodes()) {
+										YFCElement lineItem =  rootEle.getChildElement("Items");
+										YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+										while (yfcItr.hasNext()) {
+											YFCElement lineElem = (YFCElement) yfcItr.next();
+											YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
+											YFCElement itemIdElem = lineElem.getChildElement("LegacyProductCode");
+											lineElem.getLastChild();
+											String str = lineNumberElem.getNodeValue();
+											String legacyProductCode=itemIdElem.getNodeValue();
+											if(maxLineNum == null && str != null && str.length()>0 )
+												maxLineNum=Integer.valueOf(str);
+											if(maxItemLineNum == null && str != null && str.length()>0 && 
+													legacyProductCode != null && productID.equals(legacyProductCode))
+											{
+												maxItemLineNum =Integer.valueOf(str);
+												Integer currentLine=Integer.valueOf(str);
+												if(currentLine >= maxLineNum)
+												{
+													maxLineNum=currentLine;
+												}
+											}
+											else if(str != null && str.length()>0 )
+											{
+												Integer currentLine=Integer.valueOf(str);
+												if(productID.equals(legacyProductCode) && currentLine > maxItemLineNum)
+												{
+													maxItemLineNum=currentLine;
+												}
+												if(currentLine > maxLineNum)
+												{
+													maxLineNum=currentLine;
+												}
 											}
 										}
-									
+										yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+										while (yfcItr.hasNext()) {
+											YFCElement lineElem = (YFCElement) yfcItr.next();
+											YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
+											lineElem.getLastChild();
+											String str = lineStatusCodeElem.getNodeValue();
+											if(maxItemLineNum != null && str.equals(maxItemLineNum.toString()) && maxItemLineNum == maxLineNum)
+												continue;
+											else
+												lineItem.removeChild(lineElem);
+										}
+										
 									}
-								XPEDXWCUtils.setObectInCache("PNA_RESPONSE_FOR_ITEM",doc) ;
-			         		}
+									if(maxItemLineNum == maxLineNum)
+										XPEDXWCUtils.setObectInCache("PNA_RESPONSE_FOR_ITEM",doc) ;
+				         		}
+		         			}
+		         			catch(Exception e)
+		         			{
+		         				LOG.error("Exception while getting item from PnA Response "+e.getMessage());
+		         			}
 		         		changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
 		         		 if(YFCCommon.isVoid(editedOrderHeaderKey))
 		        		 {
@@ -150,7 +182,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         		}
 		
 		         		//refreshCartInContext(orderHeaderKey);
-		
+		         		XPEDXWCUtils.releaseEnv(wcContext);
 		         		return SUCCESS;
 		
 		         	}
@@ -162,7 +194,6 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	         // cause of error should have been logged by the throwing method
 	         e.printStackTrace();
 	         System.out.println(" Add to Cart Undefined : " +e.getMessage());
-	         XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 	         return ERROR;
 	     }
 		 return SUCCESS;
