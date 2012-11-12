@@ -65,7 +65,7 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
     <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorting<s:property value='#wcUtil.xpedxBuildKey' />.js" type="text/javascript"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min.js"></script> 
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-tool-tip/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<script type="text/javascript">
@@ -368,11 +368,7 @@
 			        </div>
 			      </div>
 			    </div>
-			    <script type="text/javascript">
-					<!--
-					var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
-					//-->
-				</script>
+			  
 			</div>
 			<!-- end main  -->
     		
