@@ -676,6 +676,9 @@ function showSplitDiv(divId)
                         					(CSR Reviewing)
                         				</s:elseif>                        				                        				
                         			  </s:if>
+                        			  <s:elseif test='%{(#orderType != "Customer"  && #isFOCSRReview) }'>
+                        			  	(CSR Reviewing)
+                        			  </s:elseif>
                         			</s:else>                        				
 					 					<s:if test="%{#ViewInvoicesFlag}">                        				
 		                        			<s:if test='%{#status == "Invoiced"}'>	                        				 
@@ -1764,6 +1767,7 @@ function displayLineAdjustments(panelId, lineKey) {
 	DialogPanel.show(panelId);
 	}
 </script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/order<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/order/approval<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
