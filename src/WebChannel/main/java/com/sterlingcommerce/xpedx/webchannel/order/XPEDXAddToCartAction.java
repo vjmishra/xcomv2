@@ -129,8 +129,8 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											if(maxItemLineNum == null && str != null && str.length()>0 && 
 													legacyProductCode != null && productID.equals(legacyProductCode))
 											{
-												maxItemLineNum =Integer.valueOf(str);
 												Integer currentLine=Integer.valueOf(str);
+												maxItemLineNum =currentLine;												
 												if(currentLine >= maxLineNum)
 												{
 													maxLineNum=currentLine;
@@ -155,7 +155,8 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
 											lineElem.getLastChild();
 											String str = lineStatusCodeElem.getNodeValue();
-											if(maxItemLineNum != null && str.equals(maxItemLineNum.toString()) && maxItemLineNum == maxLineNum)
+											Integer lineNumber=Integer.valueOf(str);
+											if(maxItemLineNum != null && lineNumber == maxItemLineNum && maxItemLineNum == maxLineNum)
 												continue;
 											else
 												lineItem.removeChild(lineElem);
