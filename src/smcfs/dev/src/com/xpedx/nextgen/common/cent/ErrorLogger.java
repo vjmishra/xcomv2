@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.w3c.dom.Document;
@@ -21,6 +22,7 @@ import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 
 public class ErrorLogger {
 
@@ -31,6 +33,7 @@ public class ErrorLogger {
 	 */
 	private static YIFApi api = null;
 	private static YFCLogCategory yfcLogCatlog;
+	private static HashMap<String, String> centExemptErrors = new HashMap<String, String>();
 	
 	static {
 		/* Please do not change anything here this is very specific to cent logging  and if the getlogger path going to change this will be conflict with log4jconfig.custom.xml
@@ -51,6 +54,20 @@ public class ErrorLogger {
 		   <XPXErrorLookup ErrorClass="Unknown Error" SourceSystem="Sterling" TransType="App"/>  */
 		String randomNumber = null;
 		try {
+			Exception e = errorObj.getException();
+			if(e instanceof YFSException){
+				YFSException yfe = (YFSException)e;
+				String errorCode = yfe.getErrorCode();
+				if(!YFCObject.isVoid(errorCode))
+				{
+					if(centExemptErrors.size()==0){
+						centExemptErrors = XPXUtils.readCentPropertiesFile();									
+					}									
+					if (centExemptErrors.containsKey(errorCode)){
+						return;										
+					}
+				}
+			} 
 			
 			Random random = new Random(); 
 			long fraction = (long)(1 * Math.abs(random.nextLong())); 
@@ -78,7 +95,6 @@ public class ErrorLogger {
 				xpxErrorLookupRootElem.setAttribute("ErrorClass", errorObj.getErrorClass());
 				xpxErrorLookupRootElem.setAttribute("SourceSystem", "Sterling");
 				xpxErrorLookupRootElem.setAttribute("TransType", errorObj.getTransType());
-				Exception e = errorObj.getException();
 				
 				Document getErrorLookupOutputDoc = api.executeFlow(yfsEnv,"XPXGetErrorLookupListService", getErrorLookupInDoc);
 				Element outputRootElement = getErrorLookupOutputDoc.getDocumentElement();
@@ -105,20 +121,7 @@ public class ErrorLogger {
 							logString.append("|");						
 							logString.append(checkDateTimeCommMethod(xpxErrorElem.getAttribute("CommMethod"),xpxErrorElem.getAttribute("StartDownTime"),xpxErrorElem.getAttribute("EndDownTime"),xpxErrorElem.getAttribute("DownTimeNotification")));
 							logString.append("|");
-							if(e instanceof com.yantra.yfs.japi.YFSException) {
-				            	YFSException yfe = (YFSException)e;
-								String errorCode = yfe.getErrorCode();
-								if((XPXLiterals.CD_ITEM_TRANS_TYPE).equalsIgnoreCase(xpxErrorElem.getAttribute("TransType")) && "ORA-12899".equalsIgnoreCase(errorCode)){
-									String queueName = "xpedx eBusiness Data Quality ***NotForITCSUse***";
-									logString.append(queueName);
-								}
-								else{
-									logString.append(xpxErrorElem.getAttribute("QueueName"));
-								}
-							}
-							else{
-								logString.append(xpxErrorElem.getAttribute("QueueName"));
-							}
+							logString.append(xpxErrorElem.getAttribute("QueueName"));
 							logString.append("|");
 							logString.append(xpxErrorElem.getAttribute("ErrorClass"));
 							logString.append("|");
