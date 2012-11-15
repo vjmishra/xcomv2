@@ -66,7 +66,7 @@
 <s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
 <s:set name='myParam' value='{"itemID"}' />
 <s:url action='navigate.action' namespace='/catalog' id='myUrl' />
-<s:url id='addToCartURL' namespace='/catalog' action='addToCartAndAvailablity'
+<s:url id='addToCartURL' namespace='/order' action='addToCart'
 	includeParams="none" />
 <s:url id='imgViewerURL' namespace='/catalog' action='itemImageViewer' />
 <s:set name='appFlowContext' value='#session.FlowContext' />
@@ -142,7 +142,11 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	});
 }
 
-function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor){			
+function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){		
+	if(isOrderData == undefined || isOrderData == null)
+	{
+		isOrderData='false';
+	}
 	document.getElementById("displayPricesDiv").innerHTML = "";
 	if(itemId == null || itemId == "null" || itemId == "") {
 		Ext.Msg.hide();
@@ -188,7 +192,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
-	       	Category : Category
+	       	Category : Category,
+	       	isOrderData :isOrderData
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
@@ -799,8 +804,10 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         // end testing
         method: 'GET',
         success: function (response, request){
-	    	 document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
-	    	 setPandAData();
+	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
+	    //	 setPandAData();
+	    	var pricingUOMConvFactor = '<s:property value="#_action.getPricingUOMConvFactor()" />';
+	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,'',pricingUOMConvFactor,'true');
               
            // DialogPanel.toggleDialogVisibility('addToCart');	  
          //-- WebTrends tag start --
