@@ -194,6 +194,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	     {
 	         // cause of error should have been logged by the throwing method
 	         e.printStackTrace();
+			 XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 	         System.out.println(" Add to Cart Undefined : " +e.getMessage());
 	         return ERROR;
 	     }
