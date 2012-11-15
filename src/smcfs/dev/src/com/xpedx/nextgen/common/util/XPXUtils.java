@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -52,7 +57,7 @@ public class XPXUtils implements YIFCustomApi {
 	private static YIFApi api = null;
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static final XPathFactory xPathFactory = XPathFactory.newInstance();
-
+	private static final String propertyFile="/xpedx/sterling/Foundation/properties/centExempt.properties";
 	static {
 		
 		try {
@@ -2657,4 +2662,38 @@ public class XPXUtils implements YIFCustomApi {
 		
 		return sb.toString();
 	}
+	
+	
+	
+	public static HashMap<String, String> readCentPropertiesFile(){
+		HashMap<String, String> map = null;
+		try
+	    { 
+			 map = XPXUtils.getProperties(propertyFile);			
+	    }
+	    catch(Exception e)
+	    {
+	         log.error("Failed to read from " + propertyFile + " file.");
+	    }
+	    return map;
+	}
+	
+	
+	
+	public static HashMap<String, String> getProperties(String infile) throws IOException {
+        final int lhs = 0;
+        final int rhs = 1;
+
+        HashMap<String, String> map = new HashMap<String, String>();
+        BufferedReader  bfr = new BufferedReader(new FileReader(new File(infile)));
+        String line;
+        while ((line = bfr.readLine()) != null) {
+            if (!line.startsWith("#") && !line.isEmpty()) {
+                String[] pair = line.trim().split("=");
+                map.put(pair[lhs].trim(), pair[rhs].trim());
+            }
+        }
+        bfr.close();
+        return(map);
+    }
 }
