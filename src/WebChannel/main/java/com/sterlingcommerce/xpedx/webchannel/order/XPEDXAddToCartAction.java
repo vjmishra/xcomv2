@@ -155,7 +155,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
 											lineElem.getLastChild();
 											String str = lineStatusCodeElem.getNodeValue();
-											Integer lineNumber=Integer.valueOf(str);
+											int lineNumber=Integer.parseInt(str);
 											if(maxItemLineNum != null && lineNumber == maxItemLineNum && maxItemLineNum == maxLineNum)
 												continue;
 											else
