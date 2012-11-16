@@ -22,6 +22,7 @@ import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
@@ -252,8 +253,16 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			log.error(SCXmlUtil.getString(eItem));
 			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
+			String errorCode = yfe.getErrorCode();
+			if(!YFCObject.isVoid(errorCode) && errorCode.equalsIgnoreCase("ORA-12899"))
+			{
+			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
+						XPXLiterals.YFE_ERROR_VALUE_TOO_LARGE_CLASS, env, inXML);	
+			}
+			else {
 			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
+			}
 			outXML = generateResponse(env, inXML, "FAIL", yfe);
 			return outXML;
 		} catch (Exception e) {
