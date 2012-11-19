@@ -5963,6 +5963,8 @@ public class XPEDXWCUtils {
 
 	public static String getCategoryPathPromo(String itemId,String org){
 
+		if(itemId == null || itemId.trim().length() == 0)
+			return "";
 		IWCContext context = null;
 		SCUIContext wSCUIContext = null;
 
