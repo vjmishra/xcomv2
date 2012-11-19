@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,6 +122,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setCategoryPath(String categoryPath) {
 		this.categoryPath = categoryPath;
+	}
+
+//Added for performance Fix 
+	private String categoryShortDescription = "";
+	
+	public String getCategoryShortDescription() {
+		return categoryShortDescription;
+	}
+
+	public void setCategoryShortDescription(String categoryShortDescription) {
+		this.categoryShortDescription = categoryShortDescription;
 	}
 
 	//Start 2964
@@ -412,10 +424,54 @@ public class XPEDXCatalogAction extends CatalogAction {
 				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
 			}
 			/****End of Code Changed for Promotions JIra 2599 *******/
-		
+		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
 
 		}
 		return SUCCESS;
+	}
+
+/*Added for performance issue */
+	public  void getCatTwoDescFromItemIdForpath(Element categoryList,String path) {
+		String result = null;
+		StringBuilder cat = new StringBuilder();
+		if(path != null && path.trim().length()>0 && categoryList != null  )
+		{
+			StringTokenizer st = new StringTokenizer(path, "/");
+			if(st.hasMoreTokens())
+			{
+				cat.append("/").append(st.nextToken());
+				if(st.hasMoreTokens())
+				{
+					cat.append("/").append(st.nextToken());
+					if(st.hasMoreTokens())
+						cat.append("/").append(st.nextToken());
+				}
+			}
+			try
+			{
+				String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
+				ArrayList<Element> categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category");
+				if(categoryElements != null)
+				categoryElements.addAll(SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category"));
+				else
+					categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category");
+				for(Element catgegory: categoryElements)
+				{
+					String shortDescription=catgegory.getAttribute("ShortDescription");
+					String categoryPath=catgegory.getAttribute("CategoryPath");
+					if(categoryPath != null && categoryPath.equals(cat.toString()))
+					{
+						result = adjugglerKeywordPrefix + shortDescription;
+						break;
+					}
+				}
+				categoryShortDescription = XPEDXWCUtils.sanitizeAJKeywords(result);
+			}
+			catch(Exception e)
+			{
+				log.error("Error while getting ShortDescreption for Adjuggler "+e.getMessage());
+			}
+		}
 	}
 
 	/*
@@ -733,7 +789,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	
 		setStockedItemFromSession();				
-	
+		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -854,6 +910,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//prepareMyItemListList();
 			getSortFieldDocument();
 		}
+		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),path);
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -1226,6 +1283,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if(isStockedItem){
 		 setsearchMetaTag(true);
 		}
+		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),path);
 		//Webrtends	tag End
 		return SUCCESS;
 	}
