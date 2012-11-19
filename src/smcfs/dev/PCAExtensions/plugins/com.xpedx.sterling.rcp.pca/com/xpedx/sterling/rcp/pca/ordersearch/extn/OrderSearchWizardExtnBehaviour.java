@@ -431,7 +431,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				eleExtn.setAttribute("ExtnSourceQryType", "EQ");
 			}
 			else{
-				eleExtn.setAttribute("ExtnSourceType","");
+				eleExtn.removeAttribute("ExtnSourceType");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
