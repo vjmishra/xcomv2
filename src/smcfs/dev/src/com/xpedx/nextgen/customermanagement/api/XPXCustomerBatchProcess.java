@@ -366,29 +366,49 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							
 							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
 							{
-								//JIRA 3740 Start
-								//Currently log to CENT if the SAP is different. We are not handling this case at the moment
-								if(!sapUnchanged) {
-									
-									//Added for XBT- 124
-									boolean sapOrgNameUpdate = updateCustomerWithSAPAccountNumber(env,organizationCode,customerID,sapCustomerId,sapAccountNumber,strSAPName,"B", custElement);
-									if(sapOrgNameUpdate){
-									//Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
-									updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
-									//Update all Ship-to Records
-									updateAllShipToWithSAPAccountNumber(env,organizationCode,customerID, sapAccountNumber,strSAPName,custElement,sapCustomerId,inXML);
-								
-									
-									
-									}
-									//Added for XBT - 124
-									
-     							}
-								//JIRA 3740 End
-								//Modify SAPName if Changed
-								//JIRA 3740 Start
-								
-								//Need to Write for XBT -124
+							      //Currently log to CENT if the SAP is different. We are not handling this case at the moment
+                                if(!sapUnchanged) {
+                                            boolean isAnExistingSAP=checkIsCustomerAvailableInSystem(env, sapCustomerId, organizationCode);
+                                      if(isAnExistingSAP){
+                                            if(!isCustomerActive()){
+                                                  //activate the customer
+                                                  YFCDocument manageCustomerInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
+                                                  manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, sapCustomerId);
+                                                  manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE,organizationCode);
+                                                  manageCustomerInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_STATUS, "10");
+                                                  api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API, manageCustomerInputDoc.getDocument());
+                                            }
+                                            //Added for XBT- 124
+                                            boolean sapOrgNameUpdate = updateCustomerWithSAPAccountNumber(env,organizationCode,customerID,sapCustomerId,sapAccountNumber,strSAPName,"B", custElement);
+                                            if(sapOrgNameUpdate){
+                                            //Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
+                                            updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+                                            //Update all Ship-to Records
+                                            updateAllShipToWithSAPAccountNumber(env,organizationCode,customerID, sapAccountNumber,strSAPName,custElement,sapCustomerId,inXML);
+                                            }
+                                            }
+                                   else {
+                                                  createCustomerWithSAPAccountNumber(env,  sapCustomerId, masterSapCustomerId, strSAPName, 
+                                                              strMSAPName, organizationCode, custElement);
+                                                  //Added for XBT- 124
+                                                  boolean sapOrgNameUpdate = updateCustomerWithSAPAccountNumber(env,organizationCode,customerID,sapCustomerId,sapAccountNumber,strSAPName,"B", custElement);
+                                                  if(sapOrgNameUpdate){
+                                                  //Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
+                                                  updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+                                                  //Update all Ship-to Records
+                                                  updateAllShipToWithSAPAccountNumber(env,organizationCode,customerID, sapAccountNumber,strSAPName,custElement,sapCustomerId,inXML);
+                                                  }
+                                            }
+                                            //Added for XBT - 124
+                                }
+                                      
+                                      
+                                      //JIRA 3740 End
+                                      //Modify SAPName if Changed
+                                      //JIRA 3740 Start
+                                      
+                                      //Need to Write for XBT -124//
+
 								
 								
 								if (sapUnchanged && !existingSAPName.equalsIgnoreCase(strSAPName)) {
