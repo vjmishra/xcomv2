@@ -364,7 +364,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							masterSAPUnchanged=existingMSAPNumber.trim().equals(masterSapAccountNumber);												
 							
 							
-							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) || suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) )
+							if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B) )
 							{
 							      //Currently log to CENT if the SAP is different. We are not handling this case at the moment
                                 if(!sapUnchanged) {
