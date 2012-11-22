@@ -293,7 +293,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*if(searchTerm!=null && searchTerm.contains("\"")){
 			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
 		}*/
-		searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~]","");
+		searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]","");
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{
@@ -596,7 +596,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			
 			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
 			
-			searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~]","");
+			searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]","");
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
