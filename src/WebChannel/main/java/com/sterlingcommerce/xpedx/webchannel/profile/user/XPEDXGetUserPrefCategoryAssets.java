@@ -124,6 +124,13 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 	        this.mainCatsDoc = outDoc.getDocumentElement();
 
 	        this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "CategoryPath",getPrefCategoryPath());
+	     //Added For XBT-253
+	        if(this.prefCategoryElem != null)
+	        {
+		        
+		        XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));
+	        }
+	        
 	        if(this.prefCategoryElem==null)
 		       {
 		    	   SortedSet<String> categorySet = new TreeSet<String>();
@@ -140,7 +147,9 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 		    		   categorySet.add(topCategoryDescription);
 		    	   }
 		    	   if(isPaperEntitled){
-		    		   this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description","Paper");  
+		    		   this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description","Paper"); 
+		    		   //Added For XBT-253
+		    		  XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));
 		    		   wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.USER_PREF_CATEGORY,"Paper");
 		    	   } else {
 		    	    Iterator categoryIter = categorySet.iterator();
@@ -148,6 +157,8 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 			        {
 			        	String prefCategoryDesc = categoryIter.next().toString();
 			        	this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description",prefCategoryDesc); 
+			        	//Added For XBT-253
+			        	XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));  
 			        	wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.USER_PREF_CATEGORY,prefCategoryDesc);
 			        	//String prefCateforyPath =SCXmlUtil.getAttribute(this.prefCategoryElem,"CategoryPath");			        	
 			        }

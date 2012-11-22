@@ -434,6 +434,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public  void getCatTwoDescFromItemIdForpath(Element categoryList,String path) {
 		String result = null;
 		StringBuilder cat = new StringBuilder();
+		String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
 		if(path != null && path.trim().length()>0 && categoryList != null  )
 		{
 			StringTokenizer st = new StringTokenizer(path, "/");
@@ -449,7 +450,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			try
 			{
-				String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
+				
 				ArrayList<Element> categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category");
 				if(categoryElements != null)
 				categoryElements.addAll(SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category"));
@@ -471,6 +472,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			{
 				log.error("Error while getting ShortDescreption for Adjuggler "+e.getMessage());
 			}
+		}
+		// Added For XBT-253
+		if(categoryShortDescription == null || categoryShortDescription.equals("")){
+			if(firstItemCategoryShortDescription !=null && firstItemCategoryShortDescription.length() >0)
+				categoryShortDescription=adjugglerKeywordPrefix + firstItemCategoryShortDescription;
+			else
+				categoryShortDescription= adjugglerKeywordPrefix + (String)XPEDXWCUtils.getObjectFromCache("defaultCategoryDesc");
+			XPEDXWCUtils.sanitizeAJKeywords(result);
 		}
 	}
 
@@ -779,7 +788,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 						categoryPath = path;
 					}
 				}*/
-				path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
+				path=tempCategoryPath;
 				categoryPath = path;
 			//}
 			
@@ -941,7 +951,32 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(itemList !=  null) {
 				for(int i=0; i<itemList.size();i++) {
 					String itemId = itemList.get(i).getAttribute("ItemID");
-					if(i == 0) firstItem = itemId;
+					if(i == 0) 
+					{
+						// Added For XBT-253
+						firstItem = itemId;
+						 Element catagoryElement=(Element)itemList.get(i).getElementsByTagName("Category").item(0);
+                        if(catagoryElement != null)
+						{
+						 String  catDescription=catagoryElement.getAttribute("Description");
+                         tempCategoryPath=catagoryElement.getAttribute("CategoryPath");
+                         if(catDescription !=null)
+                         {
+                                 String [] descriptions=catDescription.split("/");
+                                 if(descriptions != null)
+                                 {
+                                         for(int ind=0;ind<2;ind++)
+                                         {
+                                                 firstItemCategoryShortDescription=descriptions[ind];
+
+                                         }
+
+                                 }
+
+                         }
+						}
+
+					}
 					if(itemIDList.contains(itemId))
 						continue ;
 					itemIDList.add(itemId);
@@ -2368,7 +2403,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 	protected String draft;
 	protected String path;	
 	public Map<String,List<Element>> facetListMap = new HashMap<String , List<Element>>();//Added for JIRA 3821
-	
+	private String firstItemCategoryShortDescription;
+	private String tempCategoryPath;
+
+
+
 	public Map<String, List<Element>> getFacetListMap() {
 		return facetListMap;
 	}
