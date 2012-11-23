@@ -573,7 +573,21 @@
                 <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
                 <param name="draft">${draft}</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
             </result>
+            <result name="checkoutError" type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="zipCode">${#parameters.zipCode}</param>
+                <param name="canCheckout">${#parameters.canCheckout}</param>
+                <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
+                <param name="draft">${draft}</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+            </result>
+            
+            
         </action>
 
         <action name="XPEDXMiniCartDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction">
