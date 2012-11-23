@@ -167,7 +167,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                           }
                     }
               }
+			  //XBT 248
+              if ("true".equals(isComingFromCheckout)){
+            		  retVal= "checkoutError"; 
+              }
+              else {
       			retVal= SUCCESS; 
+              }
         }
 	     catch(Exception e)
 	     {
