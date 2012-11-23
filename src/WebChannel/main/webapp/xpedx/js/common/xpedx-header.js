@@ -4642,11 +4642,22 @@ function deleteLine(orderHeaderKey, lineKey){
         method: 'POST',
 
         success: function (response, request){
-        	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
-        	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);    
-        	Ext.Msg.hide();
-        	myMask.hide();
-        	$('#cluetip').hide();
+        	//added for XBT 242 & 252
+        	var draftErr = response.responseText;
+            var draftErrDiv = document.getElementById("errorMessageDiv");
+            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
+        {
+                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
+                    Ext.Msg.hide();
+                	myMask.hide();
+        }
+            else{
+            	var anchorToreplace = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
+            	anchorToreplace.innerHTML= Ext.util.Format.trim(response.responseText);    
+            	Ext.Msg.hide();
+            	myMask.hide();
+            	$('#cluetip').hide();
+        }
         },
 
         failure: function (response, request){
@@ -4839,8 +4850,17 @@ function updateLines() {
         method: 'POST',
 
         success: function (response, request){
-
-        	refreshMiniCartLinkforUpdate();
+        	//added for XBT 242 & 252
+        	var draftErr = response.responseText;
+            var draftErrDiv = document.getElementById("errorMessageDiv");
+            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
+        {
+                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
+        }
+            else{
+            	refreshMiniCartLinkforUpdate();
+            }
+        	
             //added for jira 3232
             Ext.MessageBox.hide();
         },
