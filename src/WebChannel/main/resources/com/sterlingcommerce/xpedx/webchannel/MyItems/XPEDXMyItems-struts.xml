@@ -204,6 +204,7 @@
         </result>
         <result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
 		</result>
+		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
 	</action>
 	              
 	<action name="XPEDXMyItemsDetailsGetShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetShareListAction">
