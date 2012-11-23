@@ -414,7 +414,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="">
            			 <OrderLines>
                 		<OrderLine Action="CREATE" OrderedQty=""
                   			  ReservationMandatory="N" ValidateItem="N">
@@ -427,7 +427,7 @@
        			 </Order>
             </Input>
             <Template>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="">
 					<Extn/>
 					<OrderLines TotalNumberOfRecords="">
 						<OrderLine OrderLineKey="">

@@ -75,6 +75,15 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isEditOrder;
 	protected String customerFieldsValidated;
 	protected String isCustomerPOMandatory="false";
+	public String draftOrderFlagOrderSummary;
+	public String getDraftOrderFlagOrderSummary() {
+		return draftOrderFlagOrderSummary;
+	}
+
+	public void setDraftOrderFlagOrderSummary(String draftOrderFlagOrderSummary) {
+		this.draftOrderFlagOrderSummary = draftOrderFlagOrderSummary;
+	}
+
 	String lastModifiedUserId = "";
 	XPEDXShipToCustomer shipToCustomer;
 	private Document shipFromDoc;
@@ -477,6 +486,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		String customerID = wcContext.getCustomerId();
 		String storeFrontID = wcContext.getStorefrontId();
 		String shipFromDivision = null;
+		if(shipToCustomer != null)
+		{
 		deliveryCutOffTime=shipToCustomer.getShipToDivDeliveryCutOffTime();
 		//Added For Jira 3465
 		deliveryInfo=shipToCustomer.getShipToDivdeliveryInfo();
@@ -529,6 +540,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
 				return;
 			}
+		}
 		}
 		
 	}

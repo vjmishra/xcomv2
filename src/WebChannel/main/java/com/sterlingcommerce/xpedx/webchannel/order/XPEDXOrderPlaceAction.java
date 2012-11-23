@@ -38,6 +38,9 @@ import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -132,6 +135,17 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	private String orderType;
 	XPEDXShipToCustomer shipToCustomer;
 	private String customerContactID;
+	public String draftOrderflagOrderSubmit;
+	public String draftErrorFlagOrderSummary = "draftErrorFlagOrderSummary";
+	public String draftErrorOrderSummary = "false";
+	public String getDraftOrderflagOrderSubmit() {
+		return draftOrderflagOrderSubmit;
+	}
+
+	public void setDraftOrderflagOrderSubmit(String draftOrderflagOrderSubmit) {
+		this.draftOrderflagOrderSubmit = draftOrderflagOrderSubmit;
+	}
+
 	public boolean isCSRReview() {
 		return isCSRReview;
 	}
@@ -204,7 +218,19 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			if (isDraftOrder()) {
 //				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
 				Document shipToCustomerDoc=createCustomerDocument();
+				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+				if(YFCCommon.isVoid(editedOrderHeaderKey)){
+		 			draftOrderflagOrderSubmit="Y";
+
+		 		}
+		 		else{
+		 			draftOrderflagOrderSubmit="N";
+		 		}
 				isPendingApproval=prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+				if(isPendingApproval != null && isPendingApproval.getAttribute("DraftOrderFlag").equals("N"))
+				{
+					return draftErrorFlagOrderSummary;
+				}
 				if(isPendingApproval != null)
 				{
 					Element holdType = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
@@ -391,9 +417,24 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			}
 			
 			return SUCCESS;
-		} catch (Exception ex) {
+		}catch(XMLExceptionWrapper e)
+		 {
+			 YFCElement errorXML=e.getXML();
+			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 if(errorDeasc.contains("Order is not Draft Order"))
+			 {
+				 
+				 return draftErrorFlagOrderSummary;
+			 }
+			 else{
+				 return FAILURE;
+			 }
+		 } 
+		
+		catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
-			generatedErrorMessage = "There was an error processing your last request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
+			generatedErrorMessage = "There was an error processing your last  request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
 			XPEDXWCUtils.logExceptionIntoCent(ex);   //JIRA 4289
 			return FAILURE;
 		}

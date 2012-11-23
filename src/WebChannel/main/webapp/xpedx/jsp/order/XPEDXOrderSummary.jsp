@@ -550,6 +550,9 @@ from session . We have customer Contact Object in session .
 		<div id="errorMessageDiv"><s:if test='#pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5>
 			</s:if>
+			<s:if test='%{draftOrderFlagOrderSummary !=null || draftOrderFlagOrderSummary == "true" }'>
+				<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5>
+			</s:if>
 			</div>
 		
 		<div class="clearall">&nbsp;</div>

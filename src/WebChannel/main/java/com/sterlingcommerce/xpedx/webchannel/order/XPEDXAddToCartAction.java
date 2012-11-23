@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -24,6 +25,7 @@ import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXAddToCartAction extends AddToCartAction {
@@ -40,6 +42,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	
 	 public String execute()
 	 {
+		 
 		 this.reqProductUOM = this.productUOM;	
 		 String sOrderHeaderKey =(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext"); //XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 		 if((sOrderHeaderKey==null || sOrderHeaderKey.equals("_CREATE_NEW_") )&& XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
@@ -53,6 +56,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 				orderHeaderKey=editedOrderHeaderKey;
 				isEditNewline="Y";
 		 }
+
 		 XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 		 try
 	     {
@@ -88,6 +92,14 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	                     setDraft(DRAFT_N);
 	         	    }
 		         }
+	         		
+         		if(YFCCommon.isVoid(editedOrderHeaderKey)){
+         			draftOrderflag="Y";
+
+         		}
+         		else{
+         			draftOrderflag="N";
+         		}
 		         	organizeProductInformationResults();
 		         	// Added for addtocart base UOM issue, due to performance fixes
 		         	HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
@@ -190,6 +202,26 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	           }
 	         XPEDXWCUtils.releaseEnv(wcContext);
 	     }
+		 catch(XMLExceptionWrapper e)
+		 {
+			 YFCElement errorXML=e.getXML();
+			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 if(errorDeasc.contains("Key Fields cannot be modified."))
+			 {
+				 YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+				 for(int i=0;i<listAttribute.getLength();i++)
+				 {
+					 YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+					 String value=attributeELement.getAttribute("Value");
+					 if("DraftOrderFlag".equals(value))
+					 {
+						 draftError = "true";
+					 }
+				 }
+			 }
+			 return draftErrorFlag;
+		 }
 	     catch (Exception e)
 	     {
 	         // cause of error should have been logged by the throwing method
@@ -356,4 +388,17 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	protected String lineType;
 	protected String customerPONo="";
 	protected String isEditNewline="N";
+	public String draftOrderflag;
+	public String draftErrorFlag="DraftError";
+	private String draftError= "false";
+
+	public String getDraftError() {
+		return draftError;
+	}
+
+	public void setDraftError(String draftError) {
+		this.draftError = draftError;
+	}
+
+	
 }

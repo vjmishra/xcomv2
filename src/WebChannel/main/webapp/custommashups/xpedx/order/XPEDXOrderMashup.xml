@@ -1414,7 +1414,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="">
+				<Order OrderHeaderKey="" DraftOrderFlag="">
 					<OrderLines>
 						<OrderLine Action="CREATE" OrderedQty=""
 							ReservationMandatory="N" ValidateItem="N" LineType="" CustomerPONo="">
@@ -1429,7 +1429,7 @@
 				</Order>
 			</Input>
 			<Template>
-				<Order OrderHeaderKey="">
+				<Order OrderHeaderKey="" DraftOrderFlag="">
 					<Extn>
 						<XPXUeAdditionalAttrXmlList>
 							<XPXUeAdditionalAttrXml/>

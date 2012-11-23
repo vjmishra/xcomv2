@@ -17,4 +17,5 @@
     <entry key="reqCustomer">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Extn/@ExtnCustLineField1</entry>
     <entry key="lineType">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/@LineType</entry>
     <entry key="isEditNewline">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
+    <entry key="draftOrderflag">xpedx_me_addToCartAddOrderLines:/Order/@DraftOrderFlag</entry>
 </properties>

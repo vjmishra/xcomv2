@@ -841,7 +841,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private String orderedByName;
 	private ArrayList<String> inventoryInds;
 	private String customerHoldCheck;
+	public String draftOrderFlagOrderSummary;
 	
+	public String getDraftOrderFlagOrderSummary() {
+		return draftOrderFlagOrderSummary;
+	}
+	public void setDraftOrderFlagOrderSummary(String draftOrderFlagOrderSummary) {
+		this.draftOrderFlagOrderSummary = draftOrderFlagOrderSummary;
+	}
 	public String getCustomerHoldCheck() {
 		return customerHoldCheck;
 	}
