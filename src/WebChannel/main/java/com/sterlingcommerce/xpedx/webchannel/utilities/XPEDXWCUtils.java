@@ -1627,6 +1627,12 @@ public class XPEDXWCUtils {
 			IWCContext context = WCContextHelper
 					.getWCContext(ServletActionContext.getRequest());
 			wSCUIContext = context.getSCUIContext();
+			 String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+             if(YFCCommon.isVoid(editedOrderHeaderKey)){
+            	 documentElement.setAttribute("DraftOrderFlag", "Y");     
+             }
+
+
 			documentElement.setAttribute("Action", "MODIFY");
 			documentElement.setAttribute("OrderHeaderKey", orderHeaderKey);
 			documentElement.setAttribute("BillToID", XPEDXWCUtils
