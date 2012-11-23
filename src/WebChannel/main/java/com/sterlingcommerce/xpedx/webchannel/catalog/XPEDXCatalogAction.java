@@ -293,10 +293,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*if(searchTerm!=null && searchTerm.contains("\"")){
 			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
 		}*/
-		searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]","");
+		
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
-		{
+		{   
+			searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]","");
 			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
