@@ -19,6 +19,9 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInput
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
@@ -32,14 +35,44 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	 private static final String CHECKOUT_MINI_CART_MASHUP="checkoutOrderForMiniCart";
 	 public ArrayList<String> allItemID = new ArrayList<String>();//Added for Jira 3523
 	 XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
-	 public String execute()
+	 //XBT- 248 & 252
+	 public String draftOrderFlag;
+	 public String draftOrderError;
+	 public String draftOrderFailure="draftOrderFailure";
+
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+
+	public String getDraftOrderFlag() {
+		return draftOrderFlag;
+	}
+
+	public void setDraftOrderFlag(String draftOrderFlag) {
+		this.draftOrderFlag = draftOrderFlag;
+	}
+	//End of XBT- 248 & 252
+	public String execute()
 	 {
 		XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
 		 String returnValue = ERROR;
 		 Element orderLelement=null;
 		 xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+		//start of XBT 252 & 248
+			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if(YFCCommon.isVoid(editedOrderHeaderKey)){
+				draftOrderFlag="Y";	
+			}
+			else {
+				draftOrderFlag="N";	
+			}
+			//end of XBT 252 & 248   
 	        try
-	        {
+	        {     	
 	        	Map<String, Element> outputMap=prepareAndInvokeMashups();
 	        	if(getMashupIds().contains(CHECKOUT_MINI_CART_MASHUP))
 	        	{
@@ -112,6 +145,28 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        	XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	            returnValue=SUCCESS;
 	        }
+	        catch(XMLExceptionWrapper e)
+            {
+                  YFCElement errorXML=e.getXML();
+                  YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+                  String errorDeasc=errorElement.getAttribute("ErrorDescription");
+                  if(errorDeasc.contains("Key Fields cannot be modified."))
+                  {
+                        YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+                        for(int i=0;i<listAttribute.getLength();i++)
+                        {
+                              YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+                              String value=attributeELement.getAttribute("Value");
+                              if("DraftOrderFlag".equals(value))
+                              {
+                                    draftOrderError = "true";
+                                    break;
+                              }
+                        }
+                  }
+                  return draftOrderFailure;
+            }
+
 	        catch(Exception e)
 	        {
 	        	

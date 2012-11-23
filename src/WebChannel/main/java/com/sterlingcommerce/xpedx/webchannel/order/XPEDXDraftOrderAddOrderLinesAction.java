@@ -23,6 +23,10 @@ import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.OrderItemValidationBaseAction;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
+import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXDraftOrderAddOrderLinesAction extends
 		OrderItemValidationBaseAction {
@@ -59,14 +63,45 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				organizeProductInformationResults();
 				
 				if (orderedProductIDs.size() > 0) {
-					
+					//start of XBT 252 & 248
+					String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+					if(YFCCommon.isVoid(editedOrderHeaderKey)){
+						draftOrderFlag="Y";	
+					}
+					else {
+						draftOrderFlag="N";	
+					}
+					//end of XBT 252 & 248
 					Element changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 					changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
 					getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutputDoc);
 					refreshCartInContext(orderHeaderKey);
 				}
 			}
-		} catch (Exception databaseLockException) {
+		} 
+		//start of XBT 252 & 248
+		catch(XMLExceptionWrapper e)
+        {
+              YFCElement errorXML=e.getXML();
+              YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+              String errorDeasc=errorElement.getAttribute("ErrorDescription");
+              if(errorDeasc.contains("Key Fields cannot be modified."))
+              {
+                    YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+                    for(int i=0;i<listAttribute.getLength();i++)
+                    {
+                          YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+                          String value=attributeELement.getAttribute("Value");
+                          if("DraftOrderFlag".equals(value))
+                          {
+                                draftOrderError = "true";
+                                break;
+                          }
+                    }
+              }
+        }
+		//end of XBT 252 & 248
+		catch (Exception databaseLockException) {
 			if (databaseLockException != null
 					&& databaseLockException.toString() != null
 					&& databaseLockException.toString().contains("YFC0101")) {
@@ -804,6 +839,25 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	//Adding ArrayList quickAddOrderMultiple FOr Jira 3481
 	protected ArrayList quickAddOrderMultiple;
 	
+	//XBT 282 & 252
+	public String draftOrderFlag;
+	public String draftOrderError;
+	
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+
+	public String getDraftOrderFlag() {
+		return draftOrderFlag;
+	}
+
+	public void setDraftOrderFlag(String draftOrderFlag) {
+		this.draftOrderFlag = draftOrderFlag;
+	}
 
 
 	public ArrayList getQuickAddOrderMultiple() {

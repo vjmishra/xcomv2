@@ -21,6 +21,9 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -43,6 +46,25 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	private double totalAmount;
 	private Element modifiedOrderExtnForSpecailCharge;
 	private String modifyOrderLines="false";
+	public String draftOrderFlag;
+	public String draftOrderError;
+
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+
+	public String getDraftOrderFlag() {
+		return draftOrderFlag;
+	}
+
+	public void setDraftOrderFlag(String draftOrderFlag) {
+		this.draftOrderFlag = draftOrderFlag;
+	}
+
 	public String getModifyOrderLines() {
 		return modifyOrderLines;
 	}
@@ -110,6 +132,15 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 		Document outputDocument=null;
 		try
 	    {
+			//start of XBT 252 & 248
+			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if(YFCCommon.isVoid(editedOrderHeaderKey)){
+				draftOrderFlag="Y";	
+			}
+			else {
+				draftOrderFlag="N";	
+			}
+			//end of XBT 252 & 248
 			Map<String, Element> out = prepareAndInvokeMashups();
 			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 			outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
@@ -117,6 +148,27 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 			
             retVal= SUCCESS;
 	     }
+		catch(XMLExceptionWrapper e)
+        {
+              YFCElement errorXML=e.getXML();
+              YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+              String errorDeasc=errorElement.getAttribute("ErrorDescription");
+              if(errorDeasc.contains("Key Fields cannot be modified."))
+              {
+                    YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+                    for(int i=0;i<listAttribute.getLength();i++)
+                    {
+                          YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+                          String value=attributeELement.getAttribute("Value");
+                          if("DraftOrderFlag".equals(value))
+                          {
+                                draftOrderError = "true";
+                                break;
+                          }
+                    }
+              }
+      			retVal= SUCCESS; 
+        }
 	     catch(Exception e)
 	     {
             LOG.error(e.getMessage(), e);
@@ -148,8 +200,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, outputDocument);
 			}
 		}
-		else
-			retVal= ERROR;
 		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
 		XPEDXWCUtils.releaseEnv(wcContext);
 		

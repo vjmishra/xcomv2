@@ -2256,6 +2256,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
 	private String salesreploggedInUserName; //added for XBT-146
+	//XBT - 248 & 252
+	public String draftOrderError;
+	
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+	//End of XBT 248 & 252
 	
 	public String getSalesreploggedInUserName() {
 		return salesreploggedInUserName;
