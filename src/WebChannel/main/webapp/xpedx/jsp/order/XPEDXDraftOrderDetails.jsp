@@ -697,6 +697,11 @@ $(document).ready(function(){
 	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
 	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
 </s:if>
+<s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
+<s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
+	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
+</s:if>
+
 
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name">
