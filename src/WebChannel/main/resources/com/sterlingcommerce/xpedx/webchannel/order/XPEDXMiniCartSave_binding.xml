@@ -7,4 +7,5 @@
     <entry key="#parameters.lineKeys" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/@OrderLineKey,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
     <entry key="#parameters.orderLineQtys" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
     <entry key="#parameters.orderLineReqUOMs" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry>
+	<entry key="draftOrderFlag">deleteLineForMiniCart:/Order/@DraftOrderFlag,updateOrderForMiniCart:/Order/@DraftOrderFlag,checkoutOrderForMiniCart:/Order/@DraftOrderFlag</entry>
 </properties>

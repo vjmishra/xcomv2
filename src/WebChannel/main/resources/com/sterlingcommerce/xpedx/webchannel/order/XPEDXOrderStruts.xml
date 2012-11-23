@@ -222,6 +222,7 @@
 				<param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
 				<param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
 				<param name="draft">${draft}</param>
+				<param name="draftOrderError">${draftOrderError}</param>
 			</result>
 		</action>
 
@@ -242,6 +243,7 @@
 				<param name="draft">${draft}</param>
 				<param name="validateCustomerFields">${validateCustomerFields}</param>
 				<param name="modifyOrderLines">true</param>
+				<param name="draftOrderError">${draftOrderError}</param>
 			</result>
 		</action>
 
@@ -593,12 +595,14 @@
                 <param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param> 
                 <param name="isEditOrder">${#parameters.isEditOrder}</param>
                 <param name="draft">${draft}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
             </result>
             <result name="pendingChangeConflict" type="redirectAction">
                 <param name="actionName">orderDetail</param>
                 <param name="namespace">/order</param>
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
                 <param name="draft">${draft}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
                 <param name="pendingChangeConflictErrorMsg">${errorMessage}</param>
             </result>
         </action>
@@ -610,6 +614,7 @@
             <result name="success" type="redirectAction">
                 <param name="actionName">XPEDXMiniCartDisplay</param>
             </result>
+            <result name="draftOrderFailure">/xpedx/jsp/order/XPEDXMiniCartErrorDisplay.jsp</result>
         </action>
         
         <action name="miniCartCheckout" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
@@ -628,8 +633,15 @@
              <result name="CartError" type="redirectAction">
                 <param name="actionName">draftOrderDetails</param>
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
-                <param name="draft">Y</param>				
+                <param name="draft">Y</param>	
+                <param name="draftOrderError">${draftOrderError}</param>			
             </result>
+            <result name="draftOrderFailure"  type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">Y</param>	
+                <param name="draftOrderError">${draftOrderError}</param>
+             </result>
         </action>
         
         <action name="quickAddAction"
@@ -725,22 +737,25 @@
                 <param name="OrderHeaderKey">${orderHeaderKey}</param>
                 <param name="draft">${draft}</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
             </result>
      		 <result name="draftOrderDetails" type="redirectAction">
                  <param name="actionName">draftOrderDetails</param>
                  <param name="parse">true</param>
                  <param name="orderHeaderKey">${orderHeaderKey}</param>
          		<param name="draft">${draft}</param>
+         		<param name="draftOrderError">${draftOrderError}</param>
             </result>
         </action>
 		
     <action name="miniCartDelete" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
-            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/MiniCartSave_binding.xml</param>
+            <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
             <param name="mashups">deleteLineForMiniCart</param>
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success" type="redirectAction">
                 <param name="actionName">XPEDXMiniCartLinkDisplay</param>
             </result>
+            <result name="draftOrderFailure">/xpedx/jsp/order/XPEDXMiniCartErrorDisplay.jsp</result>          
         </action>
         
         <action name="draftOrderDelete" class="com.sterlingcommerce.webchannel.order.DraftOrderDeleteAction">

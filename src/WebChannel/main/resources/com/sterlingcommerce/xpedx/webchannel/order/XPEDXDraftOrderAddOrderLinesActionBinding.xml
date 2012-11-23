@@ -21,4 +21,5 @@
     <entry key="orderedLineTypes">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@LineType</entry>
     <entry key="orderedPONos">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@CustomerPONo</entry>
     <entry key="recordPendingChanges">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
 </properties>

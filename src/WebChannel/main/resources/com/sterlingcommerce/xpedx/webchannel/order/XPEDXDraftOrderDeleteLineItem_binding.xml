@@ -7,4 +7,5 @@
     <entry key="deleteActions" >xpedx_me_draftOrderDeleteLineItems:/Order/OrderLines/OrderLine[]/@Action</entry>
     <entry key="deleteQuantities" >xpedx_me_draftOrderDeleteLineItems:/Order/OrderLines/OrderLine[]/@OrderedQty</entry>
     <entry key="recordPendingChanges">xpedx_me_draftOrderDeleteLineItems:/Order/PendingChanges/@RecordPendingChanges</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderDeleteLineItems:/Order/@DraftOrderFlag</entry>
 </properties>
