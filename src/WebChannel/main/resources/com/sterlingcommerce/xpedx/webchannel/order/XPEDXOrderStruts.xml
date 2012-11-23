@@ -339,6 +339,7 @@
 			<param name="resourceId">/swc/order/guestShopping</param>
 			<result name="success">/swc/jsp/order/addToCartSuccess.jsp</result>
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="DraftError">/xpedx/jsp/common/XPEDXDraftOrderFlagError.jsp</result>
 		</action>
 
 		<!-- Product Details Changes End : Manoj Kodagali  -->
@@ -490,6 +491,16 @@
 				<param name="orderHeaderKey">${orderHeaderKey}</param>
 				<param name="resetWithError">Y</param>
 			</result>
+			<result name="draftErrorFlagOrderSummary" type="redirectAction">
+                <param name="actionName">OrderSummary</param>
+                <param name="namespace">/order</param>
+                <param name="parse">true</param>
+                <param name="OrderHeaderKey">${orderHeaderKey}</param>
+                <param name="draft">${draft}</param>
+                <param name="draftOrderFlagOrderSummary">true</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+            </result>
+			
 		</action>
 		<action name="draftOrderMakeCartInContext"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
