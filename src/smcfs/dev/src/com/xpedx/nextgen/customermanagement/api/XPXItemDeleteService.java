@@ -150,7 +150,7 @@ public class XPXItemDeleteService implements YIFCustomApi {
 				yfcElement.setAttribute("Action", "Delete");
 				yfcElement.setAttribute("ItemID", itemId);
 				yfcElement.setAttribute("UnitOfMeasure", unitOfMeasure);
-				yfcElement.setAttribute("GlobalItemID ", globalItemID);
+				yfcElement.setAttribute("GlobalItemID", globalItemID);
 				yfcElement.setAttribute("OrganizationCode", "xpedx");
 				eItemListTemplate.appendChild(yfcElement);
 				YFCElement yfcCategorElement = getItemListTemplate.createElement("CategoryList");
@@ -158,12 +158,14 @@ public class XPXItemDeleteService implements YIFCustomApi {
 				eCategoryTemplate.setAttribute("CategoryDomain", "MasterCatalog");
 				eCategoryTemplate.setAttribute("CategoryID", catalogId);
 				eCategoryTemplate.setAttribute("CategoryPath", categoryPath);
-				eCategoryTemplate.setAttribute("OrganizationCode ", "xpedx");
+				eCategoryTemplate.setAttribute("OrganizationCode", "xpedx");
 				yfcElement.appendChild(yfcCategorElement);
 				yfcCategorElement.appendChild(eCategoryTemplate);
-				log.info("DeleteItemService: \n" + SCXmlUtil.getString(getItemListTemplate.getDocument()));
-				Document itemListOutDoc = api.invoke(env, "XPXItemDeleteService", getItemListTemplate.getDocument());
-				log.info("DeleteItemService: \n" + SCXmlUtil.getString(itemListOutDoc));
+				//System.out.println(SCXmlUtil.getString(getItemListTemplate.getDocument()));
+				log.debug("DeleteItemService: \n" + SCXmlUtil.getString(getItemListTemplate.getDocument()));
+				Document itemListOutDoc = api.invoke(env, "XPEDXItemDelete", getItemListTemplate.getDocument());
+				log.debug("DeleteItemService: \n" + SCXmlUtil.getString(itemListOutDoc));
+
 
 			}
 
