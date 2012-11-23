@@ -480,7 +480,7 @@ function showSharedListForm(){
 			addToCartFlag = true;
 			//Clear previous messages if any
 			clearPreviousDisplayMsg();
-			javascript:addItemToCart(itemId, id );
+			addItemToCart(itemId,id);
 		}
 		var isAdd2List=false;
 		function add2List(){
@@ -878,14 +878,25 @@ function showSharedListForm(){
 	                   method: 'POST',
 	                   //Fix for Jira 3946
 	                   success: function (response, request){
+	                	   alert(response.responseText);
+	   		        	var draftErr = response.responseText;
+	   		            var draftErrDiv = document.getElementById("errorMessageDiv");
+	   		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
+	   		        {
+	   		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
+	   		                    Ext.Msg.hide();
+	   		                	myMask.hide();
+	   		        }
+	   		            else{
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
 	                	    Ext.Msg.hide();
-				    myMask.hide();
+				    		myMask.hide();
+	   		         	}
 	                   },
 	                   failure: function (response, request){
 	                	   setMsgOnAddItemsWithQtyToCart(response);
 	                	   Ext.Msg.hide();
-			   	   myMask.hide();
+			   	   		   myMask.hide();
 	                	}
 	               });    
 	                } 
@@ -2187,6 +2198,7 @@ function showSharedListForm(){
 			<h5 align="center"><b><font color="red"><s:property
 				value="ajaxLineStatusCodeMsg" /></font></b></h5>
 			</div>
+			<div id ="errorMessageDiv"> </div>
 
 			<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 			<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
