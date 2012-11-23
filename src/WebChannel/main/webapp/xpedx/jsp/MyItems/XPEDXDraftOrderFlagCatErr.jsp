@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-This cart has already been submitted, please refer to the Order Management page to review the order.
+<h5 align='center'><b><font color=red>This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5>
 </body>
 </html>
