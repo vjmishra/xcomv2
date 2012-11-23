@@ -67,12 +67,17 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 		// Template to the getOrderList Api
-		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' ><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
+		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
 
 		env.setApiTemplate("getCompleteOrderDetails",orderOutputTemplate);
 		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
 		env.clearApiTemplate("getCompleteOrderDetails");
 		Element orderElem = orderOutputDoc.getDocumentElement();
+		String inputDraftOrderFlag =inXML.getDocumentElement().getAttribute("DraftOrderFlag");
+		if(orderElem != null && "Y".equalsIgnoreCase(inputDraftOrderFlag) && "N".equalsIgnoreCase(orderElem.getAttribute("DraftOrderFlag")))
+		{
+			return orderOutputDoc;
+		}
 		Double spendingLimit = null;
 		/*if(orderOutputDoc!=null) {
 
