@@ -301,6 +301,7 @@
 		</result>
 		<result name="error">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
 		</result>
+		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
 	</action>
 
   </package>

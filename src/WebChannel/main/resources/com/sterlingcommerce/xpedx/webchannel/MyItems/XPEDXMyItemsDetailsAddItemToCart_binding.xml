@@ -10,6 +10,7 @@
     <entry key="currency">addToCartGetCompleteItemList:/Item/@Currency</entry>
     
     <entry key="orderHeaderKey">me_draftOrderAddOrderLines:/Order/@OrderHeaderKey</entry>
+    <entry key="draftOrderflag">me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
     <entry key="orderedProductIDs">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ItemID</entry>
     <entry key="orderedProductUOMs">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@UnitOfMeasure</entry>
     <entry key="ExtnCustLineAccNo">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnCustLineAccNo</entry>
