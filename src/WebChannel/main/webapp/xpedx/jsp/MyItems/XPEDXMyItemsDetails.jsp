@@ -878,7 +878,6 @@ function showSharedListForm(){
 	                   method: 'POST',
 	                   //Fix for Jira 3946
 	                   success: function (response, request){
-	                	   alert(response.responseText);
 	   		        	var draftErr = response.responseText;
 	   		            var draftErrDiv = document.getElementById("errorMessageDiv");
 	   		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
