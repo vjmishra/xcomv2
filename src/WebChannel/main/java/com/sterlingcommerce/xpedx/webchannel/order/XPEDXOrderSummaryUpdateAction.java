@@ -475,6 +475,26 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				setExtnWebHoldFlag("N");
 				setRushOrdrFlag("N");
 			}
+			/* Code changes for JIRA 246
+			 * If customer selects either of the following shipping options on the Checkout page - append a message to the Header Comment Field. 
+			 * Rush Order, Charges may apply, MUST add delivery info. in comments - append ‘RUSH ORDER’
+			 * Requested delivery Date, MUST add delivery date in Comments for deliveries outside your normal schedule. - append ‘REQUESTED DELIVERY DATE’
+			 * if customer select both above options - append 'RUSH ORDER, REQUESTED DELIVERY DATE'
+			 */
+			if(SpecialInstructions!=null && SpecialInstructions.trim().length()>0) {
+				StringBuffer instructions = new StringBuffer(SpecialInstructions);
+				if("Y".equals(getRushOrdrFlag())){
+					instructions.append(" RUSH ORDER");
+					if("true".equals(getRushOrdrDateFlag())){
+						instructions.append(", REQUESTED DELIVERY DATE");
+					}
+				}else{
+					if("true".equals(getRushOrdrDateFlag())){
+						instructions.append(" REQUESTED DELIVERY DATE");
+					}
+				}
+				setSpecialInstructions(instructions.toString());
+			}
 			// webtrend code starts
 			HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
 	        HttpSession localSession = httpRequest.getSession();	        
@@ -841,7 +861,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private String orderedByName;
 	private ArrayList<String> inventoryInds;
 	private String customerHoldCheck;
+	private String rushOrdrDateFlag = "false";
 	
+	public String getRushOrdrDateFlag() {
+		return rushOrdrDateFlag;
+	}
+	public void setRushOrdrDateFlag(String rushOrdrDateFlag) {
+		this.rushOrdrDateFlag = rushOrdrDateFlag;
+	}
 	public String getCustomerHoldCheck() {
 		return customerHoldCheck;
 	}
