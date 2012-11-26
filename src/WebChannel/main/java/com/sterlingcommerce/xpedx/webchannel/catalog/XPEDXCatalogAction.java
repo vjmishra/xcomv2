@@ -966,7 +966,8 @@ public class XPEDXCatalogAction extends CatalogAction {
                                  String [] descriptions=catDescription.split("/");
                                  if(descriptions != null)
                                  {
-                                         for(int ind=0;ind<2;ind++)
+                                	 int length = descriptions.length >2 ? 2 :descriptions.length;
+                                         for(int ind=0;ind<length;ind++)
                                          {
                                                  firstItemCategoryShortDescription=descriptions[ind];
 
