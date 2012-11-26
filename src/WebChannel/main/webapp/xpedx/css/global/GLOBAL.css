@@ -7832,6 +7832,14 @@ p#milltext{
 	color: #f00;
 	font-weight: bold;
 }
+/* Added for jira 346 */
+p#replacementtext{
+	float:left;
+    margin-bottom: 15px;
+    margin-left: 0;
+   	color: #f00;
+	font-weight: bold;
+}
 
 .bottom_right{
 width:100%;
