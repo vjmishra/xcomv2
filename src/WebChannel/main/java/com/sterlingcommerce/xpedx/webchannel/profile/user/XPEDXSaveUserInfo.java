@@ -442,18 +442,21 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						String useLoginID = wcContext.getSCUIContext()
 						.getRequest().getParameter("userName");
 						if (checkIfPasswordChanged()) {
+							//XB - 319
+							List<String> strErrorMessage= new ArrayList<String>();
 							//Added For Jira-3106
 							if(newPassword.length()<8){
 
 								// This exception is put here to handle the password validation exceptions.
-								request.getSession().setAttribute("errorNote","The password must contain at least 8 characters. Please revise and try again.");
+								//request.getSession().setAttribute("errorNote","The password must contain at least 8 characters. Please revise and try again.");
+								strErrorMessage.add("The password must contain at least 8 characters.");
 								setSuccess(false);
 								setSaveAddUser(false);
-								return REDIRECT;
+								//return REDIRECT;
 							}
-							else if(newPassword.length()>=8){
+							//else if(newPassword.length()>=8){
 								char[] newPwdChar = newPassword.toCharArray();
-								int countSpclChar = 0;
+								//int countSpclChar = 0;
 								int pwdCharLength = newPwdChar.length;
 								int iNoOfNumericChars = 0;
 								int iNoOfUpperCaseChars = 0;
@@ -461,8 +464,22 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
 								for(int i=0;i<pwdCharLength;i++){
 									char c = newPwdChar[i];
-									if (newPwdChar[i] == 33 || newPwdChar[i] == 36 || newPwdChar[i] == 63){
-										countSpclChar++;
+									if (newPwdChar[i] == 33){
+										//XB - 319
+										strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+										//countSpclChar++;
+									}
+									
+									if (newPwdChar[i] == 36){
+										//XB - 319
+										strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+										//countSpclChar++;
+									}
+									
+									if (newPwdChar[i] == 63){
+										//XB - 319
+										strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+										//countSpclChar++;
 									}
 									if(Character.isUpperCase(c) || Character.isLowerCase(c)){
 					                	iNoOfAlphabeticalChars++;
@@ -475,42 +492,58 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					                }
 								}
 								if(newPassword.toUpperCase().contains(useLoginID.toUpperCase())){
-									request.getSession().setAttribute("errorNote","The password cannot contain the user's login ID. Please revise and try again.");
+									//request.getSession().setAttribute("errorNote","The password cannot contain the user's login ID. Please revise and try again.");
+									strErrorMessage.add("The password must not contain the user's login ID. ");
 									setSuccess(false);
 									setSaveAddUser(false);
-									return REDIRECT;
+									//return REDIRECT;
 								}
 								if(iNoOfAlphabeticalChars < 2){
-									request.getSession().setAttribute("errorNote","The password must contain at least 2 alpha characters. Please revise and try again.");
+									//request.getSession().setAttribute("errorNote","The password must contain at least 2 alpha characters. Please revise and try again.");
+									strErrorMessage.add("The password must contain at least 2 alpha characters.");
 									setSuccess(false);
 									setSaveAddUser(false);
-									return REDIRECT;
+									//return REDIRECT;
 								}
 								if(iNoOfNumericChars < 1){
-									request.getSession().setAttribute("errorNote","The password must contain at least 1 numeric character. Please revise and try again.");
+									//request.getSession().setAttribute("errorNote","The password must contain at least 1 numeric character. Please revise and try again.");
+									strErrorMessage.add("The password must contain at least 1 numeric character. ");
 									setSuccess(false);
 									setSaveAddUser(false);
-									return REDIRECT;
+									//return REDIRECT;
 								}
 								if(iNoOfUpperCaseChars < 1){
-									request.getSession().setAttribute("errorNote","The password must contain at least 1 uppercase character. Please revise and try again.");
+									//request.getSession().setAttribute("errorNote","The password must contain at least 1 uppercase character. Please revise and try again.");
+									strErrorMessage.add("The password must contain at least 1 uppercase character.");
 									setSuccess(false);
 									setSaveAddUser(false);
-									return REDIRECT;
+									//return REDIRECT;
 								}
 								if(exceededMaxRepeatedChars){
-									request.getSession().setAttribute("errorNote","The password cannot exceed more than 2 consecutive repeated characters. Please revise and try again.");
+									//request.getSession().setAttribute("errorNote","The password cannot exceed more than 2 consecutive repeated characters. Please revise and try again.");
+									strErrorMessage.add("The password must not exceed more than 2 consecutive repeated characters.");
 									setSuccess(false);
 									setSaveAddUser(false);
-									return REDIRECT;
+									//return REDIRECT;
 								}
-								if(countSpclChar > 0){
-									request.getSession().setAttribute("errorNote","The password cannot contain $, ? or ! characters. Please revise and try again.");
+								//commented for XB - 319
+								/*if(countSpclChar > 0){
+									//request.getSession().setAttribute("errorNote","The password cannot contain $, ? or ! characters. Please revise and try again.");
+									
 									setSuccess(false);
 									setSaveAddUser(false);
+									//return REDIRECT;
+								}*/
+							//}
+								
+								//start XB - 319
+								if(!isSuccess()){
+									strErrorMessage.add("Please revise and try again.");
+									request.getSession().setAttribute("errorNote",strErrorMessage);
 									return REDIRECT;
 								}
-							}
+								//end XB - 319
+								
 							//Fix End For Jira-3106
 							valuemap
 									.put("/Customer/CustomerContactList/CustomerContact/User/@Password",
