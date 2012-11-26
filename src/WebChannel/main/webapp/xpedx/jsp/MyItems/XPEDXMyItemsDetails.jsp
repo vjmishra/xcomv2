@@ -2761,13 +2761,7 @@ function showSharedListForm(){
 										</s:if>
 									</p>
 									
-								<s:if test='editMode == true'>
-								<%-- Show Replacement link only in Edit mode --%>
-									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-										<p class="mil-replaced"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This Item has been replaced.</a></p>
-									</s:if>
-								</s:if>
-								
+																
 									<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}'/>
 										<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
@@ -2787,22 +2781,39 @@ function showSharedListForm(){
 									</s:if>
 					
 								</s:if>
-								
-							<div>
+							<%-- JIRA 356 Code Changes Begin --%>	
+							<div class="red fields-padding">
 	                            <s:if test="%{#itemType != '99.00'}">
 									<s:set name="isStocked" value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
 									<s:if test="#isStocked !=null">
 										<s:if test='%{#isStocked !="Y"}'>
-												<p class="red fields-padding" id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+												<p>Mill / Mfg. Item - Additional charges may apply</p>
 										</s:if>
 									</s:if> 
 									<s:else>
-										<p class="red fields-padding" id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
+										<p>Mill / Mfg. Item - Additional charges may apply</p>
 									</s:else>
 								</s:if>
+						
+							<s:if test='editMode == true'>
+							<%-- Show Replacement link only in Edit mode --%>
+									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+										<p id="replacementtext"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This Item has been replaced.</a></p>
+									</s:if>
+								</s:if>
+								<s:else>
+								  <s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+									<p id="replacementtext">This item has been replaced.&nbsp;<img
+					alt="To replace or add item, click the Edit This List button."
+					title="To replace or add item, click the Edit This List button."
+					height="12" border="0" width="12"
+					src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px; float: right;" />
+									 </p>
+									</s:if>
+								</s:else>
 							</div>
-							</div>
-
+							<%-- JIRA 356 Code Changes End --%>	
+				</div>
 							<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 								<p class="mil-replaced"> <a class="modal red" href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>Complimentary</a></p>
 								<br />
