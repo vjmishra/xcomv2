@@ -280,7 +280,7 @@ $(document).ready(function()
 
 <%--XB - 319 --%>
 $(window).load(function() {
-	if(document.getElementById("errorNote") != null){
+	if(document.getElementById("errorNote") != null || document.getElementById("successMsgFor_save") != null){
 	  $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 	}
 	});
