@@ -200,6 +200,13 @@
           XMLName="ExtnExtendedDesc"
           XMLGroup="Extn" />
 	  
+	  		<Attribute ColumnName="EXTN_PACK_METHOD" 
+          	DataType="Text-50"
+	  		Description="Extn field with the packaging type or method"  
+          	Nullable="true" 
+          	XMLName="ExtnPackMethod"
+         	XMLGroup="Extn" />
+	  
         </Attributes>
         
         <Indices>
