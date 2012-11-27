@@ -1067,7 +1067,9 @@
 					OwnerOrganizationCode="" Status="" AggregateStatus=""
 					RelationshipType="" CustomerLevel="" Vertical="">
 					<ParentCustomer CustomerID="" CustomerKey=""
-						OrganizationCode="" Status="" AggregateStatus="" />
+						OrganizationCode="" Status="" AggregateStatus="" >
+						<Extn/>
+					</ParentCustomer>	
 					<BuyerOrganization OrganizationCode=""
 						OrganizationName="" OrganizationKey="" DunsNumber="" PrimaryUrl=""
 						PrimaryEnterpriseKey="" ParentOrganizationCode="" IsBuyer="">

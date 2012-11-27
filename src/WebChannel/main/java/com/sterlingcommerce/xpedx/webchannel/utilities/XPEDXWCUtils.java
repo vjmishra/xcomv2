@@ -1646,7 +1646,10 @@ public class XPEDXWCUtils {
 			YFCElement extnDocumentElem=documentElement.getOwnerDocument().createElement("Extn");
 			Document customerDetails = XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(), wcContext.getStorefrontId(),"xpedx-customer-getCustomerAddressInfo");
 			Element extnElement = SCXmlUtil.getChildElement(customerDetails.getDocumentElement(), "Extn");
-			String custPrefcategory = extnElement.getAttribute("ExtnCustomerClass");
+			String custPrefcategory = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/ParentCustomer/Extn/@ExtnCustomerClass");
+			if(custPrefcategory==null){
+			 custPrefcategory = extnElement.getAttribute("ExtnCustomerClass");
+			}
 			String shipFromDivision = extnElement.getAttribute("ExtnShipFromBranch");
 			String customerDivision = extnElement.getAttribute("ExtnCustomerDivision");
 			String currencyCode = extnElement.getAttribute("ExtnCurrencyCode");
@@ -5493,6 +5496,7 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnECsr1EMailID(parentExtnElem.getAttribute("ExtnECsr1EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnMaxOrderAmount(parentExtnElem.getAttribute("ExtnMaxOrderAmount"));//JIRA 3488
+					billToCustomer.setExtnCustomerClass(parentExtnElem.getAttribute("ExtnCustomerClass"));//XBT-265
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
