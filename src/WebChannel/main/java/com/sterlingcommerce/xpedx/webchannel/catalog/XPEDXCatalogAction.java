@@ -384,6 +384,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String filter() {
 		init();		
 		String returnString = super.filter();
+		//XBT-260
+		changeBasis();	
 		//getting the customer bean object from session.
 		/***** Start of  Code changed for Promotions Jira 2599 ********/ 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
@@ -723,6 +725,27 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 	}
 
+	private void changeBasis()
+	{
+		
+		Element itemEementList=(Element)getOutDoc().getElementsByTagName("ItemList").item(0);
+		if(itemEementList != null)
+		{
+			NodeList extnNodeList=itemEementList.getElementsByTagName("Extn");
+			if(extnNodeList != null)
+			{
+				for(int i=0;i<extnNodeList.getLength();i++)
+				{
+					Element itemElement=(Element)extnNodeList.item(i);
+					if(itemElement  != null)
+					{
+						String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
+						itemElement.setAttribute("ExtnBasis", extnBasis);
+					}
+				}
+			}
+		}
+	}
 	@Override
 	public String newSearch() {
 		try{
@@ -730,7 +753,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		setCustomerNumber();
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
-		
+		//XBT-260
+		changeBasis();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 	
 		/***** Start of  Code changed for Promotions ********/ 
@@ -890,7 +914,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 		//getting the customer bean object from session.
-
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 
 		//determine if the request is catalog landing or catalog page
@@ -902,7 +925,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		String returnString = super.navigate();
-
+		//XBT-260
+		changeBasis();
+		
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -1248,7 +1273,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		setCustomerNumber();
 		String returnString = super.search();
 		//getting the customer bean object from session.
-		
+		//XBT-260
+		changeBasis();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		
 				/***** Start of  Code changed for Promotions Jira 2599 ********/ 
@@ -1329,6 +1355,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String sortResultBy() {
 		init();
 		String returnString = super.sortResultBy();
+		//XBT-260
+		changeBasis();	
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -1390,6 +1418,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String selectPageSize() {
 		init();
 		String returnString = super.selectPageSize();
+		//XBT-260
+		changeBasis();	
 		wcContext.getSCUIContext().getSession().setAttribute(
 				"selectedPageSize", pageSize);
 		if (ERROR.equals(returnString)) {
