@@ -76,6 +76,9 @@
 						<Attribute IndexFieldName="Item.ExtendedDescription" 
 							XMLName="ExtendedDescription" DefaultWeight="1.0" Index="ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />		
+						<Attribute IndexFieldName="Item.ExtnPackMethod"
+							XMLName="ExtnPackMethod" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" />
 					</Attributes>
 				</Entity>
 			</Entities>
