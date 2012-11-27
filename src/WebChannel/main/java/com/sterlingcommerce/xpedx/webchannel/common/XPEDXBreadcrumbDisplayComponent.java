@@ -84,6 +84,8 @@ public class XPEDXBreadcrumbDisplayComponent
             if(bcl.size() - rootIndex > 1)
             {
                 String lastDisp = this.getLastBreadcrumbDisplay(bcl);
+                //Changes made for XBT 251 special characters replace by Space for Displaying Bread Crumb
+            	lastDisp=lastDisp.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
                 sb.append(lastDisp);
               //  sb.append(this.getSeparator());
                 /* 3/10/2011 Seperator not required for the last bread crumb */
