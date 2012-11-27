@@ -1819,7 +1819,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" disabled="true"/>Buyer</label>							
 			</s:else>
-			<s:if test='%{#estimator=="T"}'>
+			<s:if test='%{#estimator=="Y"}'>
 		        	<label title="Estimator views available inventory and pricing.">
 					<s:checkbox tabindex="15" name='estimator' id='estimator' fieldValue="true" value="true" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
 			</s:if>
@@ -1854,7 +1854,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			Approver 
 			<s:hidden name="buyerApprover" id='buyerApprover' value='%{isInUserGroup("BUYER-APPROVER")}' ></s:hidden>
 			</s:if>
-			<s:if test='%{#estimator=="T"}'>
+			<s:if test='%{#estimator=="Y"}'>
 			Estimator 
 			<s:hidden name='estimator' value='%{true}' />
 			</s:if>

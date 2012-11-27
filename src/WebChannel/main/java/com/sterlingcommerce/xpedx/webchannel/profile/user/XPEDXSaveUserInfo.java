@@ -296,7 +296,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/* ENDS - Customer-User Profile Changes - adsouza */
 
-	private String estimator = "F";
+	private String estimator = "N";
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
 	private String viewInvoices = "N";
@@ -1011,7 +1011,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		setViewInvoices(viewInvoices.equals("true")?"Y":"N");		
 		setPunchoutUsers(punchoutUsers.equals("true")?"T":"F");
 		setStockCheckWebservice(stockCheckWebservice.equals("true")?"T":"F");
-		setEstimator(estimator.equals("true")?"T":"F");
+		setEstimator(estimator.equals("true")?"Y":"N");
 		setViewPrices("true".equals(viewPrices)?"Y":"N");
 		setViewReports("true".equals(viewReports)?"Y":"N");
 		setOrderConfirmationEmailFlag("true".equals(orderConfirmationEmailFlag)?"Y":"N");
@@ -1040,7 +1040,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			}
 		}
 		setViewInvoices(viewInvoices.equals("true")?"Y":"N");		
-		setEstimator(estimator.equals("true")?"T":"F");
+		setEstimator(estimator.equals("true")?"Y":"N");
 		setViewPrices(viewPrices.equals("true")?"Y":"N");
 		setViewReports(viewReports.equals("true")?"Y":"N");
 	}

@@ -5618,8 +5618,7 @@ public class XPEDXWCUtils {
 				if(approverElem!=null) {
 					isApprover = "Y";
 				}
-				
-				if("T".equalsIgnoreCase(estimatorFlag)) {
+				if(estimatorFlag.equals("Y")) {
 					isEstimator = true;
 				}
 				

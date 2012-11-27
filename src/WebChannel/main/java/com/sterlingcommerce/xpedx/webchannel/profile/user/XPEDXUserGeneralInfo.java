@@ -2115,7 +2115,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/* ENDS - Customer-User Profile Changes - adsouza */
 
-	private String estimator = "F";
+	private String estimator = "N";
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
 	private String viewInvoices = "N";
