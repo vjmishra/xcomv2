@@ -21,24 +21,32 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.catalog.CatalogAction;
 import com.sterlingcommerce.webchannel.common.Breadcrumb;
 import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
+import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -47,12 +55,16 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXWarehouseLocation;
 import com.xpedx.nextgen.common.util.XPXCatalogDataProcessor;
+import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
@@ -404,6 +416,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
+			try
+			{
+				getAllAPIOutput();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -751,10 +771,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 		try{
 		init();
 		setCustomerNumber();
+		long startTime=System.currentTimeMillis();
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
 		//XBT-260
 		changeBasis();
+		long endTime=System.currentTimeMillis();
+		long timespent=(endTime-startTime);
+		System.out.println("OOTB execution time on catlaog Search = "+timespent);
+		startTime=System.currentTimeMillis();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 	
 		/***** Start of  Code changed for Promotions ********/ 
@@ -794,6 +819,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 			return "singleItem";
 		}
 		else {
+			long startTimeCustomerService=System.currentTimeMillis();
+			
+			getAllAPIOutput();
+			long endTimeCustomerService=System.currentTimeMillis();
+			timespent=(endTimeCustomerService-startTimeCustomerService);
+			System.out.println("Custom Service Execution time on catlaog Search = "+timespent);
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -825,6 +856,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 		setStockedItemFromSession();				
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
+		endTime=System.currentTimeMillis();
+		timespent=(endTime-startTime);
+		System.out.println("Custom Action execution time on catlaog Search = "+timespent);
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -833,9 +867,166 @@ public class XPEDXCatalogAction extends CatalogAction {
 		        
 			
 		}	
+		
 		return SUCCESS;
 	}
 
+	private void getAllAPIOutput() throws Exception
+	{
+		Document catDoc = getOutDoc();
+		
+		// get the CatalogSearch/ItemList
+		Element itemListElement = SCXmlUtil.getChildElement(catDoc
+				.getDocumentElement(), "ItemList");
+		NodeList itemNodeList = itemListElement.getElementsByTagName("Item");
+		ArrayList<String> itemIds = new ArrayList<String>();
+		
+		for (int i = 0; i < itemNodeList.getLength(); i++) {
+			itemIds.add(SCXmlUtil.getAttribute((Element) itemNodeList.item(i), "ItemID"));
+		}
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		
+		try {
+			if(shipToCustomer==null) {
+				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(),wcContext.getStorefrontId())
+						.getDocumentElement());
+				shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);	
+			}
+		}
+		catch (Exception e) {
+			log.error("Error fetching or creating the shipToCustomer object in to the session in getXpxItemCustXRefDoc() So returning back null");
+		}
+		
+		if(!(itemIds!=null && itemIds.size()>0))
+			return;
+		
+		if(shipToCustomer!=null) {
+			String envCode = shipToCustomer.getExtnEnvironmentCode();
+			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
+			String custDivision = shipToCustomer.getExtnCustomerDivision();
+			HashMap<String,String> valueMap =  new HashMap<String, String>();
+			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
+			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
+			//valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId); Filled using Complex Query
+			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
+			
+			Element xrefInput =  null;
+			Element res =  null;
+			try {
+				// Commented for Jira 2796. Calling the XPEDXMyItemsListGetCustomersPart to compare customer number and the customerpartnumber.
+				//input = WCMashupHelper.getMashupInput("xpedxGetItemCustXRef", valueMap, context.getSCUIContext()); 
+				xrefInput = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap,  wcContext.getSCUIContext());
+				Element complexQuery = xrefInput.getOwnerDocument().createElement("ComplexQuery");
+				xrefInput.appendChild(complexQuery);
+				Element Or = xrefInput.getOwnerDocument().createElement("Or");
+				complexQuery.appendChild(Or);
+				Iterator<String> itemIdIter = itemIds.iterator();
+				/*while(itemIdIter.hasNext()) {
+					Element expElement = xrefInput.getOwnerDocument().createElement("Exp");
+					expElement.setAttribute("Name", "LegacyItemNumber");
+					expElement.setAttribute("QryType", "EQ");
+					expElement.setAttribute("Value", itemIdIter.next());
+					SCXmlUtil.importElement(Or, expElement);
+				}*/
+				// Commented for Jira 2796. Calling the XPEDXMyItemsListGetCustomersPart to compare customer number and the customerpartnumber.
+				//res = (Element)WCMashupHelper.invokeMashup("xpedxGetItemCustXRef",input , context.getSCUIContext());
+				
+				String customerId = wcContext.getCustomerId();
+				Map<String, String> valueMaps = new HashMap<String, String>();
+				valueMaps.put("/PricelistAssignment//@CustomerID", customerId);
+				valueMaps.put("/PricelistAssignment/PricelistLine/Item/@OrganizationCode", wcContext.getStorefrontId());
+				Element pricLlistAssignmentInput = WCMashupHelper.getMashupInput("xpedxYpmPriceLinelistAssignmentList", valueMaps,getWCContext().getSCUIContext());
+				Document pricLlistAssignmentInputDoc = pricLlistAssignmentInput.getOwnerDocument();
+				NodeList pricLlistAssignmentInputNodeList = pricLlistAssignmentInput.getElementsByTagName("Or");
+				Element pricLlistAssignmentInputElemt = (Element) pricLlistAssignmentInputNodeList.item(0);
+				/*itemIdIter = itemIds.iterator();
+				while(itemIdIter.hasNext()) {
+					Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+					Element expElement = expDoc.getDocumentElement();
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value", itemIdIter.next());
+					pricLlistAssignmentInputElemt.appendChild(pricLlistAssignmentInputDoc.importNode(expElement, true));
+				}*/
+				Element input = WCMashupHelper.getMashupInput("xpedxgetAllAPI",  wcContext
+						.getSCUIContext());
+				
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+
+				documentElement.setAttribute("CustomerID", customerId);
+				documentElement.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+				
+				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+				YFCElement complexQueryOrElement = documentElement.createChild("Or");
+				
+				complexQueryElement.setAttribute("Operator", "AND");
+				complexQueryElement.appendChild(complexQueryOrElement);
+				Element customerDetails=SCXmlUtil.createChild(inputDocument.getDocument().getDocumentElement(), "CustomerDetails");
+				customerDetails.setAttribute("ExtnCompanyCode", shipToCustomer.getExtnCompanyCode());
+				customerDetails.setAttribute("ExtnEnvironmentCode", shipToCustomer.getExtnEnvironmentCode());
+				customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
+				customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
+				customerDetails.setAttribute("ExtnUseOrderMulUOMFlag", shipToCustomer.getExtnUseOrderMulUOMFlag());
+				
+				valueMap = new HashMap<String, String>();
+				valueMap.put("/XPXItemExtn/@XPXDivision", shipToCustomer.getExtnShipFromBranch());
+				valueMap.put("/XPXItemExtn/@EnvironmentID", envCode);
+
+				Element xpxItemExtninputElem = WCMashupHelper.getMashupInput("xpedxXPXItemExtnList", valueMap,wcContext.getSCUIContext());
+				
+				Document inputDoc = xpxItemExtninputElem.getOwnerDocument();
+				NodeList inputNodeList = inputDoc.getElementsByTagName("Or");
+				Element inputNodeListElemt = (Element) inputNodeList.item(0);
+				itemIdIter = itemIds.iterator();
+				orderMultipleMap = new HashMap<String,String>();
+				while(itemIdIter.hasNext()) {
+					//Complex query for XPXItemExtn input xml
+					Element expElement =SCXmlUtil.createChild(inputNodeListElemt, "Exp");
+					String itemid=itemIdIter.next();
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value",itemid );
+					
+					//Complex query for itemXef input xml
+					Element exp1Element = xrefInput.getOwnerDocument().createElement("Exp");
+					exp1Element.setAttribute("Name", "LegacyItemNumber");
+					exp1Element.setAttribute("QryType", "EQ");
+					exp1Element.setAttribute("Value", itemid);
+					SCXmlUtil.importElement(Or, exp1Element);
+					
+					//Complex query for PriceLineList input xml
+					Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+					Element exp2Element = expDoc.getDocumentElement();
+					exp2Element.setAttribute("Name", "ItemID");
+					exp2Element.setAttribute("Value", itemid);
+					pricLlistAssignmentInputElemt.appendChild(pricLlistAssignmentInputDoc.importNode(exp2Element, true));
+					
+					//UOMList input XML
+					YFCElement exp3Element = documentElement.createChild("Exp");
+					exp3Element.setAttribute("Name", "ItemID");
+					exp3Element.setAttribute("Value", itemid);
+					complexQueryOrElement.appendChild((YFCNode)exp3Element);
+					orderMultipleMap.put(itemid, "1");
+				}
+				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
+				input.appendChild(input.getOwnerDocument().importNode(pricLlistAssignmentInput, true));
+				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
+				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
+				String inputXml = SCXmlUtil.getString(input);
+				System.out.println("xpedxgetAllAPI  Input XML: " + inputXml);
+				
+				 allAPIOutputDoc=(Element)WCMashupHelper.invokeMashup(
+						"xpedxgetAllAPI", input, wcContext
+								.getSCUIContext());
+				 
+				 getOrderMultipleMapForItems();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private boolean isSingleItem() {
 		YFCDocument yfcDocument = YFCDocument.getDocumentFor(getOutDoc());
 		if (yfcDocument != null && yfcDocument.getDocumentElement() != null) {
@@ -927,7 +1118,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String returnString = super.navigate();
 		//XBT-260
 		changeBasis();
-		
+		getAllAPIOutput();
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -1019,8 +1210,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
-			itemUomHashMap =	XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
-			orderMultipleMap = new HashMap<String,String>();
+			itemUomHashMap =	getXpedxUOMList();//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
+			//orderMultipleMap = new HashMap<String,String>();
 			
 			//Start - Code added to fix XNGTP 2964
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
@@ -1029,11 +1220,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			
 			try {
-				orderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(itemIDList);
+				//orderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(itemIDList);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				orderMultipleMap = new HashMap();
+				//orderMultipleMap = new HashMap();
 			}
 			wcContext.setWCAttribute("orderMultipleMap",orderMultipleMap, WCAttributeScope.REQUEST);
 			
@@ -1149,13 +1340,109 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//Set itemMap MAP again in session
 			XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 			//set a itemsUOMMap in Session for ConvFactor
-			XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId()));
+			XPEDXWCUtils.setObectInCache("itemsUOMMap",getXpedxUOMList());
 
 			
 			
 		}
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
+	}
+	private void getOrderMultipleMapForItems()
+	{
+		ArrayList<Element> xpxItemExtnList=SCXmlUtil.getElements(allAPIOutputDoc, "XPXItemExtnList/XPXItemExtn");
+		if(xpxItemExtnList != null)
+		{
+			for(Element xpxItemExtn : xpxItemExtnList)
+			{
+				if(xpxItemExtn != null)
+				{
+					orderMultipleMap.put(xpxItemExtn.getAttribute("ItemID"), xpxItemExtn.getAttribute("OrderMultiple"));
+				}
+			}
+		}
+	}
+	private Map<String, Map<String,String>> getXpedxUOMList() {
+		
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		
+		
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		try {
+			
+			if(allAPIOutputDoc != null)
+			{
+			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
+			NodeList wNodeList = wElement.getChildNodes();
+			if (wNodeList != null) {
+				int length = wNodeList.getLength();
+				String conversion;
+				for (int i = 0; i < length; i++) {
+					Node wNode = wNodeList.item(i);
+					if (wNode != null) {
+						NamedNodeMap nodeAttributes = wNode.getAttributes();
+						if (nodeAttributes != null) {
+							Node itemId = nodeAttributes
+									.getNamedItem("ItemID");
+							if(itemId!=null) {
+								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+								NodeList uomListNodeList =	wNode.getChildNodes();
+								Node uomListNode = uomListNodeList.item(0);
+								
+								//2964 Start
+								if (uomListNode != null) {
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
+								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
+									
+									for (Element uomNode : listOfUOMElements) {
+									
+										if (uomNode != null) {
+											NamedNodeMap uomAttributes = uomNode.getAttributes();
+											//2964 end
+											if (uomAttributes != null) {
+												Node UnitOfMeasure = uomAttributes
+														.getNamedItem("UnitOfMeasure");
+												Node Conversion = uomAttributes
+														.getNamedItem("Conversion");
+												if (UnitOfMeasure != null && Conversion != null) {
+													conversion = Conversion.getTextContent();
+													if(!YFCUtils.isVoid(conversion)){
+														long convFactor = Math.round(Double.parseDouble(conversion));
+															wUOMsAndConFactors.put(UnitOfMeasure
+																.getTextContent(), Long.toString(convFactor));
+															
+													}
+												}
+											}
+										}
+									}
+								}
+							
+								itemUomHashMap.put(itemId.getTextContent(), wUOMsAndConFactors);
+							}
+						}
+					}
+				}
+			}
+			}
+
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		} finally {
+			scuiTransactionContext.end();
+			env.clearApiTemplate("XPXUOMListAPI");
+			SCUITransactionContextHelper.releaseTransactionContext(
+					scuiTransactionContext, wSCUIContext);
+			env = null;
+		}
+		return itemUomHashMap;
+
 	}
 
 	protected void prepareMyItemListList() {
@@ -1323,6 +1610,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 			return "singleItem";
 		}
 		else {
+			try
+			{
+			getAllAPIOutput();
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -1720,9 +2014,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		List items = new ArrayList();
 		items.add(itemId);
-
-		itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemId,
-				organizationCode);
+		
+		itemUOMsMap = getXpedxUOMList();//XPEDXOrderUtils.getXpedxUOMList(customerId, itemId,
+				//organizationCode);*/
 		displayItemUOMsMap = new HashMap();
 		for (Iterator it = itemUOMsMap.keySet().iterator(); it.hasNext();) {
 			String uomDesc = (String) it.next();
@@ -1931,9 +2225,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		if(CUSTOMER_PART_NUMBER_FLAG.equalsIgnoreCase(customerUseSKU)){
 			if(itemIds.size()>0){
-				Document custPartNoDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIds, wcContext);
-				if(custPartNoDoc!=null){
-					Element itemcustXrefListElemet = custPartNoDoc.getDocumentElement();
+				//Document custPartNoDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIds, wcContext);
+				//if(custPartNoDoc!=null){
+				Element itemcustXrefListElemet = (Element)allAPIOutputDoc.getElementsByTagName("XPXItemcustXrefList").item(0);
+				if(itemcustXrefListElemet != null)
+				{
 					NodeList itemCustXrefList = itemcustXrefListElemet.getElementsByTagName("XPXItemcustXref");
 					
 					for (int i = 0; i < itemCustXrefList.getLength(); i++) {
@@ -1946,9 +2242,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 		
-		Document xPXItemExtnListElement = null;
+		Element xPXItemExtnListElement = null;
 		try {
-			xPXItemExtnListElement = XPEDXWCUtils.getXPXItemExtnList(itemIds, wcContext);
+			xPXItemExtnListElement = (Element)allAPIOutputDoc.getElementsByTagName("XPXItemExtnList").item(0);//XPEDXWCUtils.getXPXItemExtnList(itemIds, wcContext);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1993,7 +2289,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				List<Element> itemBranchElementList = null;
 				if(xPXItemExtnListElement!=null) {
 					try {
-						itemBranchElementList = XMLUtilities.getElements(xPXItemExtnListElement.getDocumentElement(),"XPXItemExtn[@ItemID='"+itemID+"']");
+						itemBranchElementList = XMLUtilities.getElements(xPXItemExtnListElement,"XPXItemExtn[@ItemID='"+itemID+"']");
 					} catch (XPathExpressionException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -2080,7 +2376,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		Document outputDoc = null;
 		Document outputDocument = null;
 		
-		String organizationCode = wcContext.getStorefrontId();
+	/*	String organizationCode = wcContext.getStorefrontId();
 		String customerId = wcContext.getCustomerId();
 		
 		Map<String, String> valueMaps = new HashMap<String, String>();
@@ -2110,36 +2406,38 @@ public class XPEDXCatalogAction extends CatalogAction {
 				inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
 			}
 			Element obj = (Element)WCMashupHelper.invokeMashup("xpedxYpmPricelistLine", input,getWCContext().getSCUIContext());
-			outputDoc = ((Element) obj).getOwnerDocument();
+			outputDoc = ((Element) obj).getOwnerDocument();*/
 			
-			NodeList itemNodeList1 = obj.getElementsByTagName("PricelistLine");
+			NodeList itemNodeList1 = allAPIOutputDoc.getElementsByTagName("PricelistLine");
 			Map <String, List<Element>> PricelistLineMap = new HashMap<String, List<Element>>();
 			List<Element> PricelistLineList = null;
-			
-			for (int i = 0; i < itemNodeList1.getLength(); i++) {
-				Node itemNode = itemNodeList1.item(i);
-				Element itemElement = (Element) itemNode;
-				String itemId = itemElement.getAttribute("ItemID");
-				String quantity = itemElement.getAttribute("FromQuantity");
-				if (quantity == "" || quantity == null)
-				{
-					itemElement.setAttribute("FromQuantity", "1");
-				}
-				if(PricelistLineMap.containsKey(itemId)) {
-					PricelistLineList = PricelistLineMap.get(itemId);
-					PricelistLineList.add(itemElement);
-					PricelistLineMap.put(itemId, PricelistLineList);
-				} else {
-					PricelistLineList = new ArrayList<Element>();
-					PricelistLineList.add(itemElement);
-					PricelistLineMap.put(itemId, PricelistLineList);
+			if(itemNodeList1 != null)
+			{
+				for (int i = 0; i < itemNodeList1.getLength(); i++) {
+					Node itemNode = itemNodeList1.item(i);
+					Element itemElement = (Element) itemNode;
+					String itemId = itemElement.getAttribute("ItemID");
+					String quantity = itemElement.getAttribute("FromQuantity");
+					if (quantity == "" || quantity == null || quantity.equals("")|| quantity.equals("null"))
+					{
+						itemElement.setAttribute("FromQuantity", "1");
+					}
+					if(PricelistLineMap.containsKey(itemId)) {
+						PricelistLineList = PricelistLineMap.get(itemId);
+						PricelistLineList.add(itemElement);
+						PricelistLineMap.put(itemId, PricelistLineList);
+					} else {
+						PricelistLineList = new ArrayList<Element>();
+						PricelistLineList.add(itemElement);
+						PricelistLineMap.put(itemId, PricelistLineList);
+					}
 				}
 			}
 			setPLLineMap(sortPriceListLine(PricelistLineMap));
-			if (null != outputDoc) {
+			/*if (null != outputDoc) {
 				log.debug("Output XML for xpedxYpmPricelistLine: " + SCXmlUtil.getString((Element) obj));
-			}
-		}
+			}*/
+		//}
 		return outputDoc;
 	}
 	
@@ -2437,7 +2735,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public Map<String,List<Element>> facetListMap = new HashMap<String , List<Element>>();//Added for JIRA 3821
 	private String firstItemCategoryShortDescription;
 	private String tempCategoryPath;
-
+	private Element allAPIOutputDoc;
 
 
 	public Map<String, List<Element>> getFacetListMap() {

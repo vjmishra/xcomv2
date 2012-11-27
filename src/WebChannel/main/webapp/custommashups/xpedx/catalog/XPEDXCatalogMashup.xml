@@ -976,6 +976,30 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedxYpmPriceLinelistAssignmentList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getPricelistAssignmentList" >
+			<Input>
+				<PricelistAssignment CustomerID="" >
+					<PricelistLine PricingStatus="ACTIVE">
+					<Item OrganizationCode=""/>
+						<ComplexQuery Operator="And">
+       					 <Or>
+       					 </Or>
+						</ComplexQuery>
+					</PricelistLine>
+				</PricelistAssignment>
+			</Input>
+			<Template>
+			<PricelistLineList>
+			<PricelistLine FromQuantity="" ItemID="" ListPrice="">
+					<Extn/>
+				</PricelistLine>
+			</PricelistLineList>
+			</Template>
+		</API>
+	</mashup>
+	
 	<!-- Added for performance : overriding outOfBox catalogNavBar -->
 	<mashup id ='xpedxCatalogNavBar' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
 		description="Filter out the categories from the Catalog Index Search">
@@ -1010,4 +1034,17 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedxgetAllAPI' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCatalogAllAPIService">
+			<Input>
+				<XPXCatalogAllAPIService />
+			</Input>
+			<Template>
+				<XPXCatalogAllAPIService />
+			</Template>
+		</API>
+	</mashup>
 </mashups>       
