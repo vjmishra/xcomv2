@@ -100,6 +100,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cGuage = validate(b2cItemExtn.getAttribute("ExtnGauge"));
 		String b2cThickness = validate(b2cItemExtn.getAttribute("ExtnThickness"));
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
+		String b2cPackMethod = validate(b2cItemExtn.getAttribute("ExtnPackMethod")); //added for XBT 262 & 258
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
 		//String isValid = validate(info.getAttribute("IsValid"));
@@ -206,6 +207,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("basis: \"").append(TextUtils.htmlEncode(b2cBasis)).append("\",");
 		sb.append("mwt: \"").append(TextUtils.htmlEncode(b2cMwt)).append("\",");
 		sb.append("vendorNumber: \"").append(TextUtils.htmlEncode(b2cVendorNumber)).append("\",");
+		sb.append("packMethod: \"").append(TextUtils.htmlEncode(b2cPackMethod)).append("\",");//added for XBT 262 & 258
 		sb.append("stocked: \"");
 		if(!"W".equals(b2cstockStatus)) {
 			sb.append("M");
