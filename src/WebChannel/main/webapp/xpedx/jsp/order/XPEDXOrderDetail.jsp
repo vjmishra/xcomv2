@@ -1460,7 +1460,7 @@ function showSplitDiv(divId)
 		<!--Changed returnOrderListId for  Jira 2039  -->
 			<s:a id='returnOrderListId' href='%{orderListReturnUrl}' cssClass="grey-ui-btn return-orders float-left"><span>Return to Orders</span></s:a>
 			<s:if test="%{'Invoiced' == #xutil.getAttribute(#orderDetail,'Status')}">
-			<s:a href="%{returnItemsLink}" cssClass="grey-ui-btn float-left"><span>Return Items</span></s:a>
+			<!--<s:a href="%{returnItemsLink}" cssClass="grey-ui-btn float-left"><span>Return Items</span></s:a>-->
 			</s:if>
 			<%-- Commented for bug# 1913
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
