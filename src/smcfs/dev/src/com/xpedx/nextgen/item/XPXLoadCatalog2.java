@@ -47,6 +47,28 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 	}
 
+	private int getLengthForExtnBasis(YFSEnvironment env)
+	{
+		int length=0;
+		try
+		{
+			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
+			Connection m_Conn= connHolder.getDBConnection();
+			Statement stmt =m_Conn.createStatement();
+			String query="select max(length(extn_basis)) from yfs_item ";
+			ResultSet itemRs=stmt.executeQuery(query);
+			if(itemRs != null && itemRs.next())
+			{
+				length=itemRs.getInt(1);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return length;
+	}
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception
 	{
 		Document outXML = null;
@@ -62,7 +84,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
 			}
 			Element eItemList = inXML.getDocumentElement();
-
+			
+			int length=getLengthForExtnBasis(env);
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
@@ -117,9 +140,27 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
 
 							if(eExtnList!=null){
-						eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
-						eExtnList.setAttribute("ExtnDescription", strDesc);
-						eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+								eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
+								eExtnList.setAttribute("ExtnDescription", strDesc);
+								eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+								String val=eExtnList.getAttribute("ExtnBasis");
+								if(val != null)
+								{
+									int vallength=val.length();
+									if(vallength < length)
+									{
+										StringBuffer sb=new StringBuffer();
+										int _length=length -vallength;
+										for(int k=0;k<_length;k++)
+										{
+											sb.append("0");
+										}
+										sb.append(val);
+										eExtnList.setAttribute("ExtnBasis",(sb.toString()));
+										
+									}
+									
+								}
 							}
 						
 					}
