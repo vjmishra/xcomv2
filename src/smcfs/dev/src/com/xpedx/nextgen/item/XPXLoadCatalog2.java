@@ -108,11 +108,13 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						String strShortDesc = ePrimaryList.getAttribute("ShortDescription");
 						String strDesc =ePrimaryList.getAttribute("Description");
 						String strExtendedDesc = ePrimaryList.getAttribute("ExtendedDescription");
+						String keywords = ePrimaryList.getAttribute("Keywords");
 						strShortDesc =	XPXCatalogDataProcessor.preprocessCatalogData(strShortDesc);
 						strDesc = XPXCatalogDataProcessor.preprocessCatalogData(strDesc);
 						strExtendedDesc =XPXCatalogDataProcessor.preprocessCatalogData(strExtendedDesc);
-
-						Element eExtnList =(Element)eItem.getElementsByTagName("Extn").item(0);
+						keywords =XPXCatalogDataProcessor.preprocessCatalogData(keywords);
+						eItem.setAttribute("Keywords", keywords);
+						Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
 
 							if(eExtnList!=null){
 						eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
