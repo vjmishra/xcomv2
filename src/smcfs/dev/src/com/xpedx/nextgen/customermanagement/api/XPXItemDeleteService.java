@@ -163,7 +163,7 @@ public class XPXItemDeleteService implements YIFCustomApi {
 				yfcCategorElement.appendChild(eCategoryTemplate);
 				//System.out.println(SCXmlUtil.getString(getItemListTemplate.getDocument()));
 				log.debug("DeleteItemService: \n" + SCXmlUtil.getString(getItemListTemplate.getDocument()));
-				Document itemListOutDoc = api.invoke(env, "XPEDXItemDelete", getItemListTemplate.getDocument());
+				Document itemListOutDoc = api.executeFlow(env, "XPEDXItemDelete", getItemListTemplate.getDocument());
 				log.debug("DeleteItemService: \n" + SCXmlUtil.getString(itemListOutDoc));
 
 
