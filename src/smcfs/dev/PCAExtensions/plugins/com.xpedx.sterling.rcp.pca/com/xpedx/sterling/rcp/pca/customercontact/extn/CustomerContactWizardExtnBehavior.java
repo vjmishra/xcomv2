@@ -325,12 +325,13 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewReportsFlag",
 										checked);
 					}
+					// Value to Y/N instead of T/F for JIRA XBT-211
 					if (userGroupId.equalsIgnoreCase("ESTIMATOR")) {
 						YRCXmlUtils
 								.setAttributeValue(
 										eleInput,
 										"/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator",
-										("Y".equals(checked))?"T":"F" );
+										("Y".equals(checked))?"Y":"N" );
 					}
 					
 				}
