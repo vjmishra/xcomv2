@@ -112,6 +112,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 	private Element getCustXrefList(YFSEnvironment env,Document inputXML,Document outputDoc) throws SQLException
 	{
 		Element custXrefElement=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemcustXrefList");
+		try
+		{
 		Element custXrefList=(Element)inputXML.getElementsByTagName("XPXItemcustXref").item(0);
 		
 		/*StringBuilder query=new StringBuilder("SELECT      XPX_ITEMCUST_XREF.* FROM XPX_ITEMCUST_XREF XPX_ITEMCUST_XREF     WHERE ( ( ( XPX_ITEMCUST_XREF.ENVIRONMENT_CODE =  '"+custXrefList.getAttribute("EnvironmentCode")+"'   )  AND ( XPX_ITEMCUST_XREF.CUSTOMER_NUMBER =  '"+custXrefList.getAttribute("CustomerNumber")+"'   )  AND  ( XPX_ITEMCUST_XREF.CUSTOMER_DIVISION =  '"+custXrefList.getAttribute("CustomerDivision")+"'   ) AND  ( " );
@@ -189,82 +191,94 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			itemXrefEleme.setAttribute("Modifyts", custXREFRs.getString("MODIFYTS"));
 			
 		}*/
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return custXrefElement;
 	}
 	private Element getXPXItemExtnElement(YFSEnvironment env,Document inputXML,Document outputDoc) throws SQLException
 	{
 			Element xpxItemExtnList=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemExtnList");
-			Element itemExtnElelement=(Element)inputXML.getElementsByTagName("XPXItemExtn").item(0);
-			if(itemExtnElelement == null)
-				return null;
-			/*StringBuilder query=new StringBuilder("SELECT      XPX_ITEM_EXTN.* FROM XPX_ITEM_EXTN XPX_ITEM_EXTN     WHERE ( (  ( XPX_ITEM_EXTN.ENVIRONMENT_ID =  'M'   )  AND ( XPX_ITEM_EXTN.XPX_DIVISION =  '68'   ) ");
-			 
-			NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
-			query.append("AND  (  ( XPX_ITEM_EXTN.ITEM_ID =  '"+5178022+"'   )");
-			for(int i=1;i<itemIDList.getLength();i++)
+			try
 			{
-				Element itemExtnElem=(Element)itemIDList.item(i);
-				String itemID=itemExtnElem.getAttribute("Value");
-				query.append("OR ( XPX_ITEM_EXTN.ITEM_ID =  =  '"+itemID+"'   )");
-			}
-			query.append(")");*/
-			//722377,5414951
-			/*StringBuilder query=new StringBuilder("SELECT      XPX_ITEM_EXTN.* FROM XPX_ITEM_EXTN XPX_ITEM_EXTN     WHERE ( (  ( XPX_ITEM_EXTN.ENVIRONMENT_ID =  'M'   )  AND ( XPX_ITEM_EXTN.XPX_DIVISION =  '68'   ) AND  (  ( XPX_ITEM_EXTN.ITEM_ID =  '2035347'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2110816'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2115928'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2189663'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2202862'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2265817'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2312967'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530153'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530158'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530159'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5302673'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5333343'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5342032'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5414951'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '613682'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '681930'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '689792'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '722377'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '724508'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '743064'   )  )  ) )");
-			Statement stmt =m_Conn.createStatement();
-			ResultSet xpxItemExtnRs=stmt.executeQuery(query.toString());*/
-			
-			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
-			pltQryBuilder.setCurrentTable("XPX_ITEM_EXTN");
-			pltQryBuilder.appendString("ENVIRONMENT_ID", "=", itemExtnElelement.getAttribute("EnvironmentID"));
-			pltQryBuilder.appendString(" AND trim(XPX_DIVISION)", "=", itemExtnElelement.getAttribute("XPXDivision"));
-			NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
-			pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIDList.item(0)).getAttribute("Value"));
-			for(int i=1;i<itemIDList.getLength();i++)
-			{
-				Element custRefElem=(Element)itemIDList.item(i);
-				pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", custRefElem.getAttribute("Value"));
+				Element itemExtnElelement=(Element)inputXML.getElementsByTagName("XPXItemExtn").item(0);
+				if(itemExtnElelement == null)
+					return null;
+				/*StringBuilder query=new StringBuilder("SELECT      XPX_ITEM_EXTN.* FROM XPX_ITEM_EXTN XPX_ITEM_EXTN     WHERE ( (  ( XPX_ITEM_EXTN.ENVIRONMENT_ID =  'M'   )  AND ( XPX_ITEM_EXTN.XPX_DIVISION =  '68'   ) ");
+				 
+				NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
+				query.append("AND  (  ( XPX_ITEM_EXTN.ITEM_ID =  '"+5178022+"'   )");
+				for(int i=1;i<itemIDList.getLength();i++)
+				{
+					Element itemExtnElem=(Element)itemIDList.item(i);
+					String itemID=itemExtnElem.getAttribute("Value");
+					query.append("OR ( XPX_ITEM_EXTN.ITEM_ID =  =  '"+itemID+"'   )");
+				}
+				query.append(")");*/
+				//722377,5414951
+				/*StringBuilder query=new StringBuilder("SELECT      XPX_ITEM_EXTN.* FROM XPX_ITEM_EXTN XPX_ITEM_EXTN     WHERE ( (  ( XPX_ITEM_EXTN.ENVIRONMENT_ID =  'M'   )  AND ( XPX_ITEM_EXTN.XPX_DIVISION =  '68'   ) AND  (  ( XPX_ITEM_EXTN.ITEM_ID =  '2035347'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2110816'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2115928'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2189663'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2202862'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2265817'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '2312967'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530153'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530158'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '530159'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5302673'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5333343'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5342032'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '5414951'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '613682'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '681930'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '689792'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '722377'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '724508'   )  OR  ( XPX_ITEM_EXTN.ITEM_ID =  '743064'   )  )  ) )");
+				Statement stmt =m_Conn.createStatement();
+				ResultSet xpxItemExtnRs=stmt.executeQuery(query.toString());*/
 				
+				PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
+				pltQryBuilder.setCurrentTable("XPX_ITEM_EXTN");
+				pltQryBuilder.appendString("ENVIRONMENT_ID", "=", itemExtnElelement.getAttribute("EnvironmentID"));
+				pltQryBuilder.appendString(" AND trim(XPX_DIVISION)", "=", itemExtnElelement.getAttribute("XPXDivision"));
+				NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
+				pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIDList.item(0)).getAttribute("Value"));
+				for(int i=1;i<itemIDList.getLength();i++)
+				{
+					Element custRefElem=(Element)itemIDList.item(i);
+					pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", custRefElem.getAttribute("Value"));
+					
+				}
+				pltQryBuilder.append(")");
+				List<XPX_Item_Extn> xpxItemExtns=
+					XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
+				Iterator<XPX_Item_Extn> xpxItemExtnIter=xpxItemExtns.iterator();
+				while(xpxItemExtnIter.hasNext())
+				{
+					XPX_Item_Extn xpxItemExtn=xpxItemExtnIter.next();
+					Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEM_KEY,xpxItemExtn.getItem_Key());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMEXTNKEY,xpxItemExtn.getItemExtnKey());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ENVIRONMENTID,xpxItemExtn.getEnvironmentID() );
+					itemXrefEleme.setAttribute(XPX_Item_Extn.COMPANYCODE,xpxItemExtn.getCompanyCode() );
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMID,xpxItemExtn.getItemID());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.MASTERPRODUCTCODE,xpxItemExtn.getMasterProductCode());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.XPXDIVISION,xpxItemExtn.getXPXDivision());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMSTOCKSTATUS,xpxItemExtn.getItemStockStatus());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ORDERMULTIPLE,""+xpxItemExtn.getOrderMultiple());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.INVENTORYINDICATOR,xpxItemExtn.getInventoryIndicator());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.ORIGINALINDICATOR,xpxItemExtn.getOriginalIndicator());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.CREATETS,""+xpxItemExtn.getCreatets());
+					itemXrefEleme.setAttribute(XPX_Item_Extn.MODIFYTS,""+xpxItemExtn.getModifyts());
+				}
+				/*while(xpxItemExtnRs.next())
+				{
+					Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
+					itemXrefEleme.setAttribute("ItemcustRefKey", xpxItemExtnRs.getString("ITEM_KEY"));
+					itemXrefEleme.setAttribute("CustomerNumber", xpxItemExtnRs.getString("ITEM_EXTN_KEY"));
+					itemXrefEleme.setAttribute("MPC", xpxItemExtnRs.getString("ENVIRONMENT_ID"));
+					itemXrefEleme.setAttribute("LegacyItemNumber", xpxItemExtnRs.getString("COMPANY_CODE"));
+					itemXrefEleme.setAttribute("CustomerPartNumber", xpxItemExtnRs.getString("ITEM_ID"));
+					itemXrefEleme.setAttribute("CustomerItemNumber", xpxItemExtnRs.getString("MASTER_PRODUCT_CODE"));
+					itemXrefEleme.setAttribute("CustomerDecription", xpxItemExtnRs.getString("XPX_DIVISION"));
+					itemXrefEleme.setAttribute("CustomerUnit", xpxItemExtnRs.getString("ITEM_STOCK_STATUS"));
+					itemXrefEleme.setAttribute("ConvFactor", xpxItemExtnRs.getString("ORDER_MULTIPLE"));
+					itemXrefEleme.setAttribute("IsCustUOMExcl", xpxItemExtnRs.getString("INVENTORY_INDICATOR"));
+					itemXrefEleme.setAttribute("EnvironmentCode", xpxItemExtnRs.getString("ORIGINAL_INDICATOR"));
+					itemXrefEleme.setAttribute("Createts", xpxItemExtnRs.getString("CREATETS"));
+					itemXrefEleme.setAttribute("Modifyts", xpxItemExtnRs.getString("MODIFYTS"));
+					
+				}*/
 			}
-			pltQryBuilder.append(")");
-			List<XPX_Item_Extn> xpxItemExtns=
-				XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
-			Iterator<XPX_Item_Extn> xpxItemExtnIter=xpxItemExtns.iterator();
-			while(xpxItemExtnIter.hasNext())
+			catch(Exception e)
 			{
-				XPX_Item_Extn xpxItemExtn=xpxItemExtnIter.next();
-				Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ITEM_KEY,xpxItemExtn.getItem_Key());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMEXTNKEY,xpxItemExtn.getItemExtnKey());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ENVIRONMENTID,xpxItemExtn.getEnvironmentID() );
-				itemXrefEleme.setAttribute(XPX_Item_Extn.COMPANYCODE,xpxItemExtn.getCompanyCode() );
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMID,xpxItemExtn.getItemID());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.MASTERPRODUCTCODE,xpxItemExtn.getMasterProductCode());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.XPXDIVISION,xpxItemExtn.getXPXDivision());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMSTOCKSTATUS,xpxItemExtn.getItemStockStatus());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ORDERMULTIPLE,""+xpxItemExtn.getOrderMultiple());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.INVENTORYINDICATOR,xpxItemExtn.getInventoryIndicator());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.ORIGINALINDICATOR,xpxItemExtn.getOriginalIndicator());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.CREATETS,""+xpxItemExtn.getCreatets());
-				itemXrefEleme.setAttribute(XPX_Item_Extn.MODIFYTS,""+xpxItemExtn.getModifyts());
+				e.printStackTrace();
 			}
-			/*while(xpxItemExtnRs.next())
-			{
-				Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
-				itemXrefEleme.setAttribute("ItemcustRefKey", xpxItemExtnRs.getString("ITEM_KEY"));
-				itemXrefEleme.setAttribute("CustomerNumber", xpxItemExtnRs.getString("ITEM_EXTN_KEY"));
-				itemXrefEleme.setAttribute("MPC", xpxItemExtnRs.getString("ENVIRONMENT_ID"));
-				itemXrefEleme.setAttribute("LegacyItemNumber", xpxItemExtnRs.getString("COMPANY_CODE"));
-				itemXrefEleme.setAttribute("CustomerPartNumber", xpxItemExtnRs.getString("ITEM_ID"));
-				itemXrefEleme.setAttribute("CustomerItemNumber", xpxItemExtnRs.getString("MASTER_PRODUCT_CODE"));
-				itemXrefEleme.setAttribute("CustomerDecription", xpxItemExtnRs.getString("XPX_DIVISION"));
-				itemXrefEleme.setAttribute("CustomerUnit", xpxItemExtnRs.getString("ITEM_STOCK_STATUS"));
-				itemXrefEleme.setAttribute("ConvFactor", xpxItemExtnRs.getString("ORDER_MULTIPLE"));
-				itemXrefEleme.setAttribute("IsCustUOMExcl", xpxItemExtnRs.getString("INVENTORY_INDICATOR"));
-				itemXrefEleme.setAttribute("EnvironmentCode", xpxItemExtnRs.getString("ORIGINAL_INDICATOR"));
-				itemXrefEleme.setAttribute("Createts", xpxItemExtnRs.getString("CREATETS"));
-				itemXrefEleme.setAttribute("Modifyts", xpxItemExtnRs.getString("MODIFYTS"));
-				
-			}*/
 			return xpxItemExtnList;
 			
 	}
@@ -273,99 +287,106 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 	{
 		Element priceElement=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "PricelistLineList");
 		// getting price list details 
-		Element pricelistAssignmentElement=(Element)inputXML.getElementsByTagName("PricelistAssignment").item(0);
-		
-		
-		
-		if(pricelistAssignmentElement != null)
+		try
 		{
-			String customerID=pricelistAssignmentElement.getAttribute("CustomerID");
+			Element pricelistAssignmentElement=(Element)inputXML.getElementsByTagName("PricelistAssignment").item(0);
 			
-			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
-			pltQryBuilder.setCurrentTable("YPM_PRICELIST_ASSIGNMENT");
-			pltQryBuilder.appendString("trim(CUSTOMER_ID)", "=", customerID);
-			//pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
 			
-			List<YPM_Pricelist_Assignment> priceListAssignments=
-				YPM_Pricelist_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
-			Iterator<YPM_Pricelist_Assignment> priceListIter=priceListAssignments.iterator();
-			if(priceListIter.hasNext())
+			
+			if(pricelistAssignmentElement != null)
 			{
-				PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
-				pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
-				Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
-				pltQryBuilder1.appendString("trim(SELLER_ORGANIZATION_CODE)", "=",itemElem.getAttribute("OrganizationCode") );
-				pltQryBuilder1.appendString("AND trim(PRICING_STATUS)", "=","ACTIVE");
+				String customerID=pricelistAssignmentElement.getAttribute("CustomerID");
+				
+				PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
+				pltQryBuilder.setCurrentTable("YPM_PRICELIST_ASSIGNMENT");
+				pltQryBuilder.appendString("trim(CUSTOMER_ID)", "=", customerID);
+				//pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
+				
+				List<YPM_Pricelist_Assignment> priceListAssignments=
+					YPM_Pricelist_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
+				Iterator<YPM_Pricelist_Assignment> priceListIter=priceListAssignments.iterator();
 				if(priceListIter.hasNext())
 				{
+					PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
+					pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
+					Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
+					pltQryBuilder1.appendString("trim(SELLER_ORGANIZATION_CODE)", "=",itemElem.getAttribute("OrganizationCode") );
+					pltQryBuilder1.appendString("AND trim(PRICING_STATUS)", "=","ACTIVE");
+					if(priceListIter.hasNext())
+					{
+						
+						YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
+						pltQryBuilder1.appendString("AND ( trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
+					}
+					while(priceListIter.hasNext())
+					{
+						YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
+						pltQryBuilder1.appendString(" OR trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
+					}
+					pltQryBuilder1.append(")");
+					NodeList itemIdComplexQuery=pricelistAssignmentElement.getElementsByTagName("Exp");
+					pltQryBuilder1.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIdComplexQuery.item(0)).getAttribute("Value"));
+					for(int i=1;i<itemIdComplexQuery.getLength();i++)
+					{
+						Element itemIDElement=(Element)itemIdComplexQuery.item(i);
+						pltQryBuilder1.appendString(" OR trim(ITEM_ID)", "=", itemIDElement.getAttribute("Value"));
+					}
+					pltQryBuilder1.append(")");
+					List<YPM_Pricelist_Line> priceListLineList=
+						YPM_Pricelist_LineDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
+					Iterator<YPM_Pricelist_Line> priceListLineIter=priceListLineList.iterator();
+					while(priceListLineIter.hasNext())
+					{
+						YPM_Pricelist_Line priceListLine=priceListLineIter.next();
+						Element priceLineElement=SCXmlUtil.createChild(priceElement, "PricelistLine");
+						priceLineElement.setAttribute("ItemID",priceListLine.getItem_ID());
+						priceLineElement.setAttribute("FromQuantity",""+priceListLine.getFrom_Quantity() );
+						priceLineElement.setAttribute("ListPrice",""+priceListLine.getList_Price() );
+						Element priceLineExtnElement=SCXmlUtil.createChild(priceLineElement, "Extn");
+						priceLineExtnElement.setAttribute("ExtnTierUom",priceListLine.getExtn_Extn_Tier_Uom() );
+						priceLineExtnElement.setAttribute("ExtnPricingUom",priceListLine.getExtn_Extn_Pricing_Uom());
+						
+					}
+				}
+				/*Element pricelistLine=(Element)inputXML.getElementsByTagName("PricelistLine").item(0);
+				ArrayList<Element> itemList=SCXmlUtil.getElements(pricelistLine, "/Item/ComplexQuery/Exp");
+				StringBuilder sb=new StringBuilder();
+				boolean isPriceCall=false;
+				for(Element itemElem : itemList)
+				{
+					String expName=itemElem.getAttribute("Name");
+					String value=itemElem.getAttribute("Value");
 					
-					YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
-					pltQryBuilder1.appendString("AND ( trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
+					if("ItemID".equals(expName) && value != null && value.trim().length() > 0 )
+					{				
+						sb.append("'").append(value).append("',");
+						isPriceCall=true;
+					}
 				}
-				while(priceListIter.hasNext())
+				int ind=sb.lastIndexOf(",");
+				sb.replace(ind, ind, "");
+				if(isPriceCall)
 				{
-					YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
-					pltQryBuilder1.appendString(" OR trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
-				}
-				pltQryBuilder1.append(")");
-				NodeList itemIdComplexQuery=pricelistAssignmentElement.getElementsByTagName("Exp");
-				pltQryBuilder1.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIdComplexQuery.item(0)).getAttribute("Value"));
-				for(int i=1;i<itemIdComplexQuery.getLength();i++)
-				{
-					Element itemIDElement=(Element)itemIdComplexQuery.item(i);
-					pltQryBuilder1.appendString(" OR trim(ITEM_ID)", "=", itemIDElement.getAttribute("Value"));
-				}
-				pltQryBuilder1.append(")");
-				List<YPM_Pricelist_Line> priceListLineList=
-					YPM_Pricelist_LineDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
-				Iterator<YPM_Pricelist_Line> priceListLineIter=priceListLineList.iterator();
-				while(priceListLineIter.hasNext())
-				{
-					YPM_Pricelist_Line priceListLine=priceListLineIter.next();
-					Element priceLineElement=SCXmlUtil.createChild(priceElement, "PricelistLine");
-					priceLineElement.setAttribute("ItemID",priceListLine.getItem_ID());
-					priceLineElement.setAttribute("FromQuantity",""+priceListLine.getFrom_Quantity() );
-					priceLineElement.setAttribute("ListPrice",""+priceListLine.getList_Price() );
-					Element priceLineExtnElement=SCXmlUtil.createChild(priceLineElement, "Extn");
-					priceLineExtnElement.setAttribute("ExtnTierUom",priceListLine.getExtn_Extn_Tier_Uom() );
-					priceLineExtnElement.setAttribute("ExtnPricingUom",priceListLine.getExtn_Extn_Pricing_Uom());
-					
-				}
+					Statement stmt =m_Conn.createStatement();
+					String sql="select YPL.* from YPM_PRICELIST_ASSIGNMENT YPA ,  YPM_PRICELIST_LINE YPL where ypl.pricelist_hdr_key =ypa.pricelist_hdr_key and ypa.customer_id ='"+customerID+"' and PRICING_STATUS='ACTIVE' and in("+sb.toString()+")";
+					ResultSet priceListRs=stmt.executeQuery(sql);
+					while(priceListRs.next())
+					{
+						Element priceLineElement=SCXmlUtil.createChild(priceElement, "PricelistLine");
+						priceLineElement.setAttribute("ItemID", priceListRs.getString("ITEM_ID"));
+						priceLineElement.setAttribute("FromQuantity", priceListRs.getString("FROM_QUANTITY"));
+						priceLineElement.setAttribute("ListPrice", priceListRs.getString("LIST_PRICE"));
+						Element priceLineExtnElement=SCXmlUtil.createChild(priceLineElement, "Extn");
+						priceLineExtnElement.setAttribute("ExtnTierUom", priceListRs.getString("EXTN_TIER_UOM"));
+						priceLineExtnElement.setAttribute("ExtnPricingUom", priceListRs.getString("EXTN_PRICING_UOM"));
+						
+					}
+				}*/
 			}
-			/*Element pricelistLine=(Element)inputXML.getElementsByTagName("PricelistLine").item(0);
-			ArrayList<Element> itemList=SCXmlUtil.getElements(pricelistLine, "/Item/ComplexQuery/Exp");
-			StringBuilder sb=new StringBuilder();
-			boolean isPriceCall=false;
-			for(Element itemElem : itemList)
-			{
-				String expName=itemElem.getAttribute("Name");
-				String value=itemElem.getAttribute("Value");
-				
-				if("ItemID".equals(expName) && value != null && value.trim().length() > 0 )
-				{				
-					sb.append("'").append(value).append("',");
-					isPriceCall=true;
-				}
-			}
-			int ind=sb.lastIndexOf(",");
-			sb.replace(ind, ind, "");
-			if(isPriceCall)
-			{
-				Statement stmt =m_Conn.createStatement();
-				String sql="select YPL.* from YPM_PRICELIST_ASSIGNMENT YPA ,  YPM_PRICELIST_LINE YPL where ypl.pricelist_hdr_key =ypa.pricelist_hdr_key and ypa.customer_id ='"+customerID+"' and PRICING_STATUS='ACTIVE' and in("+sb.toString()+")";
-				ResultSet priceListRs=stmt.executeQuery(sql);
-				while(priceListRs.next())
-				{
-					Element priceLineElement=SCXmlUtil.createChild(priceElement, "PricelistLine");
-					priceLineElement.setAttribute("ItemID", priceListRs.getString("ITEM_ID"));
-					priceLineElement.setAttribute("FromQuantity", priceListRs.getString("FROM_QUANTITY"));
-					priceLineElement.setAttribute("ListPrice", priceListRs.getString("LIST_PRICE"));
-					Element priceLineExtnElement=SCXmlUtil.createChild(priceLineElement, "Extn");
-					priceLineExtnElement.setAttribute("ExtnTierUom", priceListRs.getString("EXTN_TIER_UOM"));
-					priceLineExtnElement.setAttribute("ExtnPricingUom", priceListRs.getString("EXTN_PRICING_UOM"));
-					
-				}
-			}*/
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		return priceElement;
 		
@@ -376,19 +397,25 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		Document itemListDoc=SCXmlUtil.createDocument("ItemList");
 		
 		Iterator<YFS_Item_UOM> yfsItemUOMIter=yfsItemUOMList.iterator();
-		Map<String,YFS_Item_UOM> itemUOMMap=new HashMap<String,YFS_Item_UOM>();
+		Map<String,ArrayList<YFS_Item_UOM>> itemUOMMap=new HashMap<String,ArrayList<YFS_Item_UOM>>();
 		while(yfsItemUOMIter.hasNext())
 		{
 			
 			YFS_Item_UOM yfsItemUom=yfsItemUOMIter.next();
-			itemUOMMap.put(yfsItemUom.getItem_Key(), yfsItemUom);
+			ArrayList<YFS_Item_UOM> uomList=itemUOMMap.get(yfsItemUom.getItem_Key());
+			if(uomList == null)
+			{
+				 uomList=new ArrayList<YFS_Item_UOM>();
+			}
+			uomList.add(yfsItemUom);
+			itemUOMMap.put(yfsItemUom.getItem_Key(), uomList);
 			
 		}
 		Iterator<YFS_Item> yfsItemIter=yfsItemList.iterator();
 		while(yfsItemIter.hasNext())
 		{
 			YFS_Item yfsItem=yfsItemIter.next();
-			YFS_Item_UOM yfsItemUom=itemUOMMap.get(yfsItem.getItem_Key());
+			
 			Element itemElem=SCXmlUtil.createChild(itemListDoc.getDocumentElement(), "Item");	
 			itemElem.setAttribute(YFS_Item.CAN_USE_AS_SERVICE_TOOL, yfsItem.getCan_Use_As_Service_Tool());
 			itemElem.setAttribute(YFS_Item.CREATEPROGID, yfsItem.getCreateprogid());
@@ -409,28 +436,25 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			itemElem.setAttribute(YFS_Item.ORGANIZATION_CODE, yfsItem.getOrganization_Code());
 			itemElem.setAttribute("UnitOfMeasure", yfsItem.getUom());
 			Element alternameUOMListElem=SCXmlUtil.createChild(itemElem, "AlternateUOMList");
-			if(yfsItemUom != null)
+			ArrayList<YFS_Item_UOM> uomList=itemUOMMap.get(yfsItem.getItem_Key());
+			if(uomList != null)
 			{
-				Element alternameUOMElem=SCXmlUtil.createChild(alternameUOMListElem, "AlternateUOM");
-				alternameUOMElem.setAttribute("Height", ""+yfsItemUom.getHeight());
-				alternameUOMElem.setAttribute("HeightUOM", yfsItemUom.getHeight_Uom());
-				try
+				for(YFS_Item_UOM yfsItemUom: uomList)
 				{
-					alternameUOMElem.setAttribute("IsOrderingUOM	", yfsItemUom.getIs_Ordering_Uom());
+					Element alternameUOMElem=SCXmlUtil.createChild(alternameUOMListElem, "AlternateUOM");
+					alternameUOMElem.setAttribute("Height", ""+yfsItemUom.getHeight());
+					alternameUOMElem.setAttribute("HeightUOM", yfsItemUom.getHeight_Uom());
+					alternameUOMElem.setAttribute("IsOrderingUOM", yfsItemUom.getIs_Ordering_Uom());
+					alternameUOMElem.setAttribute("ItemKey", yfsItemUom.getItem_Key());
+					alternameUOMElem.setAttribute("Length",""+ yfsItemUom.getLength());
+					alternameUOMElem.setAttribute("LengthUOM", yfsItemUom.getLength_Uom());
+					alternameUOMElem.setAttribute("Quantity", ""+yfsItemUom.getQuantity());
+					alternameUOMElem.setAttribute("UnitOfMeasure", yfsItemUom.getUom());
+					alternameUOMElem.setAttribute("Weight", ""+yfsItemUom.getWeight());
+					alternameUOMElem.setAttribute("WeightUOM", yfsItemUom.getWeight_Uom());
+					alternameUOMElem.setAttribute("Width", ""+yfsItemUom.getWidth());
+					alternameUOMElem.setAttribute("WidthUOM", yfsItemUom.getWidth_Uom());
 				}
-				catch(Exception e)
-				{
-					
-				}
-				alternameUOMElem.setAttribute("ItemKey", yfsItemUom.getItem_Key());
-				alternameUOMElem.setAttribute("Length",""+ yfsItemUom.getLength());
-				alternameUOMElem.setAttribute("LengthUOM", yfsItemUom.getLength_Uom());
-				alternameUOMElem.setAttribute("Quantity", ""+yfsItemUom.getQuantity());
-				alternameUOMElem.setAttribute("UnitOfMeasure", yfsItemUom.getUom());
-				alternameUOMElem.setAttribute("Weight", ""+yfsItemUom.getWeight());
-				alternameUOMElem.setAttribute("WeightUOM", yfsItemUom.getWeight_Uom());
-				alternameUOMElem.setAttribute("Width", ""+yfsItemUom.getWidth());
-				alternameUOMElem.setAttribute("WidthUOM", yfsItemUom.getWidth_Uom());
 			}
 			
 		}
@@ -451,164 +475,171 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		String itemID = "";
 		
 		YFCDocument complexQueryOutDoc = YFCDocument.createDocument("ItemList");
-		
-		YFCDocument inDoc = YFCDocument.getDocumentFor(inXML);
-		YFCElement complexQueryElement = inDoc.getDocumentElement().getChildElement("ComplexQuery");
-		if(complexQueryElement != null) {
-			complexQuery = true;
-		}
-		
-		Element documentElement = inXML.getDocumentElement();
-		String customerID = documentElement.getAttribute("CustomerID");
-		itemID = documentElement.getAttribute("ItemID");
-		String storeFrontId = documentElement.getAttribute("OrganizationCode");
-		//Added to identify this request is from B2B order flow or not
-		String entryType=documentElement.getAttribute("EntryType");
-		
-		String[] customerIDTokens = customerID.split("\\-");
-		if (customerIDTokens != null && customerIDTokens.length > 1) {
-			LegacyCustomerNumber = customerIDTokens[1];
-		}
-		
-		HashMap<String, String> customerDetails = getCustomerDetails(env, inXML);
-		if("false".equals(customerDetails.get("isGetUOMCall")))
+		try
 		{
-			return complexQueryOutDoc.getDocument();
-		}
-		companyCode = customerDetails.get("companyCode");
-		customerDivision = customerDetails.get("customerDivision");
-		useOrderMulUOMFlag = customerDetails.get("useOrderMulUOMFlag");
-		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
-		pltQryBuilder.setCurrentTable("YFS_ITEM");
-		pltQryBuilder.appendString("trim(organization_code)","=",storeFrontId);
-		if(complexQuery) {
-			YFCNodeList<YFCElement> itemIDList=	complexQueryElement.getElementsByTagName("Exp");
-			pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((YFCElement)itemIDList.item(0)).getAttribute("Value"));
-			for(int i=1;i<itemIDList.getLength();i++)
+			YFCDocument inDoc = YFCDocument.getDocumentFor(inXML);
+			YFCElement complexQueryElement = inDoc.getDocumentElement().getChildElement("ComplexQuery");
+			if(complexQueryElement != null) {
+				complexQuery = true;
+			}
+			
+			Element documentElement = inXML.getDocumentElement();
+			String customerID = documentElement.getAttribute("CustomerID");
+			itemID = documentElement.getAttribute("ItemID");
+			String storeFrontId = documentElement.getAttribute("OrganizationCode");
+			//Added to identify this request is from B2B order flow or not
+			String entryType=documentElement.getAttribute("EntryType");
+			
+			String[] customerIDTokens = customerID.split("\\-");
+			if (customerIDTokens != null && customerIDTokens.length > 1) {
+				LegacyCustomerNumber = customerIDTokens[1];
+			}
+			
+			HashMap<String, String> customerDetails = getCustomerDetails(env, inXML);
+			if("false".equals(customerDetails.get("isGetUOMCall")))
 			{
-				YFCElement itemIdElem=(YFCElement)itemIDList.item(i);
-				pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", itemIdElem.getAttribute("Value"));
-				
+				return complexQueryOutDoc.getDocument();
 			}
-			pltQryBuilder.append(")");
-			
-		} 
-		else {
-			pltQryBuilder.appendString(" ( trim(ITEM_ID)", "=", itemID);
-		}
-		boolean isYFSItemCall=false;
-		List<YFS_Item> yfsItemList=
-			YFS_ItemDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
-		
-		PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
-		 pltQryBuilder1.setCurrentTable("YFS_ITEM_UOM");
-		 Iterator<YFS_Item> yfsItemIter=yfsItemList.iterator();
-		 if(yfsItemIter.hasNext())
-		 {
-			 YFS_Item yfsItem=yfsItemIter.next();
-			 pltQryBuilder1.appendString("trim(ITEM_KEY)","=",yfsItem.getItem_Key());
-			 isYFSItemCall=true;
-		 }
-		 while(yfsItemIter.hasNext())
-		 {
-			 YFS_Item yfsItem=yfsItemIter.next();
-			 pltQryBuilder1.appendString("OR trim(ITEM_KEY)","=",yfsItem.getItem_Key());
-		 }
-		 Document outputListDocument =null;
-		 if(isYFSItemCall)
-		 {
-			 List<YFS_Item_UOM> yfsItemUOMList=
-				 YFS_Item_UOMDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
-			 outputListDocument=createItemListDocument(yfsItemList,yfsItemUOMList);
-		 }
-		 else
-			 return complexQueryOutDoc.getDocument();
-		//inputElement.setAttribute("OrganizationCode", storeFrontId);
-		//inputElement.setAttribute("CallingOrganizationCode", storeFrontId);
-		//End: Fix for Jira#2007 - RUgrani
-		//Removing the Extn Template as we get all the XPXItemExtn for that item. We are making separate call
-		/*env.setApiTemplate("getItemList", SCXmlUtil.createFromString(""
-				+ "<ItemList><Item><AlternateUOMList><AlternateUOM />"
-				+ "</AlternateUOMList></Item></ItemList>"));
-		
-		api = YIFClientFactory.getInstance().getApi();
-		Document outputListDocument = api.invoke(env, "getItemList",
-				inputDocument.getDocument());*/
-		Element outputListElement = outputListDocument.getDocumentElement();
-		NodeList itemListNodes = outputListElement.getChildNodes();
-		int length = itemListNodes.getLength();
-		ArrayList<String> itemIds = new ArrayList<String>();
-		for(int i=0;i<length;i++) {
-			Node itemNode = itemListNodes.item(i);
-			String tmpItemId = itemNode.getAttributes().getNamedItem("ItemID").getTextContent();
-			itemIds.add(tmpItemId);
-		}
-		setItemXrefDoc(outputXML);
-		setItemExtnDoc(outputXML);
-		if(!complexQuery) {
-			for (int i = 0; i < length; i++) {
-				Node itemNode = itemListNodes.item(i);
-				baseUOM = itemNode.getAttributes().getNamedItem("UnitOfMeasure").getTextContent();
-				NodeList itemNodeChildren = itemNode.getChildNodes();
-				int length1 = itemNodeChildren.getLength();
-				for (int j = 0; j < length1; j++) {
-					Node itemNodeChild = itemNodeChildren.item(j);
-					if (itemNodeChild != null
-							&& itemNodeChild.getNodeName().equals(
-									"AlternateUOMList")) {
-						handleAternateUOMs(itemNodeChild, wUOMsToConversionFactors);
-					}
+			companyCode = customerDetails.get("companyCode");
+			customerDivision = customerDetails.get("customerDivision");
+			useOrderMulUOMFlag = customerDetails.get("useOrderMulUOMFlag");
+			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
+			pltQryBuilder.setCurrentTable("YFS_ITEM");
+			pltQryBuilder.appendString("trim(organization_code)","=",storeFrontId);
+			if(complexQuery) {
+				YFCNodeList<YFCElement> itemIDList=	complexQueryElement.getElementsByTagName("Exp");
+				pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((YFCElement)itemIDList.item(0)).getAttribute("Value"));
+				for(int i=1;i<itemIDList.getLength();i++)
+				{
+					YFCElement itemIdElem=(YFCElement)itemIDList.item(i);
+					pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", itemIdElem.getAttribute("Value"));
+					
 				}
-				orderMultiple = getOrderMultipleValue(itemID, customerDetails);
+				pltQryBuilder.append(")");
+				
+			} 
+			else {
+				pltQryBuilder.appendString(" ( trim(ITEM_ID)", "=", itemID);
 			}
-			handleXpxItemcustXrefList(itemID,LegacyCustomerNumber, customerDivision,
-					useOrderMulUOMFlag, orderMultiple,
-					wUOMsToConversionFactors,env,entryType);
-			if (ExtnIsCustUOMExcl != null
-					&& ExtnIsCustUOMExcl.equals("Y")) {
-				outputXML.appendChild((outputXML.getOwnerDocument().importNode(getOutputDocument(wUOMsToConversionFactors, ""), true)));
-				return getOutputDocument(wUOMsToConversionFactors, "");
-			}		
-			//env.clearApiTemplate("getItemList");
-			Document document = getOutputDocument(wUOMsToConversionFactors, lowestConvUOM);
+			boolean isYFSItemCall=false;
+			List<YFS_Item> yfsItemList=
+				YFS_ItemDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
 			
-			log.endTimer("XPXUOMListAPI:getUOMList ended...");
-			outputXML.appendChild((outputXML.getOwnerDocument().importNode(document, true)));
-			return document;
-		}
-		else {
-			for (int i = 0; i < length; i++) {
+			PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
+			 pltQryBuilder1.setCurrentTable("YFS_ITEM_UOM");
+			 Iterator<YFS_Item> yfsItemIter=yfsItemList.iterator();
+			 if(yfsItemIter.hasNext())
+			 {
+				 YFS_Item yfsItem=yfsItemIter.next();
+				 pltQryBuilder1.appendString("trim(ITEM_KEY)","=",yfsItem.getItem_Key());
+				 isYFSItemCall=true;
+			 }
+			 while(yfsItemIter.hasNext())
+			 {
+				 YFS_Item yfsItem=yfsItemIter.next();
+				 pltQryBuilder1.appendString("OR trim(ITEM_KEY)","=",yfsItem.getItem_Key());
+			 }
+			 Document outputListDocument =null;
+			 if(isYFSItemCall)
+			 {
+				 List<YFS_Item_UOM> yfsItemUOMList=
+					 YFS_Item_UOMDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
+				 outputListDocument=createItemListDocument(yfsItemList,yfsItemUOMList);
+			 }
+			 else
+				 return complexQueryOutDoc.getDocument();
+			//inputElement.setAttribute("OrganizationCode", storeFrontId);
+			//inputElement.setAttribute("CallingOrganizationCode", storeFrontId);
+			//End: Fix for Jira#2007 - RUgrani
+			//Removing the Extn Template as we get all the XPXItemExtn for that item. We are making separate call
+			/*env.setApiTemplate("getItemList", SCXmlUtil.createFromString(""
+					+ "<ItemList><Item><AlternateUOMList><AlternateUOM />"
+					+ "</AlternateUOMList></Item></ItemList>"));
+			
+			api = YIFClientFactory.getInstance().getApi();
+			Document outputListDocument = api.invoke(env, "getItemList",
+					inputDocument.getDocument());*/
+			Element outputListElement = outputListDocument.getDocumentElement();
+			NodeList itemListNodes = outputListElement.getChildNodes();
+			int length = itemListNodes.getLength();
+			ArrayList<String> itemIds = new ArrayList<String>();
+			for(int i=0;i<length;i++) {
 				Node itemNode = itemListNodes.item(i);
-				wUOMsToConversionFactors.clear();
-				
-				// including the fix by Prashath in the Complex Query also
-				itemID = itemNode.getAttributes().getNamedItem("ItemID").getTextContent();
-				baseUOM = itemNode.getAttributes().getNamedItem("UnitOfMeasure").getTextContent();
-				
-				NodeList itemNodeChildren = itemNode.getChildNodes();
-				int length1 = itemNodeChildren.getLength();
-				for (int j = 0; j < length1; j++) {
-					Node itemNodeChild = itemNodeChildren.item(j);
-					if (itemNodeChild != null
-							&& itemNodeChild.getNodeName().equals(
-									"AlternateUOMList")) {
-						handleAternateUOMs(itemNodeChild, wUOMsToConversionFactors);
+				String tmpItemId = itemNode.getAttributes().getNamedItem("ItemID").getTextContent();
+				itemIds.add(tmpItemId);
+			}
+			setItemXrefDoc(outputXML);
+			setItemExtnDoc(outputXML);
+			if(!complexQuery) {
+				for (int i = 0; i < length; i++) {
+					Node itemNode = itemListNodes.item(i);
+					baseUOM = itemNode.getAttributes().getNamedItem("UnitOfMeasure").getTextContent();
+					NodeList itemNodeChildren = itemNode.getChildNodes();
+					int length1 = itemNodeChildren.getLength();
+					for (int j = 0; j < length1; j++) {
+						Node itemNodeChild = itemNodeChildren.item(j);
+						if (itemNodeChild != null
+								&& itemNodeChild.getNodeName().equals(
+										"AlternateUOMList")) {
+							handleAternateUOMs(itemNodeChild, wUOMsToConversionFactors);
+						}
 					}
+					orderMultiple = getOrderMultipleValue(itemID, customerDetails);
 				}
-				orderMultiple = getOrderMultipleValue(itemID, customerDetails);
 				handleXpxItemcustXrefList(itemID,LegacyCustomerNumber, customerDivision,
 						useOrderMulUOMFlag, orderMultiple,
 						wUOMsToConversionFactors,env,entryType);
 				if (ExtnIsCustUOMExcl != null
 						&& ExtnIsCustUOMExcl.equals("Y")) {
-					getComplexQueryOutputDocument(wUOMsToConversionFactors, "" ,complexQueryOutDoc, itemID);
-				}
-				getComplexQueryOutputDocument(wUOMsToConversionFactors, lowestConvUOM ,complexQueryOutDoc,itemID);
+					outputXML.appendChild((outputXML.getOwnerDocument().importNode(getOutputDocument(wUOMsToConversionFactors, ""), true)));
+					return getOutputDocument(wUOMsToConversionFactors, "");
+				}		
+				//env.clearApiTemplate("getItemList");
+				Document document = getOutputDocument(wUOMsToConversionFactors, lowestConvUOM);
+				
+				log.endTimer("XPXUOMListAPI:getUOMList ended...");
+				outputXML.appendChild((outputXML.getOwnerDocument().importNode(document, true)));
+				return document;
 			}
-			log.endTimer("XPXUOMListAPI:getUOMList ended...");
-			outputXML.getDocumentElement().appendChild((outputXML.importNode(complexQueryOutDoc.getDocument().getDocumentElement(), true)));
-			return complexQueryOutDoc.getDocument();
+			else {
+				for (int i = 0; i < length; i++) {
+					Node itemNode = itemListNodes.item(i);
+					wUOMsToConversionFactors.clear();
+					
+					// including the fix by Prashath in the Complex Query also
+					itemID = itemNode.getAttributes().getNamedItem("ItemID").getTextContent();
+					baseUOM = itemNode.getAttributes().getNamedItem("UnitOfMeasure").getTextContent();
+					
+					NodeList itemNodeChildren = itemNode.getChildNodes();
+					int length1 = itemNodeChildren.getLength();
+					for (int j = 0; j < length1; j++) {
+						Node itemNodeChild = itemNodeChildren.item(j);
+						if (itemNodeChild != null
+								&& itemNodeChild.getNodeName().equals(
+										"AlternateUOMList")) {
+							handleAternateUOMs(itemNodeChild, wUOMsToConversionFactors);
+						}
+					}
+					orderMultiple = getOrderMultipleValue(itemID, customerDetails);
+					handleXpxItemcustXrefList(itemID,LegacyCustomerNumber, customerDivision,
+							useOrderMulUOMFlag, orderMultiple,
+							wUOMsToConversionFactors,env,entryType);
+					if (ExtnIsCustUOMExcl != null
+							&& ExtnIsCustUOMExcl.equals("Y")) {
+						getComplexQueryOutputDocument(wUOMsToConversionFactors, "" ,complexQueryOutDoc, itemID);
+					}
+					getComplexQueryOutputDocument(wUOMsToConversionFactors, lowestConvUOM ,complexQueryOutDoc,itemID);
+				}
+				log.endTimer("XPXUOMListAPI:getUOMList ended...");
+				outputXML.getDocumentElement().appendChild((outputXML.importNode(complexQueryOutDoc.getDocument().getDocumentElement(), true)));
+				return complexQueryOutDoc.getDocument();
+			}
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return complexQueryOutDoc.getDocument();
 	}
 	
 	private HashMap<String, String> getCustomerDetails(YFSEnvironment env,
