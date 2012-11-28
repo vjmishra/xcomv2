@@ -39,6 +39,8 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	private static final String SAVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryOnOrderPlace";
 	private static final String EDIT_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnOrderPlace";
+	private static final String RUSH_ORDER="RUSH ORDER";
+	private static final String REQUESTED_DELIVERY_DATE="REQUESTED DELIVERY DATE";
 	private boolean isDraftOrder=false;
 	@Override
 	public String execute() {
@@ -482,15 +484,15 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			 * if customer select both above options - append 'RUSH ORDER, REQUESTED DELIVERY DATE'
 			 */
 			if(SpecialInstructions!=null && SpecialInstructions.trim().length()>0) {
-				StringBuffer instructions = new StringBuffer(SpecialInstructions);
+				StringBuilder instructions = new StringBuilder(SpecialInstructions);
 				if("Y".equals(getRushOrdrFlag())){
-					instructions.append(" RUSH ORDER");
+					instructions.append(" "+RUSH_ORDER);
 					if("true".equals(getRushOrdrDateFlag())){
-						instructions.append(", REQUESTED DELIVERY DATE");
+						instructions.append(", "+REQUESTED_DELIVERY_DATE);
 					}
 				}else{
 					if("true".equals(getRushOrdrDateFlag())){
-						instructions.append(" REQUESTED DELIVERY DATE");
+						instructions.append(REQUESTED_DELIVERY_DATE);
 					}
 				}
 				setSpecialInstructions(instructions.toString());
