@@ -1117,8 +1117,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		String returnString = super.navigate();
 		//XBT-260
-		changeBasis();
-		getAllAPIOutput();
+		
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -1131,6 +1130,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			if (wcContext.isGuestUser())
 				isGuestUser = "Y";
+			changeBasis();
+			getAllAPIOutput();
 			setItemsUomsMap();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
@@ -1706,7 +1707,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 			}
 			// end of performance filterAction
-			
+			//XBT-260
+			changeBasis();
+			try
+			{
+				getAllAPIOutput();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
