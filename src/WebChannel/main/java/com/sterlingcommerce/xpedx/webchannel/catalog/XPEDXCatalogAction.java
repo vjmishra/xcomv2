@@ -1668,7 +1668,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 			}
 			// end of performance sortResultByAction
-			
+			try
+			{
+				getAllAPIOutput();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -1730,6 +1737,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 						path=SCXmlUtil.getXpathAttribute(_categoryElem, "//ItemList/Item/CategoryList/Category/@CategoryPath");
 					}
 				}
+			}
+			try
+			{
+				getAllAPIOutput();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 			// end of performance sortResultByAction
 			setItemsUomsMap();
