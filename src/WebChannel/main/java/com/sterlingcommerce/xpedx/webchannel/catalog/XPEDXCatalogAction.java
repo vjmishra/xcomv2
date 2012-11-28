@@ -2231,12 +2231,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 				if(itemcustXrefListElemet != null)
 				{
 					NodeList itemCustXrefList = itemcustXrefListElemet.getElementsByTagName("XPXItemcustXref");
-					
-					for (int i = 0; i < itemCustXrefList.getLength(); i++) {
-						Element itemcustXrefElement = (Element) itemCustXrefList.item(i);
-						String itemId = SCXmlUtil.getAttribute(itemcustXrefElement, "LegacyItemNumber");
-						String customerItemNumber = SCXmlUtil.getAttribute(itemcustXrefElement, "CustomerItemNumber");					
-						itemToCustPartNoMap.put(itemId, customerItemNumber);
+					if(itemCustXrefList != null)
+					{
+						for (int i = 0; i < itemCustXrefList.getLength(); i++) {
+							Element itemcustXrefElement = (Element) itemCustXrefList.item(i);
+							String itemId = SCXmlUtil.getAttribute(itemcustXrefElement, "LegacyItemNumber");
+							String customerItemNumber = SCXmlUtil.getAttribute(itemcustXrefElement, "CustomerItemNumber");					
+							itemToCustPartNoMap.put(itemId, customerItemNumber);
+						}
 					}
 				}
 			}
