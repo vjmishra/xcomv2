@@ -7833,8 +7833,8 @@ p#milltext{
 	font-weight: bold;
 }
 /* Added for jira 346 */
-p#replacementtext{
-	float:left;
+.replacementtext{
+	float: left;
     margin-bottom: 15px;
     margin-left: 0;
    	color: #f00;
