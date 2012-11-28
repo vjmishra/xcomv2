@@ -3997,8 +3997,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_PARENT_NAME, strMSAPName);
 		reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS);
 		reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS);
-		reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
-		reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+		
 
 
 		}else{
@@ -4008,8 +4007,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_NAME, strMSAPName);
 		reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS_SAP);
 		reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS_SAP);
-		reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);
-		reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+		
 
 			
 		}
@@ -4086,11 +4084,21 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					if(counterVar == 0){
 					String[] salesID = LoginId.split("@");
 					if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
+						if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+						reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
 						
+						}else{
+							reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);	
+							
+						}
 						reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
 						reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
 					}else{
-						
+						if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+							reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+						}else{
+							reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+						}
 						reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
 						reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
 					}
