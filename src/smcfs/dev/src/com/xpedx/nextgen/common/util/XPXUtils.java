@@ -2198,7 +2198,7 @@ public class XPXUtils implements YIFCustomApi {
 
 		String brand = rootElem.getAttribute("SellerOrganizationCode");
 		imageUrl = rootElem.getAttribute("ImageUrl");
-		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Update Notification"); //Start - Jira 3262
+		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
 		
 		log.debug("brand:" + brand);
 		log.debug("imageUrl:" + imageUrl);

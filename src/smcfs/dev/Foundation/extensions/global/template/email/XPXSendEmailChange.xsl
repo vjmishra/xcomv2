@@ -19,10 +19,10 @@
 		        <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><table width="" border="0" cellpadding="0">
 		          <tr>
 		          <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-		          This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com.If you did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
+		          This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com.#160;&#160;If you or your administrator did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
 		          <a><xsl:attribute name="href">
 			       mailto:ebusiness@<xsl:value-of select='//@BrandName' />.com</xsl:attribute>
-			       ebusiness@<xsl:value-of select="//@BrandName" />.com</a> or  <strong> 877 269-1784</strong>
+			       ebusiness@<xsl:value-of select="//@BrandName" />.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
 			</td>
 			</tr>
 		            <tr>
@@ -34,7 +34,7 @@
 		          </tr>
 		           <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-		              Please do not reply  to this email. This mailbox is not monitored and you will not receive a response.</td>
+		              Please do not reply  to this email.&#160;&#160;This mailbox is not monitored and you will not receive a response.</td>
 		          </tr>
 		           <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
