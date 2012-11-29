@@ -778,7 +778,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		changeBasis();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
-		System.out.println("OOTB execution time on catlaog Search = "+timespent);
+		log.error("OOTB execution time on catlaog newSearch() = "+timespent);
 		startTime=System.currentTimeMillis();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 	
@@ -824,7 +824,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			getAllAPIOutput();
 			long endTimeCustomerService=System.currentTimeMillis();
 			timespent=(endTimeCustomerService-startTimeCustomerService);
-			System.out.println("Custom Service Execution time on catlaog Search = "+timespent);
+			log.error("Custom Service Execution time on catlaog Search = "+timespent);
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -858,7 +858,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
 		endTime=System.currentTimeMillis();
 		timespent=(endTime-startTime);
-		System.out.println("Custom Action execution time on catlaog Search = "+timespent);
+		log.error("Custom Action execution time on catlaog Search = "+timespent);
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -1012,7 +1012,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 				String inputXml = SCXmlUtil.getString(input);
-				System.out.println("xpedxgetAllAPI  Input XML: " + inputXml);
 				
 				 allAPIOutputDoc=(Element)WCMashupHelper.invokeMashup(
 						"xpedxgetAllAPI", input, wcContext
