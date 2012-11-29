@@ -24,4 +24,5 @@
     <entry key="orderedQuantities">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
  	<entry key="transactionalUOMs">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry> 
  	<entry key="isEditNewline">me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
+ 	<entry key="draftOrderflag">me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
 </properties>
