@@ -857,7 +857,7 @@ var ct = Ext.get('item-box-inner');
 	<div class="normal-view" id="items">
 	<div id="items-control">
 	<table width="100%" >
-	<tr ><td class="drag-to-compare"  id="items-combox" width="60%" >
+	<tr ><td class="drag-to-compare"  id="items-combox" width="50%" >
 	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
 	<s:if test="%{#totalNumberOfPages} == 0"> 
 	 	<div class="success"> Your search did not yield any results. Please try again. </div>
@@ -869,7 +869,7 @@ var ct = Ext.get('item-box-inner');
 	 </a></h4>
 	</td>
 	<%--Start XB - 339 Label added to identify Catalog View icons --%>
-	<td class="drag-to-compare"  width="30%" align="right" ><h4><s:text name="MSG.SWC.COMP.CHGCATALOGVIEW.GENERIC.PGTITLE" /> :&nbsp;</h4></td>
+	<td class="drag-to-compare"  width="40%" align="right" ><h4><s:text name="MSG.SWC.COMP.CHGCATALOGVIEW.GENERIC.PGTITLE" /> :&nbsp;</h4></td>
 	<%--End XB - 339 --%>
 	<td id="items-cb" width="10%"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
 		class="normal-view" title="Full View"><img
