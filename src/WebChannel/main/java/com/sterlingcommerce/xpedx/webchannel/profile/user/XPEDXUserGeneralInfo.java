@@ -659,8 +659,10 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			
 			// get single contact
 			setContact(getSingleContact(customerContactId));
-
-			setContactStatus(this.contact.getAttribute("Status"));
+			if(this.contact.getAttribute("Status") == null || "".equals(this.contact.getAttribute("Status")))
+					setContactStatus("10");
+			else
+				setContactStatus(this.contact.getAttribute("Status"));
 			this.customer = SCXmlUtils
 					.getChildElement(this.contact, "Customer");
 			if (log.isDebugEnabled()) {
