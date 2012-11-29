@@ -180,7 +180,7 @@
           XMLGroup="Extn" />
 
 		  <Attribute ColumnName="EXTN_SHORT_DESCRIPTION" 
-          DataType="varchar2-200"
+          DataType="varchar2-300"
 		  Description="Extn field with modified special charecters "  
           Nullable="true" 
           XMLName="ExtnShortDescription"
