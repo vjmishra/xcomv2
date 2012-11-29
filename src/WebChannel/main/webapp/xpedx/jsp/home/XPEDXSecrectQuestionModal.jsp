@@ -30,29 +30,36 @@
 			<s:form id="secrectQuestionForm" name="secrectQuestionForm"  namespace='/common' action='xpedxSubmitSecurityQuestion'  validate="true" method="POST">
 			
 			<table class="full-width">
+			<tbody style="width: 721px">
+			<tr><td align ="left"><div class="xpedx-light-box" style="width: 718px"><h2>Security Question and Answer</h2></div></td></tr>
+			<tr><td class="no-border-right-user" ></td></tr>
+			</tbody>
+			</table>
+			<table width="75%">
 				<tbody>
 					<tr>
 						<td colspan="4" class="underlines no-border-right-user" align="center">
-						<b>	Please setup your security question and answer. We will ask you this question if you should forget your password in future, in order
+						 <b>Please setup your security question and answer. We will ask you this question if you should </br>
+						forget your password in future, in order to verify that you are the correct user. Keep in mind
 							</br>
-						to verify that you are the correct user. Keep in mind that the answers to the security questions are case-sensitive.</b></br></br>
+						 that the answers to the security questions are case-sensitive.</b></br></br>
 							</td>
 					</tr>
 					<tr>
-			<td class="no-border-right-user">&nbsp;
-			</td>
-			<td  class="no-border-right-user"></td>
-			<td colspan="1" class="text-right">
-			</td>
-			<td class="no-border-right-user"></td>
-		</tr>
+					<td class="no-border-right-user">&nbsp;
+					</td>
+					<td  class="no-border-right-user"></td>
+					<td colspan="1" class="text-right">
+					</td>
+					<td class="no-border-right-user"></td>
+				</tr>
 					<s:if test="#orgQuestionList!=null">
 				<tr> 
 			<td class="no-border-right-user">
 			Security Question:</td>
 			<td colspan="3" class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
 				tabindex="20" name="secretQuestion" id="secretQuestion"
-				list="#orgQuestionList" cssClass="x-input" cssStyle="width: auto;"
+				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 100%;"
 				onchange="javascript:document.secrectQuestionForm.secretAnswer.value='';javascript:document.secrectQuestionForm.confirmAnswer.value='';" />
 			</td>
 		</tr>
@@ -71,17 +78,29 @@
 			<td  class="no-border-right-user"><s:password tabindex="25"
 				name='secretAnswer' id="secretAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 185px;" 
+				cssStyle="width: 100%;" 
 				showPassword="true" /></td>
-			<td align="right" >
+			
+		</tr>
+		<tr>
+			<td class="no-border-right-user">&nbsp;
+			</td>
+			<td  class="no-border-right-user"></td>
+			<td colspan="1" align="right" class="text-right">
+			</td>
+			<td class="no-border-right-user"></td>
+		</tr>
+		
+		<tr>
+			<td class="no-border-right-user">
 			Confirm Answer:</td>
 			<td class="no-border-right-user"><s:password tabindex="30"
 				name='confirmAnswer' id="confirmAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 185px;" 
+				cssStyle="width: 100%;" 
 				showPassword="true" /></td>
-		</tr>
-			<tr>
+		</tr>		
+		<tr>
 			<td class="no-border-right-user">&nbsp;
 			</td>
 			<td  class="no-border-right-user"></td>
@@ -89,29 +108,43 @@
 			</td>
 			<td class="no-border-right-user"></td>
 		</tr>		
-					<tr>
-						<td  colspan="3" >&nbsp;</td>
-						<td   align="right" >
-							<div >
-								<ul >
-								
-									 <li class="float-right"><a href="javascript:saveAnswer();" 
-                                        class="orange-ui-btn"><span>Submit</span>										
-									</a>
-									</li>
-								</ul>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="grey  no-border-right-user" colspan="3" >&nbsp;</td>
-						<td  ></br>
-							<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsgForAnswer" ></div>
-						</td>
-					</tr>
-					
-            		
+		<tr>
+			<td></td>
+			 <td  class=" no-border-right-user" align="right" >
+	
+			</td>
+			<td></td>
+			<td></td>
+			</tr>
 				</tbody>
+			</table>
+			
+			<table width="82%">
+			<tbody>
+			<tr>
+			<td class ="no-border-right-user" colspan="1" width="79%"></td>
+			<td class ="no-border-right-user"  colspan="2" width="5%">
+			<div>
+			<ul class="float-right">
+			<li >
+			<a href="javascript:saveAnswer();"  class="orange-ui-btn"><span>Submit</span>					
+			</a>
+			</li>
+			</ul>
+			</div></td>
+			<td></td>
+			</tr>
+			
+			<tr>
+				<td class="grey  no-border-right-user" colspan="3" >
+				</br>
+					<div class="error"  style="float:right; margin-right: 1px;display:none;" id="errorMsgForAnswer" ></div>
+						</td>
+						<td class="grey  no-border-right-user" colspan="1">
+						</td>
+					</tr>
+			</tr>
+			</tbody>
 			</table>
 
 			</s:form>
