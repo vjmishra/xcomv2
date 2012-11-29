@@ -84,8 +84,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
 			}
 			Element eItemList = inXML.getDocumentElement();
-			
-			int length=getLengthForExtnBasis(env);
+			//Hard Coded length based on column max size
+			int length= 40; //getLengthForExtnBasis(env);
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
@@ -151,12 +151,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 									{
 										StringBuffer sb=new StringBuffer();
 										int _length=length -vallength;
-										for(int k=0;k<_length;k++)
-										{
-											sb.append("0");
-										}
-										sb.append(val);
-										eExtnList.setAttribute("ExtnBasis",(sb.toString()));
+										eExtnList.setAttribute("ExtnBasis",String.format("%0"+(_length)+"d",Integer.valueOf(val)));
 										
 									}
 									
