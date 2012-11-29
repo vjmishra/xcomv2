@@ -339,6 +339,10 @@
 									<td class="widthLeft">Ordered By: </td>
 									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/></td>
 								</tr>	
+								<tr>
+									<td class="widthLeft">Ordered Date: </td>
+									<td class="widthRight"><xsl:value-of select="substring(Order/@OrderDate,1,10)"/>&#160;<xsl:value-of select="substring(Order/@OrderDate,12,8)"/>&#160;<xsl:text>CT</xsl:text></td>
+								</tr>	
 						 	</table>
 						 	
 						</td>	
