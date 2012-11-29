@@ -76,6 +76,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String customerFieldsValidated;
 	protected String isCustomerPOMandatory="false";
 	public String draftOrderFlagOrderSummary;
+	public String draftFlagError = "draftFlagError";
 	public String getDraftOrderFlagOrderSummary() {
 		return draftOrderFlagOrderSummary;
 	}
@@ -147,6 +148,10 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		XPEDXOrderUtils orderUtils = new XPEDXOrderUtils();
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		
+		if(draftOrderFlagOrderSummary != null  && draftOrderFlagOrderSummary.equals("true")){
+			return draftFlagError;
+		}
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		//Commented for JIRA 2909
 		/*try {
