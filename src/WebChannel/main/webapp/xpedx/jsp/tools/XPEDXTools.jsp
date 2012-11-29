@@ -136,7 +136,7 @@
                 <li><span class="underlink"> <a target="_blank" href="http://dbcalc.usps.gov">Postal Calculator</a> </span></li>
                 <li><span class="underlink"> <a target="_blank" href="http://www.canadapost.ca" onclick="javascript: writeMetaTag('WT.ti', 'Postes Canada - Canada Post');">Canada Post Tools</a> </span></li><!--add _blank for jira 1538  -->
                 <!-- <li><span class="underlink"> <a href="#" onclick="javascript: writeMetaTag('WT.ti', 'Postes Canada - Canada Post');">Electronic Product Guide</a> </span></li> Commented for jira 1538-->
-                <li><span class="underlink"> <a target="_blank" href="http://xpedx.edviser.com/" onclick="javascript: writeMetaTag('WT.ti', 'Graphics Edviser');">Printer Knowledge Center</a> </span></li><!--add _blank for jira 1538  -->
+               <%-- <li><span class="underlink"> <a target="_blank" href="http://xpedx.edviser.com/" onclick="javascript: writeMetaTag('WT.ti', 'Graphics Edviser');">Printer Knowledge Center</a> </span></li>--%><!--Commented for XB-438  -->
           </ul>
           			</div>
                 </div>
