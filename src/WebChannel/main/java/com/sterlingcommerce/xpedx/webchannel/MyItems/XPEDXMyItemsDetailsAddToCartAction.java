@@ -116,10 +116,18 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 							
 						 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 					}
-
+					
+					//start of XBT 252 & 248
+					if(YFCCommon.isVoid(editedOrderHeaderKey)){
+						draftOrderflag="Y";	
+					}
+					else {
+						draftOrderflag="N";	
+					}
+					//end of XBT 252 & 248   
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-						long changeOrderStartTime=System.currentTimeMillis();
+						long changeOrderStartTime=System.currentTimeMillis();					
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 						long changeOrderEndTime=System.currentTimeMillis();
 						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
@@ -164,6 +172,25 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 				}
 			}
 		} 
+		catch(XMLExceptionWrapper e)
+		 {
+			 YFCElement errorXML=e.getXML();
+			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 if(errorDeasc.contains("Key Fields cannot be modified."))
+			 {
+				 YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+				 for(int i=0;i<listAttribute.getLength();i++)
+				 {
+					 YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+					 String value=attributeELement.getAttribute("Value");
+					 if("DraftOrderFlag".equals(value))
+					 {
+						 draftErrorCatalog = "true";
+					 }
+				 }
+			 }
+		 }
 		catch (Exception dle) {
 			LOG.debug(dle.getStackTrace());
 			dle.printStackTrace();
