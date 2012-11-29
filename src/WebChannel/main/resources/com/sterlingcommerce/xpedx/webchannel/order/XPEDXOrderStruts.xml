@@ -31,6 +31,8 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/DraftOrderCopy_binding.xml</param>
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
 			<param name="validationClass">com.sterlingcommerce.webchannel.order.OrderListValidation</param>
+			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
+			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
 				<param name="copyFlag">${copyCartName}</param>	

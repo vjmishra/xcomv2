@@ -2929,6 +2929,17 @@
 			</Template>
         </API>
     </mashup>
+    <mashup id='draftOrderCopyGetName' transactional='true' mashuptype='XAPI' endpoint='DRAFT_ORDER' description="Draft Order Copy Get Name">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getOrderDetails">
+            <Input>
+                <Order OrderHeaderKey=""/>
+            </Input>
+            <Template>
+                <Order OrderName="" OrderNo="" DraftOrderFlag=""/>
+            </Template>
+        </API>
+    </mashup>
     
     <mashup id='xpedx_checkout_changeOrderLineDetails' transactional='true'
 		mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Modify the draft order line item(s)">
