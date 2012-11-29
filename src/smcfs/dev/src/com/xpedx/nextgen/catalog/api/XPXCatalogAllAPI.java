@@ -105,7 +105,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		{
 			getXpedxUOMList(env, SCXmlUtil.createFromString(SCXmlUtil.getString(uomList)), outputDoc);
 		}
-		System.out.println("getAllCatalogAPI ::::::::::::::::    :::::::::"+SCXmlUtil.getString(outputDoc));
 		return outputDoc;
 	}
 	
@@ -131,13 +130,23 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		pltQryBuilder.setCurrentTable("XPX_ITEMCUST_XREF");
 		pltQryBuilder.appendString("CUSTOMER_NUMBER", "=", custXrefList.getAttribute("CustomerNumber"));
 		pltQryBuilder.appendString(" AND ENVIRONMENT_CODE", "=", custXrefList.getAttribute("EnvironmentCode"));
-		pltQryBuilder.appendString("AND trim(CUSTOMER_DIVISION)", "=", custXrefList.getAttribute("CustomerDivision"));
+		pltQryBuilder.append("AND CUSTOMER_DIVISION ='"+custXrefList.getAttribute("CustomerDivision")+"'");
 		NodeList legacyItemNumberList=	custXrefList.getElementsByTagName("Exp");
-		pltQryBuilder.appendString("AND ( trim(LEGACY_ITEM_NUMBER)", "=", ((Element)legacyItemNumberList.item(0)).getAttribute("Value"));
+		if(legacyItemNumberList == null)
+			return custXrefElement;
+		/*pltQryBuilder.appendString("AND ( trim(LEGACY_ITEM_NUMBER)", "=", ((Element)legacyItemNumberList.item(0)).getAttribute("Value"));
 		for(int i=1;i<legacyItemNumberList.getLength();i++)
 		{
 			Element custRefElem=(Element)legacyItemNumberList.item(i);
 			pltQryBuilder.appendString("OR trim(LEGACY_ITEM_NUMBER)", "=", custRefElem.getAttribute("Value"));
+			
+		}
+		pltQryBuilder.append(")");*/
+		pltQryBuilder.append(" AND LEGACY_ITEM_NUMBER IN ('"+((Element)legacyItemNumberList.item(0)).getAttribute("Value")+"'");
+		for(int i=1;i<legacyItemNumberList.getLength();i++)
+		{
+			Element custRefElem=(Element)legacyItemNumberList.item(i);
+			pltQryBuilder.append(",'"+custRefElem.getAttribute("Value")+"'");
 			
 		}
 		pltQryBuilder.append(")");
@@ -225,13 +234,21 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 				pltQryBuilder.setCurrentTable("XPX_ITEM_EXTN");
 				pltQryBuilder.appendString("ENVIRONMENT_ID", "=", itemExtnElelement.getAttribute("EnvironmentID"));
-				pltQryBuilder.appendString(" AND trim(XPX_DIVISION)", "=", itemExtnElelement.getAttribute("XPXDivision"));
+				pltQryBuilder.append(" AND XPX_DIVISION ='"+ itemExtnElelement.getAttribute("XPXDivision") +"'");
 				NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
-				pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIDList.item(0)).getAttribute("Value"));
+				/*pltQryBuilder.appendString("AND ( (ITEM_ID)", "=", ((Element)itemIDList.item(0)).getAttribute("Value"));
 				for(int i=1;i<itemIDList.getLength();i++)
 				{
 					Element custRefElem=(Element)itemIDList.item(i);
-					pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", custRefElem.getAttribute("Value"));
+					pltQryBuilder.appendString("OR (ITEM_ID)", "=", custRefElem.getAttribute("Value"));
+					
+				}
+				pltQryBuilder.append(")");*/
+				pltQryBuilder.append(" AND ITEM_ID IN ('"+((Element)itemIDList.item(0)).getAttribute("Value")+"'");
+				for(int i=1;i<itemIDList.getLength();i++)
+				{
+					Element custRefElem=(Element)itemIDList.item(i);
+					pltQryBuilder.append(",'"+custRefElem.getAttribute("Value")+"'");
 					
 				}
 				pltQryBuilder.append(")");
@@ -299,7 +316,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				
 				PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 				pltQryBuilder.setCurrentTable("YPM_PRICELIST_ASSIGNMENT");
-				pltQryBuilder.appendString("trim(CUSTOMER_ID)", "=", customerID);
+				pltQryBuilder.append(" CUSTOMER_ID ='"+customerID+"'");
 				//pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
 				
 				List<YPM_Pricelist_Assignment> priceListAssignments=
@@ -310,26 +327,30 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
 					pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
 					Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
-					pltQryBuilder1.appendString("trim(SELLER_ORGANIZATION_CODE)", "=",itemElem.getAttribute("OrganizationCode") );
-					pltQryBuilder1.appendString("AND trim(PRICING_STATUS)", "=","ACTIVE");
+					pltQryBuilder1.append(" SELLER_ORGANIZATION_CODE ='"+itemElem.getAttribute("OrganizationCode")+"'" );
+					pltQryBuilder1.append(" AND PRICING_STATUS ='ACTIVE' ");
 					if(priceListIter.hasNext())
 					{
 						
 						YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
-						pltQryBuilder1.appendString("AND ( trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
+						pltQryBuilder1.append("AND pricelist_hdr_key IN  ('"+ pricelistAssignment.getPricelist_Header_Key()+"'");
 					}
+					else
+						return priceElement;
 					while(priceListIter.hasNext())
 					{
 						YPM_Pricelist_Assignment pricelistAssignment=priceListIter.next();
-						pltQryBuilder1.appendString(" OR trim(pricelist_hdr_key)", "=", pricelistAssignment.getPricelist_Header_Key());
+						pltQryBuilder1.append(" ,'"+ pricelistAssignment.getPricelist_Header_Key()+"'");
 					}
 					pltQryBuilder1.append(")");
 					NodeList itemIdComplexQuery=pricelistAssignmentElement.getElementsByTagName("Exp");
-					pltQryBuilder1.appendString("AND ( trim(ITEM_ID)", "=", ((Element)itemIdComplexQuery.item(0)).getAttribute("Value"));
+					if(itemIdComplexQuery == null)
+						return priceElement;
+					pltQryBuilder1.append(" AND ITEM_ID IN ('"+((Element)itemIdComplexQuery.item(0)).getAttribute("Value")+"'");
 					for(int i=1;i<itemIdComplexQuery.getLength();i++)
 					{
 						Element itemIDElement=(Element)itemIdComplexQuery.item(i);
-						pltQryBuilder1.appendString(" OR trim(ITEM_ID)", "=", itemIDElement.getAttribute("Value"));
+						pltQryBuilder1.append(" ,'"+itemIDElement.getAttribute("Value")+"'");
 					}
 					pltQryBuilder1.append(")");
 					List<YPM_Pricelist_Line> priceListLineList=
@@ -505,14 +526,14 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			useOrderMulUOMFlag = customerDetails.get("useOrderMulUOMFlag");
 			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 			pltQryBuilder.setCurrentTable("YFS_ITEM");
-			pltQryBuilder.appendString("trim(organization_code)","=",storeFrontId);
+			pltQryBuilder.append("organization_code ='"+storeFrontId+"'");
 			if(complexQuery) {
 				YFCNodeList<YFCElement> itemIDList=	complexQueryElement.getElementsByTagName("Exp");
-				pltQryBuilder.appendString("AND ( trim(ITEM_ID)", "=", ((YFCElement)itemIDList.item(0)).getAttribute("Value"));
+				pltQryBuilder.append("AND ITEM_ID IN('"+ ((YFCElement)itemIDList.item(0)).getAttribute("Value")+"'");
 				for(int i=1;i<itemIDList.getLength();i++)
 				{
 					YFCElement itemIdElem=(YFCElement)itemIDList.item(i);
-					pltQryBuilder.appendString("OR trim(ITEM_ID)", "=", itemIdElem.getAttribute("Value"));
+					pltQryBuilder.append(" ,'"+ itemIdElem.getAttribute("Value")+"'");
 					
 				}
 				pltQryBuilder.append(")");
@@ -531,14 +552,15 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			 if(yfsItemIter.hasNext())
 			 {
 				 YFS_Item yfsItem=yfsItemIter.next();
-				 pltQryBuilder1.appendString("trim(ITEM_KEY)","=",yfsItem.getItem_Key());
+				 pltQryBuilder1.append(" ITEM_KEY IN('"+yfsItem.getItem_Key()+"'");
 				 isYFSItemCall=true;
 			 }
 			 while(yfsItemIter.hasNext())
 			 {
 				 YFS_Item yfsItem=yfsItemIter.next();
-				 pltQryBuilder1.appendString("OR trim(ITEM_KEY)","=",yfsItem.getItem_Key());
+				 pltQryBuilder1.append(" ,'"+yfsItem.getItem_Key()+"'");
 			 }
+			 pltQryBuilder1.append(")");
 			 Document outputListDocument =null;
 			 if(isYFSItemCall)
 			 {
@@ -550,7 +572,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				 return complexQueryOutDoc.getDocument();
 			//inputElement.setAttribute("OrganizationCode", storeFrontId);
 			//inputElement.setAttribute("CallingOrganizationCode", storeFrontId);
-			//End: Fix for Jira#2007 - RUgrani
 			//Removing the Extn Template as we get all the XPXItemExtn for that item. We are making separate call
 			/*env.setApiTemplate("getItemList", SCXmlUtil.createFromString(""
 					+ "<ItemList><Item><AlternateUOMList><AlternateUOM />"
