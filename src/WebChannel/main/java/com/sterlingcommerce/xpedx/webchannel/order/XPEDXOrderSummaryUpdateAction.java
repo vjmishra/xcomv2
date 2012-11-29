@@ -492,7 +492,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					}
 				}else{
 					if("true".equals(getRushOrdrDateFlag())){
-						instructions.append(REQUESTED_DELIVERY_DATE);
+						instructions.append(" "+REQUESTED_DELIVERY_DATE);
 					}
 				}
 				setSpecialInstructions(instructions.toString());
