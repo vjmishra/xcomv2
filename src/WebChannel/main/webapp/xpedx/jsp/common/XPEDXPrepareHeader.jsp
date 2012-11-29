@@ -748,7 +748,7 @@ var selectedShipCustomer = null;
 </s:url>
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
-		style="width: 900px; height: 300px; overflow: auto;">
+		style="width: auto; height: auto; ">
 	</div>
 </div>
 <%--JIRA 3487 end--%>
@@ -1361,7 +1361,7 @@ var securityQuestionWin = new Ext.Window({
     hidden: true,
     id: 'securityQuestionBox',
     modal: true,
-    width: 1050,
+    width: 750,
     height: 'auto',
     resizable   : false,
     draggable   : false,
