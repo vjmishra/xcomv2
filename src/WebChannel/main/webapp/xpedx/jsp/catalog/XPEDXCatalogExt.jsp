@@ -814,8 +814,8 @@ return new Ext.XTemplate(
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname" style="min-width:45px;"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
-  <s:if test='#allowedColumns.contains("Package")'>'<td class="Gauge-hname"><a href="#">Pack</a></td>',</s:if>			                    
+  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
+  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#">Pack</a></td>',</s:if>			                    
   <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
@@ -838,8 +838,8 @@ return new Ext.XTemplate(
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname">{basis}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname">{mwt}</td>',</s:if>
-      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname">{thickness}</td>',</s:if>
-      <s:if test='#allowedColumns.contains("Package")'>'<td class="Gauge-hname">{packMethod}</td>',</s:if>
+      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname">{thickness}</td>',</s:if>
+      <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname">{packMethod}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname">{capacity}</td>',</s:if>     			                            			                        
       <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname">{model}</td>',</s:if>     				                    
       <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname">{material}</td>',</s:if>
