@@ -771,6 +771,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		try{
 		init();
 		setCustomerNumber();
+		StringBuffer sb=new StringBuffer();
 		long startTime=System.currentTimeMillis();
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
@@ -778,8 +779,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		changeBasis();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
-		log.error("OOTB execution time on catlaog newSearch() = "+timespent);
-		startTime=System.currentTimeMillis();
+		sb.append("OOTB execution time on catlaog newSearch() = "+timespent);
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 	
 		/***** Start of  Code changed for Promotions ********/ 
@@ -824,7 +824,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			getAllAPIOutput();
 			long endTimeCustomerService=System.currentTimeMillis();
 			timespent=(endTimeCustomerService-startTimeCustomerService);
-			log.error("Custom Service Execution time on catlaog Search = "+timespent);
+			sb.append("\nCustom Service Execution time on catlaog newSearch() = "+timespent);
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
@@ -858,7 +858,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
 		endTime=System.currentTimeMillis();
 		timespent=(endTime-startTime);
-		log.error("Custom Action execution time on catlaog Search = "+timespent);
+		sb.append("\nTotal time of Action execution on catlaog newSearch() = "+timespent);
+		System.out.println(sb.toString());
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
@@ -1558,7 +1559,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String search() {
 		init();
 		setCustomerNumber();
+		long startTime=System.currentTimeMillis();
+		StringBuffer sb=new StringBuffer();
 		String returnString = super.search();
+		long endTime=System.currentTimeMillis();
+		long timespent=(endTime-startTime);
+		sb.append("OOTB execution time on catlaog Search() = "+timespent);
 		//getting the customer bean object from session.
 		//XBT-260
 		changeBasis();
@@ -1612,7 +1618,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		else {
 			try
 			{
-			getAllAPIOutput();
+				
+				long startTimeCustomerService=System.currentTimeMillis(); 
+				getAllAPIOutput();
+				endTime=System.currentTimeMillis();
+				timespent=(endTime-startTimeCustomerService);
+				sb.append("\nCustom Service execution time on catlaog Search() = "+timespent);
 			}catch(Exception e)
 			{
 				e.printStackTrace();
@@ -1641,14 +1652,24 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 setsearchMetaTag(true);
 		}
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),path);
+		timespent=(endTime-startTime);
+		sb.append("\nTotal Action time  execution on catlaog Search() = "+timespent);
+		System.out.println(sb.toString());
 		//Webrtends	tag End
 		return SUCCESS;
 	}
 
 	@Override
 	public String sortResultBy() {
+		StringBuffer sb=new StringBuffer();
+		long startTime=System.currentTimeMillis();
 		init();
 		String returnString = super.sortResultBy();
+		long endTime=System.currentTimeMillis();
+		long timespent=(endTime-startTime);
+
+		sb.append("OOTB execution time on catlaog sortResultBy() = "+timespent);
+
 		//XBT-260
 		changeBasis();	
 		if (ERROR.equals(returnString)) {
@@ -1670,7 +1691,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// end of performance sortResultByAction
 			try
 			{
+				long startTimeCustomerService=System.currentTimeMillis(); 
 				getAllAPIOutput();
+				endTime=System.currentTimeMillis();
+				timespent=(endTime-startTimeCustomerService);
+				sb.append("\nCustom Service execution time on catlaog sortResultBy() = "+timespent);
 			}
 			catch(Exception e)
 			{
@@ -1682,14 +1707,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setColumnListForUI();
 			getSortFieldDocument();
 		}
+		timespent=(endTime-startTime);
+		sb.append("\nTotal Action time  execution on catlaog sortResultBy() = "+timespent);
+		System.out.println(sb.toString());
 		return SUCCESS;
 
 	}
 
 	@Override
 	public String goToPage() {
+		StringBuffer sb=new StringBuffer();
+		long startTime=System.currentTimeMillis();
 		init();
 		String returnString = super.goToPage();
+		long endTime=System.currentTimeMillis();
+		long timespent=(endTime-startTime);
+
+		sb.append("OOTB execution time on catlaog goToPage() = "+timespent);
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
@@ -1710,7 +1744,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 			changeBasis();
 			try
 			{
+				long startTimeCustomerService=System.currentTimeMillis(); 
 				getAllAPIOutput();
+				endTime=System.currentTimeMillis();
+				timespent=(endTime-startTimeCustomerService);
+				sb.append("\nCustom Service execution time on catlaog goToPage() = "+timespent);
+				
 			}
 			catch(Exception e)
 			{
@@ -1721,13 +1760,21 @@ public class XPEDXCatalogAction extends CatalogAction {
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
 		}
+		timespent=(endTime-startTime);
+		sb.append("\nTotal Action time  execution on catlaog goToPage() = "+timespent);
+		System.out.println(sb.toString());
 		return SUCCESS;
 	}
 
 	@Override
 	public String selectPageSize() {
+		StringBuffer sb=new StringBuffer();
+		long startTime=System.currentTimeMillis();
 		init();
 		String returnString = super.selectPageSize();
+		long endTime=System.currentTimeMillis();
+		long timespent=(endTime-startTime);
+		sb.append("OOTB execution time on catlaog selectPageSize() = "+timespent);
 		//XBT-260
 		changeBasis();	
 		wcContext.getSCUIContext().getSession().setAttribute(
@@ -1749,7 +1796,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			try
 			{
+				long startTimeCustomerService=System.currentTimeMillis(); 
 				getAllAPIOutput();
+				endTime=System.currentTimeMillis();
+				timespent=(endTime-startTimeCustomerService);
+				sb.append("\nCustom Service execution time on catlaog selectPageSize() = "+timespent);
 			}
 			catch(Exception e)
 			{
@@ -1761,6 +1812,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
 		}
+		timespent=(endTime-startTime);
+		sb.append("\nTotal Action time  execution on catlaog selectPageSize() = "+timespent);
+		System.out.println(sb.toString());
 		return SUCCESS;
 	}
 	
