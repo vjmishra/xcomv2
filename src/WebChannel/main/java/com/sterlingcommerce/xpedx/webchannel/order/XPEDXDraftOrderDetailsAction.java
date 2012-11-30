@@ -678,6 +678,11 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		try
 		{
 			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
+			{
+				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
+				editedOrderHeaderKey=orderHeaderKey;
+			}			
 			if(YFCCommon.isVoid(editedOrderHeaderKey)){
 				draftOrderFlag="Y";	
 			}
