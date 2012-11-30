@@ -33,6 +33,7 @@
     <DataType Name="varchar2-64" Size="64" Type="VARCHAR2"/>
     <DataType Name="varchar2-100" Size="100" Type="VARCHAR2"/>
     <DataType Name="varchar2-200" Size="200" Type="VARCHAR2"/>
+	<DataType Name="varchar2-300" Size="300" Type="VARCHAR2"/>
     <DataType Name="varchar2-255" Size="255" Type="VARCHAR2"/>
 	<DataType Name="varchar2-500" Size="500" Type="VARCHAR2"/>
 	<DataType Name="varchar2-1000" Size="1000" Type="VARCHAR2"/>
