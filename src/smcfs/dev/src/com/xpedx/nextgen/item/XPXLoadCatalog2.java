@@ -40,6 +40,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
 	private static String _RESPONSE_MSG_SERVICE = "xpedxSendItemFeedResponse";
+	private String itemKeyVal = null;
 	Element eItem = null;
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
@@ -149,7 +150,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 									int vallength=val.length();
 									if(vallength < length)
 									{
-										StringBuffer sb=new StringBuffer();
+										//StringBuffer sb=new StringBuffer();
 										int _length=length -vallength;
 										eExtnList.setAttribute("ExtnBasis",String.format("%0"+(_length)+"d",Integer.valueOf(val)));
 										
@@ -205,7 +206,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 
 				//Added for Jira 3155
-				String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
+				//String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
 				
 				/*NodeList assetIdList = eItem.getElementsByTagName("Asset");
 				if(assetIdList != null)
@@ -226,8 +227,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						counter++;
 					}*/
 					//if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
-				    if(itemKey != null){
-					deleteAssetType(env,inXML,itemKey);
+				    if(itemKeyVal != null){
+					deleteAssetType(env,inXML,itemKeyVal);
 				    }
 		/*			}
 				}*/
@@ -639,6 +640,12 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 
 		Element eItemListOut = itemListOutDoc.getDocumentElement();
 		Element itemElement = SCXmlUtil.getChildElement(eItemListOut, "Item");
+		if(itemElement.getAttribute("ItemKey")!=null){
+		itemKeyVal = itemElement.getAttribute("ItemKey");
+		
+		log.info("ItemKey Value is"+itemKeyVal);
+		
+		}
 		Element eCategoryList = SCXmlUtil.getChildElement(itemElement, "CategoryList");
 		ArrayList <HashMap<String, String>> alCategory = new ArrayList();
 		if(null!=eCategoryList && eCategoryList.hasChildNodes()){
