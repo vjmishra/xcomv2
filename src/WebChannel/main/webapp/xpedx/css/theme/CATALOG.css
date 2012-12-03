@@ -1079,11 +1079,12 @@ ul
 #x-tbl-cmmn td.Item-hname
 {
 	width: 4em;
+	text-align: center;
 }
 #x-tbl-cmmn td.size,
 #x-tbl-cmmn td.Size-hname
 {
-	width: 5em;
+
 }
 #x-tbl-cmmn td.color,
 #x-tbl-cmmn td.Color-hname
@@ -1102,16 +1103,21 @@ ul
 }
 
 #x-tbl-cmmn td.Mwt-hname,
-#x-tbl-cmmn td.Basis-hname,
-#x-tbl-cmmn td.Thickness-hname,
-#x-tbl-cmmn td.Pack-hname
+#x-tbl-cmmn td.basis,
+#x-tbl-cmmn td.Basis-hname
 {
               width: 2em;
               text-align: center;
 }
-#x-tbl-cmmn td.M-hname {
-	      width: 1em;
-          text-align: center;
+#x-tbl-cmmn td.Pack-hname
+{
+              width: 5em;
+              text-align: center;
+}
+#x-tbl-cmmn td.M-hname,
+#x-tbl-cmmn td.Thickness-hname {
+	          width: 1em;
+              text-align: center;
 }
 
 /**********************************************************************************************************************
