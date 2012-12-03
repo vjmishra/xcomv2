@@ -278,6 +278,13 @@ $(document).ready(function()
 		$("#dayFaxNo_new").mask("999 999-9999");
 });
 
+<%--XB - 319 --%>
+$(window).load(function() {
+	if(document.getElementById("errorNote") != null || document.getElementById("successMsgFor_save") != null){
+	  $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+	}
+	});
+	
 </script>
 <!-- 
 <script type="text/javascript"
@@ -2665,11 +2672,43 @@ a.underlink:hover { text-decoration: underline !important; }
 
 <div class="error" id="errorMsgForMandatoryFields_myAccount" style="display : none; float: right"></div>
 
+<%-- Commented for XB - 319
 <s:if test="%{#session.errorNote!= null}">
 	<div id="errorNote" class="error" style="display : inline; float: right"><s:property value='%{#session.errorNote}'/>
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</div>
 </s:if>
+--%>
+
+<%--Start XB - 319 --%>
+<%-- New Line Version 
+<s:if test="%{#session.errorNote!= null}">
+	
+	<s:iterator value="%{#session.errorNote}" id="error"  >
+            <div id="errorNote" class="error" style="display : inline; float: right">
+                      <s:property escape="false" value="%{#error}"/>  
+              </div>
+              <br>
+              <br>
+	</s:iterator>
+	<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
+	
+</s:if>
+--%>
+
+<%--XB - 319 Boxed version. Deana preferred to view the error messages in a box --%>
+<s:if test="%{#session.errorNote!= null}">
+	 <div id="errorNote" class="error" style="display : inline; float: right">
+		<s:iterator value="%{#session.errorNote}" id="error"  >
+        	<s:property escape="false" value="%{#error}"/>  
+        	<br>
+  		</s:iterator>
+  	</div>
+  	
+	<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
+	
+</s:if>
+<%--End XB - 319 --%>
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 
@@ -2689,7 +2728,7 @@ a.underlink:hover { text-decoration: underline !important; }
 <%-- End fix for XNGTP-3196 --%>
 
 
-	<div class="clearview textAlignCenter">Last modified by
+	<div class="clearview textAlignCenter"><br>Last modified by
 <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="%{getLastModifiedDate()}"/></div>
 	<div class="clearview">&nbsp;</div>
 	</div>
