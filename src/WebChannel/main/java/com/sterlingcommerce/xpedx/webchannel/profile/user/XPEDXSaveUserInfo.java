@@ -536,7 +536,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								}*/
 							//}
 								//start XB - 319
-								if(!isSuccess()){
+								if(strErrorMessage.size()>0){
 									strErrorMessage.add("Please revise and try again.");
 									request.getSession().setAttribute("errorNote",strErrorMessage);
 									return REDIRECT;
