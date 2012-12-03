@@ -2090,6 +2090,15 @@ function checkSessionTimeout(){
           }
      });  
 }
+//added for XBT 298
+var myMask;
+function msgWait(){
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+	}
+//end for XBT 298
+
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
@@ -2636,7 +2645,7 @@ function checkSessionTimeout(){
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
 						<s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />			       
 						<li>
-							<s:a href='%{myProfile}' cssClass="link">
+							<s:a href='%{myProfile}' cssClass="link" onclick="msgWait();">
 								<s:text name="My Profile"></s:text>
 							</s:a>
 						</li>						
@@ -2662,7 +2671,7 @@ function checkSessionTimeout(){
 					</s:if>
 					<s:if test="%{#isUserAdmin && !#isSalesRep}">
 						<li>
-							<s:a href='%{myProfile}' cssClass="link">
+							<s:a href='%{myProfile}' cssClass="link" onclick="msgWait();">
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
