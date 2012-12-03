@@ -808,12 +808,12 @@ return new Ext.XTemplate(
   '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" title="Mill / Mfg. Item">M</td>',</s:if>
+   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item">M</td>',</s:if>
   '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname" style="min-width:45px;"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
+  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
   <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#">Pack</a></td>',</s:if>			                    
   <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
@@ -832,7 +832,7 @@ return new Ext.XTemplate(
   '<tpl for="items">',
    '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
 	  '<span class="ddesc desc-hname">{name}</span></a>','</td>',
-      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;">'+
+      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;text-align: center;">'+
       '<a  id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
       <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname">{size}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
