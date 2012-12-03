@@ -239,7 +239,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			//PNA call end
 			//Setting the price hover map
 			//added for jira 2885 
-			if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
+			if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 			}
 			
