@@ -39,7 +39,7 @@
 				<tbody>
 					<tr>
 						<td colspan="4" class="underlines no-border-right-user" align="center">
-						 <b>Please setup your security question and answer. We will ask you this question if you should </br>
+						 <b>Please set up your security question and answer. We will ask you this question if you should </br>
 						forget your password in future, in order to verify that you are the correct user. Keep in mind
 							</br>
 						 that the answers to the security questions are case-sensitive.</b></br></br>
@@ -59,7 +59,7 @@
 			Security Question:</td>
 			<td colspan="3" class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
 				tabindex="20" name="secretQuestion" id="secretQuestion"
-				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 100%;"
+				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 99.8%;"
 				onchange="javascript:document.secrectQuestionForm.secretAnswer.value='';javascript:document.secrectQuestionForm.confirmAnswer.value='';" />
 			</td>
 		</tr>
@@ -78,9 +78,8 @@
 			<td  class="no-border-right-user"><s:password tabindex="25"
 				name='secretAnswer' id="secretAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 100%;" 
+				cssStyle="width: 99%;" 
 				showPassword="true" /></td>
-			
 		</tr>
 		<tr>
 			<td class="no-border-right-user">&nbsp;
@@ -97,7 +96,7 @@
 			<td class="no-border-right-user"><s:password tabindex="30"
 				name='confirmAnswer' id="confirmAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 100%;" 
+				cssStyle="width: 99%;" 
 				showPassword="true" /></td>
 		</tr>		
 		<tr>
