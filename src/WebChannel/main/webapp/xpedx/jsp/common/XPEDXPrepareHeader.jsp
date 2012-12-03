@@ -2645,7 +2645,7 @@ function msgWait(){
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
 						<s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />			       
 						<li>
-							<s:a href='%{myProfile}' cssClass="link" onclick="msgWait();">
+							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Profile"></s:text>
 							</s:a>
 						</li>						
@@ -2671,7 +2671,7 @@ function msgWait(){
 					</s:if>
 					<s:if test="%{#isUserAdmin && !#isSalesRep}">
 						<li>
-							<s:a href='%{myProfile}' cssClass="link" onclick="msgWait();">
+							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
