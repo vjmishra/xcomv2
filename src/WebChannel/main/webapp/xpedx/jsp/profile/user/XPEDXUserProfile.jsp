@@ -526,7 +526,8 @@ function funDivOpenClose(val1)
 			row.appendChild(data4);
 			tbody.appendChild(row);		
 		}
-
+		//added for XBT 298
+		var myMask;
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
 			
@@ -675,6 +676,12 @@ function funDivOpenClose(val1)
 				return false;
 			}
 		}
+		//start for XBT 298
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+		//end for XBT 298
+		
 		    /*var tbody = document.getElementById("tb1").getElementsByTagName("tbody")[0];
 			var rowCount = tbody.rows.length;
 			var invalidOrdering = false;
