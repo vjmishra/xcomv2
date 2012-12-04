@@ -99,6 +99,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 			//log.debug("inXML"+SCXmlUtil.getString(inXML));
 			boolean isSapCustomerCreated = false;
+			boolean isMSapCustomerCreated = false;
 
 			String suffixType = null;
 			String shipToParentCustId = null;
@@ -302,7 +303,11 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 									Document manageCustomerOutputDoc = createCustomerWithSAPAccountNumber(env,sapCustomerId,masterSapCustomerId, strSAPName, strMSAPName, organizationCode,custElement);
 								}
+								isMSapCustomerCreated = checkIsCustomerAvailableInSystem(env, masterSapCustomerId, organizationCode);
+								if(!isMSapCustomerCreated){
+									Document masterManageCustomerOutputDoc = createCustomerWithMasterSAPAccountNumber(env,masterSapCustomerId, strMSAPName, organizationCode,custElement);
 
+								}
 								YFCElement parentCustomerElement = inputCustomerDoc.createElement("ParentCustomer");
 								parentCustomerElement.setAttribute("CustomerID", sapCustomerId);
 								parentCustomerElement.setAttribute("OrganizationCode", organizationCode);
