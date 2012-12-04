@@ -126,6 +126,7 @@ range.select();
 }
 
 function isValidQuantityRemoveAlpha(component,e){
+	
 var characterCode;
 var position=doGetCaretPosition(component);
 
@@ -168,14 +169,13 @@ quantity = val;
 component.value = quantity;
 }
 
-if(position!=0 && isError == true)
-{
-setCaretPosition(component,position-1);
+//Start JIRA XB - 126
+if(isError){
+	setCaretPosition(component,position-1);
+}else{
+	setCaretPosition(component,position);
 }
-else if(position!=0 && isError == false)
-{
-setCaretPosition(component,position);
-}
+//End JIRA XB - 126
 
 return true;
 }
