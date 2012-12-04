@@ -560,8 +560,10 @@ function funDivOpenClose(val1)
 			    {
 					new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
 					document.getElementById("errorMsgFor_userpassword").style.display = "inline";
+					if(document.getElementById("successMsgFor_save") != null){
 					document.getElementById("successMsgFor_save").innerHTML = "";
 					document.getElementById("successMsgFor_save").style.display = "none";
+					}
 					return false;
 			         
 			    }
@@ -770,6 +772,15 @@ function funDivOpenClose(val1)
 			  	            	                        	            	
 		}
 
+		//Start XB -319
+		function validateAndSave(docDivId, ignoreDivIds) {
+			var state = callSave(docDivId, ignoreDivIds);
+			if(state == false){
+				$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+			}
+		}
+		//End XB - 319
+		
 		function resetCallSaveDiv()
 		{
 			if(document.getElementById("errorMsgFor_emailId") != null)
@@ -2660,7 +2671,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<ul class="float-right">
 		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
 		<li class="float-right"><a class="green-ui-btn" href="javascript:void(0);"
-			onclick="javascript:callSave('myAccount', []);"  tabindex="38"><span>Save</span></a></li>
+			onclick="javascript:validateAndSave('myAccount', []);"  tabindex="38"><span>Save</span></a></li>
 	</ul>
 	</div>
 	<div class="clearview">&nbsp;</div>
