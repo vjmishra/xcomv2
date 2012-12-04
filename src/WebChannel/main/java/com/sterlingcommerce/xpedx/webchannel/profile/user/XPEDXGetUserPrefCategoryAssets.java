@@ -1,7 +1,9 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -121,7 +123,22 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 	        if(outDoc == null){
 	            log.error("Exception in reading the Categories  ");
 	        }
-	        this.mainCatsDoc = outDoc.getDocumentElement();
+	        this.mainCatsDoc = outDoc.getDocumentElement();	      
+	        
+	        Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+	        if (topCategoryMap == null) {
+	        	topCategoryMap = new HashMap<String, String>();
+		        Element catListRootElement = SCXmlUtil.getChildElement(mainCatsDoc, "CategoryList");
+	    	    ArrayList<Element> mainCategoryList = SCXmlUtil.getChildren(catListRootElement,"Category");
+	    	    Iterator<Element> catListIter = mainCategoryList.iterator();
+	    	    while (catListIter.hasNext()) {
+	    	    	Element topLevelCategory = catListIter.next();
+	    		    String topCategoryDescription = SCXmlUtil.getAttribute(topLevelCategory, "Description");
+	    		    String topCategoryID = SCXmlUtil.getAttribute(topLevelCategory, "CategoryID");
+	    		    topCategoryMap.put(topCategoryID, topCategoryDescription);
+	    	    }	    	    
+	    	    XPEDXWCUtils.setObectInCache("TopCategoryMap", topCategoryMap);	    	    
+	        }
 
 	        this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "CategoryPath",getPrefCategoryPath());
 	     //Added For XBT-253

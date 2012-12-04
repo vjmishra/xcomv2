@@ -395,6 +395,21 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	public String filter() {
 		init();		
+		
+		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		List<Breadcrumb> bclFilter = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		
+		for (int i = 0; i < bclFilter.size(); i++) {
+			Breadcrumb bc = bclFilter.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
+				orderByAttribute = "Item.ExtnBasis";
+				break;
+			}			
+		}
+		
 		String returnString = super.filter();
 		//XBT-260
 		changeBasis();	
@@ -1088,13 +1103,35 @@ public class XPEDXCatalogAction extends CatalogAction {
 		{
 			XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, editedOrderHeaderKey);
 		}
-
+		
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
-		path = params.get("path");
+		path = params.get("path");		
+		
+		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		if (topCategoryMap == null) {			
+			for (int i = 0; i < bcl.size(); i++) {
+				Breadcrumb bc = bcl.get(i);
+				Map<String, String> bcParams = bc.getParams();			
+				String cnameValue = bcParams.get("cname");
+				if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
+					orderByAttribute = "Item.ExtnBasis";
+					break;
+				}			
+			}
+		} else {
+			if (pathDepth != null) {
+				String categoryID = pathDepth[1];				
+				String catSelected = topCategoryMap.get(categoryID);
+				if (catSelected !=null && catSelected.equals("Paper")) {
+					orderByAttribute = "Item.ExtnBasis";
+				}
+			}
+		}
+
 
 		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
 			if (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) {
@@ -1719,6 +1756,36 @@ public class XPEDXCatalogAction extends CatalogAction {
 		StringBuffer sb=new StringBuffer();
 		long startTime=System.currentTimeMillis();
 		init();
+		
+		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		if (topCategoryMap == null) {						
+			for (int i = 0; i < bcl.size(); i++) {
+				Breadcrumb bc = bcl.get(i);
+				Map<String, String> bcParams = bc.getParams();			
+				String cnameValue = bcParams.get("cname");
+				if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
+					orderByAttribute = "Item.ExtnBasis";
+					break;
+				}				
+			}
+			
+		} else {
+			Breadcrumb bc = bcl.get(bcl.size()-2);
+			Map<String, String> bcParams = bc.getParams();						
+			String pathValue = bcParams.get("path");
+			String[] pathDepth = StringUtils.split(pathValue, "/");
+			if (pathDepth != null) {
+				String categoryId = pathDepth[1];
+				String catDescription = topCategoryMap.get(categoryId);
+				if (catDescription !=null && catDescription.equals("Paper")) {
+					orderByAttribute = "Item.ExtnBasis";
+				}
+			}
+			
+		}
+		
 		String returnString = super.goToPage();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
