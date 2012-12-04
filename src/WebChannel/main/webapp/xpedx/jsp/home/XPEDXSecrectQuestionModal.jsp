@@ -20,7 +20,7 @@
 
 <s:set name='orgQuestionList' value='%{getQuestionListForOrg()}' />
 
-<body class="ext-gecko ext-gecko3" onload="javascript:document.getElementById('answer').focus();">
+<body class="ext-gecko ext-gecko3" onLoad="javascript:document.getElementById('answer').focus();">
 
 
     	
@@ -32,7 +32,7 @@
 			<table class="full-width">
 			<tbody style="width: 721px">
 			<tr><td align ="left"><div class="xpedx-light-box" style="width: 718px"><h2>Security Question and Answer</h2></div></td></tr>
-			<tr><td class="no-border-right-user" ></td></tr>
+			<tr><td></td></tr>
 			</tbody>
 			</table>
 			<table width="75%">
@@ -42,35 +42,31 @@
 						 <b>Please set up your security question and answer. We will ask you this question if you should </br>
 						forget your password in future, in order to verify that you are the correct user. Keep in mind
 							</br>
-						 that the answers to the security questions are case-sensitive.</b></br></br>
-							</td>
+						 that the answers to the security questions are case-sensitive.</b></br></br>							</td>
 					</tr>
 					<tr>
-					<td class="no-border-right-user">&nbsp;
-					</td>
-					<td  class="no-border-right-user"></td>
-			<td colspan="1" class="text-right">
-					</td>
-					<td class="no-border-right-user"></td>
+					<td width="23%" >&nbsp;</td>
+					<td width="71%"></td>
+					<td width="2%"></td>
+					<td width="4%"></td>
 				</tr>
 					<s:if test="#orgQuestionList!=null">
 				<tr> 
 			<td class="no-border-right-user">
 			Security Question:</td>
-			<td colspan="3" class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
+			<td class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
 				tabindex="20" name="secretQuestion" id="secretQuestion"
-				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 99.8%;"
-				onchange="javascript:document.secrectQuestionForm.secretAnswer.value='';javascript:document.secrectQuestionForm.confirmAnswer.value='';" />
-			</td>
-		</tr>
+				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 102%;"
+				onchange="javascript:document.secrectQuestionForm.secretAnswer.value='';javascript:document.secrectQuestionForm.confirmAnswer.value='';" />			</td>
+		    <td class="no-border-right-user">&nbsp;</td>
+		    <td class="no-border-right-user">&nbsp;</td>
+				</tr>
 		</s:if>
 		<tr>
-			<td class="no-border-right-user">&nbsp;
-			</td>
-			<td  class="no-border-right-user"></td>
-			<td colspan="1" align="right" class="text-right">
-			</td>
-			<td class="no-border-right-user"></td>
+			<td>&nbsp;</td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="no-border-right-user">
@@ -78,50 +74,39 @@
 			<td  class="no-border-right-user"><s:password tabindex="25"
 				name='secretAnswer' id="secretAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 99%;" 
+				cssStyle="width: 100%;" 
 				showPassword="true" /></td>
 		</tr>
 		<tr>
-			<td class="no-border-right-user">&nbsp;
-			</td>
-			<td  class="no-border-right-user"></td>
-			<td colspan="1" align="right" class="text-right">
-			</td>
-			<td class="no-border-right-user"></td>
+			<td >&nbsp;</td>
+			<td ></td>
+			<td ></td>
+			<td ></td>
 		</tr>
+		
 		<tr>
 			<td class="no-border-right-user">
 			Confirm Answer:</td>
 			<td class="no-border-right-user"><s:password tabindex="30"
 				name='confirmAnswer' id="confirmAnswer" 
 			    cssClass="x-input"
-				cssStyle="width: 99%;" 
+				cssStyle="width: 100%;" 
 				showPassword="true" /></td>
-		</tr>
-		<tr>
-			<td class="no-border-right-user">&nbsp;
-			</td>
-			<td  class="no-border-right-user"></td>
-			<td colspan="1" class="text-right">
-			</td>
-			<td class="no-border-right-user"></td>
 		</tr>		
 		<tr>
-			<td></td>
-			 <td  class=" no-border-right-user" align="right" >
-	
-			</td>
+			<td>&nbsp;</td>
 			<td></td>
 			<td></td>
-			</tr>
+			<td></td>
+		</tr>		
 				</tbody>
 			</table>
 			
-			<table width="82%">
+			<table width="75%">
 			<tbody>
 			<tr>
-			<td class ="no-border-right-user" colspan="1" width="79%"></td>
-			<td class ="no-border-right-user"  colspan="2" width="5%">
+			<td colspan="1" width="83%"></td>
+			<td colspan="2">
 			<div>
 			<ul class="float-right">
 			<li >
@@ -130,21 +115,20 @@
 			</li>
 			</ul>
 			</div></td>
-			<td></td>
+			<td width="5%"></td>
 			</tr>
 			
 			<tr>
 				<td class="grey  no-border-right-user" colspan="3" >
 				</br>
 					<div class="error"  style="float:right; margin-right: 1px;display:none;" id="errorMsgForAnswer" ></div>
-						</td>
+			  </td>
 						<td class="grey  no-border-right-user" colspan="1">
 						</td>
-					</tr>
+			  </tr>
 			</tr>
 			</tbody>
 			</table>
-
 			</s:form>
 			
 		
