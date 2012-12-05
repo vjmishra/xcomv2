@@ -151,7 +151,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 									if(vallength < length)
 									{
 										StringBuffer sb=new StringBuffer();
-									//	int _length=length -vallength;
+									    //int _length=length -vallength;
 										sb.append(String.format("%0"+(length)+"d",0)).append(val);
 										eExtnList.setAttribute("ExtnBasis",sb.toString());
 									}
@@ -640,7 +640,7 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 
 		Element eItemListOut = itemListOutDoc.getDocumentElement();
 		Element itemElement = SCXmlUtil.getChildElement(eItemListOut, "Item");
-		if(itemElement.getAttribute("ItemKey")!=null){
+		if(itemElement != null && itemElement.getAttribute("ItemKey")!=null){
 		itemKeyVal = itemElement.getAttribute("ItemKey");
 		
 		log.info("ItemKey Value is"+itemKeyVal);
