@@ -145,15 +145,15 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 								eExtnList.setAttribute("ExtnDescription", strDesc);
 								eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
 								String val=eExtnList.getAttribute("ExtnBasis");
-								if(val != null)
+								if(val != null && val.trim().length() > 0)
 								{
 									int vallength=val.length();
 									if(vallength < length)
 									{
-										//StringBuffer sb=new StringBuffer();
-										//int _length=length -vallength;
-										eExtnList.setAttribute("ExtnBasis",String.format("%0"+(length)+"d",Integer.valueOf(val)));
-										
+										StringBuffer sb=new StringBuffer();
+									//	int _length=length -vallength;
+										sb.append(String.format("%0"+(length)+"d",0)).append(val);
+										eExtnList.setAttribute("ExtnBasis",sb.toString());
 									}
 									
 								}
