@@ -81,7 +81,7 @@ public class XPXCatalogDataProcessor {
 		search = SymbolInfo.preprocess(search);
 		search = preprocessXPatterns(search);
 		search = preprocessXPatterns(search);
-		search = preprocessSlashPatterns(search);
+		//search = preprocessSlashPatterns(search);
 		
 		return search;
 	}
