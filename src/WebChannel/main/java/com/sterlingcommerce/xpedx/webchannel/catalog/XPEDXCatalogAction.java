@@ -1838,6 +1838,36 @@ public class XPEDXCatalogAction extends CatalogAction {
 		StringBuffer sb=new StringBuffer();
 		long startTime=System.currentTimeMillis();
 		init();
+		
+		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		if (topCategoryMap == null) {						
+			for (int i = 0; i < bcl.size(); i++) {
+				Breadcrumb bc = bcl.get(i);
+				Map<String, String> bcParams = bc.getParams();			
+				String cnameValue = bcParams.get("cname");
+				if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
+					orderByAttribute = "Item.ExtnBasis";
+					break;
+				}				
+			}
+			
+		} else {
+			Breadcrumb bc = bcl.get(bcl.size()-2);
+			Map<String, String> bcParams = bc.getParams();						
+			String pathValue = bcParams.get("path");
+			String[] pathDepth = StringUtils.split(pathValue, "/");
+			if (pathDepth != null) {
+				String categoryId = pathDepth[1];
+				String catDescription = topCategoryMap.get(categoryId);
+				if (catDescription !=null && catDescription.equals("Paper")) {
+					orderByAttribute = "Item.ExtnBasis";
+				}
+			}
+			
+		}
+		
 		String returnString = super.selectPageSize();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
