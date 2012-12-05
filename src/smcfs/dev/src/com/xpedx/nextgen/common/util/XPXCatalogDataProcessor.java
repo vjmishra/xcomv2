@@ -271,7 +271,8 @@ public class XPXCatalogDataProcessor {
 		final public static SymbolInfo[] all = new SymbolInfo[] {
 			new SymbolInfo(true, "%", "percent", "pct"),
 			new SymbolInfo(false, "&amp;", "and"),
-			new SymbolInfo(false, "&", "and")
+			new SymbolInfo(false, "&", "and"),
+			new SymbolInfo(false, "\"", "")
 			//new SymbolInfo(false, "@", "at"),
 		};
 		
