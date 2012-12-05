@@ -763,19 +763,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private void changeBasis()
 	{
 		
-		Element itemEementList=(Element)getOutDoc().getElementsByTagName("ItemList").item(0);
-		if(itemEementList != null)
+		if(getOutDoc() != null)
 		{
-			NodeList extnNodeList=itemEementList.getElementsByTagName("Extn");
-			if(extnNodeList != null)
+			Element itemEementList=(Element)getOutDoc().getElementsByTagName("ItemList").item(0);
+			if(itemEementList != null)
 			{
-				for(int i=0;i<extnNodeList.getLength();i++)
+				NodeList extnNodeList=itemEementList.getElementsByTagName("Extn");
+				if(extnNodeList != null)
 				{
-					Element itemElement=(Element)extnNodeList.item(i);
-					if(itemElement  != null)
+					for(int i=0;i<extnNodeList.getLength();i++)
 					{
-						String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
-						itemElement.setAttribute("ExtnBasis", extnBasis);
+						Element itemElement=(Element)extnNodeList.item(i);
+						if(itemElement  != null)
+						{
+							String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
+							if(extnBasis != null && !"0".equals(extnBasis))
+								itemElement.setAttribute("ExtnBasis", extnBasis);
+							else
+								itemElement.setAttribute("ExtnBasis","");
+						}
 					}
 				}
 			}
