@@ -258,6 +258,11 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				setOrderType("Customer");
 			} else {//order update flow
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
+				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+				if(YFCCommon.isVoid(editedOrderHeaderKey)){
+					return draftErrorFlagOrderSummary;
+		 		}
+				
 				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
 				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
 				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
