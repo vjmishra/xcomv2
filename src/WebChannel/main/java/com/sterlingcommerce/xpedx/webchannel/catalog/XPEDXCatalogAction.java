@@ -1783,11 +1783,26 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String pathValue = bcParams.get("path");
 			String[] pathDepth = StringUtils.split(pathValue, "/");
 			if (pathDepth != null) {
-				String categoryId = pathDepth[1];
-				String catDescription = topCategoryMap.get(categoryId);
-				if (catDescription !=null && catDescription.equals("Paper")) {
-					orderByAttribute = "Item.ExtnBasis";
-				}
+				if (pathDepth.length > 1) {
+					String categoryId = pathDepth[1];
+					String catDescription = topCategoryMap.get(categoryId);
+					if (catDescription !=null && catDescription.equals("Paper")) {
+						orderByAttribute = "Item.ExtnBasis";
+					}
+				} else {					
+					for (int i = 0; i < bcl.size(); i++) {
+						Breadcrumb bcrum = bcl.get(i);
+						Map<String, String> bcParameter = bcrum.getParams();
+						if(bcParameter != null )
+						{
+							String cnameVal = bcParameter.get("cname");
+							if (cnameVal != null && cnameVal.equals("Paper") && i <=2) {
+								orderByAttribute = "Item.ExtnBasis";
+								break;
+							}
+						}			
+					}					
+				}				
 			}
 			
 		}
@@ -1865,13 +1880,27 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String pathValue = bcParams.get("path");
 			String[] pathDepth = StringUtils.split(pathValue, "/");
 			if (pathDepth != null) {
-				String categoryId = pathDepth[1];
-				String catDescription = topCategoryMap.get(categoryId);
-				if (catDescription !=null && catDescription.equals("Paper")) {
-					orderByAttribute = "Item.ExtnBasis";
+				if (pathDepth.length > 1) {
+					String categoryId = pathDepth[1];
+					String catDescription = topCategoryMap.get(categoryId);
+					if (catDescription !=null && catDescription.equals("Paper")) {
+						orderByAttribute = "Item.ExtnBasis";
+					}
+				} else {					
+					for (int i = 0; i < bcl.size(); i++) {
+						Breadcrumb bcrum = bcl.get(i);
+						Map<String, String> bcParameter = bcrum.getParams();
+						if(bcParameter != null )
+						{
+							String cnameVal = bcParameter.get("cname");
+							if (cnameVal != null && cnameVal.equals("Paper") && i <=2) {
+								orderByAttribute = "Item.ExtnBasis";
+								break;
+							}
+						}			
+					}					
 				}
-			}
-			
+			}			
 		}
 		
 		String returnString = super.selectPageSize();
