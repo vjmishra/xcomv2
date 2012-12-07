@@ -340,7 +340,7 @@
 			<div class="clearall">&nbsp;</div>
 		</div>
 		<!-- END breadcrumb -->
-	
+	<s:set name='categoryDepthNarrowBy'	value="'2'" />
 	<s:include value='XPEDXNarrowBy.jsp' />
 	<!--  end of new content -->
 	
