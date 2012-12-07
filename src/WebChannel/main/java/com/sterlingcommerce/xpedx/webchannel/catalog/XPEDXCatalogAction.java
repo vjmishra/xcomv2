@@ -1137,9 +1137,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 			}
 		}
+	//Added below condn for XBT-269
+		if("2".equals(categoryDepthNarrowBy))
+		{
+			setCategoryDepth("2");
+		}
 
-
-		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
+	else if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
 			if (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) {
 				// for c1 categories-> show all the sub categories of C1 in the
 				// landing page
@@ -1152,7 +1156,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		//determine if the request is catalog landing or catalog page
 		boolean isCategoryLanding = determineCatalogLandingRedirection(bcl,pathDepth);
-		if(isCategoryLanding){
+	//Added below condn for XBT-269
+		if(!"2".equals(categoryDepthNarrowBy) && isCategoryLanding){
 			getWCContext().removeWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
 			//call the catalog landing mashup
 			setMashupID(getCatalogLandingMashupID());
@@ -1165,7 +1170,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			return returnString;
 		} else {
 			setAttributeListForUI();
-			if (isCategoryLanding || displayAllCategories.equalsIgnoreCase("true")) {
+			//Added below condn for XBT-269
+			if (!"2".equals(categoryDepthNarrowBy) && (isCategoryLanding || displayAllCategories.equalsIgnoreCase("true"))) {
+			
 				if(log.isDebugEnabled()){
 				log.debug("Search for Category Domain. Need to show the asset widget for Category Images");
 				}
@@ -2948,7 +2955,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String firstItemCategoryShortDescription;
 	private String tempCategoryPath;
 	private Element allAPIOutputDoc;
+	private String categoryDepthNarrowBy;
+	
+	
 
+
+	public String getCategoryDepthNarrowBy() {
+		return categoryDepthNarrowBy;
+	}
+
+	public void setCategoryDepthNarrowBy(String categoryDepthNarrowBy) {
+		this.categoryDepthNarrowBy = categoryDepthNarrowBy;
+	}
 
 	public Map<String, List<Element>> getFacetListMap() {
 		return facetListMap;
