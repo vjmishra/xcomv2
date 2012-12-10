@@ -154,6 +154,11 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 								Status = YRCXmlUtils.getXPathElement(eleTableItem, "/Order").getAttribute("Status") + " (Pending Approval)";	
 								isPendingApproval = true;
 							}
+					//Condition added for JIRA XBT192
+					if("ORDER_LIMIT_APPROVAL".equals(eleOrderHold.getAttribute("HoldType")) && "1200".equals(eleOrderHold.getAttribute("Status"))){
+						Status = YRCXmlUtils.getXPathElement(eleTableItem, "/Order").getAttribute("Status") + " (Rejected)";	
+						isPendingApproval = true;
+					}
 					//Condition Added for JIRA 4326
 					if(XPXConstants.ORDER_IN_EXCEPTION_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_ORD_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEGACY_CNCL_LNE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.LEG_ERR_CODE_HOLD.equals(eleOrderHold.getAttribute("HoldType"))|| XPXConstants.NEEDS_ATTENTION.equals(eleOrderHold.getAttribute("HoldType"))){
 						Status = YRCXmlUtils.getXPathElement(eleTableItem, "/Order").getAttribute("Status") + " (CSR Reviewing)";	
@@ -426,7 +431,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				eleExtn.setAttribute("ExtnSourceQryType", "EQ");
 			}
 			else{
-				eleExtn.setAttribute("ExtnSourceType","");
+				eleExtn.removeAttribute("ExtnSourceType");
 			}
 			
 			if ("" != eleInput.getAttribute("FromStatus") || "" != eleInput.getAttribute("ToStatus") || null != eleInput.getAttribute("FromStatus")|| null != eleInput.getAttribute("ToStatus")){
