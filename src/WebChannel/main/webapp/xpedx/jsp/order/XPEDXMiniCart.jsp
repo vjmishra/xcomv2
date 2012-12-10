@@ -70,6 +70,7 @@
 <%--Added  OrderLinesCount for Validating Jira 3481--%>
 <s:hidden id="OrderLinesCount" name="OrderLinesCount" value='%{majorLineElements.size()}' />
 <!-- cart rows -->
+<div id="errorMessageDiv"> </div>
 <div class="mini-cart-rows">
 
 

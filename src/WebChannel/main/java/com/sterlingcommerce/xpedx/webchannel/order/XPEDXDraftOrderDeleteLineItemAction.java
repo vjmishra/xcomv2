@@ -13,6 +13,10 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.order.CartInContextRefreshingWCMashupAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
+import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshingWCMashupAction
 {
@@ -24,8 +28,28 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
     protected static final String ERROR_CODE_CANCELLATION_CONFLICT = "YFS85_0020";
     public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
     protected static final String RETURN_CANCELLATION_CONFLICT = "pendingChangeConflict";
-    
-    public String execute()
+    //XBT -252 & 248
+    public String draftOrderFlag;
+    public String draftOrderError;  
+
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+
+	public String getDraftOrderFlag() {
+		return draftOrderFlag;
+	}
+
+	public void setDraftOrderFlag(String draftOrderFlag) {
+		this.draftOrderFlag = draftOrderFlag;
+	}
+	//end of XBT -252 & 248 
+
+	public String execute()
     {
     	Document outputDocument;
     	String returnValue = ERROR;
@@ -33,6 +57,15 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
         try
         {
         	try {
+        		//start of XBT 252 & 248
+    			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+    			if(YFCCommon.isVoid(editedOrderHeaderKey)){
+    				draftOrderFlag="Y";	
+    			}
+    			else {
+					draftOrderFlag="N";	
+				}
+    			//end of XBT 252 & 248
         		Map<String, Element> out = prepareAndInvokeMashups();
      			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
      			outputDocument = (Document)out.get("xpedx_me_draftOrderDeleteLineItems").getOwnerDocument();
@@ -40,6 +73,29 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
      			/*End - Changes made by Mitesh Parikh for JIRA#3595*/                 
                 returnValue = SUCCESS;
              }
+			//XBT -252 & 248
+        	catch(XMLExceptionWrapper e)
+            {
+                  YFCElement errorXML=e.getXML();
+                  YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+                  String errorDeasc=errorElement.getAttribute("ErrorDescription");
+                  if(errorDeasc.contains("Key Fields cannot be modified."))
+                  {
+                        YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+                        for(int i=0;i<listAttribute.getLength();i++)
+                        {
+                              YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+                              String value=attributeELement.getAttribute("Value");
+                              if("DraftOrderFlag".equals(value))
+                              {
+                                    draftOrderError = "true";
+                                    break;
+                              }
+                        }
+                  }
+                  returnValue= SUCCESS; 
+            }
+			// end of XBT -252 & 248
              catch(Throwable t) {
                  log.error("Error in prepareAndInvokeMashups invocation", t);
                  executeException = t;

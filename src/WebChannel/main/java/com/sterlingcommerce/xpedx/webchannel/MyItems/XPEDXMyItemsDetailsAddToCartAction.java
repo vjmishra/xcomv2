@@ -26,6 +26,8 @@ import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 @SuppressWarnings("serial")
@@ -73,6 +75,9 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	protected String addToCartError;
 	protected boolean addingSingleItem = false;
 	protected ArrayList<String> isEditNewline=new ArrayList<String>();
+	public String draftOrderflag;
+	public String draftErrorCatalog="false";
+	public String draftErrorFlagCatalog = "DraftErrorCat";
 
 	@Override
 	public String execute() {
@@ -111,15 +116,43 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 							
 						 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 					}
-
+					
+					//start of XBT 252 & 248
+					if(YFCCommon.isVoid(editedOrderHeaderKey)){
+						draftOrderflag="Y";	
+					}
+					else {
+						draftOrderflag="N";	
+					}
+					//end of XBT 252 & 248   
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-						long changeOrderStartTime=System.currentTimeMillis();
+						long changeOrderStartTime=System.currentTimeMillis();					
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 						long changeOrderEndTime=System.currentTimeMillis();
 						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
 						
-					} catch (Exception dle) {
+					} 
+					catch(XMLExceptionWrapper e)
+					 {
+						 YFCElement errorXML=e.getXML();
+						 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+						 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+						 if(errorDeasc.contains("Key Fields cannot be modified."))
+						 {
+							 YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+							 for(int i=0;i<listAttribute.getLength();i++)
+							 {
+								 YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+								 String value=attributeELement.getAttribute("Value");
+								 if("DraftOrderFlag".equals(value))
+								 {
+									 draftErrorCatalog = "true";
+								 }
+							 }
+						 }
+						 return draftErrorFlagCatalog;
+					 }catch (Exception dle) {
 						if (dle != null && dle.toString() != null
 								&& dle.toString().contains("YFC0101")) {
 							LOG.debug("Databse is locked, hence continuing to "
@@ -138,7 +171,27 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					//refreshCartInContext(orderHeaderKey);
 				}
 			}
-		} catch (Exception dle) {
+		} 
+		catch(XMLExceptionWrapper e)
+		 {
+			 YFCElement errorXML=e.getXML();
+			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 if(errorDeasc.contains("Key Fields cannot be modified."))
+			 {
+				 YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+				 for(int i=0;i<listAttribute.getLength();i++)
+				 {
+					 YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+					 String value=attributeELement.getAttribute("Value");
+					 if("DraftOrderFlag".equals(value))
+					 {
+						 draftErrorCatalog = "true";
+					 }
+				 }
+			 }
+		 }
+		catch (Exception dle) {
 			LOG.debug(dle.getStackTrace());
 			dle.printStackTrace();
 			return "error";
@@ -460,11 +513,24 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		{
 			orderHeaderKey=editedOrderHeaderKey;
 		}
+		XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+ 		if(YFCCommon.isVoid(editedOrderHeaderKey)){
+ 			draftOrderflag="Y";
+
+ 		}
+ 		else{
+ 			draftOrderflag="N";
+ 		}
 		setAddingSingleItem(true);
 		setCustomerDisplayFields(requestedCustomerFields);
 		String returnVal = execute();
-		if(returnVal!=null && returnVal.equalsIgnoreCase(ERROR))
+		if(draftErrorCatalog.equals("true")){
+			addToCartError = "This cart has already been submitted, please refer to the Order Management page to review the order.";
+		}
+		else if(returnVal!=null && returnVal.equalsIgnoreCase(ERROR)){
 			addToCartError = "Error while adding item to cart";
+		}
+		 
 		return returnVal;
 	}
 	

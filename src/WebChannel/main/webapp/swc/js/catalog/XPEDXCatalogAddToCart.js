@@ -73,6 +73,12 @@ function addItemToCart(itemId) {
 				    method: 'POST',
 					success: function (response, request){
 						var responseText = response.responseText;
+						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
+							Ext.Msg.hide();
+							myMask.hide();
+							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
+							return false;
+						}
 						if(responseText.indexOf("Error")>-1)
 						{
 							Ext.Msg.hide();

@@ -144,7 +144,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		item.setRequestedQtyUOM(requestedUOM);
 		item.setRequestedQty(pnaRequestedQty);
 		inputItems.add(item);
-		XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems);
+		XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems,isOrderData);
 		
 		//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 		ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
@@ -159,6 +159,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			return returnVal;
 		}
 		pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems());
+		/*if("true".equals(isOrderData))
+		{
+			Set<String> itemSet=pnaHoverMap.keySet();
+			for(String _itemID:itemSet)
+			{
+				itemID=_itemID;
+			}
+		}*/
 		Vector<XPEDXItem> items = pna.getItems();
 		String lineStatusErrorMsg = "";
 		for (XPEDXItem pandAItem1 : items) {
@@ -2065,6 +2073,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private int currentConversion;
 	private String ExtnIsCustUOMExcl = "";
 	private String pnaRequestedQty;
+	private String isOrderData ="false";
+	public String getIsOrderData() {
+		return isOrderData;
+	}
+
+	public void setIsOrderData(String isOrderData) {
+		this.isOrderData = isOrderData;
+	}
+
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXItemDetailsAction.class);
 	

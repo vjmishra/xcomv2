@@ -81,12 +81,28 @@ function setStockItemFlag()
 									<s:param name='path' value='#cat.getAttribute("CategoryPath")' />
 									<s:param name='cname' value='#cat.getAttribute("ShortDescription")' />
 								</s:url>
+								<s:url id='cat3URL' namespace='/catalog' action='navigate.action'>
+									<s:param name='path' value='#cat.getAttribute("CategoryPath")' />
+									<s:param name='cname' value='#cat.getAttribute("ShortDescription")' />
+									<s:param name='categoryDepthNarrowBy' value='#categoryDepthNarrowBy' />
+									
+								</s:url>
 								<!-- s:if test='#subCatElem.size() > 0'-->
 									<s:set name='catCount' value='#cat.getAttribute("Count")' />
 									<s:set name='showCurrency' value="false" />
-									<li class="roll close"><s:a href='%{catURL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
-										<s:property value='#cat.getAttribute("ShortDescription")' />
-									</s:a></li>
+									<li class="roll close">
+										<s:if test="%{#categoryDepthNarrowBy =='2' }">
+											<s:a href='%{#cat3URL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+												<s:property value='#cat.getAttribute("ShortDescription")' />
+											</s:a>
+										</s:if>
+										<s:else>
+											<s:a href='%{#catURL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+												<s:property value='#cat.getAttribute("ShortDescription")' />
+											</s:a>
+										</s:else>
+									
+									</li>
 								<!-- /s:if-->
 							</s:iterator>
 						</ul>

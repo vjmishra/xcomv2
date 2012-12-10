@@ -844,7 +844,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				
 				shipToAddress = shipToCustomer;//XPEDXWCUtils.getShipToAddressOfCustomer(customerOrganizationEle);
 				//Element parentExtnElem = SCXmlUtil.getChildElement(parentElem, "Extn");
-				String custPrefcategory = shipToCustomer.getExtnCustomerClass();
+				//String custPrefcategory = shipToCustomer.getExtnCustomerClass();
+				String custPrefcategory = billToCustomer.getExtnCustomerClass();
 				String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
 				//String customerUseSKU = extnElement.getAttribute("ExtnUseCustSKU");
 				String industry = shipToCustomer.getExtnIndustry();

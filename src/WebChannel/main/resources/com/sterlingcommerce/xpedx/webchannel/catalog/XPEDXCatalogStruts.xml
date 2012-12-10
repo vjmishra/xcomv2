@@ -19,6 +19,8 @@
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction" method="callPriceAndAvailability">
 			<result name="success">/xpedx/jsp/catalog/XPEDXItemDetailsAvailability.jsp</result>
 		</action>
+		
+		
 		<action name="search"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
 			method="search">

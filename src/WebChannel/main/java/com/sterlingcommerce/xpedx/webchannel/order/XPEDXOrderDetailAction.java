@@ -524,8 +524,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						}
 					}
 				}
-				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim()) ||( null != headerStatusCode
-						  && !"".equals(headerStatusCode.trim()) && !headerStatusCode.equals("M0000"))) {
+				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim())) {
 					isCSRReview = true;
 				}
 				

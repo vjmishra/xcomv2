@@ -974,7 +974,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="">
+				<Order OrderHeaderKey="" DraftOrderFlag="">
 					<OrderLines>
 						<OrderLine Action="CREATE" OrderedQty="" LineType=""
 							ReservationMandatory="N" ValidateItem="N" CustomerPONo="">
@@ -1198,7 +1198,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y">
+				<Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" DraftOrderFlag="">
 					<OrderLines>
 						<OrderLine Action="MODIFY" OrderLineKey=""
 							DeliveryMethod="" ReservationMandatory="N">
@@ -1414,7 +1414,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="">
+				<Order OrderHeaderKey="" DraftOrderFlag="">
 					<OrderLines>
 						<OrderLine Action="CREATE" OrderedQty=""
 							ReservationMandatory="N" ValidateItem="N" LineType="" CustomerPONo="">
@@ -1429,8 +1429,12 @@
 				</Order>
 			</Input>
 			<Template>
-				<Order OrderHeaderKey="">
-					<Extn/>
+				<Order OrderHeaderKey="" DraftOrderFlag="">
+					<Extn>
+						<XPXUeAdditionalAttrXmlList>
+							<XPXUeAdditionalAttrXml/>
+						</XPXUeAdditionalAttrXmlList>
+					</Extn>	
 					<OrderLines TotalNumberOfRecords="">
 						<OrderLine OrderLineKey="">
 							<Item ItemID="" UnitOfMeasure="" ProductClass="" ItemShortDesc=""/>
@@ -2138,7 +2142,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="">
                     <OrderLines>
                        <OrderLine Action="MODIFY" OrderLineKey="" OrderedQty="" DeliveryMethod="" ReservationMandatory="N">
                        		<OrderLineTranQuantity TransactionalUOM=""
@@ -2148,7 +2152,7 @@
                 </Order>
             </Input>
             <Template>
-                <Order OrderHeaderKey=""/>
+                <Order OrderHeaderKey="" DraftOrderFlag=""/>
             </Template>
         </API>
     </mashup>
@@ -2359,7 +2363,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="">
                     <OrderLines>
                         <OrderLine Action="MODIFY" OrderLineKey="" >
                         	<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
@@ -2368,7 +2372,7 @@
                 </Order>
             </Input>
             <Template>
-                <Order OrderHeaderKey="" OrderNo="" OrderName="">
+                <Order OrderHeaderKey="" OrderNo="" OrderName="" DraftOrderFlag="">
                     <PriceInfo Currency=""/>
                     <OrderLines TotalNumberOfRecords="">
                         <OrderLine OrderLineKey="" >
@@ -2546,14 +2550,14 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="" >
                     <OrderLines>
                         <OrderLine Action="REMOVE" OrderLineKey=""/>
                     </OrderLines>
                 </Order>
             </Input>
             <Template>
-                <Order OrderHeaderKey="" OrderNo="" OrderName="">
+                <Order OrderHeaderKey="" OrderNo="" OrderName="" DraftOrderFlag="">
                     <PriceInfo Currency=""/>
                     <OrderLines TotalNumberOfRecords="">
                         <OrderLine OrderLineKey="" >
@@ -2686,7 +2690,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
 			<Input>
-				<Order OrderHeaderKey="" >
+				<Order OrderHeaderKey="" DraftOrderFlag="">
 				<PendingChanges RecordPendingChanges=""/> 
 				</Order>
 			</Input>
@@ -2858,7 +2862,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="">
+                <Order OrderHeaderKey="" DraftOrderFlag="">
                     <OrderLines>
                         <OrderLine Action="" OrderLineKey="" OrderedQty=""/>
                     </OrderLines>
@@ -2923,6 +2927,17 @@
 					</Extn>
 				</Order>
 			</Template>
+        </API>
+    </mashup>
+    <mashup id='draftOrderCopyGetName' transactional='true' mashuptype='XAPI' endpoint='DRAFT_ORDER' description="Draft Order Copy Get Name">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getOrderDetails">
+            <Input>
+                <Order OrderHeaderKey=""/>
+            </Input>
+            <Template>
+                <Order OrderName="" OrderNo="" DraftOrderFlag=""/>
+            </Template>
         </API>
     </mashup>
     

@@ -1,14 +1,31 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import com.comergent.appservices.configuredItem.XMLUtils;
+import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
+import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
+import com.yantra.yfc.core.YFCIterable;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXAddToCartAction extends AddToCartAction {
@@ -25,6 +42,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	
 	 public String execute()
 	 {
+		 
 		 this.reqProductUOM = this.productUOM;	
 		 String sOrderHeaderKey =(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext"); //XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 		 if((sOrderHeaderKey==null || sOrderHeaderKey.equals("_CREATE_NEW_") )&& XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
@@ -38,6 +56,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 				orderHeaderKey=editedOrderHeaderKey;
 				isEditNewline="Y";
 		 }
+
 		 XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 		 try
 	     {
@@ -73,6 +92,14 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	                     setDraft(DRAFT_N);
 	         	    }
 		         }
+	         		
+         		if(YFCCommon.isVoid(editedOrderHeaderKey)){
+         			draftOrderflag="Y";
+
+         		}
+         		else{
+         			draftOrderflag="N";
+         		}
 		         	organizeProductInformationResults();
 		         	// Added for addtocart base UOM issue, due to performance fixes
 		         	HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
@@ -83,6 +110,79 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         	{
 		
 		         		Element changeOrderOutput = performChangeOrder();
+		         			try
+		         			{
+				         		Integer maxItemLineNum = null;
+				         		Integer maxLineNum = null;
+				         		String responseXML = null;
+				         		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutput, "Extn");
+				         		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+				         		if(additionalAttrXml != null){
+					         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
+					         		Document attrXml =SCXmlUtil.createFromString(responseXML);
+									Element priceAvailXml = attrXml.getDocumentElement();
+					         		
+									Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
+									Document doc  = itemPrice.getOwnerDocument();
+									YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
+									
+									if (rootEle.hasChildNodes()) {
+										YFCElement lineItem =  rootEle.getChildElement("Items");
+										YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+										while (yfcItr.hasNext()) {
+											YFCElement lineElem = (YFCElement) yfcItr.next();
+											YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
+											YFCElement itemIdElem = lineElem.getChildElement("LegacyProductCode");
+											lineElem.getLastChild();
+											String str = lineNumberElem.getNodeValue();
+											String legacyProductCode=itemIdElem.getNodeValue();
+											if(maxLineNum == null && str != null && str.length()>0 )
+												maxLineNum=Integer.valueOf(str);
+											if(maxItemLineNum == null && str != null && str.length()>0 && 
+													legacyProductCode != null && productID.equals(legacyProductCode))
+											{
+												Integer currentLine=Integer.valueOf(str);
+												maxItemLineNum =currentLine;												
+												if(currentLine >= maxLineNum)
+												{
+													maxLineNum=currentLine;
+												}
+											}
+											else if(str != null && str.length()>0 )
+											{
+												Integer currentLine=Integer.valueOf(str);
+												if(productID.equals(legacyProductCode) && currentLine > maxItemLineNum)
+												{
+													maxItemLineNum=currentLine;
+												}
+												if(currentLine > maxLineNum)
+												{
+													maxLineNum=currentLine;
+												}
+											}
+										}
+										yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+										while (yfcItr.hasNext()) {
+											YFCElement lineElem = (YFCElement) yfcItr.next();
+											YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
+											lineElem.getLastChild();
+											String str = lineStatusCodeElem.getNodeValue();
+											int lineNumber=Integer.parseInt(str);
+											if(maxItemLineNum != null && lineNumber == maxItemLineNum && maxItemLineNum == maxLineNum)
+												continue;
+											else
+												lineItem.removeChild(lineElem);
+										}
+										
+									}
+									if(maxItemLineNum == maxLineNum)
+										XPEDXWCUtils.setObectInCache("PNA_RESPONSE_FOR_ITEM",doc) ;
+				         		}
+		         			}
+		         			catch(Exception e)
+		         			{
+		         				LOG.error("Exception while getting item from PnA Response "+e.getMessage());
+		         			}
 		         		changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
 		         		 if(YFCCommon.isVoid(editedOrderHeaderKey))
 		        		 {
@@ -95,19 +195,39 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         		}
 		
 		         		//refreshCartInContext(orderHeaderKey);
-		
+		         		XPEDXWCUtils.releaseEnv(wcContext);
 		         		return SUCCESS;
 		
 		         	}
 	           }
 	         XPEDXWCUtils.releaseEnv(wcContext);
 	     }
+		 catch(XMLExceptionWrapper e)
+		 {
+			 YFCElement errorXML=e.getXML();
+			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 if(errorDeasc.contains("Key Fields cannot be modified."))
+			 {
+				 YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+				 for(int i=0;i<listAttribute.getLength();i++)
+				 {
+					 YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+					 String value=attributeELement.getAttribute("Value");
+					 if("DraftOrderFlag".equals(value))
+					 {
+						 draftError = "true";
+					 }
+				 }
+			 }
+			 return draftErrorFlag;
+		 }
 	     catch (Exception e)
 	     {
 	         // cause of error should have been logged by the throwing method
 	         e.printStackTrace();
+			 XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 	         System.out.println(" Add to Cart Undefined : " +e.getMessage());
-	         XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 	         return ERROR;
 	     }
 		 return SUCCESS;
@@ -268,4 +388,17 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	protected String lineType;
 	protected String customerPONo="";
 	protected String isEditNewline="N";
+	public String draftOrderflag;
+	public String draftErrorFlag="DraftError";
+	private String draftError= "false";
+
+	public String getDraftError() {
+		return draftError;
+	}
+
+	public void setDraftError(String draftError) {
+		this.draftError = draftError;
+	}
+
+	
 }

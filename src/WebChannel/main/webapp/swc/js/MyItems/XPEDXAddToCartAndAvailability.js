@@ -59,7 +59,7 @@
 		 if(validateOrderMultiple(true,uid) == false)
 		 {
 		 	Ext.Msg.hide();
-		        myMask.hide();
+		    myMask.hide();
 			return;
 		 }
 		var qty = document.getElementById('QTY_'+uid).value;
@@ -107,7 +107,15 @@
 			    method: 'POST',
 				success: function (response, request){
 					var responseText = response.responseText;
-					if(responseText.indexOf("Error")>-1)
+		        	var draftErr = response.responseText;
+		            var draftErrDiv = document.getElementById("errorMessageDiv");
+		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
+		        {
+		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
+		                    Ext.Msg.hide();
+		                	myMask.hide();
+		        }
+					else if(responseText.indexOf("Error")>-1)
 					{
 						Ext.Msg.hide();
 						myMask.hide();

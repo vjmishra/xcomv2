@@ -75,6 +75,16 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isEditOrder;
 	protected String customerFieldsValidated;
 	protected String isCustomerPOMandatory="false";
+	public String draftOrderFlagOrderSummary;
+	public String draftFlagError = "draftFlagError";
+	public String getDraftOrderFlagOrderSummary() {
+		return draftOrderFlagOrderSummary;
+	}
+
+	public void setDraftOrderFlagOrderSummary(String draftOrderFlagOrderSummary) {
+		this.draftOrderFlagOrderSummary = draftOrderFlagOrderSummary;
+	}
+
 	String lastModifiedUserId = "";
 	XPEDXShipToCustomer shipToCustomer;
 	private Document shipFromDoc;
@@ -138,6 +148,10 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		XPEDXOrderUtils orderUtils = new XPEDXOrderUtils();
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		
+		if(draftOrderFlagOrderSummary != null  && draftOrderFlagOrderSummary.equals("true")){
+			return draftFlagError;
+		}
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		//Commented for JIRA 2909
 		/*try {
@@ -225,7 +239,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			//PNA call end
 			//Setting the price hover map
 			//added for jira 2885 
-			if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
+			if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 			}
 			
@@ -477,6 +491,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		String customerID = wcContext.getCustomerId();
 		String storeFrontID = wcContext.getStorefrontId();
 		String shipFromDivision = null;
+		if(shipToCustomer != null)
+		{
 		deliveryCutOffTime=shipToCustomer.getShipToDivDeliveryCutOffTime();
 		//Added For Jira 3465
 		deliveryInfo=shipToCustomer.getShipToDivdeliveryInfo();
@@ -529,6 +545,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
 				return;
 			}
+		}
 		}
 		
 	}

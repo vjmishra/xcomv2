@@ -1,7 +1,9 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -121,9 +123,31 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 	        if(outDoc == null){
 	            log.error("Exception in reading the Categories  ");
 	        }
-	        this.mainCatsDoc = outDoc.getDocumentElement();
+	        this.mainCatsDoc = outDoc.getDocumentElement();	      
+	        
+	        Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+	        if (topCategoryMap == null) {
+	        	topCategoryMap = new HashMap<String, String>();
+		        Element catListRootElement = SCXmlUtil.getChildElement(mainCatsDoc, "CategoryList");
+	    	    ArrayList<Element> mainCategoryList = SCXmlUtil.getChildren(catListRootElement,"Category");
+	    	    Iterator<Element> catListIter = mainCategoryList.iterator();
+	    	    while (catListIter.hasNext()) {
+	    	    	Element topLevelCategory = catListIter.next();
+	    		    String topCategoryDescription = SCXmlUtil.getAttribute(topLevelCategory, "Description");
+	    		    String topCategoryID = SCXmlUtil.getAttribute(topLevelCategory, "CategoryID");
+	    		    topCategoryMap.put(topCategoryID, topCategoryDescription);
+	    	    }	    	    
+	    	    XPEDXWCUtils.setObectInCache("TopCategoryMap", topCategoryMap);	    	    
+	        }
 
 	        this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "CategoryPath",getPrefCategoryPath());
+	     //Added For XBT-253
+	        if(this.prefCategoryElem != null)
+	        {
+		        
+		        XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));
+	        }
+	        
 	        if(this.prefCategoryElem==null)
 		       {
 		    	   SortedSet<String> categorySet = new TreeSet<String>();
@@ -140,7 +164,9 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 		    		   categorySet.add(topCategoryDescription);
 		    	   }
 		    	   if(isPaperEntitled){
-		    		   this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description","Paper");  
+		    		   this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description","Paper"); 
+		    		   //Added For XBT-253
+		    		  XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));
 		    		   wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.USER_PREF_CATEGORY,"Paper");
 		    	   } else {
 		    	    Iterator categoryIter = categorySet.iterator();
@@ -148,6 +174,8 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction{
 			        {
 			        	String prefCategoryDesc = categoryIter.next().toString();
 			        	this.prefCategoryElem = SCXmlUtils.getElementByAttribute(mainCatsDoc, "CategoryList/Category", "Description",prefCategoryDesc); 
+			        	//Added For XBT-253
+			        	XPEDXWCUtils.setObectInCache("defaultCategoryDesc",this.prefCategoryElem.getAttribute("ShortDescription"));  
 			        	wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.USER_PREF_CATEGORY,prefCategoryDesc);
 			        	//String prefCateforyPath =SCXmlUtil.getAttribute(this.prefCategoryElem,"CategoryPath");			        	
 			        }

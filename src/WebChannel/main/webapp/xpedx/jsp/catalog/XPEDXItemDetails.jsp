@@ -142,7 +142,11 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	});
 }
 
-function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor){			
+function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){		
+	if(isOrderData == undefined || isOrderData == null)
+	{
+		isOrderData='false';
+	}
 	document.getElementById("displayPricesDiv").innerHTML = "";
 	if(itemId == null || itemId == "null" || itemId == "") {
 		Ext.Msg.hide();
@@ -188,7 +192,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
-	       	Category : Category
+	       	Category : Category,
+	       	isOrderData :isOrderData
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
@@ -799,6 +804,21 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         // end testing
         method: 'GET',
         success: function (response, request){
+	         var draftErr = response.responseText;
+	         var myMessageDiv = document.getElementById("errorMsgForQty");
+	         var draftErrDiv = document.getElementById("errorMessageDiv");
+
+	         if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
+             {
+	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+             }
+	         
+	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
+	    //	 setPandAData();
+	    else
+		    {
+	    	var pricingUOMConvFactor = '<s:property value="#_action.getPricingUOMConvFactor()" />';
+	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,'',pricingUOMConvFactor,'true');
               
            // DialogPanel.toggleDialogVisibility('addToCart');	  
          //-- WebTrends tag start --
@@ -838,17 +858,17 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
             //myDiv.innerHTML = 'The product has been successfully added to the cart';	            
            // DialogPanel.show('modalDialogPanel1');	            
            // svg_classhandlers_decoratePage();
-           
 			
-             var myMessageDiv = document.getElementById("errorMsgForQty");
+            
              if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
             	 myMessageDiv.innerHTML = "Item has been added to order." ;
 			 else
 				 myMessageDiv.innerHTML = "Item has been added to cart." ;	            
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
-             Ext.Msg.hide();
-             myMask.hide();	 
+		    }
+	         Ext.Msg.hide();
+             myMask.hide();	
         },
         failure: function (response, request){
 			Ext.MessageBox.hide(); 

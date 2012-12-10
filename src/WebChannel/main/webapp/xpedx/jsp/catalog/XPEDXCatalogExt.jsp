@@ -28,16 +28,16 @@
 </s:if>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
+
+<!-- javascript -->
+					
+<s:if test="#isGuestUser == true">
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+</s:if>
 <!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	
-<!-- javascript -->
-					
-<s:if test="#isGuestUser == true">
-	
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-</s:if>
 
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
@@ -217,9 +217,10 @@
 				<s:set name='ad_keyword' value='' />
 				<s:set name='firstItem1' value='%{firstItem}' />
 				<s:set name='catPath' value='%{categoryPath}' />
-				
+				<%-- Commented for Performance Fix
 				<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemIdForpath(#firstItem1,#storefrontId,#catPath)" />
-			
+				 --%>
+				<s:set name="cat2Val" value='%{categoryShortDescription}' />
 				<s:if test="#cat2Val != null" >
 					<s:set name='ad_keyword' value='#cat2Val' />
 				</s:if>
@@ -318,7 +319,9 @@
 					<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
 						<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
 						tabindex="1002" type="text" onkeydown="javascript:validateQuote(event)" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
+						
 						<button type="submit" class="searchButton"  tabindex="1003" title="Search" onclick="javascript:setDefaultSearchText();"></button>
+						
 						<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
 						<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
 					</div>	
@@ -337,7 +340,7 @@
 			<div class="clearall">&nbsp;</div>
 		</div>
 		<!-- END breadcrumb -->
-	
+	<s:set name='categoryDepthNarrowBy'	value="'2'" />
 	<s:include value='XPEDXNarrowBy.jsp' />
 	<!--  end of new content -->
 	
@@ -805,19 +808,20 @@ return new Ext.XTemplate(
   '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:26px;" title="Mill / Mfg. Item">M</td>',</s:if>
+   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item">M</td>',</s:if>
   '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname" style="min-width:45px;"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
+  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
+  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
+  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></td>',</s:if>			                    
   <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname"><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></td>',</s:if>				                
   <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname"><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></td>',</s:if>			                    				  
   <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname"><a href="#" onclick="toggleThicknessSort();">Gauge<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
   <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
   <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
@@ -828,20 +832,21 @@ return new Ext.XTemplate(
   '<tpl for="items">',
    '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
 	  '<span class="ddesc desc-hname">{name}</span></a>','</td>',
-      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;">'+
+      <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;text-align: center;">'+
       '<a  id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
       <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname">{size}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname">{basis}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname">{mwt}</td>',</s:if>
+      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname">{thickness}</td>',</s:if>
+      <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname">{packMethod}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname">{capacity}</td>',</s:if>     			                            			                        
       <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname">{model}</td>',</s:if>     				                    
       <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname">{material}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname">{ply}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname">{form}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname">{gauge}</td>',</s:if>  
-      <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Gauge-hname">{thickness}</td>',</s:if>  
-	  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname">{vendorNumber}</td>',</s:if>
+	  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname">{vendorNumber}</td>',</s:if>	
       <s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname" style="margin-left:0px; padding: 2px 5px 25px 10px;">{cert}</td>',</s:if>
 	  <s:if test='!#isReadOnly && !#guestUser'>'<td class="lprice-hname" style="width:120px;">{listprice}</td>',</s:if>
     '</tr>',
@@ -856,7 +861,8 @@ var ct = Ext.get('item-box-inner');
 
 	<div class="normal-view" id="items">
 	<div id="items-control">
-	<div class="drag-to-compare" id="items-combox">
+	<table width="100%" >
+	<tr ><td class="drag-to-compare"  id="items-combox" width="50%" >
 	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
 	<s:if test="%{#totalNumberOfPages} == 0"> 
 	 	<div class="success"> Your search did not yield any results. Please try again. </div>
@@ -866,8 +872,11 @@ var ct = Ext.get('item-box-inner');
 			:<span id="comnum"> <s:text name='No_Items' /></span>
 	 </s:else>
 	 </a></h4>
-	</div>
-	<div id="items-cb"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+	</td>
+	<%--Start XB - 339 Label added to identify Catalog View icons --%>
+	<td class="drag-to-compare"  width="40%" align="right" ><h4><s:text name="MSG.SWC.COMP.CHGCATALOGVIEW.GENERIC.PGTITLE" /> :&nbsp;</h4></td>
+	<%--End XB - 339 --%>
+	<td id="items-cb" width="10%"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
 		class="normal-view" title="Full View"><img
 		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif" class="condensed-view"
 		title="Condensed View"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
@@ -884,7 +893,9 @@ var ct = Ext.get('item-box-inner');
 	   <s:else>
 	   		<input name="selectedView" value="normal-view" id="selectedView" type="hidden" />
 	   </s:else>
-		</div>
+		</td>
+		</tr>
+	</table>
 	</div>
 	<%--Added For Jira 3195 --%>
 	<s:if test="#numResult == 0"> 

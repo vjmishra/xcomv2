@@ -748,7 +748,7 @@ var selectedShipCustomer = null;
 </s:url>
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
-		style="width: 900px; height: 300px; overflow: auto;">
+		style="width: auto; height: auto; ">
 	</div>
 </div>
 <%--JIRA 3487 end--%>
@@ -1361,7 +1361,7 @@ var securityQuestionWin = new Ext.Window({
     hidden: true,
     id: 'securityQuestionBox',
     modal: true,
-    width: 1050,
+    width: 750,
     height: 'auto',
     resizable   : false,
     draggable   : false,
@@ -2090,6 +2090,15 @@ function checkSessionTimeout(){
           }
      });  
 }
+//added for XBT 298
+var myMask;
+function msgWait(){
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+	}
+//end for XBT 298
+
 </script>
 <!-- WebTrends tag start -->
 <s:if test='%{#xpedxCustomerContactInfoBean.getUsergroupKeyList() != null && #xpedxCustomerContactInfoBean.getUsergroupKeyListActive() == true}'>	
@@ -2185,7 +2194,7 @@ function checkSessionTimeout(){
 		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
 	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;" style="top:-4px;margin-left: 3px;height: 20px;"></button>
 	     <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		</div> 
@@ -2346,7 +2355,9 @@ function checkSessionTimeout(){
 								<s:property value='addressline'/><br/>
 							</s:if>
 							<s:else>
+								<s:if test="%{#addressline.trim() != ''}">
 								<s:property value='addressline'/><br/>
+								</s:if>
 							</s:else>
 					    </s:iterator>
 					    <s:if test="{#defualtShipTAddress.getCityCode()!=''}">
@@ -2634,7 +2645,7 @@ function checkSessionTimeout(){
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
 						<s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />			       
 						<li>
-							<s:a href='%{myProfile}' cssClass="link">
+							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Profile"></s:text>
 							</s:a>
 						</li>						
@@ -2660,7 +2671,7 @@ function checkSessionTimeout(){
 					</s:if>
 					<s:if test="%{#isUserAdmin && !#isSalesRep}">
 						<li>
-							<s:a href='%{myProfile}' cssClass="link">
+							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
@@ -2767,7 +2778,9 @@ function checkSessionTimeout(){
 		       </span>
 		       <s:property   value='LoggerInUserCustomerName' />, 
 		       <s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline'>
+		       	<s:if test="%{#addressline.trim() != ''}">		       	
 		          <s:property value="addressline" />, 
+		       	</s:if>		           
 		       </s:iterator>
 		       <s:property value="#defualtShipTAddress.getCity()" />,
 		       <s:property value="#defualtShipTAddress.getState()" />

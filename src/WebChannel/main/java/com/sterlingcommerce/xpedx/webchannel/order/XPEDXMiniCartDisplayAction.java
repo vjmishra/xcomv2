@@ -49,7 +49,17 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
     private boolean readOrderLinesFromStart = false;
     private HashMap<String, String> itemMap = new HashMap<String, String>();
 	public String customerStatus;
+	//XBT 248 & 252
+	public String draftOrderError;
     
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+
 	public String getCustomerStatus() {
 		return customerStatus;
 	}

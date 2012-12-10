@@ -54,6 +54,9 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -72,6 +75,11 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 		String ajaxDisplayStatusCodeMsg = "";
+		String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+		
+		if(draftOrderError != null && "true".equalsIgnoreCase(draftOrderError)){
+			return draftFlagError;
+		}
 		boolean isChangeOrderCalled=false;
 		try {
 			
@@ -81,6 +89,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 			{
 				callChangeOrder();
+				if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
+					return draftFlagError;
+				}
 				
 			} else {				
 				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
@@ -98,7 +109,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			super.execute();
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
 			
-			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
 			{
 				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
@@ -217,7 +227,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 				//Setting the price hover map
 				//added for jira 2885 
-				if(pna.getHeaderStatusCode().equalsIgnoreCase("00")){
+				if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				}
 				
@@ -667,9 +677,22 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	{
 		try
 		{
+			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
+			{
+				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
+				editedOrderHeaderKey=orderHeaderKey;
+			}			
+			if(YFCCommon.isVoid(editedOrderHeaderKey)){
+				draftOrderFlag="Y";	
+			}
+			else {
+				draftOrderFlag="N";	
+			}
 			LOG.debug("Calling Change Order");
 			Map<String, String> valueMap1 = new HashMap<String, String>();
 			valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);
+			valueMap1.put("/Order/@DraftOrderFlag", draftOrderFlag);
 			if("true".equals(isEditOrder)) {
 				valueMap1.put("/Order/PendingChanges/@RecordPendingChanges", "Y");
 			} else {
@@ -768,6 +791,26 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				WCMashupHelper.invokeMashup("xpedx_me_changeOrderLineDetails", inputDocument.getDocumentElement(), wcContext.getSCUIContext());*/
 			//}
 		}
+		catch(XMLExceptionWrapper e)
+        {
+              YFCElement errorXML=e.getXML();
+              YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+              String errorDeasc=errorElement.getAttribute("ErrorDescription");
+              if(errorDeasc.contains("Key Fields cannot be modified."))
+              {
+                    YFCNodeList listAttribute=errorElement.getElementsByTagName("Attribute");
+                    for(int i=0;i<listAttribute.getLength();i++)
+                    {
+                          YFCElement attributeELement=(YFCElement)listAttribute.item(i);
+                          String value=attributeELement.getAttribute("Value");
+                          if("DraftOrderFlag".equals(value))
+                          {
+                                draftOrderFail = "true";
+                                break;
+                          }
+                    }
+              }
+        }
 		catch(Exception e)
 		{
 			LOG.error("Error while calling change order to Update the price from PNA");
@@ -2167,7 +2210,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private String 	uniqueId = ""; 
 	private float minOrderAmount;
 	private float chargeAmount;
-	
+	public String draftFlagError = "draftFlagError";
 	private String 	erroMsg = "";
 	public String getErroMsg() {
 		return erroMsg;
@@ -2252,10 +2295,35 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	//added for jira 2885
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	private String draftOrderList;
+	public String draftOrderFail="false";
 	
+	public String getDraftOrderFail() {
+		return draftOrderFail;
+	}
+
+
+	public void setDraftOrderFail(String draftOrderFail) {
+		this.draftOrderFail = draftOrderFail;
+	}
+
+
+
 	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
 	private String itemDtlBackPageURL="";
 	private String salesreploggedInUserName; //added for XBT-146
+	//XBT - 248 & 252
+	public String draftOrderError;
+	
+	public String draftOrderFlag;
+	
+	public String getDraftOrderError() {
+		return draftOrderError;
+	}
+
+	public void setDraftOrderError(String draftOrderError) {
+		this.draftOrderError = draftOrderError;
+	}
+	//End of XBT 248 & 252
 	
 	public String getSalesreploggedInUserName() {
 		return salesreploggedInUserName;

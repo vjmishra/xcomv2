@@ -278,6 +278,13 @@ $(document).ready(function()
 		$("#dayFaxNo_new").mask("999 999-9999");
 });
 
+<%--XB - 319 --%>
+$(window).load(function() {
+	if(document.getElementById("errorNote") != null || document.getElementById("successMsgFor_save") != null){
+	  $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+	}
+	});
+	
 </script>
 <!-- 
 <script type="text/javascript"
@@ -526,7 +533,8 @@ function funDivOpenClose(val1)
 			row.appendChild(data4);
 			tbody.appendChild(row);		
 		}
-
+		//added for XBT 298
+		var myMask;
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
 			
@@ -552,8 +560,10 @@ function funDivOpenClose(val1)
 			    {
 					new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(0);
 					document.getElementById("errorMsgFor_userpassword").style.display = "inline";
+					if(document.getElementById("successMsgFor_save") != null){
 					document.getElementById("successMsgFor_save").innerHTML = "";
 					document.getElementById("successMsgFor_save").style.display = "none";
+					}
 					return false;
 			         
 			    }
@@ -675,6 +685,12 @@ function funDivOpenClose(val1)
 				return false;
 			}
 		}
+		//start for XBT 298
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+		//end for XBT 298
+		
 		    /*var tbody = document.getElementById("tb1").getElementsByTagName("tbody")[0];
 			var rowCount = tbody.rows.length;
 			var invalidOrdering = false;
@@ -756,6 +772,15 @@ function funDivOpenClose(val1)
 			  	            	                        	            	
 		}
 
+		//Start XB -319
+		function validateAndSave(docDivId, ignoreDivIds) {
+			var state = callSave(docDivId, ignoreDivIds);
+			if(state == false){
+				$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+			}
+		}
+		//End XB - 319
+		
 		function resetCallSaveDiv()
 		{
 			if(document.getElementById("errorMsgFor_emailId") != null)
@@ -1819,7 +1844,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" disabled="true"/>Buyer</label>							
 			</s:else>
-			<s:if test='%{#estimator=="T"}'>
+			<s:if test='%{#estimator=="Y"}'>
 		        	<label title="Estimator views available inventory and pricing.">
 					<s:checkbox tabindex="15" name='estimator' id='estimator' fieldValue="true" value="true" disabled='%{#checkBoxDisable || #isDisabled}' /> Estimator</label> 
 			</s:if>
@@ -1854,7 +1879,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			Approver 
 			<s:hidden name="buyerApprover" id='buyerApprover' value='%{isInUserGroup("BUYER-APPROVER")}' ></s:hidden>
 			</s:if>
-			<s:if test='%{#estimator=="T"}'>
+			<s:if test='%{#estimator=="Y"}'>
 			Estimator 
 			<s:hidden name='estimator' value='%{true}' />
 			</s:if>
@@ -2646,7 +2671,7 @@ a.underlink:hover { text-decoration: underline !important; }
 	<ul class="float-right">
 		<li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
 		<li class="float-right"><a class="green-ui-btn" href="javascript:void(0);"
-			onclick="javascript:callSave('myAccount', []);"  tabindex="38"><span>Save</span></a></li>
+			onclick="javascript:validateAndSave('myAccount', []);"  tabindex="38"><span>Save</span></a></li>
 	</ul>
 	</div>
 	<div class="clearview">&nbsp;</div>
@@ -2658,11 +2683,43 @@ a.underlink:hover { text-decoration: underline !important; }
 
 <div class="error" id="errorMsgForMandatoryFields_myAccount" style="display : none; float: right"></div>
 
+<%-- Commented for XB - 319
 <s:if test="%{#session.errorNote!= null}">
 	<div id="errorNote" class="error" style="display : inline; float: right"><s:property value='%{#session.errorNote}'/>
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</div>
 </s:if>
+--%>
+
+<%--Start XB - 319 --%>
+<%-- New Line Version 
+<s:if test="%{#session.errorNote!= null}">
+	
+	<s:iterator value="%{#session.errorNote}" id="error"  >
+            <div id="errorNote" class="error" style="display : inline; float: right">
+                      <s:property escape="false" value="%{#error}"/>  
+              </div>
+              <br>
+              <br>
+	</s:iterator>
+	<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
+	
+</s:if>
+--%>
+
+<%--XB - 319 Boxed version. Deana preferred to view the error messages in a box --%>
+<s:if test="%{#session.errorNote!= null}">
+	 <div id="errorNote" class="error" style="display : inline; float: right">
+		<s:iterator value="%{#session.errorNote}" id="error"  >
+        	<s:property escape="false" value="%{#error}"/>  
+        	<br>
+  		</s:iterator>
+  	</div>
+  	
+	<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
+	
+</s:if>
+<%--End XB - 319 --%>
 
 <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
 
@@ -2682,7 +2739,7 @@ a.underlink:hover { text-decoration: underline !important; }
 <%-- End fix for XNGTP-3196 --%>
 
 
-	<div class="clearview textAlignCenter">Last modified by
+	<div class="clearview textAlignCenter"><br>Last modified by
 <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="%{getLastModifiedDate()}"/></div>
 	<div class="clearview">&nbsp;</div>
 	</div>

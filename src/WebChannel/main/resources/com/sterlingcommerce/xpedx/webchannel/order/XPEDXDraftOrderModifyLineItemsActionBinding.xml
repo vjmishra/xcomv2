@@ -18,4 +18,5 @@
     <entry key="#parameters.selectedDeliveryMethods">xpedx_me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@DeliveryMethod,xpedx_checkout_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@DeliveryMethod</entry>
     <entry key="#parameters.selectedDeliveryMethods">xpedx_me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@DeliveryMethod,xpedx_checkout_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@DeliveryMethod</entry>
     <entry key="recordPendingChanges">xpedx_me_changeOrderLineDetails:/Order/PendingChanges/@RecordPendingChanges,xpedx_checkout_changeOrderLineDetails:/Order/PendingChanges/@RecordPendingChanges</entry>
+	<entry key="draftOrderFlag">xpedx_me_changeOrderLineDetails:/Order/@DraftOrderFlag,xpedx_checkout_changeOrderLineDetails:/Order/@DraftOrderFlag</entry>
 </properties>
