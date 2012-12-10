@@ -1466,9 +1466,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setName("chkProcurementUser");
 		chkProcurementUser.setData("YRCButtonBindingDefination", chkBoxBindingData);
 		
+		// Binding Value to Y/N instead of T/F for JIRA XBT-211
 		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("T");
-		chkBoxBindingData.setUnCheckedBinding("F");
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnEstimator");
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnEstimator");
 		chkBoxBindingData.setName("chkEstimator");

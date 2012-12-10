@@ -14,6 +14,7 @@ import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
@@ -129,8 +130,16 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 			log.error(SCXmlUtil.getString(eleWMItemBranchs));
 			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
-			prepareErrorObject(yfe, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
-					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
+			String errorCode = yfe.getErrorCode();
+			if(!YFCObject.isVoid(errorCode) && errorCode.equalsIgnoreCase("ERROR_LOAD_01"))
+			{
+				prepareErrorObject(yfe, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
+						XPXLiterals.YFE_ERROR_INVALID_PRODUCT_CODE_CLASS, env, inXML);
+			}
+			else {
+				prepareErrorObject(yfe, XPXLiterals.ITEM_DIV_B_TRANS_TYPE,
+						XPXLiterals.YFE_ERROR_CLASS, env, inXML);
+			}
 			throw yfe;
 		} catch (Exception e) {
 			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");

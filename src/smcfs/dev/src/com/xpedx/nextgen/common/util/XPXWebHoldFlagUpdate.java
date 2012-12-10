@@ -229,6 +229,8 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
                 if(connection != null){
                 connection.close();
                 }
+          
+                in.close();
  
             } catch (InvalidFormatException e) {
             	e.printStackTrace();
@@ -237,6 +239,12 @@ public class XPXWebHoldFlagUpdate implements YIFCustomApi {
             } catch (IOException e) {
             	e.printStackTrace();
             	log.error("IOException: " + e.getStackTrace());	
+            	try {
+					in.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
             catch (SQLException e) {
             	e.printStackTrace();

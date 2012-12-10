@@ -1,9 +1,11 @@
 package com.xpedx.nextgen.common.cent;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.w3c.dom.Document;
@@ -20,6 +22,7 @@ import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 
 public class ErrorLogger {
 
@@ -30,6 +33,7 @@ public class ErrorLogger {
 	 */
 	private static YIFApi api = null;
 	private static YFCLogCategory yfcLogCatlog;
+	private static HashMap<String, String> centExemptErrors = new HashMap<String, String>();
 	
 	static {
 		/* Please do not change anything here this is very specific to cent logging  and if the getlogger path going to change this will be conflict with log4jconfig.custom.xml
@@ -50,6 +54,20 @@ public class ErrorLogger {
 		   <XPXErrorLookup ErrorClass="Unknown Error" SourceSystem="Sterling" TransType="App"/>  */
 		String randomNumber = null;
 		try {
+			Exception e = errorObj.getException();
+			if(e instanceof YFSException){
+				YFSException yfe = (YFSException)e;
+				String errorCode = yfe.getErrorCode();
+				if(!YFCObject.isVoid(errorCode))
+				{
+					if(centExemptErrors.size()==0){
+						centExemptErrors = XPXUtils.readCentPropertiesFile();									
+					}									
+					if (centExemptErrors.containsKey(errorCode)){
+						return;										
+					}
+				}
+			} 
 			
 			Random random = new Random(); 
 			long fraction = (long)(1 * Math.abs(random.nextLong())); 

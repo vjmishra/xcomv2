@@ -180,7 +180,7 @@
           XMLGroup="Extn" />
 
 		  <Attribute ColumnName="EXTN_SHORT_DESCRIPTION" 
-          DataType="varchar2-200"
+          DataType="varchar2-300"
 		  Description="Extn field with modified special charecters "  
           Nullable="true" 
           XMLName="ExtnShortDescription"
@@ -199,6 +199,13 @@
           Nullable="true" 
           XMLName="ExtnExtendedDesc"
           XMLGroup="Extn" />
+	  
+	  		<Attribute ColumnName="EXTN_PACK_METHOD" 
+          	DataType="Text-50"
+	  		Description="Extn field with the packaging type or method"  
+          	Nullable="true" 
+          	XMLName="ExtnPackMethod"
+         	XMLGroup="Extn" />
 	  
         </Attributes>
         

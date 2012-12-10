@@ -136,6 +136,7 @@
 		-->
 		<copy file="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
 		
+       <copy file="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
 		
 	</target>
 

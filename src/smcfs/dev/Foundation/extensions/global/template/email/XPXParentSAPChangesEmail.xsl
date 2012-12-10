@@ -92,6 +92,62 @@
 																</td>
 														</tr>
 														<br></br>	
+														<tr>
+															<td width="27%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" nowrap="nowrap">Old SAP #: </td>
+															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; padding:10px 2px; "><xsl:value-of select="./@OldSAPAccountNumber"/></td>
+														</tr>
+														<tr>
+															<td width="27%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" nowrap="nowrap">New SAP #: </td>															
+															<td width="30%"  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="./@NewSAPAccountNumber"/></td>
+														</tr>
+														<tr>
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" height="10"></td>
+														</tr>
+															<tr>
+															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Username: </td>
+ 															<xsl:for-each select="./UsersSAP/UserSAP/@UserId" >
+															<tr><td></td><td valign="top" width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
+																<xsl:value-of select="."/>																															
+																	<xsl:choose>
+																	 <xsl:when test="count(./UsersSAP/UserSAP) &gt; 0"> 
+																		<xsl:text></xsl:text>
+																	</xsl:when>
+																	<xsl:otherwise>continue</xsl:otherwise>
+																</xsl:choose>
+																</td></tr>
+																</xsl:for-each>
+																<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px">
+																<xsl:choose>
+																<xsl:when test="count(./UsersSAP/UserSAP) = 0">
+																<xsl:text>No User Assigned</xsl:text>
+																</xsl:when>
+															</xsl:choose>
+																</td>
+														</tr>
+														<tr>
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" height="10"></td>
+														</tr>
+													   <tr>
+															<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px" >Sales Rep: </td>
+ 															<xsl:for-each select="./SalesRepsSAP/SalesRepSAP/@SalesId" >
+ 															<tr><td></td><td valign="top" width="100%" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; color:#000;padding:10px 2px;">
+																<xsl:value-of select="."/>																															
+																	<xsl:choose>
+																	 <xsl:when test="count(./SalesRepsSAP/SalesRepSAP) &gt; 0"> 
+																		<xsl:text></xsl:text>
+																	</xsl:when>
+																	</xsl:choose>
+																</td></tr>
+																</xsl:for-each>
+																<td width="30%" valign="top" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;padding-left:3px">
+																<xsl:choose>
+																<xsl:when test="count(./SalesRepsSAP/SalesRepSAP) = 0">
+																<xsl:text>No SalesRep Assigned</xsl:text>
+																</xsl:when>
+															</xsl:choose>
+																</td>
+														</tr>
+														<br></br>
 													</table>
 												</td>
 											  </tr>

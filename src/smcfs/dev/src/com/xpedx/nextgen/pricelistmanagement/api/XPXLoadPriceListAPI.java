@@ -205,12 +205,11 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 				continue;
 			}else{
 				//log it in the CENT and return false;
-				log.error("Tier UOM is not matching between different tiers in a pricebook.Check CENT for more details. LegacyProductCode = "+ itemId);
-				Exception e = new Exception("Tier UOM is not matching between different tiers in a pricebook. LegacyProductCode = "+ itemId);
-				Document d_priceBook = priceBookElement.getOwnerDocument();
-				prepareErrorObject(e, XPXLiterals.PB_B_TRANS_TYPE, XPXLiterals.IOBE_ERROR_CLASS, env, d_priceBook);
 				isAllTierUOMSame =  false;
-				break;
+				log.error("Tier UOM is not matching between different tiers in a pricebook.Check CENT for more details. LegacyProductCode = "+ itemId);
+				throw new YFSException("Tier UOM is not matching between different tiers in a pricebook.",
+						"ERROR_LOAD_PRICE_BOOK",
+						"Tier UOM is not matching between different tiers in a pricebook.Check CENT for more details.");
 			}
 		}
 		return isAllTierUOMSame;

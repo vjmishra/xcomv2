@@ -33,7 +33,8 @@ public class XPXLiterals {
 	public static final String PB_B_TRANS_TYPE = "PB-B";
 	public static final String UOM_B_TRANS_TYPE = "UOM-B";
 	public static final String ITEM_DIV_B_TRANS_TYPE = "ItemDiv-B";
-	
+	public static final String YFE_ERROR_VALUE_TOO_LARGE_CLASS = "Column Value Too Large";
+	public static final String YFE_ERROR_INVALID_PRODUCT_CODE_CLASS = "Invalid Legacy Product Number";
 	public static final String IOBE_ERROR_CLASS = "Unexpected / Invalid";
 	public static final String NE_ERROR_CLASS = "Unexpected / Invalid";
 	public static final String YFE_ERROR_CLASS = "Application";
@@ -557,6 +558,9 @@ public class XPXLiterals {
 	public static final String E_XPEDX_SALES_REP_LIST = "XPEDXSalesRepList";
 
 	public static final String E_SALES_REPS = "SalesReps";
+	
+	public static final String E_SALES_REPS_SAP = "SalesRepsSAP";
+
 
 	public static final String E_SALES_REP = "SalesRep";
 
@@ -637,6 +641,9 @@ public class XPXLiterals {
 	public static final String E_USER = "User";
 	
 	public static final String E_SALES = "SalesRep";
+	public static final String E_USER_SAP = "UserSAP";
+	
+	public static final String E_SALES_SAP = "SalesRepSAP";
 
 	public static final String A_EXTN_EMPLOYEE_ID = "ExtnEmployeeId";
 
@@ -773,10 +780,16 @@ public class XPXLiterals {
 	public static final String A_CUSTOMER_RECORD_TYPE="CustomerRecordType";
 	public static final String A_USERS = "Users";
 	public static final String A_SALES_REP = "SalesRep";
+	public static final String A_USERS_SAP = "UsersSAP";
+	public static final String A_SALES_REP_SAP = "SalesRepSAP";
 	public static final String OLD_SAP_PARENT_ACCOUNT_NO = "OldSAPParentAccountNumber";
 	public static final String OLD_SAP_PARENT_NAME = "OldSAPParentName";
 	public static final String NEW_SAP_PARENT_ACCOUNT_NO = "NewSAPParentAccountNumber";
 	public static final String NEW_SAP_PARENT_NAME = "NewSAPParentName";
+	public static final String OLD_SAP_ACCOUNT_NO = "OldSAPAccountNumber";
+	public static final String OLD_SAP_NAME = "OldSAPName";
+	public static final String NEW_SAP_ACCOUNT_NO = "NewSAPAccountNumber";
+	public static final String NEW_SAP_NAME = "NewSAPName";
 	public static final String A_SELLER_ORGANIZATION_CODE="SellerOrganizationCode";
 	/*End - Changes made by Mitesh Parikh for JIRA 3002*/
 	public static final String SWC_ORDER_TRANS_TYPE = "Order";

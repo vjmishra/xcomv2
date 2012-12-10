@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
+	final static Pattern slashPattern = buildSlashPattern(); 
 	
 	public static void main(String[] args){
 		/*String[] searches = new String[] {
@@ -80,6 +81,8 @@ public class XPXCatalogDataProcessor {
 		search = SymbolInfo.preprocess(search);
 		search = preprocessXPatterns(search);
 		search = preprocessXPatterns(search);
+		//search = preprocessSlashPatterns(search);
+		
 		return search;
 	}
 	
@@ -106,6 +109,30 @@ public class XPXCatalogDataProcessor {
 		return sb.toString();
 		
 	}
+	
+	private static Pattern buildSlashPattern() {
+        StringBuilder canonicals = new StringBuilder();
+        for (UnitInfo unitInfo : UnitInfo.all) {
+               canonicals.append("|"+unitInfo.canonical);
+        }
+        return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([/])([0-9"+canonicals.toString()+"]?)");
+  }
+  
+  //processes / patterns
+  private static String preprocessSlashPatterns(String rawText){
+        Matcher matcher = slashPattern.matcher(rawText);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+               matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
+               // handle cases where "/" immediately follows symbol such as in: 2.75"/ 8.5"
+               if (matcher.group(4).length() > 0)
+                      sb.append(' ').append(matcher.group(4));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+        
+  }
+
 	/**
 	 * Represents a unit that may have multiple synonymous representations in text
 	 * <p>There are three attributes of a UnitInfo
@@ -244,7 +271,8 @@ public class XPXCatalogDataProcessor {
 		final public static SymbolInfo[] all = new SymbolInfo[] {
 			new SymbolInfo(true, "%", "percent", "pct"),
 			new SymbolInfo(false, "&amp;", "and"),
-			new SymbolInfo(false, "&", "and")
+			new SymbolInfo(false, "&", "and"),
+			new SymbolInfo(false, "\"", "")
 			//new SymbolInfo(false, "@", "at"),
 		};
 		

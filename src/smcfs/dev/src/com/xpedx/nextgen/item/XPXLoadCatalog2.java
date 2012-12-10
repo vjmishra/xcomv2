@@ -4,7 +4,6 @@ package com.xpedx.nextgen.item;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,25 +11,25 @@ import java.util.Properties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
+import com.xpedx.nextgen.common.util.XPXCatalogDataProcessor;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-import com.yantra.yfc.log.YFCLogCategory;
-import com.yantra.yfc.util.YFCCommon;
-import com.xpedx.nextgen.common.util.XPXCatalogDataProcessor;
 
 public class XPXLoadCatalog2 implements YIFCustomApi {
 
@@ -39,6 +38,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
 	private static String _RESPONSE_MSG_SERVICE = "xpedxSendItemFeedResponse";
+	private String itemKeyVal = null;
 	Element eItem = null;
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
@@ -46,6 +46,28 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 	}
 
+	private int getLengthForExtnBasis(YFSEnvironment env)
+	{
+		int length=0;
+		try
+		{
+			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
+			Connection m_Conn= connHolder.getDBConnection();
+			Statement stmt =m_Conn.createStatement();
+			String query="select max(length(extn_basis)) from yfs_item ";
+			ResultSet itemRs=stmt.executeQuery(query);
+			if(itemRs != null && itemRs.next())
+			{
+				length=itemRs.getInt(1);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return length;
+	}
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception
 	{
 		Document outXML = null;
@@ -61,7 +83,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				System.out.println("Item Load xml"+SCXmlUtil.getString(inXML));
 			}
 			Element eItemList = inXML.getDocumentElement();
-
+			//Hard Coded length based on column max size
+			int length= 40; //getLengthForExtnBasis(env);
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
@@ -107,16 +130,31 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						String strShortDesc = ePrimaryList.getAttribute("ShortDescription");
 						String strDesc =ePrimaryList.getAttribute("Description");
 						String strExtendedDesc = ePrimaryList.getAttribute("ExtendedDescription");
+						String keywords = ePrimaryList.getAttribute("Keywords");
 						strShortDesc =	XPXCatalogDataProcessor.preprocessCatalogData(strShortDesc);
 						strDesc = XPXCatalogDataProcessor.preprocessCatalogData(strDesc);
 						strExtendedDesc =XPXCatalogDataProcessor.preprocessCatalogData(strExtendedDesc);
-
-						Element eExtnList =(Element)eItem.getElementsByTagName("Extn").item(0);
+						keywords =XPXCatalogDataProcessor.preprocessCatalogData(keywords);
+						ePrimaryList.setAttribute("Keywords", keywords);
+						Element eExtnList = (Element)eItem.getElementsByTagName("Extn").item(0);
 
 							if(eExtnList!=null){
-						eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
-						eExtnList.setAttribute("ExtnDescription", strDesc);
-						eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+								eExtnList.setAttribute("ExtnShortDescription", strShortDesc);
+								eExtnList.setAttribute("ExtnDescription", strDesc);
+								eExtnList.setAttribute("ExtnExtendedDesc", strExtendedDesc);
+								String val=eExtnList.getAttribute("ExtnBasis");
+								if(val != null && val.trim().length() > 0)
+								{
+									int vallength=val.length();
+									if(vallength < length)
+									{
+										StringBuffer sb=new StringBuffer();
+									    int _length=length -vallength;
+										sb.append(String.format("%0"+(_length)+"d",0)).append(val);
+										eExtnList.setAttribute("ExtnBasis",sb.toString());
+									}
+									
+								}
 							}
 						
 					}
@@ -166,7 +204,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 
 				//Added for Jira 3155
-				String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
+				//String itemKey = getItemId(env,inXML,eItem.getAttribute("ItemID"));
 				
 				/*NodeList assetIdList = eItem.getElementsByTagName("Asset");
 				if(assetIdList != null)
@@ -187,8 +225,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 						counter++;
 					}*/
 					//if(strAssetType.toString()!=null && !strAssetType.toString().isEmpty()){
-				    if(itemKey != null){
-					deleteAssetType(env,inXML,itemKey);
+				    if(itemKeyVal != null){
+					deleteAssetType(env,inXML,itemKeyVal);
 				    }
 		/*			}
 				}*/
@@ -252,8 +290,16 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			log.error(SCXmlUtil.getString(eItem));
 			log.error("------------Failed XML Needs to Catch for Re-Processing XML END ----------");
 			log.error("YFSException: " + yfe.getStackTrace());
+			String errorCode = yfe.getErrorCode();
+			if(!YFCObject.isVoid(errorCode) && errorCode.equalsIgnoreCase("ORA-12899"))
+			{
+			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
+						XPXLiterals.YFE_ERROR_VALUE_TOO_LARGE_CLASS, env, inXML);	
+			}
+			else {
 			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
+			}
 			outXML = generateResponse(env, inXML, "FAIL", yfe);
 			return outXML;
 		} catch (Exception e) {
@@ -578,6 +624,7 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 		eItemTemplate.setAttribute("ItemID", "");
 		eItemTemplate.setAttribute("UnitOfMeasure", "");
 		eItemTemplate.setAttribute("OrganizationCode", "");
+		eItemTemplate.setAttribute("ItemKey", "");
 
 		eCategoryTemplate.setAttribute("CategoryID", "");
 		eCategoryTemplate.setAttribute("CategoryPath", "");
@@ -592,6 +639,12 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 
 		Element eItemListOut = itemListOutDoc.getDocumentElement();
 		Element itemElement = SCXmlUtil.getChildElement(eItemListOut, "Item");
+		if(itemElement != null && itemElement.getAttribute("ItemKey")!=null){
+		itemKeyVal = itemElement.getAttribute("ItemKey");
+		
+		log.info("ItemKey Value is"+itemKeyVal);
+		
+		}
 		Element eCategoryList = SCXmlUtil.getChildElement(itemElement, "CategoryList");
 		ArrayList <HashMap<String, String>> alCategory = new ArrayList();
 		if(null!=eCategoryList && eCategoryList.hasChildNodes()){
