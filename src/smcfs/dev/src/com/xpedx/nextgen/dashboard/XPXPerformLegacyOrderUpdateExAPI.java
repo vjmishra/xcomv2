@@ -2426,7 +2426,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
 			customerError = true;
-			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
+			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
+			if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
+				legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
+			}
+			throw new Exception("Customer Doesn't Exist In Web. [Company No:"+legacyCompanyNo+", Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
 		if(log.isDebugEnabled()){
