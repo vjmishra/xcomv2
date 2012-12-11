@@ -4744,7 +4744,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 										String headerProcessCode=rootEle.getAttribute("HeaderProcessCode");
 										String newInstructionText=instructionEle.getAttribute("InstructionText");
 										boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
-										if(("D".equalsIgnoreCase(headerProcessCode) || "C".equalsIgnoreCase(headerProcessCode)) && (isNewInstructionTextVoid))
+										if(isNewInstructionTextVoid)
 										{
 											String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)ordEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
 											instructionEle.setAttribute("InstructionText", instructionTextInDB);
@@ -4787,6 +4787,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 												String instDtlKey = getOrderLineInstructionKey(extnWebLineNum, _ordLineEle);
 												if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 													rootLineInstructionEle.setAttribute("InstructionDetailKey", instDtlKey);
+													String lineProcessCode=rootOrdLineEle.getAttribute("LineProcessCode");
+													String newInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
+													boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
+													if(isNewInstructionTextVoid)
+													{
+														String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)_ordLineEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
+														rootLineInstructionEle.setAttribute("InstructionText", instructionTextInDB);
+														rootLineInstructionEle.setAttribute("Action", "REMOVE");
+													}
 												}
 											}
 										}
