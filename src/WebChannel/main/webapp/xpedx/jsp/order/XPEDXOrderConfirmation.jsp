@@ -119,7 +119,7 @@
 -->
 <%-- <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart.css" /> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/om2.css" />--%>
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="orderlist.title"/></title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="Order Confirmation"/></title>
 
 <!-- Facy Box (Lightbox/Modal Window -->
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
