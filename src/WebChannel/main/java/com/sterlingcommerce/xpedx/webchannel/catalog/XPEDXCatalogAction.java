@@ -90,10 +90,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
 //XNGTP-4264 Escaping Below words from search criteria.
-	private String luceneEscapeWords[]={"a", "and", "are", "as", "at", "be", "but", "by",
+	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
-			 "no", "not", "of", "on", "or", "s", "such",
-			 "t", "that", "the", "their", "then", "there", "these",
+			 "no", "not", "of", "on", "or", "such",
+			 "that", "the", "their", "then", "there", "these",
 			 "they", "this", "to", "was", "will", "with"
 };
 	
