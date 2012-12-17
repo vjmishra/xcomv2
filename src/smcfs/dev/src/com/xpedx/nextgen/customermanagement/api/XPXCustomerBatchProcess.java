@@ -565,9 +565,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 											/********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
 											//if(userExists.equals("true"))
 											//{
-											//Added for XBT - 222 - Start
-											salesRepSet = getExistingCSRList(env,customerID);
-											//Added for XBT - 222 - End
+											
 											if(!salesRepSet.contains(inputXMLEmployeeId))
 											{
 												salesRepSet.add(inputXMLEmployeeId);
@@ -3538,47 +3536,6 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	}
 	
 	
-	//Added for XBT - 222 - Start
-	/**
-	 * @param env
-	 * @return
-	 * @throws RemoteException
-	 */
-	private HashSet<String> getExistingCSRList(YFSEnvironment env,String customerId) throws RemoteException {
-		//set template to get the XPEDXSalesRepList
-
-		YFCDocument salesRepTemplateListDoc = YFCDocument.createDocument("XPEDXSalesRep");
-		YFCElement salesRepTemplateListElement = salesRepTemplateListDoc.getDocumentElement();
-		salesRepTemplateListElement.setAttribute("CustomerID", customerId);
-		//YFCElement salesRepTemplateElement = salesRepTemplateListDoc.createElement("XPEDXSalesRep");
-		//salesRepTemplateElement.setAttribute("CustomerID", customerId);
-		//salesRepTemplateListElement.appendChild(salesRepTemplateElement);
-
-		//form the input
-		//YFCDocument inputCSRDoc = YFCDocument.createDocument("XPEDXSalesRep"); 
-		
-		//get the exisitng list of CSRs
-		env.setApiTemplate("getCSRListService", salesRepTemplateListDoc.getDocument());
-		Document outputCSRListDocument = api.executeFlow(env, "getCSRListService", salesRepTemplateListDoc.getDocument());
-		//Document outputCSRListDocument = api.invoke(env, "getCSRListService", inputCSRDoc.getDocument());
-
-		env.clearApiTemplate("getCSRListService");
-		//log.debug(YFCDocument.getDocumentFor(outputCSRListDocument));
-		HashSet<String> existingEmployeeSet = new HashSet<String>();
-		NodeList employeeList = outputCSRListDocument.getElementsByTagName("XPEDXSalesRep");
-		int employeeNumber = employeeList.getLength();
-		if(employeeNumber>0)
-		{
-			for(int employeeCounter = 0;employeeCounter<employeeNumber;employeeCounter++)
-			{
-				Element employeeElement = (Element)employeeList.item(employeeCounter);
-				String salesRedId = employeeElement.getAttribute("SalesRepId");
-				existingEmployeeSet.add(salesRedId.trim());
-			}
-		}
-		return existingEmployeeSet;
-	}
-	//Added for XBT - 222 - End
 
 
 	/**

@@ -327,8 +327,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					PLTQueryBuilder pltQryBuilder1 = PLTQueryBuilderHelper.createPLTQueryBuilder();
 					pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
 					Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
-					pltQryBuilder1.append(" SELLER_ORGANIZATION_CODE ='"+itemElem.getAttribute("OrganizationCode")+"'" );
-					pltQryBuilder1.append(" AND PRICING_STATUS ='ACTIVE' ");
+					pltQryBuilder1.append("PRICING_STATUS ='ACTIVE' ");
 					if(priceListIter.hasNext())
 					{
 						

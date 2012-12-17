@@ -55,12 +55,10 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	
 	public Document invokeActions(YFSEnvironment env, Document inputXML) {
 		
-		log.debug("XPXInvokeOrderPlaceActions-InXML: "+ SCXmlUtil.getString(inputXML));
-		
+		log.debug("XPXInvokeOrderPlaceActions-InXML: "+ SCXmlUtil.getString(inputXML));		
 		String entryType = null;
 		Document getCustomerProfileDetailsDoc = null;
 		boolean webOrder=false;
-		
 		try
 		{	
 		   YFCDocument yfcDoc = YFCDocument.getDocumentFor(inputXML);
@@ -82,7 +80,17 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			   setOPOrderDetailsFromEnv(env,rootElem);
 			   // Commenting the code as extn Atrributes needs to be analyzed before picking it up from txn object.
 			   // getCustomerProfileDetailsDoc = getCustomerProfileDocFromEnv(env);
-		   }
+		   } else {
+			   YFCElement instructionsElem = rootElem.getChildElement("Instructions");
+			   if (instructionsElem != null) {				   
+				   YFCElement instructionElem = instructionsElem.getChildElement("Instruction");	
+				   String hdrComments = instructionElem.getAttribute("InstructionText");
+				   if(hdrComments != null && (hdrComments.indexOf("\n") != -1 || hdrComments.indexOf("\r\n") != -1)) {
+					   hdrComments = hdrComments.replaceAll("\n|\r\n", " ");
+					   instructionElem.setAttribute("InstructionText", hdrComments);
+				   }
+			   }
+		   }  
 		   
 		   if (getCustomerProfileDetailsDoc == null) {
 			   // To Pull ShipToProfile From DB For COM Or If WC Application Didn't Set It In Transaction.
@@ -680,12 +688,18 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
 					if (!YFCObject.isNull(headerComments) && rootElem.getChildElement("Instructions") == null) {
+						if(headerComments.indexOf("\n")!=-1 || headerComments.indexOf("\r\n")!=-1){
+							headerComments = headerComments.replaceAll("\n|\r\n", " ");
+						}
 						YFCElement instructionsElem = rootElem.createChild("Instructions");
 						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
 						instructionElem.setAttribute("InstructionType", "HEADER");
 						instructionElem.setAttribute("InstructionText", headerComments);
 					} else if (!YFCObject.isNull(headerComments)) {
 						// Instructions Element Is Already Created In The Document.
+						if(headerComments.indexOf("\n")!=-1 || headerComments.indexOf("\r\n")!=-1){
+							headerComments = headerComments.replaceAll("\n|\r\n", " ");
+						}
 						YFCElement instructionsElem = rootElem.getChildElement("Instructions");
 						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
 						instructionElem.setAttribute("InstructionType", "HEADER");

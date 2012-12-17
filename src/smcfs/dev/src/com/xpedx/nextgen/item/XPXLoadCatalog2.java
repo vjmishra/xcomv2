@@ -84,7 +84,10 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			}
 			Element eItemList = inXML.getDocumentElement();
 			//Hard Coded length based on column max size
-			int length= 40; //getLengthForExtnBasis(env);
+			int length= 40;
+			/*int length= 31; //getLengthForExtnBasis(env);
+			int endLength=8;*/ // commented because we are not promoting this to prod now
+			
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
@@ -145,15 +148,37 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 								String val=eExtnList.getAttribute("ExtnBasis");
 								if(val != null && val.trim().length() > 0)
 								{
+									StringBuffer sb=new StringBuffer();
+									//Commenting since we do not need to promote to prod
+									/*String basisVal[]=val.split("\\.");
+									if(basisVal != null)
+									{
+										String leadingZero=basisVal[0];
+										int vallength=leadingZero.length();
+										if(vallength < length)
+										{
+											
+										    int _length=length -vallength;
+											sb.append(String.format("%0"+(_length)+"d",0)).append(leadingZero);
+											
+										}
+										String endingZero=basisVal.length ==2 ? basisVal[1] : "";
+										if(endingZero != null)
+										{
+											int _endLength=endingZero.length();
+											int _length=endLength -_endLength;
+											sb.append(".").append(endingZero).append(String.format("%0"+(_length)+"d",0));
+										}
+									}*/
 									int vallength=val.length();
 									if(vallength < length)
 									{
-										StringBuffer sb=new StringBuffer();
+										
 									    int _length=length -vallength;
 										sb.append(String.format("%0"+(_length)+"d",0)).append(val);
-										eExtnList.setAttribute("ExtnBasis",sb.toString());
+										
 									}
-									
+									eExtnList.setAttribute("ExtnBasis",sb.toString());
 								}
 							}
 						
