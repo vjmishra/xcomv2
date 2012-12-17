@@ -396,7 +396,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String filter() {
 		init();		
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bclFilter = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		
@@ -408,6 +408,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				orderByAttribute = "Item.ExtnBasis";
 				break;
 			}			
+		} */						
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.filter();
@@ -774,14 +779,32 @@ public class XPEDXCatalogAction extends CatalogAction {
 					for(int i=0;i<extnNodeList.getLength();i++)
 					{
 						Element itemElement=(Element)extnNodeList.item(i);
-						if(itemElement  != null)
+						//Commenting not to promote to 12/15
+						/*if(itemElement  != null)
 						{
-							String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
-							if(extnBasis != null && !"0".equals(extnBasis))
-								itemElement.setAttribute("ExtnBasis", extnBasis);
-							else
-								itemElement.setAttribute("ExtnBasis","");
-						}
+							String extnBasisAttr=itemElement.getAttribute("ExtnBasis");
+							if(extnBasisAttr != null && extnBasisAttr.length() >0)
+							{
+								String extnBasis=extnBasisAttr.replaceFirst("^0+(?!$)", "");
+								extnBasis=extnBasis.replaceFirst("\\.?0*$","");
+								if(extnBasis != null && !"0".equals(extnBasis))
+									itemElement.setAttribute("ExtnBasis", extnBasis);
+								else
+									itemElement.setAttribute("ExtnBasis","");
+							}
+						}*/
+						if(itemElement  != null)
+                        {
+				if(itemElement.getAttribute("ExtnBasis") != null)
+				{		
+                              String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
+                              if(extnBasis != null && !"0".equals(extnBasis))
+                                    itemElement.setAttribute("ExtnBasis", extnBasis);
+                              else
+                                    itemElement.setAttribute("ExtnBasis","");
+				}
+                        }
+
 					}
 				}
 			}
@@ -793,7 +816,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();
 		setCustomerNumber();
 		StringBuffer sb=new StringBuffer();
-		long startTime=System.currentTimeMillis();
+		long startTime=System.currentTimeMillis();		
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";	
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
 		//XBT-260
@@ -1079,6 +1108,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				public int compare(Element elem, Element elem1) {
 					String attrValue =elem.getAttribute("Value");
 					String attrValue1 =elem1.getAttribute("Value");
+					 if(isDouble(attrValue) && isDouble(attrValue1)){
+                         return Double.valueOf(attrValue).compareTo(Double.valueOf(attrValue1));
+					 }
 					return attrValue.compareTo(attrValue1);
 				}
 			});
@@ -1117,7 +1149,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");		
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		if (topCategoryMap == null) {			
 			for (int i = 0; i < bcl.size(); i++) {
 				Breadcrumb bc = bcl.get(i);
@@ -1136,6 +1168,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 					orderByAttribute = "Item.ExtnBasis";
 				}
 			}
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 	//Added below condn for XBT-269
 		if("2".equals(categoryDepthNarrowBy))
@@ -1610,7 +1647,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();
 		setCustomerNumber();
 		long startTime=System.currentTimeMillis();
-		StringBuffer sb=new StringBuffer();
+		StringBuffer sb=new StringBuffer();		
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.search();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
@@ -1714,6 +1757,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		StringBuffer sb=new StringBuffer();
 		long startTime=System.currentTimeMillis();
 		init();
+				
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.sortResultBy();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
@@ -1770,7 +1819,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		long startTime=System.currentTimeMillis();
 		init();
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		if (topCategoryMap == null) {						
@@ -1812,6 +1861,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}				
 			}
 			
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.goToPage();
@@ -1867,7 +1921,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		long startTime=System.currentTimeMillis();
 		init();
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		if (topCategoryMap == null) {						
@@ -1908,6 +1962,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 					}					
 				}
 			}			
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.selectPageSize();
@@ -2956,9 +3015,48 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String tempCategoryPath;
 	private Element allAPIOutputDoc;
 	private String categoryDepthNarrowBy;
-	
-	
+	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();	
 
+	public Map<String, String> getSortListMap() {
+		sortListMap.put("relevancy", "Relevancy");
+		sortListMap.put("Item.ItemID--A", "Item # (Low to High)");
+		sortListMap.put("Item.ItemID--D", "Item # (High to Low)");
+		sortListMap.put("Item.SortableShortDescription--A", "Description (A to Z)");
+		sortListMap.put("Item.SortableShortDescription--D", "Description (Z to A)");
+		
+		ArrayList<String> allowedColumns = getColumnList();
+		
+		if (allowedColumns != null && allowedColumns.contains("Size")) {
+			sortListMap.put("Item.ExtnSize--A", "Size (Low to High)");		
+			sortListMap.put("Item.ExtnSize--D", "Size (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Color")) {
+			sortListMap.put("Item.ExtnColor--A", "Color (A to Z)");
+			sortListMap.put("Item.ExtnColor--D", "Color (Z to A)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Basis")) {
+			sortListMap.put("Item.ExtnBasis--A", "Basis (Low to High)");
+			sortListMap.put("Item.ExtnBasis--D", "Basis (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Mwt")) {
+			sortListMap.put("Item.ExtnMwt--A", "Mwt (Low to High)");
+			sortListMap.put("Item.ExtnMwt--D", "Mwt (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Thickness")) {
+			sortListMap.put("Item.ExtnThickness--A", "Thickness (A to Z)");
+			sortListMap.put("Item.ExtnThickness--D", "Thickness (Z to A)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Package")) {
+			sortListMap.put("Item.ExtnPackMethod--A", "Pack (A to Z)");
+			sortListMap.put("Item.ExtnPackMethod--D", "Pack (Z to A)");
+		}
+		
+		return sortListMap;
+	}
+
+	public void setSortListMap(Map<String, String> sortListMap) {
+		this.sortListMap = sortListMap;
+	}
 
 	public String getCategoryDepthNarrowBy() {
 		return categoryDepthNarrowBy;
@@ -3043,5 +3141,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.path = path;
 	}
 
+	/**
+	 * This operation will verfiy if Value is Integer
+	 * isInteger
+	 * @param i
+	 * @return
+	 */
+	public static boolean isDouble(String i)
+	{
+		try {
+			Double.parseDouble(i);
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
 
 }

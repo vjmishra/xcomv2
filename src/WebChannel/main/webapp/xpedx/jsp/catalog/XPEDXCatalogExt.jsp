@@ -90,6 +90,7 @@
 <%-- <s:url id='addToMyItemListURLid' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsAddFromCatalog'/>
 <!--  <s:a id='addToMyItemListURL' href='%{#addToMyItemListURLid}'/> --> --%>
 <s:set name='isProcurementInspectMode'	value='#util.isProcurementInspectMode(wCContext)' />
+<s:set name="sortList" value="sortListMap" />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
 <s:set name='catDoc' value='%{outDoc.documentElement}' />
 <s:set name='numResult' value='#catDoc.getAttribute("TotalHits")' />
@@ -347,8 +348,7 @@
 	<div class="t1-main-content" id="navigateContainer"> 
 	
 	 <div class="pagination">
-                 <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>
-				 <s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
+                 <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>				 
                      <select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
 						onchange="javascript:processSortByUpper()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
@@ -589,7 +589,7 @@
 				</div> --%>
 
 
-				<s:set name="allowedColumns" value="columnList" />
+				<s:set name="allowedColumns" value="columnList" />				
 				<s:set name='itemList' value='XMLUtils.getChildElement(#catDoc, "ItemList")'/>
 				<%--<s:url id='shipImg' value='/swc/images/common/shippable.jpg'/>--%>
 				<%-- <s:url id='shipImg' value='/swc/images/theme/theme-1/Shippable.png'/> --%>
@@ -912,8 +912,7 @@ var ct = Ext.get('item-box-inner');
 	<div class="clearall">&nbsp;</div>
 	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
-					<span class="checkboxtxt">Sort By:&nbsp;</span> 
-					<s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
+					<span class="checkboxtxt">Sort By:&nbsp;</span> 					
 					<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldLower" name="sortFieldLower"
 						onchange="javascript:processSortByLower()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
@@ -1264,7 +1263,13 @@ function processSortByUpperTroy(theValue,directionValue,theSpanNameValue)
 }               
 function processSortByUpper(){
 	var sortFieldValue = Ext.fly('sortFieldUpper').dom.value;
-	var ArrowDirection="";
+	processSortByTab(sortFieldValue);
+		
+}
+
+function processSortByTab(sortFieldValue) {
+	
+var ArrowDirection="";
 	
 	if(sortFieldValue.indexOf("--D")>-1)
 		{
@@ -1272,11 +1277,34 @@ function processSortByUpper(){
 			{
 			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionDescArrow";
 			}
-		else
+		if(sortFieldValue.indexOf("ItemID")>-1) 
 			{
 			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionItemArrow";
 			}
-		
+		if(sortFieldValue.indexOf("ExtnSize")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionSizeArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnColor")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionColorArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnBasis")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionBasisArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnMwt")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionMwtArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnThickness")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionThicknessArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnPackMethod")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionPackArrow";
+			}		
 		}
 	else
 		{
@@ -1284,18 +1312,43 @@ function processSortByUpper(){
 				{
 				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionDescArrow";
 				}
-			else
+		     if(sortFieldValue.indexOf("ItemID")>-1)
 				{
 				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionItemArrow";
-				}		
+				}
+		     if(sortFieldValue.indexOf("ExtnSize")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionSizeArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnColor")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionColorArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnBasis")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionBasisArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnMwt")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionMwtArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnThickness")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionThicknessArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnPackMethod")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionPackArrow";
+				}
 		}
+	
 	
 	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue+ArrowDirection;
 }
 
 function processSortByLower(){
 	var sortFieldValue = Ext.fly('sortFieldLower').dom.value;
-	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue;
+	processSortByTab(sortFieldValue);
 }
 
 function processPageSizeUpper(){
