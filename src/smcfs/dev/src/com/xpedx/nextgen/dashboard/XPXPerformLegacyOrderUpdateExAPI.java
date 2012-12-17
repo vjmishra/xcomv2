@@ -2426,11 +2426,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
 			customerError = true;
-			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
-			if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
-				legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
-			}
-			throw new Exception("Customer Doesn't Exist In Web. [Company No:"+legacyCompanyNo+", Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
+			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
 		if(log.isDebugEnabled()){
@@ -4744,7 +4740,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 										String headerProcessCode=rootEle.getAttribute("HeaderProcessCode");
 										String newInstructionText=instructionEle.getAttribute("InstructionText");
 										boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
-										if(isNewInstructionTextVoid)
+										if(("D".equalsIgnoreCase(headerProcessCode) || "C".equalsIgnoreCase(headerProcessCode)) && (isNewInstructionTextVoid))
 										{
 											String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)ordEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
 											instructionEle.setAttribute("InstructionText", instructionTextInDB);
@@ -4787,15 +4783,6 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 												String instDtlKey = getOrderLineInstructionKey(extnWebLineNum, _ordLineEle);
 												if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 													rootLineInstructionEle.setAttribute("InstructionDetailKey", instDtlKey);
-													String lineProcessCode=rootOrdLineEle.getAttribute("LineProcessCode");
-													String newInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
-													boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
-													if(isNewInstructionTextVoid)
-													{
-														String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)_ordLineEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
-														rootLineInstructionEle.setAttribute("InstructionText", instructionTextInDB);
-														rootLineInstructionEle.setAttribute("Action", "REMOVE");
-													}
 												}
 											}
 										}
