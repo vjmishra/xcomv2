@@ -90,6 +90,7 @@
 <%-- <s:url id='addToMyItemListURLid' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsAddFromCatalog'/>
 <!--  <s:a id='addToMyItemListURL' href='%{#addToMyItemListURLid}'/> --> --%>
 <s:set name='isProcurementInspectMode'	value='#util.isProcurementInspectMode(wCContext)' />
+<s:set name="sortList" value="sortListMap" />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
 <s:set name='catDoc' value='%{outDoc.documentElement}' />
 <s:set name='numResult' value='#catDoc.getAttribute("TotalHits")' />
@@ -347,8 +348,7 @@
 	<div class="t1-main-content" id="navigateContainer"> 
 	
 	 <div class="pagination">
-                 <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>
-				 <s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
+                 <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>				 
                      <select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
 						onchange="javascript:processSortByUpper()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
@@ -589,7 +589,7 @@
 				</div> --%>
 
 
-				<s:set name="allowedColumns" value="columnList" />
+				<s:set name="allowedColumns" value="columnList" />				
 				<s:set name='itemList' value='XMLUtils.getChildElement(#catDoc, "ItemList")'/>
 				<%--<s:url id='shipImg' value='/swc/images/common/shippable.jpg'/>--%>
 				<%-- <s:url id='shipImg' value='/swc/images/theme/theme-1/Shippable.png'/> --%>
@@ -692,7 +692,6 @@ true;"
 <script>	
 <%-- //IMPORTANT: The templates are optimized to reduce the space and # of lines in JS for performance reasons. Please maintain this in future. --%>
 <%-- //IMPORTANT: Removed redundant class="itemdiv" style from all Views (grid,normal,condensed) - JIRA 2798 --%>
-<%-- Modifying the itemkey div CSS class when we apply onmousedown, onmouseout events for highlighting the text on Qty input box (JIRA 500). The same logic applied for Normal (Full) View, Condensed View and Mini View --%>
 var itemWin;			
 var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{<xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
 function getNormalView() {
@@ -711,7 +710,7 @@ return new Ext.XTemplate(
   '<table class="bottable">','<tr>','<td class="compare_check">',
 	// Do not delete this code. This will come as a CR. '<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
   '</td>','<td class="item_number">','<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}','</td>',
-  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
+  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
   '</td>','</tr>',
   '<tr>','<td></td>','<td class="item_number">{partno}</td>',
   '<td class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -752,7 +751,7 @@ return new Ext.XTemplate(
    // Do not delete this code. This will come as a CR.'<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
    '</td>','</tr>',
    '<tr>','<td class="item_number">','<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}','</td>',
-    '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);"  onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>'</td>','</tr>',
+    '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);"  onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>'</td>','</tr>',
    '<tr>','<td class="item_number">{partno}</td>',
     '<td class="uom_cell">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</td>','</tr>',
    '<tr>','<td class="mill-mfg">{itemtypedesc}</td>',
@@ -782,7 +781,7 @@ return new Ext.XTemplate(
    '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>','<div class="clearBoth">&nbsp;</div>',
    '<div class="item_number"><s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}<br />{partno} {itemtypedesc}</div>',
    '<div class="quantity_box">',
-	'<div class="qty">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>
+	'<div class="qty">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');"/>','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',</s:if>
    '</div>','<div class="uom-select">',<s:if test='!#guestUser'>'{uomdisplay}',</s:if>'</div>',
    '<div class="clearall">&nbsp;</div>',
    <s:if test='!#guestUser'>'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#" onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',</s:if><s:else>'<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',</s:else>
@@ -816,7 +815,7 @@ return new Ext.XTemplate(
   <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
-  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#">Pack</a></td>',</s:if>			                    
+  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></td>',</s:if>			                    
   <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
@@ -913,8 +912,7 @@ var ct = Ext.get('item-box-inner');
 	<div class="clearall">&nbsp;</div>
 	<div class="pagination line-spacing">
 	<div class="sortbycontrols">
-					<span class="checkboxtxt">Sort By:&nbsp;</span> 
-					<s:set name='sortList'	value='#{"relevancy":"Relevancy", "Item.ItemID--A":"Item # (Low to High)", "Item.ItemID--D":"Item # (High to Low)", "Item.SortableShortDescription--A":"Description (A to Z)", "Item.SortableShortDescription--D":"Description (Z to A)"}' />
+					<span class="checkboxtxt">Sort By:&nbsp;</span> 					
 					<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldLower" name="sortFieldLower"
 						onchange="javascript:processSortByLower()">
                 		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
@@ -1265,7 +1263,13 @@ function processSortByUpperTroy(theValue,directionValue,theSpanNameValue)
 }               
 function processSortByUpper(){
 	var sortFieldValue = Ext.fly('sortFieldUpper').dom.value;
-	var ArrowDirection="";
+	processSortByTab(sortFieldValue);
+		
+}
+
+function processSortByTab(sortFieldValue) {
+	
+var ArrowDirection="";
 	
 	if(sortFieldValue.indexOf("--D")>-1)
 		{
@@ -1273,11 +1277,34 @@ function processSortByUpper(){
 			{
 			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionDescArrow";
 			}
-		else
+		if(sortFieldValue.indexOf("ItemID")>-1) 
 			{
 			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionItemArrow";
 			}
-		
+		if(sortFieldValue.indexOf("ExtnSize")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionSizeArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnColor")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionColorArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnBasis")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionBasisArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnMwt")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionMwtArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnThickness")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionThicknessArrow";
+			}
+		if(sortFieldValue.indexOf("ExtnPackMethod")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionPackArrow";
+			}		
 		}
 	else
 		{
@@ -1285,18 +1312,43 @@ function processSortByUpper(){
 				{
 				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionDescArrow";
 				}
-			else
+		     if(sortFieldValue.indexOf("ItemID")>-1)
 				{
 				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionItemArrow";
-				}		
+				}
+		     if(sortFieldValue.indexOf("ExtnSize")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionSizeArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnColor")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionColorArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnBasis")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionBasisArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnMwt")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionMwtArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnThickness")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionThicknessArrow";
+				}
+		     if(sortFieldValue.indexOf("ExtnPackMethod")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionPackArrow";
+				}
 		}
+	
 	
 	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue+ArrowDirection;
 }
 
 function processSortByLower(){
 	var sortFieldValue = Ext.fly('sortFieldLower').dom.value;
-	window.location.href="<s:property value='%{sortFieldsURL}' escape='false'/>" + "&sortField=" + sortFieldValue;
+	processSortByTab(sortFieldValue);
 }
 
 function processPageSizeUpper(){

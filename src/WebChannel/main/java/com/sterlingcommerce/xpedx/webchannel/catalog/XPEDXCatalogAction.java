@@ -90,10 +90,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
 //XNGTP-4264 Escaping Below words from search criteria.
-	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
+	private String luceneEscapeWords[]={"a", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
-			 "no", "not", "of", "on", "or", "such",
-			 "that", "the", "their", "then", "there", "these",
+			 "no", "not", "of", "on", "or", "s", "such",
+			 "t", "that", "the", "their", "then", "there", "these",
 			 "they", "this", "to", "was", "will", "with"
 };
 	
@@ -309,10 +309,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{   //Changes made for XBT 251 special characters replace by Space while Search
-			//searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-			//Start Jira XBT-319
-			searchTerm = processSpecialCharacters(searchTerm);
-			//End Jira XBT-319
+			searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
@@ -399,7 +396,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String filter() {
 		init();		
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bclFilter = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		
@@ -411,6 +408,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				orderByAttribute = "Item.ExtnBasis";
 				break;
 			}			
+		} */						
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.filter();
@@ -637,10 +639,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			
 			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
 			//Changes made for XBT 251 special characters replace by Space while Search
-			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-			//Start Jira XBT-19
-			searchTerm = processSpecialCharacters(searchTerm);
-			//End Jira XBT - 319
+			searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
@@ -780,14 +779,32 @@ public class XPEDXCatalogAction extends CatalogAction {
 					for(int i=0;i<extnNodeList.getLength();i++)
 					{
 						Element itemElement=(Element)extnNodeList.item(i);
-						if(itemElement  != null)
+						//Commenting not to promote to 12/15
+						/*if(itemElement  != null)
 						{
-							String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
-							if(extnBasis != null && !"0".equals(extnBasis))
-								itemElement.setAttribute("ExtnBasis", extnBasis);
-							else
-								itemElement.setAttribute("ExtnBasis","");
-						}
+							String extnBasisAttr=itemElement.getAttribute("ExtnBasis");
+							if(extnBasisAttr != null && extnBasisAttr.length() >0)
+							{
+								String extnBasis=extnBasisAttr.replaceFirst("^0+(?!$)", "");
+								extnBasis=extnBasis.replaceFirst("\\.?0*$","");
+								if(extnBasis != null && !"0".equals(extnBasis))
+									itemElement.setAttribute("ExtnBasis", extnBasis);
+								else
+									itemElement.setAttribute("ExtnBasis","");
+							}
+						}*/
+						if(itemElement  != null)
+                        {
+				if(itemElement.getAttribute("ExtnBasis") != null)
+				{		
+                              String extnBasis=itemElement.getAttribute("ExtnBasis").replaceFirst("^0+(?!$)", "");
+                              if(extnBasis != null && !"0".equals(extnBasis))
+                                    itemElement.setAttribute("ExtnBasis", extnBasis);
+                              else
+                                    itemElement.setAttribute("ExtnBasis","");
+				}
+                        }
+
 					}
 				}
 			}
@@ -799,7 +816,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();
 		setCustomerNumber();
 		StringBuffer sb=new StringBuffer();
-		long startTime=System.currentTimeMillis();
+		long startTime=System.currentTimeMillis();		
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";	
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.newSearch();
 		//getting the customer bean object from session.
 		//XBT-260
@@ -1085,8 +1108,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 				public int compare(Element elem, Element elem1) {
 					String attrValue =elem.getAttribute("Value");
 					String attrValue1 =elem1.getAttribute("Value");
-					 if(StringUtils.isNumeric(attrValue) && StringUtils.isNumeric(attrValue1)){
-                         return Integer.valueOf(attrValue).compareTo(Integer.valueOf(attrValue1));
+					 if(isDouble(attrValue) && isDouble(attrValue1)){
+                         return Double.valueOf(attrValue).compareTo(Double.valueOf(attrValue1));
 					 }
 					return attrValue.compareTo(attrValue1);
 				}
@@ -1126,7 +1149,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");		
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		if (topCategoryMap == null) {			
 			for (int i = 0; i < bcl.size(); i++) {
 				Breadcrumb bc = bcl.get(i);
@@ -1145,6 +1168,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 					orderByAttribute = "Item.ExtnBasis";
 				}
 			}
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 	//Added below condn for XBT-269
 		if("2".equals(categoryDepthNarrowBy))
@@ -1619,7 +1647,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();
 		setCustomerNumber();
 		long startTime=System.currentTimeMillis();
-		StringBuffer sb=new StringBuffer();
+		StringBuffer sb=new StringBuffer();		
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.search();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
@@ -1723,6 +1757,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		StringBuffer sb=new StringBuffer();
 		long startTime=System.currentTimeMillis();
 		init();
+				
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
+		}
+		
 		String returnString = super.sortResultBy();
 		long endTime=System.currentTimeMillis();
 		long timespent=(endTime-startTime);
@@ -1779,7 +1819,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		long startTime=System.currentTimeMillis();
 		init();
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		if (topCategoryMap == null) {						
@@ -1821,6 +1861,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}				
 			}
 			
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.goToPage();
@@ -1876,7 +1921,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		long startTime=System.currentTimeMillis();
 		init();
 		
-		Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		if (topCategoryMap == null) {						
@@ -1917,6 +1962,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 					}					
 				}
 			}			
+		} */
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
+			orderByAttribute = "Item.ExtnBasis";
+			sortField = "Item.ExtnBasis--A";
 		}
 		
 		String returnString = super.selectPageSize();
@@ -2704,74 +2754,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	/*End - Code changes for 2964*/
 
-		//Start JIRA  XBT-319
-		private String processSpecialCharacters(String searchText){
-			if(searchText == null){
-				return null;
-			}
-			String specialCharacterReg = "[\\[\\]^);{!(}:,~\\\\]";
-			searchText = searchText.replaceAll(specialCharacterReg," ");
-			searchText = processPlusCharacter(searchText);
-			searchText = processEiphenCharacter(searchText);
-			return searchText;
-		}
-		
-		 /*Replace "+" with whitespace when it 
-		 * a) appears as a word 
-		 * b) appears as first character in a word 
-		 * c) appears as last character in a word
-		 */
-		private String processPlusCharacter(String searchText){
-			String whiteSpaceReg = "[ ]";
-			String[] searchTexts = searchText.split(whiteSpaceReg);
-			StringBuilder searchTerm = new StringBuilder();
-			for(String textSegment : searchTexts){
-				textSegment = textSegment.trim();
-				if(textSegment.equals("+")){
-					continue;
-				}
-				
-				if(textSegment.startsWith("+")){
-					textSegment = " " + textSegment.substring(1, textSegment.length());
-				}
-				
-				if(textSegment.endsWith("+")){
-					textSegment = textSegment.substring(0, textSegment.length()-1) + " ";
-				}
-				
-				searchTerm.append(textSegment);
-				searchTerm.append(" ");
-				
-			}
-			return searchTerm.toString();
-		}
-		
-		/*Replace "-" with whitespace when it 
-		 * a) appears as a word 
-		 * b) appears as last character in a word
-		 */
-		private String processEiphenCharacter(String searchText){
-			String whiteSpaceReg = "[ ]";
-			String[] searchTexts = searchText.split(whiteSpaceReg);
-			StringBuilder searchTerm = new StringBuilder();
-			for(String textSegment : searchTexts){
-				textSegment = textSegment.trim();
-				if(textSegment.equals("-")){
-					continue;
-				}
-				
-				if(textSegment.endsWith("-")){
-					textSegment = textSegment.substring(0, textSegment.length()-1)+" ";
-					
-				}
-				
-				searchTerm.append(textSegment);
-				searchTerm.append(" ");
-				
-			}
-			return searchTerm.toString();
-		}
-		//End JIRA XBT-319
 	
 	/**
 	 * @return the pnaItemId
@@ -3033,9 +3015,48 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String tempCategoryPath;
 	private Element allAPIOutputDoc;
 	private String categoryDepthNarrowBy;
-	
-	
+	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();	
 
+	public Map<String, String> getSortListMap() {
+		sortListMap.put("relevancy", "Relevancy");
+		sortListMap.put("Item.ItemID--A", "Item # (Low to High)");
+		sortListMap.put("Item.ItemID--D", "Item # (High to Low)");
+		sortListMap.put("Item.SortableShortDescription--A", "Description (A to Z)");
+		sortListMap.put("Item.SortableShortDescription--D", "Description (Z to A)");
+		
+		ArrayList<String> allowedColumns = getColumnList();
+		
+		if (allowedColumns != null && allowedColumns.contains("Size")) {
+			sortListMap.put("Item.ExtnSize--A", "Size (Low to High)");		
+			sortListMap.put("Item.ExtnSize--D", "Size (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Color")) {
+			sortListMap.put("Item.ExtnColor--A", "Color (A to Z)");
+			sortListMap.put("Item.ExtnColor--D", "Color (Z to A)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Basis")) {
+			sortListMap.put("Item.ExtnBasis--A", "Basis (Low to High)");
+			sortListMap.put("Item.ExtnBasis--D", "Basis (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Mwt")) {
+			sortListMap.put("Item.ExtnMwt--A", "Mwt (Low to High)");
+			sortListMap.put("Item.ExtnMwt--D", "Mwt (High to Low)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Thickness")) {
+			sortListMap.put("Item.ExtnThickness--A", "Thickness (A to Z)");
+			sortListMap.put("Item.ExtnThickness--D", "Thickness (Z to A)");
+		}
+		if (allowedColumns != null && allowedColumns.contains("Package")) {
+			sortListMap.put("Item.ExtnPackMethod--A", "Pack (A to Z)");
+			sortListMap.put("Item.ExtnPackMethod--D", "Pack (Z to A)");
+		}
+		
+		return sortListMap;
+	}
+
+	public void setSortListMap(Map<String, String> sortListMap) {
+		this.sortListMap = sortListMap;
+	}
 
 	public String getCategoryDepthNarrowBy() {
 		return categoryDepthNarrowBy;
@@ -3120,5 +3141,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.path = path;
 	}
 
+	/**
+	 * This operation will verfiy if Value is Integer
+	 * isInteger
+	 * @param i
+	 * @return
+	 */
+	public static boolean isDouble(String i)
+	{
+		try {
+			Double.parseDouble(i);
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
 
 }

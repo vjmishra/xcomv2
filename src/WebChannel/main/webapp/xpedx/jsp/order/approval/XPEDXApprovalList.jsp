@@ -244,7 +244,13 @@
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";*/
 		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 		}
+	//added for XBT - 322
+	var myMask;
 	function openNotePanelSetAction(actionValue){
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+		//end for XBT - 322
 		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){

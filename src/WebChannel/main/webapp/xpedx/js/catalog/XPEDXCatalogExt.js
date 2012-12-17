@@ -919,6 +919,30 @@ function toggleBasisSort()
   }
 }
 
+function togglePackSort() {
+  theUrlValue=window.location.href;
+  var theQueryString=window.location.search;
+  if(theQueryString.indexOf("sortDirection") > -1)
+  {
+	  if(theQueryString.indexOf("sortDown") > -1)
+	  {
+		processSortByUpperTroy("ExtnPackMethod--D","sortDown","directionPackArrow");
+	  }
+	  else if(theQueryString.indexOf("sortUp" > -1))
+	  {
+		processSortByUpperTroy("ExtnPackMethod--A","sortUp","directionPackArrow");
+	  }
+	  else
+	  {
+	   processSortByUpperTroy("ExtnPackMethod--A","sortUp","directionPackArrow");
+	  }
+  }
+  else
+  {
+   processSortByUpperTroy("ExtnPackMethod--A","sortUp","directionPackArrow");
+  }	  
+}
+
 
 function toggleEnvironmentSort()
 {
