@@ -89,11 +89,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String firstItem = "";
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
-//XNGTP-4264 Escaping Below words from search criteria.
-	private String luceneEscapeWords[]={"a", "and", "are", "as", "at", "be", "but", "by",
+//XNGTP-4264 and XB 355 Escaping Below words from search criteria.
+	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
-			 "no", "not", "of", "on", "or", "s", "such",
-			 "t", "that", "the", "their", "then", "there", "these",
+			 "no", "not", "of", "on", "or", "such",
+			  "that", "the", "their", "then", "there", "these",
 			 "they", "this", "to", "was", "will", "with"
 };
 	
@@ -309,7 +309,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{   //Changes made for XBT 251 special characters replace by Space while Search
-			searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//Start Jira XBT-319
+			searchTerm = processSpecialCharacters(searchTerm);
+			//End Jira XBT-319
 			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
@@ -638,8 +641,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 			
 			
 			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
+			
+			//Start Jira XBT-319
+			searchTerm = processSpecialCharacters(searchTerm);
+			//End Jira XBT-319
 			//Changes made for XBT 251 special characters replace by Space while Search
-			searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
@@ -2754,6 +2761,74 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	/*End - Code changes for 2964*/
 
+	//Start JIRA  XBT-319
+			private String processSpecialCharacters(String searchText){
+				if(searchText == null){
+					return null;
+				}
+				String specialCharacterReg = "[\\[\\]^);{!(}:,~\\\\]";
+				searchText = searchText.replaceAll(specialCharacterReg," ");
+				searchText = processPlusCharacter(searchText);
+				searchText = processEiphenCharacter(searchText);
+				return searchText;
+			}
+			
+			 /*Replace "+" with whitespace when it 
+			 * a) appears as a word 
+			 * b) appears as first character in a word 
+			 * c) appears as last character in a word
+			 */
+			private String processPlusCharacter(String searchText){
+				String whiteSpaceReg = "[ ]";
+				String[] searchTexts = searchText.split(whiteSpaceReg);
+				StringBuilder searchTerm = new StringBuilder();
+				for(String textSegment : searchTexts){
+					textSegment = textSegment.trim();
+					if(textSegment.equals("+")){
+						continue;
+					}
+					
+					if(textSegment.startsWith("+")){
+						textSegment = " " + textSegment.substring(1, textSegment.length());
+					}
+					
+					if(textSegment.endsWith("+")){
+						textSegment = textSegment.substring(0, textSegment.length()-1) + " ";
+					}
+					
+					searchTerm.append(textSegment);
+					searchTerm.append(" ");
+					
+				}
+				return searchTerm.toString();
+			}
+			
+			/*Replace "-" with whitespace when it 
+			 * a) appears as a word 
+			 * b) appears as last character in a word
+			 */
+			private String processEiphenCharacter(String searchText){
+				String whiteSpaceReg = "[ ]";
+				String[] searchTexts = searchText.split(whiteSpaceReg);
+				StringBuilder searchTerm = new StringBuilder();
+				for(String textSegment : searchTexts){
+					textSegment = textSegment.trim();
+					if(textSegment.equals("-")){
+						continue;
+					}
+					
+					if(textSegment.endsWith("-")){
+						textSegment = textSegment.substring(0, textSegment.length()-1)+" ";
+						
+					}
+					
+					searchTerm.append(textSegment);
+					searchTerm.append(" ");
+					
+				}
+				return searchTerm.toString();
+			}
+			//End JIRA XBT-319
 	
 	/**
 	 * @return the pnaItemId
