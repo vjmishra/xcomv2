@@ -643,7 +643,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
 			
 			//Start Jira XBT-319
-			searchTerm = processSpecialCharacters(searchTerm);
+			searchStringValue = processSpecialCharacters(searchStringValue);
 			//End Jira XBT-319
 			//Changes made for XBT 251 special characters replace by Space while Search
 			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
