@@ -592,7 +592,7 @@
                   </xsl:element>
 
 <!-- OrderLineTranQuantity End  -->
-                 
+                  <xsl:if test="(normalize-space(LineNotes)!='')">
                      <xsl:element name="Instructions">
                         <xsl:element name="Instruction">
                            <xsl:attribute name="InstructionType">LINE</xsl:attribute>
@@ -602,7 +602,7 @@
                            </xsl:attribute>
                         </xsl:element>
                      </xsl:element>
-                  
+                  </xsl:if>
                </xsl:element>
 
 <!-- Order Line End  -->
