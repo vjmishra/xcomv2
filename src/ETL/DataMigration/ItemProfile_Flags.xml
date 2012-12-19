@@ -4257,7 +4257,6 @@ if DSLink12.BRAND_CDE=&apos;XPED&apos; then DSLink12.BRAND_CDE else &apos;XPED&a
  Else If (DSLink44.cLocationType = &apos;B&apos;) Then DSLink44.cBillToSuffix 
  Else If (DSLink44.cLocationType = &apos;S&apos;) Then DSLink44.cShipToSuffix 
  Else &apos;&apos;) :&apos;-&apos;:(if Isnull(DSLink44.cName) then &apos;&apos; else substrings(DSLink44.cName,1,1)) :&apos;-XX-&apos;: (if Isnull
-
 (DSLink44.cLocationType) then &apos;&apos; else DSLink44.cLocationType)) else (&apos;CD-&apos;:(If Isnull(DSLink12.SAP_PARENT) then &apos;&apos; else DSLink12.SAP_PARENT)
 :&apos;-M-&apos;:(If DSLink12.CO_BR=&apos;98&apos; then &apos;XCAN&apos; else 
 if isnull(DSLink12.BRAND_CDE) then &apos;XPED&apos; else 
