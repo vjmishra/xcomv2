@@ -567,7 +567,7 @@ $(document).ready(function(){
 	<div class="tq-quick-add-form">
 		<span class="page-title">Quick Add</span>
 		<p class="quick-add-aux-links" style="margin-top:5px; margin-right:5px;"> 
-			<a class="modal underlink" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste" >Copy and Paste</a>
+			<a class="modal underlink" "tabindex=-1" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste" >Copy and Paste</a>
 			<img class="pointers" alt="[close]" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" id="quick-add-close" title="Close">
 		</p>
 		<div class="clear">&nbsp;</div>
@@ -588,7 +588,7 @@ $(document).ready(function(){
 				<ul class="hvv">
 					<li>
 						<label>Item Type:</label>
-						<s:select id="qaItemType"  name="qaItemType" cssStyle="width:135px;"
+						<s:select  tabindex="3403" id="qaItemType"  name="qaItemType" cssStyle="width:135px;"
 										headerKey="1"
 										list="skuTypeList" listKey="key" listValue="value"/>
 						
@@ -596,13 +596,13 @@ $(document).ready(function(){
 					</li>
 					<li>
 						<label>Item #:</label>
-						<input maxlength="27" style="width:70px;" type="text" id="qaProductID" name="qaProductID" class="text x-input" />
+						<input tabindex="3404" maxlength="27" style="width:70px;" type="text" id="qaProductID" name="qaProductID" class="text x-input" />
 						<s:hidden name="#qaProductID.type" value="ItemID" />
 						<s:hidden name='localizedMissingProductIDMessage'value='%{#_action.getText("QAMissingProductID")}' />
 					</li>
 					<li>
 						<label>Qty:</label>						
-						<input maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
+						<input tabindex="3405" maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
 						<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 					</li>
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
@@ -622,7 +622,7 @@ $(document).ready(function(){
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
 						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
-						<input maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+						<input tabindex="3407" maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
 						<s:hidden name="#qaJobID.type" value="" />
 					</li>
 					</s:if>
@@ -635,13 +635,13 @@ $(document).ready(function(){
 					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 					<li>
 						<label><s:property value='#customerPONoFlag' />:</label>
-						<s:textfield maxlength="22" name="purchaseOrder" value=""></s:textfield>
+						<s:textfield tabindex="3408" maxlength="22" name="purchaseOrder" value=""></s:textfield>
 					</li>
 					</s:if>
 					<li>
 						<label>&nbsp;</label>
 						<input id="quickAddButton" type="hidden"/>
-						<a class="grey-ui-btn" onclick="javascript:addProductToQuickAddList(document.getElementById('quickAddButton')); return false;" href="#" class="noborder">
+						<a id="addToQuickListId" class="grey-ui-btn" tabindex="3409" onkeydown="javascript: addToQuickListnextFocus(event);" onclick="javascript:addProductToQuickAddList(document.getElementById('quickAddButton')); return false;" href="#" class="noborder">
 							<%-- <img src="<s:url value='/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png'/>" /> --%>
 							<span><p>+</p>Add to Quick List</span>
 							</a>
@@ -650,7 +650,7 @@ $(document).ready(function(){
 					</li>
 				</ul>
 				<s:url id='productValidateURLid' namespace='/order' action='validateProduct' />
-				<s:a id='productValidateURL' href='%{#productValidateURLid}' />
+				<s:a id='productValidateURL' href='%{#productValidateURLid}'tabindex="-1" />
 				<div id="QuickAddList" style="display: block;"></div>
 				<div class="error" id="errorMsgItemBottom" style="display:none;position:relative;left:340px" ></div>
 				
@@ -861,19 +861,19 @@ $(document).ready(function(){
 			Description
 			<br/>
 			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
-				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
+				<textarea  tabindex="3401" id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255'); "></textarea>
 			</s:if>
 			<s:else>
-				<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
+				<textarea  tabindex="3401" id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
 			</s:else>
 								
 	</s:if> 
 	<s:else>	
 		<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
-			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
+			<textarea  tabindex="3401" id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"></textarea>
 		</s:if>
 		<s:else>
-			<textarea  id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
+			<textarea  tabindex="3401"id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255');"><s:property value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}' /></textarea>
 		</s:else>
 	</s:else>
 </s:if>
@@ -915,9 +915,9 @@ $(document).ready(function(){
 		<ul class="float-right tool-bar-bottom sc-btn-list">
 	</s:else>
 	
-	<li class="float-right"><a id="quick-add-button" class="grey-ui-btn" href="#"><span>Quick Add</span></a></li>
+	<li class="float-right"><a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="#"><span>Quick Add</span></a></li>
     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-    	<li><a href="#" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
+    	<li><a href="#" tabindex="3402" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
     </s:if>	
 <s:if test='majorLineElements.size() > 0'>
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -1854,6 +1854,17 @@ function validateOrder()
 				 return false;
 				}
 		}
+	function addToQuickListnextFocus(evt)
+	{
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		var addList=document.getElementById('QuickAddList');
+	    if (charCode == 9 ) {
+	    	document.getElementById('qaProductID').focus();
+	    }
+	    
+		
+		
+	}
 	openQuickAdd();
 </script>
 
