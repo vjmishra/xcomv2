@@ -3322,6 +3322,11 @@ function showSharedListForm(){
 						<s:if test="#iStatus.first" >
                   			 <input name="relatedItems"
 								onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" checked="checked" />
+								<script>
+										Ext.onReady(function(){ 
+										selReplacementId='<s:property value="#uId" />';
+									});
+							  </script>
 						</s:if>
 						<s:else>
 						<input name="relatedItems" 
