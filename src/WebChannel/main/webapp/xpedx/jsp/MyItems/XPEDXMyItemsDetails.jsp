@@ -3318,8 +3318,15 @@ function showSharedListForm(){
 							<s:param name="sfId" value="#parameters.sfId" />
 							<s:param name="unitOfMeasure" value="#ritemUomId" />
 						</s:url>
-                   <input name="relatedItems"
-						onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />
+						<!-- Checked in for JIRA XBT-335  -->
+						<s:if test="#iStatus.first" >
+                  			 <input name="relatedItems"
+								onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" checked="checked" />
+						</s:if>
+						<s:else>
+						<input name="relatedItems" 
+								onclick="javascript:setUId('<s:property value="#uId" />');" type="radio" />
+						</s:else>
                     <div class="mil-question-mark"> 
                     <a href='<s:property value="%{itemDetailsLink}" />'>
                     <img src="<s:property value='%{#pImg}' />" width="150" height="150" alt="" />
