@@ -83,11 +83,14 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		   } else {
 			   YFCElement instructionsElem = rootElem.getChildElement("Instructions");
 			   if (instructionsElem != null) {				   
-				   YFCElement instructionElem = instructionsElem.getChildElement("Instruction");	
-				   String hdrComments = instructionElem.getAttribute("InstructionText");
-				   if(hdrComments != null && (hdrComments.indexOf("\n") != -1 || hdrComments.indexOf("\r\n") != -1)) {
-					   hdrComments = hdrComments.replaceAll("\n|\r\n", " ");
-					   instructionElem.setAttribute("InstructionText", hdrComments);
+				   YFCElement instructionElem = instructionsElem.getChildElement("Instruction");
+				   if(instructionElem!=null)
+				   {
+					   String hdrComments = instructionElem.getAttribute("InstructionText");
+					   if(hdrComments != null && (hdrComments.indexOf("\n") != -1 || hdrComments.indexOf("\r\n") != -1)) {
+						   hdrComments = hdrComments.replaceAll("\n|\r\n", " ");
+						   instructionElem.setAttribute("InstructionText", hdrComments);
+					   }
 				   }
 			   }
 		   }  
