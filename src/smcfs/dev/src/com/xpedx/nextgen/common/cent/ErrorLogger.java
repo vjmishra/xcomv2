@@ -75,9 +75,14 @@ public class ErrorLogger {
 			
 			String userID=null;
 			if(errorObj.getTransType().equalsIgnoreCase(XPXLiterals.OU_TRANS_TYPE))
+			{
 				userID="admin";
-			else
+				YFCUserContext.getInstance().setUserId(userID);
+
+			} else
+			{				
 				userID=yfsEnv.getUserId();
+			}
 			
 			String progID = yfsEnv.getProgId();
 			
