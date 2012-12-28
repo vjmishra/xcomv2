@@ -603,6 +603,10 @@
         <relatedTasksExtensionContributor
             class="com.xpedx.sterling.rcp.pca.customerDetails.Contributor.XPXCustomerEditorContributor" editorId="com.yantra.pca.ycd.rcp.editors.YCDCustomerEditor"/>
     </extension>
+    <extension point="com.yantra.yfc.rcp.YRCRelatedTasksExtensionContributor">
+        <relatedTasksExtensionContributor
+            class="com.xpedx.sterling.rcp.pca.orderheader.screen.XPXOrderEditorContributor" editorId="com.yantra.pca.ycd.rcp.editors.YCDOrderEditor"/>
+    </extension>
     <extension id="Xpedx" name="Xpedx" point="com.yantra.yfc.rcp.YRCRelatedTaskGroups">
         <groups id="com.xpedx.sterling.rcp.pca.groups1">
             <group id="Xpedx_Group" name="Xpedx_Group" sequence="1"/>
