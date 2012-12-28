@@ -4741,10 +4741,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 										instructionEle.setAttribute("InstructionDetailKey", instDtlKey);
 										/*Begin - Changes made by Mitesh Parikh for JIRA 3248*/
-										String headerProcessCode=rootEle.getAttribute("HeaderProcessCode");
 										String newInstructionText=instructionEle.getAttribute("InstructionText");
 										boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
-										if(("D".equalsIgnoreCase(headerProcessCode) || "C".equalsIgnoreCase(headerProcessCode)) && (isNewInstructionTextVoid))
+										if(isNewInstructionTextVoid)
 										{
 											String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)ordEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
 											instructionEle.setAttribute("InstructionText", instructionTextInDB);
@@ -4787,6 +4786,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 												String instDtlKey = getOrderLineInstructionKey(extnWebLineNum, _ordLineEle);
 												if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 													rootLineInstructionEle.setAttribute("InstructionDetailKey", instDtlKey);
+													/*Begin - Changes made by Mitesh Parikh for JIRA XBT-247*/
+													String newLineInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
+													boolean isNewLineInstructionTextVoid=YFCObject.isVoid(newLineInstructionText);
+													if(isNewLineInstructionTextVoid)
+													{
+														String lineInstructionTextInDB = SCXmlUtil.getXpathAttribute((Element)_ordLineEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
+														rootLineInstructionEle.setAttribute("InstructionText", lineInstructionTextInDB);
+														rootLineInstructionEle.setAttribute("Action", "REMOVE");
+													}
+													/*End - Changes made by Mitesh Parikh for JIRA XBT-247*/
 												}
 											}
 										}
