@@ -712,6 +712,9 @@ var selectedShipCustomer = null;
 <s:url id="userListURL" action="xpedxGetUserList" namespace="/profile/user" />
 <s:url id='targetURL' namespace='/common'
 	action='xpedxGetAssignedCustomers' />
+<s:url id='xpedxHeaderUrl' action='xpedxHeader' namespace="/common" >
+        <s:param name='shipToBanner' value="%{'true'}" />
+</s:url>
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
 <s:url id='shipToForUserProfileSearch' namespace='/common'
@@ -1231,7 +1234,15 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     }
                     else
                     {
-	                    window.location.reload( true );
+	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){
+                          var milurl=window.location;
+                          var headerUrl='<s:property value="#xpedxHeaderUrl" />';
+                          window.location.href = headerUrl ;
+                          window.location.href = milurl;
+                        }
+                        else{
+                        window.location.reload( true );
+                        }
                     }
                     //end of jira 2440
                 },
