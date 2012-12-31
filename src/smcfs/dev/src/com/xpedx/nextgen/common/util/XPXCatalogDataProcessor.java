@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
-	final static Pattern slashPattern = buildSlashPattern(); 
-	
+	final static Pattern dimensionPattern = buildDimensionPattern();
+		
 	public static void main(String[] args){
 		/*String[] searches = new String[] {
         		"m&c",
@@ -62,27 +62,32 @@ public class XPXCatalogDataProcessor {
         		
         };*/
 		
-		String[] searches = {"P&amp;G P &amp; G P&G P & G"};
+		String[] searches = {"abcd 12.25\" x13.75ft x 14.15  abcd"};
 		
 		
 		for (String rawSearch : searches) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
-			String search = preprocessCatalogData(rawSearch);
+			String search = preprocessSearchQuery(rawSearch);
         	
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
 	}
 	
-	public static String preprocessCatalogData(String rawSearch) {
+	public static String preprocessSearchQuery(String rawSearch) {
 		String search = rawSearch;
 		search = UnitInfo.preprocess(search);
 		search = SymbolInfo.preprocess(search);
 		search = preprocessXPatterns(search);
-		search = preprocessXPatterns(search);
-		//search = preprocessSlashPatterns(search);
+		return search;
+	}
 		
+	public static String preprocessCatalogData(String rawSearch) {
+		String search = rawSearch;
+		search = UnitInfo.preprocess(search);
+		search = SymbolInfo.preprocess(search);
+		search = preprocessDimensionPatterns(search);
 		return search;
 	}
 	
@@ -90,9 +95,10 @@ public class XPXCatalogDataProcessor {
 	private static Pattern buildXPattern() {
 		StringBuilder canonicals = new StringBuilder();
 		for (UnitInfo unitInfo : UnitInfo.all) {
-			canonicals.append("|"+unitInfo.canonical);
+			canonicals.append(unitInfo.canonical+"|");
 		}
-		return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([Xx])([0-9"+canonicals.toString()+"]?)");
+		System.out.println("canonicals "+canonicals.toString());
+		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?))?");
 	}
 	
 	//processes x patterns
@@ -100,38 +106,103 @@ public class XPXCatalogDataProcessor {
 		Matcher matcher = xPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
-			matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
+			matcher.appendReplacement(sb, matcher.group(1));
+			System.out.println("gropu3"+matcher.group(3)+"group3");
+			if(matcher.group(3).length()>0)
+				sb.append(matcher.group(3));
+			sb.append(matcher.group(5)+matcher.group(7));
 			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
-			if (matcher.group(4).length() > 0)
-				sb.append(' ').append(matcher.group(4));
+			if (matcher.group(9).length() > 0)
+				sb.append(matcher.group(9));
+			System.out.println(matcher.group(10));
+			if(matcher.group(10) != null){
+				sb.append(matcher.group(12)+matcher.group(14));
+			}
+			/*if (matcher.group(10).length() > 0 && matcher.group(11).length()>0 && matcher.group(12).length()>0  )
+				sb.append(matcher.group(11));*/
+			
+			
+			
 		}
 		matcher.appendTail(sb);
 		return sb.toString();
 		
 	}
 	
-	private static Pattern buildSlashPattern() {
-        StringBuilder canonicals = new StringBuilder();
-        for (UnitInfo unitInfo : UnitInfo.all) {
-               canonicals.append("|"+unitInfo.canonical);
-        }
-        return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([/])([0-9"+canonicals.toString()+"]?)");
+	private static Pattern buildDimensionPattern() {
+		StringBuilder canonicals = new StringBuilder();
+		for (UnitInfo unitInfo : UnitInfo.all) {
+			canonicals.append(unitInfo.canonical+"|");
+		}
+		System.out.println("canonicals "+canonicals.toString());
+		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?)?");
   }
   
   //processes / patterns
-  private static String preprocessSlashPatterns(String rawText){
-        Matcher matcher = slashPattern.matcher(rawText);
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-               matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
-               // handle cases where "/" immediately follows symbol such as in: 2.75"/ 8.5"
-               if (matcher.group(4).length() > 0)
-                      sb.append(' ').append(matcher.group(4));
-        }
-        matcher.appendTail(sb);
-        return sb.toString();
+  private static String preprocessDimensionPatterns(String rawText){
+	  Matcher matcher = dimensionPattern.matcher(rawText);
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			matcher.appendReplacement(sb, matcher.group(1));
+			System.out.println("gropu3"+matcher.group(3)+"group3");
+			if(matcher.group(3).length()>0)
+				sb.append(matcher.group(3));
+			sb.append(matcher.group(5)+matcher.group(7));
+			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
+			if (matcher.group(9).length() > 0)
+				sb.append(matcher.group(9));
+			System.out.println(matcher.group(10));
+			if(matcher.group(10) != null){
+				sb.append(matcher.group(12)+matcher.group(14));
+			}
+			
+			if(matcher.group(16) != null){
+				sb.append(matcher.group(16));
+			}
+			
+			
+			if(matcher.group(3).length()>0){
+				sb.append(" "+matcher.group(1));
+				sb.append(matcher.group(3));
+				sb.append(" "+matcher.group(1));
+			}else{
+				sb.append(" "+matcher.group(1));
+			}
+			
+			if(matcher.group(9).length()>0){
+				sb.append(" "+matcher.group(7));
+				sb.append(matcher.group(9));
+				sb.append(" "+matcher.group(7));
+			}else{
+				sb.append(" "+matcher.group(7));
+			}
+			
+			if(matcher.group(10) != null){
+				if(matcher.group(16).length() > 0){
+					sb.append(" "+matcher.group(14));
+					sb.append(matcher.group(16));
+					sb.append(" "+matcher.group(14));
+				}else{
+					sb.append(" "+matcher.group(14));
+				}
+			}
+			
+			if(matcher.group(3).length() > 0){
+				if(matcher.group(10) != null){
+					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(7)+matcher.group(5)+matcher.group(14));
+				}else{
+					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(7));
+				}
+			}
+			
+			
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
         
   }
+  
+  
 
 	/**
 	 * Represents a unit that may have multiple synonymous representations in text
@@ -197,8 +268,8 @@ public class XPXCatalogDataProcessor {
 				}
 				matcher.appendReplacement(sb, matcher.group(1) + toCanonical.get(matcher.group(3)));
 				// handle cases where "x" imediately follows symbol such as in: 2.75"x 8.5"
-				if (matcher.group(4).length() > 0)
-					sb.append(' ').append(matcher.group(4));
+				/*if (matcher.group(4).length() > 0)
+					sb.append(' ').append(matcher.group(4));*/
 			}
 			matcher.appendTail(sb);
 			return sb.toString();
@@ -222,7 +293,7 @@ public class XPXCatalogDataProcessor {
 			for (UnitInfo unitInfo : UnitInfo.all) {
 				symbols.append(Pattern.quote(unitInfo.symbol));
 			}
-			return Pattern.compile("([0-9]+(\\.[0-9]+)?)([" + symbols.toString() + "])([xX]?)");
+			return Pattern.compile("([0-9]+(\\.[0-9]+)?)([" + symbols.toString() + "])");
 		}
 		
 		// build the pattern that recognizes unit name usages
