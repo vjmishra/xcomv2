@@ -97,32 +97,24 @@ public class XPXCatalogDataProcessor {
 		for (UnitInfo unitInfo : UnitInfo.all) {
 			canonicals.append(unitInfo.canonical+"|");
 		}
-		System.out.println("canonicals "+canonicals.toString());
 		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?))?");
 	}
 	
-	//processes x patterns
+	//Remove spaces before and after x in dimensions
 	private static String preprocessXPatterns(String rawText){
 		Matcher matcher = xPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
 			matcher.appendReplacement(sb, matcher.group(1));
-			System.out.println("gropu3"+matcher.group(3)+"group3");
 			if(matcher.group(3).length()>0)
 				sb.append(matcher.group(3));
 			sb.append(matcher.group(5)+matcher.group(7));
-			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
 			if (matcher.group(9).length() > 0)
 				sb.append(matcher.group(9));
-			System.out.println(matcher.group(10));
 			if(matcher.group(10) != null){
 				sb.append(matcher.group(12)+matcher.group(14));
 			}
-			/*if (matcher.group(10).length() > 0 && matcher.group(11).length()>0 && matcher.group(12).length()>0  )
-				sb.append(matcher.group(11));*/
-			
-			
-			
+					
 		}
 		matcher.appendTail(sb);
 		return sb.toString();
@@ -134,21 +126,19 @@ public class XPXCatalogDataProcessor {
 		for (UnitInfo unitInfo : UnitInfo.all) {
 			canonicals.append(unitInfo.canonical+"|");
 		}
-		System.out.println("canonicals "+canonicals.toString());
 		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?)?");
   }
   
-  //processes / patterns
+  /*Represent dimensions in all possible combinations. For ex, 1.2ftx2.3in should be represented as below:
+	1.2ftx2.3in 1.2ft 1.2 2.3in 2.3 1.2x2.3*/
   private static String preprocessDimensionPatterns(String rawText){
 	  Matcher matcher = dimensionPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
 			matcher.appendReplacement(sb, matcher.group(1));
-			System.out.println("gropu3"+matcher.group(3)+"group3");
 			if(matcher.group(3).length()>0)
 				sb.append(matcher.group(3));
 			sb.append(matcher.group(5)+matcher.group(7));
-			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
 			if (matcher.group(9).length() > 0)
 				sb.append(matcher.group(9));
 			System.out.println(matcher.group(10));
