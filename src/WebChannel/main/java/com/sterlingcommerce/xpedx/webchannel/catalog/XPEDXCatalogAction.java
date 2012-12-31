@@ -313,7 +313,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//Start Jira XBT-319
 			searchTerm = processSpecialCharacters(searchTerm);
 			//End Jira XBT-319
-			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
+			
+			//Start JIRA XBT-263
+			searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+			//End JIRA XBT-263
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
 			String appendStr="&searchTerm="+searchTerm;
@@ -639,12 +642,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			
-			
-			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
+			//Start JIRA XBT-263
+			searchStringValue = XPXCatalogDataProcessor.preprocessSearchQuery(searchStringValue);
+			//End JIRA XBT-263
 			
 			//Start Jira XBT-319
 			searchStringValue = processSpecialCharacters(searchStringValue);
 			//End Jira XBT-319
+			
 			//Changes made for XBT 251 special characters replace by Space while Search
 			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
@@ -707,7 +712,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				End of changes 3464*/	
 				
-				termValue = XPXCatalogDataProcessor.preprocessCatalogData(termValue);
+				//Start JIRA XBT-263
+				termValue = XPXCatalogDataProcessor.preprocessSearchQuery(termValue);
+				//End JIRA XBT-263
+				
 				termEle.setAttribute("Value", termValue);
 				
 				
@@ -728,8 +736,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}*/	
 				/*end of 3464*/			
 				
-				searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
-				
+				//Start JIRA XBT-263
+				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+				//End JIRA XBT-263
 				
 				term.setAttribute("Value", customerNumber + "|" + searchTerm);
 			}
