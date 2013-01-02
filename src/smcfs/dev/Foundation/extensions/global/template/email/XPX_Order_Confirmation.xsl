@@ -427,29 +427,8 @@
 					</tr><!-- End intentionally blank row. -->
 					<tr>
 						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
-						Ship Order Complete
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
-					    ,
-					    </xsl:if>
-						</xsl:if>						
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
-						Will Call
-					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
-						,
-						</xsl:if>					    					
-						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
-						Rush Order
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
-						,
-						</xsl:if>
-						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
-						Order Placed on Hold
-						</xsl:if>
-						
-						 </td>
+						<xsl:value-of select="Order/Extn/@ShippingOptions"/>
+						</td>
 					</tr>
 					<tr> 
 
