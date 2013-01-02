@@ -4795,8 +4795,20 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 														rootLineInstructionEle.setAttribute("InstructionText", lineInstructionTextInDB);
 														rootLineInstructionEle.setAttribute("Action", "REMOVE");
 													}
-													/*End - Changes made by Mitesh Parikh for JIRA XBT-247*/
+													
+												
+												} else {
+													if(rootOrdLineEle != null) 
+													{
+														String lpc = rootOrdLineEle.getAttribute("LineProcessCode");
+														if (lpc != null && lpc.equalsIgnoreCase("C")) {
+															String newLineInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
+															if(YFCObject.isVoid(newLineInstructionText))
+																rootOrdLineEle.removeChild(rootLineInstructionsEle);
+														}
+													}
 												}
+												/*End - Changes made by Mitesh Parikh for JIRA XBT-247*/
 											}
 										}
 									}

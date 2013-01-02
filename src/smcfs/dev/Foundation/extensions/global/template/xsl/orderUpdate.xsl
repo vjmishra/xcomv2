@@ -593,7 +593,7 @@
 
 <!-- OrderLineTranQuantity End  -->
 				  <!-- Begin : Changes made for JIRA XBT-247 -->
-				  <xsl:if test="((normalize-space(LineType)!='M' and normalize-space(LineType)!='C') and (normalize-space(LineProcessCode)='C' or ((normalize-space(LineProcessCode)='A' or normalize-space(LineProcessCode)='D') and normalize-space(LineNotes)!='')))">
+				  <xsl:if test="(normalize-space(LineNotes)!='' or normalize-space(LineProcessCode)='C')">
                   <!-- End : Changes made for JIRA XBT-247 -->
                      <xsl:element name="Instructions">
                         <xsl:element name="Instruction">
