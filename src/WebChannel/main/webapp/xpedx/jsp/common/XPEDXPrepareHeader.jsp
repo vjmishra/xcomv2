@@ -2392,7 +2392,7 @@ function msgWait(){
 				<li style="border-right: none;">&nbsp;</li>
 				<li> &nbsp;&nbsp;&nbsp;&nbsp; </li>
 				<li><a
-					href="<s:url action="login" namespace="/common" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
+					href="<s:url action="loginFullPage" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006" id="signIn">Sign In</a>
 				</li>	
 			</s:else>
