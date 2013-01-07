@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
 	final static Pattern dimensionPattern = buildDimensionPattern();
-		
+			
 	public static void main(String[] args){
 		/*String[] searches = new String[] {
         		"m&c",
@@ -62,13 +62,13 @@ public class XPXCatalogDataProcessor {
         		
         };*/
 		
-		String[] searches = {"abcd 12.25\" x13.75ft x 14.15  abcd"};
-		
+		String[] searches = {"45\"x 55/25\"x 12\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
+		//String[] searches = {"abcd b5.35\" x 9.875in x 8.75in H"};
 		
 		for (String rawSearch : searches) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
-			String search = preprocessSearchQuery(rawSearch);
+			String search = preprocessCatalogData(rawSearch);
         	
         	
         	System.out.println(rawSearch+"====>"+search);
@@ -88,6 +88,7 @@ public class XPXCatalogDataProcessor {
 		search = UnitInfo.preprocess(search);
 		search = SymbolInfo.preprocess(search);
 		search = preprocessDimensionPatterns(search);
+		search = preprocessXPatterns(search);
 		return search;
 	}
 	
@@ -126,64 +127,93 @@ public class XPXCatalogDataProcessor {
 		for (UnitInfo unitInfo : UnitInfo.all) {
 			canonicals.append(unitInfo.canonical+"|");
 		}
-		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?)?");
+		return Pattern.compile("((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?)?");
   }
+	
+	
   
   /*Represent dimensions in all possible combinations. For ex, 1.2ftx2.3in should be represented as below:
 	1.2ftx2.3in 1.2ft 1.2 2.3in 2.3 1.2x2.3*/
+	
   private static String preprocessDimensionPatterns(String rawText){
 	  Matcher matcher = dimensionPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
+			int matcherStart = matcher.start()-1;
+			if(matcherStart > -1){
+				char prefix = rawText.charAt(matcherStart);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
+			int matcherEnd = matcher.end(8);
+			if(matcherEnd > -1){
+				char prefix = rawText.charAt(matcherEnd);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
+			if(matcher.group(12) != null){
+				matcherEnd = matcher.end(16);
+				char prefix = rawText.charAt(matcherEnd);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
 			matcher.appendReplacement(sb, matcher.group(1));
-			if(matcher.group(3).length()>0)
-				sb.append(matcher.group(3));
-			sb.append(matcher.group(5)+matcher.group(7));
-			if (matcher.group(9).length() > 0)
-				sb.append(matcher.group(9));
-			System.out.println(matcher.group(10));
-			if(matcher.group(10) != null){
-				sb.append(matcher.group(12)+matcher.group(14));
+			if(matcher.group(4).length()>0)
+				sb.append(matcher.group(4));
+			sb.append(matcher.group(6)+matcher.group(8));
+			if (matcher.group(11).length() > 0)
+				sb.append(matcher.group(11));
+			
+			if(matcher.group(12) != null){
+				sb.append(matcher.group(14)+matcher.group(16));
 			}
 			
-			if(matcher.group(16) != null){
-				sb.append(matcher.group(16));
+			if(matcher.group(19) != null){
+				sb.append(matcher.group(19));
 			}
 			
 			
-			if(matcher.group(3).length()>0){
+			if(matcher.group(4).length()>0){
 				sb.append(" "+matcher.group(1));
-				sb.append(matcher.group(3));
+				sb.append(matcher.group(4));
 				sb.append(" "+matcher.group(1));
 			}else{
 				sb.append(" "+matcher.group(1));
 			}
 			
-			if(matcher.group(9).length()>0){
-				sb.append(" "+matcher.group(7));
-				sb.append(matcher.group(9));
-				sb.append(" "+matcher.group(7));
+			if(matcher.group(11).length()>0){
+				sb.append(" "+matcher.group(8));
+				sb.append(matcher.group(11));
+				sb.append(" "+matcher.group(8));
 			}else{
-				sb.append(" "+matcher.group(7));
+				sb.append(" "+matcher.group(8));
 			}
 			
-			if(matcher.group(10) != null){
-				if(matcher.group(16).length() > 0){
-					sb.append(" "+matcher.group(14));
-					sb.append(matcher.group(16));
-					sb.append(" "+matcher.group(14));
+			if(matcher.group(12) != null){
+				if(matcher.group(19).length() > 0){
+					sb.append(" "+matcher.group(16));
+					sb.append(matcher.group(19));
+					sb.append(" "+matcher.group(16));
 				}else{
-					sb.append(" "+matcher.group(14));
+					sb.append(" "+matcher.group(16));
 				}
 			}
 			
-			if(matcher.group(3).length() > 0){
-				if(matcher.group(10) != null){
-					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(7)+matcher.group(5)+matcher.group(14));
+			if(matcher.group(4).length() > 0){
+				if(matcher.group(12) != null){
+					sb.append(" "+matcher.group(1)+matcher.group(6)+matcher.group(8)+matcher.group(6)+matcher.group(16));
 				}else{
-					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(7));
+					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(8));
 				}
 			}
+			
+			sb.append(" ");
 			
 			
 		}
