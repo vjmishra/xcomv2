@@ -928,12 +928,21 @@
         </Attributes>
         <!-- ENDS Fix for JIRA 1886 : adsouza-->
 		
-		<!--   <Indices>
-            <Index Name="CUSTOMER_I1" Unique="True">
+		<Indices>
+            <!--<Index Name="CUSTOMER_I1" Unique="True">
                <Column Name="EXTN_COMPANY_CODE"/>
                <Column Name="EXTN_LEGACY_CUST_NUMBER"/>
+            </Index>-->
+			<!-- Begin : New index created for XBT-361 -->
+			<Index Name="YFS_CUSTOMER_I5" Unique="True">
+               <Column Name="EXTN_LEGACY_CUST_NUMBER"/>
+			   <Column Name="EXTN_SHIP_TO_SUFFIX"/>
+               <Column Name="EXTN_SUFFIX_TYPE"/>
+               <Column Name="ORGANIZATION_CODE"/>               
             </Index>
-         </Indices> -->
+			<!-- End : New index created for XBT-361 -->			
+        </Indices> 
+		 
       </Entity>
 
 	 <!--  <Entity TableName="XPEDX_SALES_REP" > -->
@@ -1093,7 +1102,15 @@
 			/>		  
         </Attributes>		
       </Entity>
-
-
+	  <!-- Begin : New index created for XBT-361 -->
+	  <Entity TableName="YFS_CUSTOMER_ASSIGNMENT" >
+      		<Indices>
+				<Index Name="YFS_CUSTOMER_ASSGN_I4" Unique="True">
+					<Column Name="CUSTOMER_KEY" />
+					<Column Name="ASSIGNMENT_TYPE" />
+				</Index>				
+			</Indices>
+	  </Entity>
+	  <!-- End : New index created for XBT-361 -->
     </Entities>
 </DBSchema>
