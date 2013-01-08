@@ -127,7 +127,7 @@
         </Attributes>
 		<!-- Begin : New index created for XBT-361 -->
 		<Indices>
-            <Index Name="YFS_ORDER_HEADER_I20" Unique="False">
+            <Index Name="XPX_YFS_ORDER_HEADER_I20" Unique="False">
                <Column Name="EXTN_WEB_CONF_NUM"/>
 			   <Column Name="EXTN_LEGACY_ORDER_NO"/>               
             </Index>			

@@ -934,7 +934,7 @@
                <Column Name="EXTN_LEGACY_CUST_NUMBER"/>
             </Index>-->
 			<!-- Begin : New index created for XBT-361 -->
-			<Index Name="YFS_CUSTOMER_I5" Unique="False">
+			<Index Name="XPX_YFS_CUSTOMER_I5" Unique="False">
                <Column Name="EXTN_LEGACY_CUST_NUMBER"/>
 			   <Column Name="EXTN_SHIP_TO_SUFFIX"/>
                <Column Name="EXTN_SUFFIX_TYPE"/>
@@ -1105,7 +1105,7 @@
 	  <!-- Begin : New index created for XBT-361 -->
 	  <Entity TableName="YFS_CUSTOMER_ASSIGNMENT" >
       		<Indices>
-				<Index Name="YFS_CUSTOMER_ASSGN_I4" Unique="False">
+				<Index Name="XPX_YFS_CUSTOMER_ASSGN_I4" Unique="False">
 					<Column Name="CUSTOMER_KEY" />
 					<Column Name="ASSIGNMENT_TYPE" />
 				</Index>				
