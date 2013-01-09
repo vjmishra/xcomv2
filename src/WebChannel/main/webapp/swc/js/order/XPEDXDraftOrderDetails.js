@@ -798,6 +798,10 @@ function redrawQuickAddList()
 					    }			  
 					  				  
 					  else{	
+						  if((msapExtnUseOrderMulUOMFlag!=null && msapExtnUseOrderMulUOMFlag == 'Y') )
+				        	{
+				        		defaultSelUOM=undefined;
+				        	}
 						  var uomValues = QuickAddElems[i].uomList;
 				        	var _uomCodes = QuickAddElems[i].uomCodes;
 				        	code += '<td class="col-item">'; 
