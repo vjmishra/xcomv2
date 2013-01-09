@@ -62,7 +62,7 @@ public class XPXCatalogDataProcessor {
         		
         };*/
 		
-		String[] searches = {"45\"x 55/25\"x 12\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
+		String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
 		//String[] searches = {"abcd b5.35\" x 9.875in x 8.75in H"};
 		
 		for (String rawSearch : searches) {
@@ -209,7 +209,7 @@ public class XPXCatalogDataProcessor {
 				if(matcher.group(12) != null){
 					sb.append(" "+matcher.group(1)+matcher.group(6)+matcher.group(8)+matcher.group(6)+matcher.group(16));
 				}else{
-					sb.append(" "+matcher.group(1)+matcher.group(5)+matcher.group(8));
+					sb.append(" "+matcher.group(1)+matcher.group(6)+matcher.group(8));
 				}
 			}
 			
