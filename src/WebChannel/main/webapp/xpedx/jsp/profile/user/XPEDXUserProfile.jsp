@@ -1825,7 +1825,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true"/> Approver</label> 
 				<label
 				title="Buyer has the ability to submit orders."> 
-				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
+				<s:checkbox	tabindex="14" name='test' id='test' disabled="true" fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" />Buyer</label>
 			</s:if>	
 			<s:else> 
