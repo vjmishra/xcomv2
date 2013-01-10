@@ -1144,7 +1144,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtPOList = new Text(pnlPOLIst, SWT.BORDER);
 		txtPOList.setText("");
 		txtPOList.setLayoutData(gridData7);
-		txtPOList.setTextLimit(500);
+		txtPOList.setTextLimit(22);
 		txtPOList.setData("name", "txtPOList");	
 		
 		createPnlPOListButtons();
