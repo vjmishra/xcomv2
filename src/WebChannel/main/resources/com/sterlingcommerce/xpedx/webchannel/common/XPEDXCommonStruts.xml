@@ -239,5 +239,9 @@
 			<result name="success">/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp</result>
 		</action>
 		
+		<action name="httpaction" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHTTPAction">
+			<result>/xpedx/jsp/common/XPEDXHTTPData.jsp</result>
+		</action>
+		
 	</package>
 </struts>
