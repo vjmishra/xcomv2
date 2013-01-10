@@ -428,11 +428,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/***** Start of  Code changed for Promotions Jira 2599 ********/ 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : filter(): start");
+		
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");       
 
+		// Added for debugging Breadcrumb parameters
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : filter(): Breadcrumb : cnameValue=" + cnameValue); 
+		} // end of debugging code
 
 		/****End of Code Changed for Promotions JIra 2599 *******/
 
@@ -543,6 +552,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public void setColumnListForUI() {
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : setColumnListForUI(): start");
+
 		boolean isLayoutDefined = false;
 		try {
 			Iterator<Breadcrumb> iter = bcl.iterator();
@@ -552,6 +563,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 					String indexField = (String) bc.getParams().get(
 							"indexField");
 					String filterDesc = (String) bc.getParams().get("filterDesc");
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField=" + indexField);
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc=" + filterDesc);
 					String attributeName = null;
 					if (!YFCCommon.isVoid(filterDesc)
 							&& filterDesc
@@ -854,12 +867,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : newSearch(): start");
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");  
 
-		
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : newSearch(): Breadcrumb : cnameValue=" + cnameValue); 
+			}			
 		/****End of Code Changed for Promotions *******/
 
 		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
@@ -1160,10 +1179,19 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : navigate(): start");
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");		
+		
+		// Added for debugging Breadcrumb parameters
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : navigate(): Breadcrumb : cnameValue=" + cnameValue); 
+		} // end of debugging code			}			
 		
 		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		if (topCategoryMap == null) {			
