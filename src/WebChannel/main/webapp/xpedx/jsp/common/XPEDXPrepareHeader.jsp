@@ -813,20 +813,17 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
 		else return true;
-		if (keycode == 13)
-	   	{
-		   	if(searchTxt == "" || searchTxt == null){
-		   		document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
-		   		document.getElementById("errorText").setAttribute("class", "error");
-		}
-			
-			searchShipToAddress(divId,url);
-	   		return false;
-	   	}
-		else{
-	   		return true;
-		}
+		 <!-- XBT-343 Start-->
+         if (keycode == 13)
+         {     
+                 searchShipToAddress(divId,url);
+                 return true;
+
+         } else {
+                 return false;
+         }
 	}
+	 <!-- XBT-343 Stop-->
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
 				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To…"){
