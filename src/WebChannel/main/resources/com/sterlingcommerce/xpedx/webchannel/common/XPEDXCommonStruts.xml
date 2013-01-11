@@ -99,7 +99,8 @@
 			<param name="mashups">xpedx-customer-getHeaderInformation</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
 			<result name="success" type="redirectAction">
-				<param name="actionName">XPEDXMyItemsList</param>				
+				<param name="actionName">XPEDXMyItemsList</param>		
+				<param name="namespace">/xpedx/myItems</param>   		
 			</result>
 		</action>
 		
