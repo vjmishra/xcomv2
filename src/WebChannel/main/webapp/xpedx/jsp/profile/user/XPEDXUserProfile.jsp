@@ -252,7 +252,7 @@ $(document).ready(function()
 			},
 			'autoDimensions'	: false,
 			'width' 			: 751,
-			'height' 			: 350  
+			'height' 			: 365  
 			});
 		$("#addNewQL").fancybox({
 			'onStart'		:	function(){
@@ -1235,7 +1235,8 @@ a.underlink:hover { text-decoration: underline !important; }
 </s:else>
 
 <div class='x-hidden dialog-body ' id="shipToUserProfileDiv">
-	<div id="shipToUserProfile"></div>
+	<div id="shipToUserProfile"><div id="errorText" class="float-right"></div></div>
+	
 </div>
 	
 <div id="main-container">
