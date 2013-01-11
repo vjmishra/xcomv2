@@ -134,7 +134,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 						}
 						cachedObject.setAttribute("Class", _properties
-								.getProperty(cachedObjectProperty));
+								.getProperty(cachedObjectProperty).trim());
 						cachedGroup.appendChild(cachedObject);
 					}
 				}
@@ -156,7 +156,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						}
 						//	cachedObject.setAttribute("Enabled", "N");
 						cachedObject.setAttribute("Class", _properties
-								.getProperty(cachedObjectProperty));
+								.getProperty(cachedObjectProperty).trim());
 						cachedGroup.appendChild(cachedObject);
 					}
 				}
@@ -186,7 +186,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						}
 						//cachedObject.setAttribute("Enabled", "N");
 						cachedObject.setAttribute("Class", _properties
-								.getProperty(cachedObjectProperty));
+								.getProperty(cachedObjectProperty).trim());
 						cachedGroup.appendChild(cachedObject);
 					}
 					if(strRoot.equals("EOFPriceBook")){
@@ -215,7 +215,7 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 						}
 						//cachedObject.setAttribute("Enabled", "N");
 						cachedObject.setAttribute("Class", _properties
-								.getProperty(cachedObjectProperty));
+								.getProperty(cachedObjectProperty).trim());
 						cachedGroup.appendChild(cachedObject);
 					}
 				}
