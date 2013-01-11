@@ -93,6 +93,16 @@
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="setCurrentCustomerIntoContext">
 		</action>
+		<action name="refreshCustomerIntoContextForMIL"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">XPEDXMyItemsList</param>				
+			</result>
+		</action>
+		
 		<action name="setSelectedShipToAsDefault"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="setSelectedShipToAsDefault">

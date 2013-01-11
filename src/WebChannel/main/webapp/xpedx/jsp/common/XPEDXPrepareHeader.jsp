@@ -715,6 +715,10 @@ var selectedShipCustomer = null;
 <s:url id='xpedxHeaderUrl' action='xpedxHeader' namespace="/common" >
         <s:param name='shipToBanner' value="%{'true'}" />
 </s:url>
+<s:url id='refreshCustomerIntoContext' namespace='/common' action='refreshCustomerIntoContextForMIL.action'>	
+<s:param name='shipToBanner' value="%{'true'}" />					
+</s:url>
+		 
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
 <s:url id='shipToForUserProfileSearch' namespace='/common'
@@ -1234,11 +1238,10 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     }
                     else
                     {
-	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){
-                          var milurl=window.location;
-                          var headerUrl='<s:property value="#xpedxHeaderUrl" />';
+	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){                        
+                          var headerUrl='<s:property value="#refreshCustomerIntoContext" />';
                           window.location.href = headerUrl ;
-                          window.location.href = milurl;
+                          
                         }
                         else{
                         window.location.reload( true );
