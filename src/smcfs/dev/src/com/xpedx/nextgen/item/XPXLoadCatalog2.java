@@ -44,8 +44,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private static String _ATTR_GROUP_ID = "xpedx";
 	private static String _ORG_CODE = "xpedx";
 	private static String _RESPONSE_MSG_SERVICE = "xpedxSendItemFeedResponse";
-	private String itemKeyVal;
-	private String itemIDVal;
+	private String itemKeyVal = null;
+	private String itemIDVal = null;
 	Element eItem = null;
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
@@ -78,8 +78,7 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	public Document invoke(YFSEnvironment env, Document inXML) throws Exception
 	{
 		Document outXML = null;
-		itemKeyVal = null;
-		itemIDVal = null;
+		
 		try
 		{
 			api = YIFClientFactory.getInstance().getApi();
@@ -104,34 +103,43 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 
 				ArrayList<HashMap<String, String>> alCategoryDtls = getCategoryAssociations(env, eItem);
            
-				if(itemIDVal!=null){
+			//	if(itemIDVal!=null){
 
 				//check if it's a delete operation;change the flow
 				String actionName = SCXmlUtil.getAttribute(eItem, "Action");
 				if(!YFCCommon.isVoid(actionName) && (actionName.equalsIgnoreCase("Delete"))){
 
 					//delete the category association
-					Element eCategoryList = (Element)eItem.getElementsByTagName("CategoryList").item(0);
+			/*		Element eCategoryList = (Element)eItem.getElementsByTagName("CategoryList").item(0);
 
 					eItem.removeChild(eCategoryList);
 					Element textNode = SCXmlUtil.createChild(eItem, "CategoryList");
 					Text txt = eItem.getOwnerDocument().createTextNode(null);
-					textNode.appendChild(txt);
+					textNode.appendChild(txt);*/
 
-					iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
+					//iCat = addItemToCategory(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
+					if(itemIDVal!=null){
+						iCat = populateModifyCategoryItems(env, modifyCategoryItemsDoc, eItem, alCategoryDtls);
+					
+					
 					if(log.isDebugEnabled()){
 						log.debug("modifyCategoryItem for delete operation :" + modifyCategoryItemsDoc.toString());
 					}
-
+					if(iCat>0){
 					api.invoke(env, "modifyCategoryItem", modifyCategoryItemsDoc.getDocument());
+					}
 					//delete the item
 					if(log.isDebugEnabled()){
 						log.debug("manageItem for delete operation :" + SCXmlUtil.getString(inXML));
 					}
-
+					}
 					api.invoke(env, "manageItem", inXML);
 					//generate the response
+					
+					itemKeyVal = null;
+					itemIDVal = null;
 					outXML = generateResponse(env, inXML, "SUCCESS", null);
+ 	
 					return outXML;
 				}
 
@@ -190,8 +198,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 									}
 									eExtnList.setAttribute("ExtnBasis",sb.toString());
 								}
-							}
 						
+							}
 					}
 					//System.out.println(" Final xml"+SCXmlUtil.getString(inXML));
 
@@ -263,11 +271,11 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				    if(itemKeyVal != null){
 					deleteAssetType(env,inXML,itemKeyVal);
 				    }
-		/*			}
-				}*/
+				//	}
+				/*	}*/
 				//End for Jira 3155
 			}		    
-			}
+		//	}
 
 			//create the item
 
@@ -288,6 +296,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 				log.debug("Before Manage Item Successfull" );
 			}
 			//post a message to the response queue
+			itemKeyVal = null;
+			itemIDVal = null;
 			outXML = generateResponse(env, inXML, "SUCCESS", null);
 
 			
@@ -350,6 +360,61 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			return outXML;
 		}	
 		return outXML;
+	}
+
+private int populateModifyCategoryItems(YFSEnvironment env,
+			YFCDocument modifyCategoryItemsDoc, Element eItem2,
+			ArrayList<HashMap<String, String>> alCategoryDtls) {
+		// TODO Auto-generated method stub
+		int counter = 0;
+		if (log.isDebugEnabled()) {
+			log.debug("Modified item XML for delete testing: \n"
+					+ SCXmlUtil.getString(eItem2));
+		}
+
+		YFCElement eModifyCategoryItems = modifyCategoryItemsDoc
+				.getDocumentElement();
+
+		Element eCategoryList = (Element) eItem2.getElementsByTagName(
+				"CategoryList").item(0);
+
+		String strItemID = eItem2.getAttribute("ItemID");
+		String strUOM = eItem2.getAttribute("UnitOfMeasure");
+		String strOrganizationCode = eItem2.getAttribute("OrganizationCode");
+
+		NodeList nlCategoryList = eItem2.getElementsByTagName("Category");
+		if(nlCategoryList!=null){
+		for (int k = 0; k < nlCategoryList.getLength(); k++) {
+			Element eCategory = (Element) nlCategoryList.item(k);
+			String strCatPath = eCategory.getAttribute("CategoryPath");
+			String strOrgCode = eCategory.getAttribute("OrganizationCode");
+			if (log.isDebugEnabled()) {
+				log.debug("Adding item to category.");
+			}
+			//if (assocatedToCategory(strCatPath, strOrgCode, alCategoryDtls)) {
+				YFCElement eCategoryToModify = modifyCategoryItemsDoc
+						.createElement("Category");
+				eCategoryToModify.setAttribute("CategoryPath", strCatPath);
+				eCategoryToModify.setAttribute("OrganizationCode", strOrgCode);
+
+				YFCElement eCategoryItemList = modifyCategoryItemsDoc
+						.createElement("CategoryItemList");
+
+				YFCElement eCategoryItem = modifyCategoryItemsDoc
+						.createElement("CategoryItem");
+				eCategoryItem.setAttribute("Action", "Delete");
+				eCategoryItem.setAttribute("ItemID", strItemID);
+				eCategoryItem.setAttribute("UnitOfMeasure", strUOM);
+				eCategoryItem.setAttribute("OrganizationCode",
+						strOrganizationCode);
+
+				eModifyCategoryItems.appendChild(eCategoryToModify);
+				eCategoryToModify.appendChild(eCategoryItemList);
+				eCategoryItemList.appendChild(eCategoryItem);
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey) {
