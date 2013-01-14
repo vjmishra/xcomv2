@@ -380,17 +380,17 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 				}
 
 							
-					String errorMsg="Please provide Values/Flags for "+errorMessage+" in  Corporate Info at Customer Level.";
+					//String errorMsg="Please provide Values/Flags for "+errorMessage+" in  Corporate Info at Customer Level.";
 					String errorGTM="Please provide Values for Gross Trading Margin. ";
 					if(YRCPlatformUI.isVoid(errorMessageGTM)){
 					
-						errrorValueFinal=errorMsg;
+						//errrorValueFinal=errorMsg;
 					}
 					else if(YRCPlatformUI.isVoid(errorMessage)){
 						errrorValueFinal=errorGTM;
 					}
 					else
-						errrorValueFinal=errorMsg+"\n"+errorGTM;
+						errrorValueFinal=errorGTM;
 					
 					YRCPlatformUI.showError("Error",
 							errrorValueFinal);
