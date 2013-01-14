@@ -2183,7 +2183,7 @@ public class XPXUtils implements YIFCustomApi {
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
 		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat(" Order Submitted Notification "));		
+		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));		
 		
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
 		YFCElement orderElem = inDoc.getDocumentElement();
@@ -2195,11 +2195,7 @@ public class XPXUtils implements YIFCustomApi {
 				_subjectLine.append("- PO ").append(customerPO);
 			}
 			
-			YFCElement extnElem = orderElem.getChildElement("Extn");
-			if (extnElem != null && (!YFCObject.isVoid(extnElem.getAttribute("ExtnOrderDivision")))
-					             && (!YFCObject.isVoid(extnElem.getAttribute("ExtnLegacyOrderNo")))
-					             && (!YFCObject.isVoid(extnElem.getAttribute("ExtnGenerationNo")))
-					             && (!YFCObject.isVoid(orderNo)))
+			if (!YFCObject.isVoid(orderNo))
 			{
 				if(!YFCObject.isVoid(customerPO))
 				{
@@ -2238,12 +2234,7 @@ public class XPXUtils implements YIFCustomApi {
 		{
 			_subjectLine.append(" - PO ").append(customerPO);
 		}
-		Element extnElem = SCXmlUtil.getChildElement(orderElement, "Extn");
-		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)) 
-							 && extnElem != null 
-				             && (!YFCObject.isVoid(extnElem.getAttribute("ExtnOrderDivision")))
-				             && (!YFCObject.isVoid(extnElem.getAttribute("ExtnLegacyOrderNo")))
-				             && (!YFCObject.isVoid(extnElem.getAttribute("ExtnGenerationNo"))))
+		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)))
 		{
 			if(!YFCObject.isVoid(customerPO))
 			{
