@@ -1,6 +1,0 @@
-<Organization OrganizationCode="xpedx" Operation="Manage" IsNode="Y"> 
-        <Extn ExtnDivisionType="" ExtnPhone2="513-739-0747" ExtnFax2="" ExtnDivisionContact="" ExtnDivEmailPaper="" ExtnDivEmailNonPaper="" ExtnMinOrderAmt="" ExtnMaxOrderAmt="" ExtnSmallOrderFee="" ExtnWillCallInfo="" ExtnDeliveryInfo="" ExtnDeliveryCutOffTime="" ExtnPriceWareHouseName="" /> 
-        <Node InterfaceType="YFX"> 
-</Organization> 
-
-
