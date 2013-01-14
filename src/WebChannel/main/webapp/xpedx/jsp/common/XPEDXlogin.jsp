@@ -98,6 +98,12 @@ $('#signIn').hide();
 						<label class="txt-sml-gry">&nbsp;Remember Me</label>
 						<p/>
 					</s:if>
+					</P>
+				<div>
+					<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
+							<s:param name="callerPage">SignInPageSide</s:param>
+						</s:action>
+				</div>
 					
 				 <s:set name="displayError" value="N" />
 					<% if(null != request.getParameter("fromRegisterPage") && !request.getParameter("fromRegisterPage").equals("Y")) { %>
