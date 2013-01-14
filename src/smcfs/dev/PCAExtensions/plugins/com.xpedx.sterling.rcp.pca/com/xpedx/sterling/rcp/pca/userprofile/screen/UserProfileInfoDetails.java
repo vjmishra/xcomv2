@@ -51,6 +51,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Label lblSpendingLimit;
 	private Combo comboCurrencyType;
 	private Text txtSpendingLimit;
+	private Label lblApproveOrders;
+	private Button chkApproveOrders;
 	private Button btnUpdate;
 	private Label lblUserID;
 	private Label lblUserType;
@@ -226,7 +228,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 				chkReceiveOrderCancellationEmail, chkReceiveOrderShipmentEmail,
 				chkeceiveBackOrderEmail, chkAcceptTAndC, txtFaxNumber,
 				txtLastLoginDate, comboB2BCatalogView, fullView, condensedView,
-				miniView, paperGridView, btnAssign, btnRemove };
+				miniView, paperGridView, btnAssign, btnRemove,chkApproveOrders };
 	}	
 	
 	private void setControlsEnabled(Control[] controls, boolean enabled) {
@@ -867,7 +869,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = 4;
         gridData2.horizontalIndent = 100;
-        gridData2.widthHint = 150;
+        gridData2.widthHint = 200;
         gridData2.verticalIndent = 8;
         GridData gridData3 = new GridData();
         gridData3.horizontalAlignment = SWT.BEGINNING;
@@ -936,6 +938,22 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtSpendingLimit.setData("name", "txtSpendingLimit");
 		
 		/*End- For Jira 3264 */
+		
+		//Added for JIRA XB-258
+		lblApproveOrders = new Label(pnlSiteSettings, SWT.LEFT);
+		lblApproveOrders.setText("Submit_Orders");
+		lblApproveOrders.setLayoutData(gridData2);
+		lblApproveOrders.setData("name", "lblApproveOrders");
+		chkApproveOrders = new Button(pnlSiteSettings, SWT.CHECK);
+		chkApproveOrders.setVisible(true);
+		chkApproveOrders.setData("yrc:customType", "Label");
+		chkApproveOrders.setData("name", "chkApproveOrders");
+		
+		Label lblApproveOrdersDummy = new Label(pnlSiteSettings, SWT.LEFT);
+		lblApproveOrdersDummy.setText("");
+		lblApproveOrdersDummy.setLayoutData(gridData2);
+		lblApproveOrdersDummy.setVisible(false);
+		lblApproveOrdersDummy.setData("name", "lblApproveOrdersDummy");
 		
 		lblPreferredCatalogView = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPreferredCatalogView.setText("Preferred_Catalog_View");
@@ -1835,6 +1853,17 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnBackOrderEmailFlag");
 		chkBoxBindingData.setName("chkeceiveBackOrderEmail");
 		chkeceiveBackOrderEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
+		
+		
+		//Added for JIRA XB-258
+		
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnOrderApproval");
+		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderApproval");
+		chkBoxBindingData.setName("chkApproveOrders");
+		chkApproveOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);
 
 //		/*chkBoxBindingData = new YRCButtonBindingData();
 //		chkBoxBindingData.setCheckedBinding("Y");
