@@ -391,9 +391,13 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 					}
 					else
 						errrorValueFinal=errorGTM;
-					
-					YRCPlatformUI.showError("Error",
-							errrorValueFinal);
+					//Added for XB-120
+					if(!YRCPlatformUI.isVoid(errrorValueFinal)){
+						YRCPlatformUI.showError("Error",errrorValueFinal);
+						}
+						else{
+							myBehavior.callUpdateApi();
+						}
 					
 					errorMessageList.clear();
 			}
