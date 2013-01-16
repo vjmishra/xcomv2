@@ -596,6 +596,38 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 					xpedxCustomerContactInfoBean.setExtnViewPricesFlag(getViewPrices());
 					xpedxCustomerContactInfoBean.setExtnViewReportsFlag(getViewReports());
+					//XB - 537 - start
+					String prefCatalog = request.getParameter("PrefCatalog");
+					xpedxCustomerContactInfoBean.setFirstName(getFirstName());
+					xpedxCustomerContactInfoBean.setLastName(getLastName());
+					xpedxCustomerContactInfoBean.setExtnViewInvoices(getViewInvoices());
+					
+					boolean isEstimator = getEstimator().equals("Y")?true:false;
+					xpedxCustomerContactInfoBean.setIsEstimator(isEstimator);
+					
+					xpedxCustomerContactInfoBean.setExtnPrefCatalog(prefCatalog);
+					
+					String selectView = null;
+					switch(Integer.parseInt(getB2bCatalogView())){
+					case 0:
+						selectView = "normal-view";
+						break;
+					case 1:
+						selectView = "condensed-view";
+						break;
+					case 2:
+						selectView = "mini-view";
+						break;
+					case 3:
+						selectView = "papergrid-view";
+					default:
+						selectView = "normal-view";
+						break;
+
+					}
+					request.getSession().setAttribute("selectedView", selectView);
+					//XB - 537 - end
+					
 //					wcContext.getSCUIContext().getSession().setAttribute("viewPricesFlag", getViewPrices());
 //					wcContext.getSCUIContext().getSession().setAttribute("viewReportsFlag", getViewReports());
 					//added for jira 3780
