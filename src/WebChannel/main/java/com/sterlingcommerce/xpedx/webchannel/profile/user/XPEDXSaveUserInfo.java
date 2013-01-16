@@ -621,6 +621,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						break;
 					case 3:
 						selectView = "papergrid-view";
+						break;
 					default:
 						selectView = "normal-view";
 						break;
