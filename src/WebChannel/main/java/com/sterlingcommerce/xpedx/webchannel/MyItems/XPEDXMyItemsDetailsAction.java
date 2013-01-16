@@ -161,6 +161,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	//Added for webtrends
 	protected Map<String,String>itemTypeMap=new HashMap<String,String>();
+	//Added	erroMsg for XB-224
+	private String 	erroMsg = "";
+	public String getErroMsg() {
+		return erroMsg;
+	}
+
+	public void setErroMsg(String erroMsg) {
+		this.erroMsg = erroMsg;
+	}
     
 	public void setItemTypeMap(Map<String, String> itemTypeMap) {
 		this.itemTypeMap = itemTypeMap;
@@ -317,6 +326,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	//This includes only My items list items and not other alternate items etc.
 	protected ArrayList<String> allMyItemsListItemIds = new ArrayList<String>();
+	//Added	validItemIds for XB-224
+	protected ArrayList<String> validItemIds = new ArrayList<String>();
 	YFCDate lastModifiedDate = new YFCDate();
 	String lastModifiedDateString = "";
 	String lastModifiedUserId = "";
@@ -584,6 +595,96 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
+	
+	//XB-224 Added to check for item entitlement for the logged in customer
+	
+	private void checkforEntitlement(){
+		
+		ArrayList<String> entlErrorList = new ArrayList<String>();
+		ArrayList<String> itemlist = new ArrayList<String>();
+		try {
+			// Removing call to getXpedxEntitledItemDetails for performance fix. JIRA 4020
+			//Iterator productIDIter = allItemIds.iterator();
+			if(allMyItemsListItemIds  != null) {
+				itemlist  = allMyItemsListItemIds;
+			}
+		
+		if(itemlist.size() == 0){
+				for(int i=0; i<allMyItemsListItemIds.size();i++) {
+					entlErrorList.add(allMyItemsListItemIds.get(i));
+				}	
+				if(entlErrorList.size() == 0) {
+					erroMsg = "";
+					
+				} else {
+					if(entlErrorList.size()> 1){
+						Iterator itr = entlErrorList.iterator();
+						while(itr.hasNext())
+						{
+							erroMsg+= itr.next().toString()+",";
+
+						}
+						int lastIndex = erroMsg.lastIndexOf(",");
+						erroMsg = erroMsg.substring(0,lastIndex);
+
+					}
+					else{
+						erroMsg=entlErrorList.get(0);
+					}					
+				}
+		}
+		else if(itemlist.size() == 1){
+			
+			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
+				if(validItemIds.size() > 0){
+				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+					entlErrorList.add(allMyItemsListItemIds .get(i));
+				}
+				}
+				else	
+						entlErrorList.add(allMyItemsListItemIds.get(i));
+			}
+			if(entlErrorList != null && entlErrorList.size() > 0){
+				erroMsg=entlErrorList.get(0);
+	
+			}
+		}
+		else{
+		
+			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
+				
+				
+				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+					entlErrorList.add(allMyItemsListItemIds .get(i));
+				}
+			}
+				 if(entlErrorList != null && entlErrorList.size() > 0){
+				if(entlErrorList.size()> 1){
+					Iterator itr = entlErrorList.iterator();
+					while(itr.hasNext())
+					{
+						erroMsg+= itr.next().toString()+",";
+
+					}
+					int lastIndex = erroMsg.lastIndexOf(",");
+					erroMsg = erroMsg.substring(0,lastIndex);
+
+				}
+				else {
+					erroMsg=entlErrorList.get(0);
+				}
+				}
+			
+		//}	End of while loop
+	}
+	}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+	
+	}
+	
+	//End of XB-224
 
 	private void setItemDescription()
 	{
@@ -741,6 +842,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// Get related items and their information
 			getRelatedItems();
 			
+			checkforEntitlement();//checks if the Items are entitled to the current customer - added for XB 224
 			setItemDescription();
 			
 			String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
@@ -1571,6 +1673,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Element itemElem=itemsElem.get(i);
 					if(itemElem!=null){
 						String Itemid = SCXmlUtil.getAttribute(itemElem,"ItemID");
+						//Using validItemIds for XB-224
+						validItemIds.add(Itemid.trim());
 						baseUOMmap.put(Itemid,itemElem.getAttribute("UnitOfMeasure"));
 					}
 					setMyItemsImages(itemElem);
