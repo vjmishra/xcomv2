@@ -117,6 +117,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String userPwdToValidate;
 	public String defaultShipTo;
 	private ArrayList<String> oldAssignCusts=new ArrayList<String>();
+	private Document manageCustomerAssigmentInputDoc=null;
 	public String getDefaultShipTo() {
 		return defaultShipTo;
 	}
@@ -921,8 +922,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					customers2Iterator.remove();
 				}
 			}
-			saveChanges(customers2, "Create");
-			saveChanges(newCustomers1, "Delete");
+			manageCustomerAssigmentInputDoc=SCXmlUtil.createDocument("ManageCustomerAndAssignment");
+			Element customerAssignmentListElem=SCXmlUtil.createChild(manageCustomerAssigmentInputDoc.getDocumentElement(), "CustomerAssignmentList");
+			saveChanges(customers2, "Create",customerAssignmentListElem);
+			saveChanges(newCustomers1, "Delete",customerAssignmentListElem);
+			NodeList customerAssignementNodeList=customerAssignmentListElem.getElementsByTagName("CustomerAssignment");
+			if(customerAssignementNodeList != null && customerAssignementNodeList.getLength() >0)
+			{
+				WCMashupHelper.invokeMashup(
+						"XPEDXManageCustomerAndAssignment", manageCustomerAssigmentInputDoc.getDocumentElement(), wcContext
+								.getSCUIContext());
+			}
 		}
 		
 		if(getSpendingLtCurrency()!=null && getSpendingLtCurrency().equals("-1")){
@@ -930,7 +940,65 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		}
 	}
 
-	private void saveChanges(List<String> wList, String operation) {
+	private void saveChanges(List<String> wList, String operation,Element customerAssignmentListElem) {
+		
+		ArrayList<String> listOfShipTo=new ArrayList<String>() ;
+		try
+		{
+			if(operation.equals("Delete"))
+				listOfShipTo=getAllShipTos(wList);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		for (int index = 0; index < wList.size(); index++) {
+			try {
+				if(wList.get(index) != null && wList.get(index).trim().length() ==0 )
+					continue;
+				Element customerAssignmentElem=SCXmlUtil.createChild(customerAssignmentListElem, "CustomerAssignment");
+				customerAssignmentElem.setAttribute("CustomerID", wList.get(index));
+				customerAssignmentElem.setAttribute("OrganizationCode", getWCContext().getBuyerOrgCode());
+				customerAssignmentElem.setAttribute("UserId", customerContactId);
+				customerAssignmentElem.setAttribute("Operation", operation);
+				if(operation.equals("Delete")){
+						if(listOfShipTo.size() == 0 ){
+							defaultShipTo = "";
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,"true" );
+						}
+						
+						if(!listOfShipTo.contains(defaultShipTo))
+						{
+							defaultShipTo = "";
+							if(customerContactId.equals(wcContext.getLoggedInUserId()))
+							{
+								XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+								XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,"true" );
+							}
+						}
+        		}
+				/*String inputXml = SCXmlUtil.getString(input);
+				LOG.debug("Input XML: " + inputXml);
+				Object obj = WCMashupHelper.invokeMashup(
+						"xpedxSaveCustomerAssignments", input, wcContext
+								.getSCUIContext());
+				Document outputDoc = null;
+				if (obj != null) {
+					outputDoc = ((Element) obj).getOwnerDocument();
+					if (null != outputDoc) {
+						String outputXml = SCXmlUtil.getString((Element) obj);
+						LOG.debug("Output XML: " + outputXml);
+					}
+				}*/
+			} catch (Exception ex) {
+				log.debug("Record already exists");
+			}
+		}
+	}
+//Commented for JIRA 488 save performance issue.
+	
+	/*private void saveChanges(List<String> wList, String operation) {
 		for (int index = 0; index < wList.size(); index++) {
 			try {
 				Map<String, String> valueMap = new HashMap<String, String>();
@@ -985,7 +1053,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				log.debug("Record already exists");
 			}
 		}
-	}
+	}*/
 
 	private ArrayList<String> getAllShipTos(List<String> wList) throws Exception
 	{
