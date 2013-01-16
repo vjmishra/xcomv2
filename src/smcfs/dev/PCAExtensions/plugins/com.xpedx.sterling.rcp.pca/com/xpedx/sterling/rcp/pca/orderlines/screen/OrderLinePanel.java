@@ -3079,7 +3079,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		if ((legacylineNum != null && legacylineNum != "")
 				&& (weblineNum != null && weblineNum != "")) {
 
-			legacy_webline_number = legacylineNum + "," + weblineNum;
+			legacy_webline_number = legacylineNum + ", " + weblineNum;
 
 		}
 
