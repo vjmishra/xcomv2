@@ -1020,6 +1020,20 @@ function showSharedListForm(){
 
 			var quantity = arrQty.value;
 			quantity = ReplaceAll(quantity,",","");
+			// XB-224 start
+			var erroMsg = '<s:property value='erroMsg' />';//Added for XB- 224
+			if(erroMsg != null && erroMsg != ""){
+			        document.getElementById("errorMsgTop").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgTop").style.display = "inline";
+						
+			        document.getElementById("errorMsgBottom").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgBottom").style.display = "inline";
+					errorflag= true;
+					isAddToCart=false;
+					Ext.Msg.hide();
+					myMask.hide();
+			}
+			//XB 224 end
 
 			if (priceCheck == true && addItemsWithQty != true){
 				if(quantity == '0'|| quantity == '')
@@ -1146,8 +1160,7 @@ function showSharedListForm(){
 				}	
 			}
 		}// End of If block
-			else{
-			
+			else{		
 			isAddToCart=true;
 			var arrQty = new Array();
 			var arrUOM = new Array();
@@ -1164,6 +1177,17 @@ function showSharedListForm(){
 			addToCartFlag=false;
 			var isQuantityZero = true;
 			var uomCheck = false ;
+			// XB-224 start
+			var erroMsg = '<s:property value='erroMsg' />';
+			if(erroMsg != null && erroMsg != ""){
+					document.getElementById("errorMsgTop").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgTop").style.display = "inline";
+						
+			        document.getElementById("errorMsgBottom").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgBottom").style.display = "inline";
+					errorflag= true;
+					isAddToCart=false;	
+			//XB 224 end
 			for(var i = 0; i < arrItemID.length; i++)
 			{	
 				
@@ -1292,13 +1316,12 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 							
 							}
-						
-						
 					}	
 				}	
 				
 			}
-			
+			Ext.Msg.hide();
+    			myMask.hide();
 			} // End of else . This else is for if itemCount==1	
 			if(uomCheck == true)
 			{
@@ -1345,6 +1368,8 @@ function showSharedListForm(){
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
+			//added for XB-224
+			var erroMsg = '<s:property value='erroMsg' />';//Added for XB- 224
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
@@ -1352,6 +1377,26 @@ function showSharedListForm(){
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
+				var itemID = arrItemID[i].value;				
+				if(erroMsg != null && erroMsg != ""){
+					if(divId != null)
+					{		
+						var errorItemList = erroMsg.split(",");
+						for (var i = 0; i < errorItemList.length; i++)
+						{
+						if(errorItemList[i] == itemID){
+						divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
+						divVal.setAttribute("class", "error");
+						divVal.style.display = 'block';
+						Ext.Msg.hide();
+				    	myMask.hide();
+						errorflag= true;
+						isAddToCart=false;
+						}
+						}
+					}
+				}
+				//End of XB 224
 
 				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined)){
 					if(quantity == '0'|| quantity == '')
@@ -2897,6 +2942,7 @@ function showSharedListForm(){
                                 </tr>
 								
 								<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
+									<s:set name="erroMsg" value='%{erroMsg}'/>
 									<%-- <s:set name="itemIdUOMsMap" value='itemIdsUOMsMap.get(#itemId1)' />
 									 --%>
 									 <s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
@@ -2987,10 +3033,16 @@ function showSharedListForm(){
 	                              	
 	                               </li>
                                 </s:if>
-                                <li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
+                                <s:if test='%{#erroMsg !=null && #erroMsg !=""}'>  
+                                <li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
 		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
 		                    	</li>
-                               <br/> 
+		                    	</s:if>
+		                    	<s:else><li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
+		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+		                    	</li>
+		                    	</s:else>
+		                    	<br/> 
 		
 		                     </ul>
                             <div class="clearall"> &nbsp;</div>
