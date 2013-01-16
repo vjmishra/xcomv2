@@ -681,7 +681,6 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String transactionalUOM = "";
 		String extnPrisingUOM = "";
 		String[] valueArray =  new String[5];
-		String[] unique = null ;
 		HashSet<String> hs = new HashSet<String>();
 
 
@@ -824,32 +823,23 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String orderNumber = "";
 
 		if(hs.isEmpty()){
-
 			orderNumber = "In Progress";
 
-		}
-
-		else if(!hs.isEmpty())
-
+		}else 
 		{
-
-			unique = (String[]) hs.toArray(new String[hs.size()]);
-
-		}
-
-
-
-		if( unique != null && unique.length > 0){
-
-			for (int i = 0; i < unique.length; i++) {
-
-				orderNumber = orderNumber + unique[i] + ",";
-
+			int i=1;
+			Iterator<String> orderNumberItr=hs.iterator();
+			while(orderNumberItr.hasNext()){
+				if(i==hs.size()) {
+					orderNumber=orderNumber+orderNumberItr.next();
+					
+				}else {
+					orderNumber=orderNumber+orderNumberItr.next()+",";
+				}
+				++i;					
 			}
 
 		}
-
-		orderNumber = orderNumber.substring(0, orderNumber.length() - 1);
 
 		if (!"".equalsIgnoreCase(orderNo)) {
 			/** Logic to remove the last comma **/
@@ -1067,7 +1057,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	public Document getSalesRepEmail(YFSEnvironment env,
 			Document inputDocument, String billToId) throws YFSException, RemoteException, YIFClientCreationException
-			{
+	{
 		api = YIFClientFactory.getInstance().getApi();
 		yfcLogCatalog.debug("getSalesRepEmail " +  SCXmlUtil.getString(inputDocument));
 
@@ -1150,8 +1140,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			inputDocument.getDocumentElement().setAttribute("salesRepEmail", salesRepEmail);
 
 		}
-
 		
 		return inputDocument ;
-			}
+	}
 }

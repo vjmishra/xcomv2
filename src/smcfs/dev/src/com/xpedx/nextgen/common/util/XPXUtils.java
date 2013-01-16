@@ -2192,17 +2192,17 @@ public class XPXUtils implements YIFCustomApi {
 		{
 			if(!YFCObject.isVoid(customerPO))
 			{
-				_subjectLine.append("- PO ").append(customerPO);
+				_subjectLine.append("- PO # ").append(customerPO);
 			}
 			
 			if (!YFCObject.isVoid(orderNo))
 			{
 				if(!YFCObject.isVoid(customerPO))
 				{
-				_subjectLine.append(", Order ").append(orderNo);
+				_subjectLine.append(", Order # ").append(orderNo);
 				
 				}else {
-					_subjectLine.append("- Order ").append(orderNo);
+					_subjectLine.append("- Order # ").append(orderNo);
 				}
 				
 			}
@@ -2232,16 +2232,16 @@ public class XPXUtils implements YIFCustomApi {
 		
 		if(!YFCObject.isVoid(customerPO))
 		{
-			_subjectLine.append(" - PO ").append(customerPO);
+			_subjectLine.append(" - PO # ").append(customerPO);
 		}
 		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)))
 		{
 			if(!YFCObject.isVoid(customerPO))
 			{
-				_subjectLine.append(", Order ").append(formattedOrderNo);
+				_subjectLine.append(", Order # ").append(formattedOrderNo);
 			
 			}else {
-				_subjectLine.append("- Order ").append(formattedOrderNo);
+				_subjectLine.append("- Order # ").append(formattedOrderNo);
 			}
 		}
 		orderElement.setAttribute("Subject", _subjectLine.toString());
@@ -2718,8 +2718,6 @@ public class XPXUtils implements YIFCustomApi {
 		return sb.toString();
 	}
 	
-	
-	
 	public static HashMap<String, String> readCentPropertiesFile(){
 		HashMap<String, String> map = null;
 		try
@@ -2732,8 +2730,6 @@ public class XPXUtils implements YIFCustomApi {
 	    }
 	    return map;
 	}
-	
-	
 	
 	public static HashMap<String, String> getProperties(String infile) throws IOException {
         final int lhs = 0;
