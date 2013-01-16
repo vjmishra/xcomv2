@@ -339,10 +339,6 @@
 									<td class="widthLeft">Ordered By: </td>
 									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/></td>
 								</tr>	
-								<tr>
-									<td class="widthLeft">Ordered Date: </td>
-									<td class="widthRight"><xsl:value-of select="substring(Order/@OrderDate,1,10)"/>&#160;<xsl:value-of select="substring(Order/@OrderDate,12,8)"/>&#160;<xsl:text>CT</xsl:text></td>
-								</tr>	
 						 	</table>
 						 	
 						</td>	
@@ -518,6 +514,7 @@
 						<td class="align-right">
 						<xsl:if test='$viewPricesFlag ="Y"'>
 							<xsl:choose>
+								<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
 								<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 								<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
 								<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
