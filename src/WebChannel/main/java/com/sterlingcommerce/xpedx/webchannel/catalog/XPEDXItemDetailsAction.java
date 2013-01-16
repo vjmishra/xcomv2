@@ -375,6 +375,30 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		
 //		displayUOMs.add(BaseUomDesc); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
+		//Moved code from below to above for JIRA XB-558
+		displayUOMs.add(PricingUOMDesc);
+		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
+				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
+			//displayUOMs.add("Thousand");
+			if (prodMweight != null && prodMweight.trim().length() > 0 )
+				prodWeight = new BigDecimal(prodMweight);
+			else
+				prodWeight = new BigDecimal(100); // this will make
+			// pricing for CW
+			try
+			{
+				//priceForTHUom = pricingUOMPrice.multiply(prodWeight.divide(new BigDecimal(100)));
+				priceForTHUom = pricingUOMPrice.multiply(XPEDXPriceandAvailabilityUtil.divideBDWithPrecision(prodWeight  ,new BigDecimal(100)) );
+				thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_M);
+				if(thUOMDesc==null || thUOMDesc.length()==0)
+					thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_A);
+				displayUOMs.add(thUOMDesc);
+			}
+			catch(Exception e)
+			{	
+				priceForTHUom = pricingUOMPrice;
+			}
+		}
 		if ((XPEDXPriceandAvailabilityUtil.TH_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.TH_UOM_A.equalsIgnoreCase(pricingUOM)) && 
 				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))) {
 			// hardcode for now.
@@ -402,30 +426,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 			
 		}
-		//Moved code from above to bottom for JIRA 1835
-		displayUOMs.add(PricingUOMDesc);
-		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
-				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
-			//displayUOMs.add("Thousand");
-			if (prodMweight != null && prodMweight.trim().length() > 0 )
-				prodWeight = new BigDecimal(prodMweight);
-			else
-				prodWeight = new BigDecimal(100); // this will make
-			// pricing for CW
-			try
-			{
-				//priceForTHUom = pricingUOMPrice.multiply(prodWeight.divide(new BigDecimal(100)));
-				priceForTHUom = pricingUOMPrice.multiply(XPEDXPriceandAvailabilityUtil.divideBDWithPrecision(prodWeight  ,new BigDecimal(100)) );
-				thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_M);
-				if(thUOMDesc==null || thUOMDesc.length()==0)
-					thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_A);
-				displayUOMs.add(thUOMDesc);
-			}
-			catch(Exception e)
-			{	
-				priceForTHUom = pricingUOMPrice;
-			}
-		}
+		
 		boolean isDisplayReqUOM=true;
 		for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
 		{
