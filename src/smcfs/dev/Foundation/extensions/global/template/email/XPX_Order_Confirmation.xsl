@@ -521,6 +521,7 @@
 						<td class="align-right">
 							<xsl:if test='$viewPricesFlag ="Y"'>
 								<xsl:choose>
+									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
 									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
 									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
