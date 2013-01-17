@@ -46,7 +46,7 @@
 <s:set name='orderHoldType' value='#xutil.getChildElement(#orderHoldTypes, "OrderHoldType")'/>
 <s:set name='approverID2' value='#xutil.getAttribute(#orderHoldType, "ResolverUserId")'/>
 <s:set name='modifyuserid' value='#xutil.getAttribute(#orderHoldType, "Modifyuserid")'/>
-<s:set name='approvedDate' value='#xutil.getAttribute(#orderDetail, "Modifyts")'/>
+<s:set name='approvedDate' value='#xutil.getAttribute(#orderHoldType, "Modifyts")'/>
 <s:set name='xpedxApprovedDate' value="#xpedxutil.formatDate(#approvedDate, #wcContext, null,'MM/dd/yyyy')" />
 <s:set name='xpedxReqDeliveryDate' value='#xutil.getAttribute(#orderDetail,"ReqDeliveryDate")'/>
 <s:set name='xpedxReqDeliveryDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null,'MM/dd/yyyy')" />
