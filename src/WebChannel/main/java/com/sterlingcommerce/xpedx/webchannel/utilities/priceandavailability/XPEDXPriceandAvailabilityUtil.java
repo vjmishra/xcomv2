@@ -1007,14 +1007,7 @@ public class XPEDXPriceandAvailabilityUtil {
 							
 							
 							ArrayList<XPEDXBracket> displayPriceForUoms = new ArrayList<XPEDXBracket>();
-							
-							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0 &&
-									(uomsList.contains(CWT_UOM_M) || uomsList.contains(CWT_UOM_A)))
-							{
-								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
-								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
-							}
-							//Moved code from above to bottom for JIRA 1835
+							//Moved code from  bottom to above for JIRA XB-558
 							String fmtPricePerUom =  xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode,pricingUOMUnitPrice);
 							displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
 							
@@ -1024,6 +1017,13 @@ public class XPEDXPriceandAvailabilityUtil {
 								String fmtPriceForTHUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForTHUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, thUOMDesc,fmtPriceForTHUom ));
 							}
+							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0 &&
+									(uomsList.contains(CWT_UOM_M) || uomsList.contains(CWT_UOM_A)))
+							{
+								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
+								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
+							}
+							
 							
 							boolean isDisplayReqUOM=true;
 							for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
