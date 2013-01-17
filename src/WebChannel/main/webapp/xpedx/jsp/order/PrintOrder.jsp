@@ -542,7 +542,7 @@
         <td class="printField">&nbsp;</td><td class="printValue"></td>
         <td class="printValue" colspan="2">
               	<ul id="cart-actions" class="float-right">
-		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="javascript:window.close()"><span>Cancel</span></s:a></li>
+		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="javascript:window.close()"><span>Close</span></s:a></li>
 		            <li><s:a href="javascript:window.print()" cssClass="orange-ui-btn"><span>Print</span></s:a></li>
 		        </ul>
         </td>    
