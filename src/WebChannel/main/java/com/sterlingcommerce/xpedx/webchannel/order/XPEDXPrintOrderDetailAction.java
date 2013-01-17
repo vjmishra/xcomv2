@@ -122,6 +122,20 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			Document orderDoc = getOutputDocument();
+			Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc.getDocumentElement(), "OrderLines");
+			ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+			for (int i = 0; i < orderLineElemList.size(); i++) {
+				Element orderLineElement = (Element)orderLineElemList.get(i);
+				String lineType = orderLineElement.getAttribute("LineType");
+				if(lineType.equals("P")){
+					lineItemCount++;
+				}
+				else{
+					lineOtherCount++;
+				}
+			}
+			
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
@@ -229,12 +243,12 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 			
 			String customerItem = orderLineElement.getAttribute("CustomerItem");
 			String lineType = orderLineElement.getAttribute("LineType");
-			if(lineType.equals("P")){
-				lineItemCount++;
-			}
-			else{
-				lineOtherCount++;
-			}
+//			if(lineType.equals("P")){
+//				lineItemCount++;
+//			}
+//			else{
+//				lineOtherCount++;
+//			}
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
 					"Item");
 			String itemId = itemElement.getAttribute("ItemID");// orderline/item
