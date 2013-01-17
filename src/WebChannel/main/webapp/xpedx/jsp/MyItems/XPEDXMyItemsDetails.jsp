@@ -1190,7 +1190,9 @@ function showSharedListForm(){
 			        document.getElementById("errorMsgBottom").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
 			        document.getElementById("errorMsgBottom").style.display = "inline";
 					errorflag= true;
-					isAddToCart=false;	
+					isAddToCart=false;
+				
+			}
 			//XB 224 end
 			for(var i = 0; i < arrItemID.length; i++)
 			{	
