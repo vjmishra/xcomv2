@@ -1272,18 +1272,23 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
 							if(altItemIds.contains(curritemID)){
 								alternateAssociatedItems.add(curritem);
+								continue;
 							}
 							if(compItemIds.contains(curritemID)){
 								complimentAssociatedItems.add(curritem);
+								continue;
 							}
 							if(upItemIds.contains(curritemID)){
 								upgradeAssociatedItems.add(curritem);
+								continue;
 							}
 							if(crossSellItemIDs.contains(curritemID)){
 								crossSellAssociatedItems.add(curritem);
+								continue;
 							}
 							if(upSellItemIDs.contains(curritemID)){
 								upSellAssociatedItems.add(curritem);
+								continue;
 							}
 					        if(repItemIds.contains(curritemID))
 					        {
