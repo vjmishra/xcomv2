@@ -38,6 +38,7 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 	<s:set name="goBackFlag" value='%{"false"}' />
@@ -175,7 +176,7 @@ var selectedShipCustomer = null;
 			
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
-				if (isUserAdmin){
+				if (isUserAdmin || isEstUser){
 				//Call AJAX function to fetch Ship-To locations only when user is an Admin
 					showShareListHL('<s:property value="#CurrentCustomerId"/>');
 				}
@@ -191,7 +192,7 @@ var selectedShipCustomer = null;
 	            var radioBtns = document.XPEDXMyItemsDetailsChangeShareListHL.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontentHL");
 				clearTheArrays();
-				if(!isUserAdmin)
+				if(!isUserAdmin && !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;

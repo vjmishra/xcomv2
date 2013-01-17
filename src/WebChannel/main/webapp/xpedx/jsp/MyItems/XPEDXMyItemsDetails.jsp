@@ -18,6 +18,8 @@
 	value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
+<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <s:bean	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xutil' />
 <!-- Added for JIRA 1402 Starts -->
@@ -32,6 +34,8 @@
 <s:set name='outDoc2' value='%{outDoc.documentElement}' />
 <script type="text/javascript">
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
+	var isEstUser = <s:property value="#isEstUser"/>;
+
 </script>
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -207,7 +211,7 @@ function showSharedListForm(){
 		
 		$("#dlgShareListLink1").fancybox({
 			'onStart' 	: function(){
-			if (isUserAdmin){
+			if (isUserAdmin || isEstUser){			
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
 				showShareList('<s:property value="#CurrentCustomerId"/>', true);
 				hideSharedListFormIfPrivate();
@@ -217,7 +221,7 @@ function showSharedListForm(){
 				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
 				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin)
+				if(!isUserAdmin &&  !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
@@ -247,7 +251,7 @@ function showSharedListForm(){
 
 		$("#dlgShareListLink2").fancybox({
 			'onStart' 	: function(){
-			if (isUserAdmin){
+			if (isUserAdmin || isEstUser){
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
 				showShareList('<s:property value="#CurrentCustomerId"/>', true);
 				hideSharedListFormIfPrivate();
@@ -257,7 +261,7 @@ function showSharedListForm(){
 				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
 				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin)
+				if(!isUserAdmin && !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
@@ -2592,7 +2596,7 @@ function showSharedListForm(){
                 <!-- Close mil-edit -->
 				<div class="clear"></div>
                 <br />
-                
+                <s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
 				<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>	
 					
 					<fieldset class="mil-edit-field">
@@ -2608,6 +2612,13 @@ function showSharedListForm(){
                 	<s:if test="%{canShare}">
                     <li><a class="grey-ui-btn " id="dlgShareListLink1" href="#dlgShareList" ><span>Share List</span></a></li>
                     </s:if>
+                    <s:else>								
+						<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>									
+								<s:if test="#isEstUser">
+											<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+								</s:if>
+						</s:if>
+					</s:else>
                     <li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
                 </ul>
 
@@ -3163,6 +3174,13 @@ function showSharedListForm(){
 								<s:if test="%{canShare}">
 								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
 								</s:if>
+								<s:else>																
+									<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>																			
+										<s:if test="#isEstUser">
+											<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+										</s:if>
+									</s:if>
+								</s:else>
 								<li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
 							</ul>
 	

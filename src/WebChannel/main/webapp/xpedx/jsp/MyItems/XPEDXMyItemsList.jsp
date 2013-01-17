@@ -14,6 +14,7 @@
   	  %>
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="SelectedCustomerId" value="wCContext.customerId" />
+<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -493,9 +494,11 @@
 </style>
 
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
-	
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<script type="text/javascript">
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
+		var isEstUser = <s:property value="#isEstUser"/>;
+	
 	</script>	
 <div style="display: none;">
 <div id="dlgShareList" class="share-modal xpedx-light-box">
@@ -729,6 +732,21 @@
 </td>
 </tr>
 </s:if>
+<s:elseif test="#isEstUser">
+<tr>
+<td height="5px" width="5px">
+  <a class="underlink"   id="" name="" href="javascript:showListForSelectedOption();">  
+  <div id="Layer2" style="FONT-WEIGHT: bold; WIDTH:300px; HEIGHT: 10px">Manage My Items Lists for Other Locations</div></a>
+ 
+</td>
+<td valign="right">
+<div class="search-pagination-bottom" style="WIDTH:630px; HEIGHT: 10px">
+                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
+                 	urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
+			</div>
+</td>
+</tr>
+</s:elseif>
 <s:else>
 <tr>
 <td height="5px" width="5px">
@@ -860,7 +878,7 @@
   function showListForSelectedOption(){
 			    		Ext.get("XPEDXMyItemsSelectedList").dom.filterByMyListChk.value='false';
 				    	Ext.get("XPEDXMyItemsSelectedList").dom.filterBySelectedListChk.value='true';
-			    		if (isUserAdmin) {
+			    		if (isUserAdmin || isEstUser) {
 					    	$('#various5').trigger('click');
 						}else{
 							Ext.get("XPEDXMyItemsSelectedList").dom.customerIds.value='<s:property value="#SelectedCustomerId"/>';

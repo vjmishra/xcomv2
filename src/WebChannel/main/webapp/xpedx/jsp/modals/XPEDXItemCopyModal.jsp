@@ -37,7 +37,7 @@ function restrictMaxLength(Object, maxLen){
 <h2 id="smilTitleHL"><s:text name="MSG.SWC.MIL.COPYMIL.GENERIC.DLGTITLE" /></h2>
 
 <!-- CODE_START MIL - PN --> 
-
+<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 <s:form id="XPEDXMyItemsDetailsChangeShareListHL"
 	name="XPEDXMyItemsDetailsChangeShareListHL"
 	action="XPEDXMyItemsDetailsChangeShareList" namespace="/xpedx/myItems"
@@ -128,8 +128,10 @@ function restrictMaxLength(Object, maxLen){
 	<!-- END - Saved hidden data Fields -->
 
 	<!-- Private and Shared are missing from the HTMLs -->
-	<s:if test="%{!#isUserAdmin}">
-		<div style="display: none;">
+	<s:if test="%{!#isUserAdmin }">
+		<s:if test="%{!#isEstUser}">
+			<div style="display: none;">
+		</s:if>
 	</s:if>
 	
 	<p>
@@ -144,19 +146,31 @@ function restrictMaxLength(Object, maxLen){
 		id="rbPermissionShared" <s:property value="#rbPermissionShared"/>
 		type="radio" name="sharePermissionLevel" value=" " />&nbsp;Shared &nbsp;&nbsp;&nbsp;
 
-	<s:if test="%{!#isUserAdmin}">
+	<s:if test="%{!#isUserAdmin }">
+		<s:if test="%{!#isEstUser}">
 		</div>
+		</s:if>
 	</s:if>
 	
 	<s:set name="displayStyle" value="%{''}" />
-	<s:if test="%{!#isUserAdmin}">
+	<s:if test="%{!#isUserAdmin }">
+		<s:if test="%{!#isEstUser}">
 		<s:set name="displayStyle" value="%{'display: none;'}" />
 	</s:if>
+	</s:if>
 	
+	<s:if test="%{#isUserAdmin }">		
 	<span style="<s:property value="#displayStyle"/>" id="shareAdminOnlyHL" >
 		<input type="checkbox" <s:property value="#saCV"/> 
-		name="shareAdminOnly" id="shareAdminOnly" value="Y" /> Edit by Admin users only
+		name="shareAdminOnly" id="shareAdminOnly" value="Y" /> Edit by Admin users only  <s:property value="#saCV"/> 
 	</span>
+	</s:if>
+	<s:else>		
+	<span style="<s:property value="#displayStyle"/>" id="shareAdminOnlyHL" >
+		<input type="hidden"  
+		name="shareAdminOnly" id="shareAdminOnly" value="" />
+	</span>
+	</s:else>
 	
 	<div style="<s:property value="#displayStyle"/>" id="dynamiccontentHL">
 
