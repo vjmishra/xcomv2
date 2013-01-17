@@ -46,7 +46,7 @@
 <s:set name='orderHoldType' value='#xutil.getChildElement(#orderHoldTypes, "OrderHoldType")'/>
 <s:set name='approverID2' value='#xutil.getAttribute(#orderHoldType, "ResolverUserId")'/>
 <s:set name='modifyuserid' value='#xutil.getAttribute(#orderHoldType, "Modifyuserid")'/>
-<s:set name='approvedDate' value='#xutil.getAttribute(#orderHoldType, "Modifyts")'/>
+<s:set name='approvedDate' value='#xutil.getAttribute(#orderDetail, "Modifyts")'/>
 <s:set name='xpedxApprovedDate' value="#xpedxutil.formatDate(#approvedDate, #wcContext, null,'MM/dd/yyyy')" />
 <s:set name='xpedxReqDeliveryDate' value='#xutil.getAttribute(#orderDetail,"ReqDeliveryDate")'/>
 <s:set name='xpedxReqDeliveryDate' value="#util.formatDate(#xpedxOrderDate, #wcContext, null,'MM/dd/yyyy')" />
@@ -227,7 +227,7 @@
 		<td class="printField"><span style="float:right;">Approved By:&nbsp;</span></td>
 		<td class="printValue">
 		<s:if test='%{#approverID2 !="" && #approverID2 == #modifyuserid}'>
-			<s:set name="approverID" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#approverID2)' />
+			<s:set name="approverID" value='#_action.getApproversUserName(#approverID2)' />
 			<s:property value='#approverID'/>
 		</s:if></td>
 	</tr>
@@ -342,6 +342,7 @@
 				<s:set name='item' value='#xutil.getChildElement(#orderLine, "Item")'/>
 				<s:set name='itemDetails' value='#xutil.getChildElement(#orderLine, "ItemDetails")'/>
 				<s:set name='uomFromItem' value='#itemDetails.getAttribute("UnitOfMeasure")'/>		
+				<s:set name='baseUOM'  value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uomFromItem)'/>
 				<s:set name='primaryInfo' value='#xutil.getChildElement(#itemDetails, "PrimaryInformation")'/>
 				<s:set name='itemExtnEle' value='#xutil.getChildElement(#itemDetails, "Extn")' />
 				<s:set name='certFlag' value='#itemExtnEle.getAttribute("ExtnCert")' />
@@ -497,7 +498,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="printField"><span style="float:right;">Base UOM:&nbsp;</span></td><td class="printValue"><s:property value='#uomFromItem'/></td>
+		<td class="printField"><span style="float:right;">Base UOM:&nbsp;</span></td><td class="printValue"><s:property value='#baseUOM'/></td>
 		<td class="printField">&nbsp;</td><td class="printValue"></td>
 		<td class="printField"><span style="float:right;">Extended:&nbsp;</span></td>
 		<td class="printValue">
