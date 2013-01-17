@@ -833,6 +833,45 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 		}
 		return isCustomerOrder;
 	}
+	
+	public static String getApproversUserName(String UserID) throws CannotBuildInputException, XPathExpressionException
+	{
+		String FirstName;
+		String LastName;
+		String UserName = null;
+		Document outputDoc1 = null;
+		Map<String, String> valueMap1 = new HashMap<String, String>();
+		valueMap1.put("/CustomerContact/@CustomerContactID", UserID);
+		IWCContext wcContext = WCContextHelper
+				.getWCContext(ServletActionContext.getRequest());
+		Element input1 = WCMashupHelper.getMashupInput(
+				"xpedxItemListUserContactName", valueMap1, wcContext
+						.getSCUIContext());
+		Object obj1 = WCMashupHelper.invokeMashup(
+				"xpedxItemListUserContactName", input1, wcContext
+						.getSCUIContext());
+		outputDoc1 = ((Element) obj1).getOwnerDocument();
+		Element outputE2 = outputDoc1.getDocumentElement();
+		Element CustomerContact = XMLUtilities.getElement(outputE2,	"CustomerContact");
+		String customerContactId = SCXmlUtil.getAttribute(CustomerContact, "CustomerContactID");
+		if(customerContactId == null ){
+			return "";
+		} 
+		FirstName = SCXmlUtil.getAttribute(CustomerContact, "FirstName");
+		LastName = SCXmlUtil.getAttribute(CustomerContact, "LastName");
+		
+		try {
+			if(FirstName!=null || LastName!=null)
+			{
+					UserName = FirstName + " " + LastName;
+			}
+			else
+				UserName = UserID;
+		} catch (Exception e) {
+			LOG.error("error in getting the approvers Username"+e.getMessage());
+		}
+		return UserName;
+	}
 
 	protected boolean deliveryHoldFlag = false;
 	protected boolean willCallFlag = false;

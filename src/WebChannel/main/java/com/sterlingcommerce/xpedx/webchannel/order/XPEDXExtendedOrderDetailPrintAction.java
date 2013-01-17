@@ -507,7 +507,7 @@ public class XPEDXExtendedOrderDetailPrintAction extends
 				String shipFromBranch = orderExtn.getAttribute("ExtnOrderDivision");
 				String[] orderDivision = shipFromBranch.split("_M");
 				String shipFromBranchFormat = orderDivision[0];
-				setInventoryMap(xPEDXWCUtils.getInventoryCheckMap(outputDoc, shipFromBranchFormat, getWCContext()));
+				//setInventoryMap(xPEDXWCUtils.getInventoryCheckMap(outputDoc, shipFromBranchFormat, getWCContext()));
 
 				if(!"Customer".equals(outputDocElement.getAttribute("OrderType"))){
 					parentOHK = getParentOrderHeaderKey((Element)outputDocElement.getElementsByTagName("OrderLines").item(0));
