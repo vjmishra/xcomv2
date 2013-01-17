@@ -181,7 +181,7 @@ public class XPEDXExtendedOrderDetailPrintAction extends
 			"	OrderNo='' EnterpriseCode='' OrderName='' DraftOrderFlag='' Status='' "+
 			"	OrderDate='' MaxOrderStatus='' OptimizationType='' "+
 			"	CarrierServiceCode='' CustomerPONo='' SupportLevel='' "+
-			"	HasPendingChanges='' PendingChangesUserID='' ReqDeliveryDate='' "+
+			"	HasPendingChanges='' PendingChangesUserID='' ReqDeliveryDate='' Createts='' Modifyts='' "+
 			"	OrderType='' EntryType='' ShipToID='' Createuserid=''> "+
 			"	<Extn/> "+
 			"	<Instructions> "+
@@ -193,7 +193,7 @@ public class XPEDXExtendedOrderDetailPrintAction extends
 			"	<PersonInfoBillTo /> "+
 			"	<OrderHoldTypes> "+
 			"		<OrderHoldType ReasonText='' ResolverUserId='' "+
-			"			HoldType='' Status='' StatusDescription='' Modifyuserid='' "+
+			"			HoldType='' Status='' StatusDescription='' Modifyuserid='' Modifyts='' "+
 			"			LastHoldTypeDate=''> "+
 			"			<OrderHoldTypeLogs> "+
 			"				<OrderHoldTypeLog ResolverUserId='' Status='' "+
@@ -217,7 +217,7 @@ public class XPEDXExtendedOrderDetailPrintAction extends
 			"			<Notes NumberOfNotes=''> "+
 			"				<Note /> "+
 			"			</Notes> "+
-			"			<Item ItemShortDesc='' ItemID='' UnitOfMeasure='' /> "+
+			"			<Item ItemShortDesc='' ItemID='' UnitOfMeasure='' CustomerItem='' /> "+
 			"			<LinePriceInfo UnitPrice='' LineTotal='' "+
 			"				IsLinePriceForInformationOnly='' /> "+
 			"			<KitLines NumberOfKitLines=''> "+
