@@ -1244,17 +1244,7 @@ function showSplitDiv(divId)
 			    	    </td>
 						</tr>
 						<tr>
-						<td>
-						
-		    			<div class="od-special-instructions line-spacing" >
-							<s:if test='#orderLineSpecialInstruction != "" && #orderLineSpecialInstruction != null '>
-							<p class="special-instructions-padding">Special Instructions:</p>
-								<div class="checkout-special-instructions"><s:property value="#orderLineSpecialInstruction"/></div>
-							</s:if>
-							<s:else>
-								<div class="checkout-special-instructions"> <br/> </div>
-							</s:else>								
-						</div>
+						<td>								    			
 						
 			    	    <!--begin bottom-right-section -->
 					    <div class="wc-bottom-right-section" >
@@ -1299,6 +1289,17 @@ function showSplitDiv(divId)
 		    		    </td>
 		    		    </tr>
 		    		    </table>
+		    		    
+		    		    <div class="od-special-instructions line-spacing" >
+							<s:if test='#orderLineSpecialInstruction != "" && #orderLineSpecialInstruction != null '>
+							<p class="special-instructions-padding">Special Instructions:</p>
+								<div style="width:450px; word-wrap: break-word;" class="checkout-special-instructions"><s:property value="#orderLineSpecialInstruction"/></div>
+							</s:if>
+							<s:else>
+								<div class="checkout-special-instructions"> <br/> </div>
+							</s:else>								
+						</div>
+		    		    
 		    		    <div class="clearall">&nbsp;</div>
 					</div> <!-- end containing border div -->
 				</div><!-- end box section - "div class="middle-section rounded-border rr-border"" -->

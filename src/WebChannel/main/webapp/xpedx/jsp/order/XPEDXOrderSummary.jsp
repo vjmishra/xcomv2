@@ -1315,7 +1315,7 @@ from session . We have customer Contact Object in session .
 				<div class="clearall">&nbsp;</div>
 			    
 			    <div class="bottom-mil-info">
-			    	<div class="brand-info">
+			    	<div class="float-left brand-info">
 			    		<p><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' />
 			    			<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
@@ -1342,17 +1342,9 @@ from session . We have customer Contact Object in session .
 								
 							</s:if>
 						</s:if>
-			    	</div>
-			    	<div class="special-instructions-div" id="checkout-special-instructions">
-			    		<s:if test='#lineNotes.getAttribute("InstructionText") != ""'>
-			    		<p class="special-instructions-padding">Special Instructions:
-			    		<div class="checkout-special-instructions">
-			    			<s:property value='%{#lineNotes.getAttribute("InstructionText")}'/>
-			    		</div>
-			    		</p>
-			    		</s:if>
-					</div>
-			    		<table class="cust-field-summary">
+			    	</div>			    	
+			    	<div class="text-left od-customer-defined-fields">
+			    		<table style="FONT-SIZE: 12px; MARGIN-LEFT: 500px;">
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 								<s:iterator value='customerFieldsMap'>
@@ -1364,10 +1356,8 @@ from session . We have customer Contact Object in session .
                                 	<s:if test='(#orderLine.getAttribute("LineType") =="P" || #orderLine.getAttribute("LineType") =="S")'>
 		                                <s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
 											<s:if test="%{#orderLine.getAttribute(#FieldLabel) != null && #orderLine.getAttribute(#FieldLabel) != ''}">
-												<td class="right" colspan="2">
-												<s:property value="%{#FieldValue}" />:
-												</td>
-												<td class="left">
+												<td class=float-right>
+												<s:property value="%{#FieldValue}" />:					
 												<s:label id="orderLine%{#FieldLabel}_%{#orderLineKey}" name='orderLine%{#FieldLabel}' value="%{#orderLine.getAttribute(#FieldLabel)}"/>
 												</td>
 												
@@ -1375,10 +1365,8 @@ from session . We have customer Contact Object in session .
 										</s:if>
 										<s:else>
 											<s:if test="%{#lineExtn.getAttribute(#customLbl) != null && #lineExtn.getAttribute(#customLbl) != ''}">
-												<td class="right" colspan="2">
-													<s:property value="%{#FieldValue}" />:
-												</td>
-												<td class="left">
+												<td class=float-right>
+													<s:property value="%{#FieldValue}" />:												
 												<s:label id="orderLine%{#FieldLabel}_%{#orderLineKey}" name='orderLine%{#FieldLabel}' value="%{#lineExtn.getAttribute(#customLbl)}"/>
 												</td>
 												</s:if>
@@ -1389,9 +1377,19 @@ from session . We have customer Contact Object in session .
                                 </s:iterator>
                             </tbody>
                         </table>
+                        </div>
+                        
+
+                        <div class="clearall">&nbsp; </div>
+			    		<s:if test='#lineNotes.getAttribute("InstructionText") != ""'>
+				    		<p style='MARGIN-LEFT: 15px;' class="line-spacing">Special Instructions:</p>
+				    		<div style="width:550px; word-wrap: break-word; MARGIN-LEFT: 130px; MARGIN-TOP: -23px; line-height: 130%" class="checkout-special-instructions">
+				    			<s:property value='%{#lineNotes.getAttribute("InstructionText")}'/>
+				    		</div>				    		
+			    		</s:if>						
+                        
 				</div>
-                <br/>
-		    	<div class="clear"></div>
+
 		    	
                         <%--jira 2885 --%>
     				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
