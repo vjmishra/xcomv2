@@ -451,18 +451,18 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				pricingUOMConvFactor));*/
 
 //		displayPriceForUoms.add(basePrice.toString());  //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
-		
-		if (priceForCWTUom != null && prodMweight != null &&
-				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))){
-			displayPriceForUoms.add(priceForCWTUom.toString());
-		}
-		//Moved code from above to bottom for JIRA 1835
+		//Moved code from bottom to above for XB-558
 		displayPriceForUoms.add(pricingUOMUnitPrice);
 
 		if (priceForTHUom != null &&
 				(uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M ) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))){
 			displayPriceForUoms.add(priceForTHUom.toString());
 		}
+		if (priceForCWTUom != null && prodMweight != null &&
+				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))){
+			displayPriceForUoms.add(priceForCWTUom.toString());
+		}
+		
 		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM())
 				&& isDisplayReqUOM)
 			displayPriceForUoms.add(pandAItem.getUnitPricePerRequestedUOM());
