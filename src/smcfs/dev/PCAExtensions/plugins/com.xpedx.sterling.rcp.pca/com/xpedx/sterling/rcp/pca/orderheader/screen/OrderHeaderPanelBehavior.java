@@ -420,5 +420,25 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 
 
     }
+	public void openPrintOrderUrl()
+    {
+		String url = YRCPlatformUI.getString("xpedx.printing.url");    
+		String sfId = YRCPlatformUI.getString("StoreFrontID");    
+        try {
+            //condition to check URL Attributes 
+            
+            String orderHeaderKey = eleOrderDetails.getAttribute("OrderHeaderKey");
+            
+            
+            String finalQueryString = "sfId=" + sfId + "&orderHeaderKey=" + orderHeaderKey;
+            XPXUtils.accessURL(url, finalQueryString);
 
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return;
+        }
+
+
+    }
 }

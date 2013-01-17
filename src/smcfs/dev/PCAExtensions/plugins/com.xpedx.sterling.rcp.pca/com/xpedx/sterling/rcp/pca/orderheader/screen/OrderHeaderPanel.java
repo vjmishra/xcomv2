@@ -997,6 +997,13 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		//adding or changes as part of bug#1600 - SWT.End to center & Indent
 		gridDataInvoice.horizontalIndent=810;
 		
+		GridData gridDataPrint = new GridData();
+		gridDataPrint.verticalAlignment = 2;
+		gridDataPrint.horizontalAlignment=SWT.CENTER;
+		gridDataPrint.horizontalSpan = 1;
+		//adding or changes as part of bug#1600 - SWT.End to center & Indent
+		//gridDataPrint.horizontalIndent=810;
+		
 		
 		
 		
@@ -1052,6 +1059,18 @@ public class OrderHeaderPanel extends Composite implements IYRCComposite {
 		lnkInvoice.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { public void
 			 widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
 							myBehavior.openUrl();
+					}
+			});	
+		//gridDataPrint
+		Link lnkOrder = new Link(pnlRoot, 0);
+		lnkOrder.setText("Print Order");
+		lnkOrder.setData("name", "lnkOrder");
+		lnkOrder.setData("yrc:customType", "Link");
+		lnkOrder.setEnabled(true);
+		lnkOrder.setLayoutData(gridDataPrint);
+		lnkOrder.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { public void
+			 widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
+							myBehavior.openPrintOrderUrl();
 					}
 			});	
 		
