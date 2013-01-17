@@ -474,7 +474,7 @@
 					OrderDate="" MaxOrderStatus="" OptimizationType=""
 					CarrierServiceCode="" CustomerPONo="" SupportLevel=""
 					HasPendingChanges="" PendingChangesUserID="" ReqDeliveryDate=""
-					OrderType="" EntryType="" ShipToID="" Createuserid="">
+					OrderType="" EntryType="" ShipToID="" Createuserid="" Createts="">
 					<Extn/>
 					<Instructions>
 						<Instruction />
@@ -485,7 +485,7 @@
 					<PersonInfoBillTo />
 					<OrderHoldTypes>
 						<OrderHoldType ReasonText="" ResolverUserId=""
-							HoldType="" Status="" StatusDescription="" Modifyuserid=""
+							HoldType="" Status="" StatusDescription="" Modifyuserid="" Modifyts=""
 							LastHoldTypeDate="">
 							<OrderHoldTypeLogs>
 								<OrderHoldTypeLog ResolverUserId="" Status=""
@@ -498,8 +498,8 @@
 					<OrderLines>
 						<OrderLine OrderLineKey="" SubLineNo="" PrimeLineNo="" CustomerPONo=""
 							OrderedQty="" OriginalOrderedQty="" ItemGroupCode="" DeliveryMethod="" OverallStatus=""
-							ShipNode="" ReqShipDate="" KitQty="" Status="" MaxLineStatus=""
-							IsBundleParent="" LineType="" FieldLabel="" ChainedFromOrderHeaderKey="">
+							ShipNode="" ReqShipDate="" KitQty="" Status="" MaxLineStatus="" CustomerItem=""
+							IsBundleParent="" LineType="" FieldLabel="" ChainedFromOrderHeaderKey="" >
 							<Extn />
 							<Instructions>
 								<Instruction />
@@ -512,7 +512,7 @@
 							<Notes NumberOfNotes="">
 								<Note />
 							</Notes>
-							<Item ItemShortDesc="" ItemID="" UnitOfMeasure="" />
+							<Item ItemShortDesc="" ItemID="" UnitOfMeasure="" CustomerItem="" />
 							<LinePriceInfo UnitPrice="" LineTotal=""
 								IsLinePriceForInformationOnly="" />
 							<KitLines NumberOfKitLines="">
