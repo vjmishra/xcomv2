@@ -235,7 +235,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				return null; 
 			}
 			else if(buyerFlag=="N"){
-                YRCPlatformUI.showInformation("Error!", "Buyer role is required for user creation.");
+                YRCPlatformUI.showInformation("Error!", "User cannot be created without the Buyer role. Please select the Buyer role.");
+                buyerFlag = "Y";
                 return null; 
           }else if (!(adminFlag=="Y" || buyerFlag=="Y" ||approverFlag=="Y" ||procurementUserFlag=="Y" ||
 					//extnEstimator=="T" || extnStockCheckFlag=="T" || extnViewInvoiceFlag =="T" ||
