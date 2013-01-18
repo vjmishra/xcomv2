@@ -20,7 +20,7 @@
             memoryStoreEvictionPolicy="LRU"
             />
 
-<cache name="SearchIndexCache" maxElementsInMemory="2147483647" eternal="true" timeToIdleSeconds="0" timeToLiveSeconds="0" 
+<cache name="SearchIndexCache" maxElementsInMemory="60000" eternal="true" timeToIdleSeconds="0" timeToLiveSeconds="0" 
 overflowToDisk="true" maxElementsOnDisk="0" diskPersistent="false" memoryStoreEvictionPolicy="LRU" diskSpoolBufferSizeMB="200"/>
 
 </ehcache>
