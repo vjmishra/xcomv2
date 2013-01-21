@@ -651,6 +651,9 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			lastLoginDate = xpxCustContExtnEle.getAttribute("LastLoginDate");
 		}
 		
+		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N") ){
+			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
+		}
 		if (toaFlag == null || (toaFlag != null && toaFlag.trim().length() == 0)) {
 			toaFlag = "";
 		}
