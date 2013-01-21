@@ -106,6 +106,66 @@
 			</Template>
 		</API>
 	</mashup>
+	<mashup id='ManagePasswordUpdate' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+			    <CustomerContactList>
+			        <CustomerContact CustomerContactID="">
+			           <User EnterpriseCode="" DisplayUserID=""
+							 GeneratePassword="Y" OrganizationKey="" SessionTimeout="0">
+						</User>
+			         </CustomerContact>
+			    </CustomerContactList>
+			</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" UserID=""  ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+							<User Activateflag="" Loginid=""
+								EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+								Localecode="" Username="" Password="">
+								<ContactPersonInfo EveningPhone=""
+									FirstName="" Department="" DayFaxNo="" DayPhone="" JobTitle=""
+									LastName="" EMailID="" Title="" />
+								<UserGroupLists>
+									<UserGroupList UserGroupKey="">
+									</UserGroupList>
+								</UserGroupLists>
+							</User>
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									AddressType="" CustomerAdditionalAddressID="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnEstimator="" ExtnPunchOutUser=""
+								ExtnStockCheckWS="" ExtnViewInvoices=""  ExtnB2BCatalogView=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
 	<mashup id='getXpedxCustomerContactDetails' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER'
 		description="Buyer User General Information">
