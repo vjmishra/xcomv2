@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.soap.providers.com.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,13 +26,14 @@ import com.yantra.shared.ycp.YFSContext;
 import com.yantra.yfc.dblayer.PLTQueryBuilder;
 import com.yantra.yfc.dblayer.PLTQueryBuilderHelper;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPXManageCustomerAndAssignmentAPI  implements YIFCustomApi{
 
 private static YIFApi api = null;
-	
+private static YFCLogCategory log;	
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -39,7 +41,7 @@ private static YIFApi api = null;
 	
 	public Document manageCustomerAndAssignment(YFSEnvironment env,Document inputXML) throws Exception
 	{
-		
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		Element  customerAssignmentList=(Element)inputXML.getElementsByTagName("CustomerAssignmentList").item(0);
 		Document customerAssignmentListDoc=SCXmlUtil.createFromString(SCXmlUtil.getString(customerAssignmentList));
 		if(customerAssignmentListDoc != null)
@@ -87,34 +89,41 @@ private static YIFApi api = null;
 		Map<String,String>  assignmentKeyMap=null;
 		for(int i=0;i<customerAssignmentNodeList.getLength();i++)
 		{
-			YFS_Customer_AssignmentBase ycAssignment=YFS_Customer_AssignmentBase.newInstance();
-			//YFS_Customer_Assignment ycAssignment= YFS_Customer_Assignment.newInstance();
-			Element customerAssignmentElem=(Element)customerAssignmentNodeList.item(i);
-			String operation=customerAssignmentElem.getAttribute("Operation");
-			YFS_Customer customer=customerList.get(i);
-			if(customer != null)
+			try
 			{
-				ycAssignment.setCustomer(customer);
-				ycAssignment.setCustomer_Key(customer.getCustomer_Key());
-			}
-			ycAssignment.setOrganization_Code(customerAssignmentElem.getAttribute("OrganizationCode"));
-			ycAssignment.setUser_Id(customerAssignmentElem.getAttribute("UserId"));
-			if("Create".equals(operation))
-			{				
-				ycAssignment.setModifyts(new YFCDate());
-				ycAssignment.setCreatets(new YFCDate());
-				YFS_Customer_AssignmentDBHome.getInstance().insert(ctx, ycAssignment);
-			}
-			else if("Delete".equals(operation))
-			{
-				if(assignmentKeyMap == null)
-					assignmentKeyMap=getCustomerAssignment(env, userId, organizationCode, customerList);
-				String assignmentKey=assignmentKeyMap.get(customer.getCustomer_Key());
-				if(assignmentKey != null && assignmentKey.trim().length() >0)
-				{ 
-					ycAssignment.setCustomer_Assignment_Key(assignmentKey);
-					YFS_Customer_AssignmentDBHome.getInstance().delete(ctx, ycAssignment);
+				YFS_Customer_AssignmentBase ycAssignment=YFS_Customer_AssignmentBase.newInstance();
+				//YFS_Customer_Assignment ycAssignment= YFS_Customer_Assignment.newInstance();
+				Element customerAssignmentElem=(Element)customerAssignmentNodeList.item(i);
+				String operation=customerAssignmentElem.getAttribute("Operation");
+				YFS_Customer customer=customerList.get(i);
+				if(customer != null)
+				{
+					ycAssignment.setCustomer(customer);
+					ycAssignment.setCustomer_Key(customer.getCustomer_Key());
 				}
+				ycAssignment.setOrganization_Code(customerAssignmentElem.getAttribute("OrganizationCode"));
+				ycAssignment.setUser_Id(customerAssignmentElem.getAttribute("UserId"));
+				if("Create".equals(operation))
+				{				
+					ycAssignment.setModifyts(new YFCDate());
+					ycAssignment.setCreatets(new YFCDate());
+					YFS_Customer_AssignmentDBHome.getInstance().insert(ctx, ycAssignment);
+				}
+				else if("Delete".equals(operation))
+				{
+					if(assignmentKeyMap == null)
+						assignmentKeyMap=getCustomerAssignment(env, customerAssignmentElem.getAttribute("UserId"), customerAssignmentElem.getAttribute("OrganizationCode"), customerList);
+					String assignmentKey=assignmentKeyMap.get(customer.getCustomer_Key());
+					if(assignmentKey != null && assignmentKey.trim().length() >0)
+					{ 
+						ycAssignment.setCustomer_Assignment_Key(assignmentKey);
+						YFS_Customer_AssignmentDBHome.getInstance().delete(ctx, ycAssignment);
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				log.error(" Error While adding or deleting customer Assignment "+e.getMessage());
 			}
 				
 			//YFS_Customer_AssignmentDBHome.getInstance().addToBatch(ctx, ycAssignment);
@@ -133,10 +142,10 @@ private static YIFApi api = null;
 		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltQryBuilder.setCurrentTable("YFS_CUSTOMER_ASSIGNMENT");
 		if(customerList != null && customerList.size() >0)
-			pltQryBuilder.append(" CUSTOMER_KEY IN ('"+customerList.get(0)+"'");
+			pltQryBuilder.append(" CUSTOMER_KEY IN ('"+customerList.get(0).getCustomer_Key()+"'");
 		for(int i=1;i<customerList.size();i++)
 		{
-			pltQryBuilder.append(", '"+customerList.get(i)+"'");
+			pltQryBuilder.append(", '"+customerList.get(i).getCustomer_Key()+"'");
 			
 		}
 		pltQryBuilder.append(")");
