@@ -45,8 +45,130 @@
 	<s:hidden id="goBackFlag" name="goBackFlag" value="%{goBackFlag}"></s:hidden>
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-			
+	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
+	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>	
 <script type="text/javascript">
+
+function savePassword(){
+	var errorDiv = document.getElementById("pwdValidationDiv");
+	var errDiv = document.getElementById("errorNote");
+	var error = document.getElementById("pwdErrorDiv");
+	if(error !=null){
+		error.innerHTML = '';
+	}
+	if(errDiv != null)
+	{
+		errDiv.style.display = 'none';
+	}
+	if(errorDiv != null){
+	errorDiv.style.display = 'none';
+	}
+	 var answerFiled = document.passwordUpdateForm.userpassword;
+	 var answerConfirmFiled = document.passwordUpdateForm.confirmpassword;
+	 var errDiv = document.getElementById("errorMsgFor_userpassword");
+	 if(errDiv != null){
+		 errDiv.style.display = 'none';
+	 }
+	 document.passwordSubmit.newPassword.value = answerFiled.value;
+	 var returnVal = false;
+		if(answerFiled.value.trim().length == 0 && answerConfirmFiled.value.trim().length == 0)
+			{
+				errDiv.innerHTML = "The feilds can not be blank."
+				errDiv.style.display = "inline";
+				errDiv.setAttribute("align", "center");
+				return;
+			}
+		else if(answerFiled.value != answerConfirmFiled.value){
+				errDiv.innerHTML = "Please enter the same password in both Password and Confirm Password fields."
+				errDiv.style.display = "inline";
+				return;
+			}
+
+			validatePassword();
+			
+	}
+
+function validatePassword(){
+	var erDiv = document.getElementById("pwdErrorDiv");
+	if(erDiv != null){
+		erDiv.innerHTML = '';
+	}
+	 var answerFiled = document.passwordUpdateForm.userpassword;
+	var url = '<s:property value="#ValidatePasswordURL" />';
+		Ext.Ajax.request({
+	        url :url,
+	        params:{
+	        	userPwdToValidate : answerFiled.value
+	        	},
+	        method: 'POST',
+	        success: function (response, request){
+	           var responseText = response.responseText;
+	           var errorDiv = document.getElementById("pwdValidationDiv");
+              if(errorDiv){
+              		if(responseText.indexOf("error")>-1){
+	                    errorDiv.innerHTML = response.responseText;
+	                    errorDiv.style.display = 'block';
+	                }else{
+	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
+	                	errorDiv.style.display = 'none';
+	                }
+              }
+              
+              
+              		submitPassword();
+  	   		},
+	   		failure: function (response, request){
+	   		   errorDiv = document.getElementById("pwdValidationDiv");
+              if(errorDiv){
+               errorDiv.style.display = 'none';
+              }
+	    	   alert("Error in service.");
+	        }
+	    });
+}
+function submitPassword(){
+	var answerFiled = document.passwordUpdateForm.userpassword;
+	var errorDiv = document.getElementById("pwdErrorDiv");
+	if(errorDiv != null && errorDiv.innerHTML != "")
+		{
+	 		return false;   
+		} 
+	else{
+		var url1 = '<s:property value="#XPEDXPasswordSubmitURL" escape='false' />';
+		Ext.Ajax.request({
+	        url :url1,
+	        params:{
+	        	userPwdToValidate : answerFiled.value
+	        	},
+	        method: 'POST',
+	        success: function (response, request){
+	           var responseText = response.responseText;
+	           var errorDiv = document.getElementById("pwdValidationDiv");
+              if(errorDiv){
+              		if(responseText.indexOf("error")>-1){
+	                    errorDiv.innerHTML = response.responseText;
+	                    errorDiv.style.display = 'block';
+	                }else{
+	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
+	                	errorDiv.style.display = 'none';
+	                }
+              }
+              window.location.reload(); 
+              
+  	   		},
+	   		failure: function (response, request){
+	   		   errorDiv = document.getElementById("pwdValidationDiv");
+              if(errorDiv){
+               errorDiv.style.display = 'none';
+              }
+	    	   alert("Error in service.");
+	    	  
+	        }
+	    });
+		//document.passwordSubmit.submit();
+	}
+   
+	}
 function saveAnswer(){
     var answerFiled = document.secrectQuestionForm.secretAnswer ;
     var answerConfirmFiled = document.secrectQuestionForm.confirmAnswer ;
@@ -754,8 +876,17 @@ var selectedShipCustomer = null;
 <s:url id='securityQueURL' namespace='/common' action='xpedxGetSecurityQuestion' >
 <s:param name="organizationCode" value="#loggedInUserOrgCode" />
 </s:url>
+<s:url id='passwordUpdate' namespace='/common' action='xpedxPasswordUpdate' >
+</s:url>
+
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
+		style="width: auto; height: auto; ">
+	</div>
+</div>
+
+<div class='x-hidden dialog-body ' id="passwordUpdateContent">
+	<div id="ajax-passwordUpdateContent" class="xpedx-light-box"
 		style="width: auto; height: auto; ">
 	</div>
 </div>
@@ -1363,7 +1494,26 @@ var toaWin = new Ext.Window({
         shadow: 'drop',
         baseCls: 'swc-ext',
         shadowOffset: 10
-      	}); 	
+      	}); 
+
+var passwordUpdateWin = new Ext.Window({
+    autoScroll: false,
+    closeAction: 'hide',
+    cloaseable: false,
+    contentEl: 'passwordUpdateContent',
+    hidden: true,
+    id: 'passwordUpdateBox',
+    modal: true,
+    width: 750,
+    height: 'auto',
+    resizable   : false,
+    draggable   : false,
+    closable    : false,
+    shadow: 'drop',
+    baseCls: 'swc-ext',
+    scrolling : 'no',
+    shadowOffset: 10
+  	}); 	
 //JIRA 3487 start
 var securityQuestionWin = new Ext.Window({
     autoScroll: false,
@@ -1385,12 +1535,20 @@ var securityQuestionWin = new Ext.Window({
   	}); 	
 
 var isGuestuser = "<s:property value='%{wCContext.guestUser}'/>";
-var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 
+var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>';
 var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
+var passwordUpdateFlag = '<s:property value="%{wCContext.getWCAttribute('setPasswordUpdate')}"/>';
 if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
-}
+	}
+
+
+function passwordUpdateModal()
+{
+	
+     		showPasswordUpdateDialog('<s:property value="#passwordUpdate"/>');
     
+}
     function loadTermsOfAccess()
     {
 		
@@ -1437,6 +1595,24 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
                 else
                 {	
                     alert("Error getting terms of access content");
+                }
+            }
+        });     
+    }
+
+    function showPasswordUpdateDialog(url)
+    {
+        Ext.get('ajax-passwordUpdateContent').load({
+            url :url,
+            method: 'POST',
+            callback:function(el, success, response){
+                if(success)
+                {
+                	DialogPanel.show('passwordUpdateBox');
+               }
+                else
+                {	
+                    alert("Error getting password Update Box");
                 }
             }
         });     
@@ -1587,7 +1763,15 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
+			if((!isSalesRep) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+				var myMask
+				var waitMsg = Ext.Msg.wait("");
+				 myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+				 myMask.show();
+				passwordUpdateModal();
+				Ext.Msg.hide();
+			}
+			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){
 			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";            
@@ -1613,7 +1797,8 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 			 		'width' 		: 750,
 			 		'height' 		: 530  
 				}).trigger('click');
-			} else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+			} 
+			else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		
