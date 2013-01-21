@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.soap.providers.com.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
