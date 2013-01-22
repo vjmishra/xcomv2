@@ -1136,6 +1136,69 @@ public class XPEDXOrderUtils {
 	    }
     }
 
+	
+	
+	
+	public static ArrayList<String>  getRequiredCustomerFieldMap(Element orderElem, Document rulesDoc, IWCContext wcContext)
+    throws Exception
+    {
+	    
+		Element orderLinesElement = SCXmlUtil.getChildElement(orderElem, "OrderLines");
+	    ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+	    ArrayList<String> requiredCustFields = new ArrayList<String>();
+	    
+	    Element rulesElem = rulesDoc.getDocumentElement();
+	    ArrayList<Element> ruleElems = SCXmlUtil.getChildren(rulesElem, "Rule");
+	    if(orderLineElemList == null || orderLineElemList.size() == 0)
+	    {
+	    	if(ruleElems != null && ruleElems.size() > 0)
+		    {
+		        for(int i = 0; i < ruleElems.size(); i++)
+		        {
+		        	 String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+		        	 validateCustomerPOBusinessRule(wcContext,ruleId);
+		        	 break;
+		        }
+		        
+		    }
+	        return requiredCustFields;
+	    }
+	   
+	    if(ruleElems != null && ruleElems.size() > 0)
+	    {
+	        for(int i = 0; i < ruleElems.size(); i++)
+	        {
+	            String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+	            if(log.isDebugEnabled()){
+	            log.debug("RuleID:::"+ruleId);
+	            }
+	            if("RequiredCustomerLineAccountNo".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineAccNo");
+	            else
+	            if("RequireCustomerLineField1".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField1");
+	            else
+	            if("RequireCustomerLineField2".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField2");
+	            else
+	            if("RequireCustomerLineField3".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField3");
+	            else
+		        if("RequiredCustomerLinePO".equalsIgnoreCase(ruleId))
+		                requiredCustFields.add("CustomerPONo");
+		        else
+		        {
+		        	validateCustomerPOBusinessRule(wcContext,ruleId);
+		        }
+	        }
+	
+	    }
+	    return requiredCustFields;
+	    
+    }
+	
+	
+	
 	private static void validateCustomerPOBusinessRule(IWCContext wcContext,String ruleId)
 	{
 		
@@ -1610,9 +1673,9 @@ public class XPEDXOrderUtils {
 			LOG.error("Exception while getting item details for associated items",e);
 			return null;
 		}
-		//we need to prepare xpedxItemIDUOMToReplacementListMap in edit and non-edit mode as per 356 JIRA 
+		//prepare the xpedxItemIDUOMToReplacementListMap only when editMode is true
 		Set replacementMapKeySet = replacementItemsMap.keySet();
-		if(replacementMapKeySet!=null){
+		if(editMode ==  true && replacementMapKeySet!=null){
 		Iterator<String> replacementIterator = replacementMapKeySet.iterator();
 			while(replacementIterator.hasNext()){
 				ArrayList replacementItemsElementList = new ArrayList();
