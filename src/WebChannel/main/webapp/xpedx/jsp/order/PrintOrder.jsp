@@ -303,8 +303,8 @@
                         	<td class="printField"><span style="float:right;">Address 2:&nbsp;</span></td><td class="printValue"><s:property value='#shipToAddress2'/></td>
                         </tr>
                         <tr>
-                        	<td class="printField"><span style="float:right;">City,ST,Zip,Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#billToCity'/>,<s:property value='#billToState'/>,<s:property value='#billToZipCode'/>,<s:property value='#billToCountry'/></td>
-                        	<td class="printField"><span style="float:right;">City,ST,Zip,Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#shipToCity'/>,<s:property value='#shipToState'/>,<s:property value='#shipToZipCode'/>,<s:property value='#shipToCountry'/></td>
+                        	<td class="printField"><span style="float:right;">City, ST, Zip, Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#billToCity'/>,<s:property value='#billToState'/>,<s:property value='#billToZipCode'/>,<s:property value='#billToCountry'/></td>
+                        	<td class="printField"><span style="float:right;">City, ST, Zip, Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#shipToCity'/>,<s:property value='#shipToState'/>,<s:property value='#shipToZipCode'/>,<s:property value='#shipToCountry'/></td>
                         </tr>
                         <tr>
                         	<td class="printField"></td><td class="printValue"></td>
