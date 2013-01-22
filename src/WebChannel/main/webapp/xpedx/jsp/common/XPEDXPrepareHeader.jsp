@@ -144,7 +144,7 @@ function submitPassword(){
 	        success: function (response, request){
 	           var responseText = response.responseText;
 	           var errorDiv = document.getElementById("pwdValidationDiv");
-              if(errorDiv){
+              if(errorDiv != null && errorDiv.innerHTML != ""){
               		if(responseText.indexOf("error")>-1){
 	                    errorDiv.innerHTML = response.responseText;
 	                    errorDiv.style.display = 'block';
