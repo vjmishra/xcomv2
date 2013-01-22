@@ -1183,17 +1183,9 @@ function showSharedListForm(){
 			var uomCheck = false ;
 			// XB-224 start
 			var erroMsg = '<s:property value='erroMsg' />';
-			if(erroMsg != null && erroMsg != ""){
-					document.getElementById("errorMsgTop").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
-			        document.getElementById("errorMsgTop").style.display = "inline";
-						
-			        document.getElementById("errorMsgBottom").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
-			        document.getElementById("errorMsgBottom").style.display = "inline";
-					errorflag= true;
-					isAddToCart=false;
-				
-			}
-			//XB 224 end
+			var errorItemList = erroMsg.split(",");
+			var unEntitledItemIDs = new Array();
+			var n=0;
 			for(var i = 0; i < arrItemID.length; i++)
 			{	
 				
@@ -1203,6 +1195,7 @@ function showSharedListForm(){
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
+				var itemID = arrItemID[i].value;
 
 				if (priceCheck == true && addItemsWithQty != true){
 					if(quantity == '0'|| quantity == '')
@@ -1240,6 +1233,21 @@ function showSharedListForm(){
 					}
 				}
 				else if(quantity>0){
+					//XB 224
+					for (var j = 0; j < errorItemList.length; j++)
+					{						
+					if(errorItemList[j] == itemID){		
+							n++;
+							unEntitledItemIDs[j] = itemID;	
+								/*document.getElementById("errorMsgTop").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+						        document.getElementById("errorMsgTop").style.display = "inline";
+									
+						        document.getElementById("errorMsgBottom").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+						        document.getElementById("errorMsgBottom").style.display = "inline";
+								errorflag= false;*/
+					}
+					}
+					//end of XB 224
 					var totalQty = arrUOM[i].value * quantity;
 					if(arrOrdMul[i].value == undefined || arrOrdMul[i].value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul[i].value == null)
 					{
@@ -1324,10 +1332,25 @@ function showSharedListForm(){
 							}
 					}	
 				}	
-				
 			}
+			
+			if(unEntitledItemIDs.length == ''){
+				
+			}else if(unEntitledItemIDs.length != '' && quantity>0){
+				if(n==1){
+					var str = ""+unEntitledItemIDs;
+					var str2 = ReplaceAll(str,",","");
+					unEntitledItemIDs = str2;
+				}
+			document.getElementById("errorMsgTop").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+	        document.getElementById("errorMsgTop").style.display = "inline";
+	        document.getElementById("errorMsgBottom").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+	        document.getElementById("errorMsgBottom").style.display = "inline";
+			errorflag= false;
+			isAddToCart=false;
 			Ext.Msg.hide();
     			myMask.hide();
+			}	
 			} // End of else . This else is for if itemCount==1	
 			if(uomCheck == true)
 			{
@@ -1370,12 +1393,11 @@ function showSharedListForm(){
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			}
-
+			//added for XB-224
+			var erroMsg = '<s:property value='erroMsg' />';
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
-			//added for XB-224
-			var erroMsg = '<s:property value='erroMsg' />';//Added for XB- 224
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
@@ -1388,15 +1410,15 @@ function showSharedListForm(){
 					if(divId != null)
 					{		
 						var errorItemList = erroMsg.split(",");
-						for (var i = 0; i < errorItemList.length; i++)
+						for (var j = 0; j < errorItemList.length; j++)
 						{
-						if(errorItemList[i] == itemID){
+						if(errorItemList[j] == itemID){
 						divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						Ext.Msg.hide();
 				    	myMask.hide();
-						errorflag= true;
+						errorflag= false;
 						isAddToCart=false;
 						}
 						}
