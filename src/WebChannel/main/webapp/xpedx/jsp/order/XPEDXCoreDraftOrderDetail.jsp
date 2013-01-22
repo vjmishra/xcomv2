@@ -650,6 +650,8 @@
 				    			<s:if test="%{requiredCustFieldsErrorMap!=null && requiredCustFieldsErrorMap.size>0}" >
                 					<s:set name="requiredFieldsForOLK" value="%{requiredCustFieldsErrorMap.get(#orderLineKey)}" />
                 				</s:if>
+                				<s:set name="jobIdRuleFlag" value='%{isJobIdRuleFlag()}'></s:set>
+                				<s:set name="customerPONoRuleFlag" value='%{isCustomerPORuleFlag()}'></s:set>
 								<s:iterator value='customerFieldsMap'>
 									<s:set name='FieldLabel' value='key' />
 									<s:set name='FieldValue' value='value' />
@@ -660,7 +662,7 @@
 		                                		<label>
 		                                			<s:text name="%{#FieldValue}" />:
 		                                		</label>
-		                                		<s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
+		                                		<s:if test=' ((#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo")) ||(%{#jobIdRuleFlag != null && #jobIdRuleFlag.equals("true")}) || (%{#customerPONoRuleFlag != null && #customerPONoRuleFlag.equals("true")})'>
 													<%--Added if-else condn for giving border-color when CustomerPONo and CustomerLinePONo are blank - Jira 3966 --%>
 													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
 													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
