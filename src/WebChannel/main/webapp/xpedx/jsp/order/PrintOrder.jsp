@@ -161,7 +161,13 @@
 	<tr><td colspan="6" style="border-bottom:1px solid black"></td> </tr>	
 	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
 	<tr>
+	<s:if test='#orderType == "STOCK_ORDER"'>
+		<td class="printField"><strong><span style="float:right;">Order Type:&nbsp;</span></strong></td><td class="printValue"><strong>Fulfillment</strong></td>
+	</s:if>
+	<s:else>
 		<td class="printField"><strong><span style="float:right;">Order Type:&nbsp;</span></strong></td><td class="printValue"><strong><s:property value='#orderType'/></strong></td>
+	</s:else>
+		
 		<td class="printField"><span style="float:right;">Order Create Date:&nbsp;</span></td><td class="printValue"><s:property value='#xpedxOrderDate' /></td>
 		<td class="printField"><span style="float:right; width:68%;">Total Order Value:&nbsp;</span></td><td class="printValue"><s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' /></td>
 	</tr>
@@ -541,12 +547,7 @@
 <tr>
         <td class="printField">&nbsp;</td><td class="printValue"></td>
         <td class="printField">&nbsp;</td><td class="printValue"></td>
-        <td class="printValue" colspan="2">
-              	<ul id="cart-actions" class="float-right">
-		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="javascript:window.close()"><span>Close</span></s:a></li>
-		            <li><s:a href="javascript:window.print()" cssClass="orange-ui-btn"><span>Print</span></s:a></li>
-		        </ul>
-        </td>    
+           
 	</tr> 
 </table>			    	    
 			    	    
