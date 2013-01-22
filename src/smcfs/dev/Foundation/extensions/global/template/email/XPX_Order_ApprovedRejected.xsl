@@ -505,8 +505,10 @@
 					<td class="align-right">
 					<xsl:if test='$viewPricesFlag ="Y"'>						
 						<xsl:choose>
-							<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
 							<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
+							<xsl:when test='Extn/@ExtnUnitPrice ="0.0"'><span class="tbd">Call for price</span></xsl:when>
+							<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
+							<xsl:when test='Extn/@ExtnUnitPrice ="0.00000"'><span class="tbd">Call for price</span></xsl:when>
 							<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,###.00000")'/></xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
@@ -516,6 +518,7 @@
 					<xsl:choose>
 							<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 							<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+							<xsl:when test='Extn/@ExtnExtendedPrice ="0.00000"'><span class="tbd">To be determined</span></xsl:when>
 							<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
 							</xsl:choose>
 					</xsl:if>
@@ -532,16 +535,12 @@
 							<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 							<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
 							<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
-							</xsl:choose>
+						</xsl:choose>
 				     </xsl:if>
 					</td>
 					
 					</xsl:otherwise>
 					</xsl:choose>
-					
-					
-					
-					
 					
 				</tr>
 				<tr>
@@ -559,6 +558,8 @@
 						<xsl:when test='Extn/@ExtnUnitPrice =""'>
 						</xsl:when>
 						<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
+						</xsl:when>
+						<xsl:when test='Extn/@ExtnUnitPrice ="0.00000"'>
 						</xsl:when>
 						<xsl:otherwise>per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/></xsl:otherwise>
 						</xsl:choose>
