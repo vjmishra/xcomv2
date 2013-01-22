@@ -133,6 +133,14 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//}
 			//END: sort the orderlines based on legacy line number - RUgrani
 			
+				//Start XB-560
+				Document rulesDoc1 = (Document) wcContext.getWCAttribute("rulesDoc");
+				if(rulesDoc1 == null){
+					rulesDoc1 = XPEDXOrderUtils.getValidationRulesForCustomer(getOrderElementFromOutputDocument(), wcContext);
+					wcContext.setWCAttribute("rulesDoc", rulesDoc1, WCAttributeScope.LOCAL_SESSION);	
+				}
+				customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(getOrderElementFromOutputDocument(),rulesDoc1, wcContext);
+				//End XB-560
 			//Get the field validateCustomerFields. It will be set to Y when cart is updated
 			if(getValidateCustomerFields()!=null && getValidateCustomerFields().equals("Y"))
 			{
@@ -1139,6 +1147,33 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setCustomerFieldsMap(HashMap customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
+	}
+	public ArrayList<String> getCustomerFieldsRulesMap() {
+		return customerFieldsRulesMap;
+	}	
+
+	public void setCustomerFieldsRulesMap(ArrayList<String> customerFieldsRulesMap) {
+		this.customerFieldsRulesMap = customerFieldsRulesMap;
+	}
+
+	public String isJobIdRuleFlag() {		
+		if (this.customerFieldsRulesMap != null && this.customerFieldsRulesMap.contains("ExtnCustLineAccNo")) {
+			if(!customerFieldsMap.containsKey("CustLineAccNo"))
+			customerFieldsMap.put("CustLineAccNo", "Line Account #");
+			return "true";
+		}
+
+		return "false";
+	}
+	
+	public String isCustomerPORuleFlag() {		
+		if (this.customerFieldsRulesMap != null && this.customerFieldsRulesMap.contains("CustomerPONo")) {
+			if(!customerFieldsMap.containsKey("CustomerPONo"))
+			customerFieldsMap.put("CustomerPONo", "Line PO #");
+			return "true";
+		}
+
+		return "false";
 	}
 	
 	public HashMap<String, HashMap<String, String>> getSkuMap() {
@@ -2191,6 +2226,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected ArrayList<Element> xpedxYouMightConsiderItems;
 	protected ArrayList<Element> xpedxPopularAccessoriesItems;
 	protected HashMap customerFieldsMap;
+	protected ArrayList<String> customerFieldsRulesMap;
 	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;
 	private String adjCatTwoShortDesc = "";
