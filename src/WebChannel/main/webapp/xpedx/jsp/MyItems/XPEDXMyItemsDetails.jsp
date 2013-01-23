@@ -1333,10 +1333,10 @@ function showSharedListForm(){
 					}	
 				}	
 			}
-			
-			if(unEntitledItemIDs.length == ''){
+		
+			if(unEntitledItemIDs.length == 0){
 				
-			}else if(unEntitledItemIDs.length != '' && quantity>0){
+			}else if(unEntitledItemIDs.length != 0){
 				if(n==1){
 					var str = ""+unEntitledItemIDs;
 					var str2 = ReplaceAll(str,",","");
