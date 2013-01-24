@@ -66,19 +66,37 @@ function savePassword(){
 	 var answerFiled = document.passwordUpdateForm.userpassword;
 	 var answerConfirmFiled = document.passwordUpdateForm.confirmpassword;
 	 var errDiv = document.getElementById("errorMsgFor_userpassword");
+	 var errDivBlank = document.getElementById("errorMsgFor_blank");
 	 if(errDiv != null){
 		 errDiv.style.display = 'none';
 	 }
+	 answerFiled.style.borderColor="";
+	 answerConfirmFiled.style.borderColor="";
 	 document.passwordSubmit.newPassword.value = answerFiled.value;
 	 var returnVal = false;
-		if(answerFiled.value.trim().length == 0 && answerConfirmFiled.value.trim().length == 0)
-			{
-				errDiv.innerHTML = "The feilds can not be blank."
-				errDiv.style.display = "inline";
-				errDiv.setAttribute("align", "center");
-				return;
+	 if(answerFiled.value.trim().length == 0 && answerConfirmFiled.value.trim().length == 0){
+	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			 answerFiled.style.borderColor="#FF0000";
+			 answerConfirmFiled.style.borderColor="#FF0000";
+			 return;
 			}
-		else if(answerFiled.value != answerConfirmFiled.value){
+	 	if(answerFiled.value.trim().length == 0 || answerFiled.value == null){
+	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			 answerFiled.style.borderColor="#FF0000";
+			 return;
+			}
+	 	
+	 	if(answerConfirmFiled.value.trim().length == 0 || answerConfirmFiled.value == null){
+	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			answerConfirmFiled.style.borderColor="#FF0000";
+			 return;
+			}
+	 	
+	 	
+		if(answerFiled.value != answerConfirmFiled.value){
 				errDiv.innerHTML = "Please enter the same password in both Password and Confirm Password fields."
 				errDiv.style.display = "inline";
 				return;
@@ -94,6 +112,7 @@ function validatePassword(){
 		erDiv.innerHTML = '';
 	}
 	 var answerFiled = document.passwordUpdateForm.userpassword;
+	 document.getElementById("userPwdToValidate").value=answerFiled.value;
 	var url = '<s:property value="#ValidatePasswordURL" />';
 		Ext.Ajax.request({
 	        url :url,
@@ -104,18 +123,15 @@ function validatePassword(){
 	        success: function (response, request){
 	           var responseText = response.responseText;
 	           var errorDiv = document.getElementById("pwdValidationDiv");
-              if(errorDiv){
               		if(responseText.indexOf("error")>-1){
 	                    errorDiv.innerHTML = response.responseText;
 	                    errorDiv.style.display = 'block';
 	                }else{
 	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
 	                	errorDiv.style.display = 'none';
+	                	document.passwordSubmit.submit();
 	                }
-              }
               
-              
-              		submitPassword();
   	   		},
 	   		failure: function (response, request){
 	   		   errorDiv = document.getElementById("pwdValidationDiv");
@@ -126,49 +142,6 @@ function validatePassword(){
 	        }
 	    });
 }
-function submitPassword(){
-	var answerFiled = document.passwordUpdateForm.userpassword;
-	var errorDiv = document.getElementById("pwdErrorDiv");
-	if(errorDiv != null && errorDiv.innerHTML != "")
-		{
-	 		return false;   
-		} 
-	else{
-		var url1 = '<s:property value="#XPEDXPasswordSubmitURL" escape='false' />';
-		Ext.Ajax.request({
-	        url :url1,
-	        params:{
-	        	userPwdToValidate : answerFiled.value
-	        	},
-	        method: 'POST',
-	        success: function (response, request){
-	           var responseText = response.responseText;
-	           var errorDiv = document.getElementById("pwdValidationDiv");
-              if(errorDiv != null && errorDiv.innerHTML != ""){
-              		if(responseText.indexOf("error")>-1){
-	                    errorDiv.innerHTML = response.responseText;
-	                    errorDiv.style.display = 'block';
-	                }else{
-	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
-	                	errorDiv.style.display = 'none';
-	                }
-              }
-              window.location.reload(); 
-              
-  	   		},
-	   		failure: function (response, request){
-	   		   errorDiv = document.getElementById("pwdValidationDiv");
-              if(errorDiv){
-               errorDiv.style.display = 'none';
-              }
-	    	   alert("Error in service.");
-	    	  
-	        }
-	    });
-		//document.passwordSubmit.submit();
-	}
-   
-	}
 function saveAnswer(){
     var answerFiled = document.secrectQuestionForm.secretAnswer ;
     var answerConfirmFiled = document.secrectQuestionForm.confirmAnswer ;
