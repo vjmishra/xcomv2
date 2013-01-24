@@ -154,7 +154,7 @@
 		</action>
 		<action name="xpedxPasswordValidation" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordUpdateValidation">
 			<result name="success">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
-			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPwdValidationError.jsp</result>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
 		</action>
 		<action name="XPEDXPasswordSubmit" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordChange">
 			<param name="mashups">ManagePasswordUpdate</param>
