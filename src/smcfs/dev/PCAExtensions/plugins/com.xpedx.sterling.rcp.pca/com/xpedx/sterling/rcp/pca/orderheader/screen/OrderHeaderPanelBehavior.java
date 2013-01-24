@@ -431,7 +431,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
             
             
             String finalQueryString = "sfId=" + sfId + "&orderHeaderKey=" + orderHeaderKey;
-            XPXUtils.accessURL(url, finalQueryString);
+            XPXUtils.accessURL(url.trim(), finalQueryString);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
