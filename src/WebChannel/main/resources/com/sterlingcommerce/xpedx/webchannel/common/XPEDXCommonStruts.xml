@@ -153,11 +153,12 @@
 			<result name="success">/xpedx/jsp/home/XPEDXPasswordUpdateModal.jsp</result>
 		</action>
 		<action name="xpedxPasswordValidation" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordUpdateValidation">
-			<result name="success">/xpedx/jsp/profile/user/XPEDXPwdValidationError.jsp</result>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPwdValidationError.jsp</result>
 		</action>
 		<action name="XPEDXPasswordSubmit" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordChange">
 			<param name="mashups">ManagePasswordUpdate</param>
-			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPwdValidationError.jsp</result>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">home</param>
 				<param name="namespace">/home</param>
