@@ -1398,6 +1398,7 @@ function showSharedListForm(){
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
+			var errorMsgFlag = false;
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
@@ -1416,6 +1417,7 @@ function showSharedListForm(){
 						divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
+						errorMsgFlag = true;
 						Ext.Msg.hide();
 				    	myMask.hide();
 						errorflag= false;
@@ -1501,7 +1503,7 @@ function showSharedListForm(){
 						}
 						errorflag= false;
 					}
-					else if (arrOrdMul[i].value > 1 && priceCheck == true){
+					else if (arrOrdMul[i].value > 1 && priceCheck == true && errorMsgFlag == false){
 						if (priceCheck == true){
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
