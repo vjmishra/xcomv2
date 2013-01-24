@@ -67,6 +67,9 @@ function savePassword(){
 	 var answerConfirmFiled = document.passwordUpdateForm.confirmpassword;
 	 var errDiv = document.getElementById("errorMsgFor_userpassword");
 	 var errDivBlank = document.getElementById("errorMsgFor_blank");
+	 if(errDivBlank != null){
+		 errDivBlank.style.display = 'none';
+	 }
 	 if(errDiv != null){
 		 errDiv.style.display = 'none';
 	 }
@@ -75,21 +78,21 @@ function savePassword(){
 	 document.passwordSubmit.newPassword.value = answerFiled.value;
 	 var returnVal = false;
 	 if(answerFiled.value.trim().length == 0 && answerConfirmFiled.value.trim().length == 0){
-	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 		errDivBlank.innerHTML = "Required fields missing. Please review and try again."
 	 			errDivBlank.style.display = "inline";
 			 answerFiled.style.borderColor="#FF0000";
 			 answerConfirmFiled.style.borderColor="#FF0000";
 			 return;
 			}
 	 	if(answerFiled.value.trim().length == 0 || answerFiled.value == null){
-	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 		errDivBlank.innerHTML = "Required field missing. Please review and try again."
 	 			errDivBlank.style.display = "inline";
 			 answerFiled.style.borderColor="#FF0000";
 			 return;
 			}
 	 	
 	 	if(answerConfirmFiled.value.trim().length == 0 || answerConfirmFiled.value == null){
-	 		errDivBlank.innerHTML = "Required Feild Missing.Please review and try again."
+	 		errDivBlank.innerHTML = "Required field missing. Please review and try again."
 	 			errDivBlank.style.display = "inline";
 			answerConfirmFiled.style.borderColor="#FF0000";
 			 return;
@@ -142,6 +145,7 @@ function validatePassword(){
 	        }
 	    });
 }
+
 function saveAnswer(){
     var answerFiled = document.secrectQuestionForm.secretAnswer ;
     var answerConfirmFiled = document.secrectQuestionForm.confirmAnswer ;
