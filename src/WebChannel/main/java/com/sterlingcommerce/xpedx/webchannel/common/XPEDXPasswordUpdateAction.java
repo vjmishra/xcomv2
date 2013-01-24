@@ -72,7 +72,12 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 		HashMap<String, String> userInfoMap = new HashMap<String, String>();
 		userInfoMap.put("newPassword", getUserPwdToValidate());
 		userInfoMap.put("loginId", wcContext.getLoggedInUserId());
-		
+		String newPassword="";
+		String useLoginID="";
+		if (checkIfPasswordChanged()) {
+			newPassword = getUserPwdToValidate();
+		useLoginID = wcContext.getCustomerContactId();
+		}
 		String returnStr = SUCCESS;
 		PasswordPolicyResult pwdValidationResult;
 		Map<String, String> resultMap = null;
@@ -87,12 +92,90 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 					setPwdValidationResultMap(resultMap);
 				}
 			}
-		} catch (Exception e) {
+			if (checkIfPasswordChanged()) {
+				List<String> strErrorMessage= new ArrayList<String>();
+				if(newPassword.length()<8){
+
+					strErrorMessage.add("The password must contain at least 8 characters.");
+				}
+				
+					char[] newPwdChar = newPassword.toCharArray();
+					int pwdCharLength = newPwdChar.length;
+					int iNoOfNumericChars = 0;
+					int iNoOfUpperCaseChars = 0;
+					int iNoOfAlphabeticalChars = 0;
+					boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
+					for(int i=0;i<pwdCharLength;i++){
+						char c = newPwdChar[i];
+						/*if (newPwdChar[i] == 33){
+							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+						}
+						
+						if (newPwdChar[i] == 36){
+							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+						}
+						
+						if (newPwdChar[i] == 63){
+							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
+						}*/
+						if(Character.isUpperCase(c) || Character.isLowerCase(c)){
+		                	iNoOfAlphabeticalChars++;
+		                }
+						if(Character.isDigit(c)){
+		                	iNoOfNumericChars++;
+		                }
+						if(Character.isUpperCase(c)){
+		                	iNoOfUpperCaseChars++;
+		                }
+					}
+					if(newPassword.toUpperCase().contains(useLoginID.toUpperCase())){
+						strErrorMessage.add("The password must not contain the user's login ID. ");
+					}
+					/*if(iNoOfAlphabeticalChars < 2){
+						strErrorMessage.add("The password must contain at least 2 alpha characters.");
+					}*/
+					if(iNoOfNumericChars < 1){
+						strErrorMessage.add("The password must contain at least 1 numeric character. ");
+					}
+					if(iNoOfUpperCaseChars < 1){
+						strErrorMessage.add("The password must contain at least 1 uppercase character.");
+					}
+					if(exceededMaxRepeatedChars){
+						strErrorMessage.add("The password must not exceed more than 2 consecutive repeated characters.");
+					}
+					
+					if(strErrorMessage.size()>0){
+						request.getSession().setAttribute("errorNote",strErrorMessage);
+						for(String errorDesc:strErrorMessage)
+						{
+							if(pwdValidationResultMap == null)
+								pwdValidationResultMap = new HashMap<String, String>();
+							pwdValidationResultMap.put(errorDesc, errorDesc);
+						}
+							
+						return errorPwd;
+					}
+			}
+		} 
+		catch (YFCException passexp) {
+			// This exception is put here to handle the password validation exceptions.
+			if(log.isDebugEnabled()){
+			log.debug("GOT EXCEPTION");
+			}
+			pwdValidationResultMap = new HashMap<String, String>();
+			pwdValidationResultMap.put(((YFCException) passexp).getAttribute("ErrorCode"), ((YFCException) passexp).getAttribute("ErrorDescription"));
+			setPwdValidationResultMap(pwdValidationResultMap);
+			passexp.printStackTrace();
+			return ERROR;
+		}
+		catch (Exception e) {
 			if(e instanceof YFCException){
 				pwdValidationResultMap = new HashMap<String, String>();
 				pwdValidationResultMap.put(((YFCException) e).getAttribute("ErrorCode"), ((YFCException) e).getAttribute("ErrorDescription"));
 			}
+			e.printStackTrace();
 		}
+		
 		return returnStr;
 	}
 	
@@ -107,61 +190,7 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 			}
 			
 			if (checkIfPasswordChanged()) {
-				List<String> strErrorMessage= new ArrayList<String>();
-				if(newPassword.length()<8){
-
-					strErrorMessage.add("The password must contain at least 8 characters.");
-				}
-					char[] newPwdChar = newPassword.toCharArray();
-					int pwdCharLength = newPwdChar.length;
-					int iNoOfNumericChars = 0;
-					int iNoOfUpperCaseChars = 0;
-					int iNoOfAlphabeticalChars = 0;
-					boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
-					for(int i=0;i<pwdCharLength;i++){
-						char c = newPwdChar[i];
-						if (newPwdChar[i] == 33){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}
-						
-						if (newPwdChar[i] == 36){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}
-						
-						if (newPwdChar[i] == 63){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}
-						if(Character.isUpperCase(c) || Character.isLowerCase(c)){
-		                	iNoOfAlphabeticalChars++;
-		                }
-						if(Character.isDigit(c)){
-		                	iNoOfNumericChars++;
-		                }
-						if(Character.isUpperCase(c)){
-		                	iNoOfUpperCaseChars++;
-		                }
-					}
-					if(newPassword.toUpperCase().contains(useLoginID.toUpperCase())){
-						strErrorMessage.add("The password must not contain the user's login ID. ");
-					}
-					if(iNoOfAlphabeticalChars < 2){
-						strErrorMessage.add("The password must contain at least 2 alpha characters.");
-					}
-					if(iNoOfNumericChars < 1){
-						strErrorMessage.add("The password must contain at least 1 numeric character. ");
-					}
-					if(iNoOfUpperCaseChars < 1){
-						strErrorMessage.add("The password must contain at least 1 uppercase character.");
-					}
-					if(exceededMaxRepeatedChars){
-						strErrorMessage.add("The password must not exceed more than 2 consecutive repeated characters.");
-					}
-					
-					if(strErrorMessage.size()>0){
-						strErrorMessage.add("Please revise and try again.");
-						request.getSession().setAttribute("errorNote",strErrorMessage);
-						return errorPwd;
-					}
+				
 					valueMap.put("/Customer/@CustomerID",getWCContext().getCustomerId());
 					valueMap.put("/Customer/@OrganizationCode",wcContext.getStorefrontId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/@CustomerContactID",wcContext.getCustomerContactId() );

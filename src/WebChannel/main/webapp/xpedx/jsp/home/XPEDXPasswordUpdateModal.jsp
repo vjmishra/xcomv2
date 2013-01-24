@@ -40,14 +40,14 @@
 				<tbody>
 					<tr>
 						<td colspan="4" class="underlines no-border-right-user" align="center" width="80%">
-						 <b>Please Change your password.</b></br></br></td>
+						 <b>Please change your password.</b></br></br></td>
 						 </tr>
 						 <tr>
 						 <td colspan="4" class="underlines no-border-right-user" align="center">
 						<b>Password Policy: minimum of 8 characters, maximum of 14 characters, at least 2 
 							</br>
 						 alpha characters, 1 uppercase character, 1 numeric character, maximum of</br>
-						 consecutive repeated characters=2, the following characters cannot be used $,?,!</b></br>							
+						 consecutive repeated characters=2, the following characters cannot be used $, ?, !</b></br>							
 						 </td>
 					</tr>
 					<tr>
@@ -108,7 +108,7 @@
 			<div>
 			<ul class="float-right">
 			<li >
-			<a href="javascript:savePassword();"  class="orange-ui-btn"><span>Submit</span>					
+			<a href="javascript:savePassword();"  class="orange-ui-btn" tabindex="24"><span>Submit</span>					
 			</a>
 			</li>
 			</ul>
@@ -131,11 +131,12 @@
 			</s:form>
 			 <s:form id='passwordSubmit' namespace='/common' action='XPEDXPasswordSubmit' name='passwordSubmit'>
 					<s:hidden name='newPassword' id='newPassword' value='%{#userpassword}'></s:hidden> 
+					<s:hidden name='userPwdToValidate' id='userPwdToValidate' value='%{#userpassword}'></s:hidden> 
 				  </s:form>
 		
 			</div> 
-      		<br />
-      		<div class="error" id="errorMsgFor_userpassword" style="display : none; float: right"/></div>
+      		<div class="error" id="errorMsgFor_userpassword" style="display : none; margin-left: 140px ;"/></div>
+      		<div class="error" id="errorMsgFor_blank" style="display : none; margin-left: 300px ;"/></div>
       		<s:if test="%{#session.errorNote!= null}">
 	 <div id="errorNote" class="error" style="display : inline; float: right">
 		<s:iterator value="%{#session.errorNote}" id="error"  >
@@ -149,8 +150,6 @@
 			<s:set name="errorCode" value="key" />	
 			<s:property value="#errorDesc"/>
 			</div>			
-			<br/>
-			<br/>
 		</s:iterator>
 	
 </s:if>
