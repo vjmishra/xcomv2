@@ -83,7 +83,7 @@ $(document).ready(function() {
 					<br/>
 					<br/>
 					<div>
-						<span class="bold">PLEASE NOTE</span>: Our Privacy Policy has changed effective November 22, 2011. If you submitted personally identifiable information to us prior to the above effective date, and desire to opt out of having that previously submitted personally identifiable information from being treated under the new policy, please contact us at <a href="mailto:distribution.webmaster@ipaper.com">distribution.webmaster@ipaper.com</a>.<br/><br/>
+						<span class="bold">PLEASE NOTE</span>: Our Privacy Policy has changed effective November 22, 2011. If you submitted personally identifiable information to us prior to the above effective date, and desire to opt out of having that previously submitted personally identifiable information from being treated under the new policy, please contact us at <a href="mailto:distribution.webmaster@ipaper.com" class="underlink">distribution.webmaster@ipaper.com</a>.<br/><br/>
 
 						<div align="center">
 						<span class="bold">PRIVACY POLICY</span><br/>
@@ -143,6 +143,6 @@ $(document).ready(function() {
 		</div>
 		<!-- end container  -->  
           
-		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />            
+		        
 	</body>
 </html>
