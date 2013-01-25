@@ -42,7 +42,7 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 	public Map<String, String> getPwdValidationResultMap() {
 		return pwdValidationResultMap;
 	}
-	public void setPwdValidationResultMap(Map<String, String> pwdValidationResultMap) {
+	public void setPwdValidationResultMap(Map pwdValidationResultMap) {
 		this.pwdValidationResultMap = pwdValidationResultMap;
 	}
 	public String getUserPwdToValidate() {
@@ -81,69 +81,16 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 		String returnStr = SUCCESS;
 		PasswordPolicyResult pwdValidationResult;
 		Map<String, String> resultMap = null;
+		HashMap errorMap = new HashMap();
 		try {
 			// validate client password
-			pwdValidationResult = XPEDXClientPasswordValidator.validateClientPassword(userInfoMap);
-			if(ResultType.FAILURE.equals(pwdValidationResult.getResultType())){
-				String errorMsg = (String)pwdValidationResult.getResultMap().get("ErrorMsg");
-				if(errorMsg!=null){
-					resultMap = new HashMap<String, String>();
-					resultMap.put("ErrorMsg", errorMsg);
-					setPwdValidationResultMap(resultMap);
-				}
+			errorMap = XPEDXClientPasswordValidator.validateClientAllPassword(userInfoMap);
+			if(null!= errorMap && errorMap.size()>0){
+		    	setPwdValidationResultMap(errorMap);
 			}
 			if (checkIfPasswordChanged()) {
 				List<String> strErrorMessage= new ArrayList<String>();
-				if(newPassword.length()<8){
-
-					strErrorMessage.add("The password must contain at least 8 characters.");
-				}
 				
-					char[] newPwdChar = newPassword.toCharArray();
-					int pwdCharLength = newPwdChar.length;
-					int iNoOfNumericChars = 0;
-					int iNoOfUpperCaseChars = 0;
-					int iNoOfAlphabeticalChars = 0;
-					boolean exceededMaxRepeatedChars = this.checkIfExceedsMaxRepeatedChars(newPassword);
-					for(int i=0;i<pwdCharLength;i++){
-						char c = newPwdChar[i];
-						/*if (newPwdChar[i] == 33){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}
-						
-						if (newPwdChar[i] == 36){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}
-						
-						if (newPwdChar[i] == 63){
-							strErrorMessage.add("The password must not contain the character '"+newPwdChar[i]+"'");
-						}*/
-						if(Character.isUpperCase(c) || Character.isLowerCase(c)){
-		                	iNoOfAlphabeticalChars++;
-		                }
-						if(Character.isDigit(c)){
-		                	iNoOfNumericChars++;
-		                }
-						if(Character.isUpperCase(c)){
-		                	iNoOfUpperCaseChars++;
-		                }
-					}
-					if(newPassword.toUpperCase().contains(useLoginID.toUpperCase())){
-						strErrorMessage.add("The password must not contain the user's login ID. ");
-					}
-					/*if(iNoOfAlphabeticalChars < 2){
-						strErrorMessage.add("The password must contain at least 2 alpha characters.");
-					}*/
-					if(iNoOfNumericChars < 1){
-						strErrorMessage.add("The password must contain at least 1 numeric character. ");
-					}
-					if(iNoOfUpperCaseChars < 1){
-						strErrorMessage.add("The password must contain at least 1 uppercase character.");
-					}
-					if(exceededMaxRepeatedChars){
-						strErrorMessage.add("The password must not exceed more than 2 consecutive repeated characters.");
-					}
-					
 					if(strErrorMessage.size()>0){
 						request.getSession().setAttribute("errorNote",strErrorMessage);
 						for(String errorDesc:strErrorMessage)
