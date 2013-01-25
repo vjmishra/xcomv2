@@ -1199,6 +1199,7 @@ function showSharedListForm(){
 			
 			errorflag=true;
 			addToCartFlag=false;
+			var isValidItemError=false;
 			var isQuantityZero = true;
 			var uomCheck = false ;
 			// XB-224 start
@@ -1368,8 +1369,8 @@ function showSharedListForm(){
 	        document.getElementById("errorMsgBottom").style.display = "inline";
 			errorflag= false;
 			isAddToCart=false;
-			Ext.Msg.hide();
-    			myMask.hide();
+			isValidItemError=true;
+			
 			}	
 			} // End of else . This else is for if itemCount==1	
 			if(uomCheck == true)
@@ -1385,7 +1386,11 @@ function showSharedListForm(){
 	            document.getElementById("errorMsgBottom").style.display = "inline";
 				errorflag= false;
 			}
-			
+			if(isValidItemError)
+			{
+				Ext.Msg.hide();
+    			myMask.hide();
+			}
 			return errorflag;
 			
 		}
