@@ -363,6 +363,25 @@ function showSharedListForm(){
      		myMask.show();
      		clearPreviousDisplayMsg()
      		
+     		//Added for XB 224 - not to display availability when Item is not Entitled		
+     		var erroMsg = '<s:property value='erroMsg' />';
+     		var isItemEntitled=true;
+			if(erroMsg != null && erroMsg != ""){
+				var errorItemList = erroMsg.split(",");
+				for (var j = 0; j < errorItemList.length; j++)
+						{
+						if(errorItemList[j] == itemId){
+							
+							isItemEntitled=false;
+							Ext.Msg.hide();
+		            				myMask.hide();
+							break;
+							
+						}	
+						}
+				
+				}
+			
      		var validateOM ; 
      			if(validateOrderMultiple(true,myItemsKey) == false)
    			 {
@@ -371,7 +390,7 @@ function showSharedListForm(){
      			else{
      				validateOM = true;
      			}
-     		
+     			if(isItemEntitled) {
      		if(itemId == null || itemId =="") {
     			alert("Item ID cannot be null to make a PnA call");
     		}
@@ -382,6 +401,7 @@ function showSharedListForm(){
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
      	}
+     }
 		
 		function importItems(msgImportMyItemsError){
 			
@@ -1398,31 +1418,32 @@ function showSharedListForm(){
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
-			var errorMsgFlag = false;
+			
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
+				var errorMsgFlag = false;
 				var divVal=document.getElementById(divId);
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
 				var itemID = arrItemID[i].value;				
-				if(erroMsg != null && erroMsg != ""){
+				if(erroMsg != null && erroMsg != "")
+				{
 					if(divId != null)
 					{		
 						var errorItemList = erroMsg.split(",");
 						for (var j = 0; j < errorItemList.length; j++)
 						{
-						if(errorItemList[j] == itemID){
-						divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
-						divVal.setAttribute("class", "error");
-						divVal.style.display = 'block';
-						errorMsgFlag = true;
-						Ext.Msg.hide();
-				    	myMask.hide();
-						errorflag= false;
-						isAddToCart=false;
-						}
+							if(errorItemList[j] == itemID)
+							{
+								divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
+								divVal.setAttribute("class", "error");
+								divVal.style.display = 'block';
+								errorMsgFlag = true;
+								errorflag= false;
+								isAddToCart=false;
+							}
 						}
 					}
 				}
@@ -1869,12 +1890,13 @@ function showSharedListForm(){
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
 			if (formItemIds){
-				
+				var erroMsg = '<s:property value='erroMsg' />';
 				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
 	                 Ext.Ajax.request({
 	                   url: '<s:property value='%{testData}' escape='false'/>',
 	                   params: {
-	                	   validateOMForMultipleItems : validateOMForMultipleItems
+	                	   validateOMForMultipleItems : validateOMForMultipleItems,
+	                	   erroMsg : erroMsg,
 		                   },
 	                   form: 'formItemIds',
 	                  method: 'POST',
