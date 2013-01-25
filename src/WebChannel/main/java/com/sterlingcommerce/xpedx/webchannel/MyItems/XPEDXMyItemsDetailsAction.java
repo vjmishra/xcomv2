@@ -1016,8 +1016,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	public String pricecheck(){
 		try{
+			String invalidItems[]=null;
+			if(erroMsg != null)
+			{
+				invalidItems=erroMsg.split(",");
+			}
 		if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
-			processStockCheck(true);
+			processStockCheck(true,invalidItems);
 		} else if (getCommand().equals(COMMAND_STOCK_CHECK_SEL)) {
 			processStockCheck(false);
 		}
@@ -1252,8 +1257,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-
 	private void processStockCheck(boolean checkAllItems) throws Exception {
+		processStockCheck(checkAllItems,null);
+	}
+
+	private void processStockCheck(boolean checkAllItems,String invalidItems[]) throws Exception {
 
 			pnaCall = true;
 			String customerId = wcContext.getCustomerId();
@@ -1277,7 +1285,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(listOfItemsFromsession != null) {
 			for (int i = 0; i < listOfItemsFromsession.size(); i++) {
 				Element item = (Element) listOfItemsFromsession.get(i);
-
+				boolean isInvalidItem=false;
 				// Get some vars
 				String id = item.getAttribute("MyItemsKey");
 				String itemId = item.getAttribute("ItemId");
@@ -1299,6 +1307,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
 				OM = totalQty % (Integer.parseInt(orderMultiple));
 				
+				if(invalidItems != null && invalidItems.length > 0)
+				{
+					for(int j=0;j<invalidItems.length;j++){
+						if(invalidItems[j].equals(itemId))
+						{
+							isInvalidItem=true;
+							break;
+						}
+					}
+				}
 				if(OM!= 0){
 					validateOrderMul = true;
 					validateCheck.put(itemId+":"+(i+1),validateOrderMul);
@@ -1311,7 +1329,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 				}
 
-				if (addThisItem) {
+				if (addThisItem && !isInvalidItem) {
 					XPEDXItem tmpItem = new XPEDXItem();
 					tmpItem.setLegacyProductCode(itemId);
 					tmpItem.setRequestedQtyUOM(itemUom);
