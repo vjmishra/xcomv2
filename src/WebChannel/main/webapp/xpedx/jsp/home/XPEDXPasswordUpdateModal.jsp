@@ -132,6 +132,7 @@
 			 <s:form id='passwordSubmit' namespace='/common' action='XPEDXPasswordSubmit' name='passwordSubmit'>
 					<s:hidden name='newPassword' id='newPassword' value='%{#userpassword}'></s:hidden> 
 					<s:hidden name='userPwdToValidate' id='userPwdToValidate' value='%{#userpassword}'></s:hidden> 
+					<s:hidden name="preferredLocale" id="preferredLocale" value="%{'en_US_EST'}"/>
 				  </s:form>
 		
 			</div> 
