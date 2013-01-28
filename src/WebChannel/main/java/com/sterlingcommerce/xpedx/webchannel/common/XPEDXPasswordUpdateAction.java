@@ -33,6 +33,13 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 	private static final String YES = "Y";
 	private String enterpriseCode="";
 	private String passwordUpdate;
+	private String preferredLocale;
+	public String getPreferredLocale() {
+		return preferredLocale;
+	}
+	public void setPreferredLocale(String preferredLocale) {
+		this.preferredLocale = preferredLocale;
+	}
 	public String getPasswordUpdate() {
 		return passwordUpdate;
 	}
@@ -138,14 +145,15 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 			
 			if (checkIfPasswordChanged()) {
 				
-					valueMap.put("/Customer/@CustomerID",getWCContext().getCustomerId());
+					valueMap.put("/Customer/@CustomerID",getWCContext().getBuyerOrgCode());
 					valueMap.put("/Customer/@OrganizationCode",wcContext.getStorefrontId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/@CustomerContactID",wcContext.getCustomerContactId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Password",newPassword);
+					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Localecode",preferredLocale);
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@GeneratePassword",YES);
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@EnterpriseCode",wcContext.getStorefrontId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@DisplayUserID",wcContext.getCustomerContactId());
-					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey",getWCContext().getCustomerId());
+					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey",getWCContext().getBuyerOrgCode());
 					
 			}
 			Element userContactInput = WCMashupHelper.getMashupInput(
