@@ -115,7 +115,7 @@
 				<Customer CustomerID="" OrganizationCode="">
 			    <CustomerContactList>
 			        <CustomerContact CustomerContactID="">
-			           <User EnterpriseCode="" DisplayUserID=""
+			           <User EnterpriseCode="" DisplayUserID="" Localecode=""
 							 GeneratePassword="Y" OrganizationKey="" SessionTimeout="0">
 						</User>
 			         </CustomerContact>
