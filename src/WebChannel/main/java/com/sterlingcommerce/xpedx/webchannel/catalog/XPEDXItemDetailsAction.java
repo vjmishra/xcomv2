@@ -192,8 +192,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	protected void getCustomerLineDetails() throws Exception {
 		//get the map from the session. if null query the DB
-		HashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
-		HashMap<String,String> customerFieldsMap =new HashMap<String,String>();
+		LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();		
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         }else
@@ -247,11 +246,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
     }
 
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
         XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-        HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+        LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 
