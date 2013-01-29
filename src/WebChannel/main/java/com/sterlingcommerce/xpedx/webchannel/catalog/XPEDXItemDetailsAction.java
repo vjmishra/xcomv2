@@ -449,8 +449,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				break;
 			}
 		}
-		if(isThAndCwtAdded &&( pandAItem.getRequestedQtyUOM().toLowerCase().contains("thousand") || 
-				pandAItem.getRequestedQtyUOM().toLowerCase().contains("cwt")))
+		if(isThAndCwtAdded &&( RequestedQtyUOMDesc.toLowerCase().contains("thousand") || 
+				RequestedQtyUOMDesc.toLowerCase().contains("cwt")))
 		{
 			isDisplayReqUOM=false;
 		}
