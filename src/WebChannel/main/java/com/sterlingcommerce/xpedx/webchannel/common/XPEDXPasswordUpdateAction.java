@@ -149,8 +149,8 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 					valueMap.put("/Customer/@OrganizationCode",wcContext.getStorefrontId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/@CustomerContactID",wcContext.getCustomerContactId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Password",newPassword);
-					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Localecode",preferredLocale);
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@GeneratePassword",YES);
+					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@Localecode",preferredLocale);
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@EnterpriseCode",wcContext.getStorefrontId() );
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@DisplayUserID",wcContext.getCustomerContactId());
 					valueMap.put("/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey",getWCContext().getBuyerOrgCode());
@@ -163,7 +163,7 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 			invokeMashup("ManagePasswordUpdate", userContactInput);
 			//getWCContext().setWCAttribute("setPasswordUpdate", "N", WCAttributeScope.LOCAL_SESSION);
 			Boolean sessionForUserProfile=  (Boolean) XPEDXWCUtils.getObjectFromCache("setPasswordUpdate");
-			if(sessionForUserProfile == true){
+			if(sessionForUserProfile != null && sessionForUserProfile == true){
 					XPEDXWCUtils.removeObectFromCache("setPasswordUpdate");
 			}
 			return "success";
