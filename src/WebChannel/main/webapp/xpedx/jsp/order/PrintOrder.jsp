@@ -86,7 +86,7 @@
 <s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
 <s:set name="isFOCSRReview" value="%{#_action.isFOCSRReview()}"/>
 <s:set name='OrderExtn' value='#xutil.getChildElement(#orderDetail,"Extn")'/>
-<s:set name='webConfirmationNumber' value='#OrderExtn.getAttribute("ExtnWebConfNum")' />
+<s:set name='webConfirmationNumber' value='#OrderExtn.getAttribute("ExtnWebConfNum")' /> 
 <s:set name='xpedxLegacyOrderNumber' value='#OrderExtn.getAttribute("ExtnLegacyOrderNo")' />
 <s:set name="shipToId" value='#orderDetail.getAttribute("ShipToID")' />
 <s:set name='billToAttnTxt' value='#OrderExtn.getAttribute("ExtnAttnName")'/>
@@ -134,7 +134,7 @@
 <s:set name="status" value='#xutil.getAttribute(#orderDetail,"Status")'/>
 <s:set name="orderType" value='%{#xutil.getAttribute(#orderDetail, "OrderType")}' />
 <s:set name="ShipNode" value='%{#xutil.getAttribute(#orderDetail, "ShipNode")}' />
-<s:set name='xpedxOrderDateTime' value='#xutil.getAttribute(#orderDetail,"Createts")' />
+<s:set name='xpedxOrderDateTime' value='#xutil.getAttribute(#orderDetail,"OrderDate")' />
 <s:set name='xpedxOrderTime' value="#xpedxutil.formatDate(#xpedxOrderDateTime, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'HH:mm:ss')"/>
 <s:set name='xpedxReqDeliveryDate1' value='#xutil.getAttribute(#orderDetail,"ReqDeliveryDate")'/>
 <s:set name='xpedxReqDeliveryDate' value="#xpedxutil.formatDate(#xpedxReqDeliveryDate1, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'MM/dd/yyyy')"/>
@@ -149,16 +149,21 @@
 <div id="main" class=" order-pages">
 <s:url id ='homeLink' action='home' namespace='/home' /> 
 
-<div class="t1-header commonHeader signOnHeader" id="headerContainer" >
+<%-- <div class="t1-header commonHeader signOnHeader" id="headerContainer" >
 	<div class="logo">
 		<s:a href="%{homeLink}">&nbsp;</s:a>
 	</div> 
-</div>   	
+</div>  --%>  	
 <div class="rounded-border top-section">
 
 <table border="0px solid black" cellpadding="0" cellspacing="0" style="width:100%;background-color:#FFFFFF; padding-top: 5px; padding-left: 5px; padding-right: 5px;" id="print-Preview-section">
-	<tr><td><br/></td></tr>
-	<tr><td colspan="6" style="border-bottom:1px solid black"></td> </tr>	
+	<!-- <tr><td colspan="6" style="border-bottom:1px solid black"></td> </tr>	 -->
+	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+	<tr>
+	<td colspan="6" style="border-bottom:1px solid black">
+	<s:a href="%{homeLink}">&nbsp;<img border="0" alt="" src="../swc/images/logo/xpedx/logo.gif"></s:a>
+	</td>
+	</tr>
 	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
 	<tr>
 	<s:if test='#orderType == "STOCK_ORDER"'>
@@ -188,10 +193,10 @@
 		<td class="printField"><span style="float:right;">Ship Complete:&nbsp;</span></td>
 		<td class="printValue">
 		<s:if test='%{#extnShipComplete == "C"}'>
-				<input name="shipComplete" type=checkbox checked="checked" DISABLED>
+				<input name="shipComplete" type=checkbox checked="checked" onclick='return false;'>
 		</s:if>
 		<s:else>
-			<input name="shipComplete" type=checkbox DISABLED>
+			<input name="shipComplete" type=checkbox onclick='return false;'>
 		</s:else></td>
 		<td class="printField">&nbsp;</td><td class="printField">&nbsp;</td>
 	</tr>
@@ -223,13 +228,12 @@
 		 </td>
 		<td class="printField"><span style="float:right;">Will Call:&nbsp;</span></td>
 		<td class="printValue">
-		<s:if test='%{#extnWebHoldFlag == "Y"}'>
-				<input name="willCall" type=checkbox checked="checked" DISABLED>
+			<s:if test='%{#extnWillCall == "Y"}'>
+				<input name="extnWillCall"  type=checkbox checked="checked"  onclick='return false;'>
 			</s:if>
 		<s:else>
-			<input name="willCall" type=checkbox DISABLED>
-		</s:else>
-		</td>
+			<input name="extnWillCall"  type=checkbox onclick='return false;'>
+		</s:else></td>
 		<td class="printField"><span style="float:right;">Approved By:&nbsp;</span></td>
 		<td class="printValue">
 		<s:if test='%{#approverID2 !="" && #approverID2 == #modifyuserid}'>
@@ -242,10 +246,10 @@
 		
 		<td class="printValue">
 		<s:if test='%{#orderHoldFlag == "Y"}'>
-				<input name="OrderHoldCode"  type=checkbox checked="checked" DISABLED>
+				<input name="OrderHoldCode"  type=checkbox checked="checked" onclick='return false;'>
 			</s:if>
 		<s:else>
-			<input name="OrderHoldCode"  type=checkbox  DISABLED>
+			<input name="OrderHoldCode"  type=checkbox  onclick='return false;'>
 		</s:else>		
 		</td>
 		<td class="printField"><span style="float:right;">Ship From Division:&nbsp;</span></td>
@@ -271,10 +275,10 @@
 		<td class="printField"><span style="float:right;">Web Hold Flag:&nbsp;</span></td>
 		<td class="printValue">
 			<s:if test='%{#extnWebHoldFlag == "Y"}'>
-				<input name="webHoldFlag"  type=checkbox checked="checked" DISABLED>
+				<input name="webHoldFlag"  type=checkbox checked="checked" onclick='return false;'  >
 			</s:if>
 		<s:else>
-			<input name="webHoldFlag"  type=checkbox  DISABLED>
+			<input name="webHoldFlag"  type=checkbox onclick='return false;' >
 		</s:else></td>
 	</tr>
 	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -303,8 +307,8 @@
                         	<td class="printField"><span style="float:right;">Address 2:&nbsp;</span></td><td class="printValue"><s:property value='#shipToAddress2'/></td>
                         </tr>
                         <tr>
-                        	<td class="printField"><span style="float:right;">City, ST, Zip, Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#billToCity'/>,<s:property value='#billToState'/>,<s:property value='#billToZipCode'/>,<s:property value='#billToCountry'/></td>
-                        	<td class="printField"><span style="float:right;">City, ST, Zip, Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#shipToCity'/>,<s:property value='#shipToState'/>,<s:property value='#shipToZipCode'/>,<s:property value='#shipToCountry'/></td>
+                        	<td class="printField"><span style="float:right;">City, ST Zip Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#billToCity'/>,&nbsp;<s:property value='#billToState'/>&nbsp; <s:property value='#billToZipCode'/>&nbsp; <s:property value='#billToCountry'/></td>
+                        	<td class="printField"><span style="float:right;">City, ST Zip Cntry:&nbsp;</span></td><td class="printValue"><s:property value='#shipToCity'/>,&nbsp;<s:property value='#shipToState'/>&nbsp;<s:property value='#shipToZipCode'/>&nbsp;<s:property value='#shipToCountry'/></td>
                         </tr>
                         <tr>
                         	<td class="printField"></td><td class="printValue"></td>
@@ -346,10 +350,12 @@
 				<s:set name='unitPrice' value='#priceInfo.getAttribute("UnitPrice")'/>			
 				<s:set name='lineTotals' value='#xutil.getChildElement(#orderLine, "LineOverallTotals")'/>
 				<s:set name='item' value='#xutil.getChildElement(#orderLine, "Item")'/>
+				<s:set name='itemShortDesc' value='#item.getAttribute("ItemShortDesc")'/>
 				<s:set name='itemDetails' value='#xutil.getChildElement(#orderLine, "ItemDetails")'/>
 				<s:set name='uomFromItem' value='#itemDetails.getAttribute("UnitOfMeasure")'/>		
 				<s:set name='baseUOM'  value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uomFromItem)'/>
 				<s:set name='primaryInfo' value='#xutil.getChildElement(#itemDetails, "PrimaryInformation")'/>
+				<s:set name='extendedDesc' value='#primaryInfo.getAttribute("ExtendedDescription")'/>
 				<s:set name='itemExtnEle' value='#xutil.getChildElement(#itemDetails, "Extn")' />
 				<s:set name='certFlag' value='#itemExtnEle.getAttribute("ExtnCert")' />
 				<s:set name='kitLines' value='#xutil.getChildElement(#orderLine, "KitLines")'/>
@@ -370,6 +376,7 @@
 				<s:set name='xpedxJobId' value='#xpedxOrderLineExtn.getAttribute("ExtnCustLineAccNo")'/>
 				<s:set name='originalOrderedQty' value='#xutil.getAttribute(#orderLine,"OriginalOrderedQty")'/>
 				<s:set name='shipNode' value='#xutil.getAttribute(#orderLine,"ShipNode")'/>
+				<s:hidden name="hdn_ship" value="%{#shipNode}"  />
 
 				
 				<s:set name="orderLineStatIndexSize" value='#_action.getMajorLineElements().size()'/>
@@ -429,9 +436,11 @@
 			<s:set name="orgName" value="value" />
 			<s:set name="orgKey" value="key" />										
 			<s:hidden name="hdn_test" value="%{#orgKey}"  />
+			<s:hidden name="hdn_kk" value="%{#orgKey}"  />
 			<s:if test='%{#orgKey == #shipNode}'>
 				<s:property value='%{#orgName}'/>
 			</s:if>
+			
 		</s:iterator>
 		</td>
 	</tr>
@@ -449,8 +458,14 @@
 
 	<tr>
 		<td valign="top" rowspan="2"><span style="float:right;">Description:&nbsp;</span></td>
-		<td rowspan="2" colspan="3" valign="top"><s:property value='#showDesc'/>
-		</td>
+		<s:if test='(#orderLine.getAttribute("LineType") == "C") || (#orderLine.getAttribute("LineType") == "M")'>
+			<td rowspan="3" colspan="3" valign="top"><s:property value='#itemShortDesc'/></td>
+			
+		</s:if>
+		<s:else>
+			<td rowspan="3" colspan="3" valign="top"><s:property value='#extendedDesc'/></td>
+		</s:else>
+		
 				<td><span style="float:right;">Unit Price:&nbsp;</span></td>
 				<td>
 				<s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
@@ -548,7 +563,13 @@
         <td class="printField">&nbsp;</td><td class="printValue"></td>
         <td class="printField">&nbsp;</td><td class="printValue"></td>
            
-	</tr> 
+	
+	<td class="printValue" colspan="2">
+              	<ul id="cart-actions" class="float-right">
+		            <li><s:a href="javascript:window.print()" cssClass="orange-ui-btn"><span>Print</span></s:a></li>
+		        </ul>
+        </td>
+      </tr>     
 </table>			    	    
 			    	    
 			    	    

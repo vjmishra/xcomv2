@@ -3283,7 +3283,7 @@
 		<API Name="getOrganizationList">
 			<Input>
 				<Organization IgnoreOrdering="N" IsNode="Y" ParentOrganizationCode="xpedx">
-    			<Extn ExtnBrandCode="XPED"/>
+    			<Extn ExtnBrandCode="XPED" ExtnBrandCodeQryType="LIKE"/>
 				</Organization>
 
 			</Input>

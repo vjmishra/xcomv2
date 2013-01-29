@@ -67,7 +67,7 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 		NodeList orgList = outputOrgElem.getElementsByTagName("Organization");
 		for(int i=0;orgList!= null && i< orgList.getLength();i++ ){
 		orgElem = (Element) orgList.item(i);
-		organizationKey = orgElem.getAttribute("OrganizationKey");
+		organizationKey = orgElem.getAttribute("OrganizationCode");
 		organizationName = orgElem.getAttribute("OrganizationName");
 		orgsKeyNameMap.put(organizationKey, organizationName);
 		wcContext.setWCAttribute("OrgKeyNameMAP", orgsKeyNameMap, WCAttributeScope.SESSION);	
