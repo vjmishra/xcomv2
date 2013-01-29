@@ -376,7 +376,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 //		displayUOMs.add(BaseUomDesc); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
 		//Moved code from below to above for JIRA XB-558
-		displayUOMs.add(PricingUOMDesc);
+		boolean isPricingUOMAdded=false;
+		boolean isThAndCwtAdded=false;
+		if(PricingUOMDesc != null && PricingUOMDesc.toLowerCase().contains("thousand"))
+		{
+			displayUOMs.add(PricingUOMDesc);
+			isPricingUOMAdded=true;
+			isThAndCwtAdded=true;
+		}
+		
 		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
 				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
 			//displayUOMs.add("Thousand");
@@ -393,6 +401,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				if(thUOMDesc==null || thUOMDesc.length()==0)
 					thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_A);
 				displayUOMs.add(thUOMDesc);
+				isThAndCwtAdded=true;
 			}
 			catch(Exception e)
 			{	
@@ -417,6 +426,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				cwtUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.CWT_UOM_A);
 				if(prodMweight != null){
 					displayUOMs.add(cwtUOMDesc);
+					isThAndCwtAdded=true;
 				}
 			}
 			
@@ -426,7 +436,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 			
 		}
-		
+		if(!isPricingUOMAdded )
+		{
+			displayUOMs.add(PricingUOMDesc);
+		}
 		boolean isDisplayReqUOM=true;
 		for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
 		{
@@ -435,6 +448,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				isDisplayReqUOM=false;
 				break;
 			}
+		}
+		if(isThAndCwtAdded &&( pandAItem.getRequestedQtyUOM().toLowerCase().contains("thousand") || 
+				pandAItem.getRequestedQtyUOM().toLowerCase().contains("cwt")))
+		{
+			isDisplayReqUOM=false;
 		}
 		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) 
 				&& isDisplayReqUOM)
