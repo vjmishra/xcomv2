@@ -1135,17 +1135,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		//xpedxItemIDUOMToRelatedItemsListMap = new HashMap<String,ArrayList<Element>>();
 		xpedxPopularAccessoriesItems =  new ArrayList<Element>();
 		xpedxYouMightConsiderItems = new ArrayList<Element>();
-		customerFieldsMap = new HashMap();
+		customerFieldsMap = new LinkedHashMap();
 		itemUOMsMap = new HashMap();
 		itemOrderMultipleMap = new HashMap();
 		requiredCustFieldsErrorMap = new HashMap<String, ArrayList<String>>();
 	}
 
-	public HashMap getCustomerFieldsMap() {
+	public LinkedHashMap getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
-	public void setCustomerFieldsMap(HashMap customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 	public ArrayList<String> getCustomerFieldsRulesMap() {
@@ -1717,7 +1717,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected void getCustomerLineDetails() throws Exception {
 		//get the map from the session. if null query the DB
-		HashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+		LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         	customerFieldsMap = customerFieldsSessionMap;
@@ -1820,12 +1820,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 	}
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-		HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 
@@ -2225,7 +2225,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	//protected HashMap xpedxItemIDUOMToRelatedItemsListMap;
 	protected ArrayList<Element> xpedxYouMightConsiderItems;
 	protected ArrayList<Element> xpedxPopularAccessoriesItems;
-	protected HashMap customerFieldsMap;
+	protected LinkedHashMap customerFieldsMap;
 	protected ArrayList<String> customerFieldsRulesMap;
 	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;

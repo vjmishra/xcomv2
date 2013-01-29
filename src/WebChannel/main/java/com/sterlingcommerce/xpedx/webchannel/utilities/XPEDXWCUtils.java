@@ -1603,12 +1603,12 @@ public class XPEDXWCUtils {
 		return true;
 	}
 	
-	public static HashMap getCustomerFieldsMapfromSession(IWCContext wcContext){
+	public static LinkedHashMap getCustomerFieldsMapfromSession(IWCContext wcContext){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
 		setSAPCustomerExtnFieldsInCache();
-		HashMap customerFieldsSessionMap = (HashMap)getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 
@@ -1668,9 +1668,9 @@ public class XPEDXWCUtils {
 			wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,customerDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.INDUSTRY,industry,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_CURRENCY_CODE,currencyCode,WCAttributeScope.LOCAL_SESSION);*/
-			HashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession(wcContext);
+			LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession(wcContext);
 	        if(null == customerFieldsSessionMap || customerFieldsSessionMap.size() == 0){
-	        	HashMap customerFieldsMap = XPEDXOrderUtils.getCustomerLineFieldMap(customerDetails);
+	        	LinkedHashMap customerFieldsMap = XPEDXOrderUtils.getCustomerLineFieldMap(customerDetails);
 	        	setObectInCache("customerFieldsSessionMap", customerFieldsMap);
 	        }
 			if(custPrefcategory!=null && custPrefcategory.trim().length()>0) {
@@ -5334,7 +5334,7 @@ public class XPEDXWCUtils {
 			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged)){
 				// do this only when the default ship to is changed and when logging in for the first time.
 				Document SAPCustomerDoc = XPEDXOrderUtils.getSAPCustomerExtnFlagsDoc(wcContext);
-				HashMap customerFieldsMap = XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement());
+				LinkedHashMap customerFieldsMap = XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement());
 				setObectInCache("customerFieldsSessionMap", customerFieldsMap);
 				setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP"));
 				// reset the flag once used
@@ -5359,10 +5359,11 @@ public class XPEDXWCUtils {
 			Element sapCustomerExtnElem=SCXmlUtil.createChild(outputsapCustomerElement, "Extn");
 			Element customerOrganizationExtnEle=(Element)(sapCustomerElement.getElementsByTagName("XPXCustHierarchyView")).item(0);
 			outputsapCustomerElement.setAttribute("CustomerID", customerOrganizationExtnEle.getAttribute("SAPCustomerID"));
-			sapCustomerExtnElem.setAttribute("ExtnCustLineAccNoFlag", SCXmlUtil.getAttribute(
-					customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag"));
 			sapCustomerExtnElem.setAttribute("ExtnCustLinePONoFlag",SCXmlUtil.getAttribute(
 					customerOrganizationExtnEle, prefix+"ExtnCustLinePONoFlag"));
+			sapCustomerExtnElem.setAttribute("ExtnCustLineAccNoFlag", SCXmlUtil.getAttribute(
+					customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag"));
+			
 			//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 			/*String custSeqNoFlag = SCXmlUtil.getAttribute(
 					customerOrganizationExtnEle, prefix+"ExtnCustLineSeqNoFlag");*/

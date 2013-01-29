@@ -95,7 +95,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setListOfItemsFromsession(ArrayList listOfItemsFromsession) {
 		this.listOfItemsFromsession = listOfItemsFromsession;
 	}
-	private HashMap customerFieldsMap;
+	private LinkedHashMap customerFieldsMap;
 	private HashMap customerFieldsDBMap;
 	protected Map displayItemUOMsMap;
 	private HashMap<String, HashMap<String,String>> skuMap;
@@ -1436,11 +1436,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-        HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 	
@@ -1475,6 +1475,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 		String shipFromDivision = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnShipFromBranch");
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
+			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
+		}
 
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -1490,13 +1497,6 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
-		}
-		
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
-			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
-			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
 		}
 		
 		if ("Y".equals(custField1Flag)) {
@@ -1547,8 +1547,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	private void getCustomerDisplayFields() {
 		try {
-			HashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
-			HashMap<String,String> customerFieldsMap =new HashMap<String,String>();
+			LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+			
 	        if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
 	        	LOG.debug("Found customerFieldsMap in the session");
 
@@ -2843,11 +2843,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.complimentAssociatedItems = complimentAssociatedItems;
 	}
 
-	public HashMap getCustomerFieldsMap() {
+	public LinkedHashMap getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
-	public void setCustomerFieldsMap(HashMap customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 

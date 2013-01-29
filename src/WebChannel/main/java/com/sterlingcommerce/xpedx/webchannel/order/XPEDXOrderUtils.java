@@ -842,7 +842,7 @@ public class XPEDXOrderUtils {
 
 	}
 
-	public static HashMap<String, String> getSAPCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getSAPCustomerLineFieldMap(
 			Element customerOrganizationExtnEle) throws CannotBuildInputException 
 	{
 		
@@ -854,7 +854,7 @@ public class XPEDXOrderUtils {
 		return getCustomerLineFieldMap(CustHierarchyView,"SAP");
 	}
 	
-	public static HashMap<String, String> getCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getCustomerLineFieldMap(
 			Document customerDoc) throws CannotBuildInputException {
 		if (YFCCommon.isVoid(customerDoc)) {
 			LOG
@@ -874,15 +874,16 @@ public class XPEDXOrderUtils {
 	 * fields which has the Flag value set to 'Y'. The Map contains the
 	 * LabelName and Label Value.
 	 */
-	public static HashMap<String, String> getCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getCustomerLineFieldMap(
 			Element customerOrganizationExtnEle,String prefix) throws CannotBuildInputException {
 		//The customerFieldsMap is a LinkedHashMap as it should retain the sequence of customer fields
-		HashMap<String, String> customerFieldsMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> customerFieldsMap = new LinkedHashMap<String, String>();
 		
-		String custLineNoFlag = SCXmlUtil.getAttribute(
-				customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag");
 		String custPONoFlag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLinePONoFlag");
+		String custLineNoFlag = SCXmlUtil.getAttribute(
+				customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag");
+		
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*String custSeqNoFlag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLineSeqNoFlag");*/
@@ -892,6 +893,13 @@ public class XPEDXOrderUtils {
 				customerOrganizationExtnEle, prefix+"ExtnCustLineField2Flag");
 		String custField3Flag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLineField3Flag");
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//customerFieldsMap.put("CustomerPONo", "Customer PO No");
+			customerFieldsMap.put("CustomerPONo", "Line PO #");
+			
+		}
 		
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -930,12 +938,7 @@ public class XPEDXOrderUtils {
 			else
 				customerFieldsMap.put("CustLineField3", "Customer Field 3");
 		}
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//customerFieldsMap.put("CustomerPONo", "Customer PO No");
-			customerFieldsMap.put("CustomerPONo", "Line PO #");
-			
-		}
+
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*if ("Y".equals(custSeqNoFlag)) {
 			customerFieldsMap.put("CustomerLinePONo", "Customer Seq No");

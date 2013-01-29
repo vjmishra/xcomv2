@@ -292,18 +292,18 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 	 * @return
 	 */
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-        HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+        LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 	
 	protected void getCustomerLineDetails() {
 		//get the map from the session. if null query the DB
-		HashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+		LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         	customerFieldsMap = customerFieldsSessionMap;
@@ -796,7 +796,7 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 	/**
 	 * @return the customerFieldsMap
 	 */
-	public HashMap<String, String> getCustomerFieldsMap() {
+	public LinkedHashMap<String, String> getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
@@ -804,7 +804,7 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 	 * @param customerFieldsMap
 	 *            the customerFieldsMap to set
 	 */
-	public void setCustomerFieldsMap(HashMap<String, String> customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap<String, String> customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 
@@ -943,7 +943,7 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 	protected String headerComment = "";
 	private HashMap<String, HashMap<String,String>> skuMap;
 	private String customerSku;
-	protected HashMap<String, String> customerFieldsMap;
+	protected LinkedHashMap<String, String> customerFieldsMap;
 	protected HashMap<String, ArrayList<String>> chainedOrderMap;
 	protected LinkedHashMap<String, List<YFCElement>> chainedOrderCountMap=new LinkedHashMap<String, List<YFCElement>>();
 	protected HashMap<String, String> chainedFOMap=new HashMap<String, String>();

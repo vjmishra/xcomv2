@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private static final String SWC_CHECKOUT_TYPE = "SWC_CHECKOUT_TYPE";
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private Element customerOrganizationEle;
-	protected HashMap customerFieldsMap;
+	protected LinkedHashMap customerFieldsMap;
 	protected boolean viewInvoices = false;
 	protected boolean viewReports = false;
 	protected boolean approver = false;

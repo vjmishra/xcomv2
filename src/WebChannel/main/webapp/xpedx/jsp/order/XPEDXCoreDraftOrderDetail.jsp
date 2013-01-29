@@ -724,7 +724,7 @@
 				    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
 							<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />				    														
 							<P style='MARGIN-LEFT: 140px; MARGIN-TOP: -25px;'>	
-								<s:textarea name="orderLineNote" rows="5" cols="90" onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+								<s:textarea name="orderLineNote" rows="3" cols="90" onkeyup="javascript:restrictTextareaMaxLength(this,250);"
 									id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
 									cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled="%{#isUOMAndInstructions}"/>									
 							</P>	
