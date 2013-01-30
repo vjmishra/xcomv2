@@ -1,0 +1,2109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DSExport>
+   <Header CharacterSet="ENGLISH" ExportingTool="IBM InfoSphere DataStage Export" ToolVersion="8" ServerName="ZMLTIDEV1:31638" ToolInstanceID="xprod" Date="2012-10-10" Time="17.28.35" ServerVersion="8.7"/>
+   <Job Identifier="CustomerSpecificProfile" DateModified="2012-09-28" TimeModified="23.27.41">
+      <Record Identifier="ROOT" Type="JobDefn" Readonly="0">
+         <Property Name="Name">CustomerSpecificProfile</Property>
+         <Property Name="NextID">18</Property>
+         <Property Name="Container">V0</Property>
+         <Property Name="JobVersion">56.0.0</Property>
+         <Property Name="ControlAfterSubr">0</Property>
+         <Collection Name="Parameters" Type="Parameters">
+            <SubRecord>
+               <Property Name="Name">Start</Property>
+               <Property Name="Prompt">Enter the start number</Property>
+               <Property Name="Default">1</Property>
+               <Property Name="ParamType">2</Property>
+               <Property Name="ParamLength">0</Property>
+               <Property Name="ParamScale">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">End</Property>
+               <Property Name="Prompt">Enter the end number</Property>
+               <Property Name="Default">3000</Property>
+               <Property Name="ParamType">2</Property>
+               <Property Name="ParamLength">0</Property>
+               <Property Name="ParamScale">0</Property>
+            </SubRecord>
+         </Collection>
+         <Collection Name="MetaBag" Type="MetaProperty">
+            <SubRecord>
+               <Property Name="Owner">APT</Property>
+               <Property Name="Name">AdvancedRuntimeOptions</Property>
+               <Property Name="Value">#DSProjectARTOptions#</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="NULLIndicatorPosition">0</Property>
+         <Property Name="IsTemplate">0</Property>
+         <Property Name="NLSLocale">,,,,</Property>
+         <Property Name="JobType">0</Property>
+         <Property Name="Category">\Jobs\Reporting Requests\Data Migration Flags</Property>
+         <Property Name="CenturyBreakYear">30</Property>
+         <Property Name="NextAliasID">2</Property>
+         <Property Name="ParameterFileDDName">DD00001</Property>
+         <Property Name="ReservedWordCheck">1</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="ValidationStatus">0</Property>
+         <Property Name="Uploadable">0</Property>
+         <Property Name="PgmCustomizationFlag">0</Property>
+         <Property Name="JobReportFlag">0</Property>
+         <Property Name="AllowMultipleInvocations">0</Property>
+         <Property Name="Act2ActOverideDefaults">1</Property>
+         <Property Name="Act2ActEnableRowBuffer">0</Property>
+         <Property Name="Act2ActUseIPC">0</Property>
+         <Property Name="Act2ActBufferSize">128</Property>
+         <Property Name="Act2ActIPCTimeout">10</Property>
+         <Property Name="ExpressionSemanticCheckFlag">0</Property>
+         <Property Name="TraceOption">0</Property>
+         <Property Name="EnableCacheSharing">0</Property>
+         <Property Name="RuntimeColumnPropagation">0</Property>
+         <Property Name="RelStagesInJobStatus">-1</Property>
+         <Property Name="WebServiceEnabled">0</Property>
+         <Property Name="MFProcessMetaData">0</Property>
+         <Property Name="MFProcessMetaDataXMLFileExchangeMethod">0</Property>
+         <Property Name="IMSProgType">0</Property>
+         <Property Name="CopyLibPrefix">ARDT</Property>
+         <Property Name="RecordPerformanceResults">0</Property>
+      </Record>
+      <Record Identifier="V0" Type="ContainerView" Readonly="0">
+         <Property Name="Name">Job</Property>
+         <Property Name="NextID">1</Property>
+         <Property Name="IsTopLevel">0</Property>
+         <Property Name="StageList">V0S0|V0S3|V0S116|V0S131|V0S168|V0S170|V0S172|V0S177|V3S0|V17S0</Property>
+         <Property Name="StageXPos">216|216|216|408|576|360|576|576|48|72</Property>
+         <Property Name="StageYPos">120|264|456|264|264|504|408|624|264|408</Property>
+         <Property Name="StageTypes">CODBCStage|CTransformerStage|CCustomStage|CCustomStage|CHashedFileStage|CHashedFileStage|CTransformerStage|CCustomStage|CODBCStage|CODBCStage</Property>
+         <Property Name="NextStageID">209</Property>
+         <Property Name="SnapToGrid">1</Property>
+         <Property Name="GridLines">0</Property>
+         <Property Name="ZoomValue">100</Property>
+         <Property Name="StageXSize">48|48|48|48|48|48|48|48|48|48</Property>
+         <Property Name="StageYSize">48|48|48|48|48|48|48|48|48|48</Property>
+         <Property Name="ContainerViewSizing">-144 0016 0567 0558 0000 0001 0000 0081</Property>
+         <Property Name="StageNames">xpedxdotcom|Transformer_3|XML_Output_116|XML_Output_131|Hashed_File_168|Hashed_File_170|Transformer_172|XML_Output_177|Copy_of_xpedxdotcom|Copy_of_ODBC_238</Property>
+         <Property Name="StageTypeIDs">CODBCStage|CTransformerStage|XMLOutput|XMLOutput|CHashedFileStage|CHashedFileStage|CTransformerStage|XMLOutput|CODBCStage|CODBCStage</Property>
+         <Property Name="LinkNames">DSLink44|DSLink61,DSLink117,Migrated|DSLink171|DSLink169|DSLink174|DSLink173|DSLink176| |xref|\(20)</Property>
+         <Property Name="LinkHasMetaDatas">True|True,True,True|True|True|True|True|True| |True|\(20)</Property>
+         <Property Name="LinkTypes">1|1,1,1|1|1|1|2|1| |2|\(20)</Property>
+         <Property Name="LinkNamePositionXs">240|291,240,179|284|516|600|463|600| |150|\(20)</Property>
+         <Property Name="LinkNamePositionYs">184|288,335,351|475|288|358|497|541| |288|\(20)</Property>
+         <Property Name="TargetStageIDs">V0S3|V0S131,V0S116,V17S0|V0S170|V0S168|V0S172|V0S172|V0S177| |V0S3|\(20)</Property>
+         <Property Name="SourceStageEffectiveExecutionModes">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="SourceStageRuntimeExecutionModes">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="TargetStageEffectiveExecutionModes">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="TargetStageRuntimeExecutionModes">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="LinkIsSingleOperatorLookup">False|False,False,False|False|False|False|False|False| |False|\(20)</Property>
+         <Property Name="LinkIsSortSequential">False|False,False,False|False|False|False|False|False| |False|\(20)</Property>
+         <Property Name="LinkSortMode">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="LinkPartColMode">0|0,0,0|0|0|0|0|0| |0|\(20)</Property>
+         <Property Name="LinkSourcePinIDs">V0S0P2|V0S3P16,V0S3P20,V0S3P32|V0S116P3|V0S131P3|V0S168P2|V0S170P2|V0S172P10| |V3S0P1|\(20)</Property>
+      </Record>
+      <Record Identifier="V0S0" Type="ODBCStage" Readonly="0">
+         <Property Name="Name">xpedxdotcom</Property>
+         <Property Name="NextID">4</Property>
+         <Property Name="OutputPins">V0S0P2</Property>
+         <Property Name="DSN">eventlogstg</Property>
+         <Property Name="UserName">xpedxview</Property>
+         <Property Name="Password">LM9@9JRHN9;M0N6I48N&lt;AOADB&lt;M</Property>
+         <Property Name="UvFlag">0</Property>
+         <Property Name="Isolation">0</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="ArraySize">1</Property>
+         <Property Name="QuoteChar">000</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Property Name="SepString">.</Property>
+         <Property Name="StageType">CODBCStage</Property>
+      </Record>
+      <Record Identifier="V0S0P2" Type="ODBCOutput" Readonly="0">
+         <Property Name="Name">DSLink44</Property>
+         <Property Name="Partner">V0S3|V0S3P23</Property>
+         <Property Name="TableNames">DSLink44</Property>
+         <Property Name="SqlPrimary" PreFormatted="1">select distinct --top 10 mcg.nMasterCustomers_ID,
+	mcg.cConversionType,
+                mcg.cStandardXpedxValue,
+                mcg.cStandardXpedxValueDesc,
+                mcg.cCustomerSpecificValue,
+                mcg.cCustomerSpecificValueDesc,
+                mcg.cLegacyItemNumber,
+	ccr.webmethodscustomerid
+FROM 
+	xpedx.dbo.customers C (NOLOCK)
+                INNER JOIN xpedx.dbo.MasterCustomerGeneric_XREF  mcg (NOLOCK) ON mcg.nMasterCustomers_id = C.nMasterCustomers_ID
+                INNER JOIN xpedx.dbo.wm_CustomerCrossReference ccr ON mcg.nmastercustomers_id = substring(ccr.xpedxcustomerid,2,len(ccr.xpedxcustomerid)-1)
+               	INNER JOIN xpedx.dbo.CustomerLocations  cl (NOLOCK) ON cl.nCustomers_id = C.nCustomers_id
+	LEFT OUTER JOIN xpedx.dbo.CustomerDivisions CD (NOLOCK) ON C.nCustomers_Id = CD.nCustomers_ID
+	LEFT OUTER JOIN xpedx.dbo.Divisions D (NOLOCK) ON CD.nDivisions_Id = D.nDivisions_ID
+	INNER JOIN xpedx.dbo.LegacySystems ls (NOLOCK) ON D.nLegacySystems_id = ls.nLegacySystems_id
+	LEFT OUTER JOIN xpedx.dbo.Brands B (NOLOCK) ON D.Brands_Id = B.Brands_Id
+WHERE
+                C.lDeleted = 0 and cl.cShipToSuffix IS NULL and ls.cName = &apos;MAX&apos; and mcg.cConversionType  in  ( &apos;UNSPSC&apos; ,  &apos;UOM&apos;)
+and ccr.webmethodscustomerid is not null and mcg.cNG_datamigration_Flag &lt;&gt; &apos;M&apos;</Property>
+         <Property Name="SqlRef" PreFormatted="1">select distinct --mcg.nMasterCustomers_ID,
+		mcg.cConversionType,
+                mcg.cStandardXpedxValue,
+                mcg.cStandardXpedxValueDesc,
+                mcg.cCustomerSpecificValue,
+                mcg.cCustomerSpecificValueDesc,
+                mcg.cLegacyItemNumber
+FROM 
+	xpedx.dbo.customers C (NOLOCK)
+        INNER JOIN xpedx.dbo.MasterCustomerGeneric_XREF  mcg (NOLOCK) ON mcg.nMasterCustomers_id = C.nMasterCustomers_ID
+WHERE
+        C.lDeleted = 0 and mcg.cConversionType  in  ( &apos;UNSPSC&apos; ,  &apos;UOM&apos;)
+--and mcg.nMasterCustomers_id = 1084362336</Property>
+         <Property Name="SqlUser">1</Property>
+         <Property Name="Isolation">2</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">cConversionType</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">20</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">20</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cConversionType</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cConversionType</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cConversionType</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cConversionType</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cStandardXpedxValue</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">50</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">50</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cStandardXpedxValue</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cStandardXpedxValueDesc</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValueDesc</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValueDesc</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValueDesc</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cStandardXpedxValueDesc</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cCustomerSpecificValue</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">50</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">50</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cCustomerSpecificValue</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cCustomerSpecificValueDesc</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValueDesc</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValueDesc</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValueDesc</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cCustomerSpecificValueDesc</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cLegacyItemNumber</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">20</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">20</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cLegacyItemNumber</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cLegacyItemNumber</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cLegacyItemNumber</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cLegacyItemNumber</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">WebMethodsCustomerID</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">40</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">40</Property>
+               <Property Name="Derivation">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="SourceColumn">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.wm_CustomerCrossReference</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">WebMethodsCustomerID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">240</Property>
+         <Property Name="TopTextPos">184</Property>
+         <Property Name="SqlEditMode">0</Property>
+      </Record>
+      <Record Identifier="V0S116" Type="CustomStage" Readonly="0">
+         <Property Name="Name">XML_Output_116</Property>
+         <Property Name="NextID">4</Property>
+         <Property Name="InputPins">V0S116P1</Property>
+         <Property Name="OutputPins">V0S116P3</Property>
+         <Property Name="StageType">XMLOutput</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Collection Name="Properties" Type="CustomProperty">
+            <SubRecord>
+               <Property Name="Name">output_file</Property>
+               <Property Name="Value">/app/xprism/data/ReportReq/CustomerSpecificUnspsc.xml</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_full_document</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">multi_line_output</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_character</Property>
+               <Property Name="Value">\s</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_length</Property>
+               <Property Name="Value">2</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">new_line_style</Property>
+               <Property Name="Value">DOS</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_header</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_namespaces</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">namespace_declaration</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_comment</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_xml_chunk</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">replace_nulls</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">discard_empty_values</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">empty_element_style</Property>
+               <Property Name="Value">use single tag</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_generation</Property>
+               <Property Name="Value">all rows</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_trigger_column</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_encoding</Property>
+               <Property Name="Value">UTF-8</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">validate_output</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">enable_grammar_caching</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_validation_level</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">log_reject_errors</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_warning_mapping</Property>
+               <Property Name="Value">DS_WARNING</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_error_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_fatal_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="NextRecordID">0</Property>
+      </Record>
+      <Record Identifier="V0S116P1" Type="CustomInput" Readonly="0">
+         <Property Name="Name">DSLink117</Property>
+         <Property Name="Partner">V0S3|V0S3P20</Property>
+         <Property Name="LinkType">1</Property>
+         <Property Name="ConditionNotMet">fail</Property>
+         <Property Name="LookupFail">fail</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="TXNBehaviour">0</Property>
+         <Property Name="EnableTxGroup">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S116P3" Type="CustomOutput" Readonly="0">
+         <Property Name="Name">DSLink171</Property>
+         <Property Name="Partner">V0S170|V0S170P1</Property>
+         <Collection Name="Properties" Type="CustomProperty">
+            <SubRecord>
+               <Property Name="Name">output_file</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_full_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">multi_line_output</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_character</Property>
+               <Property Name="Value">\s</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_length</Property>
+               <Property Name="Value">2</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">new_line_style</Property>
+               <Property Name="Value">DOS</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_header</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_namespaces</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">namespace_declaration</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_comment</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_xml_chunk</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">replace_nulls</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">discard_empty_values</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">empty_element_style</Property>
+               <Property Name="Value">use single tag</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_generation</Property>
+               <Property Name="Value">all rows</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_trigger_column</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">inherit_properties</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_encoding</Property>
+               <Property Name="Value">UTF-8</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">is_reject_link</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">reject_message_column</Property>
+            </SubRecord>
+         </Collection>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUom</Property>
+               <Property Name="Description">/</Property>
+               <Property Name="SqlType">-1</Property>
+               <Property Name="Precision">132768</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">284</Property>
+         <Property Name="TopTextPos">475</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S131" Type="CustomStage" Readonly="0">
+         <Property Name="Name">XML_Output_131</Property>
+         <Property Name="NextID">4</Property>
+         <Property Name="InputPins">V0S131P1</Property>
+         <Property Name="OutputPins">V0S131P3</Property>
+         <Property Name="StageType">XMLOutput</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Collection Name="Properties" Type="CustomProperty">
+            <SubRecord>
+               <Property Name="Name">output_file</Property>
+               <Property Name="Value">/app/xprism/data/ReportReq/CustomerSpecificuom.xml</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_full_document</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">multi_line_output</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_character</Property>
+               <Property Name="Value">\s</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_length</Property>
+               <Property Name="Value">2</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">new_line_style</Property>
+               <Property Name="Value">DOS</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_header</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_namespaces</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">namespace_declaration</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_comment</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_xml_chunk</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">replace_nulls</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">discard_empty_values</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">empty_element_style</Property>
+               <Property Name="Value">use single tag</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_generation</Property>
+               <Property Name="Value">all rows</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_trigger_column</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_encoding</Property>
+               <Property Name="Value">UTF-8</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">validate_output</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">enable_grammar_caching</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_validation_level</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">log_reject_errors</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_warning_mapping</Property>
+               <Property Name="Value">DS_WARNING</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_error_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_fatal_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="NextRecordID">0</Property>
+      </Record>
+      <Record Identifier="V0S131P1" Type="CustomInput" Readonly="0">
+         <Property Name="Name">DSLink61</Property>
+         <Property Name="Partner">V0S3|V0S3P16</Property>
+         <Property Name="LinkType">1</Property>
+         <Property Name="ConditionNotMet">fail</Property>
+         <Property Name="LookupFail">fail</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="TXNBehaviour">0</Property>
+         <Property Name="EnableTxGroup">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S131P3" Type="CustomOutput" Readonly="0">
+         <Property Name="Name">DSLink169</Property>
+         <Property Name="Partner">V0S168|V0S168P1</Property>
+         <Collection Name="Properties" Type="CustomProperty">
+            <SubRecord>
+               <Property Name="Name">output_file</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_full_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">multi_line_output</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_character</Property>
+               <Property Name="Value">\s</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_length</Property>
+               <Property Name="Value">2</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">new_line_style</Property>
+               <Property Name="Value">DOS</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_header</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_namespaces</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">namespace_declaration</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_comment</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_xml_chunk</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">replace_nulls</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">discard_empty_values</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">empty_element_style</Property>
+               <Property Name="Value">use single tag</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_generation</Property>
+               <Property Name="Value">all rows</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_trigger_column</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">inherit_properties</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_encoding</Property>
+               <Property Name="Value">UTF-8</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">is_reject_link</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">reject_message_column</Property>
+            </SubRecord>
+         </Collection>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUnspsc</Property>
+               <Property Name="Description">/</Property>
+               <Property Name="SqlType">-1</Property>
+               <Property Name="Precision">132768</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">516</Property>
+         <Property Name="TopTextPos">288</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S168" Type="HashedFileStage" Readonly="0">
+         <Property Name="Name">Hashed_File_168</Property>
+         <Property Name="NextID">3</Property>
+         <Property Name="InputPins">V0S168P1</Property>
+         <Property Name="OutputPins">V0S168P2</Property>
+         <Property Name="Directory">/app/xprism/data/ReportReq</Property>
+         <Property Name="UVcompatible">0</Property>
+         <Property Name="SQLNull">0</Property>
+         <Property Name="StageType">CHashedFileStage</Property>
+      </Record>
+      <Record Identifier="V0S168P1" Type="HashedInput" Readonly="0">
+         <Property Name="Name">DSLink169</Property>
+         <Property Name="Partner">V0S131|V0S131P3</Property>
+         <Property Name="FileName">UnspscXref</Property>
+         <Property Name="ClearFile">1</Property>
+         <Property Name="Backup">0</Property>
+         <Property Name="DisableCW">1</Property>
+         <Property Name="CreateFileOptions">DYNAMIC</Property>
+         <Property Name="DeleteFile">0</Property>
+      </Record>
+      <Record Identifier="V0S168P2" Type="HashedOutput" Readonly="0">
+         <Property Name="Name">DSLink174</Property>
+         <Property Name="Partner">V0S172|V0S172P8</Property>
+         <Property Name="FileName">UnspscXref</Property>
+         <Property Name="InMemory">0</Property>
+         <Property Name="Normalize">Un-Normalized</Property>
+         <Property Name="LeftTextPos">600</Property>
+         <Property Name="TopTextPos">358</Property>
+         <Property Name="RecordLevelRead">0</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="KeyExpression">trim(DSLink173.ID)</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyParsedDerivation">trim(DSLink173.ID)</Property>
+               <Property Name="PKeySourceColumn">DSLink173.ID</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUnspsc</Property>
+               <Property Name="DataType">XML</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">132768</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+      </Record>
+      <Record Identifier="V0S170" Type="HashedFileStage" Readonly="0">
+         <Property Name="Name">Hashed_File_170</Property>
+         <Property Name="NextID">3</Property>
+         <Property Name="InputPins">V0S170P1</Property>
+         <Property Name="OutputPins">V0S170P2</Property>
+         <Property Name="Directory">/app/xprism/data/ReportReq</Property>
+         <Property Name="UVcompatible">0</Property>
+         <Property Name="SQLNull">0</Property>
+         <Property Name="StageType">CHashedFileStage</Property>
+      </Record>
+      <Record Identifier="V0S170P1" Type="HashedInput" Readonly="0">
+         <Property Name="Name">DSLink171</Property>
+         <Property Name="Partner">V0S116|V0S116P3</Property>
+         <Property Name="FileName">uomxref</Property>
+         <Property Name="ClearFile">1</Property>
+         <Property Name="Backup">0</Property>
+         <Property Name="DisableCW">1</Property>
+         <Property Name="CreateFileOptions">DYNAMIC</Property>
+         <Property Name="DeleteFile">0</Property>
+      </Record>
+      <Record Identifier="V0S170P2" Type="HashedOutput" Readonly="0">
+         <Property Name="Name">DSLink173</Property>
+         <Property Name="Partner">V0S172|V0S172P7</Property>
+         <Property Name="FileName">uomxref</Property>
+         <Property Name="InMemory">0</Property>
+         <Property Name="Normalize">Un-Normalized</Property>
+         <Property Name="LeftTextPos">463</Property>
+         <Property Name="TopTextPos">497</Property>
+         <Property Name="RecordLevelRead">0</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="KeyExpression">DSLink174.ID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyParsedDerivation">DSLink174.ID</Property>
+               <Property Name="PKeySourceColumn">DSLink174.ID</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUom</Property>
+               <Property Name="DataType">XML</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">132768</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">0</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+      </Record>
+      <Record Identifier="V0S172" Type="TransformerStage" Readonly="0">
+         <Property Name="Name">Transformer_172</Property>
+         <Property Name="NextID">11</Property>
+         <Property Name="InputPins">V0S172P7|V0S172P8</Property>
+         <Property Name="OutputPins">V0S172P10</Property>
+         <Property Name="ValidationStatus">0</Property>
+         <Property Name="StageType">CTransformerStage</Property>
+         <Property Name="BlockSize">0</Property>
+         <Property Name="StageVarsMinimised">0</Property>
+         <Property Name="LoopVarsMaximised">0</Property>
+         <Property Name="MaxLoopIterations">0</Property>
+      </Record>
+      <Record Identifier="V0S172P10" Type="TrxOutput" Readonly="0">
+         <Property Name="Name">DSLink176</Property>
+         <Property Name="Partner">V0S177|V0S177P1</Property>
+         <Property Name="Reject">0</Property>
+         <Property Name="ErrorPin">0</Property>
+         <Property Name="RowLimit">0</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUnspscXrefList</Property>
+               <Property Name="Description">/XPXB2bCustomerSpecificDataList/XPXB2bCustomerSpecificData</Property>
+               <Property Name="DataType">XML</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">DSLink174.XPXB2bLegacyUnspsc</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">DSLink174.XPXB2bLegacyUnspsc</Property>
+               <Property Name="SourceColumn">DSLink174.XPXB2bLegacyUnspsc</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\CustomerSpecifict</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">XPXB2bLegacyUnspscXrefList</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUomXrefList</Property>
+               <Property Name="Description">/XPXB2bCustomerSpecificDataList/XPXB2bCustomerSpecificData</Property>
+               <Property Name="DataType">XML</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">DSLink173.XPXB2bLegacyUom</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">DSLink173.XPXB2bLegacyUom</Property>
+               <Property Name="SourceColumn">DSLink173.XPXB2bLegacyUom</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\CustomerSpecifict</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">XPXB2bLegacyUomXrefList</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">600</Property>
+         <Property Name="TopTextPos">541</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S172P7" Type="TrxInput" Readonly="0">
+         <Property Name="Name">DSLink173</Property>
+         <Property Name="Partner">V0S170|V0S170P2</Property>
+         <Property Name="LinkType">2</Property>
+         <Property Name="MultiRow">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S172P8" Type="TrxInput" Readonly="0">
+         <Property Name="Name">DSLink174</Property>
+         <Property Name="Partner">V0S168|V0S168P2</Property>
+         <Property Name="LinkType">1</Property>
+         <Property Name="MultiRow">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S177" Type="CustomStage" Readonly="0">
+         <Property Name="Name">XML_Output_177</Property>
+         <Property Name="NextID">2</Property>
+         <Property Name="InputPins">V0S177P1</Property>
+         <Property Name="StageType">XMLOutput</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Collection Name="Properties" Type="CustomProperty">
+            <SubRecord>
+               <Property Name="Name">output_file</Property>
+               <Property Name="Value">/app/xprism/data/ReportReq/DataMigrationFlags/CustomerSpecificExtract/CustomerSpecific#End#.xml</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_full_document</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">multi_line_output</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_character</Property>
+               <Property Name="Value">\s</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">indentation_length</Property>
+               <Property Name="Value">2</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">new_line_style</Property>
+               <Property Name="Value">DOS</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_header</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">header</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_namespaces</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">namespace_declaration</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">generate_comment</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_document</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">document_type</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">include_xml_chunk</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk_text</Property>
+               <Property Name="Value">text</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_chunk</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">replace_nulls</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">discard_empty_values</Property>
+               <Property Name="Value">1</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">empty_element_style</Property>
+               <Property Name="Value">use single tag</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_generation</Property>
+               <Property Name="Value">all rows</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">output_row_trigger_column</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_encoding</Property>
+               <Property Name="Value">UTF-8</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">validate_output</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">enable_grammar_caching</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_validation_level</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">log_reject_errors</Property>
+               <Property Name="Value">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_warning_mapping</Property>
+               <Property Name="Value">DS_WARNING</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_error_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">xml_fatal_mapping</Property>
+               <Property Name="Value">DS_REJECT</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="NextRecordID">0</Property>
+      </Record>
+      <Record Identifier="V0S177P1" Type="CustomInput" Readonly="0">
+         <Property Name="Name">DSLink176</Property>
+         <Property Name="Partner">V0S172|V0S172P10</Property>
+         <Property Name="LinkType">1</Property>
+         <Property Name="ConditionNotMet">fail</Property>
+         <Property Name="LookupFail">fail</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="TXNBehaviour">0</Property>
+         <Property Name="EnableTxGroup">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S3" Type="TransformerStage" Readonly="0">
+         <Property Name="Name">Transformer_3</Property>
+         <Property Name="NextID">33</Property>
+         <Property Name="InputPins">V0S3P23|V0S3P31</Property>
+         <Property Name="OutputPins">V0S3P16|V0S3P20|V0S3P32</Property>
+         <Property Name="ValidationStatus">0</Property>
+         <Property Name="StageType">CTransformerStage</Property>
+         <Property Name="BlockSize">0</Property>
+         <Property Name="StageVarsMinimised">0</Property>
+         <Property Name="LoopVarsMaximised">0</Property>
+         <Property Name="MaxLoopIterations">0</Property>
+      </Record>
+      <Record Identifier="V0S3P16" Type="TrxOutput" Readonly="0">
+         <Property Name="Name">DSLink61</Property>
+         <Property Name="Partner">V0S131|V0S131P1</Property>
+         <Property Name="Constraint">NOT(IsNull(DSLink44.cCustomerSpecificValue)) and (DSLink44.cConversionType = &apos;UNSPSC&apos;)</Property>
+         <Property Name="Reject">0</Property>
+         <Property Name="ErrorPin">0</Property>
+         <Property Name="RowLimit">0</Property>
+         <Property Name="ParsedConstraint">NOT(IsNull(DSLink44.cCustomerSpecificValue)) and (DSLink44.cConversionType = &apos;UNSPSC&apos;)</Property>
+         <Property Name="SourceColumns">DSLink44.cCustomerSpecificValue;DSLink44.cConversionType</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">&apos;A&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">&apos;A&apos;</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">CustomerUNSPSC</Property>
+               <Property Name="Description">/XPXB2bLegacyUnspscXrefList/XPXB2bLegacyUnspscXref/@CustomerUNSPSC</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cCustomerSpecificValue else &apos; &apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cCustomerSpecificValue else &apos; &apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;DSLink44.cCustomerSpecificValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">CustomerUNSPSC</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">LegacyItemID</Property>
+               <Property Name="Description">/XPXB2bLegacyUnspscXrefList/XPXB2bLegacyUnspscXref/@LegacyItemID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cLegacyItemNumber else &apos; &apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cLegacyItemNumber else &apos; &apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;DSLink44.cLegacyItemNumber</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">LegacyItemID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">MasterCustomerID</Property>
+               <Property Name="Description">/XPXB2bLegacyUnspscXrefList/XPXB2bLegacyUnspscXref/@MasterCustomerID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SourceColumn">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">MasterCustomerID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XpedxUNSPSC</Property>
+               <Property Name="Description">/XPXB2bLegacyUnspscXrefList/XPXB2bLegacyUnspscXref/@XpedxUNSPSC</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cStandardXpedxValue  Else &apos; &apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UNSPSC&apos;) Then DSLink44.cStandardXpedxValue Else &apos; &apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;DSLink44.cStandardXpedxValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">XpedxUNSPSC</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">291</Property>
+         <Property Name="TopTextPos">288</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S3P20" Type="TrxOutput" Readonly="0">
+         <Property Name="Name">DSLink117</Property>
+         <Property Name="Partner">V0S116|V0S116P1</Property>
+         <Property Name="Constraint">NOT(IsNull(DSLink44.cCustomerSpecificValue)) and (DSLink44.cConversionType = &apos;UOM&apos;)</Property>
+         <Property Name="Reject">0</Property>
+         <Property Name="ErrorPin">0</Property>
+         <Property Name="RowLimit">0</Property>
+         <Property Name="ParsedConstraint">NOT(IsNull(DSLink44.cCustomerSpecificValue)) and (DSLink44.cConversionType = &apos;UOM&apos;)</Property>
+         <Property Name="SourceColumns">DSLink44.cCustomerSpecificValue;DSLink44.cConversionType</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">ID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">&apos;A&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">&apos;A&apos;</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">CustomerUOM</Property>
+               <Property Name="Description">/XPXB2bLegacyUomXrefList/XPXB2bLegacyUomXref/@CustomerUOM</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UOM&apos;) Then xref.cCustomerSpecificValue Else &apos;&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UOM&apos;) Then xref.cCustomerSpecificValue Else &apos;&apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;xref.cCustomerSpecificValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">CustomerUOM</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">CustomerUOMDesc</Property>
+               <Property Name="Description">/XPXB2bLegacyUomXrefList/XPXB2bLegacyUomXref/@CustomerUOMDesc</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UOM&apos;) Then DSLink44.cCustomerSpecificValueDesc  Else &apos;&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UOM&apos;) Then DSLink44.cCustomerSpecificValueDesc Else &apos;&apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;DSLink44.cCustomerSpecificValueDesc</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">CustomerUOMDesc</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">LegacyUOM</Property>
+               <Property Name="Description">/XPXB2bLegacyUomXrefList/XPXB2bLegacyUomXref/@LegacyUOM</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UOM&apos;) Then  xref.cStandardXpedxValue Else &apos;&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UOM&apos;) Then xref.cStandardXpedxValue Else &apos;&apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;xref.cStandardXpedxValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">LegacyUOM</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">LegacyUOMDesc</Property>
+               <Property Name="Description">/XPXB2bLegacyUomXrefList/XPXB2bLegacyUomXref/@LegacyUOMDesc</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">If (DSLink44.cConversionType = &apos;UOM&apos;) Then DSLink44.cStandardXpedxValueDesc  Else &apos;&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">\(20)If (DSLink44.cConversionType = &apos;UOM&apos;) Then DSLink44.cStandardXpedxValueDesc Else &apos;&apos;</Property>
+               <Property Name="SourceColumn">DSLink44.cConversionType;DSLink44.cStandardXpedxValueDesc</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">LegacyUOMDesc</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">XPXB2bLegacyUomXrefMasterCustomerID</Property>
+               <Property Name="Description">/XPXB2bLegacyUomXrefList/XPXB2bLegacyUomXref/@MasterCustomerID</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">255</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">255</Property>
+               <Property Name="Derivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SourceColumn">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">XML\Imports\B2bCustomerSpecificData</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">XPXB2bLegacyUomXrefMasterCustomerID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">240</Property>
+         <Property Name="TopTextPos">335</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S3P23" Type="TrxInput" Readonly="0">
+         <Property Name="Name">DSLink44</Property>
+         <Property Name="Partner">V0S0|V0S0P2</Property>
+         <Property Name="LinkType">1</Property>
+         <Property Name="MultiRow">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S3P31" Type="TrxInput" Readonly="0">
+         <Property Name="Name">xref</Property>
+         <Property Name="Partner">V3S0|V3S0P1</Property>
+         <Property Name="LinkType">2</Property>
+         <Property Name="MultiRow">0</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V0S3P32" Type="TrxOutput" Readonly="0">
+         <Property Name="Name">Migrated</Property>
+         <Property Name="Partner">V17S0|V17S0P1</Property>
+         <Property Name="Reject">0</Property>
+         <Property Name="ErrorPin">0</Property>
+         <Property Name="RowLimit">0</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">WebMethodsCustomerID</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">40</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">40</Property>
+               <Property Name="Derivation">xref.WebMethodsCustomerID</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xref.WebMethodsCustomerID</Property>
+               <Property Name="SourceColumn">xref.WebMethodsCustomerID</Property>
+               <Property Name="KeyExpression">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlogstg\xpedx.dbo.wm_CustomerCrossReference</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">WebMethodsCustomerID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyParsedDerivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="PKeySourceColumn">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cNG_datamigration_Flag</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">1</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">1</Property>
+               <Property Name="Derivation">&apos;M&apos;</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">&apos;M&apos;</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\xpedxdev\xpedxr1.dbo.MasterCustomerGeneric_XREF</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cNG_datamigration_Flag</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">dMigratedTimestamp</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">11</Property>
+               <Property Name="Precision">23</Property>
+               <Property Name="Scale">3</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">23</Property>
+               <Property Name="Derivation">DSJobStartTimestamp</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">DSJobStartTimestamp</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\xpedxdev\xpedxr1.dbo.MasterCustomerGeneric_XREF</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">dMigratedTimestamp</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">179</Property>
+         <Property Name="TopTextPos">351</Property>
+         <Property Name="LinkMinimised">0</Property>
+      </Record>
+      <Record Identifier="V17S0" Type="ODBCStage" Readonly="0">
+         <Property Name="Name">Copy_of_ODBC_238</Property>
+         <Property Name="NextID">2</Property>
+         <Property Name="InputPins">V17S0P1</Property>
+         <Property Name="DSN">eventlogstg</Property>
+         <Property Name="UserName">xpedx</Property>
+         <Property Name="Password">LM9@1IRHM9:L4O7</Property>
+         <Property Name="UvFlag">0</Property>
+         <Property Name="Isolation">0</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="ArraySize">1</Property>
+         <Property Name="QuoteChar">000</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Property Name="SepString">.</Property>
+         <Property Name="StageType">CODBCStage</Property>
+      </Record>
+      <Record Identifier="V17S0P1" Type="ODBCInput" Readonly="0">
+         <Property Name="Name">Migrated</Property>
+         <Property Name="Partner">V0S3|V0S3P32</Property>
+         <Property Name="Action">7</Property>
+         <Property Name="SqlInsert">UPDATE xpedx.dbo.MasterCustomerGeneric_XREF SET cNG_datamigration_Flag = ?, dMigratedTimestamp = ? WHERE nMasterCustomers_ID IN (SELECT substring(xpedxcustomerid,2,len(xpedxcustomerid)-1) FROM xpedx.dbo.wm_CustomerCrossReference WHERE WebMethodsCustomerID = ?);</Property>
+         <Property Name="Isolation">0</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="ArraySize">1</Property>
+         <Property Name="TXNBehaviour">40</Property>
+         <Property Name="EnableTxGroup">0</Property>
+      </Record>
+      <Record Identifier="V3S0" Type="ODBCStage" Readonly="0">
+         <Property Name="Name">Copy_of_xpedxdotcom</Property>
+         <Property Name="NextID">2</Property>
+         <Property Name="OutputPins">V3S0P1</Property>
+         <Property Name="DSN">eventlogstg</Property>
+         <Property Name="UserName">xpedxview</Property>
+         <Property Name="Password">LM9@9JRHN9;M0N6I48N&lt;AOADB&lt;M</Property>
+         <Property Name="UvFlag">0</Property>
+         <Property Name="Isolation">0</Property>
+         <Property Name="TransactionSize">0</Property>
+         <Property Name="ArraySize">1</Property>
+         <Property Name="QuoteChar">000</Property>
+         <Property Name="AllowColumnMapping">0</Property>
+         <Property Name="SepString">.</Property>
+         <Property Name="StageType">CODBCStage</Property>
+      </Record>
+      <Record Identifier="V3S0P1" Type="ODBCOutput" Readonly="0">
+         <Property Name="Name">xref</Property>
+         <Property Name="Partner">V0S3|V0S3P31</Property>
+         <Property Name="TableNames">xref</Property>
+         <Property Name="SqlPrimary" PreFormatted="1">SELECT DISTINCT 
+ccr.webmethodscustomerid,
+mcgn.cStandardXpedxValue, 
+mcgn.cCustomerSpecificValue 
+FROM xpedx.dbo.MasterCustomerGeneric_XREF_NextGen mcgn
+INNER JOIN xpedx.dbo.wm_CustomerCrossReference ccr 
+ON mcgn.nMasterCustomers_ID = substring(ccr.xpedxcustomerid,2,len(ccr.xpedxcustomerid)-1)
+ORDER BY 1,2,3</Property>
+         <Property Name="SqlRef">SELECT xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.nMasterCustomers_ID, xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue, xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue FROM xpedx.dbo.MasterCustomerGeneric_XREF_NextGen WHERE (xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.nMasterCustomers_ID = ?);</Property>
+         <Property Name="SqlUser">1</Property>
+         <Property Name="Isolation">2</Property>
+         <Collection Name="Columns" Type="OutputColumn">
+            <SubRecord>
+               <Property Name="Name">WebMethodsCustomerID</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">40</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">1</Property>
+               <Property Name="DisplaySize">40</Property>
+               <Property Name="Derivation">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="SourceColumn">xpedx.dbo.wm_CustomerCrossReference.WebMethodsCustomerID</Property>
+               <Property Name="KeyExpression">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlogstg\xpedx.dbo.wm_CustomerCrossReference</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">WebMethodsCustomerID</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyParsedDerivation">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="PKeySourceColumn">DSLink44.WebMethodsCustomerID</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cStandardXpedxValue</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">50</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">1</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">50</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cStandardXpedxValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cStandardXpedxValue</Property>
+               <Property Name="APTFieldProp">null_field=&apos;&apos;</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+            <SubRecord>
+               <Property Name="Name">cCustomerSpecificValue</Property>
+               <Property Name="Description" PreFormatted="1">&lt;none&gt;
+Searchable? N\(20)</Property>
+               <Property Name="SqlType">12</Property>
+               <Property Name="Precision">50</Property>
+               <Property Name="Scale">0</Property>
+               <Property Name="Nullable">0</Property>
+               <Property Name="KeyPosition">0</Property>
+               <Property Name="DisplaySize">50</Property>
+               <Property Name="Derivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="Group">0</Property>
+               <Property Name="ParsedDerivation">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="SourceColumn">xpedx.dbo.MasterCustomerGeneric_XREF_NextGen.cCustomerSpecificValue</Property>
+               <Property Name="SortKey">0</Property>
+               <Property Name="SortType">0</Property>
+               <Property Name="TableDef">ODBC\eventlog\xpedx.dbo.MasterCustomerGeneric_XREF_NextGen</Property>
+               <Property Name="AllowCRLF">0</Property>
+               <Property Name="LevelNo">0</Property>
+               <Property Name="Occurs">0</Property>
+               <Property Name="PadNulls">0</Property>
+               <Property Name="SignOption">0</Property>
+               <Property Name="SortingOrder">0</Property>
+               <Property Name="ArrayHandling">0</Property>
+               <Property Name="SyncIndicator">0</Property>
+               <Property Name="PadChar"/>
+               <Property Name="ColumnReference">cCustomerSpecificValue</Property>
+               <Property Name="ExtendedPrecision">0</Property>
+               <Property Name="TaggedSubrec">0</Property>
+               <Property Name="OccursVarying">0</Property>
+               <Property Name="PKeyIsCaseless">0</Property>
+               <Property Name="SCDPurpose">0</Property>
+            </SubRecord>
+         </Collection>
+         <Property Name="LeftTextPos">150</Property>
+         <Property Name="TopTextPos">288</Property>
+         <Property Name="SqlEditMode">0</Property>
+      </Record>
+   </Job>
+</DSExport>
