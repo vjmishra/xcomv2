@@ -935,7 +935,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	 <!-- XBT-343 Stop-->
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
-				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To…"){
+				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-Toï¿½"){
 						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
 						document.getElementById("errorText").setAttribute("class", "error");
 				}
@@ -1421,25 +1421,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         return;
     }
 	// Added for removing the double quotes from an search term. Jira # 2415
-	var myMask;
-    function validate(e){
-    	
-  	  if (e.keyCode == 13) {  
-  	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
-		//added for jira 3974
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
-  	  /*	while(searchRes.indexOf("\"")!= -1){
-  	  	searchRes = searchRes.replace("\"", "");    	  
-  	 	}*/
-  	 	//alert(searchRes);
-  	  	/*while(searchRes.indexOf("*")!= -1){
-   	  		searchRes = searchRes.replace("*", " ");    	  
-   	 	}*/
-  	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
-  	}
-  }	
+	
 	var myMask;
   function validateVal(e){
 	//added for jira 3974
@@ -1863,7 +1845,7 @@ function searchShipToAddress(divId,url) {
 		if(searchText==''|| searchText==null)
 */
 		/* JIRA 3331 if search text is blank then all ship tos should be shown
-		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
+		if(searchText==''|| searchText==null || searchText=='Search Ship-Toï¿½')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
@@ -2348,12 +2330,14 @@ function msgWait(){
 	  <s:url id='newCatSearch' action='newSearch' namespace='/catalog' >
 	  </s:url>
 	  <div  class="searchbox-1 auth">
-	   <s:form name='newSearch' action='newSearch' namespace='/catalog'>
+	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
+	   <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
 	   		<s:hidden name='path' id='path' value="/" />
+	   		<!-- XBT-391 removed the onkeydown event -->
 			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	        	type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
+	        	type="text" value="Search Catalog..." onclick="clearTxt();" >
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
-	                            onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+	                            ></button>
 		    <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		    </div>
@@ -2363,12 +2347,14 @@ function msgWait(){
  </s:if> 
  <s:if test='(#isGuestUser == true)'> 
 	<div  class="searchbox-1">
-	  <s:form name='newSearch' action='newSearch' namespace='/catalog'>
+	<!-- XBT-391 Removed submit event from Submit button and added to form -->
+	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
 	  		<s:hidden name='path' id='path' value="/" />
+	  		<!-- XBT-391 removed the onkeydown event -->
 		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
+	         type="text" value="Search Catalog..." onclick="clearTxt();" >
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;" style="top:-4px;margin-left: 3px;height: 20px;"></button>
+	            style="top:-4px;margin-left: 3px;height: 20px;"></button>
 	     <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		</div> 
