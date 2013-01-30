@@ -145,6 +145,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	public static final String CALLER_PROMO_REQ_PARAM_SIGNIN_PG_BOTTOM  		=  	"SignInPageBottom";
 	public static final String CALLER_PROMO_REQ_PARAM_HOME_PG  					=  	"HomePage";
 	public static final String CALLER_PROMO_REQ_PARAM_CATALOG_PG  				=  	"CatalogPage";
+	public static final String CALLER_PROMO_REQ_PARAM_SIGNIN_PG_SIDE			=  	"SignInPageSide";
 	
 	/**
 	 * PRE_LOGIN PROMOTIONS (XPEDX_PROMO_RESP_MAP)
@@ -159,6 +160,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 	
 	public static final String XPEDX_PROMO_RESP_PRE_LOGIN_CATALOG_PAGE				=	//"preLoginCatalogPage";
 		STD_PRE_LOGIN_PREFIX + CALLER_PROMO_REQ_PARAM_CATALOG_PG ;
+	
+	public static final String XPEDX_PROMO_RESP_PRE_LOGIN_SIGNIN_PG_SIDE			=	STD_PRE_LOGIN_PREFIX + CALLER_PROMO_REQ_PARAM_SIGNIN_PG_SIDE ;
 	
 	//POST LOGIN
 	public static final String XPEDX_PROMO_RESP_POST_LOGIN_HOME_PAGE				=	//"postLoginHomePage";
@@ -192,6 +195,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		//Keep all possible request params in vector
 		CALLER_REQ_PROMO_PARAM_VECTOR.addElement( CALLER_PROMO_REQ_PARAM_SIGNIN_PG_TOP );
 		CALLER_REQ_PROMO_PARAM_VECTOR.addElement( CALLER_PROMO_REQ_PARAM_SIGNIN_PG_BOTTOM );
+		CALLER_REQ_PROMO_PARAM_VECTOR.addElement( CALLER_PROMO_REQ_PARAM_SIGNIN_PG_SIDE );
 		CALLER_REQ_PROMO_PARAM_VECTOR.addElement( CALLER_PROMO_REQ_PARAM_HOME_PG );
 		CALLER_REQ_PROMO_PARAM_VECTOR.addElement( CALLER_PROMO_REQ_PARAM_CATALOG_PG );
 		
@@ -1173,6 +1177,16 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				buildFileNameForPreLoginPage = getStoreFrontId() + "_AP_" + STD_PROMO_HTML_SUFFIX ;
 				
 			 }
+			
+			/**
+			 *  SignIn Page - Side (contact us image)
+			 * 		File name Format: <Storefront>_SPS_Promo.html 
+			 * 		There is no default if file is not found (--NO--).
+			 */
+			if( XPEDX_PROMO_RESP_PRE_LOGIN_SIGNIN_PG_SIDE.equalsIgnoreCase(callerPageTag ) ) {
+				buildFileNameForPreLoginPage = getStoreFrontId() + "_SPS_" + STD_PROMO_HTML_SUFFIX ;
+				
+			}
 			
 			boolean isPreLoginFileBuild = setGeneratedFileName(buildFileNameForPreLoginPage );
 

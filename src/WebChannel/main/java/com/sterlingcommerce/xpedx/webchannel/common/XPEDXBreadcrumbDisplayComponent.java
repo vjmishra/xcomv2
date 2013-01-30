@@ -5,12 +5,14 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.components.Component;
-import com.opensymphony.xwork2.util.ValueStack;
+
 import com.opensymphony.xwork2.util.TextUtils;
+import com.opensymphony.xwork2.util.ValueStack;
 import com.sterlingcommerce.webchannel.common.Breadcrumb;
 import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
 import com.sterlingcommerce.webchannel.common.ParamAttachMapper;
@@ -85,7 +87,10 @@ public class XPEDXBreadcrumbDisplayComponent
             {
                 String lastDisp = this.getLastBreadcrumbDisplay(bcl);
                 //Changes made for XBT 251 special characters replace by Space for Displaying Bread Crumb
-            	lastDisp=lastDisp.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+            	//lastDisp=lastDisp.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+                //start JIRA XBT-319
+                lastDisp = processSpecialCharacters(lastDisp);
+                //End JIRA XBT-319
                 sb.append(lastDisp);
               //  sb.append(this.getSeparator());
                 /* 3/10/2011 Seperator not required for the last bread crumb */
@@ -276,7 +281,7 @@ public class XPEDXBreadcrumbDisplayComponent
         if(!("").equals(toReturn) && (toReturn.indexOf("*") == 0 || toReturn.indexOf("?") == 0)) {
         	toReturn = toReturn.substring(1, toReturn.length());
         }
-
+        
         return toReturn;
     }
 
@@ -329,4 +334,73 @@ public class XPEDXBreadcrumbDisplayComponent
     protected HttpServletRequest req = null;
     protected HttpServletResponse res = null;
     protected XPEDXBreadcrumbDisplayTag tag = null;
+    
+  //Start JIRA  XBT-319
+	private String processSpecialCharacters(String searchText){
+		if(searchText == null){
+			return null;
+		}
+		String specialCharacterReg = "[\\[\\]^);{!(}:,~\\\\]";
+		searchText = searchText.replaceAll(specialCharacterReg," ");
+		searchText = processPlusCharacter(searchText);
+		searchText = processEiphenCharacter(searchText);
+		return searchText;
+	}
+	
+	 /*Replace "+" with whitespace when it 
+	 * a) appears as a word 
+	 * b) appears as first character in a word 
+	 * c) appears as last character in a word
+	 */
+	private String processPlusCharacter(String searchText){
+		String whiteSpaceReg = "[ ]";
+		String[] searchTexts = searchText.split(whiteSpaceReg);
+		StringBuilder searchTerm = new StringBuilder();
+		for(String textSegment : searchTexts){
+			textSegment = textSegment.trim();
+			if(textSegment.equals("+")){
+				continue;
+			}
+			
+			if(textSegment.startsWith("+")){
+				textSegment = " " + textSegment.substring(1, textSegment.length());
+			}
+			
+			if(textSegment.endsWith("+")){
+				textSegment = textSegment.substring(0, textSegment.length()-1) + " ";
+			}
+			
+			searchTerm.append(textSegment);
+			searchTerm.append(" ");
+			
+		}
+		return searchTerm.toString();
+	}
+	
+	/*Replace "-" with whitespace when it 
+	 * a) appears as a word 
+	 * b) appears as last character in a word
+	 */
+	private String processEiphenCharacter(String searchText){
+		String whiteSpaceReg = "[ ]";
+		String[] searchTexts = searchText.split(whiteSpaceReg);
+		StringBuilder searchTerm = new StringBuilder();
+		for(String textSegment : searchTexts){
+			textSegment = textSegment.trim();
+			if(textSegment.equals("-")){
+				continue;
+			}
+			
+			if(textSegment.endsWith("-")){
+				textSegment = textSegment.substring(0, textSegment.length()-1)+" ";
+				
+			}
+			
+			searchTerm.append(textSegment);
+			searchTerm.append(" ");
+			
+		}
+		return searchTerm.toString();
+	}
+	//End JIRA XBT-319
 }

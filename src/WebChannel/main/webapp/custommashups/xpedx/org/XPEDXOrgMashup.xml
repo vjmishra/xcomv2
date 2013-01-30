@@ -22,6 +22,24 @@
 			<Template />
 		</API>
 	</mashup>
+	<mashup id='XPEDXManageCustomerAndAssignment' transactional='true' endpoint='CUSTOMER'
+		mashuptype='XAPI' description="adding article">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="XPXManageCustomerAndAssignmentAPIService">
+			<Input>
+				<ManageCustomerAndAssignment>
+					<CustomerAssignmentList>
+						<CustomerAssignment CustomerID=""
+							OrganizationCode="" UserId="" Operation="" />
+					</CustomerAssignmentList>
+				</ManageCustomerAndAssignment>
+			</Input>
+			<Template>
+				<XPXArticle />
+			</Template>
+		</API>
+	</mashup>
 	<mashup id='XPEDXAddArticle' transactional='true' endpoint='CUSTOMER'
 		mashuptype='XAPI' description="adding article">
 		<classInformation

@@ -106,6 +106,28 @@
 			</Template>
 		</API>
 	</mashup>
+	<mashup id='ManagePasswordUpdate' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+			    <CustomerContactList>
+			        <CustomerContact CustomerContactID="">
+			           <User EnterpriseCode="" DisplayUserID="" Localecode=""
+							 GeneratePassword="Y" OrganizationKey="" SessionTimeout="0">
+						</User>
+			         </CustomerContact>
+			    </CustomerContactList>
+			</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
 	<mashup id='getXpedxCustomerContactDetails' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER'
 		description="Buyer User General Information">

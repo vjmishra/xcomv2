@@ -252,7 +252,7 @@ $(document).ready(function()
 			},
 			'autoDimensions'	: false,
 			'width' 			: 751,
-			'height' 			: 350  
+			'height' 			: 365  
 			});
 		$("#addNewQL").fancybox({
 			'onStart'		:	function(){
@@ -1235,7 +1235,8 @@ a.underlink:hover { text-decoration: underline !important; }
 </s:else>
 
 <div class='x-hidden dialog-body ' id="shipToUserProfileDiv">
-	<div id="shipToUserProfile"></div>
+	<div id="shipToUserProfile"><div id="errorText" class="float-right"></div></div>
+	
 </div>
 	
 <div id="main-container">
@@ -1825,7 +1826,7 @@ a.underlink:hover { text-decoration: underline !important; }
 				value='%{isInUserGroup("BUYER-APPROVER")}' fieldValue="true"/> Approver</label> 
 				<label
 				title="Buyer has the ability to submit orders."> 
-				<s:checkbox	tabindex="14" name='test' id='test' fieldValue="test123"
+				<s:checkbox	tabindex="14" name='test' id='test' disabled="true" fieldValue="test123"
 				value="%{isInUserGroup('BUYER-USER')}" />Buyer</label>
 			</s:if>	
 			<s:else> 

@@ -192,8 +192,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	protected void getCustomerLineDetails() throws Exception {
 		//get the map from the session. if null query the DB
-		HashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
-		HashMap<String,String> customerFieldsMap =new HashMap<String,String>();
+		LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();		
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         }else
@@ -247,11 +246,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
     }
 
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
         XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-        HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+        LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 
@@ -375,6 +374,39 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		
 //		displayUOMs.add(BaseUomDesc); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 		
+		//Moved code from below to above for JIRA XB-558
+		boolean isPricingUOMAdded=false;
+		boolean isThAndCwtAdded=false;
+		if(PricingUOMDesc != null && PricingUOMDesc.toLowerCase().contains("thousand"))
+		{
+			displayUOMs.add(PricingUOMDesc);
+			isPricingUOMAdded=true;
+			isThAndCwtAdded=true;
+		}
+		
+		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
+				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
+			//displayUOMs.add("Thousand");
+			if (prodMweight != null && prodMweight.trim().length() > 0 )
+				prodWeight = new BigDecimal(prodMweight);
+			else
+				prodWeight = new BigDecimal(100); // this will make
+			// pricing for CW
+			try
+			{
+				//priceForTHUom = pricingUOMPrice.multiply(prodWeight.divide(new BigDecimal(100)));
+				priceForTHUom = pricingUOMPrice.multiply(XPEDXPriceandAvailabilityUtil.divideBDWithPrecision(prodWeight  ,new BigDecimal(100)) );
+				thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_M);
+				if(thUOMDesc==null || thUOMDesc.length()==0)
+					thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_A);
+				displayUOMs.add(thUOMDesc);
+				isThAndCwtAdded=true;
+			}
+			catch(Exception e)
+			{	
+				priceForTHUom = pricingUOMPrice;
+			}
+		}
 		if ((XPEDXPriceandAvailabilityUtil.TH_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.TH_UOM_A.equalsIgnoreCase(pricingUOM)) && 
 				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))) {
 			// hardcode for now.
@@ -393,6 +425,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				cwtUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.CWT_UOM_A);
 				if(prodMweight != null){
 					displayUOMs.add(cwtUOMDesc);
+					isThAndCwtAdded=true;
 				}
 			}
 			
@@ -402,29 +435,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 			
 		}
-		//Moved code from above to bottom for JIRA 1835
-		displayUOMs.add(PricingUOMDesc);
-		if ((XPEDXPriceandAvailabilityUtil.CWT_UOM_M.equalsIgnoreCase(pricingUOM) || XPEDXPriceandAvailabilityUtil.CWT_UOM_A.equalsIgnoreCase(pricingUOM))
-				&& (uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))) {
-			//displayUOMs.add("Thousand");
-			if (prodMweight != null && prodMweight.trim().length() > 0 )
-				prodWeight = new BigDecimal(prodMweight);
-			else
-				prodWeight = new BigDecimal(100); // this will make
-			// pricing for CW
-			try
-			{
-				//priceForTHUom = pricingUOMPrice.multiply(prodWeight.divide(new BigDecimal(100)));
-				priceForTHUom = pricingUOMPrice.multiply(XPEDXPriceandAvailabilityUtil.divideBDWithPrecision(prodWeight  ,new BigDecimal(100)) );
-				thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_M);
-				if(thUOMDesc==null || thUOMDesc.length()==0)
-					thUOMDesc = XPEDXWCUtils.getUOMDescription(XPEDXPriceandAvailabilityUtil.TH_UOM_A);
-				displayUOMs.add(thUOMDesc);
-			}
-			catch(Exception e)
-			{	
-				priceForTHUom = pricingUOMPrice;
-			}
+		if(!isPricingUOMAdded )
+		{
+			displayUOMs.add(PricingUOMDesc);
 		}
 		boolean isDisplayReqUOM=true;
 		for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
@@ -434,6 +447,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				isDisplayReqUOM=false;
 				break;
 			}
+		}
+		if(isThAndCwtAdded &&( RequestedQtyUOMDesc.toLowerCase().contains("thousand") || 
+				RequestedQtyUOMDesc.toLowerCase().contains("cwt")))
+		{
+			isDisplayReqUOM=false;
 		}
 		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) 
 				&& isDisplayReqUOM)
@@ -450,18 +468,18 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				pricingUOMConvFactor));*/
 
 //		displayPriceForUoms.add(basePrice.toString());  //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
-		
-		if (priceForCWTUom != null && prodMweight != null &&
-				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))){
-			displayPriceForUoms.add(priceForCWTUom.toString());
-		}
-		//Moved code from above to bottom for JIRA 1835
+		//Moved code from bottom to above for XB-558
 		displayPriceForUoms.add(pricingUOMUnitPrice);
 
 		if (priceForTHUom != null &&
 				(uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_M ) || uomsList.contains(XPEDXPriceandAvailabilityUtil.TH_UOM_A))){
 			displayPriceForUoms.add(priceForTHUom.toString());
 		}
+		if (priceForCWTUom != null && prodMweight != null &&
+				(uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_M) || uomsList.contains(XPEDXPriceandAvailabilityUtil.CWT_UOM_A))){
+			displayPriceForUoms.add(priceForCWTUom.toString());
+		}
+		
 		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM())
 				&& isDisplayReqUOM)
 			displayPriceForUoms.add(pandAItem.getUnitPricePerRequestedUOM());
@@ -1271,18 +1289,23 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
 							if(altItemIds.contains(curritemID)){
 								alternateAssociatedItems.add(curritem);
+								continue;
 							}
 							if(compItemIds.contains(curritemID)){
 								complimentAssociatedItems.add(curritem);
+								continue;
 							}
 							if(upItemIds.contains(curritemID)){
 								upgradeAssociatedItems.add(curritem);
+								continue;
 							}
 							if(crossSellItemIDs.contains(curritemID)){
 								crossSellAssociatedItems.add(curritem);
+								continue;
 							}
 							if(upSellItemIDs.contains(curritemID)){
 								upSellAssociatedItems.add(curritem);
+								continue;
 							}
 					        if(repItemIds.contains(curritemID))
 					        {

@@ -31,7 +31,8 @@
 	<div class="clear"></div>
 
 <!-- CODE_START MIL - PN --> 
-
+<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<s:form id="XPEDXMyItemsDetailsChangeShareList"
 			action="XPEDXMyItemsDetailsChangeShareList" method="post"
 			enctype="multipart/form-data" >
@@ -46,7 +47,7 @@
 			<s:set name="rbPermissionShared" value="%{''}" />
 			<s:set name="rbPermissionPrivate" value="%{''}" />
 
-	<s:if test="%{#isUserAdmin}">
+	<s:if test="%{(#isUserAdmin) || (#isEstUser) }">
 		<s:set name="rbPermissionShared" value="%{' checked '}" />
 	</s:if>
 	<s:else>
@@ -83,7 +84,8 @@
 			value="<s:property value="wCContext.loggedInUserId"/>"
 			onclick="hideSharedListForm()" />&nbsp;Personal (only you will be able to view and edit this list)  
 		</p>
-		<s:if test="%{!#isUserAdmin}">
+		
+		<s:if test="%{(!#isEstUser) && (!#isUserAdmin)}">			
 			<div style="display: none;"> 	
 		
 		<input style="margin-left:53px; margin-top:5px; margin-bottom:10px;" 
@@ -94,8 +96,10 @@
 		
 		
 			</div>
-		</s:if>
-	<s:else><input style="margin-left:53px; margin-top:5px; margin-bottom:10px;" 
+		</s:if>	
+		
+	<s:else>
+		<input style="margin-left:53px; margin-top:5px; margin-bottom:10px;" 
 			onchange="" id="rbPermissionShared"
 			<s:property value="#rbPermissionShared"/> 
 			type="radio" name="sharePermissionLevel" value=" "
@@ -103,15 +107,21 @@
 	 </s:else>
 		<s:set name="displayStyle" value="%{''}" />
 	
-		<s:if test="%{(!#isUserAdmin) || (getSharePrivateField() != '' && getSharePrivateField() != null)}">
+		<s:if test="%{((!#isUserAdmin) && (!#isEstUser)) || (getSharePrivateField() != '' && getSharePrivateField() != null)}">
 			<s:set name="displayStyle" value="%{'display: none;'}"/>
 		</s:if>
-		
+	<s:if test="%{#isUserAdmin }">
 		<span style="<s:property value="#displayStyle"/>" id="shareAdminOnlyShared" >
 		<input type="checkbox" <s:property value="#saCV"/>
 			name="shareAdminOnly" id="shareAdminOnly" value="Y" onchange="javascript:setAdminFlag(this);"/> Edit by Admin users only<br>
 		</span>
-			
+	</s:if>
+	<s:else>
+		<span style="<s:property value="#displayStyle"/>" id="shareAdminOnlyShared" >
+		<input type="hidden" 
+			name="shareAdminOnly" id="shareAdminOnly" value="" />
+		</span>
+	</s:else>				
 	<div style="<s:property value="#displayStyle"/>" id="dynamiccontent" >
 	<!-- Placeholder for the dynamic content -->
 	

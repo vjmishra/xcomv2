@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.common;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class XPEDXShiptoHeaderAction extends WCMashupAction {
 	protected String customerId;
 	protected String organizationCode;
 	private Element customerOrganizationEle;
-	protected HashMap customerFieldsMap;
+	protected LinkedHashMap customerFieldsMap;
 
 	public XPEDXShiptoHeaderAction() {
 		logoURL = null;

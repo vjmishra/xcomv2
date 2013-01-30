@@ -640,26 +640,8 @@
 						
 						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
 			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
-			    		</s:if>
-			    		
-			    	</div>
-			    	<div class="special-instructions-div">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-			    				<p class="special-instructions-padding">Special Instructions:</p>
-					    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
-								<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />
-		    					<s:textfield name='orderLineNote' maxlength="62"
-									id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
-									cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled='%{#isUOMAndInstructions}'/>
-								<s:if test='#isUOMAndInstructions'>
-									<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
-								</s:if>	
-			    		</s:if>
-			    		<s:else>
-			    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
-			    			<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='' />
-			    		</s:else>			    	
-    				</div>
+			    		</s:if>					    		
+			    	</div>			    	
     
 			    	<div class="cust-defined-fields">
 			    		<table style="font-size:12px">
@@ -734,7 +716,26 @@
                                 </s:iterator>
                             </tbody>
                         </table>
-					</div>
+					</div>				
+	
+					<div class="clearall">&nbsp; </div>
+					<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+		    				<p style='MARGIN-LEFT: 25px;' class="line-spacing">Special Instructions:</p>
+				    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
+							<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />				    														
+							<P style='MARGIN-LEFT: 140px; MARGIN-TOP: -25px;'>	
+								<s:textarea name="orderLineNote" rows="3" cols="90" onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+									id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
+									cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled="%{#isUOMAndInstructions}"/>									
+							</P>	
+							<s:if test='#isUOMAndInstructions'>
+								<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+							</s:if>	
+		    		</s:if>
+		    		<s:else>
+		    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+		    			<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='' />
+		    		</s:else>										
 				</div>
 				<%--jira 2885 --%>
     				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>

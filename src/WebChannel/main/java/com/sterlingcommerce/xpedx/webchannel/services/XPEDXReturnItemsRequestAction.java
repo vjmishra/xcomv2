@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.services;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -371,18 +372,18 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 	 * @return
 	 */
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-		HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 	
 	protected void getCustomerLineDetails() {
 		//get the map from the session. if null query the DB
-		HashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+		LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         	customerFieldsMap = customerFieldsSessionMap;
@@ -550,7 +551,7 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 
 	private String userName;
 	private String requestedBy;
-	protected HashMap<String, String> customerFieldsMap;
+	protected LinkedHashMap<String, String> customerFieldsMap;
 
 	// Variables declaration for itemReturnComplaintRequest
 	private String itemNumber;
@@ -638,11 +639,11 @@ public class XPEDXReturnItemsRequestAction extends OrderDetailAction {
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXReturnItemsRequestAction.class);
 
-	public HashMap<String, String> getCustomerFieldsMap() {
+	public LinkedHashMap<String, String> getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
-	public void setCustomerFieldsMap(HashMap<String, String> customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap<String, String> customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 

@@ -38,14 +38,115 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 	<s:set name="goBackFlag" value='%{"false"}' />
 	<s:hidden id="goBackFlag" name="goBackFlag" value="%{goBackFlag}"></s:hidden>
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
-			
+	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
+	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>	
 <script type="text/javascript">
+
+function savePassword(){
+	var errorDiv = document.getElementById("pwdValidationDiv");
+	var errDiv = document.getElementById("errorNote");
+	var error = document.getElementById("pwdErrorDiv");
+	if(error !=null){
+		error.innerHTML = '';
+	}
+	if(errDiv != null)
+	{
+		errDiv.style.display = 'none';
+	}
+	if(errorDiv != null){
+	errorDiv.style.display = 'none';
+	}
+	 var answerFiled = document.passwordUpdateForm.userpassword;
+	 var answerConfirmFiled = document.passwordUpdateForm.confirmpassword;
+	 var errDiv = document.getElementById("errorMsgFor_userpassword");
+	 var errDivBlank = document.getElementById("errorMsgFor_blank");
+	 if(errDivBlank != null){
+		 errDivBlank.style.display = 'none';
+	 }
+	 if(errDiv != null){
+		 errDiv.style.display = 'none';
+	 }
+	 answerFiled.style.borderColor="";
+	 answerConfirmFiled.style.borderColor="";
+	 document.passwordSubmit.newPassword.value = answerFiled.value;
+	 var returnVal = false;
+	 if(answerFiled.value.trim().length == 0 && answerConfirmFiled.value.trim().length == 0){
+	 		errDivBlank.innerHTML = "Required fields missing. Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			 answerFiled.style.borderColor="#FF0000";
+			 answerConfirmFiled.style.borderColor="#FF0000";
+			 return;
+			}
+	 	if(answerFiled.value.trim().length == 0 || answerFiled.value == null){
+	 		errDivBlank.innerHTML = "Required field missing. Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			 answerFiled.style.borderColor="#FF0000";
+			 return;
+			}
+	 	
+	 	if(answerConfirmFiled.value.trim().length == 0 || answerConfirmFiled.value == null){
+	 		errDivBlank.innerHTML = "Required field missing. Please review and try again."
+	 			errDivBlank.style.display = "inline";
+			answerConfirmFiled.style.borderColor="#FF0000";
+			 return;
+			}
+	 	
+	 	
+		if(answerFiled.value != answerConfirmFiled.value){
+				errDiv.innerHTML = "Please enter the same password in both Password and Confirm Password fields."
+				errDiv.style.display = "inline";
+				return;
+			}
+
+			validatePassword();
+			
+	}
+
+function validatePassword(){
+	var erDiv = document.getElementById("pwdErrorDiv");
+	if(erDiv != null){
+		erDiv.innerHTML = '';
+	}
+	 var answerFiled = document.passwordUpdateForm.userpassword;
+	 document.getElementById("userPwdToValidate").value=answerFiled.value;
+	var url = '<s:property value="#ValidatePasswordURL" />';
+		Ext.Ajax.request({
+	        url :url,
+	        params:{
+	        	userPwdToValidate : answerFiled.value
+	        	},
+	        method: 'POST',
+	        success: function (response, request){
+	           var responseText = response.responseText;
+	           var errorDiv = document.getElementById("pwdValidationDiv");
+              		if(responseText.indexOf("error")>-1){
+	                    errorDiv.innerHTML = response.responseText;
+	                    errorDiv.style.display = 'block';
+	                }else{
+	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
+	                	document.getElementById("submitButton").disabled=true;
+	                	errorDiv.style.display = 'none';
+	                	document.passwordSubmit.submit();
+	                }
+              
+  	   		},
+	   		failure: function (response, request){
+	   		   errorDiv = document.getElementById("pwdValidationDiv");
+              if(errorDiv){
+               errorDiv.style.display = 'none';
+              }
+	    	   alert("Error in service.");
+	        }
+	    });
+}
+
 function saveAnswer(){
     var answerFiled = document.secrectQuestionForm.secretAnswer ;
     var answerConfirmFiled = document.secrectQuestionForm.confirmAnswer ;
@@ -175,7 +276,7 @@ var selectedShipCustomer = null;
 			
 		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
-				if (isUserAdmin){
+				if (isUserAdmin || isEstUser){
 				//Call AJAX function to fetch Ship-To locations only when user is an Admin
 					showShareListHL('<s:property value="#CurrentCustomerId"/>');
 				}
@@ -191,7 +292,7 @@ var selectedShipCustomer = null;
 	            var radioBtns = document.XPEDXMyItemsDetailsChangeShareListHL.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontentHL");
 				clearTheArrays();
-				if(!isUserAdmin)
+				if(!isUserAdmin && !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
@@ -712,6 +813,13 @@ var selectedShipCustomer = null;
 <s:url id="userListURL" action="xpedxGetUserList" namespace="/profile/user" />
 <s:url id='targetURL' namespace='/common'
 	action='xpedxGetAssignedCustomers' />
+<s:url id='xpedxHeaderUrl' action='xpedxHeader' namespace="/common" >
+        <s:param name='shipToBanner' value="%{'true'}" />
+</s:url>
+<s:url id='refreshCustomerIntoContext' namespace='/common' action='refreshCustomerIntoContextForMIL.action'>	
+<s:param name='shipToBanner' value="%{'true'}" />					
+</s:url>
+		 
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
 <s:url id='shipToForUserProfileSearch' namespace='/common'
@@ -746,8 +854,17 @@ var selectedShipCustomer = null;
 <s:url id='securityQueURL' namespace='/common' action='xpedxGetSecurityQuestion' >
 <s:param name="organizationCode" value="#loggedInUserOrgCode" />
 </s:url>
+<s:url id='passwordUpdate' namespace='/common' action='xpedxPasswordUpdate' >
+</s:url>
+
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
+		style="width: auto; height: auto; ">
+	</div>
+</div>
+
+<div class='x-hidden dialog-body ' id="passwordUpdateContent">
+	<div id="ajax-passwordUpdateContent" class="xpedx-light-box"
 		style="width: auto; height: auto; ">
 	</div>
 </div>
@@ -806,23 +923,20 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
 		else return true;
-		if (keycode == 13)
-	   	{
-		   	if(searchTxt == "" || searchTxt == null){
-		   		document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
-		   		document.getElementById("errorText").setAttribute("class", "error");
-		}
-			
-			searchShipToAddress(divId,url);
-	   		return false;
-	   	}
-		else{
-	   		return true;
-		}
+		 <!-- XBT-343 Start-->
+         if (keycode == 13)
+         {     
+                 searchShipToAddress(divId,url);
+                 return true;
+
+         } else {
+                 return false;
+         }
 	}
+	 <!-- XBT-343 Stop-->
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
-				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To…"){
+				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To..."){
 						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
 						document.getElementById("errorText").setAttribute("class", "error");
 				}
@@ -1231,7 +1345,14 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     }
                     else
                     {
-	                    window.location.reload( true );
+	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){                        
+                          var headerUrl='<s:property value="#refreshCustomerIntoContext" />';
+                          window.location.href = headerUrl ;
+                          
+                        }
+                        else{
+                        window.location.reload( true );
+                        }
                     }
                     //end of jira 2440
                 },
@@ -1301,25 +1422,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         return;
     }
 	// Added for removing the double quotes from an search term. Jira # 2415
-	var myMask;
-    function validate(e){
-    	
-  	  if (e.keyCode == 13) {  
-  	 	var searchRes = document.getElementById("newSearch_searchTerm").value;
-		//added for jira 3974
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
-  	  /*	while(searchRes.indexOf("\"")!= -1){
-  	  	searchRes = searchRes.replace("\"", "");    	  
-  	 	}*/
-  	 	//alert(searchRes);
-  	  	/*while(searchRes.indexOf("*")!= -1){
-   	  		searchRes = searchRes.replace("*", " ");    	  
-   	 	}*/
-  	 	Ext.fly('newSearch_searchTerm').dom.value=searchRes;
-  	}
-  }	
+	
 	var myMask;
   function validateVal(e){
 	//added for jira 3974
@@ -1351,7 +1454,26 @@ var toaWin = new Ext.Window({
         shadow: 'drop',
         baseCls: 'swc-ext',
         shadowOffset: 10
-      	}); 	
+      	}); 
+
+var passwordUpdateWin = new Ext.Window({
+    autoScroll: false,
+    closeAction: 'hide',
+    cloaseable: false,
+    contentEl: 'passwordUpdateContent',
+    hidden: true,
+    id: 'passwordUpdateBox',
+    modal: true,
+    width: 750,
+    height: 'auto',
+    resizable   : false,
+    draggable   : false,
+    closable    : false,
+    shadow: 'drop',
+    baseCls: 'swc-ext',
+    scrolling : 'no',
+    shadowOffset: 10
+  	}); 	
 //JIRA 3487 start
 var securityQuestionWin = new Ext.Window({
     autoScroll: false,
@@ -1373,12 +1495,20 @@ var securityQuestionWin = new Ext.Window({
   	}); 	
 
 var isGuestuser = "<s:property value='%{wCContext.guestUser}'/>";
-var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>'; 
+var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>';
 var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
+var passwordUpdateFlag = '<s:property value="%{wCContext.getWCAttribute('setPasswordUpdate')}"/>';
 if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
-}
+	}
+
+
+function passwordUpdateModal()
+{
+	
+     		showPasswordUpdateDialog('<s:property value="#passwordUpdate"/>');
     
+}
     function loadTermsOfAccess()
     {
 		
@@ -1425,6 +1555,24 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
                 else
                 {	
                     alert("Error getting terms of access content");
+                }
+            }
+        });     
+    }
+
+    function showPasswordUpdateDialog(url)
+    {
+        Ext.get('ajax-passwordUpdateContent').load({
+            url :url,
+            method: 'POST',
+            callback:function(el, success, response){
+                if(success)
+                {
+                	DialogPanel.show('passwordUpdateBox');
+               }
+                else
+                {	
+                    alert("Error getting password Update Box");
                 }
             }
         });     
@@ -1575,7 +1723,15 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
+			if((!isSalesRep) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+				var myMask
+				var waitMsg = Ext.Msg.wait("");
+				 myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+				 myMask.show();
+				passwordUpdateModal();
+				Ext.Msg.hide();
+			}
+			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){
 			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";            
@@ -1601,7 +1757,8 @@ if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTO
 			 		'width' 		: 750,
 			 		'height' 		: 530  
 				}).trigger('click');
-			} else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+			} 
+			else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		
@@ -1689,7 +1846,7 @@ function searchShipToAddress(divId,url) {
 		if(searchText==''|| searchText==null)
 */
 		/* JIRA 3331 if search text is blank then all ship tos should be shown
-		if(searchText==''|| searchText==null || searchText=='Search Ship-To…')
+		if(searchText==''|| searchText==null || searchText=='Search Ship-Toï¿½')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
@@ -2174,12 +2331,14 @@ function msgWait(){
 	  <s:url id='newCatSearch' action='newSearch' namespace='/catalog' >
 	  </s:url>
 	  <div  class="searchbox-1 auth">
-	   <s:form name='newSearch' action='newSearch' namespace='/catalog'>
+	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
+	   <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
 	   		<s:hidden name='path' id='path' value="/" />
+	   		<!-- XBT-391 removed the onkeydown event -->
 			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	        	type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
+	        	type="text" value="Search Catalog..." onclick="clearTxt();" >
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
-	                            onclick="newSearch_searchTerm_onclick();validateVal(event);return;"></button>
+	                            ></button>
 		    <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		    </div>
@@ -2189,12 +2348,14 @@ function msgWait(){
  </s:if> 
  <s:if test='(#isGuestUser == true)'> 
 	<div  class="searchbox-1">
-	  <s:form name='newSearch' action='newSearch' namespace='/catalog'>
+	<!-- XBT-391 Removed submit event from Submit button and added to form -->
+	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
 	  		<s:hidden name='path' id='path' value="/" />
+	  		<!-- XBT-391 removed the onkeydown event -->
 		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	         type="text" value="Search Catalog..." onclick="clearTxt();" onkeydown="javascript:validate(event)">
+	         type="text" value="Search Catalog..." onclick="clearTxt();" >
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	           onclick="newSearch_searchTerm_onclick();validateVal(event);return;" style="top:-4px;margin-left: 3px;height: 20px;"></button>
+	            style="top:-4px;margin-left: 3px;height: 20px;"></button>
 	     <div id="tips-container">
 		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
 		</div> 
@@ -2381,8 +2542,8 @@ function msgWait(){
 				<li style="border-right: none;">&nbsp;</li>
 				<li> &nbsp;&nbsp;&nbsp;&nbsp; </li>
 				<li><a
-					href="<s:url action="login" namespace="/common" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
-					tabindex="2006" id="signIn">Sign In</a>
+					href="<s:url action="loginFullPage" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
+					tabindex="2006" id="signIn"><span style="font-size: 12px">Sign In</span></a>
 				</li>	
 			</s:else>
 	   	</s:if>

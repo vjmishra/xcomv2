@@ -72,8 +72,8 @@
 		<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress('shipToUserProfile');">&nbsp;</span>		
-		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
-		<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
+	<!-- XBT-343 --><s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToUserProfile');" />
+			<%-- <s:hidden id="magGlass" name="searchButton"></s:hidden> --%>
 </div>
 <div class="clearall">&nbsp;</div>
 <!-- END modal header -->

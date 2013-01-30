@@ -89,11 +89,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String firstItem = "";
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
-//XNGTP-4264 Escaping Below words from search criteria.
-	private String luceneEscapeWords[]={"a", "and", "are", "as", "at", "be", "but", "by",
+//XNGTP-4264 and XB 355 Escaping Below words from search criteria.
+	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
-			 "no", "not", "of", "on", "or", "s", "such",
-			 "t", "that", "the", "their", "then", "there", "these",
+			 "no", "not", "of", "on", "or", "such",
+			  "that", "the", "their", "then", "there", "these",
 			 "they", "this", "to", "was", "will", "with"
 };
 	
@@ -309,8 +309,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*End of changes made for Jira 3464*/
 		if(searchTerm != null && !searchTerm.trim().equals(""))
 		{   //Changes made for XBT 251 special characters replace by Space while Search
-			searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-			searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
+			//searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//Start Jira XBT-319
+			searchTerm = processSpecialCharacters(searchTerm);
+			//End Jira XBT-319
+			
+			//Start JIRA XBT-263
+			searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+			//End JIRA XBT-263
 			setSearchString(searchTerm);//Added JIRA #4195 
 			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
 			String appendStr="&searchTerm="+searchTerm;
@@ -422,11 +428,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/***** Start of  Code changed for Promotions Jira 2599 ********/ 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : filter(): start");
+		
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");       
 
+		// Added for debugging Breadcrumb parameters
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : filter(): Breadcrumb : cnameValue=" + cnameValue); 
+		} // end of debugging code
 
 		/****End of Code Changed for Promotions JIra 2599 *******/
 
@@ -537,6 +552,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public void setColumnListForUI() {
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : setColumnListForUI(): start");
+
 		boolean isLayoutDefined = false;
 		try {
 			Iterator<Breadcrumb> iter = bcl.iterator();
@@ -546,6 +563,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 					String indexField = (String) bc.getParams().get(
 							"indexField");
 					String filterDesc = (String) bc.getParams().get("filterDesc");
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField=" + indexField);
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc=" + filterDesc);
 					String attributeName = null;
 					if (!YFCCommon.isVoid(filterDesc)
 							&& filterDesc
@@ -636,10 +655,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
 				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
 			
+			//Start JIRA XBT-263
+			searchStringValue = XPXCatalogDataProcessor.preprocessSearchQuery(searchStringValue);
+			//End JIRA XBT-263
 			
-			searchStringValue = XPXCatalogDataProcessor.preprocessCatalogData(searchStringValue);
+			//Start Jira XBT-319
+			searchStringValue = processSpecialCharacters(searchStringValue);
+			//End Jira XBT-319
+			
 			//Changes made for XBT 251 special characters replace by Space while Search
-			searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
@@ -700,7 +725,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				End of changes 3464*/	
 				
-				termValue = XPXCatalogDataProcessor.preprocessCatalogData(termValue);
+				//Start JIRA XBT-263
+				termValue = XPXCatalogDataProcessor.preprocessSearchQuery(termValue);
+				//End JIRA XBT-263
+				
 				termEle.setAttribute("Value", termValue);
 				
 				
@@ -721,8 +749,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}*/	
 				/*end of 3464*/			
 				
-				searchTerm = XPXCatalogDataProcessor.preprocessCatalogData(searchTerm);
-				
+				//Start JIRA XBT-263
+				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+				//End JIRA XBT-263
 				
 				term.setAttribute("Value", customerNumber + "|" + searchTerm);
 			}
@@ -838,12 +867,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : newSearch(): start");
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");  
 
-		
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : newSearch(): Breadcrumb : cnameValue=" + cnameValue); 
+			}			
 		/****End of Code Changed for Promotions *******/
 
 		if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) {
@@ -1144,10 +1179,19 @@ public class XPEDXCatalogAction extends CatalogAction {
 		
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
+		log.debug("CatalogAction : navigate(): start");
 		Breadcrumb lastBc = bcl.get(bcl.size() - 1);
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
 		path = params.get("path");		
+		
+		// Added for debugging Breadcrumb parameters
+		for (int i = 0; i < bcl.size(); i++) {
+			Breadcrumb bc = bcl.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			log.debug("CatalogAction : navigate(): Breadcrumb : cnameValue=" + cnameValue); 
+		} // end of debugging code			}			
 		
 		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		if (topCategoryMap == null) {			
@@ -2754,6 +2798,74 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	/*End - Code changes for 2964*/
 
+	//Start JIRA  XBT-319
+			private String processSpecialCharacters(String searchText){
+				if(searchText == null){
+					return null;
+				}
+				String specialCharacterReg = "[\\[\\]^);{!(}:,~\\\\]";
+				searchText = searchText.replaceAll(specialCharacterReg," ");
+				searchText = processPlusCharacter(searchText);
+				searchText = processEiphenCharacter(searchText);
+				return searchText;
+			}
+			
+			 /*Replace "+" with whitespace when it 
+			 * a) appears as a word 
+			 * b) appears as first character in a word 
+			 * c) appears as last character in a word
+			 */
+			private String processPlusCharacter(String searchText){
+				String whiteSpaceReg = "[ ]";
+				String[] searchTexts = searchText.split(whiteSpaceReg);
+				StringBuilder searchTerm = new StringBuilder();
+				for(String textSegment : searchTexts){
+					textSegment = textSegment.trim();
+					if(textSegment.equals("+")){
+						continue;
+					}
+					
+					if(textSegment.startsWith("+")){
+						textSegment = " " + textSegment.substring(1, textSegment.length());
+					}
+					
+					if(textSegment.endsWith("+")){
+						textSegment = textSegment.substring(0, textSegment.length()-1) + " ";
+					}
+					
+					searchTerm.append(textSegment);
+					searchTerm.append(" ");
+					
+				}
+				return searchTerm.toString();
+			}
+			
+			/*Replace "-" with whitespace when it 
+			 * a) appears as a word 
+			 * b) appears as last character in a word
+			 */
+			private String processEiphenCharacter(String searchText){
+				String whiteSpaceReg = "[ ]";
+				String[] searchTexts = searchText.split(whiteSpaceReg);
+				StringBuilder searchTerm = new StringBuilder();
+				for(String textSegment : searchTexts){
+					textSegment = textSegment.trim();
+					if(textSegment.equals("-")){
+						continue;
+					}
+					
+					if(textSegment.endsWith("-")){
+						textSegment = textSegment.substring(0, textSegment.length()-1)+" ";
+						
+					}
+					
+					searchTerm.append(textSegment);
+					searchTerm.append(" ");
+					
+				}
+				return searchTerm.toString();
+			}
+			//End JIRA XBT-319
 	
 	/**
 	 * @return the pnaItemId

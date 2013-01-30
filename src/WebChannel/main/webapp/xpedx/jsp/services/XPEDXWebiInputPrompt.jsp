@@ -100,9 +100,22 @@
 	//strUrl += "&timeOutx=100&zoom=100&sNewDoc=false&sApplyFormat=&iDPIndex=&bValidateSQL=false&nAction=&advPrompts=yes&bCreateDefaultReportBody=false&defaultRepTitle=Report%2BTitle";
 	//Added For Jira 2810
 	//window.open(strUrl,'','toolbar=0');
-	window.open(strUrl);
-</s:if>
+	//XBT-346 - Added  ReplaceAll() so that the report is not rendered on refresh
+	var reportUrl= window.location.href;
+	reportUrl = ReplaceAll(reportUrl,"renderReport=true", 'renderReport=false');
+	window.open(strUrl);	
+	window.location.href = reportUrl;
+	</s:if>
 
+function ReplaceAll(Source,stringToFind,stringToReplace){
+	  var temp = Source;
+	    var index = temp.indexOf(stringToFind);
+	        while(index != -1){
+	            temp = temp.replace(stringToFind,stringToReplace);
+	            index = temp.indexOf(stringToFind);
+			}
+	        return temp;
+	}
 
 
 	function submitSapForm() {
@@ -272,7 +285,6 @@
 	}	
 
 	function submitReportForm() {
-		//alert("Submit called");
 		document.webiPromptForm.submit();
 
 	}	

@@ -18,6 +18,8 @@
 	value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
+<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <s:bean	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xutil' />
 <!-- Added for JIRA 1402 Starts -->
@@ -32,6 +34,8 @@
 <s:set name='outDoc2' value='%{outDoc.documentElement}' />
 <script type="text/javascript">
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
+	var isEstUser = <s:property value="#isEstUser"/>;
+
 </script>
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -207,7 +211,7 @@ function showSharedListForm(){
 		
 		$("#dlgShareListLink1").fancybox({
 			'onStart' 	: function(){
-			if (isUserAdmin){
+			if (isUserAdmin || isEstUser){			
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
 				showShareList('<s:property value="#CurrentCustomerId"/>', true);
 				hideSharedListFormIfPrivate();
@@ -217,7 +221,7 @@ function showSharedListForm(){
 				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
 				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin)
+				if(!isUserAdmin &&  !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
@@ -247,7 +251,7 @@ function showSharedListForm(){
 
 		$("#dlgShareListLink2").fancybox({
 			'onStart' 	: function(){
-			if (isUserAdmin){
+			if (isUserAdmin || isEstUser){
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
 				showShareList('<s:property value="#CurrentCustomerId"/>', true);
 				hideSharedListFormIfPrivate();
@@ -257,7 +261,7 @@ function showSharedListForm(){
 				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
 				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin)
+				if(!isUserAdmin && !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
@@ -359,6 +363,25 @@ function showSharedListForm(){
      		myMask.show();
      		clearPreviousDisplayMsg()
      		
+     		//Added for XB 224 - not to display availability when Item is not Entitled		
+     		var erroMsg = '<s:property value='erroMsg' />';
+     		var isItemEntitled=true;
+			if(erroMsg != null && erroMsg != ""){
+				var errorItemList = erroMsg.split(",");
+				for (var j = 0; j < errorItemList.length; j++)
+						{
+						if(errorItemList[j] == itemId){
+							
+							isItemEntitled=false;
+							Ext.Msg.hide();
+		            				myMask.hide();
+							break;
+							
+						}	
+						}
+				
+				}
+			
      		var validateOM ; 
      			if(validateOrderMultiple(true,myItemsKey) == false)
    			 {
@@ -367,7 +390,7 @@ function showSharedListForm(){
      			else{
      				validateOM = true;
      			}
-     		
+     			if(isItemEntitled) {
      		if(itemId == null || itemId =="") {
     			alert("Item ID cannot be null to make a PnA call");
     		}
@@ -378,6 +401,7 @@ function showSharedListForm(){
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
      	}
+     }
 		
 		function importItems(msgImportMyItemsError){
 			
@@ -1020,6 +1044,20 @@ function showSharedListForm(){
 
 			var quantity = arrQty.value;
 			quantity = ReplaceAll(quantity,",","");
+			// XB-224 start
+			var erroMsg = '<s:property value='erroMsg' />';//Added for XB- 224
+			if(erroMsg != null && erroMsg != ""){
+			        document.getElementById("errorMsgTop").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgTop").style.display = "inline";
+						
+			        document.getElementById("errorMsgBottom").innerHTML = "Item # "+erroMsg+" is currently not valid. Please delete it from your list and contact Customer Service.";
+			        document.getElementById("errorMsgBottom").style.display = "inline";
+					errorflag= true;
+					isAddToCart=false;
+					Ext.Msg.hide();
+					myMask.hide();
+			}
+			//XB 224 end
 
 			if (priceCheck == true && addItemsWithQty != true){
 				if(quantity == '0'|| quantity == '')
@@ -1146,8 +1184,7 @@ function showSharedListForm(){
 				}	
 			}
 		}// End of If block
-			else{
-			
+			else{		
 			isAddToCart=true;
 			var arrQty = new Array();
 			var arrUOM = new Array();
@@ -1162,8 +1199,14 @@ function showSharedListForm(){
 			
 			errorflag=true;
 			addToCartFlag=false;
+			var isValidItemError=false;
 			var isQuantityZero = true;
 			var uomCheck = false ;
+			// XB-224 start
+			var erroMsg = '<s:property value='erroMsg' />';
+			var errorItemList = erroMsg.split(",");
+			var unEntitledItemIDs = new Array();
+			var n=0;
 			for(var i = 0; i < arrItemID.length; i++)
 			{	
 				
@@ -1173,6 +1216,7 @@ function showSharedListForm(){
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
+				var itemID = arrItemID[i].value;
 
 				if (priceCheck == true && addItemsWithQty != true){
 					if(quantity == '0'|| quantity == '')
@@ -1210,6 +1254,21 @@ function showSharedListForm(){
 					}
 				}
 				else if(quantity>0){
+					//XB 224
+					for (var j = 0; j < errorItemList.length; j++)
+					{						
+					if(errorItemList[j] == itemID){		
+							n++;
+							unEntitledItemIDs[j] = itemID;	
+								/*document.getElementById("errorMsgTop").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+						        document.getElementById("errorMsgTop").style.display = "inline";
+									
+						        document.getElementById("errorMsgBottom").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+						        document.getElementById("errorMsgBottom").style.display = "inline";
+								errorflag= false;*/
+					}
+					}
+					//end of XB 224
 					var totalQty = arrUOM[i].value * quantity;
 					if(arrOrdMul[i].value == undefined || arrOrdMul[i].value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul[i].value == null)
 					{
@@ -1292,13 +1351,27 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 							
 							}
-						
-						
 					}	
 				}	
-				
 			}
+		
+			if(unEntitledItemIDs.length == 0){
+				
+			}else if(unEntitledItemIDs.length != 0){
+				if(n==1){
+					var str = ""+unEntitledItemIDs;
+					var str2 = ReplaceAll(str,",","");
+					unEntitledItemIDs = str2;
+				}
+			document.getElementById("errorMsgTop").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+	        document.getElementById("errorMsgTop").style.display = "inline";
+	        document.getElementById("errorMsgBottom").innerHTML = "Item # "+unEntitledItemIDs+" is currently not valid. Please delete it from your list and contact Customer Service.";
+	        document.getElementById("errorMsgBottom").style.display = "inline";
+			errorflag= false;
+			isAddToCart=false;
+			isValidItemError=true;
 			
+			}	
 			} // End of else . This else is for if itemCount==1	
 			if(uomCheck == true)
 			{
@@ -1313,7 +1386,11 @@ function showSharedListForm(){
 	            document.getElementById("errorMsgBottom").style.display = "inline";
 				errorflag= false;
 			}
-			
+			if(isValidItemError)
+			{
+				Ext.Msg.hide();
+    			myMask.hide();
+			}
 			return errorflag;
 			
 		}
@@ -1341,17 +1418,41 @@ function showSharedListForm(){
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			}
-
+			//added for XB-224
+			var erroMsg = '<s:property value='erroMsg' />';
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
+			
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
+				var errorMsgFlag = false;
 				var divVal=document.getElementById(divId);
 
 				var quantity = arrQty[i].value;
 				quantity = ReplaceAll(quantity,",","");
+				var itemID = arrItemID[i].value;				
+				if(erroMsg != null && erroMsg != "")
+				{
+					if(divId != null)
+					{		
+						var errorItemList = erroMsg.split(",");
+						for (var j = 0; j < errorItemList.length; j++)
+						{
+							if(errorItemList[j] == itemID)
+							{
+								divVal.innerHTML="Item # "+itemID+" is currently not valid. Please delete it from your list and contact Customer Service.";
+								divVal.setAttribute("class", "error");
+								divVal.style.display = 'block';
+								errorMsgFlag = true;
+								errorflag= false;
+								isAddToCart=false;
+							}
+						}
+					}
+				}
+				//End of XB 224
 
 				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined)){
 					if(quantity == '0'|| quantity == '')
@@ -1428,7 +1529,7 @@ function showSharedListForm(){
 						}
 						errorflag= false;
 					}
-					else if (arrOrdMul[i].value > 1 && priceCheck == true){
+					else if (arrOrdMul[i].value > 1 && priceCheck == true && errorMsgFlag == false){
 						if (priceCheck == true){
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
@@ -1794,12 +1895,13 @@ function showSharedListForm(){
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
 			if (formItemIds){
-				
+				var erroMsg = '<s:property value='erroMsg' />';
 				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
 	                 Ext.Ajax.request({
 	                   url: '<s:property value='%{testData}' escape='false'/>',
 	                   params: {
-	                	   validateOMForMultipleItems : validateOMForMultipleItems
+	                	   validateOMForMultipleItems : validateOMForMultipleItems,
+	                	   erroMsg : erroMsg,
 		                   },
 	                   form: 'formItemIds',
 	                  method: 'POST',
@@ -2547,7 +2649,7 @@ function showSharedListForm(){
                 <!-- Close mil-edit -->
 				<div class="clear"></div>
                 <br />
-                
+                <s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
 				<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>	
 					
 					<fieldset class="mil-edit-field">
@@ -2563,6 +2665,13 @@ function showSharedListForm(){
                 	<s:if test="%{canShare}">
                     <li><a class="grey-ui-btn " id="dlgShareListLink1" href="#dlgShareList" ><span>Share List</span></a></li>
                     </s:if>
+                    <s:else>								
+						<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>									
+								<s:if test="#isEstUser">
+											<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+								</s:if>
+						</s:if>
+					</s:else>
                     <li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
                 </ul>
 
@@ -2897,6 +3006,7 @@ function showSharedListForm(){
                                 </tr>
 								
 								<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
+									<s:set name="erroMsg" value='%{erroMsg}'/>
 									<%-- <s:set name="itemIdUOMsMap" value='itemIdsUOMsMap.get(#itemId1)' />
 									 --%>
 									 <s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
@@ -2987,10 +3097,16 @@ function showSharedListForm(){
 	                              	
 	                               </li>
                                 </s:if>
-                                <li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
+                                <s:if test='%{#erroMsg !=null && #erroMsg !=""}'>  
+                                <li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
 		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
 		                    	</li>
-                               <br/> 
+		                    	</s:if>
+		                    	<s:else><li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
+		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+		                    	</li>
+		                    	</s:else>
+		                    	<br/> 
 		
 		                     </ul>
                             <div class="clearall"> &nbsp;</div>
@@ -3111,6 +3227,13 @@ function showSharedListForm(){
 								<s:if test="%{canShare}">
 								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
 								</s:if>
+								<s:else>																
+									<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>																			
+										<s:if test="#isEstUser">
+											<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+										</s:if>
+									</s:if>
+								</s:else>
 								<li><a href="#dlgImportForm" id="various5"  class="grey-ui-btn"><span>Import Items</span></a></li>
 							</ul>
 	
@@ -3318,8 +3441,20 @@ function showSharedListForm(){
 							<s:param name="sfId" value="#parameters.sfId" />
 							<s:param name="unitOfMeasure" value="#ritemUomId" />
 						</s:url>
-                   <input name="relatedItems"
-						onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />
+						<!-- Checked in for JIRA XBT-335  -->
+						<s:if test="#iStatus.first" >
+                  			 <input name="relatedItems"
+								onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" checked="checked" />
+								<script>
+										Ext.onReady(function(){ 
+										selReplacementId='<s:property value="#uId" />';
+									});
+							  </script>
+						</s:if>
+						<s:else>
+						<input name="relatedItems" 
+								onclick="javascript:setUId('<s:property value="#uId" />');" type="radio" />
+						</s:else>
                     <div class="mil-question-mark"> 
                     <a href='<s:property value="%{itemDetailsLink}" />'>
                     <img src="<s:property value='%{#pImg}' />" width="150" height="150" alt="" />

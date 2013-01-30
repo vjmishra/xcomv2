@@ -93,6 +93,17 @@
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="setCurrentCustomerIntoContext">
 		</action>
+		<action name="refreshCustomerIntoContextForMIL"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">XPEDXMyItemsList</param>		
+				<param name="namespace">/xpedx/myItems</param>   		
+			</result>
+		</action>
+		
 		<action name="setSelectedShipToAsDefault"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="setSelectedShipToAsDefault">
@@ -138,6 +149,23 @@
 			<result name="success">/xpedx/jsp/home/XPEDXSecrectQuestionModal.jsp</result>
 		</action>
 		
+		<action name="xpedxPasswordUpdate" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction">
+			<result name="success">/xpedx/jsp/home/XPEDXPasswordUpdateModal.jsp</result>
+		</action>
+		<action name="xpedxPasswordValidation" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordUpdateValidation">
+			<result name="success">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+		</action>
+		<action name="XPEDXPasswordSubmit" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordChange">
+			<param name="mashups">ManagePasswordUpdate</param>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/home</param>
+				<param name="parse">true</param>
+			</result>
+		</action>
+		
 		<action name="xpedxSubmitSecurityQuestion" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSetSecurityQuestionAction" method="saveAnswer">
 			<result name="success" type="redirectAction">
 				<param name="actionName">home</param>
@@ -149,7 +177,12 @@
 		<action name="xpedxPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
 		</action>
-		
+		<action name="xpedxPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDXPrivacyPolicyForModal.jsp</result>
+		</action>
+		<action name="xpedxPasswordHeader"	class="com.sterlingcommerce.webchannel.core.WCAction">	
+			<result>/xpedx/jsp/common/XPEDXPasswordHeader.jsp</result>
+		</action>
 		
 		<action name="getOrderMultiple"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXCommonActions" method="getOrderMultiple">
@@ -237,6 +270,10 @@
 			<param name="mashups">xpedxCatalogNavBar</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetCategories_Binding.xml</param>
 			<result name="success">/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp</result>
+		</action>
+		
+		<action name="httpaction" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHTTPAction">
+			<result>/xpedx/jsp/common/XPEDXHTTPData.jsp</result>
 		</action>
 		
 	</package>

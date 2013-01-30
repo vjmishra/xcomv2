@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,15 +14,22 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.OrderItemValidationBaseAction;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -119,7 +127,388 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		XPEDXWCUtils.releaseEnv(wcContext);
 		return "success";
 	}
+	
+	@SuppressWarnings("unchecked")
+	public String validateProductList() {
+		try {
+			if (currency == null)
+				currency = getWCContext().getEffectiveCurrency();
+			// productsJson = new JSONObject();
+			String items = request.getParameter("itemList");
+			String itemTypes = request.getParameter("itemTypeList");
+			//Modified for JIRA 2995
+			StringTokenizer itemsStringToken = new StringTokenizer(items, "*");
+			StringTokenizer itemTypeStringToken = new StringTokenizer(
+					itemTypes, "*");
+			StringBuilder sb = new StringBuilder();
+			Map<String, String> itemIdsOrderMultipleMap = new HashMap<String, String>();
+			Element itemType1InputElem=null;
+			Element itemType4InputElem=null;
+			List<String> legacyItems=null;
+			Document productInfoDoc = null;
+			Document productInfoOutput = null;
+			ArrayList<String> productList = new ArrayList<String>();
+			Map<String,String> productListMap=new HashMap<String,String>();
+			Map<String,String> xrefMap=new HashMap<String,String>();
+			String itemType=null;
+			while (itemsStringToken.hasMoreTokens()) {
+				
+				productID = itemsStringToken.nextToken();
+				if(itemType== null)
+					itemType = itemTypeStringToken.nextToken();
+				
+				if ("1".equals(itemType)) { //"1 = xpedx Item #" 
+					if(itemType1InputElem == null)
+					{
+						Map<String, String> valueMap = new HashMap<String, String>();
+						valueMap.put("/Item/@CallingOrganizationCode", wcContext.getStorefrontId());
+						valueMap.put("/Item/ItemAssociationTypeList/ItemAssociationType/@Type", "Substitutions");
+						valueMap.put("/Item/CustomerInformation/@CustomerID", wcContext.getCustomerId());
+						valueMap.put("/Item/@Currency", currency);
+						Element input = WCMashupHelper.getMashupInput("addToCartGetCompleteItemList",valueMap,wcContext);
+						
+						Element complexQuery =SCXmlUtil.createChild(input, "ComplexQuery");// input.getOwnerDocument().createElement("ComplexQuery");
+						itemType1InputElem = SCXmlUtil.createChild(complexQuery, "Or");
+							Element exp = input.getOwnerDocument().createElement("Exp");
+							exp.setAttribute("Name", "ItemID");
+							exp.setAttribute("Value", productID);
+							SCXmlUtil.importElement(itemType1InputElem, exp);
+					}
+					else
+					{
+						Element exp =SCXmlUtil.createChild(itemType1InputElem, "Exp");
+						exp.setAttribute("Name", "ItemID");
+						exp.setAttribute("Value", productID);
+					}/*
+			        
+			        loggedinCustomer = (Element)WCMashupHelper.invokeMashup("xpedxgetLoggedInCustomer", input, wcContext.getSCUIContext());*/
+					/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
+					productInfoDoc = getDocFromOutput(productInfoOutput);*/ 
+				} else if ("2".equals(itemType))  { //Manufacturer # 
+					
+					Element productInfoOutputDOc = prepareAndInvokeMashup("xpedxAddToCartGetCompleteItemList");
+					if(productInfoOutput == null)
+						productInfoOutput=productInfoOutputDOc.getOwnerDocument();
+					if(productInfoOutputDOc!=null)
+					{
+						ArrayList<Element> itemElem = getXMLUtils().getElements(productInfoOutputDOc, "Item");
+						if(itemElem!=null){
+							for(Iterator<Element> iterator = itemElem.iterator(); iterator.hasNext();){
+								Element itemList = (Element)iterator.next();
+								productInfoOutput.getDocumentElement().appendChild(productInfoOutput.importNode(itemList, true));
+								productID = itemList.getAttribute("ItemID");
+							} // end of for
+						} // end of if(itemElem!=null)              
+					}
+					
+				} else if("3".equals(itemType)) //Customer Part #
+				{
+					String customerPartNo = productID;
+					//Map itemAttr = new HashMap();
+					if(legacyItems == null)
+						legacyItems =new ArrayList<String>();
+					legacyItems.add(customerPartNo);
+					//itemAttr.put("CustomerItemNumber", customerPartNo);
+					
+				} else if("4".equals(itemType)) //4 = MPC Code
+				{
+					/*String mpc = productID;
+					Map itemAttr = new HashMap();
+					itemAttr.put("MPC", mpc);
+					Element itemCustXrefEle = XPEDXWCUtils.getItemCustXrefInfo(itemAttr);
+					if(itemCustXrefEle != null)
+					{
+						Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
+						String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
+						if(itemId!=null)
+						{
+							productID = itemId;
+							Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
+							productInfoDoc = getDocFromOutput(productInfoOutput);
+						}
+					}*/
+					if(itemType4InputElem == null)
+					{
+						
+						Map<String, String> valueMap = new HashMap<String, String>();
+						valueMap.put("/Item/@CallingOrganizationCode", wcContext.getStorefrontId());
+						Element input = WCMashupHelper.getMashupInput("xpedxGetCompleteItemListWithMpc",valueMap,wcContext);
+						
+						Element complexQuery = SCXmlUtil.createChild(input, "ComplexQuery");
+						itemType4InputElem = SCXmlUtil.createChild(complexQuery, "Or");
+							Element exp = input.getOwnerDocument().createElement("Exp");
+							exp.setAttribute("Name", "Extn_ExtnMpc");
+							exp.setAttribute("Value", productID);
+							SCXmlUtil.importElement(itemType4InputElem, exp);
+					}
+					else
+					{
+						Element exp =SCXmlUtil.createChild(itemType4InputElem, "Exp");
+						exp.setAttribute("Name", "Extn_ExtnMpc");
+						exp.setAttribute("Value", productID);
+					}
+					
+					
+					/*Element productInfoOutput = prepareAndInvokeMashup("xpedxGetCompleteItemListWithMpc");
+					productInfoDoc = getDocFromOutput(productInfoOutput);
+					if(productInfoDoc!=null)
+					{
+						Element itemElem = getXMLUtils().getChildElement(productInfoOutput, "Item");
+						if(itemElem!=null)
+							productID = itemElem.getAttribute("ItemID");
+					}*/
+				}
+				
 
+			}
+			if(itemType1InputElem != null)//"1 = xpedx Item #" 
+			{
+
+				productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", itemType1InputElem.getOwnerDocument().getDocumentElement(), wcContext.getSCUIContext()));
+				/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
+				productInfoDoc = getDocFromOutput(productInfoOutput);*/
+			}
+			if(productInfoOutput != null)//Manufacturer # 
+				productInfoDoc=productInfoOutput;
+			if(legacyItems != null) //Customer Part #
+			{
+				Element itemCustXrefEle = getItemCustXrefInfo(legacyItems);
+				if(itemCustXrefEle != null)
+				{
+					
+					//Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
+					Map<String, String> valueMap = new HashMap<String, String>();
+					valueMap.put("/Item/@CallingOrganizationCode", wcContext.getStorefrontId());
+					valueMap.put("/Item/ItemAssociationTypeList/ItemAssociationType/@Type", "Substitutions");
+					valueMap.put("/Item/CustomerInformation/@CustomerID", wcContext.getCustomerId());
+					valueMap.put("/Item/@Currency", currency);
+					Element input = WCMashupHelper.getMashupInput("addToCartGetCompleteItemList",valueMap,wcContext);				
+					Element complexQuery = SCXmlUtil.createChild(input, "ComplexQuery");
+					itemType1InputElem = SCXmlUtil.createChild(complexQuery, "Or");
+					ArrayList<Element> custXrefEleList=SCXmlUtil.getElements(itemCustXrefEle, "XPXItemcustXref");
+					for(int i=0;custXrefEleList != null && i<custXrefEleList.size() ;i++)
+					{
+						Element custXrefEle=custXrefEleList.get(0);
+						Element exp = input.getOwnerDocument().createElement("Exp");
+						exp.setAttribute("Name", "ItemID");
+						exp.setAttribute("Value", custXrefEle.getAttribute("LegacyItemNumber"));
+						SCXmlUtil.importElement(itemType1InputElem, exp);
+						productListMap.put(custXrefEle.getAttribute("CustomerItemNumber"),custXrefEle.getAttribute("LegacyItemNumber"));
+					}
+					if(custXrefEleList != null && custXrefEleList.size() >0)
+					{
+						productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", input, wcContext.getSCUIContext()));
+					}
+					//String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
+					/*if(itemId!=null)
+					{
+						productID = itemId;
+						productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", input, wcContext.getSCUIContext()));
+						Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
+						productInfoDoc = getDocFromOutput(productInfoOutput);
+					}*/
+				}
+			}
+			if(itemType4InputElem != null)
+			{
+
+				productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("xpedxGetCompleteItemListWithMpc", itemType4InputElem.getOwnerDocument().getDocumentElement(), wcContext.getSCUIContext()));
+				/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
+				productInfoDoc = getDocFromOutput(productInfoOutput);*/
+			}
+			StringTokenizer _itemsStringToken = new StringTokenizer(items, "*");
+			StringTokenizer _itemTypeStringToken = new StringTokenizer(
+					itemTypes, "*");
+			Element itemListEl = null;
+			if(productInfoDoc!=null)
+			{
+				itemListEl = productInfoDoc.getDocumentElement();
+				ArrayList<Element> itemsList=SCXmlUtil.getElements(itemListEl, "Item");
+				boolean isItemEntitle=false;
+				//itemEl = XMLUtilities.getElement(itemListEl, "Item");
+				while(_itemsStringToken.hasMoreElements())
+				{
+					String _productID=_itemsStringToken.nextToken();
+					//String itemType=_itemTypeStringToken.nextToken();
+					for(Element itemElem:itemsList)
+					{
+						
+						String itemId=itemElem.getAttribute("ItemID");
+						productList.add(itemId);
+						if("1".equals(itemType) && _productID.equals(itemId))
+						{
+								productListMap.put(_productID, itemId);
+								isItemEntitle=true;
+								break;
+						}
+						if("2".equals(itemType) )
+						{
+							Element primaryInformationEle= XMLUtilities.getElement(itemElem, "PrimaryInformation");
+							if(primaryInformationEle != null && _productID.equals(primaryInformationEle.getAttribute("ManufacturerItem")))
+							{
+								productListMap.put(_productID, itemId);
+								isItemEntitle=true;
+								break;
+							}
+						}
+						if("3".equals(itemType) && _productID.equals(xrefMap.get(itemId)))
+						{
+							productListMap.put(xrefMap.get(itemId), itemId);
+							isItemEntitle=true;
+							break;
+						}
+						if("4".equals(itemType))
+						{
+							Element extnEle= XMLUtilities.getElement(itemElem, "Extn");
+							if(extnEle != null && _productID.equals(extnEle.getAttribute("ExtnMpc")))
+							{
+								productListMap.put(_productID, itemId);
+								isItemEntitle=true;
+								break;
+							}
+						}
+					}
+					if(!isItemEntitle)
+					{
+						productListMap.put(_productID, "");
+					}
+				}
+				itemIdsOrderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(productList);
+			}
+			
+
+			StringTokenizer _items1StringToken = new StringTokenizer(items, "*");
+			Map<String,Map<String,String>> itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), productList, wcContext.getStorefrontId());
+			while(_items1StringToken.hasMoreTokens()) {
+				
+				String _productID=_items1StringToken.nextToken();
+				productID=productListMap.get(_productID);
+				if(productID != null && !"".equals(productID))
+				{
+					createItemForUI(sb, itemIdsUOMsMap, itemIdsOrderMultipleMap,productID);
+				}
+				else
+				{
+					sb.append(false);
+					sb.append(",");
+				}
+				
+			}
+			int index = sb.lastIndexOf(",");
+			if (index != -1) {
+				sb.deleteCharAt(index);
+			}
+			prodValdAjaxResp = sb.toString();
+
+		} catch (Exception e) {
+			LOG
+					.error("Unable to retrieve information about the entered products");
+		}
+		
+		
+		
+		
+		return "success";
+	}
+public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> itemIdsUOMsMap,
+		Map<String, String> itemIdsOrderMultipleMap,String productID)
+{
+	sb.append(true);
+	Map<String,String> uomMap = itemIdsUOMsMap.get(productID);//getUOMlist(productID);
+	if (uomMap !=null && !uomMap.isEmpty()) {
+		sb.append("*");
+		Set<String> keys = uomMap.keySet();
+		Iterator<String> keyIter = keys.iterator();
+		while (keyIter.hasNext()) {
+			String uom =  keyIter.next();
+//			String uomDesc = XPEDXWCUtils.getUOMDescription(uom);
+			String uomConvfactr = (String) uomMap.get(uom);
+			sb.append(uom);
+			sb.append(":");
+			sb.append(uomConvfactr);
+			if (keyIter.hasNext()) {
+				sb.append("!");
+			}
+		}
+	}
+	sb.append("|");
+	sb.append(itemIdsOrderMultipleMap.get(productID));
+	sb.append(",");
+}
+	public  Element getItemCustXrefInfo(List<String> items)
+	throws CannotBuildInputException 
+	{
+			IWCContext wcContext = WCContextHelper
+					.getWCContext(ServletActionContext.getRequest());
+			
+			Map<String, String> valueMap = new HashMap<String, String>();
+			Map<String, String> getExtnValueMap = new HashMap<String, String>();
+			
+			/*String MPC = (String) itemAttributes.get("MPC");
+			String CustomerPartNumber = (String) itemAttributes
+					.get("CustomerItemNumber");*/
+			String customerLegNo = null;
+			String customerSuffix = null;
+			//String companyCode = null;
+			String envCode = null;
+			String customerId = wcContext.getCustomerId();
+			String custShipFromBranch = null;
+			
+			/*envCode = (String) wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
+			//companyCode = (String) wcContext.getWCAttribute(XPEDXConstants.COMPANY_CODE,WCAttributeScope.LOCAL_SESSION);
+			customerLegNo = (String) wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);
+			custShipFromBranch = (String) wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
+			String custDivision = (String) wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);*/
+			
+			XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			
+			/*String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
+			//String companyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.COMPANY_CODE);
+			String legacyCustomerNumber = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.LEGACY_CUST_NUMBER);
+			String shipFromBranch = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
+			String custDivision = (String) wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);*/
+			envCode = shipToCustomer.getExtnEnvironmentCode();
+			customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
+			custShipFromBranch =shipToCustomer.getExtnShipFromBranch();
+			String custDivision =shipToCustomer.getExtnCustomerDivision();
+			
+			/*
+			StringTokenizer str = new StringTokenizer(customerId, "-");
+			if (str.hasMoreTokens())
+				customerBranch = str.nextToken();
+			if (str.hasMoreTokens())
+				customerLegNo = str.nextToken();
+			if (str.hasMoreTokens())
+				customerSuffix = str.nextToken();
+			if (str.hasMoreTokens())
+				customerCode = str.nextToken();
+			if (str.hasMoreTokens())
+				envCode = str.nextToken();
+			*/
+		
+			
+			
+			valueMap.put("/XPXItemcustXref/@CustomerNumber", customerLegNo);
+			//valueMap.put("/XPXItemcustXref/@CompanyCode", companyCode);
+			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
+			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
+			
+			Element input1 = WCMashupHelper.getMashupInput("xpedxItemCustXRef",
+					valueMap, wcContext.getSCUIContext());
+			Element complexQuery = SCXmlUtil.createChild(input1,"ComplexQuery");
+			Element orElement = SCXmlUtil.createChild(complexQuery, "Or");
+			for(String item:items)
+			{
+				Element exp = input1.getOwnerDocument().createElement("Exp");
+				exp.setAttribute("Name", "CustomerItemNumber");
+				exp.setAttribute("Value", item);
+				SCXmlUtil.importElement(orElement, exp);
+			}
+			Object obj1 = WCMashupHelper.invokeMashup("xpedxItemCustXRef", input1,
+					wcContext.getSCUIContext());
+			return (Element) obj1;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public String validateProduct() {
 		try {

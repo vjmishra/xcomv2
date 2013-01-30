@@ -79,19 +79,9 @@ function toggleCost(id)
 
 }
 //end of global-xped-functions.js 	
+//XBT - 319 removed validateQuote function which was used in OnKeyDown event in the search text field
 var myMask;
-//Added for removing double quote from the search srting. Jira # 2415
-function validateQuote(e){
-  if (e.keyCode == 13) {  
-	var searchVal = document.getElementById("search_searchTerm").value;
-	//added for jira 3974
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
 
-	Ext.fly('search_searchTerm').dom.value=searchVal;
-  }
-}
 
 $(document).ready(function() {
 	$('.slideshow').cycle({

@@ -842,7 +842,7 @@ public class XPEDXOrderUtils {
 
 	}
 
-	public static HashMap<String, String> getSAPCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getSAPCustomerLineFieldMap(
 			Element customerOrganizationExtnEle) throws CannotBuildInputException 
 	{
 		
@@ -854,7 +854,7 @@ public class XPEDXOrderUtils {
 		return getCustomerLineFieldMap(CustHierarchyView,"SAP");
 	}
 	
-	public static HashMap<String, String> getCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getCustomerLineFieldMap(
 			Document customerDoc) throws CannotBuildInputException {
 		if (YFCCommon.isVoid(customerDoc)) {
 			LOG
@@ -874,15 +874,16 @@ public class XPEDXOrderUtils {
 	 * fields which has the Flag value set to 'Y'. The Map contains the
 	 * LabelName and Label Value.
 	 */
-	public static HashMap<String, String> getCustomerLineFieldMap(
+	public static LinkedHashMap<String, String> getCustomerLineFieldMap(
 			Element customerOrganizationExtnEle,String prefix) throws CannotBuildInputException {
 		//The customerFieldsMap is a LinkedHashMap as it should retain the sequence of customer fields
-		HashMap<String, String> customerFieldsMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> customerFieldsMap = new LinkedHashMap<String, String>();
 		
-		String custLineNoFlag = SCXmlUtil.getAttribute(
-				customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag");
 		String custPONoFlag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLinePONoFlag");
+		String custLineNoFlag = SCXmlUtil.getAttribute(
+				customerOrganizationExtnEle, prefix+"ExtnCustLineAccNoFlag");
+		
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*String custSeqNoFlag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLineSeqNoFlag");*/
@@ -892,6 +893,13 @@ public class XPEDXOrderUtils {
 				customerOrganizationExtnEle, prefix+"ExtnCustLineField2Flag");
 		String custField3Flag = SCXmlUtil.getAttribute(
 				customerOrganizationExtnEle, prefix+"ExtnCustLineField3Flag");
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//customerFieldsMap.put("CustomerPONo", "Customer PO No");
+			customerFieldsMap.put("CustomerPONo", "Line PO #");
+			
+		}
 		
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -930,12 +938,7 @@ public class XPEDXOrderUtils {
 			else
 				customerFieldsMap.put("CustLineField3", "Customer Field 3");
 		}
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//customerFieldsMap.put("CustomerPONo", "Customer PO No");
-			customerFieldsMap.put("CustomerPONo", "Line PO #");
-			
-		}
+
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*if ("Y".equals(custSeqNoFlag)) {
 			customerFieldsMap.put("CustomerLinePONo", "Customer Seq No");
@@ -1136,6 +1139,69 @@ public class XPEDXOrderUtils {
 	    }
     }
 
+	
+	
+	
+	public static ArrayList<String>  getRequiredCustomerFieldMap(Element orderElem, Document rulesDoc, IWCContext wcContext)
+    throws Exception
+    {
+	    
+		Element orderLinesElement = SCXmlUtil.getChildElement(orderElem, "OrderLines");
+	    ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+	    ArrayList<String> requiredCustFields = new ArrayList<String>();
+	    
+	    Element rulesElem = rulesDoc.getDocumentElement();
+	    ArrayList<Element> ruleElems = SCXmlUtil.getChildren(rulesElem, "Rule");
+	    if(orderLineElemList == null || orderLineElemList.size() == 0)
+	    {
+	    	if(ruleElems != null && ruleElems.size() > 0)
+		    {
+		        for(int i = 0; i < ruleElems.size(); i++)
+		        {
+		        	 String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+		        	 validateCustomerPOBusinessRule(wcContext,ruleId);
+		        	 break;
+		        }
+		        
+		    }
+	        return requiredCustFields;
+	    }
+	   
+	    if(ruleElems != null && ruleElems.size() > 0)
+	    {
+	        for(int i = 0; i < ruleElems.size(); i++)
+	        {
+	            String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+	            if(log.isDebugEnabled()){
+	            log.debug("RuleID:::"+ruleId);
+	            }
+	            if("RequiredCustomerLineAccountNo".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineAccNo");
+	            else
+	            if("RequireCustomerLineField1".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField1");
+	            else
+	            if("RequireCustomerLineField2".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField2");
+	            else
+	            if("RequireCustomerLineField3".equalsIgnoreCase(ruleId))
+	                requiredCustFields.add("ExtnCustLineField3");
+	            else
+		        if("RequiredCustomerLinePO".equalsIgnoreCase(ruleId))
+		                requiredCustFields.add("CustomerPONo");
+		        else
+		        {
+		        	validateCustomerPOBusinessRule(wcContext,ruleId);
+		        }
+	        }
+	
+	    }
+	    return requiredCustFields;
+	    
+    }
+	
+	
+	
 	private static void validateCustomerPOBusinessRule(IWCContext wcContext,String ruleId)
 	{
 		
@@ -1610,9 +1676,9 @@ public class XPEDXOrderUtils {
 			LOG.error("Exception while getting item details for associated items",e);
 			return null;
 		}
-		//we need to prepare xpedxItemIDUOMToReplacementListMap in edit and non-edit mode as per 356 JIRA 
+		//prepare the xpedxItemIDUOMToReplacementListMap only when editMode is true
 		Set replacementMapKeySet = replacementItemsMap.keySet();
-		if(replacementMapKeySet!=null){
+		if(editMode ==  true && replacementMapKeySet!=null){
 		Iterator<String> replacementIterator = replacementMapKeySet.iterator();
 			while(replacementIterator.hasNext()){
 				ArrayList replacementItemsElementList = new ArrayList();

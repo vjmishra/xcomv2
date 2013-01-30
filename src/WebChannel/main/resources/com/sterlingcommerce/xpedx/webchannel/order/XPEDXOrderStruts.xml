@@ -184,6 +184,18 @@
 			<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 		</action>
 		<!-- END: OrderList page: RUgrani -->
+		
+		<action name="printOrderDetail"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXPrintOrderDetailAction">
+			<param name="mashups">XPEDXOrderDetailMashup</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderDetailBinding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="namespace">/order</param>
+			<param name="orderHeaderKey">${orderHeaderKey}</param>
+			<result name="success">/xpedx/jsp/order/PrintOrder.jsp</result>
+			<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+		</action>
+
 		<!-- BEGIN: ReOrder page: RUgrani -->
 		<action name="orderAgain"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderAgainAction">
@@ -333,6 +345,16 @@
 			<result name="success">/xpedx/jsp/order/XPEDXValidateProudct.jsp
 			</result>
 		</action>
+
+		<action name="validateProductList" method="validateProductList"
+                  class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddOrderLinesAction">
+                  <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddOrderLinesActionBinding.xml</param>
+                  <param name="mashups">addToCartGetCompleteItemList</param>
+                  <param name="resourceId">/swc/order/guestShopping</param>
+                  <result name="success">/xpedx/jsp/order/XPEDXValidateProudct.jsp
+                  </result>
+            </action>
+		
 
 		<!-- Draft Order Customization Ends : Manoj Kodagali -->
 

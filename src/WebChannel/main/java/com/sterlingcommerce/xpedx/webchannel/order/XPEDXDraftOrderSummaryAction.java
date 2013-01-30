@@ -894,7 +894,7 @@ END of JIRA 3382*/
 	//Fetching all customer fields at order line level
 	private void getCustomerDisplayFields() {
 		//get the map from the session. if null query the DB
-		HashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+		LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         	customerFieldsMap = customerFieldsSessionMap;
@@ -915,12 +915,12 @@ END of JIRA 3382*/
 		} */
 	}
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-		HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 
@@ -1251,11 +1251,11 @@ END of JIRA 3382*/
 		}
 	}
 	
-	public HashMap<String, String> getCustomerFieldsMap() {
+	public LinkedHashMap<String, String> getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
-	public void setCustomerFieldsMap(HashMap<String, String> customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap<String, String> customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 
@@ -1279,7 +1279,7 @@ END of JIRA 3382*/
 	protected Set <String> addnlPoNumberList;
 	private Set <String> selectedPoNumberList;
 	//Added for customer line fields
-	private HashMap<String, String> customerFieldsMap;
+	private LinkedHashMap<String, String> customerFieldsMap;
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXDraftOrderSummaryAction.class);
 	protected String deliveryCutOffTime = "";

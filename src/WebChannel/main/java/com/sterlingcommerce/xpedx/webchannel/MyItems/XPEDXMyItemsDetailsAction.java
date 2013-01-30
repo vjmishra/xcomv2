@@ -95,7 +95,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setListOfItemsFromsession(ArrayList listOfItemsFromsession) {
 		this.listOfItemsFromsession = listOfItemsFromsession;
 	}
-	private HashMap customerFieldsMap;
+	private LinkedHashMap customerFieldsMap;
 	private HashMap customerFieldsDBMap;
 	protected Map displayItemUOMsMap;
 	private HashMap<String, HashMap<String,String>> skuMap;
@@ -161,6 +161,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	//Added for webtrends
 	protected Map<String,String>itemTypeMap=new HashMap<String,String>();
+	//Added	erroMsg for XB-224
+	private String 	erroMsg = "";
+	public String getErroMsg() {
+		return erroMsg;
+	}
+
+	public void setErroMsg(String erroMsg) {
+		this.erroMsg = erroMsg;
+	}
     
 	public void setItemTypeMap(Map<String, String> itemTypeMap) {
 		this.itemTypeMap = itemTypeMap;
@@ -317,6 +326,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	//This includes only My items list items and not other alternate items etc.
 	protected ArrayList<String> allMyItemsListItemIds = new ArrayList<String>();
+	//Added	validItemIds for XB-224
+	protected ArrayList<String> validItemIds = new ArrayList<String>();
 	YFCDate lastModifiedDate = new YFCDate();
 	String lastModifiedDateString = "";
 	String lastModifiedUserId = "";
@@ -584,6 +595,96 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
+	
+	//XB-224 Added to check for item entitlement for the logged in customer
+	
+	private void checkforEntitlement(){
+		
+		ArrayList<String> entlErrorList = new ArrayList<String>();
+		ArrayList<String> itemlist = new ArrayList<String>();
+		try {
+			// Removing call to getXpedxEntitledItemDetails for performance fix. JIRA 4020
+			//Iterator productIDIter = allItemIds.iterator();
+			if(allMyItemsListItemIds  != null) {
+				itemlist  = allMyItemsListItemIds;
+			}
+		
+		if(itemlist.size() == 0){
+				for(int i=0; i<allMyItemsListItemIds.size();i++) {
+					entlErrorList.add(allMyItemsListItemIds.get(i));
+				}	
+				if(entlErrorList.size() == 0) {
+					erroMsg = "";
+					
+				} else {
+					if(entlErrorList.size()> 1){
+						Iterator itr = entlErrorList.iterator();
+						while(itr.hasNext())
+						{
+							erroMsg+= itr.next().toString()+",";
+
+						}
+						int lastIndex = erroMsg.lastIndexOf(",");
+						erroMsg = erroMsg.substring(0,lastIndex);
+
+					}
+					else{
+						erroMsg=entlErrorList.get(0);
+					}					
+				}
+		}
+		else if(itemlist.size() == 1){
+			
+			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
+				if(validItemIds.size() > 0){
+				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+					entlErrorList.add(allMyItemsListItemIds .get(i));
+				}
+				}
+				else	
+						entlErrorList.add(allMyItemsListItemIds.get(i));
+			}
+			if(entlErrorList != null && entlErrorList.size() > 0){
+				erroMsg=entlErrorList.get(0);
+	
+			}
+		}
+		else{
+		
+			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
+				
+				
+				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+					entlErrorList.add(allMyItemsListItemIds .get(i));
+				}
+			}
+				 if(entlErrorList != null && entlErrorList.size() > 0){
+				if(entlErrorList.size()> 1){
+					Iterator itr = entlErrorList.iterator();
+					while(itr.hasNext())
+					{
+						erroMsg+= itr.next().toString()+",";
+
+					}
+					int lastIndex = erroMsg.lastIndexOf(",");
+					erroMsg = erroMsg.substring(0,lastIndex);
+
+				}
+				else {
+					erroMsg=entlErrorList.get(0);
+				}
+				}
+			
+		//}	End of while loop
+	}
+	}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+	
+	}
+	
+	//End of XB-224
 
 	private void setItemDescription()
 	{
@@ -741,6 +842,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// Get related items and their information
 			getRelatedItems();
 			
+			checkforEntitlement();//checks if the Items are entitled to the current customer - added for XB 224
 			setItemDescription();
 			
 			String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
@@ -914,8 +1016,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	public String pricecheck(){
 		try{
+			String invalidItems[]=null;
+			if(erroMsg != null)
+			{
+				invalidItems=erroMsg.split(",");
+			}
 		if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
-			processStockCheck(true);
+			processStockCheck(true,invalidItems);
 		} else if (getCommand().equals(COMMAND_STOCK_CHECK_SEL)) {
 			processStockCheck(false);
 		}
@@ -1150,8 +1257,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-
 	private void processStockCheck(boolean checkAllItems) throws Exception {
+		processStockCheck(checkAllItems,null);
+	}
+
+	private void processStockCheck(boolean checkAllItems,String invalidItems[]) throws Exception {
 
 			pnaCall = true;
 			String customerId = wcContext.getCustomerId();
@@ -1175,7 +1285,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(listOfItemsFromsession != null) {
 			for (int i = 0; i < listOfItemsFromsession.size(); i++) {
 				Element item = (Element) listOfItemsFromsession.get(i);
-
+				boolean isInvalidItem=false;
 				// Get some vars
 				String id = item.getAttribute("MyItemsKey");
 				String itemId = item.getAttribute("ItemId");
@@ -1197,6 +1307,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
 				OM = totalQty % (Integer.parseInt(orderMultiple));
 				
+				if(invalidItems != null && invalidItems.length > 0)
+				{
+					for(int j=0;j<invalidItems.length;j++){
+						if(invalidItems[j].equals(itemId))
+						{
+							isInvalidItem=true;
+							break;
+						}
+					}
+				}
 				if(OM!= 0){
 					validateOrderMul = true;
 					validateCheck.put(itemId+":"+(i+1),validateOrderMul);
@@ -1209,7 +1329,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 				}
 
-				if (addThisItem) {
+				if (addThisItem && !isInvalidItem) {
 					XPEDXItem tmpItem = new XPEDXItem();
 					tmpItem.setLegacyProductCode(itemId);
 					tmpItem.setRequestedQtyUOM(itemUom);
@@ -1316,11 +1436,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 	
-	protected HashMap getCustomerFieldsMapfromSession(){
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
 		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-        HashMap customerFieldsSessionMap = (HashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
 	
@@ -1355,6 +1475,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 		String shipFromDivision = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnShipFromBranch");
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
+			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
+		}
 
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -1370,13 +1497,6 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
-		}
-		
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
-			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
-			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
 		}
 		
 		if ("Y".equals(custField1Flag)) {
@@ -1427,8 +1547,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	
 	private void getCustomerDisplayFields() {
 		try {
-			HashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
-			HashMap<String,String> customerFieldsMap =new HashMap<String,String>();
+			LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
+			
 	        if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
 	        	LOG.debug("Found customerFieldsMap in the session");
 
@@ -1571,6 +1691,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Element itemElem=itemsElem.get(i);
 					if(itemElem!=null){
 						String Itemid = SCXmlUtil.getAttribute(itemElem,"ItemID");
+						//Using validItemIds for XB-224
+						validItemIds.add(Itemid.trim());
 						baseUOMmap.put(Itemid,itemElem.getAttribute("UnitOfMeasure"));
 					}
 					setMyItemsImages(itemElem);
@@ -2721,11 +2843,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.complimentAssociatedItems = complimentAssociatedItems;
 	}
 
-	public HashMap getCustomerFieldsMap() {
+	public LinkedHashMap getCustomerFieldsMap() {
 		return customerFieldsMap;
 	}
 
-	public void setCustomerFieldsMap(HashMap customerFieldsMap) {
+	public void setCustomerFieldsMap(LinkedHashMap customerFieldsMap) {
 		this.customerFieldsMap = customerFieldsMap;
 	}
 

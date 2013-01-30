@@ -1007,22 +1007,35 @@ public class XPEDXPriceandAvailabilityUtil {
 							
 							
 							ArrayList<XPEDXBracket> displayPriceForUoms = new ArrayList<XPEDXBracket>();
-							
-							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0 &&
-									(uomsList.contains(CWT_UOM_M) || uomsList.contains(CWT_UOM_A)))
-							{
-								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
-								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
-							}
-							//Moved code from above to bottom for JIRA 1835
+							//Moved code from  bottom to above for JIRA XB-558
 							String fmtPricePerUom =  xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode,pricingUOMUnitPrice);
-							displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
-							
+							//Added Condition to display thousand UOM first
+							boolean isPricingUOMAdded=false;
+							boolean isThAndCwtAdded=false;
+							if(PricingUOMDesc != null && PricingUOMDesc.toLowerCase().contains("thousand"))
+							{
+								displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
+								isPricingUOMAdded=true;
+								isThAndCwtAdded=true;
+							}
 							if (priceForTHUom != null &&
 									(uomsList.contains(TH_UOM_M) || uomsList.contains(TH_UOM_A)))
 							{ 
 								String fmtPriceForTHUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForTHUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, thUOMDesc,fmtPriceForTHUom ));
+								isThAndCwtAdded=true;
+							}
+							if (priceForCWTUom != null && prodMweight != null && prodMweight.trim().length() > 0 &&
+									(uomsList.contains(CWT_UOM_M) || uomsList.contains(CWT_UOM_A)))
+							{
+								String fmtPriceForCWTUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForCWTUom.toString());
+								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
+								isThAndCwtAdded=true;
+							}
+							
+							if(!isPricingUOMAdded )
+							{
+								displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
 							}
 							
 							boolean isDisplayReqUOM=true;
@@ -1033,6 +1046,11 @@ public class XPEDXPriceandAvailabilityUtil {
 									isDisplayReqUOM=false;
 									break;
 								}
+							}
+							if(isThAndCwtAdded &&( RequestedQtyUOMDesc.toLowerCase().contains("thousand") || 
+									RequestedQtyUOMDesc.toLowerCase().contains("cwt")))
+							{
+								isDisplayReqUOM=false;
 							}
 							if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM()) && isDisplayReqUOM) {
 								String fmtPricingUOM  = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, pandAItem.getUnitPricePerRequestedUOM());

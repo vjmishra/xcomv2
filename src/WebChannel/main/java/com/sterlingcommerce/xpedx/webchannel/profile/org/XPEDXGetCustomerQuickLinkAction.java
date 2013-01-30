@@ -43,6 +43,9 @@ public class XPEDXGetCustomerQuickLinkAction extends WCMashupAction {
 		Element outputElement = null;
 		try {
 			XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			if(shipToCustomer== null || shipToCustomer.getBillTo() == null){				
+				return SUCCESS;
+			}
 			XPEDXShipToCustomer billToCustomerObj=shipToCustomer.getBillTo();
 			customerId=billToCustomerObj.getCustomerID();
 			/*boolean isSAPCustomeInSession=false;

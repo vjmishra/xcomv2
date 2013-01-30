@@ -10,7 +10,6 @@
 	xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
-
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet"
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-1<s:property value='#wcUtil.xpedxBuildKey' />.css" />

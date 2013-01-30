@@ -68,7 +68,8 @@
            	
      	if( document.getElementById('newUserFirstName').value.trim().length == 0 ||  document.getElementById('newUserLastName').value.trim().length == 0 || document.getElementById('newUserCompanyName').value.trim().length == 0
     			||  document.getElementById('newUserEmail').value.trim().length == 0 ||  document.getElementById('newUserPhone').value.trim().length == 0 || document.getElementById('newUserAddress1').value.trim().length == 0
-    			|| document.getElementById('newUserState').value.trim().length == 0 || document.getElementById('newUserCity').value.trim().length == 0 || document.getElementById('newUserComments').value.trim().length == 0)
+    			|| document.getElementById('newUserState').value.trim().length == 0 || document.getElementById('newUserCity').value.trim().length == 0 || document.getElementById('newUserComments').value.trim().length == 0
+    			|| document.getElementById('newUserZipCode').value.trim().length == 0 )
    		{
      		//alert("Fields can't be empty, Input required");
     		//errorDiv.innerHTML = "<s:text name='MSG.SWC.MISC.REGISTER.GENERIC.INVALIDFIELDS' />";
@@ -172,6 +173,60 @@
        
 <div id="mid-col-mil"> 
     
+<div class="padding-top3">
+	   <table >
+	   <tbody>
+		<tr>
+    		<td><div class="float-left"><img border="0" alt="" width="505" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_main.jpg"></div></td>
+    		<td><div class="float-left"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="271" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_new_to_x.jpg"></a></div></td>
+		</tr>
+		<tr>
+    		<td><div class="float-left">
+			<table align = "center" border="0" cellpadding="0" cellspacing="0" width="505" height="193">
+				<tbody>
+					<tr style="background-color: #002f75;font-weight: bold">
+						<td align = "left">&nbsp;<font color="white">Benefits of xpedx.com</font></td>
+						<td align = "center"><font color="white">Unregistered User</font></td>
+						<td align = "center"><font color="white">Registered User</font></td>
+					</tr>
+					<tr>
+						<td style="color:#4c4c4c">Robust catalog search and navigation</td>
+						<td style="text-align:center"><a onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" href="/swc/catalog/navigate.action?sfId=xpedx&amp;scFlag=Y&amp;scGuestUser=Y&amp;_bcs_=_nb_">Browse limited catalogs</a></td>
+						<td align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+					<tr>
+						<td style="background-color:#efeff0;color:#4c4c4c">Check prices, real-time inventory status</td>
+						<td style="background-color:#efeff0;text-align:center;color:#4c4c4c;border: solid 0 white; border-left-width:2px;border-right-width:2px">N/A</td>
+						<td style="background-color:#efeff0" align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+					<tr>
+						<td style="color:#4c4c4c">Manage invoices electronically</td>
+						<td style="text-align:center;color:#4c4c4c">N/A</td>
+						<td align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+					<tr>
+						<td style="background-color:#efeff0;color:#4c4c4c">Ordering templates</td>
+						<td style="background-color:#efeff0;text-align:center;color:#4c4c4c;border: solid 0 white; border-left-width:2px;border-right-width:2px">N/A</td>
+						<td style="background-color:#efeff0" align="center"><img style="align:center" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+					<tr>
+						<td style="color:#4c4c4c">Purchasing history reports</td>
+						<td style="text-align:center;color:#4c4c4c">N/A</font></td>
+						<td align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+					<tr>
+						<td style="background-color:#efeff0;color:#4c4c4c">Control spend with order approval</td>
+						<td style="background-color:#efeff0;text-align:center;color:#4c4c4c;border: solid 0 white; border-left-width:2px;border-right-width:2px">N/A</td>
+						<td style="background-color:#efeff0" align="center"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+    		<td><div class="float-left"><a href="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" target="_blank"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
+		</tr> 
+	    </tbody>
+	 </table>
+</div>
 <s:form name="registrationForm" namespace='/profile/user'
 	action='XPEDXNewUserRegistrationAction' validate="true">
 <!-- Webtrends Start  -->
@@ -186,7 +241,8 @@
 
 
 <div>
-	<div class="padding-top3 black page-title"><strong class="black"><s:text name='MSG.SWC.MISC.REGISTER.GENERIC.PGTITLE' /></strong></div>
+    <br/>
+	<div class="padding-top3 black page-title"><img style="align:center" border="0" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_form_header.jpg"></div>
 </div>
 <div class=" padding-bottom clearview"> </div>
     <!-- <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p>  -->
@@ -223,7 +279,7 @@
 		<tr>
   			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">City</div>&nbsp;*</td>
   			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">State / Province</div>&nbsp;*</td>
-  			<td style="width:180px;color:black" class="underlines no-border-right-user"><div style="position:relative;left:-150px" >&nbsp;Postal Code</div></td>
+  			<td style="width:180px;color:red" class="underlines no-border-right-user"><div style="position:relative;left:-150px;color:black" >&nbsp;Postal Code<span style="COLOR: red">&nbsp;*</span></div></td>
 		</tr>
 		
 		<tr>
@@ -243,7 +299,7 @@
 		</tr>
 		
 		<tr>
-			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Questions/Comments</div>&nbsp;*</td>
+			<td style="width:180px;color:red" class="underlines no-border-right-user"><div class="float-left" style="color:black">Comments</div>&nbsp;*</td>
 		</tr>
 		
 		<tr>
