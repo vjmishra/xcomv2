@@ -1,0 +1,12 @@
+<OrderBy>
+    <Attributes>
+        <Attribute Name="OrderByOrderNo" Value="OrderNo"/>
+        <Attribute Name="OrderByOrderDate" Value="OrderDate"/>
+        <Attribute Name="OrderByCustomerLastName" Value="CustomerLastName"/>
+        <Attribute Name="OrderByExtnTotalOrderValue" Value="ExtnTotalOrderValue"/>
+    </Attributes>
+    <Directions>
+        <Direction Name="_Ascending" Value="N"/>
+        <Direction Name="_Descending" Value="Y"/>
+    </Directions>
+</OrderBy>
