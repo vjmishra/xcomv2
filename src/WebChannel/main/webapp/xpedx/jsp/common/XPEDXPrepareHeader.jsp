@@ -935,7 +935,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	 <!-- XBT-343 Stop-->
 		function errorValidate(){
 			var searchTerm = document.getElementById("Text1").value;
-				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To�"){
+				if(searchTerm == "" ||searchTerm==null || searchTerm == "Search Ship-To..."){
 						document.getElementById("errorText").innerHTML  = "Please enter search criteria.";
 						document.getElementById("errorText").setAttribute("class", "error");
 				}
