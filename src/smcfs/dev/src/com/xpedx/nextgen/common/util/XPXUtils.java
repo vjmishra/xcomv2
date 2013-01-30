@@ -2175,25 +2175,80 @@ public class XPXUtils implements YIFCustomApi {
 	 */
 	public Document stampOrderSubjectLine(YFSEnvironment env,
 			Document inputDocument) throws Exception {
-		String _subjectLine = null;
-
+		
 		String brand = inputDocument.getDocumentElement().getAttribute(
 				"SellerOrganizationCode");
 		String customerPO = inputDocument.getDocumentElement().getAttribute(
 				"CustomerPONo");
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
-
-		_subjectLine = brand.concat(" Order Confirmation: PO ")
-				.concat(customerPO).concat(" Order ").concat(orderNo);
-		log.debug("_subjectLine: " + _subjectLine);
-
-		inputDocument.getDocumentElement()
-				.setAttribute("Subject", _subjectLine);
+		
+		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));		
+		
+		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
+		YFCElement orderElem = inDoc.getDocumentElement();
+		
+		if (orderElem != null) 
+		{
+			if(!YFCObject.isVoid(customerPO))
+			{
+				_subjectLine.append("- PO # ").append(customerPO);
+			}
+			
+			if (!YFCObject.isVoid(orderNo))
+			{
+				if(!YFCObject.isVoid(customerPO))
+				{
+				_subjectLine.append(", Order # ").append(orderNo);
+				
+				}else {
+					_subjectLine.append("- Order # ").append(orderNo);
+				}
+				
+			}
+		}	
+        
+		if(log.isDebugEnabled())
+		{
+			log.debug("Inside XPXUtils.stampOrderSubjectLine method - Order Confirmation email's subject Line : " + _subjectLine);
+		}
+		
+		if(YFCObject.isVoid(_subjectLine)){
+			log.error("Inside XPXUtils.stampOrderSubjectLine method - Order Confirmation email's subject Line is empty.");
+		}
+		inputDocument.getDocumentElement().setAttribute("Subject", _subjectLine.toString());
 
 		return inputDocument;
 	}
-
+	
+	public void stampOrderChangeStatusSubjectLine(YFSEnvironment env,
+			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
+		
+		String brand = orderElement.getAttribute("SellerOrganizationCode");
+		String customerPO = orderElement.getAttribute("CustomerPONo");		
+		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
+		
+		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		
+		if(!YFCObject.isVoid(customerPO))
+		{
+			_subjectLine.append(" - PO # ").append(customerPO);
+		}
+		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)))
+		{
+			if(!YFCObject.isVoid(customerPO))
+			{
+				_subjectLine.append(", Order # ").append(formattedOrderNo);
+			
+			}else {
+				_subjectLine.append("- Order # ").append(formattedOrderNo);
+			}
+		}
+		orderElement.setAttribute("Subject", _subjectLine.toString());
+		
+		log.debug("_subjectLine: " + _subjectLine);
+	}
+	
 	public Document stampSubjectLine_UserProfChange(YFSEnvironment env,
 			Document inputDocument) throws Exception {
 		
@@ -2663,8 +2718,6 @@ public class XPXUtils implements YIFCustomApi {
 		return sb.toString();
 	}
 	
-	
-	
 	public static HashMap<String, String> readCentPropertiesFile(){
 		HashMap<String, String> map = null;
 		try
@@ -2677,8 +2730,6 @@ public class XPXUtils implements YIFCustomApi {
 	    }
 	    return map;
 	}
-	
-	
 	
 	public static HashMap<String, String> getProperties(String infile) throws IOException {
         final int lhs = 0;

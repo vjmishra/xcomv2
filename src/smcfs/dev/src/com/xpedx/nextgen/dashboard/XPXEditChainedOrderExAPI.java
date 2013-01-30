@@ -737,65 +737,68 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			while(yfcItr.hasNext()) {
 				YFCElement fOrdLineEle = (YFCElement)yfcItr.next();
 				String lpc = fOrdLineEle.getAttribute("LineProcessCode");
-				if(lpc.equalsIgnoreCase("A")){
-				YFCElement chngfOrdExtnEle = chngfOrdEle.getChildElement("Extn");
-				if(chngfOrdExtnEle != null) {
-				YFCNodeList<YFCElement> instructionList = fOrdLineEle.getElementsByTagName("Instruction");
-				Iterator<YFCElement> itr = instructionList.iterator();
-				while(itr.hasNext()) {
-				YFCElement instructionEle = (YFCElement) itr.next();
-				if(instructionEle.hasAttribute("InstructionType")) {
-					String instType = instructionEle.getAttribute("InstructionType");
-					if(!YFCObject.isNull(instType) && !YFCObject.isVoid(instType)) {
-						if(instType.equalsIgnoreCase("LINE")) {
+				if (lpc.equalsIgnoreCase("A") || lpc.equalsIgnoreCase("C")) {
+					YFCElement chngfOrdExtnEle = chngfOrdEle.getChildElement("Extn");
+					if(chngfOrdExtnEle != null) {
+						YFCNodeList<YFCElement> instructionList = fOrdLineEle.getElementsByTagName("Instruction");
+						Iterator<YFCElement> itr = instructionList.iterator();
+						while(itr.hasNext()) {
+							YFCElement instructionEle = (YFCElement) itr.next();
+							if(instructionEle.hasAttribute("InstructionType")) {
+								String instType = instructionEle.getAttribute("InstructionType");
+								if(!YFCObject.isNull(instType) && !YFCObject.isVoid(instType)) {
+									if(instType.equalsIgnoreCase("LINE")) {
 							
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldFlag", "Y");
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Edit Order Message Had Order/Line Instructions of InstructionType-HEADER/LINE!");
-							if(log.isDebugEnabled()){
-							log.debug("IN EDIT CHAINED ORDER");
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldFlag", "Y");
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Edit Order Message Had Order/Line Instructions of InstructionType-HEADER/LINE!");
+										if(log.isDebugEnabled()){
+											log.debug("IN EDIT CHAINED ORDER");
+										}
+										break;
+									}
+								}
 							}
-							break;
+						}
+						
+						if(chngfOrdExtnEle.hasAttribute("ExtnWebHoldFlag")) {
+							String webHoldFlag = chngfOrdExtnEle.getAttribute("ExtnWebHoldFlag");
+							if(YFCObject.isNull(webHoldFlag) || YFCObject.isVoid(webHoldFlag)) {
+								if(!YFCObject.isNull(willCall) && !YFCObject.isVoid(willCall) && 
+										!YFCObject.isNull(ordUpdateFlag) && !YFCObject.isVoid(ordUpdateFlag)) {
+									if(willCall.equalsIgnoreCase("P") && !ordUpdateFlag.equalsIgnoreCase("N")) {
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested");										
+									} else if(!willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")){
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "New Customer Setup");
+									} else if(willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")) {
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested & New Customer Setup");
+									} else {
+										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Order Is On Web Hold For Unknown Reason");
+									}
+									break;
+								}
+							} else {
+								if(webHoldFlag.equalsIgnoreCase("N")) {
+									if(!YFCObject.isNull(willCall) && !YFCObject.isVoid(willCall) && 
+											!YFCObject.isNull(ordUpdateFlag) && !YFCObject.isVoid(ordUpdateFlag)) {
+										if(willCall.equalsIgnoreCase("P") && !ordUpdateFlag.equalsIgnoreCase("N")) {
+											chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested");
+										} else if(!willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")){
+											chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "New Customer Setup");
+										} else if(willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")) {
+											chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested & New Customer Setup");
+										} else {
+											chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Order Is On Web Hold For Unknown Reason");
+										}
+										break;
+									}
+								}
+							}
 						}
 					}
 				}
 			}
-			if(chngfOrdExtnEle.hasAttribute("ExtnWebHoldFlag")) {
-				String webHoldFlag = chngfOrdExtnEle.getAttribute("ExtnWebHoldFlag");
-				if(YFCObject.isNull(webHoldFlag) || YFCObject.isVoid(webHoldFlag)) {
-					if(!YFCObject.isNull(willCall) && !YFCObject.isVoid(willCall) && 
-							!YFCObject.isNull(ordUpdateFlag) && !YFCObject.isVoid(ordUpdateFlag)) {
-						if(willCall.equalsIgnoreCase("P") && !ordUpdateFlag.equalsIgnoreCase("N")) {
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested");
-						} else if(!willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")){
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "New Customer Setup");
-						} else if(willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")) {
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested & New Customer Setup");
-						} else {
-							chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Order Is On Web Hold For Unknown Reason");
-						}
-					}
-				} else {
-					if(webHoldFlag.equalsIgnoreCase("N")) {
-						if(!YFCObject.isNull(willCall) && !YFCObject.isVoid(willCall) && 
-								!YFCObject.isNull(ordUpdateFlag) && !YFCObject.isVoid(ordUpdateFlag)) {
-							if(willCall.equalsIgnoreCase("P") && !ordUpdateFlag.equalsIgnoreCase("N")) {
-								chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested");
-							} else if(!willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")){
-								chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "New Customer Setup");
-							} else if(willCall.equalsIgnoreCase("P") && ordUpdateFlag.equalsIgnoreCase("N")) {
-								chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Will Call requested & New Customer Setup");
-							} else {
-								chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Order Is On Web Hold For Unknown Reason");
-							}
-							}
-						  }
-						}
-					}
-				}
-	       }
-	    }
-    }
-}
+		}
+	}
 	
 	
 	private void prepareErrorObject(Exception e, String transType, String errorClass, YFSEnvironment env, Document inXML) {

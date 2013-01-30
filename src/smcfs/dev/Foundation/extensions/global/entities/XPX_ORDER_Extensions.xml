@@ -124,7 +124,15 @@
 		  <Attribute ColumnName="EXTN_ORDHDR_FAILED_RULE_IDS" DataType="Text-500"
 					Description="Failed Busines Rule IDS at order header level" Nullable="true" XMLName="ExtnOrdHdrLevelFailedRuleID"  XMLGroup="Extn"/>		
        	
-        </Attributes>		
+        </Attributes>
+		<!-- Begin : New index created for XBT-361 -->
+		<Indices>
+            <Index Name="XPX_YFS_ORDER_HEADER_I20" Unique="False">
+               <Column Name="EXTN_WEB_CONF_NUM"/>
+			   <Column Name="EXTN_LEGACY_ORDER_NO"/>               
+            </Index>			
+        </Indices>
+		<!-- End : New index created for XBT-361 -->		
       </Entity>
 
       <Entity TableName="YFS_ORDER_LINE" >

@@ -2426,7 +2426,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
 			customerError = true;
-			throw new Exception("Customer Doesn't Exist In Web. [Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
+			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
+			if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
+				legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
+			}
+			throw new Exception("Customer Doesn't Exist In Web. [Company No:"+legacyCompanyNo+", Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
 
 		if(log.isDebugEnabled()){
@@ -4737,10 +4741,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 										instructionEle.setAttribute("InstructionDetailKey", instDtlKey);
 										/*Begin - Changes made by Mitesh Parikh for JIRA 3248*/
-										String headerProcessCode=rootEle.getAttribute("HeaderProcessCode");
 										String newInstructionText=instructionEle.getAttribute("InstructionText");
 										boolean isNewInstructionTextVoid=YFCObject.isVoid(newInstructionText);
-										if(("D".equalsIgnoreCase(headerProcessCode) || "C".equalsIgnoreCase(headerProcessCode)) && (isNewInstructionTextVoid))
+										if(isNewInstructionTextVoid)
 										{
 											String instructionTextInDB = SCXmlUtil.getXpathAttribute((Element)ordEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
 											instructionEle.setAttribute("InstructionText", instructionTextInDB);
@@ -4783,7 +4786,29 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 												String instDtlKey = getOrderLineInstructionKey(extnWebLineNum, _ordLineEle);
 												if (!YFCObject.isNull(instDtlKey) && !YFCObject.isVoid(instDtlKey)) {
 													rootLineInstructionEle.setAttribute("InstructionDetailKey", instDtlKey);
+													/*Begin - Changes made by Mitesh Parikh for JIRA XBT-247*/
+													String newLineInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
+													boolean isNewLineInstructionTextVoid=YFCObject.isVoid(newLineInstructionText);
+													if(isNewLineInstructionTextVoid)
+													{
+														String lineInstructionTextInDB = SCXmlUtil.getXpathAttribute((Element)_ordLineEle.getDOMNode(),	"./Instructions/Instruction/@InstructionText");											
+														rootLineInstructionEle.setAttribute("InstructionText", lineInstructionTextInDB);
+														rootLineInstructionEle.setAttribute("Action", "REMOVE");
+													}
+													
+												
+												} else {
+													if(rootOrdLineEle != null) 
+													{
+														String lpc = rootOrdLineEle.getAttribute("LineProcessCode");
+														if (lpc != null && lpc.equalsIgnoreCase("C")) {
+															String newLineInstructionText=rootLineInstructionEle.getAttribute("InstructionText");
+															if(YFCObject.isVoid(newLineInstructionText))
+																rootOrdLineEle.removeChild(rootLineInstructionsEle);
+														}
+													}
 												}
+												/*End - Changes made by Mitesh Parikh for JIRA XBT-247*/
 											}
 										}
 									}

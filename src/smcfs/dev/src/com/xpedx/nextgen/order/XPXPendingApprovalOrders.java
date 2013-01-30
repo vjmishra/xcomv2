@@ -283,6 +283,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		String resolverUserIds[] = null;
+		String orderStatusSubjectlLine=null;
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e) {
@@ -334,12 +335,25 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			inXML.getDocumentElement().setAttribute("EnvironmentID", readEnv);
 			String organizationCode = SCXmlUtil.getAttribute(order, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
-
-			if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(orderHoldTypeElem.getAttribute("Status")))
+			String holdStatus=orderHoldTypeElem.getAttribute("Status");
+			
+			if(orderHoldTypeElem!=null && ("1100").equalsIgnoreCase(holdStatus))
+			{   orderStatusSubjectlLine="Order Pending Approval Notification";
+				utilObj.stampOrderChangeStatusSubjectLine(env, order ,holdStatus, orderStatusSubjectlLine);
+			
+			}
+			else if (orderHoldTypeElem!=null && ("1200").equalsIgnoreCase(holdStatus))
+			{   orderStatusSubjectlLine="Order Rejected Notification";
+				utilObj.stampOrderChangeStatusSubjectLine(env, order ,holdStatus, orderStatusSubjectlLine);
+			
+			}
+			else if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(holdStatus))
 			{
+				orderStatusSubjectlLine="Order Approved Notification";
 				Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
 				String formattedLegacyOrderNo = getLegacyOrderNumber(orderExtn,env);
 				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedLegacyOrderNo);
+				utilObj.stampOrderChangeStatusSubjectLine(env, order, holdStatus, orderStatusSubjectlLine);
 			}
 			
 			Map<String,String> getUOMListMap = getUOMList(env);

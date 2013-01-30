@@ -206,16 +206,29 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 		}
 
 		if (!YRCPlatformUI.isVoid(eleOrderLine)) {
+			//Code Modified for JIRA XBT-306 Order Multiple condition checked for fullfillment order also
 			String placeOrderValue = eleOrderLine
 					.getAttribute("LineErrorValue");
-			if (!YRCPlatformUI.isVoid(placeOrderValue)) {
+			String lineStatusCode = null;
+			Element extnCustElemt = YRCXmlUtils.getChildElement(eleOrderLine, "Extn");
+			if(!YRCPlatformUI.isVoid(extnCustElemt)){
+				lineStatusCode = extnCustElemt.getAttribute("ExtnLineStatusCode");
+			}
+			if ((!YRCPlatformUI.isVoid(placeOrderValue))||((lineStatusCode != null) && ("" != lineStatusCode))) {
 				Element eleCustDetails = (Element) page.getOrderLinesPanel()
 						.getPageBehavior().getCustomerDetails();
 				Element custDetailsExtnElement = YRCXmlUtils.getChildElement(
 						eleCustDetails, "Extn");
 				String envCode = custDetailsExtnElement
 						.getAttribute("ExtnEnvironmentCode");
-				String inputString = envCode + "_" + placeOrderValue;
+				String inputString = null;
+				if (!YRCPlatformUI.isVoid(placeOrderValue)){
+					inputString = envCode + "_" + placeOrderValue;
+				}
+				if ((lineStatusCode != null) && ("" != lineStatusCode)){
+					inputString = envCode + "_" + lineStatusCode;
+					lineStatusCode = null;
+				}
 				getPlacedOrderLineError(inputString, page);
 			}
 

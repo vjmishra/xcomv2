@@ -149,7 +149,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 	private Text txtMfrItemId;
 	private Text txtMpcItemId;
 	private Label lblComboItemId;
-	private StyledText stxtLegacyLineNumber;
+	private Text txtLegacyLineNumber;
 	private Text hiddenTxtOrderingUOM;
 	private Text hiddenTxtbaseUOM;
 	private StyledText hiddenStxtPricingUOM;
@@ -920,12 +920,12 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		txtCustomerItemId.setData("name", "txtCustomerItemId");
 		txtCustomerItemId.addFocusListener(focusListenerLatest);	
 		
-		stxtLegacyLineNumber = new StyledText(pnlLeftData, SWT.BOLD);
-		stxtLegacyLineNumber.setText("");
-		stxtLegacyLineNumber.setLayoutData(gridDataLbl);
-		stxtLegacyLineNumber.setEditable(false);
-		stxtLegacyLineNumber.setData("name", "stxtLegacyLineNumber");
-		stxtLegacyLineNumber.setEnabled(false);
+		txtLegacyLineNumber = new Text(pnlLeftData, SWT.COLOR_WHITE); 
+		txtLegacyLineNumber.setText(getWeblineData("txtLegacyLineNumber"));
+		txtLegacyLineNumber.setLayoutData(gridDataLbl);
+		txtLegacyLineNumber.setEditable(false); 
+		txtLegacyLineNumber.setData("name", "txtLegacyLineNumber"); 
+		txtLegacyLineNumber.setEnabled(true);
 		
 		GridData gridDataLbl1 = new GridData();
 		gridDataLbl1.horizontalAlignment = SWT.END;
@@ -2367,7 +2367,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			lblErrItemId.setData(YRCConstants.YRC_LABEL_BINDING_DEFINITION, lblbd);
 		}
 		
-		if(null !=stxtLegacyLineNumber){
+		/*if(null !=stxtLegacyLineNumber){
 			stbd = new YRCStyledTextBindingData();
 			stbd.setSourceBinding("OrderLineTmp:/OrderLine/Extn/@ExtnLegacyLineNumber");
 //			if(isNewLine()){
@@ -2376,7 +2376,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 //			}
 			stbd.setName("stxtLegacyLineNumber");
 			stxtLegacyLineNumber.setData(YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
-		}
+		}*/
 		
 		if (null != txtCustomerItemId) {
 			tbd = new YRCTextBindingData();
@@ -3053,6 +3053,38 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		
 		return returnValue;
 		
+	}
+	
+
+	private String getWeblineData(String controlName) {
+
+		String legacy_webline_number = "";
+
+		String legacylineNum = null;
+
+		String weblineNum = null;
+
+		Element extnorderLineEle = YRCXmlUtils.getChildElement(eleOrderLine,
+				"Extn");
+
+		if (extnorderLineEle != null) {
+
+			legacylineNum = extnorderLineEle
+					.getAttribute("ExtnLegacyLineNumber");
+
+			weblineNum = extnorderLineEle.getAttribute("ExtnWebLineNumber");
+
+		}
+
+		if ((legacylineNum != null && legacylineNum != "")
+				&& (weblineNum != null && weblineNum != "")) {
+
+			legacy_webline_number = legacylineNum + ", " + weblineNum;
+
+		}
+
+		return legacy_webline_number;
+
 	}
 
 }

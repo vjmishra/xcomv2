@@ -483,55 +483,49 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					addlnEmailAddresses = addlnEmailAddresses.replace(";", ",");
 					yfcLogCatalog.debug("addln email addresses ::"
 							+ addlnEmailAddresses);
-				}
-				/**
-				 * JIRA 4093 Start -If to Email address is blank or null then CC email address will be to email address
-				 */
-
-				/*if(toEmailId == null || toEmailId.trim().equals("")){
-
-					if(addlnEmailAddresses != null && addlnEmailAddresses.trim().length() > 0){
-						replaceToEmailId = addlnEmailAddresses ;
-						addlnEmailAddresses = "";
-					}
-					if(replaceToEmailId == null || replaceToEmailId.trim().length() == 0){
-						replaceToEmailId = extnEcsr1EmailId ;
-						extnEcsr1EmailId = "";
-					}
-					else if(extnEcsr1EmailId!= null && extnEcsr1EmailId.trim().length() > 0){
-						replaceToEmailId = replaceToEmailId+","+extnEcsr1EmailId ;
-						extnEcsr1EmailId = "";
-					}
-					if(replaceToEmailId == null || replaceToEmailId.trim().length() == 0){
-						replaceToEmailId = extnEcsr2EmailId ;
-						extnEcsr2EmailId = "";
-					}
-					else if(extnEcsr2EmailId!= null && extnEcsr2EmailId.trim().length() > 0){
-						replaceToEmailId = replaceToEmailId+","+extnEcsr2EmailId ;
-						extnEcsr2EmailId = "";
-					}
-
-					if(replaceToEmailId == null || replaceToEmailId.trim().length() == 0){
-						replaceToEmailId = customerAdminEmail ;
-						customerAdminEmail = "";
-					}
-					else if(customerAdminEmail!= null && customerAdminEmail.trim().length() > 0){
-						replaceToEmailId = replaceToEmailId+","+customerAdminEmail ;
-						customerAdminEmail = "";
-					}
-					if(replaceToEmailId == null)
-						replaceToEmailId="";
-
-					customerDoc.getDocumentElement().setAttribute("strToEmailid", replaceToEmailId);
-
-				}
-				 */	/**
-				 * JIRA 4093 End -If to Email address is blank or null then CC email address will be to email address
-				 */
-
-
+				}	
 				extnElement.setAttribute("ExtnAddnlEmailAddr",
 						addlnEmailAddresses);
+				
+				// To set Shipping Options
+				StringBuilder shippingOptions = new StringBuilder();
+				String shippingOptions_ = "";
+				String shipComplete = "";
+				String willCall = "";
+				String rushOrder  = "";
+				String webHoldFlag = "";
+				String deliveryHold = "";
+				
+				shipComplete = extnElement.getAttribute("ExtnShipComplete");
+				if (!YFCObject.isNull(shipComplete) && shipComplete.equalsIgnoreCase("C")) {
+					shippingOptions.append("Ship Order Complete,");
+				}
+				
+				willCall = extnElement.getAttribute("ExtnWillCall");
+				if (!YFCObject.isNull(willCall) && !willCall.equalsIgnoreCase("N")) {
+					shippingOptions.append("Will Call,");
+				}
+				
+				rushOrder = extnElement.getAttribute("ExtnRushOrderFlag");
+				if (!YFCObject.isNull(rushOrder) && !rushOrder.equalsIgnoreCase("N")) {
+					shippingOptions.append("Rush Order,");
+				}
+				
+				webHoldFlag = extnElement.getAttribute("ExtnWebHoldFlag");
+				if (!YFCObject.isNull(webHoldFlag) && !webHoldFlag.equalsIgnoreCase("N")) {
+					shippingOptions.append("Order Placed on Hold,");
+				}
+				
+				deliveryHold = extnElement.getAttribute("ExtnDeliveryHoldFlag");
+				if (!YFCObject.isNull(deliveryHold) && !deliveryHold.equalsIgnoreCase("N")) {
+					shippingOptions.append("Customer Hold,");
+				}
+				
+				if (shippingOptions != null && shippingOptions.length() > 0) {
+					shippingOptions_ = shippingOptions. substring(0, shippingOptions.length() - 1);
+				}
+				
+				extnElement.setAttribute("ShippingOptions", shippingOptions_);
 			}
 
 			yfcLogCatalog.debug("XPXEmailHandlerAPI_OutXML:"+ SCXmlUtil.getString(customerDoc));
@@ -687,7 +681,6 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String transactionalUOM = "";
 		String extnPrisingUOM = "";
 		String[] valueArray =  new String[5];
-		String[] unique = null ;
 		HashSet<String> hs = new HashSet<String>();
 
 
@@ -830,32 +823,23 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String orderNumber = "";
 
 		if(hs.isEmpty()){
-
 			orderNumber = "In Progress";
 
-		}
-
-		else if(!hs.isEmpty())
-
+		}else 
 		{
-
-			unique = (String[]) hs.toArray(new String[hs.size()]);
-
-		}
-
-
-
-		if( unique != null && unique.length > 0){
-
-			for (int i = 0; i < unique.length; i++) {
-
-				orderNumber = orderNumber + unique[i] + ",";
-
+			int i=1;
+			Iterator<String> orderNumberItr=hs.iterator();
+			while(orderNumberItr.hasNext()){
+				if(i==hs.size()) {
+					orderNumber=orderNumber+orderNumberItr.next();
+					
+				}else {
+					orderNumber=orderNumber+orderNumberItr.next()+",";
+				}
+				++i;					
 			}
 
 		}
-
-		orderNumber = orderNumber.substring(0, orderNumber.length() - 1);
 
 		if (!"".equalsIgnoreCase(orderNo)) {
 			/** Logic to remove the last comma **/
@@ -1073,7 +1057,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 	public Document getSalesRepEmail(YFSEnvironment env,
 			Document inputDocument, String billToId) throws YFSException, RemoteException, YIFClientCreationException
-			{
+	{
 		api = YIFClientFactory.getInstance().getApi();
 		yfcLogCatalog.debug("getSalesRepEmail " +  SCXmlUtil.getString(inputDocument));
 
@@ -1156,8 +1140,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			inputDocument.getDocumentElement().setAttribute("salesRepEmail", salesRepEmail);
 
 		}
-
 		
 		return inputDocument ;
-			}
+	}
 }

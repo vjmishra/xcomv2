@@ -1,6 +1,5 @@
 package com.xpedx.nextgen.common.cent;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,17 +11,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
+import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.core.YFCObject;
+import com.yantra.yfc.core.YFCUserContext;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-import com.xpedx.nextgen.common.util.XPXLiterals;
-import com.xpedx.nextgen.common.util.XPXUtils;
 
 public class ErrorLogger {
 
@@ -74,10 +74,13 @@ public class ErrorLogger {
 			randomNumber=""+fraction;
 			
 			String userID=null;
-			if(errorObj.getTransType().equalsIgnoreCase(XPXLiterals.OU_TRANS_TYPE))
+			if(errorObj.getTransType().equalsIgnoreCase(XPXLiterals.OU_TRANS_TYPE))	{
 				userID="admin";
-			else
+				YFCUserContext.getInstance().setUserId(userID);
+
+			} else {				
 				userID=yfsEnv.getUserId();
+			}
 			
 			String progID = yfsEnv.getProgId();
 			

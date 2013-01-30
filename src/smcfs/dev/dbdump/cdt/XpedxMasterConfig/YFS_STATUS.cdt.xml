@@ -1161,11 +1161,11 @@
     Status="1300" StatusKey="ORDER_STATUS_1300"
     StatusName="Back Ordered" StatusType="SYSTEM"/>
 <Status Createprogid="XMLMigrator" Createts="2011-07-14T14:37:48-04:00"
-    Createuserid="SYSTEM" Description="Awaiting FO Creation" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-15T10:44:11-04:00"
-    Modifyuserid="ng" OwnerKey="DEFAULT"
-    ProcessTypeKey="ORDER_FULFILLMENT" RequiresCollaboration=""
-    Status="1310" StatusKey="ORDER_STATUS_1310"
+    Createuserid="SYSTEM" Description="Awaiting Ship Order Creation"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2011-07-15T10:44:11-04:00" Modifyuserid="ng"
+    OwnerKey="DEFAULT" ProcessTypeKey="ORDER_FULFILLMENT"
+    RequiresCollaboration="" Status="1310" StatusKey="ORDER_STATUS_1310"
     StatusName="Awaiting FO Creation" StatusType="SYSTEM"/>
 <Status Createprogid="XMLMigrator" Createts="2011-07-14T14:37:48-04:00"
     Createuserid="SYSTEM" Description="Backordered From Node" Lockid="0"

@@ -592,7 +592,9 @@
                   </xsl:element>
 
 <!-- OrderLineTranQuantity End  -->
-                  <xsl:if test="(normalize-space(LineNotes)!='')">
+				  <!-- Begin : Changes made for JIRA XBT-247 -->
+				  <xsl:if test="(normalize-space(LineNotes)!='' or normalize-space(LineProcessCode)='C')">
+                  <!-- End : Changes made for JIRA XBT-247 -->
                      <xsl:element name="Instructions">
                         <xsl:element name="Instruction">
                            <xsl:attribute name="InstructionType">LINE</xsl:attribute>

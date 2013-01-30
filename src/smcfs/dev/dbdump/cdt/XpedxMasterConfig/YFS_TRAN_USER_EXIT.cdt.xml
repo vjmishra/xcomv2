@@ -785,6 +785,11 @@
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:00-04:00" Modifyuserid="SYSTEM"
     TranUserExitKey="200610171111423046" UserExitKey="YCPUE00004"/>
+<TranUserExit BaseTransactionKey="CREATE_EXCEPTION"
+    Createprogid="XMLMigrator" Createts="2013-01-08T07:36:40-05:00"
+    Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2013-01-08T07:36:40-05:00" Modifyuserid="SYSTEM"
+    TranUserExitKey="200808091111212961" UserExitKey="YCPUE77_02"/>
 <TranUserExit BaseTransactionKey="CUSTOMER_DEFINITION"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:00-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"

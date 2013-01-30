@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
-	final static Pattern slashPattern = buildSlashPattern(); 
-	
+	final static Pattern dimensionPattern = buildDimensionPattern();
+			
 	public static void main(String[] args){
 		/*String[] searches = new String[] {
         		"m&c",
@@ -62,8 +62,8 @@ public class XPXCatalogDataProcessor {
         		
         };*/
 		
-		String[] searches = {"P&amp;G P &amp; G P&G P & G"};
-		
+		String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
+		//String[] searches = {"abcd b5.35\" x 9.875in x 8.75in H"};
 		
 		for (String rawSearch : searches) {
         	// TODO: insert the following where we receive the user's search query
@@ -75,14 +75,20 @@ public class XPXCatalogDataProcessor {
 		}
 	}
 	
-	public static String preprocessCatalogData(String rawSearch) {
+	public static String preprocessSearchQuery(String rawSearch) {
 		String search = rawSearch;
 		search = UnitInfo.preprocess(search);
 		search = SymbolInfo.preprocess(search);
 		search = preprocessXPatterns(search);
-		search = preprocessXPatterns(search);
-		//search = preprocessSlashPatterns(search);
+		return search;
+	}
 		
+	public static String preprocessCatalogData(String rawSearch) {
+		String search = rawSearch;
+		search = UnitInfo.preprocess(search);
+		search = SymbolInfo.preprocess(search);
+		search = preprocessDimensionPatterns(search);
+		search = preprocessXPatterns(search);
 		return search;
 	}
 	
@@ -90,48 +96,133 @@ public class XPXCatalogDataProcessor {
 	private static Pattern buildXPattern() {
 		StringBuilder canonicals = new StringBuilder();
 		for (UnitInfo unitInfo : UnitInfo.all) {
-			canonicals.append("|"+unitInfo.canonical);
+			canonicals.append(unitInfo.canonical+"|");
 		}
-		return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([Xx])([0-9"+canonicals.toString()+"]?)");
+		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?))?");
 	}
 	
-	//processes x patterns
+	//Remove spaces before and after x in dimensions
 	private static String preprocessXPatterns(String rawText){
 		Matcher matcher = xPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
-			matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
-			// handle cases where "x" immediately follows symbol such as in: 2.75"x 8.5"
-			if (matcher.group(4).length() > 0)
-				sb.append(' ').append(matcher.group(4));
+			matcher.appendReplacement(sb, matcher.group(1));
+			if(matcher.group(3).length()>0)
+				sb.append(matcher.group(3));
+			sb.append(matcher.group(5)+matcher.group(7));
+			if (matcher.group(9).length() > 0)
+				sb.append(matcher.group(9));
+			if(matcher.group(10) != null){
+				sb.append(matcher.group(12)+matcher.group(14));
+			}
+					
 		}
 		matcher.appendTail(sb);
 		return sb.toString();
 		
 	}
 	
-	private static Pattern buildSlashPattern() {
-        StringBuilder canonicals = new StringBuilder();
-        for (UnitInfo unitInfo : UnitInfo.all) {
-               canonicals.append("|"+unitInfo.canonical);
-        }
-        return Pattern.compile("([0-9"+canonicals.toString()+"])( ?)([/])([0-9"+canonicals.toString()+"]?)");
+	private static Pattern buildDimensionPattern() {
+		StringBuilder canonicals = new StringBuilder();
+		for (UnitInfo unitInfo : UnitInfo.all) {
+			canonicals.append(unitInfo.canonical+"|");
+		}
+		return Pattern.compile("((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)((\\.)?[0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?)?");
   }
+	
+	
   
-  //processes / patterns
-  private static String preprocessSlashPatterns(String rawText){
-        Matcher matcher = slashPattern.matcher(rawText);
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-               matcher.appendReplacement(sb, matcher.group(1) + " "+matcher.group(3));
-               // handle cases where "/" immediately follows symbol such as in: 2.75"/ 8.5"
-               if (matcher.group(4).length() > 0)
-                      sb.append(' ').append(matcher.group(4));
-        }
-        matcher.appendTail(sb);
-        return sb.toString();
+  /*Represent dimensions in all possible combinations. For ex, 1.2ftx2.3in should be represented as below:
+	1.2ftx2.3in 1.2ft 1.2 2.3in 2.3 1.2x2.3*/
+	
+  private static String preprocessDimensionPatterns(String rawText){
+	  Matcher matcher = dimensionPattern.matcher(rawText);
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			int matcherStart = matcher.start()-1;
+			if(matcherStart > -1){
+				char prefix = rawText.charAt(matcherStart);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
+			int matcherEnd = matcher.end(8);
+			if(matcherEnd > -1){
+				char prefix = rawText.charAt(matcherEnd);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
+			if(matcher.group(12) != null){
+				matcherEnd = matcher.end(16);
+				char prefix = rawText.charAt(matcherEnd);
+				if(prefix == '/'){
+					continue;
+				}
+			}
+			
+			matcher.appendReplacement(sb, matcher.group(1));
+			if(matcher.group(4).length()>0)
+				sb.append(matcher.group(4));
+			sb.append(matcher.group(6)+matcher.group(8));
+			if (matcher.group(11).length() > 0)
+				sb.append(matcher.group(11));
+			
+			if(matcher.group(12) != null){
+				sb.append(matcher.group(14)+matcher.group(16));
+			}
+			
+			if(matcher.group(19) != null){
+				sb.append(matcher.group(19));
+			}
+			
+			
+			if(matcher.group(4).length()>0){
+				sb.append(" "+matcher.group(1));
+				sb.append(matcher.group(4));
+				sb.append(" "+matcher.group(1));
+			}else{
+				sb.append(" "+matcher.group(1));
+			}
+			
+			if(matcher.group(11).length()>0){
+				sb.append(" "+matcher.group(8));
+				sb.append(matcher.group(11));
+				sb.append(" "+matcher.group(8));
+			}else{
+				sb.append(" "+matcher.group(8));
+			}
+			
+			if(matcher.group(12) != null){
+				if(matcher.group(19).length() > 0){
+					sb.append(" "+matcher.group(16));
+					sb.append(matcher.group(19));
+					sb.append(" "+matcher.group(16));
+				}else{
+					sb.append(" "+matcher.group(16));
+				}
+			}
+			
+			if(matcher.group(4).length() > 0){
+				if(matcher.group(12) != null){
+					sb.append(" "+matcher.group(1)+matcher.group(6)+matcher.group(8)+matcher.group(6)+matcher.group(16));
+				}else{
+					sb.append(" "+matcher.group(1)+matcher.group(6)+matcher.group(8));
+				}
+			}
+			
+			sb.append(" ");
+			
+			
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
         
   }
+  
+  
 
 	/**
 	 * Represents a unit that may have multiple synonymous representations in text
@@ -197,8 +288,8 @@ public class XPXCatalogDataProcessor {
 				}
 				matcher.appendReplacement(sb, matcher.group(1) + toCanonical.get(matcher.group(3)));
 				// handle cases where "x" imediately follows symbol such as in: 2.75"x 8.5"
-				if (matcher.group(4).length() > 0)
-					sb.append(' ').append(matcher.group(4));
+				/*if (matcher.group(4).length() > 0)
+					sb.append(' ').append(matcher.group(4));*/
 			}
 			matcher.appendTail(sb);
 			return sb.toString();
@@ -222,7 +313,7 @@ public class XPXCatalogDataProcessor {
 			for (UnitInfo unitInfo : UnitInfo.all) {
 				symbols.append(Pattern.quote(unitInfo.symbol));
 			}
-			return Pattern.compile("([0-9]+(\\.[0-9]+)?)([" + symbols.toString() + "])([xX]?)");
+			return Pattern.compile("([0-9]+(\\.[0-9]+)?)([" + symbols.toString() + "])");
 		}
 		
 		// build the pattern that recognizes unit name usages

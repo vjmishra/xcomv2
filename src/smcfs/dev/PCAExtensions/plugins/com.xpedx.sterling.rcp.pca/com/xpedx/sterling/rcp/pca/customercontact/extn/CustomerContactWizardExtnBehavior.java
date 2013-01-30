@@ -183,6 +183,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				        YRCPlatformUI.showInformation("Error!", "Please enter login ID in lower case");
 				        return null;
 				        }
+
 				    }
 				 
 			}
@@ -232,7 +233,12 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			{
 				YRCPlatformUI.showInformation("Error!", "Please enter login ID.");
 				return null; 
-			}else if (!(adminFlag=="Y" || buyerFlag=="Y" ||approverFlag=="Y" ||procurementUserFlag=="Y" ||
+			}
+			else if(buyerFlag=="N"){
+                YRCPlatformUI.showInformation("Error!", "User cannot be created without the Buyer role. Please select the Buyer role.");
+                buyerFlag = "Y";
+                return null; 
+          }else if (!(adminFlag=="Y" || buyerFlag=="Y" ||approverFlag=="Y" ||procurementUserFlag=="Y" ||
 					//extnEstimator=="T" || extnStockCheckFlag=="T" || extnViewInvoiceFlag =="T" ||
 						extnEstimator=="Y" || extnStockCheckFlag=="Y" || extnViewInvoiceFlag =="Y" || extnViewPriceFlag=="Y" || extnViewReportsFlag=="Y")
 					){
