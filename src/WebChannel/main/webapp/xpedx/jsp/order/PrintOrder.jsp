@@ -63,7 +63,7 @@
 	
 <s:set name='dorderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
 <s:set name='dorderNo' value='#xutil.getAttribute(#orderDetail,"OrderNo")'/>
-<s:set name='orderHoldFlag' value='#xutil.getAttribute(#orderDetail,"HoldFlag")'/>
+<s:set name='orderHoldFlag' value='#xutil.getAttribute(#orderDetail,"ExtnDeliveryHoldFlag")'/>
 <s:set name='denterpriseCode' value='#xutil.getAttribute(#orderDetail,"EnterpriseCode")'/>
 <s:set name='xpedxHeaderInstructions' value='#xutil.getChildElement(#orderDetail, "Instructions")'/>
 <s:set name='xpedxHeaderInstruction' value='#xutil.getLastChildElement(#xpedxHeaderInstructions)'/>
@@ -477,10 +477,10 @@
 				<td>
 				
 				<s:if test='%{#extnPriceOverrideFlag == "Y"}'>
-					<input name="priceOverrideFlag"  type=checkbox checked="checked" DISABLED>
+					<input name="priceOverrideFlag"  type=checkbox checked="checked" onclick='return false;'>
 			   </s:if>
 			   <s:else>
-					<input name="priceOverrideFlag"  type=checkbox  DISABLED>
+					<input name="priceOverrideFlag"  type=checkbox  onclick='return false;'>
 			</s:else></td></tr>
 				
 				
