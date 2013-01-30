@@ -131,6 +131,7 @@ function validatePassword(){
 	                    errorDiv.style.display = 'block';
 	                }else{
 	                	//errorDiv.removeChild(document.getElementById('pwdErrorDiv'));
+	                	document.getElementById("submitButton").disabled=true;
 	                	errorDiv.style.display = 'none';
 	                	document.passwordSubmit.submit();
 	                }
