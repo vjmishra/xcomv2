@@ -120,7 +120,7 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 			pwdValidationResultMap.put(((YFCException) passexp).getAttribute("ErrorCode"), ((YFCException) passexp).getAttribute("ErrorDescription"));
 			setPwdValidationResultMap(pwdValidationResultMap);
 			passexp.printStackTrace();
-			return ERROR;
+			return errorPwd;
 		}
 		catch (Exception e) {
 			if(e instanceof YFCException){
@@ -176,7 +176,7 @@ public class XPEDXPasswordUpdateAction extends WCMashupAction{
 			pwdValidationResultMap = new HashMap<String, String>();
 			pwdValidationResultMap.put(((YFCException) passexp).getAttribute("ErrorCode"), ((YFCException) passexp).getAttribute("ErrorDescription"));
 			setPwdValidationResultMap(pwdValidationResultMap);
-			return ERROR;
+			return errorPwd;
 		}
 		catch (XMLExceptionWrapper xmlEx) {
 			log.error("Error in saving the User/Contact Information", xmlEx
