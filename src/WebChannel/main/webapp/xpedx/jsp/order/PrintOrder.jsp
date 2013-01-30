@@ -413,7 +413,7 @@
 			<s:set name='lineNotes' value='#util.getElement(#orderLine, "Instructions/Instruction")'/>
 			<s:set name='orderLineSpecialInstruction' value='#lineNotes.getAttribute("InstructionText")'/>
 			<s:set name='adjustment' value='#xutil.getDoubleAttribute(#orderLineExtnElem,"ExtnAdjDollarAmt")' />
-			<s:set name='extnPriceOverrideFlag' value='#xutil.getDoubleAttribute(#orderLineExtnElem,"ExtnPriceOverrideFlag")' />
+			<s:set name='extnPriceOverrideFlag' value='#xutil.getAttribute(#orderLineExtnElem,"ExtnPriceOverrideFlag")' />
 			<s:set name='extnLineCouponDiscount' value='#xutil.getDoubleAttribute(#orderLineExtnElem,"ExtnLineCouponDiscount")' />
 			<s:set name='extnLineOrderedTotal' value='#xutil.getDoubleAttribute(#orderLineExtnElem,"ExtnLineOrderedTotal")' />
 			<s:set name='extnCustLineAccNo' value='#xutil.getDoubleAttribute(#orderLineExtnElem,"ExtnCustLineAccNo")' />
@@ -492,9 +492,8 @@
 		<td class="printValue">
 		<s:set name='orderqty' value='#_action.getCalculatedOrderedQuantityWithoutDecimal(#orderLine)' />
 		<s:set name='orderdqty' value="#xpedxUtilBean.formatQuantityForCommas(#orderdqty)"/>
-		<s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
 		<s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
-		</s:if></td>
+		</td>
 		<td class="printField"><span style="float:right;"> Backorder Qty:&nbsp;</span></td>
 		<td class="printValue">
 		<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
