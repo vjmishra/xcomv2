@@ -108,7 +108,7 @@
 			<div>
 			<ul class="float-right">
 			<li >
-			<a href="javascript:savePassword();"  class="orange-ui-btn" tabindex="24"><span>Submit</span>					
+			<a href="javascript:savePassword();"  class="orange-ui-btn" tabindex="24" id="submitButton"><span>Submit</span>					
 			</a>
 			</li>
 			</ul>
