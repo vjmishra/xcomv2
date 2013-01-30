@@ -63,7 +63,6 @@
 	
 <s:set name='dorderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
 <s:set name='dorderNo' value='#xutil.getAttribute(#orderDetail,"OrderNo")'/>
-<s:set name='orderHoldFlag' value='#xutil.getAttribute(#orderDetail,"ExtnDeliveryHoldFlag")'/>
 <s:set name='denterpriseCode' value='#xutil.getAttribute(#orderDetail,"EnterpriseCode")'/>
 <s:set name='xpedxHeaderInstructions' value='#xutil.getChildElement(#orderDetail, "Instructions")'/>
 <s:set name='xpedxHeaderInstruction' value='#xutil.getLastChildElement(#xpedxHeaderInstructions)'/>
@@ -86,6 +85,7 @@
 <s:set name="isCSRReview" value="%{#_action.isCSRReview()}"/>
 <s:set name="isFOCSRReview" value="%{#_action.isFOCSRReview()}"/>
 <s:set name='OrderExtn' value='#xutil.getChildElement(#orderDetail,"Extn")'/>
+<s:set name='orderHoldFlag' value='#OrderExtn.getAttribute("ExtnDeliveryHoldFlag")'/>
 <s:set name='webConfirmationNumber' value='#OrderExtn.getAttribute("ExtnWebConfNum")' /> 
 <s:set name='xpedxLegacyOrderNumber' value='#OrderExtn.getAttribute("ExtnLegacyOrderNo")' />
 <s:set name="shipToId" value='#orderDetail.getAttribute("ShipToID")' />
