@@ -1500,3 +1500,9 @@ div.wc-table-header td { border: 0px; padding: 10px 5px; background-color:#039;}
     	width:60%;
     	font-weight:bold;
 }
+
+div.orders-page table#print-Preview-section {
+	margin-top: 4px;		
+}
+table#print-Preview-section td.printField{width:15%;}
+table#print-Preview-section td.printValue{width:20%;}
