@@ -1347,7 +1347,7 @@ from session . We have customer Contact Object in session .
 			    	</div>			    	
 			    	<div class="clearall">&nbsp; </div>
 
-			    		<table width="44%" style="FONT-SIZE: 12px; MARGIN-LEFT: 368px; MARGIN-TOP: -60px;" border=0>
+			    		<table width="44%" style="FONT-SIZE: 12px; MARGIN-LEFT: 366px; MARGIN-TOP: -60px;" border=0>
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 								<s:iterator value='customerFieldsMap'>
