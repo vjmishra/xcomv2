@@ -51,8 +51,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Label lblSpendingLimit;
 	private Combo comboCurrencyType;
 	private Text txtSpendingLimit;
-	/*private Label lblApproveOrders;
-	private Button chkApproveOrders;*/
+	private Label lblApproveOrders;
+	private Button chkApproveOrders;
 	private Button btnUpdate;
 	private Label lblUserID;
 	private Label lblUserType;
@@ -228,7 +228,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 				chkReceiveOrderCancellationEmail, chkReceiveOrderShipmentEmail,
 				chkeceiveBackOrderEmail, chkAcceptTAndC, txtFaxNumber,
 				txtLastLoginDate, comboB2BCatalogView, fullView, condensedView,
-				miniView, paperGridView, btnAssign, btnRemove,/*chkApproveOrders */};
+				miniView, paperGridView, btnAssign, btnRemove,chkApproveOrders};
 	}	
 	
 	private void setControlsEnabled(Control[] controls, boolean enabled) {
@@ -940,7 +940,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		/*End- For Jira 3264 */
 		
 		//Added for JIRA XB-258
-		/*lblApproveOrders = new Label(pnlSiteSettings, SWT.LEFT);
+		lblApproveOrders = new Label(pnlSiteSettings, SWT.LEFT);
 		lblApproveOrders.setText("Submit_Orders");
 		lblApproveOrders.setLayoutData(gridData2);
 		lblApproveOrders.setData("name", "lblApproveOrders");
@@ -953,7 +953,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblApproveOrdersDummy.setText("");
 		lblApproveOrdersDummy.setLayoutData(gridData2);
 		lblApproveOrdersDummy.setVisible(false);
-		lblApproveOrdersDummy.setData("name", "lblApproveOrdersDummy");*/
+		lblApproveOrdersDummy.setData("name", "lblApproveOrdersDummy");
 		
 		lblPreferredCatalogView = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPreferredCatalogView.setText("Preferred_Catalog_View");
@@ -1857,13 +1857,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		
 		//Added for JIRA XB-258
 		
-		/*chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnOrderApproval");
-		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderApproval");
+		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnOrderApprovalFlag");
+		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderApprovalFlag");
 		chkBoxBindingData.setName("chkApproveOrders");
-		chkApproveOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);*/
+		chkApproveOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);
 
 //		/*chkBoxBindingData = new YRCButtonBindingData();
 //		chkBoxBindingData.setCheckedBinding("Y");
