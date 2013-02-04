@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
@@ -300,19 +301,19 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		}
 		if(inXML!=null) {
 			
-			Element order = inXML.getDocumentElement();
+			Element orderElement = inXML.getDocumentElement();
 			/*JIRA 4256 Start
 			 * 
 			 */
-			String priceFlag = getViewPricesFlag(env,order);
-			order.setAttribute("viewPricesFlag",priceFlag);
+			String priceFlag = getViewPricesFlag(env,orderElement);
+			orderElement.setAttribute("viewPricesFlag",priceFlag);
 			/*
 			 * JIRA 4256 End
 			 */
 			XPXUtils utilObj = new XPXUtils();
 			inXML = utilObj.stampBrandLogo(env, inXML);
-			String customerContactOnOrder = SCXmlUtil.getAttribute(order, "CustomerContactID");
-			Element inputElem = SCXmlUtil.getChildElement(order, "Input");
+			String customerContactOnOrder = SCXmlUtil.getAttribute(orderElement, "CustomerContactID");
+			Element inputElem = SCXmlUtil.getChildElement(orderElement, "Input");
 			Element orderHoldTypeElem =null;
 			if (inputElem != null) {
 				orderHoldTypeElem = SCXmlUtil.getChildElement(inputElem, "OrderHoldType");
@@ -330,35 +331,40 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					}
 				}
 			}
-			
+			String emailType="";	        
 			String readEnv = YFSSystem.getProperty("environment");
 			inXML.getDocumentElement().setAttribute("EnvironmentID", readEnv);
-			String organizationCode = SCXmlUtil.getAttribute(order, "EnterpriseCode");
+			String organizationCode = SCXmlUtil.getAttribute(orderElement, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 			String holdStatus=orderHoldTypeElem.getAttribute("Status");
 			
 			if(orderHoldTypeElem!=null && ("1100").equalsIgnoreCase(holdStatus))
-			{   orderStatusSubjectlLine="Order Pending Approval Notification";
-				utilObj.stampOrderChangeStatusSubjectLine(env, order ,holdStatus, orderStatusSubjectlLine);
+			{   
+				orderStatusSubjectlLine="Order Pending Approval Notification";
+				emailType=XPXEmailUtil.ORDER_PENDING_APPROVAL_EMAIL_TYPE;
+				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
 			
 			}
 			else if (orderHoldTypeElem!=null && ("1200").equalsIgnoreCase(holdStatus))
-			{   orderStatusSubjectlLine="Order Rejected Notification";
-				utilObj.stampOrderChangeStatusSubjectLine(env, order ,holdStatus, orderStatusSubjectlLine);
+			{   
+				orderStatusSubjectlLine="Order Rejected Notification";
+				emailType=XPXEmailUtil.ORDER_REJECTED_EMAIL_TYPE;
+				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
 			
 			}
 			else if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(holdStatus))
 			{
 				orderStatusSubjectlLine="Order Approved Notification";
-				Element orderExtn = SCXmlUtil.getChildElement(order, "Extn");
+				emailType=XPXEmailUtil.ORDER_APPROVED_EMAIL_TYPE;
+				Element orderExtn = SCXmlUtil.getChildElement(orderElement, "Extn");
 				String formattedLegacyOrderNo = getLegacyOrderNumber(orderExtn,env);
 				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedLegacyOrderNo);
-				utilObj.stampOrderChangeStatusSubjectLine(env, order, holdStatus, orderStatusSubjectlLine);
+				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
 			}
 			
 			Map<String,String> getUOMListMap = getUOMList(env);
 			
-			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(order, "OrderLines/OrderLine");
+			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine");
 			adduomDescription(orderLinesElem,getUOMListMap);
 			
 			//stamp the approval related URLs.
@@ -408,9 +414,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				}				
 				if(outputDoc!=null) {
 					
-					SCXmlUtil.importElement(order, outputDoc.getDocumentElement());//(inXML, outputDoc.getDocumentElement());
+					SCXmlUtil.importElement(orderElement, outputDoc.getDocumentElement());//(inXML, outputDoc.getDocumentElement());
 					
-					addEmailIDToElement(order);
+					addEmailIDToElement(orderElement);
 					//order.appendChild(outputDoc.getDocumentElement());// Appends the CustomerContacList Element to the Order and returns the order Document
 				}
 				else {
@@ -420,6 +426,13 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			else {
 				appendDummyContactList(inXML);
 			}
+			/*XB-461 : Begin - Sending email through Java Mail API now*/
+			String emailOrgCode=sellerOrgCode!=null?sellerOrgCode:"";
+			String inputXML=SCXmlUtil.getString(orderElement);
+	        String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+	        String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
+	        XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode);
+	        /*XB-461 : End - Sending email through Java Mail API now*/
 		}
 				
 		return inXML;		

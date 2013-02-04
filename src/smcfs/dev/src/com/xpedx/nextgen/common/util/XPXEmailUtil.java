@@ -16,12 +16,17 @@ public class XPXEmailUtil {
 	private static YIFApi api = null;
 	private static final Logger log = Logger.getLogger(XPXEmailUtil.class);
 	public static final String ORDER_CONFIRMATION_EMAIL_TYPE="ORDER_CONFIRMATION_EMAIL";
+	public static final String ORDER_PENDING_APPROVAL_EMAIL_TYPE="ORDER_PENDING_APPROVAL_EMAIL";
+	public static final String ORDER_APPROVED_EMAIL_TYPE="ORDER_APPROVED_EMAIL";
+	public static final String ORDER_REJECTED_EMAIL_TYPE="ORDER_REJECTED_EMAIL";
     public static final String USER_NOTIFICATION_EMAIL_TYPE="USER_NOTIFICATION_EMAIL";
     public static final String USER_RESET_PASSWORD_EMAIL_TYPE="USER_RESET_PASSWORD_EMAIL";
     public static final String USER_CHANGE_PASSWORD_EMAIL_TYPE="USER_CHANGE_PASSWORD_EMAIL";
     public static final String NEW_USER_REGISTRATION_EMAIL_TYPE="NEW_USER_REGISTRATION";
+    public static final String RETURN_ITEMS_REQUEST_EMAIL_TYPE="RETURN_ITEMS_REQUEST_EMAIL";
     
     public static final String ORDER_CONFIRMATION_EMAIL_SUBJECT=".com Order Submitted Notification";
+    public static final String RETURN_ITEMS_REQUEST_EMAIL_SUBJECT="Item Return Request";
     
     public static final String EMAIL_TRANSPORT_PROTOCOL="mail.transport.protocol";
     public static final String SMTP_EMAIL_HOST="mail.smtp.host";
