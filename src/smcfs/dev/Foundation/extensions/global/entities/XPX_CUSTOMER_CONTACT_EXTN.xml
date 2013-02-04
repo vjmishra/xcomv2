@@ -21,10 +21,10 @@
 					XMLGroup="Extn">
 				</Attribute>
 				<!-- Added for XB-258 Commenting to revert the changes -->
-				<!--<Attribute ColumnName="EXTN_ORDER_APPROVAL" DataType="Flag"
+				<Attribute ColumnName="EXTN_ORDER_APPROVAL" DataType="Flag"
 					DefaultValue="N" Description=" " Nullable="false" XMLName="ExtnOrderApproval"
 					XMLGroup="Extn">
-				</Attribute> -->
+				</Attribute>
 				
 				<!-- START Customer/User Profile Data : adsouza-->
 				<Attribute ColumnName="EXTN_USER_NETWORK_ID" DataType="Text-25"
