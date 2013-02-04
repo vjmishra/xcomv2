@@ -42,6 +42,10 @@
 	                <RequestedQtyUOM><xsl:value-of select="./sRequestedQtyUOM" /></RequestedQtyUOM>
 	
 	                <RequestedQty><xsl:value-of select="./sRequestedQty" /></RequestedQty>
+	                
+	                <OrderMultipleQty><xsl:value-of select="./sOrderMultipleQty" /></OrderMultipleQty>
+	                
+	                <OrderMultipleUOM><xsl:value-of select="./sOrderMultipleUOM" /></OrderMultipleUOM>	                
 	
 	                <PurchaseOrderQty><xsl:value-of select="./sPurchaseOrderQty" /></PurchaseOrderQty>
 	
