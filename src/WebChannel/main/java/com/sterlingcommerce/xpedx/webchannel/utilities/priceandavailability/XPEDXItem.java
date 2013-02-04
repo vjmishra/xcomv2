@@ -28,6 +28,9 @@ public class XPEDXItem {
 	private Vector warehouseLocationList;
 	//added for jira 2885
 	private String lineStatusErrorMsg;
+	private String orderMultipleQty;
+	private String orderMultipleUOM;
+	
 	public String getLineStatusErrorMsg() {
 		return lineStatusErrorMsg;
 	}
@@ -219,4 +222,21 @@ public class XPEDXItem {
 	public Vector getWarehouseLocationList() {
 		return warehouseLocationList;
 	}
+	
+	public String getOrderMultipleQty() {
+		return orderMultipleQty;
+	}
+
+	public void setOrderMultipleQty(String orderMultipleQty) {
+		this.orderMultipleQty = orderMultipleQty;
+	}
+
+	public String getOrderMultipleUOM() {
+		return orderMultipleUOM;
+	}
+
+	public void setOrderMultipleUOM(String orderMultipleUOM) {
+		this.orderMultipleUOM = orderMultipleUOM;
+	}
+
 }
