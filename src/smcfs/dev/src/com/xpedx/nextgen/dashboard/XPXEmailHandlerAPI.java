@@ -323,13 +323,18 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					}
 				}
 				//msapCustomerId = getCustomerID(buyerOrgCode,env);
-				strToEmailid=customerDoc.getDocumentElement().getAttribute("salesRepEmail");
-				if(YFCObject.isVoid(strToEmailid))
-					strToEmailid=getSalesRepEmailForSalesPro(msapCustomerId,env,salesRepId);
-
+				/*XB-615 : Begin - Changes made to send order confirmation email to sales-rep only when sales-rep email confirmation flag is 'Y'*/
+				if("Y".equalsIgnoreCase(isSalesRepEmailConfirm))
+				{
+				/*XB-615 : End - Changes made to send order confirmation email to sales-rep only when sales-rep email confirmation flag is 'Y'*/
+					strToEmailid=customerDoc.getDocumentElement().getAttribute("salesRepEmail");					
+					if(YFCObject.isVoid(strToEmailid))
+						strToEmailid=getSalesRepEmailForSalesPro(msapCustomerId,env,salesRepId);
+				}
+				
 			}else{
 				/*** Start of Code Modified for JIra 102 ,JIra 165 *******/
-				if((isSalesRepEmailConfirm!=null) && ("Y".equalsIgnoreCase(isSalesRepEmailConfirm)))
+				if("Y".equalsIgnoreCase(isSalesRepEmailConfirm))
 				{
 					strToEmailid = getCustomerContactElement
 					.getAttribute("EmailID")+","+customerDoc.getDocumentElement().getAttribute("salesRepEmail");
