@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
@@ -132,17 +133,11 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			String emailBCCXPath = emailDefnElement.getAttribute("EmailBccXPath");
 			String emailBCCAddresses = retrieveEmailIds(emailXMLElement, emailBCCXPath);
 			
-			if(YFCCommon.isVoid(emailFromAddress))
-			{
-				log.error("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
-				throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");				
-				
-			} else if(YFCCommon.isVoid(emailToAddresses) && YFCCommon.isVoid(emailCCAddresses) && YFCCommon.isVoid(emailBCCAddresses))
-			{
-				log.error("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
-				throw new AddressException("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
+			validateEmailAddresses(emailDetailsElement, emailFromAddress, emailToAddresses, emailCCAddresses, emailBCCAddresses);
 			
-			}
+			Address[] toAddresses = InternetAddress.parse(emailToAddresses);
+			Address[] ccAddresses = InternetAddress.parse(emailCCAddresses);
+		    Address[] bccAddresses = InternetAddress.parse(emailBCCAddresses);		
 			
 			String emailSubject = emailDetailsElement.getAttribute("EmailSubject");			
 			String htmlMailContent = applyXsltTemplate(emailXSL, emailXMLElement);
@@ -153,7 +148,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				smtpHost = "smtp.ipaper.com";
 			}
 			
-			sendEmail(env, api, emailFromAddress, emailToAddresses, emailCCAddresses, emailBCCAddresses, emailSubject, htmlMailContent, smtpHost, emailDetailsElement);
+			sendEmail(env, api, emailFromAddress, toAddresses, ccAddresses, bccAddresses, emailSubject, htmlMailContent, smtpHost, emailDetailsElement);
 			
 			if (log.isDebugEnabled()) {
 				log.debug(emailType+" sent successfully. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
@@ -287,8 +282,8 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 
 	}
 
-	private static void sendEmail(YFSEnvironment env, YIFApi api, String from, String toAddresses, String ccAddresses, 
-								  String bccAddresses, String subject, String content, String smtpHost, Element emailDetailsElement) throws Exception
+	private static void sendEmail(YFSEnvironment env, YIFApi api, String from, Address[] toAddresses, Address[] ccAddresses, 
+								  Address[] bccAddresses, String subject, String content, String smtpHost, Element emailDetailsElement) throws Exception
 	{		
 		Properties props = new Properties();
 
@@ -302,16 +297,14 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		
 		Message emailMessage = new MimeMessage(emailSession);
 		
-		if (toAddresses == null){
-			toAddresses = "";
-		}
-		emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddresses));
+		if(toAddresses!=null && toAddresses.length>0)			
+			emailMessage.setRecipients(Message.RecipientType.TO, toAddresses);
 		
-		if(ccAddresses!=null && ccAddresses.length()>0)
-			emailMessage.setRecipient(Message.RecipientType.CC, new InternetAddress(ccAddresses));
+		if(ccAddresses!=null && ccAddresses.length>0)
+			emailMessage.setRecipients(Message.RecipientType.CC, ccAddresses);
 		
-		if(bccAddresses!=null && bccAddresses.length()>0)
-			emailMessage.setRecipient(Message.RecipientType.BCC, new InternetAddress(bccAddresses));
+		if(bccAddresses!=null && bccAddresses.length>0)
+			emailMessage.setRecipients(Message.RecipientType.BCC, bccAddresses);
 		
 		String emltencoding = null;
         emltencoding = YFSSystem.getProperty("yfs.email.template.encoding");
@@ -454,6 +447,21 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				   emailDefnMap.put(emailType, emailDefnEle);
 		   }
 		}
+	}
+	
+	private void validateEmailAddresses(Element emailDetailsElement, String emailFromAddress, String emailToAddresses, String emailCCAddresses, String emailBCCAddresses) throws AddressException
+	{
+		if(YFCCommon.isVoid(emailFromAddress))
+		{
+			log.error("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
+			throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");				
+			
+		} else if(YFCCommon.isVoid(emailToAddresses) && YFCCommon.isVoid(emailCCAddresses) && YFCCommon.isVoid(emailBCCAddresses))
+		{
+			log.error("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
+			throw new AddressException("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
+		
+		}		
 	}
 	
 }
