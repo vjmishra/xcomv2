@@ -84,6 +84,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		try {
 			
 			setDefaultShipToIntoContext();
+			getCustomerLineDetails();
 			
 			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 			{
@@ -106,7 +107,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
 			//setOutputDocument(orderOutputDocument);
 			super.execute();
-			getCustomerLineDetails();
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
 			
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
@@ -1788,7 +1788,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
-		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache(getOutputDocument().getDocumentElement());
+		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
 		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
