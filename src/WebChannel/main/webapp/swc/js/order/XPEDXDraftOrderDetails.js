@@ -116,7 +116,7 @@ function addProductsToOrder()
 						isError = true;
 						noError = false;
 					}					
-					else if(ordMul != 0 || totalQty ==0)
+				/*	else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
 						//Added for 3098
@@ -126,7 +126,7 @@ function addProductsToOrder()
 						document.getElementById(divId).setAttribute("class", "error");
 						document.getElementById(divId).setAttribute("align", "center");
 						noError = false;
-					}
+					} XB 214 removing the Order Multiple Validation in Quick add & add to cart */
 					if(orderMultiple > 1 && noError == true) {
 						document.getElementById(divId).innerHTML ="Must be ordered in units of " + orderMultiple +" "+baseUOM[i].value;
 						document.getElementById(divId).style.display = "inline-block";
