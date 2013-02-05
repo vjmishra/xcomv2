@@ -142,7 +142,7 @@ function validatePassword(){
               if(errorDiv){
                errorDiv.style.display = 'none';
               }
-	    	   alert("Error in service.");
+	    	   //alert("Error in service.");
 	        }
 	    });
 }
