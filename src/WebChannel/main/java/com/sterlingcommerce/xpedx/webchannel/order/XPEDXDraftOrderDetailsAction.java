@@ -1824,7 +1824,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
         HashMap customerFieldsSessionMap = (HashMap)localSession.getAttribute("customerFieldsSessionMap");*/
-		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache(getOutputDocument().getDocumentElement());
 		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
