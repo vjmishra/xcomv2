@@ -727,7 +727,7 @@ public class XPEDXMyItemsDetailsChangeShareListAction extends WCMashupAction {
 		if(clAjax && newList)
 			return "copy";
 		else if(newList && fromItemDetail){
-			return SUCCESS;
+			return null;
 		}
 		return SUCCESS;
 	}
