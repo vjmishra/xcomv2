@@ -7,10 +7,6 @@
 			<Attributes>
 				<Attribute ColumnName="EMAIL_DETAILS_KEY" DataType="Key"
 					DefaultValue=" " Nullable="false" Description="Primary key" XMLName="EmailDetailsKey"/>
-				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
-					DefaultValue="sysdate" Description="Create TimeStamp" XMLName="Createts"/>
-				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
-					DefaultValue="sysdate" Description="Modify TimeStamp" XMLName="Modifyts"/>
 				<Attribute ColumnName="EMAIL_TYPE" DataType="varchar2-60"
 					DefaultValue=" " Description="Type of email being sent" XMLName="EmailType"/>
 				<Attribute ColumnName="EMAIL_XML" DataType="CLOB"
@@ -30,6 +26,15 @@
 				<Attribute ColumnName="EMAIL_ERROR_MESSAGE" DataType="CLOB"
 					DefaultValue=" " Description="The error message in case of any failure"
 					Nullable="true" XMLName="EmailErrorMessage" />
+				<!-- Begin - Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			    <!-- End - Mandatory columns -->
 
 			</Attributes>
 			<PrimaryKey Name="EMAIL_DTL_KEY_PK">

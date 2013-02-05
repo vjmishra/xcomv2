@@ -21,6 +21,16 @@
 				<Attribute ColumnName="EMAIL_BCC_XPATH" DataType="varchar2-500"
 					Nullable="true" DefaultValue=" "
 					Description="The Bcc address for the email being sent" XMLName="EmailBccXPath" />
+					
+				<!-- Begin - Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			    <!-- End - Mandatory columns -->
 			</Attributes>
 			<PrimaryKey Name="EMAIL_TYPE_PK">
 				<Attribute ColumnName="EMAIL_TYPE" />
