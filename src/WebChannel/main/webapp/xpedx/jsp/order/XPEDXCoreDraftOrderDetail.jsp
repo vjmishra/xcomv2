@@ -220,6 +220,20 @@
                 <s:set name='qty' value='#lineTran.getAttribute("OrderedQty")' />
 				<s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
 				<div class="cart-availability-section">
+					<script type="text/javascript">
+								//added for XB 214
+								$(document).ready(function() {
+								var enteredQty = document.getElementById("orderLineQuantities_<s:property value='%{#orderLineKey}' />").value;
+								var orderMulQty = <s:property value='%{#mulVal}' />;
+								var orderMulModulo = enteredQty % orderMulQty;
+								var divID = document.getElementById("errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />");
+								if(orderMulModulo == 0)
+									divID.setAttribute("class", "notice");
+								else
+									divID.setAttribute("class", "error");
+								
+								});
+					</script>
 	            	<table width="100%" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config availability-table">
 	                	<tbody>
 	                    	<tr>
@@ -264,7 +278,7 @@
 						 		<td>
 						 		<br/>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
 						 		</s:if>
 						 		</td>
 						 	</tr>
