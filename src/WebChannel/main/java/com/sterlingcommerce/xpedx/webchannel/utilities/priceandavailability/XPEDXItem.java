@@ -30,6 +30,15 @@ public class XPEDXItem {
 	private String lineStatusErrorMsg;
 	private String orderMultipleQty;
 	private String orderMultipleUOM;
+	private String orderMultipleErrorFromMax;
+	
+	public String getOrderMultipleErrorFromMax() {
+		return orderMultipleErrorFromMax;
+	}
+
+	public void setOrderMultipleErrorFromMax(String orderMultipleErrorFromMax) {
+		this.orderMultipleErrorFromMax = orderMultipleErrorFromMax;
+	}
 	
 	public String getLineStatusErrorMsg() {
 		return lineStatusErrorMsg;

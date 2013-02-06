@@ -511,6 +511,10 @@ public class XPEDXPriceandAvailabilityUtil {
 					XPEDXItem item=items.get(i);
 					if(!"00".equals(item.getLineStatusCode()))
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
+						//Hardcoding it to 10, for testing, till we get an actual error code from MAX
+						if("10".equals(item.getLineStatusCode())){
+							item.setOrderMultipleErrorFromMax("true");
+						}
 						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
 				}
 			}
@@ -535,6 +539,41 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 		return getPnAHoverMap(items,false);
 	}
+	
+	public static HashMap getOrderMultipleMapFromSourcing(
+			Vector<XPEDXItem> items) {
+		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
+		if (null == items || items.size() <= 0) {
+			return ordermultipleMapFromSourcing;
+		}		
+		for (XPEDXItem item : items) {		
+			int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(item.getOrderMultipleQty()!= null){
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
+			}else
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
+		}
+		return ordermultipleMapFromSourcing;
+	}
+	
+	public static HashMap useOrderMultipleErrorMapFromMax(
+			Vector<XPEDXItem> items) {
+		HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
+		if (null == items || items.size() <= 0) {
+			return useOrdermultipleMapFromSourcing;
+		}		
+		for (XPEDXItem item : items) {		
+			int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(item.getOrderMultipleErrorFromMax()!= null && item.getOrderMultipleErrorFromMax().equalsIgnoreCase("true")){
+				useOrdermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleErrorFromMax());
+			}
+			
+		}
+		return useOrdermultipleMapFromSourcing;
+	}
+	
+	
+	
 	
 	public static HashMap<String, JSONObject> getPnAHoverMap(
 			Vector<XPEDXItem> items,boolean isLineNumberRequired) {

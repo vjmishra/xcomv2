@@ -237,6 +237,10 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			setPnaHoverForEditOrderLine(pna,lineTpeMDoc);
 			pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 			//PNA call end
+			orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems());
+			useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
+			if(useOrderMultipleMapFromSourcing!=null && useOrderMultipleMapFromSourcing.size()>0)
+				return "Order_Multiple_Error";
 			//Setting the price hover map
 			//added for jira 2885 
 			if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
@@ -1288,6 +1292,28 @@ END of JIRA 3382*/
 	
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
+	
+	protected HashMap orderMultipleMapFromSourcing;
+	
+	protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
+
+	public HashMap getOrderMultipleMapFromSourcing() {
+		return orderMultipleMapFromSourcing;
+	}
+
+
+	public void setOrderMultipleMapFromSourcing(HashMap orderMultipleMapFromSourcing) {
+		this.orderMultipleMapFromSourcing = orderMultipleMapFromSourcing;
+	}
+
 	
 	private String itemDtlBackPageURL="";
 	//XBT-146

@@ -131,6 +131,13 @@
 				<param name="draft">${draft}</param>
 				<param name="customerFieldsValidated">${customerFieldsValidated}</param>
 			</result>
+			<result name="Order_Multiple_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>				
+			</result>
 		</action>
 
 		<action name="draftOrderSummaryUpdate"

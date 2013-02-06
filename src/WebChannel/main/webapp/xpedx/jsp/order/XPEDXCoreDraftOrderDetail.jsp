@@ -76,6 +76,8 @@
 		<s:set name='isSpecialLine' value='#_action.isSpecialLine(#orderLine)' />
 		<s:set name="jsonKey" value='%{#item.getAttribute("ItemID")+"_"+#orderLine.getAttribute("PrimeLineNo")}' />
 		<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
+		
+		<s:set name="OrderMultipleQtyFromSrc" value='orderMultipleMapFromSourcing.get(#jsonKey)' />
 		<s:set name="displayPriceForUoms" value='%{""}' />
 		<s:set name="priceInfo" value='priceHoverMap.get(#jsonKey)' />
 		<s:if test="%{#priceInfo!=null}" >
@@ -90,7 +92,12 @@
 		<s:include value="XPEDXCatalogDetailURL.jsp" />
 		<s:set name='itemIDVal' value='%{#item.getAttribute("ItemID")}' />
 		<s:set name="mulVal" value='itemOrderMultipleMap[#itemIDVal]' />
-		<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#orderLineKey}" value="%{#mulVal}" />
+		<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>	
+			<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#orderLineKey}" value="%{#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|'))}" />
+		</s:if>
+		<s:else>
+			<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#orderLineKey}" value="%{#mulVal}" />
+		</s:else>	
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
 		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
@@ -220,20 +227,6 @@
                 <s:set name='qty' value='#lineTran.getAttribute("OrderedQty")' />
 				<s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
 				<div class="cart-availability-section">
-					<script type="text/javascript">
-								//added for XB 214
-								$(document).ready(function() {
-								var enteredQty = document.getElementById("orderLineQuantities_<s:property value='%{#orderLineKey}' />").value;
-								var orderMulQty = <s:property value='%{#mulVal}' />;
-								var orderMulModulo = enteredQty % orderMulQty;
-								var divID = document.getElementById("errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />");
-								if(orderMulModulo == 0)
-									divID.setAttribute("class", "notice");
-								else
-									divID.setAttribute("class", "error");
-								
-								});
-					</script>
 	            	<table width="100%" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config availability-table">
 	                	<tbody>
 	                    	<tr>
@@ -277,8 +270,28 @@
 						 	<tr>
 						 		<td>
 						 		<br/>
-						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>					 		
+						 						 			
+						 			<s:if test='(useOrderMultipleMapFromSourcing.containsKey(#jsonKey))'>
+						 			
+                						<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>						 			
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 				</s:if>
+						 				<s:else>
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 				</s:else>
+                					</s:if>
+                					<s:else>
+                					
+						 				<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>						 			
+						 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 				</s:if>
+						 				<s:else>
+						 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 				</s:else>	
+						 			</s:else>
+						 		
+						 		</div>
 						 		</s:if>
 						 		</td>
 						 	</tr>
