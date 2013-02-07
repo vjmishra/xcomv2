@@ -399,12 +399,11 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			TreeItem iItem = new TreeItem (tree, SWT.NULL);
 			Element eleCust=(Element) custId.get(0);
 			String CustomerID="";
-
 			String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 			String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
 			String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
 			CustomerID=orgId;
-
+			
 			iItem.setText(orgName+" ("+CustomerID+")");
 			iItem.setData("data", eleCust);
 			if(myBehavior.isThisCustomerAssigned(eleCust)){
@@ -430,9 +429,23 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			{
 				Element eleCust = (Element)custId.get(i);
 				String CustomerID="";
+				String address="";
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
 				String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 				String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
+				
+				String add1 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
+				String add2 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
+				String add3 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
+				String add4 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine4");
+				String add5 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine5");
+				String add6 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine6");
+				String city = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
+				String country = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
+				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
+				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
+				
+				
 			
 				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
 				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
@@ -452,7 +465,53 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				else if("S".equalsIgnoreCase(customerType)){
 						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
 				}
-				iiItem.setText(orgName+" ("+CustomerID+")");
+				
+				
+				if(add1 !=null && add1.trim().length()>0)
+				{
+					address+= " "+ add1;
+				}
+				
+				if(add2 !=null && add2.trim().length()>0)
+				{
+					address+= ", "+ add2;
+				}
+				if(add3 !=null && add3.trim().length()>0)
+				{
+					address+= ", "+ add3;
+				}
+				if(add4 !=null && add4.trim().length()>0)
+				{
+					address+= ", "+ add1;
+				}
+				if(add5 !=null && add5.trim().length()>0)
+				{
+					address+= ", "+ add5;
+				}
+				if(add6 !=null && add6.trim().length()>0)
+				{
+					address+= ", "+ add6;
+				}
+				
+				if(city !=null && city.trim().length()>0)
+				{
+					address+= ", "+ city;
+				}
+				if(state !=null && state.trim().length()>0)
+				{
+					address+= ", "+ state;
+				}
+				if(zip !=null && zip.trim().length()>0)
+				{
+					address+= " "+ zip;
+				}
+				if(country !=null && country.trim().length()>0)
+				{
+					address+= " "+ country;
+				}
+				
+				
+				iiItem.setText(orgName+" ("+CustomerID+")"+address);
 				
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisCustomerAssigned(eleCust)){
