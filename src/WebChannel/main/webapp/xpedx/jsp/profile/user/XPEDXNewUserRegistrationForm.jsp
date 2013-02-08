@@ -55,9 +55,27 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+	  var xpedxVideoSRC ="";
 		$(document).pngFix();
 		$('.phone-numeric').numeric(false); 
 		$("#newUserPhone").mask("999 999-9999");
+		$("#selectVideoToPlay").fancybox({
+	 'autoDimensions' : false,
+			'width'   : 700,
+			'height'  : 394,
+		  'scrolling' : 'no',
+		  'padding'   : 10,
+		  'onComplete': function() { 
+						  xpedxVideoSRC = $('#viewVideoDlg iframe').attr('src'); 
+					},
+			'onClosed': function() { 
+					  	$('#viewVideoDlg iframe').attr('src',xpedxVideoSRC); 
+					}, 
+		   'onCleanup': function() { 
+						 var myContent = this.href; 
+						 $(myContent).unwrap(); 
+					}
+		});
 	});	
 </script>
 <script type="text/javascript">
@@ -211,7 +229,7 @@
 					</tr>
 					<tr>
 						<td style="color:#4c4c4c">Purchasing history reports</td>
-						<td style="text-align:center;color:#4c4c4c">N/A</font></td>
+						<td style="text-align:center;color:#4c4c4c">N/A</td>
 						<td align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
 					</tr>
 					<tr>
@@ -221,11 +239,17 @@
 					</tr>
 				</tbody>
 			</table>
+			</div>
 		</td>
-    		<td><div class="float-left"><a href="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" target="_blank"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
+    		<td><div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
 		</tr> 
 	    </tbody>
 	 </table>
+</div>
+<div style="display: none;">
+	<div id="viewVideoDlg" class="float-left">
+		<iframe title="vimeo video " width="700" height="394" scrolling="no" src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" frameborder="0" allowfullscreen></iframe>
+	</div>
 </div>
 <s:form name="registrationForm" namespace='/profile/user'
 	action='XPEDXNewUserRegistrationAction' validate="true">
