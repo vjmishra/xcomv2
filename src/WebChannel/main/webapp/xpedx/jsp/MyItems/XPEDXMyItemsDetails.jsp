@@ -66,6 +66,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MIL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <script type="text/javascript">
 function maxLength(field,maxlimit) {
 	if (field.value.length > maxlimit) // if too long...trim it!
@@ -821,6 +822,7 @@ function showSharedListForm(){
 		}
 		//Added For Jira 3946
 		function setMsgOnAddItemsWithQtyToCart(response){
+				refreshMiniCartLink();
 			if(response.responseText != null && response.responseText.indexOf('Error while adding to XPEDXMyItemsAdd To Cart ') !== -1 )
      	   {
      		   alert("There is a problem adding the items to the cart. Please try again or contact your administrator.");
@@ -842,7 +844,6 @@ function showSharedListForm(){
 						  divVal.setAttribute("class", "success");
     					}
     				}
-               	 refreshMiniCartLink();
      	   }
 		}
 		
@@ -905,7 +906,7 @@ function showSharedListForm(){
 	   		        	var draftErr = response.responseText;
 	   		            var draftErrDiv = document.getElementById("errorMessageDiv");
 	   		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-	   		        {
+	   		        {			refreshWithNextOrNewCartInContext();
 	   		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 	   		                    Ext.Msg.hide();
 	   		                	myMask.hide();
