@@ -531,8 +531,14 @@ from session . We have customer Contact Object in session .
 <body class="ext-gecko ext-gecko3">
 <div id="main-container">
 <div id="main">
-<s:action name="xpedxHeader" executeResult="true"
-	namespace="/common" /> 
+<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+	 <s:param name='isFromWhichPage' value="%{'checkout'}" />
+</s:action>
+<div style="display: none;">
+	<div id="viewPrvenetChangeShipToDlg" class="float-left">
+		<p><b>To Change Ship To, click on Edit Cart at the bottom of the Checkout page.</b></p>
+	</div>
+</div> 
 	<s:form action="draftOrderSummaryUpdate"
 	validate="true" name="OrderSummaryForm" id="OrderSummaryForm"
 	namespace="/order" method="POST">
