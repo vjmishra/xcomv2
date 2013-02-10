@@ -98,6 +98,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 <!-- Web Trends tag start -->
+<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 <script>
@@ -812,6 +813,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 
 	         if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
              {
+	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
              }
 	         
@@ -886,6 +888,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 				 myMessageDiv.innerHTML = "Error in adding item to the cart." ;	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
+            refreshMiniCartLink();
             Ext.Msg.hide();
     	    myMask.hide();  
              }
