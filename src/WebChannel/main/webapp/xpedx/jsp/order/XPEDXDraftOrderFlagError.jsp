@@ -71,9 +71,9 @@ $("#various4").fancybox();
   <div id="main">
   
   
-     <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-	
-	
+     <s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+		<s:param name='isFromWhichPage' value="%{'draftorderflagerror'}" />
+	</s:action>
     <form id="contact_form" name="contact_form" method="post" action="#">
 
 	
