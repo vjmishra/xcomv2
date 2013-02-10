@@ -37,6 +37,7 @@
 	<s:else>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
+	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
@@ -718,35 +719,21 @@ var selectedShipCustomer = null;
 <!-- Web Trends tag end  -->
 	<script type="text/javascript">
 	$(document).ready(function() {
-	$('.mini-cart-trigger').cluetip({
-				activation: 'click',
-				ajaxCache:		false,
-				positionBy:		'fixed',
-				topOffset:		30,
-				leftOffset:		-410,
-				width:				435,
-				height:				285,
-				cluetipClass:	'mcqt',
-				dropShadow:		false,
-				sticky:				true,
-				closeText:		'<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" title="Close" />',
-				delayedClose:	false /* 5000 */
-		});
 		$('a#inline').fancybox();
-		$('.mini-cart-trigger').click(function() {
-			var a = 'display: block; position: absolute; width: 435px; top: 55px; right:' + ($(window).width()-1000)/2 +'px;';
-			$('#cluetip').attr("style",a);
-		});
+		$("#preventChangeShipTo").fancybox();		
 	});
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 		function callCartDetails(storefrontId)
 		{
 			var orderHeaderKey=document.getElementById('carddetailOrderHeaderKey').value;
-			if(orderHeaderKey == null || orderHeaderKey == '' || orderHeaderKey == 'null')
+			if(orderHeaderKey == null || orderHeaderKey == '' || orderHeaderKey == 'null' || orderHeaderKey == '_CREATE_NEW_')
 			{
 				orderHeaderKey = "_CREATE_NEW_";
+				document.location.href= "/swc/order/quickAddAction.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&quickAdd=false&draft=Y&scFlag=Y";
 			}
-			document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
+			else{
+				document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
+			}
 		}
 	</script>	
 	<script>
@@ -805,6 +792,7 @@ var selectedShipCustomer = null;
 <s:set name="isProcurementUser" value="%{#_action.getWCContext().isProcurementUser()}"/>
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
+<s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
 <s:set name="isCustomerSelectedIntoConext" value="#wcUtil.isCustomerSelectedIntoConext(wCContext)"/>
 <s:set name='prodCategoryDocument' value="prodCategoryOutputDoc" />
 <s:set name='prodCategoryElement' value="#prodCategoryDocument.getDocumentElement()" />
@@ -2206,22 +2194,7 @@ function callAjaxForSorting(url,divId)
 			});
 	}	
 	
-	//Added hideMiniCrt() for Jira 3727
-	function hideMiniCrt()
-	{
- 		checkSessionTimeout();
-		var miniCartDiv=document.getElementById("mini-cart");
-		if(miniCartDiv != null && miniCartDiv != undefined)
-		{
-			if(miniCartDiv.style.display =='none')
-				miniCartDiv.style.display='block';
-			else
-			{
-				miniCartDiv.style.display='none';			
-				var miniCartDiv1=document.getElementById("cluetip-close").style.display='none';
-			}
-		}
-	}
+
 	//check for timeout for JIRA 1650 
 function checkSessionTimeout(){
 	<s:url id='homeAction' action='home' namespace='/home' />;
@@ -2371,11 +2344,9 @@ function msgWait(){
  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">	          	
     <div class="searchbox-2">
     <s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
-				<s:url id='miniCartDisplayURL' namespace='/order'  action='XPEDXMiniCartDisplay'>
-					<s:param name='miniCartListMaxElements'  value='%{#miniCartListMaxElements}' />
-				</s:url>
-			<%-- Added hideMiniCrt() for Jira 3727	 --%> 
-			<a  class="underlink mini-cart-trigger" href=""  id="miniCartMouseoverArea2" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015" onclick="javascript:hideMiniCrt();">
+
+			 
+			<a  class="underlink"  id="miniCartMouseoverArea2" tabindex="2015" href="javascript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');">
 				<img id="whitecart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/16x16_white_cart.png" alt="" style="display:block;float:left;" />
 			</a> 			
 		<s:url id='XPEDXMiniCartLinkDisplayURL'  namespace='/order'  action='XPEDXMiniCartLinkDisplay.action' ></s:url>
@@ -2384,33 +2355,31 @@ function msgWait(){
     		
     		<s:if test='#sessionOrderHeaderKey == null'>
     		<div id="progressDiv"> Processing ...</div>
-    	   <a  class="underlink mini-cart-trigger" href="" onclick="javascript:hideMiniCrt();" <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">
+    	   <a  class="underlink"  href="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');"  id="miniCartMouseoverArea1" tabindex="2015">
    			
 		    		<div id ="XPEDXMiniCartLinkDisplayDiv">	
 					</div>
-					<script>
-			    	Ext.onReady(function(){
-		    		   	var url = "<s:property value='#XPEDXMiniCartLinkDisplayURL'/>";
-		       			url = ReplaceAll(url,"&amp;",'&');
-			       		Ext.Ajax.request({
-					       	url:url,
-			    		   	success: function (response, request)
-			       			{
-				    			var myDiv = document.getElementById("XPEDXMiniCartLinkDisplayDiv");
-				    			var progressDiv = document.getElementById("progressDiv");
-				    			progressDiv.innerHTML = "";
-			    				myDiv.innerHTML = response.responseText;
-		        			},
-		        			failure: function ( response, request ) {
-		        	        }
-						});
+					<s:if test="%{#fromWhichPage == 'draftorderflagerror'}">
+						<script>
+			    			Ext.onReady(function(){
+				    	 		refreshWithNextOrNewCartInContext();
+				    	 	});
+						</script>	   
+				    	</s:if>	
+				    	<s:else>
+					    	<script>
+				    			Ext.onReady(function(){
+					    			refreshMiniCartLink();
+					    		});
+							</script>
+				    	</s:else>    		   
 					});
 					</script>
 					</a>
 	    		</s:if>
 	    		<s:else>
-	    			<%-- Added hideMiniCrt() for Jira 3727	 --%>
-		    		 <a  class="underlink mini-cart-trigger" href="" onclick="javascript:hideMiniCrt();"  <%-- onclick="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" --%> id="miniCartMouseoverArea1" rel="<s:property value="%{miniCartDisplayURL}"/>" tabindex="2015">	    			
+	    		
+		    		 <a  class="underlink" href="javaScript:callCartDetails('<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>');" id="miniCartMouseoverArea1" tabindex="2015">	    			
 		    			<div id ="XPEDXMiniCartLinkDisplayDiv">
 		    				<s:include value="/xpedx/jsp/order/XPEDXMiniCartLink.jsp"/>
 						</div>
@@ -2420,51 +2389,7 @@ function msgWait(){
 			</span>			
 	</div>
 </s:if>
-	<div style='display: none;'><s:form name='miniCartForm'
-		id='miniCartForm'>
-		<s:if
-			test='(#parameters.minimalMiniCart == null) || (#yfcCommon.isVoid(#parameters.minimalMiniCart))'>
-			<s:hidden id='minimalMiniCart' value='%{"false"}' />
-		</s:if>
-		<s:else>
-			<s:hidden id='minimalMiniCart' value='%{#parameters.minimalMiniCart}' />
-		</s:else>
-		<s:hidden id='minimalMiniCartMessage'
-			value='%{#parameters.minimalMiniCartMessage}' />
-		<s:if
-			test='(#parameters.canExpandMiniCart == null) || (#yfcCommon.isVoid(#parameters.canExpandMiniCart))'>
-			<s:hidden id='canExpandMiniCart' value='%{"true"}' />
-		</s:if>
-		<s:else>
-			<s:hidden id='canExpandMiniCart'
-				value='%{#parameters.canExpandMiniCart}' />
-		</s:else>
-		<s:hidden id='isGuestUser' value='%{#isGuestUser}' />
-		<s:hidden id='miniCartGeneralAJAXError'
-			value='%{#_action.getText("miniCartGeneralAJAXError")}' />
-		<s:hidden id='miniCartDisplayError'
-			value='%{#_action.getText("miniCartDisplayError")}' />
-		<s:hidden id='miniCartTitle'
-			value='' />
-		</s:form> <s:url id='miniCartLinkDisplayURL' namespace='/order'
-			action='XPEDXMiniCartLinkDisplay' /> <s:if
-			test='(#parameters.miniCartListMaxElements == null) || (#yfcCommon.isVoid(#parameters.miniCartListMaxElements))'>
-			<s:set name='miniCartListMaxElements' value='%{"5"}' />
-		</s:if> <s:else>
-			<s:set name='miniCartListMaxElements'
-				value='#parameters.miniCartListMaxElements' />
-		</s:else> <s:url id='miniCartDisplayURL' namespace='/order'
-			action='XPEDXMiniCartDisplay'>
-			<s:param name='miniCartListMaxElements'
-				value='%{#miniCartListMaxElements}' />
-		</s:url> <s:url id='miniCartDeleteURL' namespace='/order'
-			action='miniCartDelete' /> <s:url id='miniCartUpdateURL'
-			namespace='/order' action='miniCartUpdate' /> <s:a
-			id='miniCartLinkDisplayURL' href='%{#miniCartLinkDisplayURL}' /> <s:a
-			id='miniCartDisplayURL' href='%{#miniCartDisplayURL}' /> <s:a
-			id='miniCartDeleteURL' href='%{#miniCartDeleteURL}' /> <s:a
-			id='miniCartUpdateURL' href='%{#miniCartUpdateURL}' /></div>
-		</s:if>
+</s:if>
   </s:if>
   <ul class="header-subnav commonHeader-subnav">
 	  	<s:if test="%{!#isProcurementUser}">
@@ -2503,7 +2428,12 @@ function msgWait(){
 	      				 </s:else>	        
 						<a href="#" id="welcome-address-popup-close"><img title="Close" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" alt="[close]" /></a>
 						<s:if test="#isEditOrderHeaderKey == null ">
-							<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
+							 <s:if test="%{#fromWhichPage == 'checkout'}">
+								<a href="#viewPrvenetChangeShipToDlg" id="preventChangeShipTo">[Change]</a>
+							</s:if>
+							<s:else>
+								<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
+							</s:else>
 						</s:if>						
 						<br/> 
 					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  																	
