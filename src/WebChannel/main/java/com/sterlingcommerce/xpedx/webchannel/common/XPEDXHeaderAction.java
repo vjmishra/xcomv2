@@ -65,6 +65,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private Boolean shipToBanner = false;
 	private XPEDXShipToCustomer shipToAddress;
 	private String userTypeForWebtrend;
+	private String isFromWhichPage;
 	//Commenting since this is not required
 	//could not get key directly on jsp so added the code.
 	/*private String orderHeaderKey1 = null;
@@ -78,6 +79,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		this.orderHeaderKey1 = orderHeaderKey1;
 	}*/
 	
+	public String getIsFromWhichPage() {
+		return isFromWhichPage;
+	}
+
+	public void setIsFromWhichPage(String isFromWhichPage) {
+		this.isFromWhichPage = isFromWhichPage;
+	}
+
 	public String getUserTypeForWebtrend() {
 		String temp="";
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
