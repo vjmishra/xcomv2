@@ -631,10 +631,15 @@
             <result name="success">/xpedx/jsp/order/XPEDXMiniCart.jsp</result>
         </action>
 
-    	<action name="XPEDXMiniCartLinkDisplay" class="com.sterlingcommerce.webchannel.order.MiniCartLinkDisplayAction">
+    	<action name="XPEDXMiniCartLinkDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction">
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>
         </action>
+        <action name="XPEDXRefreshCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction" method="refreshWithNextOrNewCartInContextOrderHeaderKey">
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>  
+        </action>
+
         <!-- action to check for timeout for JIRA 1650-->
         <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
         <result name="timeout">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
