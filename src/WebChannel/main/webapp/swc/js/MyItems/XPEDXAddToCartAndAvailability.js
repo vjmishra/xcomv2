@@ -110,13 +110,14 @@
 		        	var draftErr = response.responseText;
 		            var draftErrDiv = document.getElementById("errorMessageDiv");
 		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-		        {
+		        {			refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 		                    Ext.Msg.hide();
 		                	myMask.hide();
 		        }
 					else if(responseText.indexOf("Error")>-1)
 					{
+						refreshMiniCartLink();
 						Ext.Msg.hide();
 						myMask.hide();
 						alert("Error Adding the Item to the cart. Please try again later");
@@ -168,6 +169,7 @@
 					}	
 				},
 				failure: function (response, request){
+					refreshMiniCartLink();
 				    //Ext.MessageBox.hide(); 
 					Ext.Msg.hide();
 					myMask.hide();

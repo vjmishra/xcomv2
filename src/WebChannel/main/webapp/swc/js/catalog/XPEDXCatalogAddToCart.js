@@ -74,6 +74,7 @@ function addItemToCart(itemId) {
 					success: function (response, request){
 						var responseText = response.responseText;
 						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
+							refreshWithNextOrNewCartInContext();
 							Ext.Msg.hide();
 							myMask.hide();
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
@@ -81,6 +82,7 @@ function addItemToCart(itemId) {
 						}
 						if(responseText.indexOf("Error")>-1)
 						{
+							refreshMiniCartLink();
 							Ext.Msg.hide();
 							myMask.hide();
 							alert("Error Adding the Item to the cart. Please try again later");
@@ -126,6 +128,7 @@ function addItemToCart(itemId) {
 					},
 					failure: function (response, request){
 					    //Ext.MessageBox.hide(); 
+					    refreshMiniCartLink();
 					    	Ext.Msg.hide();
 						myMask.hide();
 						alert("Error Adding the Item to the cart. Please try again later");
