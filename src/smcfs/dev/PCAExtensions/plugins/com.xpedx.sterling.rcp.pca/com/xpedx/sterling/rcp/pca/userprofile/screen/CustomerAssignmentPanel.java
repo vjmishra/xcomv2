@@ -437,9 +437,6 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				String add1 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 				String add2 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
 				String add3 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
-				String add4 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine4");
-				String add5 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine5");
-				String add6 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine6");
 				String city = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
 				String country = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
@@ -479,18 +476,6 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				if(add3 !=null && add3.trim().length()>0)
 				{
 					address+= ", "+ add3;
-				}
-				if(add4 !=null && add4.trim().length()>0)
-				{
-					address+= ", "+ add1;
-				}
-				if(add5 !=null && add5.trim().length()>0)
-				{
-					address+= ", "+ add5;
-				}
-				if(add6 !=null && add6.trim().length()>0)
-				{
-					address+= ", "+ add6;
 				}
 				
 				if(city !=null && city.trim().length()>0)
