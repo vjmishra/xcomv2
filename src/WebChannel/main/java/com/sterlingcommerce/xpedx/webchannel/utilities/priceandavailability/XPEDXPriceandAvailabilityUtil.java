@@ -90,7 +90,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_HEADERSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithHeaderStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_LINESTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithLineStatusError.xml";
-
+ public static final String WS_ORDERMULTIPLE_ERROR_FROM_MAX="14";
 	
 	
 	/**
@@ -509,12 +509,11 @@ public class XPEDXPriceandAvailabilityUtil {
 				for(int i=0;i<items.size();i++)
 				{
 					XPEDXItem item=items.get(i);
-					if(!"00".equals(item.getLineStatusCode()))
+					if(WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode())){
+						item.setOrderMultipleErrorFromMax("true");
+					}
+					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode()))
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
-						//Hardcoding it to 10, for testing, till we get an actual error code from MAX
-						if("10".equals(item.getLineStatusCode())){
-							item.setOrderMultipleErrorFromMax("true");
-						}
 						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
 				}
 			}
