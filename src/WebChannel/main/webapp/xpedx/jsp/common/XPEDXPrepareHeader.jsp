@@ -2359,22 +2359,11 @@ function msgWait(){
    			
 		    		<div id ="XPEDXMiniCartLinkDisplayDiv">	
 					</div>
-					<s:if test="%{#fromWhichPage == 'draftorderflagerror'}">
-						<script>
-			    			Ext.onReady(function(){
-				    	 		refreshWithNextOrNewCartInContext();
-				    	 	});
-						</script>	   
-				    	</s:if>	
-				    	<s:else>
-					    	<script>
-				    			Ext.onReady(function(){
-					    			refreshMiniCartLink();
+			    	<script>
+				    		Ext.onReady(function(){				    				
+					    			refreshMiniCartLink();				
 					    		});
 							</script>
-				    	</s:else>    		   
-					});
-					</script>
 					</a>
 	    		</s:if>
 	    		<s:else>
