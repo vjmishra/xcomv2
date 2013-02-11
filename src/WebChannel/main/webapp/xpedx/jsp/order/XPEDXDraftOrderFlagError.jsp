@@ -65,18 +65,20 @@ $("#various4").fancybox();
 </head>
 <!-- END swc:head -->
 <s:set name='_action' value='[0]' />
-
 <body class="ext-gecko ext-gecko3">
 <div id="main-container">
   <div id="main">
   
-  
-     <s:action name="xpedxHeader" executeResult="true" namespace="/common" >
-		<s:param name='isFromWhichPage' value="%{'draftorderflagerror'}" />
-	</s:action>
+
+     <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+			<script>
+			    Ext.onReady(function(){
+			    		refreshWithNextOrNewCartInContext();
+			    	});
+			</script>
     <form id="contact_form" name="contact_form" method="post" action="#">
 
-	
+			
 		<div class="container">
 		<div id="mid-col-mil"><br/>
         <br />
@@ -98,7 +100,7 @@ $("#various4").fancybox();
     <!-- End Pricing -->
     <br />
   </div>
-</div>
+  </div>
 </div>
      
     <!-- end main  -->
