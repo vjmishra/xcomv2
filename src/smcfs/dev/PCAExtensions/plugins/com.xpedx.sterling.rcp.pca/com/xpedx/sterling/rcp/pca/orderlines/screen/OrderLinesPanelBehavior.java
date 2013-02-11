@@ -342,8 +342,14 @@ public class OrderLinesPanelBehavior extends YRCWizardPageBehavior implements IX
 						// Check if PnA is also performed along with this command,
 						// if not then proceed with handleSalesOrder() which will paint the UI
 						Document docPnAInput = XPXUtils.preparePnAInputDocForOrderLines(orderElementBeforeAddition, eleCustomerInfo);
+						if(null == docPnAInput){
 							this.handleSalesOrder();
 							page.showRootPanel(true);
+						} else {
+							//Invoke PnA docPnAInput
+							callApi(XPXUtils.PRICE_AND_AVAILABILITY_SRVC, docPnAInput);
+							
+						}
 						// invoke pna
 					} else if (XPXUtils.PRICE_AND_AVAILABILITY_SRVC.equals(apiname)) {
 						Document orderLevelPAndAResponseDoc = ctx.getOutputXmls()[i];
