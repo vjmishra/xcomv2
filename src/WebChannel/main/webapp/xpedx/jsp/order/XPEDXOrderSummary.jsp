@@ -629,9 +629,9 @@ from session . We have customer Contact Object in session .
      			<!-- Webtrends Tag ends -->
 				<tr>
 					<td><span class="bold">Ship-To:</span> <s:property value='orderShipToID'/> 
-					<s:if test='#canChangeShipTo && #_action.isDraftOrder()'>
+					
 					<!-- Webtrends Tag starts -->
-					<a onclick="javascript: writeMetaTag(tag,content,2);" href="#ajax-assignedShipToCustomers" id="shipToSelect2" class="underlink" tabindex="201">[Change]</a></s:if></td></tr>	
+					</td></tr>	
 					<s:if test="%{#currentShipTo.getOrganizationName()!='' && #currentShipTo.getOrganizationName()!= null}">
 					<tr>
 						<td width="100%"><s:property value='%{#currentShipTo.getOrganizationName()}' /></td>
