@@ -1134,7 +1134,7 @@ function showSharedListForm(){
 				
 				else if(addItemsWithQty == true){
 					addToCartFlag = true;
-					if(ordMul!= 0){
+					/* Commented for Order multiple CR - CR2if(ordMul!= 0){
 						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
@@ -1150,9 +1150,9 @@ function showSharedListForm(){
 						Ext.Msg.hide();
 						myMask.hide();
 					}
-					else{
+					else{*/
 						validAddtoCartItemsFlag[0]=true;
-					}
+					//}
 					if(arrOrdMul.value > 1 && isAddToCart == true)
 					{
 						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
@@ -1306,7 +1306,7 @@ function showSharedListForm(){
 					
 					else if(addItemsWithQty == true){
 						addToCartFlag = true;
-						if(ordMul!= 0){
+						/* Commented for Order Multiple CR-2 if(ordMul!= 0){
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 							divVal.setAttribute("class", "error");
 							divVal.style.display = 'block';
@@ -1322,9 +1322,9 @@ function showSharedListForm(){
 							Ext.Msg.hide();
 					    		myMask.hide();
 						}
-						else{
+						else{*/
 							validAddtoCartItemsFlag[i]=true;
-						}
+						//}
 						if(arrOrdMul[i].value > 1 && isAddToCart == true)
 						{
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
@@ -1505,7 +1505,7 @@ function showSharedListForm(){
 					}
 					var ordMul = totalQty % arrOrdMul[i].value;
 					isQuantityZero = false;
-					if(ordMul!= 0)
+					/* Commented for Order multiple CR2if(ordMul!= 0)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
@@ -1530,7 +1530,7 @@ function showSharedListForm(){
 						}
 						errorflag= false;
 					}
-					else if (arrOrdMul[i].value > 1 && priceCheck == true && errorMsgFlag == false){
+					else*/ if (arrOrdMul[i].value > 1 && priceCheck == true && errorMsgFlag == false){
 						if (priceCheck == true){
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
