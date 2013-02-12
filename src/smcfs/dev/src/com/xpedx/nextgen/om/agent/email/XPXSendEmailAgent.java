@@ -164,26 +164,12 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			Document emailExceptionDoc = SCXmlUtil.createFromString("<XPXEmailDetails/>");
 			Element emailExceptionEle = emailExceptionDoc.getDocumentElement();
 			String emailDetailsKey=emailDetailsElement.getAttribute("EmailDetailsKey");
-			String emailRetryCount=emailDetailsElement.getAttribute("EmailRetryCount");
-			
 			emailExceptionEle.setAttribute("EmailDetailsKey", emailDetailsKey);
-			int intRetryCount=0;
-			if(!YFCCommon.isVoid(emailRetryCount))
-				intRetryCount = Integer.parseInt(emailRetryCount);
 			
 			if (e instanceof AddressException)
 			{
 				AddressException adrEx=(AddressException)e;
-				String errorMessage="";
-				if (YFCCommon.isVoid(emailToAddresses))
-				{
-					errorMessage="Mandatory parameter - 'To Address' is null. AddressException message is : "+adrEx.getMessage();
-					
-				} else {
-					errorMessage="AddressException message is : "+adrEx.getMessage();
-					
-				}
-				
+				String errorMessage= "AddressException message is : "+adrEx.getMessage();				
 				emailExceptionEle.setAttribute("EmailRetryCount", "-1");				
 				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage);
 				log.error("AddressException caught inside XPXSendEmailAgent.sendEmail(). "+errorMessage+". Email Details Key is :["+emailDetailsKey+"]."); 
@@ -205,6 +191,11 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				
 				}else 
 				{
+					String emailRetryCount=emailDetailsElement.getAttribute("EmailRetryCount");
+					int intRetryCount=0;
+					if(!YFCCommon.isVoid(emailRetryCount))
+						intRetryCount = Integer.parseInt(emailRetryCount);
+					
 					MessagingException msgEx = (MessagingException)e;
 					if(intRetryCount > -1 && intRetryCount < 9 )
 					{
@@ -453,13 +444,11 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	{
 		if(YFCCommon.isVoid(emailFromAddress))
 		{
-			log.error("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
-			throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");				
+			throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server.");				
 			
 		} else if(YFCCommon.isVoid(emailToAddresses) && YFCCommon.isVoid(emailCCAddresses) && YFCCommon.isVoid(emailBCCAddresses))
 		{
-			log.error("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
-			throw new AddressException("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
+			throw new AddressException("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server.");
 		
 		}		
 	}
