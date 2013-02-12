@@ -237,7 +237,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			setPnaHoverForEditOrderLine(pna,lineTpeMDoc);
 			pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 			//PNA call end
-			orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems());
+			orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),true);
 			useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 			if(useOrderMultipleMapFromSourcing!=null && useOrderMultipleMapFromSourcing.size()>0)
 				return "Order_Multiple_Error";
