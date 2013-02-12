@@ -155,7 +155,29 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String modifyts;
     private String createUserId;
     private String modifyUserid;
-    //Added for JIRA 1402 Starts
+// added for XB 214   
+	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
+    protected String isOMError;
+    
+    public String getIsOMError() {
+		return isOMError;
+	}
+
+	public void setIsOMError(String isOMError) {
+		this.isOMError = isOMError;
+	}
+
+	public Map<String, String> getSourcingOrderMultipleForItems() {
+		return sourcingOrderMultipleForItems;
+	}
+
+	public void setSourcingOrderMultipleForItems(
+			Map<String, String> sourcingOrderMultipleForItems) {
+		this.sourcingOrderMultipleForItems = sourcingOrderMultipleForItems;
+	}
+
+	//End of XB 214
+	//Added for JIRA 1402 Starts
 	private ArrayList<String> itemValue = new ArrayList<String>();
     //Added for JIRA 1402 Ends
 	
@@ -2367,6 +2389,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				// prepare the information for JSP
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(items);
 				HashMap<String,XPEDXItemPricingInfo> priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext);
+				sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);//Added for XB 214 BR
+
 				if(priceHoverMap!=null && priceHoverMap.containsKey(pnaItemId))
 				{
 					XPEDXItemPricingInfo itemPriceInfo = priceHoverMap.get(pnaItemId);
@@ -2375,20 +2399,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					setIsBracketPricing(itemPriceInfo.getIsBracketPricing());
 					setPriceCurrencyCode(itemPriceInfo.getPriceCurrencyCode());
 				}
-				
+				setIsOMError("false");
 				for (XPEDXItem pandAItem : items) {
-					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {
+					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {					
 						// set the line status erros mesages if any
 						String lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 								.getPnALineErrorMessage(pandAItem);
 						//added for jira 2885 
 						if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
+							//Added for XB 214 BR
+							if(pandAItem.getLineStatusCode().equals(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+								setIsOMError("true");
+							}	
+							//end for XB 214 BR
 							pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 							if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
 								setIsPnAAvailable("true"); //jira 4094 to display Availability and MyPrice and Extended Price
 							}
 						}
-						//end of jira 2885			
+						//end of jira 2885							
 					}
 				}
 			}

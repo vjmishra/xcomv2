@@ -49,6 +49,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.util.YFCUtils;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSException;
 
@@ -159,6 +160,18 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			return returnVal;
 		}
 		pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems());
+		try {
+			sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XMLExceptionWrapper e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CannotBuildInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//Added for XB 214 BR1
 		/*if("true".equals(isOrderData))
 		{
 			Set<String> itemSet=pnaHoverMap.keySet();
@@ -167,17 +180,25 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				itemID=_itemID;
 			}
 		}*/
+		setIsOMError("false");
 		Vector<XPEDXItem> items = pna.getItems();
 		String lineStatusErrorMsg = "";
 		for (XPEDXItem pandAItem1 : items) {
 			if (pandAItem1.getLegacyProductCode().equals(itemID)) {
-				//added for jira 2885
-				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
-				lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
-						.getPnALineErrorMessage(pandAItem1);
-
-//	for jira 2885	ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
 				
+				//Added for XB 214 BR
+				if(pandAItem1.getLineStatusCode().equalsIgnoreCase(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+					setIsOMError("true");
+				}	
+				//end for XB 214 BR
+				
+				//added for jira 2885
+					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());//XB 214
+					lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
+						.getPnALineErrorMessage(pandAItem1);
+				
+				//End for XB 214 BR1
+				//	for jira 2885 ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
 				if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
 				} else {
@@ -1352,7 +1373,27 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	String itemCost = null;	
-	
+	//Added for XB 214	
+	HashMap<String, String> sourcingOrderMultipleForItems = null;
+	 protected String isOMError;
+	    
+	    public String getIsOMError() {
+			return isOMError;
+		}
+
+		public void setIsOMError(String isOMError) {
+			this.isOMError = isOMError;
+		}
+		
+	public HashMap<String, String> getSourcingOrderMultipleForItems() {
+		return sourcingOrderMultipleForItems;
+	}
+
+	public void setSourcingOrderMultipleForItems(
+			HashMap<String, String> sourcingOrderMultipleForItems) {
+		this.sourcingOrderMultipleForItems = sourcingOrderMultipleForItems;
+	}
+	//End of 214
 	LinkedHashMap<String, String> itemIdConVUOMMap = new LinkedHashMap<String, String>();
 	
 	public LinkedHashMap<String, String> getItemIdConVUOMMap() {

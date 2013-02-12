@@ -23,6 +23,8 @@
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemID)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc" value="%{#orderMultipleQtyFromSrc}"/>
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
@@ -91,7 +93,7 @@
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				<s:if test="%{#lineStatusCodeMsg != ''}">
+				<s:if test="%{#lineStatusCodeMsg != '' && && #_action.getIsOMError() != 'true'}">
 				<tr>
 					<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
 					<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span></td>

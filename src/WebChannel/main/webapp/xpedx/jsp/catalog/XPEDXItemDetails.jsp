@@ -159,8 +159,25 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	}
 	var Qty=document.getElementById("qtyBox").value;
 	//Quantity validation
-	if(Qty =='' || Qty=='0')
-	{
+	if(Qty =='')
+	{	
+		/* Commented for XB 214 BR2 - to remove blank Qty validation to display PnA on click of PnA LINK
+		document.getElementById("qtyBox").style.borderColor="#FF0000";
+		document.getElementById("qtyBox").focus();
+		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+  		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+  		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+		document.getElementById("Qty_Check_Flag").value = true;
+		document.getElementById("qtyBox").value = "";
+		Ext.Msg.hide();
+	    myMask.hide();
+	    return;*/
+	    Qty = document.getElementById("OrderMultiple").value;
+	    //alert("pandaByAjaxFromLink Qty"+Qty);
+	}	
+	if(Qty=='0')
+	{	
+		
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
 		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
@@ -745,7 +762,7 @@ function validateOrderMultiple() {
 	if(OrdMultiple!=null && OrdMultiple!=undefined && OrdMultiple.value!=0){
 		var ordMul = totalQty % OrdMultiple.value;
 		var myMessageDiv = document.getElementById("errorMsgForQty");
-		if (ordMul != 0) {
+	/*	if (ordMul != 0) {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
 			if (priceCheck == true){
 				      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
@@ -763,7 +780,9 @@ function validateOrderMultiple() {
 			}
 			return false;
 		}
-		else if (OrdMultiple.value > 1){
+		else Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response */
+		
+		if (OrdMultiple.value > 1){
 			if (priceCheck == true){
 			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
          		      myMessageDiv.style.display ="inline-block";

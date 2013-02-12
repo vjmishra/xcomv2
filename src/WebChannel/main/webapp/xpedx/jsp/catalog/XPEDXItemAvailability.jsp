@@ -21,6 +21,10 @@
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
+
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
+
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
@@ -186,7 +190,7 @@
 			<s:if test="displayPriceForUoms.size()>0" >
 				<TABLE  width="100%">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != ""}'>
+				<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 				<tbody class="mil-priceDiv-visibility" style="valign:right;">
 				<tr>
 					<td width="auto" class="left" colspan="3"><b>My Price:</b></td>

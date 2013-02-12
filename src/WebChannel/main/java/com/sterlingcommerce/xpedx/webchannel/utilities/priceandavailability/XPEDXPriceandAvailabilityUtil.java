@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
 
@@ -41,6 +42,7 @@ import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 /**
@@ -539,21 +541,39 @@ public class XPEDXPriceandAvailabilityUtil {
 		return getPnAHoverMap(items,false);
 	}
 	
-	public static HashMap getOrderMultipleMapFromSourcing(
-			Vector<XPEDXItem> items) {
+	//XB 214 - BR Changes
+	public static HashMap getOrderMultipleMapFromSourcing(Vector<XPEDXItem> items , boolean isLineNumberRequired) throws XPathExpressionException, XMLExceptionWrapper, CannotBuildInputException {
 		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
 		if (null == items || items.size() <= 0) {
 			return ordermultipleMapFromSourcing;
 		}		
-		for (XPEDXItem item : items) {		
+		for (XPEDXItem item : items) {	
+			boolean isMaxError = false;
 			int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(isLineNumberRequired){
 			if(item.getOrderMultipleQty()!= null){
-				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
+				if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+					isMaxError = true;
+				}
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
 			}else
 				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
 		}
+		
+		else{
+			if(item.getOrderMultipleQty()!= null){
+				if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+					isMaxError = true;
+				}
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM()+"|"+isMaxError);
+			}else{
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);	
+			}
+		}
+		}
 		return ordermultipleMapFromSourcing;
 	}
+	//End of XB 214 BR changes
 	
 	public static HashMap useOrderMultipleErrorMapFromMax(
 			Vector<XPEDXItem> items) {
@@ -570,9 +590,6 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return useOrdermultipleMapFromSourcing;
 	}
-	
-	
-	
 	
 	public static HashMap<String, JSONObject> getPnAHoverMap(
 			Vector<XPEDXItem> items,boolean isLineNumberRequired) {

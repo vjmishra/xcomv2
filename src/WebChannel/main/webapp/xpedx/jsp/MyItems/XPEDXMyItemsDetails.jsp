@@ -396,7 +396,8 @@ function showSharedListForm(){
     			alert("Item ID cannot be null to make a PnA call");
     		}
     		var url = document.getElementById("checkAvailabilityURLHidden");
-    		if(url != null) {
+    		//XB 214 BR4
+    		if(url != null && validateOM == true) {
         		var qty = document.getElementById('QTY_'+myItemsKey).value;
         		var uom = document.getElementById('UOM_'+myItemsKey).value;
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
@@ -1105,7 +1106,7 @@ function showSharedListForm(){
 				}
 				var ordMul = totalQty % arrOrdMul.value;
 				isQuantityZero = false;
-				if(ordMul!= 0 && addItemsWithQty != true)
+		/*		if(ordMul!= 0 && addItemsWithQty != true)
 				{
 					//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 					//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
@@ -1132,7 +1133,9 @@ function showSharedListForm(){
 					isAddToCart=false;
 				}
 				
-				else if(addItemsWithQty == true){
+				else Commented for XB 214 BR4 to remove the validation of requested Qty before PnA response */
+				
+				if(addItemsWithQty == true){
 					addToCartFlag = true;
 					/* Commented for Order multiple CR - CR2if(ordMul!= 0){
 						divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul.value) +" "+baseUOM.value ;
@@ -1277,7 +1280,7 @@ function showSharedListForm(){
 					}
 					var ordMul = totalQty % arrOrdMul[i].value;
 					isQuantityZero = false;
-					if(ordMul!= 0 && addItemsWithQty != true)
+			/*		if(ordMul!= 0 && addItemsWithQty != true)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						//divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + arrOrdMul[i].value +" "+baseUOM[i].value ;
@@ -1304,7 +1307,9 @@ function showSharedListForm(){
 						isAddToCart=false;
 					}
 					
-					else if(addItemsWithQty == true){
+					else Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response*/
+					
+					if(addItemsWithQty == true){
 						addToCartFlag = true;
 						/* Commented for Order Multiple CR-2 if(ordMul!= 0){
 							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
@@ -1456,8 +1461,11 @@ function showSharedListForm(){
 				//End of XB 224
 
 				if (priceCheck == true && (addToCartFlag == false || addToCartFlag == undefined)){
-					if(quantity == '0'|| quantity == '')
-					quantity = 1;
+					// added for XB 214 BR2
+					if(quantity == ''){
+						if(arrOrdMul[i].value!=null || arrOrdMul[i].value!='')
+							quantity = arrOrdMul[i].value; 
+					}
 				}
 				
 				//Changed to || if((quantity == '0' || quantity== '' ) && isOnlyOneItem == true) JIRA 3197
@@ -1532,6 +1540,7 @@ function showSharedListForm(){
 					}
 					else*/ if (arrOrdMul[i].value > 1 && priceCheck == true && errorMsgFlag == false){
 						if (priceCheck == true){
+							divVal.innerHTML = " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />" + addComma(arrOrdMul[i].value) +" "+baseUOM[i].value ;
 							divVal.setAttribute("class", "notice");
 							divVal.style.display = 'block';
 							document.getElementById(arrQty[i].id).style.borderColor="";
