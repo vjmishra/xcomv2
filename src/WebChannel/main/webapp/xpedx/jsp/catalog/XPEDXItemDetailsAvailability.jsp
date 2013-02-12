@@ -25,6 +25,9 @@
 
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemID)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc" value="%{#orderMultipleQtyFromSrc}"/>
+
+<s:set name="orderMulErrorCode" value="#_action.getOrderMulErrorCode()" />
+<s:hidden name="orderMulErrorCode" id="orderMulErrorCode" value="%{#orderMulErrorCode}"/>
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
@@ -93,7 +96,7 @@
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				<s:if test="%{#lineStatusCodeMsg != '' && && #_action.getIsOMError() != 'true'}">
+				<s:if test="%{#lineStatusCodeMsg != '' && #orderMulErrorCode != '14'}">
 				<tr>
 					<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
 					<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span></td>

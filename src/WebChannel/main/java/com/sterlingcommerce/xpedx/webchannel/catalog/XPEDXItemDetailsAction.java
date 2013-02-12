@@ -161,7 +161,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}
 		pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems());
 		try {
-			sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);
+			sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getItemOrderMultipleFromSourceMap(pna.getItems());
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -180,23 +180,21 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				itemID=_itemID;
 			}
 		}*/
-		setIsOMError("false");
 		Vector<XPEDXItem> items = pna.getItems();
 		String lineStatusErrorMsg = "";
 		for (XPEDXItem pandAItem1 : items) {
 			if (pandAItem1.getLegacyProductCode().equals(itemID)) {
-				
-				//Added for XB 214 BR
-				if(pandAItem1.getLineStatusCode().equalsIgnoreCase(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
-					setIsOMError("true");
-				}	
-				//end for XB 214 BR
-				
+				//Added for XB 214 BR1
+				if(pandAItem1.getLineStatusCode().equalsIgnoreCase(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){				
+									
+					orderMulErrorCode = pandAItem1.getLineStatusCode();
+				}
+				else{
 				//added for jira 2885
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());//XB 214
 					lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 						.getPnALineErrorMessage(pandAItem1);
-				
+				}
 				//End for XB 214 BR1
 				//	for jira 2885 ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
 				if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
@@ -1373,18 +1371,18 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	String itemCost = null;	
-	//Added for XB 214	
-	HashMap<String, String> sourcingOrderMultipleForItems = null;
-	 protected String isOMError;
-	    
-	    public String getIsOMError() {
-			return isOMError;
-		}
+	//Added for XB 214
+	protected HashMap<String, String> sourcingOrderMultipleForItems = null;
+	private String orderMulErrorCode;
 
-		public void setIsOMError(String isOMError) {
-			this.isOMError = isOMError;
-		}
-		
+	public String getOrderMulErrorCode() {
+		return orderMulErrorCode;
+	}
+
+	public void setOrderMulErrorCode(String orderMulErrorCode) {
+		this.orderMulErrorCode = orderMulErrorCode;
+	}
+	
 	public HashMap<String, String> getSourcingOrderMultipleForItems() {
 		return sourcingOrderMultipleForItems;
 	}
@@ -2202,7 +2200,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
 		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
-
+	
 	public Map getAssetLinkMap() {
 		return assetLinkMap;
 	}

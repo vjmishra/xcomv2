@@ -102,30 +102,22 @@ function setPandAData() {
 	//XB 214 BR1
 	var sourceOrderMulError = document.getElementById("errorMsgForQty");
 	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc");
-	if(orderMultipleQtyFromSrc != null){
-	var orderMultipleQtyFromSrc1 =orderMultipleQtyFromSrc.value
+	var orderMultipleQtyFromSrc1 = orderMultipleQtyFromSrc.value
 	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 	var orderMultipleQty = orderMultipleQtyUom[0];
 	var orderMultipleUom = orderMultipleQtyUom[1];
-	var omError = orderMultipleQtyUom[2];
-	if(omError =='true' )
+	var omError = document.getElementById("orderMulErrorCode").value;
+	if(omError == "14" )
 	{
-		
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
 		sourceOrderMulError.setAttribute("class", "notice");
 	}
-	}
+	
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
 	if(errorValue.value == null && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
 	}
-	if(omError != 'true' ){
-	
-		 OrderMultipleQty = "";
-		 OrderMultipleUom = "";
-	}
-	//End oF XB 214 BR1
 	document.getElementById("lineStatusCodeMsg").value = "";
 	document.getElementById("qtyBox").style.borderColor="";	
 }
