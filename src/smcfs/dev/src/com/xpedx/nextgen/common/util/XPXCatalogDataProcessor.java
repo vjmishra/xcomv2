@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 public class XPXCatalogDataProcessor {
 	final static Pattern xPattern = buildXPattern();
 	final static Pattern dimensionPattern = buildDimensionPattern();
+	//Added for XB-640
+	final static Pattern uomPattern = buildUomPattern();
 			
 	public static void main(String[] args){
 		/*String[] searches = new String[] {
@@ -62,14 +64,35 @@ public class XPXCatalogDataProcessor {
         		
         };*/
 		
-		String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
-		//String[] searches = {"abcd b5.35\" x 9.875in x 8.75in H"};
+		String[] searches = {"<ul><li>+ @ JR PEAR WILLIAMS OFF SM WEB 94brt 50# 52.5\"x 40\"di WHT 1838</li><li>52-1/2\" 40 (3)</li><li>50lb</li><li>White</li><li>94 Bright</li><li>Smooth</li></ul>"};
+		String[] searches1 = {"Williamsburg MAKING CUSTOMER OWNED MAKING CUSTOMER OWNED MAKINGCUSTOMEROWNED MAKINGCUSTOMEROWNED 3203790 #2 All Roll + @ JR PEAR WILLIAMS OFF SM WEB 94brt 50# 52.5\"x 40\"di WHT 1838 52.5\" 40 (3) 52-1/2\" 40 (3) 52.5\"40(3) 52-1/2\"40(3) 50# Offset Roll Smooth White"};
+		String[] searches2 = {"<ul><li>+ @ EB PRINTER OPAQ 1160ppi WEB 90brt 262# 5\"x 40\"dia WHT 845lb</li><li>5\" 40 (3)</li><li>27lb</li><li>White</li><li>Smooth</li></ul>"};
+		String[] searches3 = {"Printers Opaque MAKING CUSTOMER OWNED MAKING CUSTOMER OWNED MAKINGCUSTOMEROWNED MAKINGCUSTOMEROWNED 3203791 #2 All Roll + @ EB PRINTER OPAQ 1160ppi WEB 90brt 262# 5\"x 40\"dia WHT 845lb 5\" 40 (3) 5\" 40 (3) 5\"40(3) 5\"40(3) 27# Text Book Roll Smooth White"};
+		String[] searches4 = {"<ul><li>MCCOY SILK COVER SKID 96brt 120# 21\"x 38\" 368M ULTRA BL WHT</li><li>21 x 38</li><li>120lb</li><li>368M</li><li>White</li><li>96 Bright</li><li>Silk</li><li>10 %PCW</li></ul>"};
+		String[] searches5 = {"McCoy MAKING MAKING MAKING MAKING 3203792 #1 All Sheet MCCOY SILK COVER SKID 96brt 120# 21\"x 38\" 368M ULTRA BL WHT 21 x 38 21 x 38 21x38 21x38 Acid Free 120# Cover Folio Dull White FSC Mix Credit FSC Certificate 10 %PCW Recycled PCW"};
+		String[] searches6 = {"<ul><li>UTOPIA TWO DULL COVER WEB 80# 35.5\"x 45\"dia WHT 1743lb</li><li>35-1/2\" 45 (3)</li><li>80lb</li><li>Blue White</li><li>91 Bright</li><li>Dull</li></ul>"};
+		String[] searches7= {"Utopia Two MAKING MAKING MAKING MAKING 2880972 #2 All Roll UTOPIA TWO DULL COVER WEB 80# 35.5\"x 45\"dia WHT 1743lb 35.5\" 45 (3) 35-1/2\" 45 (3) 35.5\"45(3) 35-1/2\"45(3) 80# Cover Roll Dull White"};
+		String[] searches8 = {"<ul><li>.75\" .025 OSCILLATED BLUE STEEL STRAPPING</li><li>3/4\" W</li><li>Blue</li><li>Steel</li><li>106/Ctn</li></ul>"};
+		String[] searches9 = {"North Shore Strapping MAKING MAKING MAKING MAKING 2270524 Steel Strapping All Strapping .75\" .025 OSCILLATED BLUE STEEL STRAPPING (106/Ctn) 0.75\" W 3/4\" W 0.75\"W 3/4\"W"};
+		String[] searches10 = {" .45\"x 55\" "};
+		String[] searches11 = {" 45.5\"x .55\" "};
+		String[] searches12 = {" 45\" x .55\" x .65\" "};
+		String[] searches13 = {" 1743# 35.5\"45 (3)" };
+		String[] searches14 = {" .45\" x .55\" x .65\" .173#"};
+		String[] searches15 = {"Labelblank White Electronic Imaging Labels-Butt Cut, White, 87 Bright, Smooth, Permanent, 1 x 2.83"};
+		//String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
+		//String[] searches = {"abcd 1.25\" x .029'"};
+		  //String[] searches = {"45\"x 55\""};
+		  //String[] searches = {"14-7/8\" "};
+		//String[] searches = {"3M Scotch 7 x 11 3M Company 3MCompany 02120087399 2120087399 02120087399 2120087399 1048485 P1011877 Scotch ATG Adhesive Transfer Tape 969 Double-Coated Tapes Adhesive Transfer Tapes Transfer Tape Scotch ATG Adhesive Transfer Tape 969, 976, 1.5\" .24\" 1/4\" W x 36 yd L, Clear, Roll, Thickness: 5 Mil (36/Pkg, 144/Ctn) 0.25\" W x 36 yd L 1/4\" W x 36 yd L 0.25\"Wx36ydL 1/4\"Wx36ydL 78 lb Polycoated Kraft Paper"};
+		//String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\"x 9-7/8\"x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
 		
-		for (String rawSearch : searches) {
+		for (String rawSearch : searches15) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
 			String search = preprocessCatalogData(rawSearch);
-        	
+			
+			//String search = preprocessSearchQuery(rawSearch);
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
@@ -82,13 +105,23 @@ public class XPXCatalogDataProcessor {
 		search = preprocessXPatterns(search);
 		return search;
 	}
-		
+	
+	/**
+	 * Processes special characters in item data
+	 * @param rawSearch
+	 * @return String
+	 */
 	public static String preprocessCatalogData(String rawSearch) {
+		if(rawSearch == null){
+			return null;
+		}
 		String search = rawSearch;
 		search = UnitInfo.preprocess(search);
 		search = SymbolInfo.preprocess(search);
-		search = preprocessDimensionPatterns(search);
 		search = preprocessXPatterns(search);
+		//Added for XB - 640
+		search = preprocessUOMPatterns(search);
+		search = preprocessDimensionPatterns(search);
 		return search;
 	}
 	
@@ -98,22 +131,28 @@ public class XPXCatalogDataProcessor {
 		for (UnitInfo unitInfo : UnitInfo.all) {
 			canonicals.append(unitInfo.canonical+"|");
 		}
-		return Pattern.compile("([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)([0-9]+(\\.[0-9]+)?))?");
+		return Pattern.compile("(\\.?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?( ?)([Xx])( ?)(\\.?)([0-9]+(\\.[0-9]+)?)("+canonicals.toString()+")?(( ?)([xX])( ?)(\\.?)([0-9]+(\\.[0-9]+)?))?");
 	}
 	
-	//Remove spaces before and after x in dimensions
+	/**
+	 * Removes space before and after x in dimensions.
+	 * Updated for XB-640
+	 * @param rawText
+	 * @return
+	 */
 	private static String preprocessXPatterns(String rawText){
 		Matcher matcher = xPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
 			matcher.appendReplacement(sb, matcher.group(1));
-			if(matcher.group(3).length()>0)
-				sb.append(matcher.group(3));
-			sb.append(matcher.group(5)+matcher.group(7));
-			if (matcher.group(9).length() > 0)
-				sb.append(matcher.group(9));
-			if(matcher.group(10) != null){
-				sb.append(matcher.group(12)+matcher.group(14));
+			sb.append(matcher.group(2));
+			if(matcher.group(4).length()>0)
+				sb.append(matcher.group(4));
+			sb.append(matcher.group(6)+matcher.group(8)+matcher.group(9));
+			if (matcher.group(11).length() > 0)
+				sb.append(matcher.group(11));
+			if(matcher.group(12) != null){
+				sb.append(matcher.group(14)+matcher.group(16)+matcher.group(17));
 			}
 					
 		}
@@ -133,8 +172,7 @@ public class XPXCatalogDataProcessor {
 	
   
   /*Represent dimensions in all possible combinations. For ex, 1.2ftx2.3in should be represented as below:
-	1.2ftx2.3in 1.2ft 1.2 2.3in 2.3 1.2x2.3*/
-	
+	1.2ftx2.3in 1.2ft 1.2 2.3in 2.3 1.2x2.3*/	
   private static String preprocessDimensionPatterns(String rawText){
 	  Matcher matcher = dimensionPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
@@ -148,18 +186,25 @@ public class XPXCatalogDataProcessor {
 			}
 			
 			int matcherEnd = matcher.end(8);
-			if(matcherEnd > -1){
-				char prefix = rawText.charAt(matcherEnd);
-				if(prefix == '/'){
-					continue;
+			char pref1 = rawText.charAt(matcherEnd-1);
+			if(matcherEnd < rawText.length()-1){
+				if(matcherEnd > -1){
+					char prefix = rawText.charAt(matcherEnd);
+					if(prefix == '/'){
+						continue;
+					}
 				}
 			}
 			
 			if(matcher.group(12) != null){
 				matcherEnd = matcher.end(16);
-				char prefix = rawText.charAt(matcherEnd);
-				if(prefix == '/'){
-					continue;
+				if(matcherEnd < rawText.length()-1){
+					if(matcherEnd > -1){
+						char prefix = rawText.charAt(matcherEnd);
+						if(prefix == '/'){
+							continue;
+						}
+					}
 				}
 			}
 			
@@ -222,6 +267,53 @@ public class XPXCatalogDataProcessor {
         
   }
   
+  /**
+	 * Builds a pattern that identifies UOM suffixed measurement values that are not identified by the dimension pattern
+	 * Added for XB - 640
+	 * @return Pattern
+	 */
+	private static Pattern buildUomPattern() {
+		StringBuilder canonicals = new StringBuilder();
+		boolean firstEntry = true;
+		for (UnitInfo unitInfo : UnitInfo.all) {
+			if(firstEntry){
+				firstEntry = false;
+				canonicals.append(unitInfo.canonical);
+			}else{
+				canonicals.append("|"+unitInfo.canonical);
+			}
+		}
+		return Pattern.compile("(\\.?)([0-9]+([\\.][0-9]+)?)("+canonicals.toString()+")([<,. ])");
+	}
+	
+	
+	/**
+	 * Processes UOM prefixed measurement values and represents them with and with out UOM so that items are searchable
+	 * based on measurement values with and without UOMs
+	 * @param rawText
+	 * @return String 
+	 */
+	private static String preprocessUOMPatterns(String rawText){
+		StringBuffer sb = new StringBuffer();
+		Matcher matcher = uomPattern.matcher(rawText);
+		while(matcher.find()){
+		int matcherStart = matcher.start();
+		matcherStart = matcherStart-1;
+		if(matcherStart > -1){
+			char prefix = rawText.charAt(matcherStart);
+			if(prefix == 'x' || prefix=='X' || prefix == '/'){
+				continue;
+			}
+		}
+		matcher.appendReplacement(sb, " "+matcher.group(1)+matcher.group(2)+" " );
+		sb.append(matcher.group(1));
+		sb.append(matcher.group(2));
+		sb.append(matcher.group(4));
+		sb.append(matcher.group(5));		
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
+	}
   
 
 	/**
