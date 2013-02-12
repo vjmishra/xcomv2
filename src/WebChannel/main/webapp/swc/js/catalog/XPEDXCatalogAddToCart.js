@@ -153,6 +153,8 @@ var myMask;
 		if(validateOrderMultiple(itemId) == false)
 		{
 			validateOM =  false;
+			Ext.Msg.hide();
+			myMask.hide();
 		}
 		else{
 			validateOM =  true;
@@ -164,7 +166,7 @@ var myMask;
 			myMask.hide();
 			alert("Item ID cannot be null to make a PnA call");
 		}
-		else{
+		else if(validateOM == true){
 			var qty = document.getElementById('Qty_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
 			if(uomList!=null && uomList.options.length>0)
@@ -208,6 +210,27 @@ var myMask;
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = 'inline';
+	            		
+	            		// start of XB 214 BR1
+		            	var sourceOrderMulError = document.getElementById("errorMsgForQty_"+itemId);
+		            	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc_"+itemId);
+		            	if(orderMultipleQtyFromSrc != null ){
+		            	var orderMultipleQtyFromSrc1 = document.getElementById("orderMultipleQtyFromSrc_"+itemId).value;
+		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
+		            	var orderMultipleQty = orderMultipleQtyUom[0];
+		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	var omError = orderMultipleQtyUom[2];
+		            	//alert("orderMultipleQty"+orderMultipleQty+"orderMultipleUom :"+orderMultipleUom+"OMError: "+omError)
+
+		            	if(omError == 'true')
+		            	{
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            	}
+		            	}
+		            	//End of BR1 XB 214
+		            	
 	            		Ext.Msg.hide();
 	            		myMask.hide();
 	            		//document.getElementById('addtocart_'+itemId).focus();
@@ -265,16 +288,30 @@ var myMask;
 				}
 			}
 		}
-		if(qty =="" || qty == 0 )
+		//XB 214 BR2 
+		if(qty =="")// || qty == 0 )
 		{
 			//Changed the qty to ordermultiple for Jira 3922. pnA wasnt coming when qty is bank and orderMul flag is N.
 			//qty=1;
 			var qty = document.getElementById('orderMultiple_'+itemId).value;
 			//alert("QTY in vaidateOrderMul===="+ qty);
 		}
+		//XB 214 BR4
+		if( qty == 0 )
+		{
+			//document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
+			document.getElementById('Qty_'+itemId).focus();
+			
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again.";
+			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");	
+			return false;
+		}
+		//End of XB 214
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
-		if(ordMul != 0 || totalQty==0)
+	/*	if(ordMul != 0 || totalQty==0)
 		{		
 			if(priceCheck == true){
 				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
@@ -289,8 +326,9 @@ var myMask;
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			}
 			return false;
-		}
-		else if(orderMultiple > 1){
+		} Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response
+		else */ 
+		if(orderMultiple > 1){
 			if(priceCheck == true){
 				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
 				document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 

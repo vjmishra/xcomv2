@@ -254,6 +254,28 @@
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = '';
+	            		
+	            		// start of XB 214 BR1
+		            	var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myItemsKey);
+		            	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey);
+		            	if(orderMultipleQtyFromSrc != null ){
+		            	var orderMultipleQtyFromSrc1 = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey).value;
+		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
+		            	var orderMultipleQty = orderMultipleQtyUom[0];
+		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	var omError = orderMultipleQtyUom[2];
+		            	//alert("orderMultipleQty"+orderMultipleQty+"orderMultipleUom :"+orderMultipleUom+"OMError: "+omError)
+
+		            	if(omError == 'true')
+		            	{
+		            		//alert("orderMultipleQty : "+orderMultipleQty+"omError : "+omError);
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            	}
+		            	}
+		            	//End of BR1 XB 214
+		            	
 	            		Ext.Msg.hide();
 				myMask.hide();
 	            		//-- Web Trends tag start --

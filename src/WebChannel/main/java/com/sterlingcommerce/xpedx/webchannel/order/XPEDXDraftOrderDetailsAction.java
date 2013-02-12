@@ -233,7 +233,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				 */
 				
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
-				orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems());
+				orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),true);
 				useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 				//Setting the price hover map
 				//added for jira 2885 
