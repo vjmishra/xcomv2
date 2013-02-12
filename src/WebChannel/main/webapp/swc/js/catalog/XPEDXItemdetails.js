@@ -101,7 +101,7 @@ function setPandAData() {
 	}
 	//XB 214 BR1
 	var sourceOrderMulError = document.getElementById("errorMsgForQty");
-	var orderMultipleQtyFromSrc = document.getElementById("OrderMultipleQtyFromSrc");
+	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc");
 	if(orderMultipleQtyFromSrc != null){
 	var orderMultipleQtyFromSrc1 =orderMultipleQtyFromSrc.value
 	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
