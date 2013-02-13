@@ -178,6 +178,12 @@
           Nullable="true" 
           XMLName="ExtnPKLV5UPC"
           XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_KEYWORDS" 
+	  		          DataType="varchar2-1300"
+	  				  Description="Extn field with modified special charecters "  
+	  		          Nullable="true" 
+	  		          XMLName="ExtnKeywords"
+          XMLGroup="Extn" />
 
 		  <Attribute ColumnName="EXTN_SHORT_DESCRIPTION" 
           DataType="varchar2-300"
@@ -187,14 +193,14 @@
           XMLGroup="Extn" />
 	  
 		    <Attribute ColumnName="EXTN_DESCRIPTION" 
-          DataType="varchar2-500"
+          DataType="varchar2-650"
 		  Description="Extn field with modified special charecters  "  
           Nullable="true" 
           XMLName="ExtnDescription"
           XMLGroup="Extn" />
        
 		    <Attribute ColumnName="EXTN_EXTENDED_DESCRIPTION" 
-          DataType="varchar2-2000"
+          DataType="varchar2-2600"
 		  Description="Extn field with modified special charecters  "  
           Nullable="true" 
           XMLName="ExtnExtendedDesc"
