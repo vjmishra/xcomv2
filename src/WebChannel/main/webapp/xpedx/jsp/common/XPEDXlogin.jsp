@@ -11,7 +11,9 @@
 <head>
 <!-- This needs to be at the top to ensure the 'Sign In' link is never seen. -->
 <script type="text/javascript">
-$('#signIn').hide();
+//$('#signIn').hide();
+var sign = document.getElementById("signIn");
+sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 </script>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />  	 
