@@ -561,7 +561,18 @@ public class XPEDXPriceandAvailabilityUtil {
 					if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 						isMaxError = true;
 					}
-					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM()+"|"+isMaxError);
+					try {
+						ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
+					} catch (XPathExpressionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (XMLExceptionWrapper e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (CannotBuildInputException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else
 					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);
 			}
