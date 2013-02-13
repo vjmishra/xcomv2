@@ -108,7 +108,7 @@ function setPandAData() {
 
 	if(orderMultipleQty !=null )
 	{
-		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
 		sourceOrderMulError.setAttribute("class", "notice");
 	}
