@@ -49,7 +49,6 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.util.YFCUtils;
-import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSException;
 
@@ -160,18 +159,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			return returnVal;
 		}
 		pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems());
-		try {
-			sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getItemOrderMultipleFromSourceMap(pna.getItems());
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XMLExceptionWrapper e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CannotBuildInputException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}//Added for XB 214 BR1
+		orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);
+		useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 		/*if("true".equals(isOrderData))
 		{
 			Set<String> itemSet=pnaHoverMap.keySet();
@@ -185,17 +174,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		for (XPEDXItem pandAItem1 : items) {
 			if (pandAItem1.getLegacyProductCode().equals(itemID)) {
 				//Added for XB 214 BR1
-				if(pandAItem1.getLineStatusCode().equalsIgnoreCase(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){				
-									
-					orderMulErrorCode = pandAItem1.getLineStatusCode();
-				}
-				else{
 				//added for jira 2885
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());//XB 214
 					lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 						.getPnALineErrorMessage(pandAItem1);
-				}
-				//End for XB 214 BR1
+			
+				//End for XB 214 BR1aa
 				//	for jira 2885 ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
 				if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
@@ -1371,27 +1355,11 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	String itemCost = null;	
-	//Added for XB 214
-	protected HashMap<String, String> sourcingOrderMultipleForItems = null;
-	private String orderMulErrorCode;
 
-	public String getOrderMulErrorCode() {
-		return orderMulErrorCode;
-	}
 
-	public void setOrderMulErrorCode(String orderMulErrorCode) {
-		this.orderMulErrorCode = orderMulErrorCode;
-	}
 	
-	public HashMap<String, String> getSourcingOrderMultipleForItems() {
-		return sourcingOrderMultipleForItems;
-	}
 
-	public void setSourcingOrderMultipleForItems(
-			HashMap<String, String> sourcingOrderMultipleForItems) {
-		this.sourcingOrderMultipleForItems = sourcingOrderMultipleForItems;
-	}
-	//End of 214
+	
 	LinkedHashMap<String, String> itemIdConVUOMMap = new LinkedHashMap<String, String>();
 	
 	public LinkedHashMap<String, String> getItemIdConVUOMMap() {
@@ -1807,6 +1775,26 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	// Added by anil end
 
 	HashMap<String, JSONObject> pnaHoverMap = null;
+	
+	protected HashMap orderMultipleMapFromSourcing;
+
+	public HashMap getOrderMultipleMapFromSourcing() {
+		return orderMultipleMapFromSourcing;
+	}
+
+	public void setOrderMultipleMapFromSourcing(HashMap orderMultipleMapFromSourcing) {
+		this.orderMultipleMapFromSourcing = orderMultipleMapFromSourcing;
+	}
+	
+	protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
 
 	/**
 	 * @return the certImagePath

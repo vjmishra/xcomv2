@@ -202,7 +202,9 @@
             <param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
             <param name="draft">${draft}</param>
         </result>
-        <result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
+        <result name="MaxError">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsAddtoCartError.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
 		</result>
 		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
 	</action>
@@ -299,6 +301,8 @@
         <param name="mashups">XPEDXMyItemsDetailsAddToCart</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsAddItemToCart_binding.xml</param>
 		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
+		</result>
+		<result name="MaxError">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsAddtoCartError.jsp
 		</result>
 		<result name="error">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
 		</result>

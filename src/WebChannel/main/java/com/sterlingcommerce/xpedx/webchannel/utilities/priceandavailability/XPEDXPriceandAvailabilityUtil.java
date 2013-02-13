@@ -541,8 +541,8 @@ public class XPEDXPriceandAvailabilityUtil {
 		return getPnAHoverMap(items,false);
 	}
 	
-	//XB 214 - BR Changes
-	public static HashMap getOrderMultipleMapFromSourcing(Vector<XPEDXItem> items , boolean isLineNumberRequired) throws XPathExpressionException, XMLExceptionWrapper, CannotBuildInputException {
+	public static HashMap getOrderMultipleMapFromSourcing(
+			Vector<XPEDXItem> items, boolean isLineNumberRequired) {
 		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
 		if (null == items || items.size() <= 0) {
 			return ordermultipleMapFromSourcing;
@@ -551,25 +551,20 @@ public class XPEDXPriceandAvailabilityUtil {
 			boolean isMaxError = false;
 			int lineNumber=Integer.parseInt(item.getLineNumber());
 			if(isLineNumberRequired){
-			if(item.getOrderMultipleQty()!= null){
-				if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
-					isMaxError = true;
-				}
-				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
-			}else
-				ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
-		}
-		
-		else{
-			if(item.getOrderMultipleQty()!= null){
-				if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
-					isMaxError = true;
-				}
-				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
-			}else{
-				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);	
+				if(item.getOrderMultipleQty()!= null){
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
+				}else
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
 			}
-		}
+			else{
+				if(item.getOrderMultipleQty()!= null){
+					if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+						isMaxError = true;
+					}
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM()+"|"+isMaxError);
+				}else
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);
+			}
 		}
 		return ordermultipleMapFromSourcing;
 	}
@@ -770,7 +765,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			log.debug("getPnALineErrorMessage: lineStatusCode is null. Returning a empty message.");
 			return errorMessage;
 		}
-		if (lineStatusCode.equals("00")) {
+		if (lineStatusCode.equals("00") || lineStatusCode.equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)) {
 			log.debug("getPnALineErrorMessage: lineStatusCode is zero.Successful. Returning a empty message.");
 			return errorMessage;
 		}

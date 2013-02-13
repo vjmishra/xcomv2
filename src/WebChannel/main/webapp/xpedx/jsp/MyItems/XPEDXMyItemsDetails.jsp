@@ -838,16 +838,23 @@ function showSharedListForm(){
     					//alert("arrQty[i].value= "+ arrQty[i].value);
     					if(validAddtoCartItemsFlag[i]== true ){
     					divId='errorDiv_'+ arrQty[i].id;
-    					var divVal=document.getElementById(divId);
-    					divVal.innerHTML = "Item has been added to cart." ;
+    					var divVal=document.getElementById(divId);    					
+    					if(response.responseText.indexOf(addedItems[i].value) !== -1){
+    						divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+    						divVal.setAttribute("class", "error");
+    					}
+    					else{
+    						divVal.innerHTML = "Item has been added to cart." ;
+    						 divVal.setAttribute("class", "success");
+    					}
 						  divVal.style.display = "inline-block"; 
 						  divVal.setAttribute("style", "margin-right:5px;float:right;");
-						  divVal.setAttribute("class", "success");
-    					}
+						 
+    					
     				}
      	   }
 		}
-		
+     	   }
 		var addItemsWithQty;
 		var myMask;
 		function addToCart(){

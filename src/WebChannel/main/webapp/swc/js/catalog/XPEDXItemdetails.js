@@ -101,13 +101,12 @@ function setPandAData() {
 	}
 	//XB 214 BR1
 	var sourceOrderMulError = document.getElementById("errorMsgForQty");
-	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc");
-	var orderMultipleQtyFromSrc1 = orderMultipleQtyFromSrc.value
-	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
-	var orderMultipleQty = orderMultipleQtyUom[0];
-	var orderMultipleUom = orderMultipleQtyUom[1];
-	var omError = document.getElementById("orderMulErrorCode").value;
-	if(omError == "14" )
+	var OrderMultipleQtyFromSrc = document.getElementById("OrderMultipleQtyFromSrc").value;
+	var OrderMultipleQtyUom = OrderMultipleQtyFromSrc.split("|");
+	var orderMultipleQty = OrderMultipleQtyUom[0];
+	var OrderMultipleUom = OrderMultipleQtyUom[1];
+
+	if(orderMultipleQty !=null )
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 

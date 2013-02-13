@@ -114,7 +114,17 @@
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 		                    Ext.Msg.hide();
 		                	myMask.hide();
-		        }
+		        	}
+		            else if(draftErr.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+			        {
+		            	var divVal=document.getElementById('errorDiv_qtys_'+uid);        
+		            	divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+		            	divVal.style.display = "inline-block"; 
+						divVal.setAttribute("style", "margin-right:5px;float:right;");
+						divVal.setAttribute("class", "error");
+			                    Ext.Msg.hide();
+			                	myMask.hide();
+			        }
 					else if(responseText.indexOf("Error")>-1)
 					{
 						refreshMiniCartLink();
