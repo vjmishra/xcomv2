@@ -1,10 +1,20 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
-import org.apache.log4j.Logger;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.w3c.dom.Element;
+
+import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXNewUserRegistration extends WCMashupAction{
 	/**
@@ -14,7 +24,6 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(XPEDXNewUserRegistration.class);
 	
-/*	private String newUserName = null;*/
 	private String newUserEmail=null;
 	private String newUserPhone = null;
 	private String newUserCompanyName = null;
@@ -24,7 +33,6 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	private String newUserState = null;
 	private String newUserZipCode = null;
 	private String newUserComments = null;
-	private String mailHost= null;
 	private String mailSubject = null;
 	private String appendedCSREmailIDs = null;
 	private String templatePath=null;
@@ -46,12 +54,9 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 	
 	
 		public String execute(){
-			mailHost = YFSSystem.getProperty("EMailServer");
-			if(mailHost==null){
-				mailHost=XPEDXConstants.MAIL_HOSTUSEREMAIL;
-			}
+			
 			StringBuffer sb = new StringBuffer();
-			StringBuffer sbm = new StringBuffer();
+			//StringBuffer sbm = new StringBuffer();
 			String suffix = "";
 			
 			String storeFrontId = wcContext.getStorefrontId();
@@ -59,9 +64,9 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				String userName = YFSSystem.getProperty("fromAddress.username");
 				suffix = YFSSystem.getProperty("fromAddress.suffix");
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
-				String marketingCC = "marketing";
+				//String marketingCC = "marketing";
 				suffix = YFSSystem.getProperty("fromAddress.suffix");
-				sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
+				//sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
 				brandEmail = storeFrontId;			
 				
 			}
@@ -111,9 +116,9 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				//JIRA 3261 End-Code Commentd as per JIRA Requirement
 				*/
 				appendedCSREmailIDs = newUserEmail;
-				log.debug("XPEDXNewUserRegistration Before Mashup -Email wassucessfull send to "+appendedCSREmailIDs+ "," +newUserEmail);
-				prepareAndInvokeMashup("XPEDXSendNewUserInfoToCSR");
-				/*XBT-73 : Begin - Sending email through Java Mail API now
+				//log.debug("XPEDXNewUserRegistration Before Mashup -Email was sucessfull send to "+appendedCSREmailIDs+ "," +newUserEmail);
+				//prepareAndInvokeMashup("XPEDXSendNewUserInfoToCSR");
+				/*XBT-73 : Begin - Sending email through Java Mail API now*/
 				Set mashupId=new HashSet();
 				mashupId.add("XPEDXSendNewUserInfoToCSR");
 			    
@@ -129,7 +134,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 				YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 				String emailSubject = getMailSubject();
 		        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject.toString(), emailFrom, storeFrontId);
-		        XBT-73 : End - Sending email through Java Mail API now*/				
+		        /*XBT-73 : End - Sending email through Java Mail API now*/				
 				
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -242,12 +247,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction{
 		public void setNewUserComments(String newUserComments) {
 			this.newUserComments = newUserComments;
 		}
-		public String getMailHost() {
+		/*public String getMailHost() {
 			return mailHost;
 		}
 		public void setMailHost(String mailHost) {
 			this.mailHost = mailHost;
-		}
+		}*/
 		public String getMailSubject() {
 			return mailSubject;
 		}
