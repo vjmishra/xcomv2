@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
@@ -193,7 +194,9 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         		if(changeOrderOutput == null){
 		         			return ERROR;
 		         		}
-		
+		         		orderMultipleErrorItems = XPEDXPriceandAvailabilityUtil.processPNAResponseForOrderMultiple(changeOrderOutputDoc);
+		         		if(orderMultipleErrorItems.contains(productID))
+		         			return "MaxError";
 		         		//refreshCartInContext(orderHeaderKey);
 		         		XPEDXWCUtils.releaseEnv(wcContext);
 		         		return SUCCESS;
@@ -381,6 +384,14 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		this.isEditNewline = isEditNewline;
 	}
 
+	protected List<String> orderMultipleErrorItems = new ArrayList<String>();
+	public List<String> getOrderMultipleErrorItems() {
+		return orderMultipleErrorItems;
+	}
+
+	public void setOrderMultipleErrorItems(List<String> orderMultipleErrorItems) {
+		this.orderMultipleErrorItems = orderMultipleErrorItems;
+	}
 
 	protected String reqProductUOM;
 	protected String reqJobId;

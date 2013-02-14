@@ -835,7 +835,12 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
              }
-	         
+	         else if(draftErr.indexOf(productID) !== -1){
+	        	 myMessageDiv.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+	        	 myMessageDiv.setAttribute("class", "error");
+					myMessageDiv.style.display = "inline-block"; 
+		             
+				}
 	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 	    //	 setPandAData();
 	    else
