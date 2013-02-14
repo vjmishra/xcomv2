@@ -99,6 +99,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		YFCElement emailDefnElement=null;
 		String emailToAddresses="";
+		StringBuffer errorMessage=null;
 		if (log.isDebugEnabled()) {
 			log.debug((new StringBuilder("executeJobs() XPXSendEmailAgent class:")).append(" Email Details input document is : ").append(YFCLogUtil.toString(emailDetailsInputDoc)).toString());
 		}
@@ -112,12 +113,17 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			emailDefnElement = emailDefnMap.get(emailType);
 			
 			if(emailDefnElement==null){
-				StringBuffer errorString=new StringBuffer();
-				errorString.append("EmailType: ["+emailType+"] does not exist in the parent 'XPX_EMAIL_DEFN' table");
-				throw new Exception(errorString.toString());
+				errorMessage=new StringBuffer();
+				errorMessage.append("EmailType: ["+emailType+"] does not exist in the parent 'XPX_EMAIL_DEFN' table");
+				throw new Exception(errorMessage.toString());
 			}
 						
 			String emailXML = emailDetailsElement.getAttribute("EmailXML");
+			if(YFCCommon.isVoid(emailXML)){
+				errorMessage=new StringBuffer("Email XML not available to tranform and hence send an email.");
+				throw new Exception(errorMessage.toString());
+			}
+			
 			Element emailXMLElement=SCXmlUtil.createFromString(emailXML).getDocumentElement();
 			
 			String emailXSL=emailDefnElement.getAttribute("EmailXslPath");
@@ -160,7 +166,8 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			emailSuccessEle.setAttribute("EmailErrorMessage", "EMAIL_SUCCESS");
 			api.executeFlow(env, "changeXPXEmailDetails", emailSuccessDoc);
 			
-		} catch (Exception e) {			
+		} catch (Exception e) {
+			errorMessage=new StringBuffer();
 			Document emailExceptionDoc = SCXmlUtil.createFromString("<XPXEmailDetails/>");
 			Element emailExceptionEle = emailExceptionDoc.getDocumentElement();
 			String emailDetailsKey=emailDetailsElement.getAttribute("EmailDetailsKey");
@@ -168,26 +175,25 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			
 			if (e instanceof AddressException)
 			{
-				AddressException adrEx=(AddressException)e;
-				String errorMessage= "AddressException message is : "+adrEx.getMessage();				
+				AddressException adrEx=(AddressException)e;				
+				errorMessage.append("AddressException message is : ").append(adrEx.getMessage());				
 				emailExceptionEle.setAttribute("EmailRetryCount", "-1");				
-				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage);
+				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
 				log.error("AddressException caught inside XPXSendEmailAgent.sendEmail(). "+errorMessage+". Email Details Key is :["+emailDetailsKey+"]."); 
 			
 			} else if (e instanceof MessagingException) 
 			{
-				StringBuffer errorString=new StringBuffer();
 				if(e instanceof SendFailedException){
 					SendFailedException sfe = (SendFailedException)e;
 					emailExceptionEle.setAttribute("EmailRetryCount", "-1");
 					
-					errorString=new StringBuffer();
-					errorString.append("SendFailedException message is : "+sfe.getMessage());
-					errorString.append(" Valid Sent Addresses are : "+sfe.getValidSentAddresses());
-					errorString.append(" Valid Unsent Addresses are : "+sfe.getValidUnsentAddresses());
-					errorString.append(" Invalid Addresses are : "+sfe.getInvalidAddresses());
-					emailExceptionEle.setAttribute("EmailErrorMessage", errorString.toString());
-					log.error("SendFailedException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorString.toString()+". Email Details Key is :["+emailDetailsKey+"].");
+					errorMessage=new StringBuffer();
+					errorMessage.append("SendFailedException message is : "+sfe.getMessage());
+					errorMessage.append(" Valid Sent Addresses are : "+sfe.getValidSentAddresses());
+					errorMessage.append(" Valid Unsent Addresses are : "+sfe.getValidUnsentAddresses());
+					errorMessage.append(" Invalid Addresses are : "+sfe.getInvalidAddresses());
+					emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
+					log.error("SendFailedException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
 				
 				}else 
 				{
@@ -205,17 +211,17 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 						emailExceptionEle.setAttribute("EmailRetryCount", "-1");
 					
 					}
-					errorString=new StringBuffer();
-					errorString.append("MessagingException message is : "+msgEx.getMessage());
-					emailExceptionEle.setAttribute("EmailErrorMessage", errorString.toString());
-					log.error("MessagingException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorString.toString()+". Email Details Key is :["+emailDetailsKey+"].");
+					errorMessage.append("MessagingException message is : "+msgEx.getMessage());
+					emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
+					log.error("MessagingException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
 				}				
 				
 			} else
 			{
+				errorMessage.append("Exception message is : "+e.getMessage());
 				emailExceptionEle.setAttribute("EmailRetryCount", "-1");
-				emailExceptionEle.setAttribute("EmailErrorMessage", "Exception message is : "+e.getMessage());				
-				log.error("Exception caught inside XPXSendEmailAgent.executeJob(). Exception message is: "+e.getMessage()+". Email Details Key is :["+emailDetailsKey+"].");
+				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());				
+				log.error("Exception caught inside XPXSendEmailAgent.executeJob(). "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
 				
 			}			
 			
@@ -240,7 +246,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	}
 
 	private String applyXsltTemplate(String emailXSL, Element emailXMLElement) throws Exception {
-        
+		StringBuffer errorMessage=null;
 		try {			
 			Document emailXMLDoc = SCXmlUtil.createFromString(SCXmlUtil.getString(emailXMLElement));
 			File emailXSLFile = new File(emailXSL);
@@ -254,8 +260,11 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				Transformer trans = transFact.newTransformer(xsltSource);			
 				trans.transform(xmlSource, result);
 			
-			} catch (TransformerException trnsFrmrEx) {
-				String errorMessage = "TransformerException occured, in XPXSendEmailAgent.applyXsltTemplate method, while transforming email XML. TransformerException message is "+trnsFrmrEx.getMessage()+". Email Details Key is: "+emailXMLElement.getAttribute("EmailDetailsKey");
+			} catch (TransformerException trnsFrmrEx){
+				errorMessage=new StringBuffer();
+				errorMessage.append("TransformerException occured, in XPXSendEmailAgent.applyXsltTemplate method, while transforming email XML. ");
+				errorMessage.append("TransformerException message is "+trnsFrmrEx.getMessage()+". ");
+				errorMessage.append("Email Details Key is: "+emailXMLElement.getAttribute("EmailDetailsKey"));
 				log.error(errorMessage);
 				trnsFrmrEx.printStackTrace();
 				throw trnsFrmrEx;
@@ -265,7 +274,8 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			return htmlMailString;
 
 		} catch (Exception e) {
-			String errorMessage = "Exception occured in XPXSendEmailAgent.applyXsltTemplate method. Exception message is "+e.getMessage();
+			errorMessage=new StringBuffer();
+			errorMessage.append("Exception occured in XPXSendEmailAgent.applyXsltTemplate method. Exception message is "+e.getMessage());
 			log.error(errorMessage);
 			e.printStackTrace();
 			throw e;
