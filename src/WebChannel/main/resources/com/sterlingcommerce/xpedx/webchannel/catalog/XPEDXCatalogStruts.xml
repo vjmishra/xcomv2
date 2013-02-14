@@ -178,5 +178,13 @@
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="setNormallyStockedCheckbox">
 			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
 		</action>
+		
+		<action name="adjuggler" class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getAddjugglerPage">             
+
+                        <result name="success">/xpedx/jsp/catalog/XPEDXAdJuggler.jsp</result>
+
+                </action>
+
+		
 	</package>
 </struts>
