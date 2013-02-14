@@ -196,12 +196,12 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 
 			// populatePnAResponseinUI(elePandALineResponse);
 			setModel("PnAResponse", elePandALineResponse);
-			if ("00".equals(status)) {
+			//if ("00".equals(status)) {
 				populatePnAResponseinUI(elePandALineResponse);
-			} else {
+		/*	} else {
 				String inputString = envCode + "_" + status;
 				displayError(inputString, page);
-			}
+			}*/
 
 		}
 
