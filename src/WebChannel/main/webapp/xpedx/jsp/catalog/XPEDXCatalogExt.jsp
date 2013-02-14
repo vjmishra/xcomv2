@@ -210,23 +210,43 @@
 
             <div align="left" style="padding-right: 15px;">
 			
-			<div class="catalog-ad">
-			<div class="ad-float smallBody" style="float: none;"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
+			<div class="catalog-ad" >
+			<div class="ad-float smallBody" id="catalogAdjugglerDiv"style="float: none;"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 			
 			
 				<!-- Ad Juggler Tag Starts -->
 				<s:set name='ad_keyword' value='' />
 				<s:set name='firstItem1' value='%{firstItem}' />
 				<s:set name='catPath' value='%{categoryPath}' />
-				<%-- Commented for Performance Fix
+				<%-- 
 				<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemIdForpath(#firstItem1,#storefrontId,#catPath)" />
-				 --%>
-				<s:set name="cat2Val" value='%{categoryShortDescription}' />
+				--%>
+				<s:url id='get_adjuggler'  namespace='/catalog'  action='adjuggler' >
+					<s:param name="firstItem" value="#firstItem1"></s:param>
+					<s:param name="categoryPath" value="#catPath"></s:param>
+				</s:url>
+				<script>
+					Ext.onReady(function(){
+					    		   	var url = "<s:property value='#get_adjuggler'/>";
+					    		   	url = ReplaceAll(url,"&amp;",'&');
+					    		   	Ext.Ajax.request({
+								       	url:url,
+									   	success: function (response, request)
+											{
+											var myDiv = document.getElementById("catalogAdjugglerDiv");
+											var innerhtml=myDiv.innerHTML;
+											myDiv.innerHTML = innerhtml+response.responseText;
+											
+										}
+									});
+					});
+				</script>
+				<%-- <s:set name="cat2Val" value='%{categoryShortDescription}' />
 				<s:if test="#cat2Val != null" >
 					<s:set name='ad_keyword' value='#cat2Val' />
 				</s:if>
 
-		<%-- aj_server: https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ --%>		
+		<%-- aj_server: https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ 	
 		<s:if test="#ad_keyword != null" >
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
@@ -301,11 +321,11 @@
 				</script>
 			</s:else>
 		</s:else>
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+		
 		
 		<!-- Ad Juggler Tag Ends -->
 			
-			
+			--%>	
 			</div>
 			
 			<div class="clearall">&nbsp;</div>
