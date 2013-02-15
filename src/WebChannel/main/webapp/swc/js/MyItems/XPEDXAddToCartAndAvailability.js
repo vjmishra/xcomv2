@@ -117,6 +117,7 @@
 		        	}
 		            else if(draftErr.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 			        {
+		            	refreshMiniCartLink();
 		            	var divVal=document.getElementById('errorDiv_qtys_'+uid);        
 		            	divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
 		            	divVal.style.display = "inline-block"; 
