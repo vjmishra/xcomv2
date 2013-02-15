@@ -79,7 +79,24 @@ function addItemToCart(itemId) {
 							myMask.hide();
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
-						}						
+						}	
+						else if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+				        {
+							refreshMiniCartLink();
+							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!=''){
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your order. Please review the order to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");	
+							}else{
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+							}
+							document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+					        document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");						
+							
+							Ext.Msg.hide();
+							myMask.hide();
+							return true;
+				        }
 						else if(responseText.indexOf("Error")>-1)
 						{
 							refreshMiniCartLink();
@@ -101,32 +118,15 @@ function addItemToCart(itemId) {
 							document.getElementById('Qty_Check_Flag_'+itemId).value = false;
 							//Succesfully Added to Cart Info message
 							/*Start- Jira 3104 */
-							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!=''){
-								if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
-						        {
-									document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your order. Please review the order to update the item with a valid quantity.";
-									document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");						            
-						        }
-								else{
-									document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
-									document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
-								}
-							}else{
-								if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
-						        {
-									document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
-									document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");						            
-						        }
-								else{
-									document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to cart." ;
-									document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
-								}
-							}
+							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
+						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
+							else
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to cart." ;
 						    /*End- Jira 3104 */
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
-					           
+					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 						
 							
 							document.getElementById('Qty_'+itemId).value = "";
