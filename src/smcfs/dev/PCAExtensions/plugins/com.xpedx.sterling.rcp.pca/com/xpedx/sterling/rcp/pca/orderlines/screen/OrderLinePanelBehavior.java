@@ -1476,14 +1476,15 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				}
 
 			}
-			if ((transUOMConvFactor * ordQty)
+			//Commented by Vijay Mishra
+			/*if ((transUOMConvFactor * ordQty)
 					% Double.parseDouble(orderMultiple) != 0
 					|| ordQty == 0.0) {
 				YRCPlatformUI.showError("Error", YRCPlatformUI
 						.getString("Order_Multiple_Quantity_Error"));
 				getControl("txtQuantity").setFocus();
 				return false;
-			}
+			}*/
 		}
 		return true;
 	}
