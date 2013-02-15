@@ -296,6 +296,9 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	}
 	//---function used to iterate through tree & find the function based on their qualification for Addition or deletion of node
 	private void iterateThroughChilds(TreeItem[] item, boolean isParentChecked) {
+		// Added For XB-638
+		ArrayList<String> deleteCustIdList= new ArrayList<String>();
+		ArrayList<String> addCustIdList= new ArrayList<String>();
 		for (TreeItem treeItem : item) {
 			
 			Element eleCust = (Element)treeItem.getData("data");
@@ -313,14 +316,22 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				
 			if(isParentChecked){
 				if(treeItem.getData("OldValue").equals("true")){
-					myBehavior.createManageAssignmentInput(strCustID, false);
+					//myBehavior.createManageAssignmentInput(strCustID, false);
+					//XB-638 Changes
+					deleteCustIdList.add(strCustID);
 				}
 			}
 			else {
 				if(treeItem.getData("OldValue").equals("true") && !treeItem.getChecked() ){
-					myBehavior.createManageAssignmentInput(strCustID, false);   //---used to delete an entry from DB.
+					//myBehavior.createManageAssignmentInput(strCustID, false); //---used to delete an entry from DB.
+					//XB-638 Changes
+					deleteCustIdList.add(strCustID);
+					
 				} else if(!treeItem.getData("OldValue").equals("true") && treeItem.getChecked()){
-					myBehavior.createManageAssignmentInput(strCustID, true);   //---used to create an entry in  DB.
+					//myBehavior.createManageAssignmentInput(strCustID, true);   //---used to create an entry in  DB.
+					//XB-638 Changes
+					addCustIdList.add(strCustID);
+					
 				}
 			}
 			
@@ -331,6 +342,13 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				}
 			}
 			this.iterateThroughChilds(childItem, isParentChecked);
+		}
+		//XB-638 Changes
+		if(deleteCustIdList!= null && deleteCustIdList.size()>0){
+			myBehavior.createManageAssignmentInput(deleteCustIdList, false); //---used to delete an entry from DB.
+		}
+		if(addCustIdList!=null && addCustIdList.size()>0){
+			myBehavior.createManageAssignmentInput(addCustIdList,true);   //---used to create an entry in  DB.
 		}
 	}
 	//---function used to update child values after update action

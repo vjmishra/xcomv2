@@ -1,6 +1,7 @@
 package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
@@ -32,6 +33,8 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	private Object inputObject;
 	private ArrayList assignedList;
 	private boolean extnDefaultShipTo = false;
+	private long startTimeCustomerService;
+	private long endTime,timespent;
 	public CustomerAssignmentPanelBehavior(
 			CustomerAssignmentPanel customerAssignmentPanel,
 			Object inputObject,Element customerContactEle) {
@@ -105,7 +108,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXGetImmediateChildCustomerListService",outXml);
 						getChildList();    //--function used to set the values of child nodes in Tree structure
-					} else if ("multiApi".equals(apiname)) {
+					} else if ("XPXManageCustomerAndAssignmentAPIService".equals(apiname)) {
 						 getCustomerAssignmentsAfterUpdate();
 						((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 					}
@@ -137,7 +140,10 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		}
 		
 		super.handleApiCompletion(ctx);
-		
+		//Added to check performance of XB-638		
+		endTime=System.currentTimeMillis();
+		timespent=(endTime-startTimeCustomerService);
+		System.out.println("Final Time Taken by XPXManageCustomerAndAssignmentAPIService:"+ timespent);
 	}	
 	
 	
@@ -217,7 +223,8 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		page.setTreeValues(null, arrlst); //--function used to set the values of child nodes in Tree structure
 	}
 	//--createManageAssignmentInput function used to decide addtion or deletion action of nodes
-	public void createManageAssignmentInput(String strCustID, boolean action){
+	/*	Commented below code as new service was written for XB-638
+		public void createManageAssignmentInput(String strCustID, boolean action){
 		if(null ==multiAPIDocElement){
 			multiAPIDocElement = YRCXmlUtils.createDocument("MultiApi").getDocumentElement();
 		}
@@ -234,11 +241,46 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		
 		YRCXmlUtils.importElement(inputEle, lineEle);
 		
+	}*/
+	
+	// Added below method for XB-638
+	private void saveChanges(List<String> wList, String operation,Element customerAssignmentListElem) {
+		
+		for (int index = 0; index < wList.size(); index++) {
+			try {
+				if(wList.get(index) != null && wList.get(index).trim().length() ==0 )
+					continue;
+				Element customerAssignmentElem=YRCXmlUtils.createChild(customerAssignmentListElem, "CustomerAssignment");
+				customerAssignmentElem.setAttribute("CustomerID", wList.get(index));
+				customerAssignmentElem.setAttribute("OrganizationCode", UserOrgCode);
+				customerAssignmentElem.setAttribute("UserId", userID);
+				customerAssignmentElem.setAttribute("Operation", operation);
+				} catch (Exception ex) {
+				System.out.println("***********Record already exists");
+			}
+		}
 	}
+	
+	public void createManageAssignmentInput(List<String> wList, boolean action){
+		if(null ==multiAPIDocElement){
+		multiAPIDocElement = YRCXmlUtils.createDocument("ManageCustomerAndAssignment").getDocumentElement();
+		
+		}
+			multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
+		Element custAssignmentele= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
+		if(!action)
+		saveChanges(wList, "Delete",custAssignmentele);
+		else
+			saveChanges(wList, "Create",custAssignmentele);
+		System.out.println("Final XML : " + YRCXmlUtils.getString(multiAPIDocElement));
+	}	
+	
+	
 	public void updateAction(){
+		startTimeCustomerService=System.currentTimeMillis(); 
 		page.getTargetModelForUpdateAssignments();
 		YRCApiContext ctx = new YRCApiContext();
-		ctx.setApiName("multiApi");
+		ctx.setApiName("XPXManageCustomerAndAssignmentAPIService");
 		
 		ctx.setInputXml(multiAPIDocElement.getOwnerDocument());
 		ctx.setFormId(page.getFormId());
