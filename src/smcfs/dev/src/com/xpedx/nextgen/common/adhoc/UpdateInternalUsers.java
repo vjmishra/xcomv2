@@ -67,7 +67,8 @@ public class UpdateInternalUsers implements YIFCustomApi {
 		
             try {
             	//Get all the Internal Users and Inserting UserKey and Login in in array List
-	   	        YFCDocument getUserListInputDoc = YFCDocument.createDocument("User");
+	   	        log.info("Inside Update method to update all internal users to have view invoices group");
+            	YFCDocument getUserListInputDoc = YFCDocument.createDocument("User");
 	   	    	YFCElement userList = getUserListInputDoc.getDocumentElement();
 	   	    	YFCElement extnUserList = getUserListInputDoc.createElement("Extn");
 	   	    	extnUserList.setAttribute("ExtnUserType", "INTERNAL");
