@@ -31,9 +31,8 @@
                                 <%--Fix For Jira 4144 --%>
                                 <s:set name="itemKEY" value='#id' />
                             <!-- end prefs  -->
-                          
-                           
-                             <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}"> 
+                   <s:set name='chkItemKeys' value='#_action.getCheckItemKeys()' />    
+                   <s:hidden name='chkItemKeys' id="chkItemKeys%{#itemOrder}" value="%{#itemKEY}" />       
                               
 	                        	<table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0">
 
@@ -53,6 +52,17 @@
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:hidden name="validateOrderMul" value="%{#_action.getValidateOM()}" />
 <s:hidden name="pnaListitem" value="%{#_action.isPnaCall()}" />
+
+<s:set name="sourcingOrderMultipleForItems" value='%{#_action.getSourcingOrderMultipleForItems()}' />
+<s:hidden name="sourcingOrderMultipleForItems" id="sourcingOrderMultipleForItems" value="%{#sourcingOrderMultipleForItems}"/>
+
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId+"_"+#itemOrder)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemOrder}" value="%{#orderMultipleQtyFromSrc}"/>
+
+<s:set name="orderMulErrorCode" value="useOrderMultipleMapFromSourcing.get(#itemId+'_'+#itemOrder)" />
+<s:hidden name="orderMulErrorCode" name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
+
+
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
@@ -97,9 +107,9 @@
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
+		<!-- 	<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}"> XB 214 BR  -->
 			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
-			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if>
+			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if>
 			<s:else>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</s:else>
@@ -255,7 +265,7 @@
 			<td colspan="3" width="33%" valign="top"><span></span></td>
 			</s:else>
 </s:if>
-<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
+<!--<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}"> Commented for XB 214 -->
 			<td colspan="3" width="28%" valign="top">
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>	

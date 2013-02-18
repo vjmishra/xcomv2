@@ -20,6 +20,9 @@
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+<s:url id='uomDescriptionURL' namespace="/common" action='getUOMDescription' />
+<s:hidden name="uomDescriptionURL" value='%{#uomDescriptionURL}'/>
+
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean" id="xpedxUtilBean" />
 <s:bean	name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xutil' />
 <!-- Added for JIRA 1402 Starts -->
@@ -1024,6 +1027,26 @@ function showSharedListForm(){
 			}
 			return errorflag;
 		}*/
+		//Added for XB 214 BR requirements.
+		function convertToUOMDescription(uomCode)
+{
+    var url=document.getElementById("uomDescriptionURL").value;
+    var req=null;
+    if (window.XMLHttpRequest){
+    	req = new XMLHttpRequest();
+    }else{
+    	req = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    url=url+'&uomCode='+uomCode;
+    req.open('POST', url, false);     
+    req.send(null);
+    if(req.status == 200){
+      return req.responseText;
+    }else{
+    	return uomCode;
+    }
+}
+		//End of BR XB 214
 		//// Function Start - Jira 3770
 		var isAddToCart=true;
 		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
@@ -1436,7 +1459,7 @@ function showSharedListForm(){
 			var errorflag=true;
 			var isQuantityZero = true;
 			var uomCheck = false ;
-			
+			var count=0;
 			for(var i = 0; i < arrItemID.length; i++)
 			{
 				divId='errorDiv_'+	arrQty[i].id;
@@ -1493,25 +1516,34 @@ function showSharedListForm(){
 					isQuantityZero = false;
 				}
 				//End Fix For Jira 3770
-				if((quantity == '0' || quantity== '' ) )
+				//modified error msg & added error msg at header level for XB 214 BR4
+				if((quantity == '0') )
 				{
 					if((arrOrdMul[i].value!=null || arrOrdMul[i].value!='') && arrOrdMul[i].value>1)
 					{
 						//divVal.innerHTML="You must order in units of "+ arrOrdMul[i].value+", please review your entry and try again.";
 						divVal.innerHTML= " <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(arrOrdMul[i].value) + " "+baseUOM[i].value;
 						divVal.style.display = 'block';
-						errorflag= false;
 					}
 					//Display Generic Message at Header level first then Update Line Level message.
 					
 					/* divVal.innerHTML='Qty Should be greater than 0'; */
-						divVal.innerHTML="<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO' />";
+						divVal.innerHTML="Please enter a valid quantity and try again.";
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						document.getElementById(arrQty[i].id).style.borderColor="#FF0000";
+						
+						count++;
+			            isQuantityZero = true;
+			            if(isOnlyOneItem == true){
+							errorflag= false;
+							}
+							else{
+								errorflag= true;
+							}
 						//Ctrl.focus();
 					
-				}
+				} //end of changes to XB 214
 				else if(quantity>0){
 					var totalQty = arrUOM[i].value * quantity;
 					if(arrOrdMul[i].value == undefined || arrOrdMul[i].value.replace(/^\s*|\s*$/g,"") =='' || arrOrdMul[i].value == null)
@@ -1567,14 +1599,14 @@ function showSharedListForm(){
 			{
 				errorflag= false;
 			}	
-			if(isQuantityZero == true)
+			if(isQuantityZero == true || count > 0)
 			{
-				document.getElementById("errorMsgTop").innerHTML = "No items with quantity defined. Please review the list and try again." ;
-	            		document.getElementById("errorMsgTop").style.display = "inline";
+				document.getElementById("errorMsgTop").innerHTML = "An error has occurred with one or more of your items.  Please review any error messages on the lines below." ;
+	            document.getElementById("errorMsgTop").style.display = "inline";
 	            
-	            		document.getElementById("errorMsgBottom").innerHTML = "No items with quantity defined. Please review the list and try again." ;
-	            		document.getElementById("errorMsgBottom").style.display = "inline";
-				errorflag= false;
+	            document.getElementById("errorMsgBottom").innerHTML = "An error has occurred with one or more of your items.  Please review any error messages on the lines below." ;
+	            document.getElementById("errorMsgBottom").style.display = "inline";
+				//errorflag= false;
 				Ext.Msg.hide();
             			myMask.hide();
 			}
@@ -1911,6 +1943,7 @@ function showSharedListForm(){
 		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
+		    if(validateOMForMultipleItems == true){
 			if (formItemIds){
 				var erroMsg = '<s:property value='erroMsg' />';
 				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
@@ -1930,8 +1963,46 @@ function showSharedListForm(){
 		            		assignAvailablity();
 		            		availabilityRow.innerHTML='';
 		            		availabilityRow.style.display = '';
-	                     		Ext.Msg.hide();
-				        myMask.hide();
+		            		//Added for XB 214 - BR requirements
+				             var myitemskey = new Array();
+		            		 var myitemskey = document.getElementsByName("chkItemKeys");
+		            		// omArray = document.getElementsByName("orderMultipleQtyFromSrc");
+		            		 for(var i=0,j=1;i<myitemskey.length, j <=myitemskey.length;i++,j++){
+		            			 var omQtyUom = document.getElementById("orderMultipleQtyFromSrc_"+j).value;
+		            			 if(omQtyUom != null && omQtyUom !=''){
+		            			 var orderMultipleQtyUom = omQtyUom.split("|");
+		            			 var orderMultipleQty = orderMultipleQtyUom[0];
+		            			 var orderMultipleUom = orderMultipleQtyUom[1];
+		            			 var omError = document.getElementById("orderMulErrorCode_"+j).value;	
+		            			 var qty = document.getElementById("qtys_"+myitemskey[i].value);
+		            			 //alert("omarrayErr"+orderMultipleQty+"::"+orderMultipleUom+"::"+omError+"::"+myitemskey[i].value+"::"+qty.value);
+		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myitemskey[i].value);
+		            			 if(qty.value == '0' )
+		            				{
+		            					sourceOrderMulError.innerHTML = "Please enter a valid quantity and try again.";
+		            					sourceOrderMulError.style.display = "inline-block"; 
+		            					sourceOrderMulError.setAttribute("class", "error");
+		            					document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
+		            				}
+		            			 else if(omError == 'true' && qty.value > 0 )
+		            				{
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.style.display = "inline-block"; 
+		            					sourceOrderMulError.setAttribute("class", "error");
+		            					document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
+		            				}
+		            				else if(omError == 'true')
+		            				{
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.style.display = "inline-block"; 
+		            					sourceOrderMulError.setAttribute("class", "notice");
+		            					document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
+		            				}
+		            			
+		            			 }
+		            		 }	
+	                     	Ext.Msg.hide();
+				        	myMask.hide();
 				      //-- Web Trends tag start --
 						//alert(responseText);
 			            writeWebtrendTag(responseText);
@@ -1943,7 +2014,8 @@ function showSharedListForm(){
 						  alert("Your request could not be completed at this time, please try again.");	                   }
 	               });     
 				
-			} if(cnt <=0 ){
+			}
+		}if(cnt <=0 ){
 				
 				//alert("Please select at least one item for Price Check : " + cnt );
 				//var msgSelectItemFirst = "You have not selected any items for Price Check. Please select an item and try again";
@@ -2808,7 +2880,7 @@ function showSharedListForm(){
 					<s:set name='itemId1' value='#item.getAttribute("ItemId")' />
 
 					<s:set name='itemOrder' value='#item.getAttribute("ItemOrder")' />
-					<s:hidden name='itemOrder' value='%{#item.getAttribute("ItemOrder")}' />
+					<s:hidden name='itemOrder' id="ItemOrder11" value='%{#item.getAttribute("ItemOrder")}' />
 					<s:set name='itemOrder2' value='%{#itemOrder2 + 1}' />
 					<s:hidden name="entereditemTypeList" id="entereditemTypeList_%{#id}" value="%{#itemType}"></s:hidden>
 					<s:if test="%{#itemType == 2}">

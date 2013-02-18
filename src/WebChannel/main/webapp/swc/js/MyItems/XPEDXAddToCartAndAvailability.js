@@ -267,22 +267,31 @@
 	            		availabilityRow.style.display = '';
 	            		
 	            		// start of XB 214 BR1
+	            		var qty = document.getElementById("qtys_"+myItemsKey);
 		            	var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myItemsKey);
 		            	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey);
-		            	if(orderMultipleQtyFromSrc != null ){
+		            	
+		            	if(orderMultipleQtyFromSrc != null && orderMultipleQtyFromSrc.value != ''){
 		            	var orderMultipleQtyFromSrc1 = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey).value;
 		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 		            	var orderMultipleQty = orderMultipleQtyUom[0];
 		            	var orderMultipleUom = orderMultipleQtyUom[1];
 		            	var omError = orderMultipleQtyUom[2];
-		            	//alert("orderMultipleQty"+orderMultipleQty+"orderMultipleUom :"+orderMultipleUom+"OMError: "+omError)
-
-		            	if(omError == 'true')
+		            	
+		            	if(omError == 'true' && qty.value > 0) //(omError == 'true' && qty.value > 0)
 		            	{
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.setAttribute("class", "error");
+		            		availabilityRow.style.display = 'none';
+		            	}
+		            	else if(omError == 'true')//(omError == 'true')
+		            	{	//alert("qty.value"+qty.value);
 		            		//alert("orderMultipleQty : "+orderMultipleQty+"omError : "+omError);
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline-block"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = 'none';
 		            	}
 		            	}
 		            	//End of BR1 XB 214

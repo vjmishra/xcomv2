@@ -1392,7 +1392,7 @@ public class XPEDXPriceandAvailabilityUtil {
 				XPEDXItem item=items.get(i);
 				String itemID=item.getLegacyProductCode();
 				//if(!"00".equals(item.getLineStatusCode())){
-				if(item.getLineStatusErrorMsg() == null){
+				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 					errorMessage="";
 				}
 				else{

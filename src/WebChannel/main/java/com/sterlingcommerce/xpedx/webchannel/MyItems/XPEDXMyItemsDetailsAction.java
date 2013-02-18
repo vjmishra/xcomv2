@@ -147,7 +147,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String priceCurrencyCode;
 	public String validateOM;
 	public String catagory;
-	public boolean validateOrderMul = false;
+	//public boolean validateOrderMul = false;
 	public boolean pnaCall;
 	public ArrayList<String> itemOrder;
 	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
@@ -158,6 +158,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 // added for XB 214   
 	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
     protected String isOMError;
+    protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
     
     public String getIsOMError() {
 		return isOMError;
@@ -275,13 +284,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.pnaCall = pnaCall;
 	}
 
-	public boolean isValidateOrderMul() {
+/*	public boolean isValidateOrderMul() {
 		return validateOrderMul;
 	}
 
 	public void setValidateOrderMul(boolean validateOrderMul) {
 		this.validateOrderMul = validateOrderMul;
-	}
+	}*/
 
 	public String getCatagory() {
 		return catagory;
@@ -1338,11 +1347,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							break;
 						}
 					}
-				}
-				if(OM!= 0){
-					validateOrderMul = true;
-					validateCheck.put(itemId+":"+(i+1),validateOrderMul);
-				}
+				}			
 				
 				boolean addThisItem = checkAllItems;
 				if (!checkAllItems) {
@@ -1408,6 +1413,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Vector<XPEDXItem> items = pna.getItems();
 					// prepare the information for JSP
 					pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(items,true);
+					sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(items,true);//Added for XB 214 BR1
+					useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
+
+					//System.out.println("sourcingOrderMultipleForItems : "+sourcingOrderMultipleForItems);
 					Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 					NodeList itemsNode=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
 					for (int i = 0; i < itemsNode.getLength(); i++) {
