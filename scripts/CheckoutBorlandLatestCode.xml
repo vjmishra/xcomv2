@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<project name="Build Script For xpedx_smcfs" default="all" basedir=".">
+
+	
+	<!--added by balkhi for borland star team -->
+	<target name="CheckoutSMCFS"  depends="bst-fetch-smcfs" description="Executes the borland fetch target for smcfs"/>
+	<target name="CheckoutSMCFSAgile"  depends="bst-fetch-smcfs-from-Test_Pilot_Sprint-view" description="Executes the borland fetch target for smcfs agile view"/>
+	
+ 	<target name="CheckoutSWC"  depends="bst-fetch-swc" description="Executes just the borland fetch target for swc"/>
+	<target name="CheckoutSWCAgile"  depends="bst-fetch-swc-from-Test_Pilot_Sprint-view" description="Executes just the borland fetch target for swc for agile view"/>
+	
+ 	<target name="CheckinCustomerOverrides"  depends="bst-checkin-customer_overrides" description="Checks in customer overrides.properties files"/>
+ 	<target name="CheckoutCustomerOverrides"  depends="bst-checkout-customer_overrides" description="Checks in customer overrides.properties files"/>
+ 	
+ 
+	  
+	<!-- Fetches smcfs  from Borland SarTeam respository -->
+	<target name="bst-fetch-smcfs"  description="Fetches latest files from Borland star team">
+	<echo message="about to connect to Borland to fetch smcfs latest code"/>
+
+				 <stcheckout servername="10.210.7.135" 
+							  serverport="49216"
+							  projectname="A0236-xPedx/Releases/" 
+							  viewname="Releases"
+							  username="mohammad.balkhi"
+							  password="Asdfghjkl;'9876"
+							  rootstarteamfolder="src/smcfs/dev"
+							  rootlocalfolder="/xpedx/sci_build/smcfs/smcfs/dev"
+							  forced="false"/>
+	<echo message="Finished fetching smcfs latest code"/>	
+	</target>   
+	
+	<target name="bst-fetch-smcfs-from-Test_Pilot_Sprint-view"  description="Fetches latest files from Borland star team agile view">
+	<echo message="about to connect to Borland to fetch smcfs latest code from the Test_Pilot_Sprint view"/>
+
+				 <stcheckout servername="10.210.7.135" 
+							  serverport="49216"
+							  projectname="A0236-xPedx/Releases/" 
+							  viewname="Test_Pilot_Sprint"
+							  username="mohammad.balkhi"
+							  password="Asdfghjkl;'9876"
+							  rootstarteamfolder="src/smcfs/dev"
+							  rootlocalfolder="/xpedx/sci_build/BorlandViews/Test_Pilot_Sprint/smcfs/dev"
+							  forced="false"/>
+	<echo message="Finished fetching smcfs latest code from the Test_Pilot_Sprint view"/>	
+	</target>   
+	
+	<!-- Fetches swc/WebChannel from Borland SarTeam respository -->
+	<target name="bst-fetch-swc"  description="Fetches latest files from Borland star team">		
+		<echo message="about to connect to Borland to fetch WebChannel latest code"/>
+			 <stcheckout servername="10.210.7.135" 
+					  serverport="49216"
+					  projectname="A0236-xPedx/Releases/" 
+					  viewname="Releases"
+					  username="mohammad.balkhi"
+					  password="Asdfghjkl;'9876"
+					  rootstarteamfolder="src/WebChannel/main"
+					  rootlocalfolder="/xpedx/sci_build/WebChannel/WebChannel/main"
+					  forced="false"/>
+		<echo message="Finished fetching WebChannel latest code"/>
+	</target>   
+  	 
+	 <target name="bst-fetch-swc-from-Test_Pilot_Sprint-view"  description="Fetches latest files from Borland star team agile view">		
+		<echo message="about to connect to Borland to fetch WebChannel latest code"/>
+			 <stcheckout servername="10.210.7.135" 
+					  serverport="49216"
+					  projectname="A0236-xPedx/Releases/" 
+					  viewname="Test_Pilot_Sprint"
+					  username="mohammad.balkhi"
+					  password="Asdfghjkl;'9876"
+					  rootstarteamfolder="src/WebChannel/"
+					  rootlocalfolder="/xpedx/sci_build/BorlandViews/Test_Pilot_Sprint/WebChannel/"
+					  forced="false"/>
+		<echo message="Finished fetching WebChannel latest code for agile view"/>
+	</target>   
+	
+	
+	 <!-- Fetches smcfs  from Borland SarTeam respository -->
+	<target name="bst-checkin-customer_overrides"  description="checks in the customer overrides property file to Borland star team. This is done after changing the build number.">
+	<echo message="about to checkin customer_overrides.properties file to Borland. "/>
+	<echo message="Please stand by."/>
+	
+				 <stcheckin servername="10.210.7.135" 
+							  serverport="49216"
+							  projectname="A0236-xPedx/Releases/" 
+							  viewname="Releases"
+							  username="mohammad.balkhi"
+							  password="Asdfghjkl;'9876"
+							  rootstarteamfolder="src/smcfs/dev/smcfs/Foundation/properties/"
+							  rootlocalfolder="/xpedx/sci_build/smcfs/smcfs/dev/Foundation/properties/"
+							  forced="false"
+							  comment="Checkin in new build version"
+							  recursive="false"
+							  />
+	<echo message="Finished checking in customer overrides to Borland"/>	
+	</target>   
+   
+ 	<target name="bst-checkout-customer_overrides"  description="Fetches latest customer override from Borland star team">		
+		<echo message="about to get latest customer override from Borland star team"/>
+			 <stcheckout servername="10.210.7.135" 
+					  serverport="49216"
+					  projectname="A0236-xPedx/Releases/" 
+					  viewname="Releases"
+					  username="mohammad.balkhi"
+					  password="Asdfghjkl;'9876"
+					  rootstarteamfolder="src/smcfs/dev/smcfs/Foundation/properties/"
+					  rootlocalfolder="/xpedx/sci_build/smcfs/smcfs/dev/Foundation/properties/"
+					  forced="false"
+					  />
+		<echo message="Finished fetching WebChannel latest code"/>
+	</target>   
+	 
+  
+</project>
+
