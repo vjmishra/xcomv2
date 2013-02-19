@@ -14,7 +14,7 @@ case "$HOST_NAME" in
  *);;
 esac
 
-cd /home/share/xpadmin/scripts
+cd /home/share/xpadmin/scripts/
 if nohup ksh -x startswc.sh; then
 	echo "Finished starting SWC server... "
 	if nohup ksh -x startsmcfs.sh; then	

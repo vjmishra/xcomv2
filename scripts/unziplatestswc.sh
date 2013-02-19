@@ -11,6 +11,8 @@ cd /xpedx/sci_build/WebChannel/WebChannel/
 chmod -R +w *
 
 cd $SWCBUILDHOME
+# make sure user has write perm before unzipping or will get warnings for each read-only file.
+chmod -R +w /xpedx/sci_build/WebChannel/WebChannel
 rm -R /xpedx/sci_build/WebChannel/WebChannel 
 unzip $CURRENTZIPFILE 
 if [ "$?" != "0" ]; then

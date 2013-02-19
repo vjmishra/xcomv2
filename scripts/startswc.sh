@@ -11,6 +11,7 @@ echo "Starting swc on $HOST_NAME"
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
+ zxpappd02) ENVIRONMENT=dev;;
  zxpappt01) ENVIRONMENT=stg;; 
  zxpapps01) ENVIRONMENT=ps;; 
  zxpagnt01) ENVIRONMENT=prod;; 
@@ -20,10 +21,11 @@ esac
 
 cd /xpedx/wldomain/xp$ENVIRONMENT/servers/swc$ENVIRONMENT
 rm -R cache tmp
+rm -R stage/swc/swc.ear
 
 #start the smcfs server
 cd /xpedx/scripts
-./startswc$ENVIRONMENT.sh
+nohup ./startswc$ENVIRONMENT.sh &
 
 #show log file immediately after. 
 echo "Press ctrl+c to exit out of the log file..."

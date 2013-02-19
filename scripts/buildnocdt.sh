@@ -10,6 +10,7 @@ echo $HOST_NAME
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
+  zxpappd02) ENVIRONMENT=dev;;
  zxpappt01) ENVIRONMENT=staging;; 
  zxpapps01) ENVIRONMENT=prodsupport;; 
  zxpagnt01) ENVIRONMENT=prod;; 
@@ -29,12 +30,15 @@ if nohup ksh -x buildsmcfs.sh; then
 	# sucess: then proceed to swc	 
 	if nohup ksh -x buildswc.sh; then			 
 		echo "SUCCESS! Completed the SWC build without errors. Continuing with the deployment" >> $LOGFILE			 	 			
+		./sendnotification.sh SMCFS-AND-SWC Success mahmoud.lamriben@hp.com,balkhi.mohammad@hp.com $LOGFILE
 	else
 		echo "ERROR/FAILURE! There were errors in the SWC build. Check logs..." 1>&2 >> $LOGFILE
+		./sendnotification.sh SMCFS-AND-SWC Error mahmoud.lamriben@hp.com,balkhi.mohammad@hp.com $LOGFILE
 		exit 1
 	fi
 else
 	echo "ERROR/FAILURE! There were errors in the SMCFS build. Check logs..." 1>&2 >> $LOGFILE
+	./sendnotification.sh SMCFS-AND-SWC Error mahmoud.lamriben@hp.com,balkhi.mohammad@hp.com $LOGFILE
 	exit 1
 fi
 

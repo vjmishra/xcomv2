@@ -9,8 +9,8 @@ HOST_NAME="$(hostname)"
 echo $HOST_NAME
 
 if [[ "$HOST_NAME" = "zxpapps01" ]];then
-	chmod +x ./xpedxagentserver.sh
-	chmod +x ./xpedxStartIntegrationServer.sh
+	#chmod +x ./xpedxagentserver.sh
+	#chmod +x ./xpedxStartIntegrationServer.sh
 
 	#xpedxStartIntegrationServer.sh  is the same as  startIntegrationServer.sh except it adds a new memory parameters to specify the size of the jvm.
 	# use xpedxstartIntegrationServer instead of  startIntegrationServer
@@ -18,9 +18,13 @@ if [[ "$HOST_NAME" = "zxpapps01" ]];then
 	#The only change that I have made to this file is to add Memory Parameters to the startup process
 
 	#Start MQ Dataload agent
-	nohup ./startIntegrationServer.sh port=1655 XpedxDataFeedMQServer > /xpedx/sterling/Foundation/logs/Item_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	#nohup ./xpedxStartIntegrationServer.sh port=1655 XpedxDataFeedMQServer > /xpedx/sterling/Foundation/logs/Item_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 	nohup ./startHealthMonitor.sh 1 > /xpedx/sterling/Foundation/logs/HealthMonitor_`date +"%Y%m%d-%H%M"`.log 2>&1 &
-
+	nohup ./xpedxagentserver.sh port=1656 XPXResetPasswordServer > /xpedx/sterling/Foundation/logs/ResetPwd_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	# start the order approval emails agent
+	nohup ./xpedxStartIntegrationServer.sh port=1659 OrderApprovalEmailsServer > /xpedx/sterling/Foundation/logs/OrderApprovalEmails_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	#Orderconfirmation agents
+    nohup ./xpedxStartIntegrationServer.sh port=1698 XPXOrderConfirmationEmailServer > /xpedx/sterling/Foundation/logs/OrderConfirmationEmails_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 	#Integration Server:
 	#nohup ./xpedxStartIntegrationServer.sh xpedxMaxUOMFeedServer> ../logs/MaxUOM_`date +"%Y%m%d_%H%M"`.log 2>&1 &  
 	#nohup ./xpedxStartIntegrationServer.sh xpedxMaxDivFeedServer > ../logs/MaxDiv_`date +"%Y%m%d_%H%M"`.log 2>&1 &

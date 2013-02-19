@@ -11,6 +11,7 @@ echo "Starting smcfs on $HOST_NAME"
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
+ zxpappd02) ENVIRONMENT=dev;;
  zxpappt01) ENVIRONMENT=stg;; 
  zxpapps01) ENVIRONMENT=ps;; 
  zxpagnt01) ENVIRONMENT=prd;; 
@@ -23,10 +24,17 @@ esac
 #remove cache/tmp files
 cd /xpedx/wldomain/xp$ENVIRONMENT/servers/smcfs$ENVIRONMENT
 rm -R cache tmp
+rm -R stage/smcfs/smcfs.ear
 
 #start the smcfs server
 cd /xpedx/scripts
-./startsmcfs$ENVIRONMENT.sh
+nohup ./startsmcfs$ENVIRONMENT.sh &
+
+#wait 6mins, then start OUs
+sleep 360
+#start the order updates 
+cd /home/share/xpadmin/scripts/
+ksh -x startorderupdates.sh
 
 #show log file immediately after. 
 echo "Press ctrl+c to exit out of the log file..."

@@ -13,7 +13,7 @@ if [[ "$HOST_NAME" = "zxpappt01" ]];then
 	#Integration MQ Feed Server:
 	# Commented out on 11/11/2011 to allow the prodsupport box consume the attributes/items from the production queues. Need to re-enable once we go live.
 	nohup ./xpedxStartIntegrationServer.sh port=1690 xpedxMaxUOMFeedServer> /xpedx/sterling/Foundation/logs/MaxUOM_`date +"%Y%m%d_%H%M"`.log 2>&1 &
-	nohup ./xpedxStartIntegrationServer.sh port=1691 XpedxDataFeedMQServer> /xpedx/sterling/Foundation/logs/Item_`date +"%Y%m%d-%H%M"`.log 2>&1 &
+	#nohup ./xpedxStartIntegrationServer.sh port=1691 XpedxDataFeedMQServer> /xpedx/sterling/Foundation/logs/Item_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 	nohup ./xpedxStartIntegrationServer.sh port=1692 xpedxMaxDivFeedServer > /xpedx/sterling/Foundation/logs/MaxDiv_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 	nohup ./xpedxStartIntegrationServer.sh port=1693 xpedxMaxEntServer> /xpedx/sterling/Foundation/logs/MaxEntitlement_`date +"%Y%m%d-%H%M"`.log 2>&1 &
 	nohup ./xpedxStartIntegrationServer.sh port=1694 xpedxMaxItemBranchFeedServer> /xpedx/sterling/Foundation/logs/MaxIB_`date +"%Y%m%d-%H%M"`.log 2>&1 &

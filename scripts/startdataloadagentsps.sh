@@ -9,6 +9,7 @@ HOST_NAME="$(hostname)"
 echo $HOST_NAME
 
 if [[ "$HOST_NAME" = "zxpapps01" ]];then
+	echo "This is because ProdSupport and Staging share the same Queues/WM environments"
 	chmod +x ./xpedxStartIntegrationServer.sh
 	#Integration MQ Feed Server:
 	# Commented out on 11/11/2011 to allow the prodsupport box consume the attributes/items from the production queues. Need to re-enable once we go live.

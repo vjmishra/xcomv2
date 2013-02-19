@@ -4,5 +4,5 @@
 cd /xpedx/wldomain/xpdev/servers/smcfsdev
 rm -R cache tmp
 
-cd /xpedx/wldomain/xpdev/
+cd /xpedx/scripts
 ksh -x ./startsmcfsdev.sh
