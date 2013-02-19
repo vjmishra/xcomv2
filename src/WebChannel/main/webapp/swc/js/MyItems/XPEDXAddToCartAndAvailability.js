@@ -281,7 +281,7 @@
 		            	if(omError == 'true' && qty.value > 0) //(omError == 'true' && qty.value > 0)
 		            	{
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
-		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "error");
 		            		availabilityRow.style.display = 'none';
 		            	}
@@ -289,7 +289,7 @@
 		            	{	//alert("qty.value"+qty.value);
 		            		//alert("orderMultipleQty : "+orderMultipleQty+"omError : "+omError);
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
-		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = 'none';
 		            	}

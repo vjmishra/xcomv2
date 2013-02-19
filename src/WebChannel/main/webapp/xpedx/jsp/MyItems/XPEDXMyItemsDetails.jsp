@@ -3186,6 +3186,12 @@ function showSharedListForm(){
 	                              	
 	                               </li>
                                 </s:if>
+                                <s:else>
+                                <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
+	                               </div>
+								</li>
+                                </s:else>
                                 <s:if test='%{#erroMsg !=null && #erroMsg !=""}'>  
                                 <li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
 		                            <div class="error" style="display:none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>

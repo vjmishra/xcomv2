@@ -241,14 +241,14 @@ var myMask;
 		            	var omError = orderMultipleQtyUom[2];		            			
 		            	if(omError == 'true' && qty.value >0 ){
 				            sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
-				            sourceOrderMulError.style.display = "inline-block"; 
+				            sourceOrderMulError.style.display = "inline"; 
 				            sourceOrderMulError.setAttribute("class", "error");
 				            availabilityRow.style.display = "none"; 
 				        }
 		            	else if(omError == 'true')
 		            	{	
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
-		            		sourceOrderMulError.style.display = "inline-block"; 
+		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = "none"; 
 		            		
