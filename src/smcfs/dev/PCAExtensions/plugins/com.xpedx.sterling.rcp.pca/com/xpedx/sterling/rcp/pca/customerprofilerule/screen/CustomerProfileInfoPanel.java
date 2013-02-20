@@ -53,7 +53,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
  */
 
 public class CustomerProfileInfoPanel extends Composite implements
-		IYRCComposite {
+IYRCComposite {
 
 	private Composite pnlRoot = null;
 
@@ -260,7 +260,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 
 	private Text txtWebConfirmationNo;
 
-	private Text txtCustLineAcct;
+	//private Text txtCustLineAcct;
 
 	// private Text txtCustomerLinePONumber;
 	// private Text txtCustomerLineSeqNumber;
@@ -505,22 +505,23 @@ public class CustomerProfileInfoPanel extends Composite implements
 	StyledText stxtMinOrderCurrency;
 	StyledText stxtSmallOrderCurrency;
 	StyledText stxtMaxOrderCurrency;
-	
+
 	private CustomerProfileMaintenance parentObj;
-	
+
 	private String CustomerAdditionalAddressKey="";
-	
+
 	private HashMap<String, Label> fillerLabelMap = new HashMap<String, Label>();
 	private List<Control> HideControlsList=null;
 	Element eleCustomer =null; 
 	String  suffixType =null; 
-	
-	
+
+
 	private Text txtZip;
 
 	private FocusAdapter focusListener;
-	
 
+	private Label lblCustLineAcctMsg;
+	private Label lblCustomerLinePONumberMsg;
 	public CustomerProfileInfoPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
 		super(parent, style);
@@ -562,7 +563,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 				}
 			}
 		};
-		
+
 		initialize();
 		setBindingForComponents();
 		eleCustomer=parentObj.getBehavior().getLocalModel("XPXCustomerIn");
@@ -571,7 +572,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 				FORM_ID, parentObj);
 		updateNonBindedComponents();
 		CreateListforControls();
-	
+
 		disableControls();//---function used to disable controls for ShipTo & BillTo
 		adjustScrollPnl(scrolledPnlforInfo, pnlPrimaryInformation,
 				pnlProfileInfo, true, true);
@@ -581,20 +582,20 @@ public class CustomerProfileInfoPanel extends Composite implements
 		getControlStatus(controls);
 		checkUserPermissions();
 	}
-/**function used to show-dispose of controls **/
+	/**function used to show-dispose of controls **/
 	private void getControlStatus(Control[] controls) {
-		
+
 		for (Control control : HideControlsList) {
-			
-				if (null != control) {
-				
+
+			if (null != control) {
+
 //				if(HideControlsList.contains(control)){
 
-			control.dispose();
+				control.dispose();
 			}
 		}
 
-		
+
 	}
 
 	private void initialize() {
@@ -675,7 +676,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		scrolledPnlforInfo.setContent(pnlPrimaryInformation);
 		scrolledPnlforInfo.setData("yrc:customType", "TaskComposite");
 		scrolledPnlforInfo.setData("name", "scrolledPnlforInfo");
-		
+
 		createCustomerProfileInfoPnl();
 		createCompositeMiscPnl();
 		adjustScrollPnl(scrolledPnlforInfo, pnlPrimaryInformation,
@@ -697,10 +698,10 @@ public class CustomerProfileInfoPanel extends Composite implements
 		pnlCentralContactlayout.marginHeight = 2;
 		pnlCentralContactlayout.marginWidth = 2;
 		pnlCentralContactlayout.numColumns=6;
-		
+
 		eleCustomer=parentObj.getBehavior().getLocalModel("XPXCustomerIn");
 		suffixType=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnSuffixType");
-		
+
 		pnlCustomerProfileInfo.setLayout(pnlCentralContactlayout);		
 		Element eleCustomer = parentObj.getBehavior().getLocalModel("XPXCustomerIn");
 		String strHeader = null;
@@ -722,27 +723,27 @@ public class CustomerProfileInfoPanel extends Composite implements
 		} else {
 			strHeader = "";
 		}
-		
+
 		createHeaderPnl(strHeader,SWT.CENTER);
 		createHeaderPnl("Central Contact Information (will not update account information and is for information purposes only)",SWT.LEFT);
 		createCentralContactComposite();
-		
+
 		if(!(("C".equals(suffixType))||("MC".equals(suffixType)))){
-		createHeaderPnl("General Info",SWT.LEFT);
-		
+			createHeaderPnl("General Info",SWT.LEFT);
+
 		}
 		createGeneralInfoComposite();
 		if(!("S".equals(suffixType))){
 			createHeaderPnl("Site Management",SWT.LEFT);
 		}
-		
+
 		createSiteManagementComposite();
 		if(!("C".equals(suffixType))){
 			createHeaderPnl("Order Header",SWT.LEFT);
 		}
 
 		createOrderHeaderComposite();
-	
+
 	}
 
 	private void createOrderHeaderComposite() {
@@ -756,7 +757,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData1.widthHint = 30;
 		gridData1.heightHint=20;
 		gridData1.horizontalSpan=1;		
-		
+
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -771,14 +772,14 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData3.verticalAlignment = SWT.CENTER;
 		gridData3.widthHint = 200;
 		gridData3.horizontalSpan=3;	
-		
+
 		GridData gridDataDummy = new GridData();
 		gridDataDummy.horizontalAlignment = SWT.BEGINNING;
 		gridDataDummy.grabExcessHorizontalSpace = true;
 		gridDataDummy.verticalAlignment = SWT.CENTER;
 		gridDataDummy.widthHint = 200;
 		gridDataDummy.horizontalSpan=3;		
-		
+
 		GridData gridDataDummy1 = new GridData();
 		gridDataDummy1.horizontalAlignment = SWT.END;
 		// gridData9.grabExcessHorizontalSpace = true;
@@ -786,7 +787,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridDataDummy1.verticalAlignment = SWT.CENTER;
 		gridDataDummy1.widthHint = 30;
 		gridDataDummy1.horizontalSpan=1;
-		
+
 		chkCsr1EmailConfirmationFlag = new Button(pnlCustomerProfileInfo,
 				SWT.CHECK);
 		chkCsr1EmailConfirmationFlag.setText("");
@@ -794,13 +795,13 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkCsr1EmailConfirmationFlag.setData("yrc:customType", "Label");
 		chkCsr1EmailConfirmationFlag.setLayoutData(gridData1);
 		chkCsr1EmailConfirmationFlag.setData("name",
-				"chkCsr1EmailConfirmationFlag");
+		"chkCsr1EmailConfirmationFlag");
 		lblCsr1EmailConfirmationFlag = new Label(pnlCustomerProfileInfo,
 				SWT.NONE);
 		lblCsr1EmailConfirmationFlag.setText("Email_Confirmation_Flag_CSR1");
 		lblCsr1EmailConfirmationFlag.setLayoutData(gridData2);
 		lblCsr1EmailConfirmationFlag.setData("name",
-				"lblCsr1EmailConfirmationFlag");
+		"lblCsr1EmailConfirmationFlag");
 		addTab(gridDataDummy,"dummyCsr1EmailConfirmationFlag");
 
 		chkCsr2EmailConfirmationFlag = new Button(pnlCustomerProfileInfo,
@@ -814,7 +815,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblCsr2EmailConfirmationFlag.setText("Email_Confirmation_Flag_CSR2");
 		lblCsr2EmailConfirmationFlag.setLayoutData(gridData2);
 		lblCsr2EmailConfirmationFlag.setData("name",
-				"lblCsr2EmailConfirmationFlag");
+		"lblCsr2EmailConfirmationFlag");
 		addTab(gridDataDummy,"dummyCsr2EmailConfirmationFlag");
 
 		chkSalesRepEmailConfirmationFlag = new Button(pnlCustomerProfileInfo,SWT.CHECK);
@@ -827,29 +828,29 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblSalesRepEmailConfirmationFlag.setText("Email_Confirmation_Flag_SalesRep");
 		lblSalesRepEmailConfirmationFlag.setLayoutData(gridData2);
 		lblSalesRepEmailConfirmationFlag.setData("name","lblSalesRepEmailConfirmationFlag");
-		
+
 		addTab(gridDataDummy,"dummySalesRepEmailConfirmationFlag");
-		
+
 		GridData gridDataPriceControl = new GridData();
 		gridDataPriceControl.horizontalAlignment = SWT.BEGINNING;
 		gridDataPriceControl.grabExcessHorizontalSpace = false;
 		gridDataPriceControl.verticalAlignment = 2;
 		gridDataPriceControl.widthHint = 200;
 		gridDataPriceControl.horizontalSpan=1;	
-		
+
 		GridData gridDataCurrency = new GridData();
 		gridDataCurrency.horizontalAlignment = SWT.BEGINNING;
 		gridDataCurrency.grabExcessHorizontalSpace = true;
 		gridDataCurrency.verticalAlignment = 2;
 		gridDataCurrency.widthHint = 100;
 		gridDataCurrency.horizontalSpan=2;	
-		
+
 		addTab(gridData1,"dummyMaxOrderAmount");
 		lblMaxOrderAmount = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblMaxOrderAmount.setText("Max_Order_Amount");
 		lblMaxOrderAmount.setLayoutData(gridData2);
 		lblMaxOrderAmount.setData("name", "lblMaxOrderAmount");
-		
+
 		txtMaxOrderAmount = new Text(pnlCustomerProfileInfo, 133120);
 		txtMaxOrderAmount.setText("");
 		txtMaxOrderAmount.setLayoutData(gridDataPriceControl);
@@ -895,7 +896,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		stxtSmallOrderCurrency.setEditable(false);
 		stxtSmallOrderCurrency.setLayoutData(gridDataCurrency);
 		stxtSmallOrderCurrency.setData("name", "stxtSmallOrderCurrency");
-		
+
 		addTab(gridData1, "dummyShipComplete");
 		lblShipComplete = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblShipComplete.setText("Ship_Complete");
@@ -950,7 +951,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData1.verticalAlignment = SWT.CENTER;
 		gridData1.widthHint = 30;
 		gridData1.horizontalSpan=1;		
-		
+
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -958,6 +959,14 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData2.verticalAlignment = SWT.CENTER;
 		gridData2.widthHint = 300;
 		gridData2.horizontalSpan=3;
+		
+
+		GridData gridData3 = new GridData();
+		gridData3.horizontalAlignment = SWT.BEGINNING;
+		gridData3.grabExcessHorizontalSpace = true;
+		gridData3.verticalAlignment = SWT.CENTER;
+		gridData3.widthHint = 500;
+		gridData3.horizontalSpan=3;	
 
 		GridData gridDataLbl = new GridData();
 		gridDataLbl.horizontalAlignment = SWT.BEGINNING;
@@ -966,81 +975,104 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridDataLbl.verticalAlignment = SWT.CENTER;
 		gridDataLbl.widthHint = 300;
 		gridDataLbl.horizontalSpan=2;
-		
+
 		GridData gridDataDummy = new GridData();
-		
+
 		gridDataDummy.horizontalAlignment = SWT.BEGINNING;
 		gridDataDummy.grabExcessHorizontalSpace = true;
 //		gridData2.horizontalIndent = 80;
 		gridDataDummy.verticalAlignment = SWT.CENTER;
 		gridDataDummy.widthHint = 300;
 		gridDataDummy.horizontalSpan=3;
-		
+
 		chkCustLineAcct = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustLineAcct.setText("");
 		chkCustLineAcct.setVisible(true);
 		chkCustLineAcct.setData("yrc:customType", "Label");
 		chkCustLineAcct.setLayoutData(gridData1);
 		chkCustLineAcct.setData("name", "chkCustLineAcct");
+		//lblCustLineAcct = new Label(pnlCustomerProfileInfo, SWT.LEFT);
 		lblCustLineAcct = new Label(pnlCustomerProfileInfo, SWT.LEFT);
 		lblCustLineAcct.setText("Cust Line Acct#:");
 		lblCustLineAcct.setLayoutData(gridDataLbl);
 		lblCustLineAcct.setData("name", "lblCustLineAcct");
-		txtCustLineAcct = new Text(pnlCustomerProfileInfo, SWT.BORDER);
-		txtCustLineAcct.setText("");
-		txtCustLineAcct.setLayoutData(gridData2);
-		txtCustLineAcct.setTextLimit(500);
-		txtCustLineAcct.setData("name", "txtCustLineAcct");
-		txtCustLineAcct.setVisible(false);
 
+		/*	lblCustLineAcctMsg = new Label(pnlCustomerProfileInfo,SWT.LEFT);
+		lblCustLineAcctMsg.setText("Cust Line Acct# will display if required is checked regardless of display settings.");
+		lblCustLineAcctMsg.setLayoutData(gridData2);
+		lblCustLineAcctMsg.setData("name",lblCustLineAcctMsg );
+		 */
+
+		lblCustLineAcctMsg = new Label(pnlCustomerProfileInfo,SWT.NONE);
+		lblCustLineAcctMsg.setText("Customer Line Acct# will display if required is checked,regardless of display setting.");
+		lblCustLineAcctMsg.setLayoutData(gridData3);
+		lblCustLineAcctMsg.setData("name", "txtCustLineAcct");
+		lblCustLineAcctMsg.setVisible(true);
+
+			/***** Commented for Jira xb-120 ********
+ 			* 
+ * 
+ * 
+ * /
+/*		//txtCustLineAcct = new Text(pnlCustomerProfileInfo, SWT.BORDER);
+		txtCustLineAcct.setText("Will display if required is checked,regardless of display setting. ");
+		txtCustLineAcct.setLayoutData(gridData2);
+		//txtCustLineAcct.setLayoutData(gridData2);
+		//txtCustLineAcct.setTextLimit(500);
+		txtCustLineAcct.setData("name", "txtCustLineAcct");
+		//txtCustLineAcct.setVisible(false);
+		 * 
+		 * */
+
+		
 		if(!("C".equals(suffixType))){
-		chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
-		chkCustLineField1.setText("");
-		chkCustLineField1.setVisible(true);
-		chkCustLineField1.setData("yrc:customType", "Label");
-		chkCustLineField1.setLayoutData(gridData1);
-		chkCustLineField1.setData("name", "chkCustLineField1");
-		lblCustLineField1 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustLineField1.setText("Cust Line Field 1:");
-		lblCustLineField1.setLayoutData(gridDataLbl);
-		lblCustLineField1.setData("name", "lblCustLineField1");
-		txtCustLineField1 = new Text(pnlCustomerProfileInfo, 2048);
-		txtCustLineField1.setText("");
-		txtCustLineField1.setLayoutData(gridData2);
-		txtCustLineField1.setTextLimit(500);
-		txtCustLineField1.setData("name", "txtCustLineField1");	
-		
-		chkCustLineField2 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
-		chkCustLineField2.setText("");
-		chkCustLineField2.setVisible(true);
-		chkCustLineField2.setData("yrc:customType", "Label");
-		chkCustLineField2.setLayoutData(gridData1);
-		chkCustLineField2.setData("name", "chkCustLineField2");
-		lblCustLineField2 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustLineField2.setText("Cust Line Field 2:");
-		lblCustLineField2.setLayoutData(gridDataLbl);
-		lblCustLineField2.setData("name", "lblCustLineField2");
-		txtCustLineField2 = new Text(pnlCustomerProfileInfo, 2048);
-		txtCustLineField2.setText("");
-		txtCustLineField2.setLayoutData(gridData2);
-		txtCustLineField2.setTextLimit(500);
-		txtCustLineField2.setData("name", "txtCustLineField2");		
-		
-		chkCustLineField3 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
-		chkCustLineField3.setText("");
-		chkCustLineField3.setVisible(true);
-		chkCustLineField3.setData("yrc:customType", "Label");
-		chkCustLineField3.setLayoutData(gridData1);
-		chkCustLineField3.setData("name", "chkCustLineField3");
-		lblCustLineField3 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustLineField3.setText("Cust Line Field 3:");
-		lblCustLineField3.setLayoutData(gridDataLbl);
-		lblCustLineField3.setData("name", "lblCustLineField3");
-		txtCustLineField3 = new Text(pnlCustomerProfileInfo, 2048);
-		txtCustLineField3.setText("");
-		txtCustLineField3.setLayoutData(gridData2);
-		txtCustLineField3.setTextLimit(500);
-		txtCustLineField3.setData("name", "txtCustLineField3");	
+			chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkCustLineField1.setText("");
+			chkCustLineField1.setVisible(true);
+			chkCustLineField1.setData("yrc:customType", "Label");
+			chkCustLineField1.setLayoutData(gridData1);
+			chkCustLineField1.setData("name", "chkCustLineField1");
+			lblCustLineField1 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblCustLineField1.setText("Cust Line Field 1:");
+			lblCustLineField1.setLayoutData(gridDataLbl);
+			lblCustLineField1.setData("name", "lblCustLineField1");
+			txtCustLineField1 = new Text(pnlCustomerProfileInfo, 2048);
+			txtCustLineField1.setText("");
+			txtCustLineField1.setLayoutData(gridData2);
+			txtCustLineField1.setTextLimit(500);
+			txtCustLineField1.setData("name", "txtCustLineField1");	
+
+			chkCustLineField2 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkCustLineField2.setText("");
+			chkCustLineField2.setVisible(true);
+			chkCustLineField2.setData("yrc:customType", "Label");
+			chkCustLineField2.setLayoutData(gridData1);
+			chkCustLineField2.setData("name", "chkCustLineField2");
+			lblCustLineField2 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblCustLineField2.setText("Cust Line Field 2:");
+			lblCustLineField2.setLayoutData(gridDataLbl);
+			lblCustLineField2.setData("name", "lblCustLineField2");
+			txtCustLineField2 = new Text(pnlCustomerProfileInfo, 2048);
+			txtCustLineField2.setText("");
+			txtCustLineField2.setLayoutData(gridData2);
+			txtCustLineField2.setTextLimit(500);
+			txtCustLineField2.setData("name", "txtCustLineField2");		
+
+			chkCustLineField3 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkCustLineField3.setText("");
+			chkCustLineField3.setVisible(true);
+			chkCustLineField3.setData("yrc:customType", "Label");
+			chkCustLineField3.setLayoutData(gridData1);
+			chkCustLineField3.setData("name", "chkCustLineField3");
+			lblCustLineField3 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblCustLineField3.setText("Cust Line Field 3:");
+			lblCustLineField3.setLayoutData(gridDataLbl);
+			lblCustLineField3.setData("name", "lblCustLineField3");
+			txtCustLineField3 = new Text(pnlCustomerProfileInfo, 2048);
+			txtCustLineField3.setText("");
+			txtCustLineField3.setLayoutData(gridData2);
+			txtCustLineField3.setTextLimit(500);
+			txtCustLineField3.setData("name", "txtCustLineField3");	
 		}
 		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustomerLinePONumber.setText("");
@@ -1052,8 +1084,16 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblCustomerLinePONumber.setText("Customer Line PO#");
 		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
 		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
-		addTab(gridDataDummy,"dummyCustomerLinePONumber");
 		
+		lblCustomerLinePONumberMsg = new Label(pnlCustomerProfileInfo,SWT.NONE);
+		lblCustomerLinePONumberMsg.setText("Customer Line PO# will display if required is checked,regardless of display setting.");
+		lblCustomerLinePONumberMsg.setLayoutData(gridData3);
+		lblCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
+		lblCustomerLinePONumberMsg.setVisible(true);
+
+		
+		addTab(gridDataDummy,"dummyCustomerLinePONumber");
+
 		chkCanRequestSample = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCanRequestSample.setText("");
 		chkCanRequestSample.setVisible(true);
@@ -1065,7 +1105,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblCanRequestSample.setLayoutData(gridDataLbl);
 		lblCanRequestSample.setData("name", "lblCanRequestSample");
 		addTab(gridDataDummy,"dummyCanRequestSample");
-		
+
 		chkViewPriceFlag = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkViewPriceFlag.setText("");
 		chkViewPriceFlag.setVisible(true);
@@ -1077,7 +1117,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblViewPriceFlag.setLayoutData(gridDataLbl);
 		lblViewPriceFlag.setData("name", "lblViewPriceFlag");
 		addTab(gridDataDummy,"dummyViewPriceFlag");
-		
+
 		chkCanOrder = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCanOrder.setText("");
 		chkCanOrder.setVisible(true);
@@ -1089,7 +1129,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblCanOrder.setLayoutData(gridDataLbl);
 		lblCanOrder.setData("name", "lblCanOrder");
 		addTab(gridDataDummy,"dummyCanOrder");
-		
+
 		chkViewInventory = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkViewInventory.setText("");
 		chkViewInventory.setVisible(true);
@@ -1101,7 +1141,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblViewInventory.setLayoutData(gridDataLbl);
 		lblViewInventory.setData("name", "lblViewInventory");
 		addTab(gridDataDummy,"dummyViewInventory");
-		
+
 		chkUseOrderMultiple = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkUseOrderMultiple.setText("");
 		chkUseOrderMultiple.setVisible(true);
@@ -1113,7 +1153,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblUseOrderMultiple.setLayoutData(gridDataLbl);
 		lblUseOrderMultiple.setData("name", "lblUseOrderMultiple");
 		addTab(gridDataDummy,"dummyUseOrderMultiple");
-		
+
 		chkViewInvoices = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkViewInvoices.setText("");
 		chkViewInvoices.setVisible(true);
@@ -1125,7 +1165,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblViewInvoices.setLayoutData(gridDataLbl);
 		lblViewInvoices.setData("name", "lblViewInvoices");
 		addTab(gridDataDummy,"dummyViewInvoices");
-		
+
 		GridData gridDataDummy1 = new GridData();
 		gridDataDummy1.horizontalAlignment = SWT.END;
 //		gridData1.grabExcessHorizontalSpace = true;
@@ -1133,7 +1173,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridDataDummy1.verticalAlignment = SWT.CENTER;
 		gridDataDummy1.widthHint = 30;
 		gridDataDummy1.horizontalSpan=1;			
-		
+
 		addTab(gridDataDummy1,"dummySecondItemDisplay");
 		lblSecondItemDisplay = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblSecondItemDisplay.setText("Second Item# Display:");
@@ -1153,7 +1193,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData1.verticalAlignment = 2;
 		gridData1.widthHint = 30;
 		gridData1.horizontalSpan=1;	
-		
+
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -1161,22 +1201,22 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData2.verticalAlignment = 2;
 		gridData2.widthHint = 300;
 		gridData2.horizontalSpan=2;
-		
+
 		GridData gridData3 = new GridData();
 		gridData3.horizontalAlignment = SWT.BEGINNING;
 		gridData3.grabExcessHorizontalSpace = true;
 		gridData3.verticalAlignment = 2;
 		gridData3.widthHint = 300;
 		gridData3.horizontalSpan=3;
-		
+
 		GridData gridData4 = new GridData();
 		gridData4.horizontalAlignment = SWT.FILL;
 		gridData4.grabExcessHorizontalSpace = true;
 		gridData4.verticalAlignment = 2;
-	//	gridData4.widthHint = 300;
+		//	gridData4.widthHint = 300;
 		gridData4.horizontalSpan=3;
 
-		
+
 		addParentCustomerLinks(gridData1, gridData2, gridData4);	
 
 		GridData gridDataType = new GridData();
@@ -1185,7 +1225,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridDataType.verticalAlignment = 2;
 		gridDataType.widthHint = 100;
 		gridDataType.horizontalSpan=3;	
-		
+
 		addTab(gridData1,"dummyType");
 		lblType = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblType.setText("Type:");
@@ -1196,7 +1236,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtType.setLayoutData(gridDataType);
 		txtType.setTextLimit(240);
 		txtType.setData("name", "txtType");
-		
+
 		addTab(gridData1,"dummyAddressLine1");
 		lblAddressLine1 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblAddressLine1.setText("Address Line 1:");
@@ -1207,7 +1247,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtAddressLine1.setLayoutData(gridData3);
 		txtAddressLine1.setTextLimit(240);
 		txtAddressLine1.setData("name", "txtAddressLine1");
-		
+
 		addTab(gridData1,"dummyAddressLine2");
 		lblAddressLine2 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblAddressLine2.setText("Address Line 2:");
@@ -1218,7 +1258,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtAddressLine2.setLayoutData(gridData3);
 		txtAddressLine2.setTextLimit(240);
 		txtAddressLine2.setData("name", "txtAddressLine2");
-		
+
 		addTab(gridData1,"dummyAddressLine3");
 		lblAddressLine3 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblAddressLine3.setText("Address Line 3:");
@@ -1240,7 +1280,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCity.setLayoutData(gridDataType);
 		txtCity.setTextLimit(240);
 		txtCity.setData("name", "txtCity");
-		
+
 		addTab(gridData1,"dummyState");
 		lblState = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblState.setText("State/Province:");
@@ -1251,39 +1291,39 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtState.setLayoutData(gridDataType);
 		txtState.setTextLimit(240);
 		txtState.setData("name", "txtState");
-		
+
 		addTab(gridData1,"dummyPostalCode");
 		lblPostalCode = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblPostalCode.setText("Postal Code"+"+"+"Zip4:");
 		lblPostalCode.setLayoutData(gridData2);
 		lblPostalCode.setData("name", "lblPostalCode");
-		
+
 		GridData gridDataPostalCode = new GridData();
 		gridDataPostalCode.horizontalAlignment = SWT.BEGINNING;
 		gridDataPostalCode.grabExcessHorizontalSpace = false;
 		gridDataPostalCode.verticalAlignment = 2;
 		gridDataPostalCode.widthHint = 160;
 		gridDataPostalCode.horizontalSpan=1;	
-		
+
 		GridData gridDataZip = new GridData();
 		gridDataZip.horizontalAlignment = SWT.BEGINNING;
 		gridDataZip.grabExcessHorizontalSpace = true;
 		gridDataZip.verticalAlignment = 2;
 		gridDataZip.widthHint = 100;
 		gridDataZip.horizontalSpan=2;	
-		
+
 		txtPostalCode = new Text(pnlCustomerProfileInfo, 2048);
 		txtPostalCode.setText("");
 		txtPostalCode.setLayoutData(gridDataPostalCode);
 		txtPostalCode.setTextLimit(240);
 		txtPostalCode.setData("name", "txtPostalCode");
-		
+
 		txtZip = new Text(pnlCustomerProfileInfo, 2048);
 		txtZip.setText("");
 		txtZip.setLayoutData(gridDataZip);
 		txtZip.setTextLimit(240);
 		txtZip.setData("name", "txtZip");
-		
+
 		addTab(gridData1,"dummyCountryCode");
 		lblCountryCode = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblCountryCode.setText("Country Code:");
@@ -1294,7 +1334,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtCountryCode.setLayoutData(gridDataType);
 		txtCountryCode.setTextLimit(240);
 		txtCountryCode.setData("name", "txtCountryCode");
-		
+
 		addTab(gridData1,"dummyAttentionName");
 		lblAttentionName = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblAttentionName.setText("Attention_Name");
@@ -1305,7 +1345,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtAttentionName.setLayoutData(gridData3);
 		txtAttentionName.setTextLimit(240);
 		txtAttentionName.setData("name", "txtAttentionName");
-		
+
 		addTab(gridData1,"dummyPhone1");
 		lblPhone1 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblPhone1.setText("Phone1");
@@ -1349,7 +1389,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtFax2.setLayoutData(gridData3);
 		txtFax2.setTextLimit(25);
 		txtFax2.setData("name", "txtFax2");
-		
+
 		addTab(gridData1,"dummyLocationId");
 		lblLocationId = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblLocationId.setText("Location ID:");
@@ -1361,7 +1401,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		txtLocationId.setTextLimit(240);
 		txtLocationId.setData("name", "txtLocationId");
 		//txtLocationId.setEditable(false);
-		
+
 		addTab(gridData1,"dummyCustomerStatus");
 		lblCustomerStatus = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblCustomerStatus.setText("Customer Status:");
@@ -1408,10 +1448,10 @@ public class CustomerProfileInfoPanel extends Composite implements
 				linkMasterCustomer.setEnabled(true);
 				linkMasterCustomer.setLayoutData(gridData3);
 				linkMasterCustomer.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { public void
-					 widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
-							myBehavior.openDetailEditor((String) linkMasterCustomer.getData("name"));
-							}
-					});				
+					widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
+					myBehavior.openDetailEditor((String) linkMasterCustomer.getData("name"));
+				}
+				});				
 			}
 			if(YRCXmlUtils.getChildren(customerEle,"ParentCustomerCustomer").size()>0)
 			{
@@ -1425,10 +1465,10 @@ public class CustomerProfileInfoPanel extends Composite implements
 				linkCustomer.setData("name", "linkCustomer");
 				linkCustomer.setLayoutData(gridData3);
 				linkCustomer.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { public void
-					 widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
+					widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
 					myBehavior.openDetailEditor((String) linkCustomer.getData("name"));
 				}
-		});	
+				});	
 			}
 			if(YRCXmlUtils.getChildren(customerEle,"ParentBillToCustomer").size()>0)
 			{
@@ -1442,10 +1482,10 @@ public class CustomerProfileInfoPanel extends Composite implements
 				linkBillTo.setData("name", "linkBillTo");
 				linkBillTo.setLayoutData(gridData3);
 				linkBillTo.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { public void
-					 widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
+					widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
 					myBehavior.openDetailEditor((String) linkBillTo.getData("name"));
 				}
-		});
+				});
 			}
 		}
 	}
@@ -1508,7 +1548,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 
 
 	private void createHeaderPnl(String headerTitle , int align){
-		
+
 		pnlSearchCriteriaTitle = new Composite(pnlCustomerProfileInfo, SWT.NONE);
 		pnlSearchCriteriaTitle.setBackgroundMode(SWT.INHERIT_NONE);
 		pnlSearchCriteriaTitle.setData(YRCConstants.YRC_CONTROL_NAME, "pnlSearchCriteriaTitle");
@@ -1524,22 +1564,22 @@ public class CustomerProfileInfoPanel extends Composite implements
 		pnlSearchCriteriaTitlelayout.marginWidth = 2;
 		pnlSearchCriteriaTitlelayout.numColumns=6;
 		pnlSearchCriteriaTitle.setLayout(pnlSearchCriteriaTitlelayout);
-		
+
 		lblSearchCriteriaTitle = new Label(pnlSearchCriteriaTitle, align);
 		GridData gridData = new GridData();
-	       gridData.horizontalSpan=6;
-	       gridData.horizontalAlignment =align;
-        gridData.verticalAlignment = SWT.TOP;
-        gridData.grabExcessHorizontalSpace = true;
-        gridData.horizontalIndent = 3;
-        gridData.widthHint = 1000;	
- 		lblSearchCriteriaTitle.setLayoutData(gridData);
+		gridData.horizontalSpan=6;
+		gridData.horizontalAlignment =align;
+		gridData.verticalAlignment = SWT.TOP;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalIndent = 3;
+		gridData.widthHint = 1000;	
+		lblSearchCriteriaTitle.setLayoutData(gridData);
 		lblSearchCriteriaTitle.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
 		lblSearchCriteriaTitle.setText(headerTitle);
-		
+
 	}
 	public void createGeneralInfoComposite() {
-		
+
 
 		// TODO Auto-generated method stub
 		GridData gridData1 = new GridData();
@@ -1549,7 +1589,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData1.verticalAlignment = 2;
 		gridData1.widthHint = 30;
 		gridData1.horizontalSpan=1;		
-		
+
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -1564,7 +1604,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		gridData3.verticalAlignment = 2;
 		gridData3.widthHint = 300;
 		gridData3.horizontalSpan=3;
-		
+
 		addTab(gridData1,"dummyECSR");
 		lblECSR = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblECSR.setText("eCSR");
@@ -1589,7 +1629,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		lblCustomerDivision.setText("Company");
 		lblCustomerDivision.setLayoutData(gridData2);
 		lblCustomerDivision.setData("name", "lblCustomerDivision");
-		
+
 		txtCustomerDivision = new Text(pnlCustomerProfileInfo, 2048);
 		txtCustomerDivision.setText(getDivisionData("txtCustomerDivision"));
 		txtCustomerDivision.setLayoutData(gridData3);
@@ -1713,25 +1753,25 @@ public class CustomerProfileInfoPanel extends Composite implements
 		String environmentVariable="";
 		Element eleCustomer = parentObj.getBehavior().getLocalModel("XPXCustomerIn");
 		if("txtShipFromBranch".equals(controlName)){
-		
-		 divisioncode = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnShipFromBranch");
-		 environmentVariable=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnEnvironmentCode");
-		String divisionCode1=divisioncode+"_"+environmentVariable;
-		divisionReturntmp=XPXUtils.divisionMap.get(divisionCode1);
-//		divisionReturn=divisionReturntmp+"("+divisionCode1+")";
-		divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
+
+			divisioncode = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnShipFromBranch");
+			environmentVariable=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnEnvironmentCode");
+			String divisionCode1=divisioncode+"_"+environmentVariable;
+			divisionReturntmp=XPXUtils.divisionMap.get(divisionCode1);
+//			divisionReturn=divisionReturntmp+"("+divisionCode1+")";
+			divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
 		}
 		else if("txtCustomerDivision".equals(controlName)){  //updated code for JIRA 4192 to show only division number
-			 divisioncode = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnCustomerDivision");
-			 environmentVariable=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnEnvironmentCode");
+			divisioncode = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnCustomerDivision");
+			environmentVariable=YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnEnvironmentCode");
 			//String divisionCode1=divisioncode+"_"+environmentVariable;
-			 String divisionCode1=divisioncode;
+			String divisionCode1=divisioncode;
 			//divisionReturntmp=XPXUtils.divisionMap.get(divisionCode1);
 			divisionReturn = divisionCode1;
 			//divisionReturn=YRCPlatformUI.getFormattedString("DisplayDivisionContactKey", new String[]{divisionReturntmp, divisionCode1});
-//		    divisionReturn=divisionReturntmp+"("+divisionCode1+")";
+//			divisionReturn=divisionReturntmp+"("+divisionCode1+")";
 		}
-		
+
 		if(divisionReturntmp==null){
 			divisionReturn=divisioncode;
 		}
@@ -1750,77 +1790,77 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSampleRequestFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSampleRequestFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSampleRequestFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSampleRequestFlag");
 		chkBoxBindingData.setName("chkCanRequestSample");
 		chkCanRequestSample.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
 
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLinePONoFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLinePONoFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLinePONoFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLinePONoFlag");
 		chkBoxBindingData.setName("chkCustomerLinePONumber");
 		chkCustomerLinePONumber.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
-		
-		
+
+
 //		tbd = new YRCTextBindingData();
 //		tbd
-//				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustEmailAddress");
+//		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustEmailAddress");
 //		tbd
-//				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustEmailAddress");
+//		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustEmailAddress");
 //		// tbd.setDataType("Quantity");
 //		tbd.setName("txtCustomerEmailAddress");
 //		txtCustomerEmailAddress.setData(
-//				YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+//		YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerStoreNumber");
 		tbd.setName("txtLocationId");
 		txtLocationId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 		tbd.setName("txtAddressLine1");
 		txtAddressLine1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
 		tbd.setName("txtAddressLine2");
 		txtAddressLine2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
 		tbd.setName("txtAddressLine3");
 		txtAddressLine3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
-		
+
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
 		tbd.setName("txtCity");
 		txtCity.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 		tbd.setName("txtState");
 		txtState.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 		tbd.setName("txtPostalCode");
 		txtPostalCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/Extn/@ExtnZip4");
 		tbd.setName("txtZip");
 		txtZip.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);		
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 		tbd.setName("txtCountryCode");
@@ -1837,9 +1877,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1EmailConfirmFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1EmailConfirmFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR1EmailConfirmFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR1EmailConfirmFlag");
 		chkBoxBindingData.setName("chkCsr1EmailConfirmationFlag");
 		chkCsr1EmailConfirmationFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1848,20 +1888,20 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2EmailConfirmFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2EmailConfirmFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR2EmailConfirmFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR2EmailConfirmFlag");
 		chkBoxBindingData.setName("chkCsr2EmailConfirmationFlag");
 		chkCsr2EmailConfirmationFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
 		chkBoxBindingData.setName("chkSalesRepEmailConfirmationFlag");
 		chkSalesRepEmailConfirmationFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1872,7 +1912,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		cbd.setDescriptionBinding("@Loginid");
 		cbd.setListBinding("XPXGetUserList:/UserList/User");
 		cbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1Key");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR1Key");
 		cbd.setName("comboECSR");
 		comboECSR.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
@@ -1882,7 +1922,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		cbd.setDescriptionBinding("@Loginid");
 		cbd.setListBinding("XPXGetUserList:/UserList/User");
 		cbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2Key");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR2Key");
 		cbd.setName("comboECSR2");
 		comboECSR2.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
@@ -1895,35 +1935,35 @@ public class CustomerProfileInfoPanel extends Composite implements
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseCustSKU");
 		cbd.setName("comboSecondItemDisplay");
 		comboSecondItemDisplay.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-		
-		tbd = new YRCTextBindingData();
-		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMaxOrderAmount");
-		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMaxOrderAmount");
-		tbd.setDataType("Price");
-		tbd.setName("txtMaxOrderAmount");
-		txtMaxOrderAmount
-				.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMinOrderAmount");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMaxOrderAmount");
 		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMinOrderAmount");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMaxOrderAmount");
+		tbd.setDataType("Price");
+		tbd.setName("txtMaxOrderAmount");
+		txtMaxOrderAmount
+		.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
+		tbd = new YRCTextBindingData();
+		tbd
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMinOrderAmount");
+		tbd
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMinOrderAmount");
 		tbd.setDataType("Price");
 		tbd.setName("txtMinOrderAmount");
 		txtMinOrderAmount
-				.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnViewPricesFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnViewPricesFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnViewPricesFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnViewPricesFlag");
 		chkBoxBindingData.setName("chkViewPriceFlag");
 		chkViewPriceFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1932,9 +1972,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCanOrderFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCanOrderFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCanOrderFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCanOrderFlag");
 		chkBoxBindingData.setName("chkCanOrder");
 		chkCanOrder.setData("YRCButtonBindingDefination", chkBoxBindingData);
 
@@ -1942,9 +1982,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCanViewInvFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCanViewInvFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCanViewInvFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCanViewInvFlag");
 		chkBoxBindingData.setName("chkViewInventory");
 		chkViewInventory.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1954,9 +1994,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOrderMulUOMFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOrderMulUOMFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOrderMulUOMFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOrderMulUOMFlag");
 		chkBoxBindingData.setName("chkUseOrderMultiple");
 		chkUseOrderMultiple.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1965,9 +2005,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPreviewInvoicesFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPreviewInvoicesFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPreviewInvoicesFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPreviewInvoicesFlag");
 		chkBoxBindingData.setName("chkViewInvoices");
 		chkViewInvoices.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -1976,93 +2016,94 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineAccNoFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineAccNoFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccNoFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccNoFlag");
 		chkBoxBindingData.setName("chkCustLineAcct");
 		chkCustLineAcct.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
 
-		tbd = new YRCTextBindingData();
+	/*	tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineAccLbl");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineAccLbl");
 		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccLbl");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccLbl");
 		tbd.setName("txtCustLineAcct");
 		txtCustLineAcct.setData(
 				YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+				*/
 
 		if(!("C".equals(suffixType))){
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField1Flag");
-		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField1Flag");
-		chkBoxBindingData.setName("chkCustLineField1");
-		chkCustLineField1.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField1Flag");
+			chkBoxBindingData
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField1Flag");
+			chkBoxBindingData.setName("chkCustLineField1");
+			chkCustLineField1.setData("YRCButtonBindingDefination",
+					chkBoxBindingData);
 
-		tbd = new YRCTextBindingData();
-		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField1Label");
-		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField1Label");
-		tbd.setName("txtCustLineField1");
-		txtCustLineField1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
-				tbd);
+		/*	tbd = new YRCTextBindingData();
+			tbd
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField1Label");
+			tbd
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField1Label");
+			tbd.setName("txtCustLineField1");
+			txtCustLineField1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
+					tbd);
+*/
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField2Flag");
+			chkBoxBindingData
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField2Flag");
+			chkBoxBindingData.setName("chkCustLineField2");
+			chkCustLineField2.setData("YRCButtonBindingDefination",
+					chkBoxBindingData);
 
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField2Flag");
-		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField2Flag");
-		chkBoxBindingData.setName("chkCustLineField2");
-		chkCustLineField2.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
+			tbd = new YRCTextBindingData();
+			tbd
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField2Label");
+			tbd
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField2Label");
+			tbd.setName("txtCustLineField2");
+			txtCustLineField2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
+					tbd);
 
-		tbd = new YRCTextBindingData();
-		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField2Label");
-		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField2Label");
-		tbd.setName("txtCustLineField2");
-		txtCustLineField2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
-				tbd);
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField3Flag");
+			chkBoxBindingData
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField3Flag");
+			chkBoxBindingData.setName("chkCustLineField3");
+			chkCustLineField3.setData("YRCButtonBindingDefination",
+					chkBoxBindingData);
 
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField3Flag");
-		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField3Flag");
-		chkBoxBindingData.setName("chkCustLineField3");
-		chkCustLineField3.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-
-		tbd = new YRCTextBindingData();
-		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField3Label");
-		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField3Label");
-		tbd.setName("txtCustLineField3");
-		txtCustLineField3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
-				tbd);
+			tbd = new YRCTextBindingData();
+			tbd
+			.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustLineField3Label");
+			tbd
+			.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineField3Label");
+			tbd.setName("txtCustLineField3");
+			txtCustLineField3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
+					tbd);
 		}
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnAttnName");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnAttnName");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnAttnName");
 		tbd.setName("txtAttentionName");
 		txtAttentionName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPhone1");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPhone1");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPhone1");
 		// tbd.setDataType("PhoneNo");
 		tbd.setName("txtPhone1");
@@ -2070,21 +2111,21 @@ public class CustomerProfileInfoPanel extends Composite implements
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPhone2");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPhone2");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPhone2");
 		tbd.setName("txtPhone2");
 		txtPhone2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnFax1");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnFax1");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnFax1");
 		tbd.setName("txtFax1");
 		txtFax1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnFax2");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnFax2");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnFax2");
 		tbd.setName("txtFax2");
 		txtFax2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
@@ -2093,7 +2134,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSuffixType");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSuffixType");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSuffixType");
 		tbd.setName("txtType");
 		txtType.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
@@ -2102,31 +2143,31 @@ public class CustomerProfileInfoPanel extends Composite implements
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnBrandCodeName");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnBrandCodeName");
 //		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnBrandCode");
 		tbd.setName("txtBrandCode");
 		txtBrandCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerClass");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerClass");
 		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerClass");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerClass");
 		tbd.setName("txtCustomerClass");
 		txtCustomerClass.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnServiceOptCode");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnServiceOptCode");
 		tbd
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnServiceOptCode");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnServiceOptCode");
 		tbd.setName("txtServiceOptmizationCode");
 		txtServiceOptmizationCode.setData(
 				YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCurrencyCode");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCurrencyCode");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCurrencyCode");
 		tbd.setName("txtCurrencyCode");
 		txtCurrencyCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
@@ -2137,11 +2178,11 @@ public class CustomerProfileInfoPanel extends Composite implements
 		tbd.setDataType("Price");
 		tbd.setName("txtSmallOrderFee");
 		txtSmallOrderFee.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnShipComplete");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnShipComplete");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnShipComplete");
 		tbd.setName("txtShipComplete");
 		txtShipComplete.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
@@ -2150,9 +2191,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnOrderUpdateFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnOrderUpdateFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnOrderUpdateFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnOrderUpdateFlag");
 		chkBoxBindingData.setName("chkOrderUpdateFlag");
 		chkOrderUpdateFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
@@ -2160,7 +2201,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		// txtPrimarySalesRep
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("PrimarySalesRepList:/PrimarySalesRepList/SalesRep/@SalesRepName");
+		.setSourceBinding("PrimarySalesRepList:/PrimarySalesRepList/SalesRep/@SalesRepName");
 		// tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnShipComplete");
 		tbd.setName("txtPrimarySalesRep");
 		txtPrimarySalesRep.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION,
@@ -2171,23 +2212,23 @@ public class CustomerProfileInfoPanel extends Composite implements
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnShipToOverrideFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnShipToOverrideFlag");
 		chkBoxBindingData
-				.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnShipToOverrideFlag");
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnShipToOverrideFlag");
 		chkBoxBindingData.setName("chkShipToOverrideFlag");
 		chkShipToOverrideFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnNAICSCode");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnNAICSCode");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnNAICSCode");
 		tbd.setName("txtNAICSCode");
 		txtNAICSCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
 		tbd
-				.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnNAICSName");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnNAICSName");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnNAICSName");
 		tbd.setName("txtNAICSName");
 		txtNAICSName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
@@ -2196,7 +2237,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		bbd.setName("btnUpdate");
 		bbd.setActionHandlerEnabled(true);
 		bbd
-				.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
+		.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
 
 	}
@@ -2239,7 +2280,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 	public Object getInput() {
 		Object inObject = null;
 		org.eclipse.ui.part.WorkbenchPart currentPart = YRCDesktopUI
-				.getCurrentPart();
+		.getCurrentPart();
 		inObject = ((YRCEditorPart) currentPart).getEditorInput();
 		return inObject;
 	}
@@ -2315,7 +2356,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 				txtFax1, txtSalesRep1, txtSalesRep2, txtSalesRep3,
 				txtSalesRep4, txtSAPName, txtMasterSAPName };
 	}
-	
+
 	private Control[] readOnlyforSAPChilds(){
 		return new Control[] {
 				txtAddressLine1,txtAddressLine2,txtAttentionName,
@@ -2323,53 +2364,53 @@ public class CustomerProfileInfoPanel extends Composite implements
 				txtState,txtPostalCode,
 				txtZip,txtCountryCode,txtLocationId
 		};
-		}
-		
+	}
+
 	private Control[] enableFieldsForMSAP(){
 		return new Control[] {
 				txtPhone1,txtFax1
 		};
-		}
-		
-	
+	}
+
+
 
 
 	private Control[] getIntegrationDataControls() {
 		System.out.println("inside getIntegrationDataControls method");
 		return new Control[] { txtWmLocationId };
 	}
-/** function used to create list for controls **/
+	/** function used to create list for controls **/
 	private void CreateListforControls(){
 		HideControlsList=new ArrayList<Control>();
 		if("MC".equalsIgnoreCase(suffixType)){
-			
+
 			Control[]elements= {lblECSR,comboECSR,lblECSR2,comboECSR2,lblSalesRep1,txtSalesRep1,lblSalesRep2,txtSalesRep2,
-						lblSalesRep3,txtSalesRep3,lblSalesRep4,txtSalesRep4,lblNAICSCode,txtNAICSCode,lblNAICSName,txtNAICSName,
-						lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod"),
-						chkCustLineAcct,lblCustLineAcct,txtCustLineAcct,chkCustLineField1,lblCustLineField1,txtCustLineField1,
-						chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
-						lblCustomerEmailAddress,txtCustomerEmailAddress,lblInvoiceEmailId,txtInvoiceEmailId,chkConfirmation,lblConfirmation,
-						txtConfirmation,txtConfirmation,chkCancelled,lblCancelled,txtCancelled,chkBackorder,lblBackorder,txtBackorder,chkInvoiced,lblInvoiced,txtInvoiced
-						,chkCsr1EmailConfirmationFlag,lblCsr1EmailConfirmationFlag,chkCsr2EmailConfirmationFlag,lblCsr2EmailConfirmationFlag,
-						lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,fillerLabelMap.get("dummySmallOrderFee"),txtSmallOrderFee,stxtSmallOrderCurrency
-						,fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),fillerLabelMap.get("dummyPrimarySalesRep"),
-						fillerLabelMap.get("dummySalesRep1"),fillerLabelMap.get("dummySalesRep2"),fillerLabelMap.get("dummySalesRep3"),fillerLabelMap.get("dummySalesRep4")
-						,fillerLabelMap.get("NAICSName"),fillerLabelMap.get("dummyNAICSCode"),
-						fillerLabelMap.get("dummyShipComplete"),lblShipComplete,txtShipComplete,
-						lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId")
-						,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
-						,lblOrderUpdateFlag, chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
-						chkShipToOverrideFlag,lblShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
-						fillerLabelMap.get("dummyCurrencyCode"),lblCurrencyCode,txtCurrencyCode
-						,lblCustomerStatus,txtCustomerStatus,fillerLabelMap.get("dummyCustomerStatus"),lblShipFromBranch, txtShipFromBranch,fillerLabelMap.get("dummyShipFromBranch")
-						,lblBrandCode, txtBrandCode,fillerLabelMap.get("dummyBrandCode"),
-						lblCustomerClass, txtCustomerClass,fillerLabelMap.get("dummyCustomerClass"),
-						lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
-						lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
-						lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
+					lblSalesRep3,txtSalesRep3,lblSalesRep4,txtSalesRep4,lblNAICSCode,txtNAICSCode,lblNAICSName,txtNAICSName,
+					lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod"),
+					chkCustLineAcct,lblCustLineAcct,lblCustLineAcctMsg,lblCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
+					lblCustomerEmailAddress,txtCustomerEmailAddress,lblInvoiceEmailId,txtInvoiceEmailId,chkConfirmation,lblConfirmation,
+					txtConfirmation,txtConfirmation,chkCancelled,lblCancelled,txtCancelled,chkBackorder,lblBackorder,txtBackorder,chkInvoiced,lblInvoiced,txtInvoiced
+					,chkCsr1EmailConfirmationFlag,lblCsr1EmailConfirmationFlag,chkCsr2EmailConfirmationFlag,lblCsr2EmailConfirmationFlag,
+					lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,fillerLabelMap.get("dummySmallOrderFee"),txtSmallOrderFee,stxtSmallOrderCurrency
+					,fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),fillerLabelMap.get("dummyPrimarySalesRep"),
+					fillerLabelMap.get("dummySalesRep1"),fillerLabelMap.get("dummySalesRep2"),fillerLabelMap.get("dummySalesRep3"),fillerLabelMap.get("dummySalesRep4")
+					,fillerLabelMap.get("NAICSName"),fillerLabelMap.get("dummyNAICSCode"),
+					fillerLabelMap.get("dummyShipComplete"),lblShipComplete,txtShipComplete,
+					lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId")
+					,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
+					,lblOrderUpdateFlag, chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
+					chkShipToOverrideFlag,lblShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
+					fillerLabelMap.get("dummyCurrencyCode"),lblCurrencyCode,txtCurrencyCode
+					,lblCustomerStatus,txtCustomerStatus,fillerLabelMap.get("dummyCustomerStatus"),lblShipFromBranch, txtShipFromBranch,fillerLabelMap.get("dummyShipFromBranch")
+					,lblBrandCode, txtBrandCode,fillerLabelMap.get("dummyBrandCode"),
+					lblCustomerClass, txtCustomerClass,fillerLabelMap.get("dummyCustomerClass"),
+					lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
+					lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
+					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
 			HideControlsList=Arrays.asList(elements);
-			
+
 		}
 		else if("C".equalsIgnoreCase(suffixType)){
 			Control[]elements= {
@@ -2395,14 +2436,14 @@ public class CustomerProfileInfoPanel extends Composite implements
 					lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
 					lblOrderUpdateFlag,chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
 					lblCurrencyCode, txtCurrencyCode,fillerLabelMap.get("dummyCurrencyCode")
-					
+
 			};
-		HideControlsList=Arrays.asList(elements);
-		 }
+			HideControlsList=Arrays.asList(elements);
+		}
 		else if("S".equalsIgnoreCase(suffixType)){
 			Control[]elements= {
 					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
-					,chkCustLineAcct,lblCustLineAcct,txtCustLineAcct,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					,chkCustLineAcct,lblCustLineAcct,lblCustLineAcctMsg,lblCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,lblECSR,comboECSR,lblECSR2,comboECSR2,
 					fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod")
 					,chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
@@ -2412,13 +2453,13 @@ public class CustomerProfileInfoPanel extends Composite implements
 					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
 					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
-			
+
 			};
 			HideControlsList=Arrays.asList(elements);
-			
+
 		}
 		else if("B".equalsIgnoreCase(suffixType)){
-			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcct,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+			Control[]elements= {chkCustLineAcct,lblCustLineAcct,lblCustLineAcctMsg,lblCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
 					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
@@ -2426,7 +2467,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 					,lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
 			HideControlsList=Arrays.asList(elements);
-			
+
 		}
 	}
 	/**function is used to create a list of all available controls **/ 
@@ -2434,7 +2475,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 		return new Control[] {lblECSR,comboECSR,lblECSR2,comboECSR2,lblSalesRep1,txtSalesRep1,lblSalesRep2,txtSalesRep2,
 				lblSalesRep3,txtSalesRep3,lblSalesRep4,txtSalesRep4,lblNAICSCode,txtNAICSCode,lblNAICSName,txtNAICSName,
 				lblInvoiceDistMethod,txtInvoiceDistMethod,
-				chkCustLineAcct,lblCustLineAcct,txtCustLineAcct,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+				chkCustLineAcct,lblCustLineAcct,lblCustLineAcctMsg,lblCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 				chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 				lblCustomerEmailAddress,txtCustomerEmailAddress,lblInvoiceEmailId,txtInvoiceEmailId,chkConfirmation,lblConfirmation,
 				txtConfirmation,txtConfirmation,chkCancelled,lblCancelled,txtCancelled,chkBackorder,lblBackorder,txtBackorder,chkInvoiced,lblInvoiced,txtInvoiced
@@ -2442,7 +2483,7 @@ public class CustomerProfileInfoPanel extends Composite implements
 				lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),
 				fillerLabelMap.get("dummySalesRep1"),fillerLabelMap.get("dummySalesRep2"),fillerLabelMap.get("dummySalesRep3"),fillerLabelMap.get("dummySalesRep4")
 				,fillerLabelMap.get("NAICSName"),fillerLabelMap.get("dummyNAICSCode"),fillerLabelMap.get("dummyShipComplete"),lblShipComplete,txtShipComplete,
-				chkCustLineAcct,lblCustLineAcct,txtCustLineAcct,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+				chkCustLineAcct,lblCustLineAcct,lblCustLineAcctMsg,lblCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 				chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 				chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
 				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
@@ -2465,9 +2506,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 				fillerLabelMap.get("dummyAttentionName"),lblAttentionName,txtAttentionName,fillerLabelMap.get("dummyPhone1"),lblPhone1,txtPhone1,fillerLabelMap.get("dummyPhone2"),lblPhone2,txtPhone2
 				,fillerLabelMap.get("dummyFax1"),lblFax1,txtFax1,fillerLabelMap.get("dummyFax2"),lblFax2,txtFax2,
 				fillerLabelMap.get("dummyCanOrder")
-				
-	
-		
+
+
+
 		};
 	}
 
@@ -2492,12 +2533,12 @@ public class CustomerProfileInfoPanel extends Composite implements
 	private void updateSalesRepDetails(CustomerProfileMaintenance parentObj) {
 		ArrayList<Element> SalesRepArrayList = YRCXmlUtils.getChildren(
 				parentObj.getBehavior().getLocalModel("SalesRepList"),
-				"SalesRep");
+		"SalesRep");
 		String[] salesRepNames = { "", "", "", "" };
 		for (int i = 0; i < SalesRepArrayList.size(); i++) {
 			Element SalesRep = (Element) SalesRepArrayList.get(i);
 			String salesRepName = YRCXmlUtils.getAttribute(SalesRep,
-					"SalesRepName");
+			"SalesRepName");
 			if (!YRCPlatformUI.isVoid(salesRepName)) {
 				salesRepNames[i] = salesRepName;
 			}
@@ -2506,10 +2547,10 @@ public class CustomerProfileInfoPanel extends Composite implements
 		Element eleCustomer = parentObj.getBehavior().getLocalModel("XPXCustomerIn");
 		String suffixType = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnSuffixType");
 		if(("S".equals(suffixType))||("B".equals(suffixType)) ){
-		txtSalesRep1.setText(salesRepNames[0]);
-		txtSalesRep2.setText(salesRepNames[1]);
-		txtSalesRep3.setText(salesRepNames[2]);
-		txtSalesRep4.setText(salesRepNames[3]);
+			txtSalesRep1.setText(salesRepNames[0]);
+			txtSalesRep2.setText(salesRepNames[1]);
+			txtSalesRep3.setText(salesRepNames[2]);
+			txtSalesRep4.setText(salesRepNames[3]);
 		}
 	}
 
@@ -2538,9 +2579,9 @@ public class CustomerProfileInfoPanel extends Composite implements
 						txtCountryCode.setText(YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(customerAdditionalAddress, "/CustomerAdditionalAddress/PersonInfo"), "Country"));
 						setCustomerAdditionalAddressKey(customerAdditionalAddress.getAttribute("CustomerAdditionalAddressKey"));
 						return;
-						
+
 					}
-					
+
 				}
 				else if(!"S".equals(myBehavior.getSuffixType()) && "Y".equals(customerAdditionalAddress.getAttribute("IsDefaultBillTo")))
 				{
@@ -2559,13 +2600,13 @@ public class CustomerProfileInfoPanel extends Composite implements
 						txtCountryCode.setText(YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(customerAdditionalAddress, "/CustomerAdditionalAddress/PersonInfo"), "Country"));
 						setCustomerAdditionalAddressKey(customerAdditionalAddress.getAttribute("CustomerAdditionalAddressKey"));
 						return;
-						
+
 					}
 				}
 			}
 		}
 	}
-	
+
 	public String getCustomerAdditionalAddressKey() {
 		return CustomerAdditionalAddressKey;
 	}
@@ -2575,18 +2616,18 @@ public class CustomerProfileInfoPanel extends Composite implements
 	}
 	/**function used to disable fields for ShipTo & BillTo **/
 	public void disableControls(){
-	//Element generalInfo = getModel("XPXCustomerIn");
-	
-	String suffixType = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnSuffixType");
-	if("B".equals(suffixType) || "S".equals(suffixType)){
-		
-		setControlsEnabled(readOnlyforSAPChilds(), false);
-		
+		//Element generalInfo = getModel("XPXCustomerIn");
+
+		String suffixType = YRCXmlUtils.getAttributeValue(eleCustomer, "/CustomerList/Customer/Extn/@ExtnSuffixType");
+		if("B".equals(suffixType) || "S".equals(suffixType)){
+
+			setControlsEnabled(readOnlyforSAPChilds(), false);
+
+		}
+		if("MC".equals(suffixType) || "C".equals(suffixType)){
+			setControlsEnabled(enableFieldsForMSAP(), true);
+		}
+
 	}
-	if("MC".equals(suffixType) || "C".equals(suffixType)){
-		setControlsEnabled(enableFieldsForMSAP(), true);
-	}
-		
-}
 
 }
