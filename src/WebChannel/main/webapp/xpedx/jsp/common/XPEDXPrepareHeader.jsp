@@ -2546,7 +2546,6 @@ function msgWait(){
 					tabindex="2006" id="signIn"><span style="font-size: 12px">Sign In</span></a>
 				</li>	
 					<div id="signId"></div>
-				</li>
 				
 				<div class="float-right" style="margin-top:20px;margin-right:-70px"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="140" height="45" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
 			</s:else>
