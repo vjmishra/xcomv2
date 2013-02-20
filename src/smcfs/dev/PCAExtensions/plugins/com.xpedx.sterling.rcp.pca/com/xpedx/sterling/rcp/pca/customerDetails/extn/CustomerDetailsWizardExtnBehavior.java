@@ -180,13 +180,17 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				String permissions = "";
 				Element eleTableItem = (Element)arg0;
 				Element extnElement = YRCXmlUtils.getXPathElement(eleTableItem, "/CustomerContact/Extn");
-				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnStockCheckWS"))){
+				/*  Start of Modified code for JIra XB-198 User Profile - Permissions 
+				 * Modified code by replacing the Conditions equals("F") with ("Y")
+				 *  
+				 */
+				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnStockCheckWS"))){
 					roleList.add("StockCheck");
 				}	
-				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnViewInvoices"))){
+				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewInvoices"))){
 					roleList.add("ViewInvoices");
 				}	
-				if(YRCPlatformUI.equals("F", extnElement.getAttribute("ExtnEstimator"))){
+				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnEstimator"))){
 					roleList.add("Estimator");
 				}
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewPricesFlag"))){
@@ -195,6 +199,9 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewReportsFlag"))){
 					roleList.add("ViewReports");
 				}
+				
+				
+				/****End of Modified code for Jira XB-198 User Profile - Permissions ***/
 				NodeList userList = eleTableItem.getElementsByTagName("UserGroupList");
 				int userLength = userList.getLength();
 				for(int userCount=0;userCount<userLength;userCount++)
