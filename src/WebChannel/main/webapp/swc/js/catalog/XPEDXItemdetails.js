@@ -125,6 +125,14 @@ function setPandAData() {
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
 	}
+	else if(orderMultipleQty != null)
+	{
+		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
+		sourceOrderMulError.style.display = "inline-block"; 
+		sourceOrderMulError.setAttribute("class", "notice");
+		//displayPricesDiv.style.display = "none"; 
+		//itemAvailDiv.style.display = "none"; 
+	}
 	}
 	
 	//if(displayPricesDiv!=null && pricedDiv!=null) 

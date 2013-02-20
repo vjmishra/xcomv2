@@ -253,6 +253,14 @@ var myMask;
 		            		availabilityRow.style.display = "none"; 
 		            		
 		            	} 
+		            	else if(orderMultipleQty != null)
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		//availabilityRow.style.display = "none"; 
+		            		
+		            	} 
 		            	}
 		            	//End of BR1 XB 214
 		            	

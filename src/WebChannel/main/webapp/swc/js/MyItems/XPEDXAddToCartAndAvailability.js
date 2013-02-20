@@ -286,12 +286,18 @@
 		            		availabilityRow.style.display = 'none';
 		            	}
 		            	else if(omError == 'true')//(omError == 'true')
-		            	{	//alert("qty.value"+qty.value);
-		            		//alert("orderMultipleQty : "+orderMultipleQty+"omError : "+omError);
+		            	{	
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = 'none';
+		            	}
+		            	else if(orderMultipleQty != null)//(omError == 'true')
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		//availabilityRow.style.display = 'none';
 		            	}
 		            	}
 		            	//End of BR1 XB 214
