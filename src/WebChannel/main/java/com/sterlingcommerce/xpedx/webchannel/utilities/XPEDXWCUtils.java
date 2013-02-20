@@ -5340,44 +5340,48 @@ public class XPEDXWCUtils {
 				// do this only when the default ship to is changed and when logging in for the first time.
 				Document SAPCustomerDoc = XPEDXOrderUtils.getSAPCustomerExtnFlagsDoc(wcContext);
 				LinkedHashMap customerFieldsMap =(LinkedHashMap) XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement());
-				Document rulesDoc1 = (Document) wcContext.getWCAttribute("rulesDoc");
+				Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
 				Document orderDoc = SCXmlUtil.createDocument("Order");
 				Element orderEle = orderDoc.getDocumentElement();
 				orderEle.setAttribute("BuyerOrganizationCode", wcContext.getCustomerId());
 				orderEle.setAttribute("EnterpriseCode", wcContext.getStorefrontId());
 				orderEle.setAttribute("EntryType", "Web");
-				Element orderLineEleme=SCXmlUtil.createChild(orderEle, "OrderLines");
-				SCXmlUtil.createChild(orderLineEleme, "OrderLine");
-				if(rulesDoc1 == null){
-					rulesDoc1 = XPEDXOrderUtils.getValidationRulesForCustomer(orderEle, wcContext);
-					wcContext.setWCAttribute("rulesDoc", rulesDoc1, WCAttributeScope.LOCAL_SESSION);	
-				}
+				Element orderLineEle=SCXmlUtil.createChild(orderEle, "OrderLines");
+				SCXmlUtil.createChild(orderLineEle, "OrderLine");
 				ArrayList<String> customerFieldsRulesMap =null;
-				if(orderElement == null)
-				{
-					customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderEle,rulesDoc1, wcContext);
-				}
-				else
-				{
-					customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderElement,rulesDoc1, wcContext);
-				}
 				
-				
-				if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) {
-					if(!customerFieldsMap.containsKey("CustLineAccNo"))
-					customerFieldsMap.put("CustLineAccNo", "Line Account #");
-				}
-				if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("CustomerPONo")) {
-					if(!customerFieldsMap.containsKey("CustomerPONo"))
-					customerFieldsMap.put("CustomerPONo", "Line PO #");
-				}
-				setObectInCache("customerFieldsSessionMap", customerFieldsMap);
-				
-				setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP",customerFieldsRulesMap));
-				// reset the flag once used
-				setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
-				
-				//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
+					if(rulesDoc == null)
+					{
+						rulesDoc = XPEDXOrderUtils.getValidationRulesForCustomer(orderEle, wcContext);
+						wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);	
+					}
+					if(orderElement == null)
+					{
+						customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderEle,rulesDoc, wcContext);
+					}
+					else
+					{
+						customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderElement,rulesDoc, wcContext);
+					}
+					
+					
+					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
+					{
+						if(!customerFieldsMap.containsKey("CustLineAccNo"))
+						customerFieldsMap.put("CustLineAccNo", "Line Account #");
+					}
+					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("CustomerPONo")) 
+					{
+						if(!customerFieldsMap.containsKey("CustomerPONo"))
+						customerFieldsMap.put("CustomerPONo", "Line PO #");
+					}
+					setObectInCache("customerFieldsSessionMap", customerFieldsMap);
+					
+					setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP",customerFieldsRulesMap));
+					// reset the flag once used
+					setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
+					
+					//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 			}
 		}
 		catch(Exception e)
@@ -5396,7 +5400,8 @@ public class XPEDXWCUtils {
 			Element sapCustomerExtnElem=SCXmlUtil.createChild(outputsapCustomerElement, "Extn");
 			Element customerOrganizationExtnEle=(Element)(sapCustomerElement.getElementsByTagName("XPXCustHierarchyView")).item(0);
 			outputsapCustomerElement.setAttribute("CustomerID", customerOrganizationExtnEle.getAttribute("SAPCustomerID"));
-			if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) {
+			if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
+			{
 				sapCustomerExtnElem.setAttribute("ExtnCustLineAccNoFlag", "Y");
 			}
 			else
