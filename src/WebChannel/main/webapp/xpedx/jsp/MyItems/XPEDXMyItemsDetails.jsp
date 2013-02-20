@@ -401,7 +401,7 @@ function showSharedListForm(){
     		var url = document.getElementById("checkAvailabilityURLHidden");
     		//XB 214 BR4
     		if(url != null && validateOM == true) {
-        		var qty = document.getElementById('QTY_'+myItemsKey).value;
+        		var qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
         		var uom = document.getElementById('UOM_'+myItemsKey).value;
     			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
     		}        		
@@ -1967,7 +1967,7 @@ function showSharedListForm(){
 				             var myitemskey = new Array();
 		            		 var myitemskey = document.getElementsByName("chkItemKeys");
 		            		// omArray = document.getElementsByName("orderMultipleQtyFromSrc");
-		            		 for(var i=0,j=1;i<myitemskey.length, j <=myitemskey.length;i++,j++){
+		            		 for(var i=0,j=1;i<myitemskey.length;i++,j++){
 		            			 var omQtyUom = document.getElementById("orderMultipleQtyFromSrc_"+j).value;
 		            			 if(omQtyUom != null && omQtyUom !=''){
 		            			 var orderMultipleQtyUom = omQtyUom.split("|");
@@ -1991,12 +1991,19 @@ function showSharedListForm(){
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
 		            				}
-		            				else if(omError == 'true')
+		            			 else if(omError == 'true')
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
+		            				}
+		            				else if(orderMultipleQty != null)
+		            				{
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.style.display = "inline-block"; 
+		            					sourceOrderMulError.setAttribute("class", "notice");
+		            					//document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
 		            				}
 		            			
 		            			 }
