@@ -51,7 +51,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	
 	public Document invokeIsPendingApprovalOrder(YFSEnvironment env,Document inXML) throws Exception
 	{
-		
+		String orderApproveFlag; //xb-226
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		Document changeOrderOutput = null;
 		boolean isApprovalReq = false;
@@ -106,6 +106,12 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			if(totalOrderValue >= spendingLimit)
 				isApprovalReq = true;
 		}
+		/***Added for XB 226**/
+		orderApproveFlag = getOrderApprovalFlag(env,orderElem);
+		if(orderApproveFlag.equalsIgnoreCase("Y")){
+			isApprovalReq = true;
+		}
+		/***End of XB 226***/
 		if(isApprovalReq) {
 			if(approverUserId!=null || approverProxyUserId!=null) {//if at least there is one approver put the order on Hold
 				String approverOnHold = null;
@@ -137,6 +143,46 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			return inXML;
 		}
 	}
+	
+	//Added for XB 226
+	public String getOrderApprovalFlag(YFSEnvironment env,Element orderElement) {
+		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
+		String orderApprovalFlag="";
+		String customerContactId=orderElement.getAttribute("CustomerContactID");
+		if(customerContactId!=null && customerContactId.trim().length()>0 && organizationCode!=null && organizationCode.trim().length()>0 ) {
+			//creating the document to get the customer contacts spending limit 
+			Document inputCustContactDoc = YFCDocument.createDocument("CustomerContact").getDocument();
+			Element inputCustContactElem = inputCustContactDoc.getDocumentElement();
+			inputCustContactElem.setAttribute("CustomerContactID", customerContactId);
+			inputCustContactElem.setAttribute("OrganizationCode", organizationCode);
+			//setting the Api template for the getCustomerContactList Api and invoking the api
+			Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact><Extn ExtnOrderApprovalFlag=''/></CustomerContact></CustomerContactList>");
+			env.setApiTemplate("getCustomerContactList",Template);
+			//invoking the api
+			Document outputDoc =null;
+			try {
+				outputDoc = api.invoke(env, "getCustomerContactList", inputCustContactDoc);
+				NodeList extnNodeList = outputDoc.getDocumentElement().getElementsByTagName("Extn");
+				if(extnNodeList!=null)
+				{
+					Element extnElem=(Element)outputDoc.getDocumentElement().getElementsByTagName("Extn").item(0);
+					if(extnElem!=null){
+						orderApprovalFlag = extnElem.getAttribute("ExtnOrderApprovalFlag");
+					}
+				}
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			env.clearApiTemplate("getCustomerContactList");
+			
+		}
+		
+		return orderApprovalFlag;
+	}
+	
+	//End of XB 226
 	/**
 	 * JIRA 4256 Start
 	 * @param env
