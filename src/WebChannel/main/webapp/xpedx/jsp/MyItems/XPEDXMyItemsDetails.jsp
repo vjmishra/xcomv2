@@ -2005,6 +2005,9 @@ function showSharedListForm(){
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					//document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="none";
 		            				}
+									else{
+										document.getElementById("availabilityRow_"+myitemskey[i].value).style.display ="block";
+									}
 		            			
 		            			 }
 		            		 }	
