@@ -269,11 +269,16 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	private void getPlacedOrderLineError(String status, OrderLinePanel obj) {
 		if (!(obj.getOrderLinesPanel().getPageBehavior().PlacedOrderLineError)
 				.containsKey(status)) {
-			setFieldValue("lblPlacedOrderErr", "Unknown Line Error");
+			//Commented by Vijay
+			//setFieldValue("lblPlacedOrderErr", "Unknown Line Error");
 
 		} else {
-			setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
-					.getPageBehavior().PlacedOrderLineError).get(status));
+			//Added by Vijay to remove Invalid order multiple error.
+			if(!status.equalsIgnoreCase("M_M0080")){
+				setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
+						.getPageBehavior().PlacedOrderLineError).get(status));
+			}
+			
 		}
 
 	}
@@ -281,7 +286,8 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	public void displayError(String status, OrderLinePanel obj) {
 		if (!(obj.getOrderLinesPanel().getPageBehavior().StatusTable)
 				.containsKey(status)) {
-			setFieldValue("lblErr", "Unknown Line Error");
+			//Commented by Vijay
+			//setFieldValue("lblErr", "Unknown Line Error");
 
 		} else {
 			setFieldValue("lblErr", (page.getOrderLinesPanel()
@@ -1295,8 +1301,9 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	}
 
 	public boolean isValidMulpleItem(String itemQuantity) {
+		//Commented by vijay
 
-		Element eleOrderLineNS = getTargetModel("OrderLineNS");
+		/*Element eleOrderLineNS = getTargetModel("OrderLineNS");
 		// comboOrderingUOM control Used while editing the UOM, i.e., in case of
 		// add new line.
 		Control ctrlOrderingUOM = getControl("comboOrderingUOM");
@@ -1384,7 +1391,7 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				Color color = new Color(null, 0, 0, 0);
 				getControl("txtQuantity").setForeground(color);
 			}
-		}
+		}*/
 		return true;
 
 	}
