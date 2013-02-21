@@ -685,6 +685,27 @@ function funDivOpenClose(val1)
 				return false;
 			}
 		}
+			//Added for XB 226
+			var spendingLt;
+			var primaryApprover;
+			var OrderApprovalFlag;
+			spendingLt = document.getElementById("spendingLt").value;
+			primaryApprover = document.getElementById("primaryApprover").value;
+			submitOrderChkValue = document.getElementById("OrderApprovalFlag").value;
+			var spendingLtDivID = document.getElementById("errorMsgFor_spendingLtSubmitOrder");
+			var approverDivID = document.getElementById("errorMsgFor_approverSubmitOrder");
+
+		
+		
+		if((primaryApprover == "" || primaryApprover == null) && submitOrderChkValue){
+			document.getElementById("errorMsgFor_approverSubmitOrder").style.display = "inline";
+			return false;
+		}	
+		if(spendingLt !="" && submitOrderChkValue){
+			document.getElementById("errorMsgFor_spendingLtSubmitOrder").style.display = "inline";
+			return false;
+		}	
+		
 		//start for XBT 298
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -823,6 +844,14 @@ function funDivOpenClose(val1)
 			{
 				document.getElementById("successMsgFor_save").style.display = "none";
 			}
+		/*	if(document.getElementById("errorMsgFor_spendingLtSubmitOrder")!= null)
+			{
+				document.getElementById("errorMsgFor_spendingLtSubmitOrder").style.display = "none";
+			}
+			if(document.getElementById("errorMsgFor_approverSubmitOrder") != null)
+			{
+				document.getElementById("errorMsgFor_approverSubmitOrder").style.display = "none";
+			}*/
 		}
 		
 		function testFieldValueCheck(component, docDivId){
@@ -1177,6 +1206,7 @@ a.underlink:hover { text-decoration: underline !important; }
 <s:set name='stockCheckWebservice'
 	value='#_action.getStockCheckWebservice()' />
 <s:set name='estimator' value='#_action.getEstimator()' />
+<s:set name='OrderApprovalFlag' value='#_action.getOrderApprovalFlag()' />
 <s:set name='customer' value='customerelement' />
 
 <!-- Customer Additional Address -->
@@ -2536,6 +2566,9 @@ a.underlink:hover { text-decoration: underline !important; }
 		style="padding: 0px;">
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approvers" style="display : none"/>Please select an approver.</div></td></tr>
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_currency" style="display : none"/>Please select a currency.</div></td></tr>
+		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_spendingLtSubmitOrder" style="display : none"/>All orders will be submitted for approval. Remove the spending limit and try again.</div></td></tr>
+		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approverSubmitOrder" style="display : none"/>Please select an Primary approver.</div></td></tr>
+		
 		<tr>
 			<td width="100%" colspan="2" valign="top"
 				class="no-border-right-user padding00">
@@ -2596,7 +2629,32 @@ a.underlink:hover { text-decoration: underline !important; }
 				  </s:else>		 
 			</td>
 		</tr>
+		<tr><td width="19%" valign="top" class="no-border-right-user padding00">Submit All Orders For Approval:</td>
+		<td valign="top" width="80%" align="left" class="no-border-right-user padding00">
+		<s:if test="#disableSinceSelfApprover">
+		<s:if test='%{#OrderApprovalFlag=="Y"}'>
+		<s:hidden name="OrderApprovalFlag" value="true"/>
+		 	<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" disabled='%{true}' />
+		</s:if>
+		<s:else>
+			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" disabled='%{true}' />
+		</s:else>
+				
 		
+		</s:if>
+		<s:else>
+		<s:if test='%{#OrderApprovalFlag=="Y"}'>
+			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" />
+			<s:hidden name="OrderApprovalFlag" value="true"/>
+		</s:if>
+		<s:property value="%{#_action.isOrderFlagForApproval()}" />
+		<s:else>
+			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" />
+		</s:else>
+				
+		
+		</s:else>
+		</td></tr>
 		<tr> <td style="border:0px; height:10px;"> &nbsp; </td></tr>
 			<tr>
 				<td width="100%" colspan="2" valign="top"
