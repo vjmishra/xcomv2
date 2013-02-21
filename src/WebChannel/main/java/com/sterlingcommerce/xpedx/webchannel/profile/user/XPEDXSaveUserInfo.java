@@ -118,6 +118,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	public String defaultShipTo;
 	private ArrayList<String> oldAssignCusts=new ArrayList<String>();
 	private Document manageCustomerAssigmentInputDoc=null;
+	private String orderApprovalFlag;//added for XB 226
 	public String getDefaultShipTo() {
 		return defaultShipTo;
 	}
@@ -632,6 +633,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					
 //					wcContext.getSCUIContext().getSession().setAttribute("viewPricesFlag", getViewPrices());
 //					wcContext.getSCUIContext().getSession().setAttribute("viewReportsFlag", getViewReports());
+					xpedxCustomerContactInfoBean.setOrderApproveFlag(getOrderApprovalFlag());//added for XB 226
 					//added for jira 3780
 					xpedxCustomerContactInfoBean.setEmailID(getEmailId());
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
@@ -1152,6 +1154,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		setOrderShipmentEmailFlag("true".equals(orderShipmentEmailFlag)?"Y":"N");
 		//setOrderUpdateEmailFlag(orderUpdateEmailFlag.equals("true")?"Y":"N");
 		setBackorderEmailFlag("true".equals(backorderEmailFlag)?"Y":"N");
+		setOrderApprovalFlag("true".equals(orderApprovalFlag)?"Y":"N"); //added for XB 226
 	}
 
 	private void newUserOverrideContactAttributes() {
@@ -1176,6 +1179,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		setEstimator(estimator.equals("true")?"Y":"N");
 		setViewPrices(viewPrices.equals("true")?"Y":"N");
 		setViewReports(viewReports.equals("true")?"Y":"N");
+		setOrderApprovalFlag("true".equals(orderApprovalFlag)?"Y":"N");
 	}
 	
 	/**
@@ -1922,6 +1926,15 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	public Map getPwdValidationResultMap() {
 		return pwdValidationResultMap;
 	}
+	/** Start of code for XB 226 **/
+	public String getOrderApprovalFlag() {
+		return orderApprovalFlag;
+	}
+
+	public void setOrderApprovalFlag(String orderApprovalFlag) {
+		this.orderApprovalFlag = orderApprovalFlag;
+	}
+	/**End of Code for XB 226**/
 
 	/** JIRA 1998--function to call API for mailId change-- **/
 	private void UpdateEMailAddress(String oldMailId, String changedMailId) {
