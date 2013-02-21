@@ -244,6 +244,7 @@ var myMask;
 				            sourceOrderMulError.style.display = "inline"; 
 				            sourceOrderMulError.setAttribute("class", "error");
 				            availabilityRow.style.display = "none"; 
+				            qty.style.borderColor="#FF0000";			            
 				        }
 		            	else if(omError == 'true')
 		            	{	
@@ -251,6 +252,7 @@ var myMask;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = "none"; 
+		            		qty.style.borderColor="";
 		            		
 		            	} 
 		            	else if(orderMultipleQty != null)
@@ -258,9 +260,13 @@ var myMask;
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
-		            		//availabilityRow.style.display = "none"; 
+		            		qty.style.borderColor="";
 		            		
 		            	} 
+		            	else{
+		            		availabilityRow.style.display = "block"; 
+		            		qty.style.borderColor="";
+		            	}
 		            	}
 		            	//End of BR1 XB 214
 		            	

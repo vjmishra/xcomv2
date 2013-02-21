@@ -116,6 +116,7 @@ function setPandAData() {
 		sourceOrderMulError.setAttribute("class", "error");
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
+		qty.style.borderColor="#FF0000";
 	}
 	else if(omError == 'true')
 	{
@@ -124,14 +125,20 @@ function setPandAData() {
 		sourceOrderMulError.setAttribute("class", "notice");
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
+		qty.style.borderColor="";
 	}
 	else if(orderMultipleQty != null)
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
 		sourceOrderMulError.setAttribute("class", "notice");
-		//displayPricesDiv.style.display = "none"; 
-		//itemAvailDiv.style.display = "none"; 
+		qty.style.borderColor="";
+	}
+	else
+	{
+		displayPricesDiv.style.display = "block"; 
+		itemAvailDiv.style.display = "block"; 
+		qty.style.borderColor="";
 	}
 	}
 	
