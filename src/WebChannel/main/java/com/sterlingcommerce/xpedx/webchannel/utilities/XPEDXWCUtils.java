@@ -5640,6 +5640,7 @@ public class XPEDXWCUtils {
 				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
 				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");				
 				String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
+				String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
 				
 				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
 					b2bViewFromDB = b2bViewFromDB.trim();
