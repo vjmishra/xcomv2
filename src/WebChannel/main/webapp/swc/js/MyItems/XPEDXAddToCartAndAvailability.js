@@ -297,7 +297,9 @@
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
-		            		//availabilityRow.style.display = 'none';
+		            	}
+		            	else{
+		            		availabilityRow.style.display = 'block';
 		            	}
 		            	}
 		            	//End of BR1 XB 214
