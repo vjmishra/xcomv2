@@ -5718,7 +5718,7 @@ public class XPEDXWCUtils {
 							viewReportFlag, viewPricesFlag,
 							newusergroupkey, defaultShipTo,
 							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit);//added maxOrderAmt for JIRA 3488 
+							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 			}
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;
