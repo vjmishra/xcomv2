@@ -511,6 +511,7 @@ $("#various22").fancybox({
 								<s:hidden name="orderCancellationEmailFlag" value='%{isSendOrderCancelEmail()}' /> 
 								<s:hidden name="orderShipmentEmailFlag" value='%{isSendOrderShipEmail()}'	/>
 								<s:hidden name="backorderEmailFlag" value='%{isSendBackOrderEmail()}' />
+								<s:hidden name="orderApprovalFlag" value='%{isSendOrdersForApproval()}' />
 								<s:hidden name="b2bCatalogView" id="b2bCatalogView" value='%{getDefaultB2bCatalogView()}' />
 								<s:hidden name="POListText" id="POListText"	value='%{#extnElem.getAttribute("ExtnPOList")}' />
 								<s:hidden name="defaultShipTo" id="defaultShipTo"	value='%{#extnElem.getAttribute("ExtnDefaultShipTo")}' />
