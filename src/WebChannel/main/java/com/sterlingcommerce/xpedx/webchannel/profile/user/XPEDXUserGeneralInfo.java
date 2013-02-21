@@ -951,6 +951,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		String orderCancelEmailFlag = SCXmlUtils.getAttribute(Extn, "ExtnOrderCancelEmailFlag");
 		String orderShipEmailFlag = SCXmlUtils.getAttribute(Extn, "ExtnOrderShipEmailFlag");
 		String backOrderEmailFlag = SCXmlUtils.getAttribute(Extn, "ExtnBackOrderEmailFlag");
+		String orderApproveflag = SCXmlUtils.getAttribute(Extn, "ExtnOrderApprovalFlag");//xb-226
 
 		if ("Y".equals(vPrices))
 			viewPrices = true;
@@ -964,6 +965,8 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			sendOrderShipEmail = true;
 		if ("Y".equals(backOrderEmailFlag))
 			sendBackOrderEmail = true;
+		if ("Y".equals(orderApproveflag))//xb-226
+			orderFlagForApproval = true;
 		// TODO Auto-generated method stubExtnOrderShipEmailFlag
 
 	}
@@ -2116,14 +2119,14 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	protected boolean sendBackOrderEmail = false;
 
 	/* ENDS - Customer-User Profile Changes - adsouza */
-
 	private String estimator = "N";
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
 	private String viewInvoices = "N";
-
 	private Map b2bCatalogViewMap;
 	private String defaultB2bCatalogView;
+	protected boolean orderFlagForApproval = false;//xb-226
+	private String orderApprovalFlag = "N";//xb-226
 
 	public String getDefaultB2bCatalogView() {
         Element ccElem = XMLUtilities.getChildElementByName(customerContactList, "CustomerContact");
@@ -2432,4 +2435,21 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		return unformattedSpendingLimit;
 	}
 	
+	/** Start of Code for  XB 226 **/	
+	public String getOrderApprovalFlag() {
+		return orderApprovalFlag;
+	}
+	
+	public void setOrderApprovalFlag(String orderApprovalFlag) {
+		this.orderApprovalFlag = orderApprovalFlag;
+	}
+	
+	public boolean isOrderFlagForApproval() {
+		return orderFlagForApproval;
+	}
+	
+	public void setOrderFlagForApproval(boolean orderFlagForApproval) {
+		this.orderFlagForApproval = orderFlagForApproval;
+	}
+	/** end  of Code for  XB 226**/
 }
