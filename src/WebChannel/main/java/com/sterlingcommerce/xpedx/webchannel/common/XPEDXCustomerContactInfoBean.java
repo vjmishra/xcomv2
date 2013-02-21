@@ -29,6 +29,7 @@ public class XPEDXCustomerContactInfoBean {
     private String personInfoEmailID;
     private String addEmailID;  //JIRA 3382
     private String spendingLimit;
+    private String orderApproveFlag ; //added for XB 226
   //JIRA 3488 Start
 	 private String extnmaxOrderAmount;
 	 public void setExtnmaxOrderAmount(String extnmaxOrderAmount) {
@@ -65,7 +66,7 @@ public class XPEDXCustomerContactInfoBean {
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit) {//added maxOrderAmt for JIRA 3488
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -90,6 +91,7 @@ public class XPEDXCustomerContactInfoBean {
 		this.msapExtnUseOrderMulUOMFlag=extnUseOrderMulUOMFlag;
 		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488 
 		this.spendingLimit=spendingLimit;
+		this.orderApproveFlag = orderApproveFlag;//XB 226
 	}
 
 	public String getFirstName() {
@@ -268,6 +270,12 @@ public class XPEDXCustomerContactInfoBean {
 	}
 	public void setSpendingLimit(String spendingLimit) {
 		this.spendingLimit = spendingLimit;
+	}
+public String getOrderApproveFlag() {
+		return orderApproveFlag;
+	}
+	public void setOrderApproveFlag(String orderApproveFlag) {
+		this.orderApproveFlag = orderApproveFlag;
 	}
 
 
