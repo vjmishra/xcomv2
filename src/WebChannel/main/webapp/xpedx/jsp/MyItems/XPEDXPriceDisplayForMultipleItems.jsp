@@ -53,6 +53,7 @@
 <s:set name='id' value='myItemsKey' />
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
+<s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg_%{#itemOrder}" value="%{#lineStatusCodeMsg}"/>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:hidden name="validateOrderMul" value="%{#_action.getValidateOM()}" />
