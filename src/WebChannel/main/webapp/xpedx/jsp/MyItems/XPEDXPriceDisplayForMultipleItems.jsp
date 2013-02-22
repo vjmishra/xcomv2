@@ -9,9 +9,15 @@
 <s:set name="lineNumber" value="%{1}" />
 <s:set name='itemOrderSeq' value="%{1}" />	
 <meta name="DCSext.w_x_sc" content="1"></meta>	
+<meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />
 <s:set name='webtrendTotalQty' value="#_action.buildwebtrendTagForAll()" />
-<meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />			
-<s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
+<s:iterator value='#_action.getCheckItemKeys()' id="item" status="status" >
+                   <input type="hidden" name="availabilityRowsHide" id="hidden_availabilityRow_<s:property value='#item'/>" />               
+</s:iterator> 
+<s:set name="chkItemKeys1" value="%{#_action.getCheckItemKeys()}" />
+<s:hidden id='chkItemKeys' name="chkItemKeys" value='%{#chkItemKeys1}'/>
+
+<s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'> 
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
 					<s:set name='itemId' value='#item.getAttribute("ItemId")+"" ' />
@@ -31,8 +37,7 @@
                                 <%--Fix For Jira 4144 --%>
                                 <s:set name="itemKEY" value='#id' />
                             <!-- end prefs  -->
-                   <s:set name='chkItemKeys' value='#_action.getCheckItemKeys()' />    
-                   <s:hidden name='chkItemKeys' id="chkItemKeys%{#itemOrder}" value="%{#itemKEY}" />       
+                         
                               
 	                        	<table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0">
 
@@ -53,14 +58,16 @@
 <s:hidden name="validateOrderMul" value="%{#_action.getValidateOM()}" />
 <s:hidden name="pnaListitem" value="%{#_action.isPnaCall()}" />
 
-<s:set name="sourcingOrderMultipleForItems" value='%{#_action.getSourcingOrderMultipleForItems()}' />
-<s:hidden name="sourcingOrderMultipleForItems" id="sourcingOrderMultipleForItems" value="%{#sourcingOrderMultipleForItems}"/>
+
 
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId+"_"+#itemOrder)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemOrder}" value="%{#orderMultipleQtyFromSrc}"/>
 
 <s:set name="orderMulErrorCode" value="useOrderMultipleMapFromSourcing.get(#itemId+'_'+#itemOrder)" />
-<s:hidden name="orderMulErrorCode" name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
+<s:hidden name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
+
+
+
 
 
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
@@ -99,7 +106,7 @@
 
 								
 
-<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
+<%--<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}"> --%>
 <s:set name='currency' value='#priceCurrencyCode'/>
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
@@ -265,7 +272,6 @@
 			<td colspan="3" width="33%" valign="top"><span></span></td>
 			</s:else>
 </s:if>
-<!--<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}"> Commented for XB 214 -->
 			<td colspan="3" width="28%" valign="top">
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -338,7 +344,6 @@
 				</s:if>
 				</s:if>
 			</td>
-			</s:if>
 		</tr>		
 		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 			<td colspan="10"></td>
@@ -371,7 +376,7 @@
 </tbody>
 </s:else>
 </table>
-                        	</s:if>
+                        	
                         </div>
 					<s:set name="lineNumber" value="%{#lineNumber+1}" />
 					<s:set name='itemOrderSeq' value='%{#itemOrderSeq + 1}' />
