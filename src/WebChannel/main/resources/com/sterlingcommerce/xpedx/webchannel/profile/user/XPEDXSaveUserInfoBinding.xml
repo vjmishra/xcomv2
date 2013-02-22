@@ -160,5 +160,9 @@
 		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@SpendingLimitCurrency</entry>
 	<entry key="#parameters.spendingLt">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@SpendingLimit,
 		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@SpendingLimit</entry>
+	<entry key="orderApprovalFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderApprovalFlag,
+		ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderApprovalFlag
+	</entry>
 	
 </properties>
