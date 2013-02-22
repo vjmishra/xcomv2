@@ -48,7 +48,7 @@
 								ExtnStockCheckWS="" ExtnViewInvoices="" ExtnUserNetworkID=""
 								ExtnEmployeeID="" ExtnMaxOrderAmount="" ExtnMinOrderAmount=""
 								ExtnAddnlEmailAddrs="" ExtnPOList="" ExtnOrderEmailFormat=""
-								ExtnPrefCatalog="" ExtnDefaultShipTo="" ExtnPaper101Grade=""  
+								ExtnPrefCatalog="" ExtnDefaultShipTo="" ExtnPaper101Grade=""  ExtnOrderApprovalFlag=""
 								ExtnB2BCatalogView="" ExtnViewReportsFlag="" ExtnViewPricesFlag=""/>
 							<CustomerAdditionalAddressList>
 								<CustomerAdditionalAddress CustomerAdditionalAddressID="">
@@ -99,7 +99,7 @@
 								</CustomerAdditionalAddress>
 							</CustomerAdditionalAddressList>
 							<Extn ExtnEstimator="" ExtnPunchOutUser=""
-								ExtnStockCheckWS="" ExtnViewInvoices=""  ExtnB2BCatalogView=""/>
+								ExtnStockCheckWS="" ExtnViewInvoices=""  ExtnB2BCatalogView="" ExtnOrderApprovalFlag=""/>
 						</CustomerContact>
 					</CustomerContactList>
 				</Customer>
@@ -345,7 +345,7 @@
 								ExtnStockCheckWS="" ExtnViewInvoices="" 
 								ExtnViewPricesFlag="" ExtnViewReportsFlag=""
 								ExtnInvoiceEMailID="" ExtnOrderConfEmailFlag="" ExtnOrderCancelEmailFlag=""
-								ExtnOrderShipEmailFlag="" ExtnBackOrderEmailFlag=""
+								ExtnOrderShipEmailFlag="" ExtnBackOrderEmailFlag="" ExtnOrderApprovalFlag=""
 								ExtnB2BCatalogView=""/>
 						</CustomerContact>
 					</CustomerContactList>
