@@ -29,7 +29,7 @@
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
 
-
+<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
 	<tbody>
 		<tr class="my-headings" style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td colspan="3"><span><i>Availability</i></span></td>
@@ -190,20 +190,7 @@
 			<s:if test="displayPriceForUoms.size()>0" >
 				<TABLE  width="100%">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
-				<tbody class="mil-priceDiv-visibility" style="valign:right;">
-				<tr>
-					<td width="auto" class="left" colspan="3"><b>My Price:</b></td>
-					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
-				</tr>
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-				<tr>
-					<td width="auto" class="left" colspan="3"><strong>Extended Price:</strong></td>
-					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD'/> </span> </td>
-				</tr>
-				</tbody>
-				</s:if>	
-				<s:else>
+			
 				<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 				<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -241,7 +228,7 @@
 				</s:if>
 				</s:else>				
 				</s:iterator>			
-				</s:else>	
+			
 				</TABLE>
 				</s:if>
 				</s:if>
@@ -250,10 +237,13 @@
 		</tr>	
 		
 </tbody>
-<s:if test='%{#lineStatusCodeMsg != ""}'>
+</s:if>
+<s:else>
+<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 	<tbody><tr><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
 	</tbody>
 </s:if>	
+</s:else>
 </s:if>
 <s:else>
 		<tr >

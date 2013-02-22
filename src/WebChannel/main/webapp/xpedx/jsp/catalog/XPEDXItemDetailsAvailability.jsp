@@ -25,7 +25,7 @@
 
 <s:set name="OrderMultipleQtyFromSrc" value='orderMultipleMapFromSourcing.get(#itemID)' />
 <s:hidden name="OrderMultipleQtyFromSrc" id="OrderMultipleQtyFromSrc" value="%{#OrderMultipleQtyFromSrc}"/>
-
+<s:if test="%{#lineStatusCodeMsg != ''}">
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
@@ -94,19 +94,7 @@
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				<s:if test="%{#lineStatusCodeMsg != ''}">
-				<tr>
-					<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
-					<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span></td>
-				</tr>
-					<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-				<tr>
-					<td class="bold">Extended Price (<s:property value='priceCurrencyCode'/>):</td>
-					<td >
-						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-					</td></tr>
-				</s:if>
-					<s:elseif test="displayPriceForUoms.size()>0" >
+					<s:if test="displayPriceForUoms.size()>0" >
 						<s:iterator value='displayUOMs'	id='disUOM' status='disUOMStatus'>
 							
 							<s:set name="unitPriceForUOM" value='%{displayPriceForUoms.get(#disUOMStatus.index)}' />
@@ -161,7 +149,7 @@
 							
 							
 						</s:iterator>			
-					</s:elseif>
+					</s:if>
 				</s:if>
 
 				<tr>
@@ -257,3 +245,4 @@
 			</table>
 			</s:if>
 	</div>
+</s:if>
