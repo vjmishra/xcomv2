@@ -2647,7 +2647,7 @@ a.underlink:hover { text-decoration: underline !important; }
 			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" />
 			<s:hidden name="OrderApprovalFlag" value="true"/>
 		</s:if>
-		<s:property value="%{#_action.isOrderFlagForApproval()}" />
+		
 		<s:else>
 			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" />
 		</s:else>
