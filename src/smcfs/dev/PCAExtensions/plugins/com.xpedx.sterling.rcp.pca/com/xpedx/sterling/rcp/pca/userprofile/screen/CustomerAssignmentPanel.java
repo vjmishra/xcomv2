@@ -447,14 +447,13 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			{
 				Element eleCust = (Element)custId.get(i);
 				String CustomerID="";
-				String address="";
+				StringBuffer address= new StringBuffer();
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
 				String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 				String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
 				
 				String add1 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 				String add2 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
-				String add3 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
 				String city = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
 				String country = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
@@ -484,37 +483,32 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				
 				if(add1 !=null && add1.trim().length()>0)
 				{
-					address+= " "+ add1;
+					address.append(" "+add1);
 				}
 				
 				if(add2 !=null && add2.trim().length()>0)
 				{
-					address+= ", "+ add2;
+					address.append(", "+add2);
 				}
-				if(add3 !=null && add3.trim().length()>0)
-				{
-					address+= ", "+ add3;
-				}
-				
 				if(city !=null && city.trim().length()>0)
 				{
-					address+= ", "+ city;
+					address.append(", "+city);
 				}
 				if(state !=null && state.trim().length()>0)
 				{
-					address+= ", "+ state;
+					address.append(", "+state);
 				}
 				if(zip !=null && zip.trim().length()>0)
 				{
-					address+= " "+ zip;
+					address.append(" "+zip);
 				}
 				if(country !=null && country.trim().length()>0)
 				{
-					address+= " "+ country;
+					address.append(" "+country);
 				}
 				
 				
-				iiItem.setText(orgName+" ("+CustomerID+")"+address);
+				iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
 				
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisCustomerAssigned(eleCust)){
