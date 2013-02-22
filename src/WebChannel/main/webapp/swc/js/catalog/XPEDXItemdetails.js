@@ -94,10 +94,12 @@ function setPandAData() {
 	//added for jira 2885
 	if(errorValue.value != null && errorValue.value != ""){
 		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorValue.value + "</font></b></h5>";
+		itemAvailDiv.innerHTML ="";
 	}
 	
 	if(errorVal.value != null && errorVal.value != ""){
 		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorVal.value + "</font></b></h5>";
+		itemAvailDiv.innerHTML ="";
 	}
 	//XB 214 BR1
 	var qty = document.getElementById("qtyBox");
@@ -118,7 +120,7 @@ function setPandAData() {
 		itemAvailDiv.style.display = "none"; 
 		qty.style.borderColor="#FF0000";
 	}
-	else if(omError == 'true')
+	else if(omError == 'true' && orderMultipleQty != 0)
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
@@ -127,15 +129,16 @@ function setPandAData() {
 		itemAvailDiv.style.display = "none"; 
 		qty.style.borderColor="";
 	}
-	else if(orderMultipleQty != null)
+	else if(orderMultipleQty != null && orderMultipleQty != 0)
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
 		sourceOrderMulError.setAttribute("class", "notice");
+		displayPricesDiv.style.display = "block"; 
+		itemAvailDiv.style.display = "block"; 
 		qty.style.borderColor="";
 	}
-	else
-	{
+	else{
 		displayPricesDiv.style.display = "block"; 
 		itemAvailDiv.style.display = "block"; 
 		qty.style.borderColor="";
@@ -145,9 +148,10 @@ function setPandAData() {
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
 	if(errorValue.value == null && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
+		document.getElementById("qtyBox").style.borderColor="";	
 	}
 	document.getElementById("lineStatusCodeMsg").value = "";
-	document.getElementById("qtyBox").style.borderColor="";	
+	
 }
 
 function addItemToList() {

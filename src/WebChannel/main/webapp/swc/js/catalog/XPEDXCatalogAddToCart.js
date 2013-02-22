@@ -255,11 +255,12 @@ var myMask;
 		            		qty.style.borderColor="";
 		            		
 		            	} 
-		            	else if(orderMultipleQty != null)
+		            	else if(orderMultipleQty != null && orderMultipleQty != 0)
 		            	{	
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = "block"; 
 		            		qty.style.borderColor="";
 		            		
 		            	} 
@@ -269,7 +270,6 @@ var myMask;
 		            	}
 		            	}
 		            	//End of BR1 XB 214
-		            	
 	            		Ext.Msg.hide();
 	            		myMask.hide();
 	            		//document.getElementById('addtocart_'+itemId).focus();

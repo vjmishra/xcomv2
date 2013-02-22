@@ -285,18 +285,19 @@
 		            		sourceOrderMulError.setAttribute("class", "error");
 		            		availabilityRow.style.display = 'none';
 		            	}
-		            	else if(omError == 'true')//(omError == 'true')
+		            	else if(omError == 'true')
 		            	{	
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = 'none';
 		            	}
-		            	else if(orderMultipleQty != null)//(omError == 'true')
+		            	else if(orderMultipleQty != null && orderMultipleQty != 0)
 		            	{	
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = 'block';
 		            	}
 		            	else{
 		            		availabilityRow.style.display = 'block';
