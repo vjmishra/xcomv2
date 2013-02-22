@@ -554,13 +554,13 @@ public class XPEDXPriceandAvailabilityUtil {
 			boolean isMaxError = false;
 			int lineNumber=Integer.parseInt(item.getLineNumber());
 			if(isLineNumberRequired){
-				if(item.getOrderMultipleQty()!= null){
+				if(item.getOrderMultipleQty()!= null  && !item.getOrderMultipleQty().equalsIgnoreCase("0")){
 					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
 				}else
 					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
 			}
 			else{
-				if(item.getOrderMultipleQty()!= null){
+				if(item.getOrderMultipleQty()!= null && !item.getOrderMultipleQty().equalsIgnoreCase("0")){
 					if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 						isMaxError = true;
 					}
