@@ -1,51 +1,52 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.org;
 
-import org.w3c.dom.Element;
-
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
-import com.yantra.pca.ycd.jasperreports.returnOrderSummaryReportScriptlet;
 
-public class XPEDXSaveShipToInfo extends WCMashupAction{
-	
-	private static final String BILL_TO_SHIP_TO_MASHUP = "xpedx-save-shipToInfo";
-	protected String customerId;
-	protected String organizationCode;
-	private boolean success;
-	public boolean isSuccess() {
-		return success;
-	}
+public class XPEDXSaveShipToInfo extends WCMashupAction {
 
-	public void setSuccess(boolean isSuccess) {
-		this.success = isSuccess;
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 9077298526883812055L;
+    private static final String BILL_TO_SHIP_TO_MASHUP = "xpedx-save-shipToInfo";
+    protected String customerId;
+    protected String organizationCode;
+    private boolean success;
 
-	public String execute(){
-		try
-		{
-			Element outputDoc = prepareAndInvokeMashup(BILL_TO_SHIP_TO_MASHUP);
-		}
-		catch (Exception e) {
-			LOG.debug("Error while saving the ship to cust Info");
-			return(ERROR);
-		}
-		setSuccess(true);
-		return(SUCCESS);
-	}
+    public boolean isSuccess() {
+	return success;
+    }
 
-	public String getCustomerId() {
-		return customerId;
-	}
+    public void setSuccess(boolean isSuccess) {
+	this.success = isSuccess;
+    }
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
+    @Override
+    public String execute() {
+	try {
+	    prepareAndInvokeMashup(BILL_TO_SHIP_TO_MASHUP);
+	} catch (Exception e) {
+	    LOG.debug("Error while saving the ship to cust Info");
+	    return (ERROR);
 	}
+	setSuccess(true);
+	return (SUCCESS);
+    }
 
-	public String getOrganizationCode() {
-		return organizationCode;
-	}
+    public String getCustomerId() {
+	return customerId;
+    }
 
-	public void setOrganizationCode(String organizationCode) {
-		this.organizationCode = organizationCode;
-	}
+    public void setCustomerId(String customerId) {
+	this.customerId = customerId;
+    }
+
+    public String getOrganizationCode() {
+	return organizationCode;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+	this.organizationCode = organizationCode;
+    }
 
 }
