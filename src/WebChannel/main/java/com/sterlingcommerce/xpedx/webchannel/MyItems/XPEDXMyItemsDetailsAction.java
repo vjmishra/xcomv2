@@ -123,6 +123,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String[] itemIds;
 	private String[] checkItemKeys;
 	private ArrayList<String> enteredUOMs;
+	private ArrayList<String> itemBaseUOM;
 	private ArrayList<String> enteredQuantities;
 	private HashMap<String, JSONObject> pnaHoverMap;
 	private HashMap<String, XPEDXItemPricingInfo> priceHoverMap;
@@ -1322,8 +1323,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String itemId = item.getAttribute("ItemId");
 				itemIDList.add(itemId);
 				itemOrderMap.put(itemId+":"+(i+1), itemOrder.get(i));
+				String itemQty = enteredQuantities.get(i);
 				String itemUom = enteredUOMs.get(i);
 				String orderMultiple = (String)orderMulMap.get(itemId);
+				
+				if(itemQty.trim().equals("")){
+					itemQty = orderMultiple;
+					itemUom = itemBaseUOM.get(i);
+				}
+				
 				uoms = (Map) itemCon.get(itemId);
 				convFact = (String) uoms.get(itemUom);
 				if(itemUom==null || itemUom.equals(""))
@@ -1331,12 +1339,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				//String itemSeqNum = item.getAttribute("ItemSeqNumber");
 				String itemLineNum = item.getAttribute("ItemOrder");
 				//String itemQty = item.getAttribute("Qty");
-				String itemQty = enteredQuantities.get(i);
-				if(itemQty==null || itemQty.trim().equals("") || itemQty.equals("0") )
+				/*if(itemQty==null || itemQty.trim().equals("") || itemQty.equals("0") )
 					itemQty = "1";
 
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
-				OM = totalQty % (Integer.parseInt(orderMultiple));
+				OM = totalQty % (Integer.parseInt(orderMultiple));*/
 				
 				if(invalidItems != null && invalidItems.length > 0)
 				{
@@ -3069,7 +3076,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setEnteredUOMs(ArrayList<String> enteredUOMs) {
 		this.enteredUOMs = enteredUOMs;
 	}
+	public ArrayList<String> getItemBaseUOM() {
+		return itemBaseUOM;
+	}
 
+	public void setItemBaseUOM(ArrayList<String> itemBaseUOM) {
+		this.itemBaseUOM = itemBaseUOM;
+	}
 	/**
 	 * @return the enteredQuantities
 	 */
