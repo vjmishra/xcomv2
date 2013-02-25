@@ -72,7 +72,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 
         String orderLineShipNode = "";
         String allowDirectOrderFlag = "";
-
+        boolean isOrderLineStockType=false;
 		ArrayList thirdPartyList = new ArrayList();
 		ArrayList directOrderList = new ArrayList();
 		ArrayList stockOrderList = new ArrayList();
@@ -118,17 +118,21 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 		Element orderLinesElem = (Element) rootElem.getElementsByTagName(XPXLiterals.E_ORDER_LINES).item(0);
 		NodeList orderLineList = orderLinesElem.getElementsByTagName(XPXLiterals.E_ORDER_LINE);
 		for(int i=0; i<orderLineList.getLength(); i++) {
+			String orderLineType="";
+			String extnOrderLineType = "";
+			String lineStatus ="";
 			
-			String orderLineType = "";
 			Document orderLineElementDoc = null;
-			Element orderLine = (Element)orderLineList.item(i);			
-			String lineStatus = orderLine.getAttribute("Status");
+			Element orderLine = (Element)orderLineList.item(i);
+			orderLineType=orderLine.getAttribute(XPXLiterals.A_LINE_TYPE);
+			
+			lineStatus= orderLine.getAttribute(XPXLiterals.A_STATUS);
 		    if(!"Cancelled".equalsIgnoreCase(lineStatus)) {
 		    	
 		    	orderLineElementContents = createOrderLineElementHashMap(orderLine);
 		    	Element orderLineExtn = (Element) orderLine.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
 
-		    	orderLineType = orderLineExtn.getAttribute(XPXLiterals.A_EXTN_LINE_TYPE);
+		    	extnOrderLineType = orderLineExtn.getAttribute(XPXLiterals.A_EXTN_LINE_TYPE);
 			
 		    	String extnOrderLinetotatal = orderLineExtn.getAttribute(XPXLiterals.A_EXTN_LINE_ORDERED_TOTAL);
 		    	double extnOrderLinetotatalVal=0;
@@ -143,17 +147,21 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 				
 				if("Y".equalsIgnoreCase(allowDirectOrderFlag)) {
 					// To Create Chained or Fulfillment Orders Based On Order Line Type.
-					if(orderLineType.equalsIgnoreCase(XPXLiterals.STOCK)) {
+					if(extnOrderLineType.equalsIgnoreCase(XPXLiterals.STOCK)) {
 						// Stock Type Line.
+						if(!orderLineType.equalsIgnoreCase("M"))
+						{
+							isOrderLineStockType=true; // We are considering Minimum order charge line as a stock type line. Check the code in XPXInvokeOrderPlaceActions.java
+						}
 						orderLineElementDoc = createorderLineDoc(orderLineElementContents, orderElementContents);
 						stockExtnOrderSubTotal +=extnOrderLinetotatalVal;
 						stockOrderList.add(orderLineElementDoc);
-					} else if(orderLineType.equalsIgnoreCase(XPXLiterals.DIRECT)) {
+					} else if(extnOrderLineType.equalsIgnoreCase(XPXLiterals.DIRECT)) {
 						// Direct Type Line.
 						orderLineElementDoc = createorderLineDoc(orderLineElementContents, orderElementContents);
 						directExtnOrderSubTotal +=extnOrderLinetotatalVal;
 						directOrderList.add(orderLineElementDoc);
-					} else if(orderLineType.equalsIgnoreCase(XPXLiterals.SPECIAL)) {
+					} else if(extnOrderLineType.equalsIgnoreCase(XPXLiterals.SPECIAL)) {
 						orderLineElementDoc = createorderLineDoc(orderLineElementContents,orderElementContents);
 						thirPartyExtnOrderSubTotal +=extnOrderLinetotatalVal;		
 						thirdPartyList.add(orderLineElementDoc);
@@ -161,7 +169,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 						// Do Nothing.
 					}
 				} else {
-					if(orderLineType.trim().length() > 0) { 	
+					if(extnOrderLineType.trim().length() > 0) { 	
 					    orderLineElementDoc = createorderLineDoc(orderLineElementContents, orderElementContents);
 					    stockExtnOrderSubTotal +=extnOrderLinetotatalVal;
 					    stockOrderList.add(orderLineElementDoc);
@@ -171,7 +179,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 		}
 
 		boolean isDiscountApplied=false;	
-		if(stockOrderList.size() > 0) {
+		if(stockOrderList.size() > 0 && isOrderLineStockType) {
 			
 			Element orderExtn = (Element)orderElementContents.get(XPXLiterals.ORDER_EXTN);		
 			setOrderExtnFields(orderExtn, isDiscountApplied, stockExtnOrderSubTotal);
@@ -188,7 +196,8 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 			setOrderExtnFields(orderExtn ,isDiscountApplied,directExtnOrderSubTotal );
 			isDiscountApplied=true;
 			orderExtn.setAttribute("ExtnLegacyOrderType", "D");
-			
+			if(stockOrderList.size() > 0 && !isOrderLineStockType)
+				directOrderList.add(stockOrderList);
 			Document chainedOrderInput_DIRECT = createChainedOrderInput(directOrderList,orderElementContents,XPXLiterals.DIRECT_ORDER,orderLineShipNode,orderExtn);
 			directOrderCreationOutputDoc = api.executeFlow(env,XPXLiterals.LEGACY_ORDER_CREATION_SERVICE, chainedOrderInput_DIRECT);
 		}		
