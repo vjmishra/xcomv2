@@ -172,8 +172,9 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		Ext.Msg.hide();
 	    myMask.hide();
 	    return;*/
+	    //Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
 	    Qty = document.getElementById("OrderMultiple").value;
-	    //alert("pandaByAjaxFromLink Qty"+Qty);
+	    reqUom = baseUom;
 	}	
 	if(Qty=='0')
 	{	
