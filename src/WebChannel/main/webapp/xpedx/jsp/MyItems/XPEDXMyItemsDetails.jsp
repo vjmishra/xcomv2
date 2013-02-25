@@ -405,7 +405,7 @@ function showSharedListForm(){
     		if(url != null && validateOM == true) {
     			if(qty == ""){
     				 qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
-            		var uom = document.getElementById("baseUOM_"+myItemsKey).value;
+            	     var uom = document.getElementById("baseUOMCode_"+myItemsKey).value;
     			}
     			else{
         		 qty = document.getElementById('QTY_'+myItemsKey).value;
@@ -1951,7 +1951,6 @@ function showSharedListForm(){
 				} 
 				formItemIds = document.getElementById('formItemIds');
 			}
-
 		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
@@ -3115,8 +3114,8 @@ function showSharedListForm(){
 												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"  maxlength="7" tabindex="1"
 												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
-												<s:hidden
-													id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
+												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
+												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
 													<s:if test="#uomList!=null" >
 													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" list="#uomList"
 													listKey="key"
@@ -3201,7 +3200,9 @@ function showSharedListForm(){
                             </table>
                             <!--  TODO FXD2-11 Display error message  -->
                             <s:set name="baseUOM" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:set>
-	                        			<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}"/>
+	                        <s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}"/>
+	                         <s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
+	                        <s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}"/>
                             <div class="clear"></div>
 							<s:if test='editMode != true'>
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
