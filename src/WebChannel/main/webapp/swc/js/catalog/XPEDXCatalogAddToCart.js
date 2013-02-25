@@ -338,7 +338,7 @@ var myMask;
 		//XB 214 BR4
 		if( qty == 0 )
 		{
-			//document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
+			document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
 			document.getElementById('Qty_'+itemId).focus();
 			
 			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again.";
@@ -350,6 +350,7 @@ var myMask;
 		//End of XB 214
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
+		document.getElementById('Qty_'+itemId).style.borderColor="";
 	/*	if(ordMul != 0 || totalQty==0)
 		{		
 			if(priceCheck == true){
