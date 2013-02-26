@@ -69,7 +69,10 @@
 							Store="N" UseSynonyms="Y" Searchable="Y"/>
 						<Attribute IndexFieldName="Item.ExtnExtendedDesc" 
 							XMLName="ExtnExtendedDesc" DefaultWeight="1.0" Index="ANALYZED" 
-							Store="N" UseSynonyms="Y" Searchable="Y"/>		
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ExtnKeywords" 
+							XMLName="ExtnKeywords" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
 						<Attribute IndexFieldName="Item.ShortDescription" 
 							XMLName="ShortDescription" DefaultWeight="1.0" Index="ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />
@@ -78,7 +81,10 @@
 							Store="N" UseSynonyms="N" Searchable="N" />
 						<Attribute IndexFieldName="Item.ExtendedDescription" 
 							XMLName="ExtendedDescription" DefaultWeight="1.0" Index="ANALYZED" 
-							Store="N" UseSynonyms="N" Searchable="N" />		
+							Store="N" UseSynonyms="N" Searchable="N" />
+						<Attribute IndexFieldName="Item.Keywords" 
+							XMLName="Keywords" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />	
 					</Attributes>
 				</Entity>
 			</Entities>
