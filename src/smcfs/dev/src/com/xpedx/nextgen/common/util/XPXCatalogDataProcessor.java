@@ -1,17 +1,19 @@
 package com.xpedx.nextgen.common.util;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class XPXCatalogDataProcessor {
-	final static Pattern xPattern = buildXPattern();
-	final static Pattern dimensionPattern = buildDimensionPattern();
+	private static Logger log =  Logger.getLogger("com.xpedx.nextgen.log");
+	private final static Pattern xPattern = buildXPattern();
+	private final static Pattern dimensionPattern = buildDimensionPattern();
 	//Added for XB-640
-	final static Pattern uomPattern = buildUomPattern();
+	private final static Pattern uomPattern = buildUomPattern();
 			
-	public static void main(String[] args){
-		/*String[] searches = new String[] {
+	/*public static void main(String[] args){
+		String[] searches0 = new String[] {
         		"m&c",
         		"5%",
         		"5 percent",
@@ -62,7 +64,7 @@ public class XPXCatalogDataProcessor {
         		"1.50\"x2.25\""
         		
         		
-        };*/
+        };
 		
 		String[] searches = {"<ul><li>+ @ JR PEAR WILLIAMS OFF SM WEB 94brt 50# 52.5\"x 40\"di WHT 1838</li><li>52-1/2\" 40 (3)</li><li>50lb</li><li>White</li><li>94 Bright</li><li>Smooth</li></ul>"};
 		String[] searches1 = {"Williamsburg MAKING CUSTOMER OWNED MAKING CUSTOMER OWNED MAKINGCUSTOMEROWNED MAKINGCUSTOMEROWNED 3203790 #2 All Roll + @ JR PEAR WILLIAMS OFF SM WEB 94brt 50# 52.5\"x 40\"di WHT 1838 52.5\" 40 (3) 52-1/2\" 40 (3) 52.5\"40(3) 52-1/2\"40(3) 50# Offset Roll Smooth White"};
@@ -80,6 +82,8 @@ public class XPXCatalogDataProcessor {
 		String[] searches13 = {" 1743# 35.5\"45 (3)" };
 		String[] searches14 = {" .45\" x .55\" x .65\" .173#"};
 		String[] searches15 = {"Labelblank White Electronic Imaging Labels-Butt Cut, White, 87 Bright, Smooth, Permanent, 1 x 2.83"};
+		String[] searches16 = {"Absorbent 95% absorb capacity .75# weight"};
+		String[] searches17 = {"<ul><li>UTOPIA TWO DULL COVER WEB 80# 35\"x 45\"x 42' dia WHT 1743lb</li><li>35-1/2\" 45 (3)</li><li>80lb</li><li>Blue White</li><li>91 Bright</li><li>Dull</li></ul>"};
 		//String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\" L x 9-7/8\" W x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
 		//String[] searches = {"abcd 1.25\" x .029'"};
 		  //String[] searches = {"45\"x 55\""};
@@ -87,7 +91,7 @@ public class XPXCatalogDataProcessor {
 		//String[] searches = {"3M Scotch 7 x 11 3M Company 3MCompany 02120087399 2120087399 02120087399 2120087399 1048485 P1011877 Scotch ATG Adhesive Transfer Tape 969 Double-Coated Tapes Adhesive Transfer Tapes Transfer Tape Scotch ATG Adhesive Transfer Tape 969, 976, 1.5\" .24\" 1/4\" W x 36 yd L, Clear, Roll, Thickness: 5 Mil (36/Pkg, 144/Ctn) 0.25\" W x 36 yd L 1/4\" W x 36 yd L 0.25\"Wx36ydL 1/4\"Wx36ydL 78 lb Polycoated Kraft Paper"};
 		//String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\"x 9-7/8\"x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
 		
-		for (String rawSearch : searches15) {
+		for (String rawSearch : searches17) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
 			String search = preprocessCatalogData(rawSearch);
@@ -96,7 +100,7 @@ public class XPXCatalogDataProcessor {
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
-	}
+	}*/
 	
 	public static String preprocessSearchQuery(String rawSearch) {
 		String search = rawSearch;
@@ -138,7 +142,7 @@ public class XPXCatalogDataProcessor {
 	 * Removes space before and after x in dimensions.
 	 * Updated for XB-640
 	 * @param rawText
-	 * @return
+	 * @return String
 	 */
 	private static String preprocessXPatterns(String rawText){
 		Matcher matcher = xPattern.matcher(rawText);
@@ -161,6 +165,9 @@ public class XPXCatalogDataProcessor {
 		
 	}
 	
+	/*
+	 * Pattern that identifies dimensions
+	 */
 	private static Pattern buildDimensionPattern() {
 		StringBuilder canonicals = new StringBuilder();
 		for (UnitInfo unitInfo : UnitInfo.all) {
@@ -177,6 +184,7 @@ public class XPXCatalogDataProcessor {
 	  Matcher matcher = dimensionPattern.matcher(rawText);
 		StringBuffer sb = new StringBuffer();
 		while (matcher.find()) {
+			//Ignore fractional dimensions
 			int matcherStart = matcher.start()-1;
 			if(matcherStart > -1){
 				char prefix = rawText.charAt(matcherStart);
@@ -187,6 +195,7 @@ public class XPXCatalogDataProcessor {
 			
 			int matcherEnd = matcher.end(8);
 			char pref1 = rawText.charAt(matcherEnd-1);
+			//Ignore fractional dimensions
 			if(matcherEnd < rawText.length()-1){
 				if(matcherEnd > -1){
 					char prefix = rawText.charAt(matcherEnd);
@@ -198,6 +207,7 @@ public class XPXCatalogDataProcessor {
 			
 			if(matcher.group(12) != null){
 				matcherEnd = matcher.end(16);
+				//Ignore fractional dimensions
 				if(matcherEnd < rawText.length()-1){
 					if(matcherEnd > -1){
 						char prefix = rawText.charAt(matcherEnd);
@@ -416,7 +426,9 @@ public class XPXCatalogDataProcessor {
 					synonyms.append("|");
 				synonyms.append(synonym);
 			}
-			return Pattern.compile("([0-9]+(\\.[0-9]+)?) ?(" + synonyms.toString() + ")\\b");
+			//return Pattern.compile("([0-9]+(\\.[0-9]+)?) ?(" + synonyms.toString() + ")\\b");
+			//removed the <space>? from pattern so that 3 # is not processed as 3lb
+			return Pattern.compile("([0-9]+(\\.[0-9]+)?)(" + synonyms.toString() + ")\\b");
 		}
 
 		// builds the map from symbol or synonym to its canonical version
