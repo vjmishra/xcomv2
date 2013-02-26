@@ -33,7 +33,6 @@
 <s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
 
 			   
-<s:if test="%{#lineStatusCodeMsg == ''}">
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
@@ -246,4 +245,3 @@
 			</table>
 			</s:if>
 	</div>
-</s:if>
