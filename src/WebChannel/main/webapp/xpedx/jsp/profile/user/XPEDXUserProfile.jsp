@@ -692,11 +692,7 @@ function funDivOpenClose(val1)
 			spendingLt = document.getElementById("spendingLt").value;
 			primaryApprover = document.getElementById("primaryApprover").value;
 			submitOrderChkValue = document.getElementById("OrderApprovalFlag").value;
-			var spendingLtDivID = document.getElementById("errorMsgFor_spendingLtSubmitOrder");
-			var approverDivID = document.getElementById("errorMsgFor_approverSubmitOrder");
-
-		
-		
+			
 		if((primaryApprover == "" || primaryApprover == null) && submitOrderChkValue){
 			document.getElementById("errorMsgFor_approverSubmitOrder").style.display = "inline";
 			return false;
@@ -2651,8 +2647,6 @@ a.underlink:hover { text-decoration: underline !important; }
 		<s:else>
 			<s:checkbox tabindex="15" name='OrderApprovalFlag' id='OrderApprovalFlag' fieldValue="true" value="%{#_action.isOrderFlagForApproval()}" />
 		</s:else>
-				
-		
 		</s:else>
 		</td></tr>
 		<tr> <td style="border:0px; height:10px;"> &nbsp; </td></tr>
