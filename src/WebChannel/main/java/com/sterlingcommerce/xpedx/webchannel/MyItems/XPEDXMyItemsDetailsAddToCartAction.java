@@ -272,6 +272,8 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 							YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
 							YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 							YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+							YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+							YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
 							if(orderMultipleQtyElem!=null){
 								orderMultipleQty= orderMultipleQtyElem.getNodeValue();
 							}
@@ -281,9 +283,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 							}
 							String lineNumber = lineStatusCodeElem.getNodeValue();							
 							String legacyProductCode = legacyProductCodeElem.getNodeValue();
+							String requestedQty = requestedQtyElem.getNodeValue();
+							String requestedUom = requestedUomElem.getNodeValue();
 							if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){
-								useOrdermultipleMapFromSourcing.put(legacyProductCode, orderMultipleQty +"|"+orderMultipleUOM);
-								orderMultipleErrorItems.add(legacyProductCode);
+								useOrdermultipleMapFromSourcing.put(legacyProductCode+"_"+requestedQty+"_"+requestedUom, orderMultipleQty +"|"+orderMultipleUOM);
+								orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
 							}
 						}
 						
@@ -609,7 +613,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		else if(returnVal!=null && returnVal.equalsIgnoreCase(ERROR)){
 			addToCartError = "Error while adding item to cart";
 		}
-		else if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.containsKey(requestedItemID)){
+		else if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.containsKey(requestedItemID+"_"+requestedQty+"_"+requestedUOM)){
 			addToCartError = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";	
 			return "MaxError";
 		}

@@ -45,6 +45,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	 {
 		 
 		 this.reqProductUOM = this.productUOM;	
+		 this.reqProductQuantity=this.quantity;
 		 String sOrderHeaderKey =(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext"); //XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 		 if((sOrderHeaderKey==null || sOrderHeaderKey.equals("_CREATE_NEW_") )&& XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
 			 XPEDXOrderUtils.createNewCartInContext(getWCContext());
@@ -134,6 +135,18 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement lineElem = (YFCElement) yfcItr.next();
 											YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
 											YFCElement itemIdElem = lineElem.getChildElement("LegacyProductCode");
+											YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
+											YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+											YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
+																		
+											String legacyProductCode1 = itemIdElem.getNodeValue();
+											String requestedQty = requestedQtyElem.getNodeValue();
+											String requestedUom = requestedUomElem.getNodeValue();
+											if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14") 
+													&& legacyProductCode1.equalsIgnoreCase(this.productID) && requestedQty.equalsIgnoreCase(this.reqProductQuantity) && requestedUom.equalsIgnoreCase(this.reqProductUOM)){								
+												orderMultipleErrorItems.add(legacyProductCode1);
+											}
 											lineElem.getLastChild();
 											String str = lineNumberElem.getNodeValue();
 											String legacyProductCode=itemIdElem.getNodeValue();
@@ -194,7 +207,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         		if(changeOrderOutput == null){
 		         			return ERROR;
 		         		}
-		         		orderMultipleErrorItems = XPEDXPriceandAvailabilityUtil.processPNAResponseForOrderMultiple(changeOrderOutputDoc);
+		         		//orderMultipleErrorItems = XPEDXPriceandAvailabilityUtil.processPNAResponseForOrderMultiple(changeOrderOutputDoc);
 		         		if(orderMultipleErrorItems.contains(productID))
 		         			return "MaxError";
 		         		//refreshCartInContext(orderHeaderKey);
@@ -394,6 +407,15 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	}
 
 	protected String reqProductUOM;
+	protected String reqProductQuantity;
+	public String getReqProductQuantity() {
+		return reqProductQuantity;
+	}
+
+	public void setReqProductQuantity(String reqProductQuantity) {
+		this.reqProductQuantity = reqProductQuantity;
+	}
+
 	protected String reqJobId;
 	protected String reqCustomer;
 	protected String lineType;

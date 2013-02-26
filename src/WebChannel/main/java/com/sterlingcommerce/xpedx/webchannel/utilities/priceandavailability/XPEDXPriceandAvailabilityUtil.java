@@ -615,7 +615,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		return ordermultipleMapFromSourcing;
 	}
 	
-	public static List<String> processPNAResponseForOrderMultiple(Document changeOrderOutputDoc){
+	public static List<String> processPNAResponseForOrderMultiple(Document changeOrderOutputDoc, String reqQty, String reqUOM, String reqProductCode){
 		List<String> orderMultipleErrorItems = new ArrayList<String>();
 		try
 			{
@@ -648,6 +648,8 @@ public class XPEDXPriceandAvailabilityUtil {
 						YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
 						YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 						YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+						YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+						YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
 						if(orderMultipleQtyElem!=null){
 							orderMultipleQty= orderMultipleQtyElem.getNodeValue();
 						}
@@ -657,8 +659,10 @@ public class XPEDXPriceandAvailabilityUtil {
 						}
 						String lineNumber = lineStatusCodeElem.getNodeValue();							
 						String legacyProductCode = legacyProductCodeElem.getNodeValue();
-						if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){							
-							orderMultipleErrorItems.add(legacyProductCode);
+						String requestedQty = requestedQtyElem.getNodeValue();
+						String requestedUom = requestedUomElem.getNodeValue();
+						if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){								
+							orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
 						}
 					}
 					
