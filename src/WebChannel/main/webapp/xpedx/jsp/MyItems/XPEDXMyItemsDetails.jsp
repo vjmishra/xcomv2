@@ -847,6 +847,8 @@ function showSharedListForm(){
      	   {
          	   var addedItems = new Array();
          	   var arrQty = new Array();
+         	  var arrUOM = new Array();
+         	 arrUOM =  document.getElementsByName("enteredUOMs");
          	   addedItems = document.getElementsByName("enteredProductIDs");
     				arrQty = document.getElementsByName("qtys");
     				for(var i = 0; i < addedItems.length; i++){
@@ -854,7 +856,7 @@ function showSharedListForm(){
     					if(validAddtoCartItemsFlag[i]== true ){
     					divId='errorDiv_'+ arrQty[i].id;
     					var divVal=document.getElementById(divId);    					
-    					if(response.responseText.indexOf(addedItems[i].value) !== -1){
+    					if(response.responseText.indexOf(addedItems[i].value+"_"+arrQty[i].value+"_"+arrUOM[i].value) !== -1){
     						divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
     						divVal.setAttribute("class", "error");
     					}
