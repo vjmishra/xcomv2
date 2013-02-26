@@ -30,7 +30,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
 public class XPXPendingApprovalOrders implements YIFCustomApi{
-	
+
 	private static YIFApi api = null;
 	private String approverUserId = null;
 	private String approverProxyUserId = null;
@@ -39,16 +39,16 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/*
 	 * Methods to check if the order needs an approval.
 	 * This checks the ExtnTotalOrderValue and compares with the customer contacts Spending Limit
 	 * If ExtnTotalOrderValue is GE to SpendingLimit then Hold Type ORDER_LIMIT_APPROVAL is applied to the order.
 	 * To send Email to the approver and the contact you need to invoke a separate service with order Document as the input
 	 */
-	
+
 	public Document invokeIsPendingApprovalOrder(YFSEnvironment env,Document inXML) throws Exception
 	{
 		String orderApproveFlag; //xb-226
@@ -86,18 +86,16 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 				orderElem = SCXmlUtil.getChildElement(orderOutputDoc.getDocumentElement(),"Order");*/
 
-				if(orderElem!=null) {
+		if(orderElem!=null) 
+		{
 
-				spendingLimit = getSpendingLimit(env,orderElem,inXML.getDocumentElement().getAttribute("CustomerContactID"));
+			spendingLimit = getSpendingLimit(env,orderElem,inXML.getDocumentElement().getAttribute("CustomerContactID"));
 
-				} 
+		} 
 
-			/*}
-
-		}*/
-
-		// checking if the order total is more than the spending limit
-		if(spendingLimit!=null && orderElem!=null && spendingLimit!=-1) {
+			// checking if the order total is more than the spending limit
+		if(spendingLimit!=null && orderElem!=null && spendingLimit!=-1) 
+		{
 			Element extnElem = SCXmlUtil.getChildElement(orderElem,"Extn");
 			String ExtnTotalOrderValue = extnElem.getAttribute("ExtnTotalOrderValue");
 			Double totalOrderValue = new Double(0);
@@ -108,28 +106,32 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		}
 		/***Added for XB 226**/
 		orderApproveFlag = getOrderApprovalFlag(env,orderElem);
-		if(orderApproveFlag.equalsIgnoreCase("Y")){
+		if(orderApproveFlag.equalsIgnoreCase("Y"))
+		{
 			isApprovalReq = true;
 		}
 		/***End of XB 226***/
 		if(isApprovalReq) {
-			if(approverUserId!=null || approverProxyUserId!=null) {//if at least there is one approver put the order on Hold
+			if(approverUserId != null || approverProxyUserId != null) {//if at least there is one approver put the order on Hold
 				String approverOnHold = null;
-//			if(approverUserId!=null && approverUserId.trim().length()>0)
-//				approverOnHold = approverUserId; //approverProxyUserId;//
-//			else
-//				approverOnHold = approverProxyUserId;
+				//			if(approverUserId!=null && approverUserId.trim().length()>0)
+				//				approverOnHold = approverUserId; //approverProxyUserId;//
+				//			else
+				//				approverOnHold = approverProxyUserId;
 				//for jira 3484
-				if(approverUserId!=null && approverUserId.trim().length()>0){
-		               approverOnHold = approverUserId;
-		               if(approverProxyUserId != null && approverProxyUserId.trim().length()>0){
-		                     approverOnHold = approverOnHold + ","+ approverProxyUserId;
-		               }
-				}else{
-		              approverOnHold = approverProxyUserId;
+				if(approverUserId != null && approverUserId.trim().length()>0)
+				{
+					approverOnHold = approverUserId;
+					if(approverProxyUserId != null && approverProxyUserId.trim().length()>0){
+						approverOnHold = approverOnHold + ","+ approverProxyUserId;
+					}
+				}else
+				{
+					approverOnHold = approverProxyUserId;
 				}
 				//end of jira 3484
-				if(approverOnHold!=null && approverOnHold.trim().length()>0) {
+				if(approverOnHold != null && approverOnHold.trim().length()>0) 
+				{
 					changeOrderOutput = applyHoldTypeOnOrder(env,orderElem,approverOnHold);					
 				}
 			}
@@ -143,8 +145,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			return inXML;
 		}
 	}
-	
-	//Added for XB 226
+
+
 	public String getOrderApprovalFlag(YFSEnvironment env,Element orderElement) {
 		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
 		String orderApprovalFlag="";
@@ -171,17 +173,23 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					}
 				}
 			}
-			catch (Exception e) {
+
+			catch (YFSException  e) 
+			{
 				// TODO: handle exception
-				e.printStackTrace();
+				log.error("YFSException:getOrderApprovalFlag()", e);
+			}
+			catch (RemoteException e)
+			{
+				// TODO Auto-generated catch block
+				log.error("RemoteException:getOrderApprovalFlag()",e);
 			}
 			env.clearApiTemplate("getCustomerContactList");
-			
 		}
-		
+
 		return orderApprovalFlag;
 	}
-	
+
 	//End of XB 226
 	/**
 	 * JIRA 4256 Start
@@ -211,7 +219,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				if(extnNodeList!=null)
 				{
 					Element extnElem=(Element)outputDoc.getDocumentElement().getElementsByTagName("Extn").item(0);
-					if(extnElem!=null){
+					if(extnElem!=null)
+					{
 						viewPriceFlag = extnElem.getAttribute("ExtnViewPricesFlag");
 					}
 				}
@@ -221,9 +230,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				e.printStackTrace();
 			}
 			env.clearApiTemplate("getCustomerContactList");
-			
+
 		}
-		
+
 		return viewPriceFlag;
 	}
 	/**
@@ -279,7 +288,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		}
 		return spendingLimit;
 	}
-	
+
 	public Document applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
 		//Document changeOrderOutput = null;
 		Document changeOrderDoc = null;
@@ -292,7 +301,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					isEditOrder=(String) map.get("isEditOrderPendingOrderApproval");
 				}
 			}*/
-			
+
 			// Applying the Hold Type ORDER_LIMIT_APPROVAL on the order with one of the above approvers
 			changeOrderDoc = YFCDocument.createDocument("Order").getDocument();
 			Element changeOrderInputElem = changeOrderDoc.getDocumentElement();
@@ -318,16 +327,16 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		return changeOrderDoc;
 		//return changeOrderOutput;
 	}
-	
+
 	/*
 	 *This is invoked when sending approval email to the customer contact. 
 	 *Taking the CustomerContactID on the order and getting the Email ID 
 	 *and this method appends the CustomerContactList Element to the order, so it will be easy when sending the email.
 	 */
-	
+
 	public Document invoekApprovalOrderEmailForContact(YFSEnvironment env,Document inXML) throws Exception {
-		
-		
+
+
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		String resolverUserIds[] = null;
 		String orderStatusSubjectlLine=null;
@@ -340,13 +349,13 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			appendDummyContactList(inXML);
 			return inXML;
 		}
-		
+
 		if (log.isDebugEnabled()) {
 			log.debug("Inside XPXPendingApprovalOrders.invoekApprovalOrderEmailForContact - Input XML : "+SCXmlUtil.getString(inXML) );
-		
+
 		}
 		if(inXML!=null) {
-			
+
 			Element orderElement = inXML.getDocumentElement();
 			/*JIRA 4256 Start
 			 * 
@@ -383,20 +392,20 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			String organizationCode = SCXmlUtil.getAttribute(orderElement, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 			String holdStatus=orderHoldTypeElem.getAttribute("Status");
-			
+
 			if(orderHoldTypeElem!=null && ("1100").equalsIgnoreCase(holdStatus))
 			{   
 				orderStatusSubjectlLine="Order Pending Approval Notification";
 				emailType=XPXEmailUtil.ORDER_PENDING_APPROVAL_EMAIL_TYPE;
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
-			
+
 			}
 			else if (orderHoldTypeElem!=null && ("1200").equalsIgnoreCase(holdStatus))
 			{   
 				orderStatusSubjectlLine="Order Rejected Notification";
 				emailType=XPXEmailUtil.ORDER_REJECTED_EMAIL_TYPE;
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
-			
+
 			}
 			else if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(holdStatus))
 			{
@@ -407,22 +416,22 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedLegacyOrderNo);
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
 			}
-			
+
 			Map<String,String> getUOMListMap = getUOMList(env);
-			
+
 			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine");
 			adduomDescription(orderLinesElem,getUOMListMap);
-			
+
 			//stamp the approval related URLs.
-			
+
 			String baseURL = YFSSystem.getProperty("baseURL");
 			String toApproveOrderURL = baseURL + "/order/approvalList.action?sfId="+ sellerOrgCode +"&scFlag=y"; //http://stg.xpedx.com/swc/order/approvalList.action?sfId=xpedx&scFlag=y 
 			String approvedOrderURL =  baseURL + "/order/orderList.action?sfId="+ sellerOrgCode + "&scFlag=Y" ;  
 			inXML.getDocumentElement().setAttribute("toApproveOrderURL",toApproveOrderURL);
 			inXML.getDocumentElement().setAttribute("approvedOrderURL",approvedOrderURL);
-			
-			
-			
+
+
+
 			/* if same contact exists for different customers (multiple contacts), taking the customer contact based on the BillToID on the order,
 			 * which will be the MSAP of the contact who placed the order.
 			 */
@@ -433,9 +442,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				Element custElement = custContInputDoc.createElement("Customer");
 				custElement.setAttribute("OrganizationCode", organizationCode );
 				Element complexQuery = custContInputDoc.createElement("ComplexQuery");
-				
+
 				Element OrElem = custContInputDoc.createElement("Or"); 
-				
+
 				for(String contactId : resolverUserIds) {
 					Element exp = custContInputDoc.createElement("Exp");
 					exp.setAttribute("Name", "CustomerContactID");
@@ -459,9 +468,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					env.clearApiTemplate("getCustomerContactList");
 				}				
 				if(outputDoc!=null) {
-					
+
 					SCXmlUtil.importElement(orderElement, outputDoc.getDocumentElement());//(inXML, outputDoc.getDocumentElement());
-					
+
 					addEmailIDToElement(orderElement);
 					//order.appendChild(outputDoc.getDocumentElement());// Appends the CustomerContacList Element to the Order and returns the order Document
 				}
@@ -475,15 +484,15 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			/*XB-461 : Begin - Sending email through Java Mail API now*/
 			String emailOrgCode=sellerOrgCode!=null?sellerOrgCode:"";
 			String inputXML=SCXmlUtil.getString(orderElement);
-	        String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
-	        String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
-	        XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode);
-	        /*XB-461 : End - Sending email through Java Mail API now*/
+			String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
+			XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode);
+			/*XB-461 : End - Sending email through Java Mail API now*/
 		}
-				
+
 		return inXML;		
 	}
-	
+
 	private void addEmailIDToElement(Element orderElement)
 	{
 		String orderCustomerContactId=orderElement.getAttribute("CustomerContactID");
@@ -519,7 +528,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		 * CR 4054 Changes start
 		 * */
 		String addtionalEmailAdd = orderElemExtn.getAttribute("ExtnAddnlEmailAddr");
-		
+
 		if(addtionalEmailAdd!=null && addtionalEmailAdd.trim().length() > 0){
 			if (addtionalEmailAdd.indexOf(";") != -1) {
 
@@ -540,38 +549,38 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	}
 	private void adduomDescription(ArrayList<Element> orderLinesElement,Map<String,String> uomDesriptionMap)
 	{
-		
+
 		if(orderLinesElement != null)
 		{
 			for(int i=0;i<orderLinesElement.size();i++)
 			{
 				Element orderElement=orderLinesElement.get(i);
 				Element orderLineTranQty=(Element)orderElement.getElementsByTagName("OrderLineTranQuantity").item(0);
-				
+
 				if(orderLineTranQty !=null )
 				{
 					String checkUOMDescription = uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM"));
 					if(checkUOMDescription!=null && !checkUOMDescription.equals("")){
-					orderLineTranQty.setAttribute("UOMDescription", uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM")));
+						orderLineTranQty.setAttribute("UOMDescription", uomDesriptionMap.get(orderLineTranQty.getAttribute("TransactionalUOM")));
 					}else{
 						orderLineTranQty.setAttribute("UOMDescription", orderLineTranQty.getAttribute("TransactionalUOM"));
-						
+
 					}
 				}
 				Element orderLineExtnElem=(Element)orderElement.getElementsByTagName("Extn").item(0);
-				
+
 				if(orderLineExtnElem !=null )
 				{
 					String checkUOMPriceDesc = uomDesriptionMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM"));
 					if(checkUOMPriceDesc!=null && !checkUOMPriceDesc.equals("")){
 						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", uomDesriptionMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM")));
-						
+
 					}else{
 						orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", orderLineExtnElem.getAttribute("ExtnPricingUOM"));
-						
+
 					}
-					
-					}
+
+				}
 			}
 		}
 	}
@@ -580,44 +589,44 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		try
 		{
 			Document getItemUomMasterListInputDoc = YFCDocument.createDocument("ItemUOMMaster").getDocument();
-	    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure","" );
-	    	getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "");
-	    	env.setApiTemplate("getItemUOMMasterList", getItemUomMasterListTemplate);
-	    	Document getItemUomMasterListOutputDoc = api.invoke(env, "getItemUOMMasterList", getItemUomMasterListInputDoc);
-	    	env.clearApiTemplate("getItemUOMMasterList");
-	    	env.clearApiTemplate("getItemUOMMasterList");
-	    	NodeList itemUOMMasterList = getItemUomMasterListOutputDoc.getDocumentElement().getElementsByTagName("ItemUOMMaster");
-	    	if (itemUOMMasterList != null) 
-	    	{
-	        	int itemUOMLength = itemUOMMasterList.getLength();
-	        	if(itemUOMLength > 0) 
-	        	{
-	        		for(int i=0; i < itemUOMLength ;i++)
-	        		{
-	        			String itemUomDescriptionMaster ="";
-	        			String itemUomMaster = "";
-		        		Element itemUomMasterElement = (Element) itemUOMMasterList.item(i);
-		        		if (itemUomMasterElement.hasAttribute("Description")) 
-		        		{
-		        		   itemUomDescriptionMaster = itemUomMasterElement.getAttribute("Description");
-		        		   itemUomMaster = itemUomMasterElement.getAttribute("UnitOfMeasure");
-		        		} 
-		        		else 
-		        		{
-		        			itemUomDescriptionMaster = "";
-		        		}
-		        		UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
-		        	}
-	        	}
-	        }
+			getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure","" );
+			getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "");
+			env.setApiTemplate("getItemUOMMasterList", getItemUomMasterListTemplate);
+			Document getItemUomMasterListOutputDoc = api.invoke(env, "getItemUOMMasterList", getItemUomMasterListInputDoc);
+			env.clearApiTemplate("getItemUOMMasterList");
+			env.clearApiTemplate("getItemUOMMasterList");
+			NodeList itemUOMMasterList = getItemUomMasterListOutputDoc.getDocumentElement().getElementsByTagName("ItemUOMMaster");
+			if (itemUOMMasterList != null) 
+			{
+				int itemUOMLength = itemUOMMasterList.getLength();
+				if(itemUOMLength > 0) 
+				{
+					for(int i=0; i < itemUOMLength ;i++)
+					{
+						String itemUomDescriptionMaster ="";
+						String itemUomMaster = "";
+						Element itemUomMasterElement = (Element) itemUOMMasterList.item(i);
+						if (itemUomMasterElement.hasAttribute("Description")) 
+						{
+							itemUomDescriptionMaster = itemUomMasterElement.getAttribute("Description");
+							itemUomMaster = itemUomMasterElement.getAttribute("UnitOfMeasure");
+						} 
+						else 
+						{
+							itemUomDescriptionMaster = "";
+						}
+						UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
+					}
+				}
+			}
 		}
 		catch(Exception e)
 		{
 			log.error("Error while getting UOM Description "+e.getMessage());
 		}
-    	return UOMDesriptionMap;
+		return UOMDesriptionMap;
 	}
-	
+
 	private void appendDummyContactList(Document inXML) {
 		Element order = inXML.getDocumentElement();
 		// Creating the Dummy Element of CusotmerCotnact so that xsl wouldn't throw any error
@@ -649,7 +658,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				if (log.isDebugEnabled()) {
 					log.debug("Inside XPXPendingApprovalOrders.getFormattedOrderNumber() - getOrderList_OutXML : "+SCXmlUtil.getString(orderListDoc));				
 				}
-				
+
 				env.clearApiTemplate("getOrderList");
 				Element rootElement = orderListDoc.getDocumentElement();
 				NodeList orderNodeList = rootElement
@@ -658,7 +667,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				for (int order = 0; order < orderNodeListLength; order++) {
 					Element orderEle = (Element) orderNodeList.item(order);
 					String orderType = orderEle.getAttribute("OrderType");
-					if (!YFCObject.isVoid(orderType) && !orderType.equalsIgnoreCase("Customer")) {
+					if (!YFCObject.isVoid(orderType) && !orderType.equalsIgnoreCase("Customer"))
+					{
 						if(orderEle.getElementsByTagName("Extn")!=null)
 						{
 							Element extnElementFO = (Element) orderEle
@@ -670,10 +680,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 							String generationNum = extnElementFO
 									.getAttribute("ExtnGenerationNo");
 							if (null != orderBranch && !"".equalsIgnoreCase(orderBranch.trim()) && 
-								null != legacyOrderNum   && !"".equalsIgnoreCase(legacyOrderNum.trim())   && 
-								null != generationNum && !"".equalsIgnoreCase(generationNum.trim())) 
+									null != legacyOrderNum   && !"".equalsIgnoreCase(legacyOrderNum.trim())   && 
+									null != generationNum && !"".equalsIgnoreCase(generationNum.trim())) 
 							{
-								String orderNbr=XPXUtils.getFormattedOrderNumber(orderBranch, legacyOrderNum, generationNum);
+								String orderNbr = XPXUtils.getFormattedOrderNumber(orderBranch, legacyOrderNum, generationNum);
 								orderHashset.add(orderNbr);							
 							}
 						}
@@ -681,10 +691,10 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				}
 			}
 		}
-		
+
 		if (orderHashset.isEmpty()) {
 			orderNos = "In Progress";
-		
+
 		}else
 		{
 			if (orderHashset != null && orderHashset.size() > 0) {
@@ -692,16 +702,16 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				Iterator<String> orderItr=orderHashset.iterator();
 				while(orderItr.hasNext()){
 					if(i==orderHashset.size()) {
-						orderNos=orderNos+orderItr.next();
-						
+						orderNos = orderNos+orderItr.next();
+
 					}else {
-						orderNos=orderNos+orderItr.next()+",";
+						orderNos = orderNos+orderItr.next()+",";
 					}
 					++i;					
 				}
 			}
 		}		
 		return orderNos;
-		
+
 	}	
 }
