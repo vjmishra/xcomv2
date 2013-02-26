@@ -1998,15 +1998,12 @@ function showSharedListForm(){
 	                	 				continue;
 	                			}
 		            			
-		            			var _myItemKey=myitemskey[k].replace(/^\s+|\s+$/g,"");
+		            			 var _myItemKey=myitemskey[k].replace(/^\s+|\s+$/g,"");
 		            			 var orderMultipleQtyUom = omQtyUom.split("|");
 		            			 var orderMultipleQty = orderMultipleQtyUom[0];
 		            			 var orderMultipleUom = orderMultipleQtyUom[1];
 		            			 var omError = document.getElementById("orderMulErrorCode_"+j).value;	
 		            			 var qty = document.getElementById("QTY_"+_myItemKey);
-		            			 
-		            			 var lineError = document.getElementById("lineStatusCodeMsg_"+j).value;
-		            			 //alert("omarrayErr"+orderMultipleQty+"::"+orderMultipleUom+"::"+omError+"::"+myitemskey[i].value+"::"+qty.value);
 		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+_myItemKey);
 		            			 if(qty.value == '0' )
 		            				{
@@ -2015,9 +2012,6 @@ function showSharedListForm(){
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            				}
-		            			 else if (lineError !=""){
-		            				 document.getElementById("availabilityRow_"+_myItemKey).innerHTML = "<h5 align='center'><b><font color=red>"+lineError+ "</font></b></h5>";
-		            			 }
 		            			 else if(omError == 'true' && qty.value > 0 )
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);

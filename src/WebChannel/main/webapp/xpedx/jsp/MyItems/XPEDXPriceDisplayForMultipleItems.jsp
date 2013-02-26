@@ -58,23 +58,16 @@
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:hidden name="validateOrderMul" value="%{#_action.getValidateOM()}" />
 <s:hidden name="pnaListitem" value="%{#_action.isPnaCall()}" />
-
-
-
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId+"_"+#itemOrder)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemOrder}" value="%{#orderMultipleQtyFromSrc}"/>
 
 <s:set name="orderMulErrorCode" value="useOrderMultipleMapFromSourcing.get(#itemId+'_'+#itemOrder)" />
 <s:hidden name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
 
-
-
-
-
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
-	</s:if>
+</s:if>
 
 <s:if test='#itemOrder == null' >
 		<s:set name="jsonKey" value='%{#itemId}' />
@@ -107,7 +100,7 @@
 
 								
 
-<%--<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}"> --%>
+<s:if test='%{#lineStatusCodeMsg == "" && #pnaErrorStatusMsg== ""}'>
 <s:set name='currency' value='#priceCurrencyCode'/>
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
@@ -115,7 +108,6 @@
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-		<!-- 	<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}"> XB 214 BR  -->
 			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
 			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if>
 			<s:else>
@@ -350,19 +342,18 @@
 			<td colspan="10"></td>
 		</tr>
 </tbody>
-<s:if test='%{#lineStatusCodeMsg != ""}'>
-	<tbody><tr><td>&nbsp;</td><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
-	</tbody>
-</s:if>						
 </s:if>
 <s:else>
 
 <tbody>
 		<tr >
 			<td width="100%">
-			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
-				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+			<s:if test='%{#pnaErrorStatusMsg != ""}'>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5>
 			</s:if>		
+			<s:elseif test='%{#lineStatusCodeMsg != ""}'>
+				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+			</s:elseif>	
 			<s:else>
 				<h5 align="center"><b><font color="red">Your request could not be completed at this time, please try again.</font></b></h5>
 			</s:else>
