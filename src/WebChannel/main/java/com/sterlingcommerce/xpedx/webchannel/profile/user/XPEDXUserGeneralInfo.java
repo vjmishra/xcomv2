@@ -103,17 +103,17 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     private List<String> adminLoginidList = new ArrayList<String>();
     private List<String> questionListForUser = new ArrayList<String>();
     private Map<String, String> questionListForOrg = new LinkedHashMap<String, String>();
-    List<Element> defaultContactAddressList = new ArrayList();
-    List<Element> defaultCustomerAddressList = new ArrayList();
-    List<Element> defaultAddressList = new ArrayList();
-    List<Element> otherCustomerAddressList = new ArrayList();
-    List<Element> otherContactAddressList = new ArrayList();
-    List<Element> otherAddressList = new ArrayList();
+    List<Element> defaultContactAddressList = new ArrayList<Element>();
+    List<Element> defaultCustomerAddressList = new ArrayList<Element>();
+    List<Element> defaultAddressList = new ArrayList<Element>();
+    List<Element> otherCustomerAddressList = new ArrayList<Element>();
+    List<Element> otherContactAddressList = new ArrayList<Element>();
+    List<Element> otherAddressList = new ArrayList<Element>();
     Map<String, String> statusList = new LinkedHashMap<String, String>();
     Map<String, String> title = new LinkedHashMap<String, String>();
     Map<String, String> localeList = new LinkedHashMap<String, String>();
-    List<String> userRoles = new ArrayList();
-    Map<String, Boolean> allRoles = new HashMap();
+    List<String> userRoles = new ArrayList<String>();
+    Map<String, Boolean> allRoles = new HashMap<String, Boolean>();
 
     private String userId;
     private String userPassword = "*****";
@@ -2271,8 +2271,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     private String viewInvoices = "N";
     private Map b2bCatalogViewMap;
     protected boolean orderFlagForApproval = false;// xb-226
-    private String orderApprovalFlag = "N";// xb-226
-
+    
     public String getDefaultB2bCatalogView() {
 	Element ccElem = XMLUtilities.getChildElementByName(
 		customerContactList, "CustomerContact");
@@ -2603,14 +2602,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     }
 
     /** Start of Code for XB 226 **/
-    public String getOrderApprovalFlag() {
-	return orderApprovalFlag;
-    }
-
-    public void setOrderApprovalFlag(String orderApprovalFlag) {
-	this.orderApprovalFlag = orderApprovalFlag;
-    }
-
+   
     public boolean isOrderFlagForApproval() {
 	return orderFlagForApproval;
     }
