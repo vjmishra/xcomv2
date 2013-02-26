@@ -20,4 +20,5 @@
     <!-- <entry key="recordPendingChange">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry> -->
     <entry key="key">xpedx_me_draftOrderReplaceOrderLines:/Order/OrderLines/OrderLine/@OrderLineKey</entry>
     <entry key="orderedLineType">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@LineType</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
 </properties>

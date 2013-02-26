@@ -9,8 +9,10 @@ import org.apache.log4j.Logger;
 
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author Administrator
@@ -43,10 +45,19 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 	public static final String MASHUP_DO_DELETE_ORDER_LINES = "xpedx_me_draftOrderReplaceOrderLines";
 	private String orderedLineType;	
 	private String name;
+	public String draftOrderFlag;
 
 	public String execute() {
 		try {
 			setDefaultvaluesIfNull();
+			//Added For XBT-445
+			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			 if(YFCCommon.isVoid(editedOrderHeaderKey)){
+                 draftOrderFlag="Y";   
+	         }
+	         else {
+	                 draftOrderFlag="N";  
+	         }
 			if("true".equalsIgnoreCase(getAddToList())){// invoke only add mashup
 														// Add to cart
 				
