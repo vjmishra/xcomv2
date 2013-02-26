@@ -176,6 +176,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	    Qty = document.getElementById("OrderMultiple").value;
 	    reqUom = baseUom;
 	}	
+	var itemAvailDiv = document.getElementById("tabs-1");
 	if(Qty=='0')
 	{	
 		
@@ -186,6 +187,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
   		document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
+		itemAvailDiv.style.display = "none"; 
 		Ext.Msg.hide();
 	    	myMask.hide();
 	    return;
