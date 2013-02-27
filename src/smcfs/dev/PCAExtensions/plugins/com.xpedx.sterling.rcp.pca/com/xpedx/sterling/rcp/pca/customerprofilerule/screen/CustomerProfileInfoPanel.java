@@ -1074,31 +1074,31 @@ IYRCComposite {
 		addTab(gridDataDummy,"dummyCustomerLinePONumber");
 
 		Label lblCustomerFieldMsg1 = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		lblCustomerFieldMsg1.setText("If checked the Customer fields on this tab display but");
+		lblCustomerFieldMsg1.setText("If checked, the customer fields on this tab display but");
 		lblCustomerFieldMsg1.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg1.setData("name", "lblCustomerFieldMsg");
 		addTab(gridDataDummy,"dummyCustomerFieldMessage1");
 		
 		lblCustomerFieldMsg2 = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		lblCustomerFieldMsg2.setText("are not required.Use the ManageCustomer Rules tab");
+		lblCustomerFieldMsg2.setText("are not required. Use the Manage Customer Rules tab");
 		lblCustomerFieldMsg2.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg2.setData("name", "lblCustomerFieldMsg");
 		addTab(gridDataDummy,"dummyCustomerFieldMessage2");
 		
 		lblCustomerFieldMsg3 = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		lblCustomerFieldMsg3.setText("on the Customer or Bill-To level to make the customer");// fields required.Required fields automatically display
+		lblCustomerFieldMsg3.setText("on the Customer or Bill-To level to make the customer");
 		lblCustomerFieldMsg3.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg3.setData("name", "lblCustomerFieldMsg");
 		addTab(gridDataDummy,"dummyCustomerFieldMessage3");
 	
 		lblCustomerFieldMsg4 = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		lblCustomerFieldMsg4.setText("fields required.Required fields automatically display");//customer fields required.Required fields automatically display
+		lblCustomerFieldMsg4.setText("fields required. Required fields automatically display,");
 		lblCustomerFieldMsg4.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg4.setData("name", "lblCustomerFieldMsg");
 		addTab(gridDataDummy,"dummyCustomerFieldMessage3");
 		
 		lblCustomerFieldMsg5 = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		lblCustomerFieldMsg5.setText("regardless of the settings on this tab.");//customer fields required.Required fields automatically display
+		lblCustomerFieldMsg5.setText("regardless of the settings on this tab.");
 		lblCustomerFieldMsg5.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg5.setData("name", "lblCustomerFieldMsg");
 		addTab(gridDataDummy,"dummyCustomerFieldMessage3");
