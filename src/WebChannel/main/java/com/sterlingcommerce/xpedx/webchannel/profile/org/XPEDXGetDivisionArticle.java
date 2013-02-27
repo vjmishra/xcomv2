@@ -4,7 +4,9 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.org;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.xml.xpath.XPathConstants;
@@ -86,11 +88,45 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 		return ERROR;
 	    }
 	}
-
+	updateLastLoginDate();
 	setArticleElements();
 	return SUCCESS;
 
     }
+    
+	public void updateLastLoginDate()
+	{
+		
+		/**** Added for Jira xb 621 
+		 * Below code is used to check from table xpxCustomercontactextn to see if the 
+		 * user has accepted the terms of access and if yes it would update the recently
+		 *  logged in date to the Database.
+		 */
+
+		String termsofAccess =(String) wcContext.getWCAttribute("isTOAaccepted");
+		if((termsofAccess != null) && termsofAccess.equals("Y"))
+		{
+			boolean createCCExtn = false;
+			Map<String, String> attributeMap = new HashMap<String, String>();
+			Element xpxCustContExtnEle = (Element) XPEDXWCUtils.getObjectFromCache("CustomerContExtnEle") ;
+			String lastLoginDate = (String) XPEDXWCUtils.getObjectFromCache("LastLoginDate");
+			String custContRefKey = (String) XPEDXWCUtils.getObjectFromCache("CustomerContactRefKey");
+
+			if(xpxCustContExtnEle == null)
+			{
+				createCCExtn = true;// added if the customer contact has to be created for the first time.
+			}
+
+			if(custContRefKey!=null && custContRefKey.length()>0)
+			{
+				attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_REF_ATTR, custContRefKey);
+			}
+			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_LAST_LOGIN_DATE, lastLoginDate);		
+			Element outDoc = (Element)XPEDXWCUtils.updateXPXCustomerContactExtn(wcContext, customerContactId,createCCExtn, attributeMap);
+
+		}
+	}
+
 
     public List<Element> getArticleLines() {
 	if (this.articleElements == null) {
