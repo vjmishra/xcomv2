@@ -146,7 +146,7 @@ function setPandAData() {
 	}
 	
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
-	if(errorValue.value == null && errorValue.value == "") {
+	if(errorVal.value == "" && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
 		document.getElementById("qtyBox").style.borderColor="";	
 	}
