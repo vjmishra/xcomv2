@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +43,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.core.YFSSystem;
 
 public class XPEDXHeaderAction extends WCMashupAction {
@@ -56,7 +56,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private static final String SWC_CHECKOUT_TYPE = "SWC_CHECKOUT_TYPE";
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private Element customerOrganizationEle;
-	protected LinkedHashMap customerFieldsMap;
+	protected HashMap customerFieldsMap;
 	protected boolean viewInvoices = false;
 	protected boolean viewReports = false;
 	protected boolean approver = false;
@@ -640,21 +640,39 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
-		String lastLoginDate = null;
+		// XB 621 code changes modified code for last login date  
+		YFCDate loginDate = new YFCDate();
+    	String lastLoginDate = loginDate.getString();
+		Map<String, String> attributeMap = new HashMap<String, String>();
+		String custContRefKey = null;
+		boolean createCCExtn = false;
 		
 		String customerContactId = wcContext.getCustomerContactId();
-		Element xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, customerContactId);
+		Element xpxCustContExtnEle = (Element)XPEDXWCUtils.getObjectFromCache("CustomerContExtnEle");
 		
-		if(xpxCustContExtnEle!=null){
+		if(xpxCustContExtnEle == null)
+		{
+		 xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, customerContactId);
+		 XPEDXWCUtils.setObectInCache("CustomerContExtnEle",xpxCustContExtnEle);
+		 XPEDXWCUtils.setObectInCache("LastLoginDate",lastLoginDate);
+		}
+		if(xpxCustContExtnEle == null)
+			createCCExtn = true;// added if the customer contact has to be created for the first time.
+		else {
 			toaFlag = xpxCustContExtnEle.getAttribute("AcceptTAndCFlag");
 			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
 			addnlPOList = xpxCustContExtnEle.getAttribute("POList");
-			lastLoginDate = xpxCustContExtnEle.getAttribute("LastLoginDate");
+			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
+			 XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContRefKey);
 		}
+		if(custContRefKey != null && custContRefKey.length()>0)
+		{
+			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_REF_ATTR, custContRefKey);
+		}
+		attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_LAST_LOGIN_DATE, lastLoginDate);		
 		
-		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N") ){
-			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
-		}
+		Element outDoc = (Element)XPEDXWCUtils.updateXPXCustomerContactExtn(wcContext, customerContactId,createCCExtn, attributeMap);
+			// XBT-621 code changes end 
 		if (toaFlag == null || (toaFlag != null && toaFlag.trim().length() == 0)) {
 			toaFlag = "";
 		}
