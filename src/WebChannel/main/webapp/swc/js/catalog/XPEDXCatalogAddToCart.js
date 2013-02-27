@@ -129,7 +129,7 @@ function addItemToCart(itemId) {
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 						
 							
-							document.getElementById('Qty_'+itemId).value = "";
+							//document.getElementById('Qty_'+itemId).value = "";
 							Ext.Msg.hide();
 							myMask.hide();
 							 //-- Web Trends tag start --
