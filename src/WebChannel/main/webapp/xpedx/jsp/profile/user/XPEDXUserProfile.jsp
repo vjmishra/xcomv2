@@ -672,6 +672,7 @@ function funDivOpenClose(val1)
 			if(primaryApprover==null || primaryApprover==""){
 				if (alternateApprover==null || alternateApprover==""){
 					new Spry.Widget.TabbedPanels("TabbedPanels1").showPanel(3);
+					document.getElementById("errorMsgFor_approverSubmitOrder").style.display="none";
 			    	document.getElementById("errorMsgFor_approvers").style.display = "inline";
 					return false;
 				}
@@ -686,21 +687,28 @@ function funDivOpenClose(val1)
 			}
 		}
 			//Added for XB 226
-			var spendingLt;
-			var primaryApprover;
+			var spendingLt="";
+			var primaryApprover="";
 			var OrderApprovalFlag;
-			spendingLt = document.getElementById("spendingLt").value;
-			primaryApprover = document.getElementById("primaryApprover").value;
-			submitOrderChkValue = document.getElementById("OrderApprovalFlag").value;
+			if(document.getElementById("spendingLt")!=null){
+				spendingLt = document.getElementById("spendingLt").value;
+			}
+			if(document.getElementById("primaryApprover")!=null){
+				primaryApprover = document.getElementById("primaryApprover").value;
+			}
 			
-		if((primaryApprover == "" || primaryApprover == null) && submitOrderChkValue){
+			if(document.getElementById("OrderApprovalFlag")!=null){
+			submitOrderChkValue = document.getElementById("OrderApprovalFlag").checked;
+			}
+			if((primaryApprover == "" || primaryApprover == null) && submitOrderChkValue){
+			document.getElementById("errorMsgFor_spendingLtSubmitOrder").style.display = "none";
 			document.getElementById("errorMsgFor_approverSubmitOrder").style.display = "inline";
 			return false;
-		}	
-		if(spendingLt !="" && submitOrderChkValue){
+			}	
+			if((spendingLt !=""||spendingLt!=null) && submitOrderChkValue){
 			document.getElementById("errorMsgFor_spendingLtSubmitOrder").style.display = "inline";
 			return false;
-		}	
+			}	
 		
 		//start for XBT 298
 		var waitMsg = Ext.Msg.wait("Processing...");
@@ -1151,7 +1159,8 @@ function funDivOpenClose(val1)
 	        }
 	        return true;
 		}
-		</script>
+		
+	</script>
 
 <style type="text/css">
 .checkboxTree input[type=checkbox] {
@@ -1202,7 +1211,7 @@ a.underlink:hover { text-decoration: underline !important; }
 <s:set name='stockCheckWebservice'
 	value='#_action.getStockCheckWebservice()' />
 <s:set name='estimator' value='#_action.getEstimator()' />
-<s:set name='OrderApprovalFlag' value='#_action.getOrderApprovalFlag()' />
+<s:set name='OrderApprovalFlag' value='#_action.isOrderFlagForApproval()' />
 <s:set name='customer' value='customerelement' />
 
 <!-- Customer Additional Address -->
@@ -2563,7 +2572,7 @@ a.underlink:hover { text-decoration: underline !important; }
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approvers" style="display : none"/>Please select an approver.</div></td></tr>
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_currency" style="display : none"/>Please select a currency.</div></td></tr>
 		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_spendingLtSubmitOrder" style="display : none"/>All orders will be submitted for approval. Remove the spending limit and try again.</div></td></tr>
-		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approverSubmitOrder" style="display : none"/>Please select an Primary approver.</div></td></tr>
+		<tr><td valign="top" colspan="4" width="100%" class="no-border-right-user"><div class="error" id="errorMsgFor_approverSubmitOrder" style="display : none"/>Please select a Primary approver.</div></td></tr>
 		
 		<tr>
 			<td width="100%" colspan="2" valign="top"
