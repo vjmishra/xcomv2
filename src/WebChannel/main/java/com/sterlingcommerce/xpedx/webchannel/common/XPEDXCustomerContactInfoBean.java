@@ -265,15 +265,19 @@ public class XPEDXCustomerContactInfoBean {
 	public void setAddEmailID(String addEmailID) {
 		this.addEmailID = addEmailID;
 	}
+	
 	public String getSpendingLimit() {
 		return spendingLimit;
 	}
+	
 	public void setSpendingLimit(String spendingLimit) {
 		this.spendingLimit = spendingLimit;
 	}
-public String getOrderApproveFlag() {
+	
+	public String getOrderApproveFlag() {
 		return orderApproveFlag;
 	}
+	
 	public void setOrderApproveFlag(String orderApproveFlag) {
 		this.orderApproveFlag = orderApproveFlag;
 	}
