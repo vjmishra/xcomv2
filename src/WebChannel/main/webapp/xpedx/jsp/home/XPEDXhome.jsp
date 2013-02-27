@@ -68,33 +68,105 @@
 			 	<s:action name="login" executeResult="true" namespace="/common" />
 		  </div>
 		</div>
-		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 		
+		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+		<div id="browser-not-supported" style=" display:none">
+		<br/>
+				&nbsp;&nbsp;xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>
+				&nbsp;&nbsp;Firefox, Safari. For more information please review the help document. <br/>
+				&nbsp;&nbsp;Upgrading your browser is quick and easy, click here to get the latest versions <br/>
+				&nbsp;&nbsp;(note: Safari can be upgraded via the Apple App Store): <br/><br/><br/><br/>
+				<table width="100%">
+					<tr>
+						<td valign="top" style="line-height: 20px;" width="45%">
+							<a href='http://windows.microsoft.com/en-US/internet-explorer/download-ie'>
+							<img src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/Internet_Explorer_7_Logo<s:property value='#wcUtil.xpedxBuildKey' />.png'  style="position: relative; text-align:right; line-height: 20px;line-height: 20px;padding-left:150px;"  />
+							</a>
+						</td>
+						<td valign="top" style="line-height: 20px;" width="10%"></td>
+						<td valign="top" style="line-height: 20px;" width="45%">
+							<a href='http://www.mozilla.org/en-US/'>
+							<img src='<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/mozilla_firefox<s:property value='#wcUtil.xpedxBuildKey' />.jpg' style="position: relative;text-align:left; line-height: 20px;padding-right:150px;"/>
+							</a>
+						</td>
+							
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;&nbsp;</td>
+					</tr>
+					<tr>
+						<td valign="top" width="46%">&nbsp;&nbsp;</td>
+						<td style="float:center" valign="top" width="8%"><a style="float:center;" href="#" onclick='javascript:browserNotSupportedWin.close();'
+								class="green-ui-btn"><span>OK</span></a>
+						</td>
+						<td width="46%">&nbsp;&nbsp;</td>
+					</tr>
+				</table>
+		</div>
 		<script type="text/javascript">
-		function browserSupport(){
+		var browserNotSupportedWin = new Ext.Window({
+			autoScroll: false,
+		    closeAction: 'hide',
+		    cloaseable: false,
+		    contentEl: 'browser-not-supported',
+		    hidden: true,
+		    id: 'browser-not-supportedBox',
+		    modal: true,
+		    width: 450,
+		    height: 250,
+		    resizable   : false,
+		    draggable   : false,
+		    closable    : false,
+		    shadow: 'drop',
+		    baseCls: 'swc-ext',
+		    scrolling : 'no',
+		    shadowOffset: 10,
+		    border: 10,
+		    bodyStyle : 'background-color: white'
+		  	}); 	
 
+		function browserSupport(){
+			
 		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		   var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
-			 if (ieversion < 7)
-			  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 	
-			}
+		   var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
+			 if (ieversion < 8)
+			 {
+				 if(document.documentMode != 8)
+				 {
+					 document.getElementById("browser-not-supported").style.display = "block";
+					 browserNotSupportedWin.show();
+				 }
+			 }
+			  //alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html");
+				 
+		}
 
 		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		    var NavigatorVersion=new Number(RegExp.$1)
-		         alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
+		    var NavigatorVersion=new Number(RegExp.$1);		    
+		//         alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
+		    	document.getElementById("browser-not-supported").style.display = "block";
+				browserNotSupportedWin.show();
 		}
 
 		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
-		    var ffversion=new Number(RegExp.$1)
-			 if(ffversion < 3.4)
-		 	    alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
+		    var ffversion=new Number(RegExp.$1);
+			 if(ffversion < 3.7)
+			 {
+				document.getElementById("browser-not-supported").style.display = "block";
+				browserNotSupportedWin.show();
+			 }
+		 	  //  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
 		 }
 
 		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
-		    var str= navigator.appVersion;
-			var str1= str.substring(89,90);
-			if(str1 < 4)
-		  	  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
+		var useragent = navigator.userAgent;
+		var version = new Number(useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6));
+			if(version < 534)
+			{
+				document.getElementById("browser-not-supported").style.display = "block";
+				browserNotSupportedWin.show();
+			}
+		  	   
 		 }
 		
 		/* Commented For Jira 3646 
@@ -103,7 +175,8 @@
 		} */
 		
 		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		     alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
+			document.getElementById("browser-not-supported").style.display = "block";
+			browserNotSupportedWin.show(); 
 		}
 
 		}
@@ -111,7 +184,9 @@
 		
 		</script>
 <script type="text/javascript">
+Ext.onReady(function(){		
 		browserSupport();
+});
 		</script>	
 </s:if>
 <!-- RUgrani BEGIN: Logged in User Home page -->
