@@ -1,16 +1,16 @@
-#!/bin/sh^M
+#!/bin/sh
 
-################################################################^M
-#Copy this script to your path from where you want to search for all the files and directories in subdirectories recursively.^M
-# JIRA XNGTP-69 - C.Ctr: Staging, Hyperlinks - Custom Links fail to activate until 2nd click^M
-# Added .java files to be processed by this script. ^M
-#################################################################^M
+################################################################
+#Copy this script to your path from where you want to search for all the files and directories in subdirectories recursively.
+# JIRA XNGTP-69 - C.Ctr: Staging, Hyperlinks - Custom Links fail to activate until 2nd click
+# Added .java files to be processed by this script.
+#################################################################
 
 recur_dos2unix()
 {
 
 #
-# read all file and directory names in the current directory^M
+# read all file and directory names in the current directory
 #
 for dirname in `ls`
 do
