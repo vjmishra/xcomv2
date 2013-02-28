@@ -149,10 +149,10 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 					// To Create Chained or Fulfillment Orders Based On Order Line Type.
 					if(extnOrderLineType.equalsIgnoreCase(XPXLiterals.STOCK)) {
 						// Stock Type Line.
-						if(!orderLineType.equalsIgnoreCase("M"))
-						{
+						if(!orderLineType.equalsIgnoreCase("M")) {
 							isOrderLineStockType=true; // We are considering Minimum order charge line as a stock type line. Check the code in XPXInvokeOrderPlaceActions.java
 						}
+						
 						orderLineElementDoc = createorderLineDoc(orderLineElementContents, orderElementContents);
 						stockExtnOrderSubTotal +=extnOrderLinetotatalVal;
 						stockOrderList.add(orderLineElementDoc);
@@ -193,11 +193,17 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 		if(directOrderList.size() > 0) {
 			
 			Element orderExtn = (Element)orderElementContents.get(XPXLiterals.ORDER_EXTN);
-			setOrderExtnFields(orderExtn ,isDiscountApplied,directExtnOrderSubTotal );
+			setOrderExtnFields(orderExtn, isDiscountApplied, directExtnOrderSubTotal);
 			isDiscountApplied=true;
 			orderExtn.setAttribute("ExtnLegacyOrderType", "D");
-			if(stockOrderList.size() > 0 && !isOrderLineStockType)
-				directOrderList.add(stockOrderList);
+			
+			if(stockOrderList.size() > 0 && !isOrderLineStockType) {
+				for(int i=0; i<stockOrderList.size(); i++) {
+					Document minOrderChargeLineElementDoc = (Document)stockOrderList.get(i);
+					directOrderList.add(minOrderChargeLineElementDoc);
+				}
+			}
+			
 			Document chainedOrderInput_DIRECT = createChainedOrderInput(directOrderList,orderElementContents,XPXLiterals.DIRECT_ORDER,orderLineShipNode,orderExtn);
 			directOrderCreationOutputDoc = api.executeFlow(env,XPXLiterals.LEGACY_ORDER_CREATION_SERVICE, chainedOrderInput_DIRECT);
 		}		
@@ -352,6 +358,7 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 				Document orderLineDoc = (Document)thirdPartyList.get(i);			
 				importElement(orderLinesElement,orderLineDoc.getDocumentElement());			
 			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
