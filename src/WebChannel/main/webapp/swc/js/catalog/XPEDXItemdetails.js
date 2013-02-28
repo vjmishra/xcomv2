@@ -129,7 +129,7 @@ function setPandAData() {
 		itemAvailDiv.style.display = "none"; 
 		qty.style.borderColor="";
 	}
-	else if(orderMultipleQty != null && orderMultipleQty != 0)
+	else if(orderMultipleQty != null && orderMultipleQty != 0 && sourceOrderMulError.innerHTML.indexOf('Item has been added to cart')==-1 )
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
