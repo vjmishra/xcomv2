@@ -709,6 +709,7 @@ function funDivOpenClose(val1)
 			if(spendingLimit!="" && spendingLimit != null && (document.getElementById("primaryApprover") !=null)){
 				var primaryApprover = document.getElementById("primaryApprover").value;
 				var alternateApprover = '';
+				document.getElementById("errorMsgFor_spendingLtSubmitOrder").style.display = "none";
 				if(document.getElementById("alternateApprover") != undefined || document.getElementById("alternateApprover") != null){
 					alternateApprover = document.getElementById("alternateApprover").value;	
 				}
