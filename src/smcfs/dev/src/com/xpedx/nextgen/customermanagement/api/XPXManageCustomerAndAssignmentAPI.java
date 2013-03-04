@@ -86,6 +86,11 @@ private static YFCLogCategory log;
 		List<YFS_Customer> customerList=getCustomer(env,customerAssignmentNodeList);
 		String userId="";
 		String organizationCode="";
+		Map<String,YFS_Customer> customerIDMap=new HashMap<String,YFS_Customer>();
+		for( YFS_Customer customers:customerList)
+		{
+			customerIDMap.put(customers.getCustomer_ID(), customers);
+		}
 		Map<String,String>  assignmentKeyMap=null;
 		for(int i=0;i<customerAssignmentNodeList.getLength();i++)
 		{
@@ -95,7 +100,7 @@ private static YFCLogCategory log;
 				//YFS_Customer_Assignment ycAssignment= YFS_Customer_Assignment.newInstance();
 				Element customerAssignmentElem=(Element)customerAssignmentNodeList.item(i);
 				String operation=customerAssignmentElem.getAttribute("Operation");
-				YFS_Customer customer=customerList.get(i);
+				YFS_Customer customer=customerIDMap.get(customerAssignmentElem.getAttribute("CustomerID"));
 				if(customer != null)
 				{
 					ycAssignment.setCustomer(customer);
