@@ -981,7 +981,7 @@ IYRCComposite {
 		gridDataLblMsg.horizontalAlignment = SWT.BEGINNING;
 		gridDataLblMsg.grabExcessHorizontalSpace = true;
 		gridDataLblMsg.verticalAlignment = SWT.CENTER;
-		gridDataLblMsg.widthHint = 310;
+		gridDataLblMsg.widthHint = 330;
 		gridDataLblMsg.horizontalSpan=3;
 
 		chkCustLineAcct = new Button(pnlCustomerProfileInfo, SWT.CHECK);
@@ -1060,21 +1060,13 @@ IYRCComposite {
 		lblCustomerLinePONumber.setText("Customer Line PO#");
 		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
 		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
-
 		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,SWT.NONE);
 		txtCustomerLinePONumberMsg.setText("");
 		txtCustomerLinePONumberMsg.setLayoutData(gridDataLbl);
 		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
 		txtCustomerLinePONumberMsg.setVisible(false);
 		addTab(gridDataDummy,"dummyCustomerLinePONumber");
-
-		Label lblCustomerFieldMsg = new Label(pnlCustomerProfileInfo, SWT.WRAP);
-		gridDataLblMsg = new GridData();
-		gridDataLblMsg.horizontalAlignment = SWT.BEGINNING;
-		gridDataLblMsg.grabExcessHorizontalSpace = true;
-		gridDataLblMsg.verticalAlignment = SWT.CENTER;
-		gridDataLblMsg.widthHint = 330;
-		gridDataLblMsg.horizontalSpan=3;
+		lblCustomerFieldMsg = new Label(pnlCustomerProfileInfo, SWT.WRAP);
 		lblCustomerFieldMsg.setText("If checked, the customer fields on this tab display but " +
 				"are not required. Use the Manage Customer Rules tab" +
 				" on the Customer or Bill-To level to make the customer " +
@@ -1082,8 +1074,6 @@ IYRCComposite {
 		"regardless of the settings on this tab.");
 		lblCustomerFieldMsg.setLayoutData(gridDataLblMsg);
 		lblCustomerFieldMsg.setData("name", "lblCustomerFieldMsg");
-		addTab(gridDataDummy,"dummyCustomerFieldMessage1");
-
 
 		chkCanRequestSample = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCanRequestSample.setText("");
@@ -2378,7 +2368,7 @@ IYRCComposite {
 			Control[]elements= {lblECSR,comboECSR,lblECSR2,comboECSR2,lblSalesRep1,txtSalesRep1,lblSalesRep2,txtSalesRep2,
 					lblSalesRep3,txtSalesRep3,lblSalesRep4,txtSalesRep4,lblNAICSCode,txtNAICSCode,lblNAICSName,txtNAICSName,
 					lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod"),
-					chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 					lblCustomerEmailAddress,txtCustomerEmailAddress,lblInvoiceEmailId,txtInvoiceEmailId,chkConfirmation,lblConfirmation,
 					txtConfirmation,txtConfirmation,chkCancelled,lblCancelled,txtCancelled,chkBackorder,lblBackorder,txtBackorder,chkInvoiced,lblInvoiced,txtInvoiced
@@ -2398,7 +2388,7 @@ IYRCComposite {
 					lblCustomerClass, txtCustomerClass,fillerLabelMap.get("dummyCustomerClass"),
 					lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
 					lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
-					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
+					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,txtCustomerLinePONumberMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
 			HideControlsList=Arrays.asList(elements);
 
@@ -2434,7 +2424,7 @@ IYRCComposite {
 		else if("S".equalsIgnoreCase(suffixType)){
 			Control[]elements= {
 					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
-					,chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					,chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustomerLinePONumber,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,lblECSR,comboECSR,lblECSR2,comboECSR2,
 					fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod")
 					,chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
@@ -2443,30 +2433,31 @@ IYRCComposite {
 					fillerLabelMap.get("dummyMaxOrderAmount"),lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,fillerLabelMap.get("dummyMinOrderAmount"),lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummySmallOrderFee")
 					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
-					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
+					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
 
 			};
 			HideControlsList=Arrays.asList(elements);
 
 		}
 		else if("B".equalsIgnoreCase(suffixType)){
-			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
 					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
 					lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag")
-					,lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
+					,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
 			HideControlsList=Arrays.asList(elements);
 
 		}
+		
 	}
 	/**function is used to create a list of all available controls **/ 
 	private Control[] allControlList() {
 		return new Control[] {lblECSR,comboECSR,lblECSR2,comboECSR2,lblSalesRep1,txtSalesRep1,lblSalesRep2,txtSalesRep2,
 				lblSalesRep3,txtSalesRep3,lblSalesRep4,txtSalesRep4,lblNAICSCode,txtNAICSCode,lblNAICSName,txtNAICSName,
 				lblInvoiceDistMethod,txtInvoiceDistMethod,
-				chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+				chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 				chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 				lblCustomerEmailAddress,txtCustomerEmailAddress,lblInvoiceEmailId,txtInvoiceEmailId,chkConfirmation,lblConfirmation,
 				txtConfirmation,txtConfirmation,chkCancelled,lblCancelled,txtCancelled,chkBackorder,lblBackorder,txtBackorder,chkInvoiced,lblInvoiced,txtInvoiced
@@ -2480,7 +2471,7 @@ IYRCComposite {
 				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
 				,lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag")
 				,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
-				,lblCustomerLinePONumber,chkCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
+				,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
 				,fillerLabelMap.get("dummyCsr2EmailConfirmationFlag"),fillerLabelMap.get("dummyCsr1EmailConfirmationFlag")
 				,fillerLabelMap.get("dummyCurrencyCode"),lblCurrencyCode,txtCurrencyCode,
 				lblOrderUpdateFlag, chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag")
@@ -2620,5 +2611,4 @@ IYRCComposite {
 		}
 
 	}
-
 }
