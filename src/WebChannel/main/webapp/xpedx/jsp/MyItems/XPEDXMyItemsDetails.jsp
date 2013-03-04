@@ -375,11 +375,7 @@ function showSharedListForm(){
 				for (var j = 0; j < errorItemList.length; j++)
 						{
 						if(errorItemList[j] == itemId){
-							
-							isItemEntitled=false;
-							Ext.Msg.hide();
-		            				myMask.hide();
-							break;
+							isItemEntitled=false;							
 							
 						}	
 						}
@@ -387,37 +383,35 @@ function showSharedListForm(){
 				}
 			
      		var validateOM ; 
-     			if(validateOrderMultiple(true,myItemsKey) == false)
+     		if(validateOrderMultiple(true,myItemsKey) == false)
    			 {
      				validateOM = false;
    			 }
-     			else{
+     		else{
      				validateOM = true;
      			}
-     			if(isItemEntitled) {
-     		if(itemId == null || itemId =="") {
-    			alert("Item ID cannot be null to make a PnA call");
-    		}
-    		var url = document.getElementById("checkAvailabilityURLHidden");
-    		var qty = document.getElementById('QTY_'+myItemsKey).value;
+     		if(isItemEntitled){
+     			if(itemId == null || itemId =="") {
+    				alert("Item ID cannot be null to make a PnA call");
+    			}
+    			var url = document.getElementById("checkAvailabilityURLHidden");
+    			var qty = document.getElementById('QTY_'+myItemsKey).value;
     		
     		//XB 214 BR4
-    		if(url != null && validateOM == true) {
-    			if(qty == ""){
-    				 qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
-            	     var uom = document.getElementById("baseUOMCode_"+myItemsKey).value;
-    			}
-    			else{
-        		 qty = document.getElementById('QTY_'+myItemsKey).value;
-        		var uom = document.getElementById('UOM_'+myItemsKey).value;
-    			}
-    			displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
-    		}   
-    		else{
-    			Ext.Msg.hide();
-    			myMask.hide();
-    		}
-     	}
+    			if(url != null && validateOM == true) {
+    				if(qty == ""){
+    				 	qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
+            	     			var uom = document.getElementById("baseUOMCode_"+myItemsKey).value;
+    				}
+    				else{
+        		 		qty = document.getElementById('QTY_'+myItemsKey).value;
+        		 		var uom = document.getElementById('UOM_'+myItemsKey).value;
+    				}
+    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
+    			}   
+     		}
+        		Ext.Msg.hide();
+        		myMask.hide();
      }
 		
 		function importItems(msgImportMyItemsError){
@@ -1452,6 +1446,8 @@ function showSharedListForm(){
 			var arrItemID = new Array();
 			var arrOrdMul = new Array();
 			var baseUOM = new Array();
+			var checkItemKeys = new Array();
+			
 			if(isOnlyOneItem != undefined && isOnlyOneItem == true)
 			{	
 				arrQty[0]=document.getElementById("qtys_"+listId);
@@ -1468,6 +1464,7 @@ function showSharedListForm(){
 				arrOrdMul =  document.getElementsByName("orderLineOrderMultiple");
 				baseUOM = document.getElementsByName("baseUOM");
 			}
+			checkItemKeys = document.getElementsByName("checkItemKeys");
 			//added for XB-224
 			var erroMsg = '<s:property value='erroMsg' />';
 			var errorflag=true;
@@ -1475,7 +1472,8 @@ function showSharedListForm(){
 			var uomCheck = false ;
 			var count=0;
 			for(var i = 0; i < arrItemID.length; i++)
-			{
+			{	
+			if(isOnlyOneItem || checkItemKeys[i].checked){	
 				divId='errorDiv_'+	arrQty[i].id;
 				var errorMsgFlag = false;
 				var divVal=document.getElementById(divId);
@@ -1496,7 +1494,12 @@ function showSharedListForm(){
 								divVal.setAttribute("class", "error");
 								divVal.style.display = 'block';
 								errorMsgFlag = true;
-								errorflag= false;
+								if(isOnlyOneItem){
+									errorflag= false;
+								}
+								else{
+									errorflag= true;
+								}
 								isAddToCart=false;
 							}
 						}
@@ -1604,16 +1607,15 @@ function showSharedListForm(){
 							divVal.style.display = 'block';
 							
 							}
-						
-						
-					}				
+						}	
+					}
 				}				
 			}
 			if(uomCheck == true)
 			{
 				errorflag= false;
 			}	
-			if(isQuantityZero == true || count > 0)
+			if((isQuantityZero == true || count > 0) && !isOnlyOneItem)
 			{
 				document.getElementById("errorMsgTop").innerHTML = "An error has occurred with one or more of your items.  Please review any error messages on the lines below." ;
 	            document.getElementById("errorMsgTop").style.display = "inline";
@@ -1623,7 +1625,7 @@ function showSharedListForm(){
 				//errorflag= false;
 				//Ext.Msg.hide();
             	//myMask.hide();
-			}
+			}		
 			return errorflag;
 		}
 		
@@ -1956,7 +1958,7 @@ function showSharedListForm(){
 		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
-		    if(validateOMForMultipleItems == true){
+		    // if(validateOMForMultipleItems == true){
 			if (formItemIds){
 				var erroMsg = '<s:property value='erroMsg' />';
 				formItemIds.action = "<s:property value='%{testData}' escape='false'/>";				
@@ -2051,8 +2053,6 @@ function showSharedListForm(){
 				          	  myMask.hide();
 						  alert("Your request could not be completed at this time, please try again.");	                   }
 	               });     
-				
-			}
 		}if(cnt <=0 ){
 				
 				//alert("Please select at least one item for Price Check : " + cnt );
