@@ -244,7 +244,7 @@ var myMask;
 				            sourceOrderMulError.style.display = "inline"; 
 				            sourceOrderMulError.setAttribute("class", "error");
 				            availabilityRow.style.display = "none"; 
-				            qty.style.borderColor="#FF0000";			            
+				            qty.style.borderColor="";			            
 				        }
 		            	else if(omError == 'true')
 		            	{	
