@@ -118,7 +118,7 @@ function setPandAData() {
 		sourceOrderMulError.setAttribute("class", "error");
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
-		qty.style.borderColor="#FF0000";
+		qty.style.borderColor="";
 	}
 	else if(omError == 'true' && orderMultipleQty != 0)
 	{
