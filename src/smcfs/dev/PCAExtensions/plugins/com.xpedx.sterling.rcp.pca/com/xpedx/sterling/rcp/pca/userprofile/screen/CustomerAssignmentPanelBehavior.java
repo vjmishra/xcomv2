@@ -266,8 +266,12 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		multiAPIDocElement = YRCXmlUtils.createDocument("ManageCustomerAndAssignment").getDocumentElement();
 		
 		}
-			multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
-		Element custAssignmentele= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
+		multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
+		Element custAssignmentele=(Element)multiAPIDocElement.getElementsByTagName("CustomerAssignmentList").item(0);
+		if(custAssignmentele == null)
+		{
+			custAssignmentele= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
+		}
 		if(!action)
 		saveChanges(wList, "Delete",custAssignmentele);
 		else
