@@ -22,6 +22,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
@@ -78,21 +79,11 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		   // To Retrieve ShipTo Customer Information.
 		   if (webOrder) {
 			   setOPOrderDetailsFromEnv(env,rootElem);
+			   removeSpecialCharacters(env,rootElem);
 			   // Commenting the code as extn Atrributes needs to be analyzed before picking it up from txn object.
 			   // getCustomerProfileDetailsDoc = getCustomerProfileDocFromEnv(env);
 		   } else {
-			   YFCElement instructionsElem = rootElem.getChildElement("Instructions");
-			   if (instructionsElem != null) {				   
-				   YFCElement instructionElem = instructionsElem.getChildElement("Instruction");
-				   if(instructionElem!=null)
-				   {
-					   String hdrComments = instructionElem.getAttribute("InstructionText");
-					   if(hdrComments != null && (hdrComments.indexOf("\n") != -1 || hdrComments.indexOf("\r\n") != -1)) {
-						   hdrComments = hdrComments.replaceAll("\n|\r\n", " ");
-						   instructionElem.setAttribute("InstructionText", hdrComments);
-					   }
-				   }
-			   }
+			   removeSpecialCharacters(env,rootElem);
 		   }  
 		   
 		   if (getCustomerProfileDetailsDoc == null) {
@@ -145,6 +136,28 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		return inputXML;
 	}
 	
+	private void removeSpecialCharacters(YFSEnvironment env, YFCElement rootElem) {
+		// TODO Auto-generated method stub
+		int instructionListSize = 0;
+		YFCNodeList<YFCElement> instructionsList = rootElem.getElementsByTagName("Instruction");
+		if (instructionsList != null && instructionsList.getLength() > 0) {
+		instructionListSize = instructionsList.getLength();
+		}
+	    for (int i=0;i<instructionListSize;i++) {
+	    	YFCElement instructionElement = instructionsList.item(i);     
+	        if (instructionElement.hasAttribute("InstructionType")) {
+	        	String instructionType = instructionElement.getAttribute("InstructionType");           
+	        	if(!YFCObject.isNull(instructionType) && (instructionType.equalsIgnoreCase("HEADER") || instructionType.equalsIgnoreCase("LINE"))) {
+	        		String comments = instructionElement.getAttribute("InstructionText");
+	        		if(comments != null && (comments.indexOf("\n") != -1 || comments.indexOf("\r\n") != -1)) {
+	        			comments = comments.replaceAll("\n|\r\n", " ");
+	        			instructionElement.setAttribute("InstructionText", comments);
+	        		}
+	        	}
+	        }
+	    }
+	}
+
 	private Document createGetCustomerListInput(YFSEnvironment env, String buyerOrgCode) throws Exception {
 		
 		YFCDocument getCustomerDetailsInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);
@@ -691,18 +704,12 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
 					if (!YFCObject.isNull(headerComments) && rootElem.getChildElement("Instructions") == null) {
-						if(headerComments.indexOf("\n")!=-1 || headerComments.indexOf("\r\n")!=-1){
-							headerComments = headerComments.replaceAll("\n|\r\n", " ");
-						}
 						YFCElement instructionsElem = rootElem.createChild("Instructions");
 						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
 						instructionElem.setAttribute("InstructionType", "HEADER");
 						instructionElem.setAttribute("InstructionText", headerComments);
 					} else if (!YFCObject.isNull(headerComments)) {
 						// Instructions Element Is Already Created In The Document.
-						if(headerComments.indexOf("\n")!=-1 || headerComments.indexOf("\r\n")!=-1){
-							headerComments = headerComments.replaceAll("\n|\r\n", " ");
-						}
 						YFCElement instructionsElem = rootElem.getChildElement("Instructions");
 						YFCElement instructionElem = instructionsElem.createChild("Instruction");	
 						instructionElem.setAttribute("InstructionType", "HEADER");
