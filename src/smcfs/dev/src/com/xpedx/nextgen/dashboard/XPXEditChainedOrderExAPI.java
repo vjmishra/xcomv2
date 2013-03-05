@@ -748,7 +748,13 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 								String instType = instructionEle.getAttribute("InstructionType");
 								if(!YFCObject.isNull(instType) && !YFCObject.isVoid(instType)) {
 									if(instType.equalsIgnoreCase("LINE")) {
-							
+										if(lpc.equalsIgnoreCase("A")){
+										String comments = instructionEle.getAttribute("InstructionText");
+						        		if(comments != null && (comments.indexOf("\n") != -1 || comments.indexOf("\r\n") != -1)) {
+						        			comments = comments.replaceAll("\n|\r\n", " ");
+						        			instructionEle.setAttribute("InstructionText", comments);
+						        			}
+										}
 										chngfOrdExtnEle.setAttribute("ExtnWebHoldFlag", "Y");
 										chngfOrdExtnEle.setAttribute("ExtnWebHoldReason", "Edit Order Message Had Order/Line Instructions of InstructionType-HEADER/LINE!");
 										if(log.isDebugEnabled()){
