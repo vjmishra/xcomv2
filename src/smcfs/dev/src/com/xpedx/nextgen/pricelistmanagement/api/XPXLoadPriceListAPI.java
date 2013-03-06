@@ -31,6 +31,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 	
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
+	private String brokenUOM = "M_BKN";
 
 	String getPricelistLineListTemplate = "global/template/api/getPricelistLineList.XPXCreatePriceListService.xml";
 	static {
@@ -92,7 +93,8 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 					// Means Item exists in YFS_ITEM because if it existed then UnitOfMeasure value would have been populated
 					
 					//Make sure that all the tier brackets have the same UOM (Else log it in CENT tool) - Jira#2637
-					boolean isAllTierUOMSame = checkTierUOMs(priceBookElement,env);
+					//boolean isAllTierUOMSame = checkTierUOMs(priceBookElement,env);
+					boolean isAllTierUOMSame = true;
 					if(!isAllTierUOMSame){
 						//do not create the price list record.ignore it.
 						log.error("Tier UOM mismatch between different tiers blocks.Pricebook record for LegacyProductCode = "+ itemId+" will be ignored.");
@@ -204,6 +206,10 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 				lastTierUOM = currentTierUOM;
 				continue;
 			}else{
+				if(lastTierUOM.equals(brokenUOM) || currentTierUOM.equals(brokenUOM)){
+					lastTierUOM = currentTierUOM;
+					continue;
+				}
 				//log it in the CENT and return false;
 				isAllTierUOMSame =  false;
 				log.error("Tier UOM is not matching between different tiers in a pricebook.Check CENT for more details. LegacyProductCode = "+ itemId);
