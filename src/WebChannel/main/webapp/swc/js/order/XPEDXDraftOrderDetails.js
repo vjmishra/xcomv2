@@ -19,7 +19,11 @@ function checkOut()
 		return;
 	}
 	//JIRA 3488 End
-	if(validateOrderMultiple() == false)
+	/*if(validateOrderMultiple() == false)
+	{
+		return;
+	}*/
+	if(validateQty() == false)
 	{
 		return;
 	}
@@ -40,6 +44,54 @@ function checkOut()
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
     document.OrderDetailsForm.action = document.getElementById('checkoutURL');
     document.OrderDetailsForm.submit();
+}
+function validateQty(){
+	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
+	var retVal=true;
+	if(orderLinesCount==1){
+		var arrQty ;		
+		var arrItemID ;		
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		
+		var divId='errorDiv_'+ arrQty.id;
+		var divIdError=document.getElementById(divId);
+		var qtyElement = document.getElementById(arrQty.id);
+		
+		if(arrQty.value == '' || arrQty.value ==0)
+		{		
+			if(divIdError != null){
+				divIdError.innerHTML='Please enter a valid quantity and try again.';
+				divIdError.setAttribute("class", "error");
+			}
+			retVal=false; 
+		}
+	}else{//if more than one item
+		var arrQty = new Array();		
+		var arrItemID = new Array();
+		
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		
+		for(var i = 0; i < arrItemID.length; i++)
+		{			
+			var divId='errorDiv_'+ arrQty[i].id;
+			var divIdError=document.getElementById(divId);
+			var qtyElement = document.getElementById(arrQty[i].id);
+			if(arrQty[i].value == '' || arrQty[i].value ==0)
+			{		
+				if(divIdError != null){
+					divIdError.innerHTML='Please enter a valid quantity and try again.';
+					divIdError.setAttribute("class", "error");
+				}
+				retVal=false;			
+			}else
+			{
+				qtyElement.style.borderColor = "";
+			} 
+		}
+	}//end of else
+	return retVal;
 }
 
 function addProductsToOrder()
@@ -205,7 +257,7 @@ function update()
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
 	if(orderLinesCount > 0)
 	{
-		if(validateOrderMultiple() == false)
+		if(validateQty() == false)
 		{
 			return;
 		}
