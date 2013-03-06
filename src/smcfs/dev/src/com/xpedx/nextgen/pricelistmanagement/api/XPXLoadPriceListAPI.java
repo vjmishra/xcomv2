@@ -386,10 +386,11 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
             */
             
             //Begin: Jira#2637
-            if (fromQty != null && fromQty.trim().length() > 0 && Integer.parseInt(fromQty) <= 1){
+            //commented to test XB-562
+            /*if (fromQty != null && fromQty.trim().length() > 0 && Integer.parseInt(fromQty) <= 1){
             	log.warn("The tier block for LegacyProductCode "+legacyProductCode+" starts with qty 1. Ignored this tier block.");
             	continue;
-            }
+            }*/
             //End: Jira#2637
             
             pricelistLineQuantityTier.setAttribute(XPXLiterals.A_FROM_QUANTITY, fromQty);
