@@ -491,7 +491,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 /*Added for performance issue */
 	public  void getCatTwoDescFromItemIdForpath(Element categoryList,String path) {
 		String result = null;
-		categoryPath=path;
 		StringBuilder cat = new StringBuilder();
 		String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
 		if(path != null && path.trim().length()>0 && categoryList != null  )
@@ -2867,15 +2866,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 				return searchTerm.toString();
 			}
 			//End JIRA XBT-319
-			
-	//Added method to convert adjuggler to an Ajax call
-	public String getAddjugglerPage	()
-	{
-		categoryShortDescription=XPEDXWCUtils.getCatTwoDescFromItemIdForpath(firstItem,wcContext.getStorefrontId(),categoryDepth);
-		System.out.println(" categoryShortDescription = ************* "+categoryShortDescription);
-		return SUCCESS;
-	}
-	//adjuggler method end
 	
 	/**
 	 * @return the pnaItemId
