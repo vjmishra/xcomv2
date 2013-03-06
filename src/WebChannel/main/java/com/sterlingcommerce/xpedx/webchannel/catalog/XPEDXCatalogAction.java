@@ -35,6 +35,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
+import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.catalog.CatalogAction;
 import com.sterlingcommerce.webchannel.common.Breadcrumb;
 import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
@@ -96,6 +97,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			  "that", "the", "their", "then", "there", "these",
 			 "they", "this", "to", "was", "will", "with"
 };
+
 	
 	public String getSearchString() {
 		return searchString;
@@ -490,56 +492,106 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 /*Added for performance issue */
 	public  void getCatTwoDescFromItemIdForpath(Element categoryList,String path) {
-		String result = null;
-		StringBuilder cat = new StringBuilder();
-		String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
-		if(path != null && path.trim().length()>0 && categoryList != null  )
-		{
-			StringTokenizer st = new StringTokenizer(path, "/");
-			if(st.hasMoreTokens())
-			{
-				cat.append("/").append(st.nextToken());
-				if(st.hasMoreTokens())
-				{
-					cat.append("/").append(st.nextToken());
-					if(st.hasMoreTokens())
-						cat.append("/").append(st.nextToken());
-				}
-			}
-			try
-			{
-				
-				ArrayList<Element> categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category");
-				if(categoryElements != null)
-				categoryElements.addAll(SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category"));
-				else
-					categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category");
-				for(Element catgegory: categoryElements)
-				{
-					String shortDescription=catgegory.getAttribute("ShortDescription");
-					String categoryPath=catgegory.getAttribute("CategoryPath");
-					if(categoryPath != null && categoryPath.equals(cat.toString()))
-					{
-						result = adjugglerKeywordPrefix + shortDescription;
-						break;
-					}
-				}
-				categoryShortDescription = XPEDXWCUtils.sanitizeAJKeywords(result);
-			}
-			catch(Exception e)
-			{
-				log.error("Error while getting ShortDescreption for Adjuggler "+e.getMessage());
-			}
-		}
-		// Added For XBT-253
-		if(categoryShortDescription == null || categoryShortDescription.equals("")){
-			if(firstItemCategoryShortDescription !=null && firstItemCategoryShortDescription.length() >0)
-				categoryShortDescription=adjugglerKeywordPrefix + firstItemCategoryShortDescription;
-			else
-				categoryShortDescription= adjugglerKeywordPrefix + (String)XPEDXWCUtils.getObjectFromCache("defaultCategoryDesc");
-			XPEDXWCUtils.sanitizeAJKeywords(result);
-		}
-	}
+            categoryPath=path;
+            StringBuilder cat = new StringBuilder();
+            String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
+            String categoryID="";
+            //getting exact cat2 path and category id  from the actual path
+            if(path != null && path.trim().length()>0 && categoryList != null  )
+            {
+                  StringTokenizer st = new StringTokenizer(path, "/");
+                  if(st.hasMoreTokens())
+                  {
+                        cat.append("/").append(st.nextToken());
+                        if(st.hasMoreTokens())
+                        {
+                              cat.append("/").append(st.nextToken());
+                              if(st.hasMoreTokens())
+                              {
+                                    categoryID=st.nextToken();
+                                    cat.append("/").append(categoryID);
+                              }
+                        }
+                  }
+                  try
+                  {
+                        //checking if the cat2 path is already there in cache if yes then get it from there 
+                        ArrayList<Element> categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category");
+                        if(categoryElements != null)
+                        categoryElements.addAll(SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category"));
+                        else
+                              categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category");
+                        for(Element catgegory: categoryElements)
+                        {
+                              String shortDescription=catgegory.getAttribute("ShortDescription");
+                              String categoryPath=catgegory.getAttribute("CategoryPath");
+                              if(categoryPath != null && categoryPath.equals(cat.toString()))
+                              {
+                                    categoryShortDescription = shortDescription;
+                                    break;
+                              }
+                        }
+                  }
+                  catch(Exception e)
+                  {
+                        log.error("Error while getting ShortDescreption for Adjuggler "+e.getMessage());
+                  }
+            }
+            // Added For XBT-253
+            //if category id is not there in caceh then check whether the item is there on cat2 level if yes then get it from there
+            if(categoryShortDescription == null || categoryShortDescription.equals("")){
+                  if(firstItemCategoryShortDescription !=null && firstItemCategoryShortDescription.length() >0)
+                  {
+                        categoryShortDescription= firstItemCategoryShortDescription;
+                  }
+                  else
+                  {
+                        //if category id is not there in cacche and first item is also not at cat2 level , do the api call for getCategoryList which will give shortdescription
+                        categoryShortDescription =getCategoryShortDescription(categoryID);
+                        if(categoryShortDescription == null)
+                              categoryShortDescription=(String)XPEDXWCUtils.getObjectFromCache("defaultCategoryDesc");
+                  }
+            }
+            categoryShortDescription= XPEDXWCUtils.sanitizeAJKeywords(adjugglerKeywordPrefix+categoryShortDescription);
+      }
+
+      /*
+      * This method will do a API call getCategoryList based on given category ID
+      * @param categoryID
+      * return shortDescriotion 
+       */
+      private String getCategoryShortDescription(String categoryID)
+      {
+            YFCDocument getCategoryListInXML = YFCDocument
+            .createDocument("Category");
+            
+            YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
+            categoryLstEle.setAttribute("CategoryID", categoryID);
+            categoryLstEle.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+
+            
+            /*Input : <Category CategoryID="300131"  OrganizationCode="xpedx"></Category>
+            * 
+             * Output : <CategoryList ><Category CategoryID="" CategoryKey="" CategoryPath="" Description="" ShortDescription="" ></Category></CategoryList>
+            */
+            YFCDocument template2 = YFCDocument
+            .getDocumentFor("<CategoryList ><Category /></CategoryList>");
+
+            YFCElement categoryListElement = SCUIPlatformUtils.invokeXAPI("getCategoryList",
+                        categoryLstEle, template2.getDocumentElement(), wcContext.getSCUIContext());
+            if(categoryListElement == null )
+            {
+                  return null;
+            }
+            
+            YFCElement catEle = categoryListElement.getFirstChildElement();
+            if(catEle != null )
+            {
+                  return catEle.getAttribute("ShortDescription");
+            }
+            
+            return null;
+      }
 
 	/*
 	 * This method sets the instance varaible "columList" by getting all the
@@ -1307,26 +1359,24 @@ public class XPEDXCatalogAction extends CatalogAction {
 						 Element catagoryElement=(Element)itemList.get(i).getElementsByTagName("Category").item(0);
                         if(catagoryElement != null)
 						{
-						 String  catDescription=catagoryElement.getAttribute("Description");
-                         tempCategoryPath=catagoryElement.getAttribute("CategoryPath");
-                         if(catDescription !=null)
+						 String  catDescription=catagoryElement.getAttribute("ShortDescription");
+
+                         tempCategoryPath=catagoryElement.getAttribute("CategoryPath");                         
+
+                         if(tempCategoryPath !=null)
                          {
-                                 String [] descriptions=catDescription.split("/");
-                                 if(descriptions != null)
-                                 {
-                                	 int length = descriptions.length >2 ? 2 :descriptions.length;
-                                         for(int ind=0;ind<length;ind++)
-                                         {
-                                                 firstItemCategoryShortDescription=descriptions[ind];
+                          String [] descriptions=tempCategoryPath.split("/");
+                          if(descriptions != null)
+                         {
+                          if(descriptions.length ==4)
+                         {
+                          firstItemCategoryShortDescription=catDescription;
+                         }        
+                        }
+                       }
+			          }
 
-                                         }
-
-                                 }
-
-                         }
-						}
-
-					}
+			        }
 					if(itemIDList.contains(itemId))
 						continue ;
 					itemIDList.add(itemId);
