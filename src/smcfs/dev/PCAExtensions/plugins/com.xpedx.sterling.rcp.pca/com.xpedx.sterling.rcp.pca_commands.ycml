@@ -327,8 +327,9 @@
             <command APIName="XPXGetBillToShipToHierarchy" APIType="SERVICE" Name="XPXGetBillToShipToHierarchy" OutputTemplateName="XPXGetBillToShipToHierarchy" URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="XPXGetImmediateChildCustomerListService" APIType="SERVICE" Name="XPXGetImmediateChildCustomerListService" OutputTemplateName="XPXGetImmediateChildCustomerListService"
                 URL="DEFAULT" postCommand="" preCommand=""/>
-            <command APIName="multiApi" APIType="API" Name="multiApi" OutputTemplateName="multiApi" URL="DEFAULT" postCommand="" preCommand=""/>
-            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
+            <command APIName="XPXManageCustomerAndAssignmentAPIService" APIType="SERVICE" Name="XPXManageCustomerAndAssignmentAPIService" OutputTemplateName="multiApi" URL="DEFAULT" inputNamespace=""
+                outputNamespace="" postCommand="" preCommand="" version="ver77"/>
+			<command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
             <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
             <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
                 inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
