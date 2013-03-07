@@ -1,3 +1,4 @@
+
 <project name="Web Channel Cvs Fetch Customization and Build Ear" default="ear">
 
 	<property name="swc" value="swc" />
@@ -7,8 +8,9 @@
 	<property name="target.runtime.dir" value="${cvs.fetch.dir}/${cvs.abstract.module}/buildScripts/build/runtime" />
 	<property name="target.webapp.dir" value="${cvs.fetch.dir}/${cvs.abstract.module}/buildScripts/build/webapp" />
 	<property name="target.webapp.dir.mashups" value="${target.webapp.dir}/mashupxmls/webchannel" />
-	<property name="source.3rdParty.jar.path" value="${cvs.fetch.dir}/${cvs.abstract.module}/buildScripts/jars/reportingjars" />
+        <property name="source.3rdParty.jar.path" value="${cvs.fetch.dir}/${cvs.abstract.module}/buildScripts/jars/reportingjars" />
 	<property name="sic.src.dir" value="" />
+
 
 	<condition property="runtime.present" value="true">
 		<length string="${runtime}" when="greater" length="0" trim="true" />
@@ -20,8 +22,8 @@
 
 	<target name="cvs-fetch" description="Fetches from CVS">
 		<!-- First create the CVS fetch directory -->
-		<mkdir dir="${cvs.fetch.dir}" />
-		<cvs cvsRoot=":pserver:${cvs.user}:${cvs.pass}@${cvs.server}:${cvs.root}" package="${cvs.module.name}" dest="${cvs.fetch.dir}" />
+		<!--mkdir dir="${cvs.fetch.dir}" /-->
+		<!--cvs cvsRoot=":pserver:${cvs.user}:${cvs.pass}@${cvs.server}:${cvs.root}" package="${cvs.module.name}" dest="${cvs.fetch.dir}" /-->
 	</target>
 
 	<target name="-set-runtime-classpath" if="runtime.present">
@@ -30,7 +32,7 @@
 		<loadfile property="version.txt" srcfile="${runtime}/bin/version.txt" />
 		<echo message="Building SWC Customization against Foundation ${version.txt}" />
 		<path id="compile.classpath">
-			<fileset dir="${cvs.fetch.dir}/${cvs.module.name}/buildscripts/jars">
+			<fileset dir="${cvs.fetch.dir}/${cvs.module.name}/buildScripts/jars">
 				<include name="**/*.jar" />
 			</fileset>
 
@@ -84,15 +86,13 @@
 			<fileset dir="${runtime}/jar/COM_Add-in/9.0_9.0">
 				<include name="**/*.jar" />
 			</fileset>
-			
-			<fileset dir="${runtime}/jar/xpedxreportingjars/1.0">
+                        <fileset dir="${runtime}/jar/xpedxreportingjars/1.0">
 				<include name="**/*.jar" />
 			</fileset>
 
 		</path>
 		<pathconvert property="webxml.classpath.ref" refid="compile.classpath" />
 	</target>
-	
 	<target name="install3rdparty" description="Installs all required 3rd party jars" depends="cvs-fetch">
 
 		<exec executable="${runtime}/bin/${install3rdPartyCommand}" failonerror="true">
@@ -132,18 +132,16 @@
 			<arg value="APP"/>
 		</exec> 
 	</target>
-	
-	
 	<target name="-compile" depends="clean, -set-runtime-classpath" description="compile any changed java files">
 		<echo message="-compile" />
 		<mkdir dir="${target.webapp.dir}/temp/WEB-INF/classes" />
-		<javac srcdir="${devhome}/java" destdir="${target.webapp.dir}/temp/WEB-INF/classes" debug="${compile.debug}" classpathref="compile.classpath" source="1.5" target="1.5" />
+		<javac srcdir="${devhome}/java" destdir="${target.webapp.dir}/temp/WEB-INF/classes" debug="true" classpathref="compile.classpath" source="1.5" target="1.5" />
 		<copy overwrite="true" todir="${target.webapp.dir}/temp/WEB-INF/classes">
 			<fileset dir="${resources_dir}">
 				<include name="com/**" />
 				<include name="*.*" />
 			</fileset>
-		</copy>		
+		</copy>
 	</target>
 	<target name="-build-ui-jar" depends="-compile">
 		<echo message="-build-ui-jar ${target.webapp.dir}  " />
@@ -156,7 +154,7 @@
 				<exclude name="com/sterlingcommerce/webchannel/config/**" />
 				<exclude name="com/sterlingcommerce/webchannel/tools/mashup/**" />
 				<exclude name="com/sterlingcommerce/webchannel/build/**" />
-				<exclude name="com/sterlingcommerce/webchannel/xapi/**" />
+				<exclude name="com/sterlingcommerce/webchannel/xapi/**" />				
 			</fileset>
 		</jar>
 		<jar destfile="${target.webapp.dir}/WEB-INF/lib/${cust.module.code}_resourceBundles.jar">
@@ -165,21 +163,26 @@
 			</fileset>
 		</jar>
 	</target>
+
 	<target name="-updwebapp">
 		<echo message="-updwebapp" />
 		<delete dir="${target.webapp.dir}/temp" />
 		<copy overwrite="true" todir="${target.webapp.dir.mashups}/extn/swc" failonerror="false">
 			<fileset dir="${devhome}/webapp/custommashups">
-				<include name="*/**" />
+				<include name="**" />
 			</fileset>
 		</copy>
 		<copy overwrite="true" todir="${target.webapp.dir}">
 			<fileset dir="${devhome}/webapp">
-				<include name="*/**" />
+				<include name="**" />
 				<exclude name="${devhome}/webapp/custommashups/**" />
 			</fileset>
-		</copy>	
-		<!-- Copying tag files to the swc.war web-inf folder-->
+		</copy>
+		<copy overwrite="true" todir="${runtime}/repository/eardata/swc/extn">
+			<fileset dir="${devhome}/webapp/WEB-INF">
+				<include name="web.xml" />
+			</fileset>
+		</copy>
 		<copy overwrite="true" todir="${runtime}/repository/eardata/swc/war/WEB-INF">
 			<fileset dir="${devhome}/webapp/WEB-INF">
 				<include name="*.tld" />
@@ -206,7 +209,63 @@
 		<antcall target="-updruntime" />
 	</target>
 
-	<target name="build" depends="-copyresources" unless="devmode">
+	<target name="validate-buildEnv" description="Validates if the build Env is one of {local, dev, staging, prod}">
+		<!-- Winston 6/22/11 - Updated -->
+		<!-- Changed the script by commenting out the input portion of this target. -->
+		<!-- Ths input should be passed by command line parameter to define the environment -->
+		<!-- e.g. -Dbuild.env=dev -->
+		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
+		<condition property="Is_build.env_Set" value="true">
+			<or>
+				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
+			</or>
+		</condition>
+		<echo message="build.env: ${build.env}"/>
+		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment[${build.env}]! Please enter one of these values(casesensitive) - {local, dev, staging, prod} and Restart build Again." />
+	</target>
+	
+	<target name="choose-customer_overrides" description="Renames customer_overrides.properties and cacheoverrides.xml file based on the Build Environment">
+		<!-- Winston 6/22/11 - Updated -->
+		<!-- Changed the script by commenting out the input portion of this target. -->
+		<!-- Ths input should be passed by command line parameter to define the environment -->
+		<!-- e.g. -Dbuild.env=dev -->
+		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
+		<condition property="Is_build.env_Set" value="true">
+			<or>
+				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
+			</or>
+		</condition>
+		<echo message="build.env: ${build.env}"/>
+		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment - ${build.env}!. Please set build.env property to one of these casesensitive values - {local, dev, staging, prod} and Restart build Again!" />
+		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/customer_overrides_${build.env}.properties" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/customer_overrides.properties" verbose="true" overwrite="true"/>
+		<!-- ML 08/29/2011 Copy the appropriate cacheoverrides.xml to the resources directory . 
+		Note that there is another task (copy-files) below that copies all the files in the  ${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources directory into the installdir/resources folder. /-->
+		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources/cacheoverride_${build.env}.xml" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources/cacheoverride.xml" verbose="true" overwrite="true"/>
+		<!-- 
+		ML 09-23-2011
+		Added support for individual locations.ycfg files per environment. This copy task below chooses the appropriate locations.ycfg file based on the environment the build is executed on, and then saves it as plain "locations.ycfg".
+		The PrepareLocationsFile-comini target below then uses the locations.ycfg to include it in the final zip file. 
+		-->
+		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
+		
+       <copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
+		
+	</target>
+	
+	
+	<target name="build" depends="choose-customer_overrides, -copyresources" unless="devmode">
 		<echo message="----build" />
 		<mkdir dir="${cvs.fetch.dir}/${cvs.module.name}/buildScripts/${cust.package.dir}/${cust.module.code}" />
 		<jar destfile="${cvs.fetch.dir}/${cvs.abstract.module}/buildScripts/${cust.package.dir}/${cust.module.code}/${cust.module.package}.jar" update="false">
@@ -233,8 +292,8 @@
 
 	<target name="clean" depends="cvs-fetch">
 		<echo message="cleanz" />
-		<delete dir="${target.runtime.dir}" />
-		<delete dir="${target.webapp.dir}" />
+		<!--delete dir="${target.runtime.dir}" /-->
+		<!--delete dir="${target.webapp.dir}" /-->
 	</target>
 
 	<target name="installcmd" depends="build">
