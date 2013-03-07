@@ -2007,6 +2007,7 @@ function showSharedListForm(){
 		            			 var omError = document.getElementById("orderMulErrorCode_"+j).value;	
 		            			 var qty = document.getElementById("QTY_"+_myItemKey);
 		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+_myItemKey);
+		            			 var sourceOrderMulErrorInnerHTML = sourceOrderMulError.innerHTML;
 		            			 if(qty.value == '0' )
 		            				{
 		            					sourceOrderMulError.innerHTML = "Please enter a valid quantity and try again.";
@@ -2014,6 +2015,9 @@ function showSharedListForm(){
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            				}
+		            			 else if(sourceOrderMulErrorInnerHTML.contains("is currently not valid. Please delete it from your list and contact Customer Service")){
+		            				    document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
+		            			 }
 		            			 else if(omError == 'true' && qty.value > 0 )
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
