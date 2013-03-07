@@ -383,6 +383,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		if(PricingUOMDesc != null && PricingUOMDesc.toLowerCase().contains("thousand"))
 		{
 			displayUOMs.add(PricingUOMDesc);
+			displayPriceForUoms.add(pricingUOMUnitPrice);
 			isPricingUOMAdded=true;
 			isThAndCwtAdded=true;
 		}
@@ -483,7 +484,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}
 		if(!isPricingUOMAdded )
 		{
-			displayUOMs.add(PricingUOMDesc);
+			displayPriceForUoms.add(pricingUOMUnitPrice);
 		}
 		if(pricingUOM!=null && !pricingUOM.equals(pandAItem.getRequestedQtyUOM())
 				&& isDisplayReqUOM)
