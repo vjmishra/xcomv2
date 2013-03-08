@@ -132,6 +132,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String tierPrice = "";
 		List<Element> tierPriceList = tag.getPLLineMap().get(itemID);
 		if(tierPriceList != null) {
+			StringBuilder priceList1 = new StringBuilder();
+			StringBuilder priceList2 = new StringBuilder();
+			String oldUOM = null;
 			for (Element tierPrices : tierPriceList) {
 				String tierQty = tierPrices.getAttribute("FromQuantity");
 				tierQty = (tierQty == null || "".equals(tierQty)) ? "1" : tierQty;
@@ -139,23 +142,25 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 				tierPrice = validate(tierPrices.getAttribute("ListPrice"));
 				Element extnTierPrice = xmlUtils.getChildElement(tierPrices, "Extn");
 				String tierPriceUOM = validate(extnTierPrice.getAttribute("ExtnTierUom"));
-				String PriceUOM = validate(extnTierPrice.getAttribute("ExtnPricingUom"));
 				String formattedTierUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,tierPrice));
-				if(formattedTierUnitprice == null || "".equals(formattedTierUnitprice))
-					sb.append("<br/>");
-				else {
-					sb.append(TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getFormattedQty(tierQty)));
-					sb.append("&nbsp;");
-					try {
-						sb.append(TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
-					} catch (Exception e) {
-						sb.append(TextUtils.htmlEncode(tierPriceUOM)).append("-");
-					} 
-					sb.append(formattedTierUnitprice);
-					  
-					sb.append("<br/>");
+				if(formattedTierUnitprice == null || "".equals(formattedTierUnitprice)){
+					if(oldUOM == null || oldUOM.equals(tierPriceUOM)){
+						oldUOM = tierPriceUOM;
+						priceList1.append("<br/>");
+					}else{
+						priceList2.append("<br/>");
+					}
+				}else {
+					if(oldUOM == null || oldUOM.equals(tierPriceUOM)){
+						formatUOMPriceQty(priceList1, tierQty, tierPriceUOM, formattedTierUnitprice);
+					}else{
+						formatUOMPriceQty(priceList2, tierQty, tierPriceUOM, formattedTierUnitprice);
+					}
 				}
+				
 			}
+			sb.append(priceList1);
+			sb.append(priceList2);
 		}
 		
 		if(hasTier == false && !"".equals(formattedUnitprice)) {
@@ -265,6 +270,23 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	
 	private String validate(String str) {
 		return (str==null ? "" : str);
+	}
+	
+	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
+		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
+	    if(formattedQty.equals("0")){
+	    	formattedQty = " ";
+	    }
+		priceList.append(TextUtils.htmlEncode(formattedQty));
+		priceList.append("&nbsp;");
+		try {
+			priceList.append(TextUtils.htmlEncode(XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
+		} catch (Exception e) {
+			priceList.append(TextUtils.htmlEncode(tierPriceUOM)).append("-");
+		} 
+		priceList.append(formattedTierUnitprice);
+		  
+		priceList.append("<br/>");
 	}
 	
 	/**
