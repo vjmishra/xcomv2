@@ -31,7 +31,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 	
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
-	private String brokenUOM = "M_BKN";
+	private final String brokenUOM = "M_BKN";
 
 	String getPricelistLineListTemplate = "global/template/api/getPricelistLineList.XPXCreatePriceListService.xml";
 	static {
@@ -93,13 +93,13 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 					// Means Item exists in YFS_ITEM because if it existed then UnitOfMeasure value would have been populated
 					
 					//Make sure that all the tier brackets have the same UOM (Else log it in CENT tool) - Jira#2637
-					//boolean isAllTierUOMSame = checkTierUOMs(priceBookElement,env);
-					boolean isAllTierUOMSame = true;
+					//XB - 562 - Uncommented the UOM tier check
+					/*boolean isAllTierUOMSame = checkTierUOMs(priceBookElement,env);
 					if(!isAllTierUOMSame){
 						//do not create the price list record.ignore it.
 						log.error("Tier UOM mismatch between different tiers blocks.Pricebook record for LegacyProductCode = "+ itemId+" will be ignored.");
 						continue;
-					}
+					}*/
 				
 					Document managePriceListHeaderInputDoc = createPriceListHeaderInputDoc(env,priceBookElement);
 				
@@ -206,10 +206,6 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 				lastTierUOM = currentTierUOM;
 				continue;
 			}else{
-				if(lastTierUOM.equals(brokenUOM) || currentTierUOM.equals(brokenUOM)){
-					lastTierUOM = currentTierUOM;
-					continue;
-				}
 				//log it in the CENT and return false;
 				isAllTierUOMSame =  false;
 				log.error("Tier UOM is not matching between different tiers in a pricebook.Check CENT for more details. LegacyProductCode = "+ itemId);
@@ -339,9 +335,18 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 		//YFCDate endDate = activeDate.getNewDate(3650);				
 		
 		Element priceBracketsElement = (Element)priceBookElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKETS).item(0);
+		NodeList priceBracketList = priceBracketsElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKET);
 		Element firstPriceBracketElement = (Element)priceBracketsElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKET).item(0);
-		String tierUOM = firstPriceBracketElement.getAttribute(XPXLiterals.UOM);
-		String firstlistPrice = firstPriceBracketElement.getAttribute(XPXLiterals.PRICE);		
+		String firstTierUOM = firstPriceBracketElement.getAttribute(XPXLiterals.UOM);
+		String firstListPrice = firstPriceBracketElement.getAttribute(XPXLiterals.PRICE);		
+		String firstQuantity = firstPriceBracketElement.getAttribute(XPXLiterals.QTY);
+		
+		if(firstTierUOM.equals(brokenUOM) && priceBracketList.getLength() > 1){
+			Element secondPriceBracketElement = (Element)priceBracketsElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKET).item(1);
+			firstTierUOM = secondPriceBracketElement.getAttribute(XPXLiterals.UOM);
+			firstTierUOM = secondPriceBracketElement.getAttribute(XPXLiterals.PRICE);
+			firstQuantity = secondPriceBracketElement.getAttribute(XPXLiterals.QTY);
+		}
 		
         createPriceListLineInputDoc = createDocument(XPXLiterals.E_PRICE_LIST_LINE_LIST);
         createPriceListLineInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
@@ -352,13 +357,13 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
         priceListLineElement.setAttribute(XPXLiterals.A_PRICING_STATUS, XPXLiterals.ACTIVE);
         priceListLineElement.setAttribute(XPXLiterals.A_START_DATE_ACTIVE, activeDate.getString());
         priceListLineElement.setAttribute(XPXLiterals.A_END_DATE_ACTIVE, activeDate.HIGH_DATE.getString());
-        priceListLineElement.setAttribute(XPXLiterals.A_LIST_PRICE, firstlistPrice);
+        priceListLineElement.setAttribute(XPXLiterals.A_LIST_PRICE, firstListPrice);
         priceListLineElement.setAttribute(XPXLiterals.A_UNIT_OF_MEASURE, inventoryUOM);
         //priceListLineElement.setAttribute(XPXLiterals.A_UNIT_OF_MEASURE, pricingUOM);
         
         Element  priceListLineExtnElement = createPriceListLineInputDoc.createElement(XPXLiterals.E_EXTN);
         priceListLineExtnElement.setAttribute(XPXLiterals.A_EXTN_PRICING_UOM, pricingUOM);
-        priceListLineExtnElement.setAttribute(XPXLiterals.A_EXTN_TIER_UOM, tierUOM);
+        priceListLineExtnElement.setAttribute(XPXLiterals.A_EXTN_TIER_UOM, firstTierUOM);
         
         //Added as per review comments---adding item details to line level
         priceListLineExtnElement.setAttribute(XPXLiterals.A_EXTN_MASTER_PRODUCT_CODE, masterProductCode);
@@ -374,6 +379,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
         	Element priceBracketElement = (Element)priceBracketElementList.item(i);
         	String fromQty = priceBracketElement.getAttribute(XPXLiterals.QTY);
     		String listPrice = priceBracketElement.getAttribute(XPXLiterals.PRICE);
+    		String tierUOM =  priceBracketElement.getAttribute(XPXLiterals.UOM);
     		 
             Element pricelistLineQuantityTier = createPriceListLineInputDoc.createElement(XPXLiterals.E_PRICE_LIST_LINE_QTY_TIER);
             /*
@@ -384,14 +390,11 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
             	pricelistLineQuantityTier.setAttribute(XPXLiterals.A_FROM_QUANTITY, fromQty);
             // END - Fix for Jira# 1469
             */
-            
-            //Begin: Jira#2637
-            //commented to test XB-562
-            /*if (fromQty != null && fromQty.trim().length() > 0 && Integer.parseInt(fromQty) <= 1){
-            	log.warn("The tier block for LegacyProductCode "+legacyProductCode+" starts with qty 1. Ignored this tier block.");
+            /*XB - 562 - skip the first item since it is already added*/
+            if (fromQty != null && listPrice != null && tierUOM != null && fromQty.equals(firstQuantity) && listPrice.equals(firstListPrice) && tierUOM.equals(firstTierUOM)){
             	continue;
-            }*/
-            //End: Jira#2637
+            }
+            /*XB - 562 */
             
             pricelistLineQuantityTier.setAttribute(XPXLiterals.A_FROM_QUANTITY, fromQty);
             
