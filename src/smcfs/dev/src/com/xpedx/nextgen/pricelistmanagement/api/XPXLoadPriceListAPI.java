@@ -344,8 +344,12 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 		if(firstTierUOM.equals(brokenUOM) && priceBracketList.getLength() > 1){
 			Element secondPriceBracketElement = (Element)priceBracketsElement.getElementsByTagName(XPXLiterals.E_PRICE_BRACKET).item(1);
 			firstTierUOM = secondPriceBracketElement.getAttribute(XPXLiterals.UOM);
-			firstTierUOM = secondPriceBracketElement.getAttribute(XPXLiterals.PRICE);
+			firstListPrice = secondPriceBracketElement.getAttribute(XPXLiterals.PRICE);
 			firstQuantity = secondPriceBracketElement.getAttribute(XPXLiterals.QTY);
+		}
+		
+		if(!firstQuantity.equals("1")){
+			firstTierUOM = "dummyUOM";
 		}
 		
         createPriceListLineInputDoc = createDocument(XPXLiterals.E_PRICE_LIST_LINE_LIST);
