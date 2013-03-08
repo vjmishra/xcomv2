@@ -142,6 +142,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 				tierPrice = validate(tierPrices.getAttribute("ListPrice"));
 				Element extnTierPrice = xmlUtils.getChildElement(tierPrices, "Extn");
 				String tierPriceUOM = validate(extnTierPrice.getAttribute("ExtnTierUom"));
+				if(tierPriceUOM.equals("dummyUOM")){
+					continue;
+				}
 				String formattedTierUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,tierPrice));
 				if(formattedTierUnitprice == null || "".equals(formattedTierUnitprice)){
 					if(oldUOM == null || oldUOM.equals(tierPriceUOM)){
@@ -152,6 +155,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 					}
 				}else {
 					if(oldUOM == null || oldUOM.equals(tierPriceUOM)){
+						oldUOM = tierPriceUOM;
 						formatUOMPriceQty(priceList1, tierQty, tierPriceUOM, formattedTierUnitprice);
 					}else{
 						formatUOMPriceQty(priceList2, tierQty, tierPriceUOM, formattedTierUnitprice);
@@ -275,7 +279,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
 	    if(formattedQty.equals("0")){
-	    	formattedQty = " ";
+	    	formattedQty = "  ";
 	    }
 		priceList.append(TextUtils.htmlEncode(formattedQty));
 		priceList.append("&nbsp;");
