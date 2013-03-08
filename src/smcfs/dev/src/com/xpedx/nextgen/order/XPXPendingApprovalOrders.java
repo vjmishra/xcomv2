@@ -50,11 +50,12 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	 */
 
 	public Document invokeIsPendingApprovalOrder(YFSEnvironment env,Document inXML) throws Exception
-	{
-		String orderApproveFlag; //xb-226
+	{		
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+		Document customerContactOutputDoc=null;
+		Double spendingLimit=null;
+		String orderApprovalFlag=null;
 		Document changeOrderOutput = null;
-		boolean isApprovalReq = false;
 		String orderHeaderKey = inXML.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
 		if(orderHeaderKey == null || orderHeaderKey.trim().length() == 0)
 		{
@@ -69,7 +70,6 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 		// Template to the getOrderList Api
 		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
-
 		env.setApiTemplate("getCompleteOrderDetails",orderOutputTemplate);
 		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
 		env.clearApiTemplate("getCompleteOrderDetails");
@@ -78,53 +78,79 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		if(orderElem != null && "Y".equalsIgnoreCase(inputDraftOrderFlag) && "N".equalsIgnoreCase(orderElem.getAttribute("DraftOrderFlag")))
 		{
 			return orderOutputDoc;
-		}
-		Double spendingLimit = null;
-		/*if(orderOutputDoc!=null) {
-
-			if(SCXmlUtil.getIntAttribute(orderOutputDoc.getDocumentElement(), "TotalNumberOfRecords") >0) {
-
-				orderElem = SCXmlUtil.getChildElement(orderOutputDoc.getDocumentElement(),"Order");*/
-
+		}	
+		
 		if(orderElem!=null) 
 		{
-
-			spendingLimit = getSpendingLimit(env,orderElem,inXML.getDocumentElement().getAttribute("CustomerContactID"));
-
-		} 
-
-			// checking if the order total is more than the spending limit
-		if(spendingLimit!=null && orderElem!=null && spendingLimit!=-1) 
-		{
-			Element extnElem = SCXmlUtil.getChildElement(orderElem,"Extn");
-			String ExtnTotalOrderValue = extnElem.getAttribute("ExtnTotalOrderValue");
-			Double totalOrderValue = new Double(0);
-			if(!SCUtil.isVoid(ExtnTotalOrderValue))
-				totalOrderValue= Double.parseDouble(ExtnTotalOrderValue);
-			if(totalOrderValue >= spendingLimit)
-				isApprovalReq = true;
+			customerContactOutputDoc = getCustomerContactData(env, orderElem, inXML.getDocumentElement().getAttribute("CustomerContactID"));		
+			if(customerContactOutputDoc!=null)
+			{
+				Element custContactListElement = customerContactOutputDoc.getDocumentElement();
+				if(SCXmlUtil.getIntAttribute(custContactListElement, "TotalNumberOfRecords")>0)
+				{
+					NodeList extnNodeList = custContactListElement.getElementsByTagName("Extn");
+					if(extnNodeList!=null)
+					{
+						Element extnElem=(Element)extnNodeList.item(0);
+						if(extnElem!=null)
+						{
+							orderApprovalFlag = extnElem.getAttribute("ExtnOrderApprovalFlag");
+							
+						}
+					}
+					Element custContactElement = SCXmlUtil.getChildElement(custContactListElement, "CustomerContact");
+					approverUserId = custContactElement.getAttribute("ApproverUserId");
+					approverProxyUserId = custContactElement.getAttribute("ApproverProxyUserId");
+					
+					if(!"Y".equalsIgnoreCase(orderApprovalFlag))
+					{
+						String spndgLimitString = custContactElement.getAttribute("SpendingLimit");					
+						if(!SCUtil.isVoid(spndgLimitString))
+						{
+							Double spLimit = Double.parseDouble(spndgLimitString);
+							if(spLimit > 0)
+							{
+								spendingLimit = spLimit;
+							}
+						}
+						else
+						{
+							spendingLimit = Double.valueOf(-1);
+						}
+						// checking if the order total is more than the spending limit
+						if(spendingLimit!=null && orderElem!=null && spendingLimit!=-1) 
+						{
+							Element extnElem = SCXmlUtil.getChildElement(orderElem,"Extn");
+							String ExtnTotalOrderValue = extnElem.getAttribute("ExtnTotalOrderValue");
+							Double totalOrderValue = new Double(0);
+							if(!SCUtil.isVoid(ExtnTotalOrderValue))
+							{
+								totalOrderValue= Double.parseDouble(ExtnTotalOrderValue);
+							}
+							
+							if(totalOrderValue >= spendingLimit)
+							{
+								orderApprovalFlag="Y";
+							}
+						}
+					}
+				}
+			}			
 		}
-		/***Added for XB 226**/
-		orderApproveFlag = getOrderApprovalFlag(env,orderElem);
-		if(orderApproveFlag.equalsIgnoreCase("Y"))
+		
+		if("Y".equalsIgnoreCase(orderApprovalFlag))
 		{
-			isApprovalReq = true;
-		}
-		/***End of XB 226***/
-		if(isApprovalReq) {
-			if(approverUserId != null || approverProxyUserId != null) {//if at least there is one approver put the order on Hold
+			if(approverUserId != null || approverProxyUserId != null)
+			{//if at least there is one approver put the order on Hold
 				String approverOnHold = null;
-				//			if(approverUserId!=null && approverUserId.trim().length()>0)
-				//				approverOnHold = approverUserId; //approverProxyUserId;//
-				//			else
-				//				approverOnHold = approverProxyUserId;
-				//for jira 3484
 				if(approverUserId != null && approverUserId.trim().length()>0)
 				{
 					approverOnHold = approverUserId;
-					if(approverProxyUserId != null && approverProxyUserId.trim().length()>0){
+					if(approverProxyUserId != null && approverProxyUserId.trim().length()>0)
+					{
 						approverOnHold = approverOnHold + ","+ approverProxyUserId;
 					}
+				
 				}else
 				{
 					approverOnHold = approverProxyUserId;
@@ -145,52 +171,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			return inXML;
 		}
 	}
-
-
-	public String getOrderApprovalFlag(YFSEnvironment env,Element orderElement) {
-		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
-		String orderApprovalFlag="";
-		String customerContactId=orderElement.getAttribute("CustomerContactID");
-		if(customerContactId!=null && customerContactId.trim().length()>0 && organizationCode!=null && organizationCode.trim().length()>0 ) {
-			//creating the document to get the customer contacts spending limit 
-			Document inputCustContactDoc = YFCDocument.createDocument("CustomerContact").getDocument();
-			Element inputCustContactElem = inputCustContactDoc.getDocumentElement();
-			inputCustContactElem.setAttribute("CustomerContactID", customerContactId);
-			inputCustContactElem.setAttribute("OrganizationCode", organizationCode);
-			//setting the Api template for the getCustomerContactList Api and invoking the api
-			Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact><Extn ExtnOrderApprovalFlag=''/></CustomerContact></CustomerContactList>");
-			env.setApiTemplate("getCustomerContactList",Template);
-			//invoking the api
-			Document outputDoc =null;
-			try {
-				outputDoc = api.invoke(env, "getCustomerContactList", inputCustContactDoc);
-				NodeList extnNodeList = outputDoc.getDocumentElement().getElementsByTagName("Extn");
-				if(extnNodeList!=null)
-				{
-					Element extnElem=(Element)outputDoc.getDocumentElement().getElementsByTagName("Extn").item(0);
-					if(extnElem!=null){
-						orderApprovalFlag = extnElem.getAttribute("ExtnOrderApprovalFlag");
-					}
-				}
-			}
-
-			catch (YFSException  e) 
-			{
-				// TODO: handle exception
-				log.error("YFSException:getOrderApprovalFlag()", e);
-			}
-			catch (RemoteException e)
-			{
-				// TODO Auto-generated catch block
-				log.error("RemoteException:getOrderApprovalFlag()",e);
-			}
-			env.clearApiTemplate("getCustomerContactList");
-		}
-
-		return orderApprovalFlag;
-	}
-
-	//End of XB 226
+	
 	/**
 	 * JIRA 4256 Start
 	 * @param env
@@ -242,10 +223,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	 * @param customerContactId
 	 * @return
 	 */
-	public Double getSpendingLimit(YFSEnvironment env,Element orderElement,String customerContactId) {
-		Double spendingLimit = new Double(-1);
-		//String customerContactId = orderElement.getAttribute("CustomerContactID");
+	public Document getCustomerContactData(YFSEnvironment env, Element orderElement, String customerContactId) {
 		String organizationCode  = orderElement.getAttribute("EnterpriseCode");
+		Document outputDoc =null;
 		if(customerContactId!=null && customerContactId.trim().length()>0 && organizationCode!=null && organizationCode.trim().length()>0 ) {
 			//creating the document to get the customer contacts spending limit 
 			Document inputCustContactDoc = YFCDocument.createDocument("CustomerContact").getDocument();
@@ -256,10 +236,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			customerElem.setAttribute("CustomerID", orderElement.getAttribute("BillToID"));
 			inputCustContactElem.appendChild(customerElem);
 			//setting the Api template for the getCustomerContactList Api and invoking the api
-			Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact/></CustomerContactList>");
+			Document Template = SCXmlUtil.createFromString("<CustomerContactList TotalNumberOfRecords=''><CustomerContact><Extn ExtnOrderApprovalFlag=''/></CustomerContact></CustomerContactList>");
 			env.setApiTemplate("getCustomerContactList",Template);
-			//invoking the api
-			Document outputDoc =null;
+			//invoking the api			
 			try {
 				outputDoc = api.invoke(env, "getCustomerContactList", inputCustContactDoc);
 			}
@@ -268,25 +247,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				e.printStackTrace();
 			}
 			env.clearApiTemplate("getCustomerContactList");
-			if(outputDoc!=null) {
-				Element custContactList = outputDoc.getDocumentElement();
-				if(SCXmlUtil.getIntAttribute(custContactList, "TotalNumberOfRecords")>0) {
-					Element custContact = SCXmlUtil.getChildElement(custContactList, "CustomerContact");
-					String spndgLimitString = custContact.getAttribute("SpendingLimit");
-					approverUserId = custContact.getAttribute("ApproverUserId");
-					approverProxyUserId = custContact.getAttribute("ApproverProxyUserId");
-					if(!SCUtil.isVoid(spndgLimitString)) {
-						Double spLimit = Double.parseDouble(spndgLimitString);
-						if(spLimit > 0)
-							spendingLimit = spLimit;
-					}
-					else {
-						spendingLimit = Double.valueOf(-1);
-					}
-				}
-			}
+			
 		}
-		return spendingLimit;
+		return outputDoc;
 	}
 
 	public Document applyHoldTypeOnOrder(YFSEnvironment env, Element orderElement, String approver){
