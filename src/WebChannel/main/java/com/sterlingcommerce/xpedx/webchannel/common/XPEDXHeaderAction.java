@@ -665,6 +665,11 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContRefKey);
 		}
 		// XBT-621 code changes end 
+
+		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N") ){
+			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
+		}  
+
 		if (toaFlag == null || (toaFlag != null && toaFlag.trim().length() == 0)) {
 			toaFlag = "";
 		}
