@@ -2,11 +2,9 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
-import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -104,11 +102,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	
 	private void setCoustomerContactModel(Element customerContactElement) {
 		this.updateAdditionalAttributes(customerContactElement);
-		String viewInvoices =  YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices");;
+		String viewInvoices =  YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices");
 		if("T".equalsIgnoreCase(viewInvoices)){
 			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
 		}
 		setModel("XPXCustomerContactIn", customerContactElement);
+		setSpendingLmtTextBoxBehaviorOnLoad(YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnOrderApprovalFlag"));		
 		defaultShipTo = getFieldValue("txtCustomerID");
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
@@ -791,7 +790,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			{
 			  double d = new Double(spendingLimit);
 			  spendLimit = (int)d;
-			  System.out.println(spendingLimit);
 			  if(spendLimit<1){
 					YRCPlatformUI.showWarning("SpendingLimit", "Minimum Spending Limit is 1");
 					getControl("txtSpendingLimit").setFocus();
@@ -811,6 +809,21 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			}
 		}
 		/*End- For Jira 3264 */
+		
+		/*Start- For Jira XB-691 */
+		String chkApproveOrders=getFieldValue("chkApproveOrders");
+		if("Y".equals(chkApproveOrders))
+		{
+			String primaryApprover=getFieldValue("comboPrimApprover");
+			if(YRCPlatformUI.isVoid(primaryApprover))
+			{
+				YRCPlatformUI.showWarning("PrimaryApprover", "Please select a Primary Approver");
+				getControl("comboPrimApprover").setFocus();
+				return false;
+			}			
+		}		
+		/*End- For Jira XB-691*/
+		
 	    return hasValidData;
 	}
 
@@ -885,6 +898,17 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		YRCXmlUtils.importElement(targetContactList, results);
 		return targetDoc;
 	}
+	
+	public void setSpendingLmtTextBoxBehaviorOnLoad(String extnOrderApprovalFlag){
+		
+		if("Y".equalsIgnoreCase(extnOrderApprovalFlag)) {
+			getControl("txtSpendingLimit").setEnabled(false);
+		
+		} else{
+			getControl("txtSpendingLimit").setEnabled(true);
+		}
+		
+	}	
 	
 //	private void createModelForRecieveOrderConfirmationEmails(){
 //	Element optionListDoc = YRCXmlUtils.createFromString("<OptionList/>").getDocumentElement();

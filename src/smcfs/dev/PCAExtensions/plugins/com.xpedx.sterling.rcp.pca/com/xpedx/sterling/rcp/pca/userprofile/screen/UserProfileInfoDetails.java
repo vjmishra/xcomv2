@@ -176,9 +176,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	public UserProfileInfoDetails(Composite parent, int style,
 			Object inputObject, Element customerContactEle) {
 		super(parent, style);
-		this.inputObject = inputObject;
-		
-		
+		this.inputObject = inputObject;		
 		initialize();
 		setBindingForComponents();
 		myBehavior = new UserProfileInfoDetailsBehavior(this, inputObject,
@@ -186,7 +184,6 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		checkUserPermissions();
 		adjustScrollPnl(bodyScrolledPanel, pnlBody,
 				getRootPanel(), true, true);
-
 	}
 	/**
 	 * This method validates the user authorization
@@ -334,12 +331,6 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		
 		// Scroll Panel End
 	}
-	
-
-
-	
-
-	
 	
 	//added by madhura
 	private void createGeneralInfoHeaderPnl() {
@@ -1855,8 +1846,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkeceiveBackOrderEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
 		
 		
-		//Added for JIRA XB-258
-		
+		//Begin - Added for JIRA XB-258		
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1864,6 +1854,12 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderApprovalFlag");
 		chkBoxBindingData.setName("chkApproveOrders");
 		chkApproveOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);
+		
+		chkApproveOrders.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {				
+				setSpendingLimitTextBoxBehavior();
+			}
+		});	
 
 //		/*chkBoxBindingData = new YRCButtonBindingData();
 //		chkBoxBindingData.setCheckedBinding("Y");
@@ -2016,6 +2012,19 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 
 	public UserProfileInfoDetailsBehavior getBehavior() {
 		return myBehavior;
+	}
+	
+	private void setSpendingLimitTextBoxBehavior() {
+		boolean isApproveOrdersChecked = chkApproveOrders.getSelection();
+		
+		if(isApproveOrdersChecked) {
+				txtSpendingLimit.setText("");
+				txtSpendingLimit.setEnabled(false);
+				
+		} else {
+			txtSpendingLimit.setEnabled(true);
+		}
+		
 	}
 	//added by suneetha
 	/*private void addDefaultShipToAddress(String fieldName) {
