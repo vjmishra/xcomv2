@@ -277,12 +277,13 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	}
 	
 	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
+		String htmlSpace = "&nbsp;";
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
 	    if(formattedQty != null && formattedQty.equals("0")){
-	    	formattedQty = "  ";
+	    	formattedQty = htmlSpace+htmlSpace;
 	    }
 		priceList.append(TextUtils.htmlEncode(formattedQty));
-		priceList.append("&nbsp;");
+		priceList.append(htmlSpace);
 		try {
 			priceList.append(TextUtils.htmlEncode(XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
 		} catch (Exception e) {
