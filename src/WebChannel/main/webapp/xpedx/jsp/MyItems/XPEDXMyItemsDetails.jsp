@@ -408,10 +408,16 @@ function showSharedListForm(){
         		 		var uom = document.getElementById('UOM_'+myItemsKey).value;
     				}
     				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
-    			}   
+    			} 
+    			else{
+            		Ext.Msg.hide();
+            		myMask.hide();
+         		}
      		}
+     		else{
         		Ext.Msg.hide();
         		myMask.hide();
+     		}
      }
 		
 		function importItems(msgImportMyItemsError){
@@ -2015,10 +2021,10 @@ function showSharedListForm(){
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            				}
-		            			 else if(sourceOrderMulErrorInnerHTML.contains("is currently not valid. Please delete it from your list and contact Customer Service")){
-		            				    document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
-		            			 }
-		            			 else if(omError == 'true' && qty.value > 0 )
+		            			 else if(sourceOrderMulErrorInnerHTML.indexOf("is currently not valid. Please delete it from your list and contact Customer Service") > -1){
+		            					 document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
+		            			    }
+		            			 else if(omError == 'true' && qty.value > 0)
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
 		            					sourceOrderMulError.style.display = "inline-block"; 
