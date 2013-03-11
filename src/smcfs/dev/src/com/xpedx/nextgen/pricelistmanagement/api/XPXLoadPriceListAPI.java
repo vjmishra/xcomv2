@@ -93,7 +93,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
 					// Means Item exists in YFS_ITEM because if it existed then UnitOfMeasure value would have been populated
 					
 					//Make sure that all the tier brackets have the same UOM (Else log it in CENT tool) - Jira#2637
-					//XB - 562 - Uncommented the UOM tier check
+					//XB - 562 - commented the UOM tier check
 					/*boolean isAllTierUOMSame = checkTierUOMs(priceBookElement,env);
 					if(!isAllTierUOMSame){
 						//do not create the price list record.ignore it.
