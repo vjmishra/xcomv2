@@ -44,7 +44,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	@Override
 	public boolean end(Writer writer, String body) {
 		
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		
 		Element item = (Element) findValue(tag.getItemElement(), Element.class);
 		int tabidx = 101;		
@@ -142,7 +142,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 				tierPrice = validate(tierPrices.getAttribute("ListPrice"));
 				Element extnTierPrice = xmlUtils.getChildElement(tierPrices, "Extn");
 				String tierPriceUOM = validate(extnTierPrice.getAttribute("ExtnTierUom"));
-				if(tierPriceUOM.equals("dummyUOM")){
+				if(tierPriceUOM != null && tierPriceUOM.equals("dummyUOM")){
 					continue;
 				}
 				String formattedTierUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,tierPrice));
@@ -278,7 +278,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	
 	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
-	    if(formattedQty.equals("0")){
+	    if(formattedQty != null && formattedQty.equals("0")){
 	    	formattedQty = "  ";
 	    }
 		priceList.append(TextUtils.htmlEncode(formattedQty));
