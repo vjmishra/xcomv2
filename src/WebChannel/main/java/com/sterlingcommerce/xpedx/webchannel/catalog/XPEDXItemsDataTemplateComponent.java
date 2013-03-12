@@ -154,6 +154,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 						priceList2.append("<br/>");
 					}
 				}else {
+					/*
+					 * Order the price list values based on UOM
+					 */
 					if(oldUOM == null || oldUOM.equals(tierPriceUOM)){
 						oldUOM = tierPriceUOM;
 						formatUOMPriceQty(priceList1, tierQty, tierPriceUOM, formattedTierUnitprice);
@@ -281,8 +284,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
 	    if(formattedQty != null && formattedQty.equals("0")){
 	    	formattedQty = htmlSpace+htmlSpace;
+	    	priceList.append(formattedQty);
+	    }else{
+	    	priceList.append(TextUtils.htmlEncode(formattedQty));
 	    }
-		priceList.append(TextUtils.htmlEncode(formattedQty));
 		priceList.append(htmlSpace);
 		try {
 			priceList.append(TextUtils.htmlEncode(XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
