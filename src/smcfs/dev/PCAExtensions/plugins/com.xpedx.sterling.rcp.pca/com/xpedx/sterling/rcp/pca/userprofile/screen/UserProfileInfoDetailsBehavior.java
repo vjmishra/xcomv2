@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -901,13 +903,19 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	
 	public void setSpendingLmtTextBoxBehaviorOnLoad(String extnOrderApprovalFlag){
 		
-		if("Y".equalsIgnoreCase(extnOrderApprovalFlag)) {
-			getControl("txtSpendingLimit").setEnabled(false);
+		Control controlSpendingLimit=getControl("txtSpendingLimit");
 		
-		} else{
-			getControl("txtSpendingLimit").setEnabled(true);
-		}
-		
+		if(!YRCPlatformUI.isVoid(controlSpendingLimit)){			
+			Text txtSpendingLimit = (Text)controlSpendingLimit;			
+			if("Y".equalsIgnoreCase(extnOrderApprovalFlag)){
+				txtSpendingLimit.setText("");
+				txtSpendingLimit.setEnabled(false);
+			
+			} else{
+				txtSpendingLimit.setEnabled(true);
+				
+			}			
+		}		
 	}	
 	
 //	private void createModelForRecieveOrderConfirmationEmails(){

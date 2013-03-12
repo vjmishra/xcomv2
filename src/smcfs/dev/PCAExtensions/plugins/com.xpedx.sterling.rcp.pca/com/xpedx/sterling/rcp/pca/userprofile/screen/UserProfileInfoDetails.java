@@ -2018,11 +2018,12 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		boolean isApproveOrdersChecked = chkApproveOrders.getSelection();
 		
 		if(isApproveOrdersChecked) {
-				txtSpendingLimit.setText("");
-				txtSpendingLimit.setEnabled(false);
+			txtSpendingLimit.setText("");
+			txtSpendingLimit.setEnabled(false);
 				
 		} else {
 			txtSpendingLimit.setEnabled(true);
+			
 		}
 		
 	}
