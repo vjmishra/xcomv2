@@ -50,6 +50,7 @@ function setStockItemFlag()
 				<span class="checkboxtxt">Search normally stocked items only</span>
 					</div>
 					</s:if> --%>
+			<s:set name='narrowByCatalogItemsCount' value='%{0}' />
 			<s:iterator id='subCatElem_dup' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
 				<s:set name='subCatElem_count' value='#subCatElem_dup.getAttribute("ShortDescription")' />
 				 <s:if test='#subCatElem_count!=null'>
@@ -57,6 +58,7 @@ function setStockItemFlag()
 				 </s:if>
 			  </s:iterator>
 					 <s:if test='#subCatElem_count!=null'>
+					 	<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 						<div id="narrow_spb2" class="browseBox subPanelBox"> 
 						<div id="narrow_header2" class="header" style="background-color:#003399">
 						  <span class="float-right">
@@ -136,14 +138,22 @@ function setStockItemFlag()
 					</s:if>
 				</s:iterator> --%>
 			
-			
+				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 				<s:set name='headercount' value='%{#headercount + 1}' />
-				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399"><span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide"><img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a></span>
-				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
-				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />
-				<s:property value='#ShortDescription1' id="facet" /></div>
-				<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes default-collapsed">
-	
+				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
+					<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
+						<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand"></a>
+					</span>
+					<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
+					<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />
+					<s:property value='#ShortDescription1' id="facet" />
+				</div>
+				<s:if test='%{#narrowByCatalogItemsCount < 4}'> 
+					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes catalog-landing">
+				</s:if>
+				<s:else>
+					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes default-collapsed">
+				</s:else>
 				
 			<ul>
 			<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
