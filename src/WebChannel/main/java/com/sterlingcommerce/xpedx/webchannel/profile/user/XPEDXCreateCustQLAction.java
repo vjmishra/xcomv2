@@ -15,7 +15,7 @@ import com.yantra.yfc.dom.YFCDocument;
 public class XPEDXCreateCustQLAction extends WCMashupAction {
 
     // String for Action Results
-    private String REDIRECT = "redirect";
+    private static final String REDIRECT = "redirect";
     private String bodyData;
     private String customerContactId;
     private String customerId;
@@ -74,7 +74,6 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
     @Override
     public String execute() {
 
-	Document outputDoc = null;
 	Element input = prepareInputXML();
 
 	String inputXml = SCXmlUtil.getString(input);
@@ -82,7 +81,7 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 	LOG.debug("Input XML: " + inputXml);
 	Object obj = WCMashupHelper.invokeMashup("manageCustomerQuickLink",
 		input, wcContext.getSCUIContext());
-	outputDoc = ((Element) obj).getOwnerDocument();
+	Document outputDoc = ((Element) obj).getOwnerDocument();
 	if (null != outputDoc) {
 	    LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 	}
@@ -103,12 +102,13 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 	Document templateCustomerDoc = YFCDocument.createDocument("Customer")
 		.getDocument();
 	Element templateElement = templateCustomerDoc.getDocumentElement();
-	if (!(customerId != null && customerId.trim().length() > 0)) {
+	if (!(customerId != null && !customerId.trim().isEmpty())) {
 	    customerId = XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext);
-	    if (!(customerId != null && customerId.trim().length() > 0))
+	    if (!(customerId != null && !customerId.trim().isEmpty())) {
 		customerId = getWCContext().getCustomerId();
+	    }
 	}
-	if (!(customerContactId != null && customerContactId.trim().length() > 0)) {
+	if (!(customerContactId != null && !customerContactId.trim().isEmpty())) {
 	    customerContactId = wcContext.getCustomerContactId();
 	}
 	templateElement.setAttribute("CustomerID", customerId);
@@ -145,13 +145,9 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 			    arrstr[1].trim());
 		}
 
-		if (i == 2)
+		if (i == 2) {
 		    eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
-
-		if (i == 3) {
-		}
-		if (i == 4) {
-		}
+		}		
 
 		if (i == 5) {
 		    eleXPXQuickLink.setAttribute("URLOrder", token);
@@ -179,8 +175,9 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 		    eleXPXQuickLink.setAttribute("QuickLinkName", token);
 		}
 
-		if (i == 2)
+		if (i == 2) {
 		    eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
+		}
 
 		if (i == 3) {
 		    eleXPXQuickLink.setAttribute("ShowQuickLink", token);

@@ -71,7 +71,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     private static final String DATE_FORMAT_ON_USER_PROFILE = "MM/dd/yyyy";
 
     private List<String> assignedCustomers = null;
-    private HashMap<String, String> assignedCustomersMap = null;
+    private Map<String, String> assignedCustomersMap = null;
 
     // Elements
     private QuickLinkBean quickLinkBeanArray[];
@@ -103,17 +103,17 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     private List<String> adminLoginidList = new ArrayList<String>();
     private List<String> questionListForUser = new ArrayList<String>();
     private Map<String, String> questionListForOrg = new LinkedHashMap<String, String>();
-    List<Element> defaultContactAddressList = new ArrayList<Element>();
-    List<Element> defaultCustomerAddressList = new ArrayList<Element>();
-    List<Element> defaultAddressList = new ArrayList<Element>();
-    List<Element> otherCustomerAddressList = new ArrayList<Element>();
-    List<Element> otherContactAddressList = new ArrayList<Element>();
-    List<Element> otherAddressList = new ArrayList<Element>();
-    Map<String, String> statusList = new LinkedHashMap<String, String>();
-    Map<String, String> title = new LinkedHashMap<String, String>();
-    Map<String, String> localeList = new LinkedHashMap<String, String>();
-    List<String> userRoles = new ArrayList<String>();
-    Map<String, Boolean> allRoles = new HashMap<String, Boolean>();
+    private List<Element> defaultContactAddressList = new ArrayList<Element>();
+    private List<Element> defaultCustomerAddressList = new ArrayList<Element>();
+    private List<Element> defaultAddressList = new ArrayList<Element>();
+    private List<Element> otherCustomerAddressList = new ArrayList<Element>();
+    private List<Element> otherContactAddressList = new ArrayList<Element>();
+    private List<Element> otherAddressList = new ArrayList<Element>();
+    private Map<String, String> statusList = new LinkedHashMap<String, String>();
+    private Map<String, String> title = new LinkedHashMap<String, String>();
+    private Map<String, String> localeList = new LinkedHashMap<String, String>();
+    private List<String> userRoles = new ArrayList<String>();
+    private Map<String, Boolean> allRoles = new HashMap<String, Boolean>();
 
     private String userId;
     private String userPassword = "*****";
@@ -141,8 +141,8 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
     /* STARTS - Customer-User Profile Changes - adsouza */
 
-    protected Map AddnlEmailAddrList = new LinkedHashMap();
-    protected Map POList = new LinkedHashMap();
+    protected Map addnlEmailAddrList = new LinkedHashMap();
+    protected Map pOList = new LinkedHashMap();
 
     /* ENDS - Customer-User Profile Changes - adsouza */
     protected String showspendingLimit = "";
@@ -255,10 +255,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		if (inputCustRootCustomerKey != null
 			&& logInCustRootCustomerKey != null
 			&& inputCustRootCustomerKey
-				.equals(logInCustRootCustomerKey))
+				.equals(logInCustRootCustomerKey)) {
 		    retVal = true;
-		else
+		}
+		else {
 		    retVal = false;
+		}
 	    } else {
 		retVal = false;
 	    }
@@ -391,8 +393,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		"Extn");
 	Node quickLinkNodeList = SCXmlUtil.getChildElement(customerContactExtn,
 		"XPXQuickLinkList");
-	if (!quickLinkNodeList.hasChildNodes())
+	if (!quickLinkNodeList.hasChildNodes()) {
 	    throw new RuntimeException();
+	}
 
 	NodeList quickLinkNode = quickLinkNodeList.getChildNodes();
 	QuickLinkBean quickLinkBean[] = new QuickLinkBean[quickLinkNode
@@ -420,6 +423,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	    throws Exception {
 	Document outDoc = null;
 	Object obj = null;
+	Element ele2 = null;
 	// To get All Available Customers and keep it in Session
 	String rootCustomerKey = (String) wcContext
 		.getWCAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);
@@ -432,10 +436,14 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		input, wcContext.getSCUIContext());
 	// Element
 	// ele1=(Element)outDoc.getElementsByTagName("XPXCustView").item(0);
-	if (obj != null)
+	if (obj != null) {
 	    outDoc = ((Element) obj).getOwnerDocument();
-
-	Element ele2 = outDoc.getDocumentElement();
+	}
+        
+	if (outDoc != null) {
+	    ele2 = outDoc.getDocumentElement();
+	}
+	
 	ArrayList<Element> availCustomerList = SCXmlUtil.getElements(ele2,
 		"/XPXCustView");
 	ArrayList<String> availableCustomerList = new ArrayList<String>();
@@ -467,7 +475,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	    getCustomersByPath(assignedCustomerList, authorizedFullAddrMap);
 
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    log.error("Unable to get customer by path", e);
 	}
     }
 
@@ -476,7 +484,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	List<Element> customerMap = new ArrayList<Element>();
 	List<String> shipToStr = new ArrayList<String>();
-	if (wList != null && wList.size() > 0) {
+	if (wList != null && !wList.isEmpty()) {
 	    String pageNumber = "1";
 	    String pageSize = "10000";
 
@@ -610,8 +618,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	for (int i = 0; i <= index; i++) {
 	    tempString.append(customerPaths[i]);
 	}
-	if (index > -1)
+	if (index > -1) {
 	    customerPath = tempString.toString();
+	}
 	customerPath = customerPath.replaceAll("\\|", "");
 	customerElemet.setAttribute("CustomerPath", customerPath);
 	customerElemet.setAttribute("CustomerAddress", customerFullAddress);
@@ -736,7 +745,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		for (int i = 0; i < emailListSplit.length; i++) {
 		    if (emailListSplit[i] != null
 			    && emailListSplit[i].trim().length() > 0)
-			AddnlEmailAddrList.put(emailListSplit[i],
+			addnlEmailAddrList.put(emailListSplit[i],
 				emailListSplit[i]);
 		}
 	    }
@@ -749,18 +758,20 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 									 // 3645
 		for (int i = 0; i < poListSplit.length; i++) {
 		    if (poListSplit[i] != null
-			    && poListSplit[i].trim().length() > 0)
-			POList.put(poListSplit[i], poListSplit[i]);
+			    && !poListSplit[i].trim().isEmpty())
+			pOList.put(poListSplit[i], poListSplit[i]);
 		}
 	    }
 
 	    // get single contact
 	    setContact(getSingleContact(customerContactId));
 	    if (this.contact.getAttribute("Status") == null
-		    || "".equals(this.contact.getAttribute("Status")))
+		    || "".equals(this.contact.getAttribute("Status"))) {
 		setContactStatus("10");
-	    else
+	    }
+	    else {
 		setContactStatus(this.contact.getAttribute("Status"));
+	    }
 	    this.customer = SCXmlUtil.getChildElement(this.contact, "Customer");
 	    if (log.isDebugEnabled()) {
 		log.debug("CustomerObject " + SCXmlUtil.getString(customer));
@@ -824,7 +835,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		this.adminLoginidList = UserProfileHelper
 			.getUserLoginidListWithUserRole(buyerOrgCode,
 				"BUYER-ADMIN", wcContext);
-		if (adminLoginidList.size() > 0) {
+		if (!adminLoginidList.isEmpty()) {
 		    this.userList = prepareAndInvokeMashup(GET_ADMIN_LIST_MASHUP);
 		    if (log.isDebugEnabled()) {
 			log.debug("UserList=" + SCXmlUtil.getString(userList));
@@ -849,8 +860,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	     */
 	} catch (Exception e) {
 	    log.error("Error in getting Buyer User information for Customer Contact : "
-		    + customerContactId + "," + e.getMessage() + e.getCause());
-	    e.printStackTrace();
+		    + customerContactId + "," + e.getMessage() + e.getCause());	    
 	}
 	setUserFlags();
 	setCustContactAddtnlAddressToDisplay();
@@ -924,7 +934,8 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	    setSpendingLtCurrency((spendingCurrency == null) ? ""
 		    : spendingCurrency);
 
-	    addAvailbleCurrencies(spendingCurrency);
+	    //addAvailbleCurrencies(spendingCurrency);
+	    addAvailbleCurrencies();
 	    addAvailableApprovers();
 	    setLastModifiedUser();
 	    break;
@@ -1048,7 +1059,8 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
      * 
      * @param spendingCurrency
      */
-    private void addAvailbleCurrencies(String spendingCurrency) {
+    //private void addAvailbleCurrencies(String spendingCurrency) {
+    private void addAvailbleCurrencies() {
 
 	Element currencyInput = SCXmlUtil.createDocument("Currency")
 		.getDocumentElement();
@@ -1126,11 +1138,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	try {
 	    questionListForOrgElem = prepareAndInvokeMashup(GET_ORG_QUESTION_LIST_MASHUP);
 	} catch (XMLExceptionWrapper e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    log.error("Unable to get question list", e);
 	} catch (CannotBuildInputException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    log.error("Unable to get question list", e);
 	}
 	this.questionListForOrg = new LinkedHashMap<String, String>();
 	if (null != questionListForOrgElem) {
@@ -1430,7 +1440,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
      */
 
     public List<String> getUserGroups() {
-	if (userRoles != null && userRoles.size() > 0) {
+	if (userRoles != null && !userRoles.isEmpty()) {
 	    return userRoles;
 	}
 	userRoles = new ArrayList<String>();
@@ -1580,7 +1590,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     public String getCustomerID() {
 	String customerInSession = XPEDXWCUtils
 		.getLoggedInCustomerFromSession(getWCContext());
-	if (customerInSession != null && customerInSession.trim().length() > 0) {
+	if (customerInSession != null && !customerInSession.trim().isEmpty()) {
 	    return customerInSession;
 	} else if (customerID == null) {
 	    return getWCContext().getCustomerId();
@@ -2105,19 +2115,19 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
     }
 
     public Map getAddnlEmailAddrList() {
-	return AddnlEmailAddrList;
+	return addnlEmailAddrList;
     }
 
     public void setAddnlEmailAddrList(Map addnlEmailAddrList) {
-	AddnlEmailAddrList = addnlEmailAddrList;
+	addnlEmailAddrList = addnlEmailAddrList;
     }
 
     public Map getPOList() {
-	return POList;
+	return pOList;
     }
 
     public void setPOList(Map pOList) {
-	POList = pOList;
+	pOList = pOList;
     }
 
     /**
@@ -2139,11 +2149,11 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
      *            the assignedCustomersMap to set
      */
     public void setAssignedCustomersMap(
-	    HashMap<String, String> assignedCustomersMap) {
+	    Map<String, String> assignedCustomersMap) {
 	this.assignedCustomersMap = assignedCustomersMap;
     }
 
-    public HashMap<String, String> getAssignedCustomersMap() {
+    public Map<String, String> getAssignedCustomersMap() {
 	if (assignedCustomersMap == null) {
 	    assignedCustomersMap = new HashMap<String, String>();
 	}
@@ -2279,13 +2289,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,
 		"ExtnB2BCatalogView");
 	if (YFCCommon.isVoid(defaultB2bCatalogView.trim())) {
-	    defaultB2bCatalogView = ""
-		    + XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW;
+	    defaultB2bCatalogView = Integer.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
 	}
 	return defaultB2bCatalogView;
-    }
-
-    public void setDefaultB2bCatalogView(String defaultB2bCatalogView) {
     }
 
     public void setB2bCatalogViewMap(Map b2bCatalogViewMap) {
@@ -2294,13 +2300,13 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
     public Map getB2bCatalogViewMap() {
 	b2bCatalogViewMap = new HashMap();
-	b2bCatalogViewMap.put(new Integer(XPEDXConstants.XPEDX_B2B_FULL_VIEW),
+	b2bCatalogViewMap.put(Integer.valueOf(XPEDXConstants.XPEDX_B2B_FULL_VIEW),
 		"Full View");
-	b2bCatalogViewMap.put(new Integer(
+	b2bCatalogViewMap.put(Integer.valueOf(
 		XPEDXConstants.XPEDX_B2B_CONDENCED_VIEW), "Condensed View");
-	b2bCatalogViewMap.put(new Integer(XPEDXConstants.XPEDX_B2B_MINI_VIEW),
+	b2bCatalogViewMap.put(Integer.valueOf(XPEDXConstants.XPEDX_B2B_MINI_VIEW),
 		"Mini View");
-	b2bCatalogViewMap.put(new Integer(
+	b2bCatalogViewMap.put(Integer.valueOf(
 		XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW), "Paper Grid View");
 
 	return b2bCatalogViewMap;
@@ -2346,12 +2352,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
     public boolean isAdmin() {
 	List<String> userGroups = getUserGroups();
-	boolean isAdmin = false;
-	for (int i = 0; i < userGroups.size(); i++)
-	    if (userGroups.get(i).equalsIgnoreCase("admin")) {
-		isAdmin = true;
-	    }
-	return isAdmin;
+	if(userGroups.contains("admin")) {
+	    return true;
+	}
+	else { 
+	    return false;
+	}
     }
 
     /**

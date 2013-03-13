@@ -53,55 +53,52 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 	    return ERROR;
 	}
 
-	QuickLinkBean quickLinkBean[] = null;
-
-	try {
-	    quickLinkBean = getQuickLink(outputElement);
-	} catch (RuntimeException re) {
-	    LOG.debug("Not able to parse output xml for Customer Quick Link:->"
-		    + re.getMessage());
-	    if (getCreateSelected().equalsIgnoreCase("true"))
-		return "createsuccess";
-
+	QuickLinkBean quickLinkBean[] = getQuickLink(outputElement);
+	if (quickLinkBean == null) {
 	    return ERROR;
 	}
 
 	setQuickLinkBeanArray(quickLinkBean);
 
-	if (getCreateSelected().equalsIgnoreCase("true"))
+	if (getCreateSelected().equalsIgnoreCase("true")) {
 	    return "createsuccess";
+	}
 
 	return SUCCESS;
     }
 
-    private QuickLinkBean[] getQuickLink(Element outputElement)
-	    throws RuntimeException {
-
-	Node quickLinkNodeList = outputElement.getFirstChild().getFirstChild()
-		.getFirstChild();
-	if (!quickLinkNodeList.hasChildNodes())
-	    throw new RuntimeException();
-
-	NodeList quickLinkNode = quickLinkNodeList.getChildNodes();
-	QuickLinkBean quickLinkBean[] = new QuickLinkBean[quickLinkNode
-		.getLength()];
-
-	for (int i = 0; i < quickLinkNode.getLength(); i++) {
-	    Element quickLinkElement = (Element) quickLinkNode.item(i);
-	    quickLinkBean[i] = new QuickLinkBean();
-	    quickLinkBean[i].setUrlName(quickLinkElement
-		    .getAttribute("QuickLinkName"));
-	    quickLinkBean[i].setQuickLinkURL(quickLinkElement
-		    .getAttribute("QuickLinkUrl"));
-	    quickLinkBean[i].setUrlOrder(Integer.parseInt(quickLinkElement
-		    .getAttribute("URLOrder")));
-	    quickLinkBean[i].setShowQuickLink(quickLinkElement
-		    .getAttribute("ShowQuickLink"));
+    private QuickLinkBean[] getQuickLink(Element outputElement) {
+	Node quickLinkNodeList = null;
+	if (outputElement != null && outputElement.hasChildNodes()) {
+	    quickLinkNodeList = outputElement.getFirstChild().getFirstChild()
+			.getFirstChild();
 	}
+	
+	if (quickLinkNodeList != null && quickLinkNodeList.hasChildNodes()) {
+	    NodeList quickLinkNode = quickLinkNodeList.getChildNodes();
+		QuickLinkBean quickLinkBean[] = new QuickLinkBean[quickLinkNode
+			.getLength()];
 
-	Arrays.sort(quickLinkBean, new QuickLinkComparator());
+		for (int i = 0; i < quickLinkNode.getLength(); i++) {
+		    Element quickLinkElement = (Element) quickLinkNode.item(i);
+		    quickLinkBean[i] = new QuickLinkBean();
+		    quickLinkBean[i].setUrlName(quickLinkElement
+			    .getAttribute("QuickLinkName"));
+		    quickLinkBean[i].setQuickLinkURL(quickLinkElement
+			    .getAttribute("QuickLinkUrl"));
+		    quickLinkBean[i].setUrlOrder(Integer.parseInt(quickLinkElement
+			    .getAttribute("URLOrder")));
+		    quickLinkBean[i].setShowQuickLink(quickLinkElement
+			    .getAttribute("ShowQuickLink"));
+		}
 
-	return quickLinkBean;
+		Arrays.sort(quickLinkBean, new QuickLinkComparator());
+
+		return quickLinkBean;
+
+	} else {
+	    return null;
+	}
     }
 
     public String getCustomerContactId() {
@@ -119,16 +116,17 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 	if (input != null) {
 	    String customerId = XPEDXWCUtils
 		    .getLoggedInCustomerFromSession(wcContext);
-	    if (!(customerId != null && customerId.trim().length() > 0))
+	    if (!(customerId != null && !customerId.trim().isEmpty())) {
 		customerId = getWCContext().getCustomerId();
+	    }
 	    if (customerContactId != null
-		    && customerContactId.trim().length() > 0) {
+		    && !customerContactId.trim().isEmpty()) {
 		String contactId = input.getAttribute("CustomerContactID");
 		if (!customerContactId.equalsIgnoreCase(contactId)) {
 		    input.setAttribute("CustomerContactID", customerContactId);
 		}
 	    }
-	    if (customerId != null && customerId.trim().length() > 0) {
+	    if (customerId != null && !customerId.trim().isEmpty()) {
 		Element cusotmerElem = SCXmlUtil.getChildElement(input,
 			"Customer");
 		String passedCustomerId = cusotmerElem

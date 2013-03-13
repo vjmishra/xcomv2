@@ -9,13 +9,12 @@ public class QuickLinkComparator implements Comparator {
 
 	int bean2urlOrder = ((QuickLinkBean) quickLinkBean2).getUrlOrder();
 
-	if (bean1urlOrder > bean2urlOrder)
+	if (bean1urlOrder > bean2urlOrder) {
 	    return 1;
-
-	else if (bean1urlOrder < bean2urlOrder)
+	} else if (bean1urlOrder < bean2urlOrder) {
 	    return -1;
-
-	else
+	} else {
 	    return 0;
+	}
     }
 }

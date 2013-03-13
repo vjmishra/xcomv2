@@ -170,7 +170,7 @@ public class XPEDXGetCustomerOrganizationAction extends WCMashupAction {
 	    if (null != this.customerList) {
 		List customerList = SCXmlUtil.getChildren(getCustomerList(),
 			"Customer");
-		childCustomersMap = new HashMap(customerList.size());
+		childCustomersMap = new HashMap();
 		if (null != customerList && customerList.size() > 0) {
 		    Iterator itr = customerList.iterator();
 		    do {

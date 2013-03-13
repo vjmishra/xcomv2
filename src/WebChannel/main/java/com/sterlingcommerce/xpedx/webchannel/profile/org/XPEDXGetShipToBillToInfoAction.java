@@ -303,13 +303,12 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 		"xpedx-customer-getShipToBillToInfo", input,
 		wcContext.getSCUIContext());
 	outputDoc = ((Element) obj).getOwnerDocument();
-
+	
+	if (null != outputDoc) {
 	Element extnElem = SCXmlUtil.getChildElement(
 		outputDoc.getDocumentElement(), "Extn");
 	suffixType = SCXmlUtil.getAttribute(extnElem, "ExtnSuffixType");
-
-	if (null != outputDoc) {
-	    log.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+	log.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 	}
 	return outputDoc;
     }
@@ -377,7 +376,7 @@ public class XPEDXGetShipToBillToInfoAction extends WCMashupAction {
 			.shareformatBillToShipToCustomer(customerId, false);
 
 		String localID = getLocationId();
-		if (localID != null && locationId != "") {
+		if (localID != null && !("").equals(locationId)) {
 		    shipToAddr += "Local ID: " + localID + " ";
 		}
 

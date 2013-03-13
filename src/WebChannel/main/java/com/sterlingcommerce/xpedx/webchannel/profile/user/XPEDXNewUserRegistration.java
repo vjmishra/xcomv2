@@ -60,15 +60,15 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	StringBuffer sb = new StringBuffer();
 	// StringBuffer sbm = new StringBuffer();
-	String suffix = "";
+	//String suffix = "";
 
 	String storeFrontId = wcContext.getStorefrontId();
 	if (storeFrontId != null && storeFrontId.length() > 0) {
 	    String userName = YFSSystem.getProperty("fromAddress.username");
-	    suffix = YFSSystem.getProperty("fromAddress.suffix");
+	    String suffix = YFSSystem.getProperty("fromAddress.suffix");
 	    sb.append(userName).append("@").append(storeFrontId).append(suffix);
 	    // String marketingCC = "marketing";
-	    suffix = YFSSystem.getProperty("fromAddress.suffix");
+	    //suffix = YFSSystem.getProperty("fromAddress.suffix");
 	    // sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
 	    brandEmail = storeFrontId;
 
@@ -81,12 +81,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	 * */
 
 	// String imageUrl = "";
-	if (storeFrontId != null && storeFrontId.trim().length() > 0) {
+	if (storeFrontId != null && !storeFrontId.trim().isEmpty()) {
 	    String imageName = getLogoName(storeFrontId);
-	    String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+	    final String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 	    if (imagesRootFolder != null
-		    && imagesRootFolder.trim().length() > 0
-		    && imageName != null && imageName.trim().length() > 0) {
+		    && !imagesRootFolder.trim().isEmpty()
+		    && imageName != null && !imageName.trim().isEmpty()) {
 		imageUrlPath = imagesRootFolder + imageName;
 		setImageUrlPath(imageUrlPath);
 	    }
@@ -144,11 +144,10 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		    .getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 	    String emailSubject = getMailSubject();
 	    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
-		    emailSubject.toString(), emailFrom, storeFrontId);
+		    emailSubject, emailFrom, storeFrontId);
 	    /* XBT-73 : End - Sending email through Java Mail API now */
 
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception e) {	    
 	    log.error("Couldn't send the Mail to CSR" + e.getMessage());
 	    return ERROR;
 	    // TODO: handle exception

@@ -51,7 +51,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 		.getExtnPrefCatalog();
 	// String userPrefCategory =
 	// (String)wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.USER_PREF_CATEGORY);
-	if (userPrefCategory != null && userPrefCategory.trim().length() > 0
+	if (userPrefCategory != null && !userPrefCategory.trim().isEmpty()
 		&& !userPrefCategory.equalsIgnoreCase("None")) {
 	    this.prefCategory = userPrefCategory;
 	} else {
@@ -61,7 +61,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 		    .getSession()
 		    .getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
 	    if (custPrefCategory != null
-		    && custPrefCategory.trim().length() > 0
+		    && !custPrefCategory.trim().isEmpty()
 		    && !custPrefCategory.equalsIgnoreCase("None")) {
 		this.prefCategory = custPrefCategory;
 	    } else {
@@ -126,8 +126,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 		outDoc = prepareAndInvokeMashup(SEARCH_CATALOG_INDEX_MASHUP_ID)
 			.getOwnerDocument();
 	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error("Exception while getting Search Catalog Index", e);
 		return;
 	    }
 
@@ -239,8 +238,7 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 	    organizationCode = SCXmlUtil.getAttribute(categoryElem,
 		    "OrganizationCode");
 	} catch (Exception e) {
-	    e.printStackTrace();
-	    log.error("Error while getting the Preferred Category Path to get the category Assets");
+	    log.error("Error while getting the Preferred Category Path to get the category Assets " + e.getMessage());
 	}
 
     }

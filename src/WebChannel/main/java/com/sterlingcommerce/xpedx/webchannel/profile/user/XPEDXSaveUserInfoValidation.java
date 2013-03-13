@@ -20,9 +20,9 @@ import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXSaveUserInfoValidation extends AbstractWCFormFieldValidation {
 
-    Map parameters = new HashMap<String, String>();
-    IWCContext wcContext = null;
-    List<String> reqdFields = new ArrayList<String>();
+    private Map parameters = new HashMap<String, String>();
+    private IWCContext wcContext = null;
+    private List<String> reqdFields = new ArrayList<String>();
     // User resource package
     public static final String USER_RESOURCE_PACKAGE_STRING = "com.sterlingcommerce.xpedx.webchannel.profile.user.package";
     private static final String USER_NAME_UI_FIELD_NAME = "userName";
@@ -65,7 +65,7 @@ public class XPEDXSaveUserInfoValidation extends AbstractWCFormFieldValidation {
 				USER_RESOURCE_PACKAGE_STRING, wcContext)));
 		return;
 	    }
-	    jsonData = validateGenLoginid(userIdValue, jsonData);
+	    validateGenLoginid(userIdValue, jsonData);
 	}
 
     }

@@ -117,8 +117,8 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 	personInfo.setAttribute("State", txtState);
 	personInfo.setAttribute("ZipCode", txtZipCode);
 
-	if ((addtnlAddressID != null || addtnlAddressKey != null)
-		&& (addtnlAddressID.trim().length() > 0 || addtnlAddressKey
+	if ((addtnlAddressID != null && addtnlAddressID.trim().length() > 0)
+		|| (addtnlAddressKey != null && addtnlAddressKey
 			.trim().length() > 0)) {
 	    addtnlAddress.setAttribute("CustomerAdditionalAddressID",
 		    addtnlAddressID);

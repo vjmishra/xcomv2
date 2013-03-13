@@ -1,47 +1,48 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
-import org.w3c.dom.Document;
+//import org.apache.struts2.ServletActionContext;
+//import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+//import org.w3c.dom.NodeList;
 
-import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.webchannel.core.IWCContext;
+//import com.sterlingcommerce.baseutil.SCXmlUtil;
+//import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
-import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
+//import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+//import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCNode;
-import com.yantra.yfc.dom.YFCNodeList;
+//import com.yantra.yfc.dom.YFCDocument;
+//import com.yantra.yfc.dom.YFCNode;
+//import com.yantra.yfc.dom.YFCNodeList;
 
 public class XPEDXAssignedCustomersLocationsDisplayAction extends
 	WCMashupAction {
 
     private static final long serialVersionUID = 7861772398942028854L;
-    private String defaultShipTo; // ship to is the default ship to customer id
-    private XPEDXShipToCustomer shipToAddress;
-    private Element customerAssignmentElem;
+    //private String defaultShipTo; // ship to is the default ship to customer id
+    //private XPEDXShipToCustomer shipToAddress;
+    //private Element customerAssignmentElem;
     private final static Logger log = Logger
 	    .getLogger(XPEDXAssignedCustomersLocationsDisplayAction.class);
-    private String billToParentCustomerKey;
-    private List<String> assignedCustomerIDs;
-    private Document customerHierachyDoc;
-    private YFCNodeList<YFCNode> customerAssignmentList;
+    //private String billToParentCustomerKey;
+    //private List<String> assignedCustomerIDs;
+    //private Document customerHierachyDoc;
+    //private YFCNodeList<YFCNode> customerAssignmentList;
     private Set<String> mapKeys;
-    private ArrayList<String> billToList = new ArrayList<String>();
-    private HashMap<String, ArrayList<Element>> assignedCustomersMap;
+    private List<String> billToList = new ArrayList<String>();
+    private Map<String, ArrayList<Element>> assignedCustomersMap;
     private String loggedInUserId;
     private boolean locationsLoaded;
     private String billToListText = null;
 
-    private static final String parentCustomerInformationMashUp = "xpedx-customer-getParentCustInformation";
+    //private static final String PARENT_CUSTOMER_INFORMATION_MASHUP = "xpedx-customer-getParentCustInformation";
 
     @Override
     public String execute() {
@@ -61,7 +62,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 	return SUCCESS;
     }
 
-    private void getDefaultShipToAddress() {
+    /*private void getDefaultShipToAddress() {
 	defaultShipTo = XPEDXWCUtils.getDefaultShipTo();
 	if (defaultShipTo != null) {
 	    IWCContext wcContext = WCContextHelper
@@ -78,7 +79,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 	}
 	// TODO Auto-generated method stub
 
-    }
+    } */
 
     private void getCustomerAssignments() {
 	try {
@@ -86,17 +87,21 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 		    .getAssignedCustomerElementHashMap(XPEDXWCUtils
 			    .getLoggedInCustomerFromSession(wcContext),
 			    loggedInUserId);
-	    if (assignedCustomersMap != null && assignedCustomersMap.size() > 0)
+	    if (assignedCustomersMap != null && !assignedCustomersMap.isEmpty()) {
 		setLocationsLoaded(true);
-	    mapKeys = assignedCustomersMap.keySet();
-	    billToList.addAll(mapKeys);
+		mapKeys = assignedCustomersMap.keySet();
+		billToList.addAll(mapKeys);
+	    }
+	    
 	    if (billToList != null) {
 		for (int i = 0; i < billToList.size(); i++) {
-		    if (billToListText != null)
+		    if (billToListText != null) {
 			billToListText = billToListText + ","
 				+ billToList.get(i);
-		    else
+		    }
+		    else {
 			billToListText = billToList.get(i) + ",";
+		    }
 		}
 	    }
 	    // customerAssignmentElem =
@@ -104,7 +109,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 
 	} catch (Exception ex) {
 	    setLocationsLoaded(false);
-	    ex.printStackTrace();
+	    log.debug("Error getting Customer Assignment " + ex.getMessage());
 	}
     }
 
@@ -116,7 +121,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
      * @param inputItems
      * @return
      */
-    private void getCustomerAssignmentsAsHierarchy() {
+    /*private void getCustomerAssignmentsAsHierarchy() {
 	assignedCustomerIDs = XPEDXWCUtils.getAssignedCustomers(wcContext
 		.getCustomerContactId());
 
@@ -127,12 +132,12 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 	    // getting all the bill to and ship to hierarchy
 	    String billToCustomerId = XPEDXWCUtils
 		    .getLoggedInCustomerFromSession(wcContext);
-	    String customerId = (billToCustomerId != null && billToCustomerId
-		    .trim().length() > 0) ? billToCustomerId : wcContext
+	    String customerId = (billToCustomerId != null && !billToCustomerId
+		    .trim().isEmpty()) ? billToCustomerId : wcContext
 		    .getCustomerId();
 	    Element customerEle = XPEDXWCUtils.getCustomerDetails(customerId,
 		    wcContext.getStorefrontId(),
-		    parentCustomerInformationMashUp).getDocumentElement();
+		    PARENT_CUSTOMER_INFORMATION_MASHUP).getDocumentElement();
 	    billToParentCustomerKey = SCXmlUtil.getXpathAttribute(customerEle,
 		    "/Customer/ParentCustomer/@CustomerKey");
 	    Element outputDoc = prepareAndInvokeMashup("XPEDXBillTOAndShipToHierarchyMashup");
@@ -140,11 +145,10 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 		    "/BillToList/BillTo");
 	    prepareHierarchyToDisplay(billToNL);
 	} catch (Exception e) {
-	    log.debug("Error while getting the Bill to and Ship to Hierarchy ... ");
-	    e.printStackTrace();
+	    log.debug("Error while getting the Bill to and Ship to Hierarchy ... " + e.getMessage());	    
 	}
 
-    }
+    } 
 
     private void prepareHierarchyToDisplay(NodeList billToNL) {
 	customerHierachyDoc = YFCDocument.createDocument("CustomerAssignment")
@@ -159,9 +163,12 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 			"CustomerID", billToID);
 		Element assignedbillToElem = customerHierachyDoc
 			.createElement("BillToCustomer");
-		assignedbillToElem.setAttribute("BillToID", billToID);
-		assignedbillToElem.appendChild(billToCustElem);
-		customerHierachyElem.appendChild(assignedbillToElem);
+		if (assignedbillToElem != null) {		    
+		    assignedbillToElem.setAttribute("BillToID", billToID);
+		    assignedbillToElem.appendChild(billToCustElem);
+		    customerHierachyElem.appendChild(assignedbillToElem);
+		}		
+		
 		NodeList shipToListOfBillTO = SCXmlUtil.getXpathNodes(
 			billToElem, "ShipToList/ShipTo");
 		Element assignedbillToShipToElem = customerHierachyDoc
@@ -171,7 +178,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 		    Element shipToElem = (Element) shipToListOfBillTO.item(j);
 		    String shipToID = shipToElem.getAttribute("ShipToID");
 		    if (assignedCustomerIDs.contains(shipToID)) {
-			if (shipToIDsList.size() == 0) {
+			if (shipToIDsList.isEmpty()) {
 			    shipToIDsList.add(shipToID);
 			    Element ShipToCustElem = SCXmlUtil
 				    .getElementByAttribute(
@@ -195,8 +202,9 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 			}
 		    }
 		}
-		if (assignedbillToElem != null)
+		if (assignedbillToElem != null) {
 		    customerHierachyElem.appendChild(assignedbillToElem);
+		    }
 	    } else {
 		Element assignedbillToElem = customerHierachyDoc
 			.createElement("BillToCustomer");
@@ -209,7 +217,7 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 		    Element shipToElem = (Element) shipToListOfBillTO.item(j);
 		    String shipToID = shipToElem.getAttribute("ShipToID");
 		    if (assignedCustomerIDs.contains(shipToID.trim())) {
-			if (shipToIDsList.size() == 0) {
+			if (shipToIDsList.isEmpty()) {
 			    shipToIDsList.add(shipToID);
 			    Element billToCustElem = null;
 			    try {
@@ -217,9 +225,8 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 					.getCustomerDetails(billToID,
 						wcContext.getStorefrontId())
 					.getDocumentElement();
-			    } catch (Exception e) {
-				e.printStackTrace();
-				log.debug("Error while getting the Bill To customer Info");
+			    } catch (Exception e) {				
+				log.debug("Error while getting the Bill To customer Info " + e.getMessage());
 			    }
 			    assignedbillToElem.setAttribute("BillToID",
 				    billToID);// if bill to is not present in
@@ -265,9 +272,8 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 					    .getCustomerDetails(shipToID,
 						    wcContext.getStorefrontId())
 					    .getDocumentElement();
-				} catch (Exception e) {
-				    e.printStackTrace();
-				    log.debug("Error while getting the Ship To customer Info");
+				} catch (Exception e) {				    
+				    log.debug("Error while getting the Ship To customer Info " + e.getMessage());
 				}
 			    }
 			    Element hierarchyShipToElem = customerHierachyDoc
@@ -284,24 +290,25 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 			}
 		    }
 		}
-		if (assignedbillToElem != null)
+		if (assignedbillToElem != null) {
 		    customerHierachyElem.appendChild(assignedbillToElem);
+		}
 	    }
 	}
 
-    }
+    } */
 
     // TODO Auto-generated method stub
 
-    public String getDefaultShipTo() {
+    /*public String getDefaultShipTo() {
 	return defaultShipTo;
-    }
+    }*/
 
-    public void setDefaultShipTo(String defaultShipTo) {
+    /*public void setDefaultShipTo(String defaultShipTo) {
 	this.defaultShipTo = defaultShipTo;
-    }
+    }*/
 
-    public XPEDXShipToCustomer getShipToAddress() {
+    /*public XPEDXShipToCustomer getShipToAddress() {
 	return shipToAddress;
     }
 
@@ -327,10 +334,10 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
 
     public Element convertIntoElement(Object wNode) {
 	return (Element) wNode;
-    }
+    }*/
 
-    public YFCNodeList<YFCNode> getCustomerAssignmentList() {
-	int FIRST_CHILD = 0;
+    /*public YFCNodeList<YFCNode> getCustomerAssignmentList() {
+	final int FIRST_CHILD = 0;
 	if (customerAssignmentList != null
 		&& customerAssignmentList.item(FIRST_CHILD) != null) {
 	    return customerAssignmentList.item(FIRST_CHILD).getChildNodes();
@@ -341,22 +348,22 @@ public class XPEDXAssignedCustomersLocationsDisplayAction extends
     public void setCustomerAssignmentList(
 	    YFCNodeList<YFCNode> customerAssignmentList) {
 	this.customerAssignmentList = customerAssignmentList;
-    }
+    }*/
 
-    public ArrayList<String> getBillToList() {
+    public List<String> getBillToList() {
 	return billToList;
     }
 
-    public void setBillToList(ArrayList<String> billToList) {
+    public void setBillToList(List<String> billToList) {
 	this.billToList = billToList;
     }
 
-    public HashMap<String, ArrayList<Element>> getAssignedCustomersMap() {
+    public Map<String, ArrayList<Element>> getAssignedCustomersMap() {
 	return assignedCustomersMap;
     }
 
     public void setAssignedCustomersMap(
-	    HashMap<String, ArrayList<Element>> assignedCustomersMap) {
+	    Map<String, ArrayList<Element>> assignedCustomersMap) {
 	this.assignedCustomersMap = assignedCustomersMap;
     }
 

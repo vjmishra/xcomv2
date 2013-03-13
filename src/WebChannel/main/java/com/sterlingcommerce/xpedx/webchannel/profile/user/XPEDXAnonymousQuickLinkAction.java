@@ -13,24 +13,8 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 
 @SuppressWarnings("serial")
 public class XPEDXAnonymousQuickLinkAction extends WCMashupAction {
-    private Map<String, String> quickLinkMap = null;
     private String codeType = null;
-
-    public String getCodeType() {
-	return codeType;
-    }
-
-    public void setCodeType(String codeType) {
-	this.codeType = codeType;
-    }
-
-    public Map<String, String> getQuickLinkMap() {
-	return quickLinkMap;
-    }
-
-    public void setQuickLinkMap(Map<String, String> quickLinkMap) {
-	this.quickLinkMap = quickLinkMap;
-    }
+    private Map<String, String> quickLinkMap = null;
 
     @Override
     public String execute() {
@@ -71,5 +55,21 @@ public class XPEDXAnonymousQuickLinkAction extends WCMashupAction {
 		    ele.getAttribute("CodeShortDescription"));
 	}
 	return map;
+    }
+
+    public String getCodeType() {
+	return codeType;
+    }
+
+    public Map<String, String> getQuickLinkMap() {
+	return quickLinkMap;
+    }
+
+    public void setCodeType(String codeType) {
+	this.codeType = codeType;
+    }
+
+    public void setQuickLinkMap(Map<String, String> quickLinkMap) {
+	this.quickLinkMap = quickLinkMap;
     }
 }

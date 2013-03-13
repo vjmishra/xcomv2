@@ -77,8 +77,9 @@ public class XPEDXUserList extends UserList {
 	boolean retVal = false;
 	try {
 	    String wCCustomerId = wcContext.getCustomerId();
-	    if (inputCustomerID.equals(wCCustomerId))
+	    if (inputCustomerID.equals(wCCustomerId)) {
 		return true;
+	    }
 	    List<String> customerIdList = new ArrayList<String>();
 	    customerIdList.add(wCCustomerId);
 	    customerIdList.add(inputCustomerID);
@@ -119,10 +120,12 @@ public class XPEDXUserList extends UserList {
 		if (inputCustRootCustomerKey != null
 			&& logInCustRootCustomerKey != null
 			&& inputCustRootCustomerKey
-				.equals(logInCustRootCustomerKey))
+				.equals(logInCustRootCustomerKey)) {
 		    retVal = true;
-		else
+		}
+		else {
 		    retVal = false;
+		}
 	    } else {
 		retVal = false;
 	    }
@@ -356,7 +359,7 @@ public class XPEDXUserList extends UserList {
 	    setPageSetToken(page.getAttribute("PageSetToken"));
 	}
 
-	setTotalNumberOfPages(new Integer(0));
+	setTotalNumberOfPages(Integer.valueOf(0));
 	if ((paginated) && (page != null)) {
 	    setTotalNumberOfPages(getIntegerAttribute(page,
 		    "TotalNumberOfPages", getTotalNumberOfPages()));

@@ -30,7 +30,7 @@ public class XPEDXDeleteArticle extends WCMashupAction {
     public String execute() {
 	String[] articles = articleData.split("\\|");
 	for (int i = 0; i < articles.length; i++) {
-	    if (articles[i] != "" || articles[i] != null) {
+	    if (articles[i] != null && !("").equals(articles[i])) {
 		articleNames.add(articles[i]);
 		divisions.add("N/A");
 		customerIDs.add(customerId);

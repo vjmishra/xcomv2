@@ -330,15 +330,14 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		    String customerPath2 = elem1.getAttribute("CustomerPath");
 		    return customerPath1.compareTo(customerPath2);
 		}
-	    });
+	    });	
+	    for (Element authorizeCustomer : assignedCustomers) {
+		String customerID = authorizeCustomer.getAttribute("CustomerID");
+        	String custFullAddress = authorizeCustomer
+        		.getAttribute("CustomerAddress");
+        		authorizedLocationMap.put(customerID, custFullAddress);
+	    }
 	}
-	for (Element authorizeCustomer : assignedCustomers) {
-	    String customerID = authorizeCustomer.getAttribute("CustomerID");
-	    String custFullAddress = authorizeCustomer
-		    .getAttribute("CustomerAddress");
-	    authorizedLocationMap.put(customerID, custFullAddress);
-	}
-
     }
 
     private void populateAvailableLocation() {
@@ -662,7 +661,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 
 	    // String logedinCustomer=getWCContext().getCustomerContactId();
 	    // JIRA 1878 Start
-	    if ((customerContactId != null || customerContactId.trim().length() > 0)
+	    if ((customerContactId != null && customerContactId.trim().length() > 0)
 		    && !customerContactId.equals(getWCContext()
 			    .getCustomerContactId())) {
 		defaultShipToCustomerId = XPEDXWCUtils
@@ -1422,7 +1421,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
     }
 
     public String getCurrentCustomer() {
-	if (currentCustomer.trim().length() <= 0 && currentCustomer != null)
+	if (currentCustomer != null && currentCustomer.trim().length() <= 0 )
 	    currentCustomer = wcContext.getCustomerId();
 	return currentCustomer;
     }
