@@ -730,7 +730,7 @@ return new Ext.XTemplate(
   <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
   '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
   '</table>',
-  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div  id="availabilty_{itemid}" class="price-and-availability" align="center">','</div>','</div>',
+  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',
  '</dd>','</tpl>',  '</dl>','</tpl><div style="clear:left"></div>',
 '</div>'	
 );
