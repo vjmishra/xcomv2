@@ -719,11 +719,18 @@ $(document).ready(function(){
 					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
 					<%--JIRA 3488 end--%>
 					<%--JIRA 3853 start--%>
+					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
+					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+					<li>
+						<label><s:property value='#customerPONoFlag' />:</label>
+						<input tabindex="3407" maxlength="22" style="width:154px;" type="text" name="purchaseOrder" value="" class="text x-input"></input>
+					</li>
+					</s:if>
 					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
 						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
-						<input tabindex="3407" maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+						<input tabindex="3408" maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
 						<s:hidden name="#qaJobID.type" value="" />
 					</li>
 					</s:if>
@@ -732,13 +739,6 @@ $(document).ready(function(){
 						<s:hidden name="#qaJobID.type" value="" />
 					</s:else>
 						<%--JIRA 3853 end--%>
-					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
-					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-					<li>
-						<label><s:property value='#customerPONoFlag' />:</label>
-						<s:textfield tabindex="3408" maxlength="22" name="purchaseOrder" value=""></s:textfield>
-					</li>
-					</s:if>
 					<li>
 						<label>&nbsp;</label>
 						<input id="quickAddButton" type="hidden"/>

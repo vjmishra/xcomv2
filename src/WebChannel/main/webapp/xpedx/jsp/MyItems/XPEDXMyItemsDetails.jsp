@@ -2520,6 +2520,14 @@ function showSharedListForm(){
                                         <label>Qty</label>
 										<s:textfield maxlength="7" cssStyle="width:63px;" cssClass="qty-field text x-input" name="qty" value="" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"></s:textfield>
                                     </li>
+                                    <!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
+									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+										<li>
+											<label>Line PO #</label>
+											 <!--Blank space removed 3693  -->
+											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
+										</li>
+									</s:if>
                                     <s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 	                                    <li>
 	                                        <!-- label>Job Number:</label>  -->
@@ -2527,14 +2535,6 @@ function showSharedListForm(){
 	                                        <!--Blank space removed 3693  -->
 											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
 	                                    </li>
-									</s:if>
-									<!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
-									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-										<li>
-											<label>Line PO #</label>
-											 <!--Blank space removed 3693  -->
-											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
-										</li>
 									</s:if>
 									<li class="nomarginright">
 										<label>&nbsp;</label>
@@ -2564,11 +2564,11 @@ function showSharedListForm(){
                                             <th class="col-header item-col">Item #</th>
                                             <th class="col-header qty-col">Qty</th>
                                             <th class="col-header uom-col">UOM</th>
-                                            <s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
-                                            	<th class="col-header col-header job-col"><!-- Job Number  --><s:property value="#jobIdFlag" /></th>
+                                            <s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+                                            	<th class="col-header col-header job-col">Line PO #</th>
                                             </s:if>
-											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-												<th class="last-col-header col-header po-col">Line PO #</th>
+											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+												<th class="last-col-header col-header po-col"><!-- Job Number  --><s:property value="#jobIdFlag" /></th>
 											</s:if>
                                         </tr>
 

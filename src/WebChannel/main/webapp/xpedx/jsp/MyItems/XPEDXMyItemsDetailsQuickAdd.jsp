@@ -52,14 +52,14 @@
 		            	<s:textfield id="siUom_%{#uId}" cssClass="qty-field x-input" name="uoms" value="%{itemUomId}" cssStyle="width: 63px;"></s:textfield>
 		            </s:else>
 				</td>
-				<s:if test='jobIdFlag'>
+				<s:if test='customerPOFlag'>
 					<td class="col-item" style="width: 53px;">
-						<s:textfield id="siJobId_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="jobIds" maxlength="24"  value="%{jobId}"></s:textfield>
+						<s:textfield id="siPurchaseOrder_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="purchaseOrders" maxlength="22"  value="%{purchaseOrder}" ></s:textfield>
 					</td>
 				</s:if>
-				<s:if test="customerPOFlag">
+				<s:if test="jobIdFlag">
 				<td class="col-item" style="">
-					<s:textfield id="siPurchaseOrder_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="purchaseOrders" maxlength="22"  value="%{purchaseOrder}" ></s:textfield>
+					<s:textfield id="siJobId_%{#uId}" cssClass="qty-field x-input" cssStyle="width: 154px;" name="jobIds" maxlength="24"  value="%{jobId}"></s:textfield>
 				</td>
 				</s:if>
 			</tr>

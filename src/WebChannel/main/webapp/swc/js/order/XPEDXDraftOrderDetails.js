@@ -595,10 +595,10 @@ function redrawQuickAddList()
     	code += '<th class="col-header item-col">Item #</th>';
     	code += '<th class="col-header qty-col">Qty</th>';
     	code += '<th class="col-header uom-col">UOM</th>';
-    	if(jobidFlag == true && jobValue!= null)
-    	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
     	if(custPOFlag)
     		code += '<th class="last-col-header col-header job-col">Line PO #</th>';
+    	if(jobidFlag == true && jobValue!= null)
+    	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
     	code += '<!--  <th class="col-header qty-col">Valid Product</th> -->';
     	code += '<!--  <th class="last-col-header col-header job-col">Add as Special Item</th> -->';
     	code += '</tr></thead>';
@@ -902,17 +902,18 @@ function redrawQuickAddList()
 	        	if(document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value !=null )
 		            	 jobValue = document.QuickAddForm.jobIdValue.value;
 		        
+	        	if(custPOFlag){
+		        	code += '<td class="col-item">';
+		        	code += '<input type="text" name="enteredPONos" maxlength="25" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
+		        	code += '</td>';
+		        }
 		        if(jobidFlag == true && jobValue !=null){
 			        code += '<td class="col-item">'; 
 			        //code += encodeForHTML(QuickAddElems[i].jobId);
 			        code += '<input type="text" name="enteredJobIDs" maxlength="25" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
 			        code += '</td>';
 		        }
-		        if(custPOFlag){
-		        	code += '<td class="col-item">';
-		        	code += '<input type="text" name="enteredPONos" maxlength="25" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
-		        	code += '</td>';
-		        }
+		        
 		        var itemDescription = "enteredProductDescs_" + i;
 		        code += '<input type="hidden" name="enteredProductDescs" id="' + encodeForHTML(itemDescription) + '" value="' + encodeForHTML(QuickAddElems[i].itemDesc) + '"/>';
 		        

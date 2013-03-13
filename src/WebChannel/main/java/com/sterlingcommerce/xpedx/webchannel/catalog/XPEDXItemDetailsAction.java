@@ -210,7 +210,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			customerFieldsSessionMap=XPEDXOrderUtils.getCustomerLineFieldMap(outputEl.getOwnerDocument());
 			//set this in the session
 			localSession.setAttribute("customerFieldsSessionMap", customerFieldsMap);*/
-        	XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+        	//XPEDXWCUtils.setSAPCustomerExtnFieldsInCache(); Commented since this method is called in getCustomerFieldsMapfromSession()
 	    }
         
         if(customerFieldsSessionMap!=null)
