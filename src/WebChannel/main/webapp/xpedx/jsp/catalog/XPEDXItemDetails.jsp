@@ -1546,6 +1546,17 @@ function SubmitActionWithValidation()
 				</s:if>
 				
 				<br />
+				<s:if test=' (isCustomerPO == "Y") '>
+				<div class="linePO line-spacing">
+					<s:property value='customerPOLabel' />:
+					<s:textfield name='customerPONo' theme="simple"
+						cssClass="input-details x-input" id="customerPONo" value="" title="CustomerNumber"
+						tabindex="%{#tabIndex}" maxlength="22"/>					
+					
+				</div>
+				</s:if>
+				
+				
 				<s:if test=' (isCustomerLinAcc == "Y") '>
 					<!-- Job Number represents Customer Line Account # -->
 					<div class="jobNum line-spacing">
@@ -1557,15 +1568,7 @@ function SubmitActionWithValidation()
 					tabindex="12" title="CustomerNumber" />
 
 			
-				<s:if test=' (isCustomerPO == "Y") '>
-				<div class="linePO line-spacing">
-					<s:property value='customerPOLabel' />:
-					<s:textfield name='customerPONo' theme="simple"
-						cssClass="input-details x-input" id="customerPONo" value="" title="CustomerNumber"
-						tabindex="%{#tabIndex}" maxlength="22"/>					
 					
-				</div>
-				</s:if>	
 
 					<s:if test='!#isProcurementUser'>
 					<s:set name='cartUser'

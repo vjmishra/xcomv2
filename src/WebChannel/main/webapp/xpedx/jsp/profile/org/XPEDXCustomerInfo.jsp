@@ -345,6 +345,14 @@ ul.checkboxTree li
           	<td class="no-border table-header-bar-left"width="201"><span class="white txt-small white">Field Name</span></td>
           	<td width="357" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small white">Site Label</span></td>
           </tr>
+          <s:if test="(#_action.IsCustLinePONoFlag())">
+            <tr class="odd" >
+              <td >Line PO #: </td>
+              <td valign="top">
+              	<s:text name="Line PO #"/>
+              </td>
+            </tr>
+            </s:if>
           <s:if test="(#_action.IsCustLineAccNoFlag())">  
           <tr>
             <td>Line Account #: </td>
@@ -363,14 +371,6 @@ ul.checkboxTree li
             <s:else>
             	<s:hidden name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </s:else>
-           <s:if test="(#_action.IsCustLinePONoFlag())">
-            <tr class="odd" >
-              <td >Line PO #: </td>
-              <td valign="top">
-              	<s:text name="Line PO #"/>
-              </td>
-            </tr>
-            </s:if>
             <s:if test="(#_action.IsCustLineField1Flag())">
           <tr class="odd">
             <td >Line Field #1: </td>

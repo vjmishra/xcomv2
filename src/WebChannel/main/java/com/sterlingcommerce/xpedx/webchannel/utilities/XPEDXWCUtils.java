@@ -5339,7 +5339,7 @@ public class XPEDXWCUtils {
 			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged)){
 				// do this only when the default ship to is changed and when logging in for the first time.
 				Document SAPCustomerDoc = XPEDXOrderUtils.getSAPCustomerExtnFlagsDoc(wcContext);
-				LinkedHashMap customerFieldsMap =(LinkedHashMap) XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement());
+				LinkedHashMap customerFieldsMap = new LinkedHashMap();
 				Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
 				Document orderDoc = SCXmlUtil.createDocument("Order");
 				Element orderEle = orderDoc.getDocumentElement();
@@ -5364,17 +5364,18 @@ public class XPEDXWCUtils {
 						customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderElement,rulesDoc, wcContext);
 					}
 					
-					
-					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
-					{
-						if(!customerFieldsMap.containsKey("CustLineAccNo"))
-						customerFieldsMap.put("CustLineAccNo", "Line Account #");
-					}
 					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("CustomerPONo")) 
 					{
 						if(!customerFieldsMap.containsKey("CustomerPONo"))
 						customerFieldsMap.put("CustomerPONo", "Line PO #");
 					}
+					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
+					{
+						if(!customerFieldsMap.containsKey("CustLineAccNo"))
+						customerFieldsMap.put("CustLineAccNo", "Line Account #");
+					}
+					customerFieldsMap.putAll((LinkedHashMap) XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement()));
+					
 					setObectInCache("customerFieldsSessionMap", customerFieldsMap);
 					
 					setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP",customerFieldsRulesMap));
