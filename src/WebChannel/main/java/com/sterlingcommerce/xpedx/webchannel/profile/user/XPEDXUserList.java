@@ -20,34 +20,53 @@ import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXUserList extends UserList {
 
+    private static final String DEFAULT_PAGE_SIZE = "7";
+
+    private static final String DEFAULT_PAGE_SIZE_PARAM = "pageSizeParam";
+
+    private static final String GET_CUSTOMER_BUYER_ORG_MASHUP = "getBuyerOrganizationForCustomer";
+    // mashup
+    private static final String GET_USER_LIST_MASHUP = "getXpedxUserList";
+
+    // Logger
+    private static final Logger log = Logger.getLogger(UserList.class);
+    private static final String SEARCH_BY_EMAILID = "EmailID";
+    private static final String SEARCH_BY_FIRST_NAME = "FirstName";
+    // Search fields and parameters
+    private static final String SEARCH_BY_LAST_NAME = "LastName";
+    private static final String SEARCH_BY_PHONENO = "DayPhone";
+    private static final String SEARCH_CONTAINS = "LIKE";
+    private static final String SEARCH_EXACT = "EQ";
+    private static final String SEARCH_FIRST = "FLIKE";
+    private static final String SEARCH_NO_CRITERIA = "noCriteria";
     /**
      * 
      */
     private static final long serialVersionUID = -3029351853035730642L;
-
-    // Logger
-    private static final Logger log = Logger.getLogger(UserList.class);
-
-    // mashup
-    private static final String GET_USER_LIST_MASHUP = "getXpedxUserList";
-    private static final String GET_CUSTOMER_BUYER_ORG_MASHUP = "getBuyerOrganizationForCustomer";
-
+    private static final String SORT_BY_EMAILID = "EmailID";
+    private static final String SORT_BY_FIRST_NAME = "FirstName";
     // Sort fields and parameters
     private static final String SORT_BY_LAST_NAME = "LastName";
-    private static final String SORT_BY_FIRST_NAME = "FirstName";
-    private static final String SORT_BY_EMAILID = "EmailID";
     private static final String SORT_BY_PHONENO = "DayPhone";
-    // Search fields and parameters
-    private static final String SEARCH_BY_LAST_NAME = "LastName";
-    private static final String SEARCH_BY_FIRST_NAME = "FirstName";
-    private static final String SEARCH_BY_EMAILID = "EmailID";
-    private static final String SEARCH_BY_PHONENO = "DayPhone";
-    private static final String SEARCH_FIRST = "FLIKE";
-    private static final String SEARCH_EXACT = "EQ";
-    private static final String SEARCH_CONTAINS = "LIKE";
-    private static final String SEARCH_NO_CRITERIA = "noCriteria";
-    private static final String DEFAULT_PAGE_SIZE = "7";
-    private static final String DEFAULT_PAGE_SIZE_PARAM = "pageSizeParam";
+
+    // TODO Method should be removed and SCXMLUtils method should be used
+    private static Boolean getBooleanAttribute(Element page, String name,
+	    Boolean defaultValue) {
+	Boolean value = defaultValue;
+	String str = page.getAttribute(name);
+	if (str != null) {
+	    if ("Y".equals(str)) {
+		value = Boolean.TRUE;
+	    } else {
+		value = Boolean.TRUE;
+	    }
+	}
+	return value;
+    }
+
+    Map<String, Boolean> isAdminMap = new HashMap<String, Boolean>();
+
+    private String pageSetToken;
 
     @Override
     public String execute() {
@@ -70,69 +89,6 @@ public class XPEDXUserList extends UserList {
 	    return ERROR;
 	}
 	return searchUser();
-    }
-
-    private boolean isCustInCtxCustHierarchy(String inputCustomerID,
-	    IWCContext wcContext) {
-	boolean retVal = false;
-	try {
-	    String wCCustomerId = wcContext.getCustomerId();
-	    if (inputCustomerID.equals(wCCustomerId)) {
-		return true;
-	    }
-	    List<String> customerIdList = new ArrayList<String>();
-	    customerIdList.add(wCCustomerId);
-	    customerIdList.add(inputCustomerID);
-	    Element customerList = XPEDXWCUtils.getCustomerListDetalis(
-		    customerIdList, wcContext);
-	    UtilBean utilBean = new UtilBean();
-	    List<Element> customerContactList = utilBean.getElements(
-		    customerList, "//CustomerList/Customer");
-	    if (customerContactList != null && customerContactList.size() > 1) {
-		Element loggedinCustomerDetails = customerContactList.get(0);
-		Element inputCustomerDetails = customerContactList.get(1);
-		String inputCustRootCustomerKey = inputCustomerDetails
-			.getAttribute("RootCustomerKey");// SCXmlUtils.getAttribute(inputCustomerDetails,
-							 // "RootCustomerKey");
-		String inputCustomerId = inputCustomerDetails
-			.getAttribute("CustomerID");// SCXmlUtils.getAttribute(inputCustomerDetails,
-						    // "CustomerID");
-		Element buyerOrganizationElem = null;
-		if (inputCustomerID.equals(inputCustomerId)) {
-		    buyerOrganizationElem = (Element) inputCustomerDetails
-			    .getElementsByTagName("BuyerOrganization").item(0);
-
-		} else {
-		    buyerOrganizationElem = (Element) loggedinCustomerDetails
-			    .getElementsByTagName("BuyerOrganization").item(0);
-		}
-		if (buyerOrganizationElem != null) {
-		    String buyerOrgCode = buyerOrganizationElem
-			    .getAttribute("OrganizationCode");
-		    setBuyerOrgCode(buyerOrgCode);
-		    if (!(YFCCommon.isVoid(buyerOrgCode))) {
-			setBuyerOrgName(buyerOrganizationElem
-				.getAttribute("OrganizationName"));
-		    }
-		}
-		String logInCustRootCustomerKey = SCXmlUtil.getAttribute(
-			loggedinCustomerDetails, "RootCustomerKey");
-		if (inputCustRootCustomerKey != null
-			&& logInCustRootCustomerKey != null
-			&& inputCustRootCustomerKey
-				.equals(logInCustRootCustomerKey)) {
-		    retVal = true;
-		}
-		else {
-		    retVal = false;
-		}
-	    } else {
-		retVal = false;
-	    }
-	} catch (Exception e) {
-	    LOG.debug("error while validating user" + e.getMessage());
-	}
-	return retVal;
     }
 
     /**
@@ -166,58 +122,6 @@ public class XPEDXUserList extends UserList {
 	}
     }
 
-    @Override
-    public String searchUser() {
-	setPageSize(wcContext.getSCUIContext().getRequest()
-		.getParameter(DEFAULT_PAGE_SIZE_PARAM));
-	if (YFCCommon.isVoid(getPageSize())) {
-	    setPageSize(DEFAULT_PAGE_SIZE);
-	}
-	try {
-	    if (getOrderByAttribute() == null) {
-		setOrderByAttribute("LastName");
-	    }
-	    getContactlistAPIInput();
-	    getSearchAPIInput();
-
-	    setUserList(prepareAndInvokeMashup(GET_USER_LIST_MASHUP));
-
-	    NodeList userList = SCXmlUtil.getXpathNodes(getUserList(),
-		    "Output/CustomerContactList/CustomerContact");
-	    for (int i = 0; i < userList.getLength(); i++) {
-		Element elem = (Element) userList.item(i);
-		String customerContactId = elem
-			.getAttribute("CustomerContactID");
-		List<Element> userGroupList = SCXmlUtil.getElements(elem,
-			"/User/UserGroupLists/UserGroupList");
-		boolean isAdmin = false;
-		if (userGroupList != null) {
-		    for (Element elemUserGroupList : userGroupList) {
-			String usergroupKey = elemUserGroupList
-				.getAttribute("UsergroupKey");
-			if ("BUYER-ADMIN".equals(usergroupKey)) {
-			    isAdmin = true;
-			}
-		    }
-		}
-		isAdminMap.put(customerContactId, isAdmin);
-	    }
-	    try {
-		parsePageInfo(getUserList(), true);
-	    } catch (Exception e) {
-		log.error("Error in getting the User List for Customer : "
-			+ getCustomerID(), e.getCause());
-	    }
-	} catch (XMLExceptionWrapper e) {
-	    log.error("Error in getting the User List for Customer : "
-		    + getCustomerID(), e.getCause());
-	} catch (CannotBuildInputException e) {
-	    log.error("Error in getting the User List for Customer : "
-		    + getCustomerID(), e.getCause());
-	}
-	return SUCCESS;
-    }
-
     /**
      * This method returns the Mashup API Input variables to get Customer
      * Contact List
@@ -241,6 +145,51 @@ public class XPEDXUserList extends UserList {
 	} else if (SORT_BY_PHONENO.equals(getOrderByAttribute())) {
 	    setOrderByAttribute(SORT_BY_PHONENO);
 	}
+    }
+
+    // TODO Method should be removed and SCXMLUtils method should be used
+    private Integer getIntegerAttribute(Element page, String name,
+	    Integer defaultValue) {
+	Integer value = defaultValue;
+	String str = page.getAttribute(name);
+	try {
+	    value = Integer.valueOf(str);
+	} catch (NumberFormatException e) {
+	    value = defaultValue;
+	}
+	return value;
+    }
+
+    public Map<String, Boolean> getIsAdminMap() {
+	return isAdminMap;
+    }
+
+    public String getPageSetToken() {
+	return pageSetToken;
+    }
+
+    /**
+     * Method to get query type for the search
+     * 
+     * @param
+     * @return qryType of type string
+     */
+
+    private String getQryType(String qry) {
+	String qryType = SEARCH_EXACT;
+	if (qry != null) {
+	    if (qry.startsWith("*")) {
+		if (qry.endsWith("*")) {
+
+		    qryType = SEARCH_CONTAINS;
+		}
+	    } else {
+		if (qry.endsWith("*")) {
+		    qryType = SEARCH_FIRST;
+		}
+	    }
+	}
+	return qryType;
     }
 
     /**
@@ -318,6 +267,68 @@ public class XPEDXUserList extends UserList {
 	}
     }
 
+    private boolean isCustInCtxCustHierarchy(String inputCustomerID,
+	    IWCContext wcContext) {
+	boolean retVal = false;
+	try {
+	    String wCCustomerId = wcContext.getCustomerId();
+	    if (inputCustomerID.equals(wCCustomerId)) {
+		return true;
+	    }
+	    List<String> customerIdList = new ArrayList<String>();
+	    customerIdList.add(wCCustomerId);
+	    customerIdList.add(inputCustomerID);
+	    Element customerList = XPEDXWCUtils.getCustomerListDetalis(
+		    customerIdList, wcContext);
+	    UtilBean utilBean = new UtilBean();
+	    List<Element> customerContactList = utilBean.getElements(
+		    customerList, "//CustomerList/Customer");
+	    if (customerContactList != null && customerContactList.size() > 1) {
+		Element loggedinCustomerDetails = customerContactList.get(0);
+		Element inputCustomerDetails = customerContactList.get(1);
+		String inputCustRootCustomerKey = inputCustomerDetails
+			.getAttribute("RootCustomerKey");// SCXmlUtils.getAttribute(inputCustomerDetails,
+							 // "RootCustomerKey");
+		String inputCustomerId = inputCustomerDetails
+			.getAttribute("CustomerID");// SCXmlUtils.getAttribute(inputCustomerDetails,
+						    // "CustomerID");
+		Element buyerOrganizationElem = null;
+		if (inputCustomerID.equals(inputCustomerId)) {
+		    buyerOrganizationElem = (Element) inputCustomerDetails
+			    .getElementsByTagName("BuyerOrganization").item(0);
+
+		} else {
+		    buyerOrganizationElem = (Element) loggedinCustomerDetails
+			    .getElementsByTagName("BuyerOrganization").item(0);
+		}
+		if (buyerOrganizationElem != null) {
+		    String buyerOrgCode = buyerOrganizationElem
+			    .getAttribute("OrganizationCode");
+		    setBuyerOrgCode(buyerOrgCode);
+		    if (!(YFCCommon.isVoid(buyerOrgCode))) {
+			setBuyerOrgName(buyerOrganizationElem
+				.getAttribute("OrganizationName"));
+		    }
+		}
+		String logInCustRootCustomerKey = SCXmlUtil.getAttribute(
+			loggedinCustomerDetails, "RootCustomerKey");
+		if (inputCustRootCustomerKey != null
+			&& logInCustRootCustomerKey != null
+			&& inputCustRootCustomerKey
+				.equals(logInCustRootCustomerKey)) {
+		    retVal = true;
+		} else {
+		    retVal = false;
+		}
+	    } else {
+		retVal = false;
+	    }
+	} catch (Exception e) {
+	    LOG.debug("error while validating user" + e.getMessage());
+	}
+	return retVal;
+    }
+
     /**
      * This method sets the pagination parameters
      * 
@@ -366,75 +377,64 @@ public class XPEDXUserList extends UserList {
 	}
     }
 
-    /**
-     * Method to get query type for the search
-     * 
-     * @param
-     * @return qryType of type string
-     */
-
-    private String getQryType(String qry) {
-	String qryType = SEARCH_EXACT;
-	if (qry != null) {
-	    if (qry.startsWith("*")) {
-		if (qry.endsWith("*")) {
-
-		    qryType = SEARCH_CONTAINS;
-		}
-	    } else {
-		if (qry.endsWith("*")) {
-		    qryType = SEARCH_FIRST;
-		}
-	    }
+    @Override
+    public String searchUser() {
+	setPageSize(wcContext.getSCUIContext().getRequest()
+		.getParameter(DEFAULT_PAGE_SIZE_PARAM));
+	if (YFCCommon.isVoid(getPageSize())) {
+	    setPageSize(DEFAULT_PAGE_SIZE);
 	}
-	return qryType;
-    }
-
-    // TODO Method should be removed and SCXMLUtils method should be used
-    private static Boolean getBooleanAttribute(Element page, String name,
-	    Boolean defaultValue) {
-	Boolean value = defaultValue;
-	String str = page.getAttribute(name);
-	if (str != null) {
-	    if ("Y".equals(str)) {
-		value = Boolean.TRUE;
-	    } else {
-		value = Boolean.TRUE;
-	    }
-	}
-	return value;
-    }
-
-    // TODO Method should be removed and SCXMLUtils method should be used
-    private Integer getIntegerAttribute(Element page, String name,
-	    Integer defaultValue) {
-	Integer value = defaultValue;
-	String str = page.getAttribute(name);
 	try {
-	    value = Integer.valueOf(str);
-	} catch (NumberFormatException e) {
-	    value = defaultValue;
-	}
-	return value;
-    }
+	    if (getOrderByAttribute() == null) {
+		setOrderByAttribute("LastName");
+	    }
+	    getContactlistAPIInput();
+	    getSearchAPIInput();
 
-    public Map<String, Boolean> getIsAdminMap() {
-	return isAdminMap;
+	    setUserList(prepareAndInvokeMashup(GET_USER_LIST_MASHUP));
+
+	    NodeList userList = SCXmlUtil.getXpathNodes(getUserList(),
+		    "Output/CustomerContactList/CustomerContact");
+	    for (int i = 0; i < userList.getLength(); i++) {
+		Element elem = (Element) userList.item(i);
+		String customerContactId = elem
+			.getAttribute("CustomerContactID");
+		List<Element> userGroupList = SCXmlUtil.getElements(elem,
+			"/User/UserGroupLists/UserGroupList");
+		boolean isAdmin = false;
+		if (userGroupList != null) {
+		    for (Element elemUserGroupList : userGroupList) {
+			String usergroupKey = elemUserGroupList
+				.getAttribute("UsergroupKey");
+			if ("BUYER-ADMIN".equals(usergroupKey)) {
+			    isAdmin = true;
+			}
+		    }
+		}
+		isAdminMap.put(customerContactId, isAdmin);
+	    }
+	    try {
+		parsePageInfo(getUserList(), true);
+	    } catch (Exception e) {
+		log.error("Error in getting the User List for Customer : "
+			+ getCustomerID(), e.getCause());
+	    }
+	} catch (XMLExceptionWrapper e) {
+	    log.error("Error in getting the User List for Customer : "
+		    + getCustomerID(), e.getCause());
+	} catch (CannotBuildInputException e) {
+	    log.error("Error in getting the User List for Customer : "
+		    + getCustomerID(), e.getCause());
+	}
+	return SUCCESS;
     }
 
     public void setIsAdminMap(Map<String, Boolean> isAdminMap) {
 	this.isAdminMap = isAdminMap;
     }
 
-    public String getPageSetToken() {
-	return pageSetToken;
-    }
-
     public void setPageSetToken(String pageSetToken) {
 	this.pageSetToken = pageSetToken;
     }
-
-    Map<String, Boolean> isAdminMap = new HashMap<String, Boolean>();
-    private String pageSetToken;
 
 }

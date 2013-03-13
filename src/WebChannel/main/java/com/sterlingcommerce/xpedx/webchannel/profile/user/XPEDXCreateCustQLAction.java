@@ -23,54 +23,6 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
     private String selectedTab;
     private boolean success;
 
-    public boolean isSuccess() {
-	return success;
-    }
-
-    public void setSuccess(boolean success) {
-	this.success = success;
-    }
-
-    public String getSelectedTab() {
-	return selectedTab;
-    }
-
-    public void setSelectedTab(String selectedTab) {
-	this.selectedTab = selectedTab;
-    }
-
-    public String getFrmUserProfile1Flag() {
-	return frmUserProfile1Flag;
-    }
-
-    public void setFrmUserProfile1Flag(String frmUserProfile1Flag) {
-	this.frmUserProfile1Flag = frmUserProfile1Flag;
-    }
-
-    public String getBodyData() {
-	return bodyData;
-    }
-
-    public void setBodyData(String bodyData) {
-	this.bodyData = bodyData;
-    }
-
-    public String getCustomerContactId() {
-	return customerContactId;
-    }
-
-    public void setCustomerContactId(String customerContactId) {
-	this.customerContactId = customerContactId;
-    }
-
-    public String getCustomerId() {
-	return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-	this.customerId = customerId;
-    }
-
     @Override
     public String execute() {
 
@@ -95,6 +47,30 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 	}
 	// Fix End For Jira 3196
 	return REDIRECT;
+    }
+
+    public String getBodyData() {
+	return bodyData;
+    }
+
+    public String getCustomerContactId() {
+	return customerContactId;
+    }
+
+    public String getCustomerId() {
+	return customerId;
+    }
+
+    public String getFrmUserProfile1Flag() {
+	return frmUserProfile1Flag;
+    }
+
+    public String getSelectedTab() {
+	return selectedTab;
+    }
+
+    public boolean isSuccess() {
+	return success;
     }
 
     private Element prepareInputXML() {
@@ -147,7 +123,7 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 
 		if (i == 2) {
 		    eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
-		}		
+		}
 
 		if (i == 5) {
 		    eleXPXQuickLink.setAttribute("URLOrder", token);
@@ -203,6 +179,30 @@ public class XPEDXCreateCustQLAction extends WCMashupAction {
 	templateElement.appendChild(eleCustomerContactList);
 
 	return templateElement;
+    }
+
+    public void setBodyData(String bodyData) {
+	this.bodyData = bodyData;
+    }
+
+    public void setCustomerContactId(String customerContactId) {
+	this.customerContactId = customerContactId;
+    }
+
+    public void setCustomerId(String customerId) {
+	this.customerId = customerId;
+    }
+
+    public void setFrmUserProfile1Flag(String frmUserProfile1Flag) {
+	this.frmUserProfile1Flag = frmUserProfile1Flag;
+    }
+
+    public void setSelectedTab(String selectedTab) {
+	this.selectedTab = selectedTab;
+    }
+
+    public void setSuccess(boolean success) {
+	this.success = success;
     }
 
 }

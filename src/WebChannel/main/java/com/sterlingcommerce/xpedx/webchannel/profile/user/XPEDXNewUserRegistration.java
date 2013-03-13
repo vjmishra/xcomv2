@@ -17,50 +17,42 @@ import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXNewUserRegistration extends WCMashupAction {
+    @SuppressWarnings("unused")
+    private static final Logger log = Logger
+	    .getLogger(XPEDXNewUserRegistration.class);
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @SuppressWarnings("unused")
-    private static final Logger log = Logger
-	    .getLogger(XPEDXNewUserRegistration.class);
 
-    private String newUserEmail = null;
-    private String newUserPhone = null;
-    private String newUserCompanyName = null;
+    private static final String SUCCESS = "success";
+    private String appendedCSREmailIDs = null;
+    private String brandEmail = null;
+    private String imageUrlPath = null; // Start -Jira 3261
+    private String mailCCAddress = null;
+    private String mailFromAddress = null;
+    private String mailSubject = null;
+    private String messageType = "NewUser";
     private String newUserAddress1 = null;
     private String newUserAddress2 = null;
     private String newUserCity = null;
-    private String newUserState = null;
-    private String newUserZipCode = null;
     private String newUserComments = null;
-    private String mailSubject = null;
-    private String appendedCSREmailIDs = null;
-    private String templatePath = null;
-    private String mailFromAddress = null;
-    private String mailCCAddress = null;
+    private String newUserCompanyName = null;
+    private String newUserEmail = null;
     private String newUserFirstName = null;
     private String newUserLastName = null;
-    private String messageType = "NewUser";
-    private String imageUrlPath = null; // Start -Jira 3261
-    private String brandEmail = null;
+    private String newUserPhone = null;
+    private String newUserState = null;
+    private String newUserZipCode = null;
 
-    public String getImageUrlPath() {
-	return imageUrlPath;
-    }
-
-    public void setImageUrlPath(String imageUrlPath) {
-	this.imageUrlPath = imageUrlPath;
-    }
-
-    private static final String SUCCESS = "success";
+    private String templatePath = null;
 
     @Override
     public String execute() {
 
 	StringBuffer sb = new StringBuffer();
 	// StringBuffer sbm = new StringBuffer();
-	//String suffix = "";
+	// String suffix = "";
 
 	String storeFrontId = wcContext.getStorefrontId();
 	if (storeFrontId != null && storeFrontId.length() > 0) {
@@ -68,7 +60,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	    String suffix = YFSSystem.getProperty("fromAddress.suffix");
 	    sb.append(userName).append("@").append(storeFrontId).append(suffix);
 	    // String marketingCC = "marketing";
-	    //suffix = YFSSystem.getProperty("fromAddress.suffix");
+	    // suffix = YFSSystem.getProperty("fromAddress.suffix");
 	    // sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
 	    brandEmail = storeFrontId;
 
@@ -83,9 +75,9 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	// String imageUrl = "";
 	if (storeFrontId != null && !storeFrontId.trim().isEmpty()) {
 	    String imageName = getLogoName(storeFrontId);
-	    final String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-	    if (imagesRootFolder != null
-		    && !imagesRootFolder.trim().isEmpty()
+	    final String imagesRootFolder = YFSSystem
+		    .getProperty("ImagesRootFolder");
+	    if (imagesRootFolder != null && !imagesRootFolder.trim().isEmpty()
 		    && imageName != null && !imageName.trim().isEmpty()) {
 		imageUrlPath = imagesRootFolder + imageName;
 		setImageUrlPath(imageUrlPath);
@@ -147,12 +139,24 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		    emailSubject, emailFrom, storeFrontId);
 	    /* XBT-73 : End - Sending email through Java Mail API now */
 
-	} catch (Exception e) {	    
+	} catch (Exception e) {
 	    log.error("Couldn't send the Mail to CSR" + e.getMessage());
 	    return ERROR;
 	    // TODO: handle exception
 	}
 	return SUCCESS;
+    }
+
+    public String getAppendedCSREmailIDs() {
+	return appendedCSREmailIDs;
+    }
+
+    public String getBrandEmail() {
+	return brandEmail;
+    }
+
+    public String getImageUrlPath() {
+	return imageUrlPath;
     }
 
     /**
@@ -194,94 +198,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	return _imageName;
     }
 
-    /**
-     * End JIRA 3261
-     * 
-     * 
-     * */
-
-    public String getNewUserAddress1() {
-	return newUserAddress1;
+    public String getMailCCAddress() {
+	return mailCCAddress;
     }
 
-    public void setNewUserAddress1(String newUserAddress1) {
-	this.newUserAddress1 = newUserAddress1;
-    }
-
-    public String getNewUserAddress2() {
-	return newUserAddress2;
-    }
-
-    public void setNewUserAddress2(String newUserAddress2) {
-	this.newUserAddress2 = newUserAddress2;
-    }
-
-    public String getNewUserCompanyName() {
-	return newUserCompanyName;
-    }
-
-    public void setNewUserCompanyName(String newUserCompanyName) {
-	this.newUserCompanyName = newUserCompanyName;
-    }
-
-    public String getNewUserEmail() {
-	return newUserEmail;
-    }
-
-    public void setNewUserEmail(String newUserEmail) {
-	this.newUserEmail = newUserEmail;
-    }
-
-    public String getBrandEmail() {
-	return brandEmail;
-    }
-
-    public void setBrandEmail(String brandEmail) {
-	this.brandEmail = brandEmail;
-    }
-
-    /*
-     * public String getNewUserName() { return newUserName; } public void
-     * setNewUserName(String newUserName) { this.newUserName = newUserName; }
-     */
-    public String getNewUserPhone() {
-	return newUserPhone;
-    }
-
-    public void setNewUserPhone(String newUserPhone) {
-	this.newUserPhone = newUserPhone;
-    }
-
-    public String getNewUserCity() {
-	return newUserCity;
-    }
-
-    public void setNewUserCity(String newUserCity) {
-	this.newUserCity = newUserCity;
-    }
-
-    public String getNewUserState() {
-	return newUserState;
-    }
-
-    public void setNewUserState(String newUserState) {
-	this.newUserState = newUserState;
-    }
-
-    public String getNewUserZipCode() {
-	return newUserZipCode;
-    }
-
-    public void setNewUserZipCode(String newUserZipCode) {
-	this.newUserZipCode = newUserZipCode;
-    }
-
-    public String getNewUserComments() {
-	return newUserComments;
-    }
-
-    public void setNewUserComments(String newUserComments) {
-	this.newUserComments = newUserComments;
+    public String getMailFromAddress() {
+	return mailFromAddress;
     }
 
     /*
@@ -292,64 +214,142 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	return mailSubject;
     }
 
-    public void setMailSubject(String mailSubject) {
-	this.mailSubject = mailSubject;
+    public String getMessageType() {
+	return messageType;
     }
 
-    public String getAppendedCSREmailIDs() {
-	return appendedCSREmailIDs;
+    /**
+     * End JIRA 3261
+     * 
+     * 
+     * */
+
+    public String getNewUserAddress1() {
+	return newUserAddress1;
     }
 
-    public void setAppendedCSREmailIDs(String appendedCSREmailIDs) {
-	this.appendedCSREmailIDs = appendedCSREmailIDs;
+    public String getNewUserAddress2() {
+	return newUserAddress2;
     }
 
-    public String getTemplatePath() {
-	return templatePath;
+    public String getNewUserCity() {
+	return newUserCity;
     }
 
-    public void setTemplatePath(String templatePath) {
-	this.templatePath = templatePath;
+    public String getNewUserComments() {
+	return newUserComments;
     }
 
-    public String getMailFromAddress() {
-	return mailFromAddress;
+    public String getNewUserCompanyName() {
+	return newUserCompanyName;
     }
 
-    public void setMailFromAddress(String mailFromAddress) {
-	this.mailFromAddress = mailFromAddress;
-    }
-
-    public String getMailCCAddress() {
-	return mailCCAddress;
-    }
-
-    public void setMailCCAddress(String mailCCAddress) {
-	this.mailCCAddress = mailCCAddress;
+    public String getNewUserEmail() {
+	return newUserEmail;
     }
 
     public String getNewUserFirstName() {
 	return newUserFirstName;
     }
 
-    public void setNewUserFirstName(String newUserFirstName) {
-	this.newUserFirstName = newUserFirstName;
-    }
-
     public String getNewUserLastName() {
 	return newUserLastName;
+    }
+
+    /*
+     * public String getNewUserName() { return newUserName; } public void
+     * setNewUserName(String newUserName) { this.newUserName = newUserName; }
+     */
+    public String getNewUserPhone() {
+	return newUserPhone;
+    }
+
+    public String getNewUserState() {
+	return newUserState;
+    }
+
+    public String getNewUserZipCode() {
+	return newUserZipCode;
+    }
+
+    public String getTemplatePath() {
+	return templatePath;
+    }
+
+    public void setAppendedCSREmailIDs(String appendedCSREmailIDs) {
+	this.appendedCSREmailIDs = appendedCSREmailIDs;
+    }
+
+    public void setBrandEmail(String brandEmail) {
+	this.brandEmail = brandEmail;
+    }
+
+    public void setImageUrlPath(String imageUrlPath) {
+	this.imageUrlPath = imageUrlPath;
+    }
+
+    public void setMailCCAddress(String mailCCAddress) {
+	this.mailCCAddress = mailCCAddress;
+    }
+
+    public void setMailFromAddress(String mailFromAddress) {
+	this.mailFromAddress = mailFromAddress;
+    }
+
+    public void setMailSubject(String mailSubject) {
+	this.mailSubject = mailSubject;
+    }
+
+    public void setMessageType(String messageType) {
+	this.messageType = messageType;
+    }
+
+    public void setNewUserAddress1(String newUserAddress1) {
+	this.newUserAddress1 = newUserAddress1;
+    }
+
+    public void setNewUserAddress2(String newUserAddress2) {
+	this.newUserAddress2 = newUserAddress2;
+    }
+
+    public void setNewUserCity(String newUserCity) {
+	this.newUserCity = newUserCity;
+    }
+
+    public void setNewUserComments(String newUserComments) {
+	this.newUserComments = newUserComments;
+    }
+
+    public void setNewUserCompanyName(String newUserCompanyName) {
+	this.newUserCompanyName = newUserCompanyName;
+    }
+
+    public void setNewUserEmail(String newUserEmail) {
+	this.newUserEmail = newUserEmail;
+    }
+
+    public void setNewUserFirstName(String newUserFirstName) {
+	this.newUserFirstName = newUserFirstName;
     }
 
     public void setNewUserLastName(String newUserLastName) {
 	this.newUserLastName = newUserLastName;
     }
 
-    public String getMessageType() {
-	return messageType;
+    public void setNewUserPhone(String newUserPhone) {
+	this.newUserPhone = newUserPhone;
     }
 
-    public void setMessageType(String messageType) {
-	this.messageType = messageType;
+    public void setNewUserState(String newUserState) {
+	this.newUserState = newUserState;
+    }
+
+    public void setNewUserZipCode(String newUserZipCode) {
+	this.newUserZipCode = newUserZipCode;
+    }
+
+    public void setTemplatePath(String templatePath) {
+	this.templatePath = templatePath;
     }
 
 }

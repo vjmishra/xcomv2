@@ -55,309 +55,286 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXSaveUserInfo extends WCMashupAction
 
 {
+    private static final String BUYER_ADMIN_GROUP_KEY = "BUYER-ADMIN";
+    private static final String BUYER_APPROVER_GROUP_KEY = "BUYER-APPROVER";
+    private static final String BUYER_USER_GROUP_KEY = "BUYER-USER";
+    // Strings
+    private static final String CUSTOMER_STATUS_ACTIVE = "10";
+    private static final String CUSTOMER_STATUS_ON_HOLD = "20";
+    // Logger
+    private static final Logger log = Logger.getLogger(XPEDXSaveUserInfo.class);
+    // mashups
+    private static final String MANAGE_CONTACT_MASHUP = "ManageXpedxContact";
+    private static final String MANAGE_USER_MASHUP = "ManageXpedxUser";
+    // String for Action Results
+    private static final String REDIRECT = "redirect";
     /**
      * 
      */
     private static final long serialVersionUID = -7194085148560207953L;
-    private Element customer;
-    private Element contact;
-    private Element user;
-    private Element customerAdmin;
-    private String userPassword = "*****";
-    private String organizationCode;
-    private Element loc;
-    private String userId;
-    private String selectedTab;
 
-    // Logger
-    private static final Logger log = Logger.getLogger(XPEDXSaveUserInfo.class);
-
-    // Strings
-    private static final String CUSTOMER_STATUS_ACTIVE = "10";
-    private static final String CUSTOMER_STATUS_ON_HOLD = "20";
     private static final String YES = "Y";
-    private static final String BUYER_USER_GROUP_KEY = "BUYER-USER";
-    private static final String BUYER_ADMIN_GROUP_KEY = "BUYER-ADMIN";
-    private static final String BUYER_APPROVER_GROUP_KEY = "BUYER-APPROVER";
 
-    // mashups
-    private static final String MANAGE_CONTACT_MASHUP = "ManageXpedxContact";
-    private static final String MANAGE_USER_MASHUP = "ManageXpedxUser";
-    // Form Fields
-    private String userName;
-    private String password;
-    private String confirmPassword;
-    private String secretQuestion;
-    private String secretAnswer;
-    private String confirmAnswer;
-    private String preferredLocale;
-    private String title;
-    private String firstName;
-    private String lastName;
-    private String jobTitle;
-    // private String comparnyName;
-    private String deptName;
-    private String buyerUser;
-    private String buyerAdmin;
+    private String addnlEmailAddrText = "";
     private String approver;
-    private String status;
-    private String contactStatus;
-    private String userStatus;
-    private String emailId;
-    private String viewPrices;
-    private String viewReports;
-    private String invoiceEmailID;
-    private String orderConfirmationEmailFlag;
-    private String orderCancellationEmailFlag;
-    private String orderUpdateEmailFlag;
-    private String orderShipmentEmailFlag;
+    protected String b2bCatalogView;
     private String backorderEmailFlag;
     private String bodyData;
+    private String buyAdmin;
+
+    private String buyerAdmin;
+    private String buyerOrgCode;
+    private String buyerUser;
+    private String confirmAnswer;
+    private String confirmPassword;
+    private Element contact;
+    private String contactStatus;
+    private String currentSelTab;
+    private Element customer;
+    private Element customerAdmin;
+    private String customerContactId;
+    // Request parameters
+    private String customerId;
     private List<String> customers1 = new ArrayList<String>();
     private List<String> customers2 = new ArrayList<String>();
-    private List<String> oldAssignedCustomers = new ArrayList<String>();
-    private String buyAdmin;
-    private String spendingLtCurrency;
-    private String currentSelTab;
-    private String userPwdToValidate;
+    // Phone Book Fields
+    private String dayFaxNo;
+    private String dayPhone;
     public String defaultShipTo;
-    private List<String> oldAssignCusts = new ArrayList<String>();
-    private Document manageCustomerAssigmentInputDoc = null;
-    private String orderApprovalFlag;// added for XB 226
-
-    public String getDefaultShipTo() {
-	return defaultShipTo;
-    }
-
-    public void setDefaultShipTo(String defaultShipTo) {
-	this.defaultShipTo = defaultShipTo;
-    }
-
+    // private String comparnyName;
+    private String deptName;
+    private String emailId;
+    private String estimator = "N";
+    private String eveningFaxNo;
+    private String eveningPhone;
+    private String firstName;
+    private String invoiceEmailID;
+    private String jobTitle;
+    private String lastName;
+    private Element loc;
     /* Added for Jira 3902 */
     private String loginId;
+    private Document manageCustomerAssigmentInputDoc = null;
+    private String mobilePhone;
+    private List<String> oldAssignCusts = new ArrayList<String>();
+    private List<String> oldAssignedCustomers = new ArrayList<String>();
+    // Mode of operation
+    private String operation = "";
+    private String orderApprovalFlag;// added for XB 226
+    private String orderCancellationEmailFlag;
+    private String orderConfirmationEmailFlag;
+    private String orderShipmentEmailFlag;
+    private String orderUpdateEmailFlag;
+    private String organizationCode;
+    private String paper101Grade = "N";
+    private String password;
 
-    public String getLoginId() {
-	return loginId;
-    }
+    private String pOListText = "";
 
-    public void setLoginId(String loginId) {
-	this.loginId = loginId;
-    }
+    private String preferredLocale;
+
+    private String punchoutUsers = "F";
 
     private Map<String, String> pwdValidationResultMap;
-    private boolean success;
+
     private boolean saveAddUser;
 
-    public boolean isSaveAddUser() {
-	return saveAddUser;
+    private String secretAnswer;
+    private String secretQuestion;
+    private String selectedTab;
+
+    private String spendingLtCurrency;
+
+    private List<String> states;
+
+    private String status;
+
+    private String stockCheckWebservice = "F";
+
+    private boolean success;
+
+    private String title;
+
+    private Element user;
+
+    private String userId;
+
+    // Form Fields
+    private String userName;
+
+    private String userNameAttribute;
+
+    private String userPassword = "*****";
+
+    private String userPwdToValidate;
+
+    public List<String> userRoleList = new ArrayList<String>();
+
+    private String userStatus;
+
+    private String viewInvoices = "N";
+
+    private String viewPrices;
+
+    private String viewReports;
+
+    // AppendQuickLinkAttributes method added for 4284 - After Review
+    public void appendQuickLinkAttributes(Element eleXPXQuickLinkList) {
+	eleXPXQuickLinkList.setAttribute("Reset", "true");
+
+	Element eleXPXQuickLink = null;
+	StringTokenizer st = new StringTokenizer(getBodyData(), "||");
+	int i = 1;
+	while (st.hasMoreTokens()) {
+	    // From UserProfile1.jsp
+	    String token = st.nextToken();
+	    if (token.equals("*#?")) {
+		token = "";
+	    }
+
+	    if (i == 1) {
+		eleXPXQuickLink = SCXmlUtil.createChild(eleXPXQuickLinkList,
+			"XPXQuickLink");
+		eleXPXQuickLink.setAttribute("QuickLinkName", token);
+	    }
+
+	    if (i == 2)
+		eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
+
+	    if (i == 3) {
+		eleXPXQuickLink.setAttribute("ShowQuickLink", token);
+	    }
+	    if (i == 4) {
+		eleXPXQuickLink.setAttribute("URLOrder", token);
+		eleXPXQuickLinkList.appendChild(eleXPXQuickLink);
+	    }
+
+	    i++;
+
+	    if (i == 5) {
+		i = 1;
+
+	    }
+
+	}
+
+	// return templateElement;
+
     }
 
-    public void setSaveAddUser(boolean saveAddUser) {
-	this.saveAddUser = saveAddUser;
+    /**
+     * Checks whether user has changed password from the UI by comparing to the
+     * masked constant String to be shown in the UI
+     * 
+     * @return true if password field changed
+     */
+
+    private boolean checkIfAnswerChanged() {
+	String answerParam = wcContext.getSCUIContext().getRequest()
+		.getParameter("secretAnswer");
+	if (YFCCommon.isVoid(answerParam)
+		|| answerParam.equals(WCConstants.MASKED_SECRET_ANSWER_STRING)) {
+	    return false;
+	}
+	return true;
     }
 
-    public boolean isSuccess() {
-	return success;
-    }
+    /**
+     * JIRA 1998 Checks whether user has changed email address from the
+     * UserProfile by comparing to the old email id from session
+     * 
+     * @return true if email address field changed
+     */
 
-    public void setSuccess(boolean success) {
-	this.success = success;
-    }
-
-    public String getSelectedTab() {
-	return selectedTab;
-    }
-
-    public void setSelectedTab(String selectedTab) {
-	this.selectedTab = selectedTab;
-    }
-
-    public String getBuyAdmin() {
-	return buyAdmin;
-    }
-
-    public void setBuyAdmin(String buyAdmin) {
-	this.buyAdmin = buyAdmin;
-    }
-
-    public List<String> getCustomers1() {
-	return customers1;
-    }
-
-    public List<String> getCustomers2() {
-	return customers2;
-    }
-
-    public void setCustomers2(List<String> customers2) {
-	this.customers2 = customers2;
-    }
-
-    public void setCustomers1(List<String> customers1) {
-	this.customers1 = customers1;
-    }
-
-    public String getBackorderEmailFlag() {
-	return backorderEmailFlag;
-    }
-
-    public void setBackorderEmailFlag(String backorderEmailFlag) {
-	this.backorderEmailFlag = backorderEmailFlag;
-    }
-
-    public String getViewPrices() {
-	return viewPrices;
-    }
-
-    public void setViewPrices(String viewPrices) {
-	this.viewPrices = viewPrices;
-    }
-
-    public String getViewReports() {
-	return viewReports;
-    }
-
-    public void setViewReports(String viewReports) {
-	this.viewReports = viewReports;
-    }
-
-    public String getInvoiceEmailID() {
-	return invoiceEmailID;
-    }
-
-    public void setInvoiceEmailID(String invoiceEmailID) {
-	this.invoiceEmailID = invoiceEmailID;
-    }
-
-    public String getOrderConfirmationEmailFlag() {
-	return orderConfirmationEmailFlag;
-    }
-
-    public void setOrderConfirmationEmailFlag(String orderConfirmationEmailFlag) {
-	this.orderConfirmationEmailFlag = orderConfirmationEmailFlag;
-    }
-
-    public String getOrderCancellationEmailFlag() {
-	return orderCancellationEmailFlag;
-    }
-
-    public void setOrderCancellationEmailFlag(String orderCancellationEmailFlag) {
-	this.orderCancellationEmailFlag = orderCancellationEmailFlag;
-    }
-
-    public String getOrderUpdateEmailFlag() {
-	return orderUpdateEmailFlag;
-    }
-
-    public void setOrderUpdateEmailFlag(String orderUpdateEmailFlag) {
-	this.orderUpdateEmailFlag = orderUpdateEmailFlag;
-    }
-
-    public String getOrderShipmentEmailFlag() {
-	return orderShipmentEmailFlag;
-    }
-
-    public void setOrderShipmentEmailFlag(String orderShipmentEmailFlag) {
-	this.orderShipmentEmailFlag = orderShipmentEmailFlag;
-    }
-
-    public String getViewInvoices() {
-	return viewInvoices;
-    }
-
-    public void setViewInvoices(String viewInvoices) {
-	this.viewInvoices = viewInvoices;
-    }
-
-    public String getEstimator() {
-	return estimator;
-    }
-
-    public void setEstimator(String estimator) {
-	this.estimator = estimator;
-    }
-
-    public String getStockCheckWebservice() {
-	return stockCheckWebservice;
-    }
-
-    public void setStockCheckWebservice(String stockCheckWebservice) {
-	this.stockCheckWebservice = stockCheckWebservice;
-    }
-
-    public String getPunchoutUsers() {
-	return punchoutUsers;
-    }
-
-    public void setPunchoutUsers(String punchoutUsers) {
-	this.punchoutUsers = punchoutUsers;
-    }
-
-    /* STARTS - Customer-User Profile Changes - adsouza */
-
-    public String getPaper101Grade() {
-	return paper101Grade;
-    }
-
-    public void setPaper101Grade(String p101g) {
-	if ("true".equals(p101g)) {
-	    paper101Grade = "Y";
+    private boolean checkIfEmailChanged(String oldEmailId, String newEmailId) {
+	if (newEmailId.equalsIgnoreCase(oldEmailId)) {
+	    return false;
+	} else {
+	    return true;
 	}
     }
 
-    /* ENDS - Customer-User Profile Changes - adsouza */
+    // Added for 3106
+    private boolean checkIfExceedsMaxRepeatedChars(String newPassword) {
 
-    private String estimator = "N";
-    private String stockCheckWebservice = "F";
-    private String punchoutUsers = "F";
-    private String viewInvoices = "N";
+	ArrayList<String> setOfRepeatedChars = new ArrayList<String>();
+	// Commented for JIRA 1454
+	// newPassword = newPassword.toUpperCase();
+	char[] cArray = newPassword.toCharArray();
+	char c1, c2;
+	boolean exceededMaxRepeatedChars = false;
+	for (int i = 0; i < cArray.length; i++) {
+	    c1 = cArray[i];
 
-    /* STARTS - Customer-User Profile Changes - adsouza */
+	    if ((i + 1) < cArray.length) {
+		for (int j = i + 1; j < cArray.length; j++) {
+		    c2 = cArray[j];
 
-    private String paper101Grade = "N";
+		    if (c1 == c2) {
 
-    /* ENDS - Customer-User Profile Changes - adsouza */
+			setOfRepeatedChars.add(String.valueOf(c1));
+			setOfRepeatedChars.add(String.valueOf(c2));
 
-    // Phone Book Fields
-    private String dayFaxNo;
-    private String eveningFaxNo;
-    private String dayPhone;
-    private String eveningPhone;
-    private String mobilePhone;
-    private String addnlEmailAddrText = "";
-    private String pOListText = "";
-    // Mode of operation
-    private String operation = "";
+			if (setOfRepeatedChars.size() > 2) {
+			    exceededMaxRepeatedChars = true;
+			    break;
+			}
 
-    // String for Action Results
-    private static final String REDIRECT = "redirect";
+		    } else {
+			setOfRepeatedChars.clear();
+			break;
+		    }
+		}
+	    }
+	    if (setOfRepeatedChars.size() > 2) {
+		exceededMaxRepeatedChars = true;
+		break;
+	    }
+	}
 
-    // Request parameters
-    private String customerId;
-    private String customerContactId;
-    private String buyerOrgCode;
-    private List<String> states;
-    protected String b2bCatalogView;
-
-    public List<String> userRoleList = new ArrayList<String>();
-    private String userNameAttribute;
-
-    public String getB2bCatalogView() {
-	return b2bCatalogView;
+	return exceededMaxRepeatedChars;
     }
 
-    public void setB2bCatalogView(String b2bCatalogView) {
-	this.b2bCatalogView = b2bCatalogView;
-    }
-
-    /*
-     * (non-Javadoc)
+    /**
+     * Checks whether user has changed secret answer from the UI by comparing to
+     * the masked constant String to be shown in the UI
      * 
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
+     * @return true if secret answer field changed
      */
-    @Override
-    public String execute() {
-	return saveuserInfo();
+    private boolean checkIfPasswordChanged() {
+	String passwordParam = wcContext.getSCUIContext().getRequest()
+		.getParameter("userpassword");
+	if (YFCCommon.isVoid(passwordParam)
+		|| passwordParam.equals(WCConstants.MASKED_PASSWORD_STRING)) {
+	    return false;
+	}
+	return true;
+    }
 
+    private void createInput(Document inputDoc, String customerID,
+	    Element complexQuery, Element or) {
+	Element shipToExp = inputDoc.createElement("Exp");
+	shipToExp.setAttribute("Name", "ShipToCustomerID");
+	shipToExp.setAttribute("Value", customerID);
+	or.appendChild(shipToExp);
+
+	Element billToExp = inputDoc.createElement("Exp");
+	billToExp.setAttribute("Name", "BillToCustomerID");
+	billToExp.setAttribute("Value", customerID);
+	or.appendChild(billToExp);
+
+	Element sapExp = inputDoc.createElement("Exp");
+	sapExp.setAttribute("Name", "SAPCustomerID");
+	sapExp.setAttribute("Value", customerID);
+	or.appendChild(sapExp);
+
+	Element msapExp = inputDoc.createElement("Exp");
+	msapExp.setAttribute("Name", "MSAPCustomerID");
+	msapExp.setAttribute("Value", customerID);
+	or.appendChild(msapExp);
+
+	complexQuery.appendChild(or);
+	inputDoc.getDocumentElement().appendChild(complexQuery);
     }
 
     /**
@@ -389,6 +366,764 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	setSuccess(true);
 	setSaveAddUser(true);
 	return REDIRECT;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.opensymphony.xwork2.ActionSupport#execute()
+     */
+    @Override
+    public String execute() {
+	return saveuserInfo();
+
+    }
+
+    /**
+     * @return the addnlEmailAddrText
+     */
+    public String getAddnlEmailAddrText() {
+	return addnlEmailAddrText;
+    }
+
+    private List<String> getAllShipTos(List<String> wList) {
+	List<String> shipToStr = new ArrayList<String>();
+	Document inputDoc = SCXmlUtil.createDocument("XPXCustHierarchyView");
+	Element complexQuery = inputDoc.createElement("ComplexQuery");
+	Element or = inputDoc.createElement("Or");
+	ISCUITransactionContext scuiTransactionContext = getWCContext()
+		.getSCUIContext().getTransactionContext(true);
+	YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+		.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+	boolean isAPICall = false;
+	for (int i = 0; i < oldAssignCusts.size(); i++) {
+	    if (wList.contains(oldAssignCusts.get(i).trim()))
+		continue;
+	    createInput(inputDoc, oldAssignCusts.get(i), complexQuery, or);
+	    isAPICall = true;
+	}
+	for (int k = 0; k < customers2.size(); k++) {
+	    createInput(inputDoc, customers2.get(k), complexQuery, or);
+	    isAPICall = true;
+	}
+	if (!isAPICall)
+	    return shipToStr;
+
+	YIFApi api = null;
+	;
+	try {
+	    api = YIFClientFactory.getInstance().getApi();
+	} catch (YIFClientCreationException e1) {
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
+	Document outputListDocument = null;
+	try {
+	    outputListDocument = api.executeFlow(env,
+		    "XPXCustomerHierarchyViewService", inputDoc);
+	} catch (YFSException e) {
+	    log.error("Unable to get Customer Hierarchy", e);
+	} catch (RemoteException e) {
+	    log.error("Unable to connect remotely", e);
+	}
+	Element custView = outputListDocument.getDocumentElement();
+	ArrayList<Element> xpxCustViewElems = SCXmlUtil.getElements(custView,
+		"XPXCustHierarchyView");
+	for (int j = 0; j < xpxCustViewElems.size(); j++) {
+	    shipToStr.add(xpxCustViewElems.get(j).getAttribute(
+		    "ShipToCustomerID"));
+	}
+	return shipToStr;
+    }
+
+    /**
+     * @return the approver
+     */
+    public String getApprover() {
+	return approver;
+    }
+
+    public String getB2bCatalogView() {
+	return b2bCatalogView;
+    }
+
+    public String getBackorderEmailFlag() {
+	return backorderEmailFlag;
+    }
+
+    public String getBodyData() {
+	return bodyData;
+    }
+
+    public String getBuyAdmin() {
+	return buyAdmin;
+    }
+
+    /**
+     * @return the buyerAdmin
+     */
+    public String getBuyerAdmin() {
+	return buyerAdmin;
+    }
+
+    /**
+     * @return the buyerOrgCode
+     */
+    public String getBuyerOrgCode() {
+	return buyerOrgCode;
+    }
+
+    /**
+     * @return the buyerUser
+     */
+    public String getBuyerUser() {
+	return buyerUser;
+    }
+
+    /**
+     * @return the confirmAnswer
+     */
+    public String getConfirmAnswer() {
+	return confirmAnswer;
+    }
+
+    /* STARTS - Customer-User Profile Changes - adsouza */
+
+    /**
+     * @return the confirm password variable
+     */
+    public String getConfirmPassword() {
+	return confirmPassword;
+    }
+
+    /**
+     * @return the contact
+     */
+    public Element getContact() {
+	return contact;
+    }
+
+    /* ENDS - Customer-User Profile Changes - adsouza */
+
+    /**
+     * @return the contactStatus
+     */
+    public String getContactStatus() {
+	return contactStatus;
+    }
+
+    /**
+     * @return the currentSelTab
+     */
+    public String getCurrentSelTab() {
+	return currentSelTab;
+    }
+
+    /**
+     * Returns the Customer member variable
+     * 
+     * @return customer element
+     */
+    public Element getCustomer() {
+	return customer;
+    }
+
+    /**
+     * @return the Customer Admin List Element
+     */
+    public Element getCustomerAdmin() {
+	return customerAdmin;
+    }
+
+    /* STARTS - Customer-User Profile Changes - adsouza */
+
+    /**
+     * @return the customerContactId
+     */
+    public String getCustomerContactId() {
+	return customerContactId;
+    }
+
+    /* ENDS - Customer-User Profile Changes - adsouza */
+
+    /**
+     * @return the customerId
+     */
+    public String getCustomerId() {
+	return customerId;
+    }
+
+    public List<String> getCustomers1() {
+	return customers1;
+    }
+
+    public List<String> getCustomers2() {
+	return customers2;
+    }
+
+    /**
+     * @return the dayFaxNo
+     */
+    public String getDayFaxNo() {
+	return dayFaxNo;
+    }
+
+    /**
+     * @return the dayPhone
+     */
+    public String getDayPhone() {
+	return dayPhone;
+    }
+
+    public String getDefaultShipTo() {
+	return defaultShipTo;
+    }
+
+    /**
+     * @return the deptName
+     */
+    public String getDeptName() {
+	return deptName;
+    }
+
+    /**
+     * @return the emailId
+     */
+    public String getEmailId() {
+	return emailId;
+    }
+
+    public String getEstimator() {
+	return estimator;
+    }
+
+    /**
+     * @return the eveningFaxNo
+     */
+    public String getEveningFaxNo() {
+	return eveningFaxNo;
+    }
+
+    /**
+     * @return the eveningPhone
+     */
+    public String getEveningPhone() {
+	return eveningPhone;
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+	return firstName;
+    }
+
+    public String getInvoiceEmailID() {
+	return invoiceEmailID;
+    }
+
+    /**
+     * @return the jobTitle
+     */
+    public String getJobTitle() {
+	return jobTitle;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+	return lastName;
+    }
+
+    /**
+     * 
+     * @return the locale member variable
+     */
+    public Element getLoc() {
+	return this.loc;
+    }
+
+    public String getLoginId() {
+	return loginId;
+    }
+
+    // Start - Jira 3262
+    private String getLogoName(String sellerOrgCode) {
+	String _imageName = "";
+	if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/xpedx_r_rgb_lo.jpg";
+	} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/BulkleyDunton_r_rgb_lo.jpg";
+	} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/CentralLewmar_r_rgb_lo.jpg";
+	} else if ("CentralMarquardt".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/CentralMarquardt_r_rgb_lo.jpg";
+	} else if ("Saalfeld".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/Saalfeld_r_rgb_lo.jpg";
+	} else if ("StrategicPaper".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/StrategicPaper_r_rgb_lo.jpg";
+	} else if ("WesternPaper".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/WesternPaper_r_rgb_lo.jpg";
+	} else if ("WhitemanTower".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/WhitemanTower_r_rgb_lo.jpg";
+	} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/Zellerbach_r_rgb_lo.jpg";
+	} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
+	    _imageName = "/xpedx_r_rgb_lo.jpg";
+	}
+	return _imageName;
+    }
+
+    /**
+     * @return the mobilePhone
+     */
+    public String getMobilePhone() {
+	return mobilePhone;
+    }
+
+    public List<String> getOldAssignedCustomers() {
+	return oldAssignedCustomers;
+    }
+
+    /**
+     * @return the operation
+     */
+    public String getOperation() {
+	return operation;
+    }
+
+    /** Start of code for XB 226 **/
+    public String getOrderApprovalFlag() {
+	return orderApprovalFlag;
+    }
+
+    public String getOrderCancellationEmailFlag() {
+	return orderCancellationEmailFlag;
+    }
+
+    public String getOrderConfirmationEmailFlag() {
+	return orderConfirmationEmailFlag;
+    }
+
+    public String getOrderShipmentEmailFlag() {
+	return orderShipmentEmailFlag;
+    }
+
+    public String getOrderUpdateEmailFlag() {
+	return orderUpdateEmailFlag;
+    }
+
+    /**
+     * @return the Organization Code
+     */
+    public String getOrganizationCode() {
+	return organizationCode;
+    }
+
+    // Commented for JIRA 488 save performance issue.
+
+    /*
+     * private void saveChanges(List<String> wList, String operation) { for (int
+     * index = 0; index < wList.size(); index++) { try { Map<String, String>
+     * valueMap = new HashMap<String, String>();
+     * valueMap.put("/CustomerAssignment/@CustomerID", wList .get(index));
+     * valueMap.put("/CustomerAssignment/@OrganizationCode",
+     * getWCContext().getBuyerOrgCode());
+     * valueMap.put("/CustomerAssignment/@UserId", customerContactId);
+     * valueMap.put("/CustomerAssignment/@Operation", operation); Element input
+     * = WCMashupHelper.getMashupInput( "xpedxSaveCustomerAssignments",
+     * valueMap, wcContext .getSCUIContext()); if(operation.equals("Delete")){
+     * try { ArrayList<String> listOfShipTo=getAllShipTos(wList);
+     * if(listOfShipTo.size() == 0 ){ defaultShipTo = "";
+     * XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
+     * "true");
+     * XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT
+     * ,"true" ); }
+     * 
+     * if(!listOfShipTo.contains(defaultShipTo)) { defaultShipTo = "";
+     * if(customerContactId.equals(wcContext.getLoggedInUserId())) {
+     * XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
+     * "true");
+     * XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT
+     * ,"true" ); } } } catch(Exception e) { e.printStackTrace(); } } String
+     * inputXml = SCXmlUtil.getString(input); LOG.debug("Input XML: " +
+     * inputXml); Object obj = WCMashupHelper.invokeMashup(
+     * "xpedxSaveCustomerAssignments", input, wcContext .getSCUIContext());
+     * Document outputDoc = null; if (obj != null) { outputDoc = ((Element)
+     * obj).getOwnerDocument(); if (null != outputDoc) { String outputXml =
+     * SCXmlUtil.getString((Element) obj); LOG.debug("Output XML: " +
+     * outputXml); } } } catch (Exception ex) {
+     * log.debug("Record already exists"); } } }
+     */
+
+    public String getPaper101Grade() {
+	return paper101Grade;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+	return password;
+    }
+
+    /**
+     * @return the pOListText
+     */
+    public String getPOListText() {
+	return pOListText;
+    }
+
+    /**
+     * @return the locale
+     */
+    public String getPreferredLocale() {
+	return preferredLocale;
+    }
+
+    public String getPunchoutUsers() {
+	return punchoutUsers;
+    }
+
+    /**
+     * @return the pwdValidationResultMap
+     */
+    public Map getPwdValidationResultMap() {
+	return pwdValidationResultMap;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+	return secretAnswer;
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+	return secretQuestion;
+    }
+
+    public String getSelectedTab() {
+	return selectedTab;
+    }
+
+    /**
+     * @return the spendingLtCurrency
+     */
+    public String getSpendingLtCurrency() {
+	return spendingLtCurrency;
+    }
+
+    /**
+     * @return the states
+     */
+    public List<String> getStates() {
+	return states;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+	return status;
+    }
+
+    public String getStockCheckWebservice() {
+	return stockCheckWebservice;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+	return title;
+    }
+
+    /**
+     * @return the user element
+     */
+    public Element getUser() {
+	return user;
+    }
+
+    /**
+     * @return the UserID
+     */
+    public String getUserId() {
+	return userId;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+	return userName;
+    }
+
+    /**
+     * @return the userNameAttribute
+     */
+    public String getUserNameAttribute() {
+	return userNameAttribute;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getUserPassword() {
+	return userPassword;
+    }
+
+    /**
+     * @return the userPwdToValidate
+     */
+    public String getUserPwdToValidate() {
+	return userPwdToValidate;
+    }
+
+    /**
+     * @return the userRoleList
+     */
+    public List<String> getUserRoleList() {
+	return userRoleList;
+    }
+
+    /**
+     * @return the userStatus
+     */
+    public String getUserStatus() {
+	return userStatus;
+    }
+
+    public String getViewInvoices() {
+	return viewInvoices;
+    }
+
+    public String getViewPrices() {
+	return viewPrices;
+    }
+
+    public String getViewReports() {
+	return viewReports;
+    }
+
+    public boolean isSaveAddUser() {
+	return saveAddUser;
+    }
+
+    public boolean isSuccess() {
+	return success;
+    }
+
+    private void newUserOverrideContactAttributes() {
+	setContactStatus(getStatus());
+	if (!(YFCCommon.isVoid(wcContext.getSCUIContext().getRequest()
+		.getParameter("userName")))) {
+	    if (getContactStatus().equals(CUSTOMER_STATUS_ACTIVE)
+		    || getContactStatus().equals(CUSTOMER_STATUS_ON_HOLD)) {
+		setUserStatus(YES);
+	    }
+	    this.userRoleList.add(BUYER_USER_GROUP_KEY);
+	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
+		    .getParameter("buyerAdmin"))) {
+		this.userRoleList.add(BUYER_ADMIN_GROUP_KEY);
+	    }
+	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
+		    .getParameter("buyerApprover"))) {
+		this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
+	    }
+	}
+	setViewInvoices(viewInvoices.equals("true") ? "Y" : "N");
+	setEstimator(estimator.equals("true") ? "Y" : "N");
+	setViewPrices(viewPrices.equals("true") ? "Y" : "N");
+	setViewReports(viewReports.equals("true") ? "Y" : "N");
+	setOrderApprovalFlag("true".equals(orderApprovalFlag) ? "Y" : "N");
+    }
+
+    /**
+     * Setting some input XML attributes like User roles, Customer/User status
+     * based on the request parameters
+     * 
+     * @return
+     */
+    private void overrideContactAttributes() {
+	setContactStatus(getStatus());
+	if (!(YFCCommon.isVoid(wcContext.getSCUIContext().getRequest()
+		.getParameter("userName")))) {
+	    if (getContactStatus() != null
+		    && (getContactStatus().equals(CUSTOMER_STATUS_ACTIVE) || getContactStatus()
+			    .equals(CUSTOMER_STATUS_ON_HOLD))) {
+		setUserStatus(YES);
+	    }
+	    this.userRoleList.add(BUYER_USER_GROUP_KEY);
+	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
+		    .getParameter("buyerAdmin"))) {
+		this.userRoleList.add(BUYER_ADMIN_GROUP_KEY);
+	    }
+	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
+		    .getParameter("buyerApprover"))) {
+		this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
+	    }
+	}
+	setViewInvoices(viewInvoices.equals("true") ? "Y" : "N");
+	setPunchoutUsers(punchoutUsers.equals("true") ? "T" : "F");
+	setStockCheckWebservice(stockCheckWebservice.equals("true") ? "T" : "F");
+	setEstimator(estimator.equals("true") ? "Y" : "N");
+	setViewPrices("true".equals(viewPrices) ? "Y" : "N");
+	setViewReports("true".equals(viewReports) ? "Y" : "N");
+	setOrderConfirmationEmailFlag("true".equals(orderConfirmationEmailFlag) ? "Y"
+		: "N");
+	setOrderCancellationEmailFlag("true".equals(orderCancellationEmailFlag) ? "Y"
+		: "N");
+	setOrderShipmentEmailFlag("true".equals(orderShipmentEmailFlag) ? "Y"
+		: "N");
+	// setOrderUpdateEmailFlag(orderUpdateEmailFlag.equals("true")?"Y":"N");
+	setBackorderEmailFlag("true".equals(backorderEmailFlag) ? "Y" : "N");
+	setOrderApprovalFlag("true".equals(orderApprovalFlag) ? "Y" : "N"); // added
+									    // for
+									    // XB
+									    // 226
+    }
+
+    /**
+     * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""
+     * Operation="" />
+     * 
+     * @return
+     */
+    private void saveChanges() {
+	if (("true").equalsIgnoreCase(getBuyAdmin())) {
+	    List<String> newCustomers1 = new ArrayList<String>();
+	    List<String> tmpOldAssCust = new ArrayList<String>();
+	    for (int i = 0; i < oldAssignedCustomers.size(); i++) {
+		String custid = oldAssignedCustomers.get(i);
+		if (custid != null) {
+		    String[] custIds = custid.split(",");
+		    for (int j = 0; j < custIds.length; j++) {
+			String tempCustId = null;
+			if (custIds.length == 1) {
+			    tempCustId = custIds[j].substring(1,
+				    custIds[j].indexOf("]"));
+			} else if (j == 0) {
+			    tempCustId = custIds[j].substring(1);
+			} else if (j == custIds.length - 1) {
+			    tempCustId = custIds[j].substring(0,
+				    custIds[j].indexOf("]"));
+			} else {
+			    tempCustId = custIds[j];
+			}
+			tmpOldAssCust.add(tempCustId);
+		    }
+		}
+	    }
+	    oldAssignCusts.addAll(tmpOldAssCust);
+	    Iterator<String> newIterator = tmpOldAssCust.iterator();
+	    while (newIterator.hasNext()) {
+		String oldAssignedCustId = newIterator.next();
+
+		if (!customers2.contains(oldAssignedCustId.trim())) {
+		    newCustomers1.add(oldAssignedCustId.trim());
+		}
+	    }
+	    Iterator<String> customers2Iterator = customers2.iterator();
+	    while (customers2Iterator.hasNext()) {
+		String assignedCustomerId = customers2Iterator.next();
+		if (oldAssignedCustomers.get(0).contains(
+			assignedCustomerId.trim())) {
+		    customers2Iterator.remove();
+		}
+	    }
+	    manageCustomerAssigmentInputDoc = SCXmlUtil
+		    .createDocument("ManageCustomerAndAssignment");
+	    Element customerAssignmentListElem = SCXmlUtil.createChild(
+		    manageCustomerAssigmentInputDoc.getDocumentElement(),
+		    "CustomerAssignmentList");
+	    saveChanges(customers2, "Create", customerAssignmentListElem);
+	    saveChanges(newCustomers1, "Delete", customerAssignmentListElem);
+	    NodeList customerAssignementNodeList = customerAssignmentListElem
+		    .getElementsByTagName("CustomerAssignment");
+	    if (customerAssignementNodeList != null
+		    && customerAssignementNodeList.getLength() > 0) {
+		WCMashupHelper.invokeMashup("XPEDXManageCustomerAndAssignment",
+			manageCustomerAssigmentInputDoc.getDocumentElement(),
+			wcContext.getSCUIContext());
+	    }
+	}
+
+	if (getSpendingLtCurrency() != null
+		&& getSpendingLtCurrency().equals("-1")) {
+	    setSpendingLtCurrency("");
+	}
+    }
+
+    private void saveChanges(List<String> wList, String operation,
+	    Element customerAssignmentListElem) {
+
+	List<String> listOfShipTo = new ArrayList<String>();
+	try {
+	    if (operation.equals("Delete")) {
+		listOfShipTo = getAllShipTos(wList);
+	    }
+	} catch (Exception e) {
+	    log.error("Unable to get all Ship tos", e);
+	}
+	for (int index = 0; index < wList.size(); index++) {
+	    try {
+		if (wList.get(index) != null
+			&& !wList.get(index).trim().isEmpty()) {
+		    continue;
+		}
+		Element customerAssignmentElem = SCXmlUtil.createChild(
+			customerAssignmentListElem, "CustomerAssignment");
+		customerAssignmentElem.setAttribute("CustomerID",
+			wList.get(index));
+		customerAssignmentElem.setAttribute("OrganizationCode",
+			getWCContext().getBuyerOrgCode());
+		customerAssignmentElem
+			.setAttribute("UserId", customerContactId);
+		customerAssignmentElem.setAttribute("Operation", operation);
+		if (operation.equals("Delete")) {
+		    if (listOfShipTo.isEmpty()) {
+			defaultShipTo = "";
+			XPEDXWCUtils.setObectInCache(
+				XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
+			XPEDXWCUtils.setObectInCache(
+				XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,
+				"true");
+		    }
+
+		    if (!listOfShipTo.contains(defaultShipTo)) {
+			defaultShipTo = "";
+			if (customerContactId.equals(wcContext
+				.getLoggedInUserId())) {
+			    XPEDXWCUtils.setObectInCache(
+				    XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
+				    "true");
+			    XPEDXWCUtils
+				    .setObectInCache(
+					    XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,
+					    "true");
+			}
+		    }
+		}
+		/*
+		 * String inputXml = SCXmlUtil.getString(input);
+		 * LOG.debug("Input XML: " + inputXml); Object obj =
+		 * WCMashupHelper.invokeMashup( "xpedxSaveCustomerAssignments",
+		 * input, wcContext .getSCUIContext()); Document outputDoc =
+		 * null; if (obj != null) { outputDoc = ((Element)
+		 * obj).getOwnerDocument(); if (null != outputDoc) { String
+		 * outputXml = SCXmlUtil.getString((Element) obj);
+		 * LOG.debug("Output XML: " + outputXml); } }
+		 */
+	    } catch (Exception ex) {
+		log.debug("Record already exists");
+	    }
+	}
     }
 
     /**
@@ -691,7 +1426,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		    .getParameter("emailId");
 	    String oldEmailId = (String) wcContext.getSCUIContext()
 		    .getSession().getAttribute("emailId");
-	    if (oldEmailId != null && newEmailId != null && checkIfEmailChanged(oldEmailId, newEmailId)) {
+	    if (oldEmailId != null && newEmailId != null
+		    && checkIfEmailChanged(oldEmailId, newEmailId)) {
 		updateEMailAddress(oldEmailId, newEmailId);
 	    }
 	} catch (YFCException passexp) {
@@ -764,47 +1500,6 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	return REDIRECT;
     }
 
-    // Added for 3106
-    private boolean checkIfExceedsMaxRepeatedChars(String newPassword) {
-
-	ArrayList<String> setOfRepeatedChars = new ArrayList<String>();
-	// Commented for JIRA 1454
-	// newPassword = newPassword.toUpperCase();
-	char[] cArray = newPassword.toCharArray();
-	char c1, c2;
-	boolean exceededMaxRepeatedChars = false;
-	for (int i = 0; i < cArray.length; i++) {
-	    c1 = cArray[i];
-
-	    if ((i + 1) < cArray.length) {
-		for (int j = i + 1; j < cArray.length; j++) {
-		    c2 = cArray[j];
-
-		    if (c1 == c2) {
-
-			setOfRepeatedChars.add(String.valueOf(c1));
-			setOfRepeatedChars.add(String.valueOf(c2));
-
-			if (setOfRepeatedChars.size() > 2) {
-			    exceededMaxRepeatedChars = true;
-			    break;
-			}
-
-		    } else {
-			setOfRepeatedChars.clear();
-			break;
-		    }
-		}
-	    }
-	    if (setOfRepeatedChars.size() > 2) {
-		exceededMaxRepeatedChars = true;
-		break;
-	    }
-	}
-
-	return exceededMaxRepeatedChars;
-    }
-
     private void saveXPXCustomerContactFields() {
 	String addnlEmailAddrs = null;
 	String addnlPoList = null;
@@ -816,8 +1511,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		wcContext, this.customerContactId);
 	if (xpxCustContExtnEle == null) {
 	    createCCExtn = true;
-	}
-	else {
+	} else {
 	    custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
 	}
 
@@ -879,6 +1573,567 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	}
 	// End Fix For XNGTP-3088
+    }
+
+    /**
+     * @param addnlEmailAddrText
+     *            the addnlEmailAddrText to set
+     */
+    public void setAddnlEmailAddrText(String addnlEmailAddrText) {
+	this.addnlEmailAddrText = addnlEmailAddrText;
+    }
+
+    /**
+     * @param approver
+     *            the approver to set
+     */
+    public void setApprover(String approver) {
+	this.approver = approver;
+    }
+
+    public void setB2bCatalogView(String b2bCatalogView) {
+	this.b2bCatalogView = b2bCatalogView;
+    }
+
+    public void setBackorderEmailFlag(String backorderEmailFlag) {
+	this.backorderEmailFlag = backorderEmailFlag;
+    }
+
+    public void setBodyData(String bodyData) {
+	this.bodyData = bodyData;
+    }
+
+    public void setBuyAdmin(String buyAdmin) {
+	this.buyAdmin = buyAdmin;
+    }
+
+    /**
+     * @param buyerAdmin
+     *            the buyerAdmin to set
+     */
+    public void setBuyerAdmin(String buyerAdmin) {
+	this.buyerAdmin = buyerAdmin;
+    }
+
+    /**
+     * @param buyerOrgCode
+     *            the buyerOrgCode to set
+     */
+    public void setBuyerOrgCode(String buyerOrgCode) {
+	this.buyerOrgCode = buyerOrgCode;
+    }
+
+    /**
+     * @param buyerUser
+     *            the buyerUser to set
+     */
+    public void setBuyerUser(String buyerUser) {
+	this.buyerUser = buyerUser;
+    }
+
+    /**
+     * @param confirmAnswer
+     *            the confirmAnswer to set
+     */
+    public void setConfirmAnswer(String confirmAnswer) {
+	this.confirmAnswer = confirmAnswer;
+    }
+
+    /**
+     * Sets the Confirm Password field to the member variable
+     * 
+     * @param confirmPassword
+     */
+    public void setConfirmPassword(String confirmPassword) {
+	this.confirmPassword = confirmPassword;
+    }
+
+    // /**
+    // * @return the comparnyName
+    // */
+    // public String getComparnyName() {
+    // return comparnyName;
+    // }
+    //
+    // /**
+    // * @param comparnyName the comparnyName to set
+    // */
+    // public void setComparnyName(String comparnyName) {
+    // this.comparnyName = comparnyName;
+    // }
+
+    /**
+     * @param contact
+     *            the contact to set
+     */
+    public void setContact(Element contact) {
+	this.contact = contact;
+    }
+
+    /**
+     * @param contactStatus
+     *            the contactStatus to set
+     */
+    public void setContactStatus(String contactStatus) {
+	this.contactStatus = contactStatus;
+    }
+
+    /**
+     * @param currentSelTab
+     *            the currentSelTab to set
+     */
+    public void setCurrentSelTab(String currentSelTab) {
+	this.currentSelTab = currentSelTab;
+    }
+
+    /**
+     * Sets the customer element
+     * 
+     * @param contact
+     */
+    public void setCustomer(Element contact) {
+	this.customer = contact;
+    }
+
+    /**
+     * Sets the Customer Admin Parameter
+     * 
+     * @param customerAdmin
+     */
+    public void setCustomerAdmin(Element customerAdmin) {
+	this.customerAdmin = customerAdmin;
+    }
+
+    /**
+     * @param customerContactId
+     *            the customerContactId to set
+     */
+    public void setCustomerContactId(String customerContactId) {
+	this.customerContactId = customerContactId;
+    }
+
+    /**
+     * @param customerId
+     *            the customerId to set
+     */
+    public void setCustomerId(String customerId) {
+	this.customerId = customerId;
+    }
+
+    public void setCustomers1(List<String> customers1) {
+	this.customers1 = customers1;
+    }
+
+    public void setCustomers2(List<String> customers2) {
+	this.customers2 = customers2;
+    }
+
+    /**
+     * @param dayFaxNo
+     *            the dayFaxNo to set
+     */
+    public void setDayFaxNo(String dayFaxNo) {
+	this.dayFaxNo = dayFaxNo;
+    }
+
+    /**
+     * @param dayPhone
+     *            the dayPhone to set
+     */
+    public void setDayPhone(String dayPhone) {
+	this.dayPhone = dayPhone;
+    }
+
+    public void setDefaultShipTo(String defaultShipTo) {
+	this.defaultShipTo = defaultShipTo;
+    }
+
+    /**
+     * @param deptName
+     *            the deptName to set
+     */
+    public void setDeptName(String deptName) {
+	this.deptName = deptName;
+    }
+
+    /**
+     * @param emailId
+     *            the emailId to set
+     */
+    public void setEmailId(String emailId) {
+	this.emailId = emailId;
+    }
+
+    public void setEstimator(String estimator) {
+	this.estimator = estimator;
+    }
+
+    /**
+     * @param eveningFaxNo
+     *            the eveningFaxNo to set
+     */
+    public void setEveningFaxNo(String eveningFaxNo) {
+	this.eveningFaxNo = eveningFaxNo;
+    }
+
+    /**
+     * @param eveningPhone
+     *            the eveningPhone to set
+     */
+    public void setEveningPhone(String eveningPhone) {
+	this.eveningPhone = eveningPhone;
+    }
+
+    /**
+     * @param firstName
+     *            the firstName to set
+     */
+    public void setFirstName(String firstName) {
+	this.firstName = firstName;
+    }
+
+    public void setInvoiceEmailID(String invoiceEmailID) {
+	this.invoiceEmailID = invoiceEmailID;
+    }
+
+    /**
+     * @param jobTitle
+     *            the jobTitle to set
+     */
+    public void setJobTitle(String jobTitle) {
+	this.jobTitle = jobTitle;
+    }
+
+    /**
+     * @param lastName
+     *            the lastName to set
+     */
+    public void setLastName(String lastName) {
+	this.lastName = lastName;
+    }
+
+    /**
+     * Sets the locale value to the member variable
+     * 
+     * @param locale
+     */
+    public void setLoc(Element locale) {
+	this.loc = locale;
+    }
+
+    public void setLoginId(String loginId) {
+	this.loginId = loginId;
+    }
+
+    /**
+     * @param mobilePhone
+     *            the mobilePhone to set
+     */
+    public void setMobilePhone(String mobilePhone) {
+	this.mobilePhone = mobilePhone;
+    }
+
+    public void setOldAssignedCustomers(List<String> oldAssignedCustomers) {
+	this.oldAssignedCustomers = oldAssignedCustomers;
+    }
+
+    /**
+     * @param operation
+     *            the operation to set
+     */
+    public void setOperation(String operation) {
+	this.operation = operation;
+    }
+
+    public void setOrderApprovalFlag(String orderApprovalFlag) {
+	this.orderApprovalFlag = orderApprovalFlag;
+    }
+
+    public void setOrderCancellationEmailFlag(String orderCancellationEmailFlag) {
+	this.orderCancellationEmailFlag = orderCancellationEmailFlag;
+    }
+
+    public void setOrderConfirmationEmailFlag(String orderConfirmationEmailFlag) {
+	this.orderConfirmationEmailFlag = orderConfirmationEmailFlag;
+    }
+
+    public void setOrderShipmentEmailFlag(String orderShipmentEmailFlag) {
+	this.orderShipmentEmailFlag = orderShipmentEmailFlag;
+    }
+
+    public void setOrderUpdateEmailFlag(String orderUpdateEmailFlag) {
+	this.orderUpdateEmailFlag = orderUpdateEmailFlag;
+    }
+
+    /**
+     * Sets the Organization code
+     * 
+     * @param organizationCode
+     */
+    public void setOrganizationCode(String orgCode) {
+	organizationCode = orgCode;
+    }
+
+    public void setPaper101Grade(String p101g) {
+	if ("true".equals(p101g)) {
+	    paper101Grade = "Y";
+	}
+    }
+
+    /**
+     * @param password
+     *            the password to set
+     */
+    public void setPassword(String password) {
+	this.password = password;
+    }
+
+    /**
+     * @param pOListText
+     *            the pOListText to set
+     */
+    public void setPOListText(String pOListText) {
+	this.pOListText = pOListText;
+    }
+
+    /**
+     * @param locale
+     *            the locale to set
+     */
+    public void setPreferredLocale(String preffLocale) {
+	this.preferredLocale = preffLocale;
+    }
+
+    public void setPunchoutUsers(String punchoutUsers) {
+	this.punchoutUsers = punchoutUsers;
+    }
+
+    /**
+     * @param pwdValidationResultMap
+     *            the pwdValidationResultMap to set
+     */
+    public void setPwdValidationResultMap(Map pwdValidationResultMap) {
+	this.pwdValidationResultMap = pwdValidationResultMap;
+    }
+
+    public void setSaveAddUser(boolean saveAddUser) {
+	this.saveAddUser = saveAddUser;
+    }
+
+    /**
+     * @param secretAnswer
+     *            the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+	this.secretAnswer = secretAnswer;
+    }
+
+    /**
+     * @param secretQuestion
+     *            the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+	this.secretQuestion = secretQuestion;
+    }
+
+    public void setSelectedTab(String selectedTab) {
+	this.selectedTab = selectedTab;
+    }
+
+    /**
+     * @param spendingLtCurrency
+     *            the spendingLtCurrency to set
+     */
+    public void setSpendingLtCurrency(String spendingLtCurrency) {
+	this.spendingLtCurrency = spendingLtCurrency;
+    }
+
+    /**
+     * @param states
+     *            the states to set
+     */
+    public void setStates(List<String> states) {
+	this.states = states;
+    }
+
+    /**
+     * @param status
+     *            the status to set
+     */
+    public void setStatus(String status) {
+	this.status = status;
+    }
+
+    public void setStockCheckWebservice(String stockCheckWebservice) {
+	this.stockCheckWebservice = stockCheckWebservice;
+    }
+
+    public void setSuccess(boolean success) {
+	this.success = success;
+    }
+
+    /**
+     * @param title
+     *            the title to set
+     */
+    public void setTitle(String title) {
+	this.title = title;
+    }
+
+    /**
+     * Sets the user element
+     * 
+     * @param user
+     */
+    public void setUser(Element user) {
+	this.user = user;
+    }
+
+    /**
+     * Sets the UserID
+     * 
+     * @param userId
+     */
+    public void setUserId(String Id) {
+	userId = Id;
+    }
+
+    /**
+     * @param userName
+     *            the userName to set
+     */
+    public void setUserName(String userName) {
+	this.userName = userName;
+    }
+
+    /**
+     * @param userNameAttribute
+     *            the userNameAttribute to set
+     */
+    public void setUserNameAttribute(String userNameAttribute) {
+	this.userNameAttribute = userNameAttribute;
+    }
+
+    /**
+     * Sets the user password to the member variable
+     * 
+     * @param userPassword
+     */
+    public void setUserPassword(String userPassword) {
+	this.userPassword = userPassword;
+    }
+
+    /**
+     * @param userPwdToValidate
+     *            the userPwdToValidate to set
+     */
+    public void setUserPwdToValidate(String userPwdToValidate) {
+	this.userPwdToValidate = userPwdToValidate;
+    }
+
+    /**
+     * @param userRoleList
+     *            the userRoleList to set
+     */
+    public void setUserRoleList(List<String> userRoleList) {
+	this.userRoleList = userRoleList;
+    }
+
+    /**
+     * @param userStatus
+     *            the userStatus to set
+     */
+    public void setUserStatus(String userStatus) {
+	this.userStatus = userStatus;
+    }
+
+    public void setViewInvoices(String viewInvoices) {
+	this.viewInvoices = viewInvoices;
+    }
+
+    public void setViewPrices(String viewPrices) {
+	this.viewPrices = viewPrices;
+    }
+
+    /** End of Code for XB 226 **/
+
+    public void setViewReports(String viewReports) {
+	this.viewReports = viewReports;
+    }
+
+    /** JIRA 1998--function to call API for mailId change-- **/
+    private void updateEMailAddress(String oldMailId, String changedMailId) {
+	// String strEnterpriseCode = "";
+	String strEnterpriseCode = ""; //
+	StringBuffer sb = new StringBuffer();
+	strEnterpriseCode = wcContext.getStorefrontId();
+	String entryType = XPEDXConstants.ENTRY_TYPE_EMAIL_UPDATE;
+	String emailFromAddresses = "";
+	/* Start - JIRA 3262 */
+
+	/**
+	 * Value of username and suffix is retrieve by
+	 * customer_overrides.properties
+	 * 
+	 * */
+	if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
+	    String userName = YFSSystem.getProperty("fromAddress.username");
+	    String suffix = YFSSystem.getProperty("fromAddress.suffix");
+	    sb.append(userName).append("@").append(strEnterpriseCode)
+		    .append(suffix);
+	    emailFromAddresses = sb.toString();
+
+	}
+
+	/**
+	 * Value of imagesRootFolder is retrieve by
+	 * customer_overrides.properties
+	 * 
+	 **/
+
+	String imageUrl = "";
+	if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
+	    String imageName = getLogoName(strEnterpriseCode);
+	    String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+	    if (imagesRootFolder != null && !imagesRootFolder.trim().isEmpty()
+		    && imageName != null && !imageName.trim().isEmpty()) {
+		imageUrl = imagesRootFolder + imageName;
+	    }
+	}
+	/* End - JIRA 3262 */
+
+	// Creating input xml to send an email
+	Document templateEmailDoc = YFCDocument.createDocument(
+		"UserUpdateEmail").getDocument();
+	Element templateElement = templateEmailDoc.getDocumentElement();
+	if (log.isDebugEnabled()) {
+	    log.debug("" + SCXmlUtil.getString(templateElement));
+	}
+	Element emailElement = templateEmailDoc
+		.createElement("UserUpdateEmail");
+	emailElement.setAttribute("BrandName", strEnterpriseCode);
+	emailElement.setAttribute("EntryType", entryType);
+	emailElement.setAttribute("OldEmailID", oldMailId);
+	emailElement.setAttribute("newEmailID", changedMailId);
+	emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
+	emailElement.setAttribute("EmailFromAddresses", emailFromAddresses); // Start
+									     // -Jira
+									     // 3262
+	emailElement.setAttribute("ImageUrl", imageUrl); // Start -Jira 3262
+
+	String inputXml = SCXmlUtil.getString(emailElement);
+	LOG.debug("Input XML: " + inputXml);
+	Object obj = WCMashupHelper.invokeMashup("SendOnEmailChangeEmail",
+		emailElement, wcContext.getSCUIContext());
+	Document outputDoc = ((Element) obj).getOwnerDocument();
+	if (null != outputDoc) {
+	    LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
+	}
+	if (LOG.isDebugEnabled()) {
+	    LOG.debug("SCXmlUtil.getString((Element) obj)"
+		    + SCXmlUtil.getString((Element) obj));
+	}
+
     }
 
     /**
@@ -953,1246 +2208,6 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	    log.error("Error in ValidateResetPassword method ", e.getCause());
 	}
 	return returnStr;
-    }
-
-    /**
-     * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""
-     * Operation="" />
-     * 
-     * @return
-     */
-    private void saveChanges() {
-	if (("true").equalsIgnoreCase(getBuyAdmin())) {
-	    List<String> newCustomers1 = new ArrayList<String>();
-	    List<String> tmpOldAssCust = new ArrayList<String>();
-	    for (int i = 0; i < oldAssignedCustomers.size(); i++) {
-		String custid = oldAssignedCustomers.get(i);
-		if (custid != null) {
-		    String[] custIds = custid.split(",");
-		    for (int j = 0; j < custIds.length; j++) {
-			String tempCustId = null;
-			if (custIds.length == 1) {
-			    tempCustId = custIds[j].substring(1,
-				    custIds[j].indexOf("]"));
-			} else if (j == 0) {
-			    tempCustId = custIds[j].substring(1);
-			} else if (j == custIds.length - 1) {
-			    tempCustId = custIds[j].substring(0,
-				    custIds[j].indexOf("]"));
-			} else {
-			    tempCustId = custIds[j];
-			}
-			tmpOldAssCust.add(tempCustId);
-		    }
-		}
-	    }
-	    oldAssignCusts.addAll(tmpOldAssCust);
-	    Iterator<String> newIterator = tmpOldAssCust.iterator();
-	    while (newIterator.hasNext()) {
-		String oldAssignedCustId = newIterator.next();
-
-		if (!customers2.contains(oldAssignedCustId.trim())) {
-		    newCustomers1.add(oldAssignedCustId.trim());
-		}
-	    }
-	    Iterator<String> customers2Iterator = customers2.iterator();
-	    while (customers2Iterator.hasNext()) {
-		String assignedCustomerId = customers2Iterator.next();
-		if (oldAssignedCustomers.get(0).contains(
-			assignedCustomerId.trim())) {
-		    customers2Iterator.remove();
-		}
-	    }
-	    manageCustomerAssigmentInputDoc = SCXmlUtil
-		    .createDocument("ManageCustomerAndAssignment");
-	    Element customerAssignmentListElem = SCXmlUtil.createChild(
-		    manageCustomerAssigmentInputDoc.getDocumentElement(),
-		    "CustomerAssignmentList");
-	    saveChanges(customers2, "Create", customerAssignmentListElem);
-	    saveChanges(newCustomers1, "Delete", customerAssignmentListElem);
-	    NodeList customerAssignementNodeList = customerAssignmentListElem
-		    .getElementsByTagName("CustomerAssignment");
-	    if (customerAssignementNodeList != null
-		    && customerAssignementNodeList.getLength() > 0) {
-		WCMashupHelper.invokeMashup("XPEDXManageCustomerAndAssignment",
-			manageCustomerAssigmentInputDoc.getDocumentElement(),
-			wcContext.getSCUIContext());
-	    }
-	}
-
-	if (getSpendingLtCurrency() != null
-		&& getSpendingLtCurrency().equals("-1")) {
-	    setSpendingLtCurrency("");
-	}
-    }
-
-    private void saveChanges(List<String> wList, String operation,
-	    Element customerAssignmentListElem) {
-
-	List<String> listOfShipTo = new ArrayList<String>();
-	try {
-	    if (operation.equals("Delete")) {
-		listOfShipTo = getAllShipTos(wList);
-	    }
-	} catch (Exception e) {
-	    log.error("Unable to get all Ship tos", e);
-	}
-	for (int index = 0; index < wList.size(); index++) {
-	    try {
-		if (wList.get(index) != null
-			&& !wList.get(index).trim().isEmpty()) {
-		    continue;
-		}
-		Element customerAssignmentElem = SCXmlUtil.createChild(
-			customerAssignmentListElem, "CustomerAssignment");
-		customerAssignmentElem.setAttribute("CustomerID",
-			wList.get(index));
-		customerAssignmentElem.setAttribute("OrganizationCode",
-			getWCContext().getBuyerOrgCode());
-		customerAssignmentElem
-			.setAttribute("UserId", customerContactId);
-		customerAssignmentElem.setAttribute("Operation", operation);
-		if (operation.equals("Delete")) {
-		    if (listOfShipTo.isEmpty()) {
-			defaultShipTo = "";
-			XPEDXWCUtils.setObectInCache(
-				XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
-			XPEDXWCUtils.setObectInCache(
-				XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,
-				"true");
-		    }
-
-		    if (!listOfShipTo.contains(defaultShipTo)) {
-			defaultShipTo = "";
-			if (customerContactId.equals(wcContext
-				.getLoggedInUserId())) {
-			    XPEDXWCUtils.setObectInCache(
-				    XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
-				    "true");
-			    XPEDXWCUtils
-				    .setObectInCache(
-					    XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT,
-					    "true");
-			}
-		    }
-		}
-		/*
-		 * String inputXml = SCXmlUtil.getString(input);
-		 * LOG.debug("Input XML: " + inputXml); Object obj =
-		 * WCMashupHelper.invokeMashup( "xpedxSaveCustomerAssignments",
-		 * input, wcContext .getSCUIContext()); Document outputDoc =
-		 * null; if (obj != null) { outputDoc = ((Element)
-		 * obj).getOwnerDocument(); if (null != outputDoc) { String
-		 * outputXml = SCXmlUtil.getString((Element) obj);
-		 * LOG.debug("Output XML: " + outputXml); } }
-		 */
-	    } catch (Exception ex) {
-		log.debug("Record already exists");
-	    }
-	}
-    }
-
-    // Commented for JIRA 488 save performance issue.
-
-    /*
-     * private void saveChanges(List<String> wList, String operation) { for (int
-     * index = 0; index < wList.size(); index++) { try { Map<String, String>
-     * valueMap = new HashMap<String, String>();
-     * valueMap.put("/CustomerAssignment/@CustomerID", wList .get(index));
-     * valueMap.put("/CustomerAssignment/@OrganizationCode",
-     * getWCContext().getBuyerOrgCode());
-     * valueMap.put("/CustomerAssignment/@UserId", customerContactId);
-     * valueMap.put("/CustomerAssignment/@Operation", operation); Element input
-     * = WCMashupHelper.getMashupInput( "xpedxSaveCustomerAssignments",
-     * valueMap, wcContext .getSCUIContext()); if(operation.equals("Delete")){
-     * try { ArrayList<String> listOfShipTo=getAllShipTos(wList);
-     * if(listOfShipTo.size() == 0 ){ defaultShipTo = "";
-     * XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
-     * "true");
-     * XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT
-     * ,"true" ); }
-     * 
-     * if(!listOfShipTo.contains(defaultShipTo)) { defaultShipTo = "";
-     * if(customerContactId.equals(wcContext.getLoggedInUserId())) {
-     * XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
-     * "true");
-     * XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT
-     * ,"true" ); } } } catch(Exception e) { e.printStackTrace(); } } String
-     * inputXml = SCXmlUtil.getString(input); LOG.debug("Input XML: " +
-     * inputXml); Object obj = WCMashupHelper.invokeMashup(
-     * "xpedxSaveCustomerAssignments", input, wcContext .getSCUIContext());
-     * Document outputDoc = null; if (obj != null) { outputDoc = ((Element)
-     * obj).getOwnerDocument(); if (null != outputDoc) { String outputXml =
-     * SCXmlUtil.getString((Element) obj); LOG.debug("Output XML: " +
-     * outputXml); } } } catch (Exception ex) {
-     * log.debug("Record already exists"); } } }
-     */
-
-    private List<String> getAllShipTos(List<String> wList) {
-	List<String> shipToStr = new ArrayList<String>();
-	Document inputDoc = SCXmlUtil.createDocument("XPXCustHierarchyView");
-	Element complexQuery = inputDoc.createElement("ComplexQuery");
-	Element or = inputDoc.createElement("Or");
-	ISCUITransactionContext scuiTransactionContext = getWCContext()
-		.getSCUIContext().getTransactionContext(true);
-	YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-		.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-	boolean isAPICall = false;
-	for (int i = 0; i < oldAssignCusts.size(); i++) {
-	    if (wList.contains(oldAssignCusts.get(i).trim()))
-		continue;
-	    createInput(inputDoc, oldAssignCusts.get(i), complexQuery, or);
-	    isAPICall = true;
-	}
-	for (int k = 0; k < customers2.size(); k++) {
-	    createInput(inputDoc, customers2.get(k), complexQuery, or);
-	    isAPICall = true;
-	}
-	if (!isAPICall)
-	    return shipToStr;
-
-	YIFApi api = null;;
-	try {
-	    api = YIFClientFactory.getInstance().getApi();
-	} catch (YIFClientCreationException e1) {
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
-	}
-	Document outputListDocument = null;
-	try {
-	    outputListDocument = api.executeFlow(env,
-	    	"XPXCustomerHierarchyViewService", inputDoc);
-	} catch (YFSException e) {
-	    log.error("Unable to get Customer Hierarchy", e);
-	} catch (RemoteException e) {
-	    log.error("Unable to connect remotely", e);
-	}
-	Element custView = outputListDocument.getDocumentElement();
-	ArrayList<Element> xpxCustViewElems = SCXmlUtil.getElements(custView,
-		"XPXCustHierarchyView");
-	for (int j = 0; j < xpxCustViewElems.size(); j++) {
-	    shipToStr.add(xpxCustViewElems.get(j).getAttribute(
-		    "ShipToCustomerID"));
-	}
-	return shipToStr;
-    }
-
-    private void createInput(Document inputDoc, String customerID,
-	    Element complexQuery, Element or) {
-	Element shipToExp = inputDoc.createElement("Exp");
-	shipToExp.setAttribute("Name", "ShipToCustomerID");
-	shipToExp.setAttribute("Value", customerID);
-	or.appendChild(shipToExp);
-
-	Element billToExp = inputDoc.createElement("Exp");
-	billToExp.setAttribute("Name", "BillToCustomerID");
-	billToExp.setAttribute("Value", customerID);
-	or.appendChild(billToExp);
-
-	Element sapExp = inputDoc.createElement("Exp");
-	sapExp.setAttribute("Name", "SAPCustomerID");
-	sapExp.setAttribute("Value", customerID);
-	or.appendChild(sapExp);
-
-	Element msapExp = inputDoc.createElement("Exp");
-	msapExp.setAttribute("Name", "MSAPCustomerID");
-	msapExp.setAttribute("Value", customerID);
-	or.appendChild(msapExp);
-
-	complexQuery.appendChild(or);
-	inputDoc.getDocumentElement().appendChild(complexQuery);
-    }
-
-    /**
-     * Setting some input XML attributes like User roles, Customer/User status
-     * based on the request parameters
-     * 
-     * @return
-     */
-    private void overrideContactAttributes() {
-	setContactStatus(getStatus());
-	if (!(YFCCommon.isVoid(wcContext.getSCUIContext().getRequest()
-		.getParameter("userName")))) {
-	    if (getContactStatus() != null
-		    && (getContactStatus().equals(CUSTOMER_STATUS_ACTIVE) || getContactStatus()
-			    .equals(CUSTOMER_STATUS_ON_HOLD))) {
-		setUserStatus(YES);
-	    }
-	    this.userRoleList.add(BUYER_USER_GROUP_KEY);
-	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
-		    .getParameter("buyerAdmin"))) {
-		this.userRoleList.add(BUYER_ADMIN_GROUP_KEY);
-	    }
-	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
-		    .getParameter("buyerApprover"))) {
-		this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
-	    }
-	}
-	setViewInvoices(viewInvoices.equals("true") ? "Y" : "N");
-	setPunchoutUsers(punchoutUsers.equals("true") ? "T" : "F");
-	setStockCheckWebservice(stockCheckWebservice.equals("true") ? "T" : "F");
-	setEstimator(estimator.equals("true") ? "Y" : "N");
-	setViewPrices("true".equals(viewPrices) ? "Y" : "N");
-	setViewReports("true".equals(viewReports) ? "Y" : "N");
-	setOrderConfirmationEmailFlag("true".equals(orderConfirmationEmailFlag) ? "Y"
-		: "N");
-	setOrderCancellationEmailFlag("true".equals(orderCancellationEmailFlag) ? "Y"
-		: "N");
-	setOrderShipmentEmailFlag("true".equals(orderShipmentEmailFlag) ? "Y"
-		: "N");
-	// setOrderUpdateEmailFlag(orderUpdateEmailFlag.equals("true")?"Y":"N");
-	setBackorderEmailFlag("true".equals(backorderEmailFlag) ? "Y" : "N");
-	setOrderApprovalFlag("true".equals(orderApprovalFlag) ? "Y" : "N"); // added
-									    // for
-									    // XB
-									    // 226
-    }
-
-    private void newUserOverrideContactAttributes() {
-	setContactStatus(getStatus());
-	if (!(YFCCommon.isVoid(wcContext.getSCUIContext().getRequest()
-		.getParameter("userName")))) {
-	    if (getContactStatus().equals(CUSTOMER_STATUS_ACTIVE)
-		    || getContactStatus().equals(CUSTOMER_STATUS_ON_HOLD)) {
-		setUserStatus(YES);
-	    }
-	    this.userRoleList.add(BUYER_USER_GROUP_KEY);
-	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
-		    .getParameter("buyerAdmin"))) {
-		this.userRoleList.add(BUYER_ADMIN_GROUP_KEY);
-	    }
-	    if ("true".equalsIgnoreCase(wcContext.getSCUIContext().getRequest()
-		    .getParameter("buyerApprover"))) {
-		this.userRoleList.add(BUYER_APPROVER_GROUP_KEY);
-	    }
-	}
-	setViewInvoices(viewInvoices.equals("true") ? "Y" : "N");
-	setEstimator(estimator.equals("true") ? "Y" : "N");
-	setViewPrices(viewPrices.equals("true") ? "Y" : "N");
-	setViewReports(viewReports.equals("true") ? "Y" : "N");
-	setOrderApprovalFlag("true".equals(orderApprovalFlag) ? "Y" : "N");
-    }
-
-    /**
-     * Checks whether user has changed password from the UI by comparing to the
-     * masked constant String to be shown in the UI
-     * 
-     * @return true if password field changed
-     */
-
-    private boolean checkIfAnswerChanged() {
-	String answerParam = wcContext.getSCUIContext().getRequest()
-		.getParameter("secretAnswer");
-	if (YFCCommon.isVoid(answerParam)
-		|| answerParam.equals(WCConstants.MASKED_SECRET_ANSWER_STRING)) {
-	    return false;
-	}
-	return true;
-    }
-
-    /**
-     * Checks whether user has changed secret answer from the UI by comparing to
-     * the masked constant String to be shown in the UI
-     * 
-     * @return true if secret answer field changed
-     */
-    private boolean checkIfPasswordChanged() {
-	String passwordParam = wcContext.getSCUIContext().getRequest()
-		.getParameter("userpassword");
-	if (YFCCommon.isVoid(passwordParam)
-		|| passwordParam.equals(WCConstants.MASKED_PASSWORD_STRING)) {
-	    return false;
-	}
-	return true;
-    }
-
-    /**
-     * Returns the Customer member variable
-     * 
-     * @return customer element
-     */
-    public Element getCustomer() {
-	return customer;
-    }
-
-    /**
-     * Sets the customer element
-     * 
-     * @param contact
-     */
-    public void setCustomer(Element contact) {
-	this.customer = contact;
-    }
-
-    /**
-     * @return the user element
-     */
-    public Element getUser() {
-	return user;
-    }
-
-    /**
-     * Sets the user element
-     * 
-     * @param user
-     */
-    public void setUser(Element user) {
-	this.user = user;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getUserPassword() {
-	return userPassword;
-    }
-
-    /**
-     * Sets the user password to the member variable
-     * 
-     * @param userPassword
-     */
-    public void setUserPassword(String userPassword) {
-	this.userPassword = userPassword;
-    }
-
-    /**
-     * @return the confirm password variable
-     */
-    public String getConfirmPassword() {
-	return confirmPassword;
-    }
-
-    /**
-     * Sets the Confirm Password field to the member variable
-     * 
-     * @param confirmPassword
-     */
-    public void setConfirmPassword(String confirmPassword) {
-	this.confirmPassword = confirmPassword;
-    }
-
-    /**
-     * 
-     * @return the locale member variable
-     */
-    public Element getLoc() {
-	return this.loc;
-    }
-
-    /**
-     * Sets the locale value to the member variable
-     * 
-     * @param locale
-     */
-    public void setLoc(Element locale) {
-	this.loc = locale;
-    }
-
-    /**
-     * @return the UserID
-     */
-    public String getUserId() {
-	return userId;
-    }
-
-    /**
-     * Sets the UserID
-     * 
-     * @param userId
-     */
-    public void setUserId(String Id) {
-	userId = Id;
-    }
-
-    /**
-     * @return the Organization Code
-     */
-    public String getOrganizationCode() {
-	return organizationCode;
-    }
-
-    /**
-     * Sets the Organization code
-     * 
-     * @param organizationCode
-     */
-    public void setOrganizationCode(String orgCode) {
-	organizationCode = orgCode;
-    }
-
-    /**
-     * @return the Customer Admin List Element
-     */
-    public Element getCustomerAdmin() {
-	return customerAdmin;
-    }
-
-    /**
-     * Sets the Customer Admin Parameter
-     * 
-     * @param customerAdmin
-     */
-    public void setCustomerAdmin(Element customerAdmin) {
-	this.customerAdmin = customerAdmin;
-    }
-
-    /**
-     * @return the contact
-     */
-    public Element getContact() {
-	return contact;
-    }
-
-    /**
-     * @param contact
-     *            the contact to set
-     */
-    public void setContact(Element contact) {
-	this.contact = contact;
-    }
-
-    /**
-     * @return the userName
-     */
-    public String getUserName() {
-	return userName;
-    }
-
-    /**
-     * @param userName
-     *            the userName to set
-     */
-    public void setUserName(String userName) {
-	this.userName = userName;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-	return password;
-    }
-
-    /**
-     * @param password
-     *            the password to set
-     */
-    public void setPassword(String password) {
-	this.password = password;
-    }
-
-    /**
-     * @return the secretQuestion
-     */
-    public String getSecretQuestion() {
-	return secretQuestion;
-    }
-
-    /**
-     * @param secretQuestion
-     *            the secretQuestion to set
-     */
-    public void setSecretQuestion(String secretQuestion) {
-	this.secretQuestion = secretQuestion;
-    }
-
-    /**
-     * @return the secretAnswer
-     */
-    public String getSecretAnswer() {
-	return secretAnswer;
-    }
-
-    /**
-     * @param secretAnswer
-     *            the secretAnswer to set
-     */
-    public void setSecretAnswer(String secretAnswer) {
-	this.secretAnswer = secretAnswer;
-    }
-
-    /**
-     * @return the confirmAnswer
-     */
-    public String getConfirmAnswer() {
-	return confirmAnswer;
-    }
-
-    /**
-     * @param confirmAnswer
-     *            the confirmAnswer to set
-     */
-    public void setConfirmAnswer(String confirmAnswer) {
-	this.confirmAnswer = confirmAnswer;
-    }
-
-    /**
-     * @return the locale
-     */
-    public String getPreferredLocale() {
-	return preferredLocale;
-    }
-
-    /**
-     * @param locale
-     *            the locale to set
-     */
-    public void setPreferredLocale(String preffLocale) {
-	this.preferredLocale = preffLocale;
-    }
-
-    /**
-     * @return the title
-     */
-    public String getTitle() {
-	return title;
-    }
-
-    /**
-     * @param title
-     *            the title to set
-     */
-    public void setTitle(String title) {
-	this.title = title;
-    }
-
-    /**
-     * @return the firstName
-     */
-    public String getFirstName() {
-	return firstName;
-    }
-
-    /**
-     * @param firstName
-     *            the firstName to set
-     */
-    public void setFirstName(String firstName) {
-	this.firstName = firstName;
-    }
-
-    /**
-     * @return the lastName
-     */
-    public String getLastName() {
-	return lastName;
-    }
-
-    /**
-     * @param lastName
-     *            the lastName to set
-     */
-    public void setLastName(String lastName) {
-	this.lastName = lastName;
-    }
-
-    /**
-     * @return the jobTitle
-     */
-    public String getJobTitle() {
-	return jobTitle;
-    }
-
-    /**
-     * @param jobTitle
-     *            the jobTitle to set
-     */
-    public void setJobTitle(String jobTitle) {
-	this.jobTitle = jobTitle;
-    }
-
-    // /**
-    // * @return the comparnyName
-    // */
-    // public String getComparnyName() {
-    // return comparnyName;
-    // }
-    //
-    // /**
-    // * @param comparnyName the comparnyName to set
-    // */
-    // public void setComparnyName(String comparnyName) {
-    // this.comparnyName = comparnyName;
-    // }
-
-    /**
-     * @return the deptName
-     */
-    public String getDeptName() {
-	return deptName;
-    }
-
-    /**
-     * @param deptName
-     *            the deptName to set
-     */
-    public void setDeptName(String deptName) {
-	this.deptName = deptName;
-    }
-
-    /**
-     * @return the buyerUser
-     */
-    public String getBuyerUser() {
-	return buyerUser;
-    }
-
-    /**
-     * @param buyerUser
-     *            the buyerUser to set
-     */
-    public void setBuyerUser(String buyerUser) {
-	this.buyerUser = buyerUser;
-    }
-
-    /**
-     * @return the buyerAdmin
-     */
-    public String getBuyerAdmin() {
-	return buyerAdmin;
-    }
-
-    /**
-     * @param buyerAdmin
-     *            the buyerAdmin to set
-     */
-    public void setBuyerAdmin(String buyerAdmin) {
-	this.buyerAdmin = buyerAdmin;
-    }
-
-    /**
-     * @return the approver
-     */
-    public String getApprover() {
-	return approver;
-    }
-
-    /**
-     * @param approver
-     *            the approver to set
-     */
-    public void setApprover(String approver) {
-	this.approver = approver;
-    }
-
-    /**
-     * @return the status
-     */
-    public String getStatus() {
-	return status;
-    }
-
-    /**
-     * @param status
-     *            the status to set
-     */
-    public void setStatus(String status) {
-	this.status = status;
-    }
-
-    /**
-     * @return the emailId
-     */
-    public String getEmailId() {
-	return emailId;
-    }
-
-    /**
-     * @param emailId
-     *            the emailId to set
-     */
-    public void setEmailId(String emailId) {
-	this.emailId = emailId;
-    }
-
-    /**
-     * @return the dayFaxNo
-     */
-    public String getDayFaxNo() {
-	return dayFaxNo;
-    }
-
-    /**
-     * @param dayFaxNo
-     *            the dayFaxNo to set
-     */
-    public void setDayFaxNo(String dayFaxNo) {
-	this.dayFaxNo = dayFaxNo;
-    }
-
-    /**
-     * @return the eveningFaxNo
-     */
-    public String getEveningFaxNo() {
-	return eveningFaxNo;
-    }
-
-    /**
-     * @param eveningFaxNo
-     *            the eveningFaxNo to set
-     */
-    public void setEveningFaxNo(String eveningFaxNo) {
-	this.eveningFaxNo = eveningFaxNo;
-    }
-
-    /**
-     * @return the dayPhone
-     */
-    public String getDayPhone() {
-	return dayPhone;
-    }
-
-    /**
-     * @param dayPhone
-     *            the dayPhone to set
-     */
-    public void setDayPhone(String dayPhone) {
-	this.dayPhone = dayPhone;
-    }
-
-    /**
-     * @return the eveningPhone
-     */
-    public String getEveningPhone() {
-	return eveningPhone;
-    }
-
-    /**
-     * @param eveningPhone
-     *            the eveningPhone to set
-     */
-    public void setEveningPhone(String eveningPhone) {
-	this.eveningPhone = eveningPhone;
-    }
-
-    /**
-     * @return the mobilePhone
-     */
-    public String getMobilePhone() {
-	return mobilePhone;
-    }
-
-    /**
-     * @param mobilePhone
-     *            the mobilePhone to set
-     */
-    public void setMobilePhone(String mobilePhone) {
-	this.mobilePhone = mobilePhone;
-    }
-
-    /**
-     * @return the customerId
-     */
-    public String getCustomerId() {
-	return customerId;
-    }
-
-    /**
-     * @param customerId
-     *            the customerId to set
-     */
-    public void setCustomerId(String customerId) {
-	this.customerId = customerId;
-    }
-
-    /**
-     * @return the customerContactId
-     */
-    public String getCustomerContactId() {
-	return customerContactId;
-    }
-
-    /**
-     * @param customerContactId
-     *            the customerContactId to set
-     */
-    public void setCustomerContactId(String customerContactId) {
-	this.customerContactId = customerContactId;
-    }
-
-    /**
-     * @return the states
-     */
-    public List<String> getStates() {
-	return states;
-    }
-
-    /**
-     * @param states
-     *            the states to set
-     */
-    public void setStates(List<String> states) {
-	this.states = states;
-    }
-
-    /**
-     * @return the operation
-     */
-    public String getOperation() {
-	return operation;
-    }
-
-    /**
-     * @param operation
-     *            the operation to set
-     */
-    public void setOperation(String operation) {
-	this.operation = operation;
-    }
-
-    /**
-     * @return the buyerOrgCode
-     */
-    public String getBuyerOrgCode() {
-	return buyerOrgCode;
-    }
-
-    /**
-     * @param buyerOrgCode
-     *            the buyerOrgCode to set
-     */
-    public void setBuyerOrgCode(String buyerOrgCode) {
-	this.buyerOrgCode = buyerOrgCode;
-    }
-
-    /**
-     * @return the contactStatus
-     */
-    public String getContactStatus() {
-	return contactStatus;
-    }
-
-    /**
-     * @param contactStatus
-     *            the contactStatus to set
-     */
-    public void setContactStatus(String contactStatus) {
-	this.contactStatus = contactStatus;
-    }
-
-    /**
-     * @return the userStatus
-     */
-    public String getUserStatus() {
-	return userStatus;
-    }
-
-    /**
-     * @param userStatus
-     *            the userStatus to set
-     */
-    public void setUserStatus(String userStatus) {
-	this.userStatus = userStatus;
-    }
-
-    /**
-     * @return the userRoleList
-     */
-    public List<String> getUserRoleList() {
-	return userRoleList;
-    }
-
-    /**
-     * @param userRoleList
-     *            the userRoleList to set
-     */
-    public void setUserRoleList(List<String> userRoleList) {
-	this.userRoleList = userRoleList;
-    }
-
-    /**
-     * @return the userNameAttribute
-     */
-    public String getUserNameAttribute() {
-	return userNameAttribute;
-    }
-
-    /**
-     * @param userNameAttribute
-     *            the userNameAttribute to set
-     */
-    public void setUserNameAttribute(String userNameAttribute) {
-	this.userNameAttribute = userNameAttribute;
-    }
-
-    public String getBodyData() {
-	return bodyData;
-    }
-
-    public void setBodyData(String bodyData) {
-	this.bodyData = bodyData;
-    }
-
-    public List<String> getOldAssignedCustomers() {
-	return oldAssignedCustomers;
-    }
-
-    public void setOldAssignedCustomers(List<String> oldAssignedCustomers) {
-	this.oldAssignedCustomers = oldAssignedCustomers;
-    }
-
-    /**
-     * @param currentSelTab
-     *            the currentSelTab to set
-     */
-    public void setCurrentSelTab(String currentSelTab) {
-	this.currentSelTab = currentSelTab;
-    }
-
-    /**
-     * @return the currentSelTab
-     */
-    public String getCurrentSelTab() {
-	return currentSelTab;
-    }
-
-    /**
-     * @param spendingLtCurrency
-     *            the spendingLtCurrency to set
-     */
-    public void setSpendingLtCurrency(String spendingLtCurrency) {
-	this.spendingLtCurrency = spendingLtCurrency;
-    }
-
-    /**
-     * @return the spendingLtCurrency
-     */
-    public String getSpendingLtCurrency() {
-	return spendingLtCurrency;
-    }
-
-    /**
-     * @param addnlEmailAddrText
-     *            the addnlEmailAddrText to set
-     */
-    public void setAddnlEmailAddrText(String addnlEmailAddrText) {
-	this.addnlEmailAddrText = addnlEmailAddrText;
-    }
-
-    /**
-     * @return the addnlEmailAddrText
-     */
-    public String getAddnlEmailAddrText() {
-	return addnlEmailAddrText;
-    }
-
-    /**
-     * @return the pOListText
-     */
-    public String getPOListText() {
-	return pOListText;
-    }
-
-    /**
-     * @param pOListText
-     *            the pOListText to set
-     */
-    public void setPOListText(String pOListText) {
-	this.pOListText = pOListText;
-    }
-
-    /**
-     * @param userPwdToValidate
-     *            the userPwdToValidate to set
-     */
-    public void setUserPwdToValidate(String userPwdToValidate) {
-	this.userPwdToValidate = userPwdToValidate;
-    }
-
-    /**
-     * @return the userPwdToValidate
-     */
-    public String getUserPwdToValidate() {
-	return userPwdToValidate;
-    }
-
-    /**
-     * @param pwdValidationResultMap
-     *            the pwdValidationResultMap to set
-     */
-    public void setPwdValidationResultMap(Map pwdValidationResultMap) {
-	this.pwdValidationResultMap = pwdValidationResultMap;
-    }
-
-    /**
-     * @return the pwdValidationResultMap
-     */
-    public Map getPwdValidationResultMap() {
-	return pwdValidationResultMap;
-    }
-
-    /** Start of code for XB 226 **/
-    public String getOrderApprovalFlag() {
-	return orderApprovalFlag;
-    }
-
-    public void setOrderApprovalFlag(String orderApprovalFlag) {
-	this.orderApprovalFlag = orderApprovalFlag;
-    }
-
-    /** End of Code for XB 226 **/
-
-    /** JIRA 1998--function to call API for mailId change-- **/
-    private void updateEMailAddress(String oldMailId, String changedMailId) {
-	// String strEnterpriseCode = "";
-	String strEnterpriseCode = ""; //
-	StringBuffer sb = new StringBuffer();
-	strEnterpriseCode = wcContext.getStorefrontId();
-	String entryType = XPEDXConstants.ENTRY_TYPE_EMAIL_UPDATE;
-	String emailFromAddresses = "";
-	/* Start - JIRA 3262 */
-
-	/**
-	 * Value of username and suffix is retrieve by
-	 * customer_overrides.properties
-	 * 
-	 * */
-	if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
-	    String userName = YFSSystem.getProperty("fromAddress.username");
-	    String suffix = YFSSystem.getProperty("fromAddress.suffix");
-	    sb.append(userName).append("@").append(strEnterpriseCode)
-		    .append(suffix);
-	    emailFromAddresses = sb.toString();
-
-	}
-
-	/**
-	 * Value of imagesRootFolder is retrieve by
-	 * customer_overrides.properties
-	 * 
-	 **/
-
-	String imageUrl = "";
-	if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
-	    String imageName = getLogoName(strEnterpriseCode);
-	    String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-	    if (imagesRootFolder != null
-		    && !imagesRootFolder.trim().isEmpty()
-		    && imageName != null && !imageName.trim().isEmpty()) {
-		imageUrl = imagesRootFolder + imageName;
-	    }
-	}
-	/* End - JIRA 3262 */
-
-	// Creating input xml to send an email
-	Document templateEmailDoc = YFCDocument.createDocument(
-		"UserUpdateEmail").getDocument();
-	Element templateElement = templateEmailDoc.getDocumentElement();
-	if (log.isDebugEnabled()) {
-	    log.debug("" + SCXmlUtil.getString(templateElement));
-	}
-	Element emailElement = templateEmailDoc
-		.createElement("UserUpdateEmail");
-	emailElement.setAttribute("BrandName", strEnterpriseCode);
-	emailElement.setAttribute("EntryType", entryType);
-	emailElement.setAttribute("OldEmailID", oldMailId);
-	emailElement.setAttribute("newEmailID", changedMailId);
-	emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
-	emailElement.setAttribute("EmailFromAddresses", emailFromAddresses); // Start
-									     // -Jira
-									     // 3262
-	emailElement.setAttribute("ImageUrl", imageUrl); // Start -Jira 3262
-
-	String inputXml = SCXmlUtil.getString(emailElement);
-	LOG.debug("Input XML: " + inputXml);
-	Object obj = WCMashupHelper.invokeMashup("SendOnEmailChangeEmail",
-		emailElement, wcContext.getSCUIContext());
-	Document outputDoc = ((Element) obj).getOwnerDocument();
-	if (null != outputDoc) {
-	    LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
-	}
-	if (LOG.isDebugEnabled()) {
-	    LOG.debug("SCXmlUtil.getString((Element) obj)"
-		    + SCXmlUtil.getString((Element) obj));
-	}
-
-    }
-
-    // Start - Jira 3262
-    private String getLogoName(String sellerOrgCode) {
-	String _imageName = "";
-	if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/xpedx_r_rgb_lo.jpg";
-	} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/BulkleyDunton_r_rgb_lo.jpg";
-	} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/CentralLewmar_r_rgb_lo.jpg";
-	} else if ("CentralMarquardt".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/CentralMarquardt_r_rgb_lo.jpg";
-	} else if ("Saalfeld".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/Saalfeld_r_rgb_lo.jpg";
-	} else if ("StrategicPaper".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/StrategicPaper_r_rgb_lo.jpg";
-	} else if ("WesternPaper".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/WesternPaper_r_rgb_lo.jpg";
-	} else if ("WhitemanTower".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/WhitemanTower_r_rgb_lo.jpg";
-	} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/Zellerbach_r_rgb_lo.jpg";
-	} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
-	    _imageName = "/xpedx_r_rgb_lo.jpg";
-	}
-	return _imageName;
-    }
-
-    /**
-     * JIRA 1998 Checks whether user has changed email address from the
-     * UserProfile by comparing to the old email id from session
-     * 
-     * @return true if email address field changed
-     */
-
-    private boolean checkIfEmailChanged(String oldEmailId, String newEmailId) {
-	if (newEmailId.equalsIgnoreCase(oldEmailId)) {
-	    return false;
-	} else {
-	    return true;
-	}	
-    }
-
-    // AppendQuickLinkAttributes method added for 4284 - After Review
-    public void appendQuickLinkAttributes(Element eleXPXQuickLinkList) {
-	eleXPXQuickLinkList.setAttribute("Reset", "true");
-
-	Element eleXPXQuickLink = null;
-	StringTokenizer st = new StringTokenizer(getBodyData(), "||");
-	int i = 1;
-	while (st.hasMoreTokens()) {
-	    // From UserProfile1.jsp
-	    String token = st.nextToken();
-	    if (token.equals("*#?")) {
-		token = "";
-	    }
-
-	    if (i == 1) {
-		eleXPXQuickLink = SCXmlUtil.createChild(eleXPXQuickLinkList,
-			"XPXQuickLink");
-		eleXPXQuickLink.setAttribute("QuickLinkName", token);
-	    }
-
-	    if (i == 2)
-		eleXPXQuickLink.setAttribute("QuickLinkUrl", token);
-
-	    if (i == 3) {
-		eleXPXQuickLink.setAttribute("ShowQuickLink", token);
-	    }
-	    if (i == 4) {
-		eleXPXQuickLink.setAttribute("URLOrder", token);
-		eleXPXQuickLinkList.appendChild(eleXPXQuickLink);
-	    }
-
-	    i++;
-
-	    if (i == 5) {
-		i = 1;
-
-	    }
-
-	}
-
-	// return templateElement;
-
     }
 
 }

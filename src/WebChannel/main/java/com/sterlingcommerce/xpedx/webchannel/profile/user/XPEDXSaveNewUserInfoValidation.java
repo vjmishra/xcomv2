@@ -21,12 +21,12 @@ import com.yantra.yfc.util.YFCCommon;
 public class XPEDXSaveNewUserInfoValidation extends
 	AbstractWCFormFieldValidation {
 
-    private Map parameters = new HashMap<String, String>();
-    IWCContext wcContext = null;
-    private List<String> reqdFields = new ArrayList<String>();
+    private static final String USER_NAME_UI_FIELD_NAME = "userName";
     // User resource package
     public static final String USER_RESOURCE_PACKAGE_STRING = "com.sterlingcommerce.xpedx.webchannel.profile.user.package";
-    private static final String USER_NAME_UI_FIELD_NAME = "userName";
+    private Map parameters = new HashMap<String, String>();
+    private List<String> reqdFields = new ArrayList<String>();
+    IWCContext wcContext = null;
 
     /**
      * Implements validate method of interface IWCFormFieldValidation

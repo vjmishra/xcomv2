@@ -20,13 +20,37 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 @SuppressWarnings("deprecation")
 public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 
+    private static final Logger log = Logger
+	    .getLogger(XPEDXGetUserPrefCategoryAssets.class);
+    private static final String SEARCH_CATALOG_INDEX_MASHUP_ID = "xpedxHomeCatalogPage";
     /**
      * 
      */
     private static final long serialVersionUID = -6125072277924048937L;
-    private static final Logger log = Logger
-	    .getLogger(XPEDXGetUserPrefCategoryAssets.class);
-    private static final String SEARCH_CATALOG_INDEX_MASHUP_ID = "xpedxHomeCatalogPage";
+
+    private Element asset;
+
+    private String assetType;
+
+    private String assetURL;
+
+    protected String categoryDepth = "2";
+
+    private String custId;
+
+    private String customerContactID;
+
+    private String displayName;
+
+    protected Element mainCatsDoc;
+
+    private String organizationCode;
+
+    private String prefCategory;
+
+    private Element prefCategoryElem;
+
+    private String prefCategoryPath;
 
     @Override
     public String execute() {
@@ -35,85 +59,44 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 	return SUCCESS;
     }
 
-    /**
-     * JIRA 243 Modified getCustomerDetails method to consider the mashup to be
-     * invoked so that, we get only the required information - here
-     * ExtnCustomerClass.
-     * 
-     * @param inputItems
-     * @return
-     */
-    private void getUserPrefCategory() {
+    public Element getAsset() {
+	return asset;
+    }
 
-	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
-		.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-	String userPrefCategory = xpedxCustomerContactInfoBean
-		.getExtnPrefCatalog();
-	// String userPrefCategory =
-	// (String)wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.USER_PREF_CATEGORY);
-	if (userPrefCategory != null && !userPrefCategory.trim().isEmpty()
-		&& !userPrefCategory.equalsIgnoreCase("None")) {
-	    this.prefCategory = userPrefCategory;
-	} else {
-	    log.error("No preferred Category at User Level for User:"
-		    + customerContactID + " Checking at Customer Level");
-	    String custPrefCategory = (String) wcContext.getSCUIContext()
-		    .getSession()
-		    .getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
-	    if (custPrefCategory != null
-		    && !custPrefCategory.trim().isEmpty()
-		    && !custPrefCategory.equalsIgnoreCase("None")) {
-		this.prefCategory = custPrefCategory;
-	    } else {
-		log.error("No preferred Category at Customer Level for Customer:"
-			+ getWCContext().getCustomerId()
-			+ " Setting Preferred Category as PAPER");
-		prefCategory = "4000000"; // This the Category ID for Paper
-					  // Category took it from the staging
-					  // database
-	    }
-	    // all these Database calls are removed and the preferred categories
-	    // are set to session in the Header Action itself
-	    /*
-	     * customerContactID = wcContext.getCustomerContactId(); try{
-	     * Element OutputDoc1 =
-	     * prepareAndInvokeMashup("XPEDX-GetUserPreferredCategory"); Element
-	     * customerContactElem =
-	     * XMLUtilities.getChildElementByName(OutputDoc1,
-	     * "CustomerContact"); Element ExtnElem =
-	     * XMLUtilities.getChildElementByName(customerContactElem, "Extn");
-	     * 
-	     * userPrefCategory = SCXmlUtils.getAttribute(ExtnElem,
-	     * "ExtnPrefCatalog");
-	     * if(userPrefCategory.length()<1||userPrefCategory
-	     * .equalsIgnoreCase("None")) { String custPrefCategory =
-	     * (String)wcContext
-	     * .getSCUIContext().getSession().getAttribute(XPEDXConstants
-	     * .CUST_PREF_CATEGORY);
-	     * log.error("No preferred Category at User Level for User:"+
-	     * customerContactID + " Checking at Customer Level"); Document
-	     * outputDoc2 =
-	     * XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(),
-	     * getWCContext() .getStorefrontId(), customerExtnInfoMashUp);
-	     * Element customerElem = outputDoc2.getDocumentElement(); Element
-	     * customerOrganizationExtnEle =
-	     * XMLUtilities.getElement(customerElem, "Extn");
-	     * 
-	     * custPrefCategory =
-	     * SCXmlUtils.getAttribute(customerOrganizationExtnEle,
-	     * "ExtnCustomerClass"); if(custPrefCategory.length()<1) {
-	     * log.error(
-	     * "No preferred Category at Customer Level for Customer:"+
-	     * getWCContext().getCustomerId() +
-	     * " Setting Preferred Category as PAPER"); prefCategory = "Paper";
-	     * } else { this.prefCategory = custPrefCategory; } } else {
-	     * this.prefCategory = userPrefCategory; } }
-	     * 
-	     * catch (Exception e) { e.printStackTrace();
-	     * log.error("Error while getting the Preferred Category"); }
-	     */
-	}
+    public String getAssetType() {
+	return assetType;
+    }
 
+    public String getAssetURL() {
+	return assetURL;
+    }
+
+    public String getCategoryDepth() {
+	return categoryDepth;
+    }
+
+    public String getCustId() {
+	return custId;
+    }
+
+    public String getCustomerContactID() {
+	return customerContactID;
+    }
+
+    public String getDisplayName() {
+	return displayName;
+    }
+
+    public Element getMainCatsDoc() {
+	return mainCatsDoc;
+    }
+
+    public String getOrganizationCode() {
+	return organizationCode;
+    }
+
+    public String getPrefCategory() {
+	return prefCategory;
     }
 
     private void getPrefCategoryAssets() {
@@ -224,6 +207,14 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 	}
     }
 
+    public Element getPrefCategoryElem() {
+	return prefCategoryElem;
+    }
+
+    public String getPrefCategoryPath() {
+	return prefCategoryPath;
+    }
+
     private void getPrefCategoryPathToDisplay() {
 	try {
 	    Element outputDoc3 = prepareAndInvokeMashup("XPEDX-getPrefCategoryPath");
@@ -238,118 +229,138 @@ public class XPEDXGetUserPrefCategoryAssets extends WCMashupAction {
 	    organizationCode = SCXmlUtil.getAttribute(categoryElem,
 		    "OrganizationCode");
 	} catch (Exception e) {
-	    log.error("Error while getting the Preferred Category Path to get the category Assets " + e.getMessage());
+	    log.error("Error while getting the Preferred Category Path to get the category Assets "
+		    + e.getMessage());
 	}
 
     }
 
-    public String getCustomerContactID() {
-	return customerContactID;
-    }
+    /**
+     * JIRA 243 Modified getCustomerDetails method to consider the mashup to be
+     * invoked so that, we get only the required information - here
+     * ExtnCustomerClass.
+     * 
+     * @param inputItems
+     * @return
+     */
+    private void getUserPrefCategory() {
 
-    public void setCustomerContactID(String customerContactID) {
-	this.customerContactID = customerContactID;
-    }
+	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
+		.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+	String userPrefCategory = xpedxCustomerContactInfoBean
+		.getExtnPrefCatalog();
+	// String userPrefCategory =
+	// (String)wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.USER_PREF_CATEGORY);
+	if (userPrefCategory != null && !userPrefCategory.trim().isEmpty()
+		&& !userPrefCategory.equalsIgnoreCase("None")) {
+	    this.prefCategory = userPrefCategory;
+	} else {
+	    log.error("No preferred Category at User Level for User:"
+		    + customerContactID + " Checking at Customer Level");
+	    String custPrefCategory = (String) wcContext.getSCUIContext()
+		    .getSession()
+		    .getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
+	    if (custPrefCategory != null && !custPrefCategory.trim().isEmpty()
+		    && !custPrefCategory.equalsIgnoreCase("None")) {
+		this.prefCategory = custPrefCategory;
+	    } else {
+		log.error("No preferred Category at Customer Level for Customer:"
+			+ getWCContext().getCustomerId()
+			+ " Setting Preferred Category as PAPER");
+		prefCategory = "4000000"; // This the Category ID for Paper
+					  // Category took it from the staging
+					  // database
+	    }
+	    // all these Database calls are removed and the preferred categories
+	    // are set to session in the Header Action itself
+	    /*
+	     * customerContactID = wcContext.getCustomerContactId(); try{
+	     * Element OutputDoc1 =
+	     * prepareAndInvokeMashup("XPEDX-GetUserPreferredCategory"); Element
+	     * customerContactElem =
+	     * XMLUtilities.getChildElementByName(OutputDoc1,
+	     * "CustomerContact"); Element ExtnElem =
+	     * XMLUtilities.getChildElementByName(customerContactElem, "Extn");
+	     * 
+	     * userPrefCategory = SCXmlUtils.getAttribute(ExtnElem,
+	     * "ExtnPrefCatalog");
+	     * if(userPrefCategory.length()<1||userPrefCategory
+	     * .equalsIgnoreCase("None")) { String custPrefCategory =
+	     * (String)wcContext
+	     * .getSCUIContext().getSession().getAttribute(XPEDXConstants
+	     * .CUST_PREF_CATEGORY);
+	     * log.error("No preferred Category at User Level for User:"+
+	     * customerContactID + " Checking at Customer Level"); Document
+	     * outputDoc2 =
+	     * XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(),
+	     * getWCContext() .getStorefrontId(), customerExtnInfoMashUp);
+	     * Element customerElem = outputDoc2.getDocumentElement(); Element
+	     * customerOrganizationExtnEle =
+	     * XMLUtilities.getElement(customerElem, "Extn");
+	     * 
+	     * custPrefCategory =
+	     * SCXmlUtils.getAttribute(customerOrganizationExtnEle,
+	     * "ExtnCustomerClass"); if(custPrefCategory.length()<1) {
+	     * log.error(
+	     * "No preferred Category at Customer Level for Customer:"+
+	     * getWCContext().getCustomerId() +
+	     * " Setting Preferred Category as PAPER"); prefCategory = "Paper";
+	     * } else { this.prefCategory = custPrefCategory; } } else {
+	     * this.prefCategory = userPrefCategory; } }
+	     * 
+	     * catch (Exception e) { e.printStackTrace();
+	     * log.error("Error while getting the Preferred Category"); }
+	     */
+	}
 
-    public String getPrefCategory() {
-	return prefCategory;
-    }
-
-    public void setPrefCategory(String prefCategory) {
-	this.prefCategory = prefCategory;
-    }
-
-    public String getOrganizationCode() {
-	return organizationCode;
-    }
-
-    public void setOrganizationCode(String organizationCode) {
-	this.organizationCode = organizationCode;
-    }
-
-    public Element getAsset() {
-	return asset;
     }
 
     public void setAsset(Element asset) {
 	this.asset = asset;
     }
 
-    public String getAssetType() {
-	return assetType;
-    }
-
     public void setAssetType(String assetType) {
 	this.assetType = assetType;
-    }
-
-    public String getAssetURL() {
-	return assetURL;
     }
 
     public void setAssetURL(String assetURL) {
 	this.assetURL = assetURL;
     }
 
-    public String getDisplayName() {
-	return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-	this.displayName = displayName;
-    }
-
-    public void setPrefCategoryPath(String prefCategoryPath) {
-	this.prefCategoryPath = prefCategoryPath;
-    }
-
-    public String getPrefCategoryPath() {
-	return prefCategoryPath;
-    }
-
-    public String getCategoryDepth() {
-	return categoryDepth;
-    }
-
     public void setCategoryDepth(String categoryDepth) {
 	this.categoryDepth = categoryDepth;
-    }
-
-    public Element getMainCatsDoc() {
-	return mainCatsDoc;
-    }
-
-    public void setMainCatsDoc(Element mainCatsDoc) {
-	this.mainCatsDoc = mainCatsDoc;
-    }
-
-    public Element getPrefCategoryElem() {
-	return prefCategoryElem;
-    }
-
-    public void setPrefCategoryElem(Element prefCategoryElem) {
-	this.prefCategoryElem = prefCategoryElem;
-    }
-
-    public String getCustId() {
-	return custId;
     }
 
     public void setCustId(String custId) {
 	this.custId = custId;
     }
 
-    private String customerContactID;
-    private String prefCategory;
-    private String prefCategoryPath;
-    private String organizationCode;
-    private Element prefCategoryElem;
-    private String custId;
-    private Element asset;
-    private String assetType;
-    private String assetURL;
-    private String displayName;
-    protected Element mainCatsDoc;
-    protected String categoryDepth = "2";
+    public void setCustomerContactID(String customerContactID) {
+	this.customerContactID = customerContactID;
+    }
+
+    public void setDisplayName(String displayName) {
+	this.displayName = displayName;
+    }
+
+    public void setMainCatsDoc(Element mainCatsDoc) {
+	this.mainCatsDoc = mainCatsDoc;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+	this.organizationCode = organizationCode;
+    }
+
+    public void setPrefCategory(String prefCategory) {
+	this.prefCategory = prefCategory;
+    }
+
+    public void setPrefCategoryElem(Element prefCategoryElem) {
+	this.prefCategoryElem = prefCategoryElem;
+    }
+
+    public void setPrefCategoryPath(String prefCategoryPath) {
+	this.prefCategoryPath = prefCategoryPath;
+    }
 
 }

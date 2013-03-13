@@ -16,25 +16,9 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 @SuppressWarnings("serial")
 public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 
-    private QuickLinkBean quickLinkBeanArray[];
     private String createSelected = "false";
     private String customerContactId;
-
-    public String getCreateSelected() {
-	return createSelected;
-    }
-
-    public void setCreateSelected(String createSelected) {
-	this.createSelected = createSelected;
-    }
-
-    public QuickLinkBean[] getQuickLinkBeanArray() {
-	return quickLinkBeanArray;
-    }
-
-    public void setQuickLinkBeanArray(QuickLinkBean[] quickLinkBeanArray) {
-	this.quickLinkBeanArray = quickLinkBeanArray;
-    }
+    private QuickLinkBean quickLinkBeanArray[];
 
     @Override
     public String execute() {
@@ -67,46 +51,50 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 	return SUCCESS;
     }
 
-    private QuickLinkBean[] getQuickLink(Element outputElement) {
-	Node quickLinkNodeList = null;
-	if (outputElement != null && outputElement.hasChildNodes()) {
-	    quickLinkNodeList = outputElement.getFirstChild().getFirstChild()
-			.getFirstChild();
-	}
-	
-	if (quickLinkNodeList != null && quickLinkNodeList.hasChildNodes()) {
-	    NodeList quickLinkNode = quickLinkNodeList.getChildNodes();
-		QuickLinkBean quickLinkBean[] = new QuickLinkBean[quickLinkNode
-			.getLength()];
-
-		for (int i = 0; i < quickLinkNode.getLength(); i++) {
-		    Element quickLinkElement = (Element) quickLinkNode.item(i);
-		    quickLinkBean[i] = new QuickLinkBean();
-		    quickLinkBean[i].setUrlName(quickLinkElement
-			    .getAttribute("QuickLinkName"));
-		    quickLinkBean[i].setQuickLinkURL(quickLinkElement
-			    .getAttribute("QuickLinkUrl"));
-		    quickLinkBean[i].setUrlOrder(Integer.parseInt(quickLinkElement
-			    .getAttribute("URLOrder")));
-		    quickLinkBean[i].setShowQuickLink(quickLinkElement
-			    .getAttribute("ShowQuickLink"));
-		}
-
-		Arrays.sort(quickLinkBean, new QuickLinkComparator());
-
-		return quickLinkBean;
-
-	} else {
-	    return null;
-	}
+    public String getCreateSelected() {
+	return createSelected;
     }
 
     public String getCustomerContactId() {
 	return customerContactId;
     }
 
-    public void setCustomerContactId(String customerContactId) {
-	this.customerContactId = customerContactId;
+    private QuickLinkBean[] getQuickLink(Element outputElement) {
+	Node quickLinkNodeList = null;
+	if (outputElement != null && outputElement.hasChildNodes()) {
+	    quickLinkNodeList = outputElement.getFirstChild().getFirstChild()
+		    .getFirstChild();
+	}
+
+	if (quickLinkNodeList != null && quickLinkNodeList.hasChildNodes()) {
+	    NodeList quickLinkNode = quickLinkNodeList.getChildNodes();
+	    QuickLinkBean quickLinkBean[] = new QuickLinkBean[quickLinkNode
+		    .getLength()];
+
+	    for (int i = 0; i < quickLinkNode.getLength(); i++) {
+		Element quickLinkElement = (Element) quickLinkNode.item(i);
+		quickLinkBean[i] = new QuickLinkBean();
+		quickLinkBean[i].setUrlName(quickLinkElement
+			.getAttribute("QuickLinkName"));
+		quickLinkBean[i].setQuickLinkURL(quickLinkElement
+			.getAttribute("QuickLinkUrl"));
+		quickLinkBean[i].setUrlOrder(Integer.parseInt(quickLinkElement
+			.getAttribute("URLOrder")));
+		quickLinkBean[i].setShowQuickLink(quickLinkElement
+			.getAttribute("ShowQuickLink"));
+	    }
+
+	    Arrays.sort(quickLinkBean, new QuickLinkComparator());
+
+	    return quickLinkBean;
+
+	} else {
+	    return null;
+	}
+    }
+
+    public QuickLinkBean[] getQuickLinkBeanArray() {
+	return quickLinkBeanArray;
     }
 
     @Override
@@ -138,5 +126,17 @@ public class XPEDXCustomerQuickLinkAction extends WCMashupAction {
 	}
 	// TODO Auto-generated method stub
 	super.manipulateMashupInputs(mashupInputs);
+    }
+
+    public void setCreateSelected(String createSelected) {
+	this.createSelected = createSelected;
+    }
+
+    public void setCustomerContactId(String customerContactId) {
+	this.customerContactId = customerContactId;
+    }
+
+    public void setQuickLinkBeanArray(QuickLinkBean[] quickLinkBeanArray) {
+	this.quickLinkBeanArray = quickLinkBeanArray;
     }
 }
